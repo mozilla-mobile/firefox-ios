@@ -1,0 +1,18 @@
+/* Settings item for clearing browsing history */
+"Browsing History" = "Դիտարկումների պատմություն";
+
+/* Settings item for clearing the cache */
+"Cache" = "Շտեմ";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Cookie-ներ";
+
+/* Settings item for deleting downloaded files */
+"Downloaded Files" = "Ներբեռնված ֆայլեր";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Անցանց կայքերի տվյալներ";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Պահպանված մուտքագրումներ";
+

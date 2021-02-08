@@ -1,0 +1,9 @@
+/* The cancel button when confirming clear private data. */
+"Cancel" = "Hủy bỏ";
+
+/* The button that clears private data. */
+"OK" = "OK";
+
+/* Description of the confirmation dialog shown when a user tries to clear their private data. */
+"This action will clear all of your private data. It cannot be undone." = "Hành động này sẽ xóa tất cả dữ liệu riêng tư của bạn. Nó không thể hoàn tác được.";
+

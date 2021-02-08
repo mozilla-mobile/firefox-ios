@@ -1,0 +1,23 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "საშუალებას გაძლევთ, სურათის გადაღებისა და ატვირთვის.";
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSLocationWhenInUseUsageDescription" = "ვებსაიტებმა, შესაძლოა მოითხოვოს თქვენი მდებარეობის მონაცემები.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "საშუალებას გაძლევთ, ვიდეოს გადაღებისა და ატვირთვის.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "სურათების შენახვის საშუალებას იძლევა.";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "ახალი პირადი ჩანართი";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "ახალი ჩანართი";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "QR კოდის წაკითხვა";
+

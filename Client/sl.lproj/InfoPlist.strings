@@ -1,0 +1,29 @@
+/* (No Comment) */
+"1Password Fill Browser Action" = "Izpolni gesla z 1Password";
+
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "To vam omogoča slikati in pošiljati fotografije.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Firefox za dostop do shranjenih prijav zahteva Face ID.";
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSLocationWhenInUseUsageDescription" = "Spletne strani lahko zahtevajo vašo lokacijo.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Omogoča snemanje in nalaganje videa.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "To vam omogoča shranjevati fotografije.";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "Nov zasebni zavihek";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "Nov zavihek";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "Skeniraj QR-kodo";
+

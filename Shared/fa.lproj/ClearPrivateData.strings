@@ -1,0 +1,18 @@
+/* Settings item for clearing browsing history */
+"Browsing History" = "تاریخچه مرور";
+
+/* Settings item for clearing the cache */
+"Cache" = "حافظه نهان";
+
+/* Settings item for clearing cookies */
+"Cookies" = "کوکی‌ها";
+
+/* Settings item for deleting downloaded files */
+"Downloaded Files" = "پرونده‌های دریافت شده";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "اطلاعات آفلاین پایگا‌ه‌ اینترنتی";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "ورودهای ذخیره شده";
+

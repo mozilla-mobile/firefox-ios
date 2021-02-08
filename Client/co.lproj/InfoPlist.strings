@@ -1,0 +1,26 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Quessu vi permette di piglià fotò è di mandalle.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Firefox richiede Face ID per accede à e vostre identificazioni di cunnessione arregistrate.";
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSLocationWhenInUseUsageDescription" = "I siti web chì vò visitate ponu richiede à cunnosce a vostra lucalizazione.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Quessu vi permette di piglià filmetti è di mandalli.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Quessu vi permette d’arregistrà fotò.";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "Nova unghjetta privata";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "Nova unghjetta";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "Analizà un codice QR";
+

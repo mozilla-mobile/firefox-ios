@@ -1,0 +1,23 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "۔یہ آُپ کو تصاویر لینے اور اپلوڈ کرنے دیتا ہے۔";
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSLocationWhenInUseUsageDescription" = "جن ویب سائٹ کا آُپ دورہ کریں شاید وہ آُپ سے محل وقوع کی درخواست کر سکتی ہیں۔";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "۔یہ آُپ کو وڈیو لینے اور اپلوڈ کرنے دیتا ہے۔";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "یہ آپ کی تصاویر محفوظ کرنے دیتا ہے۔";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "نیا نجی ٹیب";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "نیا ٹیب";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "QR کوڈ اسکین کریں";
+

@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "Ferdig";
+
+/* Text selection menu item */
+"Find in Page" = "Søk på sida";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "Neste resultat";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "Førre resultat";
+

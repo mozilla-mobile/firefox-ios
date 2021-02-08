@@ -1,0 +1,1712 @@
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "Nga %@ po kërkohen një emër përdoruesi dhe një fjalëkalim.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "Nga %1$@ po kërkohen një emër përdoruesi dhe një fjalëkalim. Sajti thotë: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "Rreth";
+
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite" = "Fiksoje te Sajtet Kryesues";
+
+/* The title for removing a pinned topsite action */
+"ActivityStream.ContextMenu.RemovePinTopsite" = "Hiqe Sajtin e Fiksuar";
+
+/* The description of a highlight if it is a site the user has bookmarked */
+"ActivityStream.Highlights.Bookmark" = "I faqeruajtur";
+
+/* The description of a highlight if it is a site the user has visited */
+"ActivityStream.Highlights.Visited" = "I vizituar";
+
+/* Section title label for recently bookmarked websites */
+"ActivityStream.NewRecentBookmarks.Title" = "Faqerojtës Së Fundi";
+
+/* The link that shows more Pocket trending stories */
+"ActivityStream.Pocket.MoreLink" = "Më tepër";
+
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle" = "Në modë në Pocket";
+
+/* The description of a Pocket Story */
+"ActivityStream.Pocket.Trending" = "Në modë";
+
+/* Section title label for recently visited websites */
+"ActivityStream.RecentHistory.Title" = "Vizituar Së Fundi";
+
+/* label showing how many rows of topsites are shown. %d represents a number */
+"ActivityStream.TopSites.RowCount" = "Rreshta: %d";
+
+/* The title for the setting page which lets you select the number of top site rows */
+"ActivityStream.TopSites.RowSettingFooter" = "Caktoni Rreshta";
+
+/* Section title label for Top Sites */
+"ActivityStream.TopSites.SectionTitle" = "Sajte Kryesues";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Shtoni Skedë";
+
+/* Accessibility label for action adding current page to reading list.
+   Name for button adding current article to reading list in reader mode */
+"Add to Reading List" = "Shtoje te Listë Leximesh";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Faqja u shtua te Listë Leximesh";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "OK";
+
+/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Message" = "Ndodhi një gabim teksa bileta juaj shtohej te Wallet. Ju lutemi, riprovoni më vonë.";
+
+/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Title" = "S’u arrit të Shtohej Biletë";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Adresë dhe Kërkim";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Dërgo Përherë";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "Lyp mirëfilltësim";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "Mbrapsht";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Blloko Dritare Flluskash";
+
+/* The header title for the fields when editing a Bookmark */
+"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "Faqerojtës";
+
+/* The header title for the fields when editing a Folder */
+"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "Dosje";
+
+/* The label for the Title field when editing a bookmark */
+"Bookmark.DetailFieldTitle.Label" = "Titull";
+
+/* The label for the URL field when editing a bookmark */
+"Bookmark.DetailFieldURL.Label" = "URL";
+
+/* Toggle bookmarks syncing setting */
+"Bookmarks" = "Faqerojtës";
+
+/* The button on the snackbar to edit a bookmark after adding it. */
+"Bookmarks.Edit.Button" = "Përpunojeni";
+
+/* The button to edit a bookmark */
+"Bookmarks.EditBookmark.Label" = "Përpunoni Faqerojtësin";
+
+/* The button to edit a folder */
+"Bookmarks.EditFolder.Label" = "Përpunoni Dosjen";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "Dosje";
+
+/* The label for the location of the new folder */
+"Bookmarks.FolderLocation.Label" = "Vend";
+
+/* The label for the title of the new folder */
+"Bookmarks.FolderName.Label" = "Emër Dosjeje";
+
+/* The button to create a new bookmark */
+"Bookmarks.NewBookmark.Label" = "Faqerojtës i Ri";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "Dosje e Re";
+
+/* The button to create a new separator */
+"Bookmarks.NewSeparator.Label" = "Ndarës i Ri";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "Titull";
+
+/* The label for the URL of a bookmark */
+"Bookmarks.URL.Label" = "URL";
+
+/* Status label for the empty Bookmarks state. */
+"BookmarksPanel.EmptyState.Title" = "Këtu do të shfaqen faqerojtësit që ruani.";
+
+/* Describes the date on which the breach occurred */
+"BreachAlerts.BreachDate" = "Ky cenim ndodhi më";
+
+/* Description of what a breach is */
+"BreachAlerts.Description" = "Që nga hera e fundit që ndryshuat fjalëkalimin, ka patur rrjedhje ose vjedhje fjalëkalimesh. Që të mbroni këtë llogari, bëni hyrjen te sajti dhe ndryshoni fjalëkalimin tuaj.";
+
+/* Link to monitor.firefox.com to learn more about breached passwords */
+"BreachAlerts.LearnMoreButton" = "Mësoni më tepër";
+
+/* Leads to a link to the breached website */
+"BreachAlerts.Link" = "Shko te";
+
+/* Title for the Breached Login Detail View. */
+"BreachAlerts.Title" = "Cenim Sajti";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Ndriçim";
+
+/* Label for Cancel button */
+"Cancel" = "Anuloje";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Ndryshon temë ngjyrash.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Ndryshon lloj shkronjash.";
+
+/* The button to open a new tab with the copied link */
+"ClipboardToast.GoToCopiedLink.Button" = "Shko";
+
+/* Message displayed when the user has a copied link on the clipboard */
+"ClipboardToast.GoToCopiedLink.Title" = "Të shkohet te lidhja e kopjuar?";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Mbylle";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "Po mbyllet skeda";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "kompjuter";
+
+/* Context menu item for bookmarking a link URL */
+"ContextMenu.BookmarkLinkButtonTitle" = "Faqeruani Lidhjen";
+
+/* The button text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Kaloni në të";
+
+/* The label text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "U hap Skedë e Re Private";
+
+/* The button text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "Kaloni në të";
+
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText" = "U hap Skedë e Re";
+
+/* Context menu item for copying an image to the clipboard */
+"ContextMenu.CopyImageButtonTitle" = "Kopjo Figurën";
+
+/* Context menu item for copying an image URL to the clipboard */
+"ContextMenu.CopyImageLinkButtonTitle" = "Kopjo Lidhje Figure";
+
+/* Context menu item for copying a link URL to the clipboard */
+"ContextMenu.CopyLinkButtonTitle" = "Kopjoji Lidhjen";
+
+/* Context menu item for downloading a link URL */
+"ContextMenu.DownloadLinkButtonTitle" = "Shkarko Lidhjen";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenInNewTabButtonTitle" = "Hape në Skedë të Re";
+
+/* Context menu item for saving an image */
+"ContextMenu.SaveImageButtonTitle" = "Ruajeni Figurën";
+
+/* Context menu item for sharing a link URL */
+"ContextMenu.ShareLinkButtonTitle" = "Ndajeni Lidhjen Me të Tjerët";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "Faqja s’u shtua dot te Listë Leximesh";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it’s already there?" = "Faqja s’u shtua dot te Listë Leximesh. Mos vallë gjendet tashmë në të?";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "Faqja s’u shtua dot.";
+
+/* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
+"CoverSheet.v22.DarkMode.Description" = "Për përdorues të iOS 13-s, Firefox-i tani kalon automatikisht nën një temë të errët, kur për telefonin tuaj është zgjedhur Dark Mode. Që të ndryshoni këtë sjellje, kaloni te Rregullime > Temë.";
+
+/* Title for the new dark mode change in the version 22 app release. */
+"CoverSheet.v22.DarkMode.Title" = "Tema e errët tani përfshin një tastierë të errët dhe një skenë përshëndetëse të errët.";
+
+/* Description for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Description" = "Mbrojtja e brendshme e Thelluar Nga Gjurmimet ndihmon të ndalet gjurmimi juaj nga reklamat. Aktivizoni mënyrën Strikte, për të bllokuar edhe më shumë gjurmues reklama dhe flluska.";
+
+/* Text for the new ETP settings button */
+"CoverSheet.v24.ETP.Settings.Button" = "Shkoni te Rregullimet";
+
+/* Title for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Title" = "Mbrojtje Nga Gjurmimi Me Reklama";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Krijoni një llogari";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "E errët";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Zvogëlo madhësinë e tekstit";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Motor Kërkimesh Parazgjedhje";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Rregullime Ekrani";
+
+/* Used as a button label for crash dialog prompt */
+"Don’t Send" = "Mos e Dërgo";
+
+/* Done button on left side of the Settings view controller title bar */
+"Done" = "U bë";
+
+/* Panel accessibility label */
+"Downloads" = "Shkarkime";
+
+/* The label of the button the user will press to start downloading a file */
+"Downloads.Alert.DownloadNow" = "Shkarkojeni Tani";
+
+/* Button confirming the cancellation of the download. */
+"Downloads.CancelDialog.Cancel" = "Anuloje";
+
+/* Alert dialog body when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Message" = "Jeni i sigurt se doni të anulohet ky shkarkim?";
+
+/* Button declining the cancellation of the download. */
+"Downloads.CancelDialog.Resume" = "Rimerre";
+
+/* Alert dialog title when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Title" = "Anuloje Shkarkimin";
+
+/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
+"Downloads.Error.Message" = "Ky lloj shkarkimi s’mbulohet ende nga Firefox-i.";
+
+/* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
+"Downloads.Toast.Cancelled.LabelText" = "Shkarkimi u Anulua";
+
+/* The label text in the Download Failed toast for showing confirmation that the download has failed. */
+"Downloads.Toast.Failed.LabelText" = "Shkarkimi Dështoi";
+
+/* The button to retry a failed download from the Download Failed toast. */
+"Downloads.Toast.Failed.RetryButton" = "Riprovo";
+
+/* The button to open a new tab with the Downloads home panel */
+"Downloads.Toast.GoToDownloads.Button" = "Shkarkime";
+
+/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. */
+"Downloads.Toast.MultipleFiles.DescriptionText" = "1 nga %d kartela";
+
+/* The description text in the Download progress toast for showing the number of files (1$) and download progress (2$). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where 1$ is Downloads.Toast.MultipleFiles.DescriptionText and 2$ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and 1$ should come before 2$ everywhere except for right-to-left locales. */
+"Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";
+
+/* The description text in the Download progress toast for showing the downloaded file size (1$) out of the total expected file size (2$). */
+"Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
+
+/* Action button for deleting downloaded files in the Downloads panel. */
+"DownloadsPanel.Delete.Title" = "Fshije";
+
+/* Title for the Downloads Panel empty state. */
+"DownloadsPanel.EmptyState.Title" = "Kartelat e shkarkuara do të shfaqen këtu.";
+
+/* Action button for sharing downloaded files in the Downloads panel. */
+"DownloadsPanel.Share.Title" = "Ndajeni me të tjerët";
+
+/* Text message in the settings table view */
+"Enter your password to connect" = "Jepni fjalëkalimin tuaj që të bëhet lidhja";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "Të thelluara";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "Kujdes: s’e konfirmojmë dot se lidhja juaj me këtë sajt është e sigurt.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "Mund të jetë një keqformësim ose futje hundësh nga dikush që po sulmon. Vazhdoni, nëse e pranoni rrezikun potencial.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "I zoti i %@ e ka formësuar keq sajtin e tij. Që të mbrohen nga vjedhjet të dhënat tuaja, Firefox-i nuk u lidh me këtë sajt.";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "Kjo Lidhje Nuk Besohet";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "Shko Mbrapsht";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "Vizitoje sajtin, sido qoftë";
+
+/* Question shown to user when tapping a link that opens the App Store app */
+"ExternalLink.AppStore.ConfirmationTitle" = "Të hapet kjo lidhje në App Store?";
+
+/* Question shown to user when tapping an SMS or MailTo link that opens the external app for those. */
+"ExternalLink.AppStore.GenericConfirmationTitle" = "Të hapet kjo lidhje në aplikacion të jashtëm?";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Title for firefox about:home page in tab history list */
+"Firefox.HomePage.Title" = "Faqja Hyrëse e Firefox-it";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "Përpara";
+
+/* Label stating how to disconnect account */
+"FxA.AccountVerificationDetails" = "Email i gabuar? Shkëputuni më poshtë që t’ia riniset.";
+
+/* Label stating your account is not verified */
+"FxA.AccountVerificationRequired" = "Lypset Verifikim Llogarie";
+
+/* Message explaining that user needs to check email for Firefox Account verfication link. */
+"FxA.AccountVerificationRequiredSurface" = "Lypset të verifikoni %@. Shihni te email-et tuaj për lidhjen e verifikimit nga Firefox-i.";
+
+/* Button label to connect another device to Sync */
+"FxA.ConnectAnotherDevice" = "Lidhni Pajisje Tjetër";
+
+/* Settings section title for Firefox Account */
+"FxA.FirefoxAccount" = "Llogari Firefox";
+
+/* Button label to go to Firefox Account settings */
+"FxA.ManageAccount" = "Administroni Llogari & Pajisje";
+
+/* Label when no internet is present */
+"FxA.NoInternetConnection" = "S’ka Lidhje në Internet";
+
+/* Button label to open Sync preferences */
+"FxA.OpenSyncPreferences" = "Hap Parapëlqime Sync-u";
+
+/* Instructions shown on qr code scanning view */
+"fxa.qr-scanning-view.instructions" = "Skanoni kodin QR te firefox.com/pair";
+
+/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
+"FxA.RemoveAccount" = "Hiqe";
+
+/* Description string for alert view that gets presented when user tries to remove an account. */
+"FxA.RemoveAccountAlertMessage" = "Hiqeni Llogarinë Firefox përshoqëruar kësaj pajisjeje, për të hyrë si përdorues tjetër.";
+
+/* Remove account alert is the final confirmation before user removes their firefox account */
+"FxA.RemoveAccountAlertTitle" = "Hiqe Llogarinë";
+
+/* Button label to resend email */
+"FxA.ResendEmail" = "Ridërgoje Email-in";
+
+/* FxA sign in view subtitle */
+"fxa.signin.camera-signin" = "Hyni Me Kamerën Tuaj";
+
+/* FxA sign in create account label. */
+"fxa.signin.create-account-pt-1" = "Njëkohësoni Firefox-in mes pajisjesh me një llogari.";
+
+/* FxA sign in create account label. This will be linked to the site to create an account. */
+"fxa.signin.create-account-pt-2" = "Krijoni llogari Firefox.";
+
+/* FxA sign in view qr code instructions */
+"fxa.signin.qr-link-instruction" = "Te kompjuteri juaj, hapni Firefox-in dhe kaloni te firefox.com/pair";
+
+/* FxA sign in view qr code scan button */
+"fxa.signin.ready-to-scan" = "Gati për Skanim";
+
+/* FxA sign in view title */
+"fxa.signin.turn-on-sync" = "Aktivizo Sync-un";
+
+/* FxA sign in view email login button */
+"fxa.signin.use-email-instead" = "Më mirë Përdorni Email";
+
+/* Button label to sign into Sync */
+"FxA.SignIntoSync" = "Bëni hyrjen në Sync";
+
+/* Label explaining what sync does */
+"FxA.SyncExplain" = "Merrni skedat, faqerojtësit dhe fjalëkalimet tuaja nga pajisje të tjera tuajat.";
+
+/* Button label to Sync your Firefox Account */
+"FxA.SyncNow" = "Njëkohësoji Tani";
+
+/* Call to action for sign into sync button */
+"FxA.TakeYourWebWithYou" = "Merreni Web-in Me Vete";
+
+/* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
+"FxAPush_DeviceConnected_body" = "Firefox Sync është lidhur me %@";
+
+/* Title of a notification displayed when another device has connected to FxA. */
+"FxAPush_DeviceConnected_title" = "Lidhur Me Sync";
+
+/* Body of a notification displayed when named device has been disconnected from FxA. %@ refers to the name of the disconnected device. */
+"FxAPush_DeviceDisconnected_body" = "%@ u shkëput me sukses.";
+
+/* Body of a notification displayed when this device has been disconnected from FxA by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Kjo pajisje është shkëputur me sukses nga shërbimi Firefox Sync.";
+
+/* Title of a notification displayed when this device has been disconnected by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_title" = "Me Sync të Shkëputur";
+
+/* Title of a notification displayed when named device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_title" = "Me Sync të Shkëputur";
+
+/* Body of a notification displayed when unnamed device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Është shkëputur një pajisje nga Firefox Sync-u";
+
+/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "Merrni skedat tuaja të hapura, faqerojtësit dhe fjalëkalimet tuaja nga pajisje të tjera tuajat.";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Ndihmë";
+
+/* Toggle history syncing setting */
+"History" = "Historik";
+
+/* Title for button in the history panel to clear recent history */
+"HistoryPanel.ClearHistoryButtonTitle" = "Spastroni Historikun Së Fundi…";
+
+/* Option title to clear all browsing history. */
+"HistoryPanel.ClearHistoryMenuOptionEverything" = "Gjithçka";
+
+/* Button to perform action to clear history for the last hour */
+"HistoryPanel.ClearHistoryMenuOptionTheLastHour" = "Ora e Fundit";
+
+/* Button to perform action to clear history for today only */
+"HistoryPanel.ClearHistoryMenuOptionToday" = "Sot";
+
+/* Button to perform action to clear history for yesterday and today */
+"HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "Sot dhe Dje";
+
+/* Title for popup action menu to clear recent history. */
+"HistoryPanel.ClearHistoryMenuTitle" = "Pastrimi i Historikut Së Fundi do të heqë të dhëna të historikut, cookie-eve dhe të tjera të dhëna shfletuesi.";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "Këtu do të shfaqen sajtet që keni vizituar tani afër.";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "Këtu shfaqen skedat prej pajisjeve tuaja të tjera.";
+
+/* Description for the empty synced tabs 'not signed in' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Bëni hyrjen që të shihni një listë skedash nga pajisjet tuaja të tjera.";
+
+/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "Llogaria juaj duhet verifikuar.";
+
+/* Description for the empty synced tabs 'single device Sync' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "Doni të shihni këtu skedat tuaja prej pajisjesh të tjera?";
+
+/* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Aktivizoni njëkohësim skedash që të shihni një listë skedash prej pajisjeve tuaja të tjera.";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "Historik";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "Mbyllur së fundi";
+
+/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d device(s) të lidhura";
+
+/* Title for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Title" = "Pajisje të njëkohësuara";
+
+/* Button cancelling changes setting the home page for the first time. */
+"HomePage.Set.Dialog.Cancel" = "Anuloje";
+
+/* Alert dialog body when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Message" = "Këtë mund ta ndryshoni kurdo, te Rregullime";
+
+/* Button accepting changes setting the home page for the first time. */
+"HomePage.Set.Dialog.OK" = "Vëre si Krye";
+
+/* Alert dialog title when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Title" = "Doni të përdoret kjo faqe web si faqja juaj hyrëse?";
+
+/* The title for the Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Bookmark" = "Faqerojtës";
+
+/* The title for the Delete from History context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.DeleteFromHistory" = "Fshije prej Historiku";
+
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab" = "Hape në Skedë të Re Private";
+
+/* The title for the Open in New Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewTab" = "Hape në Skedë të Re";
+
+/* The title for the Remove context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Remove" = "Hiqe";
+
+/* The title for the Remove Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.RemoveBookmark" = "Hiqe Faqerojtësin";
+
+/* The title for the Share context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Share" = "Ndajeni me të tjerët";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Back.DiscoveryTitle" = "Mbrapsht";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.CloseTab.DiscoveryTitle" = "Mbylle Skedën";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Find.DiscoveryTitle" = "Gjej";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Forward.DiscoveryTitle" = "Përpara";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "Skedë e Re Private";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewTab.DiscoveryTitle" = "Skedë e Re";
+
+/* Label to switch to normal browsing mode */
+"Hotkeys.NormalMode.DiscoveryTitle" = "Mënyra Shfletim Normal";
+
+/* Label to switch to private browsing mode */
+"Hotkeys.PrivateMode.DiscoveryTitle" = "Mënyra Shfletim Privat";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Reload.DiscoveryTitle" = "Ringarkoje Faqen";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "Përzgjidhni Shtyllë Vendesh";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "Shfaq Skedën Pasuese";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Shfaq Skedën e Mëparshme";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Rrit madhësi teksti";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "mu tani";
+
+/* History tableview section header */
+"Last month" = "Muajin e fundit";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "Njëkohësuar së fundi më: %@";
+
+/* History tableview section header */
+"Last week" = "Javën e fundit";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Licenca";
+
+/* Light theme setting in Reading View settings */
+"Light" = "E çelët";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "Ngarko faqen origjinale";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "Po ngarkohet lëndë…";
+
+/* Authentication prompt log in button */
+"Log in" = "Hyni";
+
+/* Toggle logins syncing setting */
+"Logins" = "Kredenciale Hyrjesh";
+
+/* Login detail view field name for the last modified date */
+"LoginsDetailView.LoginModified" = "Ndryshuar më";
+
+/* Title for the login detail view */
+"LoginsDetailView.LoginTitle" = "Kredenciale Hyrjesh";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "Mos i Ruaj";
+
+/* Button to not update the user's password */
+"LoginsHelper.DontUpdate.Button" = "Mos i Përditëso";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "Të ruhen kredencialet e hyrjes për %1$@ te %2$@?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "Të ruhet fjalëkalimi për %@?";
+
+/* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
+"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "Të përditësohen kredenciale hyrjesh për %@?";
+
+/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "Të përditësohen kredenciale hyrjesh për %1$@ te %2$@?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "Ruaji Kredencialet e Hyrjes";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "Përditësoje";
+
+/* For filtering the login list, search only the login names */
+"LoginsList.LoginsListFilterLogin" = "Kredenciale Hyrjesh";
+
+/* For filtering the login list, search both website and login names. */
+"LoginsList.LoginsListFilterSearchAll" = "Krejt";
+
+/* For filtering the login list, search only the website names */
+"LoginsList.LoginsListFilterWebsite" = "Sajt";
+
+/* Placeholder test for search box in logins list view. */
+"LoginsList.LoginsListSearchPlaceholder" = "Filtër";
+
+/* Title for the list of logins */
+"LoginsList.Title" = "KREDENCIALE HYRJESH TË RUAJTURA";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Duket se Firefox-i, më herët, u vithis. Do të donit të rikthehen skedat tuaja?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "Shënoje si të Lexuar";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Shënoje si të Palexuar";
+
+/* Toast displayed to the user after a bookmark has been added. */
+"Menu.AddBookmark.Confirm" = "Faqerojtësi u Shtua";
+
+/* Toast displayed to the user after adding the item to the Top Sites. */
+"Menu.AddPin.Confirm" = "Fiksuar te Sajtet Kryesues";
+
+/* Toast displayed to the user after adding the item to their reading list. */
+"Menu.AddToReadingList.Confirm" = "U shtua te Listë Leximesh";
+
+/* The title for the button that lets you copy the url from the location bar. */
+"Menu.Copy.Title" = "Kopjoje Adresën";
+
+/* Toast displayed to user after copy url pressed. */
+"Menu.CopyURL.Confirm" = "URL-ja u Kopjua Te e Papastra";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "Mbrojtja e Thelluar Nga Gjurmimet është OFF për këtë sajt.";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "Mbrojtja e Thelluar Nga Gjurmimet është ON për këtë sajt.";
+
+/* Description for having standard ETP protection with ITP offered in iOS14+ */
+"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox-i bllokon gjurmues nga sajti në sajt, gjurmues shoqërorësh, nxjerrës kriptomonedhash dhe profilizues.";
+
+/* Description for having strict ETP protection with ITP offered in iOS14+ */
+"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox-i bllokon gjurmues nga sajti në sajt, gjurmues shoqërorësh, nxjerrës kriptomonedhash, profilizues dhe lëndë ndjekjeje.";
+
+/* Label for the button displayed in the menu used to stop the reload of the webpage */
+"Menu.Library.StopReload" = "Ndale";
+
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label" = "Aktivizo Mënyrën Natë";
+
+/* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
+"Menu.NoImageModeBlockImages.Label" = "Blloko Figura";
+
+/* Label for title in page action menu. */
+"Menu.PageActions.Title" = "Veprime Faqeje";
+
+/* The title for the button that lets you paste into the location bar */
+"Menu.Paste.Title" = "Ngjite";
+
+/* The title for the button that lets you paste and go to a URL */
+"Menu.PasteAndGo.Title" = "Ngjite & Shko";
+
+/* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
+"Menu.ReloadWithoutTrackingProtection.Title" = "Ringarkoje Pa Mbrojtje Nga Gjurmimet";
+
+/* Label for the button, displayed in the menu, used to reload the current website with Tracking Protection enabled */
+"Menu.ReloadWithTrackingProtection.Title" = "Ringarkoje Me Mbrojtje Nga Gjurmimet";
+
+/* Toast displayed to the user after a bookmark has been removed. */
+"Menu.RemoveBookmark.Confirm" = "Faqerojtësi u Hoq";
+
+/* Toast displayed to the user after removing the item from the Top Sites. */
+"Menu.RemovePin.Confirm" = "Hequr Prej Sajteve Kryesues";
+
+/* Toast displayed to the user after a tab has been sent successfully. */
+"Menu.TabSent.Confirm" = "Skeda u Dërgua";
+
+/* Title on tracking protection menu for blocked items. */
+"Menu.TrackingProtection.BlockedTitle" = "Të bllokuar";
+
+/* Message in menu when no trackers blocked. */
+"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Në këtë faqe s’u pikasën gjurmues të ditur nga Firefox-i.";
+
+/* The title for tracking protection settings */
+"Menu.TrackingProtection.ProtectionSettings.Title" = "Rregullime për Mbrojtje";
+
+/* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
+"Menu.TrackingProtection.TitlePrefix" = "Mbrojtje për %@";
+
+/* The title that shows the number of content cookies blocked */
+"Menu.TrackingProtectionBlockedContent.Title" = "Lëndë gjurmimi";
+
+/* The title that shows the number of social URLs blocked */
+"Menu.TrackingProtectionBlockedSocial.Title" = "Gjurmues Shoqërorësh";
+
+/* Description of the Tracking protection menu when TP is blocking parts of the page */
+"Menu.TrackingProtectionBlocking.Description" = "Firefox-i po bllokon pjesë të kësaj faqeje që mund të ndjekin shfletimin tuaj.";
+
+/* The description of the Tracking Protection menu item when tracking is enabled */
+"Menu.TrackingProtectionBlockingDisabled.Description" = "Blloko gjurmues internetorë";
+
+/* The title that shows the number of cross-site cookies blocked */
+"Menu.TrackingProtectionCrossSiteCookies.Title" = "“Cookies” Gjurmimi Nga Sajte Në Sajte";
+
+/* The title that shows the number of cross-site URLs blocked */
+"Menu.TrackingProtectionCrossSiteTrackers.Title" = "Gjurmues Nga Sajte Në Sajte";
+
+/* The title that shows the number of cryptomining scripts blocked */
+"Menu.TrackingProtectionCryptominersBlocked.Title" = "Nxjerrës kriptomonedhash";
+
+/* Description of content trackers. */
+"Menu.TrackingProtectionDescription.ContentTrackers" = "Sajtet mund të ngarkojnë reklama, video dhe tjetër lëndë të jashtme që përmban gjurmues të fshehur. Bllokimi i kësaj mund ta bëjë sajtin të ngarkohet më shpejt, por disa butona, formularë dhe fusha kredenciale hyrjesh mund të mos punojnë.";
+
+/* Description of cross-site trackers. */
+"Menu.TrackingProtectionDescription.CrossSiteNew" = "Këto “cookies” ju ndjekin nga sajti në sajt për të mbledhur të dhëna rreth çka bëni në internet. Ato depozitohen nga palë të treta, të tilla si shoqëri reklamash dhe analizash.";
+
+/* Description of cryptominers. */
+"Menu.TrackingProtectionDescription.CryptominersNew" = "Nxjerrësit e kriptomonedhave e përdorin fshehtas fuqinë përllogaritëse të sistemit tuaj për të nxjerrë para dixhitale. Programthet për nxjerrje kriptomonedhash konsumojnë energjinë e baterisë tuaj, ngadalësojnë kompjuterin tuaj dhe mund të sjellin shtim të faturës tuaj për energjinë.";
+
+/* Description of fingerprinters. */
+"Menu.TrackingProtectionDescription.Fingerprinters" = "Rregullimet në shfletuesin dhe kompjuterin tuaj janë unike. Krijuesit e shenjave të gishtave grumbullojnë një larmi të këtyre rregullimeve unike për të krijuar një profil rreth jush, që mund të përdoret për t’ju ndjekur teksa shfletoni.";
+
+/* Description of social network trackers. */
+"Menu.TrackingProtectionDescription.SocialNetworksNew" = "Rrjetet shoqërore vendosin gjurmues në sajte të tjerë për të krijuar një profil më të plotë dhe më të përqendruar rreth jush. Bllokimi i këtyre gjurmuesve redukton sasinë e hollësive që shoqëritë e mediave shoqërore mund të shohin prej asaj çka bëni në internet.";
+
+/* The button that disabled TP for a site. */
+"Menu.TrackingProtectionDisable1.Title" = "E çaktivizuar për këtë sajt";
+
+/* The confirmation toast once tracking protection has been disabled */
+"Menu.TrackingProtectionDisabled.Title" = "Mbrojtja Nga Gjurmimet tani është e çaktivizuar për këtë sajt.";
+
+/* A button to enable tracking protection inside the menu. */
+"Menu.TrackingProtectionEnable.Title" = "Aktivizo Mbrojtje Nga Gjurmimet";
+
+/* A button to enable tracking protection inside the menu. */
+"Menu.TrackingProtectionEnable1.Title" = "E aktivizuar për këtë sajt";
+
+/* The confirmation toast once tracking protection has been enabled */
+"Menu.TrackingProtectionEnabled.Title" = "Mbrojtja Nga Gjurmimet tani është e aktivizuar për këtë sajt.";
+
+/* The title that shows the number of fingerprinting scripts blocked */
+"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Krijues shenja gishtash";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "“Cookies” Gjurmimi Nga Sajte Në Sajte të Bllokuar";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Cryptominers" = "Nxjerrës kriptomonedhash të Bllokuar";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Fingerprinters" = "Krijuesh Shenjash Gishtash të Bllokuar";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Social" = "Gjurmues Shoqërorësh të Bllokuar";
+
+/* more info about what tracking protection is about */
+"Menu.TrackingProtectionMoreInfo.Description" = "Mësoni më tepër se si Mbrojtja Nga Gjurmimet bllokon gjurmues internetorë që grumbullojnë të dhëna shfletimi tuajat nëpër shumë sajte.";
+
+/* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
+"Menu.TrackingProtectionNoBlocking.Description" = "S’u pikasën elemente gjurmimi në këtë faqe.";
+
+/* label for the menu item to show when the website is whitelisted from blocking trackers. */
+"Menu.TrackingProtectionOption.WhiteListOnDescription" = "Ky sajt përmban elemente që mund të ndjekin shfletimin tuaj. Mbrojtjen e keni të çaktivizuar.";
+
+/* label for the menu item that lets you remove a website from the tracking protection whitelist */
+"Menu.TrackingProtectionWhitelistRemove.Title" = "Aktivizoje për këtë sajt";
+
+/* The title for the option to view the What's new page. */
+"Menu.WhatsNew.Title" = "Ç’ka të Re";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "pajisje celulare";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "më shumë se një muaj më parë";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "më shumë se një javë më parë";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Panel Lëvizjesh";
+
+/* Accessibility label for the New Tab button in the tab toolbar.
+   Accessibility Label for the tab toolbar New tab button */
+"New Tab" = "Skedë e Re";
+
+/* Restore Tabs Negative Action */
+"No" = "Jo";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "S’ka skeda";
+
+/* OK button */
+"OK" = "OK";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "OK";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "Hëm! Firefox-i u vithis";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Artikujt nën Pamjen Lexues i hapni duke prekur ikonën libër, kur shfaqet te shtylla e titullit.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Hap Rregullimet";
+
+/* Toggle tabs syncing setting */
+"Open Tabs" = "Hapi Skedat";
+
+/* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
+"OpenURL.Error.Message" = "Firefox-i s’e hap dot faqen, ngaqë ajo ka një adresë të pavlefshme.";
+
+/* Title of the message shown when the user attempts to navigate to an invalid link. */
+"OpenURL.Error.Title" = "S’hap Dot Faqen";
+
+/* Accessibility label for the Page Options menu button */
+"Page Options Menu" = "Menu Mundësish Faqeje";
+
+/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
+"Panel Chooser" = "Zgjedhës Panelesh";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Fjalëkalim";
+
+/* Error message shown in the remote tabs panel */
+"PasswordAutoFill.NoPasswordsFoundTitle" = "S’keni kredenciale hyrjesh të njëkohësuara prej Llogarisë tuaj Firefox";
+
+/* Header for the list of credentials table */
+"PasswordAutoFill.PasswordsListTitle" = "Kredenciale Hyrjesh të Gatshëm:";
+
+/* Title of the extension that shows firefox passwords */
+"PasswordAutoFill.SectionTitle" = "Kredenciale Hyrjesh Firefox";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Kjo ju lejon të ruani figurën te Camera Roll juaj.";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox-i do të donte të hynte te Fotot tuaja";
+
+/* Button for closing the menu action sheet */
+"PhotonMenu.close" = "Mbylle";
+
+/* Privacy section title */
+"Privacy" = "Privatësi";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "Rregulla Privatësie";
+
+/* Title for quick-search engines settings section. */
+"Quick-Search Engines" = "Motorë Kërkimesh të Shpejta";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "lexojeni";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "Pamja Lexues";
+
+/* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
+"ReaderMode.Available.VoiceOverAnnouncement" = "Mënyra Lexues është e mundshme";
+
+/* Panel accessibility label */
+"Reading list" = "Listë leximesh";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "Mbyllur Së Fundi";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "Ringarkoje";
+
+/* Accessibility label for the reload button */
+"Reload page" = "Ringarkoje faqen";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Hiqe";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Hiqe nga Listë Leximesh";
+
+/* Cancel button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Cancel" = "Anuloje";
+
+/* Reopen button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Reopen" = "Rihape";
+
+/* Reopen alert title shown at home page. */
+"ReopenAlert.Title" = "Rihap Skedën e Fundit të Mbyllur";
+
+/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"ReopenClosedTab.KeyCodeTitle" = "Rihap Skedat e Mbyllura";
+
+/* Accessibility label for button resetting font size in display settings of reader mode */
+"Reset text size" = "Kthim madhësie teksti te parazgjedhjet";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans-serif";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Faqet te Lista juaj e Leximeve i ruani duke prekur ikonën libër plus, te kontrollet e Listës së Leximeve.";
+
+/* OK button to dismiss the error prompt. */
+"ScanQRCode.Error.OK.Button" = "OK";
+
+/* Text for the instructions label, displayed in the QR scanner view */
+"ScanQRCode.Instructions.Label" = "Që të skanohet, vendoseni kodin QR brenda kornizës";
+
+/* Text of the prompt that is shown to the user when the data is invalid */
+"ScanQRCode.InvalidDataError.Message" = "Të dhënat janë të pavlefshme";
+
+/* Text of the prompt user to setup the camera authorization. */
+"ScanQRCode.PermissionError.Message" = "Ju lutemi, lejojeni Firefox-in të hyjë te kamera e pajisjes tuaj, që nga ‘Rregullime’ -> ‘Privatësi’ -> ‘Kamera’.";
+
+/* Title for the QR code scanner view. */
+"ScanQRCode.View.Title" = "Skanonin Kodin QR";
+
+/* Accessibility Label for the tab toolbar Search button
+   Navigation title for search settings.
+   Open search section of settings */
+"Search" = "Kërkim";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Kërkoni ose jepni adresë";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "Motori i ri i kërkimeve do të shfaqet te shtylla e kërkimeve të shpejta.";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "Motori i Kërkimeve u Shtua!";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "Të shtohet Furnizuesi i Kërkimeve?";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "Anuloje";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.DuplicateErrorMessage" = "Është shtuar tashmë një motor kërkimesh me këtë titull ose URL.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.DuplicateErrorTitle" = "Dështoi";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "Furnizuesi i kërkimeve s’u shtua dot.";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "Dështoi";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.FormErrorMessage" = "Ju lutemi, plotësoni saktë krejt fushat.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.FormErrorTitle" = "Dështoi";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "OK";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "Sugjerime për kërkimin";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "Lidhje e sigurt";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "Të dërgohet një raport vithisjeje, që kështu Mozilla të mund të ndreqë problemin?";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "Dërgoni Përshtypjet";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "Dërgoje Raportin";
+
+/* Button title for cancelling share screen
+   Close button in top navigation bar */
+"SendTo.Cancel.Button" = "Anuloje";
+
+/* Header for the list of devices table */
+"SendTo.DeviceList.Text" = "Pajisje të gatshme:";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "Me të tjerët mund të ndahen vetëm lidhje HTTP dhe HTTPS.";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "OK";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "Lidhja që po provoni të ndani me të tjerët, s’mund të ndahet.";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"SendTo.NavBar.Title" = "Dërgo Skedë";
+
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message" = "S’keni ndonjë pajisje tjetër të lidhur te kjo Llogari Firefox-i të gatshme për njëkohësim.";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Message" = "Ju lutemi, që të vazhdohet, hapni Firefox-in, shkoni te Rregullimet dhe bëni hyrjen.";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Title" = "S’keni bërë hyrjen te Llogaria juaj Firefox.";
+
+/* Navigation bar button to Send the current page to a device */
+"SendTo.SendAction.Text" = "Dërgoje";
+
+/* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
+"SendTo.SignIn.Button" = "Hyni në Firefox";
+
+/* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_body" = "Ka ardhur skedë e re prej pajisjeje tjetër.";
+
+/* Title of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_title" = "Skeda u mor";
+
+/* Body of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the app name. */
+"SentTab_TabArrivingNotification_WithDevice_body" = "Ka ardhur skedë e re në %@";
+
+/* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
+"SentTab_TabArrivingNotification_WithDevice_title" = "U mor skedë prej %@";
+
+/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
+"SentTab.AddToReadingListAction.Title" = "Shtoje te Listë Leximesh";
+
+/* Label for an action used to bookmark one or more tabs from a notification. */
+"SentTab.BookmarkAction.title" = "Faqeruaje";
+
+/* Body of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.body" = "Prekeni që të fillohet";
+
+/* Title of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+
+/* Label for an action used to view one or more tabs from a notification. */
+"SentTab.ViewAction.title" = "Shiheni";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Sepia";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serif";
+
+/* Title in the settings view controller title bar */
+"Settings" = "Rregullime";
+
+/* The button text in Search Settings that opens the Custom Search Engine view. */
+"Settings.AddCustomEngine" = "Shtoni Motor Kërkimesh";
+
+/* The text on the Save button when saving a custom search engine */
+"Settings.AddCustomEngine.SaveButtonText" = "Ruaje";
+
+/* The title of the  Custom Search Engine view. */
+"Settings.AddCustomEngine.Title" = "Shtoni Motorë Kërkimesh";
+
+/* The title for the field which sets the title for a custom search engine. */
+"Settings.AddCustomEngine.TitleLabel" = "Titull";
+
+/* The placeholder for Title Field when saving a custom search engine. */
+"Settings.AddCustomEngine.TitlePlaceholder" = "Motorë Kërkimesh";
+
+/* The title for URL Field */
+"Settings.AddCustomEngine.URLLabel" = "URL";
+
+/* The placeholder for URL Field when saving a custom search engine */
+"Settings.AddCustomEngine.URLPlaceholder" = "URL (Zëvendësojeni Kërkesën me %s)";
+
+/* Button in Data Management that clears private data for the selected items. */
+"Settings.ClearAllWebsiteData.Clear.Button" = "Spastro Krejt të Dhënat e Sajtit";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "Spastro të Dhëna Private";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "Spastroni të Dhënat Private";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "Spastroni të Dhëna Private";
+
+/* Copy app version alert shown in settings. */
+"Settings.CopyAppVersion.Title" = "U kopjua në të papastër";
+
+/* Default text in search bar for Data Management */
+"Settings.DataManagement.SearchLabel" = "Filtro Sajte";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.DataManagement.SectionName" = "Administrim të Dhënash";
+
+/* Title displayed in header of the setting panel. */
+"Settings.DataManagement.Title" = "Administrim të Dhënash";
+
+/* Body of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Body" = "Firefox-i do të reshtë së njëkohësuari me llogarinë tuaj, por nuk do të fshihet ndonjë nga të dhënat e shfletimeve tuaja në këtë pajisje.";
+
+/* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
+"Settings.Disconnect.Button" = "Shkëputeni Sync-un";
+
+/* Cancel action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.CancelButton" = "Anuloje";
+
+/* Destructive action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.DestructiveButton" = "Shkëpute";
+
+/* Title of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Title" = "Të shkëputet Sync-u?";
+
+/* Section header for brightness slider. */
+"Settings.DisplayTheme.BrightnessThreshold.SectionHeader" = "Prag";
+
+/* Display (theme) settings label to show if manually switch theme is enabled. */
+"Settings.DisplayTheme.Manual.StatusLabel" = "Dorazi";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Manually'. */
+"Settings.DisplayTheme.Manual.SwitchSubtitle" = "Zgjidhni cilën temë doni";
+
+/* Display (theme) setting to choose the theme manually. */
+"Settings.DisplayTheme.Manual.SwitchTitle" = "Dorazi";
+
+/* Option choice in display theme settings for dark theme */
+"Settings.DisplayTheme.OptionDark" = "E errët";
+
+/* Option choice in display theme settings for light theme */
+"Settings.DisplayTheme.OptionLight" = "E çelët";
+
+/* Display (theme) settings footer describing how the brightness slider works. */
+"Settings.DisplayTheme.SectionFooter" = "Tema do të ndryshojë vetvetiu bazuar në ndriçimin e ekranit tuaj. Mund të caktoni pragun se kur ndryshon tema. Rrethi tregon ndriçimin e tanishëm të ekranit tuaj.";
+
+/* Switch mode settings section title */
+"Settings.DisplayTheme.SwitchMode.SectionHeader" = "Mënyrë Këmbimi";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Automatically'. */
+"Settings.DisplayTheme.SwitchSubtitle" = "Ndërroje vetvetiu, bazuar në ndriçimin e ekranit";
+
+/* Display (theme) settings label to show if automatically switch theme is enabled.
+   Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
+"Settings.DisplayTheme.SwitchTitle" = "Vetvetiu";
+
+/* System theme settings section title */
+"Settings.DisplayTheme.SystemTheme.SectionHeader" = "Temë Sistemi";
+
+/* System theme settings switch to choose whether to use the same theme as the system */
+"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "Përdor Mënyrë të Çelët/të Errët Sistemi";
+
+/* Theme picker settings section title */
+"Settings.DisplayTheme.ThemePicker.SectionHeader" = "Zgjedhës Temash";
+
+/* Title in main app settings for Theme settings */
+"Settings.DisplayTheme.Title.v2" = "Temë";
+
+/* DNT Settings option for always on */
+"Settings.DNT.OptionAlwaysOn" = "Përherë";
+
+/* DNT Settings option for only turning on when Tracking Protection is also on */
+"Settings.DNT.OptionOnWithTP" = "Vetëm kur përdoret Mbrojtje Nga Gjurmimet";
+
+/* DNT Settings title */
+"Settings.DNT.Title" = "Dërgojuni sajteve një sinjal Mos Më Gjurmo se nuk doni të ndiqeni";
+
+/* Label used for the device name settings section. */
+"Settings.FxA.DeviceName" = "Emër Pajisjeje";
+
+/* Label used as a section title in the Firefox Accounts Settings screen. */
+"Settings.FxA.Sync.SectionName" = "Rregullime Njëkohësimesh";
+
+/* Title displayed in header of the FxA settings panel. */
+"Settings.FxA.Title" = "Llogari Firefox";
+
+/* General settings section title */
+"Settings.General.SectionName" = "Të përgjithshme";
+
+/* Button in settings to clear the home page. */
+"Settings.HomePage.Clear.Button" = "Spastroje";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "Faqe hyrëse";
+
+/* Title displayed in header of the setting panel. */
+"Settings.HomePage.Title" = "Rregullime Faqeje Hyrëse";
+
+/* Placeholder text in the homepage setting when no homepage has been set. */
+"Settings.HomePage.URL.Placeholder" = "Jepni një faqe web";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "Faqja Hyrëse e Tanishme";
+
+/* Button in settings to use the current link on the clipboard as home page. */
+"Settings.HomePage.UseCopiedLink.Button" = "Përdor Lidhjen e Kopjuar";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "Përdor Faqen e Tanishme";
+
+/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
+"Settings.HomePage.UseDefault.Button" = "Përdor Parazgjedhjen";
+
+/* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
+"Settings.LoginsAndPasswordsTitle" = "Kredenciale Hyrjesh & Fjalëkalime";
+
+/* Label used to set a custom url as the new tab option (homepage). */
+"Settings.NewTab.CustomURL" = "URL Vetjake";
+
+/* A description in settings of what the new tab choice means */
+"Settings.NewTab.Description" = "Kur hapni një Skedë të Re:";
+
+/* The title of the section in newtab that lets you modify the topsites panel */
+"Settings.NewTab.Option.ASTitle" = "Përshtatni Sajtet Kryesues";
+
+/* Option in settings to show a blank page when you open a new tab */
+"Settings.NewTab.Option.BlankPage" = "Faqe të Zbrazët";
+
+/* Option in settings to show bookmarks when you open a new tab */
+"Settings.NewTab.Option.Bookmarks" = "Faqerojtës";
+
+/* The footer for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeFooter" = "Sajtet që vizitoni më tepër";
+
+/* The title for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeTitle" = "Përshtatni Kreun për Firefox-in";
+
+/* Option in settings to show Firefox Home when you open a new tab */
+"Settings.NewTab.Option.FirefoxHome" = "Kreun e Firefox-it";
+
+/* Option in the settings to turn off recent bookmarks in the Highlights section */
+"Settings.NewTab.Option.HighlightsBookmarks" = "Faqerojtës Së Fundi";
+
+/* Option in settings to turn off history in the highlights section */
+"Settings.NewTab.Option.HighlightsHistory" = "Vizituar";
+
+/* Option in settings to show history when you open a new tab */
+"Settings.NewTab.Option.History" = "Historik";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.HomePage" = "Kreu";
+
+/* Option in settings to turn on off pocket recommendations */
+"Settings.NewTab.Option.Pocket" = "Në modë në Pocket";
+
+/* Footer caption for pocket settings */
+"Settings.NewTab.Option.PocketFooter" = "Lëndë e goditur, nga anembanë internetit.";
+
+/* Option in settings to show reading list when you open a new tab */
+"Settings.NewTab.Option.ReadingList" = "Shfaq Listën tuaj të Leximeve";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
+"Settings.NewTab.SectionName" = "Skedë e Re";
+
+/* Title displayed in header of the setting panel. */
+"Settings.NewTab.Title" = "Skedë e Re";
+
+/* Label at the top of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionName" = "Shfaq";
+
+/* Footer at the bottom of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionNameFooter" = "Zgjidhni ç’të ngarkohet kur hapet një skedë e re";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Status" = "Kur Hapet Firefox-i";
+
+/* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Title" = "Ofro Hapje Lidhjesh të Kopjuara";
+
+/* Title for Open With Settings */
+"Settings.OpenWith.PageTitle" = "Lidhjet për email hapi në";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
+"Settings.OpenWith.SectionName" = "Aplikacion Email";
+
+/* Setting to enable the built-in password manager */
+"Settings.SaveLogins.Title" = "Ruaji Kredencialet e Hyrjeve";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "U bë";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "Përpunoni";
+
+/* title for a link that explains how mozilla collects telemetry */
+"Settings.SendUsage.Link" = "Mësoni Më Tepër.";
+
+/* A short description that explains why mozilla collects usage data. */
+"Settings.SendUsage.Message" = "Mozilla rreket të grumbullojë vetëm sa na duhen për të ofruar dhe përmirësuar Firefox-in për këdo.";
+
+/* The title for the setting to send usage data. */
+"Settings.SendUsage.Title" = "Dërgo të Dhëna Përdorimi";
+
+/* Description displayed under the ”Show Link Previews” option */
+"Settings.ShowLinkPreviews.Status" = "Kur Lidhjet Klikohen Gjatë";
+
+/* Title of setting to enable link previews when long-pressing links. */
+"Settings.ShowLinkPreviews.Title" = "Shfaq Paraparje Lidhjeje";
+
+/* Setting to show Logins & Passwords quick access in the application menu */
+"Settings.ShowLoginsInAppMenu.Title" = "Shfaqe në Menu Aplikacioni";
+
+/* The description of the open new tab siri shortcut */
+"Settings.Siri.OpenTabShortcut" = "Hap Skedë të Re";
+
+/* The description that describes what siri shortcuts are */
+"Settings.Siri.SectionDescription" = "Përdorni shkurtore Siri për ta hapur shpejt e shpejt Firefox-in përmes Siri-t";
+
+/* The option that takes you to the siri shortcuts settings page */
+"Settings.Siri.SectionName" = "Shkurtore Siri";
+
+/* Dismiss button for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Button" = "OK, e mora vesh";
+
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "Nëse një sajt nuk funksionon si pritej, prekni mburojën te shtylla e adresave dhe çaktivizoni Mbrojtjen e Thelluar Nga Gjurmimet për atë faqe.";
+
+/* Title for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Title" = "Kini mendjen!";
+
+/* Header description for tracking protection options section where Basic/Strict block list can be selected */
+"Settings.TrackingProtection.BlockListsHeader" = "Mund të zgjidhni cilën listë do të përdorë Firefox-i për të bllokuar elementë Web që mund të gjurmojnë veprimtarinë tuaj të shfletimit.";
+
+/* Explanation of basic mode. */
+"Settings.TrackingProtection.Info.BasicTitle" = "E baraspeshuar për mbrojtje dhe funksionim.";
+
+/* The Title on info view which shows a list of all blocked websites */
+"Settings.TrackingProtection.Info.BlocksTitle" = "BLLOKIME";
+
+/* Explanation of strict mode. */
+"Settings.TrackingProtection.Info.StrictTitle" = "Ofron mbrojtje më të fuqishme, por mund të sjellë mosfunksionim si duhet të disa sajteve.";
+
+/* 'Learn more' info link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.LearnMore" = "Mësoni më tepër";
+
+/* 'More Info' link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.MoreInfo" = "Më Tepër të Dhëna…";
+
+/* Additional information about your Enhanced Tracking Protection */
+"Settings.TrackingProtection.ProtectionCellFooter" = "Ul numrin e reklamave të qepura enkas për ju dhe ndihmon të ndalen gjurmimi i shfletimeve tuaja nga reklamues.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "Nëse një sajt nuk funksionon si pritej, prekni mburojën te shtylla e adresave dhe çaktivizoni Mbrojtjen e Thelluar Nga Gjurmimet për atë faqe.";
+
+/* Description for standard level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Lejon disa reklama gjurmimi, kështu që sajtet punojnë si pritet.";
+
+/* Description for strict level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "Bllokon më shumë gjurmues, reklama dhe flluska. Faqet ngarkohen më shpejt, por disa anë mund të mos punojnë.";
+
+/* Title for tracking protection options section where level can be selected. */
+"Settings.TrackingProtection.ProtectionLevelTitle" = "Shkallë Mbrojtjeje";
+
+/* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
+"Settings.TrackingProtection.SectionName" = "Mbrojtje Nga Gjurmimet";
+
+/* Additional information about the strict level setting */
+"Settings.TrackingProtection.StrictLevelInfoFooter" = "Bllokimi i gjurmuesve mund të ndikojë në funksionimin e disa sajteve.";
+
+/* Tracking protection settings option for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BasicBlockList" = "Standarde (parazgjedhje)";
+
+/* Tracking protection settings option description for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BlockListBasicDescription" = "Lejon ndoca gjurmues, që sajtet të funksionojnë si duhet.";
+
+/* Tracking protection settings option for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrict" = "Strikte";
+
+/* Tracking protection settings option description for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrictDescription" = "Bllokon gjurmuesit e ditur. Disa sajte mund të mos punojnë si duhet.";
+
+/* Description label shown on tracking protection options screen. */
+"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "Gjurmim do të thotë grumbullim i të dhënave tuaja të shfletimit nga shumë sajte.";
+
+/* Settings option to specify that Tracking Protection is on */
+"Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "Mbrojtje e Thelluar Nga Gjurmimet";
+
+/* Translation settings footer describing how language detection and translation happens. */
+"Settings.TranslateSnackBar.SectionFooter" = "Gjuha e faqes zbulohet në pajisje, dhe ofrohet përkthim nga një shërbim i largët.";
+
+/* Translation settings section title */
+"Settings.TranslateSnackBar.SectionHeader" = "Shërbime";
+
+/* Switch to choose if the language of a page is detected and offer to translate. */
+"Settings.TranslateSnackBar.SwitchSubtitle" = "Ofrim të përkthehet çfarëdo sajti i shkruar në një gjuhë që është e ndryshme nga gjuha juaj parazgjedhje.";
+
+/* Switch to choose if the language of a page is detected and offer to translate. */
+"Settings.TranslateSnackBar.SwitchTitle" = "Ofrim Përkthimi";
+
+/* Title in main app settings for Translation toast settings */
+"Settings.TranslateSnackBar.Title" = "Përkthim";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "Diagnostikoje";
+
+/* Button to delete website in search results */
+"Settings.WebsiteData.ButtonDelete" = "Fshije";
+
+/* Button to exit edit website search results */
+"Settings.WebsiteData.ButtonDone" = "U bë";
+
+/* Button to edit website search results */
+"Settings.WebsiteData.ButtonEdit" = "Përpunoni";
+
+/* Button shows all websites on website data tableview */
+"Settings.WebsiteData.ButtonShowMore" = "Shfaq Më Tepër";
+
+/* Description of the confirmation dialog shown when a user tries to clear their private data. */
+"Settings.WebsiteData.ConfirmPrompt" = "Ky veprim do të sjellë fshirjen e krejt të dhënave tuaja të sajteve. S’mund të zhbëhet.";
+
+/* Title displayed in header of the Data Management panel. */
+"Settings.WebsiteData.Title" = "Të dhëna Sajtesh";
+
+/* Action label on share extension to add page to the Firefox reading list. */
+"ShareExtension.AddToReadingListAction.Title" = "Shtoje te Listë Leximesh";
+
+/* Share extension label shown after user has performed 'Add to Reading List' action. */
+"ShareExtension.AddToReadingListActionDone.Title" = "U shtua te Listë Leximesh";
+
+/* Action label on share extension to bookmark the page in Firefox. */
+"ShareExtension.BookmarkThisPageAction.Title" = "Faqeruaje Këtë Faqe";
+
+/* Share extension label shown after user has performed 'Bookmark this Page' action. */
+"ShareExtension.BookmarkThisPageActionDone.Title" = "U faqeruajt";
+
+/* Action label on share extension to load the page in Firefox when user switches apps to bring it to foreground. */
+"ShareExtension.LoadInBackgroundAction.Title" = "Ngarkoje në Prapaskenë";
+
+/* Share extension label shown after user has performed 'Load in Background' action. */
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Po ngarkohet në Firefox";
+
+/* Action label on share extension to immediately open page in Firefox. */
+"ShareExtension.OpenInFirefoxAction.Title" = "Hape në Firefox";
+
+/* Action label on share extension to immediately open page in Firefox in private mode. */
+"ShareExtension.OpenInPrivateModeAction.Title" = "Hape nën Mënyrën Private";
+
+/* Action label on share extension to search for the selected text in Firefox. */
+"ShareExtension.SeachInFirefoxAction.Title" = "Kërko në Firefox";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "Shfaq Sugjerime Kërkimi";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "Shfaq Skeda";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "Shfaq Turin";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "Ndale";
+
+/* Support section title */
+"Support" = "Asistencë";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Që të mbyllet skeda, fërkojeni majtas ose djathtas me tre gishta.";
+
+/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"SwitchToNonPBM.KeyCodeTitle" = "Mënyra Shfletim Normal";
+
+/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"SwitchToPBM.KeyCodeTitle" = "Mënyra Shfletim Privat";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, bookmarks, passwords and more." = "Njëkohësoni skedat, faqerojtësit, fjalëkalimet tuaja, etj.";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, passwords and more." = "Njëkohësoni skedat, fjalëkalimet tuaja, etj.";
+
+/* Message displayed when the user syncs for the first time */
+"Sync.FirstTimeMessage.Label" = "Njëkohësimi juaj i parë mund të hajë ca kohë";
+
+/* String displayed on Sign In to Sync page that allows the user to create a new account. */
+"Sync.NoAccount.Description" = "Pa llogari? Krijoni një të tillë, që të njëkohësoni Firefox-in mes pajisjesh.";
+
+/* Message displayed when the user's account is syncing with no ellipsis */
+"Sync.Syncing.Label" = "Po njëkohësohet";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "Po njëkohësohet…";
+
+/* Panel accessibility label */
+"Synced Tabs" = "Skeda të Njëkohësuara";
+
+/* The Bookmark sync component, used in SyncState.Partial.Title */
+"SyncState.Bookmark.Title" = "Faqerojtës";
+
+/* The Remote Clients sync component, used in SyncState.Partial.Title */
+"SyncState.Clients.Title" = "Klientë të Largët";
+
+/* Title for Sync status message when synchronization failed to complete */
+"SyncState.Failed.Title" = "Njëkohësimi dështoi";
+
+/* The History sync component, used in SyncState.Partial.Title */
+"SyncState.History.Title" = "Historik";
+
+/* The Logins sync component, used in SyncState.Partial.Title */
+"SyncState.Logins.Title" = "Kredenciale Hyrjesh";
+
+/* Title for Sync status message when Sync failed to start. */
+"SyncState.NotStarted.Title" = "Njëkohësimi s’është gati";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "Sync-u s’është në linjë";
+
+/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
+"SyncState.Partial.Title" = "Sync-u po ka probleme me njëkohësimin e %@";
+
+/* The Tabs sync component, used in SyncState.Partial.Title */
+"SyncState.Tabs.Title" = "Skeda";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "Skeda %1$@ nga %2$@";
+
+/* Hardware shortcut to open the tab tray from a tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"Tab.ShowTabTray.KeyCodeTitle" = "Shfaqini Krejt Skedat";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "Skedat nga %1$@ deri në %2$@, nga %3$@ gjithsej";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Panel Skedash";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "Zhbëje";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "U mbyllën %d skeda";
+
+/* The placeholder text for the tab search bar */
+"Tabs.Search.PlaceholderText" = "Kërko Në Skeda";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"TabTray.AddTab.Button" = "Shtoni Skedë";
+
+/* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseAllTabs.KeyCodeTitle" = "Mbylli Krejt Skedat";
+
+/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseTab.KeyCodeTitle" = "Hap Skedat e Përzgjedhura";
+
+/* The section header for tabs opened last week */
+"TabTray.LastWeek.Header" = "Javën e Kaluar";
+
+/* The title on the button to copy the tab address. */
+"TabTray.MoreMenu.Copy" = "Kopjoje";
+
+/* The section header for tabs opened before last week */
+"TabTray.Older.Header" = "Më të vjetra";
+
+/* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenNewTab.KeyCodeTitle" = "Hap Skedë të Re";
+
+/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenSelectedTab.KeyCodeTitle" = "Hap Skedën e Përzgjedhur";
+
+/* The button title to see more options to perform on the tab. */
+"TabTray.SwipeMenu.More" = "Më tepër";
+
+/* The title for the tab tray */
+"TabTray.Title" = "Hapi Skedat";
+
+/* The section header for tabs opened today */
+"TabTray.Today.Header" = "Sot";
+
+/* The section header for tabs opened yesterday */
+"TabTray.Yesterday.Header" = "Dje";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "Faqja s’u shfaq dot nën Pamjen Lexues.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Pati një problem me hyrjen te skedat prej pajisjeve tuaja të tjera. Riprovoni pas pak çastesh.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "Pati një gabim në shndërrimin e faqes";
+
+/* Relative date for date in past week. */
+"this week" = "këtë javë";
+
+/* label for Not Now button */
+"Toasts.NotNow" = "Jo Tani";
+
+/* Open App Store button */
+"Toasts.OpenAppStore" = "Hapni App Store";
+
+/* Label for button to undo the action just performed */
+"Toasts.Undo" = "Zhbëje";
+
+/* History tableview section header */
+"Today" = "Sot";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "sot, më %@";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "Menu";
+
+/* Accessibility label for the Close All Tabs menu button. */
+"Toolbar.Menu.CloseAllTabs" = "Mbylli Krejt Skedat";
+
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "Këtu do të shfaqen sajtet më të vizituar nga ju.";
+
+/* The title for the empty Top Sites state */
+"TopSites.EmptyState.Title" = "Mirë se vini te Sajtet Kryesues";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "Hiqe faqen - %@";
+
+/* Button to disallow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.Cancel" = "Jo";
+
+/* Button to allow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.OK" = "Po";
+
+/* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
+"TranslationToastHandler.PromptTranslate.Title" = "Kjo faqet duket të jetë në %1$@. Të përkthehet në %2$@ me %3$@?";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* The menu item that pastes the current contents of the clipboard into the URL bar and navigates to the page */
+"UIMenuItem.PasteGo" = "Ngjite & Shko";
+
+/* Search in New Tab Text selection menu item */
+"UIMenuItem.SearchWithFirefox" = "Kërko me Firefox";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "të palexuara";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect" = "Përmirësoni Firefox-in që të bëhet lidhja";
+
+/* Debug option */
+"Use stage servers" = "Përdor shërbyes provash";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Emër përdoruesi";
+
+/* Text message in the settings table view */
+"Verify your email address" = "Verifikoni adresën tuaj email";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "Versioni %1$@ (%2$@)";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Lëndë Web";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Mirë se vini te Lista juaj e Leximeve";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "Hëm, ndjehemi ngushtë.";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Wikipedia";
+
+/* Relative date for yesterday. */
+"yesterday" = "dje";
+
+/* History tableview section header */
+"Yesterday" = "Dje";
+
+/* Error message in the remote tabs panel */
+"You don’t have any tabs open in Firefox on your other devices." = "S’keni ndonjë skedë të hapur te Firefox-i në pajisje tuajat të tjera.";
+
+/* Your Rights settings section title */
+"Your Rights" = "Të drejtat Tuaja";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+

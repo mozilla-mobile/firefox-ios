@@ -1,0 +1,30 @@
+/* Label for the button, displayed in the menu, used to close all tabs currently open. */
+"Menu.CloseAllTabsAction.Title" = "ⵔⴳⵍ ⵉⵙⴽⵙⴰⵍ ⴰⴽⴽⵯ";
+
+/* Label for the button, displayed in the menu, used to copy the page url to the clipboard. */
+"Menu.CopyAddress.Title" = "ⵙⵙⵏⵖⵍ ⴰⵏⵙⴰ";
+
+/* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
+"Menu.FindInPageAction.Title" = "ⴰⴼ ⴳ ⵜⴰⵙⵏⴰ";
+
+/* Label for the button, displayed in the menu, used to open a new private tab. */
+"Menu.NewPrivateTabAction.Title" = "ⵕⵥⵎ ⴰⵙⴽⵙⵍ ⵓⵙⵍⵉⴳ ⴰⵎⴰⵢⵏⵓ";
+
+/* Label for the button, displayed in the menu, used to open a new tab */
+"Menu.NewTabAction.Title" = "ⵕⵥⵎ ⴰⵙⴽⵙⵍ ⴰⵎⴰⵢⵏⵓ";
+
+/* Accessibility label for the button, displayed in the menu, used to open the History home panel. Please keep as short as possible, <15 chars of space available. */
+"Menu.OpenHistoryAction.AccessibilityLabel.v2" = "ⴰⵎⵣⵔⵓⵢ";
+
+/* Label for the button, displayed in the menu, used to navigate to the home page. */
+"Menu.OpenHomePageAction.Title" = "ⴰⵙⵏⵓⴱⴳ";
+
+/* Label for the button, displayed in the menu, used to open the Settings menu. */
+"Menu.OpenSettingsAction.Title" = "ⵜⵉⵙⵖⴰⵍ";
+
+/* Label for the button, displayed in Firefox Home, used to see all Library panels. */
+"Menu.SeeAllAction.Title" = "ⵥⵕ ⵎⴰⵕⵕⴰ";
+
+/* Label for the button, displayed in the menu, used to translate the current page. */
+"Menu.TranslatePageAction.Title" = "ⵙⵙⵓⵖⵍ ⵜⴰⵙⵏⴰ";
+

@@ -1,0 +1,1712 @@
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "La pagina %@ dumonda in num d'utilisader ed in pled-clav.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "La pagina %1$@ dumonda in num d'utilisader ed in pled-clav. La pagina di: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "Davart";
+
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite" = "Fixar sco pagina preferida";
+
+/* The title for removing a pinned topsite action */
+"ActivityStream.ContextMenu.RemovePinTopsite" = "Allontanar da las paginas preferidas";
+
+/* The description of a highlight if it is a site the user has bookmarked */
+"ActivityStream.Highlights.Bookmark" = "Marcà sco segnapagina";
+
+/* The description of a highlight if it is a site the user has visited */
+"ActivityStream.Highlights.Visited" = "Visità";
+
+/* Section title label for recently bookmarked websites */
+"ActivityStream.NewRecentBookmarks.Title" = "Segnapaginas novs";
+
+/* The link that shows more Pocket trending stories */
+"ActivityStream.Pocket.MoreLink" = "Dapli";
+
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle" = "Recumandà da Pocket";
+
+/* The description of a Pocket Story */
+"ActivityStream.Pocket.Trending" = "Popular";
+
+/* Section title label for recently visited websites */
+"ActivityStream.RecentHistory.Title" = "Visità dacurt";
+
+/* label showing how many rows of topsites are shown. %d represents a number */
+"ActivityStream.TopSites.RowCount" = "Lingias: %d";
+
+/* The title for the setting page which lets you select the number of top site rows */
+"ActivityStream.TopSites.RowSettingFooter" = "Definir il dumber da lingias";
+
+/* Section title label for Top Sites */
+"ActivityStream.TopSites.SectionTitle" = "Paginas preferidas";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Agiuntar in tab";
+
+/* Accessibility label for action adding current page to reading list.
+   Name for button adding current article to reading list in reader mode */
+"Add to Reading List" = "Agiuntar a la glista da lectura";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Agiuntà la pagina a la glista da lectura";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "OK";
+
+/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Message" = "Ina errur è capitada durant inserir la carta en Wallet. Emprova pli tard anc ina giada.";
+
+/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Title" = "Errur cun inserir la carta";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Adressa e tschertga";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Adina trametter";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "Autentificaziun obligatorica";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "Enavos";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Bloccar fanestras pop-up";
+
+/* The header title for the fields when editing a Bookmark */
+"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "Segnapagina";
+
+/* The header title for the fields when editing a Folder */
+"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "Ordinatur";
+
+/* The label for the Title field when editing a bookmark */
+"Bookmark.DetailFieldTitle.Label" = "Titel";
+
+/* The label for the URL field when editing a bookmark */
+"Bookmark.DetailFieldURL.Label" = "URL";
+
+/* Toggle bookmarks syncing setting */
+"Bookmarks" = "Segnapaginas";
+
+/* The button on the snackbar to edit a bookmark after adding it. */
+"Bookmarks.Edit.Button" = "Modifitgar";
+
+/* The button to edit a bookmark */
+"Bookmarks.EditBookmark.Label" = "Modifitgar il segnapagina";
+
+/* The button to edit a folder */
+"Bookmarks.EditFolder.Label" = "Modifitgar l'ordinatur";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "Ordinatur";
+
+/* The label for the location of the new folder */
+"Bookmarks.FolderLocation.Label" = "Lieu";
+
+/* The label for the title of the new folder */
+"Bookmarks.FolderName.Label" = "Num da l'ordinatur";
+
+/* The button to create a new bookmark */
+"Bookmarks.NewBookmark.Label" = "Nov segnapagina";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "Nov ordinatur";
+
+/* The button to create a new separator */
+"Bookmarks.NewSeparator.Label" = "Nov separatur";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "Titel";
+
+/* The label for the URL of a bookmark */
+"Bookmarks.URL.Label" = "URL";
+
+/* Status label for the empty Bookmarks state. */
+"BookmarksPanel.EmptyState.Title" = "Segnapaginas che ti memoriseschas cumparan qua.";
+
+/* Describes the date on which the breach occurred */
+"BreachAlerts.BreachDate" = "Questa sperdita da datas è succedida ils";
+
+/* Description of what a breach is */
+"BreachAlerts.Description" = "Pleds-clav èn ids a perder u vegnids engulads dapi che ti has midà l'ultima giada tes pled-clav. Per proteger quest conto, t'annunzia sin la website e mida tes pled-clav.";
+
+/* Link to monitor.firefox.com to learn more about breached passwords */
+"BreachAlerts.LearnMoreButton" = "Ulteriuras infurmaziuns";
+
+/* Leads to a link to the breached website */
+"BreachAlerts.Link" = "Visitar";
+
+/* Title for the Breached Login Detail View. */
+"BreachAlerts.Title" = "Website ha pers datas";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Clerezza";
+
+/* Label for Cancel button */
+"Cancel" = "Interrumper";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Mida il schema da colur.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Mida il tip da scrittira.";
+
+/* The button to open a new tab with the copied link */
+"ClipboardToast.GoToCopiedLink.Button" = "Dai";
+
+/* Message displayed when the user has a copied link on the clipboard */
+"ClipboardToast.GoToCopiedLink.Title" = "Avrir l'adressa copiada?";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Serrar";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "Serrar il tab";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "computer";
+
+/* Context menu item for bookmarking a link URL */
+"ContextMenu.BookmarkLinkButtonTitle" = "Agiuntar segnapagina per la colliaziun";
+
+/* The button text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Midar";
+
+/* The label text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Avert in nov tab privat";
+
+/* The button text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "Midar";
+
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText" = "Avert in nov tab";
+
+/* Context menu item for copying an image to the clipboard */
+"ContextMenu.CopyImageButtonTitle" = "Copiar la grafica";
+
+/* Context menu item for copying an image URL to the clipboard */
+"ContextMenu.CopyImageLinkButtonTitle" = "Copiar la colliaziun da la grafica";
+
+/* Context menu item for copying a link URL to the clipboard */
+"ContextMenu.CopyLinkButtonTitle" = "Copiar la colliaziun";
+
+/* Context menu item for downloading a link URL */
+"ContextMenu.DownloadLinkButtonTitle" = "Telechargiar la colliaziun";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenInNewTabButtonTitle" = "Avrir en in nov tab";
+
+/* Context menu item for saving an image */
+"ContextMenu.SaveImageButtonTitle" = "Memorisar la grafica";
+
+/* Context menu item for sharing a link URL */
+"ContextMenu.ShareLinkButtonTitle" = "Cundivider la colliaziun";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "Impussibel dad agiuntar la pagina a la glista da lectura";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it’s already there?" = "Impussibel dad agiuntar la pagina a la glista da lectura. Forsa sa chatta ella gia là?";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "Impussibel da chargiar la pagina.";
+
+/* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
+"CoverSheet.v22.DarkMode.Description" = "Per utilisaders dad iOS 13 mida Firefox uss automaticamain ad in design stgir sch'il telefonin sa chatta en il modus stgir. Per midar quest cumportament, ir a Parameters > Design.";
+
+/* Title for the new dark mode change in the version 22 app release. */
+"CoverSheet.v22.DarkMode.Title" = "Il design stgir includa ussa ina tastatura stgira ed in maletg da bainvegni stgir.";
+
+/* Description for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Description" = "La protecziun avanzada cunter il fastizar gida dad impedir che reclamas ta suondan. Activescha il modus strict per bloccar anc dapli fastizaders, reclamas e pop-ups.";
+
+/* Text for the new ETP settings button */
+"CoverSheet.v24.ETP.Settings.Button" = "Ir als parameters";
+
+/* Title for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Title" = "Protecziun cunter il fastizar da reclamas";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Crear in conto";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Stgir";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Diminuir la grondezza dal text";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Maschina da tschertgar predefinida";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Configuraziun da la visualisaziun";
+
+/* Used as a button label for crash dialog prompt */
+"Don’t Send" = "Betg trametter";
+
+/* Done button on left side of the Settings view controller title bar */
+"Done" = "Finì";
+
+/* Panel accessibility label */
+"Downloads" = "Telechargiadas";
+
+/* The label of the button the user will press to start downloading a file */
+"Downloads.Alert.DownloadNow" = "Telechargiar ussa";
+
+/* Button confirming the cancellation of the download. */
+"Downloads.CancelDialog.Cancel" = "Interrumper";
+
+/* Alert dialog body when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Message" = "Vuls ti propi interrumper questa telechargiada?";
+
+/* Button declining the cancellation of the download. */
+"Downloads.CancelDialog.Resume" = "Cuntinuar";
+
+/* Alert dialog title when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Title" = "Interrumper la telechargiada";
+
+/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
+"Downloads.Error.Message" = "Telechargiadas na vegnan actualmain anc betg sustegnidas en Firefox.";
+
+/* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
+"Downloads.Toast.Cancelled.LabelText" = "Interrut la telechargiada";
+
+/* The label text in the Download Failed toast for showing confirmation that the download has failed. */
+"Downloads.Toast.Failed.LabelText" = "Betg reussì da telechargiar";
+
+/* The button to retry a failed download from the Download Failed toast. */
+"Downloads.Toast.Failed.RetryButton" = "Reempruvar";
+
+/* The button to open a new tab with the Downloads home panel */
+"Downloads.Toast.GoToDownloads.Button" = "Telechargiadas";
+
+/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. */
+"Downloads.Toast.MultipleFiles.DescriptionText" = "1 da %d datotecas";
+
+/* The description text in the Download progress toast for showing the number of files (1$) and download progress (2$). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where 1$ is Downloads.Toast.MultipleFiles.DescriptionText and 2$ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and 1$ should come before 2$ everywhere except for right-to-left locales. */
+"Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";
+
+/* The description text in the Download progress toast for showing the downloaded file size (1$) out of the total expected file size (2$). */
+"Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
+
+/* Action button for deleting downloaded files in the Downloads panel. */
+"DownloadsPanel.Delete.Title" = "Stizzar";
+
+/* Title for the Downloads Panel empty state. */
+"DownloadsPanel.EmptyState.Title" = "Datotecas telechargiadas vegnan mussadas qua.";
+
+/* Action button for sharing downloaded files in the Downloads panel. */
+"DownloadsPanel.Share.Title" = "Cundivider";
+
+/* Text message in the settings table view */
+"Enter your password to connect" = "Endatescha tes pled-clav per ta connectar";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "Avanzà";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "Attenziun: Impussibel da confermar che tia connexiun cun questa pagina web è segira.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "Eventualmain sa tracti d'ina configuraziun mala u da l'emprova dad in attatgader. Cuntinuescha sche ti acceptas il ristg potenzial.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "Il possessur da %@ ha configurà mal sia website. Per proteger tias infurmaziuns dad enguladitschs n'ha Firefox betg stabilì ina connexiun cun questa website.";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "Questa connexiun n'è betg segira";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "Turnar";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "Tuttina visitar la pagina";
+
+/* Question shown to user when tapping a link that opens the App Store app */
+"ExternalLink.AppStore.ConfirmationTitle" = "Avrir questa colliaziun en l'App Store?";
+
+/* Question shown to user when tapping an SMS or MailTo link that opens the external app for those. */
+"ExternalLink.AppStore.GenericConfirmationTitle" = "Avrir questa colliaziun en ina app externa?";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Title for firefox about:home page in tab history list */
+"Firefox.HomePage.Title" = "Pagina da partenza da Firefox";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "Renviar";
+
+/* Label stating how to disconnect account */
+"FxA.AccountVerificationDetails" = "Betg l'adressa dad e-mail correcta? Ta deconnectescha sutvart per cumenzar anc ina giada.";
+
+/* Label stating your account is not verified */
+"FxA.AccountVerificationRequired" = "Verificaziun dal conto necessaria";
+
+/* Message explaining that user needs to check email for Firefox Account verfication link. */
+"FxA.AccountVerificationRequiredSurface" = "Ti stos verifitgar %@. Controllescha tes e-mails per chattar la colliaziun da verificaziun da Firefox.";
+
+/* Button label to connect another device to Sync */
+"FxA.ConnectAnotherDevice" = "Associar in auter apparat";
+
+/* Settings section title for Firefox Account */
+"FxA.FirefoxAccount" = "Conto da Firefox";
+
+/* Button label to go to Firefox Account settings */
+"FxA.ManageAccount" = "Administrar il conto ed ils apparats";
+
+/* Label when no internet is present */
+"FxA.NoInternetConnection" = "Nagina connexiun cun l'internet";
+
+/* Button label to open Sync preferences */
+"FxA.OpenSyncPreferences" = "Avrir las preferenzas da Sync";
+
+/* Instructions shown on qr code scanning view */
+"fxa.qr-scanning-view.instructions" = "Scannescha il code QR mussà sin firefox.com/pair";
+
+/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
+"FxA.RemoveAccount" = "Allontanar";
+
+/* Description string for alert view that gets presented when user tries to remove an account. */
+"FxA.RemoveAccountAlertMessage" = "Allontanescha il conto da Firefox associà cun quest apparat per s'annunziar sco in auter utilisader.";
+
+/* Remove account alert is the final confirmation before user removes their firefox account */
+"FxA.RemoveAccountAlertTitle" = "Allontanar il conto";
+
+/* Button label to resend email */
+"FxA.ResendEmail" = "Trametter danovamain l'e-mail";
+
+/* FxA sign in view subtitle */
+"fxa.signin.camera-signin" = "T'annunzia cun tia camera";
+
+/* FxA sign in create account label. */
+"fxa.signin.create-account-pt-1" = "Sincronisescha Firefox tranter differents apparats cun in conto.";
+
+/* FxA sign in create account label. This will be linked to the site to create an account. */
+"fxa.signin.create-account-pt-2" = "Crear in conto da Firefox.";
+
+/* FxA sign in view qr code instructions */
+"fxa.signin.qr-link-instruction" = "Avra Firefox sin tes computer e visita firefox.com/pair";
+
+/* FxA sign in view qr code scan button */
+"fxa.signin.ready-to-scan" = "Pront per scannar";
+
+/* FxA sign in view title */
+"fxa.signin.turn-on-sync" = "Activar Sync";
+
+/* FxA sign in view email login button */
+"fxa.signin.use-email-instead" = "Duvrar l'adressa d'e-mail";
+
+/* Button label to sign into Sync */
+"FxA.SignIntoSync" = "S'annunziar tar Sync";
+
+/* Label explaining what sync does */
+"FxA.SyncExplain" = "Per avair access a tes tabs, tes segnapaginas e tes pleds-clav da tes auters apparats.";
+
+/* Button label to Sync your Firefox Account */
+"FxA.SyncNow" = "Sincronisar ussa";
+
+/* Call to action for sign into sync button */
+"FxA.TakeYourWebWithYou" = "Prenda tes web cun tai";
+
+/* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
+"FxAPush_DeviceConnected_body" = "Firefox Sync è connectà cun %@";
+
+/* Title of a notification displayed when another device has connected to FxA. */
+"FxAPush_DeviceConnected_title" = "Sync è connectà";
+
+/* Body of a notification displayed when named device has been disconnected from FxA. %@ refers to the name of the disconnected device. */
+"FxAPush_DeviceDisconnected_body" = "%@ è vegnì deconnetà cun success.";
+
+/* Body of a notification displayed when this device has been disconnected from FxA by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Quest apparat è vegnì deconnectà cun success da Firefox Sync.";
+
+/* Title of a notification displayed when this device has been disconnected by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync è deconnectà";
+
+/* Title of a notification displayed when named device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_title" = "Sync è deconnectà";
+
+/* Body of a notification displayed when unnamed device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "In apparat è vegnì deconnectà da Firefox Sync";
+
+/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "Per avair access a tes tabs averts, tes segnapaginas e tes pleds-clav da tes auters apparats.";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Agid";
+
+/* Toggle history syncing setting */
+"History" = "Cronologia";
+
+/* Title for button in the history panel to clear recent history */
+"HistoryPanel.ClearHistoryButtonTitle" = "Stizzar la cronologia recenta…";
+
+/* Option title to clear all browsing history. */
+"HistoryPanel.ClearHistoryMenuOptionEverything" = "Tut";
+
+/* Button to perform action to clear history for the last hour */
+"HistoryPanel.ClearHistoryMenuOptionTheLastHour" = "L'ultima ura";
+
+/* Button to perform action to clear history for today only */
+"HistoryPanel.ClearHistoryMenuOptionToday" = "Oz";
+
+/* Button to perform action to clear history for yesterday and today */
+"HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "Oz ed ier";
+
+/* Title for popup action menu to clear recent history. */
+"HistoryPanel.ClearHistoryMenuTitle" = "Cun stizzar la cronologia recenta vegnan la cronologia, ils cookies ed autras datas da navigaziun stizzadas.";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "Paginas che ti has visità dacurt cumparan qua.";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "Tes tabs dad auters apparats cumparan qua.";
+
+/* Description for the empty synced tabs 'not signed in' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "T'annunzia per vesair ina glista dals tabs da tes auters apparats.";
+
+/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "Tes conto sto vegnir verifitgà.";
+
+/* Description for the empty synced tabs 'single device Sync' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "Vuls ti vesair qua ils tabs da tes auters apparats?";
+
+/* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Activescha la sincronisaziun da tabs per vesair ina glista dals tabs da tes auters apparats.";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "Cronologia";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "Serrà dacurt";
+
+/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d apparat(s) collià(ads)";
+
+/* Title for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Title" = "Apparats sincronisads";
+
+/* Button cancelling changes setting the home page for the first time. */
+"HomePage.Set.Dialog.Cancel" = "Interrumper";
+
+/* Alert dialog body when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Message" = "Ti pos adina midar questa decisiun en las preferenzas";
+
+/* Button accepting changes setting the home page for the first time. */
+"HomePage.Set.Dialog.OK" = "Definir la pagina da partenza";
+
+/* Alert dialog title when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Title" = "Vuls ti duvrar questa pagina sco pagina da partenza?";
+
+/* The title for the Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Bookmark" = "Agiuntar segnapagina";
+
+/* The title for the Delete from History context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.DeleteFromHistory" = "Stizzar da la cronologia";
+
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab" = "Avrir en in nov tab privat";
+
+/* The title for the Open in New Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewTab" = "Avrir en in nov tab";
+
+/* The title for the Remove context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Remove" = "Allontanar";
+
+/* The title for the Remove Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.RemoveBookmark" = "Allontanar il segnapagina";
+
+/* The title for the Share context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Share" = "Cundivider";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Back.DiscoveryTitle" = "Enavos";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.CloseTab.DiscoveryTitle" = "Serrar il tab";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Find.DiscoveryTitle" = "Tschertgar";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Forward.DiscoveryTitle" = "Enavant";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "Nov tab privat";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewTab.DiscoveryTitle" = "Nov tab";
+
+/* Label to switch to normal browsing mode */
+"Hotkeys.NormalMode.DiscoveryTitle" = "Modus da navigar normal";
+
+/* Label to switch to private browsing mode */
+"Hotkeys.PrivateMode.DiscoveryTitle" = "Modus da navigar privat";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Reload.DiscoveryTitle" = "Rechargiar la pagina";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "Tscherner la trav d'adressas";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "Mussar il proxim tab";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Mussar l'ultim tab";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Engrondir il text";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "gist ussa";
+
+/* History tableview section header */
+"Last month" = "Ultim mais";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "Ultima sincronisaziun: %@";
+
+/* History tableview section header */
+"Last week" = "Ultima emna";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Licenzas";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Clar";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "Chargiar la pagina originala";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "Chargiar il cuntegn…";
+
+/* Authentication prompt log in button */
+"Log in" = "S'annunziar";
+
+/* Toggle logins syncing setting */
+"Logins" = "Infurmaziuns d'annunzia";
+
+/* Login detail view field name for the last modified date */
+"LoginsDetailView.LoginModified" = "Modifitgà";
+
+/* Title for the login detail view */
+"LoginsDetailView.LoginTitle" = "Infurmaziun d'annunzia";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "Betg memorisar";
+
+/* Button to not update the user's password */
+"LoginsHelper.DontUpdate.Button" = "Betg actualisar";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "Memorisar las datas d'annunzia %1$@ per %2$@?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "Memorisar il pled-clav per %@?";
+
+/* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
+"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "Actualisar las datas d'annunzia per %@?";
+
+/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "Actualisar las datas d'annunzia da %1$@ per %2$@?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "Memorisar";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "Actualisar";
+
+/* For filtering the login list, search only the login names */
+"LoginsList.LoginsListFilterLogin" = "Infurmaziun d'annunzia";
+
+/* For filtering the login list, search both website and login names. */
+"LoginsList.LoginsListFilterSearchAll" = "Tut";
+
+/* For filtering the login list, search only the website names */
+"LoginsList.LoginsListFilterWebsite" = "Website";
+
+/* Placeholder test for search box in logins list view. */
+"LoginsList.LoginsListSearchPlaceholder" = "Filter";
+
+/* Title for the list of logins */
+"LoginsList.Title" = "INFURMAZIUNS D'ANNUNZIA MEMORISADAS";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "I para che Firefox saja collabà dacurt. Vuls ti restaurar tes tabs?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "Marcar sco legì";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Marcar sco nunlegì";
+
+/* Toast displayed to the user after a bookmark has been added. */
+"Menu.AddBookmark.Confirm" = "Agiuntà il segnapagina";
+
+/* Toast displayed to the user after adding the item to the Top Sites. */
+"Menu.AddPin.Confirm" = "Fixà sco pagina preferida";
+
+/* Toast displayed to the user after adding the item to their reading list. */
+"Menu.AddToReadingList.Confirm" = "Agiuntà a la glista da lectura";
+
+/* The title for the button that lets you copy the url from the location bar. */
+"Menu.Copy.Title" = "Copiar l'adressa";
+
+/* Toast displayed to user after copy url pressed. */
+"Menu.CopyURL.Confirm" = "Copià l'URL en l'archiv provisoric";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "La protecziun avanzada cunter il fastizar è DEACTIVADA per questa website.";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "La protecziun avanzada cunter il fastizar è ACTIVADA per questa website.";
+
+/* Description for having standard ETP protection with ITP offered in iOS14+ */
+"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox blochescha fastizaders che ageschan sin pliras websites, fastizaders da social media, criptominiers ed improntaders.";
+
+/* Description for having strict ETP protection with ITP offered in iOS14+ */
+"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox blochescha fastizaders che ageschan sin pliras websites, fastizaders da social media, criptominiers, improntaders e cuntegn che fastizescha.";
+
+/* Label for the button displayed in the menu used to stop the reload of the webpage */
+"Menu.Library.StopReload" = "Fermar";
+
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label" = "Activar il modus da notg";
+
+/* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
+"Menu.NoImageModeBlockImages.Label" = "Bloccar las graficas";
+
+/* Label for title in page action menu. */
+"Menu.PageActions.Title" = "Acziuns da pagina";
+
+/* The title for the button that lets you paste into the location bar */
+"Menu.Paste.Title" = "Encollar";
+
+/* The title for the button that lets you paste and go to a URL */
+"Menu.PasteAndGo.Title" = "Encollar & chargiar";
+
+/* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
+"Menu.ReloadWithoutTrackingProtection.Title" = "Rechargiar senza antifastizaziun";
+
+/* Label for the button, displayed in the menu, used to reload the current website with Tracking Protection enabled */
+"Menu.ReloadWithTrackingProtection.Title" = "Rechargiar cun protecziun cunter il fastizar";
+
+/* Toast displayed to the user after a bookmark has been removed. */
+"Menu.RemoveBookmark.Confirm" = "Allontanà il segnapagina";
+
+/* Toast displayed to the user after removing the item from the Top Sites. */
+"Menu.RemovePin.Confirm" = "Allontanà da las paginas preferidas";
+
+/* Toast displayed to the user after a tab has been sent successfully. */
+"Menu.TabSent.Confirm" = "Tramess il tab";
+
+/* Title on tracking protection menu for blocked items. */
+"Menu.TrackingProtection.BlockedTitle" = "Bloccà";
+
+/* Message in menu when no trackers blocked. */
+"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Firefox n'ha chattà nagins fastizaders enconuschents sin questa pagina.";
+
+/* The title for tracking protection settings */
+"Menu.TrackingProtection.ProtectionSettings.Title" = "Parameters da protecziun";
+
+/* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
+"Menu.TrackingProtection.TitlePrefix" = "Protecziuns per %@";
+
+/* The title that shows the number of content cookies blocked */
+"Menu.TrackingProtectionBlockedContent.Title" = "Cuntegn che fastizescha";
+
+/* The title that shows the number of social URLs blocked */
+"Menu.TrackingProtectionBlockedSocial.Title" = "Fastizaders socials";
+
+/* Description of the Tracking protection menu when TP is blocking parts of the page */
+"Menu.TrackingProtectionBlocking.Description" = "Firefox blochescha parts da la pagina che ta pudessan fastizar durant che ti navigheschas.";
+
+/* The description of the Tracking Protection menu item when tracking is enabled */
+"Menu.TrackingProtectionBlockingDisabled.Description" = "Bloccar fastizaders online";
+
+/* The title that shows the number of cross-site cookies blocked */
+"Menu.TrackingProtectionCrossSiteCookies.Title" = "Cookies che fastizeschan tranter websites";
+
+/* The title that shows the number of cross-site URLs blocked */
+"Menu.TrackingProtectionCrossSiteTrackers.Title" = "Fastizaders tranter websites";
+
+/* The title that shows the number of cryptomining scripts blocked */
+"Menu.TrackingProtectionCryptominersBlocked.Title" = "Criptominiers";
+
+/* Description of content trackers. */
+"Menu.TrackingProtectionDescription.ContentTrackers" = "Websites pon chargiar reclamas, videos ed auter cuntegn extern che cuntegna fastizaders zuppads. Cun bloccar quest cuntegn chargian websites pli svelt, ma tscherts buttuns, formulars e champs d'annunzia na funcziunan eventualmain betg pli.";
+
+/* Description of cross-site trackers. */
+"Menu.TrackingProtectionDescription.CrossSiteNew" = "Quests cookies ta suondan dad ina website a la proxima per rimnar datas davart tias activitads en il web. Els vegnan installads da terzas partidas sco firmas da reclama ed analisa.";
+
+/* Description of cryptominers. */
+"Menu.TrackingProtectionDescription.CryptominersNew" = "Criptominiers maldovran adascus las resursas da tes sistem per generar daners digitals. Scripts da criptominiers consuman la battaria, ralenteschan tes computer e pon augmentar il quint da l'electricitad.";
+
+/* Description of fingerprinters. */
+"Menu.TrackingProtectionDescription.Fingerprinters" = "La configuraziun da tes navigatur e tes computer è unica. Detecturs dad improntas dal det rimnan differentas da questas configuraziuns per crear in profil da tai che po vegnir duvrà per ta fastizar durant la navigaziun.";
+
+/* Description of social network trackers. */
+"Menu.TrackingProtectionDescription.SocialNetworksNew" = "Raits socialas plazzeschan fastizaders en autras websites per crear in profil pli cumplet e cler da tai. Cun bloccar quests fastizaders sa reducescha la quantitad dad infurmaziuns davart tias activitads online che las firmas da social media pon rimnar.";
+
+/* The button that disabled TP for a site. */
+"Menu.TrackingProtectionDisable1.Title" = "Deactivà per questa website";
+
+/* The confirmation toast once tracking protection has been disabled */
+"Menu.TrackingProtectionDisabled.Title" = "La protecziun cunter il fastizar è ussa deactivada per questa website.";
+
+/* A button to enable tracking protection inside the menu. */
+"Menu.TrackingProtectionEnable.Title" = "Activar la protecziun cunter il fastizar";
+
+/* A button to enable tracking protection inside the menu. */
+"Menu.TrackingProtectionEnable1.Title" = "Activà per questa website";
+
+/* The confirmation toast once tracking protection has been enabled */
+"Menu.TrackingProtectionEnabled.Title" = "La protecziun cunter il fastizar è uss activada per questa website.";
+
+/* The title that shows the number of fingerprinting scripts blocked */
+"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Improntaders dal det";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "Cookies che fastizeschan tranter websites bloccads";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Cryptominers" = "Criptominiers bloccads";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Fingerprinters" = "Improntaders dal det bloccads";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Social" = "Fastizaders socials bloccads";
+
+/* more info about what tracking protection is about */
+"Menu.TrackingProtectionMoreInfo.Description" = "Ve a savair co che la protecziun cunter il fastizar blochescha fastizaders online che rimnan datas davart tia navigaziun a travers pliras websites.";
+
+/* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
+"Menu.TrackingProtectionNoBlocking.Description" = "Chattà nagins elements che fastizeschan sin questa pagina.";
+
+/* label for the menu item to show when the website is whitelisted from blocking trackers. */
+"Menu.TrackingProtectionOption.WhiteListOnDescription" = "Questa website includa elements che ta fastizeschan eventualmain durant la navigaziun. Ti has deactivà la protecziun.";
+
+/* label for the menu item that lets you remove a website from the tracking protection whitelist */
+"Menu.TrackingProtectionWhitelistRemove.Title" = "Activar per questa website";
+
+/* The title for the option to view the What's new page. */
+"Menu.WhatsNew.Title" = "Novaziuns";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "apparat mobil";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "avant dapli ch'in mais";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "avant dapli ch'in emna";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Trav d'utensils da navigaziun";
+
+/* Accessibility label for the New Tab button in the tab toolbar.
+   Accessibility Label for the tab toolbar New tab button */
+"New Tab" = "Nov tab";
+
+/* Restore Tabs Negative Action */
+"No" = "Na";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "Nagins tabs";
+
+/* OK button */
+"OK" = "OK";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "OK";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "Oha! Firefox è collabà";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Avra artitgels en la vista da lectura cun smatgar sin l'icona da cudesch sch'ella cumpara en la trav dal titel.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Avrir las preferenzas";
+
+/* Toggle tabs syncing setting */
+"Open Tabs" = "Tabs averts";
+
+/* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
+"OpenURL.Error.Message" = "Firefox na po betg avrir la pagina perquai ch'ella ha ina adressa nunvalida.";
+
+/* Title of the message shown when the user attempts to navigate to an invalid link. */
+"OpenURL.Error.Title" = "Impussibel d'avrir la pagina";
+
+/* Accessibility label for the Page Options menu button */
+"Page Options Menu" = "Menu «opziuns da la pagina»";
+
+/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
+"Panel Chooser" = "Selecziun da la lastra";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Pled-clav";
+
+/* Error message shown in the remote tabs panel */
+"PasswordAutoFill.NoPasswordsFoundTitle" = "Ti n'has naginas infurmaziuns d'annunzia sincronisadas da tes conto da Firefox";
+
+/* Header for the list of credentials table */
+"PasswordAutoFill.PasswordsListTitle" = "Infurmaziuns d'annunzia disponiblas:";
+
+/* Title of the extension that shows firefox passwords */
+"PasswordAutoFill.SectionTitle" = "Infurmaziuns d'annunzia da Firefox";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Quai ta lubescha da memorisar il maletg en «Camera Roll» (Aufnahmen).";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox dumonda l'access a tias fotografias";
+
+/* Button for closing the menu action sheet */
+"PhotonMenu.close" = "Serrar";
+
+/* Privacy section title */
+"Privacy" = "Protecziun da datas";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "Directivas davart la protecziun da datas";
+
+/* Title for quick-search engines settings section. */
+"Quick-Search Engines" = "Maschinas da tschertgar rapidas";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "legì";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "Vista da lectura";
+
+/* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
+"ReaderMode.Available.VoiceOverAnnouncement" = "Modus da lectura disponibel";
+
+/* Panel accessibility label */
+"Reading list" = "Glista da lectura";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "Serrà dacurt";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "Rechargiar";
+
+/* Accessibility label for the reload button */
+"Reload page" = "Rechargiar la pagina";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Allontanar";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Allontanar da la glista da lectura";
+
+/* Cancel button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Cancel" = "Interrumper";
+
+/* Reopen button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Reopen" = "Reavrir";
+
+/* Reopen alert title shown at home page. */
+"ReopenAlert.Title" = "Restaurar l'ultim tab serrà";
+
+/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"ReopenClosedTab.KeyCodeTitle" = "Restaurar il tab serrà";
+
+/* Accessibility label for button resetting font size in display settings of reader mode */
+"Reset text size" = "Redefinir la grondezza da scrittira";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Senza serifas";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Agiunta artitgels a la glista da lectura cun tutgar l'icona dal cudesch cun il plus en las controllas da la vista da lectura.";
+
+/* OK button to dismiss the error prompt. */
+"ScanQRCode.Error.OK.Button" = "OK";
+
+/* Text for the instructions label, displayed in the QR scanner view */
+"ScanQRCode.Instructions.Label" = "Plazzescha il code QR en il rom per al scannar";
+
+/* Text of the prompt that is shown to the user when the data is invalid */
+"ScanQRCode.InvalidDataError.Message" = "Las datas èn nunvalidas";
+
+/* Text of the prompt user to setup the camera authorization. */
+"ScanQRCode.PermissionError.Message" = "Permetta a Firefox dad acceder a la camera da tes apparat via «Einstellungen → Datenschutz → Kamera» («Settings → Privacy → Camera»).";
+
+/* Title for the QR code scanner view. */
+"ScanQRCode.View.Title" = "Scannar in code QR";
+
+/* Accessibility Label for the tab toolbar Search button
+   Navigation title for search settings.
+   Open search section of settings */
+"Search" = "Tschertgar";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Tschertgar u endatar in'adressa";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "La nova maschina da tschertgar cumpara en la trav per la tschertga svelta.";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "Agiuntà la maschina da tschertgar!";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "Agiuntar ina maschina da tschertgar?";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "Interrumper";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.DuplicateErrorMessage" = "Ina maschina da tschertgar cun quest titel u questa URL è gia vegnida agiuntada.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.DuplicateErrorTitle" = "Betg reussì";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "Impussibel dad agiuntar la maschina da tschertgar.";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "Betg reussì";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.FormErrorMessage" = "Emplenescha p.pl. tut ils champs correctamain.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.FormErrorTitle" = "Betg reussì";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "OK";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "Tschertgar la proposta";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "Connexiun segirada";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "Trametter in rapport da collaps per che Mozilla possia schliar il problem?";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "Trametter in resun";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "Trametter l'annunzia";
+
+/* Button title for cancelling share screen
+   Close button in top navigation bar */
+"SendTo.Cancel.Button" = "Interrumper";
+
+/* Header for the list of devices table */
+"SendTo.DeviceList.Text" = "Apparats disponibels:";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "Be colliaziuns HTTP e HTTPS pon vegnir cundivididas.";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "OK";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "Impussibel da cundivider la colliaziun che ti vuls cundivider.";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"SendTo.NavBar.Title" = "Trametter il tab";
+
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message" = "Ti n'has betg connectà auters apparats cun quest conto da Firefox che pudessan vegnir sincronisads.";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Message" = "Avra p.pl. Firefox, va en las preferenzas e t'annunzia per cuntinuar.";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Title" = "Ti n'es betg annunzià cun tes conto da Firefox.";
+
+/* Navigation bar button to Send the current page to a device */
+"SendTo.SendAction.Text" = "Trametter";
+
+/* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
+"SendTo.SignIn.Button" = "S'annunziar tar Firefox";
+
+/* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_body" = "In nov tab è arrivà d'in auter apparat.";
+
+/* Title of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_title" = "Retschavì in tab";
+
+/* Body of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the app name. */
+"SentTab_TabArrivingNotification_WithDevice_body" = "In nov tab è arrivà en %@";
+
+/* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
+"SentTab_TabArrivingNotification_WithDevice_title" = "Retschavì in tab da %@";
+
+/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
+"SentTab.AddToReadingListAction.Title" = "Agiuntar a la glista da lectura";
+
+/* Label for an action used to bookmark one or more tabs from a notification. */
+"SentTab.BookmarkAction.title" = "Agiuntar segnapagina";
+
+/* Body of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.body" = "Smatgar per cumenzar";
+
+/* Title of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+
+/* Label for an action used to view one or more tabs from a notification. */
+"SentTab.ViewAction.title" = "Mussar";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Sepia";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Cun serifas";
+
+/* Title in the settings view controller title bar */
+"Settings" = "Preferenzas";
+
+/* The button text in Search Settings that opens the Custom Search Engine view. */
+"Settings.AddCustomEngine" = "Agiuntar ina maschina da tschertgar";
+
+/* The text on the Save button when saving a custom search engine */
+"Settings.AddCustomEngine.SaveButtonText" = "Memorisar";
+
+/* The title of the  Custom Search Engine view. */
+"Settings.AddCustomEngine.Title" = "Agiuntar ina maschina da tschertgar";
+
+/* The title for the field which sets the title for a custom search engine. */
+"Settings.AddCustomEngine.TitleLabel" = "Titel";
+
+/* The placeholder for Title Field when saving a custom search engine. */
+"Settings.AddCustomEngine.TitlePlaceholder" = "Maschina da tschertgar";
+
+/* The title for URL Field */
+"Settings.AddCustomEngine.URLLabel" = "URL";
+
+/* The placeholder for URL Field when saving a custom search engine */
+"Settings.AddCustomEngine.URLPlaceholder" = "URL (remplazzar il term da tschertga cun %s)";
+
+/* Button in Data Management that clears private data for the selected items. */
+"Settings.ClearAllWebsiteData.Clear.Button" = "Stizzar tut las datas da website";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "Stizzar las datas privatas";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "Stizzar las datas privatas";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "Stizzar las datas privatas";
+
+/* Copy app version alert shown in settings. */
+"Settings.CopyAppVersion.Title" = "Copià en l'archiv provisoric";
+
+/* Default text in search bar for Data Management */
+"Settings.DataManagement.SearchLabel" = "Filtrar paginas";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.DataManagement.SectionName" = "Administraziun da datas";
+
+/* Title displayed in header of the setting panel. */
+"Settings.DataManagement.Title" = "Administraziun da datas";
+
+/* Body of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Body" = "Firefox chala da sincronisar tes conto, ma las datas da navigaziun restan sin quest apparat.";
+
+/* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
+"Settings.Disconnect.Button" = "Deconnectar Sync";
+
+/* Cancel action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.CancelButton" = "Interrumper";
+
+/* Destructive action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.DestructiveButton" = "Deconnectar";
+
+/* Title of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Title" = "Deconnectar Sync?";
+
+/* Section header for brightness slider. */
+"Settings.DisplayTheme.BrightnessThreshold.SectionHeader" = "Valur minimala";
+
+/* Display (theme) settings label to show if manually switch theme is enabled. */
+"Settings.DisplayTheme.Manual.StatusLabel" = "Manual";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Manually'. */
+"Settings.DisplayTheme.Manual.SwitchSubtitle" = "Tscherna il design giavischà";
+
+/* Display (theme) setting to choose the theme manually. */
+"Settings.DisplayTheme.Manual.SwitchTitle" = "Manualmain";
+
+/* Option choice in display theme settings for dark theme */
+"Settings.DisplayTheme.OptionDark" = "Stgir";
+
+/* Option choice in display theme settings for light theme */
+"Settings.DisplayTheme.OptionLight" = "Cler";
+
+/* Display (theme) settings footer describing how the brightness slider works. */
+"Settings.DisplayTheme.SectionFooter" = "Il design sa mida automaticamain tenor la cleritad dal visur. Ti pos definir il punct al qual il design sa mida. Il rudè inditgescha la cleritad actuala dal visur.";
+
+/* Switch mode settings section title */
+"Settings.DisplayTheme.SwitchMode.SectionHeader" = "Midar il modus";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Automatically'. */
+"Settings.DisplayTheme.SwitchSubtitle" = "Midar automaticamain tenor la cleritad dal visur";
+
+/* Display (theme) settings label to show if automatically switch theme is enabled.
+   Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
+"Settings.DisplayTheme.SwitchTitle" = "Automaticamain";
+
+/* System theme settings section title */
+"Settings.DisplayTheme.SystemTheme.SectionHeader" = "Design dal sistem";
+
+/* System theme settings switch to choose whether to use the same theme as the system */
+"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "Utilisar il modus cler/stgir dal sistem";
+
+/* Theme picker settings section title */
+"Settings.DisplayTheme.ThemePicker.SectionHeader" = "Tscherna dal design";
+
+/* Title in main app settings for Theme settings */
+"Settings.DisplayTheme.Title.v2" = "Design";
+
+/* DNT Settings option for always on */
+"Settings.DNT.OptionAlwaysOn" = "Adina";
+
+/* DNT Settings option for only turning on when Tracking Protection is also on */
+"Settings.DNT.OptionOnWithTP" = "Mo sche la protecziun encunter il fastizar è activada";
+
+/* DNT Settings title */
+"Settings.DNT.Title" = "Trametter a websites il signal «Do Not Track» per communitgar che ti na veglias betg vegnir fastizà";
+
+/* Label used for the device name settings section. */
+"Settings.FxA.DeviceName" = "Num da l'apparat";
+
+/* Label used as a section title in the Firefox Accounts Settings screen. */
+"Settings.FxA.Sync.SectionName" = "Parameters da Sync";
+
+/* Title displayed in header of the FxA settings panel. */
+"Settings.FxA.Title" = "Conto da Firefox";
+
+/* General settings section title */
+"Settings.General.SectionName" = "General";
+
+/* Button in settings to clear the home page. */
+"Settings.HomePage.Clear.Button" = "Stizzar";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "Pagina da partenza";
+
+/* Title displayed in header of the setting panel. */
+"Settings.HomePage.Title" = "Preferenzas per la pagina da partenza";
+
+/* Placeholder text in the homepage setting when no homepage has been set. */
+"Settings.HomePage.URL.Placeholder" = "Endatar ina pagina web";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "Pagina da partenza actuala";
+
+/* Button in settings to use the current link on the clipboard as home page. */
+"Settings.HomePage.UseCopiedLink.Button" = "Utilisar la colliaziun copiada";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "Utilisar la pagina actuala";
+
+/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
+"Settings.HomePage.UseDefault.Button" = "Utilisar il standard";
+
+/* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
+"Settings.LoginsAndPasswordsTitle" = "Infurmaziuns d'annunzia & pleds-clav";
+
+/* Label used to set a custom url as the new tab option (homepage). */
+"Settings.NewTab.CustomURL" = "URL definida da l'utilisader";
+
+/* A description in settings of what the new tab choice means */
+"Settings.NewTab.Description" = "Sche ti avras in nov tab:";
+
+/* The title of the section in newtab that lets you modify the topsites panel */
+"Settings.NewTab.Option.ASTitle" = "Modifitgar paginas preferidas";
+
+/* Option in settings to show a blank page when you open a new tab */
+"Settings.NewTab.Option.BlankPage" = "Pagina vida";
+
+/* Option in settings to show bookmarks when you open a new tab */
+"Settings.NewTab.Option.Bookmarks" = "Segnapaginas";
+
+/* The footer for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeFooter" = "Las paginas che ti visitas il pli savens";
+
+/* The title for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeTitle" = "Persunalisar la pagina da partenza da Firefox";
+
+/* Option in settings to show Firefox Home when you open a new tab */
+"Settings.NewTab.Option.FirefoxHome" = "Pagina da partenza da Firefox";
+
+/* Option in the settings to turn off recent bookmarks in the Highlights section */
+"Settings.NewTab.Option.HighlightsBookmarks" = "Ultims segnapaginas";
+
+/* Option in settings to turn off history in the highlights section */
+"Settings.NewTab.Option.HighlightsHistory" = "Visità";
+
+/* Option in settings to show history when you open a new tab */
+"Settings.NewTab.Option.History" = "Cronologia";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.HomePage" = "Pagina da partenza";
+
+/* Option in settings to turn on off pocket recommendations */
+"Settings.NewTab.Option.Pocket" = "Recumandà da Pocket";
+
+/* Footer caption for pocket settings */
+"Settings.NewTab.Option.PocketFooter" = "Grondius cuntegn ord il web.";
+
+/* Option in settings to show reading list when you open a new tab */
+"Settings.NewTab.Option.ReadingList" = "Mussar la glista da lectura";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
+"Settings.NewTab.SectionName" = "Nov tab";
+
+/* Title displayed in header of the setting panel. */
+"Settings.NewTab.Title" = "Nov tab";
+
+/* Label at the top of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionName" = "Mussar";
+
+/* Footer at the bottom of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionNameFooter" = "Tscherna tge chargiar cun avrir in nov tab";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Status" = "Cun avrir Firefox";
+
+/* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Title" = "Proponer d'avrir las colliaziuns copiadas";
+
+/* Title for Open With Settings */
+"Settings.OpenWith.PageTitle" = "Avrir colliaziuns d'e-mail en";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
+"Settings.OpenWith.SectionName" = "App dad e-mail";
+
+/* Setting to enable the built-in password manager */
+"Settings.SaveLogins.Title" = "Memorisar infurmaziuns d'annunzia";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "Finì";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "Modifitgar";
+
+/* title for a link that explains how mozilla collects telemetry */
+"Settings.SendUsage.Link" = "Ulteriuras infurmaziuns.";
+
+/* A short description that explains why mozilla collects usage data. */
+"Settings.SendUsage.Message" = "Mozilla vul mo rimnar las datas necessarias per porscher e meglierar Firefox per in e scadin.";
+
+/* The title for the setting to send usage data. */
+"Settings.SendUsage.Title" = "Trametter datas davart l'utilisaziun";
+
+/* Description displayed under the ”Show Link Previews” option */
+"Settings.ShowLinkPreviews.Status" = "Cun smatgar ditg sin colliaziuns";
+
+/* Title of setting to enable link previews when long-pressing links. */
+"Settings.ShowLinkPreviews.Title" = "Mussar previstas da colliaziuns";
+
+/* Setting to show Logins & Passwords quick access in the application menu */
+"Settings.ShowLoginsInAppMenu.Title" = "Mussar en il menu da l'applicaziun";
+
+/* The description of the open new tab siri shortcut */
+"Settings.Siri.OpenTabShortcut" = "Avrir in nov tab";
+
+/* The description that describes what siri shortcuts are */
+"Settings.Siri.SectionDescription" = "Utilisar scursanidas da Siri per avrir pli spert Firefox";
+
+/* The option that takes you to the siri shortcuts settings page */
+"Settings.Siri.SectionName" = "Scursanidas da Siri";
+
+/* Dismiss button for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Button" = "OK, chapì";
+
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "Sch'ina pagina na funcziuna betg sco spetgà, pos ti tippar sin il scut en la trav d'adressas e deactivar la protecziun avanzada cunter il fastizar per quella pagina.";
+
+/* Title for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Title" = "Attenziun!";
+
+/* Header description for tracking protection options section where Basic/Strict block list can be selected */
+"Settings.TrackingProtection.BlockListsHeader" = "Ti pos tscherner la glista che Firefox duai duvrar per bloccar elements da web che ta fastizeschan cun navigar.";
+
+/* Explanation of basic mode. */
+"Settings.TrackingProtection.Info.BasicTitle" = "Equilibrà tranter protecziun e prestaziun.";
+
+/* The Title on info view which shows a list of all blocked websites */
+"Settings.TrackingProtection.Info.BlocksTitle" = "BLOCCÀ";
+
+/* Explanation of strict mode. */
+"Settings.TrackingProtection.Info.StrictTitle" = "Porscha ina protecziun pli severa, ma po avair per consequenza che tschertas websites na funcziuneschan betg pli.";
+
+/* 'Learn more' info link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.LearnMore" = "Ulteriuras infurmaziuns";
+
+/* 'More Info' link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.MoreInfo" = "Ulteriuras infurmaziuns…";
+
+/* Additional information about your Enhanced Tracking Protection */
+"Settings.TrackingProtection.ProtectionCellFooter" = "Reducescha reclamas tenor profil e gida ad impedir che incumbensaders da reclama ta suondan en il web.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "Sch'ina pagina na funcziuna betg sco spetgà, pos ti tippar sin il scut en la trav d'adressas e deactivar la protecziun avanzada cunter il fastizar per quella pagina.";
+
+/* Description for standard level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Permetta tscherts fastizaders per che las paginas d'internet funcziunian correctamain.";
+
+/* Description for strict level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "Blochescha dapli fastizaders, reclamas e pop-ups. Paginas chargia pli spert, i po dentant capitar che tschertas paginas na funcziunan betg correctamain.";
+
+/* Title for tracking protection options section where level can be selected. */
+"Settings.TrackingProtection.ProtectionLevelTitle" = "Nivel da protecziun";
+
+/* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
+"Settings.TrackingProtection.SectionName" = "Protecziun cunter il fastizar";
+
+/* Additional information about the strict level setting */
+"Settings.TrackingProtection.StrictLevelInfoFooter" = "La bloccada da fastizaders po tangar la funcziunalitad da tschertas websites.";
+
+/* Tracking protection settings option for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BasicBlockList" = "Standard (predefinì)";
+
+/* Tracking protection settings option description for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BlockListBasicDescription" = "Lubescha tscherts fastizaders per che las paginas d'internet funcziuneschian correctamain.";
+
+/* Tracking protection settings option for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrict" = "Strict";
+
+/* Tracking protection settings option description for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrictDescription" = "Blochescha tut ils fastizaders enconuschents. Tschertas websites na funcziunan eventualmain betg pli correctamain.";
+
+/* Description label shown on tracking protection options screen. */
+"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "«Fastizar» (tracking) numnan ins la collecziun da datas davart tia navigaziun en l'internet.";
+
+/* Settings option to specify that Tracking Protection is on */
+"Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "Protecziun cunter il fastizar avanzada";
+
+/* Translation settings footer describing how language detection and translation happens. */
+"Settings.TranslateSnackBar.SectionFooter" = "La lingua da la pagina web vegn eruida sin l'apparat, silsuenter vegn offrida ina translaziun dad in servetsch lontan.";
+
+/* Translation settings section title */
+"Settings.TranslateSnackBar.SectionHeader" = "Servetschs";
+
+/* Switch to choose if the language of a page is detected and offer to translate. */
+"Settings.TranslateSnackBar.SwitchSubtitle" = "Offrir da translatar mintga pagina scritta en ina lingua che na correspunda betg a tia lingua da standard.";
+
+/* Switch to choose if the language of a page is detected and offer to translate. */
+"Settings.TranslateSnackBar.SwitchTitle" = "Offrir ina translaziun";
+
+/* Title in main app settings for Translation toast settings */
+"Settings.TranslateSnackBar.Title" = "Translaziun";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "Schliar problems";
+
+/* Button to delete website in search results */
+"Settings.WebsiteData.ButtonDelete" = "Stizzar";
+
+/* Button to exit edit website search results */
+"Settings.WebsiteData.ButtonDone" = "Finì";
+
+/* Button to edit website search results */
+"Settings.WebsiteData.ButtonEdit" = "Modifitgar";
+
+/* Button shows all websites on website data tableview */
+"Settings.WebsiteData.ButtonShowMore" = "Mussar dapli";
+
+/* Description of the confirmation dialog shown when a user tries to clear their private data. */
+"Settings.WebsiteData.ConfirmPrompt" = "Questa acziun stizza tut tias datas da websites. Quest pass na po betg vegnir revocà.";
+
+/* Title displayed in header of the Data Management panel. */
+"Settings.WebsiteData.Title" = "Datas da websites";
+
+/* Action label on share extension to add page to the Firefox reading list. */
+"ShareExtension.AddToReadingListAction.Title" = "Agiuntar a la glista da lectura";
+
+/* Share extension label shown after user has performed 'Add to Reading List' action. */
+"ShareExtension.AddToReadingListActionDone.Title" = "Agiuntà a la glista da lectura";
+
+/* Action label on share extension to bookmark the page in Firefox. */
+"ShareExtension.BookmarkThisPageAction.Title" = "Agiuntar in segnapagina per la pagina";
+
+/* Share extension label shown after user has performed 'Bookmark this Page' action. */
+"ShareExtension.BookmarkThisPageActionDone.Title" = "Agiuntà als segnapaginas";
+
+/* Action label on share extension to load the page in Firefox when user switches apps to bring it to foreground. */
+"ShareExtension.LoadInBackgroundAction.Title" = "Chargiar davos las culissas";
+
+/* Share extension label shown after user has performed 'Load in Background' action. */
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Chargiar en Firefox";
+
+/* Action label on share extension to immediately open page in Firefox. */
+"ShareExtension.OpenInFirefoxAction.Title" = "Avrir en Firefox";
+
+/* Action label on share extension to immediately open page in Firefox in private mode. */
+"ShareExtension.OpenInPrivateModeAction.Title" = "Avrir en il modus privat";
+
+/* Action label on share extension to search for the selected text in Firefox. */
+"ShareExtension.SeachInFirefoxAction.Title" = "Tschertgar en Firefox";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "Mussar propostas da tschertga";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "Mussar ils tabs";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "Mussar la tura";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "Fermar";
+
+/* Support section title */
+"Support" = "Agid";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Stritgar cun trais dets a sanestra u a dretga per serrar il tab.";
+
+/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"SwitchToNonPBM.KeyCodeTitle" = "Modus da navigar normal";
+
+/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"SwitchToPBM.KeyCodeTitle" = "Modus da navigar privat";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, bookmarks, passwords and more." = "Sincronisescha tes tabs, segnapaginas, pleds-clav e dapli.";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, passwords and more." = "Sincronisescha tes tabs, pleds-clav e dapli.";
+
+/* Message displayed when the user syncs for the first time */
+"Sync.FirstTimeMessage.Label" = "L'emprima sincronisaziun po durar in mument";
+
+/* String displayed on Sign In to Sync page that allows the user to create a new account. */
+"Sync.NoAccount.Description" = "Nagin conto? Creescha in per sincronisar Firefox tranter differents apparats.";
+
+/* Message displayed when the user's account is syncing with no ellipsis */
+"Sync.Syncing.Label" = "Sincronisar";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "Sincronisar…";
+
+/* Panel accessibility label */
+"Synced Tabs" = "Tabs sincronisads";
+
+/* The Bookmark sync component, used in SyncState.Partial.Title */
+"SyncState.Bookmark.Title" = "Segnapaginas";
+
+/* The Remote Clients sync component, used in SyncState.Partial.Title */
+"SyncState.Clients.Title" = "Apparats lontans";
+
+/* Title for Sync status message when synchronization failed to complete */
+"SyncState.Failed.Title" = "Errur durant sincronisar";
+
+/* The History sync component, used in SyncState.Partial.Title */
+"SyncState.History.Title" = "Cronologia";
+
+/* The Logins sync component, used in SyncState.Partial.Title */
+"SyncState.Logins.Title" = "Infurmaziuns d'annunzia";
+
+/* Title for Sync status message when Sync failed to start. */
+"SyncState.NotStarted.Title" = "Sync n'è betg disponibel";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "Sync è offline";
+
+/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
+"SyncState.Partial.Title" = "I dat errurs cun sincronisar %@";
+
+/* The Tabs sync component, used in SyncState.Partial.Title */
+"SyncState.Tabs.Title" = "Tabs";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "Tab %1$@ da %2$@";
+
+/* Hardware shortcut to open the tab tray from a tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"Tab.ShowTabTray.KeyCodeTitle" = "Mussar tut ils tabs";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "Tabs %1$@ fin %2$@ da %3$@";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Trav da tabs";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "Revocar";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "serrà %d tab(s)";
+
+/* The placeholder text for the tab search bar */
+"Tabs.Search.PlaceholderText" = "Retschertgar tabs";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"TabTray.AddTab.Button" = "Agiuntar in tab";
+
+/* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseAllTabs.KeyCodeTitle" = "Serrar tut ils tabs";
+
+/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseTab.KeyCodeTitle" = "Serrar il tab tschernì";
+
+/* The section header for tabs opened last week */
+"TabTray.LastWeek.Header" = "Ultima emna";
+
+/* The title on the button to copy the tab address. */
+"TabTray.MoreMenu.Copy" = "Copiar";
+
+/* The section header for tabs opened before last week */
+"TabTray.Older.Header" = "Pli vegl";
+
+/* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenNewTab.KeyCodeTitle" = "Avrir in nov tab";
+
+/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenSelectedTab.KeyCodeTitle" = "Avrir il tab tschernì";
+
+/* The button title to see more options to perform on the tab. */
+"TabTray.SwipeMenu.More" = "Dapli";
+
+/* The title for the tab tray */
+"TabTray.Title" = "Tabs averts";
+
+/* The section header for tabs opened today */
+"TabTray.Today.Header" = "Oz";
+
+/* The section header for tabs opened yesterday */
+"TabTray.Yesterday.Header" = "Ier";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "Impussibel da mussar la pagina en la vista da lectura.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Igl ha dà in problem cun acceder ils tabs da tes auters apparats. Emprova anc ina giada en in amen.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "Ina errur è capitada durant convertir la pagina";
+
+/* Relative date for date in past week. */
+"this week" = "quest'emna";
+
+/* label for Not Now button */
+"Toasts.NotNow" = "Betg ussa";
+
+/* Open App Store button */
+"Toasts.OpenAppStore" = "Avrir l'App Store";
+
+/* Label for button to undo the action just performed */
+"Toasts.Undo" = "Revocar";
+
+/* History tableview section header */
+"Today" = "Oz";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "oz a las %@";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "Menu";
+
+/* Accessibility label for the Close All Tabs menu button. */
+"Toolbar.Menu.CloseAllTabs" = "Serrar tut ils tabs";
+
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "Las paginas che ti visitas il pli savens vegnan mussadas qua.";
+
+/* The title for the empty Top Sites state */
+"TopSites.EmptyState.Title" = "Paginas visitadas savens";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "Allontanar la pagina - %@";
+
+/* Button to disallow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.Cancel" = "Na";
+
+/* Button to allow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.OK" = "Gea";
+
+/* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
+"TranslationToastHandler.PromptTranslate.Title" = "Questa pagina para dad esser scritta en %1$@. La vuls ti laschar translatar en %2$@ cun agid da %3$@?";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* The menu item that pastes the current contents of the clipboard into the URL bar and navigates to the page */
+"UIMenuItem.PasteGo" = "Encollar & dai";
+
+/* Search in New Tab Text selection menu item */
+"UIMenuItem.SearchWithFirefox" = "Tschertgar cun Firefox";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "nunlegì";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect" = "Actualisescha Firefox per connectar";
+
+/* Debug option */
+"Use stage servers" = "Utilisar servers da test";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Num d'utilisader";
+
+/* Text message in the settings table view */
+"Verify your email address" = "Verifitgescha tia adressa dad e-mail";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "Versiun %1$@ (%2$@)";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Cuntegn dal web";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Bainvegni tar tia glista da lectura";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "Gea, quai è penibel.";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Vichipedia";
+
+/* Relative date for yesterday. */
+"yesterday" = "ier";
+
+/* History tableview section header */
+"Yesterday" = "Ier";
+
+/* Error message in the remote tabs panel */
+"You don’t have any tabs open in Firefox on your other devices." = "Ti n'has nagins tabs da Firefox averts sin auters apparats.";
+
+/* Your Rights settings section title */
+"Your Rights" = "Tes dretgs";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+

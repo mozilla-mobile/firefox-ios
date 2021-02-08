@@ -1,0 +1,29 @@
+/* (No Comment) */
+"1Password Fill Browser Action" = "Заповнення полів для 1Password";
+
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Це дозволяє вам знімати й вивантажувати фото.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Firefox вимагає Face ID для доступу до збережених паролів.";
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSLocationWhenInUseUsageDescription" = "Відвідувані вами сайти можуть запитувати ваше розташування.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Це дозволяє вам знімати й вивантажувати відео.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Це дозволяє вам зберігати фотографії.";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "Приватна вкладка";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "Нова вкладка";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "Сканувати QR-код";
+

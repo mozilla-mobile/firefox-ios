@@ -1,0 +1,1610 @@
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "ఒక యూజర్పేరు మరియు పాస్వర్డ్ %@చే అభ్యర్థించబడింది.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "ఒక యూజర్పేరు మరియు పాస్వర్డ్ %1$@చే అభ్యర్థించబడింది. సైట్ చెబుతుంది: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "అఆ";
+
+/* About settings section title */
+"About" = "గురించి";
+
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite" = "అగ్ర సైట్లకు పిన్ చేయండి";
+
+/* The title for removing a pinned topsite action */
+"ActivityStream.ContextMenu.RemovePinTopsite" = "పిన్ చేసిన సైటుని తీసివేయండి";
+
+/* The description of a highlight if it is a site the user has bookmarked */
+"ActivityStream.Highlights.Bookmark" = "ఇష్టాంశము చేయబడినది";
+
+/* The description of a highlight if it is a site the user has visited */
+"ActivityStream.Highlights.Visited" = "సందర్శించినవి";
+
+/* Section title label for recently bookmarked websites */
+"ActivityStream.NewRecentBookmarks.Title" = "ఇటీవలి ఇష్టాంశాలు";
+
+/* The link that shows more Pocket trending stories */
+"ActivityStream.Pocket.MoreLink" = "మరిన్ని";
+
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle" = "పాకెట్‌లో ట్రెండ్ అవుతోంది";
+
+/* The description of a Pocket Story */
+"ActivityStream.Pocket.Trending" = "ట్రెండింగ్";
+
+/* Section title label for recently visited websites */
+"ActivityStream.RecentHistory.Title" = "ఇటీవల చూసినవి";
+
+/* label showing how many rows of topsites are shown. %d represents a number */
+"ActivityStream.TopSites.RowCount" = "వరుసలు: %d";
+
+/* The title for the setting page which lets you select the number of top site rows */
+"ActivityStream.TopSites.RowSettingFooter" = "వరుసలను ఏర్పాటు చేయు";
+
+/* Section title label for Top Sites */
+"ActivityStream.TopSites.SectionTitle" = "మేటి సైట్లు";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "ట్యాబును జోడించు";
+
+/* Accessibility label for action adding current page to reading list.
+   Name for button adding current article to reading list in reader mode */
+"Add to Reading List" = "చదవాల్సిన జాబితాకి చేర్చు";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "చదవాల్సిన జాబితాకి చేర్చబడింది";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "సరే";
+
+/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Message" = "వాలెట్ కు పాస్ ను జోడించడంలో ఒక లోపం సంభవించింది. దయచేసి తర్వాత మళ్లీ ప్రయత్నించండి.";
+
+/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Title" = "పాస్ జోడించలేకపొయాను";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "చిరునామా మరియు శోధన";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "ఎప్పుడూ పంపు";
+
+/* Tile title for Amazon */
+"Amazon" = "అమేజాన్";
+
+/* Authentication prompt title */
+"Authentication required" = "ప్రమాణీకరణ అవసరం";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "తిరిగి";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "పాప్-అప్ విండోలను బ్లాకు చేయి";
+
+/* The header title for the fields when editing a Bookmark */
+"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "ఇష్టాంశం";
+
+/* The header title for the fields when editing a Folder */
+"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "సంచయం";
+
+/* The label for the Title field when editing a bookmark */
+"Bookmark.DetailFieldTitle.Label" = "శీర్షిక";
+
+/* The label for the URL field when editing a bookmark */
+"Bookmark.DetailFieldURL.Label" = "చిరునామా";
+
+/* Toggle bookmarks syncing setting */
+"Bookmarks" = "ఇష్టాంశాలు";
+
+/* The button to edit a bookmark */
+"Bookmarks.EditBookmark.Label" = "ఇష్టాంశాన్ని సవరించు";
+
+/* The button to edit a folder */
+"Bookmarks.EditFolder.Label" = "సంచయాన్ని సవరించు";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "సంచిక";
+
+/* The label for the location of the new folder */
+"Bookmarks.FolderLocation.Label" = "ప్రాంతం";
+
+/* The label for the title of the new folder */
+"Bookmarks.FolderName.Label" = "సంచిక పేరు";
+
+/* The button to create a new bookmark */
+"Bookmarks.NewBookmark.Label" = "కొత్త ఇష్టాంశం";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "కొత్త సంచయం";
+
+/* The button to create a new separator */
+"Bookmarks.NewSeparator.Label" = "కొత్త విభాగిని";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "శీర్షిక";
+
+/* The label for the URL of a bookmark */
+"Bookmarks.URL.Label" = "URL";
+
+/* Status label for the empty Bookmarks state. */
+"BookmarksPanel.EmptyState.Title" = "మీరు భద్రపరుచుకున్న ఇష్టాంశాలు ఇక్కడ కనిపిస్తాయి.";
+
+/* Link to monitor.firefox.com to learn more about breached passwords */
+"BreachAlerts.LearnMoreButton" = "ఇంకా తెలుసుకోండి";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "ప్రకాశత";
+
+/* Label for Cancel button */
+"Cancel" = "రద్దుచేయి";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "రంగు థీమ్ ను మార్చును.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "ఫాంట్ రకమును మార్చును.";
+
+/* The button to open a new tab with the copied link */
+"ClipboardToast.GoToCopiedLink.Button" = "వెళ్ళు";
+
+/* Message displayed when the user has a copied link on the clipboard */
+"ClipboardToast.GoToCopiedLink.Title" = "కాపీచేసిన లంకెకు వెళ్ళాలా?";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "మూసివేయి";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "ట్యాబును మూసివేయడం";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "కంప్యూటర్";
+
+/* Context menu item for bookmarking a link URL */
+"ContextMenu.BookmarkLinkButtonTitle" = "లంకెను ఇష్టాంశంగాచేయి";
+
+/* The button text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "మార్చు";
+
+/* The label text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "కొత్త వ్యక్తిగత ట్యాబు తెరవబడింది";
+
+/* The button text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "మార్చు";
+
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText" = "కొత్త ట్యాబు తెరుచుకుంది";
+
+/* Context menu item for copying an image to the clipboard */
+"ContextMenu.CopyImageButtonTitle" = "బొమ్మని కాపీచేయి";
+
+/* Context menu item for copying an image URL to the clipboard */
+"ContextMenu.CopyImageLinkButtonTitle" = "బొమ్మ లంకెను కాపీచేయి";
+
+/* Context menu item for copying a link URL to the clipboard */
+"ContextMenu.CopyLinkButtonTitle" = "లంకెను కాపీచేయి";
+
+/* Context menu item for downloading a link URL */
+"ContextMenu.DownloadLinkButtonTitle" = "లంకెను దించుకో";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenInNewTabButtonTitle" = "కొత్త ట్యాబులో తెరువు";
+
+/* Context menu item for saving an image */
+"ContextMenu.SaveImageButtonTitle" = "బొమ్మను భద్రపరచు";
+
+/* Context menu item for sharing a link URL */
+"ContextMenu.ShareLinkButtonTitle" = "లంకెను పంచుకో";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "పఠన జాబితాకు పేజీ జోడించడం సాధ్యపడలేదు";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it’s already there?" = "పఠన జాబితాకు పేజీ జోడించడం సాధ్యపడలేదు. బహుశా ఇది ఇప్పటికే ఉంది?";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "పేజీ లోడ్ చేయడం సాధ్యపడలేదు.";
+
+/* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
+"CoverSheet.v22.DarkMode.Description" = "iOS 13 వాడుకరుల కోసం, మీ ఫోను నల్లని రీతికి అమర్చినప్పుడు Firefox స్వయంచాలకంగా నల్లని అలంకారానికి మారుతుంది. ఈ ప్రవర్తనను మార్చుకోడానికి, ఇటు వెళ్ళండి: అమరికలు > అలంకారం.";
+
+/* Title for the new dark mode change in the version 22 app release. */
+"CoverSheet.v22.DarkMode.Title" = "నల్లని అలంకారంలో ఇప్పుడు నల్లని కీబోర్డు, నల్లని ఆరంభ తెర ఉన్నాయి.";
+
+/* Text for the new ETP settings button */
+"CoverSheet.v24.ETP.Settings.Button" = "అమరికలకు వెళ్ళు";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "ఒక ఖాతాను సృష్టించు";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "చీకటి";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "పాఠం పరిమాణం తగ్గించు";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "అప్రమేయ శోధన యంత్రం";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "సెట్టింగులను ప్రదర్శించు";
+
+/* Used as a button label for crash dialog prompt */
+"Don’t Send" = "పంపవద్దు";
+
+/* Done button on left side of the Settings view controller title bar */
+"Done" = "పూర్తయింది";
+
+/* Panel accessibility label */
+"Downloads" = "దింపుకోళ్ళు";
+
+/* The label of the button the user will press to start downloading a file */
+"Downloads.Alert.DownloadNow" = "ఇప్పుడే దింపుకోండి";
+
+/* Button confirming the cancellation of the download. */
+"Downloads.CancelDialog.Cancel" = "రద్దుచేయి";
+
+/* Alert dialog body when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Message" = "ఈ దింపుకోలును నిజంగానే రద్దుచేయాలని అనుకుంటున్నారా?";
+
+/* Button declining the cancellation of the download. */
+"Downloads.CancelDialog.Resume" = "తిరిగికొనసాగించు";
+
+/* Alert dialog title when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Title" = "దింపుకోలును రద్దుచేయి";
+
+/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
+"Downloads.Error.Message" = "Firefox ఇంకా దింపుకోళ్ళకు మద్దతు ఇవ్వట్లేదు.";
+
+/* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
+"Downloads.Toast.Cancelled.LabelText" = "దింపుకోలు రద్దయింది";
+
+/* The label text in the Download Failed toast for showing confirmation that the download has failed. */
+"Downloads.Toast.Failed.LabelText" = "దింపుకోలు విఫలమైంది";
+
+/* The button to retry a failed download from the Download Failed toast. */
+"Downloads.Toast.Failed.RetryButton" = "మళ్ళీ ప్రయత్నించు";
+
+/* The button to open a new tab with the Downloads home panel */
+"Downloads.Toast.GoToDownloads.Button" = "దింపుకోళ్ళు";
+
+/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. */
+"Downloads.Toast.MultipleFiles.DescriptionText" = "%d ఫైళ్లలో 1";
+
+/* The description text in the Download progress toast for showing the number of files (1$) and download progress (2$). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where 1$ is Downloads.Toast.MultipleFiles.DescriptionText and 2$ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and 1$ should come before 2$ everywhere except for right-to-left locales. */
+"Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";
+
+/* The description text in the Download progress toast for showing the downloaded file size (1$) out of the total expected file size (2$). */
+"Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
+
+/* Action button for deleting downloaded files in the Downloads panel. */
+"DownloadsPanel.Delete.Title" = "తొలగించు";
+
+/* Title for the Downloads Panel empty state. */
+"DownloadsPanel.EmptyState.Title" = "దింపుకున్న ఫైళ్ళు ఇక్కడ కనిపిస్తాయి.";
+
+/* Action button for sharing downloaded files in the Downloads panel. */
+"DownloadsPanel.Share.Title" = "పంచుకోండి";
+
+/* Text message in the settings table view */
+"Enter your password to connect" = "కనెక్ట్ చేయడానికి మీ సంకేతపదం నమోదు చేయండి";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "ఆధునాతన";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "హెచ్చరిక: మేము ఈ వెబ్సైట్కు మీ కనెక్షన్ సురక్షితమైనదని నిర్ధారించలేము.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "ఇది ఒక అటాకర్ తప్పుగా కన్ఫిగర్ చేయడం లేదా దిద్దుబాటు ఉండవచ్చు. మీరు తీవ్ర ప్రమాదమును అంగీకరిస్తే కొనసాగండి.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "%@ యొక్క యజమాని సరిగ్గా వారి వెబ్సైట్ కాన్ఫిగర్ చేయలేదు. దొంగతనం నుండి మీ సమాచారాన్ని రక్షించడానికి, ఫైర్ఫాక్స్ ఈ వెబ్సైట్కు కనెక్ట్ కాలేదు.";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "ఈ అనుసంధానం నమ్మలేనిది";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "వెనుకకు వెళ్ళు";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "ఏమైనప్పటికీ సైట్ సందర్శించండి";
+
+/* Question shown to user when tapping a link that opens the App Store app */
+"ExternalLink.AppStore.ConfirmationTitle" = "ఈ లంకెను ఆప్ స్టోర్‌లో తెరవాలా?";
+
+/* Question shown to user when tapping an SMS or MailTo link that opens the external app for those. */
+"ExternalLink.AppStore.GenericConfirmationTitle" = "ఈ లంకెను బయటి అనువర్తనంలో తెరవాలా?";
+
+/* Tile title for Facebook */
+"Facebook" = "ఫేస్‌బుక్";
+
+/* Title for firefox about:home page in tab history list */
+"Firefox.HomePage.Title" = "Firefox ముంగిలి పేజీ";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "ఫార్వార్డ్";
+
+/* Label stating how to disconnect account */
+"FxA.AccountVerificationDetails" = "తప్పు ఇమెయిల్? ప్రారంభించడానికి దిగువ అనుసంధానం తెంచివేయండి.";
+
+/* Label stating your account is not verified */
+"FxA.AccountVerificationRequired" = "ఖాతా ధృవీకరణ అవసరం";
+
+/* Message explaining that user needs to check email for Firefox Account verfication link. */
+"FxA.AccountVerificationRequiredSurface" = "మీరు %@ని ధృవీకరించాలి. Firefox నుండి ధృవీకరణ లంకె కోసం మీ ఇమెయిల్ను తనిఖీ చేయండి.";
+
+/* Button label to connect another device to Sync */
+"FxA.ConnectAnotherDevice" = "మరొక పరికరాన్ని అనుసంధానించు";
+
+/* Settings section title for Firefox Account */
+"FxA.FirefoxAccount" = "Firefox ఖాతా";
+
+/* Button label to go to Firefox Account settings */
+"FxA.ManageAccount" = "ఖాతా, పరికరాలను నిర్వహించండి";
+
+/* Label when no internet is present */
+"FxA.NoInternetConnection" = "అంతర్జాల అనుసంధానం లేదు";
+
+/* Button label to open Sync preferences */
+"FxA.OpenSyncPreferences" = "Sync అభిరుచులను తెరువు";
+
+/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
+"FxA.RemoveAccount" = "తీసివేయి";
+
+/* Description string for alert view that gets presented when user tries to remove an account. */
+"FxA.RemoveAccountAlertMessage" = "వేరే వాడుకరిగా ప్రవేశించడానికి ఈ పరికరంతో అనుబంధమైన ఉన్న Firefox ఖాతాను తొలగించండి.";
+
+/* Remove account alert is the final confirmation before user removes their firefox account */
+"FxA.RemoveAccountAlertTitle" = "ఖాతాను తొలగించు";
+
+/* Button label to resend email */
+"FxA.ResendEmail" = "ఇమెయిల్ తిరిగి పంపండి";
+
+/* FxA sign in view email login button */
+"fxa.signin.use-email-instead" = "బదులుగా ఈమెయిలు వాడండి";
+
+/* Button label to sign into Sync */
+"FxA.SignIntoSync" = "Sync లోకి ప్రవేశించండి";
+
+/* Label explaining what sync does */
+"FxA.SyncExplain" = "మీ ఇతర పరికరాల నుండి మీ ట్యాబులను, ఇష్టాంశాలను మరియు సంకేతపదాలను పొందండి.";
+
+/* Button label to Sync your Firefox Account */
+"FxA.SyncNow" = "ఇప్పుడే సింక్ చేయి";
+
+/* Call to action for sign into sync button */
+"FxA.TakeYourWebWithYou" = "మీ జాలాన్ని మీతో తీసుకువెళ్ళండి";
+
+/* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
+"FxAPush_DeviceConnected_body" = "Firefox Sync %@కు అనుసంధానమయింది";
+
+/* Title of a notification displayed when another device has connected to FxA. */
+"FxAPush_DeviceConnected_title" = "Sync అనుసంధానించబడింది";
+
+/* Body of a notification displayed when named device has been disconnected from FxA. %@ refers to the name of the disconnected device. */
+"FxAPush_DeviceDisconnected_body" = "%@ విజయవంతంగా అనుసంధానం తెంచబడింది.";
+
+/* Body of a notification displayed when this device has been disconnected from FxA by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Firefox Syncతో ఈ పరికర అనుసంధానం విజయవంతంగా తెంచివేయబడింది.";
+
+/* Title of a notification displayed when this device has been disconnected by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync అనుసంధానం తెంచివేయబడింది";
+
+/* Title of a notification displayed when named device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_title" = "Sync అనుసంధానం తెంచివేయబడింది";
+
+/* Body of a notification displayed when unnamed device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Firefox Sync నుండి ఒక పరికర అనుసంధానం తెగిపోయింది";
+
+/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "మీ ఇతర పరికరాల నుండి మీ తెరిచిన ట్యాబ్లను, బుక్మార్క్లను మరియు పాస్వర్డ్లు పొందండి.";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "సహాయం";
+
+/* Toggle history syncing setting */
+"History" = "చరిత్ర";
+
+/* Title for button in the history panel to clear recent history */
+"HistoryPanel.ClearHistoryButtonTitle" = "ఇటీవలి చరిత్రను తుడిచివేయి…";
+
+/* Option title to clear all browsing history. */
+"HistoryPanel.ClearHistoryMenuOptionEverything" = "ప్రతీదీ";
+
+/* Button to perform action to clear history for the last hour */
+"HistoryPanel.ClearHistoryMenuOptionTheLastHour" = "క్రితం గంట";
+
+/* Button to perform action to clear history for today only */
+"HistoryPanel.ClearHistoryMenuOptionToday" = "ఈరోజు";
+
+/* Button to perform action to clear history for yesterday and today */
+"HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "ఈరోజు, నిన్న";
+
+/* Title for popup action menu to clear recent history. */
+"HistoryPanel.ClearHistoryMenuTitle" = "ఇటీవలి చరిత్రను తుడిచివేయడం చరిత్రను, కుకీలను, ఇతర విహరణ డేటాను తుడిచివేస్తుంది.";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "మీరు ఇటీవల సందర్శించిన సైట్లు ఇక్కడ కనిపిస్తాయి.";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "మీ ఇతర పరికరాల నుండి ట్యాబులు ఇక్కడ కనిపిస్తాయి.";
+
+/* Description for the empty synced tabs 'not signed in' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "మీ ఇతర పరికరాల లోని ట్యాబుల జాబితా చూడడానికి ప్రవేశించండి.";
+
+/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "మీ ఖాతాను తనిఖీ చెయ్యాలి.";
+
+/* Description for the empty synced tabs 'single device Sync' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "ఇతర పరికరాలలో తెరిచివున్న మీ ట్యాబులను ఇక్కడ చూడాలనుకుంటున్నారా?";
+
+/* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "మీ ఇతర పరికరాల లోని ట్యాబుల జాబితాను చూడడానికి ట్యాబ్ సింక్ ను ప్రారంభించండి.";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "ఫైర్ఫాక్స్ సింక్";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "చరిత్ర";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "ఇటీవల మూసినవి";
+
+/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d పరికర(లు) కనెక్ట్ అయ్యాయి";
+
+/* Title for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Title" = "సింక్ చేసిన పరికరాలు";
+
+/* Button cancelling changes setting the home page for the first time. */
+"HomePage.Set.Dialog.Cancel" = "రద్దుచేయి";
+
+/* Alert dialog body when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Message" = "మీరు ఏ సమయంలోనైనా సెట్టింగ్లలో దీనిని మార్చవచ్చు";
+
+/* Button accepting changes setting the home page for the first time. */
+"HomePage.Set.Dialog.OK" = "హోంపేజీ సెట్ చేయండి";
+
+/* Alert dialog title when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Title" = "ఈ వెబ్ పేజీని మీ ముగిలి పేజీగా ఉపయోగించాలనుకుంటున్నారా?";
+
+/* The title for the Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Bookmark" = "ఇష్టాంశంగా గుర్తించు";
+
+/* The title for the Delete from History context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.DeleteFromHistory" = "చరిత్ర నుండి తొలగించు";
+
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab" = "కొత్త ప్రైవేట్ ట్యాబులో తెరువు";
+
+/* The title for the Open in New Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewTab" = "కొత్త ట్యాబులో తెరువు";
+
+/* The title for the Remove context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Remove" = "తొలగించు";
+
+/* The title for the Remove Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.RemoveBookmark" = "ఇష్టాంశాన్ని తీసివేయి";
+
+/* The title for the Share context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Share" = "పంచు";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Back.DiscoveryTitle" = "వెనుకకు వెళ్లు";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.CloseTab.DiscoveryTitle" = "ట్యాబు‌ను మూసివేయి";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Find.DiscoveryTitle" = "కనుగొను";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Forward.DiscoveryTitle" = "ఫార్వార్డ్";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "కొత్త ప్రైవేట్ ట్యాబు";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewTab.DiscoveryTitle" = "కొత్త ట్యాబు";
+
+/* Label to switch to normal browsing mode */
+"Hotkeys.NormalMode.DiscoveryTitle" = "సాధారణ విహారణ రీతి";
+
+/* Label to switch to private browsing mode */
+"Hotkeys.PrivateMode.DiscoveryTitle" = "అంతరంగిక విహారణ రీతి";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Reload.DiscoveryTitle" = "పుటను మళ్లీ లోడ్ చేయి";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "లొకేషన్ బార్ ఎంచుకోండి";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "తదుపరి ట్యాబును చూపించు";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "మునుపటి ట్యాబును చూపించు";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "టెక్స్ట్ పరిమాణాన్ని పెంచు";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "ఇప్పుడే";
+
+/* History tableview section header */
+"Last month" = "గత నెల";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "చివరిగా సింక్ చేయబడింది: %@";
+
+/* History tableview section header */
+"Last week" = "గత వారం";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "లైసెన్స్ లు";
+
+/* Light theme setting in Reading View settings */
+"Light" = "లైటు";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "అసలు పేజీ లోడ్ చేయండి";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "కంటేంట్ లోడ్ అవుతున్నది…";
+
+/* Authentication prompt log in button */
+"Log in" = "లాగ్ ఇన్";
+
+/* Toggle logins syncing setting */
+"Logins" = "ప్రవేశాలు";
+
+/* Login detail view field name for the last modified date */
+"LoginsDetailView.LoginModified" = "సవరించబడింది";
+
+/* Title for the login detail view */
+"LoginsDetailView.LoginTitle" = "ప్రవేశం";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "సేవ్ చేయవద్దు";
+
+/* Button to not update the user's password */
+"LoginsHelper.DontUpdate.Button" = "తాజాకరించవద్దు";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "లాగిన్ %2$@ కోసం %2$@ సేవ్ చేయండి?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "%@ కోసం పాస్వర్డ్ ను సేవ్ చేయండి?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "ప్రవేశాన్ని భద్రపరచు";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "నవీకరించు";
+
+/* For filtering the login list, search only the login names */
+"LoginsList.LoginsListFilterLogin" = "ప్రవేశం";
+
+/* For filtering the login list, search both website and login names. */
+"LoginsList.LoginsListFilterSearchAll" = "అన్నీ";
+
+/* For filtering the login list, search only the website names */
+"LoginsList.LoginsListFilterWebsite" = "వెబ్‌సైటు";
+
+/* Placeholder test for search box in logins list view. */
+"LoginsList.LoginsListSearchPlaceholder" = "వడపోత";
+
+/* Title for the list of logins */
+"LoginsList.Title" = "భద్రపరచిన ప్రవేశాలు";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "ఫైర్ఫాక్స్ గతంలో క్రాష్ అయినదిగా కనిపిస్తోంది. మీరు మీ ట్యాబులు పునరుద్ధరించాలనుకుంటున్నారా?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "చదివినట్లు గుర్తించు";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "చదవనదిగా గుర్తించు";
+
+/* Toast displayed to the user after a bookmark has been added. */
+"Menu.AddBookmark.Confirm" = "ఇష్టాంశం చేర్చబడింది";
+
+/* Toast displayed to the user after adding the item to the Top Sites. */
+"Menu.AddPin.Confirm" = "మేటి సైట్లకు పిన్ చేయబడింది";
+
+/* Toast displayed to the user after adding the item to their reading list. */
+"Menu.AddToReadingList.Confirm" = "చదవాల్సిన జాబితాకి చేర్చు";
+
+/* The title for the button that lets you copy the url from the location bar. */
+"Menu.Copy.Title" = "చిరునామా కాపీచెయ్యి";
+
+/* Toast displayed to user after copy url pressed. */
+"Menu.CopyURL.Confirm" = "క్లిప్‌బోర్డునకు URL కాపీతీయబడెను";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "ఈ సైటుకి మెరుగైన ట్రాకింగ్ సంరక్షణ చేతనంగా లేదు.";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "ఈ సైటుకి మెరుగైన ట్రాకింగ్ సంరక్షణ చేతనంగా ఉంది";
+
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label" = "రాత్రి రీతిని చేతనించు";
+
+/* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
+"Menu.NoImageModeBlockImages.Label" = "బొమ్మలను నిరోధించు";
+
+/* Label for title in page action menu. */
+"Menu.PageActions.Title" = "పేజీ చర్యలు";
+
+/* The title for the button that lets you paste into the location bar */
+"Menu.Paste.Title" = "అతికించు";
+
+/* The title for the button that lets you paste and go to a URL */
+"Menu.PasteAndGo.Title" = "అతికించు & వెళ్ళు";
+
+/* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
+"Menu.ReloadWithoutTrackingProtection.Title" = "ట్రాకింగ్ రక్షణ లేకుండా రీలోడ్ చేయండి";
+
+/* Label for the button, displayed in the menu, used to reload the current website with Tracking Protection enabled */
+"Menu.ReloadWithTrackingProtection.Title" = "ట్రాకింగ్ రక్షణతో రీలోడ్ చేయండి";
+
+/* Toast displayed to the user after a bookmark has been removed. */
+"Menu.RemoveBookmark.Confirm" = "ఇష్టాంశము తీసివేయబడింది";
+
+/* Toast displayed to the user after removing the item from the Top Sites. */
+"Menu.RemovePin.Confirm" = "మేటి సైట్ల నుండి తీసివేయబడింది";
+
+/* Toast displayed to the user after a tab has been sent successfully. */
+"Menu.TabSent.Confirm" = "ట్యాబు పంపబడింది";
+
+/* Title on tracking protection menu for blocked items. */
+"Menu.TrackingProtection.BlockedTitle" = "నిరోధించబడినవి";
+
+/* Message in menu when no trackers blocked. */
+"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Firefoxకి తెలిసిన ట్రాకర్లేమీ ఈ పేజీలో కనబడలేదు.";
+
+/* The title for tracking protection settings */
+"Menu.TrackingProtection.ProtectionSettings.Title" = "సంరక్షణ అమరికలు";
+
+/* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
+"Menu.TrackingProtection.TitlePrefix" = "%@ కోసం సంరక్షణలు";
+
+/* The title that shows the number of content cookies blocked */
+"Menu.TrackingProtectionBlockedContent.Title" = "ట్రాకింగ్ విషయం";
+
+/* The title that shows the number of social URLs blocked */
+"Menu.TrackingProtectionBlockedSocial.Title" = "సామాజిక ట్రాకర్లు";
+
+/* Description of the Tracking protection menu when TP is blocking parts of the page */
+"Menu.TrackingProtectionBlocking.Description" = "ఈ పేజీలో మీ విహరణ జాడ తెలుసుకునే భాగాలను Firefox నిరోధిస్తోంది.";
+
+/* The description of the Tracking Protection menu item when tracking is enabled */
+"Menu.TrackingProtectionBlockingDisabled.Description" = "ఆన్లైన్ ట్రాకర్లను బ్లాక్ చేయండి";
+
+/* The title that shows the number of cross-site cookies blocked */
+"Menu.TrackingProtectionCrossSiteCookies.Title" = "క్రాస్-సైట్ ట్రాకింగ్ కుకీలు";
+
+/* The title that shows the number of cross-site URLs blocked */
+"Menu.TrackingProtectionCrossSiteTrackers.Title" = "క్రాస్-సైట్ ట్రాకర్లు";
+
+/* The title that shows the number of cryptomining scripts blocked */
+"Menu.TrackingProtectionCryptominersBlocked.Title" = "క్రిప్టోమైనర్లు";
+
+/* Description of content trackers. */
+"Menu.TrackingProtectionDescription.ContentTrackers" = "వెబ్‌సైట్లు కనబడని ట్రాకర్‌లను కలిగి ఉన్న బయటి ప్రకటనలను, వీడియోలను, ఇతర కంటెంట్‌ను లోడ్ చేయవచ్చు. దీన్ని నిరోధించడం వల్ల వెబ్‌సైట్లు వేగంగా తెరుచుకుంటాయి, కానీ కొన్ని బటన్లు, ఫారాలు, ప్రవేశాలు పనిచేయకపోవచ్చు.";
+
+/* Description of cross-site trackers. */
+"Menu.TrackingProtectionDescription.CrossSiteNew" = "ఈ కుకీలు సైటు నుండి సైటుకి మిమ్మల్ని అనుసరిస్తూ మీరు జాలంలో ఏంచేస్తున్నారన్నదాని గురించి డేటాను సేకరిస్తాయి. వాటిని మూడవ పక్షాలైన ప్రకటనకర్తలు, విశ్లేషక కంపెనీలు వంటివి అమరుస్తాయి.";
+
+/* Description of cryptominers. */
+"Menu.TrackingProtectionDescription.CryptominersNew" = "డిజిటల్ డబ్బును తయారుచేయడానికి మీ వ్యవస్థ యొక్క సంగణన శక్తిని క్రిప్టోమైనర్లు రహస్యంగా వాడుకుంటాయి. క్రిప్టోమైనింగ్ స్క్రిప్టులు మీ బ్యాటరీని హరించడం, మీ కంప్యూటర్‌ను నెమ్మది చేయడం చేసి, మీ కరెంటు బిల్లును పెంచగలవు.";
+
+/* Description of fingerprinters. */
+"Menu.TrackingProtectionDescription.Fingerprinters" = "మీ విహారిణి, కంప్యూటర్లలోని అమరికలు ప్రత్యేకమైనవి. ఇలాంటి విభిన్నమైన ప్రత్యేక అమరిలను ఫింగర్‌ప్రింటర్లు సేకరించి మీ ప్రొఫైలు తయారుచేసి, మీరు జాలంలో విహరిస్తూన్నప్పుడు మీ జాడ కనిపెట్టేందుకు వాడుకుంటాయి.";
+
+/* Description of social network trackers. */
+"Menu.TrackingProtectionDescription.SocialNetworksNew" = "మీ గురించిన పూర్తి, లక్ష్యిత ప్రొఫైలును తయారుచేయడానికి సామాజిక మాధ్యమాలు ఇతర వెబ్‌సైట్లలో ట్రాకర్లను ఉంచుతాయి. ఈ ట్రాకర్లను నిరోధిస్తే, సామాజిక మాధ్యమ కంపెనీలు జాలంలో మీ కార్యకలాపాలను చూడగలిగే పరిధి తగ్గుతుంది.";
+
+/* The button that disabled TP for a site. */
+"Menu.TrackingProtectionDisable1.Title" = "ఈ సైటుకి నిలిపివేయబడింది";
+
+/* The confirmation toast once tracking protection has been disabled */
+"Menu.TrackingProtectionDisabled.Title" = "ఈ సైట్ కోసం ట్రాకింగ్ రక్షణ ఇప్పుడు ముగిసింది.";
+
+/* A button to enable tracking protection inside the menu. */
+"Menu.TrackingProtectionEnable.Title" = "ట్రాకింగ్ రక్షణను చేతనపరచు";
+
+/* A button to enable tracking protection inside the menu. */
+"Menu.TrackingProtectionEnable1.Title" = "ఈ సైటుకి చేతనమైవుంది";
+
+/* The confirmation toast once tracking protection has been enabled */
+"Menu.TrackingProtectionEnabled.Title" = "ఈ సైట్ కోసం ఇప్పుడు ట్రాకింగ్ రక్షణ ఉంది.";
+
+/* The title that shows the number of fingerprinting scripts blocked */
+"Menu.TrackingProtectionFingerprintersBlocked.Title" = "ఫింగర్‌ప్రింటర్లు";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "నిరోధించిన క్రాస్-సైటు ట్రాకింగు కుకీలు";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Cryptominers" = "నిరోధిత క్రిప్టోమైనర్లు";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Fingerprinters" = "నిరోధించిన ఫింగర్‌ప్రింటర్లు";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Social" = "నిరోధించిన సామాజిక ట్రాకర్లు";
+
+/* more info about what tracking protection is about */
+"Menu.TrackingProtectionMoreInfo.Description" = "పలు వెబ్‌సైట్లలో మీ విహారణ డేటాని సేకరించే ఆన్‌లైన్ ట్రాకర్లను ట్రాకింగ్ సంరక్షణ ఎలా నిరోధిస్తుందో తెలుసుకోండి.";
+
+/* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
+"Menu.TrackingProtectionNoBlocking.Description" = "ఈ పేజీపైన ఎటువంటి జాడ తెలుసుకొనే ఎలిమెంట్స్ లేవు.";
+
+/* label for the menu item to show when the website is whitelisted from blocking trackers. */
+"Menu.TrackingProtectionOption.WhiteListOnDescription" = "మీ విహరణ జాడ తెలుసుకొనే ఎలిమెంట్లను ఈ సైట్ కలిగివుంది. మీరు రక్షణను అచేతనించారు.";
+
+/* label for the menu item that lets you remove a website from the tracking protection whitelist */
+"Menu.TrackingProtectionWhitelistRemove.Title" = "ఈ సైట్ కోసం చేతనపరచు";
+
+/* The title for the option to view the What's new page. */
+"Menu.WhatsNew.Title" = "కొత్తవి ఏమిటి";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "మొబైల్ పరికరం";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "ఒక నెల క్రితం కంటే";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "ఒక వారం క్రితం కంటే";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "నెవిగేషను టూల్బార్";
+
+/* Accessibility label for the New Tab button in the tab toolbar.
+   Accessibility Label for the tab toolbar New tab button */
+"New Tab" = "కొత్త ట్యాబు";
+
+/* Restore Tabs Negative Action */
+"No" = "కాదు";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "ట్యాబులు లేవు";
+
+/* OK button */
+"OK" = "సరే";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "సరే";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "అయ్యో! Firefox క్రాష్ అయింది";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "టైటిల్ బార్ లో కనిపించినపుడు పుస్తకం చిహ్నాన్ని నొక్కడం ద్వారా రీడర్ లో వ్యాసాలు చూడండి.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "సెట్టింగ్‌లను తెరవండి";
+
+/* Toggle tabs syncing setting */
+"Open Tabs" = "తెరిచివున్న ట్యాబులు";
+
+/* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
+"OpenURL.Error.Message" = "అది ఒక చెల్లని చిరునామాను కలిగి ఉండటం వలన Firefox పేజీని తెరవలేదు.";
+
+/* Title of the message shown when the user attempts to navigate to an invalid link. */
+"OpenURL.Error.Title" = "పేజీలను తెరవలేదు";
+
+/* Accessibility label for the Page Options menu button */
+"Page Options Menu" = "పేజీ ఎంపికల మెనూ";
+
+/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
+"Panel Chooser" = "ప్యానెల్ ఎంపిక";
+
+/* Password textbox in Authentication prompt */
+"Password" = "పాస్వర్డ్";
+
+/* Error message shown in the remote tabs panel */
+"PasswordAutoFill.NoPasswordsFoundTitle" = "మీ Firefox ఖాతా నుండి సింక్రనించిన ప్రవేశ వివరాలు ఏమీ లేవు";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "ఇది బొమ్మను మీ కేమెరా రోల్‌కు భద్రపరుచుకోనిస్తుంది.";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox మీ ఫోటోలను యాక్సెస్ చేయాలనుకుంటుంది";
+
+/* Button for closing the menu action sheet */
+"PhotonMenu.close" = "మూసివేయి";
+
+/* Privacy section title */
+"Privacy" = "ప్రైవసి";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "గోప్యతా విధానం";
+
+/* Title for quick-search engines settings section. */
+"Quick-Search Engines" = "త్వరిత శోధన ఇంజన్లు";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "చదువు";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "రీడర్ వీక్షణ";
+
+/* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
+"ReaderMode.Available.VoiceOverAnnouncement" = "రీడర్ మోడ్ అందుబాటులో ఉంది";
+
+/* Panel accessibility label */
+"Reading list" = "పఠనా జాబితా";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "ఇటీవల మూసినవి";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "రీలోడు చెయ్యి";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "తొలగించు";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "చదివే జాబితా నుండి తొలగించు";
+
+/* Cancel button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Cancel" = "రద్దుచేయి";
+
+/* Reopen button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Reopen" = "మళ్లీ తెరువు";
+
+/* Reopen alert title shown at home page. */
+"ReopenAlert.Title" = "చివరగా మూసివేసిన ట్యాబును తిరిగి తెరవండి";
+
+/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"ReopenClosedTab.KeyCodeTitle" = "మూసివేసిన ట్యాబును మళ్ళీ తెరువు";
+
+/* Accessibility label for button resetting font size in display settings of reader mode */
+"Reset text size" = "టెక్స్ట్ పరిమాణం రీసెట్ చేయండి";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "సాన్స్-సెరీఫ్";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "రీడర్ లో చూడటానికి నియంత్రణలు పుస్తక ప్లస్ చిహ్నాన్ని నొక్కడం ద్వారా మీ చదివే జాబితాకు పేజీలను సేవ్ చేయండి.";
+
+/* OK button to dismiss the error prompt. */
+"ScanQRCode.Error.OK.Button" = "సరే";
+
+/* Text for the instructions label, displayed in the QR scanner view */
+"ScanQRCode.Instructions.Label" = "స్కాన్ చేయడానికి ఫ్రేమ్ లోపల QR కోడ్ను సమలేఖనం చేయండి";
+
+/* Text of the prompt that is shown to the user when the data is invalid */
+"ScanQRCode.InvalidDataError.Message" = "డేటా చెల్లనిది";
+
+/* Text of the prompt user to setup the camera authorization. */
+"ScanQRCode.PermissionError.Message" = "మీ పరికరపు కెమెరాను వాడటానికి Firefoxను ఇక్కడ అనుమతించండి ‘అమరికలు’ -> ‘అంతరంగికత’ -> ‘కెమెరా’.";
+
+/* Title for the QR code scanner view. */
+"ScanQRCode.View.Title" = "QR కోడ్ను స్కాన్ చేయండి";
+
+/* Accessibility Label for the tab toolbar Search button
+   Navigation title for search settings.
+   Open search section of settings */
+"Search" = "శోధన";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "వెతకండి లేదా చిరునామాను ఎంటర్ చేయండి";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "క్రొత్త శోధన ఇంజన్ శీఘ్ర శోధన బార్ లో కనిపిస్తుంది.";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "శోధన ఇంజిన్ జోడించబడింది!";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "శోధన ప్రదాతను చేర్చు?";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "రద్దుచేయి";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.DuplicateErrorMessage" = "ఈ శీర్షిక లేదా URL తో ఇప్పటికే ఒక శోధన యంత్రము జోడించబడింది.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.DuplicateErrorTitle" = "విఫలమైంది";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "శోధన అందింపుదారు జోడింపు కాలేదు.";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "విఫలమైంది";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.FormErrorMessage" = "దయచేసి అన్ని ఖాళీలను పూరించండి.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.FormErrorTitle" = "విఫలమైంది";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "సరే";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "సలహా కోసం శోధనలు";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "సురక్షిత కనెక్షన్";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "Mozilla సమస్యను పరిష్కరించాలి కాబట్టి క్రాష్ నివేదికను పంపాలా?";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "అభిప్రాయాన్ని పంపండి";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "నివేదిక పంపు";
+
+/* Button title for cancelling share screen
+   Close button in top navigation bar */
+"SendTo.Cancel.Button" = "రద్దుచేయి";
+
+/* Header for the list of devices table */
+"SendTo.DeviceList.Text" = "ఆందుబాటులో ఉన్న పరికరాలు:";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "కేవలం HTTP మరియు HTTPS లింకులు షేర్ చేయవచ్చు.";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "OK";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "మీరు షేర్ చేయడానికి ప్రయత్నిస్తున్న లింక్ షేర్ చేయడం సాధ్యం కాదు.";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"SendTo.NavBar.Title" = "ట్యాబును పంపు";
+
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message" = "సింక్రనించడానికి ఈ Firefox ఖాతాకు అనుసంధానించబడిన పరికరాలు ఏమీ మీకు లేవు.";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Message" = "కొనసాగించడానికి, దయచేసి Firefoxను తెరిచి, అమరికలకు వెళ్లి, ప్రవేశించండి.";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Title" = "మీరు మీ Firefox ఖాతా లోనికి ప్రవేశించిలేరు.";
+
+/* Navigation bar button to Send the current page to a device */
+"SendTo.SendAction.Text" = "పంపించు";
+
+/* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_body" = "కొత్త ట్యాబు మరొక పరికరం నుండి వచ్చింది.";
+
+/* Title of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_title" = "ట్యాబు వచ్చింది";
+
+/* Body of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the app name. */
+"SentTab_TabArrivingNotification_WithDevice_body" = "క్రొత్త ట్యాబు %@లో వచ్చింది";
+
+/* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
+"SentTab_TabArrivingNotification_WithDevice_title" = "%@ నుండి వచ్చిన ట్యాబు";
+
+/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
+"SentTab.AddToReadingListAction.Title" = "చదవాల్సిన జాబితాకి చేర్చు";
+
+/* Label for an action used to bookmark one or more tabs from a notification. */
+"SentTab.BookmarkAction.title" = "ఇష్టాంశం";
+
+/* Body of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.body" = "నిష్క్రమించడానికి తాకండి";
+
+/* Title of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.title" = "Firefox సమకాలీకరణ";
+
+/* Label for an action used to view one or more tabs from a notification. */
+"SentTab.ViewAction.title" = "చూడండి";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "సెపియా";
+
+/* Font type setting in the reading view settings */
+"Serif" = "సెరీఫ్";
+
+/* Title in the settings view controller title bar */
+"Settings" = "అమరికలు";
+
+/* The button text in Search Settings that opens the Custom Search Engine view. */
+"Settings.AddCustomEngine" = "శోధన యంత్రమును జోడించండి";
+
+/* The text on the Save button when saving a custom search engine */
+"Settings.AddCustomEngine.SaveButtonText" = "భద్రపరుచు";
+
+/* The title of the  Custom Search Engine view. */
+"Settings.AddCustomEngine.Title" = "శోధన యంత్రాన్ని జోడించండి";
+
+/* The title for the field which sets the title for a custom search engine. */
+"Settings.AddCustomEngine.TitleLabel" = "శీర్షిక";
+
+/* The placeholder for Title Field when saving a custom search engine. */
+"Settings.AddCustomEngine.TitlePlaceholder" = "శోధన యంత్రం";
+
+/* The title for URL Field */
+"Settings.AddCustomEngine.URLLabel" = "URL";
+
+/* The placeholder for URL Field when saving a custom search engine */
+"Settings.AddCustomEngine.URLPlaceholder" = "URL (ప్రశ్నను %s తో భర్తీ చేయండి)";
+
+/* Button in Data Management that clears private data for the selected items. */
+"Settings.ClearAllWebsiteData.Clear.Button" = "వెబ్‌సైటు డేటా అంతటినీ తుడిచివేయి";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "ప్రైవేట్ డేటాను క్లియర్ చేయండి";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "ప్రైవేట్ డేటాను క్లియర్ చేయండి";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "ప్రైవేట్ డేటాను క్లియర్ చేయండి";
+
+/* Copy app version alert shown in settings. */
+"Settings.CopyAppVersion.Title" = "క్లిప్‌బోర్డుకి కాపీ అయ్యింది";
+
+/* Default text in search bar for Data Management */
+"Settings.DataManagement.SearchLabel" = "సైట్లను వడపోయండి";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.DataManagement.SectionName" = "డేటా నిర్వహణ";
+
+/* Title displayed in header of the setting panel. */
+"Settings.DataManagement.Title" = "డేటా నిర్వహణ";
+
+/* Body of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Body" = "ఫైర్ఫాక్స్ మీ ఖాతాలో సమకాలీకరించడాన్ని ఆపివేయవచ్చు, కానీ ఈ పరికరంలో మీ బ్రౌజింగ్ డేటాను తొలగించలేదు.";
+
+/* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
+"Settings.Disconnect.Button" = "Sync అనుసంధానం తెంచు";
+
+/* Cancel action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.CancelButton" = "రద్దుచేయి";
+
+/* Destructive action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.DestructiveButton" = "అనుసంధానం తెంచు";
+
+/* Title of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Title" = "Sync అనుసంధానం తెంచివేయాలా?";
+
+/* Display (theme) settings label to show if manually switch theme is enabled. */
+"Settings.DisplayTheme.Manual.StatusLabel" = "మానవీయం";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Manually'. */
+"Settings.DisplayTheme.Manual.SwitchSubtitle" = "మీకు కావలసిన అలంకారాన్ని ఎంచుకోండి";
+
+/* Display (theme) setting to choose the theme manually. */
+"Settings.DisplayTheme.Manual.SwitchTitle" = "మానవీయంగా";
+
+/* Option choice in display theme settings for dark theme */
+"Settings.DisplayTheme.OptionDark" = "నల్లని";
+
+/* Option choice in display theme settings for light theme */
+"Settings.DisplayTheme.OptionLight" = "తెల్లని";
+
+/* Display (theme) settings footer describing how the brightness slider works. */
+"Settings.DisplayTheme.SectionFooter" = "అలంకారం మీ తెర వెలుతురుని బట్టి స్వయంచాలకంగా మారుతుంది. మీరు అలంకారం ఎప్పుడు మారాలో హద్దులు పెట్టుకోవచ్చు. ఈ వృత్తం మీ తెర ప్రస్తుత వెలుతురును సూచిస్తుంది.";
+
+/* Switch mode settings section title */
+"Settings.DisplayTheme.SwitchMode.SectionHeader" = "మార్పిడి రీతి";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Automatically'. */
+"Settings.DisplayTheme.SwitchSubtitle" = "తెర వెలుతురుని బట్టి స్వయంచాలకంగా మార్చు";
+
+/* Display (theme) settings label to show if automatically switch theme is enabled.
+   Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
+"Settings.DisplayTheme.SwitchTitle" = "స్వయంచాలికంగా";
+
+/* System theme settings section title */
+"Settings.DisplayTheme.SystemTheme.SectionHeader" = "వ్యవస్థ అలంకారం";
+
+/* System theme settings switch to choose whether to use the same theme as the system */
+"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "వ్యవస్థ యొక్క తెల్లని/నల్లని రీతిని వాడు";
+
+/* Theme picker settings section title */
+"Settings.DisplayTheme.ThemePicker.SectionHeader" = "అలంకారపు ఎంపికరి";
+
+/* Title in main app settings for Theme settings */
+"Settings.DisplayTheme.Title.v2" = "అలంకారం";
+
+/* DNT Settings option for always on */
+"Settings.DNT.OptionAlwaysOn" = "ఎల్లప్పుడూ";
+
+/* DNT Settings option for only turning on when Tracking Protection is also on */
+"Settings.DNT.OptionOnWithTP" = "ట్రాకింగ్ రక్షణని ఉపయోగిస్తున్నప్పుడు మాత్రమే";
+
+/* DNT Settings title */
+"Settings.DNT.Title" = "మీరు ట్రాక్ చేయకూడదనుకునే వెబ్సైట్లు ఒక డోంట్ ట్రాక్ సంకేతాలను పంపండి";
+
+/* Label used for the device name settings section. */
+"Settings.FxA.DeviceName" = "పరికరం పేరు";
+
+/* Label used as a section title in the Firefox Accounts Settings screen. */
+"Settings.FxA.Sync.SectionName" = "సింక్ అమరికలు";
+
+/* Title displayed in header of the FxA settings panel. */
+"Settings.FxA.Title" = "Firefox ఖాతా";
+
+/* General settings section title */
+"Settings.General.SectionName" = "సాధారణం";
+
+/* Button in settings to clear the home page. */
+"Settings.HomePage.Clear.Button" = "క్లియర్ చేయి";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "హొమ్ పేజీ";
+
+/* Title displayed in header of the setting panel. */
+"Settings.HomePage.Title" = "హోంపేజీ సెట్టింగులు";
+
+/* Placeholder text in the homepage setting when no homepage has been set. */
+"Settings.HomePage.URL.Placeholder" = "ఒక వెబ్ పేజీ ఎంటర్ చేయండి";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "ప్రస్తుత హోంపేజీ";
+
+/* Button in settings to use the current link on the clipboard as home page. */
+"Settings.HomePage.UseCopiedLink.Button" = "కాపీ చేసిన లంకెను వాడు";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "ప్రస్తుత పేజీని ఉపయోగించు";
+
+/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
+"Settings.HomePage.UseDefault.Button" = "అప్రమేయాన్ని వాడు";
+
+/* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
+"Settings.LoginsAndPasswordsTitle" = "ప్రవేశాలు & సంకేతపదాలు";
+
+/* Label used to set a custom url as the new tab option (homepage). */
+"Settings.NewTab.CustomURL" = "అభిమత URL";
+
+/* A description in settings of what the new tab choice means */
+"Settings.NewTab.Description" = "మీరు ఒక కొత్త ట్యాబు తెరిచినప్పుడు:";
+
+/* The title of the section in newtab that lets you modify the topsites panel */
+"Settings.NewTab.Option.ASTitle" = "మేటి సైట్ల అభిమతీకరణ";
+
+/* Option in settings to show a blank page when you open a new tab */
+"Settings.NewTab.Option.BlankPage" = "ఖాళీ పేజీ";
+
+/* Option in settings to show bookmarks when you open a new tab */
+"Settings.NewTab.Option.Bookmarks" = "ఇష్టాంశాలు";
+
+/* The footer for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeFooter" = "మీరు ఎక్కువగా చూసే సైట్లు";
+
+/* Option in settings to show Firefox Home when you open a new tab */
+"Settings.NewTab.Option.FirefoxHome" = "Firefox ముంగిలి";
+
+/* Option in the settings to turn off recent bookmarks in the Highlights section */
+"Settings.NewTab.Option.HighlightsBookmarks" = "ఇటీవల ఇష్టాంశాలుగా చేసినవి";
+
+/* Option in settings to turn off history in the highlights section */
+"Settings.NewTab.Option.HighlightsHistory" = "సందర్శించినవి";
+
+/* Option in settings to show history when you open a new tab */
+"Settings.NewTab.Option.History" = "చరిత్ర";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.HomePage" = "ముంగిలిపేజీ";
+
+/* Option in settings to turn on off pocket recommendations */
+"Settings.NewTab.Option.Pocket" = "Pocketచే సిఫార్సు చేయబడింది";
+
+/* Footer caption for pocket settings */
+"Settings.NewTab.Option.PocketFooter" = "జాలం చుట్టుపక్కల నుంచి గొప్ప విషయం.";
+
+/* Option in settings to show reading list when you open a new tab */
+"Settings.NewTab.Option.ReadingList" = "మీరు చదవాల్సిన జాబితాను చూపించు";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
+"Settings.NewTab.SectionName" = "కొత్త ట్యాబు";
+
+/* Title displayed in header of the setting panel. */
+"Settings.NewTab.Title" = "కొత్త ట్యాబు";
+
+/* Label at the top of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionName" = "చూపించు";
+
+/* Footer at the bottom of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionNameFooter" = "కొత్త ట్యాబు తెరిచేటప్పుడు ఏమి చూపించాలో ఎంచుకోండి";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Status" = "Firefox తెరుస్తున్నపుడు";
+
+/* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Title" = "నకలు చేసిన లంకెలను తెరవడానికి సిద్దపడండి";
+
+/* Title for Open With Settings */
+"Settings.OpenWith.PageTitle" = "మెయిల్ లింకులను తెరువు";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
+"Settings.OpenWith.SectionName" = "మెయిల్ అనువర్తనం";
+
+/* Setting to enable the built-in password manager */
+"Settings.SaveLogins.Title" = "ప్రవేశాలను భద్రపరచు";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "పూర్తయింది";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "మార్చు";
+
+/* title for a link that explains how mozilla collects telemetry */
+"Settings.SendUsage.Link" = "ఇంకా తెలుసుకోండి.";
+
+/* A short description that explains why mozilla collects usage data. */
+"Settings.SendUsage.Message" = "Mozilla ప్రతి ఒక్కరికీ Firefoxను అందించడానికి మరియు మెరుగుపరచడానికి మాత్రమే అవసరమైనవి మాత్రమే సేకరించేందుకు కృషి చేస్తుంది.";
+
+/* The title for the setting to send usage data. */
+"Settings.SendUsage.Title" = "వినియోగించిన డేటాను పంపు";
+
+/* Description displayed under the ”Show Link Previews” option */
+"Settings.ShowLinkPreviews.Status" = "లంకెలను ఎక్కువసేపు నొక్కినప్పుడు";
+
+/* Title of setting to enable link previews when long-pressing links. */
+"Settings.ShowLinkPreviews.Title" = "లంకె మునుజూపులను చూపించు";
+
+/* Setting to show Logins & Passwords quick access in the application menu */
+"Settings.ShowLoginsInAppMenu.Title" = "అప్లికేషన్ మెనూలో చూపించు";
+
+/* The description of the open new tab siri shortcut */
+"Settings.Siri.OpenTabShortcut" = "కొత్త ట్యాబును తెరువు";
+
+/* The description that describes what siri shortcuts are */
+"Settings.Siri.SectionDescription" = "సిరి ద్వారా Firefoxను త్వరగా తెరవడానికి సిరి షార్టుకట్లను వాడుకోండి";
+
+/* The option that takes you to the siri shortcuts settings page */
+"Settings.Siri.SectionName" = "సిరిలో సత్వరమార్గాలు";
+
+/* Dismiss button for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Button" = "సరే, అర్థమయ్యింది";
+
+/* Title for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Title" = "గమనిక!";
+
+/* Header description for tracking protection options section where Basic/Strict block list can be selected */
+"Settings.TrackingProtection.BlockListsHeader" = "మీ విహరణ జాడ తెలుసుకునే వెబ్ ఎలిమెంట్స్ నిరోధించుటకు Firefox ఏ జాబితా ఉపయోగించాలో మీరు ఎంచుకోవచ్చు.";
+
+/* Explanation of basic mode. */
+"Settings.TrackingProtection.Info.BasicTitle" = "సంరక్షణకు, పనితనానికి మధ్య సమతుల్యమైనది.";
+
+/* The Title on info view which shows a list of all blocked websites */
+"Settings.TrackingProtection.Info.BlocksTitle" = "నిరోధాలు";
+
+/* Explanation of strict mode. */
+"Settings.TrackingProtection.Info.StrictTitle" = "బలమైన సంరక్షణను అందిస్తుంది, కానీ కొన్ని సైట్లు సరిగా పనిచేయకపోవచ్చు.";
+
+/* 'Learn more' info link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.LearnMore" = "ఇంకా తెలుసుకోండి";
+
+/* 'More Info' link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.MoreInfo" = "మరింత సమాచారం…";
+
+/* Title for tracking protection options section where level can be selected. */
+"Settings.TrackingProtection.ProtectionLevelTitle" = "సంరక్షణ స్థాయి";
+
+/* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
+"Settings.TrackingProtection.SectionName" = "ట్రాకింగ్ సంరక్షణ";
+
+/* Additional information about the strict level setting */
+"Settings.TrackingProtection.StrictLevelInfoFooter" = "ట్రాకర్లను నిరోధించడం కొన్ని వెబ్‌సైట్ల పనితనాన్ని ప్రభావితం చేయవచ్చు.";
+
+/* Tracking protection settings option for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BasicBlockList" = "ప్రామాణికం (అప్రమేయం)";
+
+/* Tracking protection settings option description for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BlockListBasicDescription" = "వెబ్‌సైట్లు సరిగా పనిచేయడం కోసం కొన్ని ట్రాకర్లను అనుమతిస్తుంది.";
+
+/* Tracking protection settings option for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrict" = "ఖచ్చితం";
+
+/* Tracking protection settings option description for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrictDescription" = "తెలిసిన ట్రాకర్లను నిరోధిస్తుంది. కొన్ని వెబ్‌సైట్లు సరిగా పనిచేయకపోవచ్చు.";
+
+/* Description label shown on tracking protection options screen. */
+"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "ట్రాకింగ్ అంటే పలు వెబ్‌సైట్ల నుండి మీ విహారణ సమాచారాన్ని సేకరించడం.";
+
+/* Settings option to specify that Tracking Protection is on */
+"Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "మెరుగైన ట్రాకింగ్ సంరక్షణ";
+
+/* Translation settings footer describing how language detection and translation happens. */
+"Settings.TranslateSnackBar.SectionFooter" = "పరికరంలో జాల పుట భాష కనుగొనబడితే, సుదూర సేవ నుండి అనువాదం అందించబడుతుంది.";
+
+/* Translation settings section title */
+"Settings.TranslateSnackBar.SectionHeader" = "సేవలు";
+
+/* Switch to choose if the language of a page is detected and offer to translate. */
+"Settings.TranslateSnackBar.SwitchSubtitle" = "మీ అప్రమేయ భాషకు భిన్నమైన భాషలో ఉండే సైట్లను అనువదించి చూడడానికి వీలుకల్పించు.";
+
+/* Switch to choose if the language of a page is detected and offer to translate. */
+"Settings.TranslateSnackBar.SwitchTitle" = "అనువాదాన్ని చూపించు";
+
+/* Title in main app settings for Translation toast settings */
+"Settings.TranslateSnackBar.Title" = "అనువాదం";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "ట్రబుల్‌షూట్";
+
+/* Button to delete website in search results */
+"Settings.WebsiteData.ButtonDelete" = "తొలగించు";
+
+/* Button to exit edit website search results */
+"Settings.WebsiteData.ButtonDone" = "పూర్తయింది";
+
+/* Button to edit website search results */
+"Settings.WebsiteData.ButtonEdit" = "మార్చు";
+
+/* Button shows all websites on website data tableview */
+"Settings.WebsiteData.ButtonShowMore" = "ఇంకా చూపించు";
+
+/* Description of the confirmation dialog shown when a user tries to clear their private data. */
+"Settings.WebsiteData.ConfirmPrompt" = "ఈ చర్య మీ వెబ్‌సైట్ల డేటా అంతటినీ తుడిచివేస్తుంది. దీన్ని వెనక్కితేలేము.";
+
+/* Title displayed in header of the Data Management panel. */
+"Settings.WebsiteData.Title" = "వెబ్‌సైటు డేటా";
+
+/* Action label on share extension to add page to the Firefox reading list. */
+"ShareExtension.AddToReadingListAction.Title" = "చదవాల్సిన జాబితాకి చేర్చు";
+
+/* Share extension label shown after user has performed 'Add to Reading List' action. */
+"ShareExtension.AddToReadingListActionDone.Title" = "చదవాల్సిన జాబితాకి జోడించబడింది";
+
+/* Action label on share extension to bookmark the page in Firefox. */
+"ShareExtension.BookmarkThisPageAction.Title" = "ఈ పేజీని ఇష్టాంశముచేయి";
+
+/* Share extension label shown after user has performed 'Bookmark this Page' action. */
+"ShareExtension.BookmarkThisPageActionDone.Title" = "ఇష్టాంశంగా గుర్తించబడింది";
+
+/* Action label on share extension to load the page in Firefox when user switches apps to bring it to foreground. */
+"ShareExtension.LoadInBackgroundAction.Title" = "వెనుతలంలో తెరువు";
+
+/* Share extension label shown after user has performed 'Load in Background' action. */
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Firefox లో లోడ్ అవుతోంది";
+
+/* Action label on share extension to immediately open page in Firefox. */
+"ShareExtension.OpenInFirefoxAction.Title" = "Firefox లో తెరవండి";
+
+/* Action label on share extension to immediately open page in Firefox in private mode. */
+"ShareExtension.OpenInPrivateModeAction.Title" = "అంతరంగిక రీతిలో తెరువు";
+
+/* Action label on share extension to search for the selected text in Firefox. */
+"ShareExtension.SeachInFirefoxAction.Title" = "Firefox లో శోధించండి";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "శోధన సలహాలను చూపించు";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "ట్యాబ్‌లను ప్రదర్శించు";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "టూర్ ను చూపించు";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "ఆపివేయి";
+
+/* Support section title */
+"Support" = "మద్దతు";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "ట్యాబు మూసివేయడానికి మూడు వేళ్ళతో కుడి లేదా ఎడమ వైపుకు స్వైప్ చెయ్యండి.";
+
+/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"SwitchToNonPBM.KeyCodeTitle" = "సాధారణ విహరణ రీతి";
+
+/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"SwitchToPBM.KeyCodeTitle" = "అంతరంగిక విహరణ రీతి";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, bookmarks, passwords and more." = "మీ ట్యాబులను, ఇష్టాంశాలను, సంకేతపదాలను, ఇంకా మరెన్నింటినో సింక్ చేసుకోండి.";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, passwords and more." = "మీ ట్యాబులను, ఇష్టాంశాలను, సంకేతపదాలను, ఇంకా మరెన్నింటినో సింక్ చేసుకోండి.";
+
+/* Message displayed when the user syncs for the first time */
+"Sync.FirstTimeMessage.Label" = "మీ మొదటి సింక్ కొంత సమయం పట్టవచ్చు";
+
+/* Message displayed when the user's account is syncing with no ellipsis */
+"Sync.Syncing.Label" = "సింక్ అవుతోంది";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "సింకవుతోంది…";
+
+/* Panel accessibility label */
+"Synced Tabs" = "సింకైన ట్యాబులు";
+
+/* The Bookmark sync component, used in SyncState.Partial.Title */
+"SyncState.Bookmark.Title" = "ఇష్టాంశాలు";
+
+/* The Remote Clients sync component, used in SyncState.Partial.Title */
+"SyncState.Clients.Title" = "రిమోట్ క్లయింట్లు";
+
+/* Title for Sync status message when synchronization failed to complete */
+"SyncState.Failed.Title" = "సింక్ చేయడం విఫలమైంది";
+
+/* The History sync component, used in SyncState.Partial.Title */
+"SyncState.History.Title" = "చరిత్ర";
+
+/* The Logins sync component, used in SyncState.Partial.Title */
+"SyncState.Logins.Title" = "ప్రవేశాలు";
+
+/* Title for Sync status message when Sync failed to start. */
+"SyncState.NotStarted.Title" = "సింక్ అందుబాటులో లేదు";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "సింక్ ఆఫ్లైన్ లో ఉన్నది";
+
+/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
+"SyncState.Partial.Title" = "సింక్ %@ సింక్ చేయడానికి సమస్యలను ఎదుర్కొంటున్నది";
+
+/* The Tabs sync component, used in SyncState.Partial.Title */
+"SyncState.Tabs.Title" = "ట్యాబులు";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "ట్యాబు %2$@ లో %1$@";
+
+/* Hardware shortcut to open the tab tray from a tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"Tab.ShowTabTray.KeyCodeTitle" = "ట్యాబులన్నింటినీ చూపించు";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "ట్యాబు %3$@ లో %1$@ నుండి %2$@ది";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "ట్యాబులు ట్రె";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "చర్యరద్దు";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "%d ట్యాబు(లు) మూసివేయబడింది";
+
+/* The placeholder text for the tab search bar */
+"Tabs.Search.PlaceholderText" = "ట్యాబులలో వెతకండి";
+
+/* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseAllTabs.KeyCodeTitle" = "ట్యాబులన్నింటినీ మూసివేయి";
+
+/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseTab.KeyCodeTitle" = "ఎంచుకున్న ట్యాబును మూసివేయి";
+
+/* The section header for tabs opened last week */
+"TabTray.LastWeek.Header" = "పోయిన వారం";
+
+/* The title on the button to copy the tab address. */
+"TabTray.MoreMenu.Copy" = "కాపీచేయి";
+
+/* The section header for tabs opened before last week */
+"TabTray.Older.Header" = "పాతవి";
+
+/* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenNewTab.KeyCodeTitle" = "కొత్త ట్యాబును తెరువు";
+
+/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenSelectedTab.KeyCodeTitle" = "ఎంచుకున్న ట్యాబును తెరువు";
+
+/* The button title to see more options to perform on the tab. */
+"TabTray.SwipeMenu.More" = "మరిన్ని";
+
+/* The title for the tab tray */
+"TabTray.Title" = "తెరిచివున్న ట్యాబులు";
+
+/* The section header for tabs opened today */
+"TabTray.Today.Header" = "ఈరోజు";
+
+/* The section header for tabs opened yesterday */
+"TabTray.Yesterday.Header" = "నిన్న";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "పేజీ రీడర్ వీక్షణలో ప్రదర్శించడం సాధ్యం కాదు.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "మీ ఇతర పరికరాల నుండి ట్యాబ్లను ప్రాప్యత చెయ్యడంలో సమస్య సంభవించింది. కొన్ని క్షణాల్లో మళ్ళీ ప్రయత్నించండి.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "పేజీ మార్చడంలో లోపం ఉంది";
+
+/* Relative date for date in past week. */
+"this week" = "ఈ వారం";
+
+/* label for Not Now button */
+"Toasts.NotNow" = "ఇప్పుడు కాదు";
+
+/* Open App Store button */
+"Toasts.OpenAppStore" = "ఆప్ స్టోరుని తెరువు";
+
+/* History tableview section header */
+"Today" = "ఈరోజు";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "నేడు %@ వద్ద";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "మెనూ";
+
+/* Accessibility label for the Close All Tabs menu button. */
+"Toolbar.Menu.CloseAllTabs" = "అన్ని ట్యాబులను మూసివేయి";
+
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "మీరు ఎక్కువగా సందర్శించే సైట్లను ఇక్కడ కనిపిస్తాయి.";
+
+/* The title for the empty Top Sites state */
+"TopSites.EmptyState.Title" = "టాప్ సైట్స్ కు స్వాగతం";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "పేజీని తొలగించు - %@";
+
+/* Button to disallow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.Cancel" = "వద్దు";
+
+/* Button to allow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.OK" = "అవును";
+
+/* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
+"TranslationToastHandler.PromptTranslate.Title" = "ఈ పేజీ %1$@ లో ఉన్నట్లు కనిపిస్తుంది. %3$@‌తో %2$@ లోనికి అనువదించాలా?";
+
+/* Tile title for Twitter */
+"Twitter" = "ట్విట్టర్";
+
+/* The menu item that pastes the current contents of the clipboard into the URL bar and navigates to the page */
+"UIMenuItem.PasteGo" = "అతికించి వెళ్ళు";
+
+/* Search in New Tab Text selection menu item */
+"UIMenuItem.SearchWithFirefox" = "Firefox‌తో వెతుకు";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "చదవ లేదు";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect" = "Firefoxతో కనెక్ట్ చేయడానికి అప్గ్రేడ్ చేయండి";
+
+/* Username textbox in Authentication prompt */
+"Username" = "యూజర్‌పేరు";
+
+/* Text message in the settings table view */
+"Verify your email address" = "మీ ఇమెయిల్ చిరునామాను ధృవీకరించండి";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "వెర్షన్ %1$@ (%2$@)";
+
+/* Accessibility label for the main web content view */
+"Web content" = "వెబ్ కంటెంట్";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "మీరు చదవాల్సిన జాబితాకు స్వాగతం";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "అవును, ఇది ఇబ్బందికరంగా ఉంది.";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "వికీపీడియా";
+
+/* Relative date for yesterday. */
+"yesterday" = "నిన్నటి రోజు";
+
+/* History tableview section header */
+"Yesterday" = "నిన్నటి రోజు";
+
+/* Error message in the remote tabs panel */
+"You don’t have any tabs open in Firefox on your other devices." = "మీరు మీ ఇతర పరికరాల్లో Firefoxలో ఏ ట్యాబులు తెరిచి లేదు.";
+
+/* Your Rights settings section title */
+"Your Rights" = "మీ హక్కులు";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+

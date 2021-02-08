@@ -1,0 +1,26 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Això permet fer fotos i pujar-les.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "El Firefox necessita el Face ID per accedir als vostres inicis de sessió desats.";
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSLocationWhenInUseUsageDescription" = "Els llocs web que visiteu poden sol·licitar la vostra ubicació.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Això permet fer vídeos i pujar-los.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Això permet desar fotos.";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "Pestanya privada nova";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "Pestanya nova";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "Escaneja un codi QR";
+
