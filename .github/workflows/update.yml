@@ -1,4 +1,4 @@
-name: github actions Demo
+name: Bitrise Xcode Check and Update
 
 on: 
   schedule:
@@ -6,34 +6,32 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
       matrix:
         python-version: [3.7]
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v1
       with:
         python-version: ${{ matrix.python-version }}
-       
-
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r ./test-fixtures/requirements.txt
-
     - name: Modify bitrise.yml 
       run: |
         python ./test-fixtures/update.py
-
     - name: Commit and push if bitrise.yml changed
       run: |-
         git diff
         git config --global user.email "bitrise-yml-bot@example.com"
         git config --global user.name "BITRISE.YML-bot"
         git diff --quiet || (git add bitrise.yml && git commit -m "Updated bitrise.yml")
-        git push
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
