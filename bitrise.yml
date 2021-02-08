@@ -2731,13 +2731,21 @@ workflows:
 
             brew install jq
 
-            curl -X GET -s -H 'Accept: application/vnd.github.v3+json' -H "authorization: Bearer ${GITHUB_ACCESS_TOKEN}" https://api.github.com/repos/mozilla-mobile/firefox-ios/commits\?sha\=main\&since\=$YESTERDAY | jq -e -r '.[].commit.author | select(.name | contains("BITRISE.YML-bot"))' > /dev/null/
-            test $? -eq 0 || exit 1
+            resp=$(curl -X GET -s -H 'Accept: application/vnd.github.v3+json' -H "authorization: Bearer ${GITHUB_ACCESS_TOKEN}" https://api.github.com/repos/mozilla-mobile/firefox-ios/commits\?sha\=main\&since\=$YESTERDAY | jq -r '.[].commit.author | select(.name | contains("BITRISE.YML-bot"))')
+            echo $resp
+            if [ -z "$resp" ]
+            then
+                echo "There is not any new commit, stop building"
+            else
+                echo "There is a new commit, continue building"
+                envman add --key NEW_XCODE_VERSION --value New_Version_Found
+            fi
         title: "Check main branch for recent activity before continuing"
     - activate-ssh-key@4.0:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@4.0: {}
     - script@1.1:
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
         inputs:
         - content: |-
             #!/usr/bin/env bash
@@ -2754,6 +2762,7 @@ workflows:
     - cache-pull@2.4: {}
     - certificate-and-profile-installer@1.10: {}
     - script@1:
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
         inputs:
         - content: >-
             #!/usr/bin/env bash
@@ -2782,9 +2791,11 @@ workflows:
             envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
         title: Workaround carthage lipo bug
     - carthage@3.2:
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
         inputs:
         - carthage_options: '--platform ios'
     - script@1:
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
         inputs:
         - content: |-
             #!/usr/bin/env bash
@@ -2795,6 +2806,7 @@ workflows:
             envman add --key XCODE_XCCONFIG_FILE --value ''
         title: Remove carthage lipo workaround
     - script@1:
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
         inputs:
         - content: >-
 
@@ -2813,20 +2825,15 @@ workflows:
 
             # requests.
 
-            git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git ||
-            exit 1
+            git clone https://github.com/boek/ios-l10n-scripts.git -b new_tool || exit 1
 
-            pip install --user virtualenv
+            git clone --depth 1 https://github.com/mozilla-l10n/firefoxios-l10n firefoxios-l10n || exit 1
 
-            cd /usr/local/bin
+            ./ios-l10n-scripts/ios-l10n-tools --project-path Client.xcodeproj --l10n-project-path ./firefoxios-l10n --import
 
-            ln -s /Users/vagrant/Library/Python/3.9/bin/virtualenv .
-
-            cd -
-
-            ./ios-l10n-scripts/import-locales-firefox.sh --release
         title: Pull in L10N
     - script@1:
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
         inputs:
         - content: >-
             #!/usr/bin/env bash
@@ -2863,6 +2870,7 @@ workflows:
             cd -
         title: Set provisioning to Bitrise in xcodeproj
     - script@1.1:
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
         title: NPM install and build
         inputs:
         - content: |-
@@ -2875,18 +2883,21 @@ workflows:
             npm install
             npm run build
     - 'git::https://github.com/bitrise-steplib/steps-xcode-build-for-test.git@export-fix':
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
         inputs:
         - xcodebuild_options: >-
             CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
             CODE_SIGNING_ALLOWED=NO
         - scheme: Fennec
     - xcode-test@2:
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
         inputs:
         - scheme: Fennec
         - simulator_device: iPhone 8
     - deploy-to-bitrise-io@1.9: {}
     - cache-push@2.4: {}
     - slack@3.1:
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
         inputs:
         - webhook_url: $WEBHOOK_SLACK_TOKEN
     description: >-
@@ -2895,8 +2906,8 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-10.3.x
-    after_run:
-    - RunSmokeXCUITests
+    #after_run:
+    #- RunSmokeXCUITests
 app:
   envs:
   - opts:
