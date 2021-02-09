@@ -562,6 +562,77 @@ extension FirefoxHomeViewController {
 
 }
 
+
+public class GTopSiteAddition {
+    // A guid is required in the case the site might become a pinned site
+    public static let googleGUID = "DefaultGoogleGUID"
+    // No Google Top Site, we should be removed, if it already exists for invalid region
+    private let invalidRegion = ["CN", "RU", "TR", "KZ", "BY"]
+    private let gTopSiteUserDefaultsKey = "gTopSiteUserDefaultsKey"
+    private var prefs: Prefs
+    var url: String? {
+        // debug only
+        //
+        return "https://www.google.com/webhp?client=firefox-b-1-m&channel=ts"
+        //
+        
+        // Couldn't find a valid region hence returning a nil value for url
+        guard let regionCode = Locale.current.regionCode, !invalidRegion.contains(regionCode) else {
+            return nil
+        }
+        let usRegionDefaultUrl = "https://www.google.com/webhp?client=firefox-b-1-m&channel=ts"
+        let otherRegionDefaultUrl = "https://www.google.com/webhp?client=firefox-b-m&channel=ts"
+        // Special case for US
+        if regionCode == "US" {
+            return usRegionDefaultUrl
+        }
+        return otherRegionDefaultUrl
+    }
+    
+    func hasAdded() -> Bool {
+        guard let value = prefs.boolForKey(PrefsKeys.GoogleTopSiteAddedKey) else {
+            // since value doesn't exist we return false and add set it
+            prefs.setBool(true, forKey: PrefsKeys.GoogleTopSiteAddedKey)
+            return false
+        }
+        return value
+    }
+    
+    func isHidden() -> Bool {
+        guard let value = prefs.boolForKey(PrefsKeys.GoogleTopSiteHideKey) else {
+            return false
+        }
+        return value
+    }
+    
+    func hide() {
+        prefs.setBool(true, forKey: PrefsKeys.GoogleTopSiteHideKey)
+    }
+    
+    func suggestedSiteData() -> SuggestedSite? {
+        guard let url = self.url else {
+            return nil
+        }
+        /*
+        let data = SuggestedSiteData (
+            url: url,
+            bgColor: "0x000000",
+            imageUrl: "asset://suggestedsites_google",
+            faviconUrl: "asset://defaultFavicon",
+            trackingId: 000,
+            title: .DefaultSuggestedGoogle
+        )
+        return SuggestedSite(data: data)
+        */
+        return SuggestedSite(trackingId: 000, url: url, title: String.DefaultSuggestedGoogle, guid: GTopSiteAddition.googleGUID)
+    }
+    
+    init(prefs: Prefs) {
+        self.prefs = prefs
+    }
+    
+}
+
 // MARK: - Data Management
 extension FirefoxHomeViewController: DataObserverDelegate {
 
@@ -581,7 +652,20 @@ extension FirefoxHomeViewController: DataObserverDelegate {
             
             let maxItems = Int(numRows) * self.topSitesManager.numberOfHorizontalItems()
             
-            self.topSitesManager.content = Array(result.prefix(maxItems))
+            var sites = Array(result.prefix(maxItems))
+            // Adding top site when total top site count is less than max items i.e. 8
+            let gTopSiteAddition = GTopSiteAddition(prefs: self.profile.prefs)
+            if !gTopSiteAddition.isHidden() && sites.count < 8 {
+                if let gSite = gTopSiteAddition.suggestedSiteData() {
+                    sites.insert(gSite, at: 0)
+                }
+            }
+
+//            if !gTopSiteAddition.hasAdded() || !gTopSiteAddition.isHidden() {
+//
+//            }
+            
+            self.topSitesManager.content = sites //Array(result.prefix(maxItems))
             
             self.topSitesManager.urlPressedHandler = { [unowned self] url, indexPath in
                 self.longPressRecognizer.isEnabled = false
@@ -628,6 +712,11 @@ extension FirefoxHomeViewController: DataObserverDelegate {
     func hideURLFromTopSites(_ site: Site) {
         guard let host = site.tileURL.normalizedHost else {
             return
+        }
+        // Hide google top site
+        if site.guid == GTopSiteAddition.googleGUID {
+            let gTopSite = GTopSiteAddition(prefs: self.profile.prefs)
+            gTopSite.hide()
         }
         let url = site.tileURL.absoluteString
         // if the default top sites contains the siteurl. also wipe it from default suggested sites.

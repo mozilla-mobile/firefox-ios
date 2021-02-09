@@ -30,6 +30,8 @@ public struct PrefsKeys {
     public static let ContextMenuShowLinkPreviews = "showLinkPreviews"
     public static let NewTabCustomUrlPrefKey = "HomePageURLPref"
     public static let ChronTabsPrefKey = "chronTabsPrefKey"
+    public static let GoogleTopSiteAddedKey = "googleTopSiteAddedKey"
+    public static let GoogleTopSiteHideKey = "googleTopSiteHideKey"
     
     //Activity Stream
     public static let KeyTopSitesCacheIsValid = "topSitesCacheIsValid"
