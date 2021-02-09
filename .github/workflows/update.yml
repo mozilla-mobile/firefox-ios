@@ -27,8 +27,8 @@ jobs:
     - name: Commit and push if bitrise.yml changed
       run: |-
         git diff
-        git config --global user.email "bitrise-yml-bot@example.com"
-        git config --global user.name "BITRISE.YML-bot"
+        git config --global user.email "firefox-test-engineering@mozilla.com"
+        git config --global user.name "Firefox Test Engineering"
         git diff --quiet || (git add bitrise.yml && git commit -m "Updated bitrise.yml")
     - name: Push changes
       uses: ad-m/github-push-action@master
