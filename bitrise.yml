@@ -1734,7 +1734,7 @@ workflows:
 
             git clone --depth 1 https://github.com/mozilla-l10n/firefoxios-l10n firefoxios-l10n || exit 1
 
-            ./ios-l10n-scripts/ios-l10n-tools --project-path Client.xcodeproj --l10n-project-path ./firefox
+            ./ios-l10n-scripts/ios-l10n-tools --project-path Client.xcodeproj --l10n-project-path ./firefoxios-l10n --import
         title: Pull in L10n
     - script@1:
         inputs:
