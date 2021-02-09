@@ -2100,18 +2100,12 @@ workflows:
 
             # requests.
 
-            git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git ||
-            exit 1
+            git clone https://github.com/boek/ios-l10n-scripts.git -b new_tool || exit 1
 
-            pip install --user virtualenv
+            git clone --depth 1 https://github.com/mozilla-l10n/firefoxios-l10n firefoxios-l10n || exit 1
 
-            cd /usr/local/bin
-
-            ln -s /Users/vagrant/Library/Python/3.9/bin/virtualenv .
-
-            cd -
-
-            ./ios-l10n-scripts/import-locales-firefox.sh --release
+            ./ios-l10n-scripts/ios-l10n-tools --project-path Client.xcodeproj --l10n-project-path ./firefoxios-l10n --import
+        title: Pull in L10N
     - script@1:
         inputs:
         - content: >-
@@ -2929,7 +2923,7 @@ trigger_map:
 - push_branch: v31.x
   workflow: xcode12-release-and-beta-nocache
 - pull_request_target_branch: main
-  workflow: RunUnitTests
+  workflow: CommonBuild-UItest-XCUISmoketest
 - pull_request_source_branch: '*'
   pull_request_target_branch: chronological-tabs
   workflow: RunUnitTests
