@@ -1734,7 +1734,7 @@ workflows:
 
             git clone --depth 1 https://github.com/mozilla-l10n/firefoxios-l10n firefoxios-l10n || exit 1
 
-            ./ios-l10n-scripts/ios-l10n-tools --project-path Client.xcodeproj --l10n-project-path ./firefox
+            ./ios-l10n-scripts/ios-l10n-tools --project-path Client.xcodeproj --l10n-project-path ./firefoxios-l10n --import
         title: Pull in L10n
     - script@1:
         inputs:
@@ -2100,18 +2100,12 @@ workflows:
 
             # requests.
 
-            git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git ||
-            exit 1
+            git clone https://github.com/boek/ios-l10n-scripts.git -b new_tool || exit 1
 
-            pip install --user virtualenv
+            git clone --depth 1 https://github.com/mozilla-l10n/firefoxios-l10n firefoxios-l10n || exit 1
 
-            cd /usr/local/bin
-
-            ln -s /Users/vagrant/Library/Python/3.9/bin/virtualenv .
-
-            cd -
-
-            ./ios-l10n-scripts/import-locales-firefox.sh --release
+            ./ios-l10n-scripts/ios-l10n-tools --project-path Client.xcodeproj --l10n-project-path ./firefoxios-l10n --import
+        title: Pull in L10N
     - script@1:
         inputs:
         - content: >-
@@ -2731,7 +2725,7 @@ workflows:
 
             brew install jq
 
-            resp=$(curl -X GET -s -H 'Accept: application/vnd.github.v3+json' -H "authorization: Bearer ${GITHUB_ACCESS_TOKEN}" https://api.github.com/repos/mozilla-mobile/firefox-ios/commits\?sha\=main\&since\=$YESTERDAY | jq -r '.[].commit.author | select(.name | contains("BITRISE.YML-bot"))')
+            resp=$(curl -X GET -s -H 'Accept: application/vnd.github.v3+json' -H "authorization: Bearer ${GITHUB_ACCESS_TOKEN}" https://api.github.com/repos/mozilla-mobile/firefox-ios/commits\?sha\=main\&since\=$YESTERDAY | jq -r '.[].commit.author | select(.name | contains("Firefox Test Engineering"))')
             echo $resp
             if [ -z "$resp" ]
             then
