@@ -2725,7 +2725,7 @@ workflows:
 
             brew install jq
 
-            resp=$(curl -X GET -s -H 'Accept: application/vnd.github.v3+json' -H "authorization: Bearer ${GITHUB_ACCESS_TOKEN}" https://api.github.com/repos/mozilla-mobile/firefox-ios/commits\?sha\=main\&since\=$YESTERDAY | jq -r '.[].commit.author | select(.name | contains("BITRISE.YML-bot"))')
+            resp=$(curl -X GET -s -H 'Accept: application/vnd.github.v3+json' -H "authorization: Bearer ${GITHUB_ACCESS_TOKEN}" https://api.github.com/repos/mozilla-mobile/firefox-ios/commits\?sha\=main\&since\=$YESTERDAY | jq -r '.[].commit.author | select(.name | contains("Firefox Test Engineering"))')
             echo $resp
             if [ -z "$resp" ]
             then
@@ -2923,7 +2923,7 @@ trigger_map:
 - push_branch: v31.x
   workflow: xcode12-release-and-beta-nocache
 - pull_request_target_branch: main
-  workflow: RunAllXCUITests
+  workflow: RunUnitTests
 - pull_request_source_branch: '*'
   pull_request_target_branch: chronological-tabs
   workflow: RunUnitTests
