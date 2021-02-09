@@ -39,7 +39,7 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         return DefaultBrowserOnboardingViewController.theme == .dark ? .white : .black
     }
     private var fxBackgroundThemeColour: UIColor {
-        return DefaultBrowserOnboardingViewController.theme == .dark ? .black : .white
+        return DefaultBrowserOnboardingViewController.theme == .dark ? UIColor(rgb: 0x1C1C1E) : .white
     }
     private lazy var closeButton: UIButton = {
         let closeButton = UIButton()

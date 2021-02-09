@@ -27,9 +27,9 @@ class DefaultBrowserOnboardingViewModel {
         switch ThemeManager.instance.currentName {
         case .dark:
             if layoutDirection == .leftToRight {
-                return UIImage(named: "Light-LTR")!
+                return UIImage(named: "Dark-LTR")!
             } else {
-                return UIImage(named: "Light-RTL")!
+                return UIImage(named: "Dark-RTL")!
             }
         case .normal:
             if layoutDirection == .leftToRight {
