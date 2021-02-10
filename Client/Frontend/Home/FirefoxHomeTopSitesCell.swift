@@ -8,17 +8,18 @@ import SDWebImage
 import Storage
 
 private struct TopSiteCellUX {
-    static let TitleHeight: CGFloat = 20
+    static let TitleHeight: CGFloat = 24
     static let TitleFont = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
     static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
     static let CellCornerRadius: CGFloat = 4
     static let TitleOffset: CGFloat = 5
     static let OverlayColor = UIColor(white: 0.0, alpha: 0.25)
-    static let IconSizePercent: CGFloat = 0.8
+    static let IconSize: CGFloat = 40
     static let BorderColor = UIColor(white: 0, alpha: 0.1)
     static let BorderWidth: CGFloat = 0.5
     static let PinIconSize: CGFloat = 12
     static let PinColor = UIColor.Photon.Grey60
+    static let FavIconInset: CGFloat = 18
 }
 
 /*
@@ -45,14 +46,18 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
         titleLabel.layer.masksToBounds = true
         titleLabel.textAlignment = .center
         titleLabel.font = TopSiteCellUX.TitleFont
+        titleLabel.numberOfLines = 2
         return titleLabel
     }()
 
     lazy private var faviconBG: UIView = {
         let view = UIView()
         view.layer.cornerRadius = TopSiteCellUX.CellCornerRadius
-        view.layer.masksToBounds = true
         view.layer.borderWidth = TopSiteCellUX.BorderWidth
+        view.layer.shadowRadius = 3
+        view.layer.shadowOffset = .init(width: 0, height: 1)
+        view.layer.shadowColor = UIColor.theme.ecosia.primaryBackground.cgColor
+        view.layer.shadowOpacity = 0.15
         return view
     }()
 
@@ -85,12 +90,11 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
         titleLabel.snp.makeConstraints { make in
             make.left.equalTo(contentView).offset(TopSiteCellUX.TitleOffset)
             make.right.equalTo(contentView).offset(-TopSiteCellUX.TitleOffset)
-            make.height.equalTo(TopSiteCellUX.TitleHeight)
-            make.bottom.equalTo(contentView)
+            make.top.equalTo(faviconBG.snp.bottom).offset(12)
         }
 
         imageView.snp.makeConstraints { make in
-            make.size.equalTo(floor(frame.width * TopSiteCellUX.IconSizePercent))
+            make.size.equalTo(TopSiteCellUX.IconSize)
             make.center.equalTo(faviconBG)
         }
 
@@ -99,9 +103,12 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
         }
 
         faviconBG.snp.makeConstraints { make in
-            make.top.left.right.equalTo(contentView)
-            make.bottom.equalTo(contentView).inset(TopSiteCellUX.TitleHeight)
+            make.size.equalTo(TopSiteCellUX.IconSize + 2)
+            make.top.equalTo(contentView).offset(TopSiteCellUX.FavIconInset)
+            make.centerX.equalTo(contentView)
         }
+        faviconBG.widthAnchor.constraint(equalTo: faviconBG.heightAnchor, multiplier: 1.0).isActive = true
+
     }
 
     override func layoutSubviews() {
@@ -154,12 +161,8 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
         faviconBG.backgroundColor = .clear
         self.imageView.setFaviconOrDefaultIcon(forSite: site) { [weak self] in
             self?.imageView.snp.remakeConstraints { make in
-                guard let faviconBG = self?.faviconBG , let frame = self?.frame else { return }
-                if self?.imageView.backgroundColor == nil {
-                    make.size.equalTo(frame.width)
-                } else {
-                    make.size.equalTo(floor(frame.width * TopSiteCellUX.IconSizePercent))
-                }
+                guard let faviconBG = self?.faviconBG else { return }
+                make.size.equalTo(TopSiteCellUX.IconSize)
                 make.center.equalTo(faviconBG)
             }
 
@@ -184,9 +187,21 @@ class EmptyTopsiteDecorationCell: UICollectionReusableView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.layer.cornerRadius = TopSiteCellUX.CellCornerRadius
-        self.layer.borderWidth = TopSiteCellUX.BorderWidth
-        self.layer.borderColor = TopSiteCellUX.BorderColor.cgColor
+
+        /* Ecosia: hide border
+        let view = UIView()
+        view.layer.cornerRadius = TopSiteCellUX.CellCornerRadius
+        view.layer.borderWidth = TopSiteCellUX.BorderWidth
+        view.layer.borderColor = TopSiteCellUX.BorderColor.cgColor
+        addSubview(view)
+
+        view.snp.makeConstraints { make in
+            make.top.equalTo(self).offset(TopSiteCellUX.FavIconInset)
+            make.left.equalTo(self).offset(TopSiteCellUX.FavIconInset)
+            make.right.equalTo(self).offset(-TopSiteCellUX.FavIconInset)
+        }
+        view.widthAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1.0).isActive = true
+        */
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -198,9 +213,9 @@ private struct ASHorizontalScrollCellUX {
     static let TopSiteCellIdentifier = "TopSiteItemCell"
     static let TopSiteEmptyCellIdentifier = "TopSiteItemEmptyCell"
 
-    static let TopSiteItemSize = CGSize(width: 75, height: 75)
+    static let TopSiteItemSize = CGSize(width: 80, height: 90)
     static let BackgroundColor = UIColor.Photon.White100
-    static let MinimumInsets: CGFloat = 14
+    static let MinimumInsets: CGFloat = 0
 }
 
 /*

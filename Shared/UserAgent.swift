@@ -97,10 +97,12 @@ public enum UserAgentPlatform {
 public struct CustomUserAgentConstant {
     private static let defaultMobileUA = UserAgentBuilder.defaultMobileUserAgent().userAgent()
     private static let customDesktopUA = UserAgentBuilder.defaultDesktopUserAgent().clone(extensions: "Version/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")
+    private static let ecosiaMobileUA = UserAgentBuilder.ecosiaMobileUserAgent().userAgent()
+
     public static let mobileUserAgent = [
         "paypal.com": defaultMobileUA,
-        "yahoo.com": defaultMobileUA ]
-
+        "yahoo.com": defaultMobileUA,
+        "ecosia.org": ecosiaMobileUA ]
 }
 
 public struct UserAgentBuilder {
@@ -128,7 +130,7 @@ public struct UserAgentBuilder {
         let userAgentItems = [product ?? self.product, systemInfo ?? self.systemInfo, platform ?? self.platform, platformDetails ?? self.platformDetails, extensions ?? self.extensions]
         return removeEmptyComponentsAndJoin(uaItems: userAgentItems)
     }
-    
+
     /// Helper method to remove the empty components from user agent string that contain only whitespaces or are just empty
     private func removeEmptyComponentsAndJoin(uaItems: [String]) -> String {
         return uaItems.filter{ !$0.isEmptyOrWhitespace() }.joined(separator: " ")
@@ -140,5 +142,9 @@ public struct UserAgentBuilder {
     
     public static func defaultDesktopUserAgent() -> UserAgentBuilder {
         return UserAgentBuilder(product: UserAgent.product, systemInfo: "(Macintosh; Intel Mac OS X 10.15)", platform: UserAgent.platform, platformDetails: UserAgent.platformDetails, extensions: "FxiOS/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")
+    }
+
+    public static func ecosiaMobileUserAgent() -> UserAgentBuilder {
+        return UserAgentBuilder(product: UserAgent.product, systemInfo: "(\(UIDevice.current.model); CPU OS \(UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")) like Mac OS X)", platform: UserAgent.platform, platformDetails: UserAgent.platformDetails, extensions: "Ecosia ios@\(AppInfo.appVersion) \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
     }
 }

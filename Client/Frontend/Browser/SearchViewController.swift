@@ -6,7 +6,7 @@ import UIKit
 import Shared
 import Storage
 import MozillaAppServices
-import Telemetry
+//import Telemetry
 
 private enum SearchListSection: Int {
     case searchSuggestions
@@ -273,7 +273,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         }
 
         Telemetry.default.recordSearch(location: .quickSearch, searchEngine: engine.engineID ?? "other")
-        GleanMetrics.Search.counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.quickSearch.rawValue)"].add()
+        //GleanMetrics.Search.counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.quickSearch.rawValue)"].add()
 
         searchDelegate?.searchViewController(self, didSelectURL: url)
     }
@@ -511,7 +511,7 @@ extension SearchViewController: SuggestionCellDelegate {
 
         if let url = engine.searchURLForQuery(suggestion) {
             Telemetry.default.recordSearch(location: .suggestion, searchEngine: engine.engineID ?? "other")
-            GleanMetrics.Search.counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.suggestion.rawValue)"].add()
+            //GleanMetrics.Search.counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.suggestion.rawValue)"].add()
 
             searchDelegate?.searchViewController(self, didSelectURL: url)
         }

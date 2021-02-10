@@ -14,9 +14,10 @@ import Account
 import MobileCoreServices
 import SDWebImage
 import SwiftyJSON
-import Telemetry
+//import Telemetry
 import MozillaAppServices
-import Sentry
+//import Sentry
+import Core
 
 private let KVOs: [KVOConstants] = [
     .estimatedProgress,
@@ -122,6 +123,9 @@ class BrowserViewController: UIViewController {
     let downloadQueue = DownloadQueue()
     var isCmdClickForNewTab = false
 
+    lazy var ecosiaNavigation: EcosiaNavigation = {
+        return EcosiaNavigation(delegate: self)
+    }()
 
     init(profile: Profile, tabManager: TabManager) {
         self.profile = profile
@@ -384,7 +388,7 @@ class BrowserViewController: UIViewController {
         KeyboardHelper.defaultHelper.addDelegate(self)
 
         webViewContainerBackdrop = UIView()
-        webViewContainerBackdrop.backgroundColor = UIColor.Photon.Ink90
+        webViewContainerBackdrop.backgroundColor = UIColor.Photon.Grey90
         webViewContainerBackdrop.alpha = 0
         view.addSubview(webViewContainerBackdrop)
 
@@ -598,8 +602,8 @@ class BrowserViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         presentIntroViewController()
-        presentETPCoverSheetViewController()
-        presentUpdateViewController()
+        // Ecosia: presentETPCoverSheetViewController()
+        // Ecosia: presentUpdateViewController()
         screenshotHelper.viewIsVisible = true
         screenshotHelper.takePendingScreenshots(tabManager.tabs)
 
@@ -618,11 +622,14 @@ class BrowserViewController: UIViewController {
     // upgrade, downgrades are not possible, so we can show the What's New page.
 
     func shouldShowWhatsNew() -> Bool {
+        /* Ecosia: don't show what's new
         guard let latestMajorAppVersion = profile.prefs.stringForKey(LatestAppVersionProfileKey)?.components(separatedBy: ".").first else {
             return false // Clean install, never show What's New
         }
 
         return latestMajorAppVersion != AppInfo.majorAppVersion && DeviceInfo.hasConnectivity()
+        */
+        return false
     }
 
     fileprivate func showQueuedAlertIfAvailable() {
@@ -917,7 +924,7 @@ class BrowserViewController: UIViewController {
         }
         
         let state: MiddleButtonState = shouldShowNewTabButton ? .newTab : (isLoading ? .stop : .reload)
-        navigationToolbar.updateMiddleButtonState(state)
+        urlBar.updateMiddleButtonState(state)
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
@@ -1014,7 +1021,7 @@ class BrowserViewController: UIViewController {
         urlBar.currentURL = tab.url?.displayURL
         urlBar.locationView.showLockIcon(forSecureContent:  tab.webView?.hasOnlySecureContent ?? false)
         let isPage = tab.url?.displayURL?.isWebPage() ?? false
-        navigationToolbar.updatePageStatus(isPage)
+        urlBar.updatePageStatus(isPage)
     }
 
     // MARK: Opening New Tabs
@@ -1202,12 +1209,22 @@ class BrowserViewController: UIViewController {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
-        if #available(iOS 13.0, *) {
-            if self.traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection), ThemeManager.instance.systemThemeIsOn {
-                let userInterfaceStyle = traitCollection.userInterfaceStyle
-                ThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
-            }
+        // Ecosia: fix cutting of toolbar
+        if previousTraitCollection?.verticalSizeClass == .compact {
+            view.setNeedsUpdateConstraints()
         }
+        
+        guard #available(iOS 13.0, *) else { return }
+
+        let colorHasChanged = traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection)
+        let shouldStayDark = ThemeManager.instance.current.isDark && NightModeHelper.isActivated(profile.prefs)
+        // Ecosia: Do not change theme if it was dark before night mode already
+        guard colorHasChanged,
+              !shouldStayDark,
+              ThemeManager.instance.systemThemeIsOn else { return }
+
+        let userInterfaceStyle = traitCollection.userInterfaceStyle
+        ThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
     }
 }
 
@@ -1534,7 +1551,7 @@ extension BrowserViewController: URLBarDelegate {
         if let searchURL = engine.searchURLForQuery(text) {
             // We couldn't find a matching search keyword, so do a search query.
             Telemetry.default.recordSearch(location: .actionBar, searchEngine: engine.engineID ?? "other")
-            GleanMetrics.Search.counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.actionBar.rawValue)"].add()
+            //GleanMetrics.Search.counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.actionBar.rawValue)"].add()
             finishEditingAndSubmit(searchURL, visitType: VisitType.typed, forTab: tab)
         } else {
             // We still don't have a valid URL, so something is broken. Give up.
@@ -1544,6 +1561,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidEnterOverlayMode(_ urlBar: URLBarView) {
+        firefoxHomeViewController?.inOverlayMode = true
         libraryDrawerViewController?.close()
         guard let profile = profile as? BrowserProfile else {
             return
@@ -1563,6 +1581,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidLeaveOverlayMode(_ urlBar: URLBarView) {
+        firefoxHomeViewController?.inOverlayMode = false
         destroySearchController()
         updateInContentHomePanel(tabManager.selectedTab?.url as URL?)
     }
@@ -1986,8 +2005,13 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 
 extension BrowserViewController {
     func presentIntroViewController(_ alwaysShow: Bool = false) {
-        if alwaysShow || profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil {
-            onboardingUserResearchHelper(alwaysShow)
+        // Ecosia:
+        if alwaysShow || User.shared.firstTime {
+            let welcome = Welcome()
+            introVCPresentHelper(introViewController: welcome)
+
+            self.profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
+            User.shared.firstTime = false
         }
     }
     

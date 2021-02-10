@@ -8,6 +8,7 @@ import Account
 import SwiftKeychainWrapper
 import LocalAuthentication
 import MozillaAppServices
+import Core
 
 // This file contains all of the settings available in the main settings screen of the app.
 
@@ -618,7 +619,7 @@ class VersionSetting: Setting {
     }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: "\(AppName.longName) \(VersionSetting.appVersion) (\(VersionSetting.appBuildNumber))", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: .init(format: .localized(.version), Bundle.version) + " (\(Environment.current))", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
     
     public static var appVersion: String {

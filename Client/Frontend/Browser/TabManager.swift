@@ -7,6 +7,7 @@ import WebKit
 import Storage
 import Shared
 import XCGLogger
+import Core
 
 private let log = Logger.browserLogger
 
@@ -45,6 +46,7 @@ class TabManager: NSObject {
     fileprivate let tabEventHandlers: [TabEventHandler]
     fileprivate let store: TabManagerStore
     fileprivate let profile: Profile
+    lazy var cookie: Cookie = Cookie()
 
     let delaySelectingNewPopupTab: TimeInterval = 0.1
 

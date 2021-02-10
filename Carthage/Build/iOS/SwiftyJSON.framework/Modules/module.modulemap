@@ -1,0 +1,11 @@
+framework module SwiftyJSON {
+  umbrella header "SwiftyJSON.h"
+
+  export *
+  module * { export * }
+}
+
+module SwiftyJSON.Swift {
+    header "SwiftyJSON-Swift.h"
+    requires objc
+}

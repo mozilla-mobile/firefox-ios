@@ -1,0 +1,226 @@
+[
+  {
+    "id" : "es-ar",
+    "name" : "Argentina"
+  },
+  {
+    "id" : "en-au",
+    "name" : "Australia"
+  },
+  {
+    "id" : "de-at",
+    "name" : "Austria"
+  },
+  {
+    "id" : "fr-be",
+    "name" : "Belgium (fr)"
+  },
+  {
+    "id" : "nl-be",
+    "name" : "Belgium (nl)"
+  },
+  {
+    "id" : "pt-br",
+    "name" : "Brazil"
+  },
+  {
+    "id" : "bg-bg",
+    "name" : "Bulgaria"
+  },
+  {
+    "id" : "en-ca",
+    "name" : "Canada (en)"
+  },
+  {
+    "id" : "fr-ca",
+    "name" : "Canada (fr)"
+  },
+  {
+    "id" : "es-cl",
+    "name" : "Chile"
+  },
+  {
+    "id" : "zh-cn",
+    "name" : "China"
+  },
+  {
+    "id" : "es-co",
+    "name" : "Colombia"
+  },
+  {
+    "id" : "hr-hr",
+    "name" : "Croatia"
+  },
+  {
+    "id" : "da-dk",
+    "name" : "Denmark"
+  },
+  {
+    "id" : "fi-fi",
+    "name" : "Finland"
+  },
+  {
+    "id" : "fr-fr",
+    "name" : "France"
+  },
+  {
+    "id" : "de-de",
+    "name" : "Germany"
+  },
+  {
+    "id" : "zh-hk",
+    "name" : "Hong Kong"
+  },
+  {
+    "id" : "en-in",
+    "name" : "India"
+  },
+  {
+    "id" : "en-id",
+    "name" : "Indonesia"
+  },
+  {
+    "id" : "en-ie",
+    "name" : "Ireland"
+  },
+  {
+    "id" : "it-it",
+    "name" : "Italy"
+  },
+  {
+    "id" : "ja-jp",
+    "name" : "Japan"
+  },
+  {
+    "id" : "lv-lv",
+    "name" : "Latvia"
+  },
+  {
+    "id" : "lt-lt",
+    "name" : "Lithuania"
+  },
+  {
+    "id" : "en-my",
+    "name" : "Malaysia"
+  },
+  {
+    "id" : "es-mx",
+    "name" : "Mexico"
+  },
+  {
+    "id" : "nl-nl",
+    "name" : "Netherlands"
+  },
+  {
+    "id" : "en-nz",
+    "name" : "New Zealand"
+  },
+  {
+    "id" : "nb-no",
+    "name" : "Norway"
+  },
+  {
+    "id" : "es-pe",
+    "name" : "Peru"
+  },
+  {
+    "id" : "en-ph",
+    "name" : "Philippines"
+  },
+  {
+    "id" : "pl-pl",
+    "name" : "Poland"
+  },
+  {
+    "id" : "pt-pt",
+    "name" : "Portugal"
+  },
+  {
+    "id" : "ru-ru",
+    "name" : "Russia"
+  },
+  {
+    "id" : "ar-sa",
+    "name" : "Saudi Arabia (ar)"
+  },
+  {
+    "id" : "en-sa",
+    "name" : "Saudi Arabia (en)"
+  },
+  {
+    "id" : "en-sg",
+    "name" : "Singapore"
+  },
+  {
+    "id" : "sk-sk",
+    "name" : "Slovakia"
+  },
+  {
+    "id" : "en-za",
+    "name" : "South Africa"
+  },
+  {
+    "id" : "ko-kr",
+    "name" : "South Korea"
+  },
+  {
+    "id" : "es-es",
+    "name" : "Spain"
+  },
+  {
+    "id" : "sv-se",
+    "name" : "Sweden"
+  },
+  {
+    "id" : "de-ch",
+    "name" : "Switzerland (de)"
+  },
+  {
+    "id" : "fr-ch",
+    "name" : "Switzerland (fr)"
+  },
+  {
+    "id" : "zh-tw",
+    "name" : "Taiwan"
+  },
+  {
+    "id" : "en-th",
+    "name" : "Thailand (en)"
+  },
+  {
+    "id" : "th-th",
+    "name" : "Thailand (th)"
+  },
+  {
+    "id" : "tr-tr",
+    "name" : "Turkey"
+  },
+  {
+    "id" : "uk-ua",
+    "name" : "Ukraine"
+  },
+  {
+    "id" : "en-gb",
+    "name" : "United Kingdom"
+  },
+  {
+    "id" : "en-us",
+    "name" : "United States (en)"
+  },
+  {
+    "id" : "es-us",
+    "name" : "United States (es)"
+  },
+  {
+    "id" : "es-ve",
+    "name" : "Venezuela"
+  },
+  {
+    "id" : "en-vn",
+    "name" : "Vietnam (en)"
+  },
+  {
+    "id" : "vi-vn",
+    "name" : "Vietnam (vi)"
+  }
+]

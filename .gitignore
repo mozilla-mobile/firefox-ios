@@ -41,7 +41,6 @@ DerivedData
 /provisioning-profiles
 /assets
 #build tools
-/fastlane/Appfile
 /fastlane/Snapfile
 /fastlane/SnapshotHelper.swift
 /fastlane/frames
@@ -98,3 +97,8 @@ Client/Assets/*.js.LICENSE.txt
 *.strings
 /firefoxios-l10n
 /ios-l10n-scripts
+
+
+# bundler
+vendor/bundle
+.bundle/config

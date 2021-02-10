@@ -4,7 +4,7 @@
 
 import MozillaAppServices
 import Shared
-import Telemetry
+//import Telemetry
 
 class TelemetryWrapper {
     let legacyTelemetry = Telemetry.default
@@ -144,6 +144,7 @@ class TelemetryWrapper {
     }
 
     func initGlean(_ profile: Profile, sendUsageData: Bool) {
+        /*
         // Get the legacy telemetry ID and record it in Glean for the deletion-request ping
         if let uuidString = UserDefaults.standard.string(forKey: "telemetry-key-prefix-clientId"), let uuid = UUID(uuidString: uuidString) {
             GleanMetrics.LegacyIds.clientId.set(uuid)
@@ -163,13 +164,14 @@ class TelemetryWrapper {
             name: UIApplication.didEnterBackgroundNotification,
             object: nil
         )
+        */
     }
 
     // Function for recording metrics that are better recorded when going to background due
     // to the particular measurement, or availability of the information.
     @objc func recordPreferenceMetrics(notification: NSNotification) {
+        /*
         guard let profile = self.profile else { assert(false); return; }
-
         // Record default search engine setting
         let searchEngines = SearchEngines(prefs: profile.prefs, files: profile.files)
         GleanMetrics.Search.defaultEngine.set(searchEngines.defaultEngine.engineID ?? "custom")
@@ -258,6 +260,7 @@ class TelemetryWrapper {
         GleanMetrics.Theme.automaticSliderValue.set("\(ThemeManager.instance.automaticBrightnessValue)")
         // Theme name
         GleanMetrics.Theme.name.set(ThemeManager.instance.currentName.rawValue)
+        */
     }
 
     @objc func uploadError(notification: NSNotification) {
@@ -387,6 +390,7 @@ extension TelemetryWrapper {
     }
 
     static func gleanRecordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue? = nil, extras: [String: Any]? = nil) {
+        /*
         let value = value?.rawValue ?? ""
         switch (category, method, object, value, extras) {
         // Bookmarks
@@ -451,5 +455,6 @@ extension TelemetryWrapper {
             let msg = "Uninstrumented metric recorded: \(category), \(method), \(object), \(value), \(String(describing: extras))"
             Sentry.shared.send(message: msg, severity: .debug)
         }
+        */
     }
 }

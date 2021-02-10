@@ -49,8 +49,14 @@ extension PhotonActionSheetProtocol {
             }
             // If we've disabled night mode and dark theme was activated by it then disable dark theme
             if !NightModeHelper.isActivated(self.profile.prefs), NightModeHelper.hasEnabledDarkTheme(self.profile.prefs), ThemeManager.instance.currentName == .dark {
-                ThemeManager.instance.current = NormalTheme()
-                NightModeHelper.setEnabledDarkTheme(self.profile.prefs, darkTheme: false)
+
+                //Ecosia: set to system theme if that was on
+                if #available(iOS 12.0, *), let traitEnv = self as? UITraitEnvironment, ThemeManager.instance.systemThemeIsOn {
+                    ThemeManager.instance.current = traitEnv.traitCollection.userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
+                } else {
+                    ThemeManager.instance.current = NormalTheme()
+                    NightModeHelper.setEnabledDarkTheme(self.profile.prefs, darkTheme: false)
+                }
             }
         }
         items.append(nightMode)

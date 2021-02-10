@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import Sentry
+//import Sentry
 
 public enum SentryTag: String {
     case swiftData = "SwiftData"

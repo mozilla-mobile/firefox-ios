@@ -12,8 +12,8 @@ class PrivateModeButton: ToggleButton, PrivateModeUI {
         super.init(frame: frame)
         accessibilityLabel = PrivateModeStrings.toggleAccessibilityLabel
         accessibilityHint = PrivateModeStrings.toggleAccessibilityHint
-        let maskImage = UIImage(named: "smallPrivateMask")?.withRenderingMode(.alwaysTemplate)
-        setImage(maskImage, for: [])
+        setTitle(.localized(.privateTab), for: .normal)
+        setTitleColor(ThemeManager.instance.current.tabTray.tabTitleText, for: .normal)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -23,10 +23,14 @@ class PrivateModeButton: ToggleButton, PrivateModeUI {
     func applyUIMode(isPrivate: Bool) {
         isSelected = isPrivate
 
-        tintColor = isPrivate ? onTint : offTint
-        imageView?.tintColor = tintColor
-
+        let color = isPrivate ? ThemeManager.instance.current.tabTray.toolbar : ThemeManager.instance.current.tabTray.toolbarButtonTint
+        setTitleColor(color, for: .normal)
         accessibilityValue = isSelected ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
+    }
+
+    override var intrinsicContentSize: CGSize {
+        let size = super.intrinsicContentSize
+        return CGSize(width: size.width + 16, height: size.height)
     }
 }
 

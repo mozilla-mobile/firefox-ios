@@ -49,16 +49,17 @@ struct OpenTabsView: View {
             }
             
             Rectangle()
-                .fill(Color(UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 0.3)))
-                .frame(height: 0.5)
+                .fill(Color(UIColor(red: 0.33, green: 0.33, blue: 0.33, alpha: 1.0)))
+                .frame(height: 1.0)
                 .padding(.leading, 45)
+                .padding(.trailing, 16)
         }
     }
     
     var openFirefoxButton: some View {
         HStack(alignment: .center, spacing: 15) {
             Image("openFirefox").foregroundColor(Color.white)
-            Text("Open Firefox").foregroundColor(Color.white).lineLimit(1).font(.system(size: 13, weight: .semibold, design: .default))
+            Text(String.OpenFirefoxLabel).foregroundColor(Color.white).lineLimit(1).font(.system(size: 13, weight: .semibold, design: .default))
             Spacer()
         }.padding([.horizontal])
     }

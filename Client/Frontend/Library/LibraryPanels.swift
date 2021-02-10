@@ -104,8 +104,9 @@ class LibraryPanels {
             profile: profile,
             imageName: "Downloads",
             accessibilityLabel: NSLocalizedString("Downloads", comment: "Panel accessibility label"),
-            accessibilityIdentifier: "LibraryPanels.Downloads"),
+            accessibilityIdentifier: "LibraryPanels.Downloads")
 
+        /* Ecosia: Disable synced tabs
         LibraryPanelDescriptor(
             makeViewController: { profile in
                 return RemoteTabsPanel(profile: profile)
@@ -114,5 +115,6 @@ class LibraryPanels {
             imageName: "SyncedTabs",
             accessibilityLabel: NSLocalizedString("Synced Tabs", comment: "Panel accessibility label"),
             accessibilityIdentifier: "LibraryPanels.SyncedTabs"),
+        */
     ]
 }

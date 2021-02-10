@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 import SnapKit
 import Shared
-import Leanplum
+//import Leanplum
 
 // Update view UX constants
 struct UpdateViewControllerUX {

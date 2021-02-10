@@ -137,7 +137,7 @@ class TopTabsViewController: UIViewController {
         privateModeButton.snp.makeConstraints { make in
             make.centerY.equalTo(view)
             make.leading.equalTo(view).offset(10)
-            make.size.equalTo(view.snp.height)
+            make.height.equalTo(view.snp.height)
         }
         topTabFader.snp.makeConstraints { make in
             make.top.bottom.equalTo(view)

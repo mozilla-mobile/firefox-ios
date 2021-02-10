@@ -5,7 +5,7 @@
 import Foundation
 import AdSupport
 import Shared
-import Leanplum
+//import Leanplum
 import Account
 
 private let LPAppIdKey = "LeanplumAppId"

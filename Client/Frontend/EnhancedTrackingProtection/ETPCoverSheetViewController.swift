@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 import SnapKit
 import Shared
-import Leanplum
+//import Leanplum
 
 /* The layout for ETP Cover Sheet
     

@@ -239,11 +239,11 @@ class TabLocationView: UIView {
 
         lockImageView.snp.makeConstraints { make in
             make.width.equalTo(TabLocationViewUX.StatusIconSize)
-            make.height.equalTo(TabLocationViewUX.ButtonSize)
+            make.height.equalTo(TabLocationViewUX.ButtonSize).priority(.high)
         }
         trackingProtectionButton.snp.makeConstraints { make in
             make.width.equalTo(TabLocationViewUX.TPIconSize)
-            make.height.equalTo(TabLocationViewUX.ButtonSize)
+            make.height.equalTo(TabLocationViewUX.ButtonSize).priority(.high)
         }
         separatorLineForTP.snp.makeConstraints { make in
             make.width.equalTo(1)
@@ -251,7 +251,7 @@ class TabLocationView: UIView {
         }
 
         pageOptionsButton.snp.makeConstraints { make in
-            make.size.equalTo(TabLocationViewUX.ButtonSize)
+            make.size.equalTo(TabLocationViewUX.ButtonSize).priority(.high)
         }
         separatorLineForPageOptions.snp.makeConstraints { make in
             make.width.equalTo(1)
@@ -259,11 +259,11 @@ class TabLocationView: UIView {
         }
         readerModeButton.snp.makeConstraints { make in
             make.width.equalTo(TabLocationViewUX.ReaderModeButtonWidth)
-            make.height.equalTo(TabLocationViewUX.ButtonSize)
+            make.height.equalTo(TabLocationViewUX.ButtonSize).priority(.high)
         }
         reloadButton.snp.makeConstraints { make in
             make.width.equalTo(TabLocationViewUX.ReaderModeButtonWidth)
-            make.height.equalTo(TabLocationViewUX.ButtonSize)
+            make.height.equalTo(TabLocationViewUX.ButtonSize).priority(.high)
         }
 
         // Setup UIDragInteraction to handle dragging the location

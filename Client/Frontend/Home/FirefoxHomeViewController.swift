@@ -246,48 +246,55 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     func scrollToTop(animated: Bool = false) {
         collectionView?.setContentOffset(.zero, animated: animated)
     }
+
+    var inOverlayMode = false {
+        didSet {
+            if isViewLoaded { collectionView.reloadSections([0]) }
+        }
+    }
+
 }
 
 // MARK: -  Section management
 extension FirefoxHomeViewController {
     enum Section: Int {
-        case topSites
+        case treeCounter
         case libraryShortcuts
-        case pocket
+        case topSites
 
         static let count = 3
-        static let allValues = [topSites, libraryShortcuts, pocket]
+        static let allValues = [treeCounter, libraryShortcuts, topSites]
 
         var title: String? {
             switch self {
-            case .pocket: return Strings.ASPocketTitle
+            case .treeCounter: return nil
             case .topSites: return Strings.ASTopSitesTitle
-            case .libraryShortcuts: return Strings.AppMenuLibraryTitleString
+            case .libraryShortcuts: return nil
             }
         }
 
         var headerHeight: CGSize {
-            return CGSize(width: 50, height: 40)
-        }
-
-        var headerImage: UIImage? {
             switch self {
-            case .pocket: return UIImage.templateImageNamed("menu-pocket")
-            case .topSites: return UIImage.templateImageNamed("menu-panel-TopSites")
-            case .libraryShortcuts: return UIImage.templateImageNamed("menu-library")
+            case .treeCounter:
+                return CGSize(width: 50, height: 30)
+            case .topSites:
+                return CGSize(width: 50, height: 42)
+            case .libraryShortcuts:
+                return CGSize(width: 50, height: 10)
             }
         }
 
         var footerHeight: CGSize {
             switch self {
-            case .pocket: return .zero
-            case .topSites, .libraryShortcuts: return CGSize(width: 50, height: 5)
+            case .topSites: return .zero
+            case .libraryShortcuts: return .zero
+            case .treeCounter: return .zero
             }
         }
 
         func cellHeight(_ traits: UITraitCollection, width: CGFloat) -> CGFloat {
             switch self {
-            case .pocket: return FirefoxHomeUX.highlightCellHeight
+            case .treeCounter: return 130
             case .topSites: return 0 //calculated dynamically
             case .libraryShortcuts: return FirefoxHomeUX.LibraryShortcutsHeight
             }
@@ -306,12 +313,12 @@ extension FirefoxHomeViewController {
             var insets = FirefoxHomeUX.sectionInsetsForSizeClass[currentTraits.horizontalSizeClass]
 
             switch self {
-            case .pocket, .libraryShortcuts:
+            case .libraryShortcuts, .topSites:
                 let window = UIApplication.shared.keyWindow
                 let safeAreaInsets = window?.safeAreaInsets.left ?? 0
                 insets += FirefoxHomeUX.MinimumInsets + safeAreaInsets
                 return insets
-            case .topSites:
+            case .treeCounter:
                 insets += FirefoxHomeUX.TopSitesInsets
                 return insets
             }
@@ -319,16 +326,9 @@ extension FirefoxHomeViewController {
 
         func numberOfItemsForRow(_ traits: UITraitCollection) -> CGFloat {
             switch self {
-            case .pocket:
-                var numItems: CGFloat = FirefoxHomeUX.numberOfItemsPerRowForSizeClassIpad[traits.horizontalSizeClass]
-                if UIApplication.shared.statusBarOrientation.isPortrait {
-                    numItems = numItems - 1
-                }
-                if traits.horizontalSizeClass == .compact && UIApplication.shared.statusBarOrientation.isLandscape {
-                    numItems = numItems - 1
-                }
-                return numItems
             case .topSites, .libraryShortcuts:
+                return 1
+            case .treeCounter:
                 return 1
             }
         }
@@ -338,10 +338,7 @@ extension FirefoxHomeViewController {
             let inset = sectionInsets(traits, frameWidth: frameWidth) * 2
 
             switch self {
-            case .pocket:
-                let numItems = numberOfItemsForRow(traits)
-                return CGSize(width: floor(((frameWidth - inset) - (FirefoxHomeUX.MinimumInsets * (numItems - 1))) / numItems), height: height)
-            case .topSites, .libraryShortcuts:
+            case .topSites, .libraryShortcuts, .treeCounter:
                 return CGSize(width: frameWidth - inset, height: height)
             }
         }
@@ -355,7 +352,7 @@ extension FirefoxHomeViewController {
         var cellIdentifier: String {
             switch self {
             case .topSites: return "TopSiteCell"
-            case .pocket: return "PocketCell"
+            case .treeCounter: return "TreeCounterCell"
             case .libraryShortcuts: return  "LibraryShortcutsCell"
             }
         }
@@ -363,7 +360,7 @@ extension FirefoxHomeViewController {
         var cellType: UICollectionViewCell.Type {
             switch self {
             case .topSites: return ASHorizontalScrollCell.self
-            case .pocket: return FirefoxHomeHighlightCell.self
+            case .treeCounter: return TreeCounterCell.self
             case .libraryShortcuts: return ASLibraryCell.self
             }
         }
@@ -385,38 +382,25 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
                 let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header", for: indexPath) as! ASHeaderView
-                view.iconView.isHidden = false
-                view.iconView.image = Section(indexPath.section).headerImage
                 let title = Section(indexPath.section).title
                 switch Section(indexPath.section) {
-                case .pocket:
-                    view.title = title
-                    view.moreButton.isHidden = false
-                    view.moreButton.setTitle(Strings.PocketMoreStoriesText, for: .normal)
-                    view.moreButton.addTarget(self, action: #selector(showMorePocketStories), for: .touchUpInside)
-                    view.titleLabel.textColor = UIColor.Pocket.red
-                    view.titleLabel.accessibilityIdentifier = "pocketTitle"
-                    view.moreButton.setTitleColor(UIColor.Pocket.red, for: .normal)
-                    view.iconView.tintColor = UIColor.Pocket.red
-                    return view
                 case .topSites:
                     view.title = title
                     view.titleLabel.accessibilityIdentifier = "topSitesTitle"
-                    view.moreButton.isHidden = true
+                    // Ecosia: view.moreButton.isHidden = true
                     return view
                 case .libraryShortcuts:
                     view.title = title
-                    view.moreButton.isHidden = false
-                    view.moreButton.setTitle(Strings.AppMenuLibrarySeeAllTitleString, for: .normal)
-                    view.moreButton.addTarget(self, action: #selector(openHistory), for: .touchUpInside)
-                    view.moreButton.accessibilityIdentifier = "libraryMoreButton"
-                    view.titleLabel.accessibilityIdentifier = "libraryTitle"
+                    // Ecosia: view.moreButton.isHidden = true
+                    return view
+                case .treeCounter:
                     return view
             }
         case UICollectionView.elementKindSectionFooter:
                 let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "Footer", for: indexPath) as! ASFooterView
                 switch Section(indexPath.section) {
-                case .topSites, .pocket:
+                case .topSites, .treeCounter:
+                    view.separatorLineView?.isHidden = true
                     return view
                 case .libraryShortcuts:
                     view.separatorLineView?.isHidden = true
@@ -441,7 +425,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
             let layout = topSiteCell.collectionView.collectionViewLayout as! HorizontalFlowLayout
             let estimatedLayout = layout.calculateLayout(for: CGSize(width: cellSize.width, height: 0))
             return CGSize(width: cellSize.width, height: estimatedLayout.size.height)
-        case .pocket:
+        case .treeCounter:
             return cellSize
         case .libraryShortcuts:
             let numberofshortcuts: CGFloat = 4
@@ -453,10 +437,10 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         switch Section(section) {
-        case .pocket:
-            return pocketStories.isEmpty ? .zero : Section(section).headerHeight
-        case .topSites:
+        case .treeCounter:
             return Section(section).headerHeight
+        case .topSites:
+            return topSitesManager.content.isEmpty ? .zero : Section(section).headerHeight
         case .libraryShortcuts:
             return UIDevice.current.userInterfaceIdiom == .pad ? CGSize.zero : Section(section).headerHeight
         }
@@ -464,8 +448,8 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         switch Section(section) {
-        case .pocket:
-            return .zero
+        case .treeCounter:
+            return Section(section).footerHeight
         case .topSites:
             return Section(section).footerHeight
         case .libraryShortcuts:
@@ -510,9 +494,8 @@ extension FirefoxHomeViewController {
         switch Section(section) {
         case .topSites:
             return topSitesManager.content.isEmpty ? 0 : 1
-        case .pocket:
-            // There should always be a full row of pocket stories (numItems) otherwise don't show them
-            return pocketStories.count
+        case .treeCounter:
+            return inOverlayMode ? 0 : 1
         case .libraryShortcuts:
             // disable the libary shortcuts on the ipad
             return UIDevice.current.userInterfaceIdiom == .pad ? 0 : 1
@@ -526,8 +509,8 @@ extension FirefoxHomeViewController {
         switch Section(indexPath.section) {
         case .topSites:
             return configureTopSitesCell(cell, forIndexPath: indexPath)
-        case .pocket:
-            return configurePocketItemCell(cell, forIndexPath: indexPath)
+        case .treeCounter:
+            return cell
         case .libraryShortcuts:
             return configureLibraryShortcutsCell(cell, forIndexPath: indexPath)
         }
@@ -535,7 +518,8 @@ extension FirefoxHomeViewController {
 
     func configureLibraryShortcutsCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let libraryCell = cell as! ASLibraryCell
-        let targets = [#selector(openBookmarks), #selector(openReadingList), #selector(openDownloads), #selector(openSyncedTabs)]
+        // Ecosia: open history instead of sync
+        let targets = [#selector(openBookmarks), #selector(openHistory), #selector(openReadingList), #selector(openDownloads)]
         libraryCell.libraryButtons.map({ $0.button }).zip(targets).forEach { (button, selector) in
             button.removeTarget(nil, action: nil, for: .allEvents)
             button.addTarget(self, action: selector, for: .touchUpInside)
@@ -673,13 +657,13 @@ extension FirefoxHomeViewController: DataObserverDelegate {
         guard let indexPath = self.collectionView?.indexPathForItem(at: point) else { return }
 
         switch Section(indexPath.section) {
-        case .pocket:
-            presentContextMenu(for: indexPath)
+        case .treeCounter:
+            return
         case .topSites:
             let topSiteCell = self.collectionView?.cellForItem(at: indexPath) as! ASHorizontalScrollCell
             let pointInTopSite = longPressGestureRecognizer.location(in: topSiteCell.collectionView)
             guard let topSiteIndexPath = topSiteCell.collectionView.indexPathForItem(at: pointInTopSite) else { return }
-            presentContextMenu(for: topSiteIndexPath)
+            presentContextMenu(for: IndexPath(item: topSiteIndexPath.item, section: indexPath.section))
         case .libraryShortcuts:
             return
         }
@@ -696,10 +680,8 @@ extension FirefoxHomeViewController: DataObserverDelegate {
     func selectItemAtIndex(_ index: Int, inSection section: Section) {
         let site: Site?
         switch section {
-        case .pocket:
-            site = Site(url: pocketStories[index].url.absoluteString, title: pocketStories[index].title)
-            let params = ["Source": "Activity Stream", "StoryType": "Article"]
-            LeanPlumClient.shared.track(event: .openedPocketStory, withParameters: params)
+        case .treeCounter:
+            return
         case .topSites:
             return
         case .libraryShortcuts:
@@ -744,8 +726,8 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
 
     func getSiteDetails(for indexPath: IndexPath) -> Site? {
         switch Section(indexPath.section) {
-        case .pocket:
-            return Site(url: pocketStories[indexPath.row].url.absoluteString, title: pocketStories[indexPath.row].title)
+        case .treeCounter:
+            return nil
         case .topSites:
             return topSitesManager.content[indexPath.item]
         case .libraryShortcuts:
@@ -761,8 +743,8 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
             if let topSiteCell = self.collectionView?.cellForItem(at: IndexPath(row: 0, section: 0)) as? ASHorizontalScrollCell {
                 sourceView = topSiteCell.collectionView.cellForItem(at: indexPath)
             }
-        case .pocket:
-            sourceView = self.collectionView?.cellForItem(at: indexPath)
+        case .treeCounter:
+            return nil
         case .libraryShortcuts:
             return nil
         }
@@ -771,9 +753,6 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
             let source = ["Source": "Activity Stream Long Press Context Menu"]
             LeanPlumClient.shared.track(event: .openedNewTab, withParameters: source)
-            if Section(indexPath.section) == .pocket {
-                LeanPlumClient.shared.track(event: .openedPocketStory, withParameters: source)
-            }
         }
 
         let openInNewPrivateTabAction = PhotonActionSheetItem(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { _, _ in
@@ -846,7 +825,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
         var actions = [openInNewTabAction, openInNewPrivateTabAction, bookmarkAction, shareAction]
 
         switch Section(indexPath.section) {
-            case .pocket: break
+            case .treeCounter: break
             case .topSites: actions.append(contentsOf: topSiteActions)
             case .libraryShortcuts: break
         }
@@ -921,19 +900,20 @@ extension ASFooterView: Themeable {
 }
 
 class ASHeaderView: UICollectionReusableView {
-    static let verticalInsets: CGFloat = 4
+    static let verticalInsets: CGFloat = 8
 
     lazy fileprivate var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.text = self.title
-        titleLabel.textColor = UIColor.theme.homePanel.activityStreamHeaderText
-        titleLabel.font = FirefoxHomeHeaderViewUX.TextFont
+        titleLabel.textColor = UIColor.theme.ecosia.highContrastText
+        titleLabel.font = DynamicFontHelper.defaultHelper.LargeSizeMediumFontAS
         titleLabel.minimumScaleFactor = 0.6
         titleLabel.numberOfLines = 1
         titleLabel.adjustsFontSizeToFitWidth = true
         return titleLabel
     }()
 
+    /* Ecosia: no more button
     lazy var moreButton: UIButton = {
         let button = UIButton()
         button.isHidden = true
@@ -943,13 +923,7 @@ class ASHeaderView: UICollectionReusableView {
         button.setTitleColor(UIColor.Photon.Grey50, for: .highlighted)
         return button
     }()
-
-    lazy fileprivate var iconView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.tintColor = UIColor.Photon.Grey50
-        imageView.isHidden = true
-        return imageView
-    }()
+    */
 
     var title: String? {
         willSet(newTitle) {
@@ -968,38 +942,32 @@ class ASHeaderView: UICollectionReusableView {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        moreButton.isHidden = true
-        moreButton.setTitle(nil, for: .normal)
-        moreButton.accessibilityIdentifier = nil;
+        // Ecosia: moreButton.isHidden = true
+        // Ecosia: moreButton.setTitle(nil, for: .normal)
+        // Ecosia: moreButton.accessibilityIdentifier = nil;
         titleLabel.text = nil
-        moreButton.removeTarget(nil, action: nil, for: .allEvents)
-        iconView.isHidden = true
-        iconView.tintColor =  UIColor.theme.homePanel.activityStreamHeaderText
-        titleLabel.textColor = UIColor.theme.homePanel.activityStreamHeaderText
-        moreButton.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
+        // Ecosia: moreButton.removeTarget(nil, action: nil, for: .allEvents)
+        titleLabel.textColor = UIColor.theme.ecosia.highContrastText
+        // Ecosia: moreButton.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
     }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(titleLabel)
+        /* Ecosia
         addSubview(moreButton)
-        addSubview(iconView)
         moreButton.snp.makeConstraints { make in
             make.top.equalTo(self.snp.top).offset(ASHeaderView.verticalInsets)
             make.bottom.equalToSuperview().offset(-ASHeaderView.verticalInsets)
             self.rightConstraint = make.trailing.equalTo(self.safeArea.trailing).inset(-titleInsets).constraint
         }
         moreButton.setContentCompressionResistancePriority(.required, for: .horizontal)
+        */
         titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(iconView.snp.trailing).offset(5)
-            make.trailing.equalTo(moreButton.snp.leading).inset(-FirefoxHomeHeaderViewUX.TitleTopInset)
-            make.top.equalTo(self.snp.top).offset(ASHeaderView.verticalInsets)
-            make.bottom.equalToSuperview().offset(-ASHeaderView.verticalInsets)
-        }
-        iconView.snp.makeConstraints { make in
             self.leftConstraint = make.leading.equalTo(self.safeArea.leading).inset(titleInsets).constraint
-            make.centerY.equalTo(self.snp.centerY)
-            make.size.equalTo(16)
+            self.rightConstraint = make.trailing.equalTo(self.safeArea.trailing).inset(-titleInsets).constraint
+            make.top.greaterThanOrEqualTo(self.snp.top)
+            make.bottom.equalToSuperview().offset(-6)
         }
     }
 
@@ -1015,7 +983,8 @@ class ASHeaderView: UICollectionReusableView {
 }
 
 class LibraryShortcutView: UIView {
-    static let spacing: CGFloat = 15
+    static let spacing: CGFloat = 16
+    static let iconSize: CGFloat = 42
 
     var button = UIButton()
     var title = UILabel()
@@ -1025,10 +994,10 @@ class LibraryShortcutView: UIView {
         addSubview(button)
         addSubview(title)
         button.snp.makeConstraints { make in
-            make.top.equalToSuperview()
+            make.top.equalToSuperview().offset(LibraryShortcutView.spacing/2.0)
             make.centerX.equalToSuperview()
-            make.width.equalTo(self).offset(-LibraryShortcutView.spacing)
-            make.height.equalTo(self.snp.width).offset(-LibraryShortcutView.spacing)
+            make.width.equalTo(LibraryShortcutView.iconSize + LibraryShortcutView.spacing)
+            make.height.equalTo(LibraryShortcutView.iconSize + LibraryShortcutView.spacing)
         }
         title.adjustsFontSizeToFitWidth = true
         title.minimumScaleFactor = 0.7
@@ -1036,13 +1005,13 @@ class LibraryShortcutView: UIView {
         title.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
         title.textAlignment = .center
         title.snp.makeConstraints { make in
-            make.top.equalTo(button.snp.bottom).offset(5)
+            make.top.equalTo(button.snp.bottom).offset(0)
             make.leading.trailing.equalToSuperview()
         }
         button.imageView?.contentMode = .scaleToFill
         button.contentVerticalAlignment = .fill
         button.contentHorizontalAlignment = .fill
-        button.imageEdgeInsets = UIEdgeInsets(equalInset: LibraryShortcutView.spacing)
+        button.imageEdgeInsets = UIEdgeInsets(equalInset: LibraryShortcutView.spacing/2.0)
         button.tintColor = .white
     }
 
@@ -1050,10 +1019,6 @@ class LibraryShortcutView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func layoutSubviews() {
-        button.layer.cornerRadius = (self.frame.width - LibraryShortcutView.spacing) / 2
-        super.layoutSubviews()
-    }
 }
 
 class ASLibraryCell: UICollectionViewCell, Themeable {
@@ -1068,28 +1033,28 @@ class ASLibraryCell: UICollectionViewCell, Themeable {
 
     var libraryButtons: [LibraryShortcutView] = []
 
-    let bookmarks = LibraryPanel(title: Strings.AppMenuBookmarksTitleString, image: UIImage.templateImageNamed("menu-Bookmark"), color: UIColor.Photon.Blue50)
-    let history = LibraryPanel(title: Strings.AppMenuHistoryTitleString, image: UIImage.templateImageNamed("menu-panel-History"), color: UIColor.Photon.Orange50)
-    let readingList = LibraryPanel(title: Strings.AppMenuReadingListTitleString, image: UIImage.templateImageNamed("menu-panel-ReadingList"), color: UIColor.Photon.Teal60)
-    let downloads = LibraryPanel(title: Strings.AppMenuDownloadsTitleString, image: UIImage.templateImageNamed("menu-panel-Downloads"), color: UIColor.Photon.Magenta60)
-    let syncedTabs = LibraryPanel(title: Strings.AppMenuSyncedTabsTitleString, image: UIImage.templateImageNamed("menu-sync"), color: UIColor.Photon.Purple70)
+    let bookmarks = LibraryPanel(title: Strings.AppMenuBookmarksTitleString, image: UIImage(named: "libraryFavorites"), color: UIColor.Photon.Yellow60)
+    let history = LibraryPanel(title: Strings.AppMenuHistoryTitleString, image: UIImage(named: "libraryHistory"), color: UIColor.Photon.Teal60)
+    let readingList = LibraryPanel(title: Strings.AppMenuReadingListTitleString, image: UIImage(named: "libraryReading"), color: UIColor.Photon.Blue60)
+    let downloads = LibraryPanel(title: Strings.AppMenuDownloadsTitleString, image: UIImage(named: "libraryDownloads"), color: UIColor.Photon.Purple60)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         mainView.distribution = .fillEqually
-        mainView.spacing = 10
+        mainView.spacing = 0
         addSubview(mainView)
         mainView.snp.makeConstraints { make in
             make.edges.equalTo(self)
         }
 
-        [bookmarks, readingList, downloads, syncedTabs].forEach { item in
+        // Ecosia: Show history instead of synced tabs
+        [bookmarks, history, readingList, downloads].forEach { item in
             let view = LibraryShortcutView()
             view.button.setImage(item.image, for: .normal)
             view.title.text = item.title
             let words = view.title.text?.components(separatedBy: NSCharacterSet.whitespacesAndNewlines).count
             view.title.numberOfLines = words == 1 ? 1 :2
-            view.button.backgroundColor = item.color
+            // view.button.backgroundColor = item.color
             view.button.setTitleColor(UIColor.theme.homePanel.topSiteDomain, for: .normal)
             view.accessibilityLabel = item.title
             mainView.addArrangedSubview(view)

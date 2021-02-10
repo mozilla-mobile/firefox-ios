@@ -53,16 +53,17 @@ enum QuickLink: Int {
     public var backgroundColors: [Color] {
         switch self {
         case .search:
-            return [Color("searchButtonColorTwo"), Color("searchButtonColorOne")]
+            return [Color("ecosiaBrand")]
         case .privateSearch:
-            return [Color("privateGradientThree"), Color("privateGradientTwo"),Color("privateGradientOne")]
+            return [Color("Bar")]
         case .copiedLink:
-            return [Color("goToCopiedLinkSolid")]
+            return [Color("Bar")]
         case .closePrivateTabs:
-            return [Color("privateGradientThree"), Color("privateGradientTwo"),Color("privateGradientOne")]
+            return [Color("Bar")]
         }
     }
 
+    /* Ecosia: deactivate Siri Intents
     static func from(_ configuration: QuickLinkSelectionIntent) -> Self {
         switch configuration.selectedLink {
         case .search:
@@ -77,4 +78,5 @@ enum QuickLink: Int {
             return .search
         }
     }
+    */
 }

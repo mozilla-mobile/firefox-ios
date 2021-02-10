@@ -90,7 +90,7 @@ private extension TrayToBrowserAnimator {
             if !UIAccessibility.isReduceMotionEnabled {
                 frameResizeClosure()
             }
-            UIApplication.shared.windows.first?.backgroundColor = UIColor.theme.browser.background
+            UIApplication.shared.windows.first?.backgroundColor = UIColor.theme.tabTray.background
             tabTray.navigationController?.setNeedsStatusBarAppearanceUpdate()
             tabCollectionViewSnapshot.alpha = 0
             tabTray.statusBarBG.alpha = 0

@@ -43,9 +43,6 @@ class AppSettingsTableViewController: SettingsTableViewController {
 
         let prefs = profile.prefs
         var generalSettings: [Setting] = [
-            SearchSetting(settings: self),
-            NewTabPageSetting(settings: self),
-            HomeSetting(settings: self),
             OpenWithSetting(settings: self),
             ThemeSetting(settings: self),
             BoolSetting(prefs: prefs, prefKey: PrefsKeys.KeyBlockPopups, defaultValue: true,
@@ -53,13 +50,16 @@ class AppSettingsTableViewController: SettingsTableViewController {
            ]
 
         if #available(iOS 14.0, *) {
-            generalSettings.insert(DefaultBrowserSetting(settings: self), at: 4)
+            generalSettings.append(DefaultBrowserSetting(settings: self))
         }
 
+        /* Ecosia: remove Siri settings
         if #available(iOS 12.0, *) {
-            generalSettings.insert(SiriPageSetting(settings: self), at: 5)
+            generalSettings.append(SiriPageSetting(settings: self))
         }
+        */
 
+        /* Ecosia: deactivate china settings
         let accountChinaSyncSetting: [Setting]
         if !AppInfo.isChinaEdition {
             accountChinaSyncSetting = []
@@ -69,6 +69,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 ChinaSyncServiceSetting(settings: self)
             ]
         }
+        */
         // There is nothing to show in the Customize section if we don't include the compact tab layout
         // setting on iPad. When more options are added that work on both device types, this logic can
         // be changed.
@@ -82,6 +83,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
                         statusText: Strings.SettingsShowLinkPreviewsStatus)
         ]
 
+        /* Ecosia: Deactivate account settings
         let accountSectionTitle = NSAttributedString(string: Strings.FxAFirefoxAccount)
 
         let footerText = !profile.hasAccount() ? NSAttributedString(string: Strings.FxASyncUsageDetails) : nil
@@ -94,6 +96,16 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 AccountStatusSetting(settings: self),
                 SyncNowSetting(settings: self)
             ] + accountChinaSyncSetting )]
+         */
+
+        let searchSettings: [Setting] = [
+            SearchAreaSetting(settings: self),
+            SafeSearchSettings(settings: self),
+            AutoCompleteSettings(prefs: prefs),
+            PersonalSearchSettings(prefs: prefs)
+        ]
+
+        settings += [ SettingSection(title: NSAttributedString(string: .localized(.search)), footerTitle: nil, children: searchSettings)]
 
         settings += [ SettingSection(title: NSAttributedString(string: Strings.SettingsGeneralSectionTitle), children: generalSettings)]
 
@@ -114,21 +126,21 @@ class AppSettingsTableViewController: SettingsTableViewController {
         privacySettings.append(ContentBlockerSetting(settings: self))
 
         privacySettings += [
-            PrivacyPolicySetting()
+            EcosiaPrivacyPolicySetting(),
+            EcosiaTermsSetting()
         ]
 
         settings += [
             SettingSection(title: NSAttributedString(string: privacyTitle), children: privacySettings),
             SettingSection(title: NSAttributedString(string: NSLocalizedString("Support", comment: "Support section title")), children: [
-                ShowIntroductionSetting(settings: self),
-                SendFeedbackSetting(),
-                SendAnonymousUsageDataSetting(prefs: prefs, delegate: settingsDelegate),
-                OpenSupportPageSetting(delegate: settingsDelegate),
+                // Ecosia: ShowIntroductionSetting(settings: self),
+                EcosiaSendFeedbackSetting(),
+                // Ecosia: SendAnonymousUsageDataSetting(prefs: prefs, delegate: settingsDelegate)
             ]),
             SettingSection(title: NSAttributedString(string: NSLocalizedString("About", comment: "About settings section title")), children: [
                 VersionSetting(settings: self),
                 LicenseAndAcknowledgementsSetting(),
-                YourRightsSetting(),
+                // Ecosia: YourRightsSetting(),
                 ExportBrowserDataSetting(settings: self),
                 ExportLogDataSetting(settings: self),
                 DeleteExportedDataSetting(settings: self),

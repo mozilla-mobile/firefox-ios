@@ -82,7 +82,7 @@ fileprivate class DarkTextFieldColor: TextFieldColor {
 
 fileprivate class DarkHomePanelColor: HomePanelColor {
     override var toolbarBackground: UIColor { return defaultBackground }
-    override var toolbarHighlight: UIColor { return UIColor.Photon.Blue40 }
+    override var toolbarHighlight: UIColor { return UIColor.theme.ecosia.primaryToolbar }
     override var toolbarTint: UIColor { return UIColor.Photon.Grey30 }
     override var panelBackground: UIColor { return UIColor.Photon.Grey90 }
     override var separator: UIColor { return defaultSeparator }
@@ -97,7 +97,7 @@ fileprivate class DarkHomePanelColor: HomePanelColor {
     override var bookmarkBackNavCellBackground: UIColor { return UIColor.Photon.Grey70 }
     
     override var activityStreamHeaderText: UIColor { return UIColor.Photon.Grey30 }
-    override var activityStreamCellTitle: UIColor { return UIColor.Photon.Grey20 }
+    override var activityStreamCellTitle: UIColor { return UIColor.Photon.Grey10 }
     override var activityStreamCellDescription: UIColor { return UIColor.Photon.Grey30 }
 
     override var topSiteDomain: UIColor { return defaultTextAndTint }
@@ -146,4 +146,5 @@ class DarkTheme: NormalTheme {
     override var general: GeneralColor { return DarkGeneralColor() }
     override var actionMenu: ActionMenuColor { return DarkActionMenuColor() }
     override var defaultBrowserCard: DefaultBrowserCardColor { return DarkDefaultBrowserCardColor() }
+    override var ecosia: EcosiaTheme { DarkEcosiaTheme() }
 }

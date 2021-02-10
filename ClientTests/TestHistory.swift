@@ -45,7 +45,7 @@ class TestHistory: ProfileTest {
         XCTAssertTrue(history.clearHistory().value.isSuccess, "History cleared.")
     }
 
-    fileprivate func checkVisits(_ history: BrowserHistory, url: String) {
+    func checkVisits(_ history: BrowserHistory, url: String) {
         let expectation = self.expectation(description: "Wait for history")
         history.getSitesByLastVisit(limit: 100, offset: 0).upon { result in
             XCTAssertTrue(result.isSuccess)

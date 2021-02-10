@@ -1,74 +1,196 @@
-Firefox for iOS [![codebeat badge](https://codebeat.co/badges/67e58b6d-bc89-4f22-ba8f-7668a9c15c5a)](https://codebeat.co/projects/github-com-mozilla-firefox-ios) [![BuddyBuild](https://dashboard.buddybuild.com/api/statusImage?appID=57bf25c0f096bc01001e21e0&branch=main&build=latest)](https://dashboard.buddybuild.com/apps/57bf25c0f096bc01001e21e0/build/latest) [![codecov](https://codecov.io/gh/mozilla-mobile/firefox-ios/branch/main/graph/badge.svg)](https://codecov.io/gh/mozilla-mobile/firefox-ios/branch/main)
-===============
+# Ecosia for iOS
 
-Download on the [App Store](https://itunes.apple.com/app/firefox-web-browser/id989804926).
+The iOS Browser that plants trees.
 
-This branch (main)
------------
+## Getting involved
 
-This branch only works with [Xcode 11.5](https://developer.apple.com/services-account/download?path=/Developer_Tools/Xcode_11.5/Xcode_11.5.xip), Swift 5.2 and supports iOS 12.0 and above.
+**!!!** This project cannot be built by anyone outside of Ecosia (yet). **!!!**
 
-Please make sure you aim your pull requests in the right direction.
+There are dependencies that are not fully disclosed and thereby not available for the build. We are working on this. We'll update this note as soon we are able to ship the closed sources in binary form.
 
-For bug fixes and features for a specific release use the version branch.
+## Thank you note
 
-Getting involved
-----------------
+Ecosia for iOS is based on a fork of the code of "Firefox for iOS". We want to express our gratitude to all the original contributors and Mozilla for releasing your code to the world.
 
-Want to contribute but don't know where to start? Here is a list of [issues that are contributor friendly](https://github.com/mozilla-mobile/firefox-ios/labels/Contributor%20OK)
+## Requirements
 
-Building the code
------------------
+- OSX
+- Xcode 12.4
+- Carthage
+- Node
+- Python3
+- pip
+- virtualenv
+- gyp
+- ninja
+- rust
+- protoc
+- tcl
+- uniffi-bindgen
+- swift-protobuf
 
-1. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
-1. Install Carthage and Node
-    ```shell
-    brew update
-    brew install carthage
-    brew install node
-    ```
-1. Clone the repository:
-    ```shell
-    git clone https://github.com/mozilla-mobile/firefox-ios
-    ```
-1. Pull in the project dependencies:
-    ```shell
-    cd firefox-ios
-    sh ./bootstrap.sh
-    ```
-1. Open `Client.xcodeproj` in Xcode.
-1. Build the `Fennec` scheme in Xcode.
+This branch works with [Xcode 12.4](https://developer.apple.com/download/more/?=xcode)
 
-## Building User Scripts
+### Install Carthage and Node
 
-User Scripts (JavaScript injected into the `WKWebView`) are compiled, concatenated and minified using [webpack](https://webpack.js.org/). User Scripts to be aggregated are placed in the following directories:
-
-```
-/Client
-|-- /Frontend
-    |-- /UserContent
-        |-- /UserScripts
-            |-- /AllFrames
-            |   |-- /AtDocumentEnd
-            |   |-- /AtDocumentStart
-            |-- /MainFrame
-                |-- /AtDocumentEnd
-                |-- /AtDocumentStart
+```bash
+brew update
+brew install carthage
+brew install node
 ```
 
-This reduces the total possible number of User Scripts down to four. The compiled output from concatenating and minifying the User Scripts placed in these folders resides in `/Client/Assets` and are named accordingly:
+### Install python3
 
-* `AllFramesAtDocumentEnd.js`
-* `AllFramesAtDocumentStart.js`
-* `MainFrameAtDocumentEnd.js`
-* `MainFrameAtDocumentStart.js`
+Newer versions of macOS come with a compatibility version for python2.7 but it is recommended to upgrade to python3.
+Newer versions of Xcode doesn't come with python anymore.
+Options:
 
-To simplify the build process, these compiled files are checked-in to this repository. When adding or editing User Scripts, these files can be re-compiled with `webpack` manually. This requires Node.js to be installed and all required `npm` packages can be installed by running `npm install` in the root directory of the project. User Scripts can be compiled by running the following `npm` command in the root directory of the project:
+- Instal via brew
+- Download from the [Official site](https://www.python.org/downloads/)
 
+### Install pip
+
+Pip comes with python but it might not be found if you have multiple version of python installed.
+Check if pip is found
+
+```bash
+python -m pip --version
 ```
+
+If there is an error run
+
+```bash
+sudo python2.7 -m ensurepip --default-pip
+```
+
+### Install virutalenv
+
+```bash
+sudo pip install virtualenv
+```
+
+### Install GYP
+
+If building application-services dependency gyp needs to be installed [https://github.com/mogemimi/pomdog/wiki/How-to-Install-GYP](https://github.com/mogemimi/pomdog/wiki/How-to-Install-GYP)
+
+### Install ninja
+
+If building application-services dependency ninja needs to be installed [https://github.com/ninja-build/ninja](https://github.com/ninja-build/ninja)
+
+### Install rust
+
+If building application-services dependency rust needs to be installed [https://www.rust-lang.org/tools/install](https://www.rust-lang.org/tools/install)
+
+### Install protoc
+
+If building application-services dependency protoc needs to be installed [https://google.github.io/proto-lens/installing-protoc.html](https://google.github.io/proto-lens/installing-protoc.html)
+
+### Install tcl
+
+If building application-services dependency tcl needs to be installed [https://www.tcl.tk/software/tcltk/](https://www.tcl.tk/software/tcltk/)
+
+### Install uniffi-bindgen
+
+If building application-services dependency uniffi-bindgen needs to be installed
+
+```bash
+cargo install uniffi_bindgen
+```
+
+### Install swift-protobuf
+
+If building application-services dependency swift-protobuf needs to be installed [https://github.com/apple/swift-protobuf](https://github.com/apple/swift-protobuf)
+
+## Getting Started
+
+Clone the project.
+
+```bash
+git clone git clone git@github.com:ecosia/ios-browser.git
+```
+
+Clone the translation files inside your working dir and run the import script.
+
+```bash
+#change into folder
+cd ios-browser
+#clone the repo
+git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git
+#run the script
+./ios-l10n-scripts/import-locales-firefox.sh --release
+```
+
+Run npm to include the user scripts
+
+```bash
+npm install
 npm run build
 ```
 
-## Contributing
+Setup content blocking scripts
 
-Want to contribute to this repository? Check out [Contributing Guidelines](https://github.com/mozilla-mobile/firefox-ios/blob/main/CONTRIBUTING.md)
+```bash
+cd content-blocker-lib-ios/ContentBlockerGen && swift run
+```
+
+### Building Application Services
+
+To validate that application services can be build locally follow the guide [https://github.com/mozilla/application-services/blob/main/docs/building.md#ios-development](https://github.com/mozilla/application-services/blob/main/docs/building.md#ios-development)
+
+Usually it should work to simply run:
+
+```bash
+./carthage_bootstrap_moz_services.sh
+```
+
+### Updating dependencies
+
+To update dependencies run:
+
+```bash
+./carthage update [optional name] --platform iOS --cache-builds
+```
+
+## TRANSLATIONS
+
+We are using [Transifex](https://docs.transifex.com/client/introduction) for managing our translations.
+
+### Install the transifex client using pip
+
+```bash
+sudo pip3 install transifex-client
+```
+
+#### Configure your `.transifexrc` file
+
+```bash
+[https://www.transifex.com]
+hostname = https://www.transifex.com
+password = ...
+username = ...
+```
+
+### Translations need to be pulled and commited manually
+
+Pulling translation from the web
+
+```bash
+tx pull -af
+```
+
+Test and commit the new translations. There exists schemes for testing other languages in the simulator.
+
+### Adding new strings
+
+#### Via CLI
+
+1. Add the new strings to the English source file `Client/Ecosia/L10N/en.lproj/Ecosia.strings`
+2. Push it to Transifex
+
+```bash
+tx push -s
+```
+
+#### Via Transifex Web-Interface
+
+You can update source file in transifex [here](https://www.transifex.com/ecosia/ecosia-ios-search-app/ecosiastrings/). Then once those have been translated you can pull them using the above commands and commit them.

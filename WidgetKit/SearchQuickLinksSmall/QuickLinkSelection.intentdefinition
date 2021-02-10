@@ -73,11 +73,11 @@
 	<key>INIntentDefinitionNamespace</key>
 	<string>6vd2jx</string>
 	<key>INIntentDefinitionSystemVersion</key>
-	<string>19F101</string>
+	<string>20D64</string>
 	<key>INIntentDefinitionToolsBuildVersion</key>
-	<string>12A6163b</string>
+	<string>12D4e</string>
 	<key>INIntentDefinitionToolsVersion</key>
-	<string>12.0</string>
+	<string>12.4</string>
 	<key>INIntents</key>
 	<array>
 		<dict>

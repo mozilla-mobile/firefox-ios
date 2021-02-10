@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Core",
+        "repositoryURL": "https://github.com/ecosia/ios-core.git",
+        "state": {
+          "branch": "main",
+          "revision": "6098b2de91d43917743ed1883eced133d07108f2",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}

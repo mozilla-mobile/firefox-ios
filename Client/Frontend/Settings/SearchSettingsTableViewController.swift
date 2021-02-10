@@ -312,7 +312,8 @@ extension SearchSettingsTableViewController {
 
     @objc func didToggleSearchSuggestions(_ toggle: UISwitch) {
         // Setting the value in settings dismisses any opt-in.
-        model.shouldShowSearchSuggestions = toggle.isOn
+        // Ecosia: not in use
+        // model.shouldShowSearchSuggestions = toggle.isOn
     }
 
     func cancel() {

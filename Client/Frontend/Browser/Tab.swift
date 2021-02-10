@@ -448,6 +448,11 @@ class Tab: NSObject {
                 return webView.loadFileURL(url, allowingReadAccessTo: url)
             }
 
+            // Ecosia: inject cookie
+            var request = request
+            if let cookie = browserViewController?.tabManager.cookie {
+                request.allHTTPHeaderFields = HTTPCookie.requestHeaderFields(with: [cookie.value])
+            }
             return webView.load(request)
         }
         return nil

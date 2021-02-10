@@ -31,6 +31,7 @@ class AppSyncDelegate: SyncDelegate {
     }
 
     func displaySentTab(for url: URL, title: String, from deviceName: String?) {
+        /* Ecosia: deactivate sync / push
         DispatchQueue.main.sync {
             if app.applicationState == .active {
                 BrowserViewController.foregroundBVC().switchToTabForURLOrOpen(url)
@@ -73,5 +74,6 @@ class AppSyncDelegate: SyncDelegate {
                 }
             }
         }
+        */
     }
 }

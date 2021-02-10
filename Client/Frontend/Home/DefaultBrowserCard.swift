@@ -19,7 +19,7 @@ class DefaultBrowserCard: UIView {
     }()
     lazy var descriptionText: UILabel = {
         let descriptionText = UILabel()
-        descriptionText.text = String.DefaultBrowserCardDescription
+        descriptionText.text = .localized(.websitesWillAlwaysOpen)
         descriptionText.numberOfLines = 0
         descriptionText.lineBreakMode = .byWordWrapping
         descriptionText.font = UIFont.systemFont(ofSize: 15, weight: .regular)
@@ -37,7 +37,7 @@ class DefaultBrowserCard: UIView {
         return button
     }()
     lazy var image: UIImageView = {
-        let imgView = UIImageView(image: #imageLiteral(resourceName: "splash"))
+        let imgView = UIImageView(image: UIImage(named: "ecosiaIcon"))
         imgView.contentMode = .scaleAspectFit
         return imgView
     }()
@@ -85,12 +85,11 @@ class DefaultBrowserCard: UIView {
     private func setupConstraints() {
         background.snp.makeConstraints { make in
             make.top.left.equalToSuperview().offset(20)
-            make.right.bottom.equalToSuperview().offset(-20)
-            make.height.greaterThanOrEqualTo(210)
+            make.right.bottom.equalToSuperview().offset(-20).priority(.high)
+            make.height.greaterThanOrEqualTo(210).priority(.high)
         }
         topView.snp.makeConstraints { make in
             make.top.equalToSuperview()
-            make.bottom.equalTo(settingsButton.snp.top)
             make.height.greaterThanOrEqualTo(114)
         }
         image.snp.makeConstraints { make in
@@ -100,15 +99,14 @@ class DefaultBrowserCard: UIView {
             make.top.equalToSuperview().offset(45)
         }
         labelView.snp.makeConstraints { make in
-            make.right.equalToSuperview()
-            make.left.equalTo(image.snp.right)
+            make.right.equalTo(closeButton.snp.right)
             make.width.lessThanOrEqualTo(223)
             make.bottom.equalTo(settingsButton.snp.top).offset(-16)
             make.top.equalToSuperview().offset(30)
         }
         settingsButton.snp.makeConstraints { make in
             make.top.equalTo(topView.snp.bottom).offset(16)
-            make.bottom.right.equalToSuperview().offset(-16)
+            make.bottom.right.equalToSuperview().offset(-16).priority(.high)
             make.left.equalToSuperview().offset(16)
             make.width.equalTo(303)
             make.height.equalTo(44)

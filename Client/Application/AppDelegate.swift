@@ -17,6 +17,7 @@ import CoreSpotlight
 import UserNotifications
 import Account
 import WidgetKit
+import Core
 
 #if canImport(BackgroundTasks)
  import BackgroundTasks
@@ -140,6 +141,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         RustFirefoxAccounts.startup(prefs: profile.prefs).uponQueue(.main) { _ in
             print("RustFirefoxAccounts started")
+
+            DispatchQueue.main.async { [weak self] in
+                self?.migrateEcosiaContents()
+            }
         }
         log.info("startApplication end")
         return true
@@ -219,7 +224,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // that is an iOS bug or not.
         AutocompleteTextField.appearance().semanticContentAttribute = .forceLeftToRight
 
+        /* Ecosia: deactivate Push
         pushNotificationSetup()
+        */
 
         // Leanplum user research variable setup for onboarding research
         _ = OnboardingUserResearch()
@@ -448,6 +455,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // is that this method is only invoked whenever the application is entering the foreground where as
         // `applicationDidBecomeActive` will get called whenever the Touch ID authentication overlay disappears.
         self.updateAuthenticationInfo()
+        Goodall.shared.refresh()
     }
 
     fileprivate func updateAuthenticationInfo() {

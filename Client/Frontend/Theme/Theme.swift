@@ -38,7 +38,7 @@ class TableViewColor {
     var headerTextLight: UIColor { return UIColor.Photon.Grey50 }
     // Used for table headers in home panel tables
     var headerTextDark: UIColor { return UIColor.Photon.Grey90 }
-    var rowActionAccessory: UIColor { return UIColor.Photon.Blue40 }
+    var rowActionAccessory: UIColor { return UIColor.theme.ecosia.primaryBrand }
     var controlTint: UIColor { return rowActionAccessory }
     var syncText: UIColor { return defaultTextAndTint }
     var errorText: UIColor { return UIColor.Photon.Red50 }
@@ -57,9 +57,9 @@ class ActionMenuColor {
 class URLBarColor {
     var border: UIColor { return UIColor.Photon.Grey90A10 }
     func activeBorder(_ isPrivate: Bool) -> UIColor { 
-        return !isPrivate ? UIColor.Photon.Blue40A30 : UIColor.Defaults.MobilePrivatePurple
+        return !isPrivate ? UIColor.theme.ecosia.primaryBrand : UIColor.Defaults.MobilePrivatePurple
     }
-    var tint: UIColor { return UIColor.Photon.Blue40A30 }
+    var tint: UIColor { return UIColor.theme.ecosia.primaryBrand }
 
     // This text selection color is used in two ways:
     // 1) <UILabel>.background = textSelectionHighlight.withAlphaComponent(textSelectionHighlightAlpha)
@@ -76,7 +76,7 @@ class URLBarColor {
         }
     }
 
-    var readerModeButtonSelected: UIColor { return UIColor.Photon.Blue40 }
+    var readerModeButtonSelected: UIColor { return UIColor.theme.ecosia.primaryBrand }
     var readerModeButtonUnselected: UIColor { return UIColor.Photon.Grey50 }
     var pageOptionsSelected: UIColor { return readerModeButtonSelected }
     var pageOptionsUnselected: UIColor { return UIColor.theme.browser.tint }
@@ -90,17 +90,17 @@ class BrowserColor {
 
 // The back/forward/refresh/menu button (bottom toolbar)
 class ToolbarButtonColor {
-    var selectedTint: UIColor { return UIColor.Photon.Blue40 }
+    var selectedTint: UIColor { return UIColor.theme.ecosia.primaryBrand }
     var disabledTint: UIColor { return UIColor.Photon.Grey30 }
 }
 
-class LoadingBarColor {
+final class LoadingBarColor {
     func start(_ isPrivate: Bool) -> UIColor {
-        return !isPrivate ? UIColor.Photon.Blue40A30 : UIColor.Photon.Magenta60A30
+        UIColor.theme.ecosia.primaryBrand
     }
 
     func end(_ isPrivate: Bool) -> UIColor {
-        return !isPrivate ? UIColor.Photon.Teal60 : UIColor.Photon.Purple60
+        UIColor.theme.ecosia.primaryBrand
     }
 }
 
@@ -111,10 +111,11 @@ class TabTrayColor {
     var cellBackground: UIColor { return defaultBackground }
     var toolbar: UIColor { return defaultBackground }
     var toolbarButtonTint: UIColor { return defaultTextAndTint }
-    var privateModeLearnMore: UIColor { return UIColor.Photon.Purple60 }
-    var privateModePurple: UIColor { return UIColor.Photon.Purple60 }
+    var privateModeLearnMore: UIColor { return UIColor.theme.ecosia.secondaryBrand }
+    var privateModePurple: UIColor { return UIColor.theme.ecosia.secondaryBrand }
     var privateModeButtonOffTint: UIColor { return toolbarButtonTint }
     var privateModeButtonOnTint: UIColor { return UIColor.Photon.Grey10 }
+    var privateEmptyText: UIColor { return UIColor.Photon.Grey10 }
     var cellCloseButton: UIColor { return UIColor.Photon.Grey50 }
     var cellTitleBackground: UIColor { return UIColor.clear }
     var faviconTint: UIColor { return UIColor.black }
@@ -128,7 +129,7 @@ class TopTabsColor {
     var tabForegroundSelected: UIColor { return UIColor.Photon.Grey90 }
     var tabForegroundUnselected: UIColor { return UIColor.Photon.Grey40 }
     func tabSelectedIndicatorBar(_ isPrivate: Bool) -> UIColor {
-        return !isPrivate ? UIColor.Photon.Blue40 : UIColor.Photon.Purple60
+        return !isPrivate ? UIColor.theme.ecosia.primaryBrand : UIColor.theme.ecosia.secondaryBrand
     }
     var buttonTint: UIColor { return UIColor.Photon.Grey40 }
     var privateModeButtonOffTint: UIColor { return buttonTint }
@@ -147,7 +148,7 @@ class TextFieldColor {
 
 class HomePanelColor {
     var toolbarBackground: UIColor { return defaultBackground }
-    var toolbarHighlight: UIColor { return UIColor.Photon.Blue40 }
+    var toolbarHighlight: UIColor { return UIColor.theme.ecosia.primaryBrand }
     var toolbarTint: UIColor { return UIColor.Photon.Grey50 }
 
     var panelBackground: UIColor { return UIColor.Photon.White100 }
@@ -160,18 +161,18 @@ class HomePanelColor {
     var bookmarkIconBorder: UIColor { return UIColor.Photon.Grey30 }
     var bookmarkFolderBackground: UIColor { return UIColor.Photon.Grey10.withAlphaComponent(0.3) } 
     var bookmarkFolderText: UIColor { return UIColor.Photon.Grey80 } 
-    var bookmarkCurrentFolderText: UIColor { return UIColor.Photon.Blue40 }
+    var bookmarkCurrentFolderText: UIColor { return UIColor.theme.ecosia.primaryBrand }
     var bookmarkBackNavCellBackground: UIColor { return UIColor.clear }
     
     var siteTableHeaderBorder: UIColor { return UIColor.Photon.Grey30.withAlphaComponent(0.8) }
 
-    var topSiteDomain: UIColor { return UIColor.black }
+    var topSiteDomain: UIColor { return UIColor.Photon.Grey60 }
     var topSitesGradientStart:  UIColor { return UIColor.white }
     var topSitesGradientEnd:  UIColor { return UIColor(rgb: 0xf8f8f8) }
     var topSitesBackground: UIColor { return UIColor.white }
 
     var activityStreamHeaderText: UIColor { return UIColor.Photon.Grey50 }
-    var activityStreamCellTitle: UIColor { return UIColor.black }
+    var activityStreamCellTitle: UIColor { return UIColor.Photon.Grey60 }
     var activityStreamCellDescription: UIColor { return UIColor.Photon.Grey60 }
 
     var readingListActive: UIColor { return defaultTextAndTint }
@@ -182,24 +183,24 @@ class HomePanelColor {
     var historyHeaderIconsBackground: UIColor { return UIColor.Photon.White100 }
 
     var searchSuggestionPillBackground: UIColor { return UIColor.Photon.White100 }
-    var searchSuggestionPillForeground: UIColor { return UIColor.Photon.Blue40 }
+    var searchSuggestionPillForeground: UIColor { return UIColor.theme.ecosia.primaryBrand }
 }
 
 class SnackBarColor {
     var highlight: UIColor { return UIColor.Defaults.iOSTextHighlightBlue.withAlphaComponent(0.9) }
-    var highlightText: UIColor { return UIColor.Photon.Blue40 }
+    var highlightText: UIColor { return UIColor.theme.ecosia.primaryBrand }
     var border: UIColor { return UIColor.Photon.Grey30 }
-    var title: UIColor { return UIColor.Photon.Blue40 }
+    var title: UIColor { return UIColor.theme.ecosia.primaryBrand }
 }
 
 class GeneralColor {
     var faviconBackground: UIColor { return UIColor.clear }
     var passcodeDot: UIColor { return UIColor.Photon.Grey60 }
-    var highlightBlue: UIColor { return UIColor.Photon.Blue40 }
+    var highlightBlue: UIColor { UIColor.theme.ecosia.primaryBrand }
     var destructiveRed: UIColor { return UIColor.Photon.Red50 }
     var separator: UIColor { return defaultSeparator }
     var settingsTextPlaceholder: UIColor { return UIColor.Photon.Grey40 }
-    var controlTint: UIColor { return UIColor.Photon.Blue40 }
+    var controlTint: UIColor { return UIColor.theme.ecosia.primaryBrand }
     var switchToggle: UIColor { return UIColor.Photon.Grey90A40 }
 }
 
@@ -224,6 +225,7 @@ protocol Theme {
     var actionMenu: ActionMenuColor { get }
     var switchToggleTheme: GeneralColor { get }
     var defaultBrowserCard: DefaultBrowserCardColor { get }
+    var ecosia: EcosiaTheme { get }
 }
 
 class NormalTheme: Theme {
@@ -242,4 +244,5 @@ class NormalTheme: Theme {
     var actionMenu: ActionMenuColor { return ActionMenuColor() }
     var switchToggleTheme: GeneralColor { return GeneralColor() }
     var defaultBrowserCard: DefaultBrowserCardColor { return DefaultBrowserCardColor() }
+    var ecosia: EcosiaTheme { return EcosiaTheme() }
 }

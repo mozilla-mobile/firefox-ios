@@ -34,9 +34,17 @@ struct SmallQuickLinkView : View {
 
     @ViewBuilder
     var body: some View {
-        ImageButtonWithLabel(isSmall: true, link: entry.link)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(LinearGradient(gradient: Gradient(colors: entry.link.backgroundColors), startPoint: .bottomLeading, endPoint: .topTrailing)).widgetURL(entry.link.url)
+        VStack(alignment: .center) {
+            Image("logoLarge")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(height: 59)
+                .padding(.bottom, 5)
+                .widgetURL(entry.link.url)
+            Bar()
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color("backgroundColor"))
     }
 }
 
@@ -62,4 +70,23 @@ struct SmallQuickActionsPreviews: PreviewProvider {
         }
     }
 }
+
+struct Bar: View {
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 25)
+                .fill(Color("Bar"))
+                .frame(height: 50)
+            HStack {
+                Image(systemName: "magnifyingglass")
+                    .foregroundColor(.white)
+                    .padding(.leading)
+                Spacer()
+            }
+        }
+        .padding(.horizontal)
+        .contentShape(Rectangle())
+    }
+}
+
 #endif

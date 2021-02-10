@@ -1,0 +1,4 @@
+framework module XCGLogger {
+  header "XCGLogger-Swift.h"
+  requires objc
+}

@@ -574,6 +574,19 @@ extension BrowserViewController: WKNavigationDelegate {
             decisionHandler(.cancel)
         }
 
+        // Ecosia: Cookie handling
+        DispatchQueue.main.async { [weak self] in
+            if #available(iOS 11.0, *) {
+                webView.configuration.websiteDataStore.httpCookieStore.getAllCookies { cookies in
+                    DispatchQueue.main.async {
+                        self?.tabManager.cookie.received(cookies)
+                    }
+                }
+            } else if let response = navigationResponse.response as? HTTPURLResponse {
+                self?.tabManager.cookie.received(response)
+            }
+        }
+
         // If none of our helpers are responsible for handling this response,
         // just let the webview handle it as normal.
         decisionHandler(.allow)

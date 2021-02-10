@@ -1,8 +1,19 @@
 {
   "images" : [
     {
-      "filename" : "privatebrowsing.pdf",
-      "idiom" : "universal"
+      "filename" : "iconEcosiaMPrivateTiger.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "iconEcosiaMPrivateTiger@2x.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "iconEcosiaMPrivateTiger@3x.png",
+      "idiom" : "universal",
+      "scale" : "3x"
     }
   ],
   "info" : {

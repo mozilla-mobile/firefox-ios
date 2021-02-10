@@ -82,6 +82,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         libraryDrawerViewController?.close(immediately: true)
         var actions: [[PhotonActionSheetItem]] = []
 
+        /* Ecosia: don't show optional actions
         let syncAction = syncMenuButton(showFxA: presentSignInViewController)
         let isLoginsButtonShowing = LoginListViewController.shouldShowAppMenuShortcut(forPrefs: profile.prefs)
         let viewLogins: PhotonActionSheetItem? = !isLoginsButtonShowing ? nil :
@@ -103,16 +104,18 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         if !optionalActions.isEmpty {
             actions.append(optionalActions)
         }
+        */
 
         actions.append(getLibraryActions(vcDelegate: self))
         actions.append(getOtherPanelActions(vcDelegate: self))
 
+        /* Ecosia: disable what's new
         if let whatsNewAction = whatsNewAction, var lastGroup = actions.last, lastGroup.count > 1 {
             lastGroup.insert(whatsNewAction, at: lastGroup.count - 1)
             actions.removeLast()
             actions.append(lastGroup)
         }
-
+         */
         // force a modal if the menu is being displayed in compact split screen
         let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
         presentSheetWith(actions: actions, on: self, from: button, suppressPopover: shouldSuppress)
@@ -197,6 +200,10 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
     func tabToolbarDidPressSearch(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         focusLocationTextField(forTab: tabManager.selectedTab)
+    }
+
+    func tabToolbarDidPressEcosia(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        present(ecosiaNavigation, animated: true, completion: nil)
     }
 }
 
