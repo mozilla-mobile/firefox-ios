@@ -2,20 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>MozDevelopmentTeam</key>
-	<string>$(DEVELOPMENT_TEAM)</string>
-	<key>LeanplumAppId</key>
-	<string></string>
-	<key>LeanplumProductionKey</key>
-	<string></string>
-	<key>LeanplumDevelopmentKey</key>
-	<string></string>
 	<key>AppIdentifierPrefix</key>
 	<string>$(APP_IDENTIFIER_PREFIX)</string>
-	<key>PocketEnvironmentAPIKey</key>
-	<string>$(POCKET_API_KEY)</string>
-	<key>MozWhatsNewTopic</key>
-	<string>whats-new-ios-18</string>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
 		<string>org.mozilla.ios.sync.part1</string>
@@ -55,6 +43,10 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>INIntentsSupported</key>
+	<array>
+		<string>QuickActionIntent</string>
+	</array>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSApplicationQueriesSchemes</key>
@@ -76,25 +68,43 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
+	<key>LeanplumAppId</key>
+	<string></string>
+	<key>LeanplumDevelopmentKey</key>
+	<string></string>
+	<key>LeanplumProductionKey</key>
+	<string></string>
+	<key>MozDevelopmentTeam</key>
+	<string>$(DEVELOPMENT_TEAM)</string>
+	<key>MozWhatsNewTopic</key>
+	<string>whats-new-ios-18</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Websites you visit may request your location.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>This lets you take and upload photos.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Firefox requires Face ID to access your saved logins.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Websites you visit may request your location.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This lets you take and upload videos.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>This lets you save photos.</string>
-	<key>NSFaceIDUsageDescription</key>
-	<string>Firefox requires Face ID to access your saved logins.</string>
 	<key>NSUserActivityTypes</key>
 	<array>
+		<string>QuickActionIntent</string>
+		<string>QuickLinkSelectionIntent</string>
 		<string>org.mozilla.ios.firefox.browsing</string>
 	</array>
+	<key>PocketEnvironmentAPIKey</key>
+	<string>$(POCKET_API_KEY)</string>
+	<key>SentryDSN</key>
+	<string>$(SENTRY_DSN)</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>NewYorkMedium-Bold.otf</string>
@@ -143,12 +153,16 @@
 		<string>processing</string>
 		<string>remote-notification</string>
 	</array>
+	<key>UIFileSharingEnabled</key>
+	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>UIStatusBarHidden</key>
+	<true/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
@@ -163,8 +177,6 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>SentryDSN</key>
-	<string>$(SENTRY_DSN)</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
 	<key>UTImportedTypeDeclarations</key>
@@ -182,11 +194,5 @@
 			<string></string>
 		</dict>
 	</array>
-	<key>UIFileSharingEnabled</key>
-	<true/>
-	<key>LSSupportsOpeningDocumentsInPlace</key>
-	<true/>
-	<key>UIStatusBarHidden</key>
-	<true/>
 </dict>
 </plist>

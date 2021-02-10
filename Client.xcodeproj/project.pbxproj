@@ -554,6 +554,7 @@
 		D58A202925C9D96400105D25 /* BookmarkPanel.strings in Resources */ = {isa = PBXBuildFile; fileRef = D58A202725C9D96400105D25 /* BookmarkPanel.strings */; };
 		D58A202C25C9D96400105D25 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D58A202A25C9D96400105D25 /* Localizable.strings */; };
 		D58A202F25C9D96400105D25 /* BookmarkPanelDeleteConfirm.strings in Resources */ = {isa = PBXBuildFile; fileRef = D58A202D25C9D96400105D25 /* BookmarkPanelDeleteConfirm.strings */; };
+		D595529825D1F5590040B30B /* WidgetIntents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = D595529725D1F5590040B30B /* WidgetIntents.intentdefinition */; };
 		D59643E325C9B8E000EAB8B9 /* ClearPrivateData.strings in Resources */ = {isa = PBXBuildFile; fileRef = 58E14A8F991610DB13A9F1E1 /* ClearPrivateData.strings */; };
 		D59643E425C9B8E000EAB8B9 /* 3DTouchActions.strings in Resources */ = {isa = PBXBuildFile; fileRef = 514A4C83AE17612AF3025498 /* 3DTouchActions.strings */; };
 		D59643E525C9B8E000EAB8B9 /* AuthenticationManager.strings in Resources */ = {isa = PBXBuildFile; fileRef = 32484895B328A342AED539C8 /* AuthenticationManager.strings */; };
@@ -572,6 +573,7 @@
 		D59643F225C9B8E000EAB8B9 /* Shared.strings in Resources */ = {isa = PBXBuildFile; fileRef = 064741F8AE308A64808E6265 /* Shared.strings */; };
 		D59643F325C9B8E000EAB8B9 /* Storage.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9403451493EE3ADAAEFA2EB1 /* Storage.strings */; };
 		D59643F425C9B8E000EAB8B9 /* Today.strings in Resources */ = {isa = PBXBuildFile; fileRef = 21374EEAA2C69079F77A0AC3 /* Today.strings */; };
+		D5AF961B25D1FCAF006ACA6A /* WidgetIntents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = D595529725D1F5590040B30B /* WidgetIntents.intentdefinition */; };
 		D81127D81F84023B0050841D /* PhotonActionSheetTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81127D71F84023B0050841D /* PhotonActionSheetTest.swift */; };
 		D815A3A824A53F3200AAB221 /* TabToolbarHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D815A3A724A53F3200AAB221 /* TabToolbarHelperTests.swift */; };
 		D81E45131F82C56D004EFFBA /* NewTabContentSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81E45121F82C56C004EFFBA /* NewTabContentSettingsViewController.swift */; };
@@ -3171,6 +3173,7 @@
 		D58A202825C9D96400105D25 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/BookmarkPanel.strings; sourceTree = "<group>"; };
 		D58A202B25C9D96400105D25 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D58A202E25C9D96400105D25 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/BookmarkPanelDeleteConfirm.strings; sourceTree = "<group>"; };
+		D595529725D1F5590040B30B /* WidgetIntents.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = WidgetIntents.intentdefinition; sourceTree = "<group>"; };
 		D5D4450485942697FD34D254 /* or */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = or; path = or.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		D5E1479D89DB06613F5C7988 /* hsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hsb; path = "hsb.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		D61E4EC184782D5CEE7DDDEB /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/HistoryPanel.strings"; sourceTree = "<group>"; };
@@ -3927,6 +3930,7 @@
 				047F9B2D24E1FE1F00CD7DF7 /* Assets.xcassets */,
 				047F9B2F24E1FE1F00CD7DF7 /* Info.plist */,
 				D58A202A25C9D96400105D25 /* Localizable.strings */,
+				D595529725D1F5590040B30B /* WidgetIntents.intentdefinition */,
 			);
 			path = WidgetKit;
 			sourceTree = "<group>";
@@ -6875,6 +6879,7 @@
 				1DF42682251BDB3A0086386A /* FaviconFetcher.swift in Sources */,
 				1DDAD13E24F0651C007623C8 /* TopSitesWidget.swift in Sources */,
 				4392FB20252EC49D00AD3D23 /* SessionData.swift in Sources */,
+				D595529825D1F5590040B30B /* WidgetIntents.intentdefinition in Sources */,
 				047F9B4224E1FF4000CD7DF7 /* ImageButtonWithLabel.swift in Sources */,
 				047F9B2C24E1FE1C00CD7DF7 /* WidgetKit.swift in Sources */,
 				1DA3CE6724EEE86C00422BB2 /* AppInfo.swift in Sources */,
@@ -7495,6 +7500,7 @@
 				D8AA923421A602DC002605C0 /* HomePageSettingViewController.swift in Sources */,
 				EBC4869D2195F58300CDA48D /* ErrorPageHelper.swift in Sources */,
 				E660BDD91BB06521009AC090 /* TabsButton.swift in Sources */,
+				D5AF961B25D1FCAF006ACA6A /* WidgetIntents.intentdefinition in Sources */,
 				63306D3921103EAE00F25400 /* SavedTab.swift in Sources */,
 				2F44FCCB1A9E972E00FD20CC /* SearchEnginePicker.swift in Sources */,
 				E68E7ACB1CAC1D4500FDCA76 /* PagingPasscodeViewController.swift in Sources */,

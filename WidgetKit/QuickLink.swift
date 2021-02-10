@@ -77,7 +77,7 @@ enum QuickLink: Int {
     }
 
     static func from(_ configuration: QuickLinkSelectionIntent) -> Self {
-        switch configuration.selectedLink {
+        switch configuration.quickLink {
         case .search:
             return .search
         case .privateSearch:
