@@ -1016,6 +1016,7 @@ workflows:
         - upload_bitcode: 'no'
         - export_method: development
         - output_tool: xcodebuild
+        - scheme: Fennec
         - configuration: Fennec
     - deploy-to-bitrise-io@1.9: {}
     - cache-push@2.4: {}
@@ -1028,8 +1029,8 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.3.x
-    after_run:
-    - RunSmokeXCUITests
+    #after_run:
+    #- RunSmokeXCUITests
   xcode12-release-and-beta:
     steps:
     - activate-ssh-key@4.0:
