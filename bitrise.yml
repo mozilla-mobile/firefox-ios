@@ -1017,6 +1017,9 @@ workflows:
         - export_method: development
         - output_tool: xcodebuild
         - scheme: Fennec
+        - xcodebuild_options: >-
+            CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+            CODE_SIGNING_ALLOWED=NO
         - configuration: Fennec
     - deploy-to-bitrise-io@1.9: {}
     - cache-push@2.4: {}
