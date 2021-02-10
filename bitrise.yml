@@ -1014,7 +1014,7 @@ workflows:
         inputs:
         - compile_bitcode: 'yes'
         - upload_bitcode: 'yes'
-        - export_method: auto-detect
+        - export_method: development
         - output_tool: xcodebuild
         - configuration: Fennec
         - scheme: Fennec
