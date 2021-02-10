@@ -1010,6 +1010,13 @@ workflows:
         inputs:
         - scheme: Fennec
         - simulator_device: iPhone 8
+    - xcode-archive@2:
+        inputs:
+        - compile_bitcode: 'no'
+        - upload_bitcode: 'no'
+        - export_method: development
+        - output_tool: xcodebuild
+        - configuration: Fennec
     - deploy-to-bitrise-io@1.9: {}
     - cache-push@2.4: {}
     - slack@3.1:
