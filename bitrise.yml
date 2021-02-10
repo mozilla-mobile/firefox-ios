@@ -1016,12 +1016,13 @@ workflows:
         - upload_bitcode: 'no'
         - export_method: auto-detect
         - output_tool: xcodebuild
+        - team_id: 43AQ936H96
+        - configuration: Fennec
         - scheme: Fennec
         - xcodebuild_options: >-
             CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
             CODE_SIGNING_ALLOWED=NO
             UseModernBuildSystem=NO
-        - configuration: Fennec
     - deploy-to-bitrise-io@1.9: {}
     - cache-push@2.4: {}
     - slack@3.1:
