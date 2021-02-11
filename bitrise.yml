@@ -1006,21 +1006,19 @@ workflows:
             CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
             CODE_SIGNING_ALLOWED=NO
         - scheme: Fennec
-    - xcode-test@2:
-        inputs:
-        - scheme: Fennec
-        - simulator_device: iPhone 8
+    #- xcode-test@2:
+    #    inputs:
+    #    - scheme: Fennec
+    #    - simulator_device: iPhone 8
     - xcode-archive@3:
         inputs:
         - compile_bitcode: 'yes'
         - upload_bitcode: 'yes'
         - export_method: development
         - output_tool: xcodebuild
-        - configuration: Fennec
+        #- configuration: Fennec
         - scheme: Fennec
         - xcodebuild_options: >-
-            CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
-            CODE_SIGNING_ALLOWED=NO
             UseModernBuildSystem=NO
     - deploy-to-bitrise-io@1.9: {}
     - cache-push@2.4: {}
