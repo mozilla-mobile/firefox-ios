@@ -1019,6 +1019,8 @@ workflows:
         #- configuration: Fennec
         - scheme: Fennec
         - xcodebuild_options: >-
+            CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+            CODE_SIGNING_ALLOWED=NO
             UseModernBuildSystem=NO
     - deploy-to-bitrise-io@1.9: {}
     - cache-push@2.4: {}
