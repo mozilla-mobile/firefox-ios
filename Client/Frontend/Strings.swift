@@ -1317,5 +1317,4 @@ extension String {
     public static let DefaultSuggestedAmazon = MZLocalizedString("Amazon", comment: "Tile title for Amazon")
     public static let DefaultSuggestedWikipedia = MZLocalizedString("Wikipedia", comment: "Tile title for Wikipedia")
     public static let DefaultSuggestedTwitter = MZLocalizedString("Twitter", comment: "Tile title for Twitter")
-    public static let DefaultSuggestedGoogle = MZLocalizedString("Google", comment: "Tile title for Google")
 }
