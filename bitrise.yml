@@ -1006,10 +1006,14 @@ workflows:
             CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
             CODE_SIGNING_ALLOWED=NO
         - scheme: Fennec
-    - xcode-test@2:
+    #- xcode-test@2:
+    #    inputs:
+    #    - scheme: Fennec
+    #    - simulator_device: iPhone 8
+    - xcode-archive@2:
         inputs:
         - scheme: Fennec
-        - simulator_device: iPhone 8
+        - export_method: auto-detect
     - deploy-to-bitrise-io@1.9: {}
     - cache-push@2.4: {}
     - slack@3.1:
@@ -1021,8 +1025,8 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.3.x
-    after_run:
-    - RunSmokeXCUITests
+    #after_run:
+    #- RunSmokeXCUITests
   xcode12-release-and-beta:
     steps:
     - activate-ssh-key@4.0:
