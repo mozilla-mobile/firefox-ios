@@ -622,7 +622,6 @@ class BrowserViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         presentIntroViewController()
-        // presentETPCoverSheetViewController()  Hiding ETP onboarding for DB onboarding
         presentDBOnboardingViewController()
         presentUpdateViewController()
         screenshotHelper.viewIsVisible = true
@@ -2128,7 +2127,7 @@ extension BrowserViewController {
         }
         let dBOnboardingViewController = DefaultBrowserOnboardingViewController()
         if topTabsVisible {
-            dBOnboardingViewController.preferredContentSize = CGSize(width: ViewControllerConsts.PreferredSize.UpdateViewController.width, height: ViewControllerConsts.PreferredSize.UpdateViewController.height)
+            dBOnboardingViewController.preferredContentSize = CGSize(width: ViewControllerConsts.PreferredSize.DBOnboardingViewController.width, height: ViewControllerConsts.PreferredSize.DBOnboardingViewController.height)
             dBOnboardingViewController.modalPresentationStyle = .formSheet
         } else {
             dBOnboardingViewController.modalPresentationStyle = .popover
