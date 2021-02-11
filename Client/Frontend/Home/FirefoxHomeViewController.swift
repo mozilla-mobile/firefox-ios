@@ -589,14 +589,27 @@ public class GTopSiteAddition {
         return otherRegionDefaultUrl
     }
     
-    func hasAdded() -> Bool {
-        guard let value = prefs.boolForKey(PrefsKeys.GoogleTopSiteAddedKey) else {
-            // since value doesn't exist we return false and add set it
-            prefs.setBool(true, forKey: PrefsKeys.GoogleTopSiteAddedKey)
-            return false
+    var hasAdded: Bool {
+        get {
+            guard let value = prefs.boolForKey(PrefsKeys.GoogleTopSiteAddedKey) else {
+                // since value doesn't exist we return false
+                return false
+            }
+            return value
         }
-        return value
+        set(value) {
+            prefs.setBool(value, forKey: PrefsKeys.GoogleTopSiteAddedKey)
+        }
     }
+    
+//    func hasAdded() -> Bool {
+//        guard let value = prefs.boolForKey(PrefsKeys.GoogleTopSiteAddedKey) else {
+//            // since value doesn't exist we return false and add set it
+//            prefs.setBool(true, forKey: PrefsKeys.GoogleTopSiteAddedKey)
+//            return false
+//        }
+//        return value
+//    }
     
     func isHidden() -> Bool {
         guard let value = prefs.boolForKey(PrefsKeys.GoogleTopSiteHideKey) else {
@@ -609,7 +622,7 @@ public class GTopSiteAddition {
         prefs.setBool(true, forKey: PrefsKeys.GoogleTopSiteHideKey)
     }
     
-    func suggestedSiteData() -> SuggestedSite? {
+    func suggestedSiteData() -> PinnedSite? {
         guard let url = self.url else {
             return nil
         }
@@ -624,7 +637,13 @@ public class GTopSiteAddition {
         )
         return SuggestedSite(data: data)
         */
-        return SuggestedSite(trackingId: 000, url: url, title: String.DefaultSuggestedGoogle, guid: GTopSiteAddition.googleGUID)
+        let pinnedSite = PinnedSite(site: Site(url: url, title:String.DefaultSuggestedGoogle))
+        pinnedSite.guid = GTopSiteAddition.googleGUID
+            //Site(url: url, title: String.DefaultSuggestedGoogle, bookmarked: false, guid: GTopSiteAddition.googleGUID)
+//        let site = Site(url: url, title: String.DefaultSuggestedGoogle)
+
+        return pinnedSite
+        //return SuggestedSite(trackingId: 000, url: url, title: String.DefaultSuggestedGoogle, guid: GTopSiteAddition.googleGUID)
     }
     
     init(prefs: Prefs) {
@@ -653,13 +672,91 @@ extension FirefoxHomeViewController: DataObserverDelegate {
             let maxItems = Int(numRows) * self.topSitesManager.numberOfHorizontalItems()
             
             var sites = Array(result.prefix(maxItems))
-            // Adding top site when total top site count is less than max items i.e. 8
-            let gTopSiteAddition = GTopSiteAddition(prefs: self.profile.prefs)
-            if !gTopSiteAddition.isHidden() && sites.count < 8 {
-                if let gSite = gTopSiteAddition.suggestedSiteData() {
-                    sites.insert(gSite, at: 0)
+            
+            // Check if all result items are pinned site
+            var pinnedSites = 0
+            result.forEach {
+                if let _ = $0 as? PinnedSite {
+                    pinnedSites += 1
                 }
             }
+            // Adding top site when total top site count is less than max items i.e. 8
+            let gTopSiteAddition = GTopSiteAddition(prefs: self.profile.prefs)
+//            if pinnedSites < 8 && !gTopSiteAddition.isHidden() {
+            
+            // Check if user has removed pinned google top site
+            // -- isHidden == true
+            // -- Don't do anything
+            // Else if user has not removed google top site then we
+            // Check if pinned sites are less than 8
+            // -- less then 8
+            // -- -- add google top site
+            // -- -- set hasAdded to true // this value is to confirm that we have added google top site once
+            
+             
+            
+            let isIpad: Bool = UIDevice.current.userInterfaceIdiom == .pad
+            let isPortrait: Bool = UIApplication.shared.statusBarOrientation.isPortrait
+            let maxNumberOfTopSites = isIpad ? (isPortrait ? 12 : 16) : 8
+            if !gTopSiteAddition.isHidden() {
+                if let gSite = gTopSiteAddition.suggestedSiteData() {
+                    // Once Google top site is added, we don't remove unless it's explicitly unpinned
+                    if gTopSiteAddition.hasAdded {
+                        sites.insert(gSite, at: 0)
+                        // Purge unwated websites as topsites can only be equal to maxNumberOfTopSites
+                        if sites.count > maxNumberOfTopSites {
+                            sites.removeLast(sites.count - maxNumberOfTopSites)
+                        }
+                    } else if pinnedSites < maxNumberOfTopSites {
+                        // Add it when pinned websites are less than max pinned sites
+                        // Once added set the bool value for hasAdded to true so we don't remove it unless user explicitly unpins
+                        sites.insert(gSite, at: 0)
+                        gTopSiteAddition.hasAdded = true
+                        if sites.count > maxNumberOfTopSites {
+                            sites.removeLast(sites.count - maxNumberOfTopSites)
+                        }
+                    }
+                }
+            }
+                //                    sites.insert(gSite, at: 0)
+                //                }
+
+                
+                
+//                let closure = {
+//
+//                }
+//                // Has added but not hidden
+//                if gTopSiteAddition.hasAdded {
+//                    if pinnedSites < 8 {
+//                        sites.insert(gSite, at: 0)
+//                    } else {
+//                        sites.insert(gSite, at: 0)
+//                        sites.removeLast()
+//                    }
+//                } else
+//                    // Has not yet added and pinned sites are below 8 we add
+//                    sites.insert(gSite, at: 0)
+//                }
+//            }
+        
+            
+            
+//            if pinnedSites < 8 && !gTopSiteAddition.hasAdded {
+//                // Adding top site when total top site count is less than max items i.e. 8
+//                // let gTopSiteAddition = GTopSiteAddition(prefs: self.profile.prefs)
+//                // if !gTopSiteAddition.isHidden() && sites.count < 8 {
+//                if let gSite = gTopSiteAddition.suggestedSiteData() {
+//                    sites.insert(gSite, at: 0)
+//                }
+//                if pinnedSites > 8 {
+//                    sites.removeLast()
+//                }
+//                //}
+//            }
+            
+            
+
 
 //            if !gTopSiteAddition.hasAdded() || !gTopSiteAddition.isHidden() {
 //
@@ -713,11 +810,6 @@ extension FirefoxHomeViewController: DataObserverDelegate {
         guard let host = site.tileURL.normalizedHost else {
             return
         }
-        // Hide google top site
-        if site.guid == GTopSiteAddition.googleGUID {
-            let gTopSite = GTopSiteAddition(prefs: self.profile.prefs)
-            gTopSite.hide()
-        }
         let url = site.tileURL.absoluteString
         // if the default top sites contains the siteurl. also wipe it from default suggested sites.
         if defaultTopSites().filter({$0.url == url}).isEmpty == false {
@@ -737,6 +829,12 @@ extension FirefoxHomeViewController: DataObserverDelegate {
     }
 
     func removePinTopSite(_ site: Site) {
+        // Special Case: Hide google top site
+        if site.guid == GTopSiteAddition.googleGUID {
+            let gTopSite = GTopSiteAddition(prefs: self.profile.prefs)
+            gTopSite.hide()
+        }
+
         profile.history.removeFromPinnedTopSites(site).uponQueue(.main) { result in
             guard result.isSuccess else { return }
             self.profile.panelDataObservers.activityStream.refreshIfNeeded(forceTopSites: true)
