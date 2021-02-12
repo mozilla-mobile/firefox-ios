@@ -10,7 +10,7 @@
 # CI services where the Carthage directory can be cached.
 #
 # Use the --force option to force a rebuild of the dependencies.
-# Use the --locale option to fetch and update locales only
+# Use the --importLocales option to fetch and update locales only
 #
 
 getLocale()
@@ -22,11 +22,6 @@ getLocale()
   rm -rf firefoxios-l10n
   git clone --depth 1 https://github.com/mozilla-l10n/firefoxios-l10n firefoxios-l10n || exit 1
 }
-
-if [ "$1" == "--locale" ]; then
-  getLocale
-  exit 0
-fi
 
 if [ "$1" == "--force" ]; then
     rm -rf firefoxios-l10n

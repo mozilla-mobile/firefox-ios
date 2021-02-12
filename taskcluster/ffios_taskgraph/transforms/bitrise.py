@@ -91,7 +91,7 @@ def add_bitrise_command(config, tasks):
         ]
 
         for locale in task["attributes"]["chunk_locales"]:
-            command.extend(["--locale", locale])
+            command.extend(["--importLocales", locale])
 
         derived_data_path = task.pop("build-derived-data-path", "")
         if derived_data_path:
@@ -115,7 +115,7 @@ def add_bitrise_command(config, tasks):
 #        ]
 
 #        for locale in task["attributes"]["chunk_locales"]:
-#            command.extend(["--locale", locale])
+#            command.extend(["--importLocales", locale])
 
 #        commands.append(command)
 

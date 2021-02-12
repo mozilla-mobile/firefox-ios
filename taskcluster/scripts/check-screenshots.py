@@ -23,7 +23,7 @@ def main():
 
     parser.add_argument("--artifacts-directory", required=True, help="The directory containing the zip archives to look into")
     parser.add_argument("--screenshots-configuration", type=argparse.FileType("r"), required=True, help="YAML file that contains the number of screenshots to expect as well as exceptions/")
-    parser.add_argument("--locale", dest="locales", metavar="LOCALE", action="append", required=True, help="locale that must be present(can be repeated)")
+    parser.add_argument("--importLocales", dest="locales", metavar="LOCALE", action="append", required=True, help="locale that must be present(can be repeated)")
 
     result = parser.parse_args()
 
