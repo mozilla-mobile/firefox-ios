@@ -1,5 +1,11 @@
+/* (No Comment) */
+"1Password Fill Browser Action" = "1Password Fill Browser Action";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "สิ่งนี้ช่วยให้คุณถ่ายและอัปโหลดรูปถ่าย";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Firefox ต้องใช้ Face ID เพื่อเข้าถึงการเข้าสู่ระบบที่คุณบันทึกไว้";
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this

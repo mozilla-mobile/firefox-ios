@@ -14,7 +14,13 @@
 "DefaultBrowserOnboarding.Description1" = "1. Ga naar Instellingen";
 
 /* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description2" = "2. Tik op Standaard browser-app";
+
+/* Description for default browser onboarding card. */
 "DefaultBrowserOnboarding.Description3" = "3. Selecteer Firefox";
+
+/* Text for the screenshot of the iOS system settings page for Firefox. */
+"DefaultBrowserOnboarding.Screenshot" = "Standaard browser-app";
 
 /* Menu option for setting Firefox as default browser. */
 "Settings.DefaultBrowserMenuItem" = "Als standaardbrowser instellen";

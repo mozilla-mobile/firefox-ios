@@ -1,5 +1,11 @@
+/* (No Comment) */
+"1Password Fill Browser Action" = "Ação de preenchimento de palavras-passe do navegador";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Isto deixa-lhe tirar e carregar fotos.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "O Firefox necessita do Face ID para aceder às suas credenciais guardadas.";
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this

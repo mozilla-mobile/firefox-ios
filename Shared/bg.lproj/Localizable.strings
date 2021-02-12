@@ -352,6 +352,9 @@
 /* Button label to resend email */
 "FxA.ResendEmail" = "Повторно изпращане";
 
+/* FxA sign in view title */
+"fxa.signin.turn-on-sync" = "Включване на Sync";
+
 /* Button label to sign into Sync */
 "FxA.SignIntoSync" = "Вписване в Sync";
 

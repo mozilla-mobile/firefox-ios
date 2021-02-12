@@ -1,5 +1,11 @@
+/* (No Comment) */
+"1Password Fill Browser Action" = "Browseractie 1Password Fill";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Hiermee kunt u foto’s maken en uploaden.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Firefox vereist Face ID om uw opgeslagen aanmeldingen te benaderen.";
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this

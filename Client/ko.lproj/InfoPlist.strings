@@ -1,5 +1,11 @@
+/* (No Comment) */
+"1Password Fill Browser Action" = "1Password 브라우저 채우기 동작";
+
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "사진을 찍고 업로드 할 수 있게 합니다.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Firefox가 저장된 로그인에 접근하기 위해 Face ID가 필요합니다.";
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this

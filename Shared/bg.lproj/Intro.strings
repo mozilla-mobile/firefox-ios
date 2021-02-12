@@ -19,3 +19,6 @@
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "Започнете да разглеждате";
 
+/* The button that opens the sign in page for sync. See http://mzl.la/1T8gxwo */
+"Turn on Sync…" = "Включване на Sync…";
+
