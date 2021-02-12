@@ -32,9 +32,13 @@ jobs:
         git diff
         git config --global user.email "firefox-test-engineering@mozilla.com"
         git config --global user.name "Firefox Test Engineering"
-        git diff --quiet || (git add bitrise.yml && git commit -m "Updated bitrise.yml")
-    - name: Push changes
-      uses: ad-m/github-push-action@master
+        git diff --quiet || (git add bitrise.yml)
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v3
       with:
+        commit-message: Auto Update Bitrise
+        author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+        committer: GitHub <noreply@github.com>
+        title: Bitrise changes
+        branch: update-br-new-xcode-version
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: ${{ github.ref }}
