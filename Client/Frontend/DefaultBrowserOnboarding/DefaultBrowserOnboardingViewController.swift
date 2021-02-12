@@ -31,7 +31,11 @@ import Leanplum
 
 struct DBOnboardingUX {
     static let textOffset = 20
+    static let textOffsetSmall = 13
     static let fontSize: CGFloat = 24
+    static let fontSizeSmall: CGFloat = 20
+    static let containerViewHeight = 350
+    static let containerViewHeightSmall = 300
 }
 
 class DefaultBrowserOnboardingViewController: UIViewController {
@@ -46,6 +50,8 @@ class DefaultBrowserOnboardingViewController: UIViewController {
     private var fxBackgroundThemeColour: UIColor {
         return DefaultBrowserOnboardingViewController.theme == .dark ? UIColor(rgb: 0x1C1C1E) : .white
     }
+    // Orientation independent screen size
+    private let screenSize = DeviceInfo.screenSizeOrientationIndependent()
     private lazy var closeButton: UIButton = {
         let closeButton = UIButton()
         closeButton.setImage(UIImage(named: "close-large"), for: .normal)
@@ -88,7 +94,7 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         let label = UILabel()
         label.text = viewModel.model?.descriptionText[0]
         label.textColor = fxTextThemeColour
-        label.font = UIFont.systemFont(ofSize: DBOnboardingUX.fontSize)
+        label.font = UIFont.systemFont(ofSize: screenSize.height > 668 ? DBOnboardingUX.fontSize : DBOnboardingUX.fontSizeSmall)
         label.textAlignment = .left
         label.numberOfLines = 3
         return label
@@ -97,7 +103,7 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         let label = UILabel()
         label.text = viewModel.model?.descriptionText[1]
         label.textColor = fxTextThemeColour
-        label.font = UIFont.systemFont(ofSize: DBOnboardingUX.fontSize)
+        label.font = UIFont.systemFont(ofSize: screenSize.height > 668 ? DBOnboardingUX.fontSize : DBOnboardingUX.fontSizeSmall)
         label.textAlignment = .left
         label.numberOfLines = 0
         return label
@@ -106,7 +112,7 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         let label = UILabel()
         label.text = viewModel.model?.descriptionText[2]
         label.textColor = fxTextThemeColour
-        label.font = UIFont.systemFont(ofSize: DBOnboardingUX.fontSize)
+        label.font = UIFont.systemFont(ofSize: screenSize.height > 668 ? DBOnboardingUX.fontSize : DBOnboardingUX.fontSizeSmall)
         label.textAlignment = .left
         label.numberOfLines = 0
         return label
@@ -115,7 +121,7 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         let label = UILabel()
         label.text = viewModel.model?.descriptionText[3]
         label.textColor = fxTextThemeColour
-        label.font = UIFont.systemFont(ofSize: DBOnboardingUX.fontSize)
+        label.font = UIFont.systemFont(ofSize: screenSize.height > 668 ? DBOnboardingUX.fontSize : DBOnboardingUX.fontSizeSmall)
         label.textAlignment = .left
         label.numberOfLines = 0
         return label
@@ -130,6 +136,9 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         return button
     }()
     
+    // Used to set the part of text in center 
+    private var containerView = UIView()
+    
     init() {
         super.init(nibName: nil, bundle: nil)
     }
@@ -143,6 +152,18 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         initialViewSetup()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // Portrait orientation: lock enable
+        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        // Portrait orientation: lock disable
+        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.all)
+    }
+    
     func initialViewSetup() {
         self.view.backgroundColor = fxBackgroundThemeColour
         
@@ -150,11 +171,12 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         self.view.addSubview(topImageView)
         self.view.addSubview(imageText)
         self.view.addSubview(closeButton)
-        textView.addSubview(titleLabel)
-        textView.addSubview(descriptionText)
-        textView.addSubview(descriptionLabel1)
-        textView.addSubview(descriptionLabel2)
-        textView.addSubview(descriptionLabel3)
+        textView.addSubview(containerView)
+        containerView.addSubview(titleLabel)
+        containerView.addSubview(descriptionText)
+        containerView.addSubview(descriptionLabel1)
+        containerView.addSubview(descriptionLabel2)
+        containerView.addSubview(descriptionLabel3)
         self.view.addSubview(textView)
         self.view.addSubview(goToSettingsButton)
         
@@ -194,27 +216,38 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         textView.snp.makeConstraints { make in
             make.top.equalTo(topImageView.snp.bottom).offset(DBOnboardingUX.textOffset)
             make.left.right.equalToSuperview().inset(36)
+            make.bottom.equalTo(goToSettingsButton.snp.top)
         }
+        
+        let containerViewHeight = screenSize.height > 668 ? DBOnboardingUX.containerViewHeight : DBOnboardingUX.containerViewHeightSmall
+        containerView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.height.equalTo(containerViewHeight)
+        }
+        
         // Top title label constraints setup
         titleLabel.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.left.right.equalToSuperview()
         }
+        
+        let textOffset = screenSize.height > 668 ? DBOnboardingUX.textOffset : DBOnboardingUX.textOffsetSmall
         descriptionText.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(DBOnboardingUX.textOffset)
+            make.top.equalTo(titleLabel.snp.bottom).offset(textOffset)
             make.left.right.equalToSuperview()
         }
         // Description title label constraints setup
         descriptionLabel1.snp.makeConstraints { make in
-            make.top.equalTo(descriptionText.snp.bottom).offset(DBOnboardingUX.textOffset)
+            make.top.equalTo(descriptionText.snp.bottom).offset(textOffset)
         }
         // Description title label constraints setup
         descriptionLabel2.snp.makeConstraints { make in
-            make.top.equalTo(descriptionLabel1.snp.bottom).offset(DBOnboardingUX.textOffset)
+            make.top.equalTo(descriptionLabel1.snp.bottom).offset(textOffset)
         }
         // Description title label constraints setup
         descriptionLabel3.snp.makeConstraints { make in
-            make.top.equalTo(descriptionLabel2.snp.bottom).offset(DBOnboardingUX.textOffset)
+            make.top.equalTo(descriptionLabel2.snp.bottom).offset(textOffset)
         }
         // Bottom settings button constraints
         goToSettingsButton.snp.makeConstraints { make in
@@ -238,17 +271,5 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .goToSettingsDefaultBrowserOnboarding)
         LeanPlumClient.shared.track(event: .goToSettingsDefaultBrowserOnboarding)
     }
-}
-
-// UIViewController setup to keep it in portrait mode
-extension DefaultBrowserOnboardingViewController {
-    override var shouldAutorotate: Bool {
-        return false
-    }
-
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        // This actually does the right thing on iPad where the modally
-        // presented version happily rotates with the iPad orientation.
-        return .portrait
-    }
+    
 }
