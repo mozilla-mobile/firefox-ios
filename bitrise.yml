@@ -2725,7 +2725,7 @@ workflows:
 
             brew install jq
 
-            resp=$(curl -X GET -s -H 'Accept: application/vnd.github.v3+json' -H "authorization: Bearer ${GITHUB_ACCESS_TOKEN}" https://api.github.com/repos/mozilla-mobile/firefox-ios/commits\?sha\=main\&since\=$YESTERDAY | jq -r '.[].commit.author | select(.name | contains("Firefox Test Engineering"))')
+            resp=$(curl -X GET -s -H 'Accept: application/vnd.github.v3+json' -H "authorization: Bearer ${GITHUB_ACCESS_TOKEN}" https://api.github.com/repos/mozilla-mobile/firefox-ios/commits\?sha\=main\&since\=$YESTERDAY | jq -r '.[].commit.message | select(contains("Auto Update Bitrise.YML"))')
             echo $resp
             if [ -z "$resp" ]
             then
