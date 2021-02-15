@@ -16,12 +16,6 @@ open class SuggestedSite: Site {
         super.init(url: data.url, title: data.title, bookmarked: nil)
         self.guid = "default" + data.title // A guid is required in the case the site might become a pinned site
     }
-    
-    public init(trackingId: Int, url: String, title: String, guid: String) {
-        self.trackingId = trackingId
-        super.init(url: url, title: title, bookmarked: nil)
-        self.guid = guid
-    }
 }
 
 public let SuggestedSites = SuggestedSitesCursor()
@@ -49,13 +43,4 @@ public struct SuggestedSiteData {
     var faviconUrl: String
     var trackingId: Int
     var title: String
-    
-    public init(url: String, bgColor: String, imageUrl: String, faviconUrl: String, trackingId: Int, title: String) {
-        self.url = url
-        self.bgColor = bgColor
-        self.imageUrl = imageUrl
-        self.faviconUrl = faviconUrl
-        self.trackingId = trackingId
-        self.title = title
-    }
 }
