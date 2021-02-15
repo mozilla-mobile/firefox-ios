@@ -610,13 +610,8 @@ extension FirefoxHomeViewController: DataObserverDelegate {
             self.topSitesManager.content = sites
             self.topSitesManager.urlPressedHandler = { [unowned self] url, indexPath in
                 self.longPressRecognizer.isEnabled = false
-//                self.showSiteWithURLHandler(url as URL)
-                let isGoogleTopSiteUrl = url.absoluteString == GoogleTopSiteHelper.usUrl || url.absoluteString == GoogleTopSiteHelper.rowUrl
+                let isGoogleTopSiteUrl = url.absoluteString == GoogleTopSiteConstants.usUrl || url.absoluteString == GoogleTopSiteConstants.rowUrl
                 self.showSiteWithURLHandler(url as URL, isGoogleTopSite: isGoogleTopSiteUrl)
-                // Telemetry for google top site
-//                if isGoogleTopSiteUrl {
-                    //GoogleTopSiteHelper.trackGoogleTopSiteTap(code: GoogleTopSiteHelper.code[url.absoluteString] ?? "")
-//                }
             }
 
             self.getPocketSites().uponQueue(.main) { _ in
@@ -680,7 +675,7 @@ extension FirefoxHomeViewController: DataObserverDelegate {
 
     func removePinTopSite(_ site: Site) {
         // Special Case: Hide google top site
-        if site.guid == GoogleTopSiteHelper.googleGUID {
+        if site.guid == GoogleTopSiteConstants.googleGUID {
             let gTopSite = GoogleTopSiteHelper(prefs: self.profile.prefs)
             gTopSite.isHidden = true
         }

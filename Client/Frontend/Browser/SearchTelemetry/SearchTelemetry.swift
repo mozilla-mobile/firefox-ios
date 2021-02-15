@@ -38,26 +38,26 @@ class SearchTelemetry {
     }
     // sap: directly from search access point
     func trackSAP() {
-//        GleanMetrics.Search.inContent["\(provider).in-content.sap.\(code)"].add()
+        GleanMetrics.Search.inContent["\(provider).in-content.sap.\(code)"].add()
     }
     
     // sap-follow-on: user continues to search from an existing sap search
     func trackSAPFollowOn() {
-//        GleanMetrics.Search.inContent["\(provider).in-content.sap-follow-on.\(code)"].add()
+        GleanMetrics.Search.inContent["\(provider).in-content.sap-follow-on.\(code)"].add()
     }
     
     // organic: search that didn't come from a SAP
     func trackOrganic() {
-//        GleanMetrics.Search.inContent["\(provider).organic.none"].add()
+        GleanMetrics.Search.inContent["\(provider).organic.none"].add()
     }
     
     //MARK: Google Top Site SAP
     func trackGoogleTopSiteTap() {
-//        GleanMetrics.Search.googleTopsitePressed["\(SearchEngine.google).\(code)"].add()
+        GleanMetrics.Search.googleTopsitePressed["\(SearchEngine.google).\(code)"].add()
     }
     
     func trackGoogleTopSiteFollowOn() {
-//        GleanMetrics.Search.inContent["\(SearchEngine.google).in-content.google-topsite-follow-on.\(code)"].add()
+        GleanMetrics.Search.inContent["\(SearchEngine.google).in-content.google-topsite-follow-on.\(code)"].add()
     }
 }
 

@@ -662,7 +662,6 @@ extension BrowserViewController: WKNavigationDelegate {
         
         if shouldSetGoogleTopSiteSearch {
             tab.urlType = .googleTopSite
-            shouldSetUrlTypeSearch = false
             shouldSetGoogleTopSiteSearch = false
             telemetry.trackGoogleTopSiteTap()
         } else if shouldSetUrlTypeSearch {

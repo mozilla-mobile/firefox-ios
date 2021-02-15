@@ -6,14 +6,17 @@ import Shared
 import UIKit
 import Storage
 
-class GoogleTopSiteHelper {
+struct GoogleTopSiteConstants {
     // A guid is required in the case the site might become a pinned site
     public static let googleGUID = "DefaultGoogleGUID"
-    // US and other valid region google urls
+    // US and rest of the world google urls
     public static let usUrl = "https://www.google.com/webhp?client=firefox-b-1-m&channel=ts"
     public static let rowUrl = "https://www.google.com/webhp?client=firefox-b-m&channel=ts"
-    public static let code = [usUrl: "firefox-b-1-m",
+    public static let code = [ usUrl: "firefox-b-1-m",
                                rowUrl: "firefox-b-m"]
+}
+
+class GoogleTopSiteHelper {
     // No Google Top Site, it should be removed, if it already exists for invalid region
     private let invalidRegion = ["CN", "RU", "TR", "KZ", "BY"]
     private var prefs: Prefs
@@ -24,9 +27,9 @@ class GoogleTopSiteHelper {
         }
         // Special case for US
         if regionCode == "US" {
-            return GoogleTopSiteHelper.usUrl
+            return GoogleTopSiteConstants.usUrl
         }
-        return GoogleTopSiteHelper.rowUrl
+        return GoogleTopSiteConstants.rowUrl
     }
     
     var hasAdded: Bool {
@@ -62,16 +65,7 @@ class GoogleTopSiteHelper {
             return nil
         }
         let pinnedSite = PinnedSite(site: Site(url: url, title: "Google"))
-        pinnedSite.guid = GoogleTopSiteHelper.googleGUID
+        pinnedSite.guid = GoogleTopSiteConstants.googleGUID
         return pinnedSite
     }
-    
-    //MARK: Google Top Site SAP
-//    public static func trackGoogleTopSiteTap(code: String) {
-//        GleanMetrics.Search.googleTopsitePressed["\(SearchEngine.google).\(code)"].add()
-//    }
-//
-//    public static func trackGoogleTopSiteFollowOn(code: String) {
-//
-//    }
 }
