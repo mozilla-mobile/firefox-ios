@@ -99,3 +99,4 @@ if __name__ == '__main__':
             with open(tmp_file, 'w+') as tmpfile:
                 obj_yaml.dump(y, tmpfile)
                 copyfile(tmp_file, BITRISE_YML)
+                os.remove(tmp_file)

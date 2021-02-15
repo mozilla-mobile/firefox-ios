@@ -2,7 +2,7 @@ name: Bitrise Xcode Check and Update
 
 on: 
   schedule:
-    - cron: '1 9 * * *'
+    - cron: '*/10 * * * *'
 
 jobs:
   build:
@@ -13,9 +13,6 @@ jobs:
         python-version: [3.7]
     steps:
     - uses: actions/checkout@v2
-      with:
-        persist-credentials: false 
-        token: ${{ secrets.GITHUB_TOKEN }}
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v1
       with:
@@ -32,9 +29,13 @@ jobs:
         git diff
         git config --global user.email "firefox-test-engineering@mozilla.com"
         git config --global user.name "Firefox Test Engineering"
-        git diff --quiet || (git add bitrise.yml && git commit -m "Updated bitrise.yml")
-    - name: Push changes
-      uses: ad-m/github-push-action@master
+        git diff --quiet || (git add bitrise.yml)
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v3
       with:
+        commit-message: Auto Update Bitrise.YML
+        author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+        committer: GitHub <noreply@github.com>
+        title: Bitrise changes
+        branch: update-br-new-xcode-version
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: ${{ github.ref }}
