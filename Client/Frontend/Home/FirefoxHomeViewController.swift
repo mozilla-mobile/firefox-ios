@@ -59,7 +59,7 @@ struct UXSizeClasses {
 
 protocol HomePanelDelegate: AnyObject {
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
-    func homePanel(didSelectURL url: URL, visitType: VisitType)
+    func homePanel(didSelectURL url: URL, visitType: VisitType, isGoogleTopSite: Bool)
     func homePanelDidRequestToOpenLibrary(panel: LibraryPanelType)
 }
 
@@ -486,9 +486,9 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
         return UIEdgeInsets(top: 0, left: insets, bottom: 0, right: insets)
     }
 
-    fileprivate func showSiteWithURLHandler(_ url: URL) {
+    fileprivate func showSiteWithURLHandler(_ url: URL, isGoogleTopSite: Bool = false) {
         let visitType = VisitType.bookmark
-        homePanelDelegate?.homePanel(didSelectURL: url, visitType: visitType)
+        homePanelDelegate?.homePanel(didSelectURL: url, visitType: visitType, isGoogleTopSite: isGoogleTopSite)
     }
 }
 
@@ -590,7 +590,7 @@ extension FirefoxHomeViewController: DataObserverDelegate {
                     pinnedSites += 1
                 }
             }
-            // Special Case: Adding Google topsite
+            // Special case: Adding Google topsite
             let googleTopSite = GoogleTopSiteHelper(prefs: self.profile.prefs)
             let isIpad: Bool = UIDevice.current.userInterfaceIdiom == .pad
             let isPortrait: Bool = UIApplication.shared.statusBarOrientation.isPortrait
@@ -610,7 +610,13 @@ extension FirefoxHomeViewController: DataObserverDelegate {
             self.topSitesManager.content = sites
             self.topSitesManager.urlPressedHandler = { [unowned self] url, indexPath in
                 self.longPressRecognizer.isEnabled = false
-                self.showSiteWithURLHandler(url as URL)
+//                self.showSiteWithURLHandler(url as URL)
+                let isGoogleTopSiteUrl = url.absoluteString == GoogleTopSiteHelper.usUrl || url.absoluteString == GoogleTopSiteHelper.rowUrl
+                self.showSiteWithURLHandler(url as URL, isGoogleTopSite: isGoogleTopSiteUrl)
+                // Telemetry for google top site
+//                if isGoogleTopSiteUrl {
+                    //GoogleTopSiteHelper.trackGoogleTopSiteTap(code: GoogleTopSiteHelper.code[url.absoluteString] ?? "")
+//                }
             }
 
             self.getPocketSites().uponQueue(.main) { _ in

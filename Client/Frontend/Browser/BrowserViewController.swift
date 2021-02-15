@@ -63,6 +63,7 @@ class BrowserViewController: UIViewController {
     var screenshotHelper: ScreenshotHelper!
     fileprivate var homePanelIsInline = false
     var shouldSetUrlTypeSearch = false
+    var shouldSetGoogleTopSiteSearch = false
     fileprivate var searchLoader: SearchLoader?
     let alertStackView = UIStackView() // All content that appears above the footer should be added to this view. (Find In Page/SnackBars)
     var findInPageBar: FindInPageBar?
@@ -1824,8 +1825,12 @@ extension BrowserViewController: HomePanelDelegate {
         view.endEditing(true)
     }
 
-    func homePanel(didSelectURL url: URL, visitType: VisitType) {
+    func homePanel(didSelectURL url: URL, visitType: VisitType, isGoogleTopSite: Bool) {
         guard let tab = tabManager.selectedTab else { return }
+        if isGoogleTopSite {
+            tab.urlType = .googleTopSite
+            shouldSetGoogleTopSiteSearch = true
+        }
         finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
     }
 

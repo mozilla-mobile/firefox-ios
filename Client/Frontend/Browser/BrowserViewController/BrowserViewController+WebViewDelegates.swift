@@ -660,15 +660,24 @@ extension BrowserViewController: WKNavigationDelegate {
         let code = SearchPartner.getCode(searchEngine: provider, region: Locale.current.regionCode == "US" ? "US" : "ROW")
         let telemetry = SearchTelemetry(code, provider: provider)
         
-        if shouldSetUrlTypeSearch {
+        if shouldSetGoogleTopSiteSearch {
+            tab.urlType = .googleTopSite
+            shouldSetUrlTypeSearch = false
+            shouldSetGoogleTopSiteSearch = false
+            telemetry.trackGoogleTopSiteTap()
+        } else if shouldSetUrlTypeSearch {
             tab.urlType = .search
             shouldSetUrlTypeSearch = false
             telemetry.trackSAP()
         } else if let webUrl = webView.url {
             let components = URLComponents(url: webUrl, resolvingAgainstBaseURL: false)!
             let clientValue = components.valueForQuery("client")
+            // Special case google followOn search
+            if (tab.urlType == .googleTopSite || tab.urlType == .googleTopSiteFollowOn) && clientValue == code {
+                tab.urlType = .googleTopSiteFollowOn
+                telemetry.trackGoogleTopSiteFollowOn()
             // Check if previous tab type is search
-            if (tab.urlType == .search || tab.urlType == .followOnSearch) && clientValue == code {
+            } else if (tab.urlType == .search || tab.urlType == .followOnSearch) && clientValue == code {
                 tab.urlType = .followOnSearch
                 telemetry.trackSAPFollowOn()
             } else if provider == .google {

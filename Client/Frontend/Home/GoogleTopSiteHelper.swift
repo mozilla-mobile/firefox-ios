@@ -9,7 +9,12 @@ import Storage
 class GoogleTopSiteHelper {
     // A guid is required in the case the site might become a pinned site
     public static let googleGUID = "DefaultGoogleGUID"
-    // No Google Top Site, we should be removed, if it already exists for invalid region
+    // US and other valid region google urls
+    public static let usUrl = "https://www.google.com/webhp?client=firefox-b-1-m&channel=ts"
+    public static let rowUrl = "https://www.google.com/webhp?client=firefox-b-m&channel=ts"
+    public static let code = [usUrl: "firefox-b-1-m",
+                               rowUrl: "firefox-b-m"]
+    // No Google Top Site, it should be removed, if it already exists for invalid region
     private let invalidRegion = ["CN", "RU", "TR", "KZ", "BY"]
     private var prefs: Prefs
     private var url: String? {
@@ -17,13 +22,11 @@ class GoogleTopSiteHelper {
         guard let regionCode = Locale.current.regionCode, !invalidRegion.contains(regionCode) else {
             return nil
         }
-        let usRegionDefaultUrl = "https://www.google.com/webhp?client=firefox-b-1-m&channel=ts"
-        let otherRegionDefaultUrl = "https://www.google.com/webhp?client=firefox-b-m&channel=ts"
         // Special case for US
         if regionCode == "US" {
-            return usRegionDefaultUrl
+            return GoogleTopSiteHelper.usUrl
         }
-        return otherRegionDefaultUrl
+        return GoogleTopSiteHelper.rowUrl
     }
     
     var hasAdded: Bool {
@@ -50,6 +53,10 @@ class GoogleTopSiteHelper {
         }
     }
     
+    init(prefs: Prefs) {
+        self.prefs = prefs
+    }
+    
     func suggestedSiteData() -> PinnedSite? {
         guard let url = self.url else {
             return nil
@@ -59,7 +66,12 @@ class GoogleTopSiteHelper {
         return pinnedSite
     }
     
-    init(prefs: Prefs) {
-        self.prefs = prefs
-    }
+    //MARK: Google Top Site SAP
+//    public static func trackGoogleTopSiteTap(code: String) {
+//        GleanMetrics.Search.googleTopsitePressed["\(SearchEngine.google).\(code)"].add()
+//    }
+//
+//    public static func trackGoogleTopSiteFollowOn(code: String) {
+//
+//    }
 }
