@@ -38,4 +38,4 @@ jobs:
         committer: GitHub <noreply@github.com>
         title: Bitrise changes
         branch: update-br-new-xcode-version
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
