@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "U bë";
+
+/* Text selection menu item */
+"Find in Page" = "Gjej në Faqe";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "Përfundimi pasues në faqe";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "Përfundimi i mëparshëm në faqe";
+

@@ -1,0 +1,27 @@
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Button" = "ਸੈਟਿੰਗਾਂ ਉੱਤੇ ਜਾਓ";
+
+/* Description for small card shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Description" = "ਵੈੱਬਸਾਈਟਾਂ, ਈਮੇਲਾਂ ਅਤੇ ਸੁਨੇਹਿਆਂ ਵਿੱਚੋਂ ਲਿੰਕਾਂ ਨੂੰ Firefox ਵਿੱਚ ਸਿੱਧਾ ਖੋਲ੍ਹਣ ਲਈ ਸੈੱਟ ਕਰੋ।";
+
+/* Title for small card shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Title" = "ਆਪਣੇ ਮੂਲ ਬਰਾਊਜ਼ਰ ਨੂੰ ਬਦਲੋ";
+
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserOnboarding.Button" = "ਸੈਟਿੰਗਾਂ ਉੱਤੇ ਜਾਓ";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description1" = "1. Settings ਉੱਤੇ ਜਾਓ";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description2" = "2. Default Browser App ਨੂੰ ਛੂਹੋ";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description3" = "3. Firefox ਚੁਣੋ";
+
+/* Text for the screenshot of the iOS system settings page for Firefox. */
+"DefaultBrowserOnboarding.Screenshot" = "ਮੂਲ ਬਰਾਊਜ਼ਰ ਐਪ";
+
+/* Menu option for setting Firefox as default browser. */
+"Settings.DefaultBrowserMenuItem" = "ਮੂਲ ਬਰਾਊਜ਼ਰ ਵਜੋਂ ਸੈੱਟ ਕਰੋ";
+

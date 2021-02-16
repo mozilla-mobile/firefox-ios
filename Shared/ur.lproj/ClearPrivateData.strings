@@ -1,0 +1,18 @@
+/* Settings item for clearing browsing history */
+"Browsing History" = "براؤزنگ سابقات";
+
+/* Settings item for clearing the cache */
+"Cache" = "کیسہ";
+
+/* Settings item for clearing cookies */
+"Cookies" = "کوکیز";
+
+/* Settings item for deleting downloaded files */
+"Downloaded Files" = "ڈائونلوڈ شدہ امسال";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "آف لائن ویب سائٹ کوائف";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "محفوظ شدہ لاگ ان";
+

@@ -1,0 +1,23 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "ᱱᱚᱶᱟ ᱛᱮ ᱟᱢ ᱪᱤᱛᱟᱹᱨ ᱨᱟᱠᱟᱵ ᱟᱨ ᱞᱟᱫᱮ ᱫᱟᱰᱮᱭᱟᱜᱼᱟᱢ᱾";
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSLocationWhenInUseUsageDescription" = "ᱦᱤᱨᱤᱟᱠᱟᱱ ᱣᱮᱵᱥᱟᱭᱤᱴ ᱟᱢᱟᱜ ᱡᱟᱭᱜᱟ ᱠᱚ ᱠᱷᱚᱡ ᱫᱟᱲᱮᱟᱜᱼᱟ᱾";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "ᱱᱚᱶᱟ ᱛᱮ ᱟᱢ ᱣᱤᱲᱤᱭᱚ ᱨᱟᱠᱟᱵ ᱟᱨ ᱞᱟᱫᱮ ᱫᱟᱰᱮᱭᱟᱜᱼᱟᱢ ᱾";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "ᱱᱚᱶᱟ ᱛᱮ ᱟᱢ ᱪᱤᱛᱟᱹᱨᱠᱚ ᱥᱟᱸᱪᱟᱣ ᱫᱟᱰᱮᱭᱟᱜᱼᱟᱢ ᱾";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "ᱱᱟᱶᱟ ᱱᱤᱡᱮᱨᱟᱠ ᱴᱮᱵ";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "ᱱᱟᱶᱟ ᱴᱮᱵ";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "Scan QR ᱠᱚᱰ ᱥᱠᱟᱱ ᱢᱮ";
+

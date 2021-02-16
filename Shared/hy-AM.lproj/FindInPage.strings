@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "Պատրաստ է";
+
+/* Text selection menu item */
+"Find in Page" = "Գտնել էջում";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "Հաջորդը արդյունքը էջում";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "Նախորդ արդյունքը էջում";
+

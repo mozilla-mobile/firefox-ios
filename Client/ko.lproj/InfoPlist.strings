@@ -1,0 +1,29 @@
+/* (No Comment) */
+"1Password Fill Browser Action" = "1Password 브라우저 채우기 동작";
+
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "사진을 찍고 업로드 할 수 있게 합니다.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Firefox가 저장된 로그인에 접근하기 위해 Face ID가 필요합니다.";
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSLocationWhenInUseUsageDescription" = "방문한 웹사이트에서 위치 정보를 요청할 수 있습니다.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "동영상을 찍고 업로드 할 수 있게 합니다.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "사진을 저장할 수 있게 합니다.";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "새 사생활 탭";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "새 탭";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "QR 코드 스캔";
+

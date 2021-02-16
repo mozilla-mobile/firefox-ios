@@ -1,0 +1,6 @@
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Button" = "ترتیبات پر جائیں";
+
+/* Title for small card shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Title" = "اپنا طے شدہ  براؤزر سوئچ کریں";
+

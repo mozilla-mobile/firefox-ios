@@ -1,0 +1,1712 @@
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "กำลังขอชื่อผู้ใช้และรหัสผ่านโดย %@";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "กำลังขอชื่อผู้ใช้และรหัสผ่านโดย %1$@ ไซต์ระบุว่า: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "เกี่ยวกับ";
+
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite" = "ปักหมุดไปยังไซต์เด่น";
+
+/* The title for removing a pinned topsite action */
+"ActivityStream.ContextMenu.RemovePinTopsite" = "เอาไซต์ที่ปักหมุดออก";
+
+/* The description of a highlight if it is a site the user has bookmarked */
+"ActivityStream.Highlights.Bookmark" = "เพิ่มที่คั่นหน้าแล้ว";
+
+/* The description of a highlight if it is a site the user has visited */
+"ActivityStream.Highlights.Visited" = "เยี่ยมชมแล้ว";
+
+/* Section title label for recently bookmarked websites */
+"ActivityStream.NewRecentBookmarks.Title" = "ที่คั่นหน้าล่าสุด";
+
+/* The link that shows more Pocket trending stories */
+"ActivityStream.Pocket.MoreLink" = "เพิ่มเติม";
+
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle" = "กำลังนิยมใน Pocket";
+
+/* The description of a Pocket Story */
+"ActivityStream.Pocket.Trending" = "กำลังนิยม";
+
+/* Section title label for recently visited websites */
+"ActivityStream.RecentHistory.Title" = "เยี่ยมชมล่าสุด";
+
+/* label showing how many rows of topsites are shown. %d represents a number */
+"ActivityStream.TopSites.RowCount" = "แถว: %d";
+
+/* The title for the setting page which lets you select the number of top site rows */
+"ActivityStream.TopSites.RowSettingFooter" = "ตั้งแถว";
+
+/* Section title label for Top Sites */
+"ActivityStream.TopSites.SectionTitle" = "ไซต์เด่น";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "เพิ่มแท็บ";
+
+/* Accessibility label for action adding current page to reading list.
+   Name for button adding current article to reading list in reader mode */
+"Add to Reading List" = "เพิ่มไปยังรายการอ่าน";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "เพิ่มหน้าไปยังรายการอ่านแล้ว";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "ตกลง";
+
+/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Message" = "เกิดข้อผิดพลาดขณะเพิ่มบัตรผ่านไปยัง Wallet โปรดลองอีกครั้งในภายหลัง";
+
+/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Title" = "ไม่สามารถเพิ่มบัตรผ่าน";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "ที่อยู่และการค้นหา";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "ส่งเสมอ";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "ต้องมีการรับรองความถูกต้อง";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "ย้อนกลับ";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "ปิดกั้นหน้าต่างป๊อปอัป";
+
+/* The header title for the fields when editing a Bookmark */
+"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "ที่คั่นหน้า";
+
+/* The header title for the fields when editing a Folder */
+"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "โฟลเดอร์";
+
+/* The label for the Title field when editing a bookmark */
+"Bookmark.DetailFieldTitle.Label" = "ชื่อเรื่อง";
+
+/* The label for the URL field when editing a bookmark */
+"Bookmark.DetailFieldURL.Label" = "URL";
+
+/* Toggle bookmarks syncing setting */
+"Bookmarks" = "ที่คั่นหน้า";
+
+/* The button on the snackbar to edit a bookmark after adding it. */
+"Bookmarks.Edit.Button" = "แก้ไข";
+
+/* The button to edit a bookmark */
+"Bookmarks.EditBookmark.Label" = "แก้ไขที่คั่นหน้า";
+
+/* The button to edit a folder */
+"Bookmarks.EditFolder.Label" = "แก้ไขโฟลเดอร์";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "โฟลเดอร์";
+
+/* The label for the location of the new folder */
+"Bookmarks.FolderLocation.Label" = "ตำแหน่งที่ตั้ง";
+
+/* The label for the title of the new folder */
+"Bookmarks.FolderName.Label" = "ชื่อโฟลเดอร์";
+
+/* The button to create a new bookmark */
+"Bookmarks.NewBookmark.Label" = "ที่คั่นหน้าใหม่";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "โฟลเดอร์ใหม่";
+
+/* The button to create a new separator */
+"Bookmarks.NewSeparator.Label" = "ตัวแบ่งใหม่";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "ชื่อ";
+
+/* The label for the URL of a bookmark */
+"Bookmarks.URL.Label" = "URL";
+
+/* Status label for the empty Bookmarks state. */
+"BookmarksPanel.EmptyState.Title" = "ที่คั่นหน้าที่คุณบันทึกไว้จะแสดงที่นี่";
+
+/* Describes the date on which the breach occurred */
+"BreachAlerts.BreachDate" = "การรั่วไหลนี้เกิดขึ้นเมื่อ";
+
+/* Description of what a breach is */
+"BreachAlerts.Description" = "รหัสผ่านถูกรั่วไหลหรือถูกขโมยตั้งแต่คุณเปลี่ยนรหัสผ่านครั้งล่าสุด เมื่อต้องการปกป้องบัญชีนี้ ให้เข้าสู่ระบบไซต์และเปลี่ยนรหัสผ่านของคุณ";
+
+/* Link to monitor.firefox.com to learn more about breached passwords */
+"BreachAlerts.LearnMoreButton" = "เรียนรู้เพิ่มเติม";
+
+/* Leads to a link to the breached website */
+"BreachAlerts.Link" = "ไป";
+
+/* Title for the Breached Login Detail View. */
+"BreachAlerts.Title" = "การรั่วไหลของเว็บไซต์";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "ความสว่าง";
+
+/* Label for Cancel button */
+"Cancel" = "ยกเลิก";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "เปลี่ยนสีชุดตกแต่ง";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "เปลี่ยนชนิดแบบอักษร";
+
+/* The button to open a new tab with the copied link */
+"ClipboardToast.GoToCopiedLink.Button" = "ไป";
+
+/* Message displayed when the user has a copied link on the clipboard */
+"ClipboardToast.GoToCopiedLink.Title" = "ไปยังลิงก์ที่คัดลอก?";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "ปิด";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "กำลังปิดแท็บ";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "คอมพิวเตอร์";
+
+/* Context menu item for bookmarking a link URL */
+"ContextMenu.BookmarkLinkButtonTitle" = "เพิ่มที่คั่นหน้าสำหรับลิงก์";
+
+/* The button text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "สลับ";
+
+/* The label text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "เปิดแท็บส่วนตัวใหม่แล้ว";
+
+/* The button text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "สลับ";
+
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText" = "เปิดแท็บใหม่แล้ว";
+
+/* Context menu item for copying an image to the clipboard */
+"ContextMenu.CopyImageButtonTitle" = "คัดลอกภาพ";
+
+/* Context menu item for copying an image URL to the clipboard */
+"ContextMenu.CopyImageLinkButtonTitle" = "คัดลอกลิงก์ภาพ";
+
+/* Context menu item for copying a link URL to the clipboard */
+"ContextMenu.CopyLinkButtonTitle" = "คัดลอกลิงก์";
+
+/* Context menu item for downloading a link URL */
+"ContextMenu.DownloadLinkButtonTitle" = "ดาวน์โหลดลิงก์";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenInNewTabButtonTitle" = "เปิดในแท็บใหม่";
+
+/* Context menu item for saving an image */
+"ContextMenu.SaveImageButtonTitle" = "บันทึกภาพ";
+
+/* Context menu item for sharing a link URL */
+"ContextMenu.ShareLinkButtonTitle" = "แบ่งปันลิงก์";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "ไม่สามารถเพิ่มหน้าไปยังรายการอ่าน";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it’s already there?" = "ไม่สามารถเพิ่มหน้าไปยังรายการอ่าน บางทีหน้าอาจจะมีอยู่แล้ว?";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "ไม่สามารถโหลดหน้า";
+
+/* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
+"CoverSheet.v22.DarkMode.Description" = "สำหรับผู้ใช้ iOS 13 Firefox จะสลับไปใช้โหมดมืดโดยอัตโนมัติเมื่อมือถือของคุณถูกตั้งค่าเป็นโหมดมืด หากต้องการเปลี่ยนพฤติกรรมนี้ ไปที่ ตั้งค่า > ชุดตกแต่ง";
+
+/* Title for the new dark mode change in the version 22 app release. */
+"CoverSheet.v22.DarkMode.Title" = "ชุดตกแต่งมืดประกอบด้วยคีย์บอร์ดและหน้าจอเด่นแบบมืด";
+
+/* Description for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Description" = "การป้องกันการติดตามที่มากขึ้นในตัวช่วยหยุดโฆษณาตามคุณไปในทุกที่ เปิดใช้แบบ เข้มงวด เพื่อเพิ่มการปิดกั้นจากตัวติดตาม โฆษณา และป๊อปอัป";
+
+/* Text for the new ETP settings button */
+"CoverSheet.v24.ETP.Settings.Button" = "ไปยังการตั้งค่า";
+
+/* Title for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Title" = "การป้องกันจากการติดตามโฆษณา";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "สร้างบัญชี";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "มืด";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "ลดขนาดข้อความ";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "เครื่องมือค้นหาเริ่มต้น";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "การตั้งค่าการแสดงผล";
+
+/* Used as a button label for crash dialog prompt */
+"Don’t Send" = "ไม่ส่ง";
+
+/* Done button on left side of the Settings view controller title bar */
+"Done" = "เสร็จสิ้น";
+
+/* Panel accessibility label */
+"Downloads" = "การดาวน์โหลด";
+
+/* The label of the button the user will press to start downloading a file */
+"Downloads.Alert.DownloadNow" = "ดาวน์โหลดตอนนี้";
+
+/* Button confirming the cancellation of the download. */
+"Downloads.CancelDialog.Cancel" = "ยกเลิก";
+
+/* Alert dialog body when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Message" = "คุณแน่ใจหรือไม่ว่าต้องการยกเลิกการดาวน์โหลดนี้?";
+
+/* Button declining the cancellation of the download. */
+"Downloads.CancelDialog.Resume" = "ทำต่อ";
+
+/* Alert dialog title when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Title" = "ยกเลิกการดาวน์โหลด";
+
+/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
+"Downloads.Error.Message" = "การดาวน์โหลดยังไม่รองรับใน Firefox";
+
+/* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
+"Downloads.Toast.Cancelled.LabelText" = "ยกเลิกการดาวน์โหลดแล้ว";
+
+/* The label text in the Download Failed toast for showing confirmation that the download has failed. */
+"Downloads.Toast.Failed.LabelText" = "การดาวน์โหลดล้มเหลว";
+
+/* The button to retry a failed download from the Download Failed toast. */
+"Downloads.Toast.Failed.RetryButton" = "ลองใหม่";
+
+/* The button to open a new tab with the Downloads home panel */
+"Downloads.Toast.GoToDownloads.Button" = "การดาวน์โหลด";
+
+/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. */
+"Downloads.Toast.MultipleFiles.DescriptionText" = "1 จาก %d ไฟล์";
+
+/* The description text in the Download progress toast for showing the number of files (1$) and download progress (2$). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where 1$ is Downloads.Toast.MultipleFiles.DescriptionText and 2$ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and 1$ should come before 2$ everywhere except for right-to-left locales. */
+"Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";
+
+/* The description text in the Download progress toast for showing the downloaded file size (1$) out of the total expected file size (2$). */
+"Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
+
+/* Action button for deleting downloaded files in the Downloads panel. */
+"DownloadsPanel.Delete.Title" = "ลบ";
+
+/* Title for the Downloads Panel empty state. */
+"DownloadsPanel.EmptyState.Title" = "ไฟล์ที่ดาวน์โหลดจะแสดงที่นี่";
+
+/* Action button for sharing downloaded files in the Downloads panel. */
+"DownloadsPanel.Share.Title" = "แบ่งปัน";
+
+/* Text message in the settings table view */
+"Enter your password to connect" = "ป้อนรหัสผ่านของคุณเพื่อเชื่อมต่อ";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "ขั้นสูง";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "คำเตือน: เราไม่สามารถยืนยันได้ว่าการเชื่อมต่อของคุณไปยังเว็บไซต์นี้ปลอดภัย";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "สิ่งนี้อาจเป็นการกำหนดค่าที่ผิดพลาดหรือกำลังมีการดัดแปลงโดยผู้โจมตี ดำเนินการต่อหากคุณยอมรับในความเสี่ยงที่อาจเกิดขึ้น";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "เจ้าของ %@ ได้กำหนดค่าเว็บไซต์ของพวกเขาไม่เหมาะสม เพื่อปกป้องข้อมูลของคุณจากการถูกขโมย Firefox จึงไม่ได้เชื่อมต่อไปยังเว็บไซต์นี้";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "การเชื่อมต่อนี้ไม่น่าเชื่อถือ";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "ย้อนกลับ";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "เยี่ยมชมไซต์ต่อไป";
+
+/* Question shown to user when tapping a link that opens the App Store app */
+"ExternalLink.AppStore.ConfirmationTitle" = "เปิดลิงก์นี้ใน App Store?";
+
+/* Question shown to user when tapping an SMS or MailTo link that opens the external app for those. */
+"ExternalLink.AppStore.GenericConfirmationTitle" = "เปิดลิงก์นี้ในแอปภายนอก?";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Title for firefox about:home page in tab history list */
+"Firefox.HomePage.Title" = "หน้าแรกของ Firefox";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "เดินหน้า";
+
+/* Label stating how to disconnect account */
+"FxA.AccountVerificationDetails" = "อีเมลผิด? ตัดการเชื่อมต่อด้านล่างเพื่อเริ่มต้นใหม่";
+
+/* Label stating your account is not verified */
+"FxA.AccountVerificationRequired" = "ต้องมีการยืนยันบัญชี";
+
+/* Message explaining that user needs to check email for Firefox Account verfication link. */
+"FxA.AccountVerificationRequiredSurface" = "คุณจำเป็นต้องยืนยัน %@ ตรวจสอบอีเมลของคุณสำหรับลิงก์ยืนยันจาก Firefox";
+
+/* Button label to connect another device to Sync */
+"FxA.ConnectAnotherDevice" = "เชื่อมต่ออุปกรณ์อื่น";
+
+/* Settings section title for Firefox Account */
+"FxA.FirefoxAccount" = "บัญชี Firefox";
+
+/* Button label to go to Firefox Account settings */
+"FxA.ManageAccount" = "จัดการบัญชีและอุปกรณ์";
+
+/* Label when no internet is present */
+"FxA.NoInternetConnection" = "ไม่มีการเชื่อมต่ออินเทอร์เน็ต";
+
+/* Button label to open Sync preferences */
+"FxA.OpenSyncPreferences" = "เปิดค่ากำหนด Sync";
+
+/* Instructions shown on qr code scanning view */
+"fxa.qr-scanning-view.instructions" = "สแกนรหัส QR ที่แสดงใน firefox.com/pair";
+
+/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
+"FxA.RemoveAccount" = "เอาออก";
+
+/* Description string for alert view that gets presented when user tries to remove an account. */
+"FxA.RemoveAccountAlertMessage" = "ลบ Firefox Account ที่เชื่อมโยงกับอุปกรณ์นี้เพื่อเข้าใช้ด้วยชื่อผู้ใช้อื่น";
+
+/* Remove account alert is the final confirmation before user removes their firefox account */
+"FxA.RemoveAccountAlertTitle" = "เอาบัญชีออก";
+
+/* Button label to resend email */
+"FxA.ResendEmail" = "ส่งอีเมลใหม่";
+
+/* FxA sign in view subtitle */
+"fxa.signin.camera-signin" = "ลงชื่อเข้าด้วยกล้องของคุณ";
+
+/* FxA sign in create account label. */
+"fxa.signin.create-account-pt-1" = "ซิงค์ Firefox ระหว่างอุปกรณ์ด้วยบัญชี";
+
+/* FxA sign in create account label. This will be linked to the site to create an account. */
+"fxa.signin.create-account-pt-2" = "สร้างบัญชี Firefox";
+
+/* FxA sign in view qr code instructions */
+"fxa.signin.qr-link-instruction" = "บนคอมพิวเตอร์ของคุณ ให้เปิด Firefox แล้วไปที่ firefox.com/pair";
+
+/* FxA sign in view qr code scan button */
+"fxa.signin.ready-to-scan" = "พร้อมที่จะสแกน";
+
+/* FxA sign in view title */
+"fxa.signin.turn-on-sync" = "เปิดใช้ Sync";
+
+/* FxA sign in view email login button */
+"fxa.signin.use-email-instead" = "ใช้อีเมลแทน";
+
+/* Button label to sign into Sync */
+"FxA.SignIntoSync" = "ลงชื่อเข้า Sync";
+
+/* Label explaining what sync does */
+"FxA.SyncExplain" = "รับแท็บ, ที่คั่นหน้า และรหัสผ่านของคุณจากอุปกรณ์อื่น ๆ ของคุณ";
+
+/* Button label to Sync your Firefox Account */
+"FxA.SyncNow" = "ซิงค์ตอนนี้";
+
+/* Call to action for sign into sync button */
+"FxA.TakeYourWebWithYou" = "นำเว็บของคุณไปกับคุณ";
+
+/* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
+"FxAPush_DeviceConnected_body" = "Firefox Sync ได้เชื่อมต่อกับ %@";
+
+/* Title of a notification displayed when another device has connected to FxA. */
+"FxAPush_DeviceConnected_title" = "เชื่อมต่อ Sync แล้ว";
+
+/* Body of a notification displayed when named device has been disconnected from FxA. %@ refers to the name of the disconnected device. */
+"FxAPush_DeviceDisconnected_body" = "ตัดการเชื่อมต่อ %@ สำเร็จ";
+
+/* Body of a notification displayed when this device has been disconnected from FxA by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "ตัดการเชื่อมต่ออุปกรณ์นี้จาก Firefox Sync สำเร็จ";
+
+/* Title of a notification displayed when this device has been disconnected by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_title" = "ตัดการเชื่อมต่อ Sync แล้ว";
+
+/* Title of a notification displayed when named device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_title" = "ตัดการเชื่อมต่อ Sync แล้ว";
+
+/* Body of a notification displayed when unnamed device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "อุปกรณ์ได้ตัดการเชื่อมต่อจาก Firefox Sync";
+
+/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "รับแท็บที่เปิดอยู่, ที่คั่นหน้า และรหัสผ่านของคุณจากอุปกรณ์อื่น ๆ ของคุณ";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "ช่วยเหลือ";
+
+/* Toggle history syncing setting */
+"History" = "ประวัติ";
+
+/* Title for button in the history panel to clear recent history */
+"HistoryPanel.ClearHistoryButtonTitle" = "ล้างประวัติล่าสุด…";
+
+/* Option title to clear all browsing history. */
+"HistoryPanel.ClearHistoryMenuOptionEverything" = "ทั้งหมด";
+
+/* Button to perform action to clear history for the last hour */
+"HistoryPanel.ClearHistoryMenuOptionTheLastHour" = "ชั่วโมงที่แล้ว";
+
+/* Button to perform action to clear history for today only */
+"HistoryPanel.ClearHistoryMenuOptionToday" = "วันนี้";
+
+/* Button to perform action to clear history for yesterday and today */
+"HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "วันนี้และเมื่อวานนี้";
+
+/* Title for popup action menu to clear recent history. */
+"HistoryPanel.ClearHistoryMenuTitle" = "การล้างประวัติล่าสุดจะเอาประวัติ, คุกกี้ และข้อมูลเบราว์เซอร์อื่น ๆ ออก";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "เว็บไซต์ที่คุณเยี่ยมชมล่าสุดจะแสดงที่นี่";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "แท็บของคุณจากอุปกรณ์อื่น ๆ จะแสดงที่นี่";
+
+/* Description for the empty synced tabs 'not signed in' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "ลงชื่อเข้าเพื่อดูรายการแท็บจากอุปกรณ์อื่น ๆ ของคุณ";
+
+/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "บัญชีของคุณจำเป็นต้องได้รับการยืนยัน";
+
+/* Description for the empty synced tabs 'single device Sync' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "ต้องการเห็นแท็บของคุณจากอุปกรณ์อื่น ๆ ที่นี่?";
+
+/* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "เปิดการซิงค์แท็บเพื่อดูรายการแท็บจากอุปกรณ์อื่น ๆ ของคุณ";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "ประวัติ";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "เพิ่งปิดล่าสุด";
+
+/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "เชื่อมต่ออยู่ %d อุปกรณ์";
+
+/* Title for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Title" = "อุปกรณ์ที่ซิงค์";
+
+/* Button cancelling changes setting the home page for the first time. */
+"HomePage.Set.Dialog.Cancel" = "ยกเลิก";
+
+/* Alert dialog body when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Message" = "คุณสามารถเปลี่ยนสิ่งนี้ได้ทุกเวลาในการตั้งค่า";
+
+/* Button accepting changes setting the home page for the first time. */
+"HomePage.Set.Dialog.OK" = "ตั้งหน้าแรก";
+
+/* Alert dialog title when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Title" = "คุณต้องการใช้หน้าเว็บนี้เป็นหน้าแรกของคุณหรือไม่?";
+
+/* The title for the Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Bookmark" = "เพิ่มที่คั่นหน้า";
+
+/* The title for the Delete from History context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.DeleteFromHistory" = "ลบออกจากประวัติ";
+
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab" = "เปิดในแท็บส่วนตัวใหม่";
+
+/* The title for the Open in New Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewTab" = "เปิดในแท็บใหม่";
+
+/* The title for the Remove context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Remove" = "เอาออก";
+
+/* The title for the Remove Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.RemoveBookmark" = "เอาที่คั่นหน้าออก";
+
+/* The title for the Share context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Share" = "แบ่งปัน";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Back.DiscoveryTitle" = "ย้อนกลับ";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.CloseTab.DiscoveryTitle" = "ปิดแท็บ";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Find.DiscoveryTitle" = "ค้นหา";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Forward.DiscoveryTitle" = "เดินหน้า";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "แท็บส่วนตัวใหม่";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewTab.DiscoveryTitle" = "แท็บใหม่";
+
+/* Label to switch to normal browsing mode */
+"Hotkeys.NormalMode.DiscoveryTitle" = "โหมดการเรียกดูแบบปกติ";
+
+/* Label to switch to private browsing mode */
+"Hotkeys.PrivateMode.DiscoveryTitle" = "โหมดการเรียกดูแบบส่วนตัว";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Reload.DiscoveryTitle" = "โหลดหน้าใหม่";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "เลือกแถบตำแหน่งที่ตั้ง";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "แสดงแท็บถัดไป";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "แสดงแท็บก่อนหน้า";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "เพิ่มขนาดข้อความ";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "เมื่อกี้นี้";
+
+/* History tableview section header */
+"Last month" = "เดือนที่แล้ว";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "ซิงค์ล่าสุด: %@";
+
+/* History tableview section header */
+"Last week" = "สัปดาห์ที่แล้ว";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "สัญญาอนุญาต";
+
+/* Light theme setting in Reading View settings */
+"Light" = "สว่าง";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "โหลดหน้าต้นฉบับ";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "กำลังโหลดเนื้อหา…";
+
+/* Authentication prompt log in button */
+"Log in" = "เข้าสู่ระบบ";
+
+/* Toggle logins syncing setting */
+"Logins" = "การเข้าสู่ระบบ";
+
+/* Login detail view field name for the last modified date */
+"LoginsDetailView.LoginModified" = "เปลี่ยนแปลงเมื่อ";
+
+/* Title for the login detail view */
+"LoginsDetailView.LoginTitle" = "การเข้าสู่ระบบ";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "ไม่บันทึก";
+
+/* Button to not update the user's password */
+"LoginsHelper.DontUpdate.Button" = "ไม่อัปเดต";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "บันทึกการเข้าสู่ระบบ %1$@ สำหรับ %2$@?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "บันทึกรหัสผ่านสำหรับ %@?";
+
+/* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
+"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "อัปเดตการเข้าสู่ระบบสำหรับ %@?";
+
+/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "อัปเดตการเข้าสู่ระบบ %1$@ สำหรับ %2$@?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "บันทึกการเข้าสู่ระบบ";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "อัปเดต";
+
+/* For filtering the login list, search only the login names */
+"LoginsList.LoginsListFilterLogin" = "การเข้าสู่ระบบ";
+
+/* For filtering the login list, search both website and login names. */
+"LoginsList.LoginsListFilterSearchAll" = "ทั้งหมด";
+
+/* For filtering the login list, search only the website names */
+"LoginsList.LoginsListFilterWebsite" = "เว็บไซต์";
+
+/* Placeholder test for search box in logins list view. */
+"LoginsList.LoginsListSearchPlaceholder" = "ตัวกรอง";
+
+/* Title for the list of logins */
+"LoginsList.Title" = "การเข้าสู่ระบบที่บันทึกไว้";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "ดูเหมือนว่า Firefox จะเกิดข้อขัดข้องก่อนหน้านี้ คุณต้องการเรียกคืนแท็บของคุณหรือไม่?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "ทำเครื่องหมายว่าอ่านแล้ว";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "ทำเครื่องหมายว่ายังไม่ได้อ่าน";
+
+/* Toast displayed to the user after a bookmark has been added. */
+"Menu.AddBookmark.Confirm" = "เพิ่มที่คั่นหน้าแล้ว";
+
+/* Toast displayed to the user after adding the item to the Top Sites. */
+"Menu.AddPin.Confirm" = "ปักหมุดไปยังไซต์เด่น";
+
+/* Toast displayed to the user after adding the item to their reading list. */
+"Menu.AddToReadingList.Confirm" = "เพิ่มไปยังรายการอ่านแล้ว";
+
+/* The title for the button that lets you copy the url from the location bar. */
+"Menu.Copy.Title" = "คัดลอกที่อยู่";
+
+/* Toast displayed to user after copy url pressed. */
+"Menu.CopyURL.Confirm" = "คัดลอก URL ไปยังคลิปบอร์ดแล้ว";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "การป้องกันการติดตามที่มากขึ้นถูก ปิด สำหรับไซต์นี้";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "การป้องกันการติดตามที่มากขึ้นถูก เปิด สำหรับไซต์นี้";
+
+/* Description for having standard ETP protection with ITP offered in iOS14+ */
+"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox จะปิดกั้นตัวติดตามข้ามไซต์ ตัวติดตามสังคมออนไลน์ ตัวขุดเหรียญดิจิทัล และลายนิ้วมือดิจิทัล";
+
+/* Description for having strict ETP protection with ITP offered in iOS14+ */
+"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox จะปิดกั้นตัวติดตามข้ามไซต์ ตัวติดตามสังคมออนไลน์ ตัวขุดเหรียญดิจิทัล ลายนิ้วมือดิจิทัล และเนื้อหาสำหรับการติดตาม";
+
+/* Label for the button displayed in the menu used to stop the reload of the webpage */
+"Menu.Library.StopReload" = "หยุด";
+
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label" = "เปิดใช้งานโหมดกลางคืน";
+
+/* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
+"Menu.NoImageModeBlockImages.Label" = "ปิดกั้นภาพ";
+
+/* Label for title in page action menu. */
+"Menu.PageActions.Title" = "การกระทำหน้า";
+
+/* The title for the button that lets you paste into the location bar */
+"Menu.Paste.Title" = "วาง";
+
+/* The title for the button that lets you paste and go to a URL */
+"Menu.PasteAndGo.Title" = "วางแล้วไป";
+
+/* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
+"Menu.ReloadWithoutTrackingProtection.Title" = "โหลดใหม่โดยไม่มีการป้องกันการติดตาม";
+
+/* Label for the button, displayed in the menu, used to reload the current website with Tracking Protection enabled */
+"Menu.ReloadWithTrackingProtection.Title" = "โหลดใหม่โดยมีการป้องกันการติดตาม";
+
+/* Toast displayed to the user after a bookmark has been removed. */
+"Menu.RemoveBookmark.Confirm" = "เอาที่คั่นหน้าออกแล้ว";
+
+/* Toast displayed to the user after removing the item from the Top Sites. */
+"Menu.RemovePin.Confirm" = "เอาออกจากไซต์เด่น";
+
+/* Toast displayed to the user after a tab has been sent successfully. */
+"Menu.TabSent.Confirm" = "แท็บถูกส่งแล้ว";
+
+/* Title on tracking protection menu for blocked items. */
+"Menu.TrackingProtection.BlockedTitle" = "ปิดกั้น";
+
+/* Message in menu when no trackers blocked. */
+"Menu.TrackingProtection.NoTrackersBlockedTitle" = "ไม่มีตัวติดตามที่ Firefox รู้จักถูกตรวจพบที่หน้านี้";
+
+/* The title for tracking protection settings */
+"Menu.TrackingProtection.ProtectionSettings.Title" = "การตั้งค่าการป้องกัน";
+
+/* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
+"Menu.TrackingProtection.TitlePrefix" = "การป้องกันสำหรับ %@";
+
+/* The title that shows the number of content cookies blocked */
+"Menu.TrackingProtectionBlockedContent.Title" = "ตัวติดตามเนื้อหา";
+
+/* The title that shows the number of social URLs blocked */
+"Menu.TrackingProtectionBlockedSocial.Title" = "ตัวติดตามสังคมออนไลน์";
+
+/* Description of the Tracking protection menu when TP is blocking parts of the page */
+"Menu.TrackingProtectionBlocking.Description" = "Firefox กำลังปิดกั้นบางส่วนของหน้าที่อาจติดตามการเรียกดูของคุณ";
+
+/* The description of the Tracking Protection menu item when tracking is enabled */
+"Menu.TrackingProtectionBlockingDisabled.Description" = "ปิดกั้นตัวติดตามออนไลน์";
+
+/* The title that shows the number of cross-site cookies blocked */
+"Menu.TrackingProtectionCrossSiteCookies.Title" = "คุกกี้ติดตามข้ามไซต์";
+
+/* The title that shows the number of cross-site URLs blocked */
+"Menu.TrackingProtectionCrossSiteTrackers.Title" = "ตัวติดตามข้ามไซต์";
+
+/* The title that shows the number of cryptomining scripts blocked */
+"Menu.TrackingProtectionCryptominersBlocked.Title" = "ตัวขุดเหรียญดิจิทัล";
+
+/* Description of content trackers. */
+"Menu.TrackingProtectionDescription.ContentTrackers" = "เว็บไซต์อาจโหลดโฆษณาวิดีโอและเนื้อหาอื่น ๆ นอกเว็บที่มีตัวติดตามที่ซ่อนอยู่ การปิดกั้นสิ่งนี้จะทำให้เว็บไซต์โหลดเร็วขึ้น แต่ปุ่มบางปุ่ม ฟอร์ม และเขตข้อมูลการเข้าสู่ระบบอาจไม่ทำงาน";
+
+/* Description of cross-site trackers. */
+"Menu.TrackingProtectionDescription.CrossSiteNew" = "คุกกี้เหล่านี้ติดตามคุณจากไซต์หนึ่งไปยังอีกไซต์หนึ่งเพื่อรวบรวมข้อมูลเกี่ยวกับสิ่งที่คุณทำทางออนไลน์ พวกมันถูกตั้งค่าโดยบุคคลที่สามเช่น นักโฆษณาและบริษัทวิเคราะห์";
+
+/* Description of cryptominers. */
+"Menu.TrackingProtectionDescription.CryptominersNew" = "ตัวขุดเหรียญคริปโตดิจิตอลใช้พลังการคำนวณของระบบของคุณเพื่อสร้างเงินคริปโตดิจิทัล สคริปต์ขุดเหรียญดิจิทัลจะทำให้พลังงานแบตเตอรี่ของคุณลดลง คอมพิวเตอร์ของคุณช้าลง และเพิ่มค่าไฟฟ้าของคุณได้";
+
+/* Description of fingerprinters. */
+"Menu.TrackingProtectionDescription.Fingerprinters" = "การตั้งค่าในเบราว์เซอร์และคอมพิวเตอร์ของคุณไม่เหมือนใคร ลายนิ้วมือดิจิทัลรวบรวมการตั้งค่าที่ไม่เหมือนใครเหล่านี้เพื่อสร้างโปรไฟล์ของคุณซึ่งสามารถใช้ติดตามคุณในขณะที่คุณท่องเว็บได้";
+
+/* Description of social network trackers. */
+"Menu.TrackingProtectionDescription.SocialNetworksNew" = "เครือข่ายสังคมออนไลน์วางเครื่องมือติดตามบนเว็บไซต์อื่น ๆ เพื่อสร้างโปรไฟล์ของคุณที่สมบูรณ์และตรงเป้าหมายมากขึ้น การปิดกั้นเครื่องมือติดตามเหล่านี้จะช่วยลดจำนวนบริษัทสื่อสังคมออนไลน์ที่สามารถดูว่าคุณออนไลน์อะไรบ้าง";
+
+/* The button that disabled TP for a site. */
+"Menu.TrackingProtectionDisable1.Title" = "ปิดใช้งานแล้วสำหรับไซต์นี้";
+
+/* The confirmation toast once tracking protection has been disabled */
+"Menu.TrackingProtectionDisabled.Title" = "การป้องกันการติดตามปิดอยู่สำหรับไซต์นี้";
+
+/* A button to enable tracking protection inside the menu. */
+"Menu.TrackingProtectionEnable.Title" = "เปิดใช้งานการป้องกันการติดตาม";
+
+/* A button to enable tracking protection inside the menu. */
+"Menu.TrackingProtectionEnable1.Title" = "เปิดใช้งานแล้วสำหรับไซต์นี้";
+
+/* The confirmation toast once tracking protection has been enabled */
+"Menu.TrackingProtectionEnabled.Title" = "การป้องกันการติดตามเปิดอยู่สำหรับไซต์นี้";
+
+/* The title that shows the number of fingerprinting scripts blocked */
+"Menu.TrackingProtectionFingerprintersBlocked.Title" = "ลายนิ้วมือดิจิทัล";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "ปิดกั้นคุกกี้ติดตามข้ามไซต์แล้ว";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Cryptominers" = "ปิดกั้นตัวขุดเหรียญดิจิทัลแล้ว";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Fingerprinters" = "ปิดกั้นลายนิ้วมือดิจิทัลแล้ว";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Social" = "ปิดกั้นตัวติดตามสังคมออนไลน์แล้ว";
+
+/* more info about what tracking protection is about */
+"Menu.TrackingProtectionMoreInfo.Description" = "เรียนรู้เพิ่มเติมเกี่ยวกับวิธีที่การป้องกันการติดตามปิดกั้นตัวติดตามออนไลน์ที่เก็บรวบรวมข้อมูลการเรียกดูของคุณในหลายเว็บไซต์";
+
+/* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
+"Menu.TrackingProtectionNoBlocking.Description" = "ไม่พบองค์ประกอบที่มีการติดตามในหน้านี้";
+
+/* label for the menu item to show when the website is whitelisted from blocking trackers. */
+"Menu.TrackingProtectionOption.WhiteListOnDescription" = "ไซต์มีองค์ประกอบที่อาจติดตามการเรียกดูของคุณ คุณได้ปิดใช้งานการป้องกัน";
+
+/* label for the menu item that lets you remove a website from the tracking protection whitelist */
+"Menu.TrackingProtectionWhitelistRemove.Title" = "เปิดใช้งานสำหรับไซต์นี้";
+
+/* The title for the option to view the What's new page. */
+"Menu.WhatsNew.Title" = "มีอะไรใหม่";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "อุปกรณ์มือถือ";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "มากกว่าหนึ่งเดือนที่แล้ว";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "มากกว่าหนึ่งสัปดาห์ที่แล้ว";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "แถบเครื่องมือนำทาง";
+
+/* Accessibility label for the New Tab button in the tab toolbar.
+   Accessibility Label for the tab toolbar New tab button */
+"New Tab" = "แท็บใหม่";
+
+/* Restore Tabs Negative Action */
+"No" = "ไม่";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "ไม่มีแท็บ";
+
+/* OK button */
+"OK" = "ตกลง";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "ตกลง";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "อุปส์! Firefox เกิดข้อขัดข้อง";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "เปิดบทความในมุมมองผู้อ่านโดยแตะไอคอนหนังสือเมื่อปรากฏในแถบหัวข้อ";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "เปิดการตั้งค่า";
+
+/* Toggle tabs syncing setting */
+"Open Tabs" = "แท็บที่เปิดอยู่";
+
+/* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
+"OpenURL.Error.Message" = "Firefox ไม่สามารถเปิดหน้าได้เนื่องจากที่อยู่ไม่ถูกต้อง";
+
+/* Title of the message shown when the user attempts to navigate to an invalid link. */
+"OpenURL.Error.Title" = "ไม่สามารถเปิดหน้า";
+
+/* Accessibility label for the Page Options menu button */
+"Page Options Menu" = "เมนูตัวเลือกหน้า";
+
+/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
+"Panel Chooser" = "ตัวเลือกแผง";
+
+/* Password textbox in Authentication prompt */
+"Password" = "รหัสผ่าน";
+
+/* Error message shown in the remote tabs panel */
+"PasswordAutoFill.NoPasswordsFoundTitle" = "คุณไม่มีข้อมูลรับรองใด ๆ ที่ซิงค์จากบัญชี Firefox ของคุณ";
+
+/* Header for the list of credentials table */
+"PasswordAutoFill.PasswordsListTitle" = "ข้อมูลรับรองที่มี:";
+
+/* Title of the extension that shows firefox passwords */
+"PasswordAutoFill.SectionTitle" = "ข้อมูลรับรอง Firefox";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "สิ่งนี้อนุญาตให้คุณสามารถบันทึกภาพไปยัง ม้วนฟิล์ม ของคุณ";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox ต้องการเข้าถึงรูปถ่ายของคุณ";
+
+/* Button for closing the menu action sheet */
+"PhotonMenu.close" = "ปิด";
+
+/* Privacy section title */
+"Privacy" = "ความเป็นส่วนตัว";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "นโยบายความเป็นส่วนตัว";
+
+/* Title for quick-search engines settings section. */
+"Quick-Search Engines" = "เครื่องมือค้นหาด่วน";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "อ่านแล้ว";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "มุมมองผู้อ่าน";
+
+/* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
+"ReaderMode.Available.VoiceOverAnnouncement" = "มีโหมดผู้อ่าน";
+
+/* Panel accessibility label */
+"Reading list" = "รายการอ่าน";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "เพิ่งปิดล่าสุด";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "โหลดใหม่";
+
+/* Accessibility label for the reload button */
+"Reload page" = "โหลดหน้าใหม่";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "เอาออก";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "เอาออกจากรายการอ่าน";
+
+/* Cancel button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Cancel" = "ยกเลิก";
+
+/* Reopen button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Reopen" = "เปิดใหม่";
+
+/* Reopen alert title shown at home page. */
+"ReopenAlert.Title" = "เปิดแท็บที่ปิดล่าสุดใหม่";
+
+/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"ReopenClosedTab.KeyCodeTitle" = "เปิดแท็บที่ปิดใหม่";
+
+/* Accessibility label for button resetting font size in display settings of reader mode */
+"Reset text size" = "กลับค่าเดิมของขนาดข้อความ";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "ไม่มีเชิง";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "บันทึกหน้าไปยังรายการอ่านของคุณโดยแตะไอคอนหนังสือที่มีเครื่องหมายบวกในตัวควบคุมมุมมองผู้อ่าน";
+
+/* OK button to dismiss the error prompt. */
+"ScanQRCode.Error.OK.Button" = "ตกลง";
+
+/* Text for the instructions label, displayed in the QR scanner view */
+"ScanQRCode.Instructions.Label" = "จัดตำแหน่งรหัส QR ให้อยู่ภายในกรอบเพื่อสแกน";
+
+/* Text of the prompt that is shown to the user when the data is invalid */
+"ScanQRCode.InvalidDataError.Message" = "ข้อมูลไม่ถูกต้อง";
+
+/* Text of the prompt user to setup the camera authorization. */
+"ScanQRCode.PermissionError.Message" = "โปรดอนุญาตให้ Firefox เข้าถึงกล้องของอุปกรณ์ของคุณใน ‘การตั้งค่า’ -> ‘ความเป็นส่วนตัว’ -> ‘กล้อง’";
+
+/* Title for the QR code scanner view. */
+"ScanQRCode.View.Title" = "สแกนรหัส QR";
+
+/* Accessibility Label for the tab toolbar Search button
+   Navigation title for search settings.
+   Open search section of settings */
+"Search" = "ค้นหา";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "ค้นหาหรือป้อนที่อยู่";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "เครื่องมือค้นหาใหม่จะปรากฏในแถบค้นหาด่วน";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "เพิ่มเครื่องมือค้นหาแล้ว!";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "เพิ่มผู้ให้บริการค้นหา?";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "ยกเลิก";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.DuplicateErrorMessage" = "เพิ่มเครื่องมือค้นหาที่มีชื่อหรือ URL นี้ไว้อยู่แล้ว";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.DuplicateErrorTitle" = "ล้มเหลว";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "ไม่สามารถเพิ่มผู้ให้บริการค้นหา";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "ล้มเหลว";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.FormErrorMessage" = "โปรดกรอกข้อมูลทั้งหมดให้ถูกต้อง";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.FormErrorTitle" = "ล้มเหลว";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "ตกลง";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "ค้นหาข้อเสนอแนะ";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "การเชื่อมต่อปลอดภัย";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "ส่งรายงานข้อขัดข้องเพื่อให้ Mozilla สามารถแก้ไขปัญหา?";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "ส่งข้อคิดเห็น";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "ส่งรายงาน";
+
+/* Button title for cancelling share screen
+   Close button in top navigation bar */
+"SendTo.Cancel.Button" = "ยกเลิก";
+
+/* Header for the list of devices table */
+"SendTo.DeviceList.Text" = "อุปกรณ์ที่มี:";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "เฉพาะลิงก์ HTTP และ HTTPS ที่สามารถแบ่งปันได้";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "ตกลง";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "ไม่สามารถแบ่งปันลิงก์ที่คุณกำลังพยายามจะแบ่งปัน";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"SendTo.NavBar.Title" = "ส่งแท็บ";
+
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message" = "คุณไม่มีอุปกรณ์ใด ๆ ที่เชื่อมต่อกับบัญชี Firefox นี้ที่พร้อมซิงค์";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Message" = "โปรดเปิด Firefox ไปยังการตั้งค่าและลงชื่อเข้าเพื่อดำเนินการต่อ";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Title" = "คุณไม่ได้ลงชื่อเข้าบัญชี Firefox ของคุณ";
+
+/* Navigation bar button to Send the current page to a device */
+"SendTo.SendAction.Text" = "ส่ง";
+
+/* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
+"SendTo.SignIn.Button" = "ลงชื่อเข้า Firefox";
+
+/* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_body" = "มีแท็บใหม่เข้ามาจากอุปกรณ์อื่น";
+
+/* Title of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_title" = "ได้รับแท็บ";
+
+/* Body of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the app name. */
+"SentTab_TabArrivingNotification_WithDevice_body" = "มีแท็บใหม่เข้ามาใน %@";
+
+/* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
+"SentTab_TabArrivingNotification_WithDevice_title" = "ได้รับแท็บจาก %@";
+
+/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
+"SentTab.AddToReadingListAction.Title" = "เพิ่มไปยังรายการอ่าน";
+
+/* Label for an action used to bookmark one or more tabs from a notification. */
+"SentTab.BookmarkAction.title" = "เพิ่มที่คั่นหน้า";
+
+/* Body of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.body" = "แตะเพื่อเริ่มต้น";
+
+/* Title of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+
+/* Label for an action used to view one or more tabs from a notification. */
+"SentTab.ViewAction.title" = "ดู";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "ซีเปีย";
+
+/* Font type setting in the reading view settings */
+"Serif" = "มีเชิง";
+
+/* Title in the settings view controller title bar */
+"Settings" = "การตั้งค่า";
+
+/* The button text in Search Settings that opens the Custom Search Engine view. */
+"Settings.AddCustomEngine" = "เพิ่มเครื่องมือค้นหา";
+
+/* The text on the Save button when saving a custom search engine */
+"Settings.AddCustomEngine.SaveButtonText" = "บันทึก";
+
+/* The title of the  Custom Search Engine view. */
+"Settings.AddCustomEngine.Title" = "เพิ่มเครื่องมือค้นหา";
+
+/* The title for the field which sets the title for a custom search engine. */
+"Settings.AddCustomEngine.TitleLabel" = "ชื่อ";
+
+/* The placeholder for Title Field when saving a custom search engine. */
+"Settings.AddCustomEngine.TitlePlaceholder" = "เครื่องมือค้นหา";
+
+/* The title for URL Field */
+"Settings.AddCustomEngine.URLLabel" = "URL";
+
+/* The placeholder for URL Field when saving a custom search engine */
+"Settings.AddCustomEngine.URLPlaceholder" = "URL (แทนที่คำสืบค้นด้วย %s)";
+
+/* Button in Data Management that clears private data for the selected items. */
+"Settings.ClearAllWebsiteData.Clear.Button" = "ล้างข้อมูลเว็บไซต์ทั้งหมด";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "ล้างข้อมูลส่วนตัว";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "ล้างข้อมูลส่วนตัว";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "ล้างข้อมูลส่วนตัว";
+
+/* Copy app version alert shown in settings. */
+"Settings.CopyAppVersion.Title" = "คัดลอกไปยังคลิปบอร์ดแล้ว";
+
+/* Default text in search bar for Data Management */
+"Settings.DataManagement.SearchLabel" = "กรองไซต์";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.DataManagement.SectionName" = "การจัดการข้อมูล";
+
+/* Title displayed in header of the setting panel. */
+"Settings.DataManagement.Title" = "การจัดการข้อมูล";
+
+/* Body of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Body" = "Firefox จะหยุดการซิงค์กับบัญชีของคุณ แต่จะไม่ลบข้อมูลการเรียกดูใด ๆ ของคุณในอุปกรณ์นี้";
+
+/* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
+"Settings.Disconnect.Button" = "ตัดการเชื่อมต่อ Sync";
+
+/* Cancel action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.CancelButton" = "ยกเลิก";
+
+/* Destructive action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.DestructiveButton" = "ตัดการเชื่อมต่อ";
+
+/* Title of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Title" = "ตัดการเชื่อมต่อ Sync?";
+
+/* Section header for brightness slider. */
+"Settings.DisplayTheme.BrightnessThreshold.SectionHeader" = "ขีดแบ่ง";
+
+/* Display (theme) settings label to show if manually switch theme is enabled. */
+"Settings.DisplayTheme.Manual.StatusLabel" = "กำหนดเอง";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Manually'. */
+"Settings.DisplayTheme.Manual.SwitchSubtitle" = "เลือกชุดตกแต่งที่ต้องการ";
+
+/* Display (theme) setting to choose the theme manually. */
+"Settings.DisplayTheme.Manual.SwitchTitle" = "กำหนดเอง";
+
+/* Option choice in display theme settings for dark theme */
+"Settings.DisplayTheme.OptionDark" = "มืด";
+
+/* Option choice in display theme settings for light theme */
+"Settings.DisplayTheme.OptionLight" = "สว่าง";
+
+/* Display (theme) settings footer describing how the brightness slider works. */
+"Settings.DisplayTheme.SectionFooter" = "ชุดตกแต่งจะเปลี่ยนตามความสว่างหน้าจอของคุณโดยอัตโนมัติ คุณสามารถตั้งค่าเกณฑ์ที่ชุดตกแต่งจะเปลี่ยน วงกลมบ่งบอกถึงความสว่างปัจจุบันของหน้าจอของคุณ";
+
+/* Switch mode settings section title */
+"Settings.DisplayTheme.SwitchMode.SectionHeader" = "สลับโหมด";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Automatically'. */
+"Settings.DisplayTheme.SwitchSubtitle" = "สลับโดยอัตโนมัติตามความสว่างหน้าจอ";
+
+/* Display (theme) settings label to show if automatically switch theme is enabled.
+   Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
+"Settings.DisplayTheme.SwitchTitle" = "โดยอัตโนมัติ";
+
+/* System theme settings section title */
+"Settings.DisplayTheme.SystemTheme.SectionHeader" = "ชุดตกแต่งระบบ";
+
+/* System theme settings switch to choose whether to use the same theme as the system */
+"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "ใช้โหมดสว่าง/มืดของระบบ";
+
+/* Theme picker settings section title */
+"Settings.DisplayTheme.ThemePicker.SectionHeader" = "ตัวเลือกชุดตกแต่ง";
+
+/* Title in main app settings for Theme settings */
+"Settings.DisplayTheme.Title.v2" = "ชุดตกแต่ง";
+
+/* DNT Settings option for always on */
+"Settings.DNT.OptionAlwaysOn" = "เสมอ";
+
+/* DNT Settings option for only turning on when Tracking Protection is also on */
+"Settings.DNT.OptionOnWithTP" = "เฉพาะเมื่อใช้การป้องกันการติดตาม";
+
+/* DNT Settings title */
+"Settings.DNT.Title" = "ส่งสัญญาณไม่ติดตามให้กับเว็บไซต์ว่าไม่ต้องการให้ติดตามคุณ";
+
+/* Label used for the device name settings section. */
+"Settings.FxA.DeviceName" = "ชื่ออุปกรณ์";
+
+/* Label used as a section title in the Firefox Accounts Settings screen. */
+"Settings.FxA.Sync.SectionName" = "การตั้งค่า Sync";
+
+/* Title displayed in header of the FxA settings panel. */
+"Settings.FxA.Title" = "บัญชี Firefox";
+
+/* General settings section title */
+"Settings.General.SectionName" = "ทั่วไป";
+
+/* Button in settings to clear the home page. */
+"Settings.HomePage.Clear.Button" = "ล้าง";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "หน้าแรก";
+
+/* Title displayed in header of the setting panel. */
+"Settings.HomePage.Title" = "การตั้งค่าหน้าแรก";
+
+/* Placeholder text in the homepage setting when no homepage has been set. */
+"Settings.HomePage.URL.Placeholder" = "ป้อนหน้าเว็บ";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "หน้าแรกปัจจุบัน";
+
+/* Button in settings to use the current link on the clipboard as home page. */
+"Settings.HomePage.UseCopiedLink.Button" = "ใช้ลิงก์ที่คัดลอก";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "ใช้หน้าปัจจุบัน";
+
+/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
+"Settings.HomePage.UseDefault.Button" = "ใช้ค่าเริ่มต้น";
+
+/* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
+"Settings.LoginsAndPasswordsTitle" = "การเข้าสู่ระบบและรหัสผ่าน";
+
+/* Label used to set a custom url as the new tab option (homepage). */
+"Settings.NewTab.CustomURL" = "URL ที่กำหนดเอง";
+
+/* A description in settings of what the new tab choice means */
+"Settings.NewTab.Description" = "เมื่อคุณเปิดแท็บใหม่:";
+
+/* The title of the section in newtab that lets you modify the topsites panel */
+"Settings.NewTab.Option.ASTitle" = "ปรับแต่งไซต์เด่น";
+
+/* Option in settings to show a blank page when you open a new tab */
+"Settings.NewTab.Option.BlankPage" = "หน้าว่าง";
+
+/* Option in settings to show bookmarks when you open a new tab */
+"Settings.NewTab.Option.Bookmarks" = "ที่คั่นหน้า";
+
+/* The footer for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeFooter" = "ไซต์ที่คุณเยี่ยมชมมากที่สุด";
+
+/* The title for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeTitle" = "ปรับแต่งหน้าแรก Firefox";
+
+/* Option in settings to show Firefox Home when you open a new tab */
+"Settings.NewTab.Option.FirefoxHome" = "หน้าแรก Firefox";
+
+/* Option in the settings to turn off recent bookmarks in the Highlights section */
+"Settings.NewTab.Option.HighlightsBookmarks" = "ที่คั่นหน้าล่าสุด";
+
+/* Option in settings to turn off history in the highlights section */
+"Settings.NewTab.Option.HighlightsHistory" = "เยี่ยมชมแล้ว";
+
+/* Option in settings to show history when you open a new tab */
+"Settings.NewTab.Option.History" = "ประวัติ";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.HomePage" = "หน้าแรก";
+
+/* Option in settings to turn on off pocket recommendations */
+"Settings.NewTab.Option.Pocket" = "กำลังนิยมใน Pocket";
+
+/* Footer caption for pocket settings */
+"Settings.NewTab.Option.PocketFooter" = "เนื้อหาที่ยอดเยี่ยมจากเว็บต่าง ๆ";
+
+/* Option in settings to show reading list when you open a new tab */
+"Settings.NewTab.Option.ReadingList" = "แสดงรายการอ่านของคุณ";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
+"Settings.NewTab.SectionName" = "แท็บใหม่";
+
+/* Title displayed in header of the setting panel. */
+"Settings.NewTab.Title" = "แท็บใหม่";
+
+/* Label at the top of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionName" = "แสดง";
+
+/* Footer at the bottom of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionNameFooter" = "เลือกสิ่งที่จะโหลดเมื่อเปิดแท็บใหม่";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Status" = "เมื่อเปิด Firefox";
+
+/* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Title" = "เสนอให้เปิดลิงก์ที่คัดลอก";
+
+/* Title for Open With Settings */
+"Settings.OpenWith.PageTitle" = "เปิดลิงก์จดหมายด้วย";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
+"Settings.OpenWith.SectionName" = "แอปจดหมาย";
+
+/* Setting to enable the built-in password manager */
+"Settings.SaveLogins.Title" = "บันทึกการเข้าสู่ระบบ";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "เสร็จสิ้น";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "แก้ไข";
+
+/* title for a link that explains how mozilla collects telemetry */
+"Settings.SendUsage.Link" = "เรียนรู้เพิ่มเติม";
+
+/* A short description that explains why mozilla collects usage data. */
+"Settings.SendUsage.Message" = "Mozilla มุ่งมั่นที่จะเก็บรวบรวมเฉพาะสิ่งที่เราจำเป็นต้องให้บริการและปรับปรุง Firefox สำหรับทุกคน";
+
+/* The title for the setting to send usage data. */
+"Settings.SendUsage.Title" = "ส่งข้อมูลการใช้งาน";
+
+/* Description displayed under the ”Show Link Previews” option */
+"Settings.ShowLinkPreviews.Status" = "เมื่อกดค้างที่ลิงก์";
+
+/* Title of setting to enable link previews when long-pressing links. */
+"Settings.ShowLinkPreviews.Title" = "แสดงตัวอย่างลิงก์";
+
+/* Setting to show Logins & Passwords quick access in the application menu */
+"Settings.ShowLoginsInAppMenu.Title" = "แสดงในเมนูแอปพลิเคชัน";
+
+/* The description of the open new tab siri shortcut */
+"Settings.Siri.OpenTabShortcut" = "เปิดแท็บใหม่";
+
+/* The description that describes what siri shortcuts are */
+"Settings.Siri.SectionDescription" = "ใช้คำสั่งลัด Siri เพื่อเปิด Firefox อย่างรวดเร็วผ่าน Siri";
+
+/* The option that takes you to the siri shortcuts settings page */
+"Settings.Siri.SectionName" = "คำสั่งลัด Siri";
+
+/* Dismiss button for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Button" = "ตกลง เข้าใจแล้ว";
+
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "ถ้าเว็บไซต์ไม่ทำงานตามที่คาดไว้ แตะที่โล่ในแถบที่อยู่และปิด การป้องการติดตามที่มากขึ้น สำหรับหน้านั้น";
+
+/* Title for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Title" = "ระวัง!";
+
+/* Header description for tracking protection options section where Basic/Strict block list can be selected */
+"Settings.TrackingProtection.BlockListsHeader" = "คุณสามารถเลือกรายการที่ Firefox จะใช้เพื่อปิดกั้นองค์ประกอบเว็บที่อาจติดตามกิจกรรมการเรียกดูของคุณ";
+
+/* Explanation of basic mode. */
+"Settings.TrackingProtection.Info.BasicTitle" = "การป้องกันและประสิทธิภาพแบบสมดุล";
+
+/* The Title on info view which shows a list of all blocked websites */
+"Settings.TrackingProtection.Info.BlocksTitle" = "การปิดกั้น";
+
+/* Explanation of strict mode. */
+"Settings.TrackingProtection.Info.StrictTitle" = "เสริมการป้องกันที่แข็งแกร่งขึ้น แต่อาจส่งผลให้ไซต์บางส่วนเสียหาย";
+
+/* 'Learn more' info link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.LearnMore" = "เรียนรู้เพิ่มเติม";
+
+/* 'More Info' link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.MoreInfo" = "ข้อมูลเพิ่มเติม…";
+
+/* Additional information about your Enhanced Tracking Protection */
+"Settings.TrackingProtection.ProtectionCellFooter" = "ลดโฆษณาที่กำหนดเป้าหมายและช่วยหยุดผู้โฆษณาไม่ให้ติดตามการเรียกดูของคุณ";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "ถ้าเว็บไซต์ไม่ทำงานตามที่คาดไว้ แตะที่โล่ในแถบที่อยู่และปิด การป้องการติดตามที่มากขึ้น สำหรับหน้านั้น";
+
+/* Description for standard level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "อนุญาตให้มีการติดตามโฆษณาบางส่วนเพื่อให้เว็บไซต์ทำงานได้ถูกต้อง";
+
+/* Description for strict level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "ปิดกั้นตัวติดตาม โฆษณา และป๊อปอัปมากขึ้น เว็บโหลดเร็วขึ้น แต่ฟังก์ชั่นบางอย่างอาจไม่ทำงาน";
+
+/* Title for tracking protection options section where level can be selected. */
+"Settings.TrackingProtection.ProtectionLevelTitle" = "ระดับการป้องกัน";
+
+/* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
+"Settings.TrackingProtection.SectionName" = "การป้องกันการติดตาม";
+
+/* Additional information about the strict level setting */
+"Settings.TrackingProtection.StrictLevelInfoFooter" = "การบล็อกตัวติดตามอาจส่งผลกระทบต่อการทำงานของบางเว็บไซต์";
+
+/* Tracking protection settings option for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BasicBlockList" = "มาตรฐาน (ค่าเริ่มต้น)";
+
+/* Tracking protection settings option description for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BlockListBasicDescription" = "อนุญาตตัวติดตามบางส่วนเพื่อให้เว็บไซต์ทำงานได้ถูกต้อง";
+
+/* Tracking protection settings option for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrict" = "เข้มงวด";
+
+/* Tracking protection settings option description for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrictDescription" = "ปิดกั้นตัวติดตามที่รู้จัก เว็บไซต์บางส่วนอาจทำงานได้ไม่ถูกต้อง";
+
+/* Description label shown on tracking protection options screen. */
+"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "การติดตามคือการเก็บรวบรวมข้อมูลการเรียกดูของคุณในหลายเว็บไซต์";
+
+/* Settings option to specify that Tracking Protection is on */
+"Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "การป้องกันการติดตามที่มากขึ้น";
+
+/* Translation settings footer describing how language detection and translation happens. */
+"Settings.TranslateSnackBar.SectionFooter" = "ตรวจพบภาษาของหน้าเว็บในอุปกรณ์และเสนอการแปลจากบริการระยะไกล";
+
+/* Translation settings section title */
+"Settings.TranslateSnackBar.SectionHeader" = "บริการ";
+
+/* Switch to choose if the language of a page is detected and offer to translate. */
+"Settings.TranslateSnackBar.SwitchSubtitle" = "เสนอให้แปลไซต์ใด ๆ ที่เขียนในภาษาที่แตกต่างจากภาษาเริ่มต้นของคุณ";
+
+/* Switch to choose if the language of a page is detected and offer to translate. */
+"Settings.TranslateSnackBar.SwitchTitle" = "เสนอการแปล";
+
+/* Title in main app settings for Translation toast settings */
+"Settings.TranslateSnackBar.Title" = "การแปล";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "แก้ไขปัญหา";
+
+/* Button to delete website in search results */
+"Settings.WebsiteData.ButtonDelete" = "ลบ";
+
+/* Button to exit edit website search results */
+"Settings.WebsiteData.ButtonDone" = "เสร็จสิ้น";
+
+/* Button to edit website search results */
+"Settings.WebsiteData.ButtonEdit" = "แก้ไข";
+
+/* Button shows all websites on website data tableview */
+"Settings.WebsiteData.ButtonShowMore" = "แสดงเพิ่มเติม";
+
+/* Description of the confirmation dialog shown when a user tries to clear their private data. */
+"Settings.WebsiteData.ConfirmPrompt" = "การกระทำนี้จะล้างข้อมูลเว็บไซต์ทั้งหมดของคุณ สิ่งนี้ไม่สามารถเลิกทำได้";
+
+/* Title displayed in header of the Data Management panel. */
+"Settings.WebsiteData.Title" = "ข้อมูลเว็บไซต์";
+
+/* Action label on share extension to add page to the Firefox reading list. */
+"ShareExtension.AddToReadingListAction.Title" = "เพิ่มไปยังรายการอ่าน";
+
+/* Share extension label shown after user has performed 'Add to Reading List' action. */
+"ShareExtension.AddToReadingListActionDone.Title" = "เพิ่มไปยังรายการอ่านแล้ว";
+
+/* Action label on share extension to bookmark the page in Firefox. */
+"ShareExtension.BookmarkThisPageAction.Title" = "เพิ่มที่คั่นหน้าสำหรับหน้านี้";
+
+/* Share extension label shown after user has performed 'Bookmark this Page' action. */
+"ShareExtension.BookmarkThisPageActionDone.Title" = "เพิ่มที่คั่นหน้าแล้ว";
+
+/* Action label on share extension to load the page in Firefox when user switches apps to bring it to foreground. */
+"ShareExtension.LoadInBackgroundAction.Title" = "โหลดในพื้นหลัง";
+
+/* Share extension label shown after user has performed 'Load in Background' action. */
+"ShareExtension.LoadInBackgroundActionDone.Title" = "กำลังโหลดใน Firefox";
+
+/* Action label on share extension to immediately open page in Firefox. */
+"ShareExtension.OpenInFirefoxAction.Title" = "เปิดใน Firefox";
+
+/* Action label on share extension to immediately open page in Firefox in private mode. */
+"ShareExtension.OpenInPrivateModeAction.Title" = "เปิดในโหมดส่วนตัว";
+
+/* Action label on share extension to search for the selected text in Firefox. */
+"ShareExtension.SeachInFirefoxAction.Title" = "ค้นหาใน Firefox";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "แสดงข้อเสนอแนะการค้นหา";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "แสดงแท็บ";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "แสดงการเที่ยวชม";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "หยุด";
+
+/* Support section title */
+"Support" = "การสนับสนุน";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "ปัดไปทางขวาหรือซ้ายด้วยสามนิ้วเพื่อปิดแท็บ";
+
+/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"SwitchToNonPBM.KeyCodeTitle" = "โหมดการเรียกดูแบบปกติ";
+
+/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"SwitchToPBM.KeyCodeTitle" = "โหมดการเรียกดูแบบส่วนตัว";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, bookmarks, passwords and more." = "ซิงค์แท็บ, ที่คั่นหน้า, รหัสผ่าน และอื่น ๆ ของคุณ";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, passwords and more." = "ซิงค์แท็บ, รหัสผ่าน และอื่น ๆ ของคุณ";
+
+/* Message displayed when the user syncs for the first time */
+"Sync.FirstTimeMessage.Label" = "การซิงค์ครั้งแรกของคุณอาจใช้เวลาสักครู่";
+
+/* String displayed on Sign In to Sync page that allows the user to create a new account. */
+"Sync.NoAccount.Description" = "ไม่มีบัญชีใช่หรือไม่? สร้างบัญชีเพื่อซิงค์ Firefox ระหว่างอุปกรณ์";
+
+/* Message displayed when the user's account is syncing with no ellipsis */
+"Sync.Syncing.Label" = "กำลังซิงค์";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "กำลังซิงค์…";
+
+/* Panel accessibility label */
+"Synced Tabs" = "แท็บที่ซิงค์";
+
+/* The Bookmark sync component, used in SyncState.Partial.Title */
+"SyncState.Bookmark.Title" = "ที่คั่นหน้า";
+
+/* The Remote Clients sync component, used in SyncState.Partial.Title */
+"SyncState.Clients.Title" = "ลูกข่ายระยะไกล";
+
+/* Title for Sync status message when synchronization failed to complete */
+"SyncState.Failed.Title" = "การซิงค์ล้มเหลว";
+
+/* The History sync component, used in SyncState.Partial.Title */
+"SyncState.History.Title" = "ประวัติ";
+
+/* The Logins sync component, used in SyncState.Partial.Title */
+"SyncState.Logins.Title" = "การเข้าสู่ระบบ";
+
+/* Title for Sync status message when Sync failed to start. */
+"SyncState.NotStarted.Title" = "Sync ไม่พร้อมใช้งาน";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "Sync ออฟไลน์อยู่";
+
+/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
+"SyncState.Partial.Title" = "Sync ประสบปัญหาในการซิงค์ %@";
+
+/* The Tabs sync component, used in SyncState.Partial.Title */
+"SyncState.Tabs.Title" = "แท็บ";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "แท็บ %1$@ จาก %2$@";
+
+/* Hardware shortcut to open the tab tray from a tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"Tab.ShowTabTray.KeyCodeTitle" = "แสดงแท็บทั้งหมด";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "แท็บ %1$@ ถึง %2$@ จาก %3$@";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "ถาดแท็บ";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "เลิกทำ";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "ปิด %d แท็บแล้ว";
+
+/* The placeholder text for the tab search bar */
+"Tabs.Search.PlaceholderText" = "ค้นหาแท็บ";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"TabTray.AddTab.Button" = "เพิ่มแท็บ";
+
+/* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseAllTabs.KeyCodeTitle" = "ปิดแท็บทั้งหมด";
+
+/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseTab.KeyCodeTitle" = "ปิดแท็บที่เลือก";
+
+/* The section header for tabs opened last week */
+"TabTray.LastWeek.Header" = "สัปดาห์ที่แล้ว";
+
+/* The title on the button to copy the tab address. */
+"TabTray.MoreMenu.Copy" = "คัดลอก";
+
+/* The section header for tabs opened before last week */
+"TabTray.Older.Header" = "เก่ากว่า";
+
+/* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenNewTab.KeyCodeTitle" = "เปิดแท็บใหม่";
+
+/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenSelectedTab.KeyCodeTitle" = "เปิดแท็บที่เลือก";
+
+/* The button title to see more options to perform on the tab. */
+"TabTray.SwipeMenu.More" = "เพิ่มเติม";
+
+/* The title for the tab tray */
+"TabTray.Title" = "แท็บที่เปิด";
+
+/* The section header for tabs opened today */
+"TabTray.Today.Header" = "วันนี้";
+
+/* The section header for tabs opened yesterday */
+"TabTray.Yesterday.Header" = "เมื่อวานนี้";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "ไม่สามารถแสดงผลหน้าในมุมมองผู้อ่าน";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "เกิดปัญหาในการเข้าถึงแท็บจากอุปกรณ์อื่น ๆ ของคุณ ลองอีกครั้งในอีกสักครู่";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "เกิดข้อผิดพลาดในการแปลงหน้า";
+
+/* Relative date for date in past week. */
+"this week" = "สัปดาห์นี้";
+
+/* label for Not Now button */
+"Toasts.NotNow" = "ไม่ใช่ตอนนี้";
+
+/* Open App Store button */
+"Toasts.OpenAppStore" = "เปิด App Store";
+
+/* Label for button to undo the action just performed */
+"Toasts.Undo" = "เลิกทํา";
+
+/* History tableview section header */
+"Today" = "วันนี้";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "วันนี้เมื่อ %@";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "เมนู";
+
+/* Accessibility label for the Close All Tabs menu button. */
+"Toolbar.Menu.CloseAllTabs" = "ปิดแท็บทั้งหมด";
+
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "ไซต์ที่คุณเยี่ยมชมมากที่สุดจะแสดงที่นี่";
+
+/* The title for the empty Top Sites state */
+"TopSites.EmptyState.Title" = "ยินดีต้อนรับสู่ไซต์เด่น";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "เอาหน้าออก - %@";
+
+/* Button to disallow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.Cancel" = "ไม่";
+
+/* Button to allow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.OK" = "ใช่";
+
+/* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
+"TranslationToastHandler.PromptTranslate.Title" = "หน้านี้ดูเหมือนจะเป็น %1$@ แปลเป็น %2$@ ด้วย %3$@?";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* The menu item that pastes the current contents of the clipboard into the URL bar and navigates to the page */
+"UIMenuItem.PasteGo" = "วางแล้วไป";
+
+/* Search in New Tab Text selection menu item */
+"UIMenuItem.SearchWithFirefox" = "ค้นหาด้วย Firefox";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "ยังไม่ได้อ่าน";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect" = "อัปเกรด Firefox เพื่อเชื่อมต่อ";
+
+/* Debug option */
+"Use stage servers" = "ใช้ stage servers";
+
+/* Username textbox in Authentication prompt */
+"Username" = "ชื่อผู้ใช้";
+
+/* Text message in the settings table view */
+"Verify your email address" = "ยืนยันที่อยู่อีเมลของคุณ";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "รุ่น %1$@ (%2$@)";
+
+/* Accessibility label for the main web content view */
+"Web content" = "เนื้อหาเว็บ";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "ยินดีต้อนรับสู่รายการอ่านของคุณ";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "เราเสียใจอย่างสุดซึ้ง";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Wikipedia";
+
+/* Relative date for yesterday. */
+"yesterday" = "เมื่อวานนี้";
+
+/* History tableview section header */
+"Yesterday" = "เมื่อวานนี้";
+
+/* Error message in the remote tabs panel */
+"You don’t have any tabs open in Firefox on your other devices." = "คุณไม่มีแท็บใด ๆ ที่เปิดอยู่ใน Firefox ในอุปกรณ์อื่น ๆ ของคุณ";
+
+/* Your Rights settings section title */
+"Your Rights" = "สิทธิของคุณ";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+

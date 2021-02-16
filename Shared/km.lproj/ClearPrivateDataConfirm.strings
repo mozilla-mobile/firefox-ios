@@ -1,0 +1,9 @@
+/* The cancel button when confirming clear private data. */
+"Cancel" = "បោះបង់";
+
+/* The button that clears private data. */
+"OK" = "យល់ព្រម";
+
+/* Description of the confirmation dialog shown when a user tries to clear their private data. */
+"This action will clear all of your private data. It cannot be undone." = "ទង្វើ​នេះ​នឹង​ជម្រះ​ទិន្នន័យ​ឯកជន​របស់​អ្នក​ទាំងអស់។ វា​មិន​អាច​មិន​ធ្វើ​វិញ​បាន​ទេ។";
+

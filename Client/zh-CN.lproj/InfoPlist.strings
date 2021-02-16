@@ -1,0 +1,29 @@
+/* (No Comment) */
+"1Password Fill Browser Action" = "1Password 浏览器填充操作";
+
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "这让您拍摄和上传照片。";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Firefox 需进行面容 ID 验证才能访问您保存的登录信息。";
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSLocationWhenInUseUsageDescription" = "您访问的网站可能会请求您的地理位置。";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "这让您可以拍摄和上传视频。";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "这使您可以保存照片。";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "新建隐私标签页";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "新建标签页";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "扫描二维码";
+

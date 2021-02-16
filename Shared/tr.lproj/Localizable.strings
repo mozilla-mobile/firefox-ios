@@ -1,0 +1,1712 @@
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "%@ kullanıcı adı ve parola istiyor.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "%1$@ kullanıcı adı ve parola istiyor. Sitenin mesajı: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "Hakkında";
+
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite" = "Sık kullanılanlara sabitle";
+
+/* The title for removing a pinned topsite action */
+"ActivityStream.ContextMenu.RemovePinTopsite" = "Sabitlenmiş siteyi kaldır";
+
+/* The description of a highlight if it is a site the user has bookmarked */
+"ActivityStream.Highlights.Bookmark" = "Yer imlerinde";
+
+/* The description of a highlight if it is a site the user has visited */
+"ActivityStream.Highlights.Visited" = "Ziyaret edildi";
+
+/* Section title label for recently bookmarked websites */
+"ActivityStream.NewRecentBookmarks.Title" = "Son Yer İmleri";
+
+/* The link that shows more Pocket trending stories */
+"ActivityStream.Pocket.MoreLink" = "Daha fazla";
+
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle" = "Pocket’ta öne çıkanlar";
+
+/* The description of a Pocket Story */
+"ActivityStream.Pocket.Trending" = "Popüler";
+
+/* Section title label for recently visited websites */
+"ActivityStream.RecentHistory.Title" = "Son bakılanlar";
+
+/* label showing how many rows of topsites are shown. %d represents a number */
+"ActivityStream.TopSites.RowCount" = "Satır: %d";
+
+/* The title for the setting page which lets you select the number of top site rows */
+"ActivityStream.TopSites.RowSettingFooter" = "Satır sayısını ayarla";
+
+/* Section title label for Top Sites */
+"ActivityStream.TopSites.SectionTitle" = "Sık kullanılanlar";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Sekme ekle";
+
+/* Accessibility label for action adding current page to reading list.
+   Name for button adding current article to reading list in reader mode */
+"Add to Reading List" = "Okuma listesine ekle";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Sayfa, okuma listesine eklendi";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "Tamam";
+
+/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Message" = "Parola Wallet’a eklenirken bir hat oluştu. Lütfen daha sonra yeniden deneyin.";
+
+/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Title" = "Parola eklenemedi";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Adres ve arama";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Her zaman gönder";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "Kimlik doğrulaması gerekli";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "Geri";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Açılır pencereleri engelle";
+
+/* The header title for the fields when editing a Bookmark */
+"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "Yer imi";
+
+/* The header title for the fields when editing a Folder */
+"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "Klasör";
+
+/* The label for the Title field when editing a bookmark */
+"Bookmark.DetailFieldTitle.Label" = "Başlık";
+
+/* The label for the URL field when editing a bookmark */
+"Bookmark.DetailFieldURL.Label" = "Adres";
+
+/* Toggle bookmarks syncing setting */
+"Bookmarks" = "Yer imleri";
+
+/* The button on the snackbar to edit a bookmark after adding it. */
+"Bookmarks.Edit.Button" = "Düzenle";
+
+/* The button to edit a bookmark */
+"Bookmarks.EditBookmark.Label" = "Yer imini düzenle";
+
+/* The button to edit a folder */
+"Bookmarks.EditFolder.Label" = "Klasörü düzenle";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "Klasör";
+
+/* The label for the location of the new folder */
+"Bookmarks.FolderLocation.Label" = "Konum";
+
+/* The label for the title of the new folder */
+"Bookmarks.FolderName.Label" = "Klasör adı";
+
+/* The button to create a new bookmark */
+"Bookmarks.NewBookmark.Label" = "Yeni yer imi";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "Yeni klasör";
+
+/* The button to create a new separator */
+"Bookmarks.NewSeparator.Label" = "Yeni ayraç";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "Başlık";
+
+/* The label for the URL of a bookmark */
+"Bookmarks.URL.Label" = "Adres";
+
+/* Status label for the empty Bookmarks state. */
+"BookmarksPanel.EmptyState.Title" = "Kaydettiğiniz yer imleri burada görünecek.";
+
+/* Describes the date on which the breach occurred */
+"BreachAlerts.BreachDate" = "İhlalin gerçekleştiği tarih";
+
+/* Description of what a breach is */
+"BreachAlerts.Description" = "Parolanızı en son değiştirdiğinizden beri parolalar sızdırılmış veya çalınmış. Bu hesabı korumak için siteye girip parolanızı değiştirin.";
+
+/* Link to monitor.firefox.com to learn more about breached passwords */
+"BreachAlerts.LearnMoreButton" = "Daha fazla bilgi al";
+
+/* Leads to a link to the breached website */
+"BreachAlerts.Link" = "Git";
+
+/* Title for the Breached Login Detail View. */
+"BreachAlerts.Title" = "Web sitesi ihlali";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Parlaklık";
+
+/* Label for Cancel button */
+"Cancel" = "İptal";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Renk temasını değiştirir.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Yazı tipi türünü değiştirir.";
+
+/* The button to open a new tab with the copied link */
+"ClipboardToast.GoToCopiedLink.Button" = "Git";
+
+/* Message displayed when the user has a copied link on the clipboard */
+"ClipboardToast.GoToCopiedLink.Title" = "Kopyalanan bağlantıya gidilsin mi?";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Kapat";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "Sekme kapatılıyor";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "bilgisayar";
+
+/* Context menu item for bookmarking a link URL */
+"ContextMenu.BookmarkLinkButtonTitle" = "Bağlantıyı yer imlerine ekle";
+
+/* The button text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Buna geç";
+
+/* The label text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Yeni gizli sekme açıldı";
+
+/* The button text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "Buna geç";
+
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText" = "Yeni sekme açıldı";
+
+/* Context menu item for copying an image to the clipboard */
+"ContextMenu.CopyImageButtonTitle" = "Resmi kopyala";
+
+/* Context menu item for copying an image URL to the clipboard */
+"ContextMenu.CopyImageLinkButtonTitle" = "Resim bağlantısını kopyala";
+
+/* Context menu item for copying a link URL to the clipboard */
+"ContextMenu.CopyLinkButtonTitle" = "Bağlantıyı kopyala";
+
+/* Context menu item for downloading a link URL */
+"ContextMenu.DownloadLinkButtonTitle" = "Bağlantıyı indir";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenInNewTabButtonTitle" = "Yeni sekmede aç";
+
+/* Context menu item for saving an image */
+"ContextMenu.SaveImageButtonTitle" = "Resmi kaydet";
+
+/* Context menu item for sharing a link URL */
+"ContextMenu.ShareLinkButtonTitle" = "Bağlantıyı paylaş";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "Sayfa okuma listesine eklenemedi";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it’s already there?" = "Sayfa okuma listesine eklenemedi. Zaten eklenmiş olabilir mi?";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "Sayfa yüklenemedi.";
+
+/* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
+"CoverSheet.v22.DarkMode.Description" = "iOS 13 kullanıcılarının telefonu koyu moda ayarlıysa Firefox artık otomatik olarak koyu temaya geçiyor. Bu davranışı Ayarlar > Tema menüsünden değiştirebilirsiniz.";
+
+/* Title for the new dark mode change in the version 22 app release. */
+"CoverSheet.v22.DarkMode.Title" = "Koyu temada artık koyu klavye ve koyu başlangıç ekranı da var.";
+
+/* Description for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Description" = "Gelişmiş izlenme korumamız reklamların sizi takip etmesini önlüyor. Daha fazla takipçiyi, reklamı ve açılır pencereyi engellemek isterseniz “sıkı” korumayı seçebilirsiniz.";
+
+/* Text for the new ETP settings button */
+"CoverSheet.v24.ETP.Settings.Button" = "Ayarlara git";
+
+/* Title for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Title" = "Reklamcılar sizi izlemesin";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Hesap oluştur";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Koyu";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Metin boyutunu küçült";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Varsayılan arama motoru";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Görünüm ayarları";
+
+/* Used as a button label for crash dialog prompt */
+"Don’t Send" = "Gönderme";
+
+/* Done button on left side of the Settings view controller title bar */
+"Done" = "Bitti";
+
+/* Panel accessibility label */
+"Downloads" = "İndirilenler";
+
+/* The label of the button the user will press to start downloading a file */
+"Downloads.Alert.DownloadNow" = "Hemen indir";
+
+/* Button confirming the cancellation of the download. */
+"Downloads.CancelDialog.Cancel" = "Vazgeç";
+
+/* Alert dialog body when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Message" = "Bu indirmeden vazgeçmek istediğinizden emin misiniz?";
+
+/* Button declining the cancellation of the download. */
+"Downloads.CancelDialog.Resume" = "Sürdür";
+
+/* Alert dialog title when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Title" = "İndirmekten vazgeç";
+
+/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
+"Downloads.Error.Message" = "Firefox’ta dosya indirme henüz desteklenmiyor.";
+
+/* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
+"Downloads.Toast.Cancelled.LabelText" = "İndirme iptal edildi";
+
+/* The label text in the Download Failed toast for showing confirmation that the download has failed. */
+"Downloads.Toast.Failed.LabelText" = "İndirme başarısız";
+
+/* The button to retry a failed download from the Download Failed toast. */
+"Downloads.Toast.Failed.RetryButton" = "Yeniden dene";
+
+/* The button to open a new tab with the Downloads home panel */
+"Downloads.Toast.GoToDownloads.Button" = "İndirilenler";
+
+/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. */
+"Downloads.Toast.MultipleFiles.DescriptionText" = "1 / %d dosya";
+
+/* The description text in the Download progress toast for showing the number of files (1$) and download progress (2$). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where 1$ is Downloads.Toast.MultipleFiles.DescriptionText and 2$ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and 1$ should come before 2$ everywhere except for right-to-left locales. */
+"Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";
+
+/* The description text in the Download progress toast for showing the downloaded file size (1$) out of the total expected file size (2$). */
+"Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
+
+/* Action button for deleting downloaded files in the Downloads panel. */
+"DownloadsPanel.Delete.Title" = "Sil";
+
+/* Title for the Downloads Panel empty state. */
+"DownloadsPanel.EmptyState.Title" = "İndirilen dosyalar burada görünecek.";
+
+/* Action button for sharing downloaded files in the Downloads panel. */
+"DownloadsPanel.Share.Title" = "Paylaş";
+
+/* Text message in the settings table view */
+"Enter your password to connect" = "Bağlanmak için parolanızı yazın";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "Gelişmiş";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "Uyarı: Bu siteye bağlantınızın güvenli olduğunu doğrulayamıyoruz.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "Bu, hatalı yapılandırmadan veya saldırganların yaptığı tahrifattan kaynaklanabilir. Olası riski kabul ediyorsanız devam edebilirsiniz.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "%@ web sitesinin sahibi siteyi hatalı yapılandırmış. Bilgilerinizin çalınmasını önlemek için Firefox bu web sitesine bağlanmadı.";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "Bu bağlantı güvenilir değil";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "Geri dön";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "Siteyi yine de ziyaret et";
+
+/* Question shown to user when tapping a link that opens the App Store app */
+"ExternalLink.AppStore.ConfirmationTitle" = "Bağlantı App Store’da açılsın mı?";
+
+/* Question shown to user when tapping an SMS or MailTo link that opens the external app for those. */
+"ExternalLink.AppStore.GenericConfirmationTitle" = "Bu bağlantı ilgili uygulamada açılsın mı?";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Title for firefox about:home page in tab history list */
+"Firefox.HomePage.Title" = "Firefox Giriş Sayfası";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "İleri";
+
+/* Label stating how to disconnect account */
+"FxA.AccountVerificationDetails" = "E-posta yanlış mı? Baştan başlamak için bağlantıyı kesin.";
+
+/* Label stating your account is not verified */
+"FxA.AccountVerificationRequired" = "Hesabın doğrulanması gerekiyor";
+
+/* Message explaining that user needs to check email for Firefox Account verfication link. */
+"FxA.AccountVerificationRequiredSurface" = "%@ adresini doğrulamalısınız. E-postanızı kontrol edip Firefox’tan gelen doğrulama bağlantısına tıklayın.";
+
+/* Button label to connect another device to Sync */
+"FxA.ConnectAnotherDevice" = "Başka bir cihaz bağla";
+
+/* Settings section title for Firefox Account */
+"FxA.FirefoxAccount" = "Firefox Hesabı";
+
+/* Button label to go to Firefox Account settings */
+"FxA.ManageAccount" = "Hesabı ve cihazları yönet";
+
+/* Label when no internet is present */
+"FxA.NoInternetConnection" = "İnternet bağlantısı yok";
+
+/* Button label to open Sync preferences */
+"FxA.OpenSyncPreferences" = "Sync tercihlerini aç";
+
+/* Instructions shown on qr code scanning view */
+"fxa.qr-scanning-view.instructions" = "firefox.com/pair adresinde görünen QR kodunu tarayın";
+
+/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
+"FxA.RemoveAccount" = "Kaldır";
+
+/* Description string for alert view that gets presented when user tries to remove an account. */
+"FxA.RemoveAccountAlertMessage" = "Farklı bir kullanıcı olarak giriş yapmak için bu cihazla ilişkili Firefox Hesabını kaldırabilirsiniz.";
+
+/* Remove account alert is the final confirmation before user removes their firefox account */
+"FxA.RemoveAccountAlertTitle" = "Hesabı kaldır";
+
+/* Button label to resend email */
+"FxA.ResendEmail" = "E-postayı tekrar gönder";
+
+/* FxA sign in view subtitle */
+"fxa.signin.camera-signin" = "Kameranızla giriş yapın";
+
+/* FxA sign in create account label. */
+"fxa.signin.create-account-pt-1" = "Hesap açarak Firefox’u cihazlar arasında eşitleyebilirsiniz.";
+
+/* FxA sign in create account label. This will be linked to the site to create an account. */
+"fxa.signin.create-account-pt-2" = "Firefox Hesabı açın.";
+
+/* FxA sign in view qr code instructions */
+"fxa.signin.qr-link-instruction" = "Bilgisayarınızda Firefox’u açıp firefox.com/pair adresine gidin";
+
+/* FxA sign in view qr code scan button */
+"fxa.signin.ready-to-scan" = "Taramaya hazırım";
+
+/* FxA sign in view title */
+"fxa.signin.turn-on-sync" = "Sync’i etkinleştir";
+
+/* FxA sign in view email login button */
+"fxa.signin.use-email-instead" = "E-posta ile giriş yap";
+
+/* Button label to sign into Sync */
+"FxA.SignIntoSync" = "Sync’e giriş yap";
+
+/* Label explaining what sync does */
+"FxA.SyncExplain" = "Başka cihazlardaki sekmelerinizi, yer imlerinizi ve parolalarınızı alabilirsiniz.";
+
+/* Button label to Sync your Firefox Account */
+"FxA.SyncNow" = "Şimdi eşitle";
+
+/* Call to action for sign into sync button */
+"FxA.TakeYourWebWithYou" = "Web’inizi yanınızda taşıyın";
+
+/* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
+"FxAPush_DeviceConnected_body" = "Firefox Sync yeni bir cihaza bağlandı: %@";
+
+/* Title of a notification displayed when another device has connected to FxA. */
+"FxAPush_DeviceConnected_title" = "Sync bağlandı";
+
+/* Body of a notification displayed when named device has been disconnected from FxA. %@ refers to the name of the disconnected device. */
+"FxAPush_DeviceDisconnected_body" = "%@ adlı cihazın bağlantısı başarıyla kesildi.";
+
+/* Body of a notification displayed when this device has been disconnected from FxA by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Bu cihazın Firefox Sync bağlantısı başarıyla kesildi.";
+
+/* Title of a notification displayed when this device has been disconnected by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync bağlantısı kesildi";
+
+/* Title of a notification displayed when named device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_title" = "Sync bağlantısı kesildi";
+
+/* Body of a notification displayed when unnamed device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Bir cihazın Sync bağlantısı kesildi";
+
+/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "Başka cihazlardaki açık sekmelerinizi, yer imlerinizi ve parolalarınızı alın.";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Yardım";
+
+/* Toggle history syncing setting */
+"History" = "Geçmiş";
+
+/* Title for button in the history panel to clear recent history */
+"HistoryPanel.ClearHistoryButtonTitle" = "Yakın geçmişi temizle…";
+
+/* Option title to clear all browsing history. */
+"HistoryPanel.ClearHistoryMenuOptionEverything" = "Her şey";
+
+/* Button to perform action to clear history for the last hour */
+"HistoryPanel.ClearHistoryMenuOptionTheLastHour" = "Son bir saat";
+
+/* Button to perform action to clear history for today only */
+"HistoryPanel.ClearHistoryMenuOptionToday" = "Bugün";
+
+/* Button to perform action to clear history for yesterday and today */
+"HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "Bugün ve dün";
+
+/* Title for popup action menu to clear recent history. */
+"HistoryPanel.ClearHistoryMenuTitle" = "Seçtiğiniz süre içinde kaydedilen geçmişiniz, çerezler ve diğer tarayıcı verileri silinecektir.";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "Son ziyaret ettiğiniz siteler burada görünecek.";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "Diğer cihazlardaki sekmeleriniz burada görünür.";
+
+/* Description for the empty synced tabs 'not signed in' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Diğer cihazlarınızdaki sekmeleri görmek için giriş yapın.";
+
+/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "Hesabınızın doğrulanması gerekiyor.";
+
+/* Description for the empty synced tabs 'single device Sync' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "Diğer cihazlarınızdaki sekmeleri burada görmek ister misiniz?";
+
+/* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Diğer cihazlardaki sekmeleri görmek için sekme eşitlemeyi açın.";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "Geçmiş";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "Son kapatılanlar";
+
+/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d cihaz bağlandı";
+
+/* Title for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Title" = "Eşitlenen cihazlar";
+
+/* Button cancelling changes setting the home page for the first time. */
+"HomePage.Set.Dialog.Cancel" = "İptal";
+
+/* Alert dialog body when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Message" = "Bunu istediğiniz zaman Ayarlar’dan değiştirebilisiniz";
+
+/* Button accepting changes setting the home page for the first time. */
+"HomePage.Set.Dialog.OK" = "Giriş sayfası yap";
+
+/* Alert dialog title when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Title" = "Bu sayfayı giriş sayfanız olarak kullanmak istiyor musunuz?";
+
+/* The title for the Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Bookmark" = "Yer imi";
+
+/* The title for the Delete from History context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.DeleteFromHistory" = "Geçmişten sil";
+
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab" = "Gizli sekmede aç";
+
+/* The title for the Open in New Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewTab" = "Yeni sekmede aç";
+
+/* The title for the Remove context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Remove" = "Sil";
+
+/* The title for the Remove Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.RemoveBookmark" = "Yer imini sil";
+
+/* The title for the Share context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Share" = "Paylaş";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Back.DiscoveryTitle" = "Geri";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.CloseTab.DiscoveryTitle" = "Sekmeyi kapat";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Find.DiscoveryTitle" = "Bul";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Forward.DiscoveryTitle" = "İleri";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "Yeni gizli sekme";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewTab.DiscoveryTitle" = "Yeni sekme";
+
+/* Label to switch to normal browsing mode */
+"Hotkeys.NormalMode.DiscoveryTitle" = "Normal gezinti modu";
+
+/* Label to switch to private browsing mode */
+"Hotkeys.PrivateMode.DiscoveryTitle" = "Gizli gezinti modu";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Reload.DiscoveryTitle" = "Sayfayı tazele";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "Konum çubuğunu seç";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "Sonraki sekmeyi göster";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Önceki sekmeyi göster";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Metin boyutunu büyüt";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "az önce";
+
+/* History tableview section header */
+"Last month" = "Geçen ay";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "Son eşitleme: %@";
+
+/* History tableview section header */
+"Last week" = "Geçen hafta";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Lisanslar";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Açık";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "Asıl sayfayı yükle";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "İçerik yükleniyor…";
+
+/* Authentication prompt log in button */
+"Log in" = "Giriş yap";
+
+/* Toggle logins syncing setting */
+"Logins" = "Hesaplar";
+
+/* Login detail view field name for the last modified date */
+"LoginsDetailView.LoginModified" = "Değişiklik";
+
+/* Title for the login detail view */
+"LoginsDetailView.LoginTitle" = "Hesap";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "Kaydetme";
+
+/* Button to not update the user's password */
+"LoginsHelper.DontUpdate.Button" = "Güncelleme";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "%2$@ için %1$@ hesabı kaydedilsin mi?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "%@ parolası kaydedilsin mi?";
+
+/* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
+"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "%@ hesabı güncellensin mi?";
+
+/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "%2$@ için %1$@ hesabı güncellensin mi?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "Hesabı kaydet";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "Güncelle";
+
+/* For filtering the login list, search only the login names */
+"LoginsList.LoginsListFilterLogin" = "Hesap";
+
+/* For filtering the login list, search both website and login names. */
+"LoginsList.LoginsListFilterSearchAll" = "Tümü";
+
+/* For filtering the login list, search only the website names */
+"LoginsList.LoginsListFilterWebsite" = "Web sitesi";
+
+/* Placeholder test for search box in logins list view. */
+"LoginsList.LoginsListSearchPlaceholder" = "Filtrele";
+
+/* Title for the list of logins */
+"LoginsList.Title" = "KAYITLI HESAPLAR";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Firefox daha önce çökmüş gibi görünüyor. Sekmelerinizi geri yüklemek ister misiniz?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "Okundu olarak işaretle";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Okunmadı olarak işaretle";
+
+/* Toast displayed to the user after a bookmark has been added. */
+"Menu.AddBookmark.Confirm" = "Yer imi eklendi";
+
+/* Toast displayed to the user after adding the item to the Top Sites. */
+"Menu.AddPin.Confirm" = "Sık kullanılanlara sabitlendi";
+
+/* Toast displayed to the user after adding the item to their reading list. */
+"Menu.AddToReadingList.Confirm" = "Okuma listesine eklendi";
+
+/* The title for the button that lets you copy the url from the location bar. */
+"Menu.Copy.Title" = "Adresi kopyala";
+
+/* Toast displayed to user after copy url pressed. */
+"Menu.CopyURL.Confirm" = "Adres panoya kopyalandı";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "Bu sitede gelişmiş izlenme koruması KAPALI.";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "Bu sitede gelişmiş izlenme koruması AÇIK.";
+
+/* Description for having standard ETP protection with ITP offered in iOS14+ */
+"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox; siteler arası takipçileri, sosyal takipçileri, kripto madencileri ve parmak izi toplayıcıları engeller.";
+
+/* Description for having strict ETP protection with ITP offered in iOS14+ */
+"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox; siteler arası takipçileri, sosyal takipçileri, kripto madencileri, parmak izi toplayıcıları ve takip amaçlı içerikleri engeller.";
+
+/* Label for the button displayed in the menu used to stop the reload of the webpage */
+"Menu.Library.StopReload" = "Durdur";
+
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label" = "Gece modunu aç";
+
+/* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
+"Menu.NoImageModeBlockImages.Label" = "Resimleri engelle";
+
+/* Label for title in page action menu. */
+"Menu.PageActions.Title" = "Sayfa eylemleri";
+
+/* The title for the button that lets you paste into the location bar */
+"Menu.Paste.Title" = "Yapıştır";
+
+/* The title for the button that lets you paste and go to a URL */
+"Menu.PasteAndGo.Title" = "Yapıştır ve git";
+
+/* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
+"Menu.ReloadWithoutTrackingProtection.Title" = "İzlenme koruması olmadan tazele";
+
+/* Label for the button, displayed in the menu, used to reload the current website with Tracking Protection enabled */
+"Menu.ReloadWithTrackingProtection.Title" = "İzlenme koruması ile tazele";
+
+/* Toast displayed to the user after a bookmark has been removed. */
+"Menu.RemoveBookmark.Confirm" = "Yer imi silindi";
+
+/* Toast displayed to the user after removing the item from the Top Sites. */
+"Menu.RemovePin.Confirm" = "Sık kullanılanlardan kaldırıldı";
+
+/* Toast displayed to the user after a tab has been sent successfully. */
+"Menu.TabSent.Confirm" = "Sekme gönderildi";
+
+/* Title on tracking protection menu for blocked items. */
+"Menu.TrackingProtection.BlockedTitle" = "Engellendi";
+
+/* Message in menu when no trackers blocked. */
+"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Bu sayfada Firefox’un tanıdığı herhangi bir takipçi tespit edilmedi.";
+
+/* The title for tracking protection settings */
+"Menu.TrackingProtection.ProtectionSettings.Title" = "Koruma ayarları";
+
+/* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
+"Menu.TrackingProtection.TitlePrefix" = "%@ korumaları";
+
+/* The title that shows the number of content cookies blocked */
+"Menu.TrackingProtectionBlockedContent.Title" = "Takip amaçlı içerikler";
+
+/* The title that shows the number of social URLs blocked */
+"Menu.TrackingProtectionBlockedSocial.Title" = "Sosyal takipçiler";
+
+/* Description of the Tracking protection menu when TP is blocking parts of the page */
+"Menu.TrackingProtectionBlocking.Description" = "Firefox bu sayfanın sizi izleme ihtimali olan kısımlarını engelliyor.";
+
+/* The description of the Tracking Protection menu item when tracking is enabled */
+"Menu.TrackingProtectionBlockingDisabled.Description" = "Çevrimiçi takipçileri engelle";
+
+/* The title that shows the number of cross-site cookies blocked */
+"Menu.TrackingProtectionCrossSiteCookies.Title" = "Siteler arası takip çerezleri";
+
+/* The title that shows the number of cross-site URLs blocked */
+"Menu.TrackingProtectionCrossSiteTrackers.Title" = "Siteler arası takipçiler";
+
+/* The title that shows the number of cryptomining scripts blocked */
+"Menu.TrackingProtectionCryptominersBlocked.Title" = "Kripto madencileri";
+
+/* Description of content trackers. */
+"Menu.TrackingProtectionDescription.ContentTrackers" = "Web siteleri; gizli takipçiler içeren harici reklamlar, videolar ve başka içerikler yükleyebilir. Bunları engellemek sitelerin daha hızlı yüklenmesini sağlayabilir ama bazı düğmeler, formlar ve giriş alanları çalışmayabilir.";
+
+/* Description of cross-site trackers. */
+"Menu.TrackingProtectionDescription.CrossSiteNew" = "Bu çerezler çevrimiçi olarak yaptığınız şeyler hakkında veriler toplamak için sizi siteden siteye takip eder. Reklamverenler ve analiz şirketleri gibi üçüncü taraflar tarafından ayarlanmışlardır.";
+
+/* Description of cryptominers. */
+"Menu.TrackingProtectionDescription.CryptominersNew" = "Kripto madencileri dijital para üretmek için gizlice sisteminizin hesaplama gücünü kullanır. Kripto madencilik betikleri pilinizi tüketir, bilgisayarınızı yavaşlatır ve elektrik faturanızı kabartabilir.";
+
+/* Description of fingerprinters. */
+"Menu.TrackingProtectionDescription.Fingerprinters" = "Tarayıcınızdaki ve bilgisayarınızdaki ayarlar benzersizdir. Parmak izi toplayıcıları, siz internette gezinirken bu benzersiz ayarları bir araya getirerek profilinizi çıkarır ve sizi takip etmek için bu profili kullanabilir.";
+
+/* Description of social network trackers. */
+"Menu.TrackingProtectionDescription.SocialNetworksNew" = "Sosyal ağlar, eksiksiz ve hedeflenmiş bir profilinizi oluşturmak için başka web sitelerine de kendi takipçilerini yerleştirir. Bu takipçileri engellerseniz sosyal medya şirketleri internette neler yaptığınızı daha az takip edebilir.";
+
+/* The button that disabled TP for a site. */
+"Menu.TrackingProtectionDisable1.Title" = "Bu sitede kapalı";
+
+/* The confirmation toast once tracking protection has been disabled */
+"Menu.TrackingProtectionDisabled.Title" = "Bu sitede izlenme koruması kapatıldı.";
+
+/* A button to enable tracking protection inside the menu. */
+"Menu.TrackingProtectionEnable.Title" = "İzlenme korumasını aç";
+
+/* A button to enable tracking protection inside the menu. */
+"Menu.TrackingProtectionEnable1.Title" = "Bu sitede açık";
+
+/* The confirmation toast once tracking protection has been enabled */
+"Menu.TrackingProtectionEnabled.Title" = "Bu sitede izlenme koruması açıldı.";
+
+/* The title that shows the number of fingerprinting scripts blocked */
+"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Parmak izi toplayıcılar";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "Siteler arası takip çerezleri engellendi";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Cryptominers" = "Kripto madencileri engellendi";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Fingerprinters" = "Parmak izi toplayıcılar engellendi";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Social" = "Sosyal takipçiler engellendi";
+
+/* more info about what tracking protection is about */
+"Menu.TrackingProtectionMoreInfo.Description" = "İzlenme koruması, siz siteler arasında gezinirken hakkınızda veri toplayan çevrimiçi takipçileri engeller. Nasıl çalıştığını öğrenin.";
+
+/* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
+"Menu.TrackingProtectionNoBlocking.Description" = "Bu sayfada sizi izleyen bir şey bulunamadı.";
+
+/* label for the menu item to show when the website is whitelisted from blocking trackers. */
+"Menu.TrackingProtectionOption.WhiteListOnDescription" = "Bu sitede gezintinizi izleme ihtimali olan öğeler var. Korumayı devre dışı bıraktınız.";
+
+/* label for the menu item that lets you remove a website from the tracking protection whitelist */
+"Menu.TrackingProtectionWhitelistRemove.Title" = "Bu sitede etkinleştir";
+
+/* The title for the option to view the What's new page. */
+"Menu.WhatsNew.Title" = "Yeni neler var?";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "mobil cihaz";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "bir aydan önce";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "bir haftadan eski";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Gezinti araç çubuğu";
+
+/* Accessibility label for the New Tab button in the tab toolbar.
+   Accessibility Label for the tab toolbar New tab button */
+"New Tab" = "Yeni sekme";
+
+/* Restore Tabs Negative Action */
+"No" = "Hayır";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "Sekme yok";
+
+/* OK button */
+"OK" = "Tamam";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "Tamam";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "Eyvahlar olsun! Firefox çöktü";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Makaleleri Okuyucu görünümünde açmak için başlık çubuğunda kitap simgesi göründüğünde ona dokunun.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Ayarları aç";
+
+/* Toggle tabs syncing setting */
+"Open Tabs" = "Açık sekmeler";
+
+/* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
+"OpenURL.Error.Message" = "Adresi geçersiz olduğu için Firefox bu sayfayı açamıyor.";
+
+/* Title of the message shown when the user attempts to navigate to an invalid link. */
+"OpenURL.Error.Title" = "Sayfa açılamadı";
+
+/* Accessibility label for the Page Options menu button */
+"Page Options Menu" = "Sayfa seçenekleri menüsü";
+
+/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
+"Panel Chooser" = "Panel seçiçi";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Parola";
+
+/* Error message shown in the remote tabs panel */
+"PasswordAutoFill.NoPasswordsFoundTitle" = "Firefox Hesabınızdan eşitlenmiş herhangi bir kimlik bilgisi yok";
+
+/* Header for the list of credentials table */
+"PasswordAutoFill.PasswordsListTitle" = "Kullanılabilir kimlik bilgileri:";
+
+/* Title of the extension that shows firefox passwords */
+"PasswordAutoFill.SectionTitle" = "Firefox kimlik bilgileri";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Seçtiğiniz resmin Film Rulosu’na kaydedilebilmesi için gereklidir.";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox fotoğraflarınıza erişmek istiyor";
+
+/* Button for closing the menu action sheet */
+"PhotonMenu.close" = "Kapat";
+
+/* Privacy section title */
+"Privacy" = "GİZLİLİK";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "Gizlilik ilkeleri";
+
+/* Title for quick-search engines settings section. */
+"Quick-Search Engines" = "Hızlı arama motorları";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "okundu";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "Okuyucu Görünümü";
+
+/* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
+"ReaderMode.Available.VoiceOverAnnouncement" = "Okuyucu modu kullanılabilir";
+
+/* Panel accessibility label */
+"Reading list" = "Okuma listesi";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "Son kapatılanlar";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "Tazele";
+
+/* Accessibility label for the reload button */
+"Reload page" = "Sayfayı tazele";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Sil";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Okuma listesinden sil";
+
+/* Cancel button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Cancel" = "İptal";
+
+/* Reopen button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Reopen" = "Yeniden aç";
+
+/* Reopen alert title shown at home page. */
+"ReopenAlert.Title" = "Kapatılan sekmeyi yeniden aç";
+
+/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"ReopenClosedTab.KeyCodeTitle" = "Kapatılan sekmeyi yeniden aç";
+
+/* Accessibility label for button resetting font size in display settings of reader mode */
+"Reset text size" = "Metin boyutunu sıfırla";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans-serif";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Sayfaları okuma listenize kaydetmek için Okuyucu görünümündeyken kitap artı simgesine dokunun.";
+
+/* OK button to dismiss the error prompt. */
+"ScanQRCode.Error.OK.Button" = "Tamam";
+
+/* Text for the instructions label, displayed in the QR scanner view */
+"ScanQRCode.Instructions.Label" = "Taranacak QR kodunu çerçeveyle hizalayın";
+
+/* Text of the prompt that is shown to the user when the data is invalid */
+"ScanQRCode.InvalidDataError.Message" = "Veri geçersiz";
+
+/* Text of the prompt user to setup the camera authorization. */
+"ScanQRCode.PermissionError.Message" = "Lütfen cihazınızın ‘Ayarlar’ -> ‘Gizlilik’ -> ‘Kamera’ menüsünden Firefox’un kameraya erişmesine izin verin.";
+
+/* Title for the QR code scanner view. */
+"ScanQRCode.View.Title" = "QR kodu tara";
+
+/* Accessibility Label for the tab toolbar Search button
+   Navigation title for search settings.
+   Open search section of settings */
+"Search" = "Arama";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Arama yapın veya adres yazın";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "Yeni arama motoru hızlı arama çubuğunda görünecektir.";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "Arama motoru eklendi!";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "Arama sağlayıcısı eklensin mi?";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "İptal";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.DuplicateErrorMessage" = "Bu başlık veya URL’ye sahip bir arama motoru zaten eklenmiş.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.DuplicateErrorTitle" = "Başarısız";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "Arama sağlayıcısı eklenemedi.";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "Başarısız";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.FormErrorMessage" = "Lütfen tüm alanları doğru bir şekilde doldurun.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.FormErrorTitle" = "Başarısız";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "Tamam";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "Öneriyle ilgili aramalar";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "Güvenli bağlantı";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "Sorunu giderebilmemiz için Mozilla’ya çökme raporu gönderilsin mi?";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "Geri bildirim gönder";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "Raporu gönder";
+
+/* Button title for cancelling share screen
+   Close button in top navigation bar */
+"SendTo.Cancel.Button" = "İptal";
+
+/* Header for the list of devices table */
+"SendTo.DeviceList.Text" = "Mevcut cihazlar:";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "Yalnızca HTTP ve HTTPS bağlantıları paylaşılabilir.";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "Tamam";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "Paylaşmaya çalıştığınız bağlantı paylaşılamaz.";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"SendTo.NavBar.Title" = "Sekmeyi Gönder";
+
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message" = "Bu Firefox Hesabı’na bağlanmış ve eşitleme yapabileceğiniz başka cihazınız yok.";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Message" = "Devam etmek için lütfen Firefox’u açın, Ayarlar’a gidin ve giriş yapın.";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Title" = "Firefox Hesabı’nıza giriş yapmadınız.";
+
+/* Navigation bar button to Send the current page to a device */
+"SendTo.SendAction.Text" = "Gönder";
+
+/* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
+"SendTo.SignIn.Button" = "Firefox’a giriş yap";
+
+/* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_body" = "Başka bir cihazdan yeni sekme geldi.";
+
+/* Title of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_title" = "Sekme alındı";
+
+/* Body of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the app name. */
+"SentTab_TabArrivingNotification_WithDevice_body" = "%@ tarayıcınıza yeni sekme geldi";
+
+/* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
+"SentTab_TabArrivingNotification_WithDevice_title" = "%@ sekme gönderdi";
+
+/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
+"SentTab.AddToReadingListAction.Title" = "Okuma listesine ekle";
+
+/* Label for an action used to bookmark one or more tabs from a notification. */
+"SentTab.BookmarkAction.title" = "Yer imlerine ekle";
+
+/* Body of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.body" = "Başlamak için dokunun";
+
+/* Title of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+
+/* Label for an action used to view one or more tabs from a notification. */
+"SentTab.ViewAction.title" = "Görüntüle";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Sepya";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serif";
+
+/* Title in the settings view controller title bar */
+"Settings" = "Ayarlar";
+
+/* The button text in Search Settings that opens the Custom Search Engine view. */
+"Settings.AddCustomEngine" = "Arama motoru ekle";
+
+/* The text on the Save button when saving a custom search engine */
+"Settings.AddCustomEngine.SaveButtonText" = "Kaydet";
+
+/* The title of the  Custom Search Engine view. */
+"Settings.AddCustomEngine.Title" = "Arama motoru ekle";
+
+/* The title for the field which sets the title for a custom search engine. */
+"Settings.AddCustomEngine.TitleLabel" = "Başlık";
+
+/* The placeholder for Title Field when saving a custom search engine. */
+"Settings.AddCustomEngine.TitlePlaceholder" = "Arama motoru";
+
+/* The title for URL Field */
+"Settings.AddCustomEngine.URLLabel" = "Adres";
+
+/* The placeholder for URL Field when saving a custom search engine */
+"Settings.AddCustomEngine.URLPlaceholder" = "Adres (Sorgunun yerine %s gelecek)";
+
+/* Button in Data Management that clears private data for the selected items. */
+"Settings.ClearAllWebsiteData.Clear.Button" = "Tüm web sitesi verilerini temizle";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "Özel verileri temizle";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "Özel verileri temizle";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "Özel verileri temizle";
+
+/* Copy app version alert shown in settings. */
+"Settings.CopyAppVersion.Title" = "Panoya kopyalandı";
+
+/* Default text in search bar for Data Management */
+"Settings.DataManagement.SearchLabel" = "Siteleri filtrele";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.DataManagement.SectionName" = "Veri yönetimi";
+
+/* Title displayed in header of the setting panel. */
+"Settings.DataManagement.Title" = "Veri yönetimi";
+
+/* Body of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Body" = "Firefox artık hesabınızla eşitlenmeyecek ama bu cihazdaki gezinti geçmişiniz silinmeyecek.";
+
+/* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
+"Settings.Disconnect.Button" = "Sync bağlantısını kes";
+
+/* Cancel action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.CancelButton" = "İptal";
+
+/* Destructive action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.DestructiveButton" = "Bağlantıyı kes";
+
+/* Title of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Title" = "Sync bağlantısı kesilsin mi?";
+
+/* Section header for brightness slider. */
+"Settings.DisplayTheme.BrightnessThreshold.SectionHeader" = "Eşik";
+
+/* Display (theme) settings label to show if manually switch theme is enabled. */
+"Settings.DisplayTheme.Manual.StatusLabel" = "Elle";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Manually'. */
+"Settings.DisplayTheme.Manual.SwitchSubtitle" = "İstediğiniz temayı seçin";
+
+/* Display (theme) setting to choose the theme manually. */
+"Settings.DisplayTheme.Manual.SwitchTitle" = "Elle";
+
+/* Option choice in display theme settings for dark theme */
+"Settings.DisplayTheme.OptionDark" = "Koyu";
+
+/* Option choice in display theme settings for light theme */
+"Settings.DisplayTheme.OptionLight" = "Açık";
+
+/* Display (theme) settings footer describing how the brightness slider works. */
+"Settings.DisplayTheme.SectionFooter" = "Tema, ekran parlaklığınıza bağlı olarak otomatik olarak değişecektir. Temanın değiştiği eşiği ayarlayabilirsiniz. Daire, ekranınızın şu anki parlaklığını gösterir.";
+
+/* Switch mode settings section title */
+"Settings.DisplayTheme.SwitchMode.SectionHeader" = "MODU DEĞİŞTİR";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Automatically'. */
+"Settings.DisplayTheme.SwitchSubtitle" = "Ekran parlaklığına göre otomatik olarak değiştir";
+
+/* Display (theme) settings label to show if automatically switch theme is enabled.
+   Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
+"Settings.DisplayTheme.SwitchTitle" = "Otomatik";
+
+/* System theme settings section title */
+"Settings.DisplayTheme.SystemTheme.SectionHeader" = "Sistem teması";
+
+/* System theme settings switch to choose whether to use the same theme as the system */
+"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "Sistemin açık/koyu modunu kullan";
+
+/* Theme picker settings section title */
+"Settings.DisplayTheme.ThemePicker.SectionHeader" = "TEMA SEÇİCİ";
+
+/* Title in main app settings for Theme settings */
+"Settings.DisplayTheme.Title.v2" = "Tema";
+
+/* DNT Settings option for always on */
+"Settings.DNT.OptionAlwaysOn" = "Her zaman";
+
+/* DNT Settings option for only turning on when Tracking Protection is also on */
+"Settings.DNT.OptionOnWithTP" = "Yalnızca izlenme korumasını kullanırken";
+
+/* DNT Settings title */
+"Settings.DNT.Title" = "Web sitelerine izlenmek istemediğimi bildiren “Do Not Track” sinyalini gönder";
+
+/* Label used for the device name settings section. */
+"Settings.FxA.DeviceName" = "CİHAZ ADI";
+
+/* Label used as a section title in the Firefox Accounts Settings screen. */
+"Settings.FxA.Sync.SectionName" = "Sync ayarları";
+
+/* Title displayed in header of the FxA settings panel. */
+"Settings.FxA.Title" = "Firefox Hesabı";
+
+/* General settings section title */
+"Settings.General.SectionName" = "Genel";
+
+/* Button in settings to clear the home page. */
+"Settings.HomePage.Clear.Button" = "Temizle";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "Giriş sayfası";
+
+/* Title displayed in header of the setting panel. */
+"Settings.HomePage.Title" = "Giriş sayfası ayarları";
+
+/* Placeholder text in the homepage setting when no homepage has been set. */
+"Settings.HomePage.URL.Placeholder" = "Bir web sayfası seç";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "ŞU ANKİ GİRİŞ SAYFASI";
+
+/* Button in settings to use the current link on the clipboard as home page. */
+"Settings.HomePage.UseCopiedLink.Button" = "Kopyalanan bağlantıyı kullan";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "Geçerli sayfayı kullan";
+
+/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
+"Settings.HomePage.UseDefault.Button" = "Varsayılanı kullan";
+
+/* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
+"Settings.LoginsAndPasswordsTitle" = "Hesaplar ve parolalar";
+
+/* Label used to set a custom url as the new tab option (homepage). */
+"Settings.NewTab.CustomURL" = "Özel adres";
+
+/* A description in settings of what the new tab choice means */
+"Settings.NewTab.Description" = "Yeni bir sekme açtığımda:";
+
+/* The title of the section in newtab that lets you modify the topsites panel */
+"Settings.NewTab.Option.ASTitle" = "SIK KULLANILANLARI ÖZELLEŞTİR";
+
+/* Option in settings to show a blank page when you open a new tab */
+"Settings.NewTab.Option.BlankPage" = "Boş sayfa";
+
+/* Option in settings to show bookmarks when you open a new tab */
+"Settings.NewTab.Option.Bookmarks" = "Yer imleri";
+
+/* The footer for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeFooter" = "En çok ziyaret ettiğiniz siteler";
+
+/* The title for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeTitle" = "FIREFOX BAŞLANGIÇ’I ÖZELLEŞTİR";
+
+/* Option in settings to show Firefox Home when you open a new tab */
+"Settings.NewTab.Option.FirefoxHome" = "Firefox Başlangıç";
+
+/* Option in the settings to turn off recent bookmarks in the Highlights section */
+"Settings.NewTab.Option.HighlightsBookmarks" = "Yeni yer imleri";
+
+/* Option in settings to turn off history in the highlights section */
+"Settings.NewTab.Option.HighlightsHistory" = "Ziyaret edilenler";
+
+/* Option in settings to show history when you open a new tab */
+"Settings.NewTab.Option.History" = "Geçmiş";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.HomePage" = "Giriş sayfası";
+
+/* Option in settings to turn on off pocket recommendations */
+"Settings.NewTab.Option.Pocket" = "Pocket’ta öne çıkanlar";
+
+/* Footer caption for pocket settings */
+"Settings.NewTab.Option.PocketFooter" = "Web’den harika içerikler.";
+
+/* Option in settings to show reading list when you open a new tab */
+"Settings.NewTab.Option.ReadingList" = "Okuma listemi göster";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
+"Settings.NewTab.SectionName" = "Yeni sekme";
+
+/* Title displayed in header of the setting panel. */
+"Settings.NewTab.Title" = "Yeni sekme";
+
+/* Label at the top of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionName" = "Göster";
+
+/* Footer at the bottom of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionNameFooter" = "Yeni bir sekme açarken ne yükleneceğini seçin";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Status" = "Firefox açılırken";
+
+/* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Title" = "Kopyalanan bağlantıları açmayı öner";
+
+/* Title for Open With Settings */
+"Settings.OpenWith.PageTitle" = "E-posta bağlantılarını bununla aç";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
+"Settings.OpenWith.SectionName" = "E-posta uygulaması";
+
+/* Setting to enable the built-in password manager */
+"Settings.SaveLogins.Title" = "Hesapları kaydet";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "Bitti";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "Düzenle";
+
+/* title for a link that explains how mozilla collects telemetry */
+"Settings.SendUsage.Link" = "Ayrıntılı bilgi alın.";
+
+/* A short description that explains why mozilla collects usage data. */
+"Settings.SendUsage.Message" = "Mozilla, yalnızca Firefox’u daha da geliştirmek için ihtiyaç duyduğumuz verileri toplar.";
+
+/* The title for the setting to send usage data. */
+"Settings.SendUsage.Title" = "Kullanım verilerini gönder";
+
+/* Description displayed under the ”Show Link Previews” option */
+"Settings.ShowLinkPreviews.Status" = "Bağlantılara basılı tutunca";
+
+/* Title of setting to enable link previews when long-pressing links. */
+"Settings.ShowLinkPreviews.Title" = "Bağlantı ön izlemelerini göster";
+
+/* Setting to show Logins & Passwords quick access in the application menu */
+"Settings.ShowLoginsInAppMenu.Title" = "Uygulama menüsünde göster";
+
+/* The description of the open new tab siri shortcut */
+"Settings.Siri.OpenTabShortcut" = "Yeni sekme aç";
+
+/* The description that describes what siri shortcuts are */
+"Settings.Siri.SectionDescription" = "Firefox’u Siri ile hızlıca açmak için Siri kestirmelerini kullanabilirsiniz";
+
+/* The option that takes you to the siri shortcuts settings page */
+"Settings.Siri.SectionName" = "Siri kestirmeleri";
+
+/* Dismiss button for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Button" = "Tamam";
+
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "Bir sitenin düzgün çalışmadığını fark ederseniz adres çubuğundaki kalkan simgesine dokunarak o site için gelişmiş izlenme korumasını kapatabilirsiniz.";
+
+/* Title for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Title" = "Bilgi";
+
+/* Header description for tracking protection options section where Basic/Strict block list can be selected */
+"Settings.TrackingProtection.BlockListsHeader" = "Gezinti etkinliğinizi izleyebilecek web öğelerini engellemek için Firefox’un hangi listeyi kullanacağını seçebilirsiniz.";
+
+/* Explanation of basic mode. */
+"Settings.TrackingProtection.Info.BasicTitle" = "Dengeli koruma ve performans.";
+
+/* The Title on info view which shows a list of all blocked websites */
+"Settings.TrackingProtection.Info.BlocksTitle" = "ENGELLENENLER";
+
+/* Explanation of strict mode. */
+"Settings.TrackingProtection.Info.StrictTitle" = "Daha güçlü koruma sağlar ama bazı sitelerin bozulmasına yol açabilir.";
+
+/* 'Learn more' info link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.LearnMore" = "Daha fazla bilgi alın";
+
+/* 'More Info' link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.MoreInfo" = "Daha fazla bilgi…";
+
+/* Additional information about your Enhanced Tracking Protection */
+"Settings.TrackingProtection.ProtectionCellFooter" = "Hedefli reklamları azaltır ve reklamcıların gezdiğiniz siteleri izlemesini engeller.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "Bir sitenin düzgün çalışmadığını fark ederseniz adres çubuğundaki kalkan simgesine dokunarak o site için gelişmiş izlenme korumasını kapatabilirsiniz.";
+
+/* Description for standard level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Web sitelerinin düzgün çalışması için bazı takipçilere izin verir.";
+
+/* Description for strict level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "Daha fazla takipçiyi, reklamı ve açılır pencereyi engeller. Sayfalar daha hızlı yüklenir ama bazı işlevler çalışmayabilir.";
+
+/* Title for tracking protection options section where level can be selected. */
+"Settings.TrackingProtection.ProtectionLevelTitle" = "KORUMA DÜZEYİ";
+
+/* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
+"Settings.TrackingProtection.SectionName" = "İzlenme koruması";
+
+/* Additional information about the strict level setting */
+"Settings.TrackingProtection.StrictLevelInfoFooter" = "Takipçileri engellemek bazı web sitelerinin işlevselliğini etkileyebilir.";
+
+/* Tracking protection settings option for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BasicBlockList" = "Standart (varsayılan)";
+
+/* Tracking protection settings option description for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BlockListBasicDescription" = "Web sitelerinin düzgün çalışması için bazı takipçilere izin verir.";
+
+/* Tracking protection settings option for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrict" = "Sıkı";
+
+/* Tracking protection settings option description for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrictDescription" = "Bilinen takipçileri engeller. Bazı siteler düzgün çalışmayabilir.";
+
+/* Description label shown on tracking protection options screen. */
+"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "Siz çeşitli sitelerde gezerken gezinti verilerinizin toplanmasına “izlenme” diyoruz.";
+
+/* Settings option to specify that Tracking Protection is on */
+"Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "Gelişmiş izlenme koruması";
+
+/* Translation settings footer describing how language detection and translation happens. */
+"Settings.TranslateSnackBar.SectionFooter" = "Web sayfasının dili cihazınızda algılanır ve çeviriler harici bir çeviri hizmeti aracılığıyla sunulur.";
+
+/* Translation settings section title */
+"Settings.TranslateSnackBar.SectionHeader" = "Hizmetler";
+
+/* Switch to choose if the language of a page is detected and offer to translate. */
+"Settings.TranslateSnackBar.SwitchSubtitle" = "Varsayılan dilimden farklı bir dilde yazılmış siteleri kendi dilime çevirmeyi öner.";
+
+/* Switch to choose if the language of a page is detected and offer to translate. */
+"Settings.TranslateSnackBar.SwitchTitle" = "Çevirmeyi öner";
+
+/* Title in main app settings for Translation toast settings */
+"Settings.TranslateSnackBar.Title" = "Çeviri";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "Sorun giderme";
+
+/* Button to delete website in search results */
+"Settings.WebsiteData.ButtonDelete" = "Sil";
+
+/* Button to exit edit website search results */
+"Settings.WebsiteData.ButtonDone" = "Bitti";
+
+/* Button to edit website search results */
+"Settings.WebsiteData.ButtonEdit" = "Düzenle";
+
+/* Button shows all websites on website data tableview */
+"Settings.WebsiteData.ButtonShowMore" = "Daha fazla göster";
+
+/* Description of the confirmation dialog shown when a user tries to clear their private data. */
+"Settings.WebsiteData.ConfirmPrompt" = "Bu işlem tüm web sitesi verilerinizi temizleyecektir. Geri alınamaz.";
+
+/* Title displayed in header of the Data Management panel. */
+"Settings.WebsiteData.Title" = "Web sitesi verileri";
+
+/* Action label on share extension to add page to the Firefox reading list. */
+"ShareExtension.AddToReadingListAction.Title" = "Okuma listesine ekle";
+
+/* Share extension label shown after user has performed 'Add to Reading List' action. */
+"ShareExtension.AddToReadingListActionDone.Title" = "Okuma listesine eklendi";
+
+/* Action label on share extension to bookmark the page in Firefox. */
+"ShareExtension.BookmarkThisPageAction.Title" = "Sayfayı yer imlerine ekle";
+
+/* Share extension label shown after user has performed 'Bookmark this Page' action. */
+"ShareExtension.BookmarkThisPageActionDone.Title" = "Yer imlerine eklendi";
+
+/* Action label on share extension to load the page in Firefox when user switches apps to bring it to foreground. */
+"ShareExtension.LoadInBackgroundAction.Title" = "Arka planda yükle";
+
+/* Share extension label shown after user has performed 'Load in Background' action. */
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Firefox’ta yükleniyor";
+
+/* Action label on share extension to immediately open page in Firefox. */
+"ShareExtension.OpenInFirefoxAction.Title" = "Firefox’ta aç";
+
+/* Action label on share extension to immediately open page in Firefox in private mode. */
+"ShareExtension.OpenInPrivateModeAction.Title" = "Gizli modda aç";
+
+/* Action label on share extension to search for the selected text in Firefox. */
+"ShareExtension.SeachInFirefoxAction.Title" = "Firefox’ta ara";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "Arama önerilerini göster";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "Sekmeleri göster";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "Turu göster";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "Durdur";
+
+/* Support section title */
+"Support" = "Destek";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Sekmeyi kapatmak için üç parmakla sağa veya sola sürükleyin.";
+
+/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"SwitchToNonPBM.KeyCodeTitle" = "Normal gezinti modu";
+
+/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"SwitchToPBM.KeyCodeTitle" = "Gizli gezinti modu";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, bookmarks, passwords and more." = "Sekmelerinizi, yer imlerinizi, parolalarınızı ve daha fazlasını eşitleyin.";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, passwords and more." = "Sekmelerinizi, parolalarınızı ve daha fazlasını eşitleyin.";
+
+/* Message displayed when the user syncs for the first time */
+"Sync.FirstTimeMessage.Label" = "İlk eşitlemeniz biraz zaman alabilir";
+
+/* String displayed on Sign In to Sync page that allows the user to create a new account. */
+"Sync.NoAccount.Description" = "Hesabınız yok mu? Firefox’u cihazlar arasında eşitlemek için hesap açın.";
+
+/* Message displayed when the user's account is syncing with no ellipsis */
+"Sync.Syncing.Label" = "Eşitleniyor";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "Eşitleniyor…";
+
+/* Panel accessibility label */
+"Synced Tabs" = "Eşitlenenler";
+
+/* The Bookmark sync component, used in SyncState.Partial.Title */
+"SyncState.Bookmark.Title" = "Yer imleri";
+
+/* The Remote Clients sync component, used in SyncState.Partial.Title */
+"SyncState.Clients.Title" = "Uzak istemciler";
+
+/* Title for Sync status message when synchronization failed to complete */
+"SyncState.Failed.Title" = "Eşitleme başarısız oldu";
+
+/* The History sync component, used in SyncState.Partial.Title */
+"SyncState.History.Title" = "Geçmiş";
+
+/* The Logins sync component, used in SyncState.Partial.Title */
+"SyncState.Logins.Title" = "Hesaplar";
+
+/* Title for Sync status message when Sync failed to start. */
+"SyncState.NotStarted.Title" = "Sync kullanılamıyor";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "Sync çevrimdışı";
+
+/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
+"SyncState.Partial.Title" = "Sync şunu eşitlemede sorun yaşıyor: %@";
+
+/* The Tabs sync component, used in SyncState.Partial.Title */
+"SyncState.Tabs.Title" = "Sekmeler";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "Sekme %1$@ / %2$@";
+
+/* Hardware shortcut to open the tab tray from a tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"Tab.ShowTabTray.KeyCodeTitle" = "Tüm sekmeleri göster";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "%3$@ sekmeden %1$@-%2$@ arası";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Sekme tepsisi";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "Geri al";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "%d sekme kapatıldı";
+
+/* The placeholder text for the tab search bar */
+"Tabs.Search.PlaceholderText" = "Sekmelerde ara";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"TabTray.AddTab.Button" = "Sekme ekle";
+
+/* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseAllTabs.KeyCodeTitle" = "Tüm sekmeleri kapat";
+
+/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseTab.KeyCodeTitle" = "Seçilen sekmeyi kapat";
+
+/* The section header for tabs opened last week */
+"TabTray.LastWeek.Header" = "Geçen hafta";
+
+/* The title on the button to copy the tab address. */
+"TabTray.MoreMenu.Copy" = "Kopyala";
+
+/* The section header for tabs opened before last week */
+"TabTray.Older.Header" = "Daha eski";
+
+/* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenNewTab.KeyCodeTitle" = "Yeni sekme aç";
+
+/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenSelectedTab.KeyCodeTitle" = "Seçilen sekmeyi aç";
+
+/* The button title to see more options to perform on the tab. */
+"TabTray.SwipeMenu.More" = "Daha fazla";
+
+/* The title for the tab tray */
+"TabTray.Title" = "Açık sekmeler";
+
+/* The section header for tabs opened today */
+"TabTray.Today.Header" = "Bugün";
+
+/* The section header for tabs opened yesterday */
+"TabTray.Yesterday.Header" = "Dün";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "Bu sayfa Okuyucu görünümünde görüntülenemedi.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Diğer cihazlarınızdaki sekmelere erişilirken bir sorun oluştu. Birkaç dakika sonra yeniden deneyin.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "Sayfa dönüştürülürken bir hata oluştu";
+
+/* Relative date for date in past week. */
+"this week" = "bu hafta";
+
+/* label for Not Now button */
+"Toasts.NotNow" = "Daha sonra";
+
+/* Open App Store button */
+"Toasts.OpenAppStore" = "App Store’u aç";
+
+/* Label for button to undo the action just performed */
+"Toasts.Undo" = "Geri al";
+
+/* History tableview section header */
+"Today" = "Bugün";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "bugün %@";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "Menü";
+
+/* Accessibility label for the Close All Tabs menu button. */
+"Toolbar.Menu.CloseAllTabs" = "Tüm sekmeleri kapat";
+
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "En çok ziyaret ettiğiniz siteler burada görünecek.";
+
+/* The title for the empty Top Sites state */
+"TopSites.EmptyState.Title" = "Sevilen sitelere hoş geldiniz";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "Sayfayı sil - %@";
+
+/* Button to disallow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.Cancel" = "Hayır";
+
+/* Button to allow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.OK" = "Evet";
+
+/* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
+"TranslationToastHandler.PromptTranslate.Title" = "Bu sayfa %1$@. %3$@ ile %2$@ye çevrilsin mi?";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* The menu item that pastes the current contents of the clipboard into the URL bar and navigates to the page */
+"UIMenuItem.PasteGo" = "Yapıştır ve git";
+
+/* Search in New Tab Text selection menu item */
+"UIMenuItem.SearchWithFirefox" = "Firefox ile ara";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "okunmadı";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect" = "Bağlanmak için Firefox’u yükseltin";
+
+/* Debug option */
+"Use stage servers" = "Stage sunucularını kullan";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Kullanıcı adı";
+
+/* Text message in the settings table view */
+"Verify your email address" = "E-posta adresinizi doğrulayın";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "Sürüm %1$@ (%2$@)";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Web içeriği";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Okuma listenize hoş geldiniz";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "Söylemekten utanıyoruz ama...";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Vikipedi";
+
+/* Relative date for yesterday. */
+"yesterday" = "dün";
+
+/* History tableview section header */
+"Yesterday" = "Dün";
+
+/* Error message in the remote tabs panel */
+"You don’t have any tabs open in Firefox on your other devices." = "Diğer cihazlarınızdaki Firefox’larda hiç açık sekme yok.";
+
+/* Your Rights settings section title */
+"Your Rights" = "Haklarınız";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+

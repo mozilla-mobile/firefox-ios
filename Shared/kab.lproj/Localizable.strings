@@ -1,0 +1,1712 @@
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "%@ yessutur aseqdec n yisem n useqdac akked wawal uffir.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "Isem n useqdac d wawal uffir yessuter-iten-id %1$@. Asmel yeqqar-d: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "Ɣef";
+
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite" = "Senteḍ deg ismal ifazen";
+
+/* The title for removing a pinned topsite action */
+"ActivityStream.ContextMenu.RemovePinTopsite" = "Kkes seg ismal ifazen";
+
+/* The description of a highlight if it is a site the user has bookmarked */
+"ActivityStream.Highlights.Bookmark" = "Yettwacreḍ";
+
+/* The description of a highlight if it is a site the user has visited */
+"ActivityStream.Highlights.Visited" = "Yettwarza";
+
+/* Section title label for recently bookmarked websites */
+"ActivityStream.NewRecentBookmarks.Title" = "Ticraḍ tineggura";
+
+/* The link that shows more Pocket trending stories */
+"ActivityStream.Pocket.MoreLink" = "Ugar";
+
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle" = "Awelleh si Pocket";
+
+/* The description of a Pocket Story */
+"ActivityStream.Pocket.Trending" = "Tiddin";
+
+/* Section title label for recently visited websites */
+"ActivityStream.RecentHistory.Title" = "Ttwarzan melmi kan";
+
+/* label showing how many rows of topsites are shown. %d represents a number */
+"ActivityStream.TopSites.RowCount" = "Izirigen: %d";
+
+/* The title for the setting page which lets you select the number of top site rows */
+"ActivityStream.TopSites.RowSettingFooter" = "Sbadu izirigen";
+
+/* Section title label for Top Sites */
+"ActivityStream.TopSites.SectionTitle" = "Ismal yettwarzan aṭas";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Rnu iccer";
+
+/* Accessibility label for action adding current page to reading list.
+   Name for button adding current article to reading list in reader mode */
+"Add to Reading List" = "Rnu ɣer tebdart n tɣuri";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Asebter yerna ɣer tebdart n tɣuri";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "IH";
+
+/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Message" = "Teḍra-d tuccḍa deg tmerna n wawal ɣer uqwṛab. Ma ulac aɣilif ɛreḍ tikelt-nniḍen.";
+
+/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Title" = "Timerna n wawal uffir ur teddi ara";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Tansa akked unadi";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Ttazen yal tikelt";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "Asesteb yettwasra";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "Ɣer deffir";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Sewḥel isfuyla udhimen";
+
+/* The header title for the fields when editing a Bookmark */
+"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "Acraḍ";
+
+/* The header title for the fields when editing a Folder */
+"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "Akaram";
+
+/* The label for the Title field when editing a bookmark */
+"Bookmark.DetailFieldTitle.Label" = "Azwel";
+
+/* The label for the URL field when editing a bookmark */
+"Bookmark.DetailFieldURL.Label" = "URL";
+
+/* Toggle bookmarks syncing setting */
+"Bookmarks" = "Ticraḍ n yisebtar";
+
+/* The button on the snackbar to edit a bookmark after adding it. */
+"Bookmarks.Edit.Button" = "Ẓreg";
+
+/* The button to edit a bookmark */
+"Bookmarks.EditBookmark.Label" = "Ẓreg tacreṭ n usebter";
+
+/* The button to edit a folder */
+"Bookmarks.EditFolder.Label" = "Ẓreg Akaram";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "Akaram";
+
+/* The label for the location of the new folder */
+"Bookmarks.FolderLocation.Label" = "Adig";
+
+/* The label for the title of the new folder */
+"Bookmarks.FolderName.Label" = "Isem n ukaram";
+
+/* The button to create a new bookmark */
+"Bookmarks.NewBookmark.Label" = "Tacreṭ n usebter tamaynut";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "Rnu Akaram";
+
+/* The button to create a new separator */
+"Bookmarks.NewSeparator.Label" = "Anabraz amaynut";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "Azwel";
+
+/* The label for the URL of a bookmark */
+"Bookmarks.URL.Label" = "URL";
+
+/* Status label for the empty Bookmarks state. */
+"BookmarksPanel.EmptyState.Title" = "Ticraḍ yettwakelsen ad d-banent da.";
+
+/* Describes the date on which the breach occurred */
+"BreachAlerts.BreachDate" = "Tarewla-a teḍra-d deg";
+
+/* Description of what a breach is */
+"BreachAlerts.Description" = "Awalen uffiren ttukcafen neɣ ttwakren seg usnifel aneggaru n wawal-ik·im uffir. I ummesten n umiḍan-a, kcem ɣer usmel syen beddel awal-ik·im uffir.";
+
+/* Link to monitor.firefox.com to learn more about breached passwords */
+"BreachAlerts.LearnMoreButton" = "Issin ugar";
+
+/* Leads to a link to the breached website */
+"BreachAlerts.Link" = "Ddu ɣer";
+
+/* Title for the Breached Login Detail View. */
+"BreachAlerts.Title" = "Tarewla n yismal web";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Asebrureq";
+
+/* Label for Cancel button */
+"Cancel" = "Sefsex";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Ad yesnifel asentel n yini.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Snifel anaw n tsefsit";
+
+/* The button to open a new tab with the copied link */
+"ClipboardToast.GoToCopiedLink.Button" = "Bdu";
+
+/* Message displayed when the user has a copied link on the clipboard */
+"ClipboardToast.GoToCopiedLink.Title" = "Ddu ɣer useɣwen yettwaneɣlen?";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Mdel";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "Amdal n yiccer";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "aselkim";
+
+/* Context menu item for bookmarking a link URL */
+"ContextMenu.BookmarkLinkButtonTitle" = "Creḍ aseɣwen";
+
+/* The button text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Sken";
+
+/* The label text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Iccer uslig amaynut yeldi";
+
+/* The button text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "Sken";
+
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText" = "Iccer amaynut yeldi";
+
+/* Context menu item for copying an image to the clipboard */
+"ContextMenu.CopyImageButtonTitle" = "Nɣel tugna";
+
+/* Context menu item for copying an image URL to the clipboard */
+"ContextMenu.CopyImageLinkButtonTitle" = "Nɣel aseɣwen n tugna";
+
+/* Context menu item for copying a link URL to the clipboard */
+"ContextMenu.CopyLinkButtonTitle" = "Nɣel aseɣwen";
+
+/* Context menu item for downloading a link URL */
+"ContextMenu.DownloadLinkButtonTitle" = "Aseɣwen n uzdam";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenInNewTabButtonTitle" = "Ldi ɣef yiccer amaynut";
+
+/* Context menu item for saving an image */
+"ContextMenu.SaveImageButtonTitle" = "Sekles tugna";
+
+/* Context menu item for sharing a link URL */
+"ContextMenu.ShareLinkButtonTitle" = "Bḍu aseɣwen";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "Ur yezmir ara ad yernu asebter ɣer tebdart n tɣuri";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it’s already there?" = "Ur yezmir ara ad yernu asebter ɣer tebdart n tɣuri. Ahat yella yakan?";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "Ur yezmir ara ad d-isali asebter.";
+
+/* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
+"CoverSheet.v22.DarkMode.Description" = "I yiseqdacen n iOS 13, Firefox ad yeddu s wudem awurman ɣer usentel ubrik ticki tiliɣri-ik tbedd ɣer usentel ubrik. Akken ad tbeddleḍ tiddin-is, ddu ɣer yiɣewwaṛen > Asentel.";
+
+/* Title for the new dark mode change in the version 22 app release. */
+"CoverSheet.v22.DarkMode.Title" = "Asentel aberkan igber anasiw aberkan d ugdil ibḍan.";
+
+/* Description for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Description" = "Ammesten uǧhid mgal aḍfaṛ, ad isewḥel aḍfaṛ n udellel. Rmed askar Uḥris akken ad tesweḥleḍ ugar n yineḍfaṛen, nudellel neɣ isfuyla udhimen.";
+
+/* Text for the new ETP settings button */
+"CoverSheet.v24.ETP.Settings.Button" = "Ddu ɣer iɣewwaṛen";
+
+/* Title for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Title" = "Ammesten mgal aḍfar n udellel";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Rnu amiḍan";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Aberkan";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Senɣes teɣzi n uḍris";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Amsedday n unadi amezwer";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Sken iɣewwaren";
+
+/* Used as a button label for crash dialog prompt */
+"Don’t Send" = "Ur ttazen ara";
+
+/* Done button on left side of the Settings view controller title bar */
+"Done" = "Immed";
+
+/* Panel accessibility label */
+"Downloads" = "Isidar";
+
+/* The label of the button the user will press to start downloading a file */
+"Downloads.Alert.DownloadNow" = "Sider tura";
+
+/* Button confirming the cancellation of the download. */
+"Downloads.CancelDialog.Cancel" = "Sefsex";
+
+/* Alert dialog body when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Message" = "S tidet triḍ ad tesfesxeḍ asider-a?";
+
+/* Button declining the cancellation of the download. */
+"Downloads.CancelDialog.Resume" = "Kemmel";
+
+/* Alert dialog title when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Title" = "Sefsex azdam";
+
+/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
+"Downloads.Error.Message" = "Isidar ur ttusefraken ara deg Firefox akka tura.";
+
+/* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
+"Downloads.Toast.Cancelled.LabelText" = "Asider ittwafsex";
+
+/* The label text in the Download Failed toast for showing confirmation that the download has failed. */
+"Downloads.Toast.Failed.LabelText" = "Asider ur yiddi ara";
+
+/* The button to retry a failed download from the Download Failed toast. */
+"Downloads.Toast.Failed.RetryButton" = "Σreḍ i tikelt nniḍen";
+
+/* The button to open a new tab with the Downloads home panel */
+"Downloads.Toast.GoToDownloads.Button" = "Isidar";
+
+/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. */
+"Downloads.Toast.MultipleFiles.DescriptionText" = "1 seg ifuyla %d";
+
+/* The description text in the Download progress toast for showing the number of files (1$) and download progress (2$). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where 1$ is Downloads.Toast.MultipleFiles.DescriptionText and 2$ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and 1$ should come before 2$ everywhere except for right-to-left locales. */
+"Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";
+
+/* The description text in the Download progress toast for showing the downloaded file size (1$) out of the total expected file size (2$). */
+"Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
+
+/* Action button for deleting downloaded files in the Downloads panel. */
+"DownloadsPanel.Delete.Title" = "Kkes";
+
+/* Title for the Downloads Panel empty state. */
+"DownloadsPanel.EmptyState.Title" = "Azdam n ifuyla ad d-ittwasken dagi.";
+
+/* Action button for sharing downloaded files in the Downloads panel. */
+"DownloadsPanel.Share.Title" = "Bḍu";
+
+/* Text message in the settings table view */
+"Enter your password to connect" = "Sekcem awal-inek uffir akken ad teqqneḍ";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "Talqayt";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "Ɣur-k: Ur nezmir ara ad nessentem tuqqna-inek ɣer usmel-a web s wudem aɣelsan.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "Ahat d tawila ur nelhi ara neɣ d aɛraḍ n ukellex sɣur aẓeddam. Kemmel ma yella tegziḍ uguren i izemren ad ḍrun.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "Imawlan n %@ ur sewlen ara asmel-nsen web akken iwata. Akken ad tettummesten teɣlut-inek seg takwerḍa, Firefox ur itteqqen ara ɣer usmel-a web.";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "Tuqqna-a ur tettwaman ara";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "Uɣal ɣer deffir";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "Rzu ɣer usmel akken ibɣu yella";
+
+/* Question shown to user when tapping a link that opens the App Store app */
+"ExternalLink.AppStore.ConfirmationTitle" = "Ldi aseɣwen-a deg App Store?";
+
+/* Question shown to user when tapping an SMS or MailTo link that opens the external app for those. */
+"ExternalLink.AppStore.GenericConfirmationTitle" = "Ldi aseɣwen-a deg usnas azɣaray?";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Title for firefox about:home page in tab history list */
+"Firefox.HomePage.Title" = "Asebter agejdan n Firefox";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "Ɣer zdat";
+
+/* Label stating how to disconnect account */
+"FxA.AccountVerificationDetails" = "Yir imayl? Ffeɣ ddaw-a akken ad talseḍ.";
+
+/* Label stating your account is not verified */
+"FxA.AccountVerificationRequired" = "Isra asenqed n umiḍan";
+
+/* Message explaining that user needs to check email for Firefox Account verfication link. */
+"FxA.AccountVerificationRequiredSurface" = "Yessef ad tesneqdeḍ %@. Wali tanaka-ik n urmas akken ad tkecmeḍ ar useɣwen i k-d-yuzen Firefox.";
+
+/* Button label to connect another device to Sync */
+"FxA.ConnectAnotherDevice" = "Qqen ibenk-nniḍen";
+
+/* Settings section title for Firefox Account */
+"FxA.FirefoxAccount" = "Amiḍan Firefox";
+
+/* Button label to go to Firefox Account settings */
+"FxA.ManageAccount" = "Sefrek amiḍan & ibenkan";
+
+/* Label when no internet is present */
+"FxA.NoInternetConnection" = "Ulac tuqqna Internet";
+
+/* Button label to open Sync preferences */
+"FxA.OpenSyncPreferences" = "Ldi Ismenyifen n umtawi";
+
+/* Instructions shown on qr code scanning view */
+"fxa.qr-scanning-view.instructions" = "Snirem tangalt QR i yettwaseknen deg firefox.com/pair";
+
+/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
+"FxA.RemoveAccount" = "Kkes";
+
+/* Description string for alert view that gets presented when user tries to remove an account. */
+"FxA.RemoveAccountAlertMessage" = "Kkes amiḍan Firefox icudden ɣer ibnek-a akken ad teqneḍ am useqdac amaynut.";
+
+/* Remove account alert is the final confirmation before user removes their firefox account */
+"FxA.RemoveAccountAlertTitle" = "Kkes amiḍan";
+
+/* Button label to resend email */
+"FxA.ResendEmail" = "Ales tuzna n imayl";
+
+/* FxA sign in view subtitle */
+"fxa.signin.camera-signin" = "Kcem s tkamirat-ik";
+
+/* FxA sign in create account label. */
+"fxa.signin.create-account-pt-1" = "Semtawi Firefox gar yibenkan s yiwen umiḍan kan.";
+
+/* FxA sign in create account label. This will be linked to the site to create an account. */
+"fxa.signin.create-account-pt-2" = "Rnu amiḍan Firefox";
+
+/* FxA sign in view qr code instructions */
+"fxa.signin.qr-link-instruction" = "Deg uselkim-ik ldi Firefox terzuḍ ɣer firefox.com/pair";
+
+/* FxA sign in view qr code scan button */
+"fxa.signin.ready-to-scan" = "Iheyya i usnirem";
+
+/* FxA sign in view title */
+"fxa.signin.turn-on-sync" = "Rmed amtawi";
+
+/* FxA sign in view email login button */
+"fxa.signin.use-email-instead" = "Seqdec imayl deg wadeg-is";
+
+/* Button label to sign into Sync */
+"FxA.SignIntoSync" = "Qqen ɣer Sync";
+
+/* Label explaining what sync does */
+"FxA.SyncExplain" = "Awi-d iccaren-inek yeldin, ticraḍ, akked wawalen uffiren seg yibenkan-nniḍen.";
+
+/* Button label to Sync your Firefox Account */
+"FxA.SyncNow" = "Mtawi tura";
+
+/* Call to action for sign into sync button */
+"FxA.TakeYourWebWithYou" = "Awi web-inek yid-k";
+
+/* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
+"FxAPush_DeviceConnected_body" = "Firefox yeqqen ar %@";
+
+/* Title of a notification displayed when another device has connected to FxA. */
+"FxAPush_DeviceConnected_title" = "Synch yeqqen";
+
+/* Body of a notification displayed when named device has been disconnected from FxA. %@ refers to the name of the disconnected device. */
+"FxAPush_DeviceDisconnected_body" = "%@ ur yeqqin ara.";
+
+/* Body of a notification displayed when this device has been disconnected from FxA by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Ibenk-a yeffeɣ akken iwata seg tuqqna n Firefox Sync.";
+
+/* Title of a notification displayed when this device has been disconnected by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_title" = "Synch yeffeɣ seg tuqqna";
+
+/* Title of a notification displayed when named device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_title" = "Synch yeffeɣ seg tuqqna";
+
+/* Body of a notification displayed when unnamed device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Ibenk yeffeɣ si tuqqna n Firefox Sync";
+
+/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "Awi-d iccaren-inek yeldin, ticraḍ, akked wawalen uffiren seg yibenkan-nniḍen.";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Tallalt";
+
+/* Toggle history syncing setting */
+"History" = "Amazray";
+
+/* Title for button in the history panel to clear recent history */
+"HistoryPanel.ClearHistoryButtonTitle" = "Sfeḍ amazray-ik n melmi kan…";
+
+/* Option title to clear all browsing history. */
+"HistoryPanel.ClearHistoryMenuOptionEverything" = "Merra";
+
+/* Button to perform action to clear history for the last hour */
+"HistoryPanel.ClearHistoryMenuOptionTheLastHour" = "Asrag aneggaru";
+
+/* Button to perform action to clear history for today only */
+"HistoryPanel.ClearHistoryMenuOptionToday" = "Ass-a";
+
+/* Button to perform action to clear history for yesterday and today */
+"HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "Ass-a akked iḍelli";
+
+/* Title for popup action menu to clear recent history. */
+"HistoryPanel.ClearHistoryMenuTitle" = "Asfaḍ n umazray aneggaru ad ikkes amazray, inagan n tuqna akked isefka-nniḍen n iminig.";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "Ismal web i twalaḍ melmi kan ad d-ttwaseknen da.";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "Iccaren-inek seg ibenkan-nniḍen ad d-ttwaseknen da.";
+
+/* Description for the empty synced tabs 'not signed in' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Qqen akken ad d-tsekneḍ tabdart n waccaren seg yibenkan-ik-nniḍen.";
+
+/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "Amiḍan-ik yeḥwaǧ ad ittusenqed.";
+
+/* Description for the empty synced tabs 'single device Sync' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "Tebɣid ad twaliḍ da iccaren-inek seg ibenkan nniḍen?";
+
+/* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Rmed amtawi n yiccer akken ad d-tsekneḍ tabdart n waccaren seg yibenkan-ik-nniḍen.";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "Amazray";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "Ttwamedlen melmi kan";
+
+/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d n yibenk (i-an) ffɣen seg tuqqna";
+
+/* Title for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Title" = "Ibenkan yemtawin";
+
+/* Button cancelling changes setting the home page for the first time. */
+"HomePage.Set.Dialog.Cancel" = "Sefsex";
+
+/* Alert dialog body when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Message" = "Tzemreḍ ad tesnifleḍ aya yal tikelt deg iɣewwaren";
+
+/* Button accepting changes setting the home page for the first time. */
+"HomePage.Set.Dialog.OK" = "Sbadu asebter agejdan";
+
+/* Alert dialog title when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Title" = "Tebɣiḍ ad terreḍ asebter-a d asebter agejdan?";
+
+/* The title for the Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Bookmark" = "Tacreṭ n usebter";
+
+/* The title for the Delete from History context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.DeleteFromHistory" = "Kkes seg umazray";
+
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab" = "Ldi deg iccer uslig amaynut";
+
+/* The title for the Open in New Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewTab" = "Ldi deg yiccer amaynut";
+
+/* The title for the Remove context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Remove" = "Kkes";
+
+/* The title for the Remove Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.RemoveBookmark" = "Kkes tacreṭ n usebter";
+
+/* The title for the Share context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Share" = "Bḍu";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Back.DiscoveryTitle" = "Ɣer deffir";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.CloseTab.DiscoveryTitle" = "Mdel Iccer";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Find.DiscoveryTitle" = "Af";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Forward.DiscoveryTitle" = "Ɣer zdat";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "Iccer uslig amaynut";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewTab.DiscoveryTitle" = "Iccer amaynut";
+
+/* Label to switch to normal browsing mode */
+"Hotkeys.NormalMode.DiscoveryTitle" = "Askar n tunigin amagnu";
+
+/* Label to switch to private browsing mode */
+"Hotkeys.PrivateMode.DiscoveryTitle" = "Askar n tunigin tusligt";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Reload.DiscoveryTitle" = "Smiren asebter";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "Fren afeggag n tansa";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "Sken iccer d-iteddun";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Sken iccer yezrin";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Semɣer teɣzi n uḍris";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "tura yakan";
+
+/* History tableview section header */
+"Last month" = "Aggur yezrin";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "Amtawi aneggaru: %@";
+
+/* History tableview section header */
+"Last week" = "Dduṛt yezrin";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Turagin";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Aceɛlal";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "Sali-d asebter aneẓli";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "Asali n ugbur…";
+
+/* Authentication prompt log in button */
+"Log in" = "Kcem";
+
+/* Toggle logins syncing setting */
+"Logins" = "Inekcam";
+
+/* Login detail view field name for the last modified date */
+"LoginsDetailView.LoginModified" = "Ittusnifel";
+
+/* Title for the login detail view */
+"LoginsDetailView.LoginTitle" = "Kcem";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "Ur seklas ara";
+
+/* Button to not update the user's password */
+"LoginsHelper.DontUpdate.Button" = "Ur leqqem ara";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "Sekles anekcum %1$@ i %2$@?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "Sekles awal uffir i %@?";
+
+/* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
+"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "Leqqem anekcum i %@?";
+
+/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "Leqqem anekcum %1$@ i %2$@?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "Sekles anekcum";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "Snifel";
+
+/* For filtering the login list, search only the login names */
+"LoginsList.LoginsListFilterLogin" = "Kcem";
+
+/* For filtering the login list, search both website and login names. */
+"LoginsList.LoginsListFilterSearchAll" = "Akk";
+
+/* For filtering the login list, search only the website names */
+"LoginsList.LoginsListFilterWebsite" = "Asmel Web";
+
+/* Placeholder test for search box in logins list view. */
+"LoginsList.LoginsListSearchPlaceholder" = "Zizdeg";
+
+/* Title for the list of logins */
+"LoginsList.Title" = "SAVED LOGINS";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "A yettban dakken Firefox yeɣli yakan. Tebɣiḍ ad d-terreḍ icarren-inek?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "Creḍ amzun yettwaɣra";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Creḍ-it amzun ur yettwaɣri ara";
+
+/* Toast displayed to the user after a bookmark has been added. */
+"Menu.AddBookmark.Confirm" = "Tacreḍt tettwerna";
+
+/* Toast displayed to the user after adding the item to the Top Sites. */
+"Menu.AddPin.Confirm" = "Inṭeḍ deg ismal ifazen";
+
+/* Toast displayed to the user after adding the item to their reading list. */
+"Menu.AddToReadingList.Confirm" = "Yettwarna ɣer tebdart n tɣuri";
+
+/* The title for the button that lets you copy the url from the location bar. */
+"Menu.Copy.Title" = "Nɣel tansa";
+
+/* Toast displayed to user after copy url pressed. */
+"Menu.CopyURL.Confirm" = "URL Ittwanɣel ɣef afus.";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "Ammesten yettwaseǧehden mgal aḍfaṛ irurmed i usmel-a.";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "Ammesten yettwaseǧehden mgal aḍfaṛ irmed i usmel-a.";
+
+/* Description for having standard ETP protection with ITP offered in iOS14+ */
+"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox yessewḥal imakaren gar yismal, imakaren inmettiyen d yidsilen umḍinen.";
+
+/* Description for having strict ETP protection with ITP offered in iOS14+ */
+"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox yessewḥal imakaren gar yismal, imakaren inmettiyen, idsilen umḍinen d tukerḍa n ugbur.";
+
+/* Label for the button displayed in the menu used to stop the reload of the webpage */
+"Menu.Library.StopReload" = "Seḥbes";
+
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label" = "Rmed askar n yiḍ";
+
+/* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
+"Menu.NoImageModeBlockImages.Label" = "Sewḥel tugniwin";
+
+/* Label for title in page action menu. */
+"Menu.PageActions.Title" = "Tigawin i usebter";
+
+/* The title for the button that lets you paste into the location bar */
+"Menu.Paste.Title" = "Senteḍ";
+
+/* The title for the button that lets you paste and go to a URL */
+"Menu.PasteAndGo.Title" = "Senṭeḍ & ddu";
+
+/* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
+"Menu.ReloadWithoutTrackingProtection.Title" = "Ales tulya war ummesten mgal asfuɣel";
+
+/* Label for the button, displayed in the menu, used to reload the current website with Tracking Protection enabled */
+"Menu.ReloadWithTrackingProtection.Title" = "Ales tulya s ummesten mgal asfuɣel";
+
+/* Toast displayed to the user after a bookmark has been removed. */
+"Menu.RemoveBookmark.Confirm" = "Tacreḍt n usebter yettwakkes";
+
+/* Toast displayed to the user after removing the item from the Top Sites. */
+"Menu.RemovePin.Confirm" = "Ittwakkes seg ismal ifazen";
+
+/* Toast displayed to the user after a tab has been sent successfully. */
+"Menu.TabSent.Confirm" = "Ittwazen iccer";
+
+/* Title on tracking protection menu for blocked items. */
+"Menu.TrackingProtection.BlockedTitle" = "Iwḥel";
+
+/* Message in menu when no trackers blocked. */
+"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Ulac ineḍfaren i yessen Firefox ittwafen deg usebter-a.";
+
+/* The title for tracking protection settings */
+"Menu.TrackingProtection.ProtectionSettings.Title" = "Iɣewwaṛen n tɣellist";
+
+/* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
+"Menu.TrackingProtection.TitlePrefix" = "Taɣellist i %@";
+
+/* The title that shows the number of content cookies blocked */
+"Menu.TrackingProtectionBlockedContent.Title" = "Agbur n uḍfaṛ";
+
+/* The title that shows the number of social URLs blocked */
+"Menu.TrackingProtectionBlockedSocial.Title" = "Ineḍfaṛen n iẓeḍwa imettanen";
+
+/* Description of the Tracking protection menu when TP is blocking parts of the page */
+"Menu.TrackingProtectionBlocking.Description" = "Firefox issewḥel kra n yiḥricen n usebter izemren ad sfuɣlen tunigin-ik.";
+
+/* The description of the Tracking Protection menu item when tracking is enabled */
+"Menu.TrackingProtectionBlockingDisabled.Description" = "Sewḥel inedfaṛen iqnen";
+
+/* The title that shows the number of cross-site cookies blocked */
+"Menu.TrackingProtectionCrossSiteCookies.Title" = "Inagan n tuqqna i uḍfaṛ gar yismal";
+
+/* The title that shows the number of cross-site URLs blocked */
+"Menu.TrackingProtectionCrossSiteTrackers.Title" = "Ineḍfaṛen gar yismal";
+
+/* The title that shows the number of cryptomining scripts blocked */
+"Menu.TrackingProtectionCryptominersBlocked.Title" = "Ikripṭuminaren";
+
+/* Description of content trackers. */
+"Menu.TrackingProtectionDescription.ContentTrackers" = "Ismal zmren ad d-salin adellel, tividyutin akked igburen izɣarayen i igebren iferdisen n uḍfaṛ. Aswḥel n ugbur yettwasqedcen i uḍfaṛ yzmr ad iszreb asali n yismal, maca kra n tqeffalin, tifrkiyin neɣ urtan n tuqqna zemren ur tddun ara.";
+
+/* Description of cross-site trackers. */
+"Menu.TrackingProtectionDescription.CrossSiteNew" = "Inagan-a n tuqqna ad k-ḍfṛen sg usml ɣr wayeḍ akken ad d-leqḍen isfka fell-as srid. Seddayen-ten-id wid ixeddmen adellel akked tkebbaniyin n teslḍt.";
+
+/* Description of cryptominers. */
+"Menu.TrackingProtectionDescription.CryptominersNew" = "Ikripṭuminaren seqdacen mebla ma teẓriḍ tazmert n usiḍen n unagraw-ik akken ad kksen tadrimt tumḍint. Iskripten n y ikripṭuminaren sseɣṣen aẓru-ik, saẓayen aselkim-ik, daɣen zemren ad salin tafaturt-ik n ṣṣehd.";
+
+/* Description of fingerprinters. */
+"Menu.TrackingProtectionDescription.Fingerprinters" = "Iɣewwaṛen deg yiminig-ik akked yibenk-ik ur sɛin timital. Inedfaṛen n udsil umḍin leqḍen-d ddeqs seg yiɣewwaṛen-a akken ad snernin amaɣnu-ik, ayen i izemren ad yettwaseqdec akken ad k-ḍfṛen deg tunigin-ik srid.";
+
+/* Description of social network trackers. */
+"Menu.TrackingProtectionDescription.SocialNetworksNew" = "Iẓeḍwa n tmetti srusun ineḍfaṛen ɣef yismal-nniḍen web akken ad rnun amaɣnu yemmden fell-ak. Asewḥel n yineḍfaṛen-a ad yessenɣṣ ayen zemren ad walint tkebbaniyin n yiẓeḍwa n tmetti fell-as srid.";
+
+/* The button that disabled TP for a site. */
+"Menu.TrackingProtectionDisable1.Title" = "Sens i usmel-agi";
+
+/* The confirmation toast once tracking protection has been disabled */
+"Menu.TrackingProtectionDisabled.Title" = "Ammesten mgal aḍfaṛ insa akka tura i usmel-a.";
+
+/* A button to enable tracking protection inside the menu. */
+"Menu.TrackingProtectionEnable.Title" = "Rmed ammesten mgal asfuɣel";
+
+/* A button to enable tracking protection inside the menu. */
+"Menu.TrackingProtectionEnable1.Title" = "Rmed i usmel-agi";
+
+/* The confirmation toast once tracking protection has been enabled */
+"Menu.TrackingProtectionEnabled.Title" = "Ammesten mgal aḍfaṛ irmed akka tura i usmel-a.";
+
+/* The title that shows the number of fingerprinting scripts blocked */
+"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Idsilen umḍinen";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "Inagan n tuqqna i uḍfaṛ gar yismal weḥlen";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Cryptominers" = "Ikripṭuminaren weḥlen";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Fingerprinters" = "Imaṭṭaffen n yidsilen umḍinen weḥlen";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Social" = "Ineḍfaṛen n yiẓeḍwa n tmetti wḥlen";
+
+/* more info about what tracking protection is about */
+"Menu.TrackingProtectionMoreInfo.Description" = "Issin ugar amek ammesten mgal aḍfar yessewḥal ineḍfaren i yeqqnen i ileqqḍen isefka n yiminig-inek/inem deg yismal web.";
+
+/* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
+"Menu.TrackingProtectionNoBlocking.Description" = "Ulac iferdisen iṭafaṛen i ittwafen ɣef usebter-a.";
+
+/* label for the menu item to show when the website is whitelisted from blocking trackers. */
+"Menu.TrackingProtectionOption.WhiteListOnDescription" = "Asmel igber iferdisen i izemren ad sfuɣlen tunigin-ik. Tekkseḍ ammesten.";
+
+/* label for the menu item that lets you remove a website from the tracking protection whitelist */
+"Menu.TrackingProtectionWhitelistRemove.Title" = "Rmed i usmel-agi";
+
+/* The title for the option to view the What's new page. */
+"Menu.WhatsNew.Title" = "D acu i d amaynut";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "ibenk aziraz";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "ugar n waggur aya";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "ugar n dduṛt aya";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Afeggag n tunigin";
+
+/* Accessibility label for the New Tab button in the tab toolbar.
+   Accessibility Label for the tab toolbar New tab button */
+"New Tab" = "Iccer amaynut";
+
+/* Restore Tabs Negative Action */
+"No" = "Ala";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "Ulac iccaren";
+
+/* OK button */
+"OK" = "IH";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "Ih";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "Ayhu! Firefox yeɣli";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Ad d-yeldi imagraden deg tmeẓri n umeɣri s usenned ɣef tignit n udlis ticki tban-d deg ufeggag n uzwel.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Ldi iɣewwaren";
+
+/* Toggle tabs syncing setting */
+"Open Tabs" = "Lddi icarren";
+
+/* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
+"OpenURL.Error.Message" = "Firefox ur yezmir ara ad yeldi asebter acku tansa-nni ur tmeɣtu ara.";
+
+/* Title of the message shown when the user attempts to navigate to an invalid link. */
+"OpenURL.Error.Title" = "Ur yezmir ara ad yeldi asebter";
+
+/* Accessibility label for the Page Options menu button */
+"Page Options Menu" = "Umuɣ n iɣewwaṛen n usebter";
+
+/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
+"Panel Chooser" = "Amsefran n ugalis";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Awal uffir";
+
+/* Error message shown in the remote tabs panel */
+"PasswordAutoFill.NoPasswordsFoundTitle" = "Ur tesεiḍ ara aseqdac akked wawal uffir imtawan seg umiḍan-ik Firefox";
+
+/* Header for the list of credentials table */
+"PasswordAutoFill.PasswordsListTitle" = "Aseqdac akked wawal uffir i yellan:";
+
+/* Title of the extension that shows firefox passwords */
+"PasswordAutoFill.SectionTitle" = "Aseqdac akked wawal uffir n Firefox";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Aya ad isireg asekles n tugna ɣer uzmam n tkamiṛat.";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox yebɣa ad yekcem ɣer tewlafin-inek";
+
+/* Button for closing the menu action sheet */
+"PhotonMenu.close" = "Mdel";
+
+/* Privacy section title */
+"Privacy" = "Tabaḍnit";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "Tasertit n tbaḍnit";
+
+/* Title for quick-search engines settings section. */
+"Quick-Search Engines" = "Imseddayen n unadi arurad";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "yettwaɣra";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "Askar n tɣuri";
+
+/* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
+"ReaderMode.Available.VoiceOverAnnouncement" = "Askar n tɣuri yella";
+
+/* Panel accessibility label */
+"Reading list" = "Tabdart n tɣuri";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "Ttwamedlen melmi kan";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "Smiren";
+
+/* Accessibility label for the reload button */
+"Reload page" = "Smiren asebter";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Kkes";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Kkes seg tebdart n tɣuri";
+
+/* Cancel button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Cancel" = "Sefsex";
+
+/* Reopen button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Reopen" = "Ales tulya";
+
+/* Reopen alert title shown at home page. */
+"ReopenAlert.Title" = "Ales tulya n yiccer imedlen";
+
+/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"ReopenClosedTab.KeyCodeTitle" = "Ales tulya n iccaren imedlen";
+
+/* Accessibility label for button resetting font size in display settings of reader mode */
+"Reset text size" = "Ales awennez n teɣzi n uḍris";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans-serif";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Sekles isebtar ɣer tebdart n tɣuri s usenned ɣef tignit n tmerna n udlis deg ifecka n tmeẓri n tɣuri.";
+
+/* OK button to dismiss the error prompt. */
+"ScanQRCode.Error.OK.Button" = "IH";
+
+/* Text for the instructions label, displayed in the QR scanner view */
+"ScanQRCode.Instructions.Label" = "Egg tangalt QR deg ukatar akken ad isemḍen";
+
+/* Text of the prompt that is shown to the user when the data is invalid */
+"ScanQRCode.InvalidDataError.Message" = "Isefka arameγtu";
+
+/* Text of the prompt user to setup the camera authorization. */
+"ScanQRCode.PermissionError.Message" = "Ttxilek sireg Firefox ad ikcem ɣer tkamiṛat n ubnek-inek deg 'iɣewwaṛen' -> 'Tabaḍnit' -> 'Takamiṛat'.";
+
+/* Title for the QR code scanner view. */
+"ScanQRCode.View.Title" = "Semḍen Tangalt QR";
+
+/* Accessibility Label for the tab toolbar Search button
+   Navigation title for search settings.
+   Open search section of settings */
+"Search" = "Nadi";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Nadi neɣ sekcem tansa";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "Amsedday n unadi amaynut ad d-iban deg ufeggag n unadi arurad.";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "Amsedday n unadi yettwarna!";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "Rnu amsedday n unadi?";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "Sefsex";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.DuplicateErrorMessage" = "Amsedday n unadi s uzwel neɣ URL yettwarna yakan.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.DuplicateErrorTitle" = "Ur iddi ara";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "Amsedday n unadi ur yezmir ara ad yettwarnu.";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "Ur yeddi ara";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.FormErrorMessage" = "Ččaṛ akk urtan akken iwata.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.FormErrorTitle" = "Ur yedda ara";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "Ih";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "Anadi n isumar";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "Tuqqna taɣelsant";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "Azen aneqqis n uɣelluy akken Mozilla ad tefru ugur?";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "Azen tikti";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "Azen aneqqis";
+
+/* Button title for cancelling share screen
+   Close button in top navigation bar */
+"SendTo.Cancel.Button" = "Sefsex";
+
+/* Header for the list of devices table */
+"SendTo.DeviceList.Text" = "Ibenkan yellan:";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "Ala iseɣwan HTTP akked HTTPS i izemren ad ttwabḍun.";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "Ih";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "Aseɣwen i tettaɛraḍeḍ ad tebḍuḍ ur yezmir ara ad yettwabḍu.";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"SendTo.NavBar.Title" = "Azen iccer";
+
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message" = "Ur ɣur-k ara ibenkan-nniḍen yeqqnen ɣer umiḍan-inek Firefox u i iwejden i usemtawi.";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Message" = "Ma ulac aɣilif ldi Firefox, ddu ɣer yiɣewwaren sakin kcem akken ad tkemmled.";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Title" = "Aql-ak ur teqqineḍ ara ɣer umiḍan-inek Firefox.";
+
+/* Navigation bar button to Send the current page to a device */
+"SendTo.SendAction.Text" = "Azen";
+
+/* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
+"SendTo.SignIn.Button" = "Kcem ɣer Firefox";
+
+/* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_body" = "Illa iccer amaynut seg ibenk-nniḍen.";
+
+/* Title of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_title" = "Iccer yettwarmes";
+
+/* Body of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the app name. */
+"SentTab_TabArrivingNotification_WithDevice_body" = "Ad d-yili iccer amaynut di %@";
+
+/* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
+"SentTab_TabArrivingNotification_WithDevice_title" = "Iccer ittwarmes sγur %@";
+
+/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
+"SentTab.AddToReadingListAction.Title" = "Rnu ɣer tebdart n tɣuri";
+
+/* Label for an action used to bookmark one or more tabs from a notification. */
+"SentTab.BookmarkAction.title" = "Creḍ asebter-agi";
+
+/* Body of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.body" = "Senned akken ad tebḍuḍ";
+
+/* Title of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+
+/* Label for an action used to view one or more tabs from a notification. */
+"SentTab.ViewAction.title" = "Sken";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Sepia";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serif";
+
+/* Title in the settings view controller title bar */
+"Settings" = "Iɣewwaren";
+
+/* The button text in Search Settings that opens the Custom Search Engine view. */
+"Settings.AddCustomEngine" = "Rnu amsedday n unadi";
+
+/* The text on the Save button when saving a custom search engine */
+"Settings.AddCustomEngine.SaveButtonText" = "Sekles";
+
+/* The title of the  Custom Search Engine view. */
+"Settings.AddCustomEngine.Title" = "Rnu amsedday n unadi";
+
+/* The title for the field which sets the title for a custom search engine. */
+"Settings.AddCustomEngine.TitleLabel" = "Azwel";
+
+/* The placeholder for Title Field when saving a custom search engine. */
+"Settings.AddCustomEngine.TitlePlaceholder" = "Amsedday n unadi";
+
+/* The title for URL Field */
+"Settings.AddCustomEngine.URLLabel" = "Tansa URL";
+
+/* The placeholder for URL Field when saving a custom search engine */
+"Settings.AddCustomEngine.URLPlaceholder" = "Tansa URL (Semselsi anadi s %s)";
+
+/* Button in Data Management that clears private data for the selected items. */
+"Settings.ClearAllWebsiteData.Clear.Button" = "Sfeḍ akk isefka n usmel Web";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "Sfeḍ isefka usligen";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "Sfeḍ isefka usligen";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "Sfeḍ isefka usligen";
+
+/* Copy app version alert shown in settings. */
+"Settings.CopyAppVersion.Title" = "Ittwanɣel ɣeṛ ɣef afus.";
+
+/* Default text in search bar for Data Management */
+"Settings.DataManagement.SearchLabel" = "Sizdeg ismal";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.DataManagement.SectionName" = "Asefrek n isefka";
+
+/* Title displayed in header of the setting panel. */
+"Settings.DataManagement.Title" = "Asefrek n isefka";
+
+/* Body of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Body" = "Firefox ad iseḥbes amtawi d umiḍan-inek, acukan ur ittekkes ara isefka-inek n tunigin seg uselkim-a.";
+
+/* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
+"Settings.Disconnect.Button" = "Ffeɣ si Sych";
+
+/* Cancel action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.CancelButton" = "Sefsex";
+
+/* Destructive action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.DestructiveButton" = "Ffeɣ";
+
+/* Title of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Title" = "Ffeɣ si Sync?";
+
+/* Section header for brightness slider. */
+"Settings.DisplayTheme.BrightnessThreshold.SectionHeader" = "Talast";
+
+/* Display (theme) settings label to show if manually switch theme is enabled. */
+"Settings.DisplayTheme.Manual.StatusLabel" = "S ufus";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Manually'. */
+"Settings.DisplayTheme.Manual.SwitchSubtitle" = "Semres asentel i tebɣiḍ";
+
+/* Display (theme) setting to choose the theme manually. */
+"Settings.DisplayTheme.Manual.SwitchTitle" = "S ufus";
+
+/* Option choice in display theme settings for dark theme */
+"Settings.DisplayTheme.OptionDark" = "Aberkan";
+
+/* Option choice in display theme settings for light theme */
+"Settings.DisplayTheme.OptionLight" = "Aceɛlal";
+
+/* Display (theme) settings footer describing how the brightness slider works. */
+"Settings.DisplayTheme.SectionFooter" = "Asentel ad iveddel s wudem awurman s wazal n tafat yesɛa ugdil-nwen. Tzemrem ad teggem talast seg wanda asentel ilaq ad ibeddel. Timdewwert tettbegin-d tafat tamirant.";
+
+/* Switch mode settings section title */
+"Settings.DisplayTheme.SwitchMode.SectionHeader" = "Beddel askar";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Automatically'. */
+"Settings.DisplayTheme.SwitchSubtitle" = "Beddel s wudem awurman s wazal n tafat yeɛa ugdil";
+
+/* Display (theme) settings label to show if automatically switch theme is enabled.
+   Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
+"Settings.DisplayTheme.SwitchTitle" = "Awurman";
+
+/* System theme settings section title */
+"Settings.DisplayTheme.SystemTheme.SectionHeader" = "Asentel n unagraw";
+
+/* System theme settings switch to choose whether to use the same theme as the system */
+"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "Seqcdec asentel aberkan/aceεlal n unagraw";
+
+/* Theme picker settings section title */
+"Settings.DisplayTheme.ThemePicker.SectionHeader" = "Amsefran n usentel";
+
+/* Title in main app settings for Theme settings */
+"Settings.DisplayTheme.Title.v2" = "Asentel";
+
+/* DNT Settings option for always on */
+"Settings.DNT.OptionAlwaysOn" = "Yal tikelt";
+
+/* DNT Settings option for only turning on when Tracking Protection is also on */
+"Settings.DNT.OptionOnWithTP" = "Ala s useqdec n ummesten mgal aḍfaṛ";
+
+/* DNT Settings title */
+"Settings.DNT.Title" = "Ad yazen tamuli “ur sfuɣul ara” γer ismal web akken ad gzun d akken ur tebγiḍ ara asfuγel";
+
+/* Label used for the device name settings section. */
+"Settings.FxA.DeviceName" = "Isem n wallal";
+
+/* Label used as a section title in the Firefox Accounts Settings screen. */
+"Settings.FxA.Sync.SectionName" = "Iγewwaṛen n umtawi";
+
+/* Title displayed in header of the FxA settings panel. */
+"Settings.FxA.Title" = "Amiḍan Firefox";
+
+/* General settings section title */
+"Settings.General.SectionName" = "Amatu";
+
+/* Button in settings to clear the home page. */
+"Settings.HomePage.Clear.Button" = "Sfeḍ";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "Asebter agejdan";
+
+/* Title displayed in header of the setting panel. */
+"Settings.HomePage.Title" = "Iɣewwaren n usebter agejdan";
+
+/* Placeholder text in the homepage setting when no homepage has been set. */
+"Settings.HomePage.URL.Placeholder" = "Sekcem asebter agejdan";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "Asebter agejdan";
+
+/* Button in settings to use the current link on the clipboard as home page. */
+"Settings.HomePage.UseCopiedLink.Button" = "Seqdec aseɣwen yettwaneɣlen";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "Seqdec asebter amiran";
+
+/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
+"Settings.HomePage.UseDefault.Button" = "Seqdec amezwer";
+
+/* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
+"Settings.LoginsAndPasswordsTitle" = "Inekcam& wawalen uffiren";
+
+/* Label used to set a custom url as the new tab option (homepage). */
+"Settings.NewTab.CustomURL" = "Tansa URL tudmawant";
+
+/* A description in settings of what the new tab choice means */
+"Settings.NewTab.Description" = "Ticki teldiḍ iccer amaynut:";
+
+/* The title of the section in newtab that lets you modify the topsites panel */
+"Settings.NewTab.Option.ASTitle" = "Sagen ismal ifazen";
+
+/* Option in settings to show a blank page when you open a new tab */
+"Settings.NewTab.Option.BlankPage" = "Asebter ilem";
+
+/* Option in settings to show bookmarks when you open a new tab */
+"Settings.NewTab.Option.Bookmarks" = "Ticraḍ n isebtar";
+
+/* The footer for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeFooter" = "Ismal i tettwaliḍ aṭas";
+
+/* The title for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeTitle" = "Sagen asebter agejdan Firefox";
+
+/* Option in settings to show Firefox Home when you open a new tab */
+"Settings.NewTab.Option.FirefoxHome" = "Asebter agejdan Firefox";
+
+/* Option in the settings to turn off recent bookmarks in the Highlights section */
+"Settings.NewTab.Option.HighlightsBookmarks" = "Ticraḍ n melmi kan";
+
+/* Option in settings to turn off history in the highlights section */
+"Settings.NewTab.Option.HighlightsHistory" = "Yettwarza";
+
+/* Option in settings to show history when you open a new tab */
+"Settings.NewTab.Option.History" = "Amazray";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.HomePage" = "Asebter agejdan";
+
+/* Option in settings to turn on off pocket recommendations */
+"Settings.NewTab.Option.Pocket" = "Awelleh si Pocket";
+
+/* Footer caption for pocket settings */
+"Settings.NewTab.Option.PocketFooter" = "Agbur n tɣara ifazen i d-yekkan seg web.";
+
+/* Option in settings to show reading list when you open a new tab */
+"Settings.NewTab.Option.ReadingList" = "Sken tabdart-inek n tɣuri";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
+"Settings.NewTab.SectionName" = "Iccer amaynut";
+
+/* Title displayed in header of the setting panel. */
+"Settings.NewTab.Title" = "Iccer amaynut";
+
+/* Label at the top of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionName" = "Mell";
+
+/* Footer at the bottom of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionNameFooter" = "Fren ayen ad d-yettwamlen m'ara yeldi yicer amaynut";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Status" = "Ticki yeldi-d Firefox";
+
+/* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Title" = "Sumer tulya n iseɣwan yettwaneɣlen";
+
+/* Title for Open With Settings */
+"Settings.OpenWith.PageTitle" = "Ldi iseɣwan n yimayl s";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
+"Settings.OpenWith.SectionName" = "Asnas n imayl";
+
+/* Setting to enable the built-in password manager */
+"Settings.SaveLogins.Title" = "Inekcam yettwakelsen";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "Immed";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "Ẓreg";
+
+/* title for a link that explains how mozilla collects telemetry */
+"Settings.SendUsage.Link" = "Issin ugar.";
+
+/* A short description that explains why mozilla collects usage data. */
+"Settings.SendUsage.Message" = "Mozilla tettennaɣ akken ad telqeḍ kan ayen tesra i usnulfu d usnerni n Firefox i yal yiwen";
+
+/* The title for the setting to send usage data. */
+"Settings.SendUsage.Title" = "Azen isefka n useqdec";
+
+/* Description displayed under the ”Show Link Previews” option */
+"Settings.ShowLinkPreviews.Status" = "Mi ara izegga issed ɣef iseɣwan";
+
+/* Title of setting to enable link previews when long-pressing links. */
+"Settings.ShowLinkPreviews.Title" = "Sken taskant n useɣwen";
+
+/* Setting to show Logins & Passwords quick access in the application menu */
+"Settings.ShowLoginsInAppMenu.Title" = "Sken-d deg umuɣ n usnas";
+
+/* The description of the open new tab siri shortcut */
+"Settings.Siri.OpenTabShortcut" = "Ldi iccer amaynut";
+
+/* The description that describes what siri shortcuts are */
+"Settings.Siri.SectionDescription" = "Seqdec Siri akken ad teldiḍ Firefox s wudem arurad";
+
+/* The option that takes you to the siri shortcuts settings page */
+"Settings.Siri.SectionName" = "Inegzumen Siri";
+
+/* Dismiss button for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Button" = "IH, awi-t-id";
+
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "Ma yella smel ur iteddu ara akken yuɣ tanumi, tekki ɣef ẓẓerb-nni deg ufeggag n tensa, sakin sens ammesten uḥriṣ mgal aḍfaṛ i usebter-a.";
+
+/* Title for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Title" = "Aqeṛṛu d afella!";
+
+/* Header description for tracking protection options section where Basic/Strict block list can be selected */
+"Settings.TrackingProtection.BlockListsHeader" = "Tzemreḍ ad tferneḍ anta tabdart ara yesseqdec Firefox akken ad isewḥel iferdisen Web i izemren ad sfuɣlen armud-inek n tunigin.";
+
+/* Explanation of basic mode. */
+"Settings.TrackingProtection.Info.BasicTitle" = "Yerked gar ummesten akked tmellit.";
+
+/* The Title on info view which shows a list of all blocked websites */
+"Settings.TrackingProtection.Info.BlocksTitle" = "BLOCKS";
+
+/* Explanation of strict mode. */
+"Settings.TrackingProtection.Info.StrictTitle" = "Yettumuddu ammesten iǧehden, maca yezmer kra n yismal ur teddun ara akken iwata.";
+
+/* 'Learn more' info link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.LearnMore" = "Issin ugar";
+
+/* 'More Info' link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.MoreInfo" = "Ugar n telɣut…";
+
+/* Additional information about your Enhanced Tracking Protection */
+"Settings.TrackingProtection.ProtectionCellFooter" = "Ad isenɣeṣ adellel yeṭṭafaṛen daɣen ad isewḥel iberraḥen ur ṭṭafaṛen ara tunigin-ik.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "Ma yella smel ur iteddu ara akken yuɣ tanumi, tekki ɣef ẓẓerb-nni deg ufeggag n tensa, sakin sens ammesten uḥriṣ mgal aḍfaṛ i usebter-a.";
+
+/* Description for standard level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Sireg kra n yineḍfaṛen n udellel akken ismal web ad ddun akken iwata.";
+
+/* Description for strict level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "Ad isewḥel ugar n yineḍfaren, n udellel d yisfuyla udhimen. Isebtar ad d-ttalin s zzreb ugar, maca kra n tmahilin zemrent ur teddunt ara.";
+
+/* Title for tracking protection options section where level can be selected. */
+"Settings.TrackingProtection.ProtectionLevelTitle" = "Aswir n ummesten";
+
+/* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
+"Settings.TrackingProtection.SectionName" = "Ammesten mgal asfuɣel";
+
+/* Additional information about the strict level setting */
+"Settings.TrackingProtection.StrictLevelInfoFooter" = "Asewḥel n yineḍfaṛen yezmer ad yeglu s useḥbes n tmahilin deg kra n yismal.";
+
+/* Tracking protection settings option for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BasicBlockList" = "Alugan (amezwer)";
+
+/* Tracking protection settings option description for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BlockListBasicDescription" = "Sireg kra n imesfuɣal akken ismal web ad ddun akken iwata.";
+
+/* Tracking protection settings option for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrict" = "Uḥriṣ";
+
+/* Tracking protection settings option description for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrictDescription" = "Ad isewḥel imesfuɣal iyettwassnen. Kra n yismal zemren ur tteddun ara akken iwata.";
+
+/* Description label shown on tracking protection options screen. */
+"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "Asfuɣel neɣ aḍfaṛ icudd ar ulqaḍ n isefka-ik n tunigin ɣef ddeqs n yismal Web. Asfuɣel neɣ aḍfaṛ yezmer ad ittwaseqdec akken ad yettwag umaɣnu neɣ ad d-yesken agbur icudden ar tunigin-ik akked isefka-ik udmawanen.";
+
+/* Settings option to specify that Tracking Protection is on */
+"Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "Ammesten mgal aḍfaṛ yettwaseǧhed";
+
+/* Translation settings footer describing how language detection and translation happens. */
+"Settings.TranslateSnackBar.SectionFooter" = "Tutlayt n usebter web tettwaf deg yibenk daɣen tasuqilt n umeẓlu anmeggag tettwasumer.";
+
+/* Translation settings section title */
+"Settings.TranslateSnackBar.SectionHeader" = "Tanfiwin";
+
+/* Switch to choose if the language of a page is detected and offer to translate. */
+"Settings.TranslateSnackBar.SwitchSubtitle" = "Sumer tasuqilt n yal asmel yettwaseknen deg tutlayt yemgaraden ɣef tutlayt tamezwert.";
+
+/* Switch to choose if the language of a page is detected and offer to translate. */
+"Settings.TranslateSnackBar.SwitchTitle" = "Sumer tasuqilt";
+
+/* Title in main app settings for Translation toast settings */
+"Settings.TranslateSnackBar.Title" = "Tasuqilt";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "Ferru n wuguren";
+
+/* Button to delete website in search results */
+"Settings.WebsiteData.ButtonDelete" = "Kkes";
+
+/* Button to exit edit website search results */
+"Settings.WebsiteData.ButtonDone" = "Immed";
+
+/* Button to edit website search results */
+"Settings.WebsiteData.ButtonEdit" = "Ẓreg";
+
+/* Button shows all websites on website data tableview */
+"Settings.WebsiteData.ButtonShowMore" = "Sken ugar";
+
+/* Description of the confirmation dialog shown when a user tries to clear their private data. */
+"Settings.WebsiteData.ConfirmPrompt" = "Tigawt-a ad tesfeḍ akk isefka-inek n usmel. Ur tettizmireḍ ad tesfesxeḍ.";
+
+/* Title displayed in header of the Data Management panel. */
+"Settings.WebsiteData.Title" = "Isefka n usmel web";
+
+/* Action label on share extension to add page to the Firefox reading list. */
+"ShareExtension.AddToReadingListAction.Title" = "Rnu ɣer tebdart n tɣuri";
+
+/* Share extension label shown after user has performed 'Add to Reading List' action. */
+"ShareExtension.AddToReadingListActionDone.Title" = "Rnu ɣer tebdart n tɣuri";
+
+/* Action label on share extension to bookmark the page in Firefox. */
+"ShareExtension.BookmarkThisPageAction.Title" = "Creḍ asebter-a";
+
+/* Share extension label shown after user has performed 'Bookmark this Page' action. */
+"ShareExtension.BookmarkThisPageActionDone.Title" = "Ittwacreḍ";
+
+/* Action label on share extension to load the page in Firefox when user switches apps to bring it to foreground. */
+"ShareExtension.LoadInBackgroundAction.Title" = "Sali-d deffir ugilal";
+
+/* Share extension label shown after user has performed 'Load in Background' action. */
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Sali-d deg Firefox";
+
+/* Action label on share extension to immediately open page in Firefox. */
+"ShareExtension.OpenInFirefoxAction.Title" = "Ldi deg Firefox";
+
+/* Action label on share extension to immediately open page in Firefox in private mode. */
+"ShareExtension.OpenInPrivateModeAction.Title" = "Ldi deg iccer uslig";
+
+/* Action label on share extension to search for the selected text in Firefox. */
+"ShareExtension.SeachInFirefoxAction.Title" = "Nadi deg firefox";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "Sken isumar n unadi";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "Sken iccaren";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "Sken tirza fessusen";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "Seḥbes";
+
+/* Support section title */
+"Support" = "Tallalt";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Suceḍ s ayeffus neɣ s azelmaḍ s kraḍ n iḍudan akken ad tmedleḍ iccer.";
+
+/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"SwitchToNonPBM.KeyCodeTitle" = "Askar n tunigin amagnu";
+
+/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"SwitchToPBM.KeyCodeTitle" = "Askar n tunigin tusligt";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, bookmarks, passwords and more." = "Mtawi iccaren-inek, ticraḍ, awalen uffiren d wayen-nniḍen.";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, passwords and more." = "Mtawi iccaren-inek, awalen uffiren d wayen-nniḍen.";
+
+/* Message displayed when the user syncs for the first time */
+"Sync.FirstTimeMessage.Label" = "Amtawi-inek amezwaru ad yawi kra n wakud";
+
+/* String displayed on Sign In to Sync page that allows the user to create a new account. */
+"Sync.NoAccount.Description" = "Ulac amiḍan? Rnu yiwen i umtaw n Firefox gar yibenkan.";
+
+/* Message displayed when the user's account is syncing with no ellipsis */
+"Sync.Syncing.Label" = "Amtawi";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "Amtawi…";
+
+/* Panel accessibility label */
+"Synced Tabs" = "Iccaren yemtawin";
+
+/* The Bookmark sync component, used in SyncState.Partial.Title */
+"SyncState.Bookmark.Title" = "Ticraḍ n yisebtar";
+
+/* The Remote Clients sync component, used in SyncState.Partial.Title */
+"SyncState.Clients.Title" = "Imsaɣen inmeggagen";
+
+/* Title for Sync status message when synchronization failed to complete */
+"SyncState.Failed.Title" = "Amtawi ur yeddi ara";
+
+/* The History sync component, used in SyncState.Partial.Title */
+"SyncState.History.Title" = "Amazray";
+
+/* The Logins sync component, used in SyncState.Partial.Title */
+"SyncState.Logins.Title" = "Inekcam";
+
+/* Title for Sync status message when Sync failed to start. */
+"SyncState.NotStarted.Title" = "Amtawi ulac-it";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "Sync ur yeqqin ara";
+
+/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
+"SyncState.Partial.Title" = "Synch yemmuger-d uguren n umtawi %@";
+
+/* The Tabs sync component, used in SyncState.Partial.Title */
+"SyncState.Tabs.Title" = "Iccaren";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "Iccer %1$@ seg %2$@";
+
+/* Hardware shortcut to open the tab tray from a tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"Tab.ShowTabTray.KeyCodeTitle" = "Sken akk accaren";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "Iccaren %1$@ ar %2$@ seg %3$@";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Tafelwit n yiccaren";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "Uɣal";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "%d n yiccer (i-en) ttwamedlen";
+
+/* The placeholder text for the tab search bar */
+"Tabs.Search.PlaceholderText" = "Nadi iccaren";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"TabTray.AddTab.Button" = "Rnu iccer";
+
+/* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseAllTabs.KeyCodeTitle" = "Mdel akk iccaren";
+
+/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseTab.KeyCodeTitle" = "Mdel iccaren ittwafernen";
+
+/* The section header for tabs opened last week */
+"TabTray.LastWeek.Header" = "Dduṛt yezrin";
+
+/* The title on the button to copy the tab address. */
+"TabTray.MoreMenu.Copy" = "Nɣel";
+
+/* The section header for tabs opened before last week */
+"TabTray.Older.Header" = "Aqbur";
+
+/* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenNewTab.KeyCodeTitle" = "Ldi iccer amaynut";
+
+/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenSelectedTab.KeyCodeTitle" = "Ldi iccaren ittwafernen";
+
+/* The button title to see more options to perform on the tab. */
+"TabTray.SwipeMenu.More" = "Ugar";
+
+/* The title for the tab tray */
+"TabTray.Title" = "Ldi iccaren";
+
+/* The section header for tabs opened today */
+"TabTray.Today.Header" = "Ass-a";
+
+/* The section header for tabs opened yesterday */
+"TabTray.Yesterday.Header" = "Iḍelli";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "Asebter ur d-yettwaskan ara deg tmeẓri n umeɣri.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Yella-d wugur deg unekcum ɣer yicarren seg yibenkan-inek nniḍen. Ɛreḍ tikelt nniḍen akka kra n wakud.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "Teḍra-d tuccḍa deg uselket n usebter";
+
+/* Relative date for date in past week. */
+"this week" = "dduṛt-a";
+
+/* label for Not Now button */
+"Toasts.NotNow" = "Maci tura";
+
+/* Open App Store button */
+"Toasts.OpenAppStore" = "Ldi App Store";
+
+/* Label for button to undo the action just performed */
+"Toasts.Undo" = "Sefsex";
+
+/* History tableview section header */
+"Today" = "Ass-a";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "ass-a ɣef %@";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "Umuɣ";
+
+/* Accessibility label for the Close All Tabs menu button. */
+"Toolbar.Menu.CloseAllTabs" = "Mdel akk iccaren";
+
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "Ismal yettwarzan aṭas ad ttwaseknen da.";
+
+/* The title for the empty Top Sites state */
+"TopSites.EmptyState.Title" = "Ansuf ɣer yismal yettwarzan aṭas";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "Kkes asebter - %@";
+
+/* Button to disallow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.Cancel" = "Ala";
+
+/* Button to allow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.OK" = "Ih";
+
+/* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
+"TranslationToastHandler.PromptTranslate.Title" = "Asebter-a yettban yura s %1$@. Suwel ɣer %2$@ s %3$@?";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* The menu item that pastes the current contents of the clipboard into the URL bar and navigates to the page */
+"UIMenuItem.PasteGo" = "Senṭeḍ & Ldi";
+
+/* Search in New Tab Text selection menu item */
+"UIMenuItem.SearchWithFirefox" = "Nadi s Firefox";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "ur yettwaɣri ara";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect" = "Leqqem Firefox akken ad teqqneḍ";
+
+/* Debug option */
+"Use stage servers" = "Seqdec iqeddacen n usekyed";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Isem n useqdac";
+
+/* Text message in the settings table view */
+"Verify your email address" = "Senqed tansa n yimayl-inek";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "Lqem %1$@ (%2$@)";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Agbur Web";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Ansuf ɣer Tebdart-inek n Tɣuri";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "Ay ay ay, aya diri-t.";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Wikipedia";
+
+/* Relative date for yesterday. */
+"yesterday" = "iḍelli";
+
+/* History tableview section header */
+"Yesterday" = "Iḍelli";
+
+/* Error message in the remote tabs panel */
+"You don’t have any tabs open in Firefox on your other devices." = "Ur ɣur-k ara icarren yeldin deg Firefox deg yibenkan-inek-nniḍen.";
+
+/* Your Rights settings section title */
+"Your Rights" = "Izerfan-inek";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+

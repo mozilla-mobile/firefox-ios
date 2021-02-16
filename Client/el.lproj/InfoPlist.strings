@@ -1,0 +1,26 @@
+/* (No Comment) */
+"1Password Fill Browser Action" = "Ενέργεια συμπλήρωσης 1Password";
+
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Επιτρέπει τη λήψη και μεταφόρτωση φωτογραφιών.";
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSLocationWhenInUseUsageDescription" = "Οι ιστοσελίδες που επισκέπτεστε ίσως απαιτήσουν την τοποθεσία σας.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Επιτρέπει τη λήψη και μεταφόρτωση βίντεο.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Αυτό σάς επιτρέπει να αποθηκεύετε φωτογραφίες.";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "Νέα ιδιωτική καρτέλα";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "Νέα καρτέλα";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "Σάρωση κωδικού QR";
+

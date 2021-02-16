@@ -1,0 +1,21 @@
+/* Description for the 'Mail' panel in the First Run tour. */
+"Intro.Slides.Mail.Description" = "ប្រើកម្មវិធីអ៊ីមែលណាមួយ​ ជាមួយ Firefox លើស​ពី​ការផ្ញើ​សារ។";
+
+/* Title for the fourth panel 'Mail' in the First Run tour. */
+"Intro.Slides.Mail.Title" = "អ្នក​បាន​ទទួលសារ… ជម្រើស";
+
+/* Description for the 'Private Browsing' panel in the First Run tour. */
+"Intro.Slides.Private.Description" = "ប៉ះរូបតំណាងរបាំង ដើម្បីចូលទៅមុខងារ​រុករកជាឯកជន។";
+
+/* Title for the third panel 'Private Browsing' in the First Run tour. */
+"Intro.Slides.Private.Title" = "រុករកដូចពេលគ្មាននរណាមើលអញ្ចឹង";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "កំពុងស្វែងរកអ្វីផ្សេងមែន​ទេ? ជ្រើសរើស​ម៉ាស៊ីនស្វែងរកលំនាំដើមផ្សេងទៀត (ឬបញ្ចូល​ផ្ទាល់ខ្លួនរបស់អ្នក) នៅក្នុងការកំណត់។";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "ការស្វែងរករបស់អ្នកជាមួយវិធីរបស់អ្នក";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "ចាប់ផ្ដើម​រក​មើល";
+

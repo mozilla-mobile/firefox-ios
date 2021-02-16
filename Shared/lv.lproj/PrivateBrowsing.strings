@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Aizvērt privātās cilnes";
+
+/* Context menu option for opening a link in a new private tab */
+"ContextMenu.OpenInNewPrivateTabButtonTitle" = "Atvērt jaunā privātā cilnē";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox neatcerēsies apmeklēto lapu vēsturi un sīkdatnes, bet jaunās grāmatzīmes tiks saglabātas jūsu ierīcē.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Uzzināt vairāk";
+
+/* Toggled OFF accessibility value */
+"Off" = "Izslēgts";
+
+/* Toggled ON accessibility value */
+"On" = "Ieslēgts";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Privātā pārlūkošana";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Privātais režīms";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Ieslēdz vai izslēdz privāto pārlūkošanu";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "Kad pametat privāto pārlūkošanu";
+

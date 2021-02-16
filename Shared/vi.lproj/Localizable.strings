@@ -1,0 +1,1712 @@
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "Tên người dùng và mật khẩu đang được yêu cầu bởi %@.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "Tên người dùng và mật khẩu đang được yêu cầu bởi %1$@. Trang web cho biết: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "Giới thiệu";
+
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite" = "Ghim vào các trang phổ biến";
+
+/* The title for removing a pinned topsite action */
+"ActivityStream.ContextMenu.RemovePinTopsite" = "Xóa trang web đã ghim";
+
+/* The description of a highlight if it is a site the user has bookmarked */
+"ActivityStream.Highlights.Bookmark" = "Đã đánh dấu";
+
+/* The description of a highlight if it is a site the user has visited */
+"ActivityStream.Highlights.Visited" = "Đã truy cập";
+
+/* Section title label for recently bookmarked websites */
+"ActivityStream.NewRecentBookmarks.Title" = "Trang đánh dấu gần đây";
+
+/* The link that shows more Pocket trending stories */
+"ActivityStream.Pocket.MoreLink" = "Thêm";
+
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle" = "Xu hướng trên Pocket";
+
+/* The description of a Pocket Story */
+"ActivityStream.Pocket.Trending" = "Xu hướng";
+
+/* Section title label for recently visited websites */
+"ActivityStream.RecentHistory.Title" = "Trang được xem gần đây";
+
+/* label showing how many rows of topsites are shown. %d represents a number */
+"ActivityStream.TopSites.RowCount" = "Hàng: %d";
+
+/* The title for the setting page which lets you select the number of top site rows */
+"ActivityStream.TopSites.RowSettingFooter" = "Thết lập hàng";
+
+/* Section title label for Top Sites */
+"ActivityStream.TopSites.SectionTitle" = "Các trang phổ biến";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Thêm thẻ";
+
+/* Accessibility label for action adding current page to reading list.
+   Name for button adding current article to reading list in reader mode */
+"Add to Reading List" = "Thêm vào danh sách đọc";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Đã thêm trang vào danh sách đọc";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "OK";
+
+/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Message" = "Đã xảy ra lỗi trong khi thêm thẻ vào Wallet. Vui lòng thử lại sau.";
+
+/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Title" = "Thất bại khi thêm thẻ";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Địa chỉ và tìm kiếm";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Luôn gửi";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "Yêu cầu xác thực";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "Quay lại";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Chặn cửa sổ pop-up";
+
+/* The header title for the fields when editing a Bookmark */
+"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "Trang đánh dấu";
+
+/* The header title for the fields when editing a Folder */
+"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "Thư mục";
+
+/* The label for the Title field when editing a bookmark */
+"Bookmark.DetailFieldTitle.Label" = "Tiêu đề";
+
+/* The label for the URL field when editing a bookmark */
+"Bookmark.DetailFieldURL.Label" = "URL";
+
+/* Toggle bookmarks syncing setting */
+"Bookmarks" = "Trang đánh dấu";
+
+/* The button on the snackbar to edit a bookmark after adding it. */
+"Bookmarks.Edit.Button" = "Chỉnh sửa";
+
+/* The button to edit a bookmark */
+"Bookmarks.EditBookmark.Label" = "Chỉnh sửa trang đánh dấu";
+
+/* The button to edit a folder */
+"Bookmarks.EditFolder.Label" = "Chỉnh sửa thư mục";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "Thư mục";
+
+/* The label for the location of the new folder */
+"Bookmarks.FolderLocation.Label" = "Địa chỉ";
+
+/* The label for the title of the new folder */
+"Bookmarks.FolderName.Label" = "Tên thư mục";
+
+/* The button to create a new bookmark */
+"Bookmarks.NewBookmark.Label" = "Đánh dấu mới";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "Thư mục mới";
+
+/* The button to create a new separator */
+"Bookmarks.NewSeparator.Label" = "Ngăn cách mới";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "Tiêu đề";
+
+/* The label for the URL of a bookmark */
+"Bookmarks.URL.Label" = "URL";
+
+/* Status label for the empty Bookmarks state. */
+"BookmarksPanel.EmptyState.Title" = "Trang đánh dấu bạn lưu sẽ hiển thị ở đây.";
+
+/* Describes the date on which the breach occurred */
+"BreachAlerts.BreachDate" = "Vụ rò rỉ này xảy ra vào";
+
+/* Description of what a breach is */
+"BreachAlerts.Description" = "Mật khẩu đã bị lộ hoặc bị đánh cắp kể từ lần cuối cùng bạn thay đổi mật khẩu của mình. Để bảo vệ tài khoản này, hãy đăng nhập vào trang web và thay đổi mật khẩu của bạn.";
+
+/* Link to monitor.firefox.com to learn more about breached passwords */
+"BreachAlerts.LearnMoreButton" = "Tìm hiểu thêm";
+
+/* Leads to a link to the breached website */
+"BreachAlerts.Link" = "Đến trang web";
+
+/* Title for the Breached Login Detail View. */
+"BreachAlerts.Title" = "Trang web rò rỉ dữ liệu";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Độ sáng";
+
+/* Label for Cancel button */
+"Cancel" = "Hủy bỏ";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Thay đổi chủ đề màu sắc.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Thay đổi loại phông chữ.";
+
+/* The button to open a new tab with the copied link */
+"ClipboardToast.GoToCopiedLink.Button" = "Đi";
+
+/* Message displayed when the user has a copied link on the clipboard */
+"ClipboardToast.GoToCopiedLink.Title" = "Chuyển đến liên kết đã sao chép?";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Đóng";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "Đang đóng thẻ";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "máy tính";
+
+/* Context menu item for bookmarking a link URL */
+"ContextMenu.BookmarkLinkButtonTitle" = "Đánh dấu liên kết";
+
+/* The button text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Chuyển";
+
+/* The label text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Đã mở thẻ riêng tư mới";
+
+/* The button text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "Chuyển";
+
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText" = "Đã mở thẻ mới";
+
+/* Context menu item for copying an image to the clipboard */
+"ContextMenu.CopyImageButtonTitle" = "Sao chép hình ảnh";
+
+/* Context menu item for copying an image URL to the clipboard */
+"ContextMenu.CopyImageLinkButtonTitle" = "Sao chép liên kết hình ảnh";
+
+/* Context menu item for copying a link URL to the clipboard */
+"ContextMenu.CopyLinkButtonTitle" = "Sao chép liên kết";
+
+/* Context menu item for downloading a link URL */
+"ContextMenu.DownloadLinkButtonTitle" = "Liên kết tải xuống";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenInNewTabButtonTitle" = "Mở trong thẻ mới";
+
+/* Context menu item for saving an image */
+"ContextMenu.SaveImageButtonTitle" = "Lưu hình ảnh";
+
+/* Context menu item for sharing a link URL */
+"ContextMenu.ShareLinkButtonTitle" = "Chia sẻ liên kết";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "Không thể thêm trang vào danh sách đọc";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it’s already there?" = "Không thể thêm trang vào danh sách đọc. Có lẽ nó đã có ở đó?";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "Không thể tải trang.";
+
+/* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
+"CoverSheet.v22.DarkMode.Description" = "Đối với người dùng iOS 13, Firefox hiện tự động chuyển sang chủ đề tối khi điện thoại của bạn được đặt thành Chế độ tối. Để thay đổi chế độ này, hãy đi tới Cài đặt > Chủ đề.";
+
+/* Title for the new dark mode change in the version 22 app release. */
+"CoverSheet.v22.DarkMode.Title" = "Chủ đề tối bây giờ bao gồm một bàn phím tối và màn hình khởi động tối.";
+
+/* Description for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Description" = "Trình chống theo dõi nâng cao tích hợp giúp ngăn quảng cáo theo dõi bạn xung quanh. Bật chế độ Nghiêm ngặt để chặn nhiều trình theo dõi, quảng cáo và cửa sổ bật lên và hơn nữa.";
+
+/* Text for the new ETP settings button */
+"CoverSheet.v24.ETP.Settings.Button" = "Đi đến Cài đặt";
+
+/* Title for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Title" = "Bảo vệ chống theo dõi quảng cáo";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Tạo tài khoản";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Tối";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Giảm kích thước văn bản";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Công cụ tìm kiếm mặc định";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Cài đặt hiển thị";
+
+/* Used as a button label for crash dialog prompt */
+"Don’t Send" = "Không gửi";
+
+/* Done button on left side of the Settings view controller title bar */
+"Done" = "Xong";
+
+/* Panel accessibility label */
+"Downloads" = "Tải xuống";
+
+/* The label of the button the user will press to start downloading a file */
+"Downloads.Alert.DownloadNow" = "Tải xuống ngay";
+
+/* Button confirming the cancellation of the download. */
+"Downloads.CancelDialog.Cancel" = "Hủy bỏ";
+
+/* Alert dialog body when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Message" = "Bạn có chắc chắn muốn hủy tải xuống này?";
+
+/* Button declining the cancellation of the download. */
+"Downloads.CancelDialog.Resume" = "Tiếp tục";
+
+/* Alert dialog title when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Title" = "Hủy tải xuống";
+
+/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
+"Downloads.Error.Message" = "Tải xuống không được hỗ trợ trong Firefox.";
+
+/* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
+"Downloads.Toast.Cancelled.LabelText" = "Đã hủy tải xuống";
+
+/* The label text in the Download Failed toast for showing confirmation that the download has failed. */
+"Downloads.Toast.Failed.LabelText" = "Tải xuống thất bại";
+
+/* The button to retry a failed download from the Download Failed toast. */
+"Downloads.Toast.Failed.RetryButton" = "Thử lại";
+
+/* The button to open a new tab with the Downloads home panel */
+"Downloads.Toast.GoToDownloads.Button" = "Tải xuống";
+
+/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. */
+"Downloads.Toast.MultipleFiles.DescriptionText" = "1 trong số %d tập tin";
+
+/* The description text in the Download progress toast for showing the number of files (1$) and download progress (2$). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where 1$ is Downloads.Toast.MultipleFiles.DescriptionText and 2$ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and 1$ should come before 2$ everywhere except for right-to-left locales. */
+"Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";
+
+/* The description text in the Download progress toast for showing the downloaded file size (1$) out of the total expected file size (2$). */
+"Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
+
+/* Action button for deleting downloaded files in the Downloads panel. */
+"DownloadsPanel.Delete.Title" = "Xóa";
+
+/* Title for the Downloads Panel empty state. */
+"DownloadsPanel.EmptyState.Title" = "Các tập tin tải xuống sẽ hiển thị ở đây.";
+
+/* Action button for sharing downloaded files in the Downloads panel. */
+"DownloadsPanel.Share.Title" = "Chia sẻ";
+
+/* Text message in the settings table view */
+"Enter your password to connect" = "Nhập mật khẩu của bạn để kết nối";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "Nâng cao";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "Cảnh báo: chúng tôi không thể xác nhận kết nối của bạn với trang web này là an toàn.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "Nó có thể là một cấu hình sai hoặc giả mạo bởi kẻ tấn công. Tiến hành nếu bạn chấp nhận rủi ro tiềm ẩn.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "Chủ sở hữu của %@ đã cấu hình trang web của họ không đúng cách. Để bảo vệ thông tin của bạn khỏi bị đánh cắp, Firefox đã không kết nối với trang web này.";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "Kết nối này không đáng tin";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "Quay lại";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "Tiếp tục truy cập trang web";
+
+/* Question shown to user when tapping a link that opens the App Store app */
+"ExternalLink.AppStore.ConfirmationTitle" = "Mở liên kết này trong App Store?";
+
+/* Question shown to user when tapping an SMS or MailTo link that opens the external app for those. */
+"ExternalLink.AppStore.GenericConfirmationTitle" = "Mở liên kết này trong ứng dụng bên ngoài?";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Title for firefox about:home page in tab history list */
+"Firefox.HomePage.Title" = "Trang chủ Firefox";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "Tiến";
+
+/* Label stating how to disconnect account */
+"FxA.AccountVerificationDetails" = "Email không đúng? Ngắt kết nối bên dưới để bắt đầu lại.";
+
+/* Label stating your account is not verified */
+"FxA.AccountVerificationRequired" = "Yêu cầu xác minh tài khoản";
+
+/* Message explaining that user needs to check email for Firefox Account verfication link. */
+"FxA.AccountVerificationRequiredSurface" = "Bạn cần xác minh %@. Kiểm tra email của bạn để biết liên kết xác minh từ Firefox.";
+
+/* Button label to connect another device to Sync */
+"FxA.ConnectAnotherDevice" = "Kết nối thiết bị khác";
+
+/* Settings section title for Firefox Account */
+"FxA.FirefoxAccount" = "Tài khoản Firefox";
+
+/* Button label to go to Firefox Account settings */
+"FxA.ManageAccount" = "Quản lý tài khoản và thiết bị";
+
+/* Label when no internet is present */
+"FxA.NoInternetConnection" = "Không có kết nối Internet";
+
+/* Button label to open Sync preferences */
+"FxA.OpenSyncPreferences" = "Mở tùy chọn đồng bộ hóa";
+
+/* Instructions shown on qr code scanning view */
+"fxa.qr-scanning-view.instructions" = "Quét mã QR được hiển thị tại firefox.com/pair";
+
+/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
+"FxA.RemoveAccount" = "Gỡ bỏ";
+
+/* Description string for alert view that gets presented when user tries to remove an account. */
+"FxA.RemoveAccountAlertMessage" = "Gỡ bỏ tài khoản Firefox được liên kết với thiết bị này để đăng nhập với tư cách người dùng khác.";
+
+/* Remove account alert is the final confirmation before user removes their firefox account */
+"FxA.RemoveAccountAlertTitle" = "Gỡ bỏ tài khoản";
+
+/* Button label to resend email */
+"FxA.ResendEmail" = "Gửi lại email";
+
+/* FxA sign in view subtitle */
+"fxa.signin.camera-signin" = "Đăng nhập bằng máy ảnh của bạn";
+
+/* FxA sign in create account label. */
+"fxa.signin.create-account-pt-1" = "Đồng bộ Firefox giữa các thiết bị với một tài khoản.";
+
+/* FxA sign in create account label. This will be linked to the site to create an account. */
+"fxa.signin.create-account-pt-2" = "Tạo tài khoản Firefox.";
+
+/* FxA sign in view qr code instructions */
+"fxa.signin.qr-link-instruction" = "Trên máy tính của bạn, hãy mở Firefox và truy cập firefox.com/pair";
+
+/* FxA sign in view qr code scan button */
+"fxa.signin.ready-to-scan" = "Sẵn sàng để quét";
+
+/* FxA sign in view title */
+"fxa.signin.turn-on-sync" = "Bật đồng bộ hóa";
+
+/* FxA sign in view email login button */
+"fxa.signin.use-email-instead" = "Sử dụng email thay thế";
+
+/* Button label to sign into Sync */
+"FxA.SignIntoSync" = "Đăng nhập vào đồng bộ hóa";
+
+/* Label explaining what sync does */
+"FxA.SyncExplain" = "Nhận các thẻ, dấu trang và mật khẩu từ các thiết bị khác của bạn.";
+
+/* Button label to Sync your Firefox Account */
+"FxA.SyncNow" = "Đồng bộ ngay";
+
+/* Call to action for sign into sync button */
+"FxA.TakeYourWebWithYou" = "Mang trang web theo bạn";
+
+/* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
+"FxAPush_DeviceConnected_body" = "Đồng bộ hóa Firefox đã kết nối với %@";
+
+/* Title of a notification displayed when another device has connected to FxA. */
+"FxAPush_DeviceConnected_title" = "Đồng bộ hóa được kết nối";
+
+/* Body of a notification displayed when named device has been disconnected from FxA. %@ refers to the name of the disconnected device. */
+"FxAPush_DeviceDisconnected_body" = "%@ đã ngắt kết nối thành công.";
+
+/* Body of a notification displayed when this device has been disconnected from FxA by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Thiết bị này đã được ngắt kết nối thành công khỏi Đồng bộ hóa Firefox.";
+
+/* Title of a notification displayed when this device has been disconnected by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_title" = "Đồng bộ hóa đã bị ngắt kết nối";
+
+/* Title of a notification displayed when named device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_title" = "Đồng bộ hóa đã bị ngắt kết nối";
+
+/* Body of a notification displayed when unnamed device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Một thiết bị đã ngắt kết nối khỏi Đồng bộ hóa Firefox";
+
+/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "Nhận các thẻ, dấu trang và mật khẩu đang mở của bạn từ các thiết bị khác của bạn.";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Trợ giúp";
+
+/* Toggle history syncing setting */
+"History" = "Lịch sử";
+
+/* Title for button in the history panel to clear recent history */
+"HistoryPanel.ClearHistoryButtonTitle" = "Xóa lịch sử gần đây…";
+
+/* Option title to clear all browsing history. */
+"HistoryPanel.ClearHistoryMenuOptionEverything" = "Mọi thứ";
+
+/* Button to perform action to clear history for the last hour */
+"HistoryPanel.ClearHistoryMenuOptionTheLastHour" = "Giờ trước";
+
+/* Button to perform action to clear history for today only */
+"HistoryPanel.ClearHistoryMenuOptionToday" = "Hôm nay";
+
+/* Button to perform action to clear history for yesterday and today */
+"HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "Hôm nay và hôm qua";
+
+/* Title for popup action menu to clear recent history. */
+"HistoryPanel.ClearHistoryMenuTitle" = "Xóa lịch sử gần đây sẽ xóa lịch sử, cookie và dữ liệu khác của trình duyệt.";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "Các trang web bạn đã truy cập gần đây sẽ hiển thị ở đây.";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "Các thẻ của bạn từ các thiết bị khác sẽ hiển thị ở đây.";
+
+/* Description for the empty synced tabs 'not signed in' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Đăng nhập để xem danh sách thẻ từ các thiết bị khác của bạn.";
+
+/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "Tài khoản của bạn cần được xác thực.";
+
+/* Description for the empty synced tabs 'single device Sync' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "Muốn xem thẻ từ các thiết bị khác của bạn ở đây?";
+
+/* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Bật đồng bộ thẻ để xem danh sách thẻ từ các thiết bị khác của bạn.";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "Đồng bộ hóa Firefox";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "Lịch sử";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "Đã đóng gần đây";
+
+/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d thiết bị đã kết nối";
+
+/* Title for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Title" = "Thiết bị được đồng bộ hóa";
+
+/* Button cancelling changes setting the home page for the first time. */
+"HomePage.Set.Dialog.Cancel" = "Hủy bỏ";
+
+/* Alert dialog body when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Message" = "Bạn có thể thay đổi điều này bất cứ lúc nào trong cài đặt";
+
+/* Button accepting changes setting the home page for the first time. */
+"HomePage.Set.Dialog.OK" = "Đặt trang chủ";
+
+/* Alert dialog title when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Title" = "Bạn có muốn sử dụng trang web này làm trang chủ của bạn?";
+
+/* The title for the Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Bookmark" = "Trang đánh dấu";
+
+/* The title for the Delete from History context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.DeleteFromHistory" = "Xóa khỏi lịch sử";
+
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab" = "Mở trong thẻ riêng tư mới";
+
+/* The title for the Open in New Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewTab" = "Mở trong thẻ mới";
+
+/* The title for the Remove context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Remove" = "Xóa";
+
+/* The title for the Remove Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.RemoveBookmark" = "Xóa trang đánh dấu";
+
+/* The title for the Share context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Share" = "Chia sẻ";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Back.DiscoveryTitle" = "Quay lại";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.CloseTab.DiscoveryTitle" = "Đóng thẻ";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Find.DiscoveryTitle" = "Tìm";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Forward.DiscoveryTitle" = "Tiến";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "Thẻ riêng tư mới";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewTab.DiscoveryTitle" = "Thẻ mới";
+
+/* Label to switch to normal browsing mode */
+"Hotkeys.NormalMode.DiscoveryTitle" = "Chế độ duyệt web bình thường";
+
+/* Label to switch to private browsing mode */
+"Hotkeys.PrivateMode.DiscoveryTitle" = "Chế độ duyệt web riêng tư";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Reload.DiscoveryTitle" = "Tải lại trang này";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "Chọn thanh địa chỉ";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "Xem thẻ tiếp theo";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Xem thẻ trước đó";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Tăng kích thước văn bản";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "vừa xong";
+
+/* History tableview section header */
+"Last month" = "Tháng trước";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "Lần đồng bộ cuối: %@";
+
+/* History tableview section header */
+"Last week" = "Tuần trước";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Giấy phép";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Sáng";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "Tải trang gốc";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "Đang tải nội dung…";
+
+/* Authentication prompt log in button */
+"Log in" = "Đăng nhập";
+
+/* Toggle logins syncing setting */
+"Logins" = "Đăng nhập";
+
+/* Login detail view field name for the last modified date */
+"LoginsDetailView.LoginModified" = "Đã sửa đổi";
+
+/* Title for the login detail view */
+"LoginsDetailView.LoginTitle" = "Đăng nhập";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "Không lưu";
+
+/* Button to not update the user's password */
+"LoginsHelper.DontUpdate.Button" = "Không cập nhật";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "Lưu đăng nhập %1$@ cho %2$@?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "Lưu mật khẩu cho %@?";
+
+/* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
+"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "Cập nhật thông tin đăng nhập cho %@?";
+
+/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "Cập nhật đăng nhập %1$@ cho %2$@?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "Lưu đăng nhập";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "Cập nhật";
+
+/* For filtering the login list, search only the login names */
+"LoginsList.LoginsListFilterLogin" = "Đăng nhập";
+
+/* For filtering the login list, search both website and login names. */
+"LoginsList.LoginsListFilterSearchAll" = "Tất cả";
+
+/* For filtering the login list, search only the website names */
+"LoginsList.LoginsListFilterWebsite" = "Trang web";
+
+/* Placeholder test for search box in logins list view. */
+"LoginsList.LoginsListSearchPlaceholder" = "Bộ lọc";
+
+/* Title for the list of logins */
+"LoginsList.Title" = "ĐĂNG NHẬP ĐÃ LƯU";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Có vẻ như Firefox đã gặp sự cố trước đó. Bạn có muốn khôi phục các thẻ của bạn?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "Đánh dấu là đã đọc";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Đánh dấu là chưa đọc";
+
+/* Toast displayed to the user after a bookmark has been added. */
+"Menu.AddBookmark.Confirm" = "Đã thêm đánh dấu";
+
+/* Toast displayed to the user after adding the item to the Top Sites. */
+"Menu.AddPin.Confirm" = "Đã ghim vào các trang web hàng đầu";
+
+/* Toast displayed to the user after adding the item to their reading list. */
+"Menu.AddToReadingList.Confirm" = "Đã thêm vào danh sách đọc";
+
+/* The title for the button that lets you copy the url from the location bar. */
+"Menu.Copy.Title" = "Sao chép địa chỉ liên kết";
+
+/* Toast displayed to user after copy url pressed. */
+"Menu.CopyURL.Confirm" = "Đã sao chép URL vào bộ nhớ tạm";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "Trình chống theo dõi nâng cao đã bị TẮT cho trang này.";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "Trình chống theo dõi nâng cao đã được BẬT cho trang này.";
+
+/* Description for having standard ETP protection with ITP offered in iOS14+ */
+"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox chặn các trình theo dõi trên nhiều trang web, trình theo dõi xã hội, trình mã hóa và vân tay.";
+
+/* Description for having strict ETP protection with ITP offered in iOS14+ */
+"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox chặn các trình theo dõi trên nhiều trang web, trình theo dõi xã hội, trình mật mã, vân tay và nội dung theo dõi.";
+
+/* Label for the button displayed in the menu used to stop the reload of the webpage */
+"Menu.Library.StopReload" = "Dừng";
+
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label" = "Bật chế độ ban đêm";
+
+/* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
+"Menu.NoImageModeBlockImages.Label" = "Chặn hình ảnh";
+
+/* Label for title in page action menu. */
+"Menu.PageActions.Title" = "Hành động trang";
+
+/* The title for the button that lets you paste into the location bar */
+"Menu.Paste.Title" = "Dán";
+
+/* The title for the button that lets you paste and go to a URL */
+"Menu.PasteAndGo.Title" = "Dán & mở";
+
+/* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
+"Menu.ReloadWithoutTrackingProtection.Title" = "Tải lại không dùng trình chống theo dõi";
+
+/* Label for the button, displayed in the menu, used to reload the current website with Tracking Protection enabled */
+"Menu.ReloadWithTrackingProtection.Title" = "Tải lại với trình chống theo dõi";
+
+/* Toast displayed to the user after a bookmark has been removed. */
+"Menu.RemoveBookmark.Confirm" = "Đã xóa đánh dấu";
+
+/* Toast displayed to the user after removing the item from the Top Sites. */
+"Menu.RemovePin.Confirm" = "Đã xóa khỏi các trang web hàng đầu";
+
+/* Toast displayed to the user after a tab has been sent successfully. */
+"Menu.TabSent.Confirm" = "Đã gửi thẻ";
+
+/* Title on tracking protection menu for blocked items. */
+"Menu.TrackingProtection.BlockedTitle" = "Đã chặn";
+
+/* Message in menu when no trackers blocked. */
+"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Không có trình theo dõi được phát hiện trên trang này bởi Firefox.";
+
+/* The title for tracking protection settings */
+"Menu.TrackingProtection.ProtectionSettings.Title" = "Cài đặt bảo vệ";
+
+/* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
+"Menu.TrackingProtection.TitlePrefix" = "Trạng thái bảo vệ cho %@";
+
+/* The title that shows the number of content cookies blocked */
+"Menu.TrackingProtectionBlockedContent.Title" = "Trình theo dõi nội dung";
+
+/* The title that shows the number of social URLs blocked */
+"Menu.TrackingProtectionBlockedSocial.Title" = "Trình theo dõi xã hội";
+
+/* Description of the Tracking protection menu when TP is blocking parts of the page */
+"Menu.TrackingProtectionBlocking.Description" = "Firefox chặn một số phần của trang có thể đang theo dõi bạn.";
+
+/* The description of the Tracking Protection menu item when tracking is enabled */
+"Menu.TrackingProtectionBlockingDisabled.Description" = "Chặn trình theo dõi trực tuyến";
+
+/* The title that shows the number of cross-site cookies blocked */
+"Menu.TrackingProtectionCrossSiteCookies.Title" = "Cookie theo dõi chéo trang web";
+
+/* The title that shows the number of cross-site URLs blocked */
+"Menu.TrackingProtectionCrossSiteTrackers.Title" = "Trình theo dõi chéo trang web";
+
+/* The title that shows the number of cryptomining scripts blocked */
+"Menu.TrackingProtectionCryptominersBlocked.Title" = "Tiền điện tử";
+
+/* Description of content trackers. */
+"Menu.TrackingProtectionDescription.ContentTrackers" = "Trang web có thể tải bên ngoài quảng cáo, video và nội dung khác có chứa trình theo dõi ẩn. Chặn điều này có thể làm cho các trang web tải nhanh hơn, nhưng một số nút, biểu mẫu và trường đăng nhập có thể không hoạt động.";
+
+/* Description of cross-site trackers. */
+"Menu.TrackingProtectionDescription.CrossSiteNew" = "Những cookie này theo bạn từ trang này sang trang khác để thu thập dữ liệu về những gì bạn làm trực tuyến. Chúng được đặt bởi các bên thứ ba như nhà quảng cáo và công ty phân tích.";
+
+/* Description of cryptominers. */
+"Menu.TrackingProtectionDescription.CryptominersNew" = "Tiền điện tử bí mật sử dụng sức mạnh tính toán của hệ thống của bạn để khai thác tiền kỹ thuật số. Các tập lệnh mã hóa làm cạn kiệt pin của bạn, làm chậm máy tính của bạn và có thể tăng hóa đơn năng lượng của bạn.";
+
+/* Description of fingerprinters. */
+"Menu.TrackingProtectionDescription.Fingerprinters" = "Các cài đặt trên trình duyệt và máy tính của bạn là duy nhất. Dấu vân tay thu thập nhiều cài đặt duy nhất này để tạo hồ sơ về bạn, có thể được sử dụng để theo dõi bạn khi bạn duyệt.";
+
+/* Description of social network trackers. */
+"Menu.TrackingProtectionDescription.SocialNetworksNew" = "Mạng xã hội đặt trình theo dõi trên các trang web khác để xây dựng hồ sơ đầy đủ hơn và nhắm mục tiêu vào bạn. Chặn các trình theo dõi này làm giảm số lượng công ty truyền thông xã hội có thể thấy những gì bạn trực tuyến.";
+
+/* The button that disabled TP for a site. */
+"Menu.TrackingProtectionDisable1.Title" = "Vô hiệu hóa cho trang web này";
+
+/* The confirmation toast once tracking protection has been disabled */
+"Menu.TrackingProtectionDisabled.Title" = "Trình chống theo dõi hiện đang tắt cho trang web này.";
+
+/* A button to enable tracking protection inside the menu. */
+"Menu.TrackingProtectionEnable.Title" = "Kích hoạt Chống theo dõi";
+
+/* A button to enable tracking protection inside the menu. */
+"Menu.TrackingProtectionEnable1.Title" = "Kích hoạt cho trang này";
+
+/* The confirmation toast once tracking protection has been enabled */
+"Menu.TrackingProtectionEnabled.Title" = "Trình chống theo dõi hiện đang bật cho trang web này.";
+
+/* The title that shows the number of fingerprinting scripts blocked */
+"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Vân tay";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "Đã chặn cookie theo dõi chéo trang web";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Cryptominers" = "Đã chặn tiền điện tử";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Fingerprinters" = "Đã chặn dấu vân tay";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Social" = "Đã chặn trình theo dõi xã hội";
+
+/* more info about what tracking protection is about */
+"Menu.TrackingProtectionMoreInfo.Description" = "Tìm hiểu thêm về cách trình chống theo dõi chặn trình theo dõi trực tuyến thu thập dữ liệu duyệt web của bạn trên nhiều trang web.";
+
+/* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
+"Menu.TrackingProtectionNoBlocking.Description" = "Không phát hiện các thành phần theo dõi bạn trên trang này.";
+
+/* label for the menu item to show when the website is whitelisted from blocking trackers. */
+"Menu.TrackingProtectionOption.WhiteListOnDescription" = "Trang web chứa các thành phần có thể theo dõi bạn. Bãn đã tắt tính năng chống theo dõi.";
+
+/* label for the menu item that lets you remove a website from the tracking protection whitelist */
+"Menu.TrackingProtectionWhitelistRemove.Title" = "Kích hoạt cho trang này";
+
+/* The title for the option to view the What's new page. */
+"Menu.WhatsNew.Title" = "Có gì mới";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "thiết bị di động";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "hơn một tháng trước";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "hơn một tuần trước";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Thanh điều hướng";
+
+/* Accessibility label for the New Tab button in the tab toolbar.
+   Accessibility Label for the tab toolbar New tab button */
+"New Tab" = "Thẻ mới";
+
+/* Restore Tabs Negative Action */
+"No" = "Không";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "Không có thẻ";
+
+/* OK button */
+"OK" = "OK";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "OK";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "Oops! Firefox đã gặp sự cố";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Mở bài viết trong chế độ đọc sách bằng cách nhấn vào biểu tượng sách khi nó xuất hiện trên thanh tiêu đề.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Mở Cài đặt";
+
+/* Toggle tabs syncing setting */
+"Open Tabs" = "Các thẻ đang mở";
+
+/* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
+"OpenURL.Error.Message" = "Firefox không thể mở trang vì nó có địa chỉ không hợp lệ.";
+
+/* Title of the message shown when the user attempts to navigate to an invalid link. */
+"OpenURL.Error.Title" = "Không thể mở trang";
+
+/* Accessibility label for the Page Options menu button */
+"Page Options Menu" = "Menu tùy chọn trang";
+
+/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
+"Panel Chooser" = "Chọn bảng điều khiển";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Mật khẩu";
+
+/* Error message shown in the remote tabs panel */
+"PasswordAutoFill.NoPasswordsFoundTitle" = "Bạn không có bất kỳ thông tin đăng nhập nào được đồng bộ hóa từ tài khoản Firefox của bạn";
+
+/* Header for the list of credentials table */
+"PasswordAutoFill.PasswordsListTitle" = "Thông tin đăng nhập có sẵn:";
+
+/* Title of the extension that shows firefox passwords */
+"PasswordAutoFill.SectionTitle" = "Thông tin đăng nhập Firefox";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Điều này cho phép bạn lưu hình ảnh vào Camera Roll của bạn.";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox muốn truy cập Ảnh của bạn";
+
+/* Button for closing the menu action sheet */
+"PhotonMenu.close" = "Đóng";
+
+/* Privacy section title */
+"Privacy" = "Riêng tư";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "Chính sách riêng tư";
+
+/* Title for quick-search engines settings section. */
+"Quick-Search Engines" = "Công cụ tìm kiếm nhanh";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "đọc";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "Chế độ đọc sách";
+
+/* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
+"ReaderMode.Available.VoiceOverAnnouncement" = "Chế độ đọc sách có sẵn";
+
+/* Panel accessibility label */
+"Reading list" = "Danh sách đọc";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "Đã đóng gần đây";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "Tải lại";
+
+/* Accessibility label for the reload button */
+"Reload page" = "Tải lại trang này";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Xóa";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Xóa khỏi danh sách đọc";
+
+/* Cancel button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Cancel" = "Hủy bỏ";
+
+/* Reopen button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Reopen" = "Mở lại";
+
+/* Reopen alert title shown at home page. */
+"ReopenAlert.Title" = "Mở lại thẻ đã đóng";
+
+/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"ReopenClosedTab.KeyCodeTitle" = "Mở lại thẻ đã đóng";
+
+/* Accessibility label for button resetting font size in display settings of reader mode */
+"Reset text size" = "Đặt lại kích thước văn bản";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans-serif";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Nhấp vào biểu tượng cộng với sách trong công cụ chế độ đọc sách để lưu trang vào danh sách đọc.";
+
+/* OK button to dismiss the error prompt. */
+"ScanQRCode.Error.OK.Button" = "OK";
+
+/* Text for the instructions label, displayed in the QR scanner view */
+"ScanQRCode.Instructions.Label" = "Căn chỉnh mã QR trong khung để quét";
+
+/* Text of the prompt that is shown to the user when the data is invalid */
+"ScanQRCode.InvalidDataError.Message" = "Dữ liệu không hợp lệ";
+
+/* Text of the prompt user to setup the camera authorization. */
+"ScanQRCode.PermissionError.Message" = "Vui lòng cho phép Firefox truy cập vào máy ảnh của thiết bị của bạn trong 'Cài đặt' -> 'Quyền riêng tư' -> 'Camera'.";
+
+/* Title for the QR code scanner view. */
+"ScanQRCode.View.Title" = "Quét mã QR";
+
+/* Accessibility Label for the tab toolbar Search button
+   Navigation title for search settings.
+   Open search section of settings */
+"Search" = "Tìm kiếm";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Tìm kiếm hoặc nhập địa chỉ";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "Công cụ tìm kiếm mới sẽ xuất hiện trong thanh tìm kiếm nhanh.";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "Đã thêm công cụ tìm kiếm!";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "Thêm nhà cung cấp tìm kiếm?";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "Hủy bỏ";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.DuplicateErrorMessage" = "Một công cụ tìm kiếm với tiêu đề hoặc URL này đã được thêm trước đó.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.DuplicateErrorTitle" = "Thất bại";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "Không thể thêm nhà cung cấp tìm kiếm.";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "Thất bại";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.FormErrorMessage" = "Vui lòng điền chính xác tất cả các trường.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.FormErrorTitle" = "Thất bại";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "OK";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "Gợi ý tìm kiếm";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "Kết nối an toàn";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "Gửi báo cáo lỗi để Mozilla có thể khắc phục sự cố?";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "Gửi phản hồi";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "Gửi báo cáo";
+
+/* Button title for cancelling share screen
+   Close button in top navigation bar */
+"SendTo.Cancel.Button" = "Hủy bỏ";
+
+/* Header for the list of devices table */
+"SendTo.DeviceList.Text" = "Các thiết bị có sẵn:";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "Chỉ các liên kết HTTP và HTTPS có thể được chia sẻ.";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "OK";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "Liên kết bạn đang cố gắng chia sẻ không thể chia sẻ được.";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"SendTo.NavBar.Title" = "Gửi thẻ";
+
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message" = "Bạn không có thiết bị nào khác được kết nối với tài khoản Firefox này để đồng bộ hóa.";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Message" = "Vui lòng mở Firefox, truy cập Cài đặt và đăng nhập để tiếp tục.";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Title" = "Bạn chưa đăng nhập vào tài khoản Firefox của mình.";
+
+/* Navigation bar button to Send the current page to a device */
+"SendTo.SendAction.Text" = "Gửi";
+
+/* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
+"SendTo.SignIn.Button" = "Đăng nhập vào Firefox";
+
+/* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_body" = "Thẻ mới đến từ một thiết bị khác.";
+
+/* Title of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_title" = "Thẻ đã nhận";
+
+/* Body of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the app name. */
+"SentTab_TabArrivingNotification_WithDevice_body" = "Thẻ mới đã đến trong %@";
+
+/* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
+"SentTab_TabArrivingNotification_WithDevice_title" = "Thẻ nhận được từ %@";
+
+/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
+"SentTab.AddToReadingListAction.Title" = "Thêm vào danh sách đọc";
+
+/* Label for an action used to bookmark one or more tabs from a notification. */
+"SentTab.BookmarkAction.title" = "Trang đánh dấu";
+
+/* Body of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.body" = "Chạm để bắt đầu";
+
+/* Title of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.title" = "Đồng bộ hóa Firefox";
+
+/* Label for an action used to view one or more tabs from a notification. */
+"SentTab.ViewAction.title" = "Xem";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Nâu đen";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serif";
+
+/* Title in the settings view controller title bar */
+"Settings" = "Cài đặt";
+
+/* The button text in Search Settings that opens the Custom Search Engine view. */
+"Settings.AddCustomEngine" = "Thêm công cụ tìm kiếm";
+
+/* The text on the Save button when saving a custom search engine */
+"Settings.AddCustomEngine.SaveButtonText" = "Lưu";
+
+/* The title of the  Custom Search Engine view. */
+"Settings.AddCustomEngine.Title" = "Thêm công cụ tìm kiếm";
+
+/* The title for the field which sets the title for a custom search engine. */
+"Settings.AddCustomEngine.TitleLabel" = "Tiêu đề";
+
+/* The placeholder for Title Field when saving a custom search engine. */
+"Settings.AddCustomEngine.TitlePlaceholder" = "Máy tìm kiếm";
+
+/* The title for URL Field */
+"Settings.AddCustomEngine.URLLabel" = "URL";
+
+/* The placeholder for URL Field when saving a custom search engine */
+"Settings.AddCustomEngine.URLPlaceholder" = "URL (Thay thế truy vấn bằng %s)";
+
+/* Button in Data Management that clears private data for the selected items. */
+"Settings.ClearAllWebsiteData.Clear.Button" = "Xóa tất cả dữ liệu trang web";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "Xóa dữ liệu riêng tư";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "Xóa dữ liệu riêng tư";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "Xóa dữ liệu riêng tư";
+
+/* Copy app version alert shown in settings. */
+"Settings.CopyAppVersion.Title" = "Đã sao chép vào bộ nhớ tạm";
+
+/* Default text in search bar for Data Management */
+"Settings.DataManagement.SearchLabel" = "Bộ lọc trang web";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.DataManagement.SectionName" = "Quản lý dữ liệu";
+
+/* Title displayed in header of the setting panel. */
+"Settings.DataManagement.Title" = "Quản lý dữ liệu";
+
+/* Body of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Body" = "Firefox sẽ ngừng đồng bộ hóa với tài khoản của bạn, nhưng sẽ không xóa mọi dữ liệu duyệt web của bạn trên thiết bị này.";
+
+/* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
+"Settings.Disconnect.Button" = "Ngắt kết nối đồng bộ hóa";
+
+/* Cancel action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.CancelButton" = "Hủy bỏ";
+
+/* Destructive action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.DestructiveButton" = "Ngắt kết nối";
+
+/* Title of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Title" = "Ngắt kết nối đồng bộ hóa?";
+
+/* Section header for brightness slider. */
+"Settings.DisplayTheme.BrightnessThreshold.SectionHeader" = "Ngưỡng";
+
+/* Display (theme) settings label to show if manually switch theme is enabled. */
+"Settings.DisplayTheme.Manual.StatusLabel" = "Thủ công";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Manually'. */
+"Settings.DisplayTheme.Manual.SwitchSubtitle" = "Chọn chủ đề bạn muốn";
+
+/* Display (theme) setting to choose the theme manually. */
+"Settings.DisplayTheme.Manual.SwitchTitle" = "Thủ công";
+
+/* Option choice in display theme settings for dark theme */
+"Settings.DisplayTheme.OptionDark" = "Tối";
+
+/* Option choice in display theme settings for light theme */
+"Settings.DisplayTheme.OptionLight" = "Sáng";
+
+/* Display (theme) settings footer describing how the brightness slider works. */
+"Settings.DisplayTheme.SectionFooter" = "Chủ đề sẽ tự động thay đổi dựa trên độ sáng màn hình của bạn. Bạn có thể đặt ngưỡng nơi chủ đề thay đổi. Vòng tròn biểu thị độ sáng hiện tại của màn hình.";
+
+/* Switch mode settings section title */
+"Settings.DisplayTheme.SwitchMode.SectionHeader" = "Chế độ chuyển đổi";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Automatically'. */
+"Settings.DisplayTheme.SwitchSubtitle" = "Tự động chuyển đổi dựa trên độ sáng màn hình";
+
+/* Display (theme) settings label to show if automatically switch theme is enabled.
+   Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
+"Settings.DisplayTheme.SwitchTitle" = "Tự động";
+
+/* System theme settings section title */
+"Settings.DisplayTheme.SystemTheme.SectionHeader" = "Chủ đề hệ thống";
+
+/* System theme settings switch to choose whether to use the same theme as the system */
+"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "Sử dụng chế độ sáng/tối của hệ thống";
+
+/* Theme picker settings section title */
+"Settings.DisplayTheme.ThemePicker.SectionHeader" = "Bộ chọn chủ đề";
+
+/* Title in main app settings for Theme settings */
+"Settings.DisplayTheme.Title.v2" = "Chủ đề";
+
+/* DNT Settings option for always on */
+"Settings.DNT.OptionAlwaysOn" = "Luôn luôn";
+
+/* DNT Settings option for only turning on when Tracking Protection is also on */
+"Settings.DNT.OptionOnWithTP" = "Chỉ khi dùng trình chống theo dõi";
+
+/* DNT Settings title */
+"Settings.DNT.Title" = "Gửi yêu cầu không theo dõi tới trang web để cho biết bạn không muốn bị theo dõi";
+
+/* Label used for the device name settings section. */
+"Settings.FxA.DeviceName" = "Tên thiết bị";
+
+/* Label used as a section title in the Firefox Accounts Settings screen. */
+"Settings.FxA.Sync.SectionName" = "Cài đặt đồng bộ hóa";
+
+/* Title displayed in header of the FxA settings panel. */
+"Settings.FxA.Title" = "Tài khoản Firefox";
+
+/* General settings section title */
+"Settings.General.SectionName" = "Tổng quát";
+
+/* Button in settings to clear the home page. */
+"Settings.HomePage.Clear.Button" = "Xóa trắng";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "Trang chủ";
+
+/* Title displayed in header of the setting panel. */
+"Settings.HomePage.Title" = "Cài đặt trang chủ";
+
+/* Placeholder text in the homepage setting when no homepage has been set. */
+"Settings.HomePage.URL.Placeholder" = "Nhập một trang web";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "Trang chủ hiện tại";
+
+/* Button in settings to use the current link on the clipboard as home page. */
+"Settings.HomePage.UseCopiedLink.Button" = "Sử dụng liên kết đã sao chép";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "Sử dụng trang hiện tại";
+
+/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
+"Settings.HomePage.UseDefault.Button" = "Sử dụng mặc định";
+
+/* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
+"Settings.LoginsAndPasswordsTitle" = "Đăng nhập & mật khẩu";
+
+/* Label used to set a custom url as the new tab option (homepage). */
+"Settings.NewTab.CustomURL" = "URL tùy chỉnh";
+
+/* A description in settings of what the new tab choice means */
+"Settings.NewTab.Description" = "Khi bạn mở một thẻ mới:";
+
+/* The title of the section in newtab that lets you modify the topsites panel */
+"Settings.NewTab.Option.ASTitle" = "Tùy chỉnh các trang phổ biến";
+
+/* Option in settings to show a blank page when you open a new tab */
+"Settings.NewTab.Option.BlankPage" = "Trang trống";
+
+/* Option in settings to show bookmarks when you open a new tab */
+"Settings.NewTab.Option.Bookmarks" = "Trang đánh dấu";
+
+/* The footer for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeFooter" = "Những trang bạn truy cập nhiều nhất";
+
+/* The title for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeTitle" = "Tùy biến trang chủ Firefox";
+
+/* Option in settings to show Firefox Home when you open a new tab */
+"Settings.NewTab.Option.FirefoxHome" = "Trang chủ Firefox";
+
+/* Option in the settings to turn off recent bookmarks in the Highlights section */
+"Settings.NewTab.Option.HighlightsBookmarks" = "Trang đánh dấu gần đây";
+
+/* Option in settings to turn off history in the highlights section */
+"Settings.NewTab.Option.HighlightsHistory" = "Đã truy cập";
+
+/* Option in settings to show history when you open a new tab */
+"Settings.NewTab.Option.History" = "Lịch sử";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.HomePage" = "Trang chủ";
+
+/* Option in settings to turn on off pocket recommendations */
+"Settings.NewTab.Option.Pocket" = "Xu hướng trên Pocket";
+
+/* Footer caption for pocket settings */
+"Settings.NewTab.Option.PocketFooter" = "Nội dung tuyệt vời từ khắp nơi trên web.";
+
+/* Option in settings to show reading list when you open a new tab */
+"Settings.NewTab.Option.ReadingList" = "Hiển thị danh sách đọc của bạn";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
+"Settings.NewTab.SectionName" = "Thẻ mới";
+
+/* Title displayed in header of the setting panel. */
+"Settings.NewTab.Title" = "Thẻ mới";
+
+/* Label at the top of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionName" = "Hiện";
+
+/* Footer at the bottom of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionNameFooter" = "Chọn những gì để tải khi mở một thẻ mới";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Status" = "Khi mở Firefox";
+
+/* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Title" = "Đề nghị mở các liên kết được sao chép";
+
+/* Title for Open With Settings */
+"Settings.OpenWith.PageTitle" = "Mở liên kết thư với";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
+"Settings.OpenWith.SectionName" = "Ứng dụng Mail";
+
+/* Setting to enable the built-in password manager */
+"Settings.SaveLogins.Title" = "Lưu đăng nhập";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "Xong";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "Chỉnh sửa";
+
+/* title for a link that explains how mozilla collects telemetry */
+"Settings.SendUsage.Link" = "Tìm hiểu thêm.";
+
+/* A short description that explains why mozilla collects usage data. */
+"Settings.SendUsage.Message" = "Mozilla chỉ thu thập những gì chúng tôi cần cung cấp và cải tiến Firefox cho tất cả mọi người.";
+
+/* The title for the setting to send usage data. */
+"Settings.SendUsage.Title" = "Gửi dữ liệu sử dụng";
+
+/* Description displayed under the ”Show Link Previews” option */
+"Settings.ShowLinkPreviews.Status" = "Khi chạm và giữ liên kết";
+
+/* Title of setting to enable link previews when long-pressing links. */
+"Settings.ShowLinkPreviews.Title" = "Hiển thị xem trước liên kết";
+
+/* Setting to show Logins & Passwords quick access in the application menu */
+"Settings.ShowLoginsInAppMenu.Title" = "Hiển thị trong menu ứng dụng";
+
+/* The description of the open new tab siri shortcut */
+"Settings.Siri.OpenTabShortcut" = "Mở thẻ mới";
+
+/* The description that describes what siri shortcuts are */
+"Settings.Siri.SectionDescription" = "Sử dụng phím tắt Siri để nhanh chóng mở Firefox qua Siri";
+
+/* The option that takes you to the siri shortcuts settings page */
+"Settings.Siri.SectionName" = "Phím tắt Siri";
+
+/* Dismiss button for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Button" = "OK, đã hiểu";
+
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "Nếu một trang web không hoạt động như mong đợi, hãy chạm vào hình khiên trong thanh địa chỉ và tắt trình chống theo dõi nâng cao cho trang đó.";
+
+/* Title for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Title" = "Hãy cân nhắc!";
+
+/* Header description for tracking protection options section where Basic/Strict block list can be selected */
+"Settings.TrackingProtection.BlockListsHeader" = "Bạn có thể chọn danh sách mà Firefox sẽ sử dụng để chặn các phần tử của trang có thể theo dõi hoạt động duyệt web của bạn.";
+
+/* Explanation of basic mode. */
+"Settings.TrackingProtection.Info.BasicTitle" = "Cân bằng để bảo vệ và hiệu suất.";
+
+/* The Title on info view which shows a list of all blocked websites */
+"Settings.TrackingProtection.Info.BlocksTitle" = "ĐÃ CHẶN";
+
+/* Explanation of strict mode. */
+"Settings.TrackingProtection.Info.StrictTitle" = "Cung cấp bảo vệ mạnh mẽ hơn, nhưng có thể khiến một số trang web bị phá vỡ.";
+
+/* 'Learn more' info link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.LearnMore" = "Tìm hiểu thêm";
+
+/* 'More Info' link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.MoreInfo" = "Thêm thông tin…";
+
+/* Additional information about your Enhanced Tracking Protection */
+"Settings.TrackingProtection.ProtectionCellFooter" = "Giảm quảng cáo được nhắm mục tiêu và giúp ngăn nhà quảng cáo theo dõi trình duyệt của bạn.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "Nếu một trang web không hoạt động như mong đợi, hãy chạm vào hình khiên trong thanh địa chỉ và tắt trình chống theo dõi nâng cao cho trang đó.";
+
+/* Description for standard level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Cho phép một số theo dõi quảng cáo để các trang web hoạt động đúng.";
+
+/* Description for strict level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "Chặn nhiều trình theo dõi, quảng cáo và cửa sổ bật lên. Các trang tải nhanh hơn, nhưng một số chức năng có thể không hoạt động.";
+
+/* Title for tracking protection options section where level can be selected. */
+"Settings.TrackingProtection.ProtectionLevelTitle" = "Mức độ bảo vệ";
+
+/* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
+"Settings.TrackingProtection.SectionName" = "Chống theo dõi";
+
+/* Additional information about the strict level setting */
+"Settings.TrackingProtection.StrictLevelInfoFooter" = "Chặn trình theo dõi có thể ảnh hưởng đến chức năng của một số trang web.";
+
+/* Tracking protection settings option for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BasicBlockList" = "Tiêu chuẩn (mặc định)";
+
+/* Tracking protection settings option description for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BlockListBasicDescription" = "Cho phép một vài hệ thống theo dõi để trang hoạt động đúng.";
+
+/* Tracking protection settings option for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrict" = "Nghiêm ngặt";
+
+/* Tracking protection settings option description for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrictDescription" = "Chặn các trình theo dõi mà đã được nhận biết. Một số trang web có thể hoạt động không đúng.";
+
+/* Description label shown on tracking protection options screen. */
+"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "Theo dõi là tập hợp dữ liệu duyệt web của bạn trên nhiều trang web.";
+
+/* Settings option to specify that Tracking Protection is on */
+"Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "Trình chống theo dõi nâng cao";
+
+/* Translation settings footer describing how language detection and translation happens. */
+"Settings.TranslateSnackBar.SectionFooter" = "Ngôn ngữ trang web được phát hiện trên thiết bị và bản dịch từ dịch vụ từ xa được cung cấp.";
+
+/* Translation settings section title */
+"Settings.TranslateSnackBar.SectionHeader" = "Dịch vụ";
+
+/* Switch to choose if the language of a page is detected and offer to translate. */
+"Settings.TranslateSnackBar.SwitchSubtitle" = "Đề nghị dịch bất kỳ trang web nào viết bằng ngôn ngữ khác với ngôn ngữ mặc định của bạn.";
+
+/* Switch to choose if the language of a page is detected and offer to translate. */
+"Settings.TranslateSnackBar.SwitchTitle" = "Đề nghị dịch";
+
+/* Title in main app settings for Translation toast settings */
+"Settings.TranslateSnackBar.Title" = "Dịch";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "Khắc phục sự cố";
+
+/* Button to delete website in search results */
+"Settings.WebsiteData.ButtonDelete" = "Xóa";
+
+/* Button to exit edit website search results */
+"Settings.WebsiteData.ButtonDone" = "Xong";
+
+/* Button to edit website search results */
+"Settings.WebsiteData.ButtonEdit" = "Chỉnh sửa";
+
+/* Button shows all websites on website data tableview */
+"Settings.WebsiteData.ButtonShowMore" = "Xem thêm";
+
+/* Description of the confirmation dialog shown when a user tries to clear their private data. */
+"Settings.WebsiteData.ConfirmPrompt" = "Hành động này sẽ xóa tất cả dữ liệu trang web của bạn. Nó không thể hoàn tác được.";
+
+/* Title displayed in header of the Data Management panel. */
+"Settings.WebsiteData.Title" = "Dữ liệu trang web";
+
+/* Action label on share extension to add page to the Firefox reading list. */
+"ShareExtension.AddToReadingListAction.Title" = "Thêm vào danh sách đọc";
+
+/* Share extension label shown after user has performed 'Add to Reading List' action. */
+"ShareExtension.AddToReadingListActionDone.Title" = "Đã thêm vào danh sách đọc";
+
+/* Action label on share extension to bookmark the page in Firefox. */
+"ShareExtension.BookmarkThisPageAction.Title" = "Đánh dấu trang này";
+
+/* Share extension label shown after user has performed 'Bookmark this Page' action. */
+"ShareExtension.BookmarkThisPageActionDone.Title" = "Đã đánh dấu";
+
+/* Action label on share extension to load the page in Firefox when user switches apps to bring it to foreground. */
+"ShareExtension.LoadInBackgroundAction.Title" = "Tải trong nền";
+
+/* Share extension label shown after user has performed 'Load in Background' action. */
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Đang tải trong Firefox";
+
+/* Action label on share extension to immediately open page in Firefox. */
+"ShareExtension.OpenInFirefoxAction.Title" = "Mở trong Firefox";
+
+/* Action label on share extension to immediately open page in Firefox in private mode. */
+"ShareExtension.OpenInPrivateModeAction.Title" = "Mở trong chế độ riêng tư";
+
+/* Action label on share extension to search for the selected text in Firefox. */
+"ShareExtension.SeachInFirefoxAction.Title" = "Tìm kiếm trong Firefox";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "Hiển thị đề xuất tìm kiếm";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "Hiển thị thẻ";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "Mở lại hướng dẫn";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "Dừng";
+
+/* Support section title */
+"Support" = "Hỗ trợ";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Vuốt sang phải hoặc trái bằng ba ngón tay để đóng thẻ.";
+
+/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"SwitchToNonPBM.KeyCodeTitle" = "Chế độ duyệt web bình thường";
+
+/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"SwitchToPBM.KeyCodeTitle" = "Chế độ duyệt web riêng tư";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, bookmarks, passwords and more." = "Đồng bộ hóa các thẻ, dấu trang, mật khẩu của bạn và hơn thế nữa.";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, passwords and more." = "Đồng bộ hóa các thẻ, mật khẩu của bạn và hơn thế nữa.";
+
+/* Message displayed when the user syncs for the first time */
+"Sync.FirstTimeMessage.Label" = "Đồng bộ hóa đầu tiên của bạn có thể mất một lúc";
+
+/* String displayed on Sign In to Sync page that allows the user to create a new account. */
+"Sync.NoAccount.Description" = "Không có tài khoản? Tạo một cái để đồng bộ hóa Firefox giữa các thiết bị.";
+
+/* Message displayed when the user's account is syncing with no ellipsis */
+"Sync.Syncing.Label" = "Đang đồng bộ hóa";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "Đang đồng bộ hóa…";
+
+/* Panel accessibility label */
+"Synced Tabs" = "Các thẻ đã đồng bộ";
+
+/* The Bookmark sync component, used in SyncState.Partial.Title */
+"SyncState.Bookmark.Title" = "Trang đánh dấu";
+
+/* The Remote Clients sync component, used in SyncState.Partial.Title */
+"SyncState.Clients.Title" = "Máy khách từ xa";
+
+/* Title for Sync status message when synchronization failed to complete */
+"SyncState.Failed.Title" = "Đồng bộ hóa thất bại";
+
+/* The History sync component, used in SyncState.Partial.Title */
+"SyncState.History.Title" = "Lịch sử";
+
+/* The Logins sync component, used in SyncState.Partial.Title */
+"SyncState.Logins.Title" = "Đăng nhập";
+
+/* Title for Sync status message when Sync failed to start. */
+"SyncState.NotStarted.Title" = "Đồng bộ hóa không khả dụng";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "Đồng bộ hóa đang ngoại tuyến";
+
+/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
+"SyncState.Partial.Title" = "Đồng bộ hóa đang gặp sự cố đồng bộ %@";
+
+/* The Tabs sync component, used in SyncState.Partial.Title */
+"SyncState.Tabs.Title" = "Thẻ";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "Thẻ %1$@ của %2$@";
+
+/* Hardware shortcut to open the tab tray from a tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"Tab.ShowTabTray.KeyCodeTitle" = "Hiện tất cả các thẻ";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "Thẻ %1$@ đến %2$@ của %3$@";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Khay thẻ";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "Hoàn tác";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "Đã đóng %d thẻ";
+
+/* The placeholder text for the tab search bar */
+"Tabs.Search.PlaceholderText" = "Tìm kiếm thẻ";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"TabTray.AddTab.Button" = "Thêm thẻ";
+
+/* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseAllTabs.KeyCodeTitle" = "Đóng tất cả các thẻ";
+
+/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseTab.KeyCodeTitle" = "Đóng thẻ đã chọn";
+
+/* The section header for tabs opened last week */
+"TabTray.LastWeek.Header" = "Tuần trước";
+
+/* The title on the button to copy the tab address. */
+"TabTray.MoreMenu.Copy" = "Sao chép";
+
+/* The section header for tabs opened before last week */
+"TabTray.Older.Header" = "Cũ hơn";
+
+/* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenNewTab.KeyCodeTitle" = "Mở thẻ mới";
+
+/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenSelectedTab.KeyCodeTitle" = "Mở thẻ đã chọn";
+
+/* The button title to see more options to perform on the tab. */
+"TabTray.SwipeMenu.More" = "Thêm";
+
+/* The title for the tab tray */
+"TabTray.Title" = "Các thẻ đang mở";
+
+/* The section header for tabs opened today */
+"TabTray.Today.Header" = "Hôm nay";
+
+/* The section header for tabs opened yesterday */
+"TabTray.Yesterday.Header" = "Hôm qua";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "Trang này không thể hiển thị trong chế độ đọc sách.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Đã xảy ra sự cố khi truy cập các thẻ từ các thiết bị khác của bạn. Hãy thử một lần nữa trong chốc lát.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "Có lỗi khi chuyển đổi trang";
+
+/* Relative date for date in past week. */
+"this week" = "tuần này";
+
+/* label for Not Now button */
+"Toasts.NotNow" = "Không phải bây giờ";
+
+/* Open App Store button */
+"Toasts.OpenAppStore" = "Mở App Store";
+
+/* Label for button to undo the action just performed */
+"Toasts.Undo" = "Hoàn tác";
+
+/* History tableview section header */
+"Today" = "Hôm nay";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "hôm nay lúc %@";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "Trình đơn";
+
+/* Accessibility label for the Close All Tabs menu button. */
+"Toolbar.Menu.CloseAllTabs" = "Đóng tất cả các thẻ";
+
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "Các trang web truy cập nhiều nhất của bạn sẽ hiển thị ở đây.";
+
+/* The title for the empty Top Sites state */
+"TopSites.EmptyState.Title" = "Chào mừng đến với trang web phổ biến";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "Xóa trang — %@";
+
+/* Button to disallow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.Cancel" = "Không";
+
+/* Button to allow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.OK" = "Có";
+
+/* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
+"TranslationToastHandler.PromptTranslate.Title" = "Hình như trang này sử dụng %1$@. Dịch sang %2$@ với %3$@?";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* The menu item that pastes the current contents of the clipboard into the URL bar and navigates to the page */
+"UIMenuItem.PasteGo" = "Dán & mở";
+
+/* Search in New Tab Text selection menu item */
+"UIMenuItem.SearchWithFirefox" = "Tìm kiếm bằng Firefox";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "chưa đọc";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect" = "Nâng cấp Firefox để kết nối";
+
+/* Debug option */
+"Use stage servers" = "Sử dụng máy chủ thử nghiệm";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Tên đăng nhập";
+
+/* Text message in the settings table view */
+"Verify your email address" = "Vui lòng xác nhận địa chỉ email của bạn";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "Phiên bản %1$@ (%2$@)";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Nội dung web";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Chào mừng đến với danh sách đọc của bạn";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "Hừm, thật là ngại quá.";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Wikipedia";
+
+/* Relative date for yesterday. */
+"yesterday" = "hôm qua";
+
+/* History tableview section header */
+"Yesterday" = "Hôm qua";
+
+/* Error message in the remote tabs panel */
+"You don’t have any tabs open in Firefox on your other devices." = "Bạn không có bất kỳ thẻ nào mở trong Firefox trên các thiết bị khác của bạn.";
+
+/* Your Rights settings section title */
+"Your Rights" = "Quyền lợi của bạn";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+

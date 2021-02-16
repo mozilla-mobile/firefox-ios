@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "Finì";
+
+/* Text selection menu item */
+"Find in Page" = "Tschertgar sin la pagina";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "Proxim resultat sin la pagina";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "Resultat precedent sin la pagina";
+

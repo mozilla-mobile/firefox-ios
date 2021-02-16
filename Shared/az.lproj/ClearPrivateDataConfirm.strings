@@ -1,0 +1,9 @@
+/* The cancel button when confirming clear private data. */
+"Cancel" = "Ləğv et";
+
+/* The button that clears private data. */
+"OK" = "Tamam";
+
+/* Description of the confirmation dialog shown when a user tries to clear their private data. */
+"This action will clear all of your private data. It cannot be undone." = "Bu əməliyyat bütün şəxsi məlumatlarınızı siləcək. Bu geri alına bilməz.";
+

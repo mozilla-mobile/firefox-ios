@@ -1,0 +1,12 @@
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Button" = "מעבר להגדרות";
+
+/* Description for small card shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Description" = "פתיחה אוטומטית של קישורים מאתרים, מהודעות דוא״ל ומהיישום הודעות ב־Firefox.";
+
+/* Title for small card shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Title" = "החלפת דפדפן ברירת המחדל שלך";
+
+/* Menu option for setting Firefox as default browser. */
+"Settings.DefaultBrowserMenuItem" = "הגדרה כדפדפן ברירת המחדל";
+

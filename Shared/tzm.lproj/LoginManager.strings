@@ -1,0 +1,18 @@
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "ⵙⵔ";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "ⵙⴼⴹ ⴰⵔⵣⵣⵓ";
+
+/* Copy password text selection menu item */
+"Copy" = "ⵙⵙⵏⵖⵍ";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "ⴽⴽⵙ";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "ⵜⴰⴳⵓⵔⵉ ⵏ ⵓⵣⵔⴰⵢ";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "ⵔⵣⵓ";
+

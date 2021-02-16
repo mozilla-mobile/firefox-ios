@@ -1,0 +1,27 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Затваряне на поверителните раздели";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox няма да запази нищо от вашата история или бисквитки, но новите отметки ще бъдат запазени.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Научете повече";
+
+/* Toggled OFF accessibility value */
+"Off" = "Включен";
+
+/* Toggled ON accessibility value */
+"On" = "Изключен";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Поверително разглеждане";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Личен режим";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Включва или изключва личен режим";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "Когато напускате поверително разглеждане";
+

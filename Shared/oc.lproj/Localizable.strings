@@ -1,0 +1,1232 @@
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "Lo site %@ demanda un nom d’utilizaire e un senhal.";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "A prepaus";
+
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite" = "Penjar als sites mai visitats";
+
+/* The title for removing a pinned topsite action */
+"ActivityStream.ContextMenu.RemovePinTopsite" = "Levar dels sites mai visitats";
+
+/* The description of a highlight if it is a site the user has bookmarked */
+"ActivityStream.Highlights.Bookmark" = "Apondut als marcapaginas";
+
+/* The description of a highlight if it is a site the user has visited */
+"ActivityStream.Highlights.Visited" = "Visitat";
+
+/* Section title label for recently bookmarked websites */
+"ActivityStream.NewRecentBookmarks.Title" = "Marcats recentament";
+
+/* The link that shows more Pocket trending stories */
+"ActivityStream.Pocket.MoreLink" = "Mai";
+
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle" = "Recomandat per Pocket";
+
+/* The description of a Pocket Story */
+"ActivityStream.Pocket.Trending" = "Tendéncia";
+
+/* Section title label for recently visited websites */
+"ActivityStream.RecentHistory.Title" = "Visitats fa res";
+
+/* label showing how many rows of topsites are shown. %d represents a number */
+"ActivityStream.TopSites.RowCount" = "Linhas : %d";
+
+/* Section title label for Top Sites */
+"ActivityStream.TopSites.SectionTitle" = "Mai visitats";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Apondre un onlget";
+
+/* Accessibility label for action adding current page to reading list.
+   Name for button adding current article to reading list in reader mode */
+"Add to Reading List" = "Apondre a la lista de lectura";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Pagina aponduda a la lista de lectura";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "D’acòrdi";
+
+/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Title" = "Fracàs de l’apondon del bilhet";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Adreça o recèrca";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Totjorn enviar";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "Autentificacion demandada";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "Tornar";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Blocar las fenèstras sorgissentas";
+
+/* The header title for the fields when editing a Bookmark */
+"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "Marcapagina";
+
+/* The header title for the fields when editing a Folder */
+"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "Dorsièr";
+
+/* The label for the Title field when editing a bookmark */
+"Bookmark.DetailFieldTitle.Label" = "Títol";
+
+/* The label for the URL field when editing a bookmark */
+"Bookmark.DetailFieldURL.Label" = "URL";
+
+/* Toggle bookmarks syncing setting */
+"Bookmarks" = "Marcapaginas";
+
+/* The button to edit a bookmark */
+"Bookmarks.EditBookmark.Label" = "Modificar lo marcapagina";
+
+/* The button to edit a folder */
+"Bookmarks.EditFolder.Label" = "Modificar lo dorsièr";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "Repertòri";
+
+/* The label for the location of the new folder */
+"Bookmarks.FolderLocation.Label" = "Emplaçament";
+
+/* The label for the title of the new folder */
+"Bookmarks.FolderName.Label" = "Nom del repertòri";
+
+/* The button to create a new bookmark */
+"Bookmarks.NewBookmark.Label" = "Marcapagina novèl";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "Repertòri novèl";
+
+/* The button to create a new separator */
+"Bookmarks.NewSeparator.Label" = "Separador novèl";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "Títol";
+
+/* The label for the URL of a bookmark */
+"Bookmarks.URL.Label" = "URL";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Luminositat";
+
+/* Label for Cancel button */
+"Cancel" = "Anullar";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Cambiar lo tèma de color.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Cambiar la polissa.";
+
+/* The button to open a new tab with the copied link */
+"ClipboardToast.GoToCopiedLink.Button" = "Zo";
+
+/* Message displayed when the user has a copied link on the clipboard */
+"ClipboardToast.GoToCopiedLink.Title" = "Anar al ligam copiat ?";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Tampar";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "Tampadura d’onglet";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "ordenador";
+
+/* Context menu item for bookmarking a link URL */
+"ContextMenu.BookmarkLinkButtonTitle" = "Marcar lo ligam";
+
+/* The button text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "I anar";
+
+/* The label text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Novèl onglet privat dobèrt";
+
+/* The button text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "I anar";
+
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText" = "Novèl onglet dobèrt";
+
+/* Context menu item for copying an image to the clipboard */
+"ContextMenu.CopyImageButtonTitle" = "Copiar l’imatge";
+
+/* Context menu item for copying an image URL to the clipboard */
+"ContextMenu.CopyImageLinkButtonTitle" = "Copiar lo ligam de l’imatge";
+
+/* Context menu item for copying a link URL to the clipboard */
+"ContextMenu.CopyLinkButtonTitle" = "Copiar lo ligam";
+
+/* Context menu item for downloading a link URL */
+"ContextMenu.DownloadLinkButtonTitle" = "Telecargar lo ligam";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenInNewTabButtonTitle" = "Dobrir dins un onglet novèl";
+
+/* Context menu item for saving an image */
+"ContextMenu.SaveImageButtonTitle" = "Enregistrar l’imatge";
+
+/* Context menu item for sharing a link URL */
+"ContextMenu.ShareLinkButtonTitle" = "Partejar lo ligam";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "Impossible d’apondre la pagina a la lista de lectura";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "Impossible de cargar la pagina.";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Crear un compte";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Escur";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Reduire la talha del tèxte";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Motor de cerca per defaut";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Paramètres d'afichatge";
+
+/* Used as a button label for crash dialog prompt */
+"Don’t Send" = "Enviar pas";
+
+/* Done button on left side of the Settings view controller title bar */
+"Done" = "Acabat";
+
+/* Panel accessibility label */
+"Downloads" = "Telecargaments";
+
+/* The label of the button the user will press to start downloading a file */
+"Downloads.Alert.DownloadNow" = "Telecargar ara";
+
+/* Button confirming the cancellation of the download. */
+"Downloads.CancelDialog.Cancel" = "Anullar";
+
+/* Alert dialog body when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Message" = "Volètz vertadièrament anullar aqueste telecargament ?";
+
+/* Button declining the cancellation of the download. */
+"Downloads.CancelDialog.Resume" = "Reprene";
+
+/* Alert dialog title when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Title" = "Anullar lo telecargament";
+
+/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
+"Downloads.Error.Message" = "Firefox permet pas encara los telecargaments.";
+
+/* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
+"Downloads.Toast.Cancelled.LabelText" = "Telecargament anullat";
+
+/* The label text in the Download Failed toast for showing confirmation that the download has failed. */
+"Downloads.Toast.Failed.LabelText" = "Lo telecargament a fracassat";
+
+/* The button to retry a failed download from the Download Failed toast. */
+"Downloads.Toast.Failed.RetryButton" = "Tornar ensajar";
+
+/* The button to open a new tab with the Downloads home panel */
+"Downloads.Toast.GoToDownloads.Button" = "Telecargaments";
+
+/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. */
+"Downloads.Toast.MultipleFiles.DescriptionText" = "1 de %d fichièrs";
+
+/* The description text in the Download progress toast for showing the number of files (1$) and download progress (2$). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where 1$ is Downloads.Toast.MultipleFiles.DescriptionText and 2$ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and 1$ should come before 2$ everywhere except for right-to-left locales. */
+"Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";
+
+/* The description text in the Download progress toast for showing the downloaded file size (1$) out of the total expected file size (2$). */
+"Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
+
+/* Action button for deleting downloaded files in the Downloads panel. */
+"DownloadsPanel.Delete.Title" = "Suprimir";
+
+/* Title for the Downloads Panel empty state. */
+"DownloadsPanel.EmptyState.Title" = "Los fichièrs telecargats seràn mostrats aquí.";
+
+/* Action button for sharing downloaded files in the Downloads panel. */
+"DownloadsPanel.Share.Title" = "Partejar";
+
+/* Text message in the settings table view */
+"Enter your password to connect" = "Picatz vòstre senhal per vos connectar";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "Avançat";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "Avís : podèm pas confirmar que la connexion a aqueste site es segura.";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "Aquesta connexion es pas certificada";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "Tornar en arrièr";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "Visitar lo site parièr";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Title for firefox about:home page in tab history list */
+"Firefox.HomePage.Title" = "Pagina d'acuèlh de Firefox";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "Pagina seguenta";
+
+/* Label stating how to disconnect account */
+"FxA.AccountVerificationDetails" = "Marrida adreça ? Desconnectatz-vos cai-jos e tornatz començar.";
+
+/* Label stating your account is not verified */
+"FxA.AccountVerificationRequired" = "Cal verificar lo compte";
+
+/* Button label to connect another device to Sync */
+"FxA.ConnectAnotherDevice" = "Connectar un autre periferic";
+
+/* Settings section title for Firefox Account */
+"FxA.FirefoxAccount" = "Compte Firefox";
+
+/* Button label to go to Firefox Account settings */
+"FxA.ManageAccount" = "Gestion del compte";
+
+/* Label when no internet is present */
+"FxA.NoInternetConnection" = "I a pas de connexion internet";
+
+/* Button label to open Sync preferences */
+"FxA.OpenSyncPreferences" = "Dobrir las preferéncias de sincronizacion";
+
+/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
+"FxA.RemoveAccount" = "Levar";
+
+/* Remove account alert is the final confirmation before user removes their firefox account */
+"FxA.RemoveAccountAlertTitle" = "Suprimir lo compte";
+
+/* Button label to resend email */
+"FxA.ResendEmail" = "Tornar enviar lo corrièl";
+
+/* Button label to sign into Sync */
+"FxA.SignIntoSync" = "Se connectar a Sync";
+
+/* Button label to Sync your Firefox Account */
+"FxA.SyncNow" = "Sincronizar ara";
+
+/* Call to action for sign into sync button */
+"FxA.TakeYourWebWithYou" = "Emportatz vòstre Web pertot";
+
+/* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
+"FxAPush_DeviceConnected_body" = "Firefox Sync s’es connectat a %@";
+
+/* Title of a notification displayed when another device has connected to FxA. */
+"FxAPush_DeviceConnected_title" = "Sync connectat";
+
+/* Body of a notification displayed when named device has been disconnected from FxA. %@ refers to the name of the disconnected device. */
+"FxAPush_DeviceDisconnected_body" = "%@ es estat corrèctament desconnectat.";
+
+/* Body of a notification displayed when this device has been disconnected from FxA by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Aqueste periferic es estat corrèctament desconnectat de Firefox Sync.";
+
+/* Title of a notification displayed when this device has been disconnected by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_title" = "Sincronizacion desconnectada";
+
+/* Title of a notification displayed when named device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_title" = "Sincronizacion desconnectada";
+
+/* Body of a notification displayed when unnamed device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Un periferic es estat desconnectat de Firefox Sync";
+
+/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "Trapatz vòstres onglets dobèrts, marcapaginas e senhals a partir d’autres periferics.";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Ajuda";
+
+/* Toggle history syncing setting */
+"History" = "Istoric";
+
+/* Title for button in the history panel to clear recent history */
+"HistoryPanel.ClearHistoryButtonTitle" = "Netejar l’istoric recent…";
+
+/* Option title to clear all browsing history. */
+"HistoryPanel.ClearHistoryMenuOptionEverything" = "Tot";
+
+/* Button to perform action to clear history for the last hour */
+"HistoryPanel.ClearHistoryMenuOptionTheLastHour" = "La darrièra ora";
+
+/* Button to perform action to clear history for today only */
+"HistoryPanel.ClearHistoryMenuOptionToday" = "Uèi";
+
+/* Button to perform action to clear history for yesterday and today */
+"HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "Uèi e ièr";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "Los sites qu’avètz visitat recentament s’afichan aquí.";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "Los onglets de vòstres autres periferics s’afichan aquí.";
+
+/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "Cal que verifiquetz vòstre compte.";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "Istoric";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "Tampaduras recentas";
+
+/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d periferic(s) connectat(s)";
+
+/* Title for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Title" = "Periferics sincronizats";
+
+/* Button cancelling changes setting the home page for the first time. */
+"HomePage.Set.Dialog.Cancel" = "Anullar";
+
+/* Alert dialog body when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Message" = "Podètz o cambiar mai tard dins los Paramètres";
+
+/* Button accepting changes setting the home page for the first time. */
+"HomePage.Set.Dialog.OK" = "Definir una pagina d’acuèlh";
+
+/* Alert dialog title when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Title" = "Volètz utilizar aquesta pagina coma pagina d’acuèlh ?";
+
+/* The title for the Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Bookmark" = "Marcapaginas";
+
+/* The title for the Delete from History context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.DeleteFromHistory" = "Suprimir de l’istoric";
+
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab" = "Dobrir en navigacion privada";
+
+/* The title for the Open in New Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewTab" = "Dobrir dins un onglet novèl";
+
+/* The title for the Remove context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Remove" = "Suprimir";
+
+/* The title for the Remove Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.RemoveBookmark" = "Suprimir lo marcapagina";
+
+/* The title for the Share context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Share" = "Partejar";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Back.DiscoveryTitle" = "Tornar";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.CloseTab.DiscoveryTitle" = "Tampar l’onglet";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Find.DiscoveryTitle" = "Recercar";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Forward.DiscoveryTitle" = "Seguent";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "Onglet de nav. privada";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewTab.DiscoveryTitle" = "Onglet novèl";
+
+/* Label to switch to normal browsing mode */
+"Hotkeys.NormalMode.DiscoveryTitle" = "Mòde de navegacion normala";
+
+/* Label to switch to private browsing mode */
+"Hotkeys.PrivateMode.DiscoveryTitle" = "Mòde de navegacion privada";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Reload.DiscoveryTitle" = "Actualizar la pagina";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "Seleccionar la barra d’adreça";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "Mostrar l’onglet seguent";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Mostrar l’onglet precedent";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Augmentar la talha del tèxte";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "ara";
+
+/* History tableview section header */
+"Last month" = "Lo mes passat";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "Darrièra sincronizacion : %@";
+
+/* History tableview section header */
+"Last week" = "La setmana passada";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Licéncias";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Clar";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "Cargar la pagina originala";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "Cargament del contengut…";
+
+/* Authentication prompt log in button */
+"Log in" = "Connexion";
+
+/* Toggle logins syncing setting */
+"Logins" = "Identificants";
+
+/* Login detail view field name for the last modified date */
+"LoginsDetailView.LoginModified" = "Modificat";
+
+/* Title for the login detail view */
+"LoginsDetailView.LoginTitle" = "Identificant";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "Enregistrar pas";
+
+/* Button to not update the user's password */
+"LoginsHelper.DontUpdate.Button" = "Metre pas a jorn";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "Enregistrar l’identificant %1$@ per %2$@ ?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "Enregistrar lo senhal per %@ ?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "Enregistrar l’identificant";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "Metre a jorn";
+
+/* For filtering the login list, search only the login names */
+"LoginsList.LoginsListFilterLogin" = "Identificant";
+
+/* For filtering the login list, search both website and login names. */
+"LoginsList.LoginsListFilterSearchAll" = "Tot";
+
+/* For filtering the login list, search only the website names */
+"LoginsList.LoginsListFilterWebsite" = "Site web";
+
+/* Placeholder test for search box in logins list view. */
+"LoginsList.LoginsListSearchPlaceholder" = "Filtrar";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Sembla que Firefox a fracassat. Volètz restablir los onglets ?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "Marcar coma legit";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Marcar coma pas legit";
+
+/* Toast displayed to the user after a bookmark has been added. */
+"Menu.AddBookmark.Confirm" = "Marcapagina apondut";
+
+/* Toast displayed to the user after adding the item to their reading list. */
+"Menu.AddToReadingList.Confirm" = "Apondut a la lista de lectura";
+
+/* The title for the button that lets you copy the url from the location bar. */
+"Menu.Copy.Title" = "Copiar l’adreça";
+
+/* Toast displayed to user after copy url pressed. */
+"Menu.CopyURL.Confirm" = "Copiat dins lo quichapapièrs.";
+
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label" = "Activar lo mòde nuèch";
+
+/* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
+"Menu.NoImageModeBlockImages.Label" = "Blocar los imatges";
+
+/* Label for title in page action menu. */
+"Menu.PageActions.Title" = "Accions per la pagina";
+
+/* The title for the button that lets you paste into the location bar */
+"Menu.Paste.Title" = "Pegar";
+
+/* The title for the button that lets you paste and go to a URL */
+"Menu.PasteAndGo.Title" = "Pegar e anar";
+
+/* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
+"Menu.ReloadWithoutTrackingProtection.Title" = "Tornar cargar la pagina sens la proteccion contra lo seguiment";
+
+/* Label for the button, displayed in the menu, used to reload the current website with Tracking Protection enabled */
+"Menu.ReloadWithTrackingProtection.Title" = "Tornar cargar amb la proteccion contra lo seguiment";
+
+/* Toast displayed to the user after a bookmark has been removed. */
+"Menu.RemoveBookmark.Confirm" = "Marcapaginas suprimit";
+
+/* Toast displayed to the user after a tab has been sent successfully. */
+"Menu.TabSent.Confirm" = "Onglet enviat";
+
+/* Title on tracking protection menu for blocked items. */
+"Menu.TrackingProtection.BlockedTitle" = "Blocats";
+
+/* Message in menu when no trackers blocked. */
+"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Cap de traçador conegut per Firefox pas detectat sus aquesta pagina.";
+
+/* The title for tracking protection settings */
+"Menu.TrackingProtection.ProtectionSettings.Title" = "Paramètres de proteccion";
+
+/* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
+"Menu.TrackingProtection.TitlePrefix" = "Proteccions per %@";
+
+/* The title that shows the number of content cookies blocked */
+"Menu.TrackingProtectionBlockedContent.Title" = "Contengut utilizat pel seguiment";
+
+/* The title that shows the number of social URLs blocked */
+"Menu.TrackingProtectionBlockedSocial.Title" = "Traçadors de malhums socials";
+
+/* Description of the Tracking protection menu when TP is blocking parts of the page */
+"Menu.TrackingProtectionBlocking.Description" = "Firefox a blocat d'elements de la pagina que pòdon pistar vòstra navegacion.";
+
+/* The description of the Tracking Protection menu item when tracking is enabled */
+"Menu.TrackingProtectionBlockingDisabled.Description" = "Blocar los traçadors";
+
+/* The button that disabled TP for a site. */
+"Menu.TrackingProtectionDisable1.Title" = "Desactivar per aqueste site";
+
+/* The confirmation toast once tracking protection has been disabled */
+"Menu.TrackingProtectionDisabled.Title" = "La proteccion contra lo seguiment es ara desactivada per aqueste site.";
+
+/* A button to enable tracking protection inside the menu. */
+"Menu.TrackingProtectionEnable.Title" = "Activar la proteccion contra lo seguiment";
+
+/* A button to enable tracking protection inside the menu. */
+"Menu.TrackingProtectionEnable1.Title" = "Activar per aqueste site";
+
+/* The confirmation toast once tracking protection has been enabled */
+"Menu.TrackingProtectionEnabled.Title" = "La proteccion contra lo seguiment es ara activada per aqueste site.";
+
+/* The title that shows the number of fingerprinting scripts blocked */
+"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Emprentas numericas";
+
+/* more info about what tracking protection is about */
+"Menu.TrackingProtectionMoreInfo.Description" = "Ne saber mai sus la proteccion contra lo seguiment bloca los traçadors en linha que collectan vòstras donadas de navegacion a partir de mantun sites web.";
+
+/* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
+"Menu.TrackingProtectionNoBlocking.Description" = "Pas cap d'element de seguiment es estat detectat sus aquela pagina.";
+
+/* label for the menu item to show when the website is whitelisted from blocking trackers. */
+"Menu.TrackingProtectionOption.WhiteListOnDescription" = "Lo site compren d'elements que pòdon pistar vòstra navegacion. Avètz desactivat la proteccion.";
+
+/* label for the menu item that lets you remove a website from the tracking protection whitelist */
+"Menu.TrackingProtectionWhitelistRemove.Title" = "Cctivar per aqueste site";
+
+/* The title for the option to view the What's new page. */
+"Menu.WhatsNew.Title" = "Qué de nòu ?";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "periferic mobil";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "fa mai d’un mes";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "fa mai d’una setmana";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Barra de navegacion";
+
+/* Accessibility label for the New Tab button in the tab toolbar.
+   Accessibility Label for the tab toolbar New tab button */
+"New Tab" = "Onglet novèl";
+
+/* Restore Tabs Negative Action */
+"No" = "Non";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "I a pas cap d’onglet";
+
+/* OK button */
+"OK" = "D'acòrdi";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "OK";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "Firefox a plantat";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Dobrir los paramètres";
+
+/* Toggle tabs syncing setting */
+"Open Tabs" = "Dobrir los onglets";
+
+/* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
+"OpenURL.Error.Message" = "Firefox pòt pas dobrir la pagina perque l’adreça es invalida.";
+
+/* Title of the message shown when the user attempts to navigate to an invalid link. */
+"OpenURL.Error.Title" = "Dobertura impossibla de la pagina";
+
+/* Accessibility label for the Page Options menu button */
+"Page Options Menu" = "Menú d’opcions de la pagina";
+
+/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
+"Panel Chooser" = "Selector de panèls";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Senhal";
+
+/* Button for closing the menu action sheet */
+"PhotonMenu.close" = "Tampar";
+
+/* Privacy section title */
+"Privacy" = "Vida privada";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "Politica de confidencialitat";
+
+/* Title for quick-search engines settings section. */
+"Quick-Search Engines" = "Motors de recèrca rapidas";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "legit";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "Mòde lectura";
+
+/* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
+"ReaderMode.Available.VoiceOverAnnouncement" = "Mòde de lectura disponible";
+
+/* Panel accessibility label */
+"Reading list" = "Lista de lectura";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "Tampaduras recentas";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "Tornar cargar";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Suprimir";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Levar de la lista de lectura";
+
+/* Cancel button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Cancel" = "Anullar";
+
+/* Reopen button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Reopen" = "Tornar dobrir";
+
+/* Reopen alert title shown at home page. */
+"ReopenAlert.Title" = "Tornar dobrir l’onglet tampat";
+
+/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"ReopenClosedTab.KeyCodeTitle" = "Tornar dobrir l’onglet tampat";
+
+/* Accessibility label for button resetting font size in display settings of reader mode */
+"Reset text size" = "Reïnicializar la talha del tèxte";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans-serif";
+
+/* OK button to dismiss the error prompt. */
+"ScanQRCode.Error.OK.Button" = "D'acòrd";
+
+/* Text of the prompt that is shown to the user when the data is invalid */
+"ScanQRCode.InvalidDataError.Message" = "Donadas invalidas";
+
+/* Title for the QR code scanner view. */
+"ScanQRCode.View.Title" = "Escanerizar un còdi QR";
+
+/* Accessibility Label for the tab toolbar Search button
+   Navigation title for search settings.
+   Open search section of settings */
+"Search" = "Recèrca";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Picar un tèrme de recercar o una adreça";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "Lo novèl motor de recèrca apareisserà dins la barra de recèrca rapida.";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "Motor de recèrca apondut";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "Apondre un motor de recèrca ?";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "Anullar";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.DuplicateErrorMessage" = "Un motor de recèrca amb aqueste nom o adreça es ja estat apondut.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.DuplicateErrorTitle" = "Fracàs";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "Lo motor de recèrca a pas pogut èsser apondut.";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "Fracàs";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.FormErrorMessage" = "Emplenatz corrèctament totes los camps.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.FormErrorTitle" = "Error";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "D'acòrd";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "Començar de recercar amb aquesta suggestion";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "Connexion segura";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "Enviar un comentari";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "Enviar lo rapòrt";
+
+/* Button title for cancelling share screen
+   Close button in top navigation bar */
+"SendTo.Cancel.Button" = "Anullar";
+
+/* Header for the list of devices table */
+"SendTo.DeviceList.Text" = "Periferics disponibles :";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "Sols los ligams HTTP e HTTPS pòdon èsser partejats.";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "D'acòrdi";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "Aqueste ligam pòt pas èsser partejat.";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"SendTo.NavBar.Title" = "Enviar l’onglet";
+
+/* Navigation bar button to Send the current page to a device */
+"SendTo.SendAction.Text" = "Enviar";
+
+/* Title of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_title" = "Onglet recebut";
+
+/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
+"SentTab.AddToReadingListAction.Title" = "Apondre a la lista de lectura";
+
+/* Label for an action used to bookmark one or more tabs from a notification. */
+"SentTab.BookmarkAction.title" = "Marcapaginas";
+
+/* Body of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.body" = "Tocatz per començar";
+
+/* Title of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+
+/* Label for an action used to view one or more tabs from a notification. */
+"SentTab.ViewAction.title" = "Veire";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Sèpia";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serif";
+
+/* Title in the settings view controller title bar */
+"Settings" = "Paramètres";
+
+/* The button text in Search Settings that opens the Custom Search Engine view. */
+"Settings.AddCustomEngine" = "Apondre un motor de recèrca";
+
+/* The text on the Save button when saving a custom search engine */
+"Settings.AddCustomEngine.SaveButtonText" = "Enregistrar";
+
+/* The title of the  Custom Search Engine view. */
+"Settings.AddCustomEngine.Title" = "Apondre un motor de recèrca";
+
+/* The title for the field which sets the title for a custom search engine. */
+"Settings.AddCustomEngine.TitleLabel" = "Títol";
+
+/* The placeholder for Title Field when saving a custom search engine. */
+"Settings.AddCustomEngine.TitlePlaceholder" = "Motor de recèrca";
+
+/* The title for URL Field */
+"Settings.AddCustomEngine.URLLabel" = "URL";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "Escafar donadas privadas";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "Escafar donadas privadas";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "Escafar donadas privadas";
+
+/* Copy app version alert shown in settings. */
+"Settings.CopyAppVersion.Title" = "Copiat dins lo quichapapièrs";
+
+/* Default text in search bar for Data Management */
+"Settings.DataManagement.SearchLabel" = "Filtrar los sites";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.DataManagement.SectionName" = "Gestion de las donadas";
+
+/* Title displayed in header of the setting panel. */
+"Settings.DataManagement.Title" = "Gestion de las donadas";
+
+/* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
+"Settings.Disconnect.Button" = "Desconnectar Sync";
+
+/* Cancel action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.CancelButton" = "Anullar";
+
+/* Destructive action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.DestructiveButton" = "Desconnectar";
+
+/* Title of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Title" = "Se desconnectar Sync ?";
+
+/* Section header for brightness slider. */
+"Settings.DisplayTheme.BrightnessThreshold.SectionHeader" = "Sulhet";
+
+/* Display (theme) settings label to show if manually switch theme is enabled. */
+"Settings.DisplayTheme.Manual.StatusLabel" = "Manual";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Manually'. */
+"Settings.DisplayTheme.Manual.SwitchSubtitle" = "Causissètz lo tèma que volètz";
+
+/* Display (theme) setting to choose the theme manually. */
+"Settings.DisplayTheme.Manual.SwitchTitle" = "Manualament";
+
+/* Option choice in display theme settings for dark theme */
+"Settings.DisplayTheme.OptionDark" = "Escur";
+
+/* Option choice in display theme settings for light theme */
+"Settings.DisplayTheme.OptionLight" = "Clar";
+
+/* Switch mode settings section title */
+"Settings.DisplayTheme.SwitchMode.SectionHeader" = "Cambiar de mòde";
+
+/* Display (theme) settings label to show if automatically switch theme is enabled.
+   Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
+"Settings.DisplayTheme.SwitchTitle" = "Automaticament";
+
+/* System theme settings section title */
+"Settings.DisplayTheme.SystemTheme.SectionHeader" = "Tèma sistèma";
+
+/* Title in main app settings for Theme settings */
+"Settings.DisplayTheme.Title.v2" = "Tèma";
+
+/* DNT Settings option for always on */
+"Settings.DNT.OptionAlwaysOn" = "Totjorn";
+
+/* DNT Settings option for only turning on when Tracking Protection is also on */
+"Settings.DNT.OptionOnWithTP" = "Sonque en utilizar la proteccion contra lo seguiment";
+
+/* DNT Settings title */
+"Settings.DNT.Title" = "Mandar als sites web lo senhal “Me pistar pas” per lor dire que volètz pas èsser pistat";
+
+/* Label used for the device name settings section. */
+"Settings.FxA.DeviceName" = "Nom del periferic";
+
+/* Label used as a section title in the Firefox Accounts Settings screen. */
+"Settings.FxA.Sync.SectionName" = "Paramètres de sincronizacion";
+
+/* Title displayed in header of the FxA settings panel. */
+"Settings.FxA.Title" = "Compte Firefox";
+
+/* General settings section title */
+"Settings.General.SectionName" = "General";
+
+/* Button in settings to clear the home page. */
+"Settings.HomePage.Clear.Button" = "Escafar";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "Pagina d'acuèlh";
+
+/* Title displayed in header of the setting panel. */
+"Settings.HomePage.Title" = "Paramètres de la pagina d’acuèlh";
+
+/* Placeholder text in the homepage setting when no homepage has been set. */
+"Settings.HomePage.URL.Placeholder" = "Picar una pagina web";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "Pagina d’acuèlh actuala";
+
+/* Button in settings to use the current link on the clipboard as home page. */
+"Settings.HomePage.UseCopiedLink.Button" = "Utilizar lo ligam copiat";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "Utilizar la pagina actuala";
+
+/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
+"Settings.HomePage.UseDefault.Button" = "Utilizar las valors per defaut";
+
+/* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
+"Settings.LoginsAndPasswordsTitle" = "Identificants e senhals";
+
+/* Label used to set a custom url as the new tab option (homepage). */
+"Settings.NewTab.CustomURL" = "Adreça personalizada";
+
+/* A description in settings of what the new tab choice means */
+"Settings.NewTab.Description" = "En dobrir un onglet novèl :";
+
+/* Option in settings to show a blank page when you open a new tab */
+"Settings.NewTab.Option.BlankPage" = "Pagina voida";
+
+/* Option in settings to show bookmarks when you open a new tab */
+"Settings.NewTab.Option.Bookmarks" = "Marcapaginas";
+
+/* The footer for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeFooter" = "Los sites que visitatz mai sovent";
+
+/* The title for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeTitle" = "Personalizar l’acuèlh de Firefox";
+
+/* Option in settings to show Firefox Home when you open a new tab */
+"Settings.NewTab.Option.FirefoxHome" = "Acuèlh de Firefox";
+
+/* Option in the settings to turn off recent bookmarks in the Highlights section */
+"Settings.NewTab.Option.HighlightsBookmarks" = "Marcats recentament";
+
+/* Option in settings to turn off history in the highlights section */
+"Settings.NewTab.Option.HighlightsHistory" = "Visitat";
+
+/* Option in settings to show history when you open a new tab */
+"Settings.NewTab.Option.History" = "Istoric";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.HomePage" = "Pagina d’acuèlh";
+
+/* Option in settings to turn on off pocket recommendations */
+"Settings.NewTab.Option.Pocket" = "Recomandat pel Pocket";
+
+/* Option in settings to show reading list when you open a new tab */
+"Settings.NewTab.Option.ReadingList" = "Afichar la lista de lectura";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
+"Settings.NewTab.SectionName" = "Onglet novèl";
+
+/* Title displayed in header of the setting panel. */
+"Settings.NewTab.Title" = "Onglet novèl";
+
+/* Label at the top of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionName" = "Afichar";
+
+/* Footer at the bottom of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionNameFooter" = "Causissètz çò que cal mostrar en dobrir un onglet novèl";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Status" = "En dobrir Firefox";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "Acabat";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "Modificar";
+
+/* title for a link that explains how mozilla collects telemetry */
+"Settings.SendUsage.Link" = "Ne saber mai.";
+
+/* The description of the open new tab siri shortcut */
+"Settings.Siri.OpenTabShortcut" = "Dobrir un onglet novèl";
+
+/* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
+"Settings.TrackingProtection.SectionName" = "Proteccion contra lo seguiment";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "Resolucion de problèmas";
+
+/* Action label on share extension to add page to the Firefox reading list. */
+"ShareExtension.AddToReadingListAction.Title" = "Apondre a la lista de lectura";
+
+/* Share extension label shown after user has performed 'Add to Reading List' action. */
+"ShareExtension.AddToReadingListActionDone.Title" = "Aponduda a la lista de lectura";
+
+/* Action label on share extension to bookmark the page in Firefox. */
+"ShareExtension.BookmarkThisPageAction.Title" = "Marcar aquesta pagina";
+
+/* Share extension label shown after user has performed 'Bookmark this Page' action. */
+"ShareExtension.BookmarkThisPageActionDone.Title" = "Apondut als marcapaginas";
+
+/* Action label on share extension to load the page in Firefox when user switches apps to bring it to foreground. */
+"ShareExtension.LoadInBackgroundAction.Title" = "Cargar en rèire plan";
+
+/* Share extension label shown after user has performed 'Load in Background' action. */
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Cargament dins Firefox";
+
+/* Action label on share extension to immediately open page in Firefox. */
+"ShareExtension.OpenInFirefoxAction.Title" = "Dobrir dins Firefox";
+
+/* Action label on share extension to immediately open page in Firefox in private mode. */
+"ShareExtension.OpenInPrivateModeAction.Title" = "Dobrir en navegacion privada";
+
+/* Action label on share extension to search for the selected text in Firefox. */
+"ShareExtension.SeachInFirefoxAction.Title" = "Cercar dins Firefox";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "Afichar las suggestions de recèrca";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "Afichar los onglets";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "Afichar la demostracion";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "Arrestar";
+
+/* Support section title */
+"Support" = "Assisténcia";
+
+/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"SwitchToNonPBM.KeyCodeTitle" = "Mòde de navegacion normala";
+
+/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"SwitchToPBM.KeyCodeTitle" = "Mòde de navegacion privada";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, bookmarks, passwords and more." = "Sincronizatz vòstres onglets, marcapaginas, senhals, e mai.";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, passwords and more." = "Sincronizatz vòstres onglets, senhals, etc.";
+
+/* Message displayed when the user syncs for the first time */
+"Sync.FirstTimeMessage.Label" = "La primièra sincronizacion pòt trigar una estona";
+
+/* Message displayed when the user's account is syncing with no ellipsis */
+"Sync.Syncing.Label" = "Sincronizacion";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "Sincronizacion…";
+
+/* The Bookmark sync component, used in SyncState.Partial.Title */
+"SyncState.Bookmark.Title" = "Marcapaginas";
+
+/* The Remote Clients sync component, used in SyncState.Partial.Title */
+"SyncState.Clients.Title" = "Clients alonhats";
+
+/* Title for Sync status message when synchronization failed to complete */
+"SyncState.Failed.Title" = "Fracàs de la sincronizacion";
+
+/* The History sync component, used in SyncState.Partial.Title */
+"SyncState.History.Title" = "Istoric";
+
+/* The Logins sync component, used in SyncState.Partial.Title */
+"SyncState.Logins.Title" = "Identificants";
+
+/* Title for Sync status message when Sync failed to start. */
+"SyncState.NotStarted.Title" = "Sync es pas disponible";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "Sync es fòra linha";
+
+/* The Tabs sync component, used in SyncState.Partial.Title */
+"SyncState.Tabs.Title" = "Onglets";
+
+/* Hardware shortcut to open the tab tray from a tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"Tab.ShowTabTray.KeyCodeTitle" = "Afichar totes los onglets";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Lista d’onglets";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "Anullar";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "%d onglet(s) tampat(s)";
+
+/* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseAllTabs.KeyCodeTitle" = "Tampar totes los onglets";
+
+/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseTab.KeyCodeTitle" = "Tampar l’onglet seleccionat";
+
+/* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenNewTab.KeyCodeTitle" = "Dobrir un onglet novèl";
+
+/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenSelectedTab.KeyCodeTitle" = "Dobrir l’onglet seleccionat";
+
+/* Relative date for date in past week. */
+"this week" = "aquesta setmana";
+
+/* History tableview section header */
+"Today" = "Uèi";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "uèi a %@";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "Menú";
+
+/* Accessibility label for the Close All Tabs menu button. */
+"Toolbar.Menu.CloseAllTabs" = "Tampar totes los onglets";
+
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "Los sites mai visitats seràn mostrats aquí.";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "pas legit";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect" = "Metètz a jorn Firefox per vos connectar";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Nom d'utilizaire";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "Version %1$@ (%2$@)";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Contengut web";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Wikipèdia";
+
+/* Relative date for yesterday. */
+"yesterday" = "ièr";
+
+/* History tableview section header */
+"Yesterday" = "Ièr";
+
+/* Your Rights settings section title */
+"Your Rights" = "Vòstres dreits";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+
