@@ -1,0 +1,26 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Dette gjer det mogleg å ta og laste opp bilde.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Firefox krev Face ID for å få tilgang til dei lagra innloggingane dine.";
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSLocationWhenInUseUsageDescription" = "Nettsider du besøkjer kan be om plasseringa di.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Dette gjer det mogleg å ta og laste opp videoar.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Dette gjer det mogleg å lagre bilde.";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "Ny Privat fane";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "Ny fane";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "Skann QR-kode";
+

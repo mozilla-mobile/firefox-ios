@@ -1,0 +1,18 @@
+/* Settings item for clearing browsing history */
+"Browsing History" = "მონახულებული გვერდები";
+
+/* Settings item for clearing the cache */
+"Cache" = "დროებითი ფაილები";
+
+/* Settings item for clearing cookies */
+"Cookies" = "ფუნთუშები";
+
+/* Settings item for deleting downloaded files */
+"Downloaded Files" = "ჩამოტვირთული ფაილები";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "ვებსაიტის კავშირგარეშე მონაცემები";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "დამახსოვრებული ანგარიშის მონაცემები";
+

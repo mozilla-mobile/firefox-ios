@@ -1,0 +1,26 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Tai leidžia jums daryti ir išsiųsti nuotraukas.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Norint pasiekti jūsų įrašytus prisijungimus, „Firefox“ reikalingas „Face ID“.";
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSLocationWhenInUseUsageDescription" = "Svetainės gali teirautis jūsų buvimo vietos.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Tai leidžia jums daryti ir išsiųsti vaizdo įrašus.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Tai jums leis įrašyti nuotraukas.";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "Nauja privačioji kortelė";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "Nauja kortelė";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "Skenuoti QR kodą";
+

@@ -1,0 +1,23 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Бұл арқылы фотоларды түсіріп, жүктеуге болады.";
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSLocationWhenInUseUsageDescription" = "Сіз ашатын веб-сайттар сізден орналасуыңызды сұрауы мүмкін.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Бұл арқылы видеоларды түсіріп, жүктеуге болады.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Бұл көмегімен фотоларды сақтауға болады.";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "Жаңа жекелік беті";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "Жаңа бет";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "QR кодын сканерлеу";
+

@@ -1,0 +1,23 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Ang ito ay hinahayaan kang makuha at e-upload ang mga larawan.";
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSLocationWhenInUseUsageDescription" = "Maaaring hingiin ang iyong lokasyon ng binibisitang website";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "This lets you take and upload videos.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Pinapayagan ka nito na i-save ang mga larawan.";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "Bagong Private Tab";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "Bagong Tab";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "I-scan ang QR Code";
+

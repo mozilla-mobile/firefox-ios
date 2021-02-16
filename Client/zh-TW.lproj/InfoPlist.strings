@@ -1,0 +1,29 @@
+/* (No Comment) */
+"1Password Fill Browser Action" = "1Password 瀏覽器填寫動作";
+
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "讓您可拍照並上傳圖片。";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Firefox 需要進行 Face ID 才能存取您儲存的登入資訊。";
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSLocationWhenInUseUsageDescription" = "您造訪的網站可能會詢問您的所在位置。";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "讓您可拍攝並上傳影片。";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "讓您可儲存相片。";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "新隱私分頁";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "新分頁";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "掃描 QR Code";
+

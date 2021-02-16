@@ -1,0 +1,9 @@
+/* The cancel button when confirming clear history. */
+"Cancel" = "취소";
+
+/* The confirmation button that clears history even when Sync is connected. */
+"OK" = "확인";
+
+/* Description of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"This action will clear all of your private data, including history from your synced devices." = "이 작업을 수행하면 동기화된 기기의 방문 기록을 포함한 모든 개인 정보가 삭제됩니다.";
+

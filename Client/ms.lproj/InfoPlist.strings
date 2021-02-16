@@ -1,0 +1,23 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Ciri ini membolehkan anda mengambil dan memuat naik foto.";
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSLocationWhenInUseUsageDescription" = "Laman web yang anda lawati mungkin meminta lokasi anda.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Ciri ini membolehkan anda mengambil dan memuat naik foto.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Membolehkan anda menyimpan foto.";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "Tab Peribadi Baru";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "Tab Baru";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "Imbas Kod QR";
+

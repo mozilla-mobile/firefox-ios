@@ -1,0 +1,21 @@
+/* Description for the 'Mail' panel in the First Run tour. */
+"Intro.Slides.Mail.Description" = "कुनै पनि इमेल एप प्रयोग गर्नुहोस् - मेल मात्र हैन - Firefox को साथमा ।";
+
+/* Title for the fourth panel 'Mail' in the First Run tour. */
+"Intro.Slides.Mail.Title" = "तपाईँले मेलहरू पाउनु भएको छ … विकल्पहरू";
+
+/* Description for the 'Private Browsing' panel in the First Run tour. */
+"Intro.Slides.Private.Description" = "निजी ब्राउजिङ्ग मोडमा छिर्नको लागि मास्क आइकन मा थिच्नुहोस् ।";
+
+/* Title for the third panel 'Private Browsing' in the First Run tour. */
+"Intro.Slides.Private.Title" = "कसैले पनि नहेरे झैँ ब्राउज गर्नुहोस्";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "केहि फरक खोज्दै हुनुहुन्छ ? सेटिङ्हरूमा अर्को पूर्वनिर्धारित खोजी इञ्जिन छनौट गर्नुहोस् (वा आफ्नै थप्नुहोस्) ।";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "तपाईंको खोजी, तपाईंको बाटो";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "ब्राउजिङ्ग सुरु गर्नुहोस";
+

@@ -1,0 +1,26 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "写真を撮影してアップロードできます。";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "保存されたログイン情報にアクセスするには Face ID が必要です。";
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSLocationWhenInUseUsageDescription" = "訪れたウェブサイトがあなたの位置情報を要求しています。";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "動画を撮影してアップロードできます。";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "これにより写真を保存できます。";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "新規プライベートタブ";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "新規タブ";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "QR コードをスキャン";
+

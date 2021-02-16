@@ -1,0 +1,1712 @@
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "%@ vyžaduje zadanie používateľského mena a hesla.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "Stránka %1$@ vyžaduje zadanie používateľského mena a hesla. Oznam stránky: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "O aplikácii";
+
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite" = "Pripnúť medzi top stránky";
+
+/* The title for removing a pinned topsite action */
+"ActivityStream.ContextMenu.RemovePinTopsite" = "Odstránenie pripnutej stránky";
+
+/* The description of a highlight if it is a site the user has bookmarked */
+"ActivityStream.Highlights.Bookmark" = "V záložkách";
+
+/* The description of a highlight if it is a site the user has visited */
+"ActivityStream.Highlights.Visited" = "Navštívené";
+
+/* Section title label for recently bookmarked websites */
+"ActivityStream.NewRecentBookmarks.Title" = "Naposledy pridané medzi záložky";
+
+/* The link that shows more Pocket trending stories */
+"ActivityStream.Pocket.MoreLink" = "Viac";
+
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle" = "Trendy v Pockete";
+
+/* The description of a Pocket Story */
+"ActivityStream.Pocket.Trending" = "Trendy";
+
+/* Section title label for recently visited websites */
+"ActivityStream.RecentHistory.Title" = "Nedávno navštívené";
+
+/* label showing how many rows of topsites are shown. %d represents a number */
+"ActivityStream.TopSites.RowCount" = "Riadky: %d";
+
+/* The title for the setting page which lets you select the number of top site rows */
+"ActivityStream.TopSites.RowSettingFooter" = "Nastaviť počet riadkov";
+
+/* Section title label for Top Sites */
+"ActivityStream.TopSites.SectionTitle" = "Top stránky";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Pridať kartu";
+
+/* Accessibility label for action adding current page to reading list.
+   Name for button adding current article to reading list in reader mode */
+"Add to Reading List" = "Pridať do Zoznamu na prečítanie";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Stránka bola pridaná zo Zoznamu na prečítanie";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "OK";
+
+/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Message" = "Pri pridávaní lístkov do aplikácie Wallet nastala chyba. Skúste to, prosím, neskôr.";
+
+/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Title" = "Pridanie lístku zlyhalo";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Adresa a vyhľadávanie";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Vždy odoslať";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "Vyžaduje sa overenie";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "Naspäť";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Blokovať vyskakovacie okná";
+
+/* The header title for the fields when editing a Bookmark */
+"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "Záložka";
+
+/* The header title for the fields when editing a Folder */
+"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "Priečinok";
+
+/* The label for the Title field when editing a bookmark */
+"Bookmark.DetailFieldTitle.Label" = "Názov";
+
+/* The label for the URL field when editing a bookmark */
+"Bookmark.DetailFieldURL.Label" = "Adresa URL";
+
+/* Toggle bookmarks syncing setting */
+"Bookmarks" = "Záložky";
+
+/* The button on the snackbar to edit a bookmark after adding it. */
+"Bookmarks.Edit.Button" = "Upraviť";
+
+/* The button to edit a bookmark */
+"Bookmarks.EditBookmark.Label" = "Upraviť záložku";
+
+/* The button to edit a folder */
+"Bookmarks.EditFolder.Label" = "Upraviť priečinok";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "Priečinok";
+
+/* The label for the location of the new folder */
+"Bookmarks.FolderLocation.Label" = "Umiestnenie";
+
+/* The label for the title of the new folder */
+"Bookmarks.FolderName.Label" = "Názov priečinka";
+
+/* The button to create a new bookmark */
+"Bookmarks.NewBookmark.Label" = "Nová záložka";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "Nový priečinok";
+
+/* The button to create a new separator */
+"Bookmarks.NewSeparator.Label" = "Nový oddeľovač";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "Názov";
+
+/* The label for the URL of a bookmark */
+"Bookmarks.URL.Label" = "URL";
+
+/* Status label for the empty Bookmarks state. */
+"BookmarksPanel.EmptyState.Title" = "Tu sa zobrazujú uložené záložky.";
+
+/* Describes the date on which the breach occurred */
+"BreachAlerts.BreachDate" = "K tomuto úniku došlo dňa";
+
+/* Description of what a breach is */
+"BreachAlerts.Description" = "Od poslednej zmeny vašich prihlasovacích údajov došlo k úniku alebo krádeži hesiel. Za účelom ochrany účtu sa k nemu prihláste a svoje heslo zmeňte.";
+
+/* Link to monitor.firefox.com to learn more about breached passwords */
+"BreachAlerts.LearnMoreButton" = "Ďalšie informácie";
+
+/* Leads to a link to the breached website */
+"BreachAlerts.Link" = "Prejsť na";
+
+/* Title for the Breached Login Detail View. */
+"BreachAlerts.Title" = "Únik z webových stránok";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Jas";
+
+/* Label for Cancel button */
+"Cancel" = "Zrušiť";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Zmení farebnú tému";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Zmení typ písma";
+
+/* The button to open a new tab with the copied link */
+"ClipboardToast.GoToCopiedLink.Button" = "Prejsť";
+
+/* Message displayed when the user has a copied link on the clipboard */
+"ClipboardToast.GoToCopiedLink.Title" = "Prejsť na skopírovaný odkaz?";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Zavrieť";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "Karta sa zatvára";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "počítač";
+
+/* Context menu item for bookmarking a link URL */
+"ContextMenu.BookmarkLinkButtonTitle" = "Pridať odkaz medzi záložky";
+
+/* The button text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Prepnúť";
+
+/* The label text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Bola otvorená nová súkromná karta";
+
+/* The button text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "Prepnúť";
+
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText" = "Bola otvorená nová karta";
+
+/* Context menu item for copying an image to the clipboard */
+"ContextMenu.CopyImageButtonTitle" = "Kopírovať obrázok";
+
+/* Context menu item for copying an image URL to the clipboard */
+"ContextMenu.CopyImageLinkButtonTitle" = "Kopírovať odkaz na obrázok";
+
+/* Context menu item for copying a link URL to the clipboard */
+"ContextMenu.CopyLinkButtonTitle" = "Kopírovať odkaz";
+
+/* Context menu item for downloading a link URL */
+"ContextMenu.DownloadLinkButtonTitle" = "Prevziať odkaz";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenInNewTabButtonTitle" = "Otvoriť na novej karte";
+
+/* Context menu item for saving an image */
+"ContextMenu.SaveImageButtonTitle" = "Uložiť obrázok";
+
+/* Context menu item for sharing a link URL */
+"ContextMenu.ShareLinkButtonTitle" = "Zdieľať odkaz";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "Stránku nebolo možné pridať do Zoznamu na prečítanie.";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it’s already there?" = "Stránku nebolo možné pridať do Zoznamu na prečítanie. Nenachádza sa už v ňom?";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "Stránku nebolo možné načítať.";
+
+/* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
+"CoverSheet.v22.DarkMode.Description" = "Pre používateľov iOS 13 - Firefox sa odteraz automaticky prepne na tmavú tému vzhľadu, keď je telefón nastavený na tmavý režim. Ak chcete zmeniť toto správanie, prejdite do časti Nastavenia > Téma.";
+
+/* Title for the new dark mode change in the version 22 app release. */
+"CoverSheet.v22.DarkMode.Title" = "Tmavá téma vzhľadu odteraz obsahuje tmavú klávesnicu a tmavú úvodnú obrazovku.";
+
+/* Description for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Description" = "Zabudovaná rozšírená ochrana pred sledovaním pomáha zastaviť vaše sledovanie reklamami. Pre zablokovanie ďalších sledovacích prvkov, reklám a vyskakovacích okien môžete zapnúť prísnu ochranu.";
+
+/* Text for the new ETP settings button */
+"CoverSheet.v24.ETP.Settings.Button" = "Prejsť do Nastavení";
+
+/* Title for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Title" = "Ochrana pred sledovaním zo strany reklám";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Vytvoriť účet";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Tmavá";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Zmeniť veľkosť textu";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Predvolený vyhľadávací modul";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Nastavenie zobrazenia";
+
+/* Used as a button label for crash dialog prompt */
+"Don’t Send" = "Neodosielať";
+
+/* Done button on left side of the Settings view controller title bar */
+"Done" = "Hotovo";
+
+/* Panel accessibility label */
+"Downloads" = "Prevzaté súbory";
+
+/* The label of the button the user will press to start downloading a file */
+"Downloads.Alert.DownloadNow" = "Prevziať";
+
+/* Button confirming the cancellation of the download. */
+"Downloads.CancelDialog.Cancel" = "Zrušiť";
+
+/* Alert dialog body when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Message" = "Naozaj chcete zrušiť toto preberanie?";
+
+/* Button declining the cancellation of the download. */
+"Downloads.CancelDialog.Resume" = "Pokračovať";
+
+/* Alert dialog title when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Title" = "Zrušiť preberanie";
+
+/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
+"Downloads.Error.Message" = "Preberanie zatiaľ nie je vo Firefoxe podporované.";
+
+/* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
+"Downloads.Toast.Cancelled.LabelText" = "Preberanie bolo zrušené";
+
+/* The label text in the Download Failed toast for showing confirmation that the download has failed. */
+"Downloads.Toast.Failed.LabelText" = "Preberanie zlyhalo";
+
+/* The button to retry a failed download from the Download Failed toast. */
+"Downloads.Toast.Failed.RetryButton" = "Znova";
+
+/* The button to open a new tab with the Downloads home panel */
+"Downloads.Toast.GoToDownloads.Button" = "Prevzaté súbory";
+
+/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. */
+"Downloads.Toast.MultipleFiles.DescriptionText" = "1 súbor z %d";
+
+/* The description text in the Download progress toast for showing the number of files (1$) and download progress (2$). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where 1$ is Downloads.Toast.MultipleFiles.DescriptionText and 2$ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and 1$ should come before 2$ everywhere except for right-to-left locales. */
+"Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";
+
+/* The description text in the Download progress toast for showing the downloaded file size (1$) out of the total expected file size (2$). */
+"Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
+
+/* Action button for deleting downloaded files in the Downloads panel. */
+"DownloadsPanel.Delete.Title" = "Odstrániť";
+
+/* Title for the Downloads Panel empty state. */
+"DownloadsPanel.EmptyState.Title" = "Prevzaté súbory sa objavia tu.";
+
+/* Action button for sharing downloaded files in the Downloads panel. */
+"DownloadsPanel.Share.Title" = "Zdieľať";
+
+/* Text message in the settings table view */
+"Enter your password to connect" = "Na pripojenie zadajte svoje heslo";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "Rozšírené";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "Varovanie: nemôžeme potvrdiť, že spojenie s touto stránkou je zabezpečené.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "Stránka môže byť chybne nakonfigurovaná alebo zneužitá útočníkom. Pokračovanie na stránku predstavuje potencionálne riziko.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "Vlastník servera %@ nakonfiguroval svoju stránku nesprávne. Kvôli ochrane vašich údajov pred odcudzením, bolo pripojenie k tejto webovej stránke prerušené.";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "Vaše pripojenie nie je dôveryhodné";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "Prejsť naspäť";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "Napriek tomu navštíviť stránku";
+
+/* Question shown to user when tapping a link that opens the App Store app */
+"ExternalLink.AppStore.ConfirmationTitle" = "Chcete tento odkaz otvoriť v App Store?";
+
+/* Question shown to user when tapping an SMS or MailTo link that opens the external app for those. */
+"ExternalLink.AppStore.GenericConfirmationTitle" = "Chcete tento odkaz otvoriť v externej aplikácii?";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Title for firefox about:home page in tab history list */
+"Firefox.HomePage.Title" = "Domovská stránka prehliadača Firefox";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "Dopredu";
+
+/* Label stating how to disconnect account */
+"FxA.AccountVerificationDetails" = "Nesprávna e-mailová adresa? Odpojte sa nižšie a začnite znova.";
+
+/* Label stating your account is not verified */
+"FxA.AccountVerificationRequired" = "Vyžaduje sa overenie účtu";
+
+/* Message explaining that user needs to check email for Firefox Account verfication link. */
+"FxA.AccountVerificationRequiredSurface" = "Je potrebné overiť e-mailovú adresu %@. Skontrolujte, či sa vo vašej e-mailovej schránke nachádza potvrdzovací odkaz od Firefoxu.";
+
+/* Button label to connect another device to Sync */
+"FxA.ConnectAnotherDevice" = "Pripojiť ďalšie zariadenie";
+
+/* Settings section title for Firefox Account */
+"FxA.FirefoxAccount" = "Účet Firefox";
+
+/* Button label to go to Firefox Account settings */
+"FxA.ManageAccount" = "Spravovať účet a zariadenia";
+
+/* Label when no internet is present */
+"FxA.NoInternetConnection" = "Žiadne internetové pripojenie";
+
+/* Button label to open Sync preferences */
+"FxA.OpenSyncPreferences" = "Otvoriť nastavenia synchronizácie";
+
+/* Instructions shown on qr code scanning view */
+"fxa.qr-scanning-view.instructions" = "Naskenujte QR kód zobrazený na stránke firefox.com/pair";
+
+/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
+"FxA.RemoveAccount" = "Odstrániť";
+
+/* Description string for alert view that gets presented when user tries to remove an account. */
+"FxA.RemoveAccountAlertMessage" = "Ak sa chcete prihlásiť ako iný používateľ, odstráňte účet Firefox priradený k tomuto zariadeniu.";
+
+/* Remove account alert is the final confirmation before user removes their firefox account */
+"FxA.RemoveAccountAlertTitle" = "Odstrániť účet";
+
+/* Button label to resend email */
+"FxA.ResendEmail" = "Znova odoslať e-mail";
+
+/* FxA sign in view subtitle */
+"fxa.signin.camera-signin" = "Prihláste sa pomocou fotoaparátu";
+
+/* FxA sign in create account label. */
+"fxa.signin.create-account-pt-1" = "Synchronizujte Firefox medzi zariadeniami.";
+
+/* FxA sign in create account label. This will be linked to the site to create an account. */
+"fxa.signin.create-account-pt-2" = "Vytvorte si účet Firefox.";
+
+/* FxA sign in view qr code instructions */
+"fxa.signin.qr-link-instruction" = "Otvorte Firefox na svojom počítači a navštívte stránku firefox.com/pair";
+
+/* FxA sign in view qr code scan button */
+"fxa.signin.ready-to-scan" = "Pripravené na skenovanie";
+
+/* FxA sign in view title */
+"fxa.signin.turn-on-sync" = "Zapnúť synchronizáciu";
+
+/* FxA sign in view email login button */
+"fxa.signin.use-email-instead" = "Použiť radšej e-mailovú adresu";
+
+/* Button label to sign into Sync */
+"FxA.SignIntoSync" = "Prihlásiť sa k službe Sync";
+
+/* Label explaining what sync does */
+"FxA.SyncExplain" = "Získajte svoje karty, záložky a heslá zo svojich ďalších zariadení.";
+
+/* Button label to Sync your Firefox Account */
+"FxA.SyncNow" = "Synchronizovať";
+
+/* Call to action for sign into sync button */
+"FxA.TakeYourWebWithYou" = "Vezmite si svoj web so sebou";
+
+/* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
+"FxAPush_DeviceConnected_body" = "Služba Firefox Sync je pripojená k zariadeniu %@";
+
+/* Title of a notification displayed when another device has connected to FxA. */
+"FxAPush_DeviceConnected_title" = "Služba Sync je pripojená";
+
+/* Body of a notification displayed when named device has been disconnected from FxA. %@ refers to the name of the disconnected device. */
+"FxAPush_DeviceDisconnected_body" = "Zariadenie %@ bolo úspešne odpojené.";
+
+/* Body of a notification displayed when this device has been disconnected from FxA by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Toto zariadenie bolo úspešne odpojené od služby Firefox Sync.";
+
+/* Title of a notification displayed when this device has been disconnected by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_title" = "Služba Sync bola odpojená";
+
+/* Title of a notification displayed when named device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_title" = "Služba Sync bola odpojená";
+
+/* Body of a notification displayed when unnamed device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Zariadenie bolo odpojené od služby Firefox Sync";
+
+/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "Získajte svoje otvorené karty, záložky a heslá zo svojich ďalších zariadení.";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Pomocník";
+
+/* Toggle history syncing setting */
+"History" = "História";
+
+/* Title for button in the history panel to clear recent history */
+"HistoryPanel.ClearHistoryButtonTitle" = "Vymazať nedávnu históriu…";
+
+/* Option title to clear all browsing history. */
+"HistoryPanel.ClearHistoryMenuOptionEverything" = "Všetko";
+
+/* Button to perform action to clear history for the last hour */
+"HistoryPanel.ClearHistoryMenuOptionTheLastHour" = "Posledná hodina";
+
+/* Button to perform action to clear history for today only */
+"HistoryPanel.ClearHistoryMenuOptionToday" = "Dnešok";
+
+/* Button to perform action to clear history for yesterday and today */
+"HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "Dnešok a včerajšok";
+
+/* Title for popup action menu to clear recent history. */
+"HistoryPanel.ClearHistoryMenuTitle" = "Vymazanie nedávnej histórie odstráni históriu, cookies a ďalšie údaje prehliadača.";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "Tu sa zobrazia stránky, ktoré ste nedávno navštívili.";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "Tu sa zobrazujú karty z vašich ostatných zariadení.";
+
+/* Description for the empty synced tabs 'not signed in' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Prihlásením sa zobrazíte zoznam kariet z vašich ostatných zariadení.";
+
+/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "Váš účet musí byť overený.";
+
+/* Description for the empty synced tabs 'single device Sync' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "Chceli by ste tu vidieť vaše karty z ostatných zariadení?";
+
+/* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Zapnutím synchronizácie kariet zobrazíte zoznam kariet z vašich ostatných zariadení.";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "História";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "Nedávno zatvorené";
+
+/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d pripojených zariadení";
+
+/* Title for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Title" = "Synchronizované zariadenia";
+
+/* Button cancelling changes setting the home page for the first time. */
+"HomePage.Set.Dialog.Cancel" = "Zrušiť";
+
+/* Alert dialog body when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Message" = "Toto môžete kedykoľvek zmeniť v Nastaveniach";
+
+/* Button accepting changes setting the home page for the first time. */
+"HomePage.Set.Dialog.OK" = "Nastaviť ako domovskú stránku";
+
+/* Alert dialog title when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Title" = "Chcete nastaviť túto webovú stránku ako svoju domovskú stránku?";
+
+/* The title for the Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Bookmark" = "Záložky";
+
+/* The title for the Delete from History context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.DeleteFromHistory" = "Odstrániť z histórie";
+
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab" = "Otvoriť na novej súkromnej karte";
+
+/* The title for the Open in New Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewTab" = "Otvoriť na novej karte";
+
+/* The title for the Remove context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Remove" = "Odstrániť";
+
+/* The title for the Remove Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.RemoveBookmark" = "Odstrániť záložku";
+
+/* The title for the Share context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Share" = "Zdieľať";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Back.DiscoveryTitle" = "Späť";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.CloseTab.DiscoveryTitle" = "Zavrieť kartu";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Find.DiscoveryTitle" = "Hľadať";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Forward.DiscoveryTitle" = "Dopredu";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "Nová súkromná karta";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewTab.DiscoveryTitle" = "Nová karta";
+
+/* Label to switch to normal browsing mode */
+"Hotkeys.NormalMode.DiscoveryTitle" = "Bežné prehliadanie";
+
+/* Label to switch to private browsing mode */
+"Hotkeys.PrivateMode.DiscoveryTitle" = "Súkromné prehliadanie";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Reload.DiscoveryTitle" = "Obnoviť stránku";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "Zvoliť panel s adresou";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "Zobraziť nasledujúcu kartu";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Zobraziť predchádzajúcu kartu";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Zväčšiť veľkosť textu";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "teraz";
+
+/* History tableview section header */
+"Last month" = "Posledný mesiac";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "Posledná synchronizácia: %@";
+
+/* History tableview section header */
+"Last week" = "Posledný týždeň";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Licencie";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Svetlá";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "Načítať pôvodnú stránku";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "Obsah sa načítava…";
+
+/* Authentication prompt log in button */
+"Log in" = "Prihlásiť sa";
+
+/* Toggle logins syncing setting */
+"Logins" = "Prihlasovacie údaje";
+
+/* Login detail view field name for the last modified date */
+"LoginsDetailView.LoginModified" = "Upravené";
+
+/* Title for the login detail view */
+"LoginsDetailView.LoginTitle" = "Prihlásenie";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "Neuložiť";
+
+/* Button to not update the user's password */
+"LoginsHelper.DontUpdate.Button" = "Neaktualizovať";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "Chcete uložiť prihlásenie ako %1$@ pre %2$@?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "Chcete uložiť heslo pre %@?";
+
+/* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
+"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "Chcete aktualizovať prihlasovacie údaje pre %@?";
+
+/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "Chcete aktualizovať prihlasovacie údaje pre %1$@ na stránke %2$@?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "Uložiť prihlasovacie údaje";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "Aktualizovať";
+
+/* For filtering the login list, search only the login names */
+"LoginsList.LoginsListFilterLogin" = "Prihlasovací údaj";
+
+/* For filtering the login list, search both website and login names. */
+"LoginsList.LoginsListFilterSearchAll" = "Všetko";
+
+/* For filtering the login list, search only the website names */
+"LoginsList.LoginsListFilterWebsite" = "Webová stránka";
+
+/* Placeholder test for search box in logins list view. */
+"LoginsList.LoginsListSearchPlaceholder" = "Filtrovať";
+
+/* Title for the list of logins */
+"LoginsList.Title" = "ULOŽENÉ PRIHLASOVACIE ÚDAJE";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Zdá sa, že Firefox naposledy zlyhal. Chcete obnoviť svoje karty?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "Označiť ako prečítané";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Označiť ako neprečítané";
+
+/* Toast displayed to the user after a bookmark has been added. */
+"Menu.AddBookmark.Confirm" = "Záložka bola pridaná";
+
+/* Toast displayed to the user after adding the item to the Top Sites. */
+"Menu.AddPin.Confirm" = "Pripnuté medzi top stránky";
+
+/* Toast displayed to the user after adding the item to their reading list. */
+"Menu.AddToReadingList.Confirm" = "Pridané do Zoznamu na prečítanie";
+
+/* The title for the button that lets you copy the url from the location bar. */
+"Menu.Copy.Title" = "Kopírovať adresu";
+
+/* Toast displayed to user after copy url pressed. */
+"Menu.CopyURL.Confirm" = "Skopírované do schránky";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "Rozšírená ochrana pred sledovaním je na tejto stránke VYPNUTÁ.";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "Rozšírená ochrana pred sledovaním je na tejto stránke ZAPNUTÁ.";
+
+/* Description for having standard ETP protection with ITP offered in iOS14+ */
+"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox blokuje sledovacie prvky, vrátane tých od sociálnych sietí, ťažbu kryptomien a vytváranie odtlačku prehliadača.";
+
+/* Description for having strict ETP protection with ITP offered in iOS14+ */
+"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox blokuje sledovacie prvky, vrátane tých od sociálnych sietí, ťažbu kryptomien, vytváranie odtlačku prehliadača a ďalší sledovací obsah.";
+
+/* Label for the button displayed in the menu used to stop the reload of the webpage */
+"Menu.Library.StopReload" = "Zastaviť";
+
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label" = "Zapnúť nočný režim";
+
+/* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
+"Menu.NoImageModeBlockImages.Label" = "Blokovať obrázky";
+
+/* Label for title in page action menu. */
+"Menu.PageActions.Title" = "Akcie stránky";
+
+/* The title for the button that lets you paste into the location bar */
+"Menu.Paste.Title" = "Prilepiť";
+
+/* The title for the button that lets you paste and go to a URL */
+"Menu.PasteAndGo.Title" = "Prilepiť a prejsť";
+
+/* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
+"Menu.ReloadWithoutTrackingProtection.Title" = "Znova načítať bez ochrany pred sledovaním";
+
+/* Label for the button, displayed in the menu, used to reload the current website with Tracking Protection enabled */
+"Menu.ReloadWithTrackingProtection.Title" = "Znova načítať s ochranou pred sledovaním";
+
+/* Toast displayed to the user after a bookmark has been removed. */
+"Menu.RemoveBookmark.Confirm" = "Záložka bola odstránená";
+
+/* Toast displayed to the user after removing the item from the Top Sites. */
+"Menu.RemovePin.Confirm" = "Odstránené z top stránok";
+
+/* Toast displayed to the user after a tab has been sent successfully. */
+"Menu.TabSent.Confirm" = "Karta bola odoslaná";
+
+/* Title on tracking protection menu for blocked items. */
+"Menu.TrackingProtection.BlockedTitle" = "Zablokované";
+
+/* Message in menu when no trackers blocked. */
+"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Na tejto stránke neboli nájdené žiadne Firefoxu známe sledovacie prvky.";
+
+/* The title for tracking protection settings */
+"Menu.TrackingProtection.ProtectionSettings.Title" = "Nastavenia ochrany";
+
+/* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
+"Menu.TrackingProtection.TitlePrefix" = "Ochrana pred sledovaním na %@";
+
+/* The title that shows the number of content cookies blocked */
+"Menu.TrackingProtectionBlockedContent.Title" = "Sledovací obsah";
+
+/* The title that shows the number of social URLs blocked */
+"Menu.TrackingProtectionBlockedSocial.Title" = "Sledovacie prvky sociálnych sietí";
+
+/* Description of the Tracking protection menu when TP is blocking parts of the page */
+"Menu.TrackingProtectionBlocking.Description" = "Firefox blokuje časti stránky, ktoré môžu sledovať vaše prehliadanie.";
+
+/* The description of the Tracking Protection menu item when tracking is enabled */
+"Menu.TrackingProtectionBlockingDisabled.Description" = "Sledovacie prvky sú blokované";
+
+/* The title that shows the number of cross-site cookies blocked */
+"Menu.TrackingProtectionCrossSiteCookies.Title" = "Sledovacie cookies";
+
+/* The title that shows the number of cross-site URLs blocked */
+"Menu.TrackingProtectionCrossSiteTrackers.Title" = "Sledovacie prvky";
+
+/* The title that shows the number of cryptomining scripts blocked */
+"Menu.TrackingProtectionCryptominersBlocked.Title" = "Ťažba kryptomien";
+
+/* Description of content trackers. */
+"Menu.TrackingProtectionDescription.ContentTrackers" = "Webové stránky môžu načítavať reklamy, videá a ďalší obsah, ktorý obsahuje skryté sledovacie prvky. Blokovanie týchto prvkov môže zrýchliť načítavanie webových stránok, no niektoré tlačidlá alebo formuláre nemusia správne fungovať.";
+
+/* Description of cross-site trackers. */
+"Menu.TrackingProtectionDescription.CrossSiteNew" = "Tieto cookies slúžia na vaše sledovanie naprieč webovými stránkami a na zber údajov o tom, čo na internete robíte. Používajú ich tretie strany, ako sú reklamné či analytické spoločnosti.";
+
+/* Description of cryptominers. */
+"Menu.TrackingProtectionDescription.CryptominersNew" = "Ťažba kryptomien používa výpočtový výkon vášho počítača na získavanie digitálnych mien. Bežiace skripty vybíjajú vašu batériu, spomaľujú váš počítač a zvyšujú váš účet za elektrinu.";
+
+/* Description of fingerprinters. */
+"Menu.TrackingProtectionDescription.Fingerprinters" = "Každý používateľ môže mať odlišné nastavenie prehliadača a počítača. Zberom údajov o nastaveniach možno vytvoriť unikátny odtlačok, ktorý potom môže slúžiť na vaše sledovanie.";
+
+/* Description of social network trackers. */
+"Menu.TrackingProtectionDescription.SocialNetworksNew" = "Sociálne siete umiestňujú na iné webové stránky prvky, pomocou ktorých o vás môžu získavať údaje. Blokovanie týchto prvkov obmedzuje množstvo informácií, ktoré o vás sociálne siete na internetu získavajú.";
+
+/* The button that disabled TP for a site. */
+"Menu.TrackingProtectionDisable1.Title" = "Vypnutá na tejto stránke";
+
+/* The confirmation toast once tracking protection has been disabled */
+"Menu.TrackingProtectionDisabled.Title" = "Ochrana pred sledovaním je na tejto stránke vypnutá.";
+
+/* A button to enable tracking protection inside the menu. */
+"Menu.TrackingProtectionEnable.Title" = "Zapnúť ochranu pred sledovaním";
+
+/* A button to enable tracking protection inside the menu. */
+"Menu.TrackingProtectionEnable1.Title" = "Zapnutá na tejto stránke";
+
+/* The confirmation toast once tracking protection has been enabled */
+"Menu.TrackingProtectionEnabled.Title" = "Ochrana pred sledovaním je na tejto stránke zapnutá.";
+
+/* The title that shows the number of fingerprinting scripts blocked */
+"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Odtlačok prehliadača";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "Zablokované sledovacie cookies";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Cryptominers" = "Zablokovaná ťažba kryptomien";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Fingerprinters" = "Zablokované vytváranie odtlačku prehliadača";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Social" = "Zablokované sledovacie prvky sociálnych sietí";
+
+/* more info about what tracking protection is about */
+"Menu.TrackingProtectionMoreInfo.Description" = "Ďalšie informácie o tom, ako ochrana pred sledovaním blokuje sledovacie prvky, ktoré o vás zbierajú údaje naprieč webovými stránkami.";
+
+/* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
+"Menu.TrackingProtectionNoBlocking.Description" = "Na tejto stránke neboli zistené žiadne prvky sledovania.";
+
+/* label for the menu item to show when the website is whitelisted from blocking trackers. */
+"Menu.TrackingProtectionOption.WhiteListOnDescription" = "Táto stránka obsahuje prvky, ktoré môžu sledovať vaše prehliadanie. Ochrana pred sledovaním je však pre túto stránku vypnutá.";
+
+/* label for the menu item that lets you remove a website from the tracking protection whitelist */
+"Menu.TrackingProtectionWhitelistRemove.Title" = "Povoliť pre túto stránku";
+
+/* The title for the option to view the What's new page. */
+"Menu.WhatsNew.Title" = "Čo je nové";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "mobilné zariadenie";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "pred viac ako mesiacom";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "pred viac ako týždňom";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Panel Navigácia";
+
+/* Accessibility label for the New Tab button in the tab toolbar.
+   Accessibility Label for the tab toolbar New tab button */
+"New Tab" = "Nová karta";
+
+/* Restore Tabs Negative Action */
+"No" = "Nie";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "Žiadne karty";
+
+/* OK button */
+"OK" = "OK";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "OK";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "Ups! Firefox zlyhal";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Ťuknutím na ikonu knihy, keď sa objaví v paneli s titulkom, otvoríte stránku v zobrazení Čítačka.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Otvoriť nastavenia";
+
+/* Toggle tabs syncing setting */
+"Open Tabs" = "Otvorené karty";
+
+/* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
+"OpenURL.Error.Message" = "Nepodarilo sa otvoriť stránku, pretože bola zadaná nesprávna adresa.";
+
+/* Title of the message shown when the user attempts to navigate to an invalid link. */
+"OpenURL.Error.Title" = "Nepodarilo sa otvoriť stránku";
+
+/* Accessibility label for the Page Options menu button */
+"Page Options Menu" = "Ponuka možností stránok";
+
+/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
+"Panel Chooser" = "Voľba panela";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Heslo";
+
+/* Error message shown in the remote tabs panel */
+"PasswordAutoFill.NoPasswordsFoundTitle" = "So svojim účtom Firefox nemáte zosynchronizované žiadne prihlasovacie údaje";
+
+/* Header for the list of credentials table */
+"PasswordAutoFill.PasswordsListTitle" = "Dostupné prihlasovacie údaje:";
+
+/* Title of the extension that shows firefox passwords */
+"PasswordAutoFill.SectionTitle" = "Prihlasovacie údaje Firefoxu";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Toto vám umožní uložiť obrázok v albume Fotoaparát.";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox žiada o prístup k vašim fotkám";
+
+/* Button for closing the menu action sheet */
+"PhotonMenu.close" = "Zavrieť";
+
+/* Privacy section title */
+"Privacy" = "Súkromie";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "Zásady ochrany súkromia";
+
+/* Title for quick-search engines settings section. */
+"Quick-Search Engines" = "Moduly pre rýchle vyhľadávanie";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "prečítané";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "Zobrazenie Čítačka";
+
+/* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
+"ReaderMode.Available.VoiceOverAnnouncement" = "K dispozícii je Režim Čítačka";
+
+/* Panel accessibility label */
+"Reading list" = "Zoznam na prečítanie";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "Nedávno zatvorené karty";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "Znova načítať";
+
+/* Accessibility label for the reload button */
+"Reload page" = "Znova načítať stránku";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Odstrániť";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Odstrániť zo Zoznamu na prečítanie";
+
+/* Cancel button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Cancel" = "Zrušiť";
+
+/* Reopen button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Reopen" = "Znova otvoriť";
+
+/* Reopen alert title shown at home page. */
+"ReopenAlert.Title" = "Znova otvoriť poslednú zatvorenú kartu";
+
+/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"ReopenClosedTab.KeyCodeTitle" = "Obnoviť zatvorenú kartu";
+
+/* Accessibility label for button resetting font size in display settings of reader mode */
+"Reset text size" = "Obnoviť veľkosť textu";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Bezpätkové";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Ťuknutím na ikonu knihy so znakom plus v ovládačoch zobrazenia Čítačka pridáte stránku do Zoznamu na prečítanie.";
+
+/* OK button to dismiss the error prompt. */
+"ScanQRCode.Error.OK.Button" = "OK";
+
+/* Text for the instructions label, displayed in the QR scanner view */
+"ScanQRCode.Instructions.Label" = "Pre skenovanie umiestnite QR kód do rámčeka";
+
+/* Text of the prompt that is shown to the user when the data is invalid */
+"ScanQRCode.InvalidDataError.Message" = "Údaje sú neplatné";
+
+/* Text of the prompt user to setup the camera authorization. */
+"ScanQRCode.PermissionError.Message" = "Prosím, povoľte Firefoxu prístup ku fotoaparátu vášho zariadenia ‘Nastavenia’ -> ‘Súkromie’ -> ‘Fotoaparát’.";
+
+/* Title for the QR code scanner view. */
+"ScanQRCode.View.Title" = "Skenovanie QR kódu";
+
+/* Accessibility Label for the tab toolbar Search button
+   Navigation title for search settings.
+   Open search section of settings */
+"Search" = "Vyhľadávanie";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Zadajte vyhľadávanie alebo adresu";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "Nový vyhľadávací modul sa objaví v paneli rýchleho vyhľadávania.";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "Pridať vyhľadávací modul!";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "Pridať poskytovateľa vyhľadávania?";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "Zrušiť";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.DuplicateErrorMessage" = "Vyhľadávací modul s týmto názvom alebo s touto adresou už bol pridaný.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.DuplicateErrorTitle" = "Zlyhanie";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "Poskytovateľ vyhľadávania nemohol byť pridaný.";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "Zlyhanie";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.FormErrorMessage" = "Prosím, vyplňte všetky polia správne.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.FormErrorTitle" = "Zlyhanie";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "OK";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "Hľadania pre zvolený návrh";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "Zabezpečené pripojenie";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "Odoslať hlásenie o zlyhaní, aby mohla Mozilla opraviť problém?";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "Odoslať spätnú väzbu";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "Odoslať hlásenie";
+
+/* Button title for cancelling share screen
+   Close button in top navigation bar */
+"SendTo.Cancel.Button" = "Zrušiť";
+
+/* Header for the list of devices table */
+"SendTo.DeviceList.Text" = "Dostupné zariadenia:";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "Zdieľané môžu byť len odkazy typu HTTP a HTTPS.";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "OK";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "Odkaz, ktorý sa pokúšate zdieľať nemôže byť zdieľaný.";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"SendTo.NavBar.Title" = "Odoslať kartu";
+
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message" = "K svojmu účtu Firefox nemáte pripojené žiadne zariadenia dostupné na synchronizáciu.";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Message" = "Otvorte Firefox, prejdite do Nastavení a prihláste sa.";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Title" = "Nie ste prihlásený k svojmu účtu Firefox.";
+
+/* Navigation bar button to Send the current page to a device */
+"SendTo.SendAction.Text" = "Odoslať";
+
+/* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
+"SendTo.SignIn.Button" = "Prihlásiť sa do Firefoxu";
+
+/* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_body" = "Nová karta bola prijatá z iného zariadenia.";
+
+/* Title of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_title" = "Bola prijatá karta";
+
+/* Body of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the app name. */
+"SentTab_TabArrivingNotification_WithDevice_body" = "Nová karta dorazila do aplikácie %@";
+
+/* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
+"SentTab_TabArrivingNotification_WithDevice_title" = "Bola prijatá karta z %@";
+
+/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
+"SentTab.AddToReadingListAction.Title" = "Pridať do Zoznamu na prečítanie";
+
+/* Label for an action used to bookmark one or more tabs from a notification. */
+"SentTab.BookmarkAction.title" = "Pridať medzi záložky";
+
+/* Body of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.body" = "Začnite ťuknutím";
+
+/* Title of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+
+/* Label for an action used to view one or more tabs from a notification. */
+"SentTab.ViewAction.title" = "Zobraziť";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Sépia";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Pätkové";
+
+/* Title in the settings view controller title bar */
+"Settings" = "Nastavenia";
+
+/* The button text in Search Settings that opens the Custom Search Engine view. */
+"Settings.AddCustomEngine" = "Pridať vyhľadávací modul";
+
+/* The text on the Save button when saving a custom search engine */
+"Settings.AddCustomEngine.SaveButtonText" = "Uložiť";
+
+/* The title of the  Custom Search Engine view. */
+"Settings.AddCustomEngine.Title" = "Pridanie vyhľadávacieho modulu";
+
+/* The title for the field which sets the title for a custom search engine. */
+"Settings.AddCustomEngine.TitleLabel" = "Názov";
+
+/* The placeholder for Title Field when saving a custom search engine. */
+"Settings.AddCustomEngine.TitlePlaceholder" = "Vyhľadávací modul";
+
+/* The title for URL Field */
+"Settings.AddCustomEngine.URLLabel" = "URL";
+
+/* The placeholder for URL Field when saving a custom search engine */
+"Settings.AddCustomEngine.URLPlaceholder" = "URL (nahraďte s %s)";
+
+/* Button in Data Management that clears private data for the selected items. */
+"Settings.ClearAllWebsiteData.Clear.Button" = "Vymazať všetky údaje webových stránok";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "Vymazať súkromné údaje";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "Vymazať súkromné údaje";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "Vymazanie súkromných údajov";
+
+/* Copy app version alert shown in settings. */
+"Settings.CopyAppVersion.Title" = "Skopírované do schránky";
+
+/* Default text in search bar for Data Management */
+"Settings.DataManagement.SearchLabel" = "Filtrovanie stránok";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.DataManagement.SectionName" = "Správa údajov";
+
+/* Title displayed in header of the setting panel. */
+"Settings.DataManagement.Title" = "Správa údajov";
+
+/* Body of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Body" = "Firefox sa už viac nebude synchronizovať s vašim účtom, ale neodstráni z toho zariadenia žiadne z údajov prehliadania.";
+
+/* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
+"Settings.Disconnect.Button" = "Odpojiť Sync";
+
+/* Cancel action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.CancelButton" = "Zrušiť";
+
+/* Destructive action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.DestructiveButton" = "Odpojiť";
+
+/* Title of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Title" = "Odpojiť Sync?";
+
+/* Section header for brightness slider. */
+"Settings.DisplayTheme.BrightnessThreshold.SectionHeader" = "Prah";
+
+/* Display (theme) settings label to show if manually switch theme is enabled. */
+"Settings.DisplayTheme.Manual.StatusLabel" = "Ručne";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Manually'. */
+"Settings.DisplayTheme.Manual.SwitchSubtitle" = "Vyberte si tému vzhľadu, ktorú chcete";
+
+/* Display (theme) setting to choose the theme manually. */
+"Settings.DisplayTheme.Manual.SwitchTitle" = "Ručne";
+
+/* Option choice in display theme settings for dark theme */
+"Settings.DisplayTheme.OptionDark" = "Tmavá";
+
+/* Option choice in display theme settings for light theme */
+"Settings.DisplayTheme.OptionLight" = "Svetlá";
+
+/* Display (theme) settings footer describing how the brightness slider works. */
+"Settings.DisplayTheme.SectionFooter" = "Téma vzhľadu sa automaticky zmení na základe jasu vašej obrazovky. Môžete nastaviť hranicu, pri ktorej sa téma zmení. Kruh zobrazuje súčasný jas vašej obrazovky.";
+
+/* Switch mode settings section title */
+"Settings.DisplayTheme.SwitchMode.SectionHeader" = "Režim zmeny";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Automatically'. */
+"Settings.DisplayTheme.SwitchSubtitle" = "Automatická zmena na základe jasu obrazovky";
+
+/* Display (theme) settings label to show if automatically switch theme is enabled.
+   Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
+"Settings.DisplayTheme.SwitchTitle" = "Automaticky";
+
+/* System theme settings section title */
+"Settings.DisplayTheme.SystemTheme.SectionHeader" = "Systémová téma vzhľadu";
+
+/* System theme settings switch to choose whether to use the same theme as the system */
+"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "Použiť tmavú/svetlú tému vzhľadu podľa systému";
+
+/* Theme picker settings section title */
+"Settings.DisplayTheme.ThemePicker.SectionHeader" = "Výber témy vzhľadu";
+
+/* Title in main app settings for Theme settings */
+"Settings.DisplayTheme.Title.v2" = "Téma vzhľadu";
+
+/* DNT Settings option for always on */
+"Settings.DNT.OptionAlwaysOn" = "Vždy";
+
+/* DNT Settings option for only turning on when Tracking Protection is also on */
+"Settings.DNT.OptionOnWithTP" = "Len pri použití ochrany pred sledovaním";
+
+/* DNT Settings title */
+"Settings.DNT.Title" = "Požiadať webové stránky pomocou signálu Do Not Track, aby vás nesledovali";
+
+/* Label used for the device name settings section. */
+"Settings.FxA.DeviceName" = "Názov zariadenia";
+
+/* Label used as a section title in the Firefox Accounts Settings screen. */
+"Settings.FxA.Sync.SectionName" = "Nastavenia synchronizácie";
+
+/* Title displayed in header of the FxA settings panel. */
+"Settings.FxA.Title" = "Účet Firefox";
+
+/* General settings section title */
+"Settings.General.SectionName" = "Všeobecné";
+
+/* Button in settings to clear the home page. */
+"Settings.HomePage.Clear.Button" = "Vymazať";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "Domovská stránka";
+
+/* Title displayed in header of the setting panel. */
+"Settings.HomePage.Title" = "Nastavenia domovskej stránky";
+
+/* Placeholder text in the homepage setting when no homepage has been set. */
+"Settings.HomePage.URL.Placeholder" = "Zadajte webovú stránku";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "Súčasná domovská stránka";
+
+/* Button in settings to use the current link on the clipboard as home page. */
+"Settings.HomePage.UseCopiedLink.Button" = "Použiť skopírovaný odkaz";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "Použiť aktuálnu stránku";
+
+/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
+"Settings.HomePage.UseDefault.Button" = "Použiť predvolené";
+
+/* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
+"Settings.LoginsAndPasswordsTitle" = "Prihlasovacie mená a heslá";
+
+/* Label used to set a custom url as the new tab option (homepage). */
+"Settings.NewTab.CustomURL" = "Vlastná URL";
+
+/* A description in settings of what the new tab choice means */
+"Settings.NewTab.Description" = "Po otvorení novej karty:";
+
+/* The title of the section in newtab that lets you modify the topsites panel */
+"Settings.NewTab.Option.ASTitle" = "Prispôsobiť top stránky";
+
+/* Option in settings to show a blank page when you open a new tab */
+"Settings.NewTab.Option.BlankPage" = "Zobraziť prázdnu stránku";
+
+/* Option in settings to show bookmarks when you open a new tab */
+"Settings.NewTab.Option.Bookmarks" = "Zobraziť vaše záložky";
+
+/* The footer for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeFooter" = "Najnavštevovanejšie stránky";
+
+/* The title for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeTitle" = "Prispôsobiť domovskú stránku Firefoxu";
+
+/* Option in settings to show Firefox Home when you open a new tab */
+"Settings.NewTab.Option.FirefoxHome" = "Domovská stránka Firefoxu";
+
+/* Option in the settings to turn off recent bookmarks in the Highlights section */
+"Settings.NewTab.Option.HighlightsBookmarks" = "Naposledy pridané medzi záložky";
+
+/* Option in settings to turn off history in the highlights section */
+"Settings.NewTab.Option.HighlightsHistory" = "Navštívené";
+
+/* Option in settings to show history when you open a new tab */
+"Settings.NewTab.Option.History" = "Zobraziť vašu históriu";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.HomePage" = "Zobraziť vašu domovskú stránku";
+
+/* Option in settings to turn on off pocket recommendations */
+"Settings.NewTab.Option.Pocket" = "Trendy v Pockete";
+
+/* Footer caption for pocket settings */
+"Settings.NewTab.Option.PocketFooter" = "Skvelý obsah z webu.";
+
+/* Option in settings to show reading list when you open a new tab */
+"Settings.NewTab.Option.ReadingList" = "Zobraziť váš Zoznam na prečítanie";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
+"Settings.NewTab.SectionName" = "Nová karta";
+
+/* Title displayed in header of the setting panel. */
+"Settings.NewTab.Title" = "Nová karta";
+
+/* Label at the top of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionName" = "Zobraziť";
+
+/* Footer at the bottom of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionNameFooter" = "Vyberte si, čo sa má načítať pri otvorení novej karty";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Status" = "Pri otvorení Firefoxu";
+
+/* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Title" = "Ponúknuť otvorenie skopírovaných odkazov";
+
+/* Title for Open With Settings */
+"Settings.OpenWith.PageTitle" = "Otvárať e-mailové odkazy pomocou";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
+"Settings.OpenWith.SectionName" = "Aplikácia e-mailu";
+
+/* Setting to enable the built-in password manager */
+"Settings.SaveLogins.Title" = "Ukladať prihlasovacie údaje";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "Hotovo";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "Upraviť";
+
+/* title for a link that explains how mozilla collects telemetry */
+"Settings.SendUsage.Link" = "Ďalšie informácie.";
+
+/* A short description that explains why mozilla collects usage data. */
+"Settings.SendUsage.Message" = "Mozilla sa usiluje zbierať len údaje, ktoré potrebujeme na vylepšenie Firefoxu pre všetkých.";
+
+/* The title for the setting to send usage data. */
+"Settings.SendUsage.Title" = "Odosielať údaje o používaní";
+
+/* Description displayed under the ”Show Link Previews” option */
+"Settings.ShowLinkPreviews.Status" = "Pri dlhom stlačení odkazu";
+
+/* Title of setting to enable link previews when long-pressing links. */
+"Settings.ShowLinkPreviews.Title" = "Zobraziť náhľad odkazu";
+
+/* Setting to show Logins & Passwords quick access in the application menu */
+"Settings.ShowLoginsInAppMenu.Title" = "Zobraziť v ponuke aplikácie";
+
+/* The description of the open new tab siri shortcut */
+"Settings.Siri.OpenTabShortcut" = "Otvoriť novú kartu";
+
+/* The description that describes what siri shortcuts are */
+"Settings.Siri.SectionDescription" = "Použite skratku na otvorenie Firefoxu pomocou Siri";
+
+/* The option that takes you to the siri shortcuts settings page */
+"Settings.Siri.SectionName" = "Siri - skratky";
+
+/* Dismiss button for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Button" = "Ok, rozumiem";
+
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "Ak niektorá stránka nebude fungovať správne, ťuknite na ikonu štítu v paneli s adresou a rozšírenú ochranu pred sledovaním na danej stránke vypnite.";
+
+/* Title for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Title" = "Pozor!";
+
+/* Header description for tracking protection options section where Basic/Strict block list can be selected */
+"Settings.TrackingProtection.BlockListsHeader" = "Môžete si vybrať, ktorý zoznam Firefox použije na blokovanie webových prvkov, ktoré môžu sledovať vašu aktivitu na webe.";
+
+/* Explanation of basic mode. */
+"Settings.TrackingProtection.Info.BasicTitle" = "Vyvážená ochrana a výkon.";
+
+/* The Title on info view which shows a list of all blocked websites */
+"Settings.TrackingProtection.Info.BlocksTitle" = "ZABLOKOVANÉ";
+
+/* Explanation of strict mode. */
+"Settings.TrackingProtection.Info.StrictTitle" = "Silnejšia ochrana. Môže obmedziť fungovanie niektorých stránok.";
+
+/* 'Learn more' info link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.LearnMore" = "Ďalšie informácie";
+
+/* 'More Info' link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.MoreInfo" = "Ďalšie informácie…";
+
+/* Additional information about your Enhanced Tracking Protection */
+"Settings.TrackingProtection.ProtectionCellFooter" = "Obmedzuje množstvo cielených reklám a zabraňuje inzerentom sledovať vás na internete.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "Ak niektorá stránka nebude fungovať správne, ťuknite na ikonu štítu v paneli s adresou a rozšírenú ochranu pred sledovaním na danej stránke vypnite.";
+
+/* Description for standard level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Niektoré sledovacie prvky sú povolené, takže webové stránky fungujú správne.";
+
+/* Description for strict level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "Blokuje viac sledovacích prvkov, reklám a vyskakovacích okien. Stránky sa načítavajú rýchlejšie, no môže byť obmedzené ich fungovanie.";
+
+/* Title for tracking protection options section where level can be selected. */
+"Settings.TrackingProtection.ProtectionLevelTitle" = "Úroveň ochrany";
+
+/* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
+"Settings.TrackingProtection.SectionName" = "Ochrana pred sledovaním";
+
+/* Additional information about the strict level setting */
+"Settings.TrackingProtection.StrictLevelInfoFooter" = "Blokovanie sledovacích prvkov môže ovplyvniť fungovanie niektorých webových stránok.";
+
+/* Tracking protection settings option for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BasicBlockList" = "Štandardná (predvolené nastavenie)";
+
+/* Tracking protection settings option description for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BlockListBasicDescription" = "Niektoré sledovacie prvky sú povolené, takže webové stránky fungujú správne.";
+
+/* Tracking protection settings option for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrict" = "Prísna ochrana";
+
+/* Tracking protection settings option description for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrictDescription" = "Blokuje známe sledovacie prvky. Niektoré stránky nemusia fungovať správne.";
+
+/* Description label shown on tracking protection options screen. */
+"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "Sledovanie je zhromažďovanie údajov o vašom prehliadaní na rôznych stránkach.";
+
+/* Settings option to specify that Tracking Protection is on */
+"Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "Rozšírená ochrana pred sledovaním";
+
+/* Translation settings footer describing how language detection and translation happens. */
+"Settings.TranslateSnackBar.SectionFooter" = "Detekcia jazyka webovej stránky sa deje na zariadení a preklad ponúka vzdialená služba.";
+
+/* Translation settings section title */
+"Settings.TranslateSnackBar.SectionHeader" = "Služby";
+
+/* Switch to choose if the language of a page is detected and offer to translate. */
+"Settings.TranslateSnackBar.SwitchSubtitle" = "Ponúkať preklad, ak je stránka v inom jazyku ako v predvolenom.";
+
+/* Switch to choose if the language of a page is detected and offer to translate. */
+"Settings.TranslateSnackBar.SwitchTitle" = "Ponúkať preklad";
+
+/* Title in main app settings for Translation toast settings */
+"Settings.TranslateSnackBar.Title" = "Preklady";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "Riešenie problémov";
+
+/* Button to delete website in search results */
+"Settings.WebsiteData.ButtonDelete" = "Odstrániť";
+
+/* Button to exit edit website search results */
+"Settings.WebsiteData.ButtonDone" = "Hotovo";
+
+/* Button to edit website search results */
+"Settings.WebsiteData.ButtonEdit" = "Upraviť";
+
+/* Button shows all websites on website data tableview */
+"Settings.WebsiteData.ButtonShowMore" = "Zobraziť viac";
+
+/* Description of the confirmation dialog shown when a user tries to clear their private data. */
+"Settings.WebsiteData.ConfirmPrompt" = "Táto akcia vymaže všetky údaje webových stránok. Túto akciu nemožno vrátiť späť.";
+
+/* Title displayed in header of the Data Management panel. */
+"Settings.WebsiteData.Title" = "Údaje webových stránok";
+
+/* Action label on share extension to add page to the Firefox reading list. */
+"ShareExtension.AddToReadingListAction.Title" = "Pridať do Zoznamu na prečítanie";
+
+/* Share extension label shown after user has performed 'Add to Reading List' action. */
+"ShareExtension.AddToReadingListActionDone.Title" = "Pridaná do Zoznamu na prečítanie";
+
+/* Action label on share extension to bookmark the page in Firefox. */
+"ShareExtension.BookmarkThisPageAction.Title" = "Pridať stránku medzi záložky";
+
+/* Share extension label shown after user has performed 'Bookmark this Page' action. */
+"ShareExtension.BookmarkThisPageActionDone.Title" = "Pridaná medzi záložky";
+
+/* Action label on share extension to load the page in Firefox when user switches apps to bring it to foreground. */
+"ShareExtension.LoadInBackgroundAction.Title" = "Načítať na pozadí";
+
+/* Share extension label shown after user has performed 'Load in Background' action. */
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Načítavanie vo Firefoxe";
+
+/* Action label on share extension to immediately open page in Firefox. */
+"ShareExtension.OpenInFirefoxAction.Title" = "Otvoriť vo Firefoxe";
+
+/* Action label on share extension to immediately open page in Firefox in private mode. */
+"ShareExtension.OpenInPrivateModeAction.Title" = "Otvoriť na súkromnej karte";
+
+/* Action label on share extension to search for the selected text in Firefox. */
+"ShareExtension.SeachInFirefoxAction.Title" = "Hľadať vo Firefoxe";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "Zobrazovať návrhy vyhľadávania";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "Zobraziť karty";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "Zobraziť prehliadku";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "Zastaviť";
+
+/* Support section title */
+"Support" = "Podpora";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Kartu zavriete potiahnutím doľava alebo doprava pomocou troch prstov.";
+
+/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"SwitchToNonPBM.KeyCodeTitle" = "Bežné prehliadanie";
+
+/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"SwitchToPBM.KeyCodeTitle" = "Súkromné prehliadanie";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, bookmarks, passwords and more." = "Synchronizujte svoje karty, záložky, heslá a ďalšie.";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, passwords and more." = "Synchronizujte svoje karty, heslá a ďalšie.";
+
+/* Message displayed when the user syncs for the first time */
+"Sync.FirstTimeMessage.Label" = "Vaša prvá synchronizácia môže chvíľu trvať";
+
+/* String displayed on Sign In to Sync page that allows the user to create a new account. */
+"Sync.NoAccount.Description" = "Ešte nemáte účet? Vytvorte si ho a synchronizujte svoj Firefox medzi zariadeniami.";
+
+/* Message displayed when the user's account is syncing with no ellipsis */
+"Sync.Syncing.Label" = "Synchronizuje sa";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "Synchronizuje sa…";
+
+/* Panel accessibility label */
+"Synced Tabs" = "Synchronizované karty";
+
+/* The Bookmark sync component, used in SyncState.Partial.Title */
+"SyncState.Bookmark.Title" = "Záložky";
+
+/* The Remote Clients sync component, used in SyncState.Partial.Title */
+"SyncState.Clients.Title" = "Vzdialení klienti";
+
+/* Title for Sync status message when synchronization failed to complete */
+"SyncState.Failed.Title" = "Synchronizácia zlyhala";
+
+/* The History sync component, used in SyncState.Partial.Title */
+"SyncState.History.Title" = "História";
+
+/* The Logins sync component, used in SyncState.Partial.Title */
+"SyncState.Logins.Title" = "Prihlasovacie údaje";
+
+/* Title for Sync status message when Sync failed to start. */
+"SyncState.NotStarted.Title" = "Služba Sync nie je dostupná";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "Služba Sync je offline";
+
+/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
+"SyncState.Partial.Title" = "Služba Sync má problém synchronizovať %@";
+
+/* The Tabs sync component, used in SyncState.Partial.Title */
+"SyncState.Tabs.Title" = "Karty";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "Karta %1$@ z %2$@";
+
+/* Hardware shortcut to open the tab tray from a tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"Tab.ShowTabTray.KeyCodeTitle" = "Zobraziť všetky karty";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "Karty %1$@ až %2$@ z %3$@";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Panel kariet";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "Späť";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "%d kariet bolo zatvorených";
+
+/* The placeholder text for the tab search bar */
+"Tabs.Search.PlaceholderText" = "Hľadať";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"TabTray.AddTab.Button" = "Pridať kartu";
+
+/* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseAllTabs.KeyCodeTitle" = "Zavrieť všetky karty";
+
+/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseTab.KeyCodeTitle" = "Zavrieť označenú kartu";
+
+/* The section header for tabs opened last week */
+"TabTray.LastWeek.Header" = "Minulý týždeň";
+
+/* The title on the button to copy the tab address. */
+"TabTray.MoreMenu.Copy" = "Kopírovať";
+
+/* The section header for tabs opened before last week */
+"TabTray.Older.Header" = "Staršie";
+
+/* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenNewTab.KeyCodeTitle" = "Otvoriť novú kartu";
+
+/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenSelectedTab.KeyCodeTitle" = "Otvoriť označenú kartu";
+
+/* The button title to see more options to perform on the tab. */
+"TabTray.SwipeMenu.More" = "Viac";
+
+/* The title for the tab tray */
+"TabTray.Title" = "Otvorené karty";
+
+/* The section header for tabs opened today */
+"TabTray.Today.Header" = "Dnes";
+
+/* The section header for tabs opened yesterday */
+"TabTray.Yesterday.Header" = "Včera";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "Stránka nemohla byť načítaná v zobrazení Čítačka.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Počas prístupu ku kartám vo vašich ďalších zariadeniach sa vyskytla chyba. Skúste to znova o chvíľu.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "Pri konverzii stránky sa vyskytla chyba";
+
+/* Relative date for date in past week. */
+"this week" = "tento týždeň";
+
+/* label for Not Now button */
+"Toasts.NotNow" = "Teraz nie";
+
+/* Open App Store button */
+"Toasts.OpenAppStore" = "Otvoriť App Store";
+
+/* Label for button to undo the action just performed */
+"Toasts.Undo" = "Späť";
+
+/* History tableview section header */
+"Today" = "Dnes";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "dnes o %@";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "Ponuka";
+
+/* Accessibility label for the Close All Tabs menu button. */
+"Toolbar.Menu.CloseAllTabs" = "Zavrieť všetky karty";
+
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "Tu sa zobrazia vaše najnavštevovanejšie stránky.";
+
+/* The title for the empty Top Sites state */
+"TopSites.EmptyState.Title" = "Vitajte na top stránkach";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "Odstrániť stránku - %@";
+
+/* Button to disallow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.Cancel" = "Nie";
+
+/* Button to allow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.OK" = "Áno";
+
+/* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
+"TranslationToastHandler.PromptTranslate.Title" = "Zdá sa, že táto stránka je v jazyku %1$@. Chcete ju pomocou služby %3$@ preložiť do jazyka %2$@?";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* The menu item that pastes the current contents of the clipboard into the URL bar and navigates to the page */
+"UIMenuItem.PasteGo" = "Prilepiť a prejsť";
+
+/* Search in New Tab Text selection menu item */
+"UIMenuItem.SearchWithFirefox" = "Hľadať vo Firefoxe";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "neprečítané";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect" = "Aby ste sa mohli pripojiť, aktualizujte Firefox";
+
+/* Debug option */
+"Use stage servers" = "Použiť testovacie servery";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Používateľské meno";
+
+/* Text message in the settings table view */
+"Verify your email address" = "Overte svoju e-mailovú adresu";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "Verzia %1$@ (%2$@)";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Webový obsah";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Vitajte vo svojom Zozname na prečítanie";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "Tak toto je nepríjemné.";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Wikipédia";
+
+/* Relative date for yesterday. */
+"yesterday" = "včera";
+
+/* History tableview section header */
+"Yesterday" = "Včera";
+
+/* Error message in the remote tabs panel */
+"You don’t have any tabs open in Firefox on your other devices." = "Vo Firefoxe na svojich ďalších zariadeniach nemáte otvorené žiadne karty.";
+
+/* Your Rights settings section title */
+"Your Rights" = "Vaše práva";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+

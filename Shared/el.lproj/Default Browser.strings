@@ -1,0 +1,12 @@
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Button" = "Μετάβαση στις ρυθμίσεις";
+
+/* Description for small card shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Description" = "Ρύθμιση συνδέσμων ιστοσελίδων, emails και μηνυμάτων ώστε να ανοίγουν στο Firefox.";
+
+/* Title for small card shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Title" = "Αλλαγή προεπ. προγράμματος περιήγησης";
+
+/* Menu option for setting Firefox as default browser. */
+"Settings.DefaultBrowserMenuItem" = "Ορισμός ως προεπ. πρόγραμμα περιήγησης";
+

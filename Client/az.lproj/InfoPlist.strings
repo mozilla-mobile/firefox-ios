@@ -1,0 +1,23 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Bu sizə şəkil çəkmə və yükləmə imkanı verir.";
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSLocationWhenInUseUsageDescription" = "Daxil olduğunuz saytlar sizin yerinizi soruşa bilərlər.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Bu sizə video çəkmə və yükləmə imkanı verir.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Bu şəkilləri saxlamağınıza imkan verir.";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "Yeni Məxfi Vərəq";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "Yeni Vərəq";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "QR Kod oxut";
+

@@ -1,0 +1,23 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Hér getur þú tekið og hlaðið upp myndum.";
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSLocationWhenInUseUsageDescription" = "Vefsvæði sem þú skoðar gætu beðið um staðsetninguna þína.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Hér getur þú tekið og hlaðið upp myndböndum.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Hér getur þú vistað myndir.";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "Nýr einkaflipi";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "Nýr flipi";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "Skanna QR kóða";
+

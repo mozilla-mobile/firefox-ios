@@ -1,0 +1,9 @@
+/* The cancel button when confirming clear private data. */
+"Cancel" = "取消";
+
+/* The button that clears private data. */
+"OK" = "好";
+
+/* Description of the confirmation dialog shown when a user tries to clear their private data. */
+"This action will clear all of your private data. It cannot be undone." = "此操作将清除您的所有隐私数据，且无法撤销。";
+

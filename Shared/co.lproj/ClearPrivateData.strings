@@ -1,0 +1,18 @@
+/* Settings item for clearing browsing history */
+"Browsing History" = "Crunulogia di navigazione";
+
+/* Settings item for clearing the cache */
+"Cache" = "Impiatta";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Canistrelli";
+
+/* Settings item for deleting downloaded files */
+"Downloaded Files" = "Schedarii scaricati";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Dati fora di cunnessione";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Identificazioni di cunnessione arregistrate";
+

@@ -1,0 +1,1712 @@
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "%@ anmoder om et brugernavn og en adgangskode.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "%1$@ anmoder om et brugernavn og en adgangskode. Webstedet siger: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "Om";
+
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite" = "Fastgør til Mest besøgte websider";
+
+/* The title for removing a pinned topsite action */
+"ActivityStream.ContextMenu.RemovePinTopsite" = "Fjern fastgjort webside";
+
+/* The description of a highlight if it is a site the user has bookmarked */
+"ActivityStream.Highlights.Bookmark" = "Bogmærket";
+
+/* The description of a highlight if it is a site the user has visited */
+"ActivityStream.Highlights.Visited" = "Besøgt";
+
+/* Section title label for recently bookmarked websites */
+"ActivityStream.NewRecentBookmarks.Title" = "Seneste bogmærker";
+
+/* The link that shows more Pocket trending stories */
+"ActivityStream.Pocket.MoreLink" = "Mere";
+
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle" = "Populære på Pocket";
+
+/* The description of a Pocket Story */
+"ActivityStream.Pocket.Trending" = "Populært";
+
+/* Section title label for recently visited websites */
+"ActivityStream.RecentHistory.Title" = "Besøgt for nyligt";
+
+/* label showing how many rows of topsites are shown. %d represents a number */
+"ActivityStream.TopSites.RowCount" = "Rækker: %d";
+
+/* The title for the setting page which lets you select the number of top site rows */
+"ActivityStream.TopSites.RowSettingFooter" = "Indstil rækker";
+
+/* Section title label for Top Sites */
+"ActivityStream.TopSites.SectionTitle" = "Mest besøgte websider";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Tilføj faneblad";
+
+/* Accessibility label for action adding current page to reading list.
+   Name for button adding current article to reading list in reader mode */
+"Add to Reading List" = "Føj til læseliste";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Side er føjet til læseliste";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "OK";
+
+/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Message" = "Der opstod en fejl, mens kortet blev føjet til Wallet. Prøv igen senere.";
+
+/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Title" = "Kunne ikke tilføje kort";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Adresse og søgning";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Send altid";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "Godkendelse påkrævet";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "Tilbage";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Bloker pop op-vinduer";
+
+/* The header title for the fields when editing a Bookmark */
+"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "Bogmærke";
+
+/* The header title for the fields when editing a Folder */
+"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "Mappe";
+
+/* The label for the Title field when editing a bookmark */
+"Bookmark.DetailFieldTitle.Label" = "Titel";
+
+/* The label for the URL field when editing a bookmark */
+"Bookmark.DetailFieldURL.Label" = "URL";
+
+/* Toggle bookmarks syncing setting */
+"Bookmarks" = "Bogmærker";
+
+/* The button on the snackbar to edit a bookmark after adding it. */
+"Bookmarks.Edit.Button" = "Rediger";
+
+/* The button to edit a bookmark */
+"Bookmarks.EditBookmark.Label" = "Rediger bogmærke";
+
+/* The button to edit a folder */
+"Bookmarks.EditFolder.Label" = "Rediger mappe";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "Mappe";
+
+/* The label for the location of the new folder */
+"Bookmarks.FolderLocation.Label" = "Adresse";
+
+/* The label for the title of the new folder */
+"Bookmarks.FolderName.Label" = "Mappenavn";
+
+/* The button to create a new bookmark */
+"Bookmarks.NewBookmark.Label" = "Nyt bogmærke";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "Ny mappe";
+
+/* The button to create a new separator */
+"Bookmarks.NewSeparator.Label" = "Ny separator";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "Navn";
+
+/* The label for the URL of a bookmark */
+"Bookmarks.URL.Label" = "URL";
+
+/* Status label for the empty Bookmarks state. */
+"BookmarksPanel.EmptyState.Title" = "Gemte bogmærker vil blive vist her.";
+
+/* Describes the date on which the breach occurred */
+"BreachAlerts.BreachDate" = "Denne datalæk fandt sted den";
+
+/* Description of what a breach is */
+"BreachAlerts.Description" = "Adgangskoder blev lækket eller stjålet, siden du sidst ændrede din adgangskode. For at beskytte denne konto skal du logge ind på webstedet og ændre din adgangskode.";
+
+/* Link to monitor.firefox.com to learn more about breached passwords */
+"BreachAlerts.LearnMoreButton" = "Læs mere";
+
+/* Leads to a link to the breached website */
+"BreachAlerts.Link" = "Gå til";
+
+/* Title for the Breached Login Detail View. */
+"BreachAlerts.Title" = "Websteds-datalæk";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Lysstyrke";
+
+/* Label for Cancel button */
+"Cancel" = "Annuller";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Ændrer farvetemaet.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Ændrer skrifttypen.";
+
+/* The button to open a new tab with the copied link */
+"ClipboardToast.GoToCopiedLink.Button" = "Gå til";
+
+/* Message displayed when the user has a copied link on the clipboard */
+"ClipboardToast.GoToCopiedLink.Title" = "Gå til kopieret link?";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Luk";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "Lukker faneblad";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "computer";
+
+/* Context menu item for bookmarking a link URL */
+"ContextMenu.BookmarkLinkButtonTitle" = "Gem bogmærke for linket";
+
+/* The button text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Skift";
+
+/* The label text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Nyt privat faneblad er åbent";
+
+/* The button text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "Skift";
+
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText" = "Nyt faneblad er åbnet";
+
+/* Context menu item for copying an image to the clipboard */
+"ContextMenu.CopyImageButtonTitle" = "Kopier billede";
+
+/* Context menu item for copying an image URL to the clipboard */
+"ContextMenu.CopyImageLinkButtonTitle" = "Kopier link til billede";
+
+/* Context menu item for copying a link URL to the clipboard */
+"ContextMenu.CopyLinkButtonTitle" = "Kopier link";
+
+/* Context menu item for downloading a link URL */
+"ContextMenu.DownloadLinkButtonTitle" = "Hent link";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenInNewTabButtonTitle" = "Åbn i nyt faneblad";
+
+/* Context menu item for saving an image */
+"ContextMenu.SaveImageButtonTitle" = "Gem billede";
+
+/* Context menu item for sharing a link URL */
+"ContextMenu.ShareLinkButtonTitle" = "Del link";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "Kunne ikke føje side til læseliste.";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it’s already there?" = "Kunne ikke føje side til læseliste. Måske er den der allerede?";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "Kunne ikke indlæse side.";
+
+/* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
+"CoverSheet.v22.DarkMode.Description" = "For brugere af iOS 13 skifter Firefox nu automatisk til et mørkt tema, når telefonen er sat til at bruge Mørk tilstand. Gå til Indstillinger > Tema for at ændre dette.";
+
+/* Title for the new dark mode change in the version 22 app release. */
+"CoverSheet.v22.DarkMode.Title" = "Mørkt tema inkluderer nu et mørkt tastatur og en mørk velkomst-skærm.";
+
+/* Description for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Description" = "Den indbyggede funktion Udvidet beskyttelse mod sporing forhindrer reklamer i at følge dig rundt på nettet. Aktivér Striks for at blokere endnu flere sporings-mekanismer, reklamer og pop ups.";
+
+/* Text for the new ETP settings button */
+"CoverSheet.v24.ETP.Settings.Button" = "Gå til Indstillinger";
+
+/* Title for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Title" = "Beskyttelse mod sporing fra reklamer";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Opret en konto";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Mørk";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Formindsk tekststørrelse";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Standardsøgetjeneste";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Visningsindstillinger";
+
+/* Used as a button label for crash dialog prompt */
+"Don’t Send" = "Send ikke";
+
+/* Done button on left side of the Settings view controller title bar */
+"Done" = "Færdig";
+
+/* Panel accessibility label */
+"Downloads" = "Hentninger";
+
+/* The label of the button the user will press to start downloading a file */
+"Downloads.Alert.DownloadNow" = "Hent nu";
+
+/* Button confirming the cancellation of the download. */
+"Downloads.CancelDialog.Cancel" = "Annuller";
+
+/* Alert dialog body when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Message" = "Er du sikker på, at du vil annullere denne hentning?";
+
+/* Button declining the cancellation of the download. */
+"Downloads.CancelDialog.Resume" = "Genoptag";
+
+/* Alert dialog title when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Title" = "Annuller hentning";
+
+/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
+"Downloads.Error.Message" = "Hentning af denne filtype er endnu ikke understøttet i Firefox.";
+
+/* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
+"Downloads.Toast.Cancelled.LabelText" = "Hentning annulleret";
+
+/* The label text in the Download Failed toast for showing confirmation that the download has failed. */
+"Downloads.Toast.Failed.LabelText" = "Hentning mislykkedes";
+
+/* The button to retry a failed download from the Download Failed toast. */
+"Downloads.Toast.Failed.RetryButton" = "Prøv igen";
+
+/* The button to open a new tab with the Downloads home panel */
+"Downloads.Toast.GoToDownloads.Button" = "Hentninger";
+
+/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. */
+"Downloads.Toast.MultipleFiles.DescriptionText" = "1 af %d filer";
+
+/* The description text in the Download progress toast for showing the number of files (1$) and download progress (2$). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where 1$ is Downloads.Toast.MultipleFiles.DescriptionText and 2$ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and 1$ should come before 2$ everywhere except for right-to-left locales. */
+"Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";
+
+/* The description text in the Download progress toast for showing the downloaded file size (1$) out of the total expected file size (2$). */
+"Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
+
+/* Action button for deleting downloaded files in the Downloads panel. */
+"DownloadsPanel.Delete.Title" = "Slet";
+
+/* Title for the Downloads Panel empty state. */
+"DownloadsPanel.EmptyState.Title" = "Hentede filer vil blive vist her.";
+
+/* Action button for sharing downloaded files in the Downloads panel. */
+"DownloadsPanel.Share.Title" = "Del";
+
+/* Text message in the settings table view */
+"Enter your password to connect" = "Indtast din adgangskode for at forbinde";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "Avanceret";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "Advarsel: Vi kan ikke bekræfte, at din forbindelse til dette websted er sikker.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "Det kan skyldes en forkert opsætning eller at nogen manipulerer din forbindelse. Fortsæt kun, hvis du kan acceptere den mulige risiko.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "Ejeren af %@ har opsat sit websted forkert. Firefox har ikke oprettet forbindelse til webstedet for at forhindre, at dine informationer bliver stjålet.";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "Webstedets identifikation kunne ikke bekræftes";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "Gå tilbage";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "Besøg webstedet alligevel";
+
+/* Question shown to user when tapping a link that opens the App Store app */
+"ExternalLink.AppStore.ConfirmationTitle" = "Åbn dette link i App Store?";
+
+/* Question shown to user when tapping an SMS or MailTo link that opens the external app for those. */
+"ExternalLink.AppStore.GenericConfirmationTitle" = "Åbn dette link i en ekstern app?";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Title for firefox about:home page in tab history list */
+"Firefox.HomePage.Title" = "Firefox startside";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "Fremad";
+
+/* Label stating how to disconnect account */
+"FxA.AccountVerificationDetails" = "Forkert mailadresse? Afbryd forbindelsen nedenfor for at starte forfra.";
+
+/* Label stating your account is not verified */
+"FxA.AccountVerificationRequired" = "Kontobekræftelse påkrævet";
+
+/* Message explaining that user needs to check email for Firefox Account verfication link. */
+"FxA.AccountVerificationRequiredSurface" = "Du skal bekræfte %@. Tjek din mail for bekræftelseslinket fra Firefox.";
+
+/* Button label to connect another device to Sync */
+"FxA.ConnectAnotherDevice" = "Opret forbindelse til en ny enhed";
+
+/* Settings section title for Firefox Account */
+"FxA.FirefoxAccount" = "Firefox-konto";
+
+/* Button label to go to Firefox Account settings */
+"FxA.ManageAccount" = "Håndter konto og enheder";
+
+/* Label when no internet is present */
+"FxA.NoInternetConnection" = "Ingen internetforbindelse";
+
+/* Button label to open Sync preferences */
+"FxA.OpenSyncPreferences" = "Indstillinger for Sync";
+
+/* Instructions shown on qr code scanning view */
+"fxa.qr-scanning-view.instructions" = "Skan QR-koden vist på firefox.com/pair";
+
+/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
+"FxA.RemoveAccount" = "Fjern";
+
+/* Description string for alert view that gets presented when user tries to remove an account. */
+"FxA.RemoveAccountAlertMessage" = "Fjern Firefox-kontoen knyttet til denne enhed for at logge ind som en anden bruger.";
+
+/* Remove account alert is the final confirmation before user removes their firefox account */
+"FxA.RemoveAccountAlertTitle" = "Fjern konto";
+
+/* Button label to resend email */
+"FxA.ResendEmail" = "Send mail igen";
+
+/* FxA sign in view subtitle */
+"fxa.signin.camera-signin" = "Log ind med dit kamera";
+
+/* FxA sign in create account label. */
+"fxa.signin.create-account-pt-1" = "Synkroniser Firefox mellem enheder med en konto.";
+
+/* FxA sign in create account label. This will be linked to the site to create an account. */
+"fxa.signin.create-account-pt-2" = "Opret en Firefox-konto.";
+
+/* FxA sign in view qr code instructions */
+"fxa.signin.qr-link-instruction" = "Åbn Firefox på din computer og gå til firefox.com/pair";
+
+/* FxA sign in view qr code scan button */
+"fxa.signin.ready-to-scan" = "Klar til at skanne";
+
+/* FxA sign in view title */
+"fxa.signin.turn-on-sync" = "Slå Sync til";
+
+/* FxA sign in view email login button */
+"fxa.signin.use-email-instead" = "Brug mail i stedet";
+
+/* Button label to sign into Sync */
+"FxA.SignIntoSync" = "Log ind på Sync";
+
+/* Label explaining what sync does */
+"FxA.SyncExplain" = "Få adgang til dine faneblade, bogmærker og adgangskoder på dine andre enheder.";
+
+/* Button label to Sync your Firefox Account */
+"FxA.SyncNow" = "Synkroniser nu";
+
+/* Call to action for sign into sync button */
+"FxA.TakeYourWebWithYou" = "Tag dit net med dig";
+
+/* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
+"FxAPush_DeviceConnected_body" = "Firefox Sync er forbundet til %@";
+
+/* Title of a notification displayed when another device has connected to FxA. */
+"FxAPush_DeviceConnected_title" = "Sync forbundet";
+
+/* Body of a notification displayed when named device has been disconnected from FxA. %@ refers to the name of the disconnected device. */
+"FxAPush_DeviceDisconnected_body" = "Forbindelsen til %@ er blevet afbrudt.";
+
+/* Body of a notification displayed when this device has been disconnected from FxA by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Forbindelsen mellem denne enhed og Firefox Sync er blevet afbrudt.";
+
+/* Title of a notification displayed when this device has been disconnected by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync er blevet afbrudt";
+
+/* Title of a notification displayed when named device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_title" = "Sync er blevet afbrudt";
+
+/* Body of a notification displayed when unnamed device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Forbindelsen mellem en enhed og Firefox Sync er blevet afbrudt";
+
+/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "Få adgang til faneblade, bogmærker og adgangskoder på dine andre enheder.";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Hjælp";
+
+/* Toggle history syncing setting */
+"History" = "Historik";
+
+/* Title for button in the history panel to clear recent history */
+"HistoryPanel.ClearHistoryButtonTitle" = "Ryd seneste historik…";
+
+/* Option title to clear all browsing history. */
+"HistoryPanel.ClearHistoryMenuOptionEverything" = "Alt";
+
+/* Button to perform action to clear history for the last hour */
+"HistoryPanel.ClearHistoryMenuOptionTheLastHour" = "Den seneste time";
+
+/* Button to perform action to clear history for today only */
+"HistoryPanel.ClearHistoryMenuOptionToday" = "I dag";
+
+/* Button to perform action to clear history for yesterday and today */
+"HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "I dag og i går";
+
+/* Title for popup action menu to clear recent history. */
+"HistoryPanel.ClearHistoryMenuTitle" = "Ved at rydde den seneste historik fjerner du historik, cookies og andre browser-data.";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "Dine senest besøgte websteder vil blive vist her.";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "Faneblade fra dine andre enheder vil blive vist her.";
+
+/* Description for the empty synced tabs 'not signed in' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Log ind for at se en liste med faneblade fra dine andre enheder.";
+
+/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "Din konto skal bekræftes.";
+
+/* Description for the empty synced tabs 'single device Sync' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "Vil du gerne se faneblade fra dine andre enheder her?";
+
+/* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Aktivér synkronisering af faneblade for at se en liste med faneblade, der er åbne på dine andre enheder.";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "Historik";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "Senest lukkede";
+
+/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d enhed(er) forbundet";
+
+/* Title for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Title" = "Synkroniserede enheder";
+
+/* Button cancelling changes setting the home page for the first time. */
+"HomePage.Set.Dialog.Cancel" = "Annuller";
+
+/* Alert dialog body when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Message" = "Du kan altid ændre dette i Indstillinger";
+
+/* Button accepting changes setting the home page for the first time. */
+"HomePage.Set.Dialog.OK" = "Indstil Startside";
+
+/* Alert dialog title when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Title" = "Vil du bruge dette websted som din startside?";
+
+/* The title for the Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Bookmark" = "Bogmærk";
+
+/* The title for the Delete from History context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.DeleteFromHistory" = "Slet fra historik";
+
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab" = "Åbn i nyt privat faneblad";
+
+/* The title for the Open in New Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewTab" = "Åbn i nyt faneblad";
+
+/* The title for the Remove context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Remove" = "Fjern";
+
+/* The title for the Remove Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.RemoveBookmark" = "Fjern bogmærke";
+
+/* The title for the Share context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Share" = "Del";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Back.DiscoveryTitle" = "Tilbage";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.CloseTab.DiscoveryTitle" = "Luk faneblad";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Find.DiscoveryTitle" = "Find";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Forward.DiscoveryTitle" = "Fremad";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "Nyt privat faneblad";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewTab.DiscoveryTitle" = "Nyt faneblad";
+
+/* Label to switch to normal browsing mode */
+"Hotkeys.NormalMode.DiscoveryTitle" = "Normal browsing-tilstand";
+
+/* Label to switch to private browsing mode */
+"Hotkeys.PrivateMode.DiscoveryTitle" = "Privat browsing-tilstand";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Reload.DiscoveryTitle" = "Genindlæs side";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "Vælg adresselinje";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "Vis næste faneblad";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Vis forrige faneblad";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Forøg tekststørrelse";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "netop nu";
+
+/* History tableview section header */
+"Last month" = "Seneste måned";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "Sidst synkroniseret: %@";
+
+/* History tableview section header */
+"Last week" = "Seneste uge";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Licenser";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Lys";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "Indlæs original side";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "Indlæser indhold…";
+
+/* Authentication prompt log in button */
+"Log in" = "Log ind";
+
+/* Toggle logins syncing setting */
+"Logins" = "Logins";
+
+/* Login detail view field name for the last modified date */
+"LoginsDetailView.LoginModified" = "Ændret";
+
+/* Title for the login detail view */
+"LoginsDetailView.LoginTitle" = "Login";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "Gem ikke";
+
+/* Button to not update the user's password */
+"LoginsHelper.DontUpdate.Button" = "Opdater ikke";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "Gem login'et %1$@ til %2$@?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "Gem adgangskoden for %@?";
+
+/* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
+"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "Opdater login til %@?";
+
+/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "Opdater login %1$@ til %2$@?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "Gem login";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "Opdater";
+
+/* For filtering the login list, search only the login names */
+"LoginsList.LoginsListFilterLogin" = "Login";
+
+/* For filtering the login list, search both website and login names. */
+"LoginsList.LoginsListFilterSearchAll" = "Alle";
+
+/* For filtering the login list, search only the website names */
+"LoginsList.LoginsListFilterWebsite" = "Websted";
+
+/* Placeholder test for search box in logins list view. */
+"LoginsList.LoginsListSearchPlaceholder" = "Filtrer";
+
+/* Title for the list of logins */
+"LoginsList.Title" = "GEMTE LOGINS";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Det ser ud som om, Firefox tidligere gik ned. Vil du gendanne dine faneblade?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "Marker som læst";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Marker som ulæst";
+
+/* Toast displayed to the user after a bookmark has been added. */
+"Menu.AddBookmark.Confirm" = "Bogmærke tilføjet";
+
+/* Toast displayed to the user after adding the item to the Top Sites. */
+"Menu.AddPin.Confirm" = "Fastgjort til Mest besøgte websider";
+
+/* Toast displayed to the user after adding the item to their reading list. */
+"Menu.AddToReadingList.Confirm" = "Føjet til læseliste";
+
+/* The title for the button that lets you copy the url from the location bar. */
+"Menu.Copy.Title" = "Kopier adresse";
+
+/* Toast displayed to user after copy url pressed. */
+"Menu.CopyURL.Confirm" = "URL kopieret til udklipsholder";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "Udvidet beskyttelse mod sporing er SLÅET FRA for dette websted.";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "Udvidet beskyttelse mod sporing er SLÅET TIL for dette websted.";
+
+/* Description for having standard ETP protection with ITP offered in iOS14+ */
+"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox blokerer sporings-teknologier på tværs af websteder, sporing via sociale medier, cryptominers og fingerprinters.";
+
+/* Description for having strict ETP protection with ITP offered in iOS14+ */
+"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox blokerer sporings-teknologier på tværs af websteder, sporing via sociale medier, cryptominers, fingerprinters og sporings-indhold.";
+
+/* Label for the button displayed in the menu used to stop the reload of the webpage */
+"Menu.Library.StopReload" = "Stop";
+
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label" = "Aktivér nat-tilstand";
+
+/* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
+"Menu.NoImageModeBlockImages.Label" = "Bloker billeder";
+
+/* Label for title in page action menu. */
+"Menu.PageActions.Title" = "Sidehandlinger";
+
+/* The title for the button that lets you paste into the location bar */
+"Menu.Paste.Title" = "Indsæt";
+
+/* The title for the button that lets you paste and go to a URL */
+"Menu.PasteAndGo.Title" = "Indsæt og gå";
+
+/* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
+"Menu.ReloadWithoutTrackingProtection.Title" = "Indlæs igen uden beskyttelse mod sporing";
+
+/* Label for the button, displayed in the menu, used to reload the current website with Tracking Protection enabled */
+"Menu.ReloadWithTrackingProtection.Title" = "Indlæs igen med beskyttelse mod sporing";
+
+/* Toast displayed to the user after a bookmark has been removed. */
+"Menu.RemoveBookmark.Confirm" = "Bogmærket fjernet";
+
+/* Toast displayed to the user after removing the item from the Top Sites. */
+"Menu.RemovePin.Confirm" = "Fjernet fra Mest besøgte websider";
+
+/* Toast displayed to the user after a tab has been sent successfully. */
+"Menu.TabSent.Confirm" = "Faneblad sendt";
+
+/* Title on tracking protection menu for blocked items. */
+"Menu.TrackingProtection.BlockedTitle" = "Blokeret";
+
+/* Message in menu when no trackers blocked. */
+"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Firefox fandt ikke kendte sporings-mekanismer på denne side.";
+
+/* The title for tracking protection settings */
+"Menu.TrackingProtection.ProtectionSettings.Title" = "Indstillinger for beskyttelse";
+
+/* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
+"Menu.TrackingProtection.TitlePrefix" = "Beskyttelse for %@";
+
+/* The title that shows the number of content cookies blocked */
+"Menu.TrackingProtectionBlockedContent.Title" = "Sporings-indhold";
+
+/* The title that shows the number of social URLs blocked */
+"Menu.TrackingProtectionBlockedSocial.Title" = "Sporing via sociale medier";
+
+/* Description of the Tracking protection menu when TP is blocking parts of the page */
+"Menu.TrackingProtectionBlocking.Description" = "Firefox blokerer for de dele af siden, der kan spore din browsing.";
+
+/* The description of the Tracking Protection menu item when tracking is enabled */
+"Menu.TrackingProtectionBlockingDisabled.Description" = "Bloker sporings-tjenester på nettet";
+
+/* The title that shows the number of cross-site cookies blocked */
+"Menu.TrackingProtectionCrossSiteCookies.Title" = "Sporings-cookies på tværs af websteder";
+
+/* The title that shows the number of cross-site URLs blocked */
+"Menu.TrackingProtectionCrossSiteTrackers.Title" = "Sporings-tjenester på tværs af websteder";
+
+/* The title that shows the number of cryptomining scripts blocked */
+"Menu.TrackingProtectionCryptominersBlocked.Title" = "Cryptominers";
+
+/* Description of content trackers. */
+"Menu.TrackingProtectionDescription.ContentTrackers" = "Websteder kan indlæse eksterne reklamer, videoer og andet indhold, der indeholder skjulte sporings-tjenester. Ved at blokere sporings-indhold kan sider ofte indlæses hurtigere, men nogle knapper, formularer og login-felter virker måske ikke.";
+
+/* Description of cross-site trackers. */
+"Menu.TrackingProtectionDescription.CrossSiteNew" = "Disse cookies følger dig fra websted til websted for at indsamle data om din adfærd på nettet. De stammer fra tredjepart som fx annoncører og analyse-virksomheder.";
+
+/* Description of cryptominers. */
+"Menu.TrackingProtectionDescription.CryptominersNew" = "Cryptominers bruger dit systems ressourcer til at udvinde digital valuta, uden at du ved det. Cryptomining-scripts gør din enhed langsommere, får den til at bruge mere strøm og kan dræne dit batteri.";
+
+/* Description of fingerprinters. */
+"Menu.TrackingProtectionDescription.Fingerprinters" = "Indstillingerne på din browser og din computer er unikke. Fingerprinters indsamler en række af disse unikke indstillinger for at oprette en profil af dig, der kan bruges til at spore dig på nettet.";
+
+/* Description of social network trackers. */
+"Menu.TrackingProtectionDescription.SocialNetworksNew" = "Sociale medier placerer sporings-mekanismer på andre websteder for kunne danne en mere komplet og målrettet profil af dig. Ved at blokere disse sporings-mekanismer får virksomhederne bag de sociale medier sværere ved at følge med i, hvad du laver på nettet.";
+
+/* The button that disabled TP for a site. */
+"Menu.TrackingProtectionDisable1.Title" = "Deaktiveret for dette websted";
+
+/* The confirmation toast once tracking protection has been disabled */
+"Menu.TrackingProtectionDisabled.Title" = "Beskyttelse mod sporing er nu deaktiveret for dette websted.";
+
+/* A button to enable tracking protection inside the menu. */
+"Menu.TrackingProtectionEnable.Title" = "Aktiver beskyttelse mod sporing";
+
+/* A button to enable tracking protection inside the menu. */
+"Menu.TrackingProtectionEnable1.Title" = "Aktiveret for dette websted";
+
+/* The confirmation toast once tracking protection has been enabled */
+"Menu.TrackingProtectionEnabled.Title" = "Beskyttelse mod sporing er nu aktiveret for dette websted.";
+
+/* The title that shows the number of fingerprinting scripts blocked */
+"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Fingerprinters";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "Blokerede sporings-cookies på tværs af websteder";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Cryptominers" = "Blokerede cryptominers";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Fingerprinters" = "Blokerede fingerprinters";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Social" = "Blokerede sporinger via sociale medier";
+
+/* more info about what tracking protection is about */
+"Menu.TrackingProtectionMoreInfo.Description" = "Læs mere om, hvordan beskyttelse mod sporing blokerer sporings-tjenester, der indsamler browser-data på tværs af websteder.";
+
+/* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
+"Menu.TrackingProtectionNoBlocking.Description" = "Ingen sporings-elementer fundet på denne side.";
+
+/* label for the menu item to show when the website is whitelisted from blocking trackers. */
+"Menu.TrackingProtectionOption.WhiteListOnDescription" = "Webstedet indeholder elementer, der kan spore din browsing. Du har deaktiveret beskyttelse.";
+
+/* label for the menu item that lets you remove a website from the tracking protection whitelist */
+"Menu.TrackingProtectionWhitelistRemove.Title" = "Aktivér for dette websted";
+
+/* The title for the option to view the What's new page. */
+"Menu.WhatsNew.Title" = "Nyheder";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "mobil enhed";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "mere end en måned siden";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "mere end en uge siden";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Navigationslinje";
+
+/* Accessibility label for the New Tab button in the tab toolbar.
+   Accessibility Label for the tab toolbar New tab button */
+"New Tab" = "Nyt faneblad";
+
+/* Restore Tabs Negative Action */
+"No" = "Nej";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "Ingen faneblade";
+
+/* OK button */
+"OK" = "OK";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "Ja";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "Hov! Firefox gik ned";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Åbn artikler i læsevisning ved at trykke på bog-ikonet, når det vises i titellinjen.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Åbn Indstillinger";
+
+/* Toggle tabs syncing setting */
+"Open Tabs" = "Åbne faneblade";
+
+/* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
+"OpenURL.Error.Message" = "Firefox kan ikke åbne siden, fordi den har en ugyldig adresse.";
+
+/* Title of the message shown when the user attempts to navigate to an invalid link. */
+"OpenURL.Error.Title" = "Siden kan ikke åbnes";
+
+/* Accessibility label for the Page Options menu button */
+"Page Options Menu" = "Menu for side-indstillinger";
+
+/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
+"Panel Chooser" = "Panelvælger";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Adgangskode";
+
+/* Error message shown in the remote tabs panel */
+"PasswordAutoFill.NoPasswordsFoundTitle" = "Du har ingen legitimationsoplysninger synkroniseret fra din Firefox-konto";
+
+/* Header for the list of credentials table */
+"PasswordAutoFill.PasswordsListTitle" = "Tilgængelige legitimationsoplysninger:";
+
+/* Title of the extension that shows firefox passwords */
+"PasswordAutoFill.SectionTitle" = "Firefox-legitimationsoplysninger";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Dette lader dig gemme billedet til dine fotos.";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox vil gerne have adgang til dine fotos";
+
+/* Button for closing the menu action sheet */
+"PhotonMenu.close" = "Luk";
+
+/* Privacy section title */
+"Privacy" = "Privatliv";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "Privatlivspolitik";
+
+/* Title for quick-search engines settings section. */
+"Quick-Search Engines" = "Søgetjenester til hurtig søgning";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "læst";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "Læsevisning";
+
+/* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
+"ReaderMode.Available.VoiceOverAnnouncement" = "Læsevisning tilgængelig";
+
+/* Panel accessibility label */
+"Reading list" = "Læseliste";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "Senest lukkede";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "Genindlæs";
+
+/* Accessibility label for the reload button */
+"Reload page" = "Genindlæs side";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Fjern";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Fjern fra læseliste";
+
+/* Cancel button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Cancel" = "Annuller";
+
+/* Reopen button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Reopen" = "Åbn igen";
+
+/* Reopen alert title shown at home page. */
+"ReopenAlert.Title" = "Åbn senest lukkede faneblad igen";
+
+/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"ReopenClosedTab.KeyCodeTitle" = "Åbn lukket faneblad igen";
+
+/* Accessibility label for button resetting font size in display settings of reader mode */
+"Reset text size" = "Nulstil tekststørrelse";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans-serif";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Gem sider til din læseliste ved at trykke på bog-plus-ikonet blandt læsevisningsknapperne.";
+
+/* OK button to dismiss the error prompt. */
+"ScanQRCode.Error.OK.Button" = "OK";
+
+/* Text for the instructions label, displayed in the QR scanner view */
+"ScanQRCode.Instructions.Label" = "Juster QR-koden indenfor rammen for at skanne";
+
+/* Text of the prompt that is shown to the user when the data is invalid */
+"ScanQRCode.InvalidDataError.Message" = "Data er ugyldige";
+
+/* Text of the prompt user to setup the camera authorization. */
+"ScanQRCode.PermissionError.Message" = "Tillad Firefox at få adgang til enhedens kamera i 'Indstillinger' -> 'Privatliv' -> 'Kamera'.";
+
+/* Title for the QR code scanner view. */
+"ScanQRCode.View.Title" = "Skan QR-kode";
+
+/* Accessibility Label for the tab toolbar Search button
+   Navigation title for search settings.
+   Open search section of settings */
+"Search" = "Søgning";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Søg eller indtast adresse";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "Den nye søgetjeneste vil blive vist i linjen \"Hurtig søgning\"";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "Tilføjet søgetjeneste";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "Tilføj søgetjeneste?";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "Annuller";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.DuplicateErrorMessage" = "En søgetjeneste med denne titel eller URL er allerede tilføjet.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.DuplicateErrorTitle" = "Mislykkedes";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "Søgetjenesten kunne ikke tilføjes.";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "Mislykkedes";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.FormErrorMessage" = "Udfyld alle felter korrekt.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.FormErrorTitle" = "Mislykkedes";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "OK";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "Søger efter forslaget";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "Sikker forbindelse";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "Vil du sende en fejlrapport, så Mozilla kan løse problemet?";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "Send feedback";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "Send rapport";
+
+/* Button title for cancelling share screen
+   Close button in top navigation bar */
+"SendTo.Cancel.Button" = "Annuller";
+
+/* Header for the list of devices table */
+"SendTo.DeviceList.Text" = "Tilgængelige enheder:";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "Det er kun muligt at dele HTTP- og HTTPS-links.";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "OK";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "Linket, du forsøger at dele, kan ikke deles.";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"SendTo.NavBar.Title" = "Send faneblad";
+
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message" = "Du har ikke andre enheder tilknyttet denne Firefox-konto, som er tilgængelige for synkronisering.";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Message" = "Åbn Firefox, gå til Indstillinger og log ind for at fortsætte.";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Title" = "Du er ikke logget ind på din Firefox-konto.";
+
+/* Navigation bar button to Send the current page to a device */
+"SendTo.SendAction.Text" = "Send";
+
+/* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
+"SendTo.SignIn.Button" = "Log ind på Firefox";
+
+/* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_body" = "Nyt faneblad modtaget fra en anden enhed.";
+
+/* Title of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_title" = "Faneblad modtaget";
+
+/* Body of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the app name. */
+"SentTab_TabArrivingNotification_WithDevice_body" = "Nyt faneblad modtaget i %@";
+
+/* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
+"SentTab_TabArrivingNotification_WithDevice_title" = "Nyt faneblad modtaget fra %@";
+
+/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
+"SentTab.AddToReadingListAction.Title" = "Føj til læseliste";
+
+/* Label for an action used to bookmark one or more tabs from a notification. */
+"SentTab.BookmarkAction.title" = "Tilføj som bogmærke";
+
+/* Body of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.body" = "Tryk for at begynde";
+
+/* Title of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+
+/* Label for an action used to view one or more tabs from a notification. */
+"SentTab.ViewAction.title" = "Vis";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Sepia";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serif";
+
+/* Title in the settings view controller title bar */
+"Settings" = "Indstillinger";
+
+/* The button text in Search Settings that opens the Custom Search Engine view. */
+"Settings.AddCustomEngine" = "Tilføj søgetjeneste";
+
+/* The text on the Save button when saving a custom search engine */
+"Settings.AddCustomEngine.SaveButtonText" = "Gem";
+
+/* The title of the  Custom Search Engine view. */
+"Settings.AddCustomEngine.Title" = "Tilføj søgetjeneste";
+
+/* The title for the field which sets the title for a custom search engine. */
+"Settings.AddCustomEngine.TitleLabel" = "Titel";
+
+/* The placeholder for Title Field when saving a custom search engine. */
+"Settings.AddCustomEngine.TitlePlaceholder" = "Søgetjeneste";
+
+/* The title for URL Field */
+"Settings.AddCustomEngine.URLLabel" = "URL";
+
+/* The placeholder for URL Field when saving a custom search engine */
+"Settings.AddCustomEngine.URLPlaceholder" = "URL (erstat søgestreng med %s)";
+
+/* Button in Data Management that clears private data for the selected items. */
+"Settings.ClearAllWebsiteData.Clear.Button" = "Ryd alle webstedsdata";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "Ryd private data";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "Ryd private data";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "Ryd private data";
+
+/* Copy app version alert shown in settings. */
+"Settings.CopyAppVersion.Title" = "Kopieret til udklipsholder";
+
+/* Default text in search bar for Data Management */
+"Settings.DataManagement.SearchLabel" = "Filtrer websteder";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.DataManagement.SectionName" = "Håndtering af data";
+
+/* Title displayed in header of the setting panel. */
+"Settings.DataManagement.Title" = "Håndtering af data";
+
+/* Body of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Body" = "Firefox vil ikke længere synkronisere med din konto, men sletter ikke dine browsing-data på denne enhed.";
+
+/* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
+"Settings.Disconnect.Button" = "Afbryd forbindelse";
+
+/* Cancel action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.CancelButton" = "Annuller";
+
+/* Destructive action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.DestructiveButton" = "Afbryd";
+
+/* Title of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Title" = "Afbryd forbindelse?";
+
+/* Section header for brightness slider. */
+"Settings.DisplayTheme.BrightnessThreshold.SectionHeader" = "Tærskel";
+
+/* Display (theme) settings label to show if manually switch theme is enabled. */
+"Settings.DisplayTheme.Manual.StatusLabel" = "Manuelt";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Manually'. */
+"Settings.DisplayTheme.Manual.SwitchSubtitle" = "Vælg et tema";
+
+/* Display (theme) setting to choose the theme manually. */
+"Settings.DisplayTheme.Manual.SwitchTitle" = "Manuelt";
+
+/* Option choice in display theme settings for dark theme */
+"Settings.DisplayTheme.OptionDark" = "Mørk";
+
+/* Option choice in display theme settings for light theme */
+"Settings.DisplayTheme.OptionLight" = "Lys";
+
+/* Display (theme) settings footer describing how the brightness slider works. */
+"Settings.DisplayTheme.SectionFooter" = "Dette tema vil automatisk ændre sig alt afhængigt af din skærms lysstyrke. Du kan indstille grænsen for, hvornår temaet ændrer sig. Cirklen viser din skærms nuværende lysstyrke.";
+
+/* Switch mode settings section title */
+"Settings.DisplayTheme.SwitchMode.SectionHeader" = "Skift tilstand";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Automatically'. */
+"Settings.DisplayTheme.SwitchSubtitle" = "Skift automatisk alt efter skærmens lysstyrke";
+
+/* Display (theme) settings label to show if automatically switch theme is enabled.
+   Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
+"Settings.DisplayTheme.SwitchTitle" = "Automatisk";
+
+/* System theme settings section title */
+"Settings.DisplayTheme.SystemTheme.SectionHeader" = "System-tema";
+
+/* System theme settings switch to choose whether to use the same theme as the system */
+"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "Brug systemets lys-/mørk-tilstand";
+
+/* Theme picker settings section title */
+"Settings.DisplayTheme.ThemePicker.SectionHeader" = "Tema-vælger";
+
+/* Title in main app settings for Theme settings */
+"Settings.DisplayTheme.Title.v2" = "Tema";
+
+/* DNT Settings option for always on */
+"Settings.DNT.OptionAlwaysOn" = "Altid";
+
+/* DNT Settings option for only turning on when Tracking Protection is also on */
+"Settings.DNT.OptionOnWithTP" = "Kun når jeg bruger beskyttelse mod sporing";
+
+/* DNT Settings title */
+"Settings.DNT.Title" = "Send websteder signalet \"Spor mig ikke\" for at fortælle, at du ikke vil spores";
+
+/* Label used for the device name settings section. */
+"Settings.FxA.DeviceName" = "Enhedens navn";
+
+/* Label used as a section title in the Firefox Accounts Settings screen. */
+"Settings.FxA.Sync.SectionName" = "Indstillinger for synkronisering";
+
+/* Title displayed in header of the FxA settings panel. */
+"Settings.FxA.Title" = "Firefox-konto";
+
+/* General settings section title */
+"Settings.General.SectionName" = "Generelt";
+
+/* Button in settings to clear the home page. */
+"Settings.HomePage.Clear.Button" = "Ryd";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "Startside";
+
+/* Title displayed in header of the setting panel. */
+"Settings.HomePage.Title" = "Indstillinger for Startside";
+
+/* Placeholder text in the homepage setting when no homepage has been set. */
+"Settings.HomePage.URL.Placeholder" = "Indtast en webside";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "Nuværende startside";
+
+/* Button in settings to use the current link on the clipboard as home page. */
+"Settings.HomePage.UseCopiedLink.Button" = "Anvend kopieret link";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "Anvend nuværende side";
+
+/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
+"Settings.HomePage.UseDefault.Button" = "Brug standard";
+
+/* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
+"Settings.LoginsAndPasswordsTitle" = "Logins & adgangskoder";
+
+/* Label used to set a custom url as the new tab option (homepage). */
+"Settings.NewTab.CustomURL" = "Tilpasset URL";
+
+/* A description in settings of what the new tab choice means */
+"Settings.NewTab.Description" = "Når du åbner et nyt faneblad:";
+
+/* The title of the section in newtab that lets you modify the topsites panel */
+"Settings.NewTab.Option.ASTitle" = "Tilpas Mest besøgte websider";
+
+/* Option in settings to show a blank page when you open a new tab */
+"Settings.NewTab.Option.BlankPage" = "Tom side";
+
+/* Option in settings to show bookmarks when you open a new tab */
+"Settings.NewTab.Option.Bookmarks" = "Bogmærker";
+
+/* The footer for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeFooter" = "Dine mest besøgte sider";
+
+/* The title for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeTitle" = "Tilpas startsiden i Firefox";
+
+/* Option in settings to show Firefox Home when you open a new tab */
+"Settings.NewTab.Option.FirefoxHome" = "Firefox' startside";
+
+/* Option in the settings to turn off recent bookmarks in the Highlights section */
+"Settings.NewTab.Option.HighlightsBookmarks" = "Seneste bogmærker";
+
+/* Option in settings to turn off history in the highlights section */
+"Settings.NewTab.Option.HighlightsHistory" = "Besøgte";
+
+/* Option in settings to show history when you open a new tab */
+"Settings.NewTab.Option.History" = "Historik";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.HomePage" = "Startside";
+
+/* Option in settings to turn on off pocket recommendations */
+"Settings.NewTab.Option.Pocket" = "Populære på Pocket";
+
+/* Footer caption for pocket settings */
+"Settings.NewTab.Option.PocketFooter" = "Godt indhold fra nettet.";
+
+/* Option in settings to show reading list when you open a new tab */
+"Settings.NewTab.Option.ReadingList" = "Vis din læseliste";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
+"Settings.NewTab.SectionName" = "Nyt faneblad";
+
+/* Title displayed in header of the setting panel. */
+"Settings.NewTab.Title" = "Nyt faneblad";
+
+/* Label at the top of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionName" = "Vis";
+
+/* Footer at the bottom of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionNameFooter" = "Vælg, hvad der indlæses, når du åbner et nyt faneblad";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Status" = "Når Firefox bliver åbnet";
+
+/* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Title" = "Tilbyd at åbne kopierede links";
+
+/* Title for Open With Settings */
+"Settings.OpenWith.PageTitle" = "Åbn mail-links i";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
+"Settings.OpenWith.SectionName" = "Åbn med";
+
+/* Setting to enable the built-in password manager */
+"Settings.SaveLogins.Title" = "Gem logins";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "Færdig";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "Rediger";
+
+/* title for a link that explains how mozilla collects telemetry */
+"Settings.SendUsage.Link" = "Læs mere.";
+
+/* A short description that explains why mozilla collects usage data. */
+"Settings.SendUsage.Message" = "Mozilla stræber efter kun at indsamle, hvad vi skal bruge for at kunne tilbyde og forbedre Firefox for alle.";
+
+/* The title for the setting to send usage data. */
+"Settings.SendUsage.Title" = "Send data for anvendelse";
+
+/* Description displayed under the ”Show Link Previews” option */
+"Settings.ShowLinkPreviews.Status" = "Når du trykker længe på links";
+
+/* Title of setting to enable link previews when long-pressing links. */
+"Settings.ShowLinkPreviews.Title" = "Forhåndsvis links";
+
+/* Setting to show Logins & Passwords quick access in the application menu */
+"Settings.ShowLoginsInAppMenu.Title" = "Vis i program-menuen";
+
+/* The description of the open new tab siri shortcut */
+"Settings.Siri.OpenTabShortcut" = "Åbn et nyt faneblad";
+
+/* The description that describes what siri shortcuts are */
+"Settings.Siri.SectionDescription" = "Brug genveje i Siri til hurtigt at åbne Firefox";
+
+/* The option that takes you to the siri shortcuts settings page */
+"Settings.Siri.SectionName" = "Siri-genveje";
+
+/* Dismiss button for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Button" = "Ok, forstået";
+
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "Hvis et websted ikke virker som ventet, så kan du trykke på skjoldet i adressefeltet og slå Udvidet beskyttelse mod sporing fra for webstedet.";
+
+/* Title for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Title" = "Vigtigt!";
+
+/* Header description for tracking protection options section where Basic/Strict block list can be selected */
+"Settings.TrackingProtection.BlockListsHeader" = "Du kan vælge, hvilken liste Firefox skal bruge til at blokere net-elementer, der kan spore din aktivitet på nettet.";
+
+/* Explanation of basic mode. */
+"Settings.TrackingProtection.Info.BasicTitle" = "Balanceret mellem beskyttelse og ydelse.";
+
+/* The Title on info view which shows a list of all blocked websites */
+"Settings.TrackingProtection.Info.BlocksTitle" = "BLOKERER";
+
+/* Explanation of strict mode. */
+"Settings.TrackingProtection.Info.StrictTitle" = "Bedre beskyttelse, men kan forhindre nogle websteder i at fungere.";
+
+/* 'Learn more' info link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.LearnMore" = "Læs mere";
+
+/* 'More Info' link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.MoreInfo" = "Læs mere…";
+
+/* Additional information about your Enhanced Tracking Protection */
+"Settings.TrackingProtection.ProtectionCellFooter" = "Reducerer antallet af målrettede reklamer og gør det sværere for annoncørerne at følge din adfærd på nettet.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "Hvis et websted ikke virker som ventet, så kan du trykke på skjoldet i adressefeltet og slå Udvidet beskyttelse mod sporing fra for webstedet.";
+
+/* Description for standard level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Tillader noget sporing fra reklamer, så websteder fungerer korrekt.";
+
+/* Description for strict level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "Blokerer flere sporings-mekanismer, reklamer og pop ups. Sider indlæses hurtigere, men noget funktionalitet virker måske ikke.";
+
+/* Title for tracking protection options section where level can be selected. */
+"Settings.TrackingProtection.ProtectionLevelTitle" = "Beskyttelsesniveau";
+
+/* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
+"Settings.TrackingProtection.SectionName" = "Beskyttelse mod sporing";
+
+/* Additional information about the strict level setting */
+"Settings.TrackingProtection.StrictLevelInfoFooter" = "Blokering af sporings-tjenester kan påvirke funktionaliteten på nogle websteder.";
+
+/* Tracking protection settings option for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BasicBlockList" = "Standard";
+
+/* Tracking protection settings option description for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BlockListBasicDescription" = "Tillader nogle sporings-elementer, så websteder fungerer som de skal.";
+
+/* Tracking protection settings option for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrict" = "Striks";
+
+/* Tracking protection settings option description for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrictDescription" = "Blokerer kendte sporings-elementer. Nogle websteder fungerer måske ikke som de skal.";
+
+/* Description label shown on tracking protection options screen. */
+"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "Sporing betyder, at data om dine vaner på nettet indsamles på tværs af websteder.";
+
+/* Settings option to specify that Tracking Protection is on */
+"Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "Udvidet beskyttelse mod sporing";
+
+/* Translation settings footer describing how language detection and translation happens. */
+"Settings.TranslateSnackBar.SectionFooter" = "Websiders sprog detekteres på enheden, og en oversættelse fra en ekstern service tilbydes.";
+
+/* Translation settings section title */
+"Settings.TranslateSnackBar.SectionHeader" = "Tjenester";
+
+/* Switch to choose if the language of a page is detected and offer to translate. */
+"Settings.TranslateSnackBar.SwitchSubtitle" = "Tilbyd at oversætte alle websteder, der ikke vises på dit valgte standard-sprog.";
+
+/* Switch to choose if the language of a page is detected and offer to translate. */
+"Settings.TranslateSnackBar.SwitchTitle" = "Tilbyd oversættelse";
+
+/* Title in main app settings for Translation toast settings */
+"Settings.TranslateSnackBar.Title" = "Oversættelse";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "Fejlfinding";
+
+/* Button to delete website in search results */
+"Settings.WebsiteData.ButtonDelete" = "Slet";
+
+/* Button to exit edit website search results */
+"Settings.WebsiteData.ButtonDone" = "Færdig";
+
+/* Button to edit website search results */
+"Settings.WebsiteData.ButtonEdit" = "Rediger";
+
+/* Button shows all websites on website data tableview */
+"Settings.WebsiteData.ButtonShowMore" = "Vis flere";
+
+/* Description of the confirmation dialog shown when a user tries to clear their private data. */
+"Settings.WebsiteData.ConfirmPrompt" = "Denne handling rydder alle dine webstedsdata. Handlingen kan ikke fortrydes.";
+
+/* Title displayed in header of the Data Management panel. */
+"Settings.WebsiteData.Title" = "Webstedsdata";
+
+/* Action label on share extension to add page to the Firefox reading list. */
+"ShareExtension.AddToReadingListAction.Title" = "Føj til læseliste";
+
+/* Share extension label shown after user has performed 'Add to Reading List' action. */
+"ShareExtension.AddToReadingListActionDone.Title" = "Føjet til læseliste";
+
+/* Action label on share extension to bookmark the page in Firefox. */
+"ShareExtension.BookmarkThisPageAction.Title" = "Bogmærk denne side";
+
+/* Share extension label shown after user has performed 'Bookmark this Page' action. */
+"ShareExtension.BookmarkThisPageActionDone.Title" = "Bogmærket";
+
+/* Action label on share extension to load the page in Firefox when user switches apps to bring it to foreground. */
+"ShareExtension.LoadInBackgroundAction.Title" = "Indlæs i baggrunden";
+
+/* Share extension label shown after user has performed 'Load in Background' action. */
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Indlæses i Firefox";
+
+/* Action label on share extension to immediately open page in Firefox. */
+"ShareExtension.OpenInFirefoxAction.Title" = "Åbn i Firefox";
+
+/* Action label on share extension to immediately open page in Firefox in private mode. */
+"ShareExtension.OpenInPrivateModeAction.Title" = "Åbn i privat tilstand";
+
+/* Action label on share extension to search for the selected text in Firefox. */
+"ShareExtension.SeachInFirefoxAction.Title" = "Søg i Firefox";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "Vis søgeforslag";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "Vis faneblade";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "Start rundvisning";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "Stop";
+
+/* Support section title */
+"Support" = "Support";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Stryg til højre eller venstre med tre fingre for at lukke fanebladet.";
+
+/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"SwitchToNonPBM.KeyCodeTitle" = "Normal browsing-tilstand";
+
+/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"SwitchToPBM.KeyCodeTitle" = "Privat browsing-tilstand";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, bookmarks, passwords and more." = "Synkronisér dine faneblade, bogmærker, adgangskoder m.m.";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, passwords and more." = "Synkroniser dine faneblade, adgangskoder og mere.";
+
+/* Message displayed when the user syncs for the first time */
+"Sync.FirstTimeMessage.Label" = "Din første synkronisering kan tage et stykke tid";
+
+/* String displayed on Sign In to Sync page that allows the user to create a new account. */
+"Sync.NoAccount.Description" = "Ingen konto? Opret en for at synkronisere Firefox mellem enheder.";
+
+/* Message displayed when the user's account is syncing with no ellipsis */
+"Sync.Syncing.Label" = "Synkroniserer";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "Synkroniserer…";
+
+/* Panel accessibility label */
+"Synced Tabs" = "Synkroniserede faneblade";
+
+/* The Bookmark sync component, used in SyncState.Partial.Title */
+"SyncState.Bookmark.Title" = "Bogmærker";
+
+/* The Remote Clients sync component, used in SyncState.Partial.Title */
+"SyncState.Clients.Title" = "Fjern-klienter";
+
+/* Title for Sync status message when synchronization failed to complete */
+"SyncState.Failed.Title" = "Synkronisering mislykkedes";
+
+/* The History sync component, used in SyncState.Partial.Title */
+"SyncState.History.Title" = "Historik";
+
+/* The Logins sync component, used in SyncState.Partial.Title */
+"SyncState.Logins.Title" = "Logins";
+
+/* Title for Sync status message when Sync failed to start. */
+"SyncState.NotStarted.Title" = "Sync er ikke tilgængelig";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "Sync er offline";
+
+/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
+"SyncState.Partial.Title" = "Sync har problemer med at synkronisere %@";
+
+/* The Tabs sync component, used in SyncState.Partial.Title */
+"SyncState.Tabs.Title" = "Faneblade";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "Faneblad %1$@ af %2$@";
+
+/* Hardware shortcut to open the tab tray from a tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"Tab.ShowTabTray.KeyCodeTitle" = "Vis alle faneblade";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "Faneblade %1$@ til %2$@ af %3$@";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Fanebladsbakke";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "Fortryd";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "%d faneblad(e) lukket";
+
+/* The placeholder text for the tab search bar */
+"Tabs.Search.PlaceholderText" = "Søg i faneblade";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"TabTray.AddTab.Button" = "Tilføj faneblad";
+
+/* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseAllTabs.KeyCodeTitle" = "Luk alle faneblade";
+
+/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseTab.KeyCodeTitle" = "Luk det valgte faneblad";
+
+/* The section header for tabs opened last week */
+"TabTray.LastWeek.Header" = "Sidste uge";
+
+/* The title on the button to copy the tab address. */
+"TabTray.MoreMenu.Copy" = "Kopier";
+
+/* The section header for tabs opened before last week */
+"TabTray.Older.Header" = "Ældre";
+
+/* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenNewTab.KeyCodeTitle" = "Nyt faneblad";
+
+/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenSelectedTab.KeyCodeTitle" = "Åbn det valgte faneblad";
+
+/* The button title to see more options to perform on the tab. */
+"TabTray.SwipeMenu.More" = "Flere";
+
+/* The title for the tab tray */
+"TabTray.Title" = "Åbne faneblade";
+
+/* The section header for tabs opened today */
+"TabTray.Today.Header" = "I dag";
+
+/* The section header for tabs opened yesterday */
+"TabTray.Yesterday.Header" = "I går";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "Siden kunne ikke vises i læsevisning.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Der opstod et problem med at tilgå faneblade fra dine andre enheder. Prøv igen om et øjeblik.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "Der opstod en fejl, da siden skulle konverteres";
+
+/* Relative date for date in past week. */
+"this week" = "denne uge";
+
+/* label for Not Now button */
+"Toasts.NotNow" = "Ikke nu";
+
+/* Open App Store button */
+"Toasts.OpenAppStore" = "Åbn App Store";
+
+/* Label for button to undo the action just performed */
+"Toasts.Undo" = "Fortryd";
+
+/* History tableview section header */
+"Today" = "I dag";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "i dag kl. %@";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "Menu";
+
+/* Accessibility label for the Close All Tabs menu button. */
+"Toolbar.Menu.CloseAllTabs" = "Luk alle faneblade";
+
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "Dine oftest besøgte websider vil blive vist her.";
+
+/* The title for the empty Top Sites state */
+"TopSites.EmptyState.Title" = "Velkommen til Mest besøgte websider";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "Fjern siden - %@";
+
+/* Button to disallow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.Cancel" = "Nej";
+
+/* Button to allow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.OK" = "Ja";
+
+/* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
+"TranslationToastHandler.PromptTranslate.Title" = "Websiden ser ud til at være på %1$@. Vil du have den oversat til %2$@ ved hjælp af %3$@?";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* The menu item that pastes the current contents of the clipboard into the URL bar and navigates to the page */
+"UIMenuItem.PasteGo" = "Indsæt og gå";
+
+/* Search in New Tab Text selection menu item */
+"UIMenuItem.SearchWithFirefox" = "Søg med Firefox";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "ulæst";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect" = "Opdater Firefox for at forbinde";
+
+/* Debug option */
+"Use stage servers" = "Brug test-servere";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Brugernavn";
+
+/* Text message in the settings table view */
+"Verify your email address" = "Bekræft din mailadresse";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "Version %1$@ (%2$@)";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Webindhold";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Velkommen til din læseliste";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "Se, det her er pinligt...";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Wikipedia";
+
+/* Relative date for yesterday. */
+"yesterday" = "i går";
+
+/* History tableview section header */
+"Yesterday" = "I går";
+
+/* Error message in the remote tabs panel */
+"You don’t have any tabs open in Firefox on your other devices." = "Du har ikke nogle åbne faneblade i Firefox på dine andre enheder.";
+
+/* Your Rights settings section title */
+"Your Rights" = "Dine rettigheder";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+

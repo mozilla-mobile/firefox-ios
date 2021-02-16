@@ -1,0 +1,1712 @@
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "Erabiltzaile-izena eta pasahitza eskatzen ditu %@ guneak.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "Erabiltzaile-izena eta pasahitza eskatzen ditu %1$@ guneak. Guneak hau dio: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "Honi buruz";
+
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite" = "Ainguratu gune erabilienetara";
+
+/* The title for removing a pinned topsite action */
+"ActivityStream.ContextMenu.RemovePinTopsite" = "Kendu ainguratutako gunea";
+
+/* The description of a highlight if it is a site the user has bookmarked */
+"ActivityStream.Highlights.Bookmark" = "Laster-marka eginda";
+
+/* The description of a highlight if it is a site the user has visited */
+"ActivityStream.Highlights.Visited" = "Bisitatua";
+
+/* Section title label for recently bookmarked websites */
+"ActivityStream.NewRecentBookmarks.Title" = "Azken laster-markak";
+
+/* The link that shows more Pocket trending stories */
+"ActivityStream.Pocket.MoreLink" = "Gehiago";
+
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle" = "Pocket-eko joerak";
+
+/* The description of a Pocket Story */
+"ActivityStream.Pocket.Trending" = "Joerak";
+
+/* Section title label for recently visited websites */
+"ActivityStream.RecentHistory.Title" = "Bisitatutako azkenak";
+
+/* label showing how many rows of topsites are shown. %d represents a number */
+"ActivityStream.TopSites.RowCount" = "Errenkadak: %d";
+
+/* The title for the setting page which lets you select the number of top site rows */
+"ActivityStream.TopSites.RowSettingFooter" = "Ezarri errenkadak";
+
+/* Section title label for Top Sites */
+"ActivityStream.TopSites.SectionTitle" = "Gune erabilienak";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Gehitu fitxa";
+
+/* Accessibility label for action adding current page to reading list.
+   Name for button adding current article to reading list in reader mode */
+"Add to Reading List" = "Gehitu irakurketa-zerrendan";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Orria irakurketa-zerrendan gehitu da";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "Ados";
+
+/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Message" = "Errorera gertatu da txartela Wallet-era gehitzean. Saiatu berriro geroago.";
+
+/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Title" = "Txartela gehitzeak huts egin du";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Helbidea eta bilaketa";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Bidali beti";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "Autentifikazioa behar da";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "Itzuli";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Blokeatu popup leihoak";
+
+/* The header title for the fields when editing a Bookmark */
+"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "Laster-marka";
+
+/* The header title for the fields when editing a Folder */
+"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "Karpeta";
+
+/* The label for the Title field when editing a bookmark */
+"Bookmark.DetailFieldTitle.Label" = "Izenburua";
+
+/* The label for the URL field when editing a bookmark */
+"Bookmark.DetailFieldURL.Label" = "URLa";
+
+/* Toggle bookmarks syncing setting */
+"Bookmarks" = "Laster-markak";
+
+/* The button on the snackbar to edit a bookmark after adding it. */
+"Bookmarks.Edit.Button" = "Editatu";
+
+/* The button to edit a bookmark */
+"Bookmarks.EditBookmark.Label" = "Editatu laster-marka";
+
+/* The button to edit a folder */
+"Bookmarks.EditFolder.Label" = "Editatu karpeta";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "Karpeta";
+
+/* The label for the location of the new folder */
+"Bookmarks.FolderLocation.Label" = "Kokalekua";
+
+/* The label for the title of the new folder */
+"Bookmarks.FolderName.Label" = "Karpetaren izena";
+
+/* The button to create a new bookmark */
+"Bookmarks.NewBookmark.Label" = "Laster-marka berria";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "Karpeta berria";
+
+/* The button to create a new separator */
+"Bookmarks.NewSeparator.Label" = "Bereizle berria";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "Izenburua";
+
+/* The label for the URL of a bookmark */
+"Bookmarks.URL.Label" = "URLa";
+
+/* Status label for the empty Bookmarks state. */
+"BookmarksPanel.EmptyState.Title" = "Gordetako laster-markak hemen agertuko dira.";
+
+/* Describes the date on which the breach occurred */
+"BreachAlerts.BreachDate" = "Urratzea data honetan gertatu zen";
+
+/* Description of what a breach is */
+"BreachAlerts.Description" = "Zure pasahitza aldatu zenuen azken alditik pasahitzak jakitera eman edo lapurtu egin dira. Kontu hau babesteko, hasi saioa gunean eta aldatu pasahitza.";
+
+/* Link to monitor.firefox.com to learn more about breached passwords */
+"BreachAlerts.LearnMoreButton" = "Argibide gehiago";
+
+/* Leads to a link to the breached website */
+"BreachAlerts.Link" = "Joan webgunera";
+
+/* Title for the Breached Login Detail View. */
+"BreachAlerts.Title" = "Webgune-urratzea";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Distira";
+
+/* Label for Cancel button */
+"Cancel" = "Utzi";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Itxuraren kolorea aldatzen du.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Letra-tipo mota aldatzen du.";
+
+/* The button to open a new tab with the copied link */
+"ClipboardToast.GoToCopiedLink.Button" = "Joan";
+
+/* Message displayed when the user has a copied link on the clipboard */
+"ClipboardToast.GoToCopiedLink.Title" = "Joan kopiatutako loturara?";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Itxi";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "Fitxa ixten";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "ordenagailua";
+
+/* Context menu item for bookmarking a link URL */
+"ContextMenu.BookmarkLinkButtonTitle" = "Egin loturaren laster-marka";
+
+/* The button text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Aldatu";
+
+/* The label text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Fitxa pribatu berria irekita";
+
+/* The button text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "Aldatu";
+
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText" = "Fitxa berria irekita";
+
+/* Context menu item for copying an image to the clipboard */
+"ContextMenu.CopyImageButtonTitle" = "Kopiatu irudia";
+
+/* Context menu item for copying an image URL to the clipboard */
+"ContextMenu.CopyImageLinkButtonTitle" = "Kopiatu irudiaren lotura";
+
+/* Context menu item for copying a link URL to the clipboard */
+"ContextMenu.CopyLinkButtonTitle" = "Kopiatu lotura";
+
+/* Context menu item for downloading a link URL */
+"ContextMenu.DownloadLinkButtonTitle" = "Deskargatu lotura";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenInNewTabButtonTitle" = "Ireki fitxa berrian";
+
+/* Context menu item for saving an image */
+"ContextMenu.SaveImageButtonTitle" = "Gorde irudia";
+
+/* Context menu item for sharing a link URL */
+"ContextMenu.ShareLinkButtonTitle" = "Partekatu lotura";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "Ezin da orria irakurketa-zerrendan gehitu";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it’s already there?" = "Ezin da orria irakurketa-zerrendan gehitu. Dagoeneko hor dago agian?";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "Ezin da orria kargatu.";
+
+/* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
+"CoverSheet.v22.DarkMode.Description" = "iOS 13ren erabiltzaileentzat, Firefoxek orain automatikoki aldatuko dut itxura ilunera telefonoa ere modu ilunean ezarrita badago. Portaera hau aldatzeko, joan Ezarpenak > Itxura atalera.";
+
+/* Title for the new dark mode change in the version 22 app release. */
+"CoverSheet.v22.DarkMode.Title" = "Itxura ilunak orain teklatu eta harrerako pantaila ilunak ere badakartza.";
+
+/* Description for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Description" = "Jarraipenaren babes hobetuak zure jarraipena egiten duten iragarkiak gelditzen laguntzen du. Akitbatu modu zorrotza oraindik eta jarraipen-elementu, iragarki eta popup leiho gehiago blokeatzeko.";
+
+/* Text for the new ETP settings button */
+"CoverSheet.v24.ETP.Settings.Button" = "Joan ezarpenetara";
+
+/* Title for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Title" = "Iragarkien jarraipenaren aurkako babesa";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Sortu kontua";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Iluna";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Txikiagotu testuaren tamaina";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Bilaketa-motor lehenetsia";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Bistaratze-ezarpenak";
+
+/* Used as a button label for crash dialog prompt */
+"Don’t Send" = "Ez bidali";
+
+/* Done button on left side of the Settings view controller title bar */
+"Done" = "Eginda";
+
+/* Panel accessibility label */
+"Downloads" = "Deskargak";
+
+/* The label of the button the user will press to start downloading a file */
+"Downloads.Alert.DownloadNow" = "Deskargatu orain";
+
+/* Button confirming the cancellation of the download. */
+"Downloads.CancelDialog.Cancel" = "Utzi";
+
+/* Alert dialog body when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Message" = "Ziur zaude deskarga hau bertan behera utzi nahi duzula?";
+
+/* Button declining the cancellation of the download. */
+"Downloads.CancelDialog.Resume" = "Berrekin";
+
+/* Alert dialog title when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Title" = "Utzi deskarga";
+
+/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
+"Downloads.Error.Message" = "Oraindik ez dira deskargak onartzen Firefoxen.";
+
+/* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
+"Downloads.Toast.Cancelled.LabelText" = "Deskargak utzita";
+
+/* The label text in the Download Failed toast for showing confirmation that the download has failed. */
+"Downloads.Toast.Failed.LabelText" = "Deskargak huts egin du";
+
+/* The button to retry a failed download from the Download Failed toast. */
+"Downloads.Toast.Failed.RetryButton" = "Saiatu berriro";
+
+/* The button to open a new tab with the Downloads home panel */
+"Downloads.Toast.GoToDownloads.Button" = "Deskargak";
+
+/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. */
+"Downloads.Toast.MultipleFiles.DescriptionText" = "%d/1 fitxategi";
+
+/* The description text in the Download progress toast for showing the number of files (1$) and download progress (2$). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where 1$ is Downloads.Toast.MultipleFiles.DescriptionText and 2$ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and 1$ should come before 2$ everywhere except for right-to-left locales. */
+"Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";
+
+/* The description text in the Download progress toast for showing the downloaded file size (1$) out of the total expected file size (2$). */
+"Downloads.Toast.Progress.DescriptionText" = "%2$@/%1$@";
+
+/* Action button for deleting downloaded files in the Downloads panel. */
+"DownloadsPanel.Delete.Title" = "Ezabatu";
+
+/* Title for the Downloads Panel empty state. */
+"DownloadsPanel.EmptyState.Title" = "Deskargatutako fitxategiak hemen erakutsiko dira.";
+
+/* Action button for sharing downloaded files in the Downloads panel. */
+"DownloadsPanel.Share.Title" = "Partekatu";
+
+/* Text message in the settings table view */
+"Enter your password to connect" = "Konektatzeko, sartu zure pasahitza";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "Aurreratua";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "Abisua: ezin dugu berretsi webgune honetarako zure konexioa segurua dela.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "Konfigurazio okerra edo erasotzaile baten faltsutze-saiakera izan daiteke. Jarraitu balizko arriskua onartzen baduzu.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "%@ gunearen jabeak webgunea gaizki konfiguratu du. Zure informazioa lapurtzea saihesteko, Firefox ez da webgune honetara konektatu.";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "Konexio hau ez da fidagarria";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "Joan atzera";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "Bisitatu gunea halere";
+
+/* Question shown to user when tapping a link that opens the App Store app */
+"ExternalLink.AppStore.ConfirmationTitle" = "Ireki lotura hau App Store aplikazioan?";
+
+/* Question shown to user when tapping an SMS or MailTo link that opens the external app for those. */
+"ExternalLink.AppStore.GenericConfirmationTitle" = "Lotura hau kanpoko aplikazioan ireki?";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Title for firefox about:home page in tab history list */
+"Firefox.HomePage.Title" = "Firefoxen hasiera-orria";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "Aurrera";
+
+/* Label stating how to disconnect account */
+"FxA.AccountVerificationDetails" = "Helbide elektroniko okerra? Deskonektatu behean eta hasi berriro.";
+
+/* Label stating your account is not verified */
+"FxA.AccountVerificationRequired" = "Kontuaren egiaztapena behar da";
+
+/* Message explaining that user needs to check email for Firefox Account verfication link. */
+"FxA.AccountVerificationRequiredSurface" = "%@ helbidea egiaztatu behar duzu. Begiratu zure posta Firefoxen egiaztapen-loturarako.";
+
+/* Button label to connect another device to Sync */
+"FxA.ConnectAnotherDevice" = "Konektatu beste gailu bat";
+
+/* Settings section title for Firefox Account */
+"FxA.FirefoxAccount" = "Firefox kontua";
+
+/* Button label to go to Firefox Account settings */
+"FxA.ManageAccount" = "Kudeatu kontua eta gailuak";
+
+/* Label when no internet is present */
+"FxA.NoInternetConnection" = "Internet konexiorik ez";
+
+/* Button label to open Sync preferences */
+"FxA.OpenSyncPreferences" = "Ireki Sync hobespenak";
+
+/* Instructions shown on qr code scanning view */
+"fxa.qr-scanning-view.instructions" = "Eskaneatu firefox.com/pair helbideko QR kodea";
+
+/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
+"FxA.RemoveAccount" = "Kendu";
+
+/* Description string for alert view that gets presented when user tries to remove an account. */
+"FxA.RemoveAccountAlertMessage" = "Kendu gailu honekin erlazionatutako Firefox kontua beste erabiltzaile batekin saioa hasteko.";
+
+/* Remove account alert is the final confirmation before user removes their firefox account */
+"FxA.RemoveAccountAlertTitle" = "Kendu kontua";
+
+/* Button label to resend email */
+"FxA.ResendEmail" = "Birbidali mezua";
+
+/* FxA sign in view subtitle */
+"fxa.signin.camera-signin" = "Hasi saioa zure kamerarekin";
+
+/* FxA sign in create account label. */
+"fxa.signin.create-account-pt-1" = "Firefox gailuen artean sinkronizatu kontu bat erabiliz.";
+
+/* FxA sign in create account label. This will be linked to the site to create an account. */
+"fxa.signin.create-account-pt-2" = "Sortu Firefox kontua.";
+
+/* FxA sign in view qr code instructions */
+"fxa.signin.qr-link-instruction" = "Ireki Firefox zure ordenagailuan eta zoaz firefox.com/pair helbidera";
+
+/* FxA sign in view qr code scan button */
+"fxa.signin.ready-to-scan" = "Eskaneatzeko prest";
+
+/* FxA sign in view title */
+"fxa.signin.turn-on-sync" = "Gaitu sinkronizazioa";
+
+/* FxA sign in view email login button */
+"fxa.signin.use-email-instead" = "Erabili helbide elektronikoa horren ordez";
+
+/* Button label to sign into Sync */
+"FxA.SignIntoSync" = "Hasi saioa Sync-en";
+
+/* Label explaining what sync does */
+"FxA.SyncExplain" = "Eskuratu zure fitxak, laster-markak eta pasahitzak zure beste gailuetatik.";
+
+/* Button label to Sync your Firefox Account */
+"FxA.SyncNow" = "Sinkronizatu orain";
+
+/* Call to action for sign into sync button */
+"FxA.TakeYourWebWithYou" = "Eraman ezazu weba zurekin";
+
+/* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
+"FxAPush_DeviceConnected_body" = "Firefox Sync %@ gailura konektatu da";
+
+/* Title of a notification displayed when another device has connected to FxA. */
+"FxAPush_DeviceConnected_title" = "Sync konektatuta";
+
+/* Body of a notification displayed when named device has been disconnected from FxA. %@ refers to the name of the disconnected device. */
+"FxAPush_DeviceDisconnected_body" = "%@ gailua ondo deskonektatu da.";
+
+/* Body of a notification displayed when this device has been disconnected from FxA by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Gailu hau Firefox Sync-etik ondo deskonektatu da.";
+
+/* Title of a notification displayed when this device has been disconnected by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync deskonektatuta";
+
+/* Title of a notification displayed when named device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_title" = "Sync deskonektatuta";
+
+/* Body of a notification displayed when unnamed device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Gailu bat Firefox Sync-etik deskonektatu da";
+
+/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "Eskuratu irekitako fitxak, laster-markak eta pasahitzak zure beste gailuetatik.";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Laguntza";
+
+/* Toggle history syncing setting */
+"History" = "Historia";
+
+/* Title for button in the history panel to clear recent history */
+"HistoryPanel.ClearHistoryButtonTitle" = "Garbitu azken historia…";
+
+/* Option title to clear all browsing history. */
+"HistoryPanel.ClearHistoryMenuOptionEverything" = "Dena";
+
+/* Button to perform action to clear history for the last hour */
+"HistoryPanel.ClearHistoryMenuOptionTheLastHour" = "Azken ordua";
+
+/* Button to perform action to clear history for today only */
+"HistoryPanel.ClearHistoryMenuOptionToday" = "Gaur";
+
+/* Button to perform action to clear history for yesterday and today */
+"HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "Gaur eta atzo";
+
+/* Title for popup action menu to clear recent history. */
+"HistoryPanel.ClearHistoryMenuTitle" = "Azken historia garbitzean historia, cookieak eta bestelako nabigazio-datuak kenduko dira.";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "Bisitatutako azken webguneak hemen agertuko dira.";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "Zure beste gailuetako fitxak hemen agertuko dira.";
+
+/* Description for the empty synced tabs 'not signed in' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Hasi saioa zure beste gailuetako fitxak ikusteko.";
+
+/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "Zure kontua egiaztatu egin behar da.";
+
+/* Description for the empty synced tabs 'single device Sync' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "Beste gailuetako zure fitxak hemen ikusi nahi dituzu?";
+
+/* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Aktibatu fitxak sinkronizatzea zure beste gailuetako fitxen zerrenda ikusteko.";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "Historia";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "Itxitako azkenak";
+
+/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d gailu konektatuta";
+
+/* Title for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Title" = "Sinkronizatutako gailuak";
+
+/* Button cancelling changes setting the home page for the first time. */
+"HomePage.Set.Dialog.Cancel" = "Utzi";
+
+/* Alert dialog body when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Message" = "Edozein unetan alda dezakezu ezarpenetan";
+
+/* Button accepting changes setting the home page for the first time. */
+"HomePage.Set.Dialog.OK" = "Ezarri hasiera-orria";
+
+/* Alert dialog title when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Title" = "Orri hau zure hasiera-orri gisa erabili nahi duzu?";
+
+/* The title for the Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Bookmark" = "Laster-marka";
+
+/* The title for the Delete from History context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.DeleteFromHistory" = "Ezabatu historiatik";
+
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab" = "Ireki fitxa pribatu berrian";
+
+/* The title for the Open in New Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewTab" = "Ireki fitxa berrian";
+
+/* The title for the Remove context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Remove" = "Kendu";
+
+/* The title for the Remove Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.RemoveBookmark" = "Kendu laster-marka";
+
+/* The title for the Share context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Share" = "Partekatu";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Back.DiscoveryTitle" = "Itzuli";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.CloseTab.DiscoveryTitle" = "Itxi fitxa";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Find.DiscoveryTitle" = "Bilatu";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Forward.DiscoveryTitle" = "Aurrera";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "Fitxa pribatu berria";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewTab.DiscoveryTitle" = "Fitxa berria";
+
+/* Label to switch to normal browsing mode */
+"Hotkeys.NormalMode.DiscoveryTitle" = "Nabigatze modu normala";
+
+/* Label to switch to private browsing mode */
+"Hotkeys.PrivateMode.DiscoveryTitle" = "Nabigatze pribatuko modua";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Reload.DiscoveryTitle" = "Berritu orria";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "Hautatu helbide-barra";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "Erakutsi hurrengo fitxa";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Erakutsi aurreko fitxa";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Handiagotu testuaren tamaina";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "orain";
+
+/* History tableview section header */
+"Last month" = "Azken hilabetea";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "Azken sinkronizazioa: %@";
+
+/* History tableview section header */
+"Last week" = "Aurreko astea";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Lizentziak";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Argia";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "Kargatu jatorrizko orria";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "Edukia kargatzen…";
+
+/* Authentication prompt log in button */
+"Log in" = "Hasi saioa";
+
+/* Toggle logins syncing setting */
+"Logins" = "Saio-hasierak";
+
+/* Login detail view field name for the last modified date */
+"LoginsDetailView.LoginModified" = "Aldatuta";
+
+/* Title for the login detail view */
+"LoginsDetailView.LoginTitle" = "Saio-hasiera";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "Ez gorde";
+
+/* Button to not update the user's password */
+"LoginsHelper.DontUpdate.Button" = "Ez eguneratu";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "Gorde %1$@ erabiltzailearen saio-hasiera %2$@ gunerako?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "Gorde pasahitza %@ erabiltzailearentzako?";
+
+/* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
+"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "Eguneratu saio-hasiera %@ gunerako?";
+
+/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "Eguneratu %1$@ erabiltzailearen saio-hasiera %2$@ gunerako?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "Gorde saio-hasiera";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "Eguneratu";
+
+/* For filtering the login list, search only the login names */
+"LoginsList.LoginsListFilterLogin" = "Saio-hasiera";
+
+/* For filtering the login list, search both website and login names. */
+"LoginsList.LoginsListFilterSearchAll" = "Denak";
+
+/* For filtering the login list, search only the website names */
+"LoginsList.LoginsListFilterWebsite" = "Webgunea";
+
+/* Placeholder test for search box in logins list view. */
+"LoginsList.LoginsListSearchPlaceholder" = "Iragazkia";
+
+/* Title for the list of logins */
+"LoginsList.Title" = "GORDETAKO SAIO-HASIERAK";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Badirudi Firefoxek aurretik huts egin duela. Zure fitxak berreskuratu nahi dituzu?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "Markatu irakurritako gisa";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Markatu irakurri gabeko gisa";
+
+/* Toast displayed to the user after a bookmark has been added. */
+"Menu.AddBookmark.Confirm" = "Laster-marka gehituta";
+
+/* Toast displayed to the user after adding the item to the Top Sites. */
+"Menu.AddPin.Confirm" = "Gune erabilienetara ainguratuta";
+
+/* Toast displayed to the user after adding the item to their reading list. */
+"Menu.AddToReadingList.Confirm" = "Irakurketa-zerrendan gehitu da";
+
+/* The title for the button that lets you copy the url from the location bar. */
+"Menu.Copy.Title" = "Kopiatu helbidea";
+
+/* Toast displayed to user after copy url pressed. */
+"Menu.CopyURL.Confirm" = "URLa arbelera kopiatu da";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "Jarraipenaren babes hobetua desgaituta dago gune honetarako.";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "Jarraipenaren babes hobetua gaituta dago gune honetarako.";
+
+/* Description for having standard ETP protection with ITP offered in iOS14+ */
+"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefoxek guneen arteko eta sare sozialetako jarraipen-elementuak, kriptomeatzariak eta hatz-marka bidezko jarraipena blokeatzen ditu.";
+
+/* Description for having strict ETP protection with ITP offered in iOS14+ */
+"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefoxek guneen arteko eta sare sozialetako jarraipen-elementuak, kriptomeatzariak eta hatz-marka bidezko eta edukiaren jarraipena blokeatzen ditu.";
+
+/* Label for the button displayed in the menu used to stop the reload of the webpage */
+"Menu.Library.StopReload" = "Gelditu";
+
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label" = "Gaitu gaueko modua";
+
+/* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
+"Menu.NoImageModeBlockImages.Label" = "Blokeatu irudiak";
+
+/* Label for title in page action menu. */
+"Menu.PageActions.Title" = "Orri-ekintzak";
+
+/* The title for the button that lets you paste into the location bar */
+"Menu.Paste.Title" = "Itsatsi";
+
+/* The title for the button that lets you paste and go to a URL */
+"Menu.PasteAndGo.Title" = "Itsatsi eta joan";
+
+/* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
+"Menu.ReloadWithoutTrackingProtection.Title" = "Kargatu berriro jarraipenaren babesik gabe";
+
+/* Label for the button, displayed in the menu, used to reload the current website with Tracking Protection enabled */
+"Menu.ReloadWithTrackingProtection.Title" = "Kargatu berriro jarraipenaren babesarekin";
+
+/* Toast displayed to the user after a bookmark has been removed. */
+"Menu.RemoveBookmark.Confirm" = "Laster-marka kenduta";
+
+/* Toast displayed to the user after removing the item from the Top Sites. */
+"Menu.RemovePin.Confirm" = "Gune erabilienetatik kenduta";
+
+/* Toast displayed to the user after a tab has been sent successfully. */
+"Menu.TabSent.Confirm" = "Fitxa bidalita";
+
+/* Title on tracking protection menu for blocked items. */
+"Menu.TrackingProtection.BlockedTitle" = "Blokeatuta";
+
+/* Message in menu when no trackers blocked. */
+"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Ez da aurkitu Firefoxi ezagunak zaizkion jarraipen-elementurik orri honetan.";
+
+/* The title for tracking protection settings */
+"Menu.TrackingProtection.ProtectionSettings.Title" = "Babesaren ezarpenak";
+
+/* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
+"Menu.TrackingProtection.TitlePrefix" = "%@ ostalarirako babesak";
+
+/* The title that shows the number of content cookies blocked */
+"Menu.TrackingProtectionBlockedContent.Title" = "Edukiaren jarraipena";
+
+/* The title that shows the number of social URLs blocked */
+"Menu.TrackingProtectionBlockedSocial.Title" = "Sare sozialetako jarraipen-elementuak";
+
+/* Description of the Tracking protection menu when TP is blocking parts of the page */
+"Menu.TrackingProtectionBlocking.Description" = "Zure nabigazioaren jarraipena egin lezaketen orriaren zatiak blokeatzen ari da Firefox.";
+
+/* The description of the Tracking Protection menu item when tracking is enabled */
+"Menu.TrackingProtectionBlockingDisabled.Description" = "Blokeatu jarraipen-elementuak";
+
+/* The title that shows the number of cross-site cookies blocked */
+"Menu.TrackingProtectionCrossSiteCookies.Title" = "Guneen arteko cookie jarraipen-egileak";
+
+/* The title that shows the number of cross-site URLs blocked */
+"Menu.TrackingProtectionCrossSiteTrackers.Title" = "Guneen arteko jarraipen-elementuak";
+
+/* The title that shows the number of cryptomining scripts blocked */
+"Menu.TrackingProtectionCryptominersBlocked.Title" = "Kriptomeatzariak";
+
+/* Description of content trackers. */
+"Menu.TrackingProtectionDescription.ContentTrackers" = "Webguneek kanpoko iragarkiak, bideoak eta ezkutuko jarraipen-elementuak izan litzaketen bestelako edukiak karga ditzakete. Hau blokeatzeak guneak azkarrago kargatzen lagun dezake baina zenbait botoi, inprimaki eta saio-hasierako eremu ez ibiltzea eragin lezake.";
+
+/* Description of cross-site trackers. */
+"Menu.TrackingProtectionDescription.CrossSiteNew" = "Cookie hauek guneen artean jarraitzen zaituzte zure lineako jarduerari buruzko datuak biltzeko. Hirugarrenek ezartzen dituzte hauek, adibidez iragarleen eta estatistiken enpresek.";
+
+/* Description of cryptominers. */
+"Menu.TrackingProtectionDescription.CryptominersNew" = "Kriptomeatzariek zure sistemaren konputazio-ahalmena erabiltzen dute diru digitala ustiatzeko. Script kriptomeatzariek zure bateria agortzen dute, zure ordenagailua makaltzen dute eta zure elektrizitate-faktura igo dezakete.";
+
+/* Description of fingerprinters. */
+"Menu.TrackingProtectionDescription.Fingerprinters" = "Zure nabigatzailearen eta ordenagailuaren ezarpenak bakarrak dira. Hatz-marka bidezko jarraipenak ezarpen bakar hauetako batzuk biltzen dituzte zuri buruzko profil bat osatzeko. Hauek zure jarraipena egiteko erabil daitezke.";
+
+/* Description of social network trackers. */
+"Menu.TrackingProtectionDescription.SocialNetworksNew" = "Zure profil osatu eta zuzenduagoa egiteko, jarraipen-elementuak ipintzen dituzte sare sozialek beste webguneetan. Hauek blokeatuz gero, gutxiagotu egiten da sare sozialetako enpresek zure online jardueraz ikus dezaketena.";
+
+/* The button that disabled TP for a site. */
+"Menu.TrackingProtectionDisable1.Title" = "Gune honetarako desgaituta";
+
+/* The confirmation toast once tracking protection has been disabled */
+"Menu.TrackingProtectionDisabled.Title" = "Jarraipenaren babesa desgaituta dago gune honetarako.";
+
+/* A button to enable tracking protection inside the menu. */
+"Menu.TrackingProtectionEnable.Title" = "Gaitu jarraipenaren babesa";
+
+/* A button to enable tracking protection inside the menu. */
+"Menu.TrackingProtectionEnable1.Title" = "Gune honetarako gaituta";
+
+/* The confirmation toast once tracking protection has been enabled */
+"Menu.TrackingProtectionEnabled.Title" = "Jarraipenaren babesa gaituta dago gune honetarako.";
+
+/* The title that shows the number of fingerprinting scripts blocked */
+"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Hatz-marka bidezko jarraipena";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "Blokeatutako guneen arteko cookie jarraipen-egileak";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Cryptominers" = "Blokeatutako kriptomeatzariak";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Fingerprinters" = "Blokeatutako hatz-marka bidezko jarraipena";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Social" = "Blokeatutako sare sozialetako jarraipena";
+
+/* more info about what tracking protection is about */
+"Menu.TrackingProtectionMoreInfo.Description" = "Argibide gehiago nola jarraipenaren babesarekin hainbat webguneren artean zure nabigazio-datuak biltzea blokeatzen den.";
+
+/* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
+"Menu.TrackingProtectionNoBlocking.Description" = "Ez da jarraipeneko elementurik atzeman orri honetan.";
+
+/* label for the menu item to show when the website is whitelisted from blocking trackers. */
+"Menu.TrackingProtectionOption.WhiteListOnDescription" = "Guneak zure nabigazioaren jarraipena egin lezaketen zatiak ditu. Babesa desgaituta daukazu.";
+
+/* label for the menu item that lets you remove a website from the tracking protection whitelist */
+"Menu.TrackingProtectionWhitelistRemove.Title" = "Gaitu gune honetarako";
+
+/* The title for the option to view the What's new page. */
+"Menu.WhatsNew.Title" = "Nobedadeak";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "gailu mugikorra";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "duela hilabete baino gehiago";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "duela astebete baino gehiago";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Nabigazioko tresna-barra";
+
+/* Accessibility label for the New Tab button in the tab toolbar.
+   Accessibility Label for the tab toolbar New tab button */
+"New Tab" = "Fitxa berria";
+
+/* Restore Tabs Negative Action */
+"No" = "Ez";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "Fitxarik ez";
+
+/* OK button */
+"OK" = "Ados";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "Ados";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "Ene! Firefoxek huts egin du";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Ireki artikuluak irakurtzeko ikuspegian liburuaren ikonoa sakatuz izenburu-barran agertzen denean.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Ireki ezarpenak";
+
+/* Toggle tabs syncing setting */
+"Open Tabs" = "Irekitako fitxak";
+
+/* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
+"OpenURL.Error.Message" = "Firefoxek ezin du orria ireki helbide baliogabea duelako.";
+
+/* Title of the message shown when the user attempts to navigate to an invalid link. */
+"OpenURL.Error.Title" = "Ezin da orria ireki";
+
+/* Accessibility label for the Page Options menu button */
+"Page Options Menu" = "Orri-aukeren menua";
+
+/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
+"Panel Chooser" = "Panel-hautatzailea";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Pasahitza";
+
+/* Error message shown in the remote tabs panel */
+"PasswordAutoFill.NoPasswordsFoundTitle" = "Ez daukazu kredentzialik sinkronizatuta zure Firefox kontutik";
+
+/* Header for the list of credentials table */
+"PasswordAutoFill.PasswordsListTitle" = "Kredentzial erabilgarriak:";
+
+/* Title of the extension that shows firefox passwords */
+"PasswordAutoFill.SectionTitle" = "Firefox kredentzialak";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Honekin kameraren karretean gorde dezakezu irudia.";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefoxek zure argazkietarako sarbidea nahi du";
+
+/* Button for closing the menu action sheet */
+"PhotonMenu.close" = "Itxi";
+
+/* Privacy section title */
+"Privacy" = "Pribatutasuna";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "Pribatutasun-politika";
+
+/* Title for quick-search engines settings section. */
+"Quick-Search Engines" = "Bilaketa bizkorreko motorrak";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "irakurrita";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "Irakurtzeko ikuspegia";
+
+/* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
+"ReaderMode.Available.VoiceOverAnnouncement" = "Irakurketa modua erabilgarri";
+
+/* Panel accessibility label */
+"Reading list" = "Irakurketa-zerrenda";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "Itxitako azkenak";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "Berritu";
+
+/* Accessibility label for the reload button */
+"Reload page" = "Berritu orria";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Kendu";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Kendu irakurketa-zerrendatik";
+
+/* Cancel button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Cancel" = "Utzi";
+
+/* Reopen button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Reopen" = "Ireki berriro";
+
+/* Reopen alert title shown at home page. */
+"ReopenAlert.Title" = "Ireki berriro itxitako azken fitxa";
+
+/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"ReopenClosedTab.KeyCodeTitle" = "Berreskuratu itxitako fitxak";
+
+/* Accessibility label for button resetting font size in display settings of reader mode */
+"Reset text size" = "Berrezarri testuaren tamaina";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans-serif";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Gorde orriak zure irakurketa-zerrendan liburuaren ikonoan sakatuz irakurketa-ikuspegiko kontroletan.";
+
+/* OK button to dismiss the error prompt. */
+"ScanQRCode.Error.OK.Button" = "Ados";
+
+/* Text for the instructions label, displayed in the QR scanner view */
+"ScanQRCode.Instructions.Label" = "Eskaneatzeko, lerrokatu QR kodea markoaren barruan";
+
+/* Text of the prompt that is shown to the user when the data is invalid */
+"ScanQRCode.InvalidDataError.Message" = "Datuak baliogabeak dira";
+
+/* Text of the prompt user to setup the camera authorization. */
+"ScanQRCode.PermissionError.Message" = "Baimendu Firefoxi zure gailuaren kamerarako sarbidea 'Ezarpenak' -> 'Pribatutasuna' -> 'Kamera' menu-aukeran.";
+
+/* Title for the QR code scanner view. */
+"ScanQRCode.View.Title" = "Eskaneatu QR kodea";
+
+/* Accessibility Label for the tab toolbar Search button
+   Navigation title for search settings.
+   Open search section of settings */
+"Search" = "Bilaketa";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Bilatu / idatzi helbidea";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "Bilaketa-motor berria bilaketa-barran agertuko da.";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "Bilaketa-motorra gehituta!";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "Gehitu bilaketa-motorra?";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "Utzi";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.DuplicateErrorMessage" = "Izenburu edo helbide hau duen bilaketa-motor bat gehituta dago.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.DuplicateErrorTitle" = "Huts egin du";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "Ezin da bilaketa-hornitzailea gehitu.";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "Huts egin du";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.FormErrorMessage" = "Bete zuzen eremu guztiak.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.FormErrorTitle" = "Huts egin du";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "Ados";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "Iradokizuna bilatzen du";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "Konexio segurua";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "Bidali hutsegite-txostena Mozillari arazoa konpondu ahal izateko?";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "Bidali iritzia";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "Bidali txostena";
+
+/* Button title for cancelling share screen
+   Close button in top navigation bar */
+"SendTo.Cancel.Button" = "Utzi";
+
+/* Header for the list of devices table */
+"SendTo.DeviceList.Text" = "Gailu erabilgarriak:";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "HTTP eta HTTPS loturak parteka daitezke soilik.";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "Ados";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "Ezin da partekatu partekatzen saiatzen ari zaren lotura.";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"SendTo.NavBar.Title" = "Bidali fitxa";
+
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message" = "Ez daukazu Firefox kontu honetara sinkronizatzeko konektatutako beste gailurik.";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Message" = "Jarraitzeko, ireki Firefox, joan ezarpenetara eta hasi saioa.";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Title" = "Ez duzu zure Firefox kontuan saiorik hasi.";
+
+/* Navigation bar button to Send the current page to a device */
+"SendTo.SendAction.Text" = "Bidali";
+
+/* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
+"SendTo.SignIn.Button" = "Hasi saioa Firefoxen";
+
+/* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_body" = "Fitxa berria heldu da beste gailu batetik.";
+
+/* Title of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_title" = "Fitxa jaso da";
+
+/* Body of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the app name. */
+"SentTab_TabArrivingNotification_WithDevice_body" = "Fitxa berria heldu da %@ gailura";
+
+/* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
+"SentTab_TabArrivingNotification_WithDevice_title" = "Fitxa %@ gailutik jaso da";
+
+/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
+"SentTab.AddToReadingListAction.Title" = "Gehitu irakurketa-zerrendan";
+
+/* Label for an action used to bookmark one or more tabs from a notification. */
+"SentTab.BookmarkAction.title" = "Egin laster-marka";
+
+/* Body of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.body" = "Sakatu hasteko";
+
+/* Title of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+
+/* Label for an action used to view one or more tabs from a notification. */
+"SentTab.ViewAction.title" = "Ikusi";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Sepia";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serif";
+
+/* Title in the settings view controller title bar */
+"Settings" = "Ezarpenak";
+
+/* The button text in Search Settings that opens the Custom Search Engine view. */
+"Settings.AddCustomEngine" = "Gehitu bilaketa-motorra";
+
+/* The text on the Save button when saving a custom search engine */
+"Settings.AddCustomEngine.SaveButtonText" = "Gorde";
+
+/* The title of the  Custom Search Engine view. */
+"Settings.AddCustomEngine.Title" = "Gehitu bilaketa-motorra";
+
+/* The title for the field which sets the title for a custom search engine. */
+"Settings.AddCustomEngine.TitleLabel" = "Izenburua";
+
+/* The placeholder for Title Field when saving a custom search engine. */
+"Settings.AddCustomEngine.TitlePlaceholder" = "Bilaketa-motorra";
+
+/* The title for URL Field */
+"Settings.AddCustomEngine.URLLabel" = "URLa";
+
+/* The placeholder for URL Field when saving a custom search engine */
+"Settings.AddCustomEngine.URLPlaceholder" = "URLa (ordezkatu bilaketa %s ikurrarekin)";
+
+/* Button in Data Management that clears private data for the selected items. */
+"Settings.ClearAllWebsiteData.Clear.Button" = "Garbitu webguneetako datu guztiak";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "Garbitu datu pribatuak";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "Garbitu datu pribatuak";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "Garbitu datu pribatuak";
+
+/* Copy app version alert shown in settings. */
+"Settings.CopyAppVersion.Title" = "Arbelean kopiatuta";
+
+/* Default text in search bar for Data Management */
+"Settings.DataManagement.SearchLabel" = "Iragazi guneak";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.DataManagement.SectionName" = "Datuen kudeaketa";
+
+/* Title displayed in header of the setting panel. */
+"Settings.DataManagement.Title" = "Datuen kudeaketa";
+
+/* Body of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Body" = "Firefoxek zure kontuarekin sinkronizatzeari utziko dio baina ez du gailu honetako zure nabigatze-daturik ezabatuko.";
+
+/* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
+"Settings.Disconnect.Button" = "Deskonektatu Sync";
+
+/* Cancel action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.CancelButton" = "Utzi";
+
+/* Destructive action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.DestructiveButton" = "Deskonektatu";
+
+/* Title of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Title" = "Sync Deskonektatu?";
+
+/* Section header for brightness slider. */
+"Settings.DisplayTheme.BrightnessThreshold.SectionHeader" = "Atalasea";
+
+/* Display (theme) settings label to show if manually switch theme is enabled. */
+"Settings.DisplayTheme.Manual.StatusLabel" = "Eskuz";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Manually'. */
+"Settings.DisplayTheme.Manual.SwitchSubtitle" = "Hautatu zein itxura nahi duzun";
+
+/* Display (theme) setting to choose the theme manually. */
+"Settings.DisplayTheme.Manual.SwitchTitle" = "Eskuz";
+
+/* Option choice in display theme settings for dark theme */
+"Settings.DisplayTheme.OptionDark" = "Iluna";
+
+/* Option choice in display theme settings for light theme */
+"Settings.DisplayTheme.OptionLight" = "Argia";
+
+/* Display (theme) settings footer describing how the brightness slider works. */
+"Settings.DisplayTheme.SectionFooter" = "Itxura automatikoki aldatuko da zure pantailaren argitasunaren arabera. Itxura aldatzeko kontuan hartuko den atalasea ezar dezakezu. Zirkuluak zure pantailaren uneko argitasuna adierazten du.";
+
+/* Switch mode settings section title */
+"Settings.DisplayTheme.SwitchMode.SectionHeader" = "Aldatu modua";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Automatically'. */
+"Settings.DisplayTheme.SwitchSubtitle" = "Aldatu automatikoki pantailaren argitasunaren arabera";
+
+/* Display (theme) settings label to show if automatically switch theme is enabled.
+   Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
+"Settings.DisplayTheme.SwitchTitle" = "Automatikoki";
+
+/* System theme settings section title */
+"Settings.DisplayTheme.SystemTheme.SectionHeader" = "Sistemaren itxura";
+
+/* System theme settings switch to choose whether to use the same theme as the system */
+"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "Erabili sistemaren argi/ilun modua";
+
+/* Theme picker settings section title */
+"Settings.DisplayTheme.ThemePicker.SectionHeader" = "Itxura hautatzekoa";
+
+/* Title in main app settings for Theme settings */
+"Settings.DisplayTheme.Title.v2" = "Itxura";
+
+/* DNT Settings option for always on */
+"Settings.DNT.OptionAlwaysOn" = "Beti";
+
+/* DNT Settings option for only turning on when Tracking Protection is also on */
+"Settings.DNT.OptionOnWithTP" = "Jarraipenaren babesa erabiltzean soilik";
+
+/* DNT Settings title */
+"Settings.DNT.Title" = "Bidali webguneei Do Not Track seinalea zure jarraipena ez egitea adierazteko";
+
+/* Label used for the device name settings section. */
+"Settings.FxA.DeviceName" = "Gailuaren izena";
+
+/* Label used as a section title in the Firefox Accounts Settings screen. */
+"Settings.FxA.Sync.SectionName" = "Sinkronizazio-ezarpenak";
+
+/* Title displayed in header of the FxA settings panel. */
+"Settings.FxA.Title" = "Firefox kontua";
+
+/* General settings section title */
+"Settings.General.SectionName" = "Orokorra";
+
+/* Button in settings to clear the home page. */
+"Settings.HomePage.Clear.Button" = "Garbitu";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "Hasiera-orria";
+
+/* Title displayed in header of the setting panel. */
+"Settings.HomePage.Title" = "Hasiera-orriko ezarpenak";
+
+/* Placeholder text in the homepage setting when no homepage has been set. */
+"Settings.HomePage.URL.Placeholder" = "Sartu web orria";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "Uneko hasiera-orria";
+
+/* Button in settings to use the current link on the clipboard as home page. */
+"Settings.HomePage.UseCopiedLink.Button" = "Erabili kopiatutako lotura";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "Erabili uneko orria";
+
+/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
+"Settings.HomePage.UseDefault.Button" = "Erabili lehenetsia";
+
+/* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
+"Settings.LoginsAndPasswordsTitle" = "Saio-hasierak eta pasahitzak";
+
+/* Label used to set a custom url as the new tab option (homepage). */
+"Settings.NewTab.CustomURL" = "URL pertsonalizatua";
+
+/* A description in settings of what the new tab choice means */
+"Settings.NewTab.Description" = "Fitxa berri bat irekitzen duzunean:";
+
+/* The title of the section in newtab that lets you modify the topsites panel */
+"Settings.NewTab.Option.ASTitle" = "Pertsonalizatu gune erabilienak";
+
+/* Option in settings to show a blank page when you open a new tab */
+"Settings.NewTab.Option.BlankPage" = "Orri zuria";
+
+/* Option in settings to show bookmarks when you open a new tab */
+"Settings.NewTab.Option.Bookmarks" = "Laster-markak";
+
+/* The footer for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeFooter" = "Gehien bisitatzen dituzun guneak";
+
+/* The title for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeTitle" = "Pertsonalizatu Firefoxen hasiera";
+
+/* Option in settings to show Firefox Home when you open a new tab */
+"Settings.NewTab.Option.FirefoxHome" = "Firefoxen hasiera";
+
+/* Option in the settings to turn off recent bookmarks in the Highlights section */
+"Settings.NewTab.Option.HighlightsBookmarks" = "Azken laster-markak";
+
+/* Option in settings to turn off history in the highlights section */
+"Settings.NewTab.Option.HighlightsHistory" = "Bisitatutakoak";
+
+/* Option in settings to show history when you open a new tab */
+"Settings.NewTab.Option.History" = "Historia";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.HomePage" = "Hasiera-orria";
+
+/* Option in settings to turn on off pocket recommendations */
+"Settings.NewTab.Option.Pocket" = "Pocket-eko joerak";
+
+/* Footer caption for pocket settings */
+"Settings.NewTab.Option.PocketFooter" = "Webeko eduki baliotsua, zuretzat pertsonalizatuta.";
+
+/* Option in settings to show reading list when you open a new tab */
+"Settings.NewTab.Option.ReadingList" = "Erakutsi irakurketa-zerrenda";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
+"Settings.NewTab.SectionName" = "Fitxa berria";
+
+/* Title displayed in header of the setting panel. */
+"Settings.NewTab.Title" = "Fitxa berria";
+
+/* Label at the top of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionName" = "Erakutsi";
+
+/* Footer at the bottom of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionNameFooter" = "Aukeratu fitxa berria irekitzean kargatuko dena";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Status" = "Firefox irekitzean";
+
+/* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Title" = "Eskaini kopiatutako loturak irekitzea";
+
+/* Title for Open With Settings */
+"Settings.OpenWith.PageTitle" = "Ireki posta-loturak honekin";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
+"Settings.OpenWith.SectionName" = "Posta aplikazioa";
+
+/* Setting to enable the built-in password manager */
+"Settings.SaveLogins.Title" = "Gorde saio-hasierak";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "Eginda";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "Editatu";
+
+/* title for a link that explains how mozilla collects telemetry */
+"Settings.SendUsage.Link" = "Argibide gehiago.";
+
+/* A short description that explains why mozilla collects usage data. */
+"Settings.SendUsage.Message" = "Firefox denontzat eskaini eta hobetzeko beharrezkoa dena soilik biltzen ahalegintzen da Mozilla.";
+
+/* The title for the setting to send usage data. */
+"Settings.SendUsage.Title" = "Bidali erabilera-datuak";
+
+/* Description displayed under the ”Show Link Previews” option */
+"Settings.ShowLinkPreviews.Status" = "Loturak denbora luzez sakatzean";
+
+/* Title of setting to enable link previews when long-pressing links. */
+"Settings.ShowLinkPreviews.Title" = "Erakutsi loturen aurrebista";
+
+/* Setting to show Logins & Passwords quick access in the application menu */
+"Settings.ShowLoginsInAppMenu.Title" = "Erakutsi aplikazio-menuan";
+
+/* The description of the open new tab siri shortcut */
+"Settings.Siri.OpenTabShortcut" = "Ireki fitxa berria";
+
+/* The description that describes what siri shortcuts are */
+"Settings.Siri.SectionDescription" = "Erabili Siri lasterbideak Firefox Siri bidez irekitzeko";
+
+/* The option that takes you to the siri shortcuts settings page */
+"Settings.Siri.SectionName" = "Siri lasterbideak";
+
+/* Dismiss button for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Button" = "Ados, ulertuta";
+
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "Gune bat ez badabil espero bezala, sakatu helbide-barrako babesaren ikonoa eta desaktibatu jarraipenaren babes hobetua orri horretarako.";
+
+/* Title for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Title" = "Argi!";
+
+/* Header description for tracking protection options section where Basic/Strict block list can be selected */
+"Settings.TrackingProtection.BlockListsHeader" = "Zure nabigazio-jardueraren jarraipena egiten ari litezkeen web elementuak blokeatzeko Firefoxek erabiliko duen zerrenda aukera dezakezu.";
+
+/* Explanation of basic mode. */
+"Settings.TrackingProtection.Info.BasicTitle" = "Babeserako eta errendimendurako orekatua.";
+
+/* The Title on info view which shows a list of all blocked websites */
+"Settings.TrackingProtection.Info.BlocksTitle" = "BLOKEOAK";
+
+/* Explanation of strict mode. */
+"Settings.TrackingProtection.Info.StrictTitle" = "Babes sendoagoa eskaintzen du baina zenbait gune apurtzea eragin lezake.";
+
+/* 'Learn more' info link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.LearnMore" = "Argibide gehiago";
+
+/* 'More Info' link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.MoreInfo" = "Informazio gehiago…";
+
+/* Additional information about your Enhanced Tracking Protection */
+"Settings.TrackingProtection.ProtectionCellFooter" = "Pertsonalizatutako iragarkiak murrizten ditu eta iragarleek zure nabigazioaren jarraipena ez egitea laguntzen du.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "Gune bat ez badabil espero bezala, sakatu helbide-barrako babesaren ikonoa eta desaktibatu jarraipenaren babes hobetua orri horretarako.";
+
+/* Description for standard level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Baimendu neurri baterainoko iragarkien jarraipena webguneak ondo ibil daitezen.";
+
+/* Description for strict level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "Jarraipen-elementu, iragarki eta popup gehiago blokeatzen ditu. Orriak azkarrago kargatzen dira baina zenbait eginbide agian ez dira ondo ibiliko.";
+
+/* Title for tracking protection options section where level can be selected. */
+"Settings.TrackingProtection.ProtectionLevelTitle" = "Babesaren maila";
+
+/* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
+"Settings.TrackingProtection.SectionName" = "Jarraipenaren babesa";
+
+/* Additional information about the strict level setting */
+"Settings.TrackingProtection.StrictLevelInfoFooter" = "Jarraipen-elementuak blokeatuz gero, zenbait gunetako eginbideak kaltetu litezke.";
+
+/* Tracking protection settings option for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BasicBlockList" = "Oinarrizkoa (lehenetsia)";
+
+/* Tracking protection settings option description for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BlockListBasicDescription" = "Baimendu neurri baterainoko jarraipena webguneak ondo ibil daitezen.";
+
+/* Tracking protection settings option for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrict" = "Zorrotza";
+
+/* Tracking protection settings option description for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrictDescription" = "Blokeatu jarraipena toki ezagunetatik. Zenbait webgune agian ez dira ondo ibiliko.";
+
+/* Description label shown on tracking protection options screen. */
+"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "Hainbat webguneren arteko zure nabigatze-datuen bildumari deritzo jarraipena.";
+
+/* Settings option to specify that Tracking Protection is on */
+"Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "Jarraipenaren babes hobetua";
+
+/* Translation settings footer describing how language detection and translation happens. */
+"Settings.TranslateSnackBar.SectionFooter" = "Web orriaren hizkuntza gailuan antzematen da eta urruneko zerbitzu batetik datorren itzulpena eskaintzen da.";
+
+/* Translation settings section title */
+"Settings.TranslateSnackBar.SectionHeader" = "Zerbitzuak";
+
+/* Switch to choose if the language of a page is detected and offer to translate. */
+"Settings.TranslateSnackBar.SwitchSubtitle" = "Eskaini zure hizkuntza lehenetsia ez diren hizkuntzetan idatzitako guneak itzultzea.";
+
+/* Switch to choose if the language of a page is detected and offer to translate. */
+"Settings.TranslateSnackBar.SwitchTitle" = "Eskaini itzulpena";
+
+/* Title in main app settings for Translation toast settings */
+"Settings.TranslateSnackBar.Title" = "Itzulpena";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "Arazoak konpontzea";
+
+/* Button to delete website in search results */
+"Settings.WebsiteData.ButtonDelete" = "Ezabatu";
+
+/* Button to exit edit website search results */
+"Settings.WebsiteData.ButtonDone" = "Eginda";
+
+/* Button to edit website search results */
+"Settings.WebsiteData.ButtonEdit" = "Editatu";
+
+/* Button shows all websites on website data tableview */
+"Settings.WebsiteData.ButtonShowMore" = "Erakutsi gehiago";
+
+/* Description of the confirmation dialog shown when a user tries to clear their private data. */
+"Settings.WebsiteData.ConfirmPrompt" = "Ekintza honek webguneetako zure datu guztiak garbituko ditu. Ezin da desegin.";
+
+/* Title displayed in header of the Data Management panel. */
+"Settings.WebsiteData.Title" = "Webguneetako datuak";
+
+/* Action label on share extension to add page to the Firefox reading list. */
+"ShareExtension.AddToReadingListAction.Title" = "Gehitu irakurketa-zerrendan";
+
+/* Share extension label shown after user has performed 'Add to Reading List' action. */
+"ShareExtension.AddToReadingListActionDone.Title" = "Irakurketa-zerrendan gehitu da";
+
+/* Action label on share extension to bookmark the page in Firefox. */
+"ShareExtension.BookmarkThisPageAction.Title" = "Egin orriaren laster-marka";
+
+/* Share extension label shown after user has performed 'Bookmark this Page' action. */
+"ShareExtension.BookmarkThisPageActionDone.Title" = "Laster-marka eginda";
+
+/* Action label on share extension to load the page in Firefox when user switches apps to bring it to foreground. */
+"ShareExtension.LoadInBackgroundAction.Title" = "Kargatu atzeko planoan";
+
+/* Share extension label shown after user has performed 'Load in Background' action. */
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Firefoxen kargatzen";
+
+/* Action label on share extension to immediately open page in Firefox. */
+"ShareExtension.OpenInFirefoxAction.Title" = "Ireki Firefoxen";
+
+/* Action label on share extension to immediately open page in Firefox in private mode. */
+"ShareExtension.OpenInPrivateModeAction.Title" = "Ireki modu pribatuan";
+
+/* Action label on share extension to search for the selected text in Firefox. */
+"ShareExtension.SeachInFirefoxAction.Title" = "Bilatu Firefoxen";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "Erakutsi bilaketa-iradokizunak";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "Erakutsi fitxak";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "Erakutsi itzulia";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "Gelditu";
+
+/* Support section title */
+"Support" = "Laguntza";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Fitxa ixteko, pasatu eskuinera edo ezkerrera hiru hatzekin.";
+
+/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"SwitchToNonPBM.KeyCodeTitle" = "Nabigatze modu normala";
+
+/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"SwitchToPBM.KeyCodeTitle" = "Nabigatze pribatuko modua";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, bookmarks, passwords and more." = "Sinkronizatu fitxak, laster-markak, pasahitzak eta gehiago.";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, passwords and more." = "Sinkronizatu fitxak, pasahitzak eta gehiago.";
+
+/* Message displayed when the user syncs for the first time */
+"Sync.FirstTimeMessage.Label" = "Lehenengo sinkronizazioa denbora apur bat har lezake";
+
+/* String displayed on Sign In to Sync page that allows the user to create a new account. */
+"Sync.NoAccount.Description" = "Ez daukazu konturik? Sortu kontua Firefox gailuen artean sinkronizatzeko.";
+
+/* Message displayed when the user's account is syncing with no ellipsis */
+"Sync.Syncing.Label" = "Sinkronizatzen";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "Sinkronizatzen…";
+
+/* Panel accessibility label */
+"Synced Tabs" = "Sinkronizatutako fitxak";
+
+/* The Bookmark sync component, used in SyncState.Partial.Title */
+"SyncState.Bookmark.Title" = "Laster-markak";
+
+/* The Remote Clients sync component, used in SyncState.Partial.Title */
+"SyncState.Clients.Title" = "Urruneko bezeroak";
+
+/* Title for Sync status message when synchronization failed to complete */
+"SyncState.Failed.Title" = "Sinkronizazioak huts egin du";
+
+/* The History sync component, used in SyncState.Partial.Title */
+"SyncState.History.Title" = "Historia";
+
+/* The Logins sync component, used in SyncState.Partial.Title */
+"SyncState.Logins.Title" = "Saio-hasierak";
+
+/* Title for Sync status message when Sync failed to start. */
+"SyncState.NotStarted.Title" = "Sync ez dago erabilgarri";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "Sync lineaz kanpo dago";
+
+/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
+"SyncState.Partial.Title" = "Sync arazoak ari da izaten %@ sinkronizatzeko";
+
+/* The Tabs sync component, used in SyncState.Partial.Title */
+"SyncState.Tabs.Title" = "Fitxak";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "%2$@/%1$@. fitxa";
+
+/* Hardware shortcut to open the tab tray from a tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"Tab.ShowTabTray.KeyCodeTitle" = "Erakutsi fitxa guztiak";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "%1$@-%2$@ fitxa-bitartea (guztira %3$@)";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Fitxen erretilua";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "Desegin";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "%d fitxa itxita";
+
+/* The placeholder text for the tab search bar */
+"Tabs.Search.PlaceholderText" = "Bilatu fitxak";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"TabTray.AddTab.Button" = "Gehitu fitxa";
+
+/* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseAllTabs.KeyCodeTitle" = "Itxi fitxa guztiak";
+
+/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseTab.KeyCodeTitle" = "Itxi hautatutako fitxa";
+
+/* The section header for tabs opened last week */
+"TabTray.LastWeek.Header" = "Azken astea";
+
+/* The title on the button to copy the tab address. */
+"TabTray.MoreMenu.Copy" = "Kopiatu";
+
+/* The section header for tabs opened before last week */
+"TabTray.Older.Header" = "Zaharragoak";
+
+/* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenNewTab.KeyCodeTitle" = "Ireki fitxa berria";
+
+/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenSelectedTab.KeyCodeTitle" = "Ireki hautatutako fitxa";
+
+/* The button title to see more options to perform on the tab. */
+"TabTray.SwipeMenu.More" = "Gehiago";
+
+/* The title for the tab tray */
+"TabTray.Title" = "Irekitako fitxak";
+
+/* The section header for tabs opened today */
+"TabTray.Today.Header" = "Gaur";
+
+/* The section header for tabs opened yesterday */
+"TabTray.Yesterday.Header" = "Atzo";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "Orria ezin da irakurtzeko ikuspegian bistaratu.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Arazoa egon da zure beste gailuetako fitxak atzitzean. Saiatu berriro geroago.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "Errorea gertatu da orria bihurtzean";
+
+/* Relative date for date in past week. */
+"this week" = "aste honetan";
+
+/* label for Not Now button */
+"Toasts.NotNow" = "Une honetan ez";
+
+/* Open App Store button */
+"Toasts.OpenAppStore" = "Ireki App Store-a";
+
+/* Label for button to undo the action just performed */
+"Toasts.Undo" = "Desegin";
+
+/* History tableview section header */
+"Today" = "Gaur";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "gaur %@(e)tan";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "Menua";
+
+/* Accessibility label for the Close All Tabs menu button. */
+"Toolbar.Menu.CloseAllTabs" = "Itxi fitxa guztiak";
+
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "Gehien bisitatutako guneak hemen agertuko dira.";
+
+/* The title for the empty Top Sites state */
+"TopSites.EmptyState.Title" = "Ongi etorri gune erabilienetara";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "Kendu orria - %@";
+
+/* Button to disallow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.Cancel" = "Ez";
+
+/* Button to allow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.OK" = "Bai";
+
+/* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
+"TranslationToastHandler.PromptTranslate.Title" = "Badirudi gune hau %1$@ hizkuntzan dagoela. Itzuli %2$@(e)ra %3$@ erabiliz?";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* The menu item that pastes the current contents of the clipboard into the URL bar and navigates to the page */
+"UIMenuItem.PasteGo" = "Itsatsi eta joan";
+
+/* Search in New Tab Text selection menu item */
+"UIMenuItem.SearchWithFirefox" = "Bilatu Firefox erabiliz";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "irakurri gabe";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect" = "Konektatzeko, bertsio-berritu Firefox";
+
+/* Debug option */
+"Use stage servers" = "Erabili probetarako zerbitzariak";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Erabiltzaile-izena";
+
+/* Text message in the settings table view */
+"Verify your email address" = "Egiaztatu zure helbide elektronikoa";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "%1$@ (%2$@) bertsioa";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Web edukia";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Ongi etorri zure irakurketa-zerrendara";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "Tira, hau pixka bat lotsagarria da.";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Wikipedia";
+
+/* Relative date for yesterday. */
+"yesterday" = "atzo";
+
+/* History tableview section header */
+"Yesterday" = "Atzo";
+
+/* Error message in the remote tabs panel */
+"You don’t have any tabs open in Firefox on your other devices." = "Ez daukazu fitxarik irekita beste gailuetako Firefoxetan.";
+
+/* Your Rights settings section title */
+"Your Rights" = "Zure eskubideak";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+

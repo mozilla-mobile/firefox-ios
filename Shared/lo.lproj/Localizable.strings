@@ -1,0 +1,1655 @@
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "ຊື່ຜູ້ໃຊ້ ແລະ ລະຫັດຜ່ານແມ່ນຈະຖືກຮ້ອງຂໍໂດຍ %@.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "ຊື່ຜູ້ໃຊ້ ແລະ ລະຫັດຜ່ານແມ່ນຈະຖືກຮ້ອງຂໍໂດຍ %1$@. ເວັບໄຊທ໌ດັ່ງກ່າວຕອບສະຫນອງ: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "ກ່ຽວກັບ";
+
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite" = "Pin ໄປທີ່ເວັບໄຊທ໌ຍອດນິຍົມ";
+
+/* The title for removing a pinned topsite action */
+"ActivityStream.ContextMenu.RemovePinTopsite" = "ລຶບເວັບໄຊທ໌ທີ່ໄດ້ Pin ໄວ້";
+
+/* The description of a highlight if it is a site the user has bookmarked */
+"ActivityStream.Highlights.Bookmark" = "ບຸກມາກໄວ້ແລ້ວ";
+
+/* The description of a highlight if it is a site the user has visited */
+"ActivityStream.Highlights.Visited" = "ເຂົ້າໄປເບິງມາແລ້ວ";
+
+/* Section title label for recently bookmarked websites */
+"ActivityStream.NewRecentBookmarks.Title" = "ບຸກມາກຫລ້າສຸດ";
+
+/* The link that shows more Pocket trending stories */
+"ActivityStream.Pocket.MoreLink" = "ເພີ່ມເຕີມ";
+
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle" = "ກຳລັງນິຍົມໃນ Pocket";
+
+/* The description of a Pocket Story */
+"ActivityStream.Pocket.Trending" = "ກຳລັງນິຍົມ";
+
+/* Section title label for recently visited websites */
+"ActivityStream.RecentHistory.Title" = "ເຂົ້າໄປເບິງມາແລ້ວ";
+
+/* label showing how many rows of topsites are shown. %d represents a number */
+"ActivityStream.TopSites.RowCount" = "ແຖວ: %d";
+
+/* The title for the setting page which lets you select the number of top site rows */
+"ActivityStream.TopSites.RowSettingFooter" = "ຕັ້ງແຖວ";
+
+/* Section title label for Top Sites */
+"ActivityStream.TopSites.SectionTitle" = "ເວັບໄຊທ໌ຍອດນິຍົມ";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "ເພີ່ມແທັບ";
+
+/* Accessibility label for action adding current page to reading list.
+   Name for button adding current article to reading list in reader mode */
+"Add to Reading List" = "ເພີ່ມເຂົ້າໄປໃນລາຍການອ່ານ";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "ເພີ່ມຫນ້າເວັບນີ້ເຂົ້າໄປໃນລາຍການອ່ານແລ້ວ";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "ຕົກລົງ";
+
+/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Message" = "ເກີດມີຂໍ້ຜິດພາດໃນການເພີ່ມລະຫັດຜ່ານເຂົ້າໄປໃນກະເປົາເງິນ. ກະລຸນາລອງໃຫມ່ອີກຄັ້ງພາຍຫລັງ.";
+
+/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Title" = "ຫລົ້ມເລວໃນການເພີ່ມລະຫັດຜ່ານ";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "ທີ່ຢູ່ ແລະ ການຄົ້ນຫາ";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "ສົ່ງຕະຫລອດເວລາ";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "ຕ້ອງການການພິສູດຕົວຕົນ";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "ກັບຄືນ";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "ບັອກຫນ້າຕ່າງ Pop-up";
+
+/* The header title for the fields when editing a Bookmark */
+"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "ບຸກມາກ";
+
+/* The header title for the fields when editing a Folder */
+"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "ໂຟລເດີ";
+
+/* The label for the Title field when editing a bookmark */
+"Bookmark.DetailFieldTitle.Label" = "ຫົວຂໍ້";
+
+/* The label for the URL field when editing a bookmark */
+"Bookmark.DetailFieldURL.Label" = "URL";
+
+/* Toggle bookmarks syncing setting */
+"Bookmarks" = "ບຸກມາກ";
+
+/* The button to edit a bookmark */
+"Bookmarks.EditBookmark.Label" = "ແກ້ໄຂບຸກມາກ";
+
+/* The button to edit a folder */
+"Bookmarks.EditFolder.Label" = "ແກ້ໄຂໂຟລເດີ";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "ໂຟລເດີ";
+
+/* The label for the location of the new folder */
+"Bookmarks.FolderLocation.Label" = "ຕຳແຫນ່ງທີ່ຕັ້ງ";
+
+/* The label for the title of the new folder */
+"Bookmarks.FolderName.Label" = "ຊື່ຂອງໂຟລເດີ";
+
+/* The button to create a new bookmark */
+"Bookmarks.NewBookmark.Label" = "ບຸກມາກໃຫມ່";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "ໂຟລເດີໃຫມ່";
+
+/* The button to create a new separator */
+"Bookmarks.NewSeparator.Label" = "ຕົວແບ່ງໃຫມ່";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "ຫົວຂໍ້";
+
+/* The label for the URL of a bookmark */
+"Bookmarks.URL.Label" = "URL";
+
+/* Status label for the empty Bookmarks state. */
+"BookmarksPanel.EmptyState.Title" = "ບຸກມາກທີ່ທ່ານບັນທຶກໄວ້ຈະສະແດງຂື້ນຢູ່ທີ່ນີ້.";
+
+/* Link to monitor.firefox.com to learn more about breached passwords */
+"BreachAlerts.LearnMoreButton" = "ຮຽນຮູ້ເພີ່ມເຕີມ";
+
+/* Leads to a link to the breached website */
+"BreachAlerts.Link" = "ໄປ​ທີ່";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "ຄວາມສະຫວ່າງ";
+
+/* Label for Cancel button */
+"Cancel" = "ຍົກເລີກ";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "ປ່ຽນຊຸດຮູບແບບສີ.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "ປ່ຽນປະເພດຕົວອັກສອນ.";
+
+/* The button to open a new tab with the copied link */
+"ClipboardToast.GoToCopiedLink.Button" = "ໄປ";
+
+/* Message displayed when the user has a copied link on the clipboard */
+"ClipboardToast.GoToCopiedLink.Title" = "ໄປຫາລີ້ງສຳເນົາໄວ້?";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "ປິດ";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "ກຳລັງປິດແທັບ";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "ຄອມພິວເຕີ";
+
+/* Context menu item for bookmarking a link URL */
+"ContextMenu.BookmarkLinkButtonTitle" = "ບຸກມາກລີ້ງ";
+
+/* The button text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "ປ່ຽນ";
+
+/* The label text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "ເປີດແທັບສ່ວນຕົວໃຫມ່ແລ້ວ";
+
+/* The button text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "ປ່ຽນ";
+
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText" = "ເປີດແທັບໃຫມ່ແລ້ວ";
+
+/* Context menu item for copying an image to the clipboard */
+"ContextMenu.CopyImageButtonTitle" = "ສຳເນົາຮູບພາບ";
+
+/* Context menu item for copying an image URL to the clipboard */
+"ContextMenu.CopyImageLinkButtonTitle" = "ສຳເນົາລີ້ງຮູບພາບ";
+
+/* Context menu item for copying a link URL to the clipboard */
+"ContextMenu.CopyLinkButtonTitle" = "ສຳເນົາລີ້ງ";
+
+/* Context menu item for downloading a link URL */
+"ContextMenu.DownloadLinkButtonTitle" = "ລີ້ງດາວໂຫລດ";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenInNewTabButtonTitle" = "ເປີດໃນແທັບໃຫມ່";
+
+/* Context menu item for saving an image */
+"ContextMenu.SaveImageButtonTitle" = "ບັນທຶກຮູບພາບ";
+
+/* Context menu item for sharing a link URL */
+"ContextMenu.ShareLinkButtonTitle" = "ແບ່ງປັນລີ້ງ";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "ບໍ່ສາມາດເພີ່ມຫນ້າເວັບເຂົ້າໄປໃນລາຍການອ່ານ";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it’s already there?" = "ບໍ່ສາມາດເພີ່ມຫນ້າເວັບເຂົ້າໄປໃນລາຍການອ່ານ. ບາງເທື່ອມັນອາດຈະມີຫນ້າເວັບນີ້ຢູ່ແລ້ວ?";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "ບໍ່ສາມາດໂຫລດຫນ້າເວັບນີ້ໄດ້.";
+
+/* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
+"CoverSheet.v22.DarkMode.Description" = "ສຳລັບຜູ້ໃຊ້ iOS 13 Firefox ຈະສະລັບກັບໄປໃຊ້ໂຫມດມືດໂດຍອັດຕະໂນມັດເມື່ອມືຖືຂອງທ່ານຖືກຕັ້ງຄ່າໃຫ້ຢູ່ໃນໂຫມດມືດ. ຫາກຕ້ອງການປ່ຽນໃຫ້ໄປທີ່ ຕັ້ງຄ່າ > ຊຸດຕົກແຕ່ງ";
+
+/* Title for the new dark mode change in the version 22 app release. */
+"CoverSheet.v22.DarkMode.Title" = "ຊຸດຕົກແຕ່ງແບບມືດປະກອບໄປດ້ວຍຄີບອດ ແລະ ຫນ້າຈໍມືດ.";
+
+/* Description for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Description" = "ການປ້ອງກັນການຕິດຕາມຈະຊ່ວຍຢຸດການໂຄສະນາ ເປີດນຳໃຊ້ງານໃນແບບເຂັ້ມງວດເພື່ອບັອກຕົວຕິດຕາມ, ໂຄສະນາ ແລະ ປັອບອັບ.";
+
+/* Text for the new ETP settings button */
+"CoverSheet.v24.ETP.Settings.Button" = "ໄປທີ່ການຕັ້ງຄ່າ";
+
+/* Title for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Title" = "ການປ້ອງກັນຈາກການຕິດຕາມໂຄສະນາ";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "ສ້າງບັນຊີ";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "ດຳ";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "ລຸດຂະໜາດຕົວຫນັງສື";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "ຄ່າພື້ນຖານການຄົ້ນຫາ";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "ການຕັ້ງຄ່າການສະແດງຜົນ";
+
+/* Used as a button label for crash dialog prompt */
+"Don’t Send" = "ບໍ່ສົ່ງ";
+
+/* Done button on left side of the Settings view controller title bar */
+"Done" = "ສຳເລັດ";
+
+/* Panel accessibility label */
+"Downloads" = "ດາວໂຫລດ";
+
+/* The label of the button the user will press to start downloading a file */
+"Downloads.Alert.DownloadNow" = "ດາວໂຫລດດຽວນີ້";
+
+/* Button confirming the cancellation of the download. */
+"Downloads.CancelDialog.Cancel" = "ຍົກເລີກ";
+
+/* Alert dialog body when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Message" = "ທ່ານແນ່ໃຈແລ້ວບໍ່ວ່າທ່ານຕ້ອງການຍົກເລີກການດາວໂຫລດນີ້?";
+
+/* Button declining the cancellation of the download. */
+"Downloads.CancelDialog.Resume" = "ດຳເນີນຕໍ່ໄປ";
+
+/* Alert dialog title when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Title" = "ຍົກເລີກການດາວໂຫລດ";
+
+/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
+"Downloads.Error.Message" = "ການດາວໂຫລດຍັງບໍ່ໄດ້ຮັບການຮັບຮອງຈາກ Firefox ເທື່ອ.";
+
+/* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
+"Downloads.Toast.Cancelled.LabelText" = "ການດາວໂຫລດຖືກຍົກເລີກ";
+
+/* The label text in the Download Failed toast for showing confirmation that the download has failed. */
+"Downloads.Toast.Failed.LabelText" = "ການດາວໂຫລດລົ້ມເຫລວ";
+
+/* The button to retry a failed download from the Download Failed toast. */
+"Downloads.Toast.Failed.RetryButton" = "ລອງໃຫມ່ອີກເທື່ອຫນຶ່ງ";
+
+/* The button to open a new tab with the Downloads home panel */
+"Downloads.Toast.GoToDownloads.Button" = "ດາວໂຫລດ";
+
+/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. */
+"Downloads.Toast.MultipleFiles.DescriptionText" = "1 ຈາກ %d ໄຟລ໌";
+
+/* The description text in the Download progress toast for showing the number of files (1$) and download progress (2$). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where 1$ is Downloads.Toast.MultipleFiles.DescriptionText and 2$ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and 1$ should come before 2$ everywhere except for right-to-left locales. */
+"Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";
+
+/* The description text in the Download progress toast for showing the downloaded file size (1$) out of the total expected file size (2$). */
+"Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
+
+/* Action button for deleting downloaded files in the Downloads panel. */
+"DownloadsPanel.Delete.Title" = "ລຶບ";
+
+/* Title for the Downloads Panel empty state. */
+"DownloadsPanel.EmptyState.Title" = "ໄຟລ໌ທີ່ດາວໂຫລດຈະປາກົດຂຶ້ນຢູ່ບ່ອນນີ້.";
+
+/* Action button for sharing downloaded files in the Downloads panel. */
+"DownloadsPanel.Share.Title" = "ແບ່ງປັນ";
+
+/* Text message in the settings table view */
+"Enter your password to connect" = "ປ້ອນລະຫັດຜ່ານຂອງທ່ານໃສ່ເພື່ອເຊື່ອມຕໍ່.";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "ຂັ້ນສູງ";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "ຄຳເຕືອນ: ພວກເຮົາບໍ່ສາມາດຍືນຍັນໄດ້ວ່າການເຊື່ອມຕໍ່ຂອງທ່ານໄປຫາເວັບໄຊທ໌ນີ້ມີຄວາມປອດໄພບໍ່.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "ມັນອາດຈະເກີດມາຈາກການຕັ້ງຄ່າຜິດພາດ ຫລື ເປັນການດັດແປງໂດຍນັກເຈາະຂໍ້ມູນ. ດຳເນີນການຕໍ່ໄປຖ້າຫາກວ່າທ່ານຍອມຮັບຄວາມສ່ຽງທີ່ອາດເກີດຂື້ນນີ້ໄດ້.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "ເຈົ້າຂອງ %@ ໄດ້ຕັ້ງຄ່າເວັບໄຊທ໌ຂອງພວກເຂົາບໍ່ເຫມາະສົມ. ເພື່ອເປັນການປົກປ້ອງຂໍ້ມູນຂອງທ່ານຈາກການຖືກໂຈລະກຳ, Firefox ຈຶ່ງໄດ້ຕັດການເຊື່ອມຕໍ່ໄປຫາເວັບໄຊທ໌ນີ້.";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "ການເຊື່ອມຕໍ່ນີ້ບໍ່ນ່າເຊື່ອຖື";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "ຍ້ອນກັບ";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "ເຂົ້າໄປເບິງເວັບໄຊທ໌ຕໍ່ໄປ";
+
+/* Question shown to user when tapping a link that opens the App Store app */
+"ExternalLink.AppStore.ConfirmationTitle" = "ເປີດລີ້ງນີ້ໃນ App Store?";
+
+/* Question shown to user when tapping an SMS or MailTo link that opens the external app for those. */
+"ExternalLink.AppStore.GenericConfirmationTitle" = "ເປີດລິ້ງນີ້ໃນ app ພາຍນອກ?";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Title for firefox about:home page in tab history list */
+"Firefox.HomePage.Title" = "ຫນ້າທຳອິດຂອງ Firefox";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "ໄປຂ້າງຫນ້າ";
+
+/* Label stating how to disconnect account */
+"FxA.AccountVerificationDetails" = "ອີເມລຜິດ? ຕັດການເຊື່ອມຕໍ່ຂ້າງລຸ່ມນີ້ເພື່ອເລີ່ມຕົ້ນໃຫມ່.";
+
+/* Label stating your account is not verified */
+"FxA.AccountVerificationRequired" = "ຈຳເປັນຕ້ອງມີການຢືນຢັນບັນຊີ";
+
+/* Message explaining that user needs to check email for Firefox Account verfication link. */
+"FxA.AccountVerificationRequiredSurface" = "ທ່ານຕ້ອງໄດ້ຢືນຢັນ %@. ກວດເບິງອີເມລຂອງທ່ານສຳລັບລີ້ງການຢືນຢັນຈາກ Firefox.";
+
+/* Button label to connect another device to Sync */
+"FxA.ConnectAnotherDevice" = "ເຊື່ອມຕໍ່ກັບອຸປະກອນອື່ນ";
+
+/* Settings section title for Firefox Account */
+"FxA.FirefoxAccount" = "ບັນຊີ Firefox";
+
+/* Button label to go to Firefox Account settings */
+"FxA.ManageAccount" = "ຈັດການບັນຊີ ແລະ ອຸປະກອນ";
+
+/* Label when no internet is present */
+"FxA.NoInternetConnection" = "ບໍ່ມີການເຊື່ອມຕໍ່ກັບອິນເຕີເນັດ";
+
+/* Button label to open Sync preferences */
+"FxA.OpenSyncPreferences" = "ເປີດການຕັ້ງຄ່າ Sync";
+
+/* Instructions shown on qr code scanning view */
+"fxa.qr-scanning-view.instructions" = "ສະແກນລະຫັດ QR ທີ່ສະແດງຢູ່ໃນ firefox.com/pair";
+
+/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
+"FxA.RemoveAccount" = "ລຶບ";
+
+/* Description string for alert view that gets presented when user tries to remove an account. */
+"FxA.RemoveAccountAlertMessage" = "ລົບບັນຊີ Firefox ທີ່ເຊື່ອມເຂົ້າກັບອຸປະກອນນີ້ອອກເພື່ອໃຫ້ຜູ້ນຳໃຊ້ຄົນອື່ນເຂົ້າສູ່ລະບົບໄດ້.";
+
+/* Remove account alert is the final confirmation before user removes their firefox account */
+"FxA.RemoveAccountAlertTitle" = "ລຶບບັນຊີ";
+
+/* Button label to resend email */
+"FxA.ResendEmail" = "ສົ່ງອີເມລຄືນໃຫມ່";
+
+/* FxA sign in view subtitle */
+"fxa.signin.camera-signin" = "ເຂົ້າລະບົບດ້ວຍກ້ອງຂອງທ່ານ";
+
+/* FxA sign in view qr code instructions */
+"fxa.signin.qr-link-instruction" = "ເປີດ Firefox ໃນຄອມພິວເຕີຂອງທ່ານ ແລະ ໄປທີ່ firefox.com/pair";
+
+/* FxA sign in view qr code scan button */
+"fxa.signin.ready-to-scan" = "ກຽມພ້ອມທີ່ຈະສະແກນ";
+
+/* FxA sign in view title */
+"fxa.signin.turn-on-sync" = "ເປີດ Sync";
+
+/* FxA sign in view email login button */
+"fxa.signin.use-email-instead" = "ໃຊ້ອີເມລແທນ";
+
+/* Button label to sign into Sync */
+"FxA.SignIntoSync" = "ເຂົ້າສູ່ລະບົບເພື່ອ Sync";
+
+/* Label explaining what sync does */
+"FxA.SyncExplain" = "ນຳເອົາແທັບ, ບຸກມາກ ແລະ ລະຫັດຜ່ານຂອງທ່ານຈາກອຸປະກອນອື່ນເຂົ້າມາ.";
+
+/* Button label to Sync your Firefox Account */
+"FxA.SyncNow" = "Sync ດຽວນີ້";
+
+/* Call to action for sign into sync button */
+"FxA.TakeYourWebWithYou" = "ນຳເອົາເວັບຂອງທ່ານໄປກັບທ່ານ";
+
+/* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
+"FxAPush_DeviceConnected_body" = "Firefox Sync ໄດ້ເຊື່ອມຕໍ່ກັບ %@";
+
+/* Title of a notification displayed when another device has connected to FxA. */
+"FxAPush_DeviceConnected_title" = "ເຊື່ອມຕໍກັບ Sync ແລ້ວ";
+
+/* Body of a notification displayed when named device has been disconnected from FxA. %@ refers to the name of the disconnected device. */
+"FxAPush_DeviceDisconnected_body" = "%@ ໄດ້ຕັດການເຊື່ອມຕໍ່ແລ້ວ.";
+
+/* Body of a notification displayed when this device has been disconnected from FxA by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "ອຸປະກອນນີ້ໄດ້ຕັດການເຊື່ອຕໍ່ກັບ Firefox Sync ແລ້ວ.";
+
+/* Title of a notification displayed when this device has been disconnected by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_title" = "ຕັດການເຊື່ອມຕໍກັບ Sync ແລ້ວ";
+
+/* Title of a notification displayed when named device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_title" = "ຕັດການເຊື່ອມຕໍກັບ Sync ແລ້ວ";
+
+/* Body of a notification displayed when unnamed device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "ອຸປະກອນບໍ່ໄດ້ເຊື່ອມຕໍ່ກັບ Firefox Sync";
+
+/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "ນຳເອົາແທັບທີ່ທ່ານເປີດ, ບຸກມາກ ແລະ ລະຫັດຜ່ານຂອງທ່ານຈາກອຸປະກອນອື່ນເຂົ້າມາ.";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "ວິທີໃຊ້";
+
+/* Toggle history syncing setting */
+"History" = "ປະຫວັດການໃຊ້ງານ";
+
+/* Title for button in the history panel to clear recent history */
+"HistoryPanel.ClearHistoryButtonTitle" = "ລ້າງປະຫວັດການໃຊ້ງານຫລ້າສຸດ…";
+
+/* Option title to clear all browsing history. */
+"HistoryPanel.ClearHistoryMenuOptionEverything" = "ທຸກຢ່າງ";
+
+/* Button to perform action to clear history for the last hour */
+"HistoryPanel.ClearHistoryMenuOptionTheLastHour" = "ຊົ່ວໂມງທີ່ຜ່ານມາ";
+
+/* Button to perform action to clear history for today only */
+"HistoryPanel.ClearHistoryMenuOptionToday" = "ມື້ນີ້";
+
+/* Button to perform action to clear history for yesterday and today */
+"HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "ມື້ນີ້ ແລະ ມື້ວານນີ້";
+
+/* Title for popup action menu to clear recent history. */
+"HistoryPanel.ClearHistoryMenuTitle" = "ການລ້າງປະຫວັດການໃຊ້ງານທີ່ຜ່ານມາຈະລຶບຂໍ້ມູນການໃຊ້ງານທີ່ຜ່ານມາ, ຄຸກກີ້ ແລະ ຂໍ້ມູນຕົວທ່ອງເວັບອື່ນໆ.";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "ເວັບໄຊທ໌ທີ່ທ່ານຫາກໍ່ເຂົ້າໄປເບິງມື້ກີ້ນີ້ຈະສະແດງຂື້ນຢູ່ທີ່ນີ້.";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "ແທັບຂອງທ່ານຈາກອຸປະກອນອື່ນໆສະແດງຂື້ນຢູ່ນີ້.";
+
+/* Description for the empty synced tabs 'not signed in' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "ເຂົ້າສູ່ລະບົບເພື່ອເບິງລາຍການແທັບທີ່ເປີດຢູ່ໃນອຸປະກອນອື່ນໆຂອງທ່ານ.";
+
+/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "ບັນຊີຂອງທ່ານຕ້ອງໄດ້ຮັບການຢືນຢັນ.";
+
+/* Description for the empty synced tabs 'single device Sync' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "ຕ້ອງການໃຫ້ເຫັນແທັບທີ່ນີ້ຂອງທ່ານໄດ້ຈາກອຸປະກອນອື່ນໆບໍ່?";
+
+/* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "ເປີດການຊິງຄ໌ແທັບເພື່ອເບິ່ງລາຍການແທັບທີ່ເປີດຢູ່ໃນອຸປະກອນອື່ນໆຂອງທ່ານ.";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "ປະຫວັດການໃຊ້ງານ";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "ຫາກໍ່ປິດມື້ກີ້ນີ້";
+
+/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d ອຸປະກອນເຊື່ອມຕໍຢູ່.";
+
+/* Title for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Title" = "ອຸປະກອນທີ່ Sync ແລ້ວ";
+
+/* Button cancelling changes setting the home page for the first time. */
+"HomePage.Set.Dialog.Cancel" = "ຍົກເລີກ";
+
+/* Alert dialog body when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Message" = "ທ່ານສາມາດປ່ຽນສິງນີ້ໄດ້ທຸກເວລາໃນການຕັ້ງຄ່າ";
+
+/* Button accepting changes setting the home page for the first time. */
+"HomePage.Set.Dialog.OK" = "ຕັ້ງເປັນຫນ້າທຳອິດ";
+
+/* Alert dialog title when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Title" = "ທ່ານຕ້ອງການໃຊ້ຫນ້າເວັບນີ້ເປັນຫນ້າທຳອິດຂອງທ່ານຫລືບໍ່?";
+
+/* The title for the Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Bookmark" = "ບຸກມາກ";
+
+/* The title for the Delete from History context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.DeleteFromHistory" = "ລຶບອອກຈາກປະຫວັດການນຳໃຊ້";
+
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab" = "ເປີດໃນແທັບສ່ວນຕົວໃຫມ່";
+
+/* The title for the Open in New Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewTab" = "ເປີດໃນແທັບໃຫມ່";
+
+/* The title for the Remove context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Remove" = "ລຶບ";
+
+/* The title for the Remove Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.RemoveBookmark" = "ລຶບບຸກມາກອອກ";
+
+/* The title for the Share context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Share" = "ແບ່ງປັນ";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Back.DiscoveryTitle" = "ຍ້ອນກັບ";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.CloseTab.DiscoveryTitle" = "ປິດແທັບ";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Find.DiscoveryTitle" = "ຄົ້ນຫາ";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Forward.DiscoveryTitle" = "ໄປຂ້າງຫນ້າ";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "ແທັບສ່ວນຕົວໃຫມ່";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewTab.DiscoveryTitle" = "ແທັບໃຫມ່";
+
+/* Label to switch to normal browsing mode */
+"Hotkeys.NormalMode.DiscoveryTitle" = "ໂຫມດການທ່ອງເວັບແບບປົກກະຕິ";
+
+/* Label to switch to private browsing mode */
+"Hotkeys.PrivateMode.DiscoveryTitle" = "ໂຫມດການທ່ອງເວັບແບບສ່ວນຕົວ";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Reload.DiscoveryTitle" = "ໂຫລດຫນ້າໃຫມ່";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "ເລືອກຕຳແຫນ່ງທີ່ຕັ້ງບາ";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "ສະແດງແທັບຕໍ່ໄປ";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "ສະແດງແທັບກ່ອນຫນ້ານີ້";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "ເພີ່ມຂະໜາດຕົວຫນັງສື";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "ມື້ກີ້ນີ້";
+
+/* History tableview section header */
+"Last month" = "ເດືອນທີ່ຜ່ານມາ";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "Synced ຄັ້ງຫລ່າສຸດ: %@";
+
+/* History tableview section header */
+"Last week" = "ອາທິດທີ່ຜ່ານມາ";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "ໃບອະນຸຍາດ";
+
+/* Light theme setting in Reading View settings */
+"Light" = "ແສງ";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "ໂຫລດຫນ້າເວັບດັ້ງເດີມ";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "ກຳລັງໂຫລດເນື້ອຫາ…";
+
+/* Authentication prompt log in button */
+"Log in" = "ລັອກອິນ";
+
+/* Toggle logins syncing setting */
+"Logins" = "ການເຂົ້າສູ່ລະບົບ";
+
+/* Login detail view field name for the last modified date */
+"LoginsDetailView.LoginModified" = "ດັດແກ້ແລ້ວ";
+
+/* Title for the login detail view */
+"LoginsDetailView.LoginTitle" = "ເຂົ້າສູ່ລະບົບ";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "ບໍ່ບັນທຶກ";
+
+/* Button to not update the user's password */
+"LoginsHelper.DontUpdate.Button" = "ບໍ່ອັບເດດ";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "ບັນທຶກການເຂົ້າສູ່ລະບົບ %1$@ for %2$@ ຫລືບໍ່?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "ບັນທຶກລະຫັດຜ່ານສຳລັບ %@ ຫລືບໍ່?";
+
+/* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
+"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "ອັບເດດການເຂົ້າສູ່ລະບົບສຳລັບ %@?";
+
+/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "ອັບເດດການເຂົ້າສູ່ລະບົບ %1$@ ສຳລັບ %2$@?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "ບັກທຶກການເຂົ້າສູ່ລະບົບ";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "ອັບເດດ";
+
+/* For filtering the login list, search only the login names */
+"LoginsList.LoginsListFilterLogin" = "ເຂົ້າສູ່ລະບົບ";
+
+/* For filtering the login list, search both website and login names. */
+"LoginsList.LoginsListFilterSearchAll" = "ທັງໝົດ";
+
+/* For filtering the login list, search only the website names */
+"LoginsList.LoginsListFilterWebsite" = "ເວັບໄຊທ";
+
+/* Placeholder test for search box in logins list view. */
+"LoginsList.LoginsListSearchPlaceholder" = "ຕົວກັ່ນຕອງ";
+
+/* Title for the list of logins */
+"LoginsList.Title" = "ບັກທຶກການເຂົ້າສູ່ລະບົບໄວ້";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "ເບິງຄ້າຍຄືວ່າ Firefox ເກີດມີຂໍ້ຜິດພາດກ່ອນຫນ້ານີ້. ທ່ານຕ້ອງການກູ້ຄືນແທັບຂອງທ່ານຫລືບໍ?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "ໝາຍໄວ້ວ່າໄດ້ອ່ານແລ້ວ";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "ໝາຍໄວ້ວ່າຫຍັງບໍ່ທັນໄດ້ອ່ານເທື່ອ";
+
+/* Toast displayed to the user after a bookmark has been added. */
+"Menu.AddBookmark.Confirm" = "ເພີ່ມບຸກມາກແລ້ວ";
+
+/* Toast displayed to the user after adding the item to their reading list. */
+"Menu.AddToReadingList.Confirm" = "ເພີ່ມເຂົ້າໄປໃນລາຍການອ່ານແລ້ວ";
+
+/* The title for the button that lets you copy the url from the location bar. */
+"Menu.Copy.Title" = "ສຳເນົາທີ່ຢູ່";
+
+/* Toast displayed to user after copy url pressed. */
+"Menu.CopyURL.Confirm" = "URL ໄດ້ຖືກບັນທຶກໄປໄວ້ໃນ Clipboard ແລ້ວ";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "ການປັບປຸງການປ້ອງກັນການຕິດຕາມຖືກປິດສຳລັບເວບໄຊທ໌ນີ້.";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "ການປັບປຸງການປ້ອງກັນການຕິດຕາມແມ່ນເປີດສຳລັບເວບໄຊທ໌ນີ້.";
+
+/* Label for the button displayed in the menu used to stop the reload of the webpage */
+"Menu.Library.StopReload" = "ຢຸດ";
+
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label" = "ເປີດໃຊ້ງານໂຫມດກາງຄືນ";
+
+/* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
+"Menu.NoImageModeBlockImages.Label" = "ບັອກຮູບພາບ";
+
+/* Label for title in page action menu. */
+"Menu.PageActions.Title" = "ການກະທຳຂອງຫນ້າ";
+
+/* The title for the button that lets you paste into the location bar */
+"Menu.Paste.Title" = "ວາງ";
+
+/* The title for the button that lets you paste and go to a URL */
+"Menu.PasteAndGo.Title" = "ວາງ & ໄປ";
+
+/* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
+"Menu.ReloadWithoutTrackingProtection.Title" = "ລີໂຫລດໂດຍປາສະຈາກການປ້ອງກັນການຕິດຕາມ";
+
+/* Label for the button, displayed in the menu, used to reload the current website with Tracking Protection enabled */
+"Menu.ReloadWithTrackingProtection.Title" = "ລີໂຫລດພ້ອມກັບການປ້ອງກັນການຕິດຕາມ";
+
+/* Toast displayed to the user after a bookmark has been removed. */
+"Menu.RemoveBookmark.Confirm" = "ລຶບບຸກມາກອອກແລ້ວ";
+
+/* Toast displayed to the user after a tab has been sent successfully. */
+"Menu.TabSent.Confirm" = "ແທັບຖືກສົ່ງແລ້ວ";
+
+/* Title on tracking protection menu for blocked items. */
+"Menu.TrackingProtection.BlockedTitle" = "ບັອກ";
+
+/* Message in menu when no trackers blocked. */
+"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Firefox ບໍ່ສາມາດກວດພົບຕົວຕິດຕາມທີ່ຮູ້ຈັກໃນໜ້ານີ້.";
+
+/* The title for tracking protection settings */
+"Menu.TrackingProtection.ProtectionSettings.Title" = "ຕັ້ງຄ່າການປ້ອງກັນ";
+
+/* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
+"Menu.TrackingProtection.TitlePrefix" = "ການປ້ອງກັນສຳລັບ %@";
+
+/* The title that shows the number of content cookies blocked */
+"Menu.TrackingProtectionBlockedContent.Title" = "ຕົວຕິດຕາມເນື້ອຫາ";
+
+/* The title that shows the number of social URLs blocked */
+"Menu.TrackingProtectionBlockedSocial.Title" = "ຕົວຕິດຕາມສືສັງຄົມອອນໄລນ";
+
+/* Description of the Tracking protection menu when TP is blocking parts of the page */
+"Menu.TrackingProtectionBlocking.Description" = "Firefox ກຳລັງບັອກເນື້ອຫາບາງສ່ວນຂອງຫນ້ານີ້ທີ່ອາດຈະເຮັດໃຫ້ການທ່ອງເວັບຂອງທ່ານຖືກຕິດຕາມ.";
+
+/* The description of the Tracking Protection menu item when tracking is enabled */
+"Menu.TrackingProtectionBlockingDisabled.Description" = "ບັອກຕົວຕິດຕາມອອນລາຍ";
+
+/* The title that shows the number of cross-site cookies blocked */
+"Menu.TrackingProtectionCrossSiteCookies.Title" = "ຄຸກກີ້ຕິດຕາມ Cross-Site";
+
+/* The title that shows the number of cross-site URLs blocked */
+"Menu.TrackingProtectionCrossSiteTrackers.Title" = "ຕົວຕິດຕາມ Cross-Site";
+
+/* The title that shows the number of cryptomining scripts blocked */
+"Menu.TrackingProtectionCryptominersBlocked.Title" = "ຕົວຂຸດຫລຽນດິຈິຕໍລ";
+
+/* Description of content trackers. */
+"Menu.TrackingProtectionDescription.ContentTrackers" = "ເວັບໄຊທອາດຈະບໍ່ໂຫລດໂຄສະນາ, ວິດີໂອ ແລະ ເນື້ອຫາອື່ນໆທີ່ມີຕົວຕິດຕາມເຊື່ອງຢູ່. ການບັອກນີ້ຈະເຮັດໃຫ້ເວັບໄຊທສາມາດໂຫລດໄດ້ໄວຂື້ນ ແຕ່ວ່າຈະມີບາງປຸ່ມ, ຟອມ ແລະ ບ່ອນລັອກອິນອາດຈະບໍ່ເຮັດວຽກ.";
+
+/* Description of cross-site trackers. */
+"Menu.TrackingProtectionDescription.CrossSiteNew" = "ຄຸກກີ້ເຫລົ່ານີ້ຈະຕິດຕາມທຸກເວັບໄຊທທີ່ທ່ານເຂົ້າໄປເພື່ອເກັບກຳສິ່ງທີ່ທ່ານເຄືອນໄຫວໃນໂລກອອນລາຍ. ພວກມັນໄດ້ຮັບການຕິດຕັ້ງໂດຍບຸກຄົນທີ່ສາມເຊັ່ນວ່າ: ຕົວໂຄສະນາ ແລະ ບໍລິສັດວິເຄາະ.";
+
+/* Description of cryptominers. */
+"Menu.TrackingProtectionDescription.CryptominersNew" = "ຕົວຂຸດຫລຽນຄຣິບໂຕຫລັກລອບນຳໃຊ້ລະບົບຄອມພິວເຕີຂອງທ່ານເພື່ອໄປຂຸດເງິນດິຈິຕໍລ. ສະຄຣິບການຂຸດຫລຽນຄຣິບໂຕຈະເຮັດໃຫ້ພະລັງງານແບັດເຕີລີຂອງທ່ານລຸດລົງ, ຄອມພິວເຕີຂອງທ່ານຊ້າລົງ ແລະ ກິນໄຟຟ້າຫລາຍຂື້ນ.";
+
+/* Description of fingerprinters. */
+"Menu.TrackingProtectionDescription.Fingerprinters" = "ການຕັ້ງຄ່າໃນບຣາວເຊີ ແລະ ຄອມພິວເຕີຂອງທ່ານບໍ່ຄືໃຜ. ເຄືອງພິມຫລາຍນີ້ວມືຈະຮວບຮ່ວມການຕັ້ງຄ່າທີ່ບໍ່ຄືໃຜຂອງທ່ານໄປສ້າງເປັນໂປຟາຍຂອງທ່ານ ຊຶ່ງສາມາດໃຊ້ຕິດຕາມທ່ານໃນຂະນະທີ່ທ່ານກຳລັງທ່ອງເວັບຢູ່.";
+
+/* Description of social network trackers. */
+"Menu.TrackingProtectionDescription.SocialNetworksNew" = "ເຄືອຂ່າຍສັງຄົມອອນໄລນຈະວ່າງເຄືອງມືຕິດຕາມໄວ້ຕາມເວັບຕ່າງໆ ເພື່ອສ້າງໂປຣຟາຍຂອງທ່ານໃຫ້ກົງກັບເປົ້າຫມາຍຫລາຍທີ່ສຸດ. ການບັອກຕົວຕິດຕາມເຫລົ່ານີ້ຈະເຮັດໃຫ້ບໍລິສັດສືສັງຄົມອອນໄລນສາມາດເບິງການເຄືອນໄຫວຂອງທ່ານໃນໂຫລກອອນໄລນໄດ້ນ້ອຍລົງ.";
+
+/* The button that disabled TP for a site. */
+"Menu.TrackingProtectionDisable1.Title" = "ປິດໃຊ້ງານແລ້ວສຳລັບເວັບໄຊທນີ້";
+
+/* The confirmation toast once tracking protection has been disabled */
+"Menu.TrackingProtectionDisabled.Title" = "ຕອນນີ້ການປ້ອງກັນການຕິດຕາມແມ່ນໄດ້ປິດສຳລັບເວັບໄຊທ໌ນີ້ແລ້ວ";
+
+/* A button to enable tracking protection inside the menu. */
+"Menu.TrackingProtectionEnable.Title" = "ເປີດໃຊ້ງານການປ້ອງກັນການຕິດຕາມ";
+
+/* A button to enable tracking protection inside the menu. */
+"Menu.TrackingProtectionEnable1.Title" = "ເປີດໃຊ້ງານແລ້ວສຳລັບເວັບໄຊທນີ້";
+
+/* The confirmation toast once tracking protection has been enabled */
+"Menu.TrackingProtectionEnabled.Title" = "ຕອນນີ້ການປ້ອງກັນການຕິດຕາມແມ່ນໄດ້ເປີດສຳລັບເວັບໄຊທ໌ນີ້ແລ້ວ";
+
+/* The title that shows the number of fingerprinting scripts blocked */
+"Menu.TrackingProtectionFingerprintersBlocked.Title" = "ເຄືອງພິມລາຍນິ້ວມື";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "ບັອກຄຸກກີ້ຕົວຕິດຕາມ Cross-Site ໄວ້ແລ້ວ";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Cryptominers" = "ບັອກຕົວຂຸດຫລຽນດິຈິຕອລໄວ້ແລ້ວ";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Fingerprinters" = "ບັອກເຄືອງພິມຫລາຍນີ້ວມືແລ້ວ";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Social" = "ບັອກຕົວຕິດຕາມສັງຄົມອອນໄລນໄວ້ແລ້ວ";
+
+/* more info about what tracking protection is about */
+"Menu.TrackingProtectionMoreInfo.Description" = "ຮຽນຮູ້ວິທີການທີ່ການປ້ອງກັນການຕິດຕາມບັອກຕົວຕິດຕາມອອນລາຍເຊິ່ງເກັບກຳຂໍ້ມູນການທ່ອງເວັບຕ່າງໆຂອງທ່ານ.";
+
+/* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
+"Menu.TrackingProtectionNoBlocking.Description" = "ບໍ່ພົບອົງປະກອບທີ່ມີການຕິດຕາມໃນຫນ້ານີ້";
+
+/* label for the menu item to show when the website is whitelisted from blocking trackers. */
+"Menu.TrackingProtectionOption.WhiteListOnDescription" = "ໄຊທນີ້ປະກອບມີອົງປະກອບທີ່ອາດຈະຕິດຕາມການທ່ອງເວັບຂອງທ່ານ. ທ່ານໄດ້ປິດການປ້ອງກັນ.";
+
+/* label for the menu item that lets you remove a website from the tracking protection whitelist */
+"Menu.TrackingProtectionWhitelistRemove.Title" = "ເປີດໃຊ້ງານສຳລັບເວັບໄຊທນີ້";
+
+/* The title for the option to view the What's new page. */
+"Menu.WhatsNew.Title" = "ສິ່ງໃຫມ່ໆ";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "ອຸປະກອນໂທລະສັບ";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "ຫລາຍກ່ວາ 1 ເດືອນຜ່ານມາ";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "ຫລາຍກ່ວາ 1 ອາທິດຜ່ານມາ";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Navigation Toolbar";
+
+/* Accessibility label for the New Tab button in the tab toolbar.
+   Accessibility Label for the tab toolbar New tab button */
+"New Tab" = "ແທັບໃຫມ່";
+
+/* Restore Tabs Negative Action */
+"No" = "ບໍ່ຕ້ອງການ";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "ບໍ່ມີແທັບ";
+
+/* OK button */
+"OK" = "ຕົກລົງ";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "ຕົກລົງ";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "Oops! Firefox ມີຂໍ້ຜິດພາດ";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "ເປີດຫົວຂໍ້ນີ້ໃນ Reader View ໂດຍການເຕະໄອຄອນປື້ມເມື່ອມັນປະກົດຂື້ນໃນ Title bar.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "ເປີດການຕັ້ງຄ່າ";
+
+/* Toggle tabs syncing setting */
+"Open Tabs" = "ເປີດແທັບ";
+
+/* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
+"OpenURL.Error.Message" = "Firefox ບໍ່ສາມາດເປີດຫນ້ານີ້ໄດ້ເພາະວ່າມັນມີທີ່ຢູ່ທີບໍ່ຖືກຕ້ອງ.";
+
+/* Title of the message shown when the user attempts to navigate to an invalid link. */
+"OpenURL.Error.Title" = "ບໍ່ສາມາດເປີດຫນ້ານີ້ໄດ້.";
+
+/* Accessibility label for the Page Options menu button */
+"Page Options Menu" = "ເມນູການຕັ້ງຄ່າຫນ້າ";
+
+/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
+"Panel Chooser" = "Panel Chooser";
+
+/* Password textbox in Authentication prompt */
+"Password" = "ລະຫັດຜ່ານ";
+
+/* Error message shown in the remote tabs panel */
+"PasswordAutoFill.NoPasswordsFoundTitle" = "ທ່ານບໍ່ມີຂໍ້ມູນຮັບຮອງໃດໆ ທີ່ຊີງຈາກບັນຊີ Firefox ຂອງທ່ານ";
+
+/* Header for the list of credentials table */
+"PasswordAutoFill.PasswordsListTitle" = "ຂໍ້ມູນຮັບຮອງທີ່ມີ";
+
+/* Title of the extension that shows firefox passwords */
+"PasswordAutoFill.SectionTitle" = "ຂໍ້ມູນຮັບຮອງ Firefox";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "ສິ່ງນີ້ອະນຸຍາດໃຫ້ທ່ານບັນທຶກຮູບພາບໄປໄວ້ໃນທີ່ເກັບຮູບພາບຂອງທ່ານ.";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox ຕ້ອງການເຂົ້າເຖິງຮູບພາບຂອງທ່ານ";
+
+/* Button for closing the menu action sheet */
+"PhotonMenu.close" = "ປິດ";
+
+/* Privacy section title */
+"Privacy" = "ຄວາມເປັນສ່ວນຕົວ";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ";
+
+/* Title for quick-search engines settings section. */
+"Quick-Search Engines" = "Quick-search Engines";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "ອ່ານ";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "Reader View";
+
+/* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
+"ReaderMode.Available.VoiceOverAnnouncement" = "ນຳໃຊ້ໂຫມດຜູ້ອ່ານໄດ້";
+
+/* Panel accessibility label */
+"Reading list" = "ລາຍການການອ່ານ";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "ຫາກໍ່ປິດມື້ກີ້ນີ້";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "ໂຫລດຄືນໃຫມ່";
+
+/* Accessibility label for the reload button */
+"Reload page" = "ໂຫລດຫນ້າໃຫມ່";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "ລືບ";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "ລືບອອກຈາກລາຍການອ່ານ";
+
+/* Cancel button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Cancel" = "ຍົກເລີກ";
+
+/* Reopen button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Reopen" = "ເປີດຄືນໃຫມ່";
+
+/* Reopen alert title shown at home page. */
+"ReopenAlert.Title" = "ເປີດແທັບທີຫາກໍ່ປິດໄປຄືນມາໃຫມ່";
+
+/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"ReopenClosedTab.KeyCodeTitle" = "ເປີດແທັບທີ່ຫາກໍປິດໄປຄືນໃຫມ່";
+
+/* Accessibility label for button resetting font size in display settings of reader mode */
+"Reset text size" = "ປັບຂະຫນາດຕົວອັກສອນ";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans-serif";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "ບັນທຶກຫນ້າເວັບເຂົ້າໄປໄວ້ໃນລາຍການອ່ານໂດຍການເຕະໄອຄອນປື້ມໃນບ່ອນຄວບຄຸ່ມ Reader View.";
+
+/* OK button to dismiss the error prompt. */
+"ScanQRCode.Error.OK.Button" = "​ຕົກ​ລົງ";
+
+/* Text for the instructions label, displayed in the QR scanner view */
+"ScanQRCode.Instructions.Label" = "ຈັດຕຳແຫນ່ງລະຫັດ QR ໃຫ້ຢູ່ພາຍໃນກອບເພື່ອສະແກນ";
+
+/* Text of the prompt that is shown to the user when the data is invalid */
+"ScanQRCode.InvalidDataError.Message" = "ຂໍ້ມູນບໍ່ຖືກຕ້ອງ";
+
+/* Text of the prompt user to setup the camera authorization. */
+"ScanQRCode.PermissionError.Message" = "ກະລຸນາອະນຸຍາດໃຫ້ Firefox ເຂົ້າໄປນຳໃຊ້ກ້ອງຖ່າຍຮູບຂອງອຸປະກອນຂອງທ່ານໃນ ‘ການຕັ້ງຄ່າ’ -> ‘ຄວາມເປັນສ່ວນຕົວ’ -> ‘ກ້ອງຖ່າຍຮູບ’.";
+
+/* Title for the QR code scanner view. */
+"ScanQRCode.View.Title" = "ສະແກນລະຫັດ QR";
+
+/* Accessibility Label for the tab toolbar Search button
+   Navigation title for search settings.
+   Open search section of settings */
+"Search" = "ຄົ້ນຫາ";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "ປ້ອນທີ່ຢູ່ຂອງເວັບໄຊທ໌ ຫລື ສີ່ງທີ່ທ່ານຕ້ອງການຄົ້ນຫາໃສ່ນີ້";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "ເຄື່ອງມືການຄົ້ນຫາໃຫມ່ຈະປະກົດຢູ່ໃນບາຂອງການຄົ້ນຫາ.";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "ເພີ່ມເຄືອງມືການຄົ້ນຫາແລ້ວ!";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "ເພີ່ມຜູ້ໃຫ້ບໍລິການຄົ້ນຫາຕື່ມອີກບໍ່?";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "ຍົກເລີກ";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.DuplicateErrorMessage" = "ເຄື່ອງມືການຄົ້ນຫາທີ່ມີຊື່ຢູ່ແລ້ວ ຫລື URL ນີ້ໄດ້ຖືກເພີ່ມເຂົ້າໄປໄວ້ແລ້ວ.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.DuplicateErrorTitle" = "ລົ້ມເຫຼວ";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "ບໍ່ສາມາດເພີ່ມຜູ້ໃຫ້ບໍລິການຄົ້ນຫາ.";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "ລົ້ມເຫລວ";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.FormErrorMessage" = "ກະລຸນາປ້ອນຂໍ້ມູນທັງຫມົດຢ່າງຖືກຕ້ອງ.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.FormErrorTitle" = "ລົ້ມເຫລວ";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "ຕົກລົງ";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "ຄົ້ນຫາສໍາລັບຄໍາແນະນໍາ";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "ການເຊື່ອມຕໍ່ທີປອດໄພ";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "ຕ້ອງການສົ່ງລາຍງານຂໍ້ຜິດພາດນີ້ໄປເພື່ອເຮັດໃຫ້ Mozilla ສາມາດແກ້ໄຂບັນຫານີ້ໄດ້ບໍ?";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "ສົ່ງຄຳຄິດເຫັນຂອງທ່ານ";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "ສົ່ງລາຍງານ";
+
+/* Button title for cancelling share screen
+   Close button in top navigation bar */
+"SendTo.Cancel.Button" = "ຍົກເລີກ";
+
+/* Header for the list of devices table */
+"SendTo.DeviceList.Text" = "ອຸປະກອນທີ່ມີຢູ່:";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "ສະເພາະລີ້ງ HTTP ແລະ HTTPS ທີ່ສາມາດແບ່ງປັນໄດ້.";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "ຕົກລົງ";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "ບໍ່ສາມາດແບ່ງປັນລີ້ງທີ່ທ່ານກຳລັງຈະແບ່ງປັນໄດ້.";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"SendTo.NavBar.Title" = "ສົ່ງແທັບ";
+
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message" = "ທ່ານບໍ່ມີອຸປະກອນໃດໆທີ່ເຊື່ອມຕໍ່ກັບບັນຊີ Firefox ນີ້ຢູ່ເພື່ອສາມາດໃຊ້ການ Sync ໄດ້.";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Message" = "ກະລຸນາເປີດ Firefox, ໄປທີ່ການຕັ້ງຄ່າ ແລະ ລົງຊື່ເຂົ້າໃຊ້ເພື່ອດຳເນີນການຕໍໄປ.";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Title" = "ທ່ານຍັງບໍ່ໄດ້ລົງຊື່ເຂົ້າໃຊ້ບັນຊີ Firefox ຂອງທ່ານເທືອ.";
+
+/* Navigation bar button to Send the current page to a device */
+"SendTo.SendAction.Text" = "ສົ່ງ";
+
+/* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_body" = "ມີແທັບໃຫມ່ເຂົ້າມາຈາກອຸປະກ່ອນອື່ນ.";
+
+/* Title of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_title" = "ແທັບທີ່ໄດ້ຮັບ";
+
+/* Body of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the app name. */
+"SentTab_TabArrivingNotification_WithDevice_body" = "ມີແທັບໃຫມ່ເຂົ້າມາໃນ %@";
+
+/* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
+"SentTab_TabArrivingNotification_WithDevice_title" = "ໄດ້ຮັບແທັບຈາກ %@";
+
+/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
+"SentTab.AddToReadingListAction.Title" = "ເພີ່ມເຂົ້າໄປໃນລາຍການອ່ານ";
+
+/* Label for an action used to bookmark one or more tabs from a notification. */
+"SentTab.BookmarkAction.title" = "ບຸກມາກ";
+
+/* Body of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.body" = "ແຕະເພື່ອເລີ່ມຕົ້ນ";
+
+/* Title of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+
+/* Label for an action used to view one or more tabs from a notification. */
+"SentTab.ViewAction.title" = "ມຸມມອງ";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Sepia";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serif";
+
+/* Title in the settings view controller title bar */
+"Settings" = "ການຕັ້ງຄ່າ";
+
+/* The button text in Search Settings that opens the Custom Search Engine view. */
+"Settings.AddCustomEngine" = "ເພີ່ມເຄື່ອງມືການຄົ້ນຫາ";
+
+/* The text on the Save button when saving a custom search engine */
+"Settings.AddCustomEngine.SaveButtonText" = "ບັນທຶກ";
+
+/* The title of the  Custom Search Engine view. */
+"Settings.AddCustomEngine.Title" = "ເພີ່ມເຄື່ອງມືການຄົ້ນຫາ";
+
+/* The title for the field which sets the title for a custom search engine. */
+"Settings.AddCustomEngine.TitleLabel" = "ຊື່ເລື່ອງ";
+
+/* The placeholder for Title Field when saving a custom search engine. */
+"Settings.AddCustomEngine.TitlePlaceholder" = "ເຄື່ອງມືການຄົ້ນຫາ";
+
+/* The title for URL Field */
+"Settings.AddCustomEngine.URLLabel" = "URL";
+
+/* The placeholder for URL Field when saving a custom search engine */
+"Settings.AddCustomEngine.URLPlaceholder" = "URL (ແທນທີ່ Query ດ້ວຍ %s)";
+
+/* Button in Data Management that clears private data for the selected items. */
+"Settings.ClearAllWebsiteData.Clear.Button" = "ລົບລ້າງຂໍ້ມູນເວັບໄຊທັງໝົດ";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "ລົບລ້າງຂໍ້ມູນສ່ວນຕົວ";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "ລົບລ້າງຂໍ້ມູນສ່ວນຕົວ";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "ລົບລ້າງຂໍ້ມູນສ່ວນຕົວ";
+
+/* Copy app version alert shown in settings. */
+"Settings.CopyAppVersion.Title" = "ສຳເນົາໄປໄວ້ໃນຄຣິບບອດແລ້ວ";
+
+/* Default text in search bar for Data Management */
+"Settings.DataManagement.SearchLabel" = "ໄຊຂັດກອງ";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.DataManagement.SectionName" = "ການຈັດການຂໍ້ມູນ";
+
+/* Title displayed in header of the setting panel. */
+"Settings.DataManagement.Title" = "ການຈັດການຂໍ້ມູນ";
+
+/* Body of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Body" = "Firefox ຈະຢຸດການ Sync ກັບບັນຊີຂອງທ່ານ, ແຕວ່າຈະບໍ່ລຶບປະຫວັດການຄົ້ນຫາຂອງທ່ານໃນອຸປະກອນນີ້.";
+
+/* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
+"Settings.Disconnect.Button" = "ຕັດການເຊື່ອມຕໍ່";
+
+/* Cancel action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.CancelButton" = "ຍົກເລີກ";
+
+/* Destructive action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.DestructiveButton" = "ຕັດການເຊື່ອມຕໍ່";
+
+/* Title of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Title" = "ຕັດການເຊື່ອມຕໍ່ Sync?";
+
+/* Section header for brightness slider. */
+"Settings.DisplayTheme.BrightnessThreshold.SectionHeader" = "ຂີດແບ່ງ";
+
+/* Display (theme) settings label to show if manually switch theme is enabled. */
+"Settings.DisplayTheme.Manual.StatusLabel" = "ດ້ວຍຕົນເອງ:";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Manually'. */
+"Settings.DisplayTheme.Manual.SwitchSubtitle" = "ເລືອກຊຸດປັບແຕ່ງທີ່ທ່ານຕ້ອງການ";
+
+/* Display (theme) setting to choose the theme manually. */
+"Settings.DisplayTheme.Manual.SwitchTitle" = "ດ້ວຍ​ຕົນ​ເອງ";
+
+/* Option choice in display theme settings for dark theme */
+"Settings.DisplayTheme.OptionDark" = "ມືດ";
+
+/* Option choice in display theme settings for light theme */
+"Settings.DisplayTheme.OptionLight" = "ແຈ້ງ";
+
+/* Display (theme) settings footer describing how the brightness slider works. */
+"Settings.DisplayTheme.SectionFooter" = "ຊຸດປັບແຕ່ງຈະປ່ຽນໄປຕາມຄວາມແຈ້ງຂອງຫນ້າຈໍຂອງທ່ານໂດຍອັດຕະໂນມັດ. ທ່ານສາມາດຕັ້ງຄ່າຕົວປ່ຽນໄວ້ໃນຊຸດປັບແຕ່ງທີ່ຈະປ່ຽນ. ວົງມົນໄດ້ບົ່ງບອກເຖິງຄວາມແຈ້ງປະຈຸບັນຂອງຫນ້າຈໍຂອງທ່ານ.";
+
+/* Switch mode settings section title */
+"Settings.DisplayTheme.SwitchMode.SectionHeader" = "ປ່ຽນໂຫມດ";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Automatically'. */
+"Settings.DisplayTheme.SwitchSubtitle" = "ສະລັບອັດຕະໂນມັດຕາມຄວາມແຈ້ງຂອງຫນ້າຈໍ";
+
+/* Display (theme) settings label to show if automatically switch theme is enabled.
+   Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
+"Settings.DisplayTheme.SwitchTitle" = "ໂດຍອັດຕະໂນມັດ";
+
+/* System theme settings section title */
+"Settings.DisplayTheme.SystemTheme.SectionHeader" = "ຊຸດປັບແຕ່ງລະບົບ";
+
+/* System theme settings switch to choose whether to use the same theme as the system */
+"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "ໃຊ້ໂຫມດສະຫວ່າງ / ມືດຂອງລະບົບ";
+
+/* Theme picker settings section title */
+"Settings.DisplayTheme.ThemePicker.SectionHeader" = "ຕົວເລືອກຊຸດຕົກແຕ່ງ";
+
+/* Title in main app settings for Theme settings */
+"Settings.DisplayTheme.Title.v2" = "ຊຸດປັບແຕ່ງ";
+
+/* DNT Settings option for always on */
+"Settings.DNT.OptionAlwaysOn" = "ຕະລອດ";
+
+/* DNT Settings option for only turning on when Tracking Protection is also on */
+"Settings.DNT.OptionOnWithTP" = "ສະເພາະເມື່ອມີການນຳໃຊ້ການປ້ອງກັນການຕິດຕາມ";
+
+/* DNT Settings title */
+"Settings.DNT.Title" = "ສົ່ງສັນຍານບໍ່ຕິດຕາມໃຫ້ກັບເວັບໄຊທວ່າທ່ານບໍ່ຕ້ອງການຖືກຕິດຕາມ";
+
+/* Label used for the device name settings section. */
+"Settings.FxA.DeviceName" = "ຊື່ອຸປະກອນ";
+
+/* Label used as a section title in the Firefox Accounts Settings screen. */
+"Settings.FxA.Sync.SectionName" = "ການຕັ້ງຄ່າ Sync";
+
+/* Title displayed in header of the FxA settings panel. */
+"Settings.FxA.Title" = "ບັນຊີ Firefox";
+
+/* General settings section title */
+"Settings.General.SectionName" = "ທົ່ວໄປ";
+
+/* Button in settings to clear the home page. */
+"Settings.HomePage.Clear.Button" = "ລົບລ້າງ";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "ຫນ້າທຳອິດ";
+
+/* Title displayed in header of the setting panel. */
+"Settings.HomePage.Title" = "ຕັ້ງຄ່າຫນ້າທຳອິດ";
+
+/* Placeholder text in the homepage setting when no homepage has been set. */
+"Settings.HomePage.URL.Placeholder" = "ປ້ອນຊື່ເວັບໃສ່";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "ຫນ້າທຳອິດ";
+
+/* Button in settings to use the current link on the clipboard as home page. */
+"Settings.HomePage.UseCopiedLink.Button" = "ໃຊ້ລີ້ງທີ່ໄດ້ສຳເນົາໄວ້";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "ໃຊ້ຫນ້າປະຈຸບັນ";
+
+/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
+"Settings.HomePage.UseDefault.Button" = "ໃຊ້ຄ່າພື້ນຖານ";
+
+/* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
+"Settings.LoginsAndPasswordsTitle" = "ເຂົ້າສູ່ລະບົບ & ລະຫັດຜ່ານ";
+
+/* Label used to set a custom url as the new tab option (homepage). */
+"Settings.NewTab.CustomURL" = "ດັດແກ້ URL";
+
+/* A description in settings of what the new tab choice means */
+"Settings.NewTab.Description" = "ເມື່ອທ່ານເປີດແທັບໃຫມ່:";
+
+/* The title of the section in newtab that lets you modify the topsites panel */
+"Settings.NewTab.Option.ASTitle" = "ປັບແຕ່ງເວັບໄຊທຍອດນິຍົມ";
+
+/* Option in settings to show a blank page when you open a new tab */
+"Settings.NewTab.Option.BlankPage" = "ຫນ້າວ່າງ";
+
+/* Option in settings to show bookmarks when you open a new tab */
+"Settings.NewTab.Option.Bookmarks" = "ບຸກມາກ";
+
+/* The footer for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeFooter" = "ເວັບໄຊທທີ່ທ່ານເຂົ້າໄປເບິ່ງຫລາຍທີ່ສຸດ";
+
+/* The title for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeTitle" = "ປັບແຕ່ງຫນ້າຫລັກຂອງ Firefox";
+
+/* Option in settings to show Firefox Home when you open a new tab */
+"Settings.NewTab.Option.FirefoxHome" = "ຫນ້າຫລັກຂອງ Firefox";
+
+/* Option in the settings to turn off recent bookmarks in the Highlights section */
+"Settings.NewTab.Option.HighlightsBookmarks" = "ບຸກມາກມື້ກີ້ນີ້";
+
+/* Option in settings to turn off history in the highlights section */
+"Settings.NewTab.Option.HighlightsHistory" = "ເຂົ້າໄປເບິງມາແລ້ວ";
+
+/* Option in settings to show history when you open a new tab */
+"Settings.NewTab.Option.History" = "ປະຫວັດ";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.HomePage" = "ຫນ້າທຳອິດ";
+
+/* Option in settings to turn on off pocket recommendations */
+"Settings.NewTab.Option.Pocket" = "ກຳລັງນິຍົມໃນ Pocket";
+
+/* Footer caption for pocket settings */
+"Settings.NewTab.Option.PocketFooter" = "ເນື້ອຫາທີ່ດີເດັ່ນຈາກເວັບຕ່າງໆ.";
+
+/* Option in settings to show reading list when you open a new tab */
+"Settings.NewTab.Option.ReadingList" = "ສະແດງລາຍການອ່ານຂອງທ່ານ";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
+"Settings.NewTab.SectionName" = "ແທັບໃຫມ່";
+
+/* Title displayed in header of the setting panel. */
+"Settings.NewTab.Title" = "ແທັບໃຫມ່";
+
+/* Label at the top of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionName" = "ສະແດງ";
+
+/* Footer at the bottom of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionNameFooter" = "ເລື່ອກສິ່ງທີ່ຈະໂຫລດເມື່ອເປີດແທັບໃຫມ່";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Status" = "ເມື່ອເປີດ Firefox";
+
+/* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Title" = "ສະເຫນີໃຫ້ເປີດລີ້ງທີ່ໄດ້ສຳເນົາໄວ້";
+
+/* Title for Open With Settings */
+"Settings.OpenWith.PageTitle" = "ເປີດລີ້ງເມລໃນ";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
+"Settings.OpenWith.SectionName" = "ແອັບເມລ";
+
+/* Setting to enable the built-in password manager */
+"Settings.SaveLogins.Title" = "ບັກທຶກການເຂົ້າສູ່ລະບົບ";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "ສຳເລັດ";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "ແກ້ໄຂ";
+
+/* title for a link that explains how mozilla collects telemetry */
+"Settings.SendUsage.Link" = "ຮຽນຮູ້ເພີ່ມເຕີມ.";
+
+/* A short description that explains why mozilla collects usage data. */
+"Settings.SendUsage.Message" = "Mozilla ພະຍາຍາມທີ່ຈະເກັບຮວບຮ່ວມສະເພາະສິ່ງທີ່ຈຳເປັນຕໍ່ການປັບປູງ Firefox ສຳລັບທຸກໆຄົນ.";
+
+/* The title for the setting to send usage data. */
+"Settings.SendUsage.Title" = "ສົ່ງຂໍ້ມູນການນຳໃຊ້";
+
+/* Description displayed under the ”Show Link Previews” option */
+"Settings.ShowLinkPreviews.Status" = "ເມື່ອກົດລີ້ງຄ້າງໄວ້ດົນໆ";
+
+/* Title of setting to enable link previews when long-pressing links. */
+"Settings.ShowLinkPreviews.Title" = "ສະແດງຕົວຢ່າງລີ້ງ";
+
+/* Setting to show Logins & Passwords quick access in the application menu */
+"Settings.ShowLoginsInAppMenu.Title" = "ສະແດງໃນເມນູແອັບພລິເຄຊັນ";
+
+/* The description of the open new tab siri shortcut */
+"Settings.Siri.OpenTabShortcut" = "ເປີດແທັບໃໝ່";
+
+/* The description that describes what siri shortcuts are */
+"Settings.Siri.SectionDescription" = "ໃຊ້ທາງລັດ Siri ເພື່ອເປີດ Firefox ຢ່າງວ່ອງໄວຜ່ານ Siri";
+
+/* The option that takes you to the siri shortcuts settings page */
+"Settings.Siri.SectionName" = "ທາງລັດ Siri";
+
+/* Dismiss button for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Button" = "ໂອເຄ, ເຂົ້າໃຈແລ້ວ";
+
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "ຖ້າເວັບໄຊທ໌ບໍ່ສາມາດເຮັດວຽກໄດ້ຕາມທີ່ຄາດຫວັງ ໃຫ້ແຕະໄສໂລ່ໃນແຖບທີ່ຢູ່ ແລະ ປິດການປັບປຸງການປ້ອງກັນການຕິດຕາມສຳລັບໜ້ານັ້ນ.";
+
+/* Title for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Title" = "ລະວັງ!";
+
+/* Header description for tracking protection options section where Basic/Strict block list can be selected */
+"Settings.TrackingProtection.BlockListsHeader" = "ທ່ານສາມາດເລືອກລາຍການໃດທີ່ຈະໃຊ້ເພື່ອບັອກອົງປະກອບຂອງເວັບທີ່ອາດຈະຕິດຕາມກິດຈະກຳການທ່ອງເວັບຂອງທ່ານ.";
+
+/* Explanation of basic mode. */
+"Settings.TrackingProtection.Info.BasicTitle" = "ການປ້ອງກັນ ແລະ ປະສິດທິພາບແບບດຸ່ນດ່ຽງ.";
+
+/* The Title on info view which shows a list of all blocked websites */
+"Settings.TrackingProtection.Info.BlocksTitle" = "ບັອກ";
+
+/* Explanation of strict mode. */
+"Settings.TrackingProtection.Info.StrictTitle" = "ເສີ່ມການປ້ອງກັນໃຫ້ເຂັ້ມແຂງຂື້ນ ແຕ່ວ່າອາດຈະສົ່ງຜົນເຮັດໃຫ້ບາງເວັບໄຊທເຂົ້າບໍ່ໄດ້";
+
+/* 'Learn more' info link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.LearnMore" = "ຮຽນຮູ້ເພີ່ມເຕີມ";
+
+/* 'More Info' link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.MoreInfo" = "ຂໍ້ມູນເພີ່ມເຕີມ……";
+
+/* Additional information about your Enhanced Tracking Protection */
+"Settings.TrackingProtection.ProtectionCellFooter" = "ລຸດຜ່ອນການໂຄສະນາ ແລະ ຊ່ວຍຢຸດຜູ້ໂຄສະນາບໍ່ໃຫ້ຕິດຕາມການທ່ອງເນັດຂອງທ່ານ.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "ຖ້າເວັບໄຊທບໍ່ເຮັດວຽກຕາມທີ່ຄາດໄວ້ ໃຫ້ແຕະໃສ່ໂລ້ໃນແທັບທີ່ຢູ່ ແລະ ປິດການປ້ອງກັນການຕິດຕາມສຳລັບຫນ້ານັ້ນ.";
+
+/* Description for standard level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "ອະນຸຍາດໃຫ້ມີການຕິດຕາມໂຄສະນາບາງສ່ວນ ເພື່ອເຮັດໃຫ້ເວັບໄຊທເຮັດວຽກໄດ້ຕາມປົກກະຕິ.";
+
+/* Description for strict level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "ບັອກຕົວຕິດຕາມ, ໂຄສະນາ ແລະ ປັອບອັບໃຫ້ຫລາຍຂື້ນ. ຫນ້າເວັບຈະໂຫລດໄວຂື້ນ ແຕ່ອາດຈະມີບາງຟັງຊັນບໍ່ສາມາດເຮັດວຽກໄດ້.";
+
+/* Title for tracking protection options section where level can be selected. */
+"Settings.TrackingProtection.ProtectionLevelTitle" = "ລະດັບການປ້ອງກັນ";
+
+/* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
+"Settings.TrackingProtection.SectionName" = "ການປ້ອງກັນການຕິດຕາມ";
+
+/* Additional information about the strict level setting */
+"Settings.TrackingProtection.StrictLevelInfoFooter" = "ການບັອກຕົວຕິດຕາມອາດຈະສົ່ງຜົນກະທົບຕໍ່ການເຮັດວຽກຂອງບາງເວັບໄຊທ.";
+
+/* Tracking protection settings option for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BasicBlockList" = "ມາດຕະຖານ (ຄ່າພື້ນຖານ)";
+
+/* Tracking protection settings option description for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BlockListBasicDescription" = "ອະນຸຍາດຕົວຕິດຕາມບາງອັນເພື່ອເຮັດໃຫ້ເວັບໄຊທເຮັດວຽກໄດ້ຢ່າງຖືກຕ້ອງ.";
+
+/* Tracking protection settings option for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrict" = "ເຄັ່ງຄັດ";
+
+/* Tracking protection settings option description for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrictDescription" = "ການບັອກຕົວຕິດຕາມທີ່ຮູ້ຈັກ. ອາດຈະເຮັດໃຫ້ບາງເວັບໄຊທເຮັດວຽກບໍ່ຖືກຕ້ອງ.";
+
+/* Description label shown on tracking protection options screen. */
+"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "ການຕິດຕາມແມ່ນເປັນການເກັບກຳຂໍ້ມູນການທ່ອງເວັບຕ່າງໆຂອງທ່ານ.";
+
+/* Settings option to specify that Tracking Protection is on */
+"Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "ເພີ່ມການປ້ອງກັນການຕິດຕາມ";
+
+/* Translation settings footer describing how language detection and translation happens. */
+"Settings.TranslateSnackBar.SectionFooter" = "ກວດພົບພາສາຂອງຫນ້າເວັບໃນອຸປະກອນຂອງທ່ານ ແລະ ສະເຫນີການແປຈາກບໍລິການໄລຍະໄກ";
+
+/* Translation settings section title */
+"Settings.TranslateSnackBar.SectionHeader" = "ບໍລິການ";
+
+/* Switch to choose if the language of a page is detected and offer to translate. */
+"Settings.TranslateSnackBar.SwitchSubtitle" = "ສະເຫນີໃຫ້ມີການແປທຸກໆເວັບໄຊທທີ່ມີພາສາຕ່າງປະເທດ.";
+
+/* Switch to choose if the language of a page is detected and offer to translate. */
+"Settings.TranslateSnackBar.SwitchTitle" = "ສະເຫນີໃຫ້ແປ";
+
+/* Title in main app settings for Translation toast settings */
+"Settings.TranslateSnackBar.Title" = "ການແປ";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "ແກ້ໄຂບັນຫາ";
+
+/* Button to delete website in search results */
+"Settings.WebsiteData.ButtonDelete" = "ລຶບ";
+
+/* Button to exit edit website search results */
+"Settings.WebsiteData.ButtonDone" = "ສຳເລັດ";
+
+/* Button to edit website search results */
+"Settings.WebsiteData.ButtonEdit" = "ແກ້ໄຂ";
+
+/* Button shows all websites on website data tableview */
+"Settings.WebsiteData.ButtonShowMore" = "ສະແດງເພີ່ມຕື່ມ";
+
+/* Description of the confirmation dialog shown when a user tries to clear their private data. */
+"Settings.WebsiteData.ConfirmPrompt" = "ການກະທຳຕໍ່ໄປນີ້ຈະລົບລ້າງຂໍ້ມູນເວັບໄຊທັງໝົດຂອງທ່ານ. ສິ່ງນີ້ບໍ່ສາມາດຍົກເລີກໄດ້.";
+
+/* Title displayed in header of the Data Management panel. */
+"Settings.WebsiteData.Title" = "ຂໍ້ມູນເວັບໄຊ";
+
+/* Action label on share extension to add page to the Firefox reading list. */
+"ShareExtension.AddToReadingListAction.Title" = "ເພີ່ມເຂົ້າໄປໃນລາຍການອ່ານ";
+
+/* Share extension label shown after user has performed 'Add to Reading List' action. */
+"ShareExtension.AddToReadingListActionDone.Title" = "ເພີ່ມເຂົ້າໄປໃນລາຍການອ່ານແລ້ວ";
+
+/* Action label on share extension to bookmark the page in Firefox. */
+"ShareExtension.BookmarkThisPageAction.Title" = "ບຸກມາກຫນ້ານີ້";
+
+/* Share extension label shown after user has performed 'Bookmark this Page' action. */
+"ShareExtension.BookmarkThisPageActionDone.Title" = "ບຸກມາກໄວ້ແລ້ວ";
+
+/* Action label on share extension to load the page in Firefox when user switches apps to bring it to foreground. */
+"ShareExtension.LoadInBackgroundAction.Title" = "ໂຫລດໃນເບື້ອງຫລັງ";
+
+/* Share extension label shown after user has performed 'Load in Background' action. */
+"ShareExtension.LoadInBackgroundActionDone.Title" = "ກຳລັງໂຫລດໃນ Firefox";
+
+/* Action label on share extension to immediately open page in Firefox. */
+"ShareExtension.OpenInFirefoxAction.Title" = "ເປີດໃນ Firefox";
+
+/* Action label on share extension to immediately open page in Firefox in private mode. */
+"ShareExtension.OpenInPrivateModeAction.Title" = "ເປີດໃນໂຫມດສ່ວນຕົວ";
+
+/* Action label on share extension to search for the selected text in Firefox. */
+"ShareExtension.SeachInFirefoxAction.Title" = "ຊອກຫາໃນ Firefox";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "ສະແດງຜົນການແນະນຳການຄົ້ນຫາ";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "ສະແດງແທັບ";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "ສະແດງວິທີນຳໃຊ້ທົ່ວໄປ";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "ຢຸດ";
+
+/* Support section title */
+"Support" = "ສະຫນັບສະຫນູນ";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "ປັດໄປທາງເບື້ອງຂວາ ຫລື ຊ້າຍດ້ວຍນີ້ວມືສາມນີ້ວເພື່ອປິດແທັບ.";
+
+/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"SwitchToNonPBM.KeyCodeTitle" = "ໂຫມດການທ່ອງເວັບແບບທຳມະດາ";
+
+/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"SwitchToPBM.KeyCodeTitle" = "ໂຫມດການທ່ອງເວັບແບບສ່ວນຕົວ";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, bookmarks, passwords and more." = "Sync ແທັບ, ບຸກມາກ, ລະຫັດຜ່ານ ແລະ ອື່ນຂອງທ່ານ.";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, passwords and more." = "Sync ແທັບ, ລະຫັດຜ່ານ ແລະ ອື່ນຂອງທ່ານ.";
+
+/* Message displayed when the user syncs for the first time */
+"Sync.FirstTimeMessage.Label" = "ການ sync ຄັ້ງທຳອິດຂອງທ່ານອາດຈະໃຊ້ເວລາດົນຫນ້ອຍຫນຶ່ງ";
+
+/* Message displayed when the user's account is syncing with no ellipsis */
+"Sync.Syncing.Label" = "ກຳລັງ sync";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "ກຳລັງ sync…";
+
+/* Panel accessibility label */
+"Synced Tabs" = "ແທັບທີ່ Sync ແລ້ວ";
+
+/* The Bookmark sync component, used in SyncState.Partial.Title */
+"SyncState.Bookmark.Title" = "ບຸກມາກສ໌";
+
+/* The Remote Clients sync component, used in SyncState.Partial.Title */
+"SyncState.Clients.Title" = "ລູກຂ່າຍທາງໄກ";
+
+/* Title for Sync status message when synchronization failed to complete */
+"SyncState.Failed.Title" = "ການ sync ລົ້ມເຫລວ";
+
+/* The History sync component, used in SyncState.Partial.Title */
+"SyncState.History.Title" = "ປະຫວັດການໃຊ້ງານ";
+
+/* The Logins sync component, used in SyncState.Partial.Title */
+"SyncState.Logins.Title" = "ການເຂົ້າສູ່ລະບົບ";
+
+/* Title for Sync status message when Sync failed to start. */
+"SyncState.NotStarted.Title" = "Sync ໃຊ້ງານບໍ່ໄດ້";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "Sync ອັອບລາຍຢູ່";
+
+/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
+"SyncState.Partial.Title" = "Sync ປະສົບກັບບັນຫາໃນ Sync %@";
+
+/* The Tabs sync component, used in SyncState.Partial.Title */
+"SyncState.Tabs.Title" = "ແທັບ";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "ແທັບ %1$@ of %2$@";
+
+/* Hardware shortcut to open the tab tray from a tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"Tab.ShowTabTray.KeyCodeTitle" = "ສະແດງແທັບທັງຫມົດ";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "ແທັບ %1$@ to %2$@ of %3$@";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "ແທັບ Tray";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "ເອົາກັບຄືນ";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "ປິດ %d ແທັບແລ້ວ";
+
+/* The placeholder text for the tab search bar */
+"Tabs.Search.PlaceholderText" = "ຄົ້ນຫາແທັບ";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"TabTray.AddTab.Button" = "ເພີ່ມແທັບ";
+
+/* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseAllTabs.KeyCodeTitle" = "ປິດແທັບທັງຫມົດ";
+
+/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseTab.KeyCodeTitle" = "ປິດແທັບທີ່ເລືອກໄວ້";
+
+/* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenNewTab.KeyCodeTitle" = "ເປີດແທັບໃຫມ່";
+
+/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenSelectedTab.KeyCodeTitle" = "ເປີດແທັບທີ່ເລືອກໄວ້";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "ຫນ້າເວັບນີ້ບໍ່ສາມາດສະແດງຢູ່ໃນ Reader View.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "ມີບັນຫາເຮັດໃຫ້ບໍ່ສາມາດເຂົ້າເຖິງແທັບຈາກອຸປະກອນອື່ນໆຂອງທ່ານ. ກະລຸນາລອງໃຫມ່ອີກຄັ້ງໃນອີກ 2-3 ນາທີຂ້າງຫນ້າ.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "ເກີດມີຂໍ້ຜິດພາດໃນການ Convert ຫນ້າເວັບ";
+
+/* Relative date for date in past week. */
+"this week" = "ອາທິດນີ້";
+
+/* label for Not Now button */
+"Toasts.NotNow" = "ບໍ່ແມ່ນຕອນນີ້";
+
+/* Open App Store button */
+"Toasts.OpenAppStore" = "ເປີດ App Store";
+
+/* Label for button to undo the action just performed */
+"Toasts.Undo" = "ກັບຄືນ";
+
+/* History tableview section header */
+"Today" = "ມື້ນີ້";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "ມື້ນີ້ທີ່ %@";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "ເມນູ";
+
+/* Accessibility label for the Close All Tabs menu button. */
+"Toolbar.Menu.CloseAllTabs" = "ປິດແທັບທັງຫມົດ";
+
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "ເວັບໄຊທ໌ທີ່ທ່ານມັກເຂົ້າໄປເບິງຕະລອດຈະສະແດງຂື້ນຢູ່ນີ້.";
+
+/* The title for the empty Top Sites state */
+"TopSites.EmptyState.Title" = "ຍິນດີຕ້ອນຮັບສູ່ເວັບໄຊທ໌ຍອດນິຍົມ";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "ລຶບຫນ້ານີ້ອອກ - %@";
+
+/* Button to disallow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.Cancel" = "ບໍ່";
+
+/* Button to allow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.OK" = "ແມ່ນ";
+
+/* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
+"TranslationToastHandler.PromptTranslate.Title" = "ຫນ້ານີ້ເບິງຄ້າຍຄືຈະຢູ່ໃນ %1$@. ແປໄປເປັນ %2$@ ດ້ວຍ %3$@?";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* The menu item that pastes the current contents of the clipboard into the URL bar and navigates to the page */
+"UIMenuItem.PasteGo" = "ວາງ & ໄປ";
+
+/* Search in New Tab Text selection menu item */
+"UIMenuItem.SearchWithFirefox" = "ຄົ້ນຫາດ້ວຍ Firefox";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "ຍັງບໍ່ທັນອ່ານ";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect" = "ອັບເກຣດ Firefox ເພື່ອເຊື່ອມຕໍ່";
+
+/* Debug option */
+"Use stage servers" = "ໃຊ້ stage servers";
+
+/* Username textbox in Authentication prompt */
+"Username" = "ຊື່ຜູ້ໃຊ້";
+
+/* Text message in the settings table view */
+"Verify your email address" = "ຢືນຢັນທີ່ຢູ່ອີເມລຂອງທ່ານ";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "ລຸ້ນທີ່ %1$@ (%2$@)";
+
+/* Accessibility label for the main web content view */
+"Web content" = "ເນື້ອຫາໃນເວັບ";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "ຍິນດີຕ້ອນຮັບສູ່ລາຍການອ່ານຂອງທ່ານ";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "ເກີດມີຂໍ້ຜິດພາດ.";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Wikipedia";
+
+/* Relative date for yesterday. */
+"yesterday" = "ມື້ວານ";
+
+/* History tableview section header */
+"Yesterday" = "ມື້ວານ";
+
+/* Error message in the remote tabs panel */
+"You don’t have any tabs open in Firefox on your other devices." = "ທ່ານບໍ່ມີແທັບໃດທີ່ເປີດໃນ Firefox ໃນອຸປະກອນອື່ນໆຂອງທ່ານ.";
+
+/* Your Rights settings section title */
+"Your Rights" = "ສິດທິຂອງທ່ານ";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+

@@ -1,0 +1,51 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "Dempués d'una hora";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "Dempués d'un minutu";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "Dempués de 5 minutos";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "Dempués de 10 minutos";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "Dempués de 15 minutos";
+
+/* Label for the Face ID/Passcode item in Settings */
+"Face ID & Passcode" = "Face ID y códigu de pasu";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Nel intre";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "El códigu de pasu ye incorreutu. Volvi tentalo (intentos restantes: %d).";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "El códigu de pasu ye incorreutu. Volvi tentalo.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "Algamóse'l númberu máximu d'intentos. Volvi tentalo nuna hora, por favor.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "Algamóse'l númberu máximu d'intentos. Volvi tentalo dempués, por favor.";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "El códigu de pasu nuevu ha estremase del esistente.";
+
+/* Label for the Passcode item in Settings */
+"Passcode For Logins" = "Códigu de pasu p'anicios de sesión";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn’t match. Try again." = "Los códigos de pasu nun concasen. Volvi tentalo.";
+
+/* Label for the Touch ID/Passcode item in Settings */
+"Touch ID & Passcode" = "Touch ID y códigu de pasu";
+
+/* Touch ID prompt subtitle when disabling Touch ID */
+"touchid.disable.reason.label" = "Usa la buelga pa desactivar Touch ID.";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Usa la buelga p'acceder agora a los anicios de sesión.";
+

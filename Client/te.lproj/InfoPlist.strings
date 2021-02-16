@@ -1,0 +1,26 @@
+/* (No Comment) */
+"1Password Fill Browser Action" = "1పాస్‌వర్డ్ విహారిణి చర్య పూరింపు";
+
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "ఇది మీకు ఫోటోలను తీసుకొని అప్లోడ్ చేయడానికి అనుమతిస్తుంది.";
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSLocationWhenInUseUsageDescription" = "మీరు సందర్శించే వెబ్ సైట్లు మీ స్థానాన్ని అభ్యర్థించవచ్చు.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "ఇది మీకు ఫోటోలు మరియు వీడియోలు తీసుకొని అప్లోడ్ చేయడానికి అనుమతిస్తుంది.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "ఇది ఫోటోలను భద్రపరచటానికి మిమ్మల్ని అనుమతిస్తుంది.";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "కొత్త ప్రైవేట్ ట్యాబు";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "కొత్త ట్యాబు";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "QR కోడ్ను స్కాన్ చేయండి";
+

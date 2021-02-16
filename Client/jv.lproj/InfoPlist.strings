@@ -1,0 +1,23 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Ngidinké sampéyan njepret lan ngunggah poto.";
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSLocationWhenInUseUsageDescription" = "Situs kang sampéyan tiliki njaluk lokasi sampéyan.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Ngidinké sampéyan ngrekam lan ngunggah video.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Ngidinké sampeyan nyimpen poto.";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "Tab Pribadi Anyar";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "Tab Anyar";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "Pindhai Kode QR";
+

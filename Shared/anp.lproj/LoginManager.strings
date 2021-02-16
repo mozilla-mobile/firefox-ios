@@ -1,0 +1,27 @@
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "रद्द करोॅ";
+
+/* Copy password text selection menu item */
+"Copy" = "कॉपी";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "हटाबोॅ";
+
+/* Hide password text selection menu item */
+"Hide" = "छुपाबियै";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "खोलियै आरू भरियै";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "पासवर्ड";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "खोजियै";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "यूजरनाम";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "वेबसाइट";
+

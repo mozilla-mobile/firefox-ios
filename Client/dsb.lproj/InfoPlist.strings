@@ -1,0 +1,29 @@
+/* (No Comment) */
+"1Password Fill Browser Action" = "Gronidła z 1Password zapisaś";
+
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "To wam zmóžnja, fotografěrowaś a fota nagraś.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Firefox Face ID trjeba, aby pśistup k wašym skłaźonym pśizjawjenjam měł.";
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSLocationWhenInUseUsageDescription" = "Websedła, kótarež se woglědujośo, pominaju snaź wašo městno.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "To wam zmóžnja, wideo gótowaś a nagraś.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Z tym móžośo fota składowaś.";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "Nowy priwatny rejtarik";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "Nowy rejtarik";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "QR-kod skannowaś";
+

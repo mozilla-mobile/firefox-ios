@@ -1,0 +1,51 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Sètz segur ?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Anullar";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Escafar las recèrcas";
+
+/* Copy password text selection menu item */
+"Copy" = "Copiar";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Suprimir";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "O seleccionar tot";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Activar lo mòde recèrca";
+
+/* Hide password text selection menu item */
+"Hide" = "Amagar";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Pas d’identificant pas trobat";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Dobrir e emplenar";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Senhal";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Afichar";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Recercar";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Recercar d’identificants";
+
+/* Label for the button used to select all logins. */
+"Select All" = "O seleccionar tot";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Nom d’utilizaire";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "Site web";
+

@@ -1,0 +1,15 @@
+/* Settings item for clearing browsing history */
+"Browsing History" = "සැරිසර අතීතය";
+
+/* Settings item for clearing the cache */
+"Cache" = "කැච්";
+
+/* Settings item for clearing cookies */
+"Cookies" = "කුකී";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "නොබැඳි වෙබ් අඩවි දත්ත";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "සුරැකි පිවිසුම්";
+

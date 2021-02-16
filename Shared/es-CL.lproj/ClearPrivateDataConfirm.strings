@@ -1,0 +1,9 @@
+/* The cancel button when confirming clear private data. */
+"Cancel" = "Cancelar";
+
+/* The button that clears private data. */
+"OK" = "Aceptar";
+
+/* Description of the confirmation dialog shown when a user tries to clear their private data. */
+"This action will clear all of your private data. It cannot be undone." = "Esta acción eliminará todos tus datos privados. No se puede deshacer.";
+

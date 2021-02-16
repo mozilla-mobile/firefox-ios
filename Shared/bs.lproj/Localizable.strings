@@ -1,0 +1,1175 @@
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "Korisničko ime i lozinka su zahtjevani od %@.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "Korisničko ime i lozinka su zahtjevani od %1$@. Stranica kaže: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "O Firefoxu";
+
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite" = "Zakači na popularne stranice";
+
+/* The title for removing a pinned topsite action */
+"ActivityStream.ContextMenu.RemovePinTopsite" = "Ukloni zakačenu stranicu";
+
+/* The description of a highlight if it is a site the user has bookmarked */
+"ActivityStream.Highlights.Bookmark" = "Zabilježeno";
+
+/* The description of a highlight if it is a site the user has visited */
+"ActivityStream.Highlights.Visited" = "Posjećeno";
+
+/* The link that shows more Pocket trending stories */
+"ActivityStream.Pocket.MoreLink" = "Više";
+
+/* The description of a Pocket Story */
+"ActivityStream.Pocket.Trending" = "Popularno";
+
+/* Section title label for Top Sites */
+"ActivityStream.TopSites.SectionTitle" = "Najpopularnije stranice";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Dodaj tab";
+
+/* Accessibility label for action adding current page to reading list.
+   Name for button adding current article to reading list in reader mode */
+"Add to Reading List" = "Dodaj na listu za čitanje";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Stranica dodana na listu za čitanje";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "U redu";
+
+/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Message" = "Došlo je do greške prilikom dodavanja propusnice u Wallet. Pokušajte ponovo kasnije.";
+
+/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Title" = "Neuspjelo dodavanje propusnice";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Adresa i pretraga";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Uvijek pošalji";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "Neophodna je autentikacija";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "Nazad";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Blokiraj iskočne prozore";
+
+/* Toggle bookmarks syncing setting */
+"Bookmarks" = "Zabilješke";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "Direktorij";
+
+/* The label for the location of the new folder */
+"Bookmarks.FolderLocation.Label" = "Lokacija";
+
+/* The label for the title of the new folder */
+"Bookmarks.FolderName.Label" = "Naziv direktorija";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "Novi direktorij";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "Naslov";
+
+/* The label for the URL of a bookmark */
+"Bookmarks.URL.Label" = "URL";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Osvjetljenje";
+
+/* Label for Cancel button */
+"Cancel" = "Otkaži";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Mijenja boju teme.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Mijenja vrstu fonta.";
+
+/* The button to open a new tab with the copied link */
+"ClipboardToast.GoToCopiedLink.Button" = "Idi";
+
+/* Message displayed when the user has a copied link on the clipboard */
+"ClipboardToast.GoToCopiedLink.Title" = "Idi na kopirani link?";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Zatvori";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "Zatvori tab";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "računar";
+
+/* The button text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Promijeni";
+
+/* The label text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Otvoren novi privatni tab";
+
+/* The button text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "Promijeni";
+
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText" = "Otvoren novi tab";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "Stranica se nije mogla dodati na listu za čitanje";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it’s already there?" = "Stranica se nije mogla dodati na listu za čitanje. Možda je već tu?";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "Nije moguće učitati stranicu.";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Kreirajte račun";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Tamno";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Smanji veličinu teksta";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Glavni pretraživač";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Postavke zaslona";
+
+/* Used as a button label for crash dialog prompt */
+"Don’t Send" = "Ne šalji";
+
+/* Done button on left side of the Settings view controller title bar */
+"Done" = "Gotovo";
+
+/* Panel accessibility label */
+"Downloads" = "Preuzimanja";
+
+/* The label of the button the user will press to start downloading a file */
+"Downloads.Alert.DownloadNow" = "Preuzmite sada";
+
+/* Button confirming the cancellation of the download. */
+"Downloads.CancelDialog.Cancel" = "Otkaži";
+
+/* Alert dialog body when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Message" = "Da li ste sigurni da želite otkazati ovo preuzimanje?";
+
+/* Button declining the cancellation of the download. */
+"Downloads.CancelDialog.Resume" = "Nastavi";
+
+/* Alert dialog title when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Title" = "Otkaži preuzimanje";
+
+/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
+"Downloads.Error.Message" = "Preuzimanja još nisu podržana u Firefoxu.";
+
+/* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
+"Downloads.Toast.Cancelled.LabelText" = "Preuzimanje je otkazano";
+
+/* The label text in the Download Failed toast for showing confirmation that the download has failed. */
+"Downloads.Toast.Failed.LabelText" = "Preuzimanje nije uspjelo";
+
+/* The button to retry a failed download from the Download Failed toast. */
+"Downloads.Toast.Failed.RetryButton" = "Pokušaj ponovo";
+
+/* The button to open a new tab with the Downloads home panel */
+"Downloads.Toast.GoToDownloads.Button" = "Preuzimanja";
+
+/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. */
+"Downloads.Toast.MultipleFiles.DescriptionText" = "1 od %d datoteka";
+
+/* The description text in the Download progress toast for showing the number of files (1$) and download progress (2$). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where 1$ is Downloads.Toast.MultipleFiles.DescriptionText and 2$ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and 1$ should come before 2$ everywhere except for right-to-left locales. */
+"Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";
+
+/* The description text in the Download progress toast for showing the downloaded file size (1$) out of the total expected file size (2$). */
+"Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
+
+/* Title for the Downloads Panel empty state. */
+"DownloadsPanel.EmptyState.Title" = "Preuzete datoteke će se pojaviti ovdje.";
+
+/* Text message in the settings table view */
+"Enter your password to connect" = "Unesite vašu lozinku za povezivanje";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "Napredno";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "Upozorenje: ne možemo potvrditi da je vaše povezivanje na ovu web stranicu sigurno.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "To može biti pogrešna konfiguracija ili ometanje od strane napadača. Nastavite ako prihvatate potencijalni rizik.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "Vlasnik %@ je nepravilno konfigurisao svoju web stranicu. Za zaštitu vaših podataka od krađe, Firefox nije povezao ovu web stranicu.";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "Ova veza nije povjerljiva";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "Idi nazad";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "Posjeti stranicu u svakom slučaju";
+
+/* Question shown to user when tapping a link that opens the App Store app */
+"ExternalLink.AppStore.ConfirmationTitle" = "Otvorite ovaj link u App Store-u?";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Title for firefox about:home page in tab history list */
+"Firefox.HomePage.Title" = "Firefox početna stranica";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "Naprijed";
+
+/* Label stating how to disconnect account */
+"FxA.AccountVerificationDetails" = "Pogrešna e-pošta? Odspojite se ispod da počnete ponovo.";
+
+/* Label stating your account is not verified */
+"FxA.AccountVerificationRequired" = "Potrebno je potvrditi račun";
+
+/* Message explaining that user needs to check email for Firefox Account verfication link. */
+"FxA.AccountVerificationRequiredSurface" = "Trebate potvrditi %@. Provjerite vašu e-poštu za vezu potvrde iz Firefoxa.";
+
+/* Button label to connect another device to Sync */
+"FxA.ConnectAnotherDevice" = "Poveži dodatni uređaj";
+
+/* Settings section title for Firefox Account */
+"FxA.FirefoxAccount" = "Firefox račun";
+
+/* Button label to go to Firefox Account settings */
+"FxA.ManageAccount" = "Upravljanje računom i uređajima";
+
+/* Label when no internet is present */
+"FxA.NoInternetConnection" = "Nema internet veze";
+
+/* Button label to open Sync preferences */
+"FxA.OpenSyncPreferences" = "Otvori postavke za sinhronizaciju";
+
+/* Button label to resend email */
+"FxA.ResendEmail" = "Ponovo pošalji e-poštu";
+
+/* Button label to sign into Sync */
+"FxA.SignIntoSync" = "Prijavite se na Sinhronizaciju";
+
+/* Label explaining what sync does */
+"FxA.SyncExplain" = "Pristupite vašim tabovima, zabilješkama i lozinkama iz vaših drugih uređaja.";
+
+/* Button label to Sync your Firefox Account */
+"FxA.SyncNow" = "Sinhronizujte sada";
+
+/* Call to action for sign into sync button */
+"FxA.TakeYourWebWithYou" = "Ponesite vaš web sa vama";
+
+/* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
+"FxAPush_DeviceConnected_body" = "Firefox sinhronizacija je povezana na %@";
+
+/* Title of a notification displayed when another device has connected to FxA. */
+"FxAPush_DeviceConnected_title" = "Sinhronizacija povezana";
+
+/* Body of a notification displayed when named device has been disconnected from FxA. %@ refers to the name of the disconnected device. */
+"FxAPush_DeviceDisconnected_body" = "%@ je uspješno odspojen.";
+
+/* Body of a notification displayed when this device has been disconnected from FxA by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Ovaj uređaj je uspješno odspojen iz Firefox sinhronizacije.";
+
+/* Title of a notification displayed when this device has been disconnected by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_title" = "Sinhronizacija odspojena";
+
+/* Title of a notification displayed when named device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_title" = "Sinhronizacija odspojena";
+
+/* Body of a notification displayed when unnamed device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Uređaj je odspojen iz Firefox sinhronizacije";
+
+/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "Pristupite vašim tabovima, zabilješkama i lozinkama iz vaših dugih uređaja.";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Pomoć";
+
+/* Toggle history syncing setting */
+"History" = "Historija";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "Web stranice koje ste nedavno posjetili će se pokazati ovdje.";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "Vaši tabovi iz drugih uređaja će se pokazati ovdje.";
+
+/* Description for the empty synced tabs 'not signed in' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Prijavite se da vidite listu tabova s vaših ostalih uređaja.";
+
+/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "Vaš račun mora biti verifikovan.";
+
+/* Description for the empty synced tabs 'single device Sync' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "Želite li vidjeti vaše tabove s drugih uređaja ovdje?";
+
+/* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Uključite sinhronizaciju tabova da biste vidjeli listu tabova s vaših ostalih uređaja.";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sinhronizacija";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "Historija";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "Nedavno zatvoreno";
+
+/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "Broj povezanih uređaja: %d";
+
+/* Title for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Title" = "Sinhronizovani uređaji";
+
+/* Button cancelling changes setting the home page for the first time. */
+"HomePage.Set.Dialog.Cancel" = "Otkaži";
+
+/* Alert dialog body when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Message" = "Možete ovo promijeniti bilo kad u Postavkama";
+
+/* Button accepting changes setting the home page for the first time. */
+"HomePage.Set.Dialog.OK" = "Postavi početnu stranicu";
+
+/* Alert dialog title when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Title" = "Želite li koristiti ovu web stranicu kao početnu stranicu?";
+
+/* The title for the Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Bookmark" = "Zabilješka";
+
+/* The title for the Delete from History context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.DeleteFromHistory" = "Izbriši iz historije";
+
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab" = "Otvori u novom privatnom tabu";
+
+/* The title for the Open in New Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewTab" = "Otvori u novom tabu";
+
+/* The title for the Remove context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Remove" = "Ukloni";
+
+/* The title for the Remove Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.RemoveBookmark" = "Ukloni zabilješku";
+
+/* The title for the Share context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Share" = "Dijeli";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Back.DiscoveryTitle" = "Nazad";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.CloseTab.DiscoveryTitle" = "Zatvori tab";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Find.DiscoveryTitle" = "Pronađi";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Forward.DiscoveryTitle" = "Naprijed";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "Novi privatni tab";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewTab.DiscoveryTitle" = "Novi tab";
+
+/* Label to switch to normal browsing mode */
+"Hotkeys.NormalMode.DiscoveryTitle" = "Uobičajeni način pretraživanja";
+
+/* Label to switch to private browsing mode */
+"Hotkeys.PrivateMode.DiscoveryTitle" = "Privatni način pretraživanja";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Reload.DiscoveryTitle" = "Ponovo učitaj stranicu";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "Izaberite traku lokacije";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "Prikaži sljedeći tab";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Prikaži prethodni tab";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Povećaj veličinu teksta";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "upravo";
+
+/* History tableview section header */
+"Last month" = "Prošli mjesec";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "Zadnje sinhronizovano: %@";
+
+/* History tableview section header */
+"Last week" = "Prošle sedmice";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Licence";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Svjetlo";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "Učitavanje izvorne stranice";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "Učitavanje sadržaja…";
+
+/* Authentication prompt log in button */
+"Log in" = "Prijava";
+
+/* Toggle logins syncing setting */
+"Logins" = "Prijave";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "Nemoj sačuvati";
+
+/* Button to not update the user's password */
+"LoginsHelper.DontUpdate.Button" = "Nemoj ažurirati";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "Sačuvaj prijavu %1$@ za %2$@?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "Sačuvaj lozinku za %@?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "Sačuvaj prijavu";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "Ažuriraj";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Izgleda da se Firefox ranije srušio. Želite li vratit tabove?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "Označi kao pročitano";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Označi kao nepročitano";
+
+/* Toast displayed to the user after a bookmark has been added. */
+"Menu.AddBookmark.Confirm" = "Zabilješka dodana";
+
+/* Toast displayed to the user after adding the item to their reading list. */
+"Menu.AddToReadingList.Confirm" = "Dodano na listu za čitanje";
+
+/* The title for the button that lets you copy the url from the location bar. */
+"Menu.Copy.Title" = "Kopiraj adresu";
+
+/* Toast displayed to user after copy url pressed. */
+"Menu.CopyURL.Confirm" = "URL kopiran u međuspremnik";
+
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label" = "Onemogući noćni način rada";
+
+/* Label for title in page action menu. */
+"Menu.PageActions.Title" = "Akcije stranice";
+
+/* The title for the button that lets you paste into the location bar */
+"Menu.Paste.Title" = "Zalijepi";
+
+/* The title for the button that lets you paste and go to a URL */
+"Menu.PasteAndGo.Title" = "Zalijepi i idi";
+
+/* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
+"Menu.ReloadWithoutTrackingProtection.Title" = "Ponovo učitaj bez zaštite od praćenja";
+
+/* Label for the button, displayed in the menu, used to reload the current website with Tracking Protection enabled */
+"Menu.ReloadWithTrackingProtection.Title" = "Ponovo učitaj sa zaštitom od praćenja";
+
+/* Toast displayed to the user after a bookmark has been removed. */
+"Menu.RemoveBookmark.Confirm" = "Zabilješka uklonjena";
+
+/* Description of the Tracking protection menu when TP is blocking parts of the page */
+"Menu.TrackingProtectionBlocking.Description" = "Firefox blokira dijelove stranicu koji bi mogli pratiti vaše pretraživanje.";
+
+/* The description of the Tracking Protection menu item when tracking is enabled */
+"Menu.TrackingProtectionBlockingDisabled.Description" = "Blokiraj tragače na mreži";
+
+/* The confirmation toast once tracking protection has been disabled */
+"Menu.TrackingProtectionDisabled.Title" = "Zaštita od praćenja je sada isključena za ovu stranicu.";
+
+/* A button to enable tracking protection inside the menu. */
+"Menu.TrackingProtectionEnable.Title" = "Omogući zaštitu od praćenja";
+
+/* The confirmation toast once tracking protection has been enabled */
+"Menu.TrackingProtectionEnabled.Title" = "Zaštita od praćenja je sada uključena za ovu stranicu.";
+
+/* more info about what tracking protection is about */
+"Menu.TrackingProtectionMoreInfo.Description" = "Saznajte više o tome kako zaštita od praćenja blokira online tragače koji prikupljaju vaše podatke pretraživanja putem više web stranica.";
+
+/* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
+"Menu.TrackingProtectionNoBlocking.Description" = "Elementi praćenja nisu uočeni na ovoj stranici.";
+
+/* label for the menu item to show when the website is whitelisted from blocking trackers. */
+"Menu.TrackingProtectionOption.WhiteListOnDescription" = "Ova stranica sadrži elemente koji bi mogli pratiti vaše pretraživanje. Vi ste onemogućili zaštitu.";
+
+/* label for the menu item that lets you remove a website from the tracking protection whitelist */
+"Menu.TrackingProtectionWhitelistRemove.Title" = "Omogući za ovu stranicu";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "mobilni uređaj";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "prije više od mjesec dana";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "prije više od sedmicu dana";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Alatna traka za navigaciju";
+
+/* Accessibility label for the New Tab button in the tab toolbar.
+   Accessibility Label for the tab toolbar New tab button */
+"New Tab" = "Novi tab";
+
+/* Restore Tabs Negative Action */
+"No" = "Ne";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "Nema tabova";
+
+/* OK button */
+"OK" = "U redu";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "U redu";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "Ups! Firefox se srušio";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Otvorite članke u prikazu za čitanje dodirivanjem ikone knjige kada se pojavi u naslovnoj traci.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Otvorite postavke";
+
+/* Toggle tabs syncing setting */
+"Open Tabs" = "Otvoreni tabovi";
+
+/* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
+"OpenURL.Error.Message" = "Firefox ne može otvoriti stranicu jer stranica ima netačnu adresu.";
+
+/* Title of the message shown when the user attempts to navigate to an invalid link. */
+"OpenURL.Error.Title" = "Nije moguće otvoriti stranicu";
+
+/* Accessibility label for the Page Options menu button */
+"Page Options Menu" = "Meni opcija stranice";
+
+/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
+"Panel Chooser" = "Selektor panela";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Lozinka";
+
+/* Button for closing the menu action sheet */
+"PhotonMenu.close" = "Zatvori";
+
+/* Privacy section title */
+"Privacy" = "Privatnost";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "Polica privatnosti";
+
+/* Title for quick-search engines settings section. */
+"Quick-Search Engines" = "Brzi pretraživači";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "pročitano";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "Prikaz za čitanje";
+
+/* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
+"ReaderMode.Available.VoiceOverAnnouncement" = "Dostupan je režim čitanja";
+
+/* Panel accessibility label */
+"Reading list" = "Lisza za čitanje";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "Nedavno zatvoreno";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "Učitaj ponovo";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Ukloni";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Ukloni sa liste za čitanje";
+
+/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"ReopenClosedTab.KeyCodeTitle" = "Ponovo otvori zatvoreni tab";
+
+/* Accessibility label for button resetting font size in display settings of reader mode */
+"Reset text size" = "Vrati veličinu teksta";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans-serif";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Sačuvajte stranice u listu za čitanje dodirivanjem ikone plus u kontrolama za pregled čitanja.";
+
+/* OK button to dismiss the error prompt. */
+"ScanQRCode.Error.OK.Button" = "U redu";
+
+/* Text for the instructions label, displayed in the QR scanner view */
+"ScanQRCode.Instructions.Label" = "Poravnajte QR kod unutar okvira za skeniranje";
+
+/* Text of the prompt that is shown to the user when the data is invalid */
+"ScanQRCode.InvalidDataError.Message" = "Podaci su nevažeći";
+
+/* Text of the prompt user to setup the camera authorization. */
+"ScanQRCode.PermissionError.Message" = "Molimo dopustite Firefoxu da pristupi kameri vašeg uređaja u ‘Postavke’ -> ‘Privatnost’ -> ‘Kamera’.";
+
+/* Title for the QR code scanner view. */
+"ScanQRCode.View.Title" = "Skenirajte QR kod";
+
+/* Accessibility Label for the tab toolbar Search button
+   Navigation title for search settings.
+   Open search section of settings */
+"Search" = "Traži";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Tražite ili upišite adresu";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "Novi pretraživač će se pojaviti u traci za brzo pretraživanje.";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "Pretraživač dodan!";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "Dodati dobavljača pretrage?";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "Otkaži";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.DuplicateErrorMessage" = "Pretraživač sa ovim nazivom ili URL-om je već dodan.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.DuplicateErrorTitle" = "Neuspješno";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "Dobavljač pretrage ne može biti dodan.";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "Neuspješno";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.FormErrorMessage" = "Molimo popunite sva polja ispravno.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.FormErrorTitle" = "Neuspješno";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "U redu";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "Potražite sugestije";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "Sigurno povezivanje";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "Poslati izvještaj o rušenju tako da Mozilla može riješiti problem?";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "Pošaljite povratnu informaciju";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "Pošalji izvještaj";
+
+/* Button title for cancelling share screen
+   Close button in top navigation bar */
+"SendTo.Cancel.Button" = "Otkaži";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "Samo HTTP i HTTPS veze se mogu dijeliti.";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "U redu";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "Veza koju želite podijeliti se ne može podijeliti.";
+
+/* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_body" = "Novi tab stigao s drugog uređaja.";
+
+/* Title of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_title" = "Tab primljen";
+
+/* Body of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the app name. */
+"SentTab_TabArrivingNotification_WithDevice_body" = "Novi tab stigao u %@";
+
+/* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
+"SentTab_TabArrivingNotification_WithDevice_title" = "Tab primljen od %@";
+
+/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
+"SentTab.AddToReadingListAction.Title" = "Dodaj na listu za čitanje";
+
+/* Label for an action used to bookmark one or more tabs from a notification. */
+"SentTab.BookmarkAction.title" = "Zabilješka";
+
+/* Body of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.body" = "Dodirnite za početak";
+
+/* Title of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.title" = "Firefox Sinhronizacija";
+
+/* Label for an action used to view one or more tabs from a notification. */
+"SentTab.ViewAction.title" = "Prikaz";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Sepia";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serif";
+
+/* Title in the settings view controller title bar */
+"Settings" = "Postavke";
+
+/* The button text in Search Settings that opens the Custom Search Engine view. */
+"Settings.AddCustomEngine" = "Dodaj pretraživač";
+
+/* The text on the Save button when saving a custom search engine */
+"Settings.AddCustomEngine.SaveButtonText" = "Sačuvaj";
+
+/* The title of the  Custom Search Engine view. */
+"Settings.AddCustomEngine.Title" = "Dodaj pretraživač";
+
+/* The title for the field which sets the title for a custom search engine. */
+"Settings.AddCustomEngine.TitleLabel" = "Naslov";
+
+/* The placeholder for Title Field when saving a custom search engine. */
+"Settings.AddCustomEngine.TitlePlaceholder" = "Pretraživač";
+
+/* The title for URL Field */
+"Settings.AddCustomEngine.URLLabel" = "URL";
+
+/* The placeholder for URL Field when saving a custom search engine */
+"Settings.AddCustomEngine.URLPlaceholder" = "URL (Zamijeni upit s %s)";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "Očisti privatne podatke";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "Očisti privatne podatke";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "Očisti privatne podatke";
+
+/* Body of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Body" = "Firefox će zaustaviti sinhronizaciju s vašim računom, ali neće izbrisati ništa od vaših podataka pretraživanja na ovom uređaju.";
+
+/* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
+"Settings.Disconnect.Button" = "Prekini Sinhronizaciju";
+
+/* Cancel action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.CancelButton" = "Otkaži";
+
+/* Destructive action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.DestructiveButton" = "Prekini vezu";
+
+/* Title of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Title" = "Prekini Sinhronizaciju?";
+
+/* Option choice in display theme settings for dark theme */
+"Settings.DisplayTheme.OptionDark" = "Tamno";
+
+/* Option choice in display theme settings for light theme */
+"Settings.DisplayTheme.OptionLight" = "Svijetlo";
+
+/* Display (theme) settings footer describing how the brightness slider works. */
+"Settings.DisplayTheme.SectionFooter" = "Tema će se automatski promijeniti ovisno o svjetlini vašeg ekrana. Možete postaviti prag kada će se tema promijeniti. Krug označava trenutnu svjetlinu vašeg ekrana.";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Automatically'. */
+"Settings.DisplayTheme.SwitchSubtitle" = "Prebaci automatski ovisno o svjetlini ekrana";
+
+/* Display (theme) settings label to show if automatically switch theme is enabled.
+   Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
+"Settings.DisplayTheme.SwitchTitle" = "Automatski";
+
+/* DNT Settings option for always on */
+"Settings.DNT.OptionAlwaysOn" = "Uvijek";
+
+/* DNT Settings option for only turning on when Tracking Protection is also on */
+"Settings.DNT.OptionOnWithTP" = "Samo kada koristim Zaštitu od praćenja";
+
+/* DNT Settings title */
+"Settings.DNT.Title" = "Pošaljite web stranicama signal Ne prati kada ne želite biti praćeni";
+
+/* Label used for the device name settings section. */
+"Settings.FxA.DeviceName" = "Naziv uređaja";
+
+/* Label used as a section title in the Firefox Accounts Settings screen. */
+"Settings.FxA.Sync.SectionName" = "Sync postavke";
+
+/* Title displayed in header of the FxA settings panel. */
+"Settings.FxA.Title" = "Firefox račun";
+
+/* General settings section title */
+"Settings.General.SectionName" = "Opće";
+
+/* Button in settings to clear the home page. */
+"Settings.HomePage.Clear.Button" = "Očisti";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "Početna stranica";
+
+/* Title displayed in header of the setting panel. */
+"Settings.HomePage.Title" = "Postavke početne stranice";
+
+/* Placeholder text in the homepage setting when no homepage has been set. */
+"Settings.HomePage.URL.Placeholder" = "Unesite web stranicu";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "Trenutna početna stranica";
+
+/* Button in settings to use the current link on the clipboard as home page. */
+"Settings.HomePage.UseCopiedLink.Button" = "Koristite kopiranu vezu";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "Koristite trenutnu stranicu";
+
+/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
+"Settings.HomePage.UseDefault.Button" = "Koristi izvorno";
+
+/* A description in settings of what the new tab choice means */
+"Settings.NewTab.Description" = "Kada otvorite novi tab:";
+
+/* The title of the section in newtab that lets you modify the topsites panel */
+"Settings.NewTab.Option.ASTitle" = "Prilagodi najposjećenije stranice";
+
+/* Option in settings to show a blank page when you open a new tab */
+"Settings.NewTab.Option.BlankPage" = "Prazna stranica";
+
+/* Option in settings to show bookmarks when you open a new tab */
+"Settings.NewTab.Option.Bookmarks" = "Zabilješke";
+
+/* Option in the settings to turn off recent bookmarks in the Highlights section */
+"Settings.NewTab.Option.HighlightsBookmarks" = "Nedavne zabilješke";
+
+/* Option in settings to turn off history in the highlights section */
+"Settings.NewTab.Option.HighlightsHistory" = "Posjećeno";
+
+/* Option in settings to show history when you open a new tab */
+"Settings.NewTab.Option.History" = "Historija";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.HomePage" = "Početna stranica";
+
+/* Option in settings to show reading list when you open a new tab */
+"Settings.NewTab.Option.ReadingList" = "Prikaz vaše liste za čitanje";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
+"Settings.NewTab.SectionName" = "Novi tab";
+
+/* Title displayed in header of the setting panel. */
+"Settings.NewTab.Title" = "Novi tab";
+
+/* Label at the top of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionName" = "Pokaži";
+
+/* Footer at the bottom of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionNameFooter" = "Odaberite šta učitati pri otvaranju novog taba";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Status" = "Pri otvaranju Firefoxa";
+
+/* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Title" = "Ponuda za otvaranje kopiranih veza";
+
+/* Title for Open With Settings */
+"Settings.OpenWith.PageTitle" = "Otvori veze e-pošte s";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
+"Settings.OpenWith.SectionName" = "Aplikacija za e-poštu";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "Gotovo";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "Uredi";
+
+/* title for a link that explains how mozilla collects telemetry */
+"Settings.SendUsage.Link" = "Saznajte više.";
+
+/* A short description that explains why mozilla collects usage data. */
+"Settings.SendUsage.Message" = "Mozila nastoji prikupljati samo ono što trebamo da osiguramo i poboljšamo Firefox za sve.";
+
+/* The title for the setting to send usage data. */
+"Settings.SendUsage.Title" = "Šalji podatke o korištenju";
+
+/* Header description for tracking protection options section where Basic/Strict block list can be selected */
+"Settings.TrackingProtection.BlockListsHeader" = "Možete izabrati koju će listu Firefox koristiti da blokira web elemente koji bi mogli pratiti vašu aktivnost.";
+
+/* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
+"Settings.TrackingProtection.SectionName" = "Zaštita od praćenja";
+
+/* Tracking protection settings option description for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BlockListBasicDescription" = "Dozvoli neke pratioce kako bi stranice radile ispravno.";
+
+/* Tracking protection settings option for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrict" = "Striktno";
+
+/* Tracking protection settings option description for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrictDescription" = "Blokira poznate pratioce. Neke web stranice možda neće fukcionisati pravilno.";
+
+/* Description label shown on tracking protection options screen. */
+"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "Praćenje je kolekcija vaših podataka pretraživanja putem web stranica.";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "Rješavanje problema";
+
+/* Action label on share extension to add page to the Firefox reading list. */
+"ShareExtension.AddToReadingListAction.Title" = "Dodaj na listu za čitanje";
+
+/* Share extension label shown after user has performed 'Add to Reading List' action. */
+"ShareExtension.AddToReadingListActionDone.Title" = "Dodano na listu za čitanje";
+
+/* Action label on share extension to bookmark the page in Firefox. */
+"ShareExtension.BookmarkThisPageAction.Title" = "Zabilježi ovu stranicu";
+
+/* Share extension label shown after user has performed 'Bookmark this Page' action. */
+"ShareExtension.BookmarkThisPageActionDone.Title" = "Zabilježeno";
+
+/* Action label on share extension to load the page in Firefox when user switches apps to bring it to foreground. */
+"ShareExtension.LoadInBackgroundAction.Title" = "Pokreni u pozadini";
+
+/* Share extension label shown after user has performed 'Load in Background' action. */
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Učitavanje u Firefoxu";
+
+/* Action label on share extension to immediately open page in Firefox. */
+"ShareExtension.OpenInFirefoxAction.Title" = "Otvori u Firefoxu";
+
+/* Action label on share extension to immediately open page in Firefox in private mode. */
+"ShareExtension.OpenInPrivateModeAction.Title" = "Otvori u privatnom načinu rada";
+
+/* Action label on share extension to search for the selected text in Firefox. */
+"ShareExtension.SeachInFirefoxAction.Title" = "Traži u Firefoxu";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "Prikaži prijedloge pretraživanja";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "Prikaži tabove";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "Prikaži vodiča";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "Zaustavi";
+
+/* Support section title */
+"Support" = "Podrška";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Povucite lijevo ili desno s tri prsta da biste zatvorili tab.";
+
+/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"SwitchToNonPBM.KeyCodeTitle" = "Uobičajeni način pretraživanja";
+
+/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"SwitchToPBM.KeyCodeTitle" = "Privatni način pretraživanja";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, bookmarks, passwords and more." = "Sinhronizujte svoje tabove, zabilješke, lozinke i više.";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, passwords and more." = "Sinhronizujte svoje tabove, lozinke i više.";
+
+/* Message displayed when the user syncs for the first time */
+"Sync.FirstTimeMessage.Label" = "Vaša prva sinhronizacija može potrajati";
+
+/* Message displayed when the user's account is syncing with no ellipsis */
+"Sync.Syncing.Label" = "Sinhronizujem";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "Sinhronizujem…";
+
+/* The Bookmark sync component, used in SyncState.Partial.Title */
+"SyncState.Bookmark.Title" = "Zabilješke";
+
+/* The Remote Clients sync component, used in SyncState.Partial.Title */
+"SyncState.Clients.Title" = "Udaljeni klijenti";
+
+/* Title for Sync status message when synchronization failed to complete */
+"SyncState.Failed.Title" = "Sinhronizacija nije uspjela";
+
+/* The History sync component, used in SyncState.Partial.Title */
+"SyncState.History.Title" = "Historija";
+
+/* The Logins sync component, used in SyncState.Partial.Title */
+"SyncState.Logins.Title" = "Prijave";
+
+/* Title for Sync status message when Sync failed to start. */
+"SyncState.NotStarted.Title" = "Sinhronizacija nije dostupana";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "Sinhronizacija je van mreže";
+
+/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
+"SyncState.Partial.Title" = "Sinhronizacija doživljava probleme sinhronizavanjem %@";
+
+/* The Tabs sync component, used in SyncState.Partial.Title */
+"SyncState.Tabs.Title" = "Tabovi";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "Tab %1$@ od %2$@";
+
+/* Hardware shortcut to open the tab tray from a tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"Tab.ShowTabTray.KeyCodeTitle" = "Prikaži sve tabove";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "Tabovi %1$@ do %2$@ od %3$@";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Traka tabova";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "Poništi";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "Zatvoreni tabovi: %d";
+
+/* The placeholder text for the tab search bar */
+"Tabs.Search.PlaceholderText" = "Tabovi za pretragu";
+
+/* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseAllTabs.KeyCodeTitle" = "Zatvori sve tabove";
+
+/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseTab.KeyCodeTitle" = "Zatvori odabrane tabove";
+
+/* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenNewTab.KeyCodeTitle" = "Otvori novi tab";
+
+/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenSelectedTab.KeyCodeTitle" = "Otvori odabrani tab";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "Nije moguće prikazati stranicu u prikazu čitanja.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Došlo je do problema pristupa tabovima iz drugih uređaja. Pokušajte ponovo za nekoliko trenutaka.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "Dogodila se greška pri pretvaranju stranice";
+
+/* Relative date for date in past week. */
+"this week" = "ove sedmice";
+
+/* label for Not Now button */
+"Toasts.NotNow" = "Ne sada";
+
+/* Open App Store button */
+"Toasts.OpenAppStore" = "Otvori App Store";
+
+/* History tableview section header */
+"Today" = "Danas";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "danas u %@";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "Meni";
+
+/* Accessibility label for the Close All Tabs menu button. */
+"Toolbar.Menu.CloseAllTabs" = "Zatvori sve tabove";
+
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "Vaše najposjećenije stranice će se pokazati ovdje.";
+
+/* The title for the empty Top Sites state */
+"TopSites.EmptyState.Title" = "Dobrodošli u najpopularnije stranice";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "Ukloni stranicu — %@";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* The menu item that pastes the current contents of the clipboard into the URL bar and navigates to the page */
+"UIMenuItem.PasteGo" = "Zalijepi i idi";
+
+/* Search in New Tab Text selection menu item */
+"UIMenuItem.SearchWithFirefox" = "Traži s Firefoxom";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "nepročitano";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect" = "Nadogradite Firefox za povezivanje";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Korisničko ime";
+
+/* Text message in the settings table view */
+"Verify your email address" = "Potvrdite vašu email adresu";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "Verzija %1$@ (%2$@)";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Web sadržaj";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Dobrodošli na vašu listu za čitanje";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "Hmm, ovo je neprijatno.";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Wikipedia";
+
+/* Relative date for yesterday. */
+"yesterday" = "juče";
+
+/* History tableview section header */
+"Yesterday" = "Juče";
+
+/* Error message in the remote tabs panel */
+"You don’t have any tabs open in Firefox on your other devices." = "Nemate otvorenih tabova u Firefoxu na vašim drugim uređajima.";
+
+/* Your Rights settings section title */
+"Your Rights" = "Vaša prava";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+

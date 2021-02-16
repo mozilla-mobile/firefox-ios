@@ -1,0 +1,23 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Toto vám umožní pořizovat a nahrávat fotografie.";
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSLocationWhenInUseUsageDescription" = "Servery, které navštěvujete, mohou chtít znát vaše umístění.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Toto vám umožní pořizovat a nahrávat videa.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Toto vám umožní ukládat fotografie.";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "Nový anonymní panel";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "Nový panel";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "Skenovat QR kód";
+

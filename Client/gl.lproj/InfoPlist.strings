@@ -1,0 +1,23 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Isto permítelle facer fotos e subilas.";
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSLocationWhenInUseUsageDescription" = "Os sitios web que visita poden solicitar a súa localización.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Isto permítelle facer vídeos e subilos.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Isto permítelle gardar fotos.";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "Nova lapela privada";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "Nova lapela";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "Examinar código QR";
+

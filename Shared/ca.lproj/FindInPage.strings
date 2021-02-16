@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "Fet";
+
+/* Text selection menu item */
+"Find in Page" = "Cerca a la pàgina";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "Resultat següent de la cerca a la pàgina";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "Resultat anterior de la cerca a la pàgina";
+

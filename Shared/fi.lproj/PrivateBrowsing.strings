@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Sulje yksityiset välilehdet";
+
+/* Context menu option for opening a link in a new private tab */
+"ContextMenu.OpenInNewPrivateTabButtonTitle" = "Avaa yksityisessä välilehdessä";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox ei tallenna historiaa tai evästeitä, mutta uudet kirjanmerkit tallennetaan.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Lue lisää";
+
+/* Toggled OFF accessibility value */
+"Off" = "Pois";
+
+/* Toggled ON accessibility value */
+"On" = "Päällä";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Yksityinen selaus";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Yksityinen tila";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Kytkee yksityisen tilan päälle tai pois";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "Kun yksityisestä selaamisesta poistutaan";
+

@@ -1,0 +1,1712 @@
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "%@ ਵਲੋਂ ਵਰਤੋਂਕਾਰ-ਨਾਂ ਅਤੇ ਪਾਸਵਰਡ ਦੀ ਬੇਨਤੀ ਕੀਤੀ ਗਈ ਹੈ।";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "%1$@ ਵਲੋਂ ਵਰਤੋਂਕਾਰ-ਨਾਂ ਅਤੇ ਪਛਾਣ-ਸ਼ਬਦ ਦੀ ਬੇਨਤੀ ਕੀਤੀ ਗਈ ਹੈ। ਸਾਈਟ ਵਲੋਂ ਸੁਨੇਹਾ: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "ਇਸ ਦੇ ਬਾਰੇ";
+
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite" = "ਚੋਟੀਆਂ ਦੀਆਂ ਸਾਈਟਾਂ 'ਚ ਟੰਗੋ";
+
+/* The title for removing a pinned topsite action */
+"ActivityStream.ContextMenu.RemovePinTopsite" = "ਟੰਗੀ ਹੋਈ ਸਾਈਟ ਨੂੰ ਹਟਾਓ";
+
+/* The description of a highlight if it is a site the user has bookmarked */
+"ActivityStream.Highlights.Bookmark" = "ਬੁੱਕਮਾਰਕ ਕੀਤਾ";
+
+/* The description of a highlight if it is a site the user has visited */
+"ActivityStream.Highlights.Visited" = "ਖੋਲ੍ਹਿਆ";
+
+/* Section title label for recently bookmarked websites */
+"ActivityStream.NewRecentBookmarks.Title" = "ਤਾਜ਼ਾ ਬੁੱਕਮਾਰਕ";
+
+/* The link that shows more Pocket trending stories */
+"ActivityStream.Pocket.MoreLink" = "ਹੋਰ";
+
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle" = "ਪਾਕੇਟ ਉੱਤੇ ਰੁਝਾਨ";
+
+/* The description of a Pocket Story */
+"ActivityStream.Pocket.Trending" = "ਰੁਝਾਨ";
+
+/* Section title label for recently visited websites */
+"ActivityStream.RecentHistory.Title" = "ਹਾਲ ਦੇ ਖੋਲ੍ਹੇ ਗਏ";
+
+/* label showing how many rows of topsites are shown. %d represents a number */
+"ActivityStream.TopSites.RowCount" = "ਕਤਾਰਾਂ: %d";
+
+/* The title for the setting page which lets you select the number of top site rows */
+"ActivityStream.TopSites.RowSettingFooter" = "ਕਤਾਰਾਂ ਤਹਿ ਕਰੋ";
+
+/* Section title label for Top Sites */
+"ActivityStream.TopSites.SectionTitle" = "ਚੋਟੀ ਦੀਆਂ ਸਾਈਟਾਂ";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "ਟੈਬ ਜੋੜੋ";
+
+/* Accessibility label for action adding current page to reading list.
+   Name for button adding current article to reading list in reader mode */
+"Add to Reading List" = "ਪੜ੍ਹਨ ਸੂਚੀ ਵਿੱਚ ਜੋੜੋ";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "ਪੜ੍ਹਨ ਸੂਚੀ ਵਿੱਚ ਸਫ਼ਾ ਜੋੜਿਆ ਗਿਆ";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "ਠੀਕ ਹੈ";
+
+/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Message" = "ਪਾਸ ਨੂੰ ਵਾਲਿਟ ਵਿੱਚ ਜੋੜਨ ਦੌਰਾਨ ਗਲਤੀ ਆਈ ਹੈ। ਬਾਅਦ 'ਚ ਮੁੜ ਕੋਸ਼ਿਸ਼ ਕਰੋ।";
+
+/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Title" = "ਪਾਸ ਨੂੰ ਜੋੜਨ ਵਿੱਚ ਫੇਲ੍ਹ ਹੈ";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "ਸਿਰਨਾਵਾਂ ਅਤੇ ਖੋਜ";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "ਹਮੇਸ਼ਾ ਭੇਜੋ";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "ਪ੍ਰਮਾਣਿਕਤਾ ਲੋੜੀਂਦੀ ਹੈ";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "ਪਿੱਛੇ";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "ਪੋਪਅੱਪ ਵਿੰਡੋ ਉੱਤੇ ਪਾਬੰਦੀ ਲਗਾਓ";
+
+/* The header title for the fields when editing a Bookmark */
+"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "ਬੁੱਕਮਾਰਕ";
+
+/* The header title for the fields when editing a Folder */
+"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "ਫੋਲਡਰ";
+
+/* The label for the Title field when editing a bookmark */
+"Bookmark.DetailFieldTitle.Label" = "ਟਾਈਟਲ";
+
+/* The label for the URL field when editing a bookmark */
+"Bookmark.DetailFieldURL.Label" = "URL";
+
+/* Toggle bookmarks syncing setting */
+"Bookmarks" = "ਵਰਕਾ ਨਿਸ਼ਾਨੀਆਂ";
+
+/* The button on the snackbar to edit a bookmark after adding it. */
+"Bookmarks.Edit.Button" = "ਸੋਧੋ";
+
+/* The button to edit a bookmark */
+"Bookmarks.EditBookmark.Label" = "ਬੁੱਕਮਾਰਕ ਸੋਧੋ";
+
+/* The button to edit a folder */
+"Bookmarks.EditFolder.Label" = "ਫੋਲਡਰ ਸੋਧੋ";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "ਫ਼ੋਲਡਰ";
+
+/* The label for the location of the new folder */
+"Bookmarks.FolderLocation.Label" = "ਟਿਕਾਣਾ";
+
+/* The label for the title of the new folder */
+"Bookmarks.FolderName.Label" = "ਫ਼ੋਲਡਰ ਨਾਂ";
+
+/* The button to create a new bookmark */
+"Bookmarks.NewBookmark.Label" = "ਨਵਾਂ ਬੁੱਕਮਾਰਕ";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "ਨਵਾਂ ਫ਼ੋਲਡਰ";
+
+/* The button to create a new separator */
+"Bookmarks.NewSeparator.Label" = "ਨਵਾਂ ਵੱਖਰੇਵਾਂ";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "ਸਿਰਲੇਖ";
+
+/* The label for the URL of a bookmark */
+"Bookmarks.URL.Label" = "URL";
+
+/* Status label for the empty Bookmarks state. */
+"BookmarksPanel.EmptyState.Title" = "ਤੁਹਾਡੇ ਵਲੋਂ ਸੰਭਾਲੇ ਬੁੱਕਮਾਰਕ ਇੱਥੇ ਦਿਖਾਏ ਜਾਣਗੇ।";
+
+/* Describes the date on which the breach occurred */
+"BreachAlerts.BreachDate" = "ਇਹ ਉਲੰਘਣ ਹੋਇਆ ਸੀ";
+
+/* Description of what a breach is */
+"BreachAlerts.Description" = "ਤੁਹਾਡੇ ਵਲੋਂ ਆਪਣਾ ਪਾਸਵਰਡ ਬਦਲੇ ਜਾਣ ਦੇ ਬਾਅਦ ਪਾਸਵਰਡ ਲੀਕ ਜਾਂ ਚੋਰੀ ਹੋਏ ਸਨ। ਇਸ ਖਾਤੇ ਨੂੰ ਸੁਰੱਖਿਅਤ ਬਣਾਉਣ ਲਈ ਸਾਈਟ ਉੱਤੇ ਲਾਗਇਨ ਕਰਕੇ ਆਪਣਾ ਪਾਸਵਰਡ ਬਦਲੋ।";
+
+/* Link to monitor.firefox.com to learn more about breached passwords */
+"BreachAlerts.LearnMoreButton" = "ਹੋਰ ਜਾਣੋ";
+
+/* Leads to a link to the breached website */
+"BreachAlerts.Link" = "ਜਾਓ";
+
+/* Title for the Breached Login Detail View. */
+"BreachAlerts.Title" = "ਵੈੱਬਸਾਈਟ ਦੀ ਉਲੰਘਣਾ";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "ਚਮਕ";
+
+/* Label for Cancel button */
+"Cancel" = "ਰੱਦ ਕਰੋ";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "ਰੰਗ ਥੀਮ ਨੂੰ ਬਦਲਦਾ ਹੈ।";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "ਫੌਂਟ ਦੀ ਕਿਸਮ ਨੂੰ ਬਦਲਦਾ ਹੈ।";
+
+/* The button to open a new tab with the copied link */
+"ClipboardToast.GoToCopiedLink.Button" = "ਜਾਓ";
+
+/* Message displayed when the user has a copied link on the clipboard */
+"ClipboardToast.GoToCopiedLink.Title" = "ਕਾਪੀ ਕੀਤੇ ਲਿੰਕ 'ਤੇ ਜਾਣਾ ਹੈ?";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "ਬੰਦ ਕਰੋ";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "ਟੈਬ ਬੰਦ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "ਕੰਪਿਊਟਰ";
+
+/* Context menu item for bookmarking a link URL */
+"ContextMenu.BookmarkLinkButtonTitle" = "ਲਿੰਕ ਬੁੱਕਮਾਰਕ ਕਰੋ";
+
+/* The button text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "ਬਦਲੋ";
+
+/* The label text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "ਨਵੀਂ ਪ੍ਰਾਈਵੇਟ ਟੈਬ ਖੋਲ੍ਹੀ ਗਈ";
+
+/* The button text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "ਬਦਲੋ";
+
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText" = "ਨਵੀਂ ਟੈਬ ਖੋਲ੍ਹੀ ਗਈ";
+
+/* Context menu item for copying an image to the clipboard */
+"ContextMenu.CopyImageButtonTitle" = "ਚਿੱਤਰ ਕਾਪੀ ਕਰੋ";
+
+/* Context menu item for copying an image URL to the clipboard */
+"ContextMenu.CopyImageLinkButtonTitle" = "ਚਿੱਤਰ ਲਿੰਕ ਕਾਪੀ ਕਰੋ";
+
+/* Context menu item for copying a link URL to the clipboard */
+"ContextMenu.CopyLinkButtonTitle" = "ਲਿੰਕ ਕਾਪੀ ਕਰੋ";
+
+/* Context menu item for downloading a link URL */
+"ContextMenu.DownloadLinkButtonTitle" = "ਲਿੰਕ ਡਾਊਨਲੋਡ ਕਰੋ";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenInNewTabButtonTitle" = "ਨਵੇਂ ਟੈਬ ਵਿੱਚ ਖੋਲ੍ਹੋ";
+
+/* Context menu item for saving an image */
+"ContextMenu.SaveImageButtonTitle" = "ਚਿੱਤਰ ਸੰਭਾਲੋ";
+
+/* Context menu item for sharing a link URL */
+"ContextMenu.ShareLinkButtonTitle" = "ਲਿੰਕ ਸਾਂਝਾ ਕਰੋ";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "ਸਫ਼ੇ ਨੂੰ ਪੜ੍ਹਨ ਸੂਚੀ ਵਿੱਚ ਨਹੀਂ ਜੋੜ ਸਕਿਆ";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it’s already there?" = "ਪੜ੍ਹਨ ਸੂਚੀ ਵਿੱਚ ਸਫ਼ੇ ਨੂੰ ਨਹੀਂ ਜੋੜ ਸਕਿਆ, ਹੋ ਸਕਦਾ ਇਹ ਪਹਿਲਾਂ ਤੋਂ ਇੱਥੇ ਹੋਵੇ?";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "ਸਫ਼ੇ ਨੂੰ ਲੋਡ ਨਹੀਂ ਕਰ ਸਕਿਆ।";
+
+/* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
+"CoverSheet.v22.DarkMode.Description" = "ios 13 ਵਰਤੋਂਕਾਰਾਂ ਲਈ, ਹੁਣ ਜਦੋਂ ਤੁਹਾਡਾ ਫ਼ੋਨ ਡਾਰਕ ਮੋਡ 'ਤੇ ਸੈੱਟ ਕੀਤਾ ਤਾਂ ਫਾਇਰਫਾਕਸ ਆਪਣੇ-ਆਪ ਡਾਰਕ ਥੀਮ ਲਈ ਬਦਲ ਜਾਵੇਗਾ। ਇਹ ਰਵੱਈਆ ਬਦਲਣ ਲਈ, ਸੈਟਿੰਗਾ > ਥੀਮ ਉੱਤੇ ਜਾਓ।";
+
+/* Title for the new dark mode change in the version 22 app release. */
+"CoverSheet.v22.DarkMode.Title" = "ਗੂੜ੍ਹਾ ਥੀਮ ਵਿੱਚ ਹੁਣ ਗੂੜ੍ਹਾ ਕੀਬੋਰਡ ਅਤੇ ਗੂੜ੍ਹੀ ਸਵਾਗਤੀ ਸਕਰੀਨ ਸ਼ਾਮਲ ਹੈ।";
+
+/* Description for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Description" = "ਬਿਲਟ-ਇਨ ਵਾਧਾ ਕੀਤੀ ਟਰੈਕਿੰਗ ਸੁਰੱਖਿਆ ਨਾਲ ਤੁਹਾਨੂੰ ਫਾਲੋ ਕਰਕੇ ਦਿਖਾਈ ਦਿੰਦੇ ਇਸ਼ਤਿਹਾਰਾਂ ਨੂੰ ਬੰਦ ਕਰਨ ਵਿੱਚ ਮਦਦ ਮਿਲਦੀ ਹੈ। ਹੋਰ ਟਰੈਕਰਾਂ, ਇਸ਼ਤਿਹਾਰਾਂ ਅਤੇ ਪੌਪ-ਅੱਪ ਨੂੰ ਵੀ ਬਲੌਕ ਕਰਨ ਲਈ ਸਖ਼ਤ ਮੋਡ ਨੂੰ ਚਾਲੂ ਕਰੋ।";
+
+/* Text for the new ETP settings button */
+"CoverSheet.v24.ETP.Settings.Button" = "ਸੈਟਿੰਗਾਂ ਉੱਤੇ ਜਾਓ";
+
+/* Title for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Title" = "ਇਸ਼ਤਿਹਾਰ ਟਰੈਕ ਕਰਨ ਪ੍ਰਤੀ ਸੁਰੱਖਿਆ";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "ਖਾਤਾ ਬਣਾਓ";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "ਗੂੜ੍ਹਾ";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "ਲਿਖਤ ਦੇ ਆਕਾਰ ਨੂੰ ਘਟਾਓ";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "ਡਿਫਾਲਟ ਖੋਜ ਇੰਜਣ";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "ਡਿਸਪਲੇਅ ਸੈਟਿੰਗਾਂ";
+
+/* Used as a button label for crash dialog prompt */
+"Don’t Send" = "ਨਾ ਭੇਜੋ";
+
+/* Done button on left side of the Settings view controller title bar */
+"Done" = "ਮੁਕੰਮਲ";
+
+/* Panel accessibility label */
+"Downloads" = "ਡਾਊਨਲੋਡ";
+
+/* The label of the button the user will press to start downloading a file */
+"Downloads.Alert.DownloadNow" = "ਹੁਣੇ ਡਾਊਨਲੋਡ ਕਰੋ";
+
+/* Button confirming the cancellation of the download. */
+"Downloads.CancelDialog.Cancel" = "ਰੱਦ ਕਰੋ";
+
+/* Alert dialog body when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Message" = "ਕੀ ਤੁਸੀਂ ਇਸ ਡਾਊਨਲੋਡ ਨੂੰ ਰੱਦ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?";
+
+/* Button declining the cancellation of the download. */
+"Downloads.CancelDialog.Resume" = "ਮੁੜ ਜਾਰੀ ਰੱਖੋ";
+
+/* Alert dialog title when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Title" = "ਡਾਊਨਲੋਡ ਰੱਦ ਕਰੋ";
+
+/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
+"Downloads.Error.Message" = "ਡਾਊਨਲੋਡਾਂ ਹਾਲੇ ਫਾਇਰਫਾਕਸ ਵਿੱਚ ਸਮਰੱਥ ਨਹੀਂ ਹਨ।";
+
+/* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
+"Downloads.Toast.Cancelled.LabelText" = "ਡਾਊਨਲੋਡ ਰੱਦ ਕਰੋ";
+
+/* The label text in the Download Failed toast for showing confirmation that the download has failed. */
+"Downloads.Toast.Failed.LabelText" = "ਡਾਊਨਲੋਡ ਅਸਫ਼ਲ ਹੈ";
+
+/* The button to retry a failed download from the Download Failed toast. */
+"Downloads.Toast.Failed.RetryButton" = "ਮੁੜ ਕੋਸ਼ਿਸ਼ ਕਰੋ";
+
+/* The button to open a new tab with the Downloads home panel */
+"Downloads.Toast.GoToDownloads.Button" = "ਡਾਊਨਲੋਡ";
+
+/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. */
+"Downloads.Toast.MultipleFiles.DescriptionText" = "%d ਫ਼ਾਈਲਾਂ ਵਿੱਚੋਂ 1";
+
+/* The description text in the Download progress toast for showing the number of files (1$) and download progress (2$). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where 1$ is Downloads.Toast.MultipleFiles.DescriptionText and 2$ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and 1$ should come before 2$ everywhere except for right-to-left locales. */
+"Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";
+
+/* The description text in the Download progress toast for showing the downloaded file size (1$) out of the total expected file size (2$). */
+"Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
+
+/* Action button for deleting downloaded files in the Downloads panel. */
+"DownloadsPanel.Delete.Title" = "ਹਟਾਓ";
+
+/* Title for the Downloads Panel empty state. */
+"DownloadsPanel.EmptyState.Title" = "ਡਾਊਨਲੋਡ ਕੀਤੀਆਂ ਫ਼ਾਈਲਾਂ ਇੱਥੇ ਵਿਖਾਈਆਂ ਜਾਣਗੀਆਂ।";
+
+/* Action button for sharing downloaded files in the Downloads panel. */
+"DownloadsPanel.Share.Title" = "ਸਾਂਝਾ ਕਰੋ";
+
+/* Text message in the settings table view */
+"Enter your password to connect" = "ਕਨੈਕਟ ਕਰਨ ਲਈ ਆਪਣਾ ਪਾਸਵਰਡ ਦਰਜ ਕਰੋ";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "ਤਕਨੀਕੀ";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "ਸਾਵਧਾਨ: ਅਸੀਂ ਪੱਕਾ ਨਹੀਂ ਕਰ ਸਕਦੇ ਹਾਂ ਕਿ ਇਸ ਵੈੱਬਸਾਈਟ ਨਾਲ ਤੁਹਾਡਾ ਕਨੈਕਸ਼ਨ ਸੁਰੱਖਿਅਤ ਹੈ।";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "ਇਹ ਗਲਤ ਸੰਰਚਨਾ ਹੋ ਸਕਦੀ ਹੈ ਜਾਂ ਹਮਲਾਵਰ ਵਲੋਂ ਨੁਕਸਾਨਿਆ ਗਿਆ। ਤਾਂ ਹੀ ਜਾਰੀ ਰੱਖੋ ਜੇ ਤੁਸੀਂ ਸੰਭਾਵਿਤ ਖ਼ਤਰੇ ਨੂੰ ਮੰਨਦੇ ਹੋ।";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "%@ ਦੇ ਮਾਲਕ ਨੇ ਆਪਣੀ ਵੈੱਬਸਾਈਟ ਨੂੰ ਗਲਤ ਢੰਗ ਨਾਲ ਸੰਰਚਿਤ ਕੀਤਾ ਹੈ। ਤੁਹਾਡੀ ਜਾਣਕਾਰੀ ਨੂੰ ਚੋਰੀ ਹੋਣ ਤੋਂ ਬਚਾਉਣ ਲਈ ਫਾਇਰਫਾਕਸ ਇਸ ਵੈੱਬਸਾਈਟ ਨਾਲ ਕਨੈਕਟ ਨਹੀਂ ਹੈ।";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "ਇਹ ਸੰਪਰਕ ਗ਼ੈਰ-ਭਰੋਸੇਯੋਗ ਹੈ";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "ਪਿੱਛੇ ਜਾਓ";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "ਫੇਰ ਵੀ ਸਾਈਟ 'ਤੇ ਜਾਓ";
+
+/* Question shown to user when tapping a link that opens the App Store app */
+"ExternalLink.AppStore.ConfirmationTitle" = "ਐਪ ਸਟੋਰ ਐਪ 'ਚ ਇਹ ਲਿੰਕ ਖੋਲ੍ਹਣਾ ਹੈ?";
+
+/* Question shown to user when tapping an SMS or MailTo link that opens the external app for those. */
+"ExternalLink.AppStore.GenericConfirmationTitle" = "ਇਹ ਲਿੰਕ ਬਾਹਰੀ ਐਪ ਵਿੱਚ ਖੋਲ੍ਹਣਾ ਹੈ?";
+
+/* Tile title for Facebook */
+"Facebook" = "ਫੇਸਬੁੱਕ";
+
+/* Title for firefox about:home page in tab history list */
+"Firefox.HomePage.Title" = "ਫਾਇਰਫਾਕਸ ਮੁੱਖ ਸਫ਼ਾ";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "ਅੱਗੇ";
+
+/* Label stating how to disconnect account */
+"FxA.AccountVerificationDetails" = "ਗਲਤ ਈਮੇਲ? ਸ਼ੁਰੂ ਤੋਂ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਹੇਠਾਂ ਡਿਸ-ਕਨੈਕਟ ਨੂੰ ਵਰਤੋਂ।";
+
+/* Label stating your account is not verified */
+"FxA.AccountVerificationRequired" = "ਖਾਤਾ ਤਸਦੀਕ ਕਰਨ ਦੀ ਲੋੜ ਹੈ";
+
+/* Message explaining that user needs to check email for Firefox Account verfication link. */
+"FxA.AccountVerificationRequiredSurface" = "ਤੁਹਾਨੂੰ %@ ਤਸਦੀਕ ਕਰਨ ਦੀ ਲੋੜ ਹੋਵੇਗੀ। ਫਾਇਰਫਾਕਸ ਤੋਂ ਤਸਦੀਕੀ ਲਿੰਕ ਦੀ ਜਾਂਚ ਕਰਨ ਲਈ ਆਪਣੀ ਈੇਮੇਲ ਦੀ ਜਾਂਚ ਕਰੋ।";
+
+/* Button label to connect another device to Sync */
+"FxA.ConnectAnotherDevice" = "ਹੋਰ ਡਿਵਾਈਸ ਨਾਲ ਕਨੈਕਟ ਕਰੋ";
+
+/* Settings section title for Firefox Account */
+"FxA.FirefoxAccount" = "ਫਾਇਰਫਾਕਸ ਖਾਤਾ";
+
+/* Button label to go to Firefox Account settings */
+"FxA.ManageAccount" = "ਖਾਤੇ ਤੇ ਡਿਵਾਈਸਾਂ ਦਾ ਇੰਤਜ਼ਾਮ";
+
+/* Label when no internet is present */
+"FxA.NoInternetConnection" = "ਇੰਟਰਨੈੱਟ ਕਨੈਕਸ਼ਨ ਨਹੀਂ ਹੈ";
+
+/* Button label to open Sync preferences */
+"FxA.OpenSyncPreferences" = "ਸਿੰਕ ਪਸੰਦਾਂ ਨੂੰ ਖੋਲ੍ਹੋ";
+
+/* Instructions shown on qr code scanning view */
+"fxa.qr-scanning-view.instructions" = "firefox.com/pair 'ਤੇ ਦਿਖਾਏ ਗਏ QR ਕੋਡ ਨੂੰ ਸਕੈਨ ਕਰੋ";
+
+/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
+"FxA.RemoveAccount" = "ਹਟਾਓ";
+
+/* Description string for alert view that gets presented when user tries to remove an account. */
+"FxA.RemoveAccountAlertMessage" = "ਵੱਖਰੇ ਵਰਤੋਂਕਾਰ ਵਿੱਚ ਸਾਇਨ ਇਨ ਕਰਨ ਲਈ ਇਸ ਡਿਵਾਈਸ ਨਾਲ ਸੰਬੰਧਿਤ ਫਾਇਰਫਾਕਸ ਖਾਤੇ ਨੂੰ ਹਟਾਓ।";
+
+/* Remove account alert is the final confirmation before user removes their firefox account */
+"FxA.RemoveAccountAlertTitle" = "ਖਾਤਾ ਹਟਾਓ";
+
+/* Button label to resend email */
+"FxA.ResendEmail" = "ਈਮੇਲ ਮੁੜ ਭੇਜੋ";
+
+/* FxA sign in view subtitle */
+"fxa.signin.camera-signin" = "ਆਪਣੇ ਕੈਮਰੇ ਨਾਲ ਸਾਈਨ ਇਨ ਕਰੋ";
+
+/* FxA sign in create account label. */
+"fxa.signin.create-account-pt-1" = "ਖਾਤੇ ਨਾਲ ਡਿਵਾਇਸਾਂ ਦਰਮਿਆਨ Firefox ਨੂੰ ਸਿੰਕ ਕਰੋ।";
+
+/* FxA sign in create account label. This will be linked to the site to create an account. */
+"fxa.signin.create-account-pt-2" = "Firefox ਖਾਤਾ ਬਣਾਓ।";
+
+/* FxA sign in view qr code instructions */
+"fxa.signin.qr-link-instruction" = "ਆਪਣੇ ਕੰਪਿਊਟਰ ਉੱਤੇ ਫਾਇਰਫਾਕਸ ਖੋਲ੍ਹੋ ਅਤੇ firefox.com/pair ਉੱਤੇ ਜਾਓ";
+
+/* FxA sign in view qr code scan button */
+"fxa.signin.ready-to-scan" = "ਸਕੈਨ ਕਰਨ ਲਈ ਤਿਆਰ";
+
+/* FxA sign in view title */
+"fxa.signin.turn-on-sync" = "ਸਿੰਕ ਚਾਲੂ ਕਰੋ";
+
+/* FxA sign in view email login button */
+"fxa.signin.use-email-instead" = "ਇਸ ਦੀ ਬਜਾਏ ਈਮੇਲ ਵਰਤੋਂ";
+
+/* Button label to sign into Sync */
+"FxA.SignIntoSync" = "ਸਿੰਕ ਲਈ ਸਾਇਨ ਇਨ ਕਰੋ";
+
+/* Label explaining what sync does */
+"FxA.SyncExplain" = "ਆਪਣੇ ਹੋਰ ਡਿਵਾਈਸਾਂ ਤੋਂ ਆਪਣੀਆਂ ਟੈਬਾਂ, ਬੁੱਕਮਾਰਕ ਤੇ ਪਾਸਵਰਡ ਲਵੋ।";
+
+/* Button label to Sync your Firefox Account */
+"FxA.SyncNow" = "ਹੁਣੇ ਸਿੰਕ ਕਰੋ";
+
+/* Call to action for sign into sync button */
+"FxA.TakeYourWebWithYou" = "ਆਪਣੇ ਵੈੱਬ ਨੂੰ ਆਪਣੇ ਨਾਲ ਲੈ ਜਾਓ";
+
+/* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
+"FxAPush_DeviceConnected_body" = "ਫਾਇਰਫਾਕਸ ਸਿੰਕ %@ ਨਾਲ ਕਨੈਕਟ ਹੋ ਚੁੱਕਾ ਹੈ";
+
+/* Title of a notification displayed when another device has connected to FxA. */
+"FxAPush_DeviceConnected_title" = "ਸਿੰਕ ਕਨੈਕਟ ਹੈ";
+
+/* Body of a notification displayed when named device has been disconnected from FxA. %@ refers to the name of the disconnected device. */
+"FxAPush_DeviceDisconnected_body" = "%@ ਕਾਮਯਾਬੀ ਨਾਲ ਡਿਸ-ਕਨੈਕਟ ਹੋ ਚੁੱਕਾ ਹੈ।";
+
+/* Body of a notification displayed when this device has been disconnected from FxA by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "ਇਹ ਡਿਵਾਈਸ ਕਾਮਯਾਬੀ ਨਾਲ ਫਾਇਰਫਾਕਸ ਸਿੰਕ ਤੋਂ ਡਿਸਕਨੈਕਟ ਕੀਤਾ ਜਾ ਚੁੱਕਾ ਹੈ।";
+
+/* Title of a notification displayed when this device has been disconnected by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_title" = "ਸਿੰਕ ਡਿਸ-ਕਨੈਕਟ ਹੈ";
+
+/* Title of a notification displayed when named device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_title" = "ਸਿੰਕ ਡਿਸ-ਕਨੈਕਟ ਹੈ";
+
+/* Body of a notification displayed when unnamed device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "ਫਾਇਰਫਾਕਸ ਸਿੰਕ ਤੋਂ ਡਿਵਾਈਸ ਡਿਸ-ਕਨੈਕਟ ਕੀਤਾ ਗਿਆ";
+
+/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "ਆਪਣੇ ਹੋਰ ਡਿਵਾਈਸਾਂ ਤੋਂ ਖੋਲ੍ਹੀਆਂ ਟੈਬਾਂ, ਬੁੱਕਮਾਰਕ ਅਤੇ ਪਾਸਵਰਡਾਂ ਨੂੰ ਲਵੋ।";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "ਮਦਦ";
+
+/* Toggle history syncing setting */
+"History" = "ਅਤੀਤ";
+
+/* Title for button in the history panel to clear recent history */
+"HistoryPanel.ClearHistoryButtonTitle" = "…ਤਾਜ਼ਾ ਅਤੀਤ ਸਾਫ਼ ਕਰੋ";
+
+/* Option title to clear all browsing history. */
+"HistoryPanel.ClearHistoryMenuOptionEverything" = "ਹਰ ਚੀਜ਼";
+
+/* Button to perform action to clear history for the last hour */
+"HistoryPanel.ClearHistoryMenuOptionTheLastHour" = "ਪਿਛਲਾ ਘੰਟਾ";
+
+/* Button to perform action to clear history for today only */
+"HistoryPanel.ClearHistoryMenuOptionToday" = "ਅੱਜ";
+
+/* Button to perform action to clear history for yesterday and today */
+"HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "ਅੱਜ ਅਤੇ ਕੱਲ੍ਹ";
+
+/* Title for popup action menu to clear recent history. */
+"HistoryPanel.ClearHistoryMenuTitle" = "ਤਾਜ਼ਾ ਅਤੀਤ ਨੂੰ ਸਾਫ਼ ਕਰਨ ਨਾਲ ਅਤੀਤ, ਕੂਕੀਜ਼ ਅਤੇ ਹੋਰ ਬਰਾਊਜ਼ਰ ਡਾਟਾ ਹਟਾਇਆ ਜਾਵੇਗਾ।";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "ਵੈੱਬਸਾਈਟਾਂ, ਜੋ ਕਿ ਤੁਸੀਂ ਹਾਲ ਵਿੱਚ ਹੀ ਖੋਲ੍ਹੀਆਂ ਹਨ, ਨੂੰ ਇੱਥੇ ਦਿਖਾਇਆ ਜਾਵੇਗਾ।";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "ਦੂਸਰੀਆਂ ਡਿਵਾਈਸਾਂ ਤੋਂ ਤੁਹਾਡੇ ਟੈਬਾਂ ਨੂੰ ਇੱਥੇ ਦਿਖਾਇਆ ਜਾਵੇਗਾ।";
+
+/* Description for the empty synced tabs 'not signed in' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "ਆਪਣੇ ਹੋਰ ਡਿਵਾਈਸਾਂ ਤੋਂ ਟੈਬਾਂ ਦੀ ਸੂਚੀ ਖੋਲ੍ਹਣ ਲਈ ਸਾਈਨ ਇਨ ਕਰੋ।";
+
+/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "ਤੁਹਾਡੇ ਖਾਤੇ ਨੂੰ ਤਸਦੀਕ ਕਰਨ ਦੀ ਲੋੜ ਹੈ।";
+
+/* Description for the empty synced tabs 'single device Sync' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "ਹੋਰ ਡਿਵਾਈਸ ਤੋਂ ਆਪਣੀਆਂ ਟੈਬਾਂ ਨੂੰ ਇੱਥੇ ਦੇਖਣਾ ਚਾਹੁੰਦੇ ਹੋ?";
+
+/* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "ਆਪਣੇ ਹੋਰ ਡਿਵਾਈਸਾਂ ਤੋਂ ਟੈਬਾਂ ਦੀ ਸੂਚੀ ਵੇਖਣ ਲਈ ਟੈਬ ਸਿੰਕ ਕਰਨ ਨੂੰ ਚਾਲੂ ਕਰੋ।";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "ਫਾਇਰਫਾਕਸ ਸਿੰਕ";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "ਅਤੀਤ";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "ਹਾਲ ਹੀ ਵਿੱਚ ਬੰਦ ਕੀਤੇ";
+
+/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d ਡਿਵਾਈਸ ਕਨੈਕਟ ਹਨ";
+
+/* Title for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Title" = "ਸਿੰਕ ਕੀਤੇ ਡਿਵਾਈਸ";
+
+/* Button cancelling changes setting the home page for the first time. */
+"HomePage.Set.Dialog.Cancel" = "ਰੱਦ ਕਰੋ";
+
+/* Alert dialog body when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Message" = "ਤੁਸੀਂ ਕਿਸੇ ਵੀ ਸਮੇਂ ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਇਸ ਨੂੰ ਬਦਲ ਸਕਦੇ ਹੋ";
+
+/* Button accepting changes setting the home page for the first time. */
+"HomePage.Set.Dialog.OK" = "ਮੁੱਖ-ਸਫ਼ਾ ਸੈੱਟ ਕਰੋ";
+
+/* Alert dialog title when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Title" = "ਕੀ ਤੁਸੀਂ ਆਪਣੇ ਮੁੱਖ ਸਫ਼ੇ ਵਜੋਂ ਇਸ ਵੈੱਬ ਸਫ਼ੇ ਨੂੰ ਵਰਤਣਾ ਚਾਹੁੰਦੇ ਹੋ?";
+
+/* The title for the Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Bookmark" = "ਬੁੱਕਮਾਰਕ";
+
+/* The title for the Delete from History context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.DeleteFromHistory" = "ਅਤੀਤ 'ਚੋਂ ਹਟਾਓ";
+
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab" = "ਨਵੀਂ ਪ੍ਰਾਈਵੇਟ ਟੈਬ 'ਚ ਖੋਲ੍ਹੋ";
+
+/* The title for the Open in New Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewTab" = "ਨਵੀਂ ਟੈਬ 'ਚ ਖੋਲ੍ਹੋ";
+
+/* The title for the Remove context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Remove" = "ਹਟਾਓ";
+
+/* The title for the Remove Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.RemoveBookmark" = "ਬੁੱਕਮਾਰਕ ਨੂੰ ਹਟਾਓ";
+
+/* The title for the Share context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Share" = "ਸਾਂਝਾ ਕਰੋ";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Back.DiscoveryTitle" = "ਪਿੱਛੇ";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.CloseTab.DiscoveryTitle" = "ਟੈਬ ਬੰਦ ਕਰੋ";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Find.DiscoveryTitle" = "ਲੱਭੋ";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Forward.DiscoveryTitle" = "ਅੱਗੇ";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "ਨਵੀਂ ਪ੍ਰਾਈਵੇਟ ਟੈਬ";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewTab.DiscoveryTitle" = "ਨਵੀਂ ਟੈਬ";
+
+/* Label to switch to normal browsing mode */
+"Hotkeys.NormalMode.DiscoveryTitle" = "ਆਮ ਬਰਾਊਜ਼ ਕਰਨ ਢੰਗ";
+
+/* Label to switch to private browsing mode */
+"Hotkeys.PrivateMode.DiscoveryTitle" = "ਨਿੱਜੀ ਬਰਾਊਜ਼ਿੰਗ ਢੰਗ";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Reload.DiscoveryTitle" = "ਸਫ਼ੇ ਨੂੰ ਮੁੜ ਲੋਡ ਕਰੋ";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "ਟਿਕਾਣਾ ਪੱਟੀ ਨੂੰ ਚੁਣੋ";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "ਅਗਲੀ ਟੈਬ ਨੂੰ ਵੇਖੋ";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "ਪਿਛਲਾ ਟੈਬ ਨੂੰ ਵੇਖੋ";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "ਲਿਖਤ ਆਕਾਰ ਨੂੰ ਵਧਾਓ";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "ਬੱਸ ਹੁਣੇ";
+
+/* History tableview section header */
+"Last month" = "ਪਿਛਲਾ ਮਹੀਨਾ";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "ਪਿਛਲੀ ਵਾਰ ਸਿੰਕ ਕੀਤਾ: %@";
+
+/* History tableview section header */
+"Last week" = "ਪਿਛਲਾ ਹਫ਼ਤਾ";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "ਲਸੰਸ";
+
+/* Light theme setting in Reading View settings */
+"Light" = "ਹਲਕਾ";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "ਮੂਲ ਸਫ਼ੇ ਨੂੰ ਲੋਡ ਕਰੋ";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "ਸਮੱਗਰੀ ਨੂੰ ਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ...";
+
+/* Authentication prompt log in button */
+"Log in" = "ਲਾਗਇਨ";
+
+/* Toggle logins syncing setting */
+"Logins" = "ਲਾਗਇਨ";
+
+/* Login detail view field name for the last modified date */
+"LoginsDetailView.LoginModified" = "ਸੋਧੇ ਗਏ";
+
+/* Title for the login detail view */
+"LoginsDetailView.LoginTitle" = "ਲਾਗਇਨ";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "ਨਾ ਸੰਭਾਲੋ";
+
+/* Button to not update the user's password */
+"LoginsHelper.DontUpdate.Button" = "ਅੱਪਡੇਟ ਨਾ ਕਰੋ";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "ਕੀ %2$@ ਲਈ %1$@ ਲਾਗਇਨ ਸੰਭਾਲਣਾ ਹੈ?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "ਕੀ %@ ਲਈ ਪਾਸਵਰਡ ਨੂੰ ਸੰਭਾਲਣਾ ਹੈ?";
+
+/* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
+"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "%@ ਲਈ ਲੌਗਇਨ ਨੂੰ ਅੱਪਡੇਟ ਕਰਨਾ ਹੈ?";
+
+/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "%2$@ ਲਈ %1$@ ਲੌਗਇਨ ਨੂੰ ਅੱਪਡੇਟ ਕਰਨਾ ਹੈ?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "ਲਾਗਇਨ ਨੂੰ ਸੰਭਾਲੋ";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "ਅੱਪਡੇਟ ਕਰੋ";
+
+/* For filtering the login list, search only the login names */
+"LoginsList.LoginsListFilterLogin" = "ਲਾਗਇਨ";
+
+/* For filtering the login list, search both website and login names. */
+"LoginsList.LoginsListFilterSearchAll" = "ਸਭ";
+
+/* For filtering the login list, search only the website names */
+"LoginsList.LoginsListFilterWebsite" = "ਵੈੱਬਸਾਈਟ";
+
+/* Placeholder test for search box in logins list view. */
+"LoginsList.LoginsListSearchPlaceholder" = "ਫਿਲਟਰ";
+
+/* Title for the list of logins */
+"LoginsList.Title" = "ਸੰਭਾਲੇ ਗਏ ਲਾਗਇਨ";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "ਜਾਪਦਾ ਹੈ ਕਿ ਪਿਛਲੀ ਵਾਰ ਫਾਇਰਫਾਕਸ ਕਰੈਸ਼ ਹੋ ਗਿਆ ਸੀ। ਕੀ ਤੁਸੀਂ ਆਪਣੀਆਂ ਟੈਬਾਂ ਨੂੰ ਮੁੜ-ਸਟੋਰ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "ਪੜ੍ਹੇ ਵਜੋਂ ਨਿਸ਼ਾਨੀ ਲਗਾਓ";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "ਨਾ-ਪੜ੍ਹੇ ਵਜੋਂ ਨਿਸ਼ਾਨੀ ਲਗਾਓ";
+
+/* Toast displayed to the user after a bookmark has been added. */
+"Menu.AddBookmark.Confirm" = "ਬੁੱਕਮਾਰਕ ਜੋੜਿਆ";
+
+/* Toast displayed to the user after adding the item to the Top Sites. */
+"Menu.AddPin.Confirm" = "ਚੋਟੀ ਦੀਆਂ ਸਾਈਟਾਂ 'ਤੇ ਟੰਗੇ ਗਏ";
+
+/* Toast displayed to the user after adding the item to their reading list. */
+"Menu.AddToReadingList.Confirm" = "ਪੜ੍ਹਨ ਸੂਚੀ 'ਚ ਜੋੜਿਆ";
+
+/* The title for the button that lets you copy the url from the location bar. */
+"Menu.Copy.Title" = "ਸਿਰਨਾਵਾਂ ਕਾਪੀ ਕਰੋ";
+
+/* Toast displayed to user after copy url pressed. */
+"Menu.CopyURL.Confirm" = "URL ਕਲਿੱਪਬੋਰਡ 'ਚ ਕਾਪੀ ਕੀਤਾ";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "ਇਸ ਸਾਈਟ ਲਈ ਵਾਧਾ ਕੀਤੀ ਟਰੈਕਿੰਗ ਸੁਰੱਖਿਆ ਬੰਦ ਹੈ।";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "ਇਸ ਸਾਈਟ ਲਈ ਵਾਧਾ ਕੀਤੀ ਟਰੈਕਿੰਗ ਸੁਰੱਖਿਆ ਚਾਲੂ ਹੈ।";
+
+/* Description for having standard ETP protection with ITP offered in iOS14+ */
+"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox ਸਾਈਟਾਂ ਵਿਚਲੇ ਟਰੈਕਰਾਂ, ਸਮਾਜਿਕ ਟਰੈਕਰਾਂ, ਕ੍ਰਿਪਟੋਮਾਈਨਰਾਂ ਅਤੇ ਫਿੰਗਰਪਰਿੰਟਰਾਂ ਉੱਤੇ ਪਾਬੰਦੀ ਲਾਉਂਦਾ ਹੈ।";
+
+/* Description for having strict ETP protection with ITP offered in iOS14+ */
+"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox ਸਾਈਟਾਂ ਵਿਚਲੇ ਟਰੈਕਰਾਂ, ਸਮਾਜਿਕ ਟਰੈਕਰਾਂ, ਕ੍ਰਿਪਟੋਮਾਈਨਰਾਂ, ਫਿੰਗਰਪਰਿੰਟਰਾਂ ਅਤੇ ਟਰੈਕ ਕਰਨ ਵਾਲੀ ਸਮੱਗਰੀ ਉੱਤੇ ਪਾਬੰਦੀ ਲਾਉਂਦਾ ਹੈ।";
+
+/* Label for the button displayed in the menu used to stop the reload of the webpage */
+"Menu.Library.StopReload" = "ਰੋਕੋ";
+
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label" = "ਰਾਤ ਢੰਗ ਚਾਲੂ ਕਰੋ";
+
+/* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
+"Menu.NoImageModeBlockImages.Label" = "ਚਿੱਤਰਾਂ ਤੇ ਪਾਬੰਦੀ ਲਾਓ";
+
+/* Label for title in page action menu. */
+"Menu.PageActions.Title" = "ਸਫ਼ਾ ਕਾਰਵਾਈਆਂ";
+
+/* The title for the button that lets you paste into the location bar */
+"Menu.Paste.Title" = "ਚੇਪੋ";
+
+/* The title for the button that lets you paste and go to a URL */
+"Menu.PasteAndGo.Title" = "ਚੇਪੋ ਤੇ ਜਾਓ";
+
+/* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
+"Menu.ReloadWithoutTrackingProtection.Title" = "ਟਰੈਕਿੰਗ ਸੁਰੱਖਿਆ ਤੋਂ ਬਿਨਾਂ ਮੁੜ-ਲੋਡ ਕਰੋ";
+
+/* Label for the button, displayed in the menu, used to reload the current website with Tracking Protection enabled */
+"Menu.ReloadWithTrackingProtection.Title" = "ਟਰੈਕਿੰਗ ਸੁਰੱਖਿਆ ਨਾਲ ਮੁੜ-ਲੋਡ ਕਰੋ";
+
+/* Toast displayed to the user after a bookmark has been removed. */
+"Menu.RemoveBookmark.Confirm" = "ਬੁੱਕਮਾਰਕ ਹਟਾਇਆ";
+
+/* Toast displayed to the user after removing the item from the Top Sites. */
+"Menu.RemovePin.Confirm" = "ਸਿਖਰਲੀਆਂ ਸਾਈਟਾਂ ਤੋਂ ਹਟਾਇਆ ਗਿਆ";
+
+/* Toast displayed to the user after a tab has been sent successfully. */
+"Menu.TabSent.Confirm" = "ਟੈਬ ਭੇਜੋ";
+
+/* Title on tracking protection menu for blocked items. */
+"Menu.TrackingProtection.BlockedTitle" = "ਪਾਬੰਦੀ ਲਗਾਈ";
+
+/* Message in menu when no trackers blocked. */
+"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Firefox ਵਲੋਂ ਜਾਣੇ ਕੋਈ ਵੀ ਟਰੈਕਰ ਇਸ ਸਫੇ ਉੱਤੇ ਖੋਜੇ ਨਹੀਂ ਗਏ ਹਨ।";
+
+/* The title for tracking protection settings */
+"Menu.TrackingProtection.ProtectionSettings.Title" = "ਸੁਰੱਖਿਆ ਸੈਟਿੰਗਾਂ";
+
+/* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
+"Menu.TrackingProtection.TitlePrefix" = "%@ ਲਈ ਸੁਰੱਖਿਆ";
+
+/* The title that shows the number of content cookies blocked */
+"Menu.TrackingProtectionBlockedContent.Title" = "ਟਰੈਕ ਕਰਨ ਵਾਲੀ ਸਮੱਗਰੀ";
+
+/* The title that shows the number of social URLs blocked */
+"Menu.TrackingProtectionBlockedSocial.Title" = "ਸਮਾਜਿਕ ਟਰੈਕਰ";
+
+/* Description of the Tracking protection menu when TP is blocking parts of the page */
+"Menu.TrackingProtectionBlocking.Description" = "ਫਾਇਰਫਾਕਸ ਨੇ ਸਫ਼ੇ ਦੇ ਉਹ ਹਿੱਸਿਆਂ ਉੱਤੇ ਪਾਬੰਦੀ ਲਗਾਈ ਹੈ, ਜੋ ਕਿ ਤੁਹਾਡੇ ਬਰਾਊਜ਼ ਕਰਨ ਨੂੰ ਟਰੈਕ ਕਰ ਸਕਦੇ ਹਨ।";
+
+/* The description of the Tracking Protection menu item when tracking is enabled */
+"Menu.TrackingProtectionBlockingDisabled.Description" = "ਆਨਲਾਈਨ ਟਰੈਕਰਾਂ ਉੱਤੇ ਪਾਬੰਦੀ ਲਗਾਓ";
+
+/* The title that shows the number of cross-site cookies blocked */
+"Menu.TrackingProtectionCrossSiteCookies.Title" = "ਅੰਤਰ-ਸਾਈਟ ਟਰੈਕ ਕਰਨ ਵਾਲੇ ਕੂਕੀਜ਼";
+
+/* The title that shows the number of cross-site URLs blocked */
+"Menu.TrackingProtectionCrossSiteTrackers.Title" = "ਅੰਤਰ-ਸਾਈਟ ਟਰੈਕਰ";
+
+/* The title that shows the number of cryptomining scripts blocked */
+"Menu.TrackingProtectionCryptominersBlocked.Title" = "ਕ੍ਰਿਪਟੋਮਾਈਨਰ";
+
+/* Description of content trackers. */
+"Menu.TrackingProtectionDescription.ContentTrackers" = "ਵੈੱਬਸਾਈਟ ਬਾਹਰੀ ਇਸ਼ਤਿਹਾਰ, ਵੀਡਿਓ ਅਤੇ ਹੋਰ ਸਮੱਗਰੀ ਨੂੰ ਲੋਡ ਕਰ ਸਕਦੀਆਂ ਹਨ, ਜਿਹਨਾਂ ਵਿੱਚ ਲੁਕਵੇਂ ਟਰੈਕਰ ਹੋ ਸਕਦੇ ਹਨ। ਇਹਨਾਂ ਉੱਤੇ ਪਾਬੰਦੀ ਲਗਾਉਣ ਨਾਲ ਵੈੱਬਸਾਈਟਾਂ ਤੇਜ਼ੀ ਨਾਲ ਲੋਡ ਸਕਦੀਆਂ ਹਨ, ਪਰ ਕੁਝ ਬਟਨ, ਫਾਰਮ ਤੇ ਲਾਗਇਨ ਖੇਤਰ ਸ਼ਾਇਦ ਠੀਕ ਤਰ੍ਹਾਂ ਕੰਮ ਨਾ ਕਰਨ।";
+
+/* Description of cross-site trackers. */
+"Menu.TrackingProtectionDescription.CrossSiteNew" = "ਇਹ ਕੂਕੀਜ਼ ਜੋ ਵੀ ਤੁਸੀਂ ਆਨਲਾਈਨ ਕਰਦੇ ਹੋ, ਦੇ ਬਾਰੇ ਡਾਟਾ ਇਕੱਤਰ ਕਰਨ ਲਈ ਇੱਕ ਤੋਂ ਦੂਜੀ ਸਾਈਟ ‘ਤੇ ਤੁਹਾਡਾ ਪਿੱਛਾ ਕਰਦੇ ਹਨ। ਇਹਨਾਂ ਨੂੰ ਅਕਸਰ ਤੀਜੀਆਂ ਧਿਰਾਂ ਜਿਵੇਂ ਕਿ ਇਸ਼ਤਿਹਾਰ ਦੇਣ ਵਾਲੀਆਂ ਤੇ ਵਿਸ਼ਲੇਸ਼ਣ ਕਰਨ ਵਾਲੀਆਂ ਕੰਪਨੀਆਂ ਵਲੋਂ ਨਿਯਤ ਕੀਤਾ ਜਾਂਦਾ ਹੈ।";
+
+/* Description of cryptominers. */
+"Menu.TrackingProtectionDescription.CryptominersNew" = "ਕ੍ਰਿਪਟੋਮਾਈਨਰ ਡਿਜ਼ਿਟਲ ਧਨ ਦੀ ਟਕਸਾਲ ਦੇ ਰੂਪ ਵਿੱਚ ਤੁਹਾਡੇ ਕੰਪਿਊਟਰ ਦੀ ਊਰਜਾ ਨੂੰ ਗੁਪਤ ਰੂਪ ਵਿੱਚ ਵਰਤਦੇ ਹਨ। ਕ੍ਰਿਪਟੋਮਾਈਨਰ ਸਕ੍ਰਿਪਟ ਤੁਹਾਡੀ ਬੈਟਰੀ ਖਪਾਉਂਦੀਆਂ ਹਨ, ਤੁਹਾਡੇ ਕੰਪਿਊਟਰ ਨੂੰ ਹੌਲੀ ਕਰਦੀਆਂ ਹਨ ਅਤੇ ਤੁਹਾਡੇ ਬਿਜਲੀ ਦੇ ਬਿੱਲ ‘ਚ ਵੀ ਵਾਧਾ ਕਰ ਸਕਦੀਆਂ ਹਨ।";
+
+/* Description of fingerprinters. */
+"Menu.TrackingProtectionDescription.Fingerprinters" = "ਤੁਹਾਡੇ ਬਰਾਊਜ਼ਰ ਅਤੇ ਕੰਪਿਊਟਰ ਉੱਤੇ ਸੈਟਿੰਗਾਂ ਵਿਲੱਖਣ ਹਨ। ਫਿੰਗਰਪਰਿੰਟਰ ਇਹਨਾਂ ਵਿਲੱਖਣ ਸੈਟਿੰਗਾਂ ਵਿੱਚੋਂ ਕਈਆਂ ਨੂੰ ਇਕੱਤਰ ਕਰਕੇ ਤੁਹਾਡਾ ਪਰੋਫਾਈਲ ਬਣਾਉਂਦੇ ਹਨ, ਤਾਂ ਕਿ ਤੁਹਾਡੇ ਵਲੋਂ ਬਰਾਊਜ਼ ਕਰਨ ਉੱਤੇ ਤੁਹਾਨੂੰ ਟਰੈਕ ਕੀਤਾ ਜਾ ਸਕੇ।";
+
+/* Description of social network trackers. */
+"Menu.TrackingProtectionDescription.SocialNetworksNew" = "ਸਮਾਜਿਕ ਨੈੱਟਵਰਕ ਤੁਹਾਡੇ ਬਾਰੇ ਪੂਰਾ ਅਤੇ ਟੀਚਾ ਬੱਧ ਪਰੋਫਾਈਲ ਬਣਾਉਣ ਲਈ ਹੋਰ ਵੈੱਬਸਾਈਟਾਂ ‘ਤੇ ਟਰੈਕਰ ਰੱਖਦੀਆਂ ਹਨ। ਇਹਨਾਂ ਟਰੈਕਰਾਂ ‘ਤੇ ਪਾਬੰਦੀ ਲਗਾਉਣ ਨਾਲ ਤੁਹਾਡੇ ਆਨਲਾਈਨ ਕੀਤੇ ਜਾਣ ਵਾਲੇ ਕੰਮਾਂ ਬਾਰੇ ਸਮਾਜਿਕ ਮੀਡਿਆ ਕੰਪਨੀਆਂ ਵਲੋਂ ਪਤਾ ਲਗਾਉਣਾ ਘੱਟ ਜਾਂਦਾ ਹੈ।";
+
+/* The button that disabled TP for a site. */
+"Menu.TrackingProtectionDisable1.Title" = "ਇਸ ਸਾਈਟ ਲਈ ਅਸਮਰੱਥ ਕੀਤਾ";
+
+/* The confirmation toast once tracking protection has been disabled */
+"Menu.TrackingProtectionDisabled.Title" = "ਇਸ ਸਾਈਟ ਲਈ ਟਰੈਕਿੰਗ ਸੁਰੱਖਿਆ ਨੂੰ ਹੁਣ ਬੰਦ ਕੀਤਾ ਹੈ।";
+
+/* A button to enable tracking protection inside the menu. */
+"Menu.TrackingProtectionEnable.Title" = "ਟਰੈਕਿੰਗ ਸੁਰੱਖਿਆ ਨੂੰ ਸਮਰੱਥ ਕਰੋ";
+
+/* A button to enable tracking protection inside the menu. */
+"Menu.TrackingProtectionEnable1.Title" = "ਇਸ ਸਾਈਟ ਲਈ ਸਮਰੱਥ ਕੀਤਾ";
+
+/* The confirmation toast once tracking protection has been enabled */
+"Menu.TrackingProtectionEnabled.Title" = "ਇਸ ਸਾਈਟ ਲਈ ਟਰੈਕਿੰਗ ਸੁਰੱਖਿਆ ਨੂੰ ਹੁਣ ਚਾਲੂ ਕੀਤਾ ਹੈ।";
+
+/* The title that shows the number of fingerprinting scripts blocked */
+"Menu.TrackingProtectionFingerprintersBlocked.Title" = "ਫਿੰਗਰਪਰਿੰਟਰ";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "ਅੰਤਰ-ਸਾਈਟ ਟਰੈਕ ਕਰਨ ਵਾਲੇ ਕੂਕੀਜ਼ ‘ਤੇ ਪਾਬੰਦੀ ਲਾਈ";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Cryptominers" = "ਕ੍ਰਿਪਟੋਮਾਈਨਰਾਂ ‘ਤੇ ਪਾਬੰਦੀ ਲਾਈ";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Fingerprinters" = "ਫਿੰਗਰਪਰਿੰਟਰਾਂ ‘ਤੇ ਪਾਬੰਦੀ ਲਾਈ";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Social" = "ਸਮਾਜਿਕ ਟਰੈਕਰਾਂ ‘ਤੇ ਪਾਬੰਦੀ ਲਾਈ";
+
+/* more info about what tracking protection is about */
+"Menu.TrackingProtectionMoreInfo.Description" = "ਆਨਲਾਈਨ ਟਰੈਕਰਾਂ ਤੋਂ ਸੁਰੱਖਿਅਤ ਰਹਿਣ ਬਾਰੇ ਹੋਰ ਜਾਣੋ, ਜੋ ਕਿ ਕਈ ਵੈੱਬਸਾਈਟਾਂ ਦੁਆਲੇ ਤੁਹਾਡੇ ਬਰਾਊਜ਼ ਕੀਤੇ ਡਾਟੇ ਨੂੰ ਇਕੱਤਰ ਕਰਦੇ ਹਨ।";
+
+/* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
+"Menu.TrackingProtectionNoBlocking.Description" = "ਇਸ ਸਫ਼ੇ ਉੱਤੇ ਕੋਈ ਟਰੈਕ ਕਰਨ ਵਾਲੇ ਭਾਗ ਨਹੀਂ ਮਿਲੇ ਹਨ।";
+
+/* label for the menu item to show when the website is whitelisted from blocking trackers. */
+"Menu.TrackingProtectionOption.WhiteListOnDescription" = "ਸਾਈਟ ਵਿੱਚ ਕੁਝ ਭਾਗ ਹਨ, ਜੋ ਕਿ ਤੁਹਾਡੇ ਬਰਾਊਜ਼ ਕਰਨ ਨੂੰ ਟਰੈਕ ਕਰ ਸਕਦੇ ਹਨ। ਤੁਸੀਂ ਸੁਰੱਖਿਆ ਨੂੰ ਅਸਮਰੱਥ ਕਰ ਚੁੱਕੇ ਹੋ।";
+
+/* label for the menu item that lets you remove a website from the tracking protection whitelist */
+"Menu.TrackingProtectionWhitelistRemove.Title" = "ਇਸ ਸਾਈਟ ਲਈ ਸਮਰੱਥ ਕਰੋ";
+
+/* The title for the option to view the What's new page. */
+"Menu.WhatsNew.Title" = "ਨਵਾਂ ਕੀ ਹੈ";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "ਮੋਬਾਈਲ ਡਿਵਾਈਸ";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "ਇੱਕ ਮਹੀਨੇ ਪਹਿਲਾਂ ਤੋਂ ਵੱਧ";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "ਇੱਕ ਹਫ਼ਤਾ ਪਹਿਲਾਂ ਤੋਂ ਵੱਧ";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "ਨੈਵੀਗੇਸ਼ਨ ਟੂਲਬਾਰ";
+
+/* Accessibility label for the New Tab button in the tab toolbar.
+   Accessibility Label for the tab toolbar New tab button */
+"New Tab" = "ਨਵੀਂ ਟੈਬ";
+
+/* Restore Tabs Negative Action */
+"No" = "ਨਹੀਂ";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "ਕੋਈ ਟੈਬ ਨਹੀਂ ਹਨ";
+
+/* OK button */
+"OK" = "ਠੀਕ ਹੈ";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "ਠੀਕ ਹੈ";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "ਓਹ ਹੋ! ਫਾਇਰਫਾਕਸ ਕਰੈਸ਼ ਹੋ ਗਿਆ";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "ਲੇਖਾਂ ਨੂੰ ਪੜ੍ਹਨ ਝਲਕ ਵਿੱਚ ਕਿਤਾਬ ਦੇ ਆਈਕਾਨ ਉੱਤੇ ਛੂਹ ਕੇ ਖੋਲ੍ਹੋ, ਜਦੋਂ ਕਿ ਉਹ ਟਾਈਟਲ ਪੱਟੀ ਵਿੱਚ ਦਿਖਾਈ ਦਿੰਦੇ ਹਨ।";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "ਸੈਟਿੰਗਾਂ ਨੂੰ ਖੋਲ੍ਹੋ";
+
+/* Toggle tabs syncing setting */
+"Open Tabs" = "ਟੈਬਾਂ ਖੋਲ੍ਹੋ";
+
+/* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
+"OpenURL.Error.Message" = "ਫਾਇਰਫਾਕਸ ਸਫ਼ੇ ਨੂੰ ਖੋਲ੍ਹ ਨਹੀਂ ਸਕਦਾ, ਕਿਉਂਕਿ ਇਹ ਗ਼ਲਤ ਐਡਰੈਸ ਹੈ।";
+
+/* Title of the message shown when the user attempts to navigate to an invalid link. */
+"OpenURL.Error.Title" = "ਸਫ਼ੇ ਨੂੰ ਖੋਲ੍ਹਿਆ ਨਹੀਂ ਜਾ ਸਕਦਾ";
+
+/* Accessibility label for the Page Options menu button */
+"Page Options Menu" = "ਸਫ਼ਾ ਚੋਣ ਮੇਨੂ";
+
+/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
+"Panel Chooser" = "ਪੈਨਲ ਦਾ ਚੋਣਕਾਰ";
+
+/* Password textbox in Authentication prompt */
+"Password" = "ਪਾਸਵਰਡ";
+
+/* Error message shown in the remote tabs panel */
+"PasswordAutoFill.NoPasswordsFoundTitle" = "ਤੁਹਾਡੇ ਕੋਲ ਆਪਣੇ ਫਾਇਰਫਾਕਸ ਖਾਤੇ ਤੋਂ ਸਿੰਕ ਕੀਤੀਆਂ ਸਨਦਾਂ ਨਹੀਂ ਹਨ";
+
+/* Header for the list of credentials table */
+"PasswordAutoFill.PasswordsListTitle" = "ਉਪਲਬਧ ਸਨਦਾਂ:";
+
+/* Title of the extension that shows firefox passwords */
+"PasswordAutoFill.SectionTitle" = "ਫਾਇਰਫਾਕਸ ਸਨਦਾਂ";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "ਇਹ ਤੁਹਾਨੂੰ ਚਿੱਤਰਾਂ ਨੂੰ ਤੁਹਾਡੇ ਕੈਮਰਾ ਰੋਲ ਵਿੱਚ ਸੰਭਾਲਣ ਲਈ ਇਜਾਜ਼ਤ ਦਿੰਦਾ ਹੈ।";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "ਫਾਇਰਫਾਕਸ ਨੂੰ ਆਪਣੀਆਂ ਫੋਟੋਆਂ ਲਈ ਪਹੁੰਚ ਚਾਹੁੰਦਾ ਹੈ";
+
+/* Button for closing the menu action sheet */
+"PhotonMenu.close" = "ਬੰਦ ਕਰੋ";
+
+/* Privacy section title */
+"Privacy" = "ਪਰਦੇਦਾਰੀ";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "ਪਰਦੇਦਾਰੀ ਦੀ ਨੀਤੀ";
+
+/* Title for quick-search engines settings section. */
+"Quick-Search Engines" = "ਤੁਰੰਤ-ਖੋਜ ਇੰਜਣ";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "ਪੜ੍ਹੇ";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "ਪੜ੍ਹਨ ਝਲਕ";
+
+/* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
+"ReaderMode.Available.VoiceOverAnnouncement" = "ਰੀਡਰ ਢੰਗ ਮੌਜੂਦ ਹੈ";
+
+/* Panel accessibility label */
+"Reading list" = "ਪੜ੍ਹਨ ਸੂਚੀ";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "ਤਾਜ਼ਾ ਬੰਦ ਕੀਤੇ";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "ਮੁੜ-ਲੋਡ ਕਰੋ";
+
+/* Accessibility label for the reload button */
+"Reload page" = "ਸਫ਼ੇ ਨੂੰ ਮੁੜ-ਲੋਡ ਕਰੋ";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "ਹਟਾਓ";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "ਪੜ੍ਹਨ ਸੂਚੀ ਵਿੱਚੋਂ ਹਟਾਓ";
+
+/* Cancel button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Cancel" = "ਰੱਦ ਕਰੋ";
+
+/* Reopen button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Reopen" = "ਮੁੜ-ਖੋਲ੍ਹੋ";
+
+/* Reopen alert title shown at home page. */
+"ReopenAlert.Title" = "ਆਖਰੀ ਬੰਦ ਕੀਤੀ ਟੈਬ ਮੁੜ-ਖੋਲ੍ਹੋ";
+
+/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"ReopenClosedTab.KeyCodeTitle" = "ਬੰਦ ਕੀਤੀ ਟੈਬ ਮੁੜ-ਖੋਲ੍ਹੋ";
+
+/* Accessibility label for button resetting font size in display settings of reader mode */
+"Reset text size" = "ਲਿਖਤ ਆਕਾਰ ਨੂੰ ਮੁੜ-ਸੈੱਟ ਕਰੋ";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "ਸਨਜ਼-ਸੈਰਿਫ਼";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "ਪੜਨ ਝਲਕ ਕੰਟਰੋਲ ਵਿੱਚ ਕਿਤਾਬ ਜੋੜ ਆਈਕਾਨ ਨੂੰ ਛੂਹ ਕੇ ਸਫ਼ਿਆਂ ਨੂੰ ਆਪਣੀ ਪੜ੍ਹਨ ਸੂਚੀ ਵਿੱਚ ਸੰਭਾਲੋ।";
+
+/* OK button to dismiss the error prompt. */
+"ScanQRCode.Error.OK.Button" = "ਠੀਕ ਹੈ";
+
+/* Text for the instructions label, displayed in the QR scanner view */
+"ScanQRCode.Instructions.Label" = "ਸਕੈਨ ਕਰਨ ਵਾਸਤੇ QR ਕੋਡ ਨੂੰ ਫਰੇਮ 'ਚ ਲਿਆਓ";
+
+/* Text of the prompt that is shown to the user when the data is invalid */
+"ScanQRCode.InvalidDataError.Message" = "ਡਾਟਾ ਅਢੁੱਕਵਾਂ ਹੈ";
+
+/* Text of the prompt user to setup the camera authorization. */
+"ScanQRCode.PermissionError.Message" = "ਫਾਇਰਫਾਕਸ ਨੂੰ ਆਪਣੇ ਡਿਵਾਈਸ ਦੇ ਕੈਮਰੇ ਲਈ ‘Settings’ -> ‘Privacy’ -> ‘Camera’ ਰਾਹੀਂ ਪਹੁੰਚ ਦੀ ਇਜਾਜ਼ਤ ਦਿਓ।";
+
+/* Title for the QR code scanner view. */
+"ScanQRCode.View.Title" = "QR ਕੋਡ ਨੂੰ ਸਕੈਨ ਕਰੋ";
+
+/* Accessibility Label for the tab toolbar Search button
+   Navigation title for search settings.
+   Open search section of settings */
+"Search" = "ਖੋਜ";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "ਖੋਜੋ ਜਾਂ ਸਿਰਨਾਵਾਂ ਦਿਓ";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "ਨਵਾਂ ਖੋਜ ਇੰਜਣ ਤੁਰੰਤ ਖੋਜ ਪੱਟੀ ਵਿੱਚ ਦਿਖਾਈ ਦੇਵੇਗਾ।";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "ਖੋਜ ਇੰਜਣ ਨੂੰ ਜੋੜਿਆ ਗਿਆ!";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "ਖੋਜ ਉਪਲੱਬਧ ਕਰਵਾਉਣ ਵਾਲੇ ਨੂੰ ਜੋੜਨਾ ਹੈ?";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "ਰੱਦ ਕਰੋ";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.DuplicateErrorMessage" = "ਇਸ ਨਾਂ ਜਾਂ URL ਨਾਲ ਖੋਜ ਇੰਜਣ ਪਹਿਲਾਂ ਹੀ ਜੋੜਿਆ ਗਿਆ ਹੈ।";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.DuplicateErrorTitle" = "ਅਸਫ਼ਲ ਹੈ";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "ਖੋਜ ਉਪਲੱਬਧ ਕਰਵਾਉਣ ਵਾਲੇ ਨੂੰ ਜੋੜਿਆ ਨਹੀਂ ਜਾ ਸਕਿਆ।";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "ਅਸਫ਼ਲ ਹੈ";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.FormErrorMessage" = "ਸਾਰੇ ਖੇਤਰਾਂ ਨੂੰ ਠੀਕ ਤਰ੍ਹਾਂ ਭਰੋ।";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.FormErrorTitle" = "ਅਸਫ਼ਲ ਹੈ";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "ਠੀਕ ਹੈ";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "ਸੁਝਾਅ ਲਈ ਖੋਜਾਂ";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "ਸੁਰੱਖਿਅਤ ਕਨੈਕਸ਼ਨ";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "ਕੀ ਸਮੱਸਿਆ ਨੂੰ ਠੀਕ ਕਰਨ ਵਾਸਤੇ ਮੋਜ਼ੀਲਾ ਨੂੰ ਕਰੈਸ਼ ਰਿਪੋਰਟ ਭੇਜਣੀ ਹੈ?";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "ਸੁਝਾਅ ਭੇਜੋ";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "ਰਿਪੋਰਟ ਨੂੰ ਭੇਜੋ";
+
+/* Button title for cancelling share screen
+   Close button in top navigation bar */
+"SendTo.Cancel.Button" = "ਰੱਦ ਕਰੋ";
+
+/* Header for the list of devices table */
+"SendTo.DeviceList.Text" = "ਉਪਲੱਬਧ ਡਿਵਾਈਸ:";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "ਕੇਵਲ HTTP ਅਤੇ HTTPS ਲਿੰਕ ਸਾਂਝੇ ਕੀਤੇ ਜਾ ਸਕਦੇ ਹਨ।";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "ਠੀਕ ਹੈ";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "ਲਿੰਕ, ਜਿਸ ਨੂੰ ਤੁਸੀਂ ਸਾਂਝਾ ਕਰਨ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰ ਰਹੇ ਹੋ, ਨੂੰ ਸਾਂਝਾ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ ਹੈ।";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"SendTo.NavBar.Title" = "ਟੈਬ ਭੇਜੋ";
+
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message" = "ਤੁਹਾਡੇ ਕੋਲ ਸਿੰਕ ਕਰਨ ਲਈ ਇਸ ਫਾਇਰਫਾਕਸ ਖਾਤੇ ਨਾਲ ਹੋਰ ਕੋਈ ਡਿਵਾਈਸ ਕਨੈਕਟ ਨਹੀਂ ਹੈ।";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Message" = "ਜਾਰੀ ਰੱਖਣ ਲਈ ਫਾਇਰਫਾਕਸ ਖੋਲ੍ਹੋ, ਸੈਟਿੰਗਾਂ 'ਤੇ ਜਾਓ ਅਤੇ ਸਾਈਨ ਇਨ ਕਰੋ।";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Title" = "ਤੁਸੀਂ ਆਪਣੇ ਫਾਇਰਫਾਕਸ ਖਾਤੇ ਵਿੱਚ ਸਾਈਨ ਇਨ ਨਹੀਂ ਕੀਤਾ ਹੈ।";
+
+/* Navigation bar button to Send the current page to a device */
+"SendTo.SendAction.Text" = "ਭੇਜੋ";
+
+/* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
+"SendTo.SignIn.Button" = "Firefox ‘ਚ ਸਾਇਨ ਇਨ ਕਰੋ";
+
+/* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_body" = "ਹੋਰ ਡਿਵਾਈਸ ਤੋਂ ਨਵੀਂ ਟੈਬ ਆਈ ਹੈ।";
+
+/* Title of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_title" = "ਟੈਬ ਪ੍ਰਾਪਤ ਹੋਈ";
+
+/* Body of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the app name. */
+"SentTab_TabArrivingNotification_WithDevice_body" = "%@ 'ਚ ਨਵੀਂ ਟੈਬ ਆਈ";
+
+/* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
+"SentTab_TabArrivingNotification_WithDevice_title" = "%@ ਤੋਂ ਟੈਬ ਆਈ";
+
+/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
+"SentTab.AddToReadingListAction.Title" = "ਪੜ੍ਹਨ-ਸੂਚੀ ਵਿੱਚ ਜੋੜੋ";
+
+/* Label for an action used to bookmark one or more tabs from a notification. */
+"SentTab.BookmarkAction.title" = "ਬੁੱਕਮਾਰਕ";
+
+/* Body of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.body" = "ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਟੈਪ ਕਰੋ";
+
+/* Title of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.title" = "ਫਾਇਰਫਾਕਸ ਸਿੰਕ";
+
+/* Label for an action used to view one or more tabs from a notification. */
+"SentTab.ViewAction.title" = "ਵੇਖੋ";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "ਭੂਰਾ";
+
+/* Font type setting in the reading view settings */
+"Serif" = "ਸੈਰੀਫ਼";
+
+/* Title in the settings view controller title bar */
+"Settings" = "ਸੈਟਿੰਗਾਂ";
+
+/* The button text in Search Settings that opens the Custom Search Engine view. */
+"Settings.AddCustomEngine" = "ਖੋਜ ਇੰਜਣ ਜੋੜੋ";
+
+/* The text on the Save button when saving a custom search engine */
+"Settings.AddCustomEngine.SaveButtonText" = "ਸੰਭਾਲੋ";
+
+/* The title of the  Custom Search Engine view. */
+"Settings.AddCustomEngine.Title" = "ਖੋਜ ਇੰਜਣ ਜੋੜੋ";
+
+/* The title for the field which sets the title for a custom search engine. */
+"Settings.AddCustomEngine.TitleLabel" = "ਨਾਂ";
+
+/* The placeholder for Title Field when saving a custom search engine. */
+"Settings.AddCustomEngine.TitlePlaceholder" = "ਖੋਜ ਇੰਜਣ";
+
+/* The title for URL Field */
+"Settings.AddCustomEngine.URLLabel" = "URL";
+
+/* The placeholder for URL Field when saving a custom search engine */
+"Settings.AddCustomEngine.URLPlaceholder" = "URL (ਕਿਊਰੀ ਨੂੰ %s ਨਾਲ ਬਦਲੋ)";
+
+/* Button in Data Management that clears private data for the selected items. */
+"Settings.ClearAllWebsiteData.Clear.Button" = "ਸਾਰੇ ਵੈੱਬਸਾਈਟ ਡਾਟੇ ਨੂੰ ਸਾਫ਼ ਕਰੋ";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "ਪ੍ਰਾਈਵੇਟ ਡਾਟੇ ਨੂੰ ਸਾਫ਼ ਕਰੋ";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "ਪ੍ਰਾਈਵੇਟ ਡਾਟੇ ਨੂੰ ਸਾਫ਼ ਕਰੋ";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "ਪ੍ਰਾਈਵੇਟ ਡਾਟੇ ਨੂੰ ਸਾਫ਼ ਕਰੋ";
+
+/* Copy app version alert shown in settings. */
+"Settings.CopyAppVersion.Title" = "ਕਲਿੱਪਬੋਰਡ ਵਿੱਚ ਕਾਪੀ ਕੀਤਾ";
+
+/* Default text in search bar for Data Management */
+"Settings.DataManagement.SearchLabel" = "ਸਾਈਟਾਂ ਛਾਣੋ";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.DataManagement.SectionName" = "ਡਾਟਾ ਬੰਦੋਬਸਤ";
+
+/* Title displayed in header of the setting panel. */
+"Settings.DataManagement.Title" = "ਡਾਟਾ ਬੰਦੋਬਸਤ";
+
+/* Body of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Body" = "ਫਾਇਰਫਾਕਸ ਤੁੁਹਾਡੇ ਖਾਤੇ ਨੂੰ ਸਿੰਕ ਕਰਨ ਤੋਂ ਰੋਕੇਗਾ, ਪਰ ਇਸ ਡਿਵਾਈਸ ਲਈ ਤੁਹਾਡੇ ਬਰਾਊਜ਼ ਕਰਨ ਵਾਲੇ ਕਿਸੇ ਵੀ ਡਾਟੇ ਨੂੰ ਹਟਾਏਗਾ ਨਹੀਂ।";
+
+/* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
+"Settings.Disconnect.Button" = "ਸਿੰਕ ਡਿਸ-ਕਨੈਕਟ ਕਰੋ";
+
+/* Cancel action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.CancelButton" = "ਰੱਦ ਕਰੋ";
+
+/* Destructive action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.DestructiveButton" = "ਡਿਸ-ਕਨੈਕਟ ਕਰੋ";
+
+/* Title of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Title" = "ਸਿੰਕ ਡਿਸ-ਕਨੈਕਟ ਕਰਨਾ ਹੈ?";
+
+/* Section header for brightness slider. */
+"Settings.DisplayTheme.BrightnessThreshold.SectionHeader" = "ਹੱਦ";
+
+/* Display (theme) settings label to show if manually switch theme is enabled. */
+"Settings.DisplayTheme.Manual.StatusLabel" = "ਖੁਦ";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Manually'. */
+"Settings.DisplayTheme.Manual.SwitchSubtitle" = "ਚੁਣੋ ਕਿ ਤੁਸੀਂ ਕਿਹੜਾ ਥੀਮ ਚਾਹੁੰਦੇ ਹੋ";
+
+/* Display (theme) setting to choose the theme manually. */
+"Settings.DisplayTheme.Manual.SwitchTitle" = "ਖੁਦ";
+
+/* Option choice in display theme settings for dark theme */
+"Settings.DisplayTheme.OptionDark" = "ਗੂੜ੍ਹਾ";
+
+/* Option choice in display theme settings for light theme */
+"Settings.DisplayTheme.OptionLight" = "ਹਲਕਾ";
+
+/* Display (theme) settings footer describing how the brightness slider works. */
+"Settings.DisplayTheme.SectionFooter" = "ਤੁਹਾਡੀ ਲਿਸ਼ਕੋਰ ਵਿਖਾਲੇ ਦੇ ਹਿਸਾਬ ਨਾਲ ਥੀਮ ਆਪਣੇ ਆਪ ਹੀ ਬਦਲ ਜਾਵੇਗਾ। ਥੀਮ ਕਿੱਥੇ ਬਦਲੇ, ਇਹ ਹੱਦ ਤੁਸੀਂ ਮਿੱਥ ਸਕਦੇ ਹੋ। ਇਹ ਘੇਰਾ ਤੁਹਾਡੇ ਵਿਖਾਲੇ ਦੀ ਮੌਜੂਦਾ ਲਿਸ਼ਕੋਰ ਨੂੰ ਦਰਸਾਉੰਦਾ ਹੈ।";
+
+/* Switch mode settings section title */
+"Settings.DisplayTheme.SwitchMode.SectionHeader" = "ਢੰਗ ਬਦਲੋ";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Automatically'. */
+"Settings.DisplayTheme.SwitchSubtitle" = "ਪਰਦੇ ਦੀ ਲਿਸ਼ਕ ਦੇ ਹਿਸਾਬ ਨਾਲ ਆਪਣੇ ਆਪ ਹੀ ਅਦਲ-ਬਦਲ ਦਿਉ";
+
+/* Display (theme) settings label to show if automatically switch theme is enabled.
+   Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
+"Settings.DisplayTheme.SwitchTitle" = "ਖੁਦ ਆਪਣੇ ਆਪ";
+
+/* System theme settings section title */
+"Settings.DisplayTheme.SystemTheme.SectionHeader" = "ਸਿਸਟਮ ਥੀਮ";
+
+/* System theme settings switch to choose whether to use the same theme as the system */
+"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "ਸਿਸਟਮ ਹਲਕਾ/ਗੂੜ੍ਹਾ ਥੀਮ ਵਰਤੋ";
+
+/* Theme picker settings section title */
+"Settings.DisplayTheme.ThemePicker.SectionHeader" = "ਥੀਮ ਚੋਣਕਾਰ";
+
+/* Title in main app settings for Theme settings */
+"Settings.DisplayTheme.Title.v2" = "ਥੀਮ";
+
+/* DNT Settings option for always on */
+"Settings.DNT.OptionAlwaysOn" = "ਹਮੇਸ਼ਾ";
+
+/* DNT Settings option for only turning on when Tracking Protection is also on */
+"Settings.DNT.OptionOnWithTP" = "ਜਦੋਂ ਟਰੈਕ ਹੋਣ ਤੋਂ ਸੁਰੱਖਿਆ ਦੀ ਵਰਤੋਂ ਹੋਵੇ ਤਾਂ ਕੇਵਲ ਤਾਂ ਹੀ";
+
+/* DNT Settings title */
+"Settings.DNT.Title" = "ਜਦੋਂ ਤੁਸੀਂ ਟਰੈਕ ਨਹੀਂ ਕੀਤੇ ਜਾਣਾ ਚਾਹੁੰਦੇ ਹੋ ਤਾਂ ਵੈੱਬਸਾਈਟਾਂ ਨੂੰ ਟਰੈਕ ਨਾ ਕਰੋ ਸੰਕੇਤ ਭੇਜੋ";
+
+/* Label used for the device name settings section. */
+"Settings.FxA.DeviceName" = "ਡਿਵਾਈਸ ਦਾ ਨਾਂ";
+
+/* Label used as a section title in the Firefox Accounts Settings screen. */
+"Settings.FxA.Sync.SectionName" = "ਸਿੰਕ ਸੈਟਿੰਗਾਂ";
+
+/* Title displayed in header of the FxA settings panel. */
+"Settings.FxA.Title" = "ਫਾਇਰਫਾਕਸ ਖਾਤਾ";
+
+/* General settings section title */
+"Settings.General.SectionName" = "ਆਮ";
+
+/* Button in settings to clear the home page. */
+"Settings.HomePage.Clear.Button" = "ਸਾਫ਼ ਕਰੋ";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "ਮੁੱਖ ਸਫ਼ਾ";
+
+/* Title displayed in header of the setting panel. */
+"Settings.HomePage.Title" = "ਮੁੱਖ ਸਫ਼ੇ ਦੀਆਂ ਸੈਟਿੰਗਾਂ";
+
+/* Placeholder text in the homepage setting when no homepage has been set. */
+"Settings.HomePage.URL.Placeholder" = "ਵੈੱਬ-ਸਫ਼ਾ ਦਿਓ";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "ਮੌਜੂਦਾ ਮੁੱਖ ਸਫ਼ਾ";
+
+/* Button in settings to use the current link on the clipboard as home page. */
+"Settings.HomePage.UseCopiedLink.Button" = "ਕਾਪੀ ਕੀਤੇ ਲਿੰਕ ਨੂੰ ਵਰਤੋਂ";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "ਮੌਜੂਦਾ ਸਫ਼ੇ ਨੂੰ ਵਰਤੋਂ";
+
+/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
+"Settings.HomePage.UseDefault.Button" = "ਡਿਫਾਲਟ ਵਰਤੋ";
+
+/* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
+"Settings.LoginsAndPasswordsTitle" = "ਲਾਗਇਨ ਅਤੇ ਪਾਸਵਰਡ";
+
+/* Label used to set a custom url as the new tab option (homepage). */
+"Settings.NewTab.CustomURL" = "ਪਸੰਦੀਦਾ URL";
+
+/* A description in settings of what the new tab choice means */
+"Settings.NewTab.Description" = "ਜਦੋਂ ਤੁਸੀਂ ਨਵੀਂ ਟੈਬ ਨੂੰ ਖੋਲ੍ਹਦੇ ਹੋ:";
+
+/* The title of the section in newtab that lets you modify the topsites panel */
+"Settings.NewTab.Option.ASTitle" = "ਮੁੱਖ ਸਾਈਟਾਂ ਦੀਆਂ ਚੋਣਾਂ ਕਰੋ";
+
+/* Option in settings to show a blank page when you open a new tab */
+"Settings.NewTab.Option.BlankPage" = "ਖਾਲੀ ਸਫ਼ਾ";
+
+/* Option in settings to show bookmarks when you open a new tab */
+"Settings.NewTab.Option.Bookmarks" = "ਬੁੱਕਮਾਰਕ";
+
+/* The footer for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeFooter" = "ਤੁਹਾਡੇ ਵਲੋਂ ਸਭ ਤੋਂਂ ਵੱਧ ਖੋਲ੍ਹੀਆਂ ਸਾਈਟਾਂ";
+
+/* The title for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeTitle" = "ਫਾਇਰਫਾਕਸ ਮੁੱਖ-ਸਫ਼ੇ ਨੂੰ ਪਸੰਦ ਮੁਤਾਬਕ ਬਣਾਓ";
+
+/* Option in settings to show Firefox Home when you open a new tab */
+"Settings.NewTab.Option.FirefoxHome" = "ਫਾਇਰਫਾਕਸ ਮੁੱਖ-ਸਫ਼ਾ";
+
+/* Option in the settings to turn off recent bookmarks in the Highlights section */
+"Settings.NewTab.Option.HighlightsBookmarks" = "ਤਾਜ਼ਾ ਬੁੱਕਮਾਰਕ";
+
+/* Option in settings to turn off history in the highlights section */
+"Settings.NewTab.Option.HighlightsHistory" = "ਖੋਲ੍ਹੇ";
+
+/* Option in settings to show history when you open a new tab */
+"Settings.NewTab.Option.History" = "ਅਤੀਤ";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.HomePage" = "ਮੁੱਖ-ਸਫ਼ਾ";
+
+/* Option in settings to turn on off pocket recommendations */
+"Settings.NewTab.Option.Pocket" = "ਪਾਕੇਟ 'ਚ ਰੁਝਾਨ";
+
+/* Footer caption for pocket settings */
+"Settings.NewTab.Option.PocketFooter" = "ਵੈੱਬ ਤੋਂ ਸਭ ਤੋਂ ਵਧੀਆ ਸਮੱਗਰੀ ਹੈ।";
+
+/* Option in settings to show reading list when you open a new tab */
+"Settings.NewTab.Option.ReadingList" = "ਆਪਣੀ ਪੜ੍ਹਨ ਸੂਚੀ ਨੂੰ ਵੇਖੋ";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
+"Settings.NewTab.SectionName" = "ਨਵੀਂ ਟੈਬ";
+
+/* Title displayed in header of the setting panel. */
+"Settings.NewTab.Title" = "ਨਵੀਂ ਟੈਬ";
+
+/* Label at the top of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionName" = "ਵੇਖਾਓ";
+
+/* Footer at the bottom of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionNameFooter" = "ਨਵੀਂ ਟੈਬ ਖੋਲ੍ਹਣ ਉੱਤੇ ਲੋਡ ਕਰਨ ਦੀ ਚੋਣ ਕਰੋ";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Status" = "ਜਦੋਂ ਫਾਇਰਫਾਕਸ ਖੋਲ੍ਹਣਾ ਹੋਵੇ";
+
+/* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Title" = "ਕਾਪੀ ਕੀਤੇ ਲਿੰਕਾਂ ਨੂੰ ਖੋਲ੍ਹਣ ਦੀ ਪੇਸ਼ਕਸ਼ ਕਰੋ";
+
+/* Title for Open With Settings */
+"Settings.OpenWith.PageTitle" = "ਮੇਲ ਲਿੰਕਾਂ ਨੂੰ ਇਸ ਨਾਲ ਖੋਲ੍ਹੋ";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
+"Settings.OpenWith.SectionName" = "ਮੇਲ ਐਪ";
+
+/* Setting to enable the built-in password manager */
+"Settings.SaveLogins.Title" = "ਲਾਗਇਨ ਸੰਭਾਲੋ";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "ਮੁਕੰਮਲ";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "ਸੋਧ";
+
+/* title for a link that explains how mozilla collects telemetry */
+"Settings.SendUsage.Link" = "ਹੋਰ ਜਾਣੋ।";
+
+/* A short description that explains why mozilla collects usage data. */
+"Settings.SendUsage.Message" = "ਮੌਜ਼ੀਲਾ ਸਿਰਫ਼ ਉਹੀ ਇਕੱਤਰ ਕਰਨਾ ਚਾਹੁੰਦਾ ਹੈ, ਜੋ ਕਿ ਸਾਨੂੰ ਹਰ ਕਿਸੇ ਲਈ ਫਾਇਰਫਾਕਸ ਪਹੁੰਚਣ ਅਤੇ ਸੁਧਾਰਨ ਲਈ ਚਾਹੀਦਾ ਹੈ।";
+
+/* The title for the setting to send usage data. */
+"Settings.SendUsage.Title" = "ਵਰਤੋ ਡਾਟੇ ਨੂੰ ਭੇਜੋ";
+
+/* Description displayed under the ”Show Link Previews” option */
+"Settings.ShowLinkPreviews.Status" = "ਲਿੰਕਾਂ ਨੂੰ ਦੇਰ ਤੱਕ ਦਬਾਉਣ ਵੇਲੇ";
+
+/* Title of setting to enable link previews when long-pressing links. */
+"Settings.ShowLinkPreviews.Title" = "ਲਿੰਕ ਪੂਰਵਦਰਸ਼ਨ ਦਿਖਾਓ";
+
+/* Setting to show Logins & Passwords quick access in the application menu */
+"Settings.ShowLoginsInAppMenu.Title" = "ਐਪਲੀਕੇਸ਼ਨ ਮੇਨੂ ਵਿੱਚ ਵੇਖੋ";
+
+/* The description of the open new tab siri shortcut */
+"Settings.Siri.OpenTabShortcut" = "ਨਵੀਂ ਟੈਬ ਖੋਲ੍ਹੋ";
+
+/* The description that describes what siri shortcuts are */
+"Settings.Siri.SectionDescription" = "ਸੀਰੀ ਰਾਹੀਂ ਤੁਰੰਤ ਫਾਇਰਫਾਕਸ ਖੋਲ੍ਹਣ ਲਈ ਸੀਰੀ ਸ਼ਾਰਟਕੱਟਾਂ ਨੂੰ ਵਰਤੋਂ";
+
+/* The option that takes you to the siri shortcuts settings page */
+"Settings.Siri.SectionName" = "ਸੀਰੀ ਸ਼ਾਰਟਕੱਟ";
+
+/* Dismiss button for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Button" = "ਠੀਕ ਹੈ, ਸਮਝ ਗਏ";
+
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "ਜੇ ਕੋਈ ਸਾਈਟ ਉਮੀਦ ਮੁਤਾਬਕ ਕੰਮ ਨਹੀਂ ਕਰਦੀ, ਤਾਂ ਐਡਰੈੱਸ ਬਾਰ ਵਿੱਚ ਸ਼ੀਲਡ 'ਤੇ ਟੈਪ ਕਰੋ ਅਤੇ ਉਸ ਪੰਨੇ ਲਈ ਵਾਧਾ ਕੀਤੀ ਟਰੈਕਿੰਗ ਸੁਰੱਖਿਆ ਨੂੰ ਬੰਦ ਕਰੋ।";
+
+/* Title for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Title" = "ਧਿਆਨ ਰੱਖੋ!";
+
+/* Header description for tracking protection options section where Basic/Strict block list can be selected */
+"Settings.TrackingProtection.BlockListsHeader" = "ਤੁਸੀਂ ਚੋਣ ਕਰ ਸਕਦੇ ਕਿ ਫਾਇਰਫਾਕਸ ਕਿਹੜੀ ਸੂਚੀ ਨੂੰ ਵੈੱਬ ਭਾਗਾਂ 'ਤੇ ਪਾਬੰਦੀ ਲਗਾਉਣ ਲਈ ਵਰਤੇ, ਜੋ ਕਿ ਤੁਹਾਡੀ ਬਰਾਊਜ਼ ਕਰਨ ਦੀ ਸਰਗਰਮੀ ਨੂੰ ਟਰੈਕ ਕਰ ਸਕਦੇ ਹਨ।";
+
+/* Explanation of basic mode. */
+"Settings.TrackingProtection.Info.BasicTitle" = "ਸੁਰੱਖਿਆ ਅਤੇ ਕਾਰਗੁਜ਼ਾਰੀ ਲਈ ਸੰਤੁਲਿਤ ਹੈ।";
+
+/* The Title on info view which shows a list of all blocked websites */
+"Settings.TrackingProtection.Info.BlocksTitle" = "ਪਾਬੰਦੀਆਂ";
+
+/* Explanation of strict mode. */
+"Settings.TrackingProtection.Info.StrictTitle" = "ਵੱਧ ਸੁਰੱਖਿਆ ਦਿੰਦਾ ਹੈ, ਪਰ ਕੁਝ ਸਾਈਟਾਂ ਠੀਕ ਤਰ੍ਹਾਂ ਕੰਮ ਨਾ ਕਰਨ ਦਾ ਕਾਰਨ ਹੋ ਸਕਦਾ ਹੈ।";
+
+/* 'Learn more' info link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.LearnMore" = "ਹੋਰ ਸਿੱਖੋ";
+
+/* 'More Info' link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.MoreInfo" = "…ਹੋਰ ਜਾਣਕਾਰੀ";
+
+/* Additional information about your Enhanced Tracking Protection */
+"Settings.TrackingProtection.ProtectionCellFooter" = "ਲਕਸ਼ਿਤ ਇਸ਼ਤਿਹਾਰਾਂ ਨੂੰ ਘਟਾਉਂਦੀ ਹੈ ਅਤੇ ਇਸ਼ਤਿਹਾਰਦਾਤਿਆਂ ਨੂੰ ਤੁਹਾਡੇ ਬ੍ਰਾਊਜ਼ਿੰਗ ਨੂੰ ਟਰੈਕ ਕਰਨ ਤੋਂ ਰੋਕਣ ਵਿੱਚ ਮਦਦ ਕਰਦੀ ਹੈ।";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "ਜੇ ਕੋਈ ਸਾਈਟ ਉਮੀਦ ਮੁਤਾਬਕ ਕੰਮ ਨਹੀਂ ਕਰਦੀ, ਤਾਂ ਐਡਰੈੱਸ ਬਾਰ ਵਿੱਚ ਸ਼ੀਲਡ 'ਤੇ ਟੈਪ ਕਰੋ ਅਤੇ ਉਸ ਪੰਨੇ ਲਈ ਵਾਧਾ ਕੀਤੀ ਟਰੈਕਿੰਗ ਸੁਰੱਖਿਆ ਨੂੰ ਬੰਦ ਕਰੋ।";
+
+/* Description for standard level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "ਕੁਝ ਇਸ਼ਤਿਹਾਰ ਟਰੈਕ ਕਰਨ ਦੀ ਇਜਾਜ਼ਤ ਦਿੰਦੀ ਹੈ, ਤਾਂ ਜੋ ਵੈੱਬਸਾਈਟਾਂ ਠੀਕ ਢੰਗ ਨਾਲ ਕੰਮ ਕਰ ਸਕਣ।";
+
+/* Description for strict level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "ਜ਼ਿਆਦਾ ਟਰੈਕਰਾਂ, ਇਸ਼ਤਿਹਾਰਾਂ ਅਤੇ ਪੌਪ-ਅੱਪ ਨੂੰ ਬਲੌਕ ਕਰਦੀ ਹੈ। ਪੰਨੇ ਵਧੇਰੇ ਤੇਜ਼ੀ ਨਾਲ ਲੋਡ ਹੁੰਦੇ ਹਨ, ਪਰ ਕੁਝ ਚੀਜ਼ਾਂ ਸ਼ਾਇਦ ਕੰਮ ਨਾ ਕਰਨ।";
+
+/* Title for tracking protection options section where level can be selected. */
+"Settings.TrackingProtection.ProtectionLevelTitle" = "ਸੁਰੱਖਿਆ ਪੱਧਰ";
+
+/* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
+"Settings.TrackingProtection.SectionName" = "ਟਰੈਕਿੰਗ ਤੋਂ ਸੁਰੱਖਿਆ";
+
+/* Additional information about the strict level setting */
+"Settings.TrackingProtection.StrictLevelInfoFooter" = "ਟਰੈਕਰਾਂ ਉੱਤੇ ਪਾਬੰਦੀ ਲਗਾਉਣ ਨਾਲ ਕੁਝ ਵੈੱਬਸਾਈਟਾਂ ਦਾ ਕੰਮ ਪ੍ਰਭਾਵਿਤ ਹੋ ਸਕਦਾ ਹੈ।";
+
+/* Tracking protection settings option for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BasicBlockList" = "ਮਿਆਰੀ (ਮੂਲ)";
+
+/* Tracking protection settings option description for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BlockListBasicDescription" = "ਕੁਝ ਟਰੈਕਾਂ ਨੂੰ ਇਜਾਜ਼ਤ ਦਿਓ ਤਾਂ ਕਿ ਵੈੱਬਸਾਈਟਾਂ ਠੀਕ ਤਰ੍ਹਾਂ ਕੰਮ ਕਰ ਸਕਣ।";
+
+/* Tracking protection settings option for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrict" = "ਸਖ਼ਤ";
+
+/* Tracking protection settings option description for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrictDescription" = "ਜਾਣੇ-ਪਛਾਣੇ ਟਰੈਕਾਂ 'ਤੇ ਪਾਬੰਦੀ ਲਗਾਉਂਦਾ ਹੈ। ਕੁਝ ਵੈੱਬਸਾਈਟਾਂ ਠੀਕ ਤਰ੍ਹਾਂ ਕੰਮ ਨਹੀਂ ਕਰ ਸਕਦੀਆਂ।";
+
+/* Description label shown on tracking protection options screen. */
+"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "ਟਰੈਕਿੰਗ ਕਈ ਵੈੱਬਸਾਈਟਾਂ ਤੋਂ ਤੁਹਾਡੇ ਬਰਾਊਜ਼ ਕਰਨ ਵਾਲੇ ਡਾਟੇ ਨੂੰ ਇਕੱਤਰ ਕਰਦੀ ਹੈ।";
+
+/* Settings option to specify that Tracking Protection is on */
+"Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "ਵਾਧਾ ਕੀਤੀ ਟਰੈਕਿੰਗ ਸੁਰੱਖਿਆ";
+
+/* Translation settings footer describing how language detection and translation happens. */
+"Settings.TranslateSnackBar.SectionFooter" = "ਡਿਵਾਈਸ 'ਤੇ ਵੈੱਬ ਸਫ਼ਾ ਭਾਸ਼ਾ ਨੂੰ ਖੋਜਿਆ ਗਿਆ ਹੈ ਅਤੇ ਰਿਮੋਟ ਸੇਵਾ ਰਾਹੀਂ ਉਲੱਥੇ ਦੀ ਪੇਸ਼ਕਸ਼ ਕੀਤੀ ਗਈ ਹੈ।";
+
+/* Translation settings section title */
+"Settings.TranslateSnackBar.SectionHeader" = "ਸੇਵਾਵਾਂ";
+
+/* Switch to choose if the language of a page is detected and offer to translate. */
+"Settings.TranslateSnackBar.SwitchSubtitle" = "ਤੁਹਾਡੀ ਮੂਲ ਭਾਸ਼ਾ ਤੋਂ ਕਿਸੇ ਵੀ ਵੱਖ ਭਾਸ਼ਾ ਵਿੱਚ ਲਿਖੀ ਗਈ ਸਾਈਟ ਲਈ ਉਲੱਥੇ ਵਾਸਤੇ ਪੇਸ਼ਕਸ਼ ਹੈ।";
+
+/* Switch to choose if the language of a page is detected and offer to translate. */
+"Settings.TranslateSnackBar.SwitchTitle" = "ਉਲੱਥੇ ਦੀ ਪੇਸ਼ਕਸ਼ ਕਰੋ";
+
+/* Title in main app settings for Translation toast settings */
+"Settings.TranslateSnackBar.Title" = "ਉਲੱਥਾ";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "ਸਮੱਸਿਆ ਨਿਪਟਾਰਾ";
+
+/* Button to delete website in search results */
+"Settings.WebsiteData.ButtonDelete" = "ਹਟਾਓ";
+
+/* Button to exit edit website search results */
+"Settings.WebsiteData.ButtonDone" = "ਮੁਕੰਮਲ";
+
+/* Button to edit website search results */
+"Settings.WebsiteData.ButtonEdit" = "ਸੋਧੋ";
+
+/* Button shows all websites on website data tableview */
+"Settings.WebsiteData.ButtonShowMore" = "ਹੋਰ ਵੇਖਾਓ";
+
+/* Description of the confirmation dialog shown when a user tries to clear their private data. */
+"Settings.WebsiteData.ConfirmPrompt" = "ਇਹ ਕਾਰਵਾਈ ਤੁਹਾਡੇ ਸਾਰੇ ਵੈੱਬਸਾਈਟ ਡਾਟੇ ਨੂੰ ਸਾਫ਼ ਕਰੇਗੀ। ਇਸ ਨੰ ਵਾਪਸ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ।";
+
+/* Title displayed in header of the Data Management panel. */
+"Settings.WebsiteData.Title" = "ਵੈੱਬਸਾਈਟ ਡਾਟਾ";
+
+/* Action label on share extension to add page to the Firefox reading list. */
+"ShareExtension.AddToReadingListAction.Title" = "ਪੜ੍ਹਨ ਲਈ ਸੂਚੀ ਵਿੱਚ ਜੋੜੋ";
+
+/* Share extension label shown after user has performed 'Add to Reading List' action. */
+"ShareExtension.AddToReadingListActionDone.Title" = "ਪੜ੍ਹਨ ਲਈ ਸੂਚੀ ਵਿੱਚ ਜੋੜਿਆ ਗਿਆ";
+
+/* Action label on share extension to bookmark the page in Firefox. */
+"ShareExtension.BookmarkThisPageAction.Title" = "ਇਹ ਸਫ਼ਾ ਬੁੱਕਮਾਰਕ ਕਰੋ";
+
+/* Share extension label shown after user has performed 'Bookmark this Page' action. */
+"ShareExtension.BookmarkThisPageActionDone.Title" = "ਬੁੱਕਮਾਰਕ ਕੀਤਾ";
+
+/* Action label on share extension to load the page in Firefox when user switches apps to bring it to foreground. */
+"ShareExtension.LoadInBackgroundAction.Title" = "ਬੈਕਗਰਾਊਂਡ 'ਚ ਲੋਡ ਕਰੋ";
+
+/* Share extension label shown after user has performed 'Load in Background' action. */
+"ShareExtension.LoadInBackgroundActionDone.Title" = "ਫਾਇਰਫਾਕਸ ਵਿੱਚ ਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ";
+
+/* Action label on share extension to immediately open page in Firefox. */
+"ShareExtension.OpenInFirefoxAction.Title" = "ਫਾਇਰਫਾਕਸ 'ਚ ਖੋਲ੍ਹੋ";
+
+/* Action label on share extension to immediately open page in Firefox in private mode. */
+"ShareExtension.OpenInPrivateModeAction.Title" = "ਨਿੱਜੀ ਢੰਗ ਵਿੱਚ ਖੋਲ੍ਹੋ";
+
+/* Action label on share extension to search for the selected text in Firefox. */
+"ShareExtension.SeachInFirefoxAction.Title" = "ਫਾਇਰਫਾਕਸ ਵਿੱਚ ਖੋਜੋ";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "ਖੋਜ ਲਈ ਸੁਝਾਆਵਾਂ ਨੂੰ ਵੇਖੋ";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "ਟੈਬਾਂ ਨੂੰ ਵੇਖੋ";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "ਟੂਰ ਵੇਖੋ";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "ਰੋਕੋ";
+
+/* Support section title */
+"Support" = "ਸਹਿਯੋਗ";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "ਟੈਬ ਨੂੰ ਬੰਦ ਕਰਨ ਵਾਸਤੇ ਤਿੰਨ ਉਂਗਲਾਂ ਨਾਲ ਸੱਜੇ ਜਾਂ ਖੱਬੇ ਵੱਲ ਸਵੈਪ ਕਰੋ।";
+
+/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"SwitchToNonPBM.KeyCodeTitle" = "ਸਧਾਰਨ ਬਰਾਊਜ਼ਿੰਗ ਢੰਗ";
+
+/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"SwitchToPBM.KeyCodeTitle" = "ਪ੍ਰਾਈਵੇਟ ਬਰਾਊਜ਼ਿੰਗ ਢੰਗ";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, bookmarks, passwords and more." = "ਆਪਣੀਆਂ ਟੈਬਾਂ, ਬੁੱਕਮਾਰਕ, ਪਾਸਵਰਡਾਂ ਅਤੇ ਹੋਰਾਂ ਨੂੰ ਸਿੰਕ ਕਰੋ।";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, passwords and more." = "ਆਪਣੀਆਂ ਟੈਬਾਂ, ਪਾਸਵਰਡ ਅਤੇ ਹੋਰਾਂ ਨੂੰ ਸਿੰਕ ਕਰੋ।";
+
+/* Message displayed when the user syncs for the first time */
+"Sync.FirstTimeMessage.Label" = "ਤੁਹਾਡੇ ਪਹਿਲੇ ਸਿੰਕ ਕਰਨ ਨੂੰ ਕੁਝ ਸਮਾਂ ਲੱਗ ਸਕਦਾ ਹੈ";
+
+/* String displayed on Sign In to Sync page that allows the user to create a new account. */
+"Sync.NoAccount.Description" = "ਖਾਤਾ ਨਹੀਂ ਹੈ? ਡਿਵਾਈਸਾਂ ਵਿਚਾਲੇ Firefox ਨੂੰ ਸਿੰਕ ਕਰਨ ਲਈ ਖਾਤਾ ਬਣਾਓ।";
+
+/* Message displayed when the user's account is syncing with no ellipsis */
+"Sync.Syncing.Label" = "ਸਿੰਕ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "…ਸਿੰਕ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ";
+
+/* Panel accessibility label */
+"Synced Tabs" = "ਸਿੰਕ ਕੀਤੀਆਂ ਟੈਬਾਂ";
+
+/* The Bookmark sync component, used in SyncState.Partial.Title */
+"SyncState.Bookmark.Title" = "ਬੁੱਕਮਾਰਕ";
+
+/* The Remote Clients sync component, used in SyncState.Partial.Title */
+"SyncState.Clients.Title" = "ਰਿਮੋਟ ਕਲਾਈਂਟ";
+
+/* Title for Sync status message when synchronization failed to complete */
+"SyncState.Failed.Title" = "ਸਿੰਕ ਕਰਨਾ ਅਸਫਲ ਹੋਇਆ";
+
+/* The History sync component, used in SyncState.Partial.Title */
+"SyncState.History.Title" = "ਅਤੀਤ";
+
+/* The Logins sync component, used in SyncState.Partial.Title */
+"SyncState.Logins.Title" = "ਲਾਗਇਨ";
+
+/* Title for Sync status message when Sync failed to start. */
+"SyncState.NotStarted.Title" = "ਸਿੰਕ ਅਣਉਪਲਬਧ ਹੈ";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "ਸਿੰਕ ਆਫ਼ਲਾਈਨ ਹੈ";
+
+/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
+"SyncState.Partial.Title" = "%@ ਨੂੰ ਸਿੰਕ ਕਰਨ ਦੌਰਾਨ ਸਮੱਸਿਆਵਾਂ ਆ ਰਹੀਆਂ ਹਨ";
+
+/* The Tabs sync component, used in SyncState.Partial.Title */
+"SyncState.Tabs.Title" = "ਟੈਬਾਂ";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "%2$@ ਵਿੱਚੋਂ %1$@ ਟੈਬ";
+
+/* Hardware shortcut to open the tab tray from a tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"Tab.ShowTabTray.KeyCodeTitle" = "ਸਾਰੀਆਂ ਟੈਬਾਂ ਵੇਖੋ";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "%3$@ ਵਿੱਚੋਂ %2$@ ਤੋਂ %1$@ ਟੈਬਾਂ";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "ਟੈਬਾਂ ਦੀ ਟਰੇ";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "ਵਾਪਸ ਲਵੋ";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "%d ਟੈਬ/ਟੈਬਾਂ ਨੂੰ ਬੰਦ ਕੀਤਾ";
+
+/* The placeholder text for the tab search bar */
+"Tabs.Search.PlaceholderText" = "ਟੈਬਾਂ ਖੋਜੋ";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"TabTray.AddTab.Button" = "ਟੈਬ ਜੋੜੋ";
+
+/* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseAllTabs.KeyCodeTitle" = "ਸਾਰੀਆਂ ਟੈਬਾਂ ਬੰਦ ਕਰੋ";
+
+/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseTab.KeyCodeTitle" = "ਚੁਣੀ ਟੈਬ ਨੂੰ ਬੰਦ ਕਰੋ";
+
+/* The section header for tabs opened last week */
+"TabTray.LastWeek.Header" = "ਪਿਛਲੇ ਹਫ਼ਤੇ";
+
+/* The title on the button to copy the tab address. */
+"TabTray.MoreMenu.Copy" = "ਕਾਪੀ ਕਰੋ";
+
+/* The section header for tabs opened before last week */
+"TabTray.Older.Header" = "ਹੋਰ ਪੁਰਾਣੇ";
+
+/* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenNewTab.KeyCodeTitle" = "ਨਵੀਂ ਟੈਬ ਖੋਲ੍ਹੋ";
+
+/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenSelectedTab.KeyCodeTitle" = "ਚੁਣੀ ਟੈਬ ਨੂੰ ਬੰਦ ਕਰੋ";
+
+/* The button title to see more options to perform on the tab. */
+"TabTray.SwipeMenu.More" = "ਹੋਰ";
+
+/* The title for the tab tray */
+"TabTray.Title" = "ਟੈਬਾਂ ਖੋਲ੍ਹੋ";
+
+/* The section header for tabs opened today */
+"TabTray.Today.Header" = "ਅੱਜ";
+
+/* The section header for tabs opened yesterday */
+"TabTray.Yesterday.Header" = "ਕੱਲ੍ਹ";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "ਸਫ਼ੇ ਨੂੰ ਰੀਡਰ ਝਲਕ ਵਿੱਚ ਦਿਖਾਇਆ ਨਹੀਂ ਜਾ ਸਕਿਆ।";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "ਤੁਹਾਡੇ ਹੋਰ ਡਿਵਾਈਸਾਂ ਤੋਂ ਟੈਬਾਂ ਲਈ ਪਹੁੰਚ ਕਰਨ ਦੌਰਾਨ ਸਮੱਸਿਆ ਹੈ। ਕੁਝ ਪਲ਼ਾਂ ਵਿੱਚ ਕੋਸ਼ਿਸ਼ ਕਰੋ।";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "ਸਫ਼ੇ ਨੂੰ ਬਦਲਣ ਦੌਰਾਨ ਗਲਤੀ ਸੀ।";
+
+/* Relative date for date in past week. */
+"this week" = "ਇਸ ਹਫ਼ਤੇ";
+
+/* label for Not Now button */
+"Toasts.NotNow" = "ਹੁਣੇ ਨਹੀਂ";
+
+/* Open App Store button */
+"Toasts.OpenAppStore" = "ਐਪ ਸਟੋਰ ਖੋਲ੍ਹੋ";
+
+/* Label for button to undo the action just performed */
+"Toasts.Undo" = "ਵਾਪਸ";
+
+/* History tableview section header */
+"Today" = "ਅੱਜ";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "ਅੱਜ %@ 'ਤੇ";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "ਮੀਨੂ";
+
+/* Accessibility label for the Close All Tabs menu button. */
+"Toolbar.Menu.CloseAllTabs" = "ਸਾਰੀਆਂ ਟੈਬਾਂ ਬੰਦ ਕਰੋ";
+
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "ਤੁਹਾਡੇ ਵਲੋਂ ਹਾਲ ਵਿੱਚ ਹੀ ਖੋਲ੍ਹੀਆਂ ਗਈਆਂ ਸਾਈਟਾਂ ਇੱਥੇ ਦਿਖਾਈ ਦੇਣਗੀਆਂ।";
+
+/* The title for the empty Top Sites state */
+"TopSites.EmptyState.Title" = "ਸਿਖਰਲੀਆਂ ਸਾਈਟਾਂ ਲਈ ਜੀ ਆਇਆਂ ਨੂੰ";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "ਸਫ਼ੇ ਨੂੰ ਹਟਾਓ - %@";
+
+/* Button to disallow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.Cancel" = "ਨਹੀਂ";
+
+/* Button to allow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.OK" = "ਹਾਂ";
+
+/* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
+"TranslationToastHandler.PromptTranslate.Title" = "ਇਹ ਸਫ਼ਾ %1$@ ਵਿੱਚ ਜਾਪਦਾ ਹੈ। ਕੀ %3$@ ਨਾਲ %2$@ ਵਿੱਚ ਉਲੱਥਾ ਕਰਨਾ ਹੈ?";
+
+/* Tile title for Twitter */
+"Twitter" = "ਟਵਿੱਟਰ";
+
+/* The menu item that pastes the current contents of the clipboard into the URL bar and navigates to the page */
+"UIMenuItem.PasteGo" = "ਚੇਪੋ ਤੇ ਜਾਓ";
+
+/* Search in New Tab Text selection menu item */
+"UIMenuItem.SearchWithFirefox" = "ਫਾਇਰਫਾਕਸ ਨਾਲ ਖੋਜੋ";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "ਨਾ-ਪੜ੍ਹੇ";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect" = "ਕਨੈਕਟ ਕਰਨ ਲਈ ਫਾਇਰਫਾਕਸ ਅੱਪਗਰੇਡ ਕਰੋ";
+
+/* Debug option */
+"Use stage servers" = "ਸਟੇਜ ਸਰਵਰਾਂ ਦੀ ਵਰਤੋਂ ਕਰੋ";
+
+/* Username textbox in Authentication prompt */
+"Username" = "ਵਰਤੋਂਕਾਰ-ਨਾਂ";
+
+/* Text message in the settings table view */
+"Verify your email address" = "ਆਪਣੇ ਈਮੇਲ ਸਿਰਨਾਵੇਂ ਨੂੰ ਤਸਦੀਕ ਕਰੋ";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "ਵਰਜ਼ਨ %1$@ (%2$@)";
+
+/* Accessibility label for the main web content view */
+"Web content" = "ਵੈੱਬ ਸਮਗਰੀ";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "ਤੁਹਾਡੀ ਪੜ੍ਹਨ ਸੂਚੀ ਲਈ ਜੀ ਆਇਆਂ ਨੂੰ";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "ਹਾਂ, ਇਹ ਸਮੱਸਿਆ ਖੜ੍ਹੀ ਕਰ ਰਿਹਾ ਹੈ।";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "ਵਿਕੀਪੀਡੀਆ";
+
+/* Relative date for yesterday. */
+"yesterday" = "ਕੱਲ੍ਹ";
+
+/* History tableview section header */
+"Yesterday" = "ਕੱਲ੍ਹ";
+
+/* Error message in the remote tabs panel */
+"You don’t have any tabs open in Firefox on your other devices." = "ਤੁਹਾਡੇ ਕੋਲ ਤੁਹਾਡੇ ਹੋਰ ਡਿਵਾਈਸ ਉੱਤੇ ਫਾਇਰਫਾਕਸ ਵਿੱਚ ਕੋਈ ਟੈਬ ਨਹੀਂ ਖੁੱਲ੍ਹੀ ਹੈ।";
+
+/* Your Rights settings section title */
+"Your Rights" = "ਤੁਹਾਡੇ ਅਧਿਕਾਰ";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+

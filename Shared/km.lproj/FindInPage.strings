@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "រួចរាល់";
+
+/* Text selection menu item */
+"Find in Page" = "រកមើល​នៅ​ក្នុង​ទំព័រ";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "លទ្ធផល​ក្នុង​ទំព័រ​បន្ទាប់";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "លទ្ធផល​ក្នុង​ទំព័រ​មុន";
+

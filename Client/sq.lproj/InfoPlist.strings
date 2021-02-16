@@ -1,0 +1,29 @@
+/* (No Comment) */
+"1Password Fill Browser Action" = "Veprim Shfletuesi Plotësimi 1Password";
+
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Kjo ju lejon të bëni dhe ngarkoni foto.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Që të mund të hyjë te kredencialet tuaja të ruajtura, Firefox-i lyp Face ID.";
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSLocationWhenInUseUsageDescription" = "Sajte që vizitoni mund të kërkojnë të njohin vendndodhjen tuaj.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Kjo ju lejon të xhironi dhe ngarkoni video.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Kjo ju lejon të ruani foto.";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "Skedë e Re Private";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "Skedë e Re";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "Skanonin Kodin QR";
+

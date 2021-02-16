@@ -1,0 +1,63 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "શું તમે ખાતરી કરો છો?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "રદ કરો";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "શોધ સાફ કરો";
+
+/* Copy password text selection menu item */
+"Copy" = "કૉપિ કરો";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "%@ બનાવ્યું";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "કાઢો";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "બધા નાપસંદ કરો";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "શોધ મોડ દાખલ કરો";
+
+/* Hide password text selection menu item */
+"Hide" = "છુપાવો";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "પ્રવેશો કાયમી ધોરણે દૂર કરવામાં આવશે.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "બધા જોડાયેલ ઉપકરણોથી લૉગિન દૂર કરવામાં આવશે.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "%@ બદલવું";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "કોઈ લૉગિન મળ્યાં નથી";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "ખોલો અને ભરો";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "પાસવર્ડ";
+
+/* Reveal password text selection menu item */
+"Reveal" = "દર્શાવો";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "શોધો";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "ઇનપુટ ક્ષેત્ર શોધો";
+
+/* Label for the button used to select all logins. */
+"Select All" = "બધું પસંદ કરો";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "વપરાશકર્તા નામ";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "વેબસાઇટ";
+

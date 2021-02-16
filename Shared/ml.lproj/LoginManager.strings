@@ -1,0 +1,63 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "നിങ്ങള്‍ക്കുറപ്പാണോ?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "റദ്ദാക്കുക";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "തിരച്ചിൽ വെടിപ്പാക്കുക";
+
+/* Copy password text selection menu item */
+"Copy" = "പകര്‍ത്തുക";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "%@ സൃഷ്ടിച്ചത്";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "കളയുക";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "തിരഞ്ഞെടുത്തവ വേണ്ടെന്ന് വയ്ക്കുക";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "തിരച്ചില്‍ മോഡില്‍ കടക്കുക";
+
+/* Hide password text selection menu item */
+"Hide" = "മറയ്ക്കുക";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "പ്രവേശനങ്ങൾ എന്നെന്നേക്കുമായി കളയുകയായിരിക്കും.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "ബന്ധപെട്ടിട്ടുള്ള എല്ലാ ഡിവൈസുകളില്‍ നിന്നും പ്രവേശനങ്ങള്‍ നീക്കം ചെയ്യും.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "%@ പരിഷ്കരിച്ചത്‌";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "പ്രവേശനങ്ങള്‍ ഒന്നും കണ്ടില്ല";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "തുറക്കുക & നിറയ്ക്കുക";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "രഹസ്യവാക്ക്";
+
+/* Reveal password text selection menu item */
+"Reveal" = "വെളിപ്പെടുത്തുക";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "തെരയുക";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "തെരയുന്ന വാക്കിടാനുള്ള ഇടം";
+
+/* Label for the button used to select all logins. */
+"Select All" = "എല്ലാം തിരഞ്ഞെടുക്കുക";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "ഉപയോക്തൃനാമം";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "വെബ്‌സൈറ്റ്";
+

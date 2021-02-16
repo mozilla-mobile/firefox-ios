@@ -1,0 +1,23 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "רכיב זה מאפשר לך לצלם ולהעלות תמונות.";
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSLocationWhenInUseUsageDescription" = "אתרים אליהם נכנסים עשויים לבקש את המיקום של המשתמש.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "רכיב זה מאפשר לך להסריט ולהעלות סרטונים.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "זה מאפשר לך לשמור תמונות.";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "לשונית פרטית חדשה";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "לשונית חדשה";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "סריקת קוד QR";
+

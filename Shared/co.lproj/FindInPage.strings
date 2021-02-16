@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "Compiu";
+
+/* Text selection menu item */
+"Find in Page" = "Circà in a pagina";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "Occurrenza seguente in a pagina";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "Occurrenza precedente in a pagina";
+

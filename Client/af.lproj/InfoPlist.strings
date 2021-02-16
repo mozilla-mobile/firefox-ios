@@ -1,0 +1,23 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Hierdie laat mens foto’s neem en oplaai.";
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSLocationWhenInUseUsageDescription" = "Webwerwe wat u besoek kan dalk u ligging vra.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Hierdie laat mens video’s neem en oplaai.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "This lets you save photos.";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "Nuwe private oortjie";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "Nuwe oortjie";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "Scan QR Code";
+

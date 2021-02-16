@@ -1,0 +1,23 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Bheir seo comas dhut dealbhan a thogail is a luchdadh suas.";
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSLocationWhenInUseUsageDescription" = "Dh’fhaoidte gun iarr làraichean-lìn air an tadhal thu d’ ionad.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Bheir seo comas dhut video a thogail is a luchdadh suas.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Bheir seo comas dhut dealbhan a shàbhaladh.";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "Taba prìobhaideach ùr";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "Taba ùr";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "Sganaich còd QR";
+

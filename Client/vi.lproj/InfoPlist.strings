@@ -1,0 +1,29 @@
+/* (No Comment) */
+"1Password Fill Browser Action" = "1Password thực hiện hành động trình duyệt";
+
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Điều này cho phép bạn chụp và tải hình ảnh lên.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Firefox yêu cầu Face ID để truy cập thông tin đăng nhập đã lưu của bạn.";
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSLocationWhenInUseUsageDescription" = "Trang web bạn truy cập có thể yêu cầu vị trí của bạn.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Điều này cho phép bạn quay và tải video lên.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Điều này cho phép bạn lưu ảnh.";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "Thẻ riêng tư mới";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "Thẻ mới";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "Quét mã QR";
+

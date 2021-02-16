@@ -1,0 +1,18 @@
+/* Settings item for clearing browsing history */
+"Browsing History" = "உலாவல் வரலாறு";
+
+/* Settings item for clearing the cache */
+"Cache" = "இடையகம்";
+
+/* Settings item for clearing cookies */
+"Cookies" = "நினைவிகள்";
+
+/* Settings item for deleting downloaded files */
+"Downloaded Files" = "பதிவிறக்கப்பட்ட கோப்புகள்";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "முடக்கலை தள தரவு";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "சேமிக்கப்பட்ட புகுபதிகைகள்";
+

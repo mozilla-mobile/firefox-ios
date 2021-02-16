@@ -1,0 +1,29 @@
+/* (No Comment) */
+"1Password Fill Browser Action" = "Acción del navegador 1Password Fill";
+
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Esto te permite sacar y subir fotos.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Firefox requiere Face ID para acceder a tus inicios de sesión guardados.";
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSLocationWhenInUseUsageDescription" = "Los sitios web que visites pueden solicitar tu ubicación.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Esto te permite filmar y subir videos.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Esto te permite guardar las fotos.";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "Nueva pestaña privada";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "Nueva pestaña";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "Escanear código QR";
+

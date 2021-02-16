@@ -1,0 +1,29 @@
+/* (No Comment) */
+"1Password Fill Browser Action" = "Aksi Peramban Pengisian Sandi 1Password";
+
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Ini dapat digunakan untuk mengambil dan mengunggah foto.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Firefox membutuhkan Face ID untuk mengakses login Anda yang tersimpan.";
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSLocationWhenInUseUsageDescription" = "Situs web yang Anda kunjungi dapat meminta lokasi Anda.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Ini dapat digunakan untuk mengambil dan mengunggah video.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Ini memungkinkan Anda menyimpan foto.";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "Tab Pribadi Baru";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "Tab Baru";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "Pindai Kode QR";
+

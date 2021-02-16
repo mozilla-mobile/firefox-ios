@@ -1,0 +1,18 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Tutup Tab Pribadi";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Sinaoni Manèh";
+
+/* Toggled OFF accessibility value */
+"Off" = "Mati";
+
+/* Toggled ON accessibility value */
+"On" = "Murub";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Ndlajah Pribadi";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Modhe Pribadi";
+

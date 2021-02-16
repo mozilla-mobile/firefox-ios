@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "მზადაა";
+
+/* Text selection menu item */
+"Find in Page" = "პოვნა გვერდზე";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "შემდეგი შედეგი";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "წინა შედეგი";
+

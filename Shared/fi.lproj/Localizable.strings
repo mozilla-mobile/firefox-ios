@@ -1,0 +1,1682 @@
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "Sivusto %@ pyytää käyttäjätunnusta ja salasanaa.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "Sivusto %1$@ pyytää käyttäjätunnusta ja salasanaa. Sivusto kertoo: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "Tietoja";
+
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite" = "Kiinnitä ykkössivustoihin";
+
+/* The title for removing a pinned topsite action */
+"ActivityStream.ContextMenu.RemovePinTopsite" = "Poista kiinnitetty sivusto";
+
+/* The description of a highlight if it is a site the user has bookmarked */
+"ActivityStream.Highlights.Bookmark" = "Merkitty kirjanmerkiksi";
+
+/* The description of a highlight if it is a site the user has visited */
+"ActivityStream.Highlights.Visited" = "Vieraillut";
+
+/* Section title label for recently bookmarked websites */
+"ActivityStream.NewRecentBookmarks.Title" = "Viimeisimmät kirjanmerkit";
+
+/* The link that shows more Pocket trending stories */
+"ActivityStream.Pocket.MoreLink" = "Lisää";
+
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle" = "Nousussa Pocketissa";
+
+/* The description of a Pocket Story */
+"ActivityStream.Pocket.Trending" = "Pinnalla";
+
+/* Section title label for recently visited websites */
+"ActivityStream.RecentHistory.Title" = "Viimeksi käydyt";
+
+/* label showing how many rows of topsites are shown. %d represents a number */
+"ActivityStream.TopSites.RowCount" = "Rivejä: %d";
+
+/* The title for the setting page which lets you select the number of top site rows */
+"ActivityStream.TopSites.RowSettingFooter" = "Aseta rivit";
+
+/* Section title label for Top Sites */
+"ActivityStream.TopSites.SectionTitle" = "Ykkössivustot";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Lisää välilehti";
+
+/* Accessibility label for action adding current page to reading list.
+   Name for button adding current article to reading list in reader mode */
+"Add to Reading List" = "Lisää lukulistaan";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Lisätty sivu lukulistaan";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "OK";
+
+/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Message" = "Tapahtui virhe lisättäessä korttia Walletiin. Yritä myöhemmin uudelleen.";
+
+/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Title" = "Kortin lisäys epäonnistui";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Osoite ja haku";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Lähetä aina";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "Todennus vaaditaan";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "Edellinen";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Estä ponnahdusikkunat";
+
+/* The header title for the fields when editing a Bookmark */
+"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "Kirjanmerkki";
+
+/* The header title for the fields when editing a Folder */
+"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "Kansio";
+
+/* The label for the Title field when editing a bookmark */
+"Bookmark.DetailFieldTitle.Label" = "Otsikko";
+
+/* The label for the URL field when editing a bookmark */
+"Bookmark.DetailFieldURL.Label" = "URL";
+
+/* Toggle bookmarks syncing setting */
+"Bookmarks" = "Kirjanmerkit";
+
+/* The button to edit a bookmark */
+"Bookmarks.EditBookmark.Label" = "Muokkaa kirjanmerkkiä";
+
+/* The button to edit a folder */
+"Bookmarks.EditFolder.Label" = "Muokkaa kansiota";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "Kansio";
+
+/* The label for the location of the new folder */
+"Bookmarks.FolderLocation.Label" = "Sijainti";
+
+/* The label for the title of the new folder */
+"Bookmarks.FolderName.Label" = "Kansion nimi";
+
+/* The button to create a new bookmark */
+"Bookmarks.NewBookmark.Label" = "Uusi kirjanmerkki";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "Uusi kansio";
+
+/* The button to create a new separator */
+"Bookmarks.NewSeparator.Label" = "Uusi erotin";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "Otsikko";
+
+/* The label for the URL of a bookmark */
+"Bookmarks.URL.Label" = "URL";
+
+/* Status label for the empty Bookmarks state. */
+"BookmarksPanel.EmptyState.Title" = "Tallentamasi kirjanmerkit näytetään täällä.";
+
+/* Describes the date on which the breach occurred */
+"BreachAlerts.BreachDate" = "Tämä vuoto tapahtui";
+
+/* Link to monitor.firefox.com to learn more about breached passwords */
+"BreachAlerts.LearnMoreButton" = "Lue lisää";
+
+/* Title for the Breached Login Detail View. */
+"BreachAlerts.Title" = "Sivuston tietovuoto";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Kirkkaus";
+
+/* Label for Cancel button */
+"Cancel" = "Peruuta";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Muuttaa väriteemaa.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Muuttaa kirjasintyyppiä.";
+
+/* The button to open a new tab with the copied link */
+"ClipboardToast.GoToCopiedLink.Button" = "Siirry";
+
+/* Message displayed when the user has a copied link on the clipboard */
+"ClipboardToast.GoToCopiedLink.Title" = "Siirrytäänkö kopioituun linkkiin?";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Sulje";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "Suljetaan välilehti";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "tietokone";
+
+/* Context menu item for bookmarking a link URL */
+"ContextMenu.BookmarkLinkButtonTitle" = "Lisää linkki kirjanmerkkeihin";
+
+/* The button text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Vaihda";
+
+/* The label text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Uusi yksityinen välilehti avattu";
+
+/* The button text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "Vaihda";
+
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText" = "Uusi välilehti avattu";
+
+/* Context menu item for copying an image to the clipboard */
+"ContextMenu.CopyImageButtonTitle" = "Kopioi kuva";
+
+/* Context menu item for copying an image URL to the clipboard */
+"ContextMenu.CopyImageLinkButtonTitle" = "Kopioi kuvan linkki";
+
+/* Context menu item for copying a link URL to the clipboard */
+"ContextMenu.CopyLinkButtonTitle" = "Kopioi linkki";
+
+/* Context menu item for downloading a link URL */
+"ContextMenu.DownloadLinkButtonTitle" = "Lataa linkki";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenInNewTabButtonTitle" = "Avaa uuteen välilehteen";
+
+/* Context menu item for saving an image */
+"ContextMenu.SaveImageButtonTitle" = "Tallenna kuva";
+
+/* Context menu item for sharing a link URL */
+"ContextMenu.ShareLinkButtonTitle" = "Jaa linkki";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "Lukulistaan ei voitu lisätä sivua";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it’s already there?" = "Lukulistaan ei voitu lisätä sivua. Ehkä se on jo siellä?";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "Sivua ei voitu ladata.";
+
+/* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
+"CoverSheet.v22.DarkMode.Description" = "iOS 13 -käyttäjille, Firefox vaihtaa nyt automaattisesti tummaan teemaan, kun puhelimesi on asetettu tummaan tilaan. Voit vaihtaa asetusta kohdasta Asetukset > Teema.";
+
+/* Title for the new dark mode change in the version 22 app release. */
+"CoverSheet.v22.DarkMode.Title" = "Tumma teema sisältää nyt tumman näppäimistön ja tumman aloitusnäytön.";
+
+/* Description for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Description" = "Sisäänrakennettu tehostettu seurannan suojaus estää mainoksia seuraamasta sinua. Ota käyttöön Tiukka estääksesi vielä enemmän seuraimia, mainoksia ja ponnahdusikkunoita.";
+
+/* Text for the new ETP settings button */
+"CoverSheet.v24.ETP.Settings.Button" = "Siirry asetuksiin";
+
+/* Title for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Title" = "Suojaus mainosten seurantaa vastaan";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Luo tili";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Tumma";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Pienennä tekstin kokoa";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Oletushakukone";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Näkymän asetukset";
+
+/* Used as a button label for crash dialog prompt */
+"Don’t Send" = "Älä lähetä";
+
+/* Done button on left side of the Settings view controller title bar */
+"Done" = "Valmis";
+
+/* Panel accessibility label */
+"Downloads" = "Lataukset";
+
+/* The label of the button the user will press to start downloading a file */
+"Downloads.Alert.DownloadNow" = "Lataa nyt";
+
+/* Button confirming the cancellation of the download. */
+"Downloads.CancelDialog.Cancel" = "Peruuta";
+
+/* Alert dialog body when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Message" = "Oletko varma, että haluat peruuttaa tämän latauksen?";
+
+/* Button declining the cancellation of the download. */
+"Downloads.CancelDialog.Resume" = "Jatka";
+
+/* Alert dialog title when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Title" = "Peruuta lataus";
+
+/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
+"Downloads.Error.Message" = "Firefox ei vielä tue latauksia.";
+
+/* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
+"Downloads.Toast.Cancelled.LabelText" = "Lataus peruutettu";
+
+/* The label text in the Download Failed toast for showing confirmation that the download has failed. */
+"Downloads.Toast.Failed.LabelText" = "Lataus epäonnistui";
+
+/* The button to retry a failed download from the Download Failed toast. */
+"Downloads.Toast.Failed.RetryButton" = "Yritä uudestaan";
+
+/* The button to open a new tab with the Downloads home panel */
+"Downloads.Toast.GoToDownloads.Button" = "Lataukset";
+
+/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. */
+"Downloads.Toast.MultipleFiles.DescriptionText" = "1/%d tiedostoa";
+
+/* The description text in the Download progress toast for showing the number of files (1$) and download progress (2$). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where 1$ is Downloads.Toast.MultipleFiles.DescriptionText and 2$ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and 1$ should come before 2$ everywhere except for right-to-left locales. */
+"Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";
+
+/* The description text in the Download progress toast for showing the downloaded file size (1$) out of the total expected file size (2$). */
+"Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
+
+/* Action button for deleting downloaded files in the Downloads panel. */
+"DownloadsPanel.Delete.Title" = "Poista";
+
+/* Title for the Downloads Panel empty state. */
+"DownloadsPanel.EmptyState.Title" = "Ladatut tiedostot näkyvät täällä.";
+
+/* Action button for sharing downloaded files in the Downloads panel. */
+"DownloadsPanel.Share.Title" = "Jaa";
+
+/* Text message in the settings table view */
+"Enter your password to connect" = "Syötä salasanasi yhdistääksesi";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "Lisätoiminnot";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "Varoitus: emme voi vahvistaa, että yhteytesi tähän verkkosivustoon on turvallinen.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "Kyseessä saattaa olla ongelma palvelimen asetuksissa tai hyökkääjän suorittama toimenpide. Jatka, jos hyväksyt mahdollisen riskin.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "Sivuston %@ omistaja on määrittänyt sivustonsa asetukset väärin. Firefox ei muodostanut yhteyttä sivustoon suojellakseen tietojasi varkaudelta.";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "Tämä yhteys ei ole luotettu";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "Palaa";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "Käy sivustolla joka tapauksessa";
+
+/* Question shown to user when tapping a link that opens the App Store app */
+"ExternalLink.AppStore.ConfirmationTitle" = "Avataanko tämä linkki App Storessa?";
+
+/* Question shown to user when tapping an SMS or MailTo link that opens the external app for those. */
+"ExternalLink.AppStore.GenericConfirmationTitle" = "Avataanko tämä linkki toisessa sovelluksessa?";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Title for firefox about:home page in tab history list */
+"Firefox.HomePage.Title" = "Firefoxin aloitussivu";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "Seuraava";
+
+/* Label stating how to disconnect account */
+"FxA.AccountVerificationDetails" = "Väärä sähköpostiosoite? Katkaise yhteys alhaalta aloittaaksesi uudestaan.";
+
+/* Label stating your account is not verified */
+"FxA.AccountVerificationRequired" = "Tilin vahvistus vaaditaan";
+
+/* Message explaining that user needs to check email for Firefox Account verfication link. */
+"FxA.AccountVerificationRequiredSurface" = "Sinun tulee vahvistaa %@. Tarkista sähköpostistasi Firefoxin lähettämä vahvistuslinkki.";
+
+/* Button label to connect another device to Sync */
+"FxA.ConnectAnotherDevice" = "Yhdistä toinen laite";
+
+/* Settings section title for Firefox Account */
+"FxA.FirefoxAccount" = "Firefox-tili";
+
+/* Button label to go to Firefox Account settings */
+"FxA.ManageAccount" = "Hallitse tiliä ja laitteita";
+
+/* Label when no internet is present */
+"FxA.NoInternetConnection" = "Ei Internet-yhteyttä";
+
+/* Button label to open Sync preferences */
+"FxA.OpenSyncPreferences" = "Avaa Syncin asetukset";
+
+/* Instructions shown on qr code scanning view */
+"fxa.qr-scanning-view.instructions" = "Skannaa osoitteessa firefox.com/pair näkyvä QR-koodi";
+
+/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
+"FxA.RemoveAccount" = "Poista";
+
+/* Description string for alert view that gets presented when user tries to remove an account. */
+"FxA.RemoveAccountAlertMessage" = "Poista tähän laitteeseen liitetty Firefox-tili, jotta voit kirjautua toisena käyttäjänä.";
+
+/* Remove account alert is the final confirmation before user removes their firefox account */
+"FxA.RemoveAccountAlertTitle" = "Poista tili";
+
+/* Button label to resend email */
+"FxA.ResendEmail" = "Lähetä sähköposti uudelleen";
+
+/* FxA sign in view subtitle */
+"fxa.signin.camera-signin" = "Kirjaudu sisään kamerallasi";
+
+/* FxA sign in view qr code instructions */
+"fxa.signin.qr-link-instruction" = "Avaa tietokoneellasi Firefox ja siirry osoitteeseen firefox.com/pair";
+
+/* FxA sign in view qr code scan button */
+"fxa.signin.ready-to-scan" = "Valmiina skannaamaan";
+
+/* FxA sign in view title */
+"fxa.signin.turn-on-sync" = "Ota Sync käyttöön";
+
+/* FxA sign in view email login button */
+"fxa.signin.use-email-instead" = "Käytä sähköpostia";
+
+/* Button label to sign into Sync */
+"FxA.SignIntoSync" = "Kirjaudu Sync-palveluun";
+
+/* Label explaining what sync does */
+"FxA.SyncExplain" = "Hanki välilehdet, kirjanmerkit ja salasanat muilta laitteiltasi.";
+
+/* Button label to Sync your Firefox Account */
+"FxA.SyncNow" = "Synkronoi";
+
+/* Call to action for sign into sync button */
+"FxA.TakeYourWebWithYou" = "Ota verkko mukaasi";
+
+/* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
+"FxAPush_DeviceConnected_body" = "Firefox Sync on yhdistänyt laitteeseen %@";
+
+/* Title of a notification displayed when another device has connected to FxA. */
+"FxAPush_DeviceConnected_title" = "Sync yhdistetty";
+
+/* Body of a notification displayed when named device has been disconnected from FxA. %@ refers to the name of the disconnected device. */
+"FxAPush_DeviceDisconnected_body" = "%@ on irrotettu onnistuneesti.";
+
+/* Body of a notification displayed when this device has been disconnected from FxA by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Tämä laite on irrotettu onnistuneesti Firefox Sync -palvelusta.";
+
+/* Title of a notification displayed when this device has been disconnected by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_title" = "Synkronointi katkaistu";
+
+/* Title of a notification displayed when named device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_title" = "Synkronointi poistettu käytöstä";
+
+/* Body of a notification displayed when unnamed device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Laite on irrotettu Firefox Sync -palvelusta";
+
+/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "Käytä avoimia välilehtiä, kirjanmerkkejä ja salasanoja muilta laitteiltasi.";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Ohje";
+
+/* Toggle history syncing setting */
+"History" = "Sivuhistoria";
+
+/* Title for button in the history panel to clear recent history */
+"HistoryPanel.ClearHistoryButtonTitle" = "Poista historiatietoja…";
+
+/* Option title to clear all browsing history. */
+"HistoryPanel.ClearHistoryMenuOptionEverything" = "Kaikki";
+
+/* Button to perform action to clear history for the last hour */
+"HistoryPanel.ClearHistoryMenuOptionTheLastHour" = "Viime tunti";
+
+/* Button to perform action to clear history for today only */
+"HistoryPanel.ClearHistoryMenuOptionToday" = "Tämä päivä";
+
+/* Button to perform action to clear history for yesterday and today */
+"HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "Tämä ja eilinen päivä";
+
+/* Title for popup action menu to clear recent history. */
+"HistoryPanel.ClearHistoryMenuTitle" = "Historian tyhjentäminen poistaa selaushistorian, evästeet ja muut selaustiedot.";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "Viimeksi vierailemasi sivut ilmestyvät tänne.";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "Välilehdet muilta laitteiltasi ilmestyvät tänne.";
+
+/* Description for the empty synced tabs 'not signed in' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Kirjaudu sisään nähdäksesi listan muiden laitteidesi välilehdistä.";
+
+/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "Tilisi tulee vahvistaa.";
+
+/* Description for the empty synced tabs 'single device Sync' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "Haluatko nähdä välilehdet muilta laitteiltasi tässä?";
+
+/* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Ota käyttöön välilehtien synkronointi nähdäksesi listan muiden laitteidesi välilehdistä.";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "Historia";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "Äskettäin suljetut";
+
+/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d laite(tta) yhdistetty";
+
+/* Title for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Title" = "Synkronoidut laitteet";
+
+/* Button cancelling changes setting the home page for the first time. */
+"HomePage.Set.Dialog.Cancel" = "Peruuta";
+
+/* Alert dialog body when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Message" = "Voit muuttaa tätä asetusta milloin tahansa asetuksista";
+
+/* Button accepting changes setting the home page for the first time. */
+"HomePage.Set.Dialog.OK" = "Aseta kotisivu";
+
+/* Alert dialog title when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Title" = "Haluatko käyttää tätä sivua kotisivunasi?";
+
+/* The title for the Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Bookmark" = "Lisää kirjanmerkkeihin";
+
+/* The title for the Delete from History context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.DeleteFromHistory" = "Poista historiasta";
+
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab" = "Avaa yksityisessä välilehdessä";
+
+/* The title for the Open in New Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewTab" = "Avaa uudessa välilehdessä";
+
+/* The title for the Remove context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Remove" = "Poista";
+
+/* The title for the Remove Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.RemoveBookmark" = "Poista kirjanmerkki";
+
+/* The title for the Share context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Share" = "Jaa";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Back.DiscoveryTitle" = "Edellinen";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.CloseTab.DiscoveryTitle" = "Sulje välilehti";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Find.DiscoveryTitle" = "Etsi";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Forward.DiscoveryTitle" = "Seuraava";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "Uusi yksityinen välilehti";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewTab.DiscoveryTitle" = "Uusi välilehti";
+
+/* Label to switch to normal browsing mode */
+"Hotkeys.NormalMode.DiscoveryTitle" = "Tavallinen selaustila";
+
+/* Label to switch to private browsing mode */
+"Hotkeys.PrivateMode.DiscoveryTitle" = "Yksityinen selaustila";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Reload.DiscoveryTitle" = "Lataa sivu uudelleen";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "Valitse osoitepalkki";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "Näytä seuraava välilehti";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Näytä edellinen välilehti";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Suurenna tekstin kokoa";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "juuri nyt";
+
+/* History tableview section header */
+"Last month" = "Viime kuukausi";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "Viimeksi synkronoitu: %@";
+
+/* History tableview section header */
+"Last week" = "Viime viikko";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Lisenssit";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Vaalea";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "Lataa alkuperäinen sivu";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "Ladataan sisältöä…";
+
+/* Authentication prompt log in button */
+"Log in" = "Kirjaudu sisään";
+
+/* Toggle logins syncing setting */
+"Logins" = "Kirjautumistiedot";
+
+/* Login detail view field name for the last modified date */
+"LoginsDetailView.LoginModified" = "Muokattu";
+
+/* Title for the login detail view */
+"LoginsDetailView.LoginTitle" = "Sisäänkirjautuminen";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "Älä tallenna";
+
+/* Button to not update the user's password */
+"LoginsHelper.DontUpdate.Button" = "Älä päivitä";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "Tallennetaanko käyttäjätunnus %1$@ sivustolle %2$@?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "Tallennetaanko sivuston %@ salasana?";
+
+/* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
+"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "Päivitetäänkö tunnus sivustolle %@?";
+
+/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "Päivitetäänkö tunnus %1$@ sivustolle %2$@?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "Tallenna kirjautumistieto";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "Päivitä";
+
+/* For filtering the login list, search only the login names */
+"LoginsList.LoginsListFilterLogin" = "Sisäänkirjautuminen";
+
+/* For filtering the login list, search both website and login names. */
+"LoginsList.LoginsListFilterSearchAll" = "Kaikki";
+
+/* For filtering the login list, search only the website names */
+"LoginsList.LoginsListFilterWebsite" = "Verkkosivusto";
+
+/* Placeholder test for search box in logins list view. */
+"LoginsList.LoginsListSearchPlaceholder" = "Suodata";
+
+/* Title for the list of logins */
+"LoginsList.Title" = "TALLENNETUT KIRJAUTUMISTIEDOT";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Näyttää siltä, että Firefox kaatui aiemmin. Haluatko palauttaa välilehdet?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "Merkitse luetuksi";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Merkitse lukemattomaksi";
+
+/* Toast displayed to the user after a bookmark has been added. */
+"Menu.AddBookmark.Confirm" = "Kirjanmerkki lisätty";
+
+/* Toast displayed to the user after adding the item to the Top Sites. */
+"Menu.AddPin.Confirm" = "Kiinnitetty ykkössivustoihin";
+
+/* Toast displayed to the user after adding the item to their reading list. */
+"Menu.AddToReadingList.Confirm" = "Lisätty lukulistaan";
+
+/* The title for the button that lets you copy the url from the location bar. */
+"Menu.Copy.Title" = "Kopioi osoite";
+
+/* Toast displayed to user after copy url pressed. */
+"Menu.CopyURL.Confirm" = "Osoite kopioitu leikepöydälle";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "Tehostettu seurannan suojaus on POIS PÄÄLTÄ tällä sivustolla.";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "Tehostettu seurannan suojaus on PÄÄLLÄ tällä sivustolla.";
+
+/* Label for the button displayed in the menu used to stop the reload of the webpage */
+"Menu.Library.StopReload" = "Pysäytä";
+
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label" = "Käytä yötilaa";
+
+/* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
+"Menu.NoImageModeBlockImages.Label" = "Estä kuvat";
+
+/* Label for title in page action menu. */
+"Menu.PageActions.Title" = "Sivutoiminnot";
+
+/* The title for the button that lets you paste into the location bar */
+"Menu.Paste.Title" = "Liitä";
+
+/* The title for the button that lets you paste and go to a URL */
+"Menu.PasteAndGo.Title" = "Liitä ja avaa";
+
+/* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
+"Menu.ReloadWithoutTrackingProtection.Title" = "Lataa ilman seurannan suojausta";
+
+/* Label for the button, displayed in the menu, used to reload the current website with Tracking Protection enabled */
+"Menu.ReloadWithTrackingProtection.Title" = "Lataa seurannan suojauksen kanssa";
+
+/* Toast displayed to the user after a bookmark has been removed. */
+"Menu.RemoveBookmark.Confirm" = "Kirjanmerkki poistettu";
+
+/* Toast displayed to the user after removing the item from the Top Sites. */
+"Menu.RemovePin.Confirm" = "Poistettu ykkössivustoista";
+
+/* Toast displayed to the user after a tab has been sent successfully. */
+"Menu.TabSent.Confirm" = "Välilehti lähetetty";
+
+/* Title on tracking protection menu for blocked items. */
+"Menu.TrackingProtection.BlockedTitle" = "Estetty";
+
+/* Message in menu when no trackers blocked. */
+"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Tällä sivulla ei havaittu seuraimia, joita Firefox tuntisi.";
+
+/* The title for tracking protection settings */
+"Menu.TrackingProtection.ProtectionSettings.Title" = "Suojausasetukset";
+
+/* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
+"Menu.TrackingProtection.TitlePrefix" = "Suojaukset sivustolle %@";
+
+/* The title that shows the number of content cookies blocked */
+"Menu.TrackingProtectionBlockedContent.Title" = "Seurantaan tarkoitettu sisältö";
+
+/* The title that shows the number of social URLs blocked */
+"Menu.TrackingProtectionBlockedSocial.Title" = "Sosiaaliset seuraimet";
+
+/* Description of the Tracking protection menu when TP is blocking parts of the page */
+"Menu.TrackingProtectionBlocking.Description" = "Firefox estää sivusta osia, jotka saattavat seurata selaamistasi.";
+
+/* The description of the Tracking Protection menu item when tracking is enabled */
+"Menu.TrackingProtectionBlockingDisabled.Description" = "Estä seuraimet";
+
+/* The title that shows the number of cross-site cookies blocked */
+"Menu.TrackingProtectionCrossSiteCookies.Title" = "Sivustorajat ylittävät seurainevästeet";
+
+/* The title that shows the number of cross-site URLs blocked */
+"Menu.TrackingProtectionCrossSiteTrackers.Title" = "Sivustorajat ylittävät seuraimet";
+
+/* The title that shows the number of cryptomining scripts blocked */
+"Menu.TrackingProtectionCryptominersBlocked.Title" = "Kryptolouhijat";
+
+/* Description of content trackers. */
+"Menu.TrackingProtectionDescription.ContentTrackers" = "Sivustot saattavat ladata ulkoisia mainoksia, videoita ja muuta sisältöä, joka seuraa sinua. Seurantaan tarkoitetun sisällön estäminen voi nopeuttaa sivujen latautumista, mutta jotkin painikkeet, lomakkeet ja kirjautumiskentät eivät välttämättä toimi.";
+
+/* Description of cross-site trackers. */
+"Menu.TrackingProtectionDescription.CrossSiteNew" = "Nämä evästeet seuraavat sinua sivustolta toiselle ja keräävät tietoja tekemisistäsi verkossa. Ne on asetettu kolmansien osapuolten, kuten mainostajien ja analytiikkayhtiöiden, toimesta.";
+
+/* Description of cryptominers. */
+"Menu.TrackingProtectionDescription.CryptominersNew" = "Kryptolouhijat käyttävät salaa tietokoneesi laskentatehoa digitaalisen rahan louhintaan. Kryptolouhintaan tarkoitetut komentosarjat kuluttavat akkua, hidastavat tietokonetta ja voivat vaikuttaa sähkölaskun loppusummaan.";
+
+/* Description of fingerprinters. */
+"Menu.TrackingProtectionDescription.Fingerprinters" = "Selaimesi ja tietokoneesi asetukset ovat ainutlaatuisia. Yksilöijät keräävät näitä ainutlaatuisia asetuksia luodaksesi sinusta profiilin, jota voidaan käyttää seuraamaan sinua selaamisen aikana.";
+
+/* Description of social network trackers. */
+"Menu.TrackingProtectionDescription.SocialNetworksNew" = "Sosiaalisen median verkostot sijoittavat seuraimia muille sivustoille luodakseen tarkemman profiilin sinusta. Näiden seuraimien estäminen vähentää sitä, kuinka paljon sosiaalisen median yritykset voivat nähdä mitä teet verkossa.";
+
+/* The button that disabled TP for a site. */
+"Menu.TrackingProtectionDisable1.Title" = "Pois käytöstä tällä sivustolla";
+
+/* The confirmation toast once tracking protection has been disabled */
+"Menu.TrackingProtectionDisabled.Title" = "Seurannan suojaus on nyt pois päältä tällä sivustolla.";
+
+/* A button to enable tracking protection inside the menu. */
+"Menu.TrackingProtectionEnable.Title" = "Aseta seurannan suojaus päälle";
+
+/* A button to enable tracking protection inside the menu. */
+"Menu.TrackingProtectionEnable1.Title" = "Käytössä tällä sivustolla";
+
+/* The confirmation toast once tracking protection has been enabled */
+"Menu.TrackingProtectionEnabled.Title" = "Seurannan suojaus on nyt päällä tällä sivustolla.";
+
+/* The title that shows the number of fingerprinting scripts blocked */
+"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Yksilöijät";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "Estetyt sivustorajat ylittävät seurainevästeet";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Cryptominers" = "Estetyt kryptolouhijat";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Fingerprinters" = "Estetyt yksilöijät";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Social" = "Estetyt sosiaaliset seuraimet";
+
+/* more info about what tracking protection is about */
+"Menu.TrackingProtectionMoreInfo.Description" = "Lue lisää, miten seurannan suojaus estää verkossa toimivia seurantamenetelmiä, jotka keräävät tietoja sinusta yli sivustorajojen.";
+
+/* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
+"Menu.TrackingProtectionNoBlocking.Description" = "Seurainelementtejä ei havaittu tällä sivulla.";
+
+/* label for the menu item to show when the website is whitelisted from blocking trackers. */
+"Menu.TrackingProtectionOption.WhiteListOnDescription" = "Tämä sivusto sisältää osia, jotka saattavat seurata sinua. Seurannan suojaus on pois päältä.";
+
+/* label for the menu item that lets you remove a website from the tracking protection whitelist */
+"Menu.TrackingProtectionWhitelistRemove.Title" = "Käytä tällä sivustolla";
+
+/* The title for the option to view the What's new page. */
+"Menu.WhatsNew.Title" = "Mitä uutta";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "mobiililaite";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "yli kuukausi sitten";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "yli viikko sitten";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Navigointipalkki";
+
+/* Accessibility label for the New Tab button in the tab toolbar.
+   Accessibility Label for the tab toolbar New tab button */
+"New Tab" = "Uusi välilehti";
+
+/* Restore Tabs Negative Action */
+"No" = "Ei";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "Ei välilehtiä";
+
+/* OK button */
+"OK" = "OK";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "Okei";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "Hups! Firefox kaatui";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Avaa artikkelit lukunäkymässä napauttamalla kirjakuvaketta, kun se ilmestyy hakuriville.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Avaa asetukset";
+
+/* Toggle tabs syncing setting */
+"Open Tabs" = "Avoimet välilehdet";
+
+/* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
+"OpenURL.Error.Message" = "Firefox ei voi avata sivustoa, sillä sen osoite on virheellinen.";
+
+/* Title of the message shown when the user attempts to navigate to an invalid link. */
+"OpenURL.Error.Title" = "Sivua ei voi avata";
+
+/* Accessibility label for the Page Options menu button */
+"Page Options Menu" = "Sivun valinnat -valikko";
+
+/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
+"Panel Chooser" = "Paneelivalitsin";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Salasana";
+
+/* Error message shown in the remote tabs panel */
+"PasswordAutoFill.NoPasswordsFoundTitle" = "Sinulla ei ole mitään Firefox-tilistäsi synkronoituja kirjautumistietoja";
+
+/* Header for the list of credentials table */
+"PasswordAutoFill.PasswordsListTitle" = "Käytettävissä olevat kirjautumistiedot:";
+
+/* Title of the extension that shows firefox passwords */
+"PasswordAutoFill.SectionTitle" = "Firefoxin kirjautumistiedot";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Tämän antaa tallentaa kuvan Kameran rullaan.";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox haluaisi käyttää valokuviasi";
+
+/* Button for closing the menu action sheet */
+"PhotonMenu.close" = "Sulje";
+
+/* Privacy section title */
+"Privacy" = "Tietosuoja";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "Yksityisyydensuoja";
+
+/* Title for quick-search engines settings section. */
+"Quick-Search Engines" = "Pikahakukoneet";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "luettu";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "Lukunäkymä";
+
+/* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
+"ReaderMode.Available.VoiceOverAnnouncement" = "Lukunäkymä saatavilla";
+
+/* Panel accessibility label */
+"Reading list" = "Lukulista";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "Äskettäin suljetut";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "Päivitä";
+
+/* Accessibility label for the reload button */
+"Reload page" = "Lataa sivu uudelleen";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Poista";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Poista lukulistalta";
+
+/* Cancel button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Cancel" = "Peruuta";
+
+/* Reopen button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Reopen" = "Avaa uudelleen";
+
+/* Reopen alert title shown at home page. */
+"ReopenAlert.Title" = "Avaa uudelleen suljettu välilehti";
+
+/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"ReopenClosedTab.KeyCodeTitle" = "Avaa uudelleen suljettu välilehti";
+
+/* Accessibility label for button resetting font size in display settings of reader mode */
+"Reset text size" = "Palauta tekstin koko";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Päätteetön";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Tallenna sivuja lukulistaan napauttamalla plus-kuvaketta lukunäkymän ohjaimissa.";
+
+/* OK button to dismiss the error prompt. */
+"ScanQRCode.Error.OK.Button" = "OK";
+
+/* Text for the instructions label, displayed in the QR scanner view */
+"ScanQRCode.Instructions.Label" = "Skannaa kohdistamalla QR-koodi kehyksen sisälle";
+
+/* Text of the prompt that is shown to the user when the data is invalid */
+"ScanQRCode.InvalidDataError.Message" = "Tiedot ovat virheellisiä";
+
+/* Text of the prompt user to setup the camera authorization. */
+"ScanQRCode.PermissionError.Message" = "Salli Firefoxin käyttää laitteen kameraa kohdassa Asetukset -> Tietosuoja -> Kamera.";
+
+/* Title for the QR code scanner view. */
+"ScanQRCode.View.Title" = "Skannaa QR-koodi";
+
+/* Accessibility Label for the tab toolbar Search button
+   Navigation title for search settings.
+   Open search section of settings */
+"Search" = "Haku";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Hae tai kirjoita osoite";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "Uusi hakukone ilmestyy pkahakupalkkiin.";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "Hakukone lisätty!";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "Lisätäänkö hakukone?";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "Peruuta";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.DuplicateErrorMessage" = "Hakukone tällä otsikolla tai osoitteella on jo lisätty.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.DuplicateErrorTitle" = "Epäonnistui";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "Hakukonetta ei voitu lisätä.";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "Epäonnistui";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.FormErrorMessage" = "Ole hyvä ja täytä kaikki kentät oikein.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.FormErrorTitle" = "Epäonnistui";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "OK";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "Ehdotuksen hakutulokset";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "Suojattu yhteys";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "Lähetätkö virheraportin, jotta Mozilla voi korjata ongelman?";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "Lähetä palautetta";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "Lähetä raportti";
+
+/* Button title for cancelling share screen
+   Close button in top navigation bar */
+"SendTo.Cancel.Button" = "Peruuta";
+
+/* Header for the list of devices table */
+"SendTo.DeviceList.Text" = "Käytettävissä olevat laitteet:";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "Vain HTTP- ja HTTPS-linkkejä voidaan jakaa.";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "OK";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "Linkkiä, jonka yrität jakaa, ei voi jakaa.";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"SendTo.NavBar.Title" = "Lähetä välilehti";
+
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message" = "Sinulla ei ole muita tähän Firefox-tiliin kytkettyjä laitteita synkronointia varten.";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Message" = "Avaa Firefox, siirry asetuksiin ja kirjaudu sisään jatkaaksesi.";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Title" = "Et ole kirjautuneena Firefox-tilillesi.";
+
+/* Navigation bar button to Send the current page to a device */
+"SendTo.SendAction.Text" = "Lähetä";
+
+/* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_body" = "Uusi välilehti vastaanotettu toiselta laitteelta.";
+
+/* Title of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_title" = "Välilehti vastaanotettu";
+
+/* Body of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the app name. */
+"SentTab_TabArrivingNotification_WithDevice_body" = "Uusi välilehti saapui laitteesta %@";
+
+/* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
+"SentTab_TabArrivingNotification_WithDevice_title" = "Välilehti vastaanotettu laitteesta %@";
+
+/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
+"SentTab.AddToReadingListAction.Title" = "Lisää lukulistaan";
+
+/* Label for an action used to bookmark one or more tabs from a notification. */
+"SentTab.BookmarkAction.title" = "Lisää kirjanmerkiksi";
+
+/* Body of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.body" = "Napauta aloittaaksesi";
+
+/* Title of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+
+/* Label for an action used to view one or more tabs from a notification. */
+"SentTab.ViewAction.title" = "Näytä";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Seepia";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Pääteviivallinen";
+
+/* Title in the settings view controller title bar */
+"Settings" = "Asetukset";
+
+/* The button text in Search Settings that opens the Custom Search Engine view. */
+"Settings.AddCustomEngine" = "Lisää hakukone";
+
+/* The text on the Save button when saving a custom search engine */
+"Settings.AddCustomEngine.SaveButtonText" = "Tallenna";
+
+/* The title of the  Custom Search Engine view. */
+"Settings.AddCustomEngine.Title" = "Lisää hakukone";
+
+/* The title for the field which sets the title for a custom search engine. */
+"Settings.AddCustomEngine.TitleLabel" = "Nimi";
+
+/* The placeholder for Title Field when saving a custom search engine. */
+"Settings.AddCustomEngine.TitlePlaceholder" = "Hakukone";
+
+/* The title for URL Field */
+"Settings.AddCustomEngine.URLLabel" = "URL";
+
+/* The placeholder for URL Field when saving a custom search engine */
+"Settings.AddCustomEngine.URLPlaceholder" = "URL (Korvaa kysely merkeillä %s)";
+
+/* Button in Data Management that clears private data for the selected items. */
+"Settings.ClearAllWebsiteData.Clear.Button" = "Poista kaikki sivustojen tiedot";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "Tyhjennä yksityiset tiedot";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "Tyhjennä yksityiset tiedot";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "Yksityisten tietojen tyhjennys";
+
+/* Copy app version alert shown in settings. */
+"Settings.CopyAppVersion.Title" = "Kopioitu leikepöydälle";
+
+/* Default text in search bar for Data Management */
+"Settings.DataManagement.SearchLabel" = "Suodata sivustoja";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.DataManagement.SectionName" = "Tietojen hallinta";
+
+/* Title displayed in header of the setting panel. */
+"Settings.DataManagement.Title" = "Tietojen hallinta";
+
+/* Body of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Body" = "Firefox lopettaa synkronoinnin tilisi kanssa, mutta ei poista mitään selaustietojasi tällä laitteella.";
+
+/* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
+"Settings.Disconnect.Button" = "Ota synkronointi pois käytöstä";
+
+/* Cancel action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.CancelButton" = "Peruuta";
+
+/* Destructive action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.DestructiveButton" = "Katkaise yhteys";
+
+/* Title of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Title" = "Otetaanko synkronointi pois käytöstä?";
+
+/* Section header for brightness slider. */
+"Settings.DisplayTheme.BrightnessThreshold.SectionHeader" = "Raja-arvo";
+
+/* Display (theme) settings label to show if manually switch theme is enabled. */
+"Settings.DisplayTheme.Manual.StatusLabel" = "Manuaalinen";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Manually'. */
+"Settings.DisplayTheme.Manual.SwitchSubtitle" = "Valitse haluamasi teema";
+
+/* Display (theme) setting to choose the theme manually. */
+"Settings.DisplayTheme.Manual.SwitchTitle" = "Manuaalisesti";
+
+/* Option choice in display theme settings for dark theme */
+"Settings.DisplayTheme.OptionDark" = "Tumma";
+
+/* Option choice in display theme settings for light theme */
+"Settings.DisplayTheme.OptionLight" = "Vaalea";
+
+/* Display (theme) settings footer describing how the brightness slider works. */
+"Settings.DisplayTheme.SectionFooter" = "Teema muuttuu automaattisesti näytön kirkkauden perusteella. Voit asettaa kirkkauskynnyksen, jossa teema muuttuu. Ympyrä ilmaisee näytön nykyistä kirkkautta.";
+
+/* Switch mode settings section title */
+"Settings.DisplayTheme.SwitchMode.SectionHeader" = "Vaihda tilaa";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Automatically'. */
+"Settings.DisplayTheme.SwitchSubtitle" = "Vaihda automaattisesti näytön kirkkauden perusteella";
+
+/* Display (theme) settings label to show if automatically switch theme is enabled.
+   Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
+"Settings.DisplayTheme.SwitchTitle" = "Automaattisesti";
+
+/* System theme settings section title */
+"Settings.DisplayTheme.SystemTheme.SectionHeader" = "Järjestelmän teema";
+
+/* System theme settings switch to choose whether to use the same theme as the system */
+"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "Järjestelmän vaalea/tumma tila";
+
+/* Theme picker settings section title */
+"Settings.DisplayTheme.ThemePicker.SectionHeader" = "Teemavalitsin";
+
+/* Title in main app settings for Theme settings */
+"Settings.DisplayTheme.Title.v2" = "Teema";
+
+/* DNT Settings option for always on */
+"Settings.DNT.OptionAlwaysOn" = "Aina";
+
+/* DNT Settings option for only turning on when Tracking Protection is also on */
+"Settings.DNT.OptionOnWithTP" = "Käytä vain, kun seurannan suojaus on päällä";
+
+/* DNT Settings title */
+"Settings.DNT.Title" = "Lähetä sivustoille Älä seuraa -signaali, että et halua sinua seurattavan";
+
+/* Label used for the device name settings section. */
+"Settings.FxA.DeviceName" = "Laitteen nimi";
+
+/* Label used as a section title in the Firefox Accounts Settings screen. */
+"Settings.FxA.Sync.SectionName" = "Sync-asetukset";
+
+/* Title displayed in header of the FxA settings panel. */
+"Settings.FxA.Title" = "Firefox-tili";
+
+/* General settings section title */
+"Settings.General.SectionName" = "Yleiset";
+
+/* Button in settings to clear the home page. */
+"Settings.HomePage.Clear.Button" = "Tyhjennä";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "Kotisivu";
+
+/* Title displayed in header of the setting panel. */
+"Settings.HomePage.Title" = "Kotisivun asetukset";
+
+/* Placeholder text in the homepage setting when no homepage has been set. */
+"Settings.HomePage.URL.Placeholder" = "Kirjoita verkkosivu";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "Nykyinen kotisivu";
+
+/* Button in settings to use the current link on the clipboard as home page. */
+"Settings.HomePage.UseCopiedLink.Button" = "Käytä kopioitua linkkiä";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "Käytä nykyistä sivua";
+
+/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
+"Settings.HomePage.UseDefault.Button" = "Käytä oletusta";
+
+/* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
+"Settings.LoginsAndPasswordsTitle" = "Käyttäjätunnukset ja salasanat";
+
+/* Label used to set a custom url as the new tab option (homepage). */
+"Settings.NewTab.CustomURL" = "Mukautettu URL";
+
+/* A description in settings of what the new tab choice means */
+"Settings.NewTab.Description" = "Kun avaat uuden välilehden:";
+
+/* The title of the section in newtab that lets you modify the topsites panel */
+"Settings.NewTab.Option.ASTitle" = "Muokkaa ykkössivustoja";
+
+/* Option in settings to show a blank page when you open a new tab */
+"Settings.NewTab.Option.BlankPage" = "Tyhjä sivu";
+
+/* Option in settings to show bookmarks when you open a new tab */
+"Settings.NewTab.Option.Bookmarks" = "Kirjanmerkit";
+
+/* The footer for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeFooter" = "Useimmin vierailemasi sivustot";
+
+/* The title for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeTitle" = "Mukauta Firefoxin aloitussivua";
+
+/* Option in settings to show Firefox Home when you open a new tab */
+"Settings.NewTab.Option.FirefoxHome" = "Firefoxin aloitussivu";
+
+/* Option in the settings to turn off recent bookmarks in the Highlights section */
+"Settings.NewTab.Option.HighlightsBookmarks" = "Uusimmat kirjanmerkit";
+
+/* Option in settings to turn off history in the highlights section */
+"Settings.NewTab.Option.HighlightsHistory" = "Vieraillut sivut";
+
+/* Option in settings to show history when you open a new tab */
+"Settings.NewTab.Option.History" = "Sivuhistoria";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.HomePage" = "Kotisivu";
+
+/* Option in settings to turn on off pocket recommendations */
+"Settings.NewTab.Option.Pocket" = "Nousussa Pocketissa";
+
+/* Footer caption for pocket settings */
+"Settings.NewTab.Option.PocketFooter" = "Ensiluokkaista sisältöä ympäri verkkoa.";
+
+/* Option in settings to show reading list when you open a new tab */
+"Settings.NewTab.Option.ReadingList" = "Näytä lukulista";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
+"Settings.NewTab.SectionName" = "Uusi välilehti";
+
+/* Title displayed in header of the setting panel. */
+"Settings.NewTab.Title" = "Uusi välilehti";
+
+/* Label at the top of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionName" = "Näytä";
+
+/* Footer at the bottom of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionNameFooter" = "Valitse, mitä avataan, kun uusi välilehti avautuu";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Status" = "Kun avaat Firefoxin";
+
+/* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Title" = "Tarjoa kopioitujen linkkien avaamista";
+
+/* Title for Open With Settings */
+"Settings.OpenWith.PageTitle" = "Avaa sähköpostin linkit sovelluksella";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
+"Settings.OpenWith.SectionName" = "Sähköpostisovellus";
+
+/* Setting to enable the built-in password manager */
+"Settings.SaveLogins.Title" = "Tallenna kirjautumistiedot";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "Valmis";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "Muokkaa";
+
+/* title for a link that explains how mozilla collects telemetry */
+"Settings.SendUsage.Link" = "Lue lisää.";
+
+/* A short description that explains why mozilla collects usage data. */
+"Settings.SendUsage.Message" = "Mozilla pyrkii keräämään vain tietoja, jotka ovat tarpeellisia ja kehittävät Firefoxia.";
+
+/* The title for the setting to send usage data. */
+"Settings.SendUsage.Title" = "Lähetä käyttötilastoja";
+
+/* Description displayed under the ”Show Link Previews” option */
+"Settings.ShowLinkPreviews.Status" = "Kun pitkään painat linkkejä";
+
+/* Title of setting to enable link previews when long-pressing links. */
+"Settings.ShowLinkPreviews.Title" = "Näytä linkkien esikatselut";
+
+/* Setting to show Logins & Passwords quick access in the application menu */
+"Settings.ShowLoginsInAppMenu.Title" = "Näytä sovellusvalikossa";
+
+/* The description of the open new tab siri shortcut */
+"Settings.Siri.OpenTabShortcut" = "Avaa uusi välilehti";
+
+/* The description that describes what siri shortcuts are */
+"Settings.Siri.SectionDescription" = "Käytä Siri-oikoteitä avataksesi Firefoxin nopeasti Sirin kautta";
+
+/* The option that takes you to the siri shortcuts settings page */
+"Settings.Siri.SectionName" = "Siri-oikotiet";
+
+/* Dismiss button for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Button" = "Selvä";
+
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "Jos sivusto ei toimi odotetulla tavalla, napauta kilpeä osoiterivillä ja poista kyseisen sivun tehostettu seurannan suojaus käytöstä.";
+
+/* Title for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Title" = "Huomio!";
+
+/* Header description for tracking protection options section where Basic/Strict block list can be selected */
+"Settings.TrackingProtection.BlockListsHeader" = "Voit valita, mitä listaa Firefox käyttää estämään elementtejä, jotka voivat seurata selaamistasi.";
+
+/* Explanation of basic mode. */
+"Settings.TrackingProtection.Info.BasicTitle" = "Tasapainoa suojauksen ja suorituskyvyn välillä.";
+
+/* The Title on info view which shows a list of all blocked websites */
+"Settings.TrackingProtection.Info.BlocksTitle" = "ESTETYT";
+
+/* Explanation of strict mode. */
+"Settings.TrackingProtection.Info.StrictTitle" = "Enemmän suojaa, mutta jotkin sivustot voivat hajota.";
+
+/* 'Learn more' info link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.LearnMore" = "Lue lisää";
+
+/* 'More Info' link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.MoreInfo" = "Lisätietoja…";
+
+/* Additional information about your Enhanced Tracking Protection */
+"Settings.TrackingProtection.ProtectionCellFooter" = "Vähentää kohdennettua mainontaa ja auttaa estämään mainostajia seuraamasta selaamistasi.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "Jos sivusto ei toimi odotetulla tavalla, napauta kilpeä osoiterivillä ja poista kyseisen sivun tehostettu seurannan suojaus käytöstä.";
+
+/* Description for standard level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Salli joitain seuraimia, jotta sivustot toimivat oikein.";
+
+/* Description for strict level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "Estää enemmän seuraimia, mainoksia ja ponnahdusikkunoita. Sivut latautuvat nopeammin, mutta jotkut toiminnot eivät välttämättä toimi.";
+
+/* Title for tracking protection options section where level can be selected. */
+"Settings.TrackingProtection.ProtectionLevelTitle" = "Suojaustaso";
+
+/* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
+"Settings.TrackingProtection.SectionName" = "Seurannan suojaus";
+
+/* Additional information about the strict level setting */
+"Settings.TrackingProtection.StrictLevelInfoFooter" = "Seurannan esto voi vaikuttaa joidenkin verkkosivustojen toimivuuteen.";
+
+/* Tracking protection settings option for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BasicBlockList" = "Tavallinen (oletus)";
+
+/* Tracking protection settings option description for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BlockListBasicDescription" = "Salli joitain seuraimia, jotta sivustot toimivat oikein.";
+
+/* Tracking protection settings option for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrict" = "Tiukka";
+
+/* Tracking protection settings option description for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrictDescription" = "Estä tunnetut seuraimet. Jotkin sivustot eivät välttämättä toimi kunnolla.";
+
+/* Description label shown on tracking protection options screen. */
+"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "Seuranta on selaustietojesi keräämistä sivustorajojen yli.";
+
+/* Settings option to specify that Tracking Protection is on */
+"Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "Tehostettu seurannan suojaus";
+
+/* Translation settings footer describing how language detection and translation happens. */
+"Settings.TranslateSnackBar.SectionFooter" = "Laite havaitsee verkkosivun kielen, ja palvelusta tarjotaan käännös.";
+
+/* Translation settings section title */
+"Settings.TranslateSnackBar.SectionHeader" = "Palvelut";
+
+/* Switch to choose if the language of a page is detected and offer to translate. */
+"Settings.TranslateSnackBar.SwitchSubtitle" = "Tarjoa käännös sivustoille, jotka on kirjoitettu oletuskieleltä poikkeavalla kielellä.";
+
+/* Switch to choose if the language of a page is detected and offer to translate. */
+"Settings.TranslateSnackBar.SwitchTitle" = "Tarjoa käännöstä";
+
+/* Title in main app settings for Translation toast settings */
+"Settings.TranslateSnackBar.Title" = "Käännös";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "Vianmääritys";
+
+/* Button to delete website in search results */
+"Settings.WebsiteData.ButtonDelete" = "Poista";
+
+/* Button to exit edit website search results */
+"Settings.WebsiteData.ButtonDone" = "Valmis";
+
+/* Button to edit website search results */
+"Settings.WebsiteData.ButtonEdit" = "Muokkaa";
+
+/* Button shows all websites on website data tableview */
+"Settings.WebsiteData.ButtonShowMore" = "Näytä lisää";
+
+/* Description of the confirmation dialog shown when a user tries to clear their private data. */
+"Settings.WebsiteData.ConfirmPrompt" = "Tämä toiminto tyhjentää kaikki sivustotiedot. Toimintoa ei voi perua.";
+
+/* Title displayed in header of the Data Management panel. */
+"Settings.WebsiteData.Title" = "Sivustojen tiedot";
+
+/* Action label on share extension to add page to the Firefox reading list. */
+"ShareExtension.AddToReadingListAction.Title" = "Lisää lukulistaan";
+
+/* Share extension label shown after user has performed 'Add to Reading List' action. */
+"ShareExtension.AddToReadingListActionDone.Title" = "Lisätty lukulistaan";
+
+/* Action label on share extension to bookmark the page in Firefox. */
+"ShareExtension.BookmarkThisPageAction.Title" = "Lisää sivu kirjanmerkkeihin";
+
+/* Share extension label shown after user has performed 'Bookmark this Page' action. */
+"ShareExtension.BookmarkThisPageActionDone.Title" = "Merkitty kirjanmerkkeihin";
+
+/* Action label on share extension to load the page in Firefox when user switches apps to bring it to foreground. */
+"ShareExtension.LoadInBackgroundAction.Title" = "Lataa taustalla";
+
+/* Share extension label shown after user has performed 'Load in Background' action. */
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Ladataan Firefoxissa";
+
+/* Action label on share extension to immediately open page in Firefox. */
+"ShareExtension.OpenInFirefoxAction.Title" = "Avaa Firefoxissa";
+
+/* Action label on share extension to immediately open page in Firefox in private mode. */
+"ShareExtension.OpenInPrivateModeAction.Title" = "Avaa yksityisessä tilassa";
+
+/* Action label on share extension to search for the selected text in Firefox. */
+"ShareExtension.SeachInFirefoxAction.Title" = "Hae Firefoxissa";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "Näytä hakuehdotukset";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "Näytä välilehdet";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "Näytä esittely";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "Pysäytä";
+
+/* Support section title */
+"Support" = "Tuki";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Sulje välilehti pyyhkäisemällä kolmella sormella oikealle tai vasemmalle.";
+
+/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"SwitchToNonPBM.KeyCodeTitle" = "Tavallinen selaustila";
+
+/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"SwitchToPBM.KeyCodeTitle" = "Yksityinen selaustila";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, bookmarks, passwords and more." = "Synkronoi välilehtesi, kirjanmerkkisi, salasanasi ja muuta.";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, passwords and more." = "Synkronoi välilehtesi, salasanasi ja muuta.";
+
+/* Message displayed when the user syncs for the first time */
+"Sync.FirstTimeMessage.Label" = "Ensimmäinen synkronointi saattaa kestää hetken";
+
+/* Message displayed when the user's account is syncing with no ellipsis */
+"Sync.Syncing.Label" = "Synkronoidaan";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "Synkronoidaan…";
+
+/* Panel accessibility label */
+"Synced Tabs" = "Synkr. välilehdet";
+
+/* The Bookmark sync component, used in SyncState.Partial.Title */
+"SyncState.Bookmark.Title" = "Kirjanmerkit";
+
+/* The Remote Clients sync component, used in SyncState.Partial.Title */
+"SyncState.Clients.Title" = "Etäasiakkaat";
+
+/* Title for Sync status message when synchronization failed to complete */
+"SyncState.Failed.Title" = "Synkronointi epäonnistui";
+
+/* The History sync component, used in SyncState.Partial.Title */
+"SyncState.History.Title" = "Historia";
+
+/* The Logins sync component, used in SyncState.Partial.Title */
+"SyncState.Logins.Title" = "Kirjautumistiedot";
+
+/* Title for Sync status message when Sync failed to start. */
+"SyncState.NotStarted.Title" = "Sync-palvelu ei ole käytettävissä";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "Sync-palvelu on offline-tilassa";
+
+/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
+"SyncState.Partial.Title" = "Ongelma synkronoitaessa %@";
+
+/* The Tabs sync component, used in SyncState.Partial.Title */
+"SyncState.Tabs.Title" = "Välilehdet";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "Välilehti %1$@/%2$@";
+
+/* Hardware shortcut to open the tab tray from a tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"Tab.ShowTabTray.KeyCodeTitle" = "Näytä kaikki välilehdet";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "Välilehdet %1$@–%2$@, %3$@ yhteensä";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Välilehdet";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "Peru";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "%d välilehteä suljettu";
+
+/* The placeholder text for the tab search bar */
+"Tabs.Search.PlaceholderText" = "Etsi välilehtiä";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"TabTray.AddTab.Button" = "Lisää välilehti";
+
+/* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseAllTabs.KeyCodeTitle" = "Sulje kaikki välilehdet";
+
+/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseTab.KeyCodeTitle" = "Sulje valittu välilehti";
+
+/* The section header for tabs opened last week */
+"TabTray.LastWeek.Header" = "Viime viikolla";
+
+/* The title on the button to copy the tab address. */
+"TabTray.MoreMenu.Copy" = "Kopioi";
+
+/* The section header for tabs opened before last week */
+"TabTray.Older.Header" = "Vanhemmat";
+
+/* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenNewTab.KeyCodeTitle" = "Avaa uusi välilehti";
+
+/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenSelectedTab.KeyCodeTitle" = "Avaa valittu välilehti";
+
+/* The button title to see more options to perform on the tab. */
+"TabTray.SwipeMenu.More" = "Lisää";
+
+/* The section header for tabs opened today */
+"TabTray.Today.Header" = "Tänään";
+
+/* The section header for tabs opened yesterday */
+"TabTray.Yesterday.Header" = "Eilen";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "Sivua ei voitu näyttää lukunäkymässä.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Muiden laitteiden välilehtien lukeminen epäonnistui. Yritä uudelleen hetken kuluttua.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "Sivuston muuntaminen epäonnistui";
+
+/* Relative date for date in past week. */
+"this week" = "tällä viikolla";
+
+/* label for Not Now button */
+"Toasts.NotNow" = "Ei nyt";
+
+/* Open App Store button */
+"Toasts.OpenAppStore" = "Avaa App Store";
+
+/* Label for button to undo the action just performed */
+"Toasts.Undo" = "Peru";
+
+/* History tableview section header */
+"Today" = "Tänään";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "tänään %@";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "Valikko";
+
+/* Accessibility label for the Close All Tabs menu button. */
+"Toolbar.Menu.CloseAllTabs" = "Sulje kaikki välilehdet";
+
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "Vierailluimmat sivustosi näkyvät täällä.";
+
+/* The title for the empty Top Sites state */
+"TopSites.EmptyState.Title" = "Tervetuloa ykkössivustoihin";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "Poista sivu — %@";
+
+/* Button to disallow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.Cancel" = "Ei";
+
+/* Button to allow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.OK" = "Kyllä";
+
+/* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
+"TranslationToastHandler.PromptTranslate.Title" = "Tämä sivu näyttää olevan kielellä %1$@. Käännetäänkö kielelle %2$@ palvelulla %3$@?";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* The menu item that pastes the current contents of the clipboard into the URL bar and navigates to the page */
+"UIMenuItem.PasteGo" = "Liitä ja avaa";
+
+/* Search in New Tab Text selection menu item */
+"UIMenuItem.SearchWithFirefox" = "Etsi Firefoxilla";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "lukematon";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect" = "Päivitä Firefox yhdistääksesi";
+
+/* Debug option */
+"Use stage servers" = "Käytä testipalvelimia";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Käyttäjätunnus";
+
+/* Text message in the settings table view */
+"Verify your email address" = "Vahvista sähköpostiosoitteesi";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "Versio %1$@ (%2$@)";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Verkkosisältö";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Tervetuloa lukulistaasi";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "Tämäpä noloa.";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Wikipedia";
+
+/* Relative date for yesterday. */
+"yesterday" = "eilen";
+
+/* History tableview section header */
+"Yesterday" = "Eilen";
+
+/* Error message in the remote tabs panel */
+"You don’t have any tabs open in Firefox on your other devices." = "Sinulla ei ole Firefoxissa avoimia välilehtiä muilla laitteilla.";
+
+/* Your Rights settings section title */
+"Your Rights" = "Oikeutesi";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+
