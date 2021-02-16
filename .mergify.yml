@@ -8,7 +8,6 @@ pull_request_rules:
   - name: github-actions
     conditions:
       - author=github-actions[bot]
-      - check-success=Bitrise
       - files~=(bitrise.yml)
     actions:
       review:
