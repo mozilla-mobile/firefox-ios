@@ -34,6 +34,9 @@ struct DBOnboardingUX {
     static let textOffsetSmall = 13
     static let fontSize: CGFloat = 24
     static let fontSizeSmall: CGFloat = 20
+    static let fontSizeXSmall: CGFloat = 15
+    static let titleSize: CGFloat = 28
+    static let titleSizeLarge: CGFloat = 34
     static let containerViewHeight = 350
     static let containerViewHeightSmall = 300
 }
@@ -49,6 +52,12 @@ class DefaultBrowserOnboardingViewController: UIViewController {
     }
     private var fxBackgroundThemeColour: UIColor {
         return DefaultBrowserOnboardingViewController.theme == .dark ? UIColor(rgb: 0x1C1C1E) : .white
+    }
+    private var descriptionFontSize: CGFloat {
+        return screenSize.height > 1000 ? DBOnboardingUX.fontSizeXSmall : (screenSize.height > 668 ? DBOnboardingUX.fontSize : DBOnboardingUX.fontSizeSmall)
+    }
+    private var titleFontSize: CGFloat {
+        return screenSize.height > 1000 ? DBOnboardingUX.titleSizeLarge : DBOnboardingUX.titleSize
     }
     // Orientation independent screen size
     private let screenSize = DeviceInfo.screenSizeOrientationIndependent()
@@ -85,7 +94,7 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         let label = UILabel()
         label.text = viewModel.model?.titleText
         label.textColor = fxTextThemeColour
-        label.font = UIFont.boldSystemFont(ofSize: 28)
+        label.font = UIFont.boldSystemFont(ofSize: titleFontSize)
         label.textAlignment = .center
         label.numberOfLines = 2
         return label
@@ -94,7 +103,7 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         let label = UILabel()
         label.text = viewModel.model?.descriptionText[0]
         label.textColor = fxTextThemeColour
-        label.font = UIFont.systemFont(ofSize: screenSize.height > 668 ? DBOnboardingUX.fontSize : DBOnboardingUX.fontSizeSmall)
+        label.font = UIFont.systemFont(ofSize: descriptionFontSize)
         label.textAlignment = .left
         label.numberOfLines = 3
         return label
@@ -103,7 +112,7 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         let label = UILabel()
         label.text = viewModel.model?.descriptionText[1]
         label.textColor = fxTextThemeColour
-        label.font = UIFont.systemFont(ofSize: screenSize.height > 668 ? DBOnboardingUX.fontSize : DBOnboardingUX.fontSizeSmall)
+        label.font = UIFont.systemFont(ofSize: descriptionFontSize)
         label.textAlignment = .left
         label.numberOfLines = 0
         return label
@@ -112,7 +121,7 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         let label = UILabel()
         label.text = viewModel.model?.descriptionText[2]
         label.textColor = fxTextThemeColour
-        label.font = UIFont.systemFont(ofSize: screenSize.height > 668 ? DBOnboardingUX.fontSize : DBOnboardingUX.fontSizeSmall)
+        label.font = UIFont.systemFont(ofSize: descriptionFontSize)
         label.textAlignment = .left
         label.numberOfLines = 0
         return label
@@ -121,7 +130,7 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         let label = UILabel()
         label.text = viewModel.model?.descriptionText[3]
         label.textColor = fxTextThemeColour
-        label.font = UIFont.systemFont(ofSize: screenSize.height > 668 ? DBOnboardingUX.fontSize : DBOnboardingUX.fontSizeSmall)
+        label.font = UIFont.systemFont(ofSize: descriptionFontSize)
         label.textAlignment = .left
         label.numberOfLines = 0
         return label
@@ -129,7 +138,7 @@ class DefaultBrowserOnboardingViewController: UIViewController {
     private lazy var goToSettingsButton: UIButton = {
         let button = UIButton()
         button.setTitle(Strings.CoverSheetETPSettingsButton, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 24)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: descriptionFontSize)
         button.layer.cornerRadius = UpdateViewControllerUX.StartBrowsingButton.cornerRadius
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UpdateViewControllerUX.StartBrowsingButton.colour
@@ -200,17 +209,18 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         }
         // The top imageview constraints setup
         topImageView.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
+            make.centerX.equalToSuperview()
             make.top.equalTo(closeButton.snp.bottom).offset(10)
             make.height.equalTo(200)
+            make.width.equalTo(350)
         }
         let layoutDirection = UIApplication.shared.userInterfaceLayoutDirection
         imageText.snp.makeConstraints { make in
-            make.top.equalTo(topImageView.snp.top).offset(122.5)
+            make.top.equalTo(topImageView.snp.top).offset(122)
             if layoutDirection == .leftToRight {
-                make.left.equalTo(topImageView.snp.left).inset(50)
+                make.left.equalTo(topImageView.snp.left).inset(20)
             } else {
-                make.right.equalTo(topImageView.snp.right).inset(50)
+                make.right.equalTo(topImageView.snp.right).inset(20)
             }
         }
         textView.snp.makeConstraints { make in
@@ -219,11 +229,12 @@ class DefaultBrowserOnboardingViewController: UIViewController {
             make.bottom.equalTo(goToSettingsButton.snp.top)
         }
         
-        let containerViewHeight = screenSize.height > 668 ? DBOnboardingUX.containerViewHeight : DBOnboardingUX.containerViewHeightSmall
+        let containerViewHeight = screenSize.height > 1000 ? DBOnboardingUX.containerViewHeightSmall :
+            (screenSize.height > 668 ? DBOnboardingUX.containerViewHeight : DBOnboardingUX.containerViewHeightSmall)
         containerView.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
-            make.centerY.equalToSuperview()
+            make.centerY.centerX.equalToSuperview()
             make.height.equalTo(containerViewHeight)
+            make.width.equalTo(350)
         }
         
         // Top title label constraints setup
@@ -251,9 +262,15 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         }
         // Bottom settings button constraints
         goToSettingsButton.snp.makeConstraints { make in
-            make.left.right.equalToSuperview().inset(UpdateViewControllerUX.StartBrowsingButton.edgeInset)
-            make.bottom.equalTo(view.safeArea.bottom).offset(-5)
-            make.height.equalTo(60)
+            if (screenSize.height > 1000) {
+                make.bottom.equalTo(view.safeArea.bottom).offset(-60)
+                make.height.equalTo(50)
+            } else {
+                make.bottom.equalTo(view.safeArea.bottom).offset(-5)
+                make.height.equalTo(60)
+            }
+            make.width.equalTo(350)
+            make.centerX.equalToSuperview()
         }
         // Bottom goto settings button
         goToSettingsButton.addTarget(self, action: #selector(goToSettings), for: .touchUpInside)

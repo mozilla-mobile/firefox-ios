@@ -27,7 +27,7 @@ struct ViewControllerConsts {
     struct PreferredSize {
         static let IntroViewController = CGSize(width: 375, height: 667)
         static let UpdateViewController = CGSize(width: 375, height: 667)
-        static let DBOnboardingViewController = CGSize(width: 375, height: 700)
+        static let DBOnboardingViewController = CGSize(width: 624, height: 680)
     }
 }
 
