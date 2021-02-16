@@ -2,7 +2,7 @@ name: Bitrise Xcode Check and Update
 
 on: 
   schedule:
-    - cron: '*/10 * * * *'
+    - cron: '0 * * * *'
 
 jobs:
   build:
@@ -34,8 +34,8 @@ jobs:
       uses: peter-evans/create-pull-request@v3
       with:
         commit-message: Auto Update Bitrise.YML
-        author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+        author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
         committer: GitHub <noreply@github.com>
         title: Bitrise changes
         branch: update-br-new-xcode-version
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
