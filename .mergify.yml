@@ -1,0 +1,19 @@
+pull_request_rules:
+  - name: Resolve conflict
+    conditions:
+      - conflict
+    actions:
+        comment:
+          message: This pull request has conflicts when rebasing. Could you fix it @{{author}}?
+  - name: github-actions
+    conditions:
+      - author=github-actions[bot]
+      - status=Bitrise
+      - files~=(bitrise.yml)
+    actions:
+      review:
+        type: APPROVE
+        message: Github-action[bot] 💪
+      merge:
+        method: rebase
+        strict: smart
