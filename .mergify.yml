@@ -8,12 +8,11 @@ pull_request_rules:
   - name: github-actions
     conditions:
       - author=github-actions[bot]
-      - check-success=Bitrise
       - files~=(bitrise.yml)
     actions:
       review:
         type: APPROVE
         message: Github-action[bot] 💪
       merge:
-        method: rebase
-        strict: smart
+        method: merge
+        strict: false
