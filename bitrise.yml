@@ -1010,13 +1010,6 @@ workflows:
         inputs:
         - scheme: Fennec
         - simulator_device: iPhone 8
-    - xcode-archive@2:
-        inputs:
-        - scheme: Fennec
-        - export_method: auto-detect
-        - xcodebuild_options: >-
-            CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
-            CODE_SIGNING_ALLOWED=NO
     - deploy-to-bitrise-io@1.9: {}
     - cache-push@2.4: {}
     - slack@3.1:
