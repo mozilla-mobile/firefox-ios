@@ -9755,7 +9755,7 @@
 				DEFINES_MODULE = YES;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				INFOPLIST_FILE = Storage/Info.plist;
-				SKIP_INSTALL = NO;
+				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
 				VALIDATE_WORKSPACE = NO;
 			};
