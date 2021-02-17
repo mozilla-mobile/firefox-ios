@@ -4,6 +4,7 @@
 
 import Foundation
 import MozillaAppServices
+import WebKit
 
 // Search Partner Codes
 // https://docs.google.com/spreadsheets/d/1HMm9UXjfJv-uHhGU1pJlbP4ILkdpSD9w_Fd-3yOd8oY/
@@ -29,13 +30,13 @@ enum SearchEngine: String, CaseIterable {
 }
 
 class SearchTelemetry {
-    var code: String
-    var provider: SearchEngine
+    var code: String = ""
+    var provider: SearchEngine = .none
+    var shouldSetGoogleTopSiteSearch = false
+    var shouldSetUrlTypeSearch = false
     
-    init(_ code: String, provider: SearchEngine) {
-        self.code = code
-        self.provider = provider
-    }
+    //MARK: Searchbar SAP
+    
     // sap: directly from search access point
     func trackSAP() {
         GleanMetrics.Search.inContent["\(provider).in-content.sap.\(code)"].add()
@@ -52,6 +53,7 @@ class SearchTelemetry {
     }
     
     //MARK: Google Top Site SAP
+    
     func trackGoogleTopSiteTap() {
         GleanMetrics.Search.googleTopsitePressed["\(SearchEngine.google).\(code)"].add()
     }
@@ -59,6 +61,40 @@ class SearchTelemetry {
     func trackGoogleTopSiteFollowOn() {
         GleanMetrics.Search.inContent["\(SearchEngine.google).in-content.google-topsite-follow-on.\(code)"].add()
     }
+    
+    //MARK: Businesslogic Regular and follow-on search
+    
+    func setTabSearchType(_ tab: Tab, webView: WKWebView) {
+        let provider = tab.getProviderForUrl()
+        let code = SearchPartner.getCode(searchEngine: provider, region: Locale.current.regionCode == "US" ? "US" : "ROW")
+        self.code = code
+        self.provider = provider
+        
+        if shouldSetGoogleTopSiteSearch {
+            tab.urlType = .googleTopSite
+            shouldSetGoogleTopSiteSearch = false
+            self.trackGoogleTopSiteTap()
+        } else if shouldSetUrlTypeSearch {
+            tab.urlType = .search
+            shouldSetUrlTypeSearch = false
+            self.trackSAP()
+        } else if let webUrl = webView.url {
+            let components = URLComponents(url: webUrl, resolvingAgainstBaseURL: false)!
+            let clientValue = components.valueForQuery("client")
+            // Special case google followOn search
+            if (tab.urlType == .googleTopSite || tab.urlType == .googleTopSiteFollowOn) && clientValue == code {
+                tab.urlType = .googleTopSiteFollowOn
+                self.trackGoogleTopSiteFollowOn()
+            // Check if previous tab type is search
+            } else if (tab.urlType == .search || tab.urlType == .followOnSearch) && clientValue == code {
+                tab.urlType = .followOnSearch
+                self.trackSAPFollowOn()
+            } else if provider == .google {
+                tab.urlType = .organicSearch
+                self.trackOrganic()
+            } else {
+                tab.urlType = .regular
+            }
+        }
+    }
 }
-
-

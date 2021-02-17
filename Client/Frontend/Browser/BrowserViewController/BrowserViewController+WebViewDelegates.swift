@@ -654,43 +654,10 @@ extension BrowserViewController: WKNavigationDelegate {
             }
         }
     }
-
-    func setTabSearchType(_ tab: Tab, webView: WKWebView) {
-        let provider = tab.getProviderForUrl()
-        let code = SearchPartner.getCode(searchEngine: provider, region: Locale.current.regionCode == "US" ? "US" : "ROW")
-        let telemetry = SearchTelemetry(code, provider: provider)
-        
-        if shouldSetGoogleTopSiteSearch {
-            tab.urlType = .googleTopSite
-            shouldSetGoogleTopSiteSearch = false
-            telemetry.trackGoogleTopSiteTap()
-        } else if shouldSetUrlTypeSearch {
-            tab.urlType = .search
-            shouldSetUrlTypeSearch = false
-            telemetry.trackSAP()
-        } else if let webUrl = webView.url {
-            let components = URLComponents(url: webUrl, resolvingAgainstBaseURL: false)!
-            let clientValue = components.valueForQuery("client")
-            // Special case google followOn search
-            if (tab.urlType == .googleTopSite || tab.urlType == .googleTopSiteFollowOn) && clientValue == code {
-                tab.urlType = .googleTopSiteFollowOn
-                telemetry.trackGoogleTopSiteFollowOn()
-            // Check if previous tab type is search
-            } else if (tab.urlType == .search || tab.urlType == .followOnSearch) && clientValue == code {
-                tab.urlType = .followOnSearch
-                telemetry.trackSAPFollowOn()
-            } else if provider == .google {
-                tab.urlType = .organicSearch
-                telemetry.trackOrganic()
-            } else {
-                tab.urlType = .regular
-            }
-        }
-    }
         
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         guard let tab = tabManager[webView] else { return }
-        setTabSearchType(tab, webView: webView)
+        searchTelemetry?.setTabSearchType(tab, webView: webView)
         tab.url = webView.url
         // When tab url changes after web content starts loading on the page
         // We notify the contect blocker change so that content blocker status can be correctly shown on beside the URL bar
