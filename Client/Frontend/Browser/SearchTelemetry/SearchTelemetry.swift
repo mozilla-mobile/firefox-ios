@@ -62,9 +62,9 @@ class SearchTelemetry {
         GleanMetrics.Search.inContent["\(SearchEngine.google).in-content.google-topsite-follow-on.\(code)"].add()
     }
     
-    //MARK: Businesslogic Regular and follow-on search
+    //MARK: Track Regular and Follow-on SAP from Tab and TopSite
     
-    func setTabSearchType(_ tab: Tab, webView: WKWebView) {
+    func trackTabAndTopSiteSAP(_ tab: Tab, webView: WKWebView) {
         let provider = tab.getProviderForUrl()
         let code = SearchPartner.getCode(searchEngine: provider, region: Locale.current.regionCode == "US" ? "US" : "ROW")
         self.code = code

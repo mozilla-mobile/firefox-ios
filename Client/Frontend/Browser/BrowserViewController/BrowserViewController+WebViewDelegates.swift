@@ -657,7 +657,7 @@ extension BrowserViewController: WKNavigationDelegate {
         
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         guard let tab = tabManager[webView] else { return }
-        searchTelemetry?.setTabSearchType(tab, webView: webView)
+        searchTelemetry?.trackTabAndTopSiteSAP(tab, webView: webView)
         tab.url = webView.url
         // When tab url changes after web content starts loading on the page
         // We notify the contect blocker change so that content blocker status can be correctly shown on beside the URL bar
