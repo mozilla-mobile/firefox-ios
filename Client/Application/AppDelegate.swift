@@ -264,8 +264,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
                 }
             }
         }
+        updateSessionCount()
 
         return shouldPerformAdditionalDelegateHandling
+    }
+
+    func updateSessionCount() {
+        var sessionCount: Int32 = 0
+        
+        // Get the session count from preferences
+        if let currentSessionCount = profile?.prefs.intForKey(PrefsKeys.SessionCount) {
+            sessionCount = currentSessionCount
+        }
+        // increase session count value
+        profile?.prefs.setInt(sessionCount + 1, forKey: PrefsKeys.SessionCount)
     }
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {

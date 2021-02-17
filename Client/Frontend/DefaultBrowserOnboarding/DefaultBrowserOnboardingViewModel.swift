@@ -46,24 +46,16 @@ class DefaultBrowserOnboardingViewModel {
     
     static func shouldShowDefaultBrowserOnboarding(userPrefs: Prefs) -> Bool {
         // Show on 3rd session
-        // sessionCount gets increased after intro onboarding is shown, so this number needs to be 3 instead of 2
         let maxSessionCount = 3
         var shouldShow = false
-        // Session count
-        var sessionCount: Int32 = 0
-        
         // Get the session count from preferences
-        if let currentSessionCount = userPrefs.intForKey(PrefsKeys.KeyDefaultBrowserCardSessionCount) {
-            sessionCount = currentSessionCount
-        }
-
-        // increase session count value
-        if sessionCount < maxSessionCount && sessionCount != -1 {
-            userPrefs.setInt(sessionCount + 1, forKey: PrefsKeys.KeyDefaultBrowserCardSessionCount)
-        // reached max count, show card
-        } else if sessionCount == maxSessionCount {
-            userPrefs.setInt(-1, forKey: PrefsKeys.KeyDefaultBrowserCardSessionCount)
+        let currentSessionCount = userPrefs.intForKey(PrefsKeys.SessionCount) ?? 0
+        let didShow = UserDefaults.standard.bool(forKey: PrefsKeys.KeyDidShowDefaultBrowserOnboarding)
+        guard !didShow else { return false }
+        
+        if currentSessionCount == maxSessionCount {
             shouldShow = true
+            UserDefaults.standard.set(true, forKey: PrefsKeys.KeyDidShowDefaultBrowserOnboarding)
         }
 
         return shouldShow
