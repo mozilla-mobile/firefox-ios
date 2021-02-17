@@ -172,7 +172,7 @@ class TabTrayV2ViewModel: NSObject {
             let maxTabs = 100
             let tabs = self.dataStore.compactMap { $0.1 }.flatMap { $0 }
             if tabs.count >= maxTabs {
-                self.tabManager.removeTabsNoToast(tabs)
+                self.tabManager.removeTabsAndAddNormalTab(tabs)
             } else {
                 self.tabManager.removeTabsWithToast(tabs)
             }

@@ -500,7 +500,7 @@ class TabManager: NSObject {
         privateConfiguration = TabManager.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
     }
 
-    func removeTabsNoToast(_ tabs: [Tab]) {
+    func removeTabsAndAddNormalTab(_ tabs: [Tab]) {
         for tab in tabs {
             self.removeTab(tab, flushToDisk: false, notify: true)
         }

@@ -489,7 +489,7 @@ extension TabTrayControllerV1 {
         let tabs = self.tabDisplayManager.dataStore.compactMap { $0 }
         let maxTabs = 100
         if tabs.count >= maxTabs {
-            self.tabManager.removeTabsNoToast(tabs)
+            self.tabManager.removeTabsAndAddNormalTab(tabs)
         } else {
             self.tabManager.removeTabsWithToast(tabs)
         }
