@@ -14,5 +14,5 @@ pull_request_rules:
         type: APPROVE
         message: Github-action[bot] 💪
       merge:
-        method: merge
+        method: squash
         strict: false
