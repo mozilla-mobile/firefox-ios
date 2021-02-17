@@ -500,7 +500,7 @@ class TabManager: NSObject {
         privateConfiguration = TabManager.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
     }
 
-    func removeTabsWithNoUndoToast(_ tabs: [Tab]) {
+    func removeTabsNoToast(_ tabs: [Tab]) {
         for tab in tabs {
             self.removeTab(tab, flushToDisk: false, notify: true)
         }
@@ -512,7 +512,7 @@ class TabManager: NSObject {
         storeChanges()
     }
     
-    func removeTabsWithUndoToast(_ tabs: [Tab]) {
+    func removeTabsWithToast(_ tabs: [Tab]) {
         recentlyClosedForUndo = normalTabs.compactMap {
             SavedTab(tab: $0, isSelected: selectedTab === $0)
         }

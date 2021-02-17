@@ -487,17 +487,13 @@ extension TabTrayControllerV1 {
 
     func closeTabsForCurrentTray() {
         let tabs = self.tabDisplayManager.dataStore.compactMap { $0 }
-        self.tabManager.removeTabsWithUndoToast(tabs)
-        let maxTabs = 10
-        guard tabs.count >= maxTabs else {
-            self.tabManager.removeTabsWithNoUndoToast(tabs)
-            closeTabsTrayHelper()
-            return
+        let maxTabs = 100
+        if tabs.count >= maxTabs {
+            self.tabManager.removeTabsNoToast(tabs)
+        } else {
+            self.tabManager.removeTabsWithToast(tabs)
         }
-        tabDisplayManager.hideDisplayedTabs() {
-            self.tabManager.removeTabsWithUndoToast(tabs)
-            self.closeTabsTrayHelper()
-        }
+        closeTabsTrayHelper()
     }
     
     func closeTabsTrayHelper() {
