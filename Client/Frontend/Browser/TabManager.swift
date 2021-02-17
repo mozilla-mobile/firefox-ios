@@ -504,11 +504,9 @@ class TabManager: NSObject {
         for tab in tabs {
             self.removeTab(tab, flushToDisk: false, notify: true)
         }
-        
         if normalTabs.isEmpty {
             selectTab(addTab())
         }
-        
         storeChanges()
     }
     
