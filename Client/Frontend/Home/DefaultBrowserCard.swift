@@ -28,7 +28,7 @@ class DefaultBrowserCard: UIView {
     }()
     lazy var learnHowButton: UIButton = {
         let button = UIButton()
-        button.setTitle(String.DefaultBrowserCardButton, for: .normal)
+        button.setTitle(String.PrivateBrowsingLearnMore, for: .normal) // TODO update string
         button.backgroundColor = UIColor.Photon.Blue50
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
         button.titleLabel?.textAlignment = .center
