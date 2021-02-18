@@ -195,7 +195,7 @@ class TabManagerTests: XCTestCase {
         // This test makes sure that a normal tab is always added even when a normal tab is not selected when calling removeAll
         delegate.expect([didRemove, didAdd, didSelect, removeAllTabs])
 
-        manager.removeTabsWithUndoToast(manager.normalTabs)
+        manager.removeTabsWithToast(manager.normalTabs)
         delegate.verify("Not all delegate methods were called")
     }
 
