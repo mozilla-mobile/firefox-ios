@@ -366,6 +366,8 @@ extension TelemetryWrapper {
         case onboarding = "onboarding"
         case dismissDefaultBrowserCard = "default-browser-card"
         case goToSettingsDefaultBrowserCard = "default-browser-card-go-to-settings"
+        case dismissDefaultBrowserOnboarding = "default-browser-onboarding"
+        case goToSettingsDefaultBrowserOnboarding = "default-browser-onboarding-go-to-settings"
         case asDefaultBrowser = "as-default-browser"
         case mediumTabsOpenUrl = "medium-tabs-widget-url"
         case largeTabsOpenUrl = "large-tabs-widget-url"
@@ -476,12 +478,17 @@ extension TelemetryWrapper {
         // Start Search Button
         case (.action, .tap, .startSearchButton, _, _):
             GleanMetrics.Search.startSearchPressed.add()
+        // Default Browser
         case (.action, .tap, .dismissDefaultBrowserCard, _, _):
             GleanMetrics.DefaultBrowserCard.dismissPressed.add()
         case (.action, .tap, .goToSettingsDefaultBrowserCard, _, _):
             GleanMetrics.DefaultBrowserCard.goToSettingsPressed.add()
         case (.action, .open, .asDefaultBrowser, _, _):
             GleanMetrics.App.openedAsDefaultBrowser.add()
+        case (.action, .tap, .dismissDefaultBrowserOnboarding, _, _):
+            GleanMetrics.DefaultBrowserOnboarding.dismissPressed.add()
+        case (.action, .tap, .goToSettingsDefaultBrowserOnboarding, _, _):
+            GleanMetrics.DefaultBrowserOnboarding.goToSettingsPressed.add()
         // Widget
         case (.action, .open, .mediumTabsOpenUrl, _, _):
             GleanMetrics.Widget.mTabsOpenUrl.add()

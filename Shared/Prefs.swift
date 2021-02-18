@@ -26,10 +26,13 @@ public struct PrefsKeys {
     public static let LoginsShowShortcutMenuItem = "showLoginsInAppMenu"
     public static let KeyInstallSession = "installSessionNumber"
     public static let KeyETPCoverSheetShowType = "etpCoverSheetShowType"
+    public static let KeyDefaultBrowserCardShowType = "defaultBrowserCardShowType"
+    public static let KeyDidShowDefaultBrowserOnboarding = "didShowDefaultBrowserOnboarding"
     public static let ShowNewTabToolbarButton = "newTabToolbarButton"
     public static let ContextMenuShowLinkPreviews = "showLinkPreviews"
     public static let NewTabCustomUrlPrefKey = "HomePageURLPref"
     public static let ChronTabsPrefKey = "chronTabsPrefKey"
+    public static let SessionCount = "sessionCount"
     
     //Activity Stream
     public static let KeyTopSitesCacheIsValid = "topSitesCacheIsValid"

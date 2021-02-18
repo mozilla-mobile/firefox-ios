@@ -261,6 +261,9 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "ETPCoverSheetTests">
+               </Test>
+               <Test
                   Identifier = "TestFavicons/testFaviconFetcherParse()">
                </Test>
             </SkippedTests>
