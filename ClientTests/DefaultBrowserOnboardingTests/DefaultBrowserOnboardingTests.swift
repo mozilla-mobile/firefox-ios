@@ -24,20 +24,19 @@ class DefaultBrowserOnboardingTests: XCTestCase {
         var sessionValue: Int32 = 0
         let shouldShow = DefaultBrowserOnboardingViewModel.shouldShowDefaultBrowserOnboarding(userPrefs: prefs)
         // The session value should increase from 0 to 1
-        sessionValue = prefs.intForKey(PrefsKeys.KeyDefaultBrowserCardSessionCount) ?? 0
-        XCTAssertEqual(sessionValue, 1)
+        sessionValue = prefs.intForKey(PrefsKeys.SessionCount) ?? 0
+        XCTAssertEqual(sessionValue, 0)
         XCTAssert(!shouldShow)
     }
     
     func testShouldShowCoverSheetCleanInstallSessionEqualTo3() {
-        var sessionValue: Int32 = 0
         var shouldShow: Bool = false
-        for _ in 0...2 {
-           shouldShow = DefaultBrowserOnboardingViewModel.shouldShowDefaultBrowserOnboarding(userPrefs: prefs)
-        }
-        // The session value should be set to -1 as we aim to show when its the 3rd session (0,1,2) and not after that
-        sessionValue = prefs.intForKey(PrefsKeys.KeyDefaultBrowserCardSessionCount) ?? 0
-        XCTAssertEqual(sessionValue, -1)
+        var didShow: Bool = false
+        prefs.setInt(3, forKey: PrefsKeys.SessionCount)
+        UserDefaults.standard.set(false, forKey: PrefsKeys.KeyDidShowDefaultBrowserOnboarding)
+        shouldShow = DefaultBrowserOnboardingViewModel.shouldShowDefaultBrowserOnboarding(userPrefs: prefs)
+        didShow = UserDefaults.standard.bool(forKey: PrefsKeys.KeyDidShowDefaultBrowserOnboarding)
         XCTAssert(shouldShow)
+        XCTAssert(didShow)
     }
 }
