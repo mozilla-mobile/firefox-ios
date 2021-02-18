@@ -187,17 +187,21 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
                 make.bottom.left.right.equalToSuperview()
             }
             defaultBrowserCard.dismissClosure = {
-                self.defaultBrowserCard.removeFromSuperview()
-                self.collectionView.snp.makeConstraints { make in
-                    make.top.equalToSuperview()
-                    make.bottom.left.right.equalToSuperview()
-                }
+                self.dismissDefaultBrowserCard()
             }
         }
         self.view.backgroundColor = UIColor.theme.homePanel.topSitesBackground
         self.profile.panelDataObservers.activityStream.delegate = self
 
         applyTheme()
+    }
+
+    public func dismissDefaultBrowserCard() {
+        self.defaultBrowserCard.removeFromSuperview()
+        self.collectionView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.bottom.left.right.equalToSuperview()
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
