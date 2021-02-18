@@ -80,6 +80,10 @@ class TestAppDelegate: AppDelegate {
         } else {
             profile = BrowserProfile(localName: "testProfile", syncDelegate: application.syncDelegate)
         }
+        
+        if launchArguments.contains(LaunchArguments.SkipAddingGoogleTopSite) {
+            profile.prefs.setBool(true, forKey: PrefsKeys.GoogleTopSiteHideKey)
+        }
 
         // Don't show the ETP Coversheet New page.
         if launchArguments.contains(LaunchArguments.SkipETPCoverSheet) {
