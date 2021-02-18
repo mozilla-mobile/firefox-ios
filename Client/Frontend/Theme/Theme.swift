@@ -206,6 +206,8 @@ class GeneralColor {
 class DefaultBrowserCardColor {
     var backgroundColor: UIColor { return UIColor.Photon.Grey30 }
     var textColor: UIColor { return UIColor.black }
+    var closeButtonBackground: UIColor { return UIColor.Photon.Grey20 }
+    var closeButton: UIColor { return UIColor.Photon.Grey80 }
 }
 
 protocol Theme {
