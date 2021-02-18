@@ -50,10 +50,6 @@ class AppSettingsTableViewController: SettingsTableViewController {
                         titleText: .AppSettingsBlockPopups),
            ]
 
-        if #available(iOS 14.0, *) {
-            generalSettings.insert(DefaultBrowserSetting(settings: self), at: 4)
-        }
-
         if #available(iOS 12.0, *) {
             generalSettings.insert(SiriPageSetting(settings: self), at: 5)
         }
@@ -79,7 +75,13 @@ class AppSettingsTableViewController: SettingsTableViewController {
                         titleText: Strings.SettingsShowLinkPreviewsTitle,
                         statusText: Strings.SettingsShowLinkPreviewsStatus)
         ]
-
+        
+        if #available(iOS 14.0, *) {
+            settings += [
+                SettingSection(footerTitle: NSAttributedString(string: String.DefaultBrowserCardDescription), children: [DefaultBrowserSetting()])
+            ]
+        }
+        
         let accountSectionTitle = NSAttributedString(string: Strings.FxAFirefoxAccount)
 
         let footerText = !profile.hasAccount() ? NSAttributedString(string: Strings.FxASyncUsageDetails) : nil
