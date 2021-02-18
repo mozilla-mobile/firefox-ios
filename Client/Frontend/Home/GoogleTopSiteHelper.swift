@@ -12,8 +12,6 @@ struct GoogleTopSiteConstants {
     // US and rest of the world google urls
     public static let usUrl = "https://www.google.com/webhp?client=firefox-b-1-m&channel=ts"
     public static let rowUrl = "https://www.google.com/webhp?client=firefox-b-m&channel=ts"
-    public static let code = [ usUrl: "firefox-b-1-m",
-                               rowUrl: "firefox-b-m"]
 }
 
 class GoogleTopSiteHelper {
