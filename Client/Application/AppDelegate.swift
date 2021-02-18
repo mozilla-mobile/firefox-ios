@@ -40,7 +40,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     var tabManager: TabManager!
     var applicationCleanlyBackgrounded = true
     var shutdownWebServer: DispatchSourceTimer?
-
+    var orientationLock = UIInterfaceOrientationMask.all
     weak var application: UIApplication?
     var launchOptions: [AnyHashable: Any]?
 
@@ -264,8 +264,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
                 }
             }
         }
+        updateSessionCount()
 
         return shouldPerformAdditionalDelegateHandling
+    }
+
+    func updateSessionCount() {
+        var sessionCount: Int32 = 0
+        
+        // Get the session count from preferences
+        if let currentSessionCount = profile?.prefs.intForKey(PrefsKeys.SessionCount) {
+            sessionCount = currentSessionCount
+        }
+        // increase session count value
+        profile?.prefs.setInt(sessionCount + 1, forKey: PrefsKeys.SessionCount)
     }
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
@@ -608,5 +620,26 @@ extension AppDelegate: MFMailComposeViewControllerDelegate {
 extension UIApplication {
     static var isInPrivateMode: Bool {
         return BrowserViewController.foregroundBVC().tabManager.selectedTab?.isPrivate ?? false
+    }
+}
+
+// Orientation lock for views that use new modal presenter 
+extension AppDelegate {
+    /// ref: https://stackoverflow.com/questions/28938660/
+    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+        return self.orientationLock
+    }
+    
+    struct AppUtility {
+        static func lockOrientation(_ orientation: UIInterfaceOrientationMask) {
+            if let delegate = UIApplication.shared.delegate as? AppDelegate {
+                delegate.orientationLock = orientation
+            }
+        }
+
+        static func lockOrientation(_ orientation: UIInterfaceOrientationMask, andRotateTo rotateOrientation:UIInterfaceOrientation) {
+            self.lockOrientation(orientation)
+            UIDevice.current.setValue(rotateOrientation.rawValue, forKey: "orientation")
+        }
     }
 }
