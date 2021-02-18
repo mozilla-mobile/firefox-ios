@@ -174,6 +174,23 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
         self.collectionView?.register(ASFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "Footer")
         collectionView?.keyboardDismissMode = .onDrag
 
+        self.view.backgroundColor = UIColor.theme.homePanel.topSitesBackground
+        self.profile.panelDataObservers.activityStream.delegate = self
+
+        applyTheme()
+    }
+
+    public func dismissDefaultBrowserCard() {
+        self.defaultBrowserCard.removeFromSuperview()
+        self.collectionView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.bottom.left.right.equalToSuperview()
+        }
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
         if #available(iOS 14.0, *), !UserDefaults.standard.bool(forKey: "DidDismissDefaultBrowserCard") {
             self.view.addSubview(defaultBrowserCard)
             defaultBrowserCard.snp.makeConstraints { make in
@@ -187,21 +204,9 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
                 make.bottom.left.right.equalToSuperview()
             }
             defaultBrowserCard.dismissClosure = {
-                self.defaultBrowserCard.removeFromSuperview()
-                self.collectionView.snp.makeConstraints { make in
-                    make.top.equalToSuperview()
-                    make.bottom.left.right.equalToSuperview()
-                }
+                self.dismissDefaultBrowserCard()
             }
         }
-        self.view.backgroundColor = UIColor.theme.homePanel.topSitesBackground
-        self.profile.panelDataObservers.activityStream.delegate = self
-
-        applyTheme()
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         reloadAll()
     }
 
