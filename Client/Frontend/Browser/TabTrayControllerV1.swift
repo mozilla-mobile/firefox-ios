@@ -486,21 +486,29 @@ extension TabTrayControllerV1 {
     }
 
     func closeTabsForCurrentTray() {
-        tabDisplayManager.hideDisplayedTabs() {
-            self.tabManager.removeTabsWithUndoToast(self.tabDisplayManager.dataStore.compactMap { $0 })
-            if self.tabDisplayManager.isPrivate {
-                self.emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()
-                if !self.emptyPrivateTabsView.isHidden {
-                    // Fade in the empty private tabs message. This slow fade allows time for the closing tab animations to complete.
-                    self.emptyPrivateTabsView.alpha = 0
-                    UIView.animate(withDuration: 0.5, animations: {
-                        self.emptyPrivateTabsView.alpha = 1
-                    }, completion: nil)
-                }
-            } else if self.tabManager.normalTabs.count == 1, let tab = self.tabManager.normalTabs.first {
-                self.tabManager.selectTab(tab)
-                self.dismissTabTray()
+        let tabs = self.tabDisplayManager.dataStore.compactMap { $0 }
+        let maxTabs = 100
+        if tabs.count >= maxTabs {
+            self.tabManager.removeTabsAndAddNormalTab(tabs)
+        } else {
+            self.tabManager.removeTabsWithToast(tabs)
+        }
+        closeTabsTrayHelper()
+    }
+    
+    func closeTabsTrayHelper() {
+        if self.tabDisplayManager.isPrivate {
+            self.emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()
+            if !self.emptyPrivateTabsView.isHidden {
+                // Fade in the empty private tabs message. This slow fade allows time for the closing tab animations to complete.
+                self.emptyPrivateTabsView.alpha = 0
+                UIView.animate(withDuration: 0.5, animations: {
+                    self.emptyPrivateTabsView.alpha = 1
+                }, completion: nil)
             }
+        } else if self.tabManager.normalTabs.count == 1, let tab = self.tabManager.normalTabs.first {
+            self.tabManager.selectTab(tab)
+            self.dismissTabTray()
         }
     }
 
