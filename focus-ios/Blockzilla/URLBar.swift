@@ -108,7 +108,7 @@ class URLBar: UIView {
     private var hideToolsetConstraints = [Constraint]()
     private var showToolsetConstraints = [Constraint]()
 
-    private var compressBar = false {
+    private var compressBar = true {
         didSet {
             guard oldValue != compressBar else { return }
             activateConstraints(compressBar, shownConstraints: compressedBarConstraints, hiddenConstraints: expandedBarConstraints)
@@ -489,7 +489,7 @@ class URLBar: UIView {
         pasteAndGo(clipboardString: clipboardString)
     }
 
-    //Adds Menu Item
+    // Adds Menu Item
     func addCustomMenu() {
         if UIPasteboard.general.hasStrings && urlText.isFirstResponder {
             let lookupMenu = UIMenuItem(title: UIConstants.strings.urlPasteAndGo, action: #selector(pasteAndGoFromContextMenu))
