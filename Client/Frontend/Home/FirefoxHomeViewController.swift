@@ -732,6 +732,7 @@ extension FirefoxHomeViewController: DataObserverDelegate {
         case .pocket:
             site = Site(url: pocketStories[index].url.absoluteString, title: pocketStories[index].title)
             let params = ["Source": "Activity Stream", "StoryType": "Article"]
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .pocketStory)
             LeanPlumClient.shared.track(event: .openedPocketStory, withParameters: params)
         case .topSites:
             return
@@ -805,6 +806,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
             let source = ["Source": "Activity Stream Long Press Context Menu"]
             LeanPlumClient.shared.track(event: .openedNewTab, withParameters: source)
             if Section(indexPath.section) == .pocket {
+                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .pocketStory)
                 LeanPlumClient.shared.track(event: .openedPocketStory, withParameters: source)
             }
         }
