@@ -59,7 +59,7 @@ struct UXSizeClasses {
 
 protocol HomePanelDelegate: AnyObject {
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
-    func homePanel(didSelectURL url: URL, visitType: VisitType)
+    func homePanel(didSelectURL url: URL, visitType: VisitType, isGoogleTopSite: Bool)
     func homePanelDidRequestToOpenLibrary(panel: LibraryPanelType)
 }
 
@@ -490,9 +490,9 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
         return UIEdgeInsets(top: 0, left: insets, bottom: 0, right: insets)
     }
 
-    fileprivate func showSiteWithURLHandler(_ url: URL) {
+    fileprivate func showSiteWithURLHandler(_ url: URL, isGoogleTopSite: Bool = false) {
         let visitType = VisitType.bookmark
-        homePanelDelegate?.homePanel(didSelectURL: url, visitType: visitType)
+        homePanelDelegate?.homePanel(didSelectURL: url, visitType: visitType, isGoogleTopSite: isGoogleTopSite)
     }
 }
 
@@ -585,11 +585,34 @@ extension FirefoxHomeViewController: DataObserverDelegate {
             
             let maxItems = Int(numRows) * self.topSitesManager.numberOfHorizontalItems()
             
-            self.topSitesManager.content = Array(result.prefix(maxItems))
+            var sites = Array(result.prefix(maxItems))
             
+            // Check if all result items are pinned site
+            var pinnedSites = 0
+            result.forEach {
+                if let _ = $0 as? PinnedSite {
+                    pinnedSites += 1
+                }
+            }
+            // Special case: Adding Google topsite
+            let googleTopSite = GoogleTopSiteHelper(prefs: self.profile.prefs)
+            if !googleTopSite.isHidden, let gSite = googleTopSite.suggestedSiteData() {
+                // Once Google top site is added, we don't remove unless it's explicitly unpinned
+                // Add it when pinned websites are less than max pinned sites
+                if googleTopSite.hasAdded || pinnedSites < maxItems {
+                    sites.insert(gSite, at: 0)
+                    // Purge unwated websites from the end of list
+                    if sites.count > maxItems {
+                        sites.removeLast(sites.count - maxItems)
+                    }
+                    googleTopSite.hasAdded = true
+                }
+            }
+            self.topSitesManager.content = sites
             self.topSitesManager.urlPressedHandler = { [unowned self] url, indexPath in
                 self.longPressRecognizer.isEnabled = false
-                self.showSiteWithURLHandler(url as URL)
+                let isGoogleTopSiteUrl = url.absoluteString == GoogleTopSiteConstants.usUrl || url.absoluteString == GoogleTopSiteConstants.rowUrl
+                self.showSiteWithURLHandler(url as URL, isGoogleTopSite: isGoogleTopSiteUrl)
             }
 
             self.getPocketSites().uponQueue(.main) { _ in
@@ -652,6 +675,12 @@ extension FirefoxHomeViewController: DataObserverDelegate {
     }
 
     func removePinTopSite(_ site: Site) {
+        // Special Case: Hide google top site
+        if site.guid == GoogleTopSiteConstants.googleGUID {
+            let gTopSite = GoogleTopSiteHelper(prefs: self.profile.prefs)
+            gTopSite.isHidden = true
+        }
+
         profile.history.removeFromPinnedTopSites(site).uponQueue(.main) { result in
             guard result.isSuccess else { return }
             self.profile.panelDataObservers.activityStream.refreshIfNeeded(forceTopSites: true)
@@ -864,255 +893,5 @@ extension FirefoxHomeViewController: UIPopoverPresentationControllerDelegate {
     // This is used by the Share UIActivityViewController action sheet on iPad
     func popoverPresentationController(_ popoverPresentationController: UIPopoverPresentationController, willRepositionPopoverTo rect: UnsafeMutablePointer<CGRect>, in view: AutoreleasingUnsafeMutablePointer<UIView>) {
         popoverPresentationController.presentedViewController.dismiss(animated: false, completion: nil)
-    }
-}
-
-// MARK: - Section Header View
-private struct FirefoxHomeHeaderViewUX {
-    static var SeparatorColor: UIColor { return UIColor.theme.homePanel.separator }
-    static let TextFont = DynamicFontHelper.defaultHelper.SmallSizeHeavyWeightAS
-    static let ButtonFont = DynamicFontHelper.defaultHelper.MediumSizeBoldFontAS
-    static let SeparatorHeight = 0.5
-    static let Insets: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? FirefoxHomeUX.SectionInsetsForIpad + FirefoxHomeUX.MinimumInsets : FirefoxHomeUX.MinimumInsets
-    static let TitleTopInset: CGFloat = 5
-}
-
-class ASFooterView: UICollectionReusableView {
-
-    var separatorLineView: UIView?
-    var leftConstraint: Constraint? //This constraint aligns content (Titles, buttons) between all sections.
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-
-        let separatorLine = UIView()
-        self.backgroundColor = UIColor.clear
-        addSubview(separatorLine)
-        separatorLine.snp.makeConstraints { make in
-            make.height.equalTo(FirefoxHomeHeaderViewUX.SeparatorHeight)
-            leftConstraint = make.leading.equalTo(self.safeArea.leading).inset(insets).constraint
-            make.trailing.equalTo(self.safeArea.trailing).inset(insets)
-            make.top.equalTo(self.snp.top)
-        }
-        separatorLineView = separatorLine
-        applyTheme()
-    }
-
-    var insets: CGFloat {
-        return UIScreen.main.bounds.size.width == self.frame.size.width && UIDevice.current.userInterfaceIdiom == .pad ? FirefoxHomeHeaderViewUX.Insets : FirefoxHomeUX.MinimumInsets
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        separatorLineView?.isHidden = false
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        // update the insets every time a layout happens.Insets change depending on orientation or size (ipad split screen)
-        leftConstraint?.update(offset: insets)
-    }
-}
-
-extension ASFooterView: Themeable {
-    func applyTheme() {
-        separatorLineView?.backgroundColor = FirefoxHomeHeaderViewUX.SeparatorColor
-    }
-}
-
-class ASHeaderView: UICollectionReusableView {
-    static let verticalInsets: CGFloat = 4
-
-    lazy fileprivate var titleLabel: UILabel = {
-        let titleLabel = UILabel()
-        titleLabel.text = self.title
-        titleLabel.textColor = UIColor.theme.homePanel.activityStreamHeaderText
-        titleLabel.font = FirefoxHomeHeaderViewUX.TextFont
-        titleLabel.minimumScaleFactor = 0.6
-        titleLabel.numberOfLines = 1
-        titleLabel.adjustsFontSizeToFitWidth = true
-        return titleLabel
-    }()
-
-    lazy var moreButton: UIButton = {
-        let button = UIButton()
-        button.isHidden = true
-        button.titleLabel?.font = FirefoxHomeHeaderViewUX.ButtonFont
-        button.contentHorizontalAlignment = .right
-        button.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
-        button.setTitleColor(UIColor.Photon.Grey50, for: .highlighted)
-        return button
-    }()
-
-    lazy fileprivate var iconView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.tintColor = UIColor.Photon.Grey50
-        imageView.isHidden = true
-        return imageView
-    }()
-
-    var title: String? {
-        willSet(newTitle) {
-            titleLabel.text = newTitle
-        }
-    }
-
-    var leftConstraint: Constraint?
-    var rightConstraint: Constraint?
-
-    var titleInsets: CGFloat {
-        get {
-            return UIScreen.main.bounds.size.width == self.frame.size.width && UIDevice.current.userInterfaceIdiom == .pad ? FirefoxHomeHeaderViewUX.Insets : FirefoxHomeUX.MinimumInsets
-        }
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        moreButton.isHidden = true
-        moreButton.setTitle(nil, for: .normal)
-        moreButton.accessibilityIdentifier = nil;
-        titleLabel.text = nil
-        moreButton.removeTarget(nil, action: nil, for: .allEvents)
-        iconView.isHidden = true
-        iconView.tintColor = UIColor.theme.homePanel.activityStreamHeaderText
-        titleLabel.textColor = UIColor.theme.homePanel.activityStreamHeaderText
-        moreButton.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
-    }
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        addSubview(titleLabel)
-        addSubview(moreButton)
-        addSubview(iconView)
-        moreButton.snp.makeConstraints { make in
-            make.top.equalTo(self.snp.top).offset(ASHeaderView.verticalInsets)
-            make.bottom.equalToSuperview().offset(-ASHeaderView.verticalInsets)
-            self.rightConstraint = make.trailing.equalTo(self.safeArea.trailing).inset(-titleInsets).constraint
-        }
-        moreButton.setContentCompressionResistancePriority(.required, for: .horizontal)
-        titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(iconView.snp.trailing).offset(5)
-            make.trailing.equalTo(moreButton.snp.leading).inset(-FirefoxHomeHeaderViewUX.TitleTopInset)
-            make.top.equalTo(self.snp.top).offset(ASHeaderView.verticalInsets)
-            make.bottom.equalToSuperview().offset(-ASHeaderView.verticalInsets)
-        }
-        iconView.snp.makeConstraints { make in
-            self.leftConstraint = make.leading.equalTo(self.safeArea.leading).inset(titleInsets).constraint
-            make.centerY.equalTo(self.snp.centerY)
-            make.size.equalTo(16)
-        }
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        leftConstraint?.update(offset: titleInsets)
-        rightConstraint?.update(offset: -titleInsets)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
-class LibraryShortcutView: UIView {
-    static let spacing: CGFloat = 15
-
-    var button = UIButton()
-    var title = UILabel()
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        addSubview(button)
-        addSubview(title)
-        button.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.centerX.equalToSuperview()
-            make.width.equalTo(self).offset(-LibraryShortcutView.spacing)
-            make.height.equalTo(self.snp.width).offset(-LibraryShortcutView.spacing)
-        }
-        title.adjustsFontSizeToFitWidth = true
-        title.minimumScaleFactor = 0.7
-        title.lineBreakMode = .byTruncatingTail
-        title.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
-        title.textAlignment = .center
-        title.snp.makeConstraints { make in
-            make.top.equalTo(button.snp.bottom).offset(5)
-            make.leading.trailing.equalToSuperview()
-        }
-        button.imageView?.contentMode = .scaleToFill
-        button.contentVerticalAlignment = .fill
-        button.contentHorizontalAlignment = .fill
-        button.imageEdgeInsets = UIEdgeInsets(equalInset: LibraryShortcutView.spacing)
-        button.tintColor = .white
-    }
-
-    required init(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override func layoutSubviews() {
-        button.layer.cornerRadius = (self.frame.width - LibraryShortcutView.spacing) / 2
-        super.layoutSubviews()
-    }
-}
-
-class ASLibraryCell: UICollectionViewCell, Themeable {
-
-    var mainView = UIStackView()
-
-    struct LibraryPanel {
-        let title: String
-        let image: UIImage?
-        let color: UIColor
-    }
-
-    var libraryButtons: [LibraryShortcutView] = []
-
-    let bookmarks = LibraryPanel(title: Strings.AppMenuBookmarksTitleString, image: UIImage.templateImageNamed("menu-Bookmark"), color: UIColor.Photon.Blue50)
-    let history = LibraryPanel(title: Strings.AppMenuHistoryTitleString, image: UIImage.templateImageNamed("menu-panel-History"), color: UIColor.Photon.Orange50)
-    let readingList = LibraryPanel(title: Strings.AppMenuReadingListTitleString, image: UIImage.templateImageNamed("menu-panel-ReadingList"), color: UIColor.Photon.Teal60)
-    let downloads = LibraryPanel(title: Strings.AppMenuDownloadsTitleString, image: UIImage.templateImageNamed("menu-panel-Downloads"), color: UIColor.Photon.Magenta60)
-    let syncedTabs = LibraryPanel(title: Strings.AppMenuSyncedTabsTitleString, image: UIImage.templateImageNamed("menu-sync"), color: UIColor.Photon.Purple70)
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        mainView.distribution = .fillEqually
-        mainView.spacing = 10
-        addSubview(mainView)
-        mainView.snp.makeConstraints { make in
-            make.edges.equalTo(self)
-        }
-
-        [bookmarks, readingList, downloads, syncedTabs].forEach { item in
-            let view = LibraryShortcutView()
-            view.button.setImage(item.image, for: .normal)
-            view.title.text = item.title
-            let words = view.title.text?.components(separatedBy: NSCharacterSet.whitespacesAndNewlines).count
-            view.title.numberOfLines = words == 1 ? 1 :2
-            view.button.backgroundColor = item.color
-            view.button.setTitleColor(UIColor.theme.homePanel.topSiteDomain, for: .normal)
-            view.accessibilityLabel = item.title
-            mainView.addArrangedSubview(view)
-            libraryButtons.append(view)
-        }
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    func applyTheme() {
-        libraryButtons.forEach { button in
-            button.title.textColor = UIColor.theme.homePanel.activityStreamCellTitle
-        }
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        applyTheme()
     }
 }

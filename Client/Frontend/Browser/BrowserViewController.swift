@@ -62,7 +62,7 @@ class BrowserViewController: UIViewController {
     var searchController: SearchViewController?
     var screenshotHelper: ScreenshotHelper!
     fileprivate var homePanelIsInline = false
-    var shouldSetUrlTypeSearch = false
+    var searchTelemetry: SearchTelemetry?
     fileprivate var searchLoader: SearchLoader?
     let alertStackView = UIStackView() // All content that appears above the footer should be added to this view. (Find In Page/SnackBars)
     var findInPageBar: FindInPageBar?
@@ -495,6 +495,7 @@ class BrowserViewController: UIViewController {
         // Setup chron tabs A/B test
         chronTabsUserResearch = ChronTabsUserResearch()
         chronTabsUserResearch?.lpVariableObserver()
+        searchTelemetry = SearchTelemetry()
     }
 
     fileprivate func setupConstraints() {
@@ -1616,7 +1617,7 @@ extension BrowserViewController: URLBarDelegate {
             // We couldn't find a matching search keyword, so do a search query.
             Telemetry.default.recordSearch(location: .actionBar, searchEngine: engine.engineID ?? "other")
             GleanMetrics.Search.counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.actionBar.rawValue)"].add()
-            shouldSetUrlTypeSearch = true
+            searchTelemetry?.shouldSetUrlTypeSearch = true
             finishEditingAndSubmit(searchURL, visitType: VisitType.typed, forTab: tab)
         } else {
             // We still don't have a valid URL, so something is broken. Give up.
@@ -1824,8 +1825,12 @@ extension BrowserViewController: HomePanelDelegate {
         view.endEditing(true)
     }
 
-    func homePanel(didSelectURL url: URL, visitType: VisitType) {
+    func homePanel(didSelectURL url: URL, visitType: VisitType, isGoogleTopSite: Bool) {
         guard let tab = tabManager.selectedTab else { return }
+        if isGoogleTopSite {
+            tab.urlType = .googleTopSite
+            searchTelemetry?.shouldSetGoogleTopSiteSearch = true
+        }
         finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
     }
 
@@ -1849,7 +1854,7 @@ extension BrowserViewController: HomePanelDelegate {
 extension BrowserViewController: SearchViewControllerDelegate {
     func searchViewController(_ searchViewController: SearchViewController, didSelectURL url: URL) {
         guard let tab = tabManager.selectedTab else { return }
-        shouldSetUrlTypeSearch = true
+        searchTelemetry?.shouldSetUrlTypeSearch = true
         finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: tab)
     }
 
