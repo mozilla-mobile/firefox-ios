@@ -6,7 +6,7 @@ Download on the [App Store](https://itunes.apple.com/app/firefox-web-browser/id9
 This branch (main)
 -----------
 
-This branch works with [Xcode 12.3](https://developer.apple.com/services-account/download?path=/Developer_Tools/Xcode_12.3/Xcode_12.3.xip), Swift 5.3 and supports iOS 12.0 and above.
+This branch works with [Xcode 12.4](https://developer.apple.com/services-account/download?path=/Developer_Tools/Xcode_12.4/Xcode_12.4.xip), Swift 5.3 and supports iOS 12.4 and above.
 
 Please make sure you aim your pull requests in the right direction.
 
