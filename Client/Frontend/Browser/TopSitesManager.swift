@@ -57,11 +57,12 @@ struct TopSitesHandler {
             result.forEach { site in
                 // Favicon icon url
                 let iconUrl = site.icon?.url ?? ""
-                let webUrl = URL(string: site.url)
                 let imageKey = site.tileURL.baseDomain ?? ""
-                widgetkitTopSites.append(WidgetKitTopSiteModel(title: site.title, faviconUrl: iconUrl, url: webUrl ?? URL(string: "")!, imageKey: imageKey))
-                // fetch favicons and cache them on disk
-                FaviconFetcher.downloadFaviconAndCache(imageURL: !iconUrl.isEmpty ? URL(string: iconUrl) : nil, imageKey: imageKey )
+                if let webUrl = URL(string: site.url) {
+                    widgetkitTopSites.append(WidgetKitTopSiteModel(title: site.title, faviconUrl: iconUrl, url: webUrl, imageKey: imageKey))
+                    // fetch favicons and cache them on disk
+                    FaviconFetcher.downloadFaviconAndCache(imageURL: !iconUrl.isEmpty ? URL(string: iconUrl) : nil, imageKey: imageKey )
+                }
             }
             // save top sites for widgetkit use
             WidgetKitTopSiteModel.save(widgetKitTopSites: widgetkitTopSites)
