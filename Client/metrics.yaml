@@ -69,6 +69,18 @@ search:
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-05-07"
+  google_topsite_pressed:
+    type: labeled_counter
+    description: |
+      Counts the number of times the google top site button
+      is pressed
+    bugs:
+      - https://jira.mozilla.com/browse/FXIOS-1223
+    data_reviews:
+      - https://jira.mozilla.com/browse/FXIOS-1223
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-09-01"
 
 # Preference metrics
 preferences:

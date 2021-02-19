@@ -29,6 +29,7 @@ class ActivityStreamTest: BaseTestCase {
                 launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + pagesVisitediPhone]
             }
         }
+        launchArguments.append(LaunchArguments.SkipAddingGoogleTopSite)
         super.setUp()
     }
 

@@ -54,6 +54,8 @@ enum TabUrlType: String {
     case search
     case followOnSearch
     case organicSearch
+    case googleTopSite
+    case googleTopSiteFollowOn
 }
 
 class Tab: NSObject {
