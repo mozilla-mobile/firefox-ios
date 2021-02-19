@@ -847,7 +847,7 @@ pocket:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/6195
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/6195
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8009
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-08-19"
