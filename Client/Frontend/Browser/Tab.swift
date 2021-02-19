@@ -435,27 +435,29 @@ class Tab: NSObject {
         _ = webView?.go(to: item)
     }
 
-    @discardableResult func loadRequest(_ request: URLRequest) -> WKNavigation? {
+    // Ecosia: adding async callback for navigation result to inject cookie
+    func loadRequest(_ request: URLRequest, completion: ((WKNavigation?) -> ())? = nil ) {
         if let webView = webView {
             // Convert about:reader?url=http://example.com URLs to local ReaderMode URLs
             if let url = request.url, let syncedReaderModeURL = url.decodeReaderModeURL, let localReaderModeURL = syncedReaderModeURL.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL()) {
                 let readerModeRequest = PrivilegedRequest(url: localReaderModeURL) as URLRequest
                 lastRequest = readerModeRequest
-                return webView.load(readerModeRequest)
+                completion?(webView.load(readerModeRequest))
             }
             lastRequest = request
             if let url = request.url, url.isFileURL, request.isPrivileged {
-                return webView.loadFileURL(url, allowingReadAccessTo: url)
+                completion?(webView.loadFileURL(url, allowingReadAccessTo: url))
             }
 
             // Ecosia: inject cookie
-            var request = request
             if let cookie = browserViewController?.tabManager.cookie {
-                request.allHTTPHeaderFields = HTTPCookie.requestHeaderFields(with: [cookie.value])
+                webView.configuration.websiteDataStore.httpCookieStore.setCookie(cookie.value) {
+                    completion?(webView.load(request))
+                }
+            } else {
+                completion?(webView.load(request))
             }
-            return webView.load(request)
         }
-        return nil
     }
 
     func stop() {

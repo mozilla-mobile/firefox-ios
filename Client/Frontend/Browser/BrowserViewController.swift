@@ -876,8 +876,11 @@ class BrowserViewController: UIViewController {
         urlBar.currentURL = url
         urlBar.leaveOverlayMode()
 
-        if let nav = tab.loadRequest(URLRequest(url: url)) {
-            self.recordNavigationInTab(tab, navigation: nav, visitType: visitType)
+        // Ecosia: change cookie handling
+        tab.loadRequest(URLRequest(url: url)) { [weak self] (nav) in
+            if let nav = nav {
+                self?.recordNavigationInTab(tab, navigation: nav, visitType: visitType)
+            }
         }
     }
 
