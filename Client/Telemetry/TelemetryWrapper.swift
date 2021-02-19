@@ -377,6 +377,7 @@ extension TelemetryWrapper {
         case mediumQuickActionCopiedLink = "medium-quick-action-copied-link"
         case mediumQuickActionClosePrivate = "medium-quick-action-close-private"
         case mediumTopSitesWidget = "medium-top-sites-widget"
+        case pocketStory = "pocket-story"
     }
 
     public enum EventValue: String {
@@ -506,6 +507,8 @@ extension TelemetryWrapper {
             GleanMetrics.Widget.mQuickActionClosePrivate.add()
         case (.action, .open, .mediumTopSitesWidget, _, _):
             GleanMetrics.Widget.mTopSitesWidget.add()
+        case (.action, .tap, .pocketStory, _, _):
+            GleanMetrics.Pocket.openStory.add()
         // Experiments
         case (.enrollment, .add, .experimentEnrollment, _, let extras):
             if let id = extras?["Experiment id"] as? String, let name = extras?["Experiment name"] as? String, let variant = extras?["Experiment variant"] as? String {
