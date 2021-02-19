@@ -1642,7 +1642,11 @@ workflows:
     - opts:
         is_expand: false
       BITRISE_SCHEME: Firefox
-    description: ''
+    description: >-
+        This step is to build, archive and upload Firefox Release and Beta
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.4.x
   RunAllXCUITests:
     steps:
     - activate-ssh-key@4.0:
@@ -2919,9 +2923,7 @@ trigger_map:
   workflow: RunUnitTests
 - push_branch: chronological-tabs
   workflow: RunUnitTests
-- push_branch: v30.x
-  workflow: xcode12-release-and-beta-nocache
-- push_branch: v31.x
+- push_branch: v32.x
   workflow: xcode12-release-and-beta-nocache
 - pull_request_target_branch: main
   workflow: RunUnitTests
