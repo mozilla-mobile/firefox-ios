@@ -217,11 +217,9 @@ extension PhotonActionSheetProtocol {
             }
             commonActions.insert(findInPageAction, at: 0)
             
-            let reportSiteIssueAction = PhotonActionSheetItem(title: Strings.AppMenuReportSiteIssueTitleString, iconString: "menu-reportSiteIssue") { _, _
-                in
+            let reportSiteIssueAction = PhotonActionSheetItem(title: Strings.AppMenuReportSiteIssueTitleString, iconString: "menu-reportSiteIssue") { _, _ in
                 reportSiteIssue()
             }
-            
             commonActions.insert(reportSiteIssueAction, at: 0)
         }
 
