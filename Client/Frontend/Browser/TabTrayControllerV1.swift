@@ -1078,7 +1078,9 @@ class TabCell: UICollectionViewCell {
     func configureWith(tab: Tab, is selected: Bool) {
         titleText.text = tab.displayTitle
 
-        if !tab.displayTitle.isEmpty {
+        if selected {
+            accessibilityLabel = tab.displayTitle + ". " + String.TabTrayCurrentlySelectedTabAccessibilityLabel
+        } else if !tab.displayTitle.isEmpty {
             accessibilityLabel = tab.displayTitle
         } else if let url = tab.url, let about = InternalURL(url)?.aboutComponent {
             accessibilityLabel = about
