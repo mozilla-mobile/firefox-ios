@@ -11,7 +11,7 @@ github "SwiftyJSON/SwiftyJSON"              ~> 5.0
 github "mozilla-mobile/telemetry-ios"      ~> 1.1
 github "mozilla-mobile/MappaMundi"          "master"
 github "Leanplum/Leanplum-iOS-SDK"          ~> 2.7.2
-github "mozilla-services/shavar-prod-lists" "85.0"
+github "mozilla-services/shavar-prod-lists" "86.0"
 
 # Use release version of application-services
 github "mozilla/application-services"      "v69.0.0"
