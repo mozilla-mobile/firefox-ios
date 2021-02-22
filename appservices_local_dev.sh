@@ -35,7 +35,7 @@ if [[ "${ACTION}" == "enable" ]]; then
   if [ ! -h "${FRAMEWORK_LOCATION}" ]; then
     msg "Replacing Carthage package by symbolic link..."
     rm -rf "${FRAMEWORK_LOCATION}"
-    ln -s "${APP_SERVICES_DIR}/Carthage/Build/iOS/Static/MozillaAppServices.framework" "${PWD}/Carthage/Build/iOS"
+    ln -s "${APP_SERVICES_DIR}/Carthage/Build/iOS/MozillaAppServices.framework" "${PWD}/Carthage/Build/iOS"
   fi
   msg "Building Application Services."
   pushd "${APP_SERVICES_DIR}"

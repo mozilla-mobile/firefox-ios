@@ -56,7 +56,7 @@ Firefox for iOS depends internally on some of the [shared Rust components](https
 
   ```
   rm -rf Carthage/Build/iOS/MozillaAppServices.framework
-  ln -s ~/REPLACE_WITH_PATH_TO_YOUR_LOCAL_CHECKOUT/application-services/Carthage/Build/iOS/Static/MozillaAppServices.framework Carthage/Build/iOS
+  ln -s ~/REPLACE_WITH_PATH_TO_YOUR_LOCAL_CHECKOUT/application-services/Carthage/Build/iOS/MozillaAppServices.framework Carthage/Build/iOS
   ```
 
 4. Build firefox-ios.
