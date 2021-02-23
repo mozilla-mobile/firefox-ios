@@ -1073,10 +1073,25 @@ workflows:
             # debug log
             set -x
 
-
             rm /tmp/tmp.xcconfig
             envman add --key XCODE_XCCONFIG_FILE --value ''
         title: remove carthage lipo workaround
+    - script@1:
+        title: Move glean sdk_generator
+        inputs:
+        - content: >-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            # Move Glean script to source folder from
+            # MozillaAppServices.framework as we don't
+            # want to ship our app with Glean shell
+            # script inside A~S framework
+
+            mv Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
     - script@1:
         inputs:
         - content: >-
@@ -1491,6 +1506,22 @@ workflows:
             rm /tmp/tmp.xcconfig
             envman add --key XCODE_XCCONFIG_FILE --value ''
         title: remove carthage lipo workaround
+    - script@1:
+        title: Move glean sdk_generator
+        inputs:
+        - content: >-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            # Move Glean script to source folder from
+            # MozillaAppServices.framework as we don't
+            # want to ship our app with Glean shell
+            # script inside A~S framework
+
+            mv Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
     - script@1:
         inputs:
         - content: >-
