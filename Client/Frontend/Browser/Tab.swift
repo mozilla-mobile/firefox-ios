@@ -451,9 +451,9 @@ class Tab: NSObject {
 
             // Ecosia: inject cookie
             if let cookie = browserViewController?.tabManager.cookie {
-                webView.configuration.websiteDataStore.httpCookieStore.setCookie(cookie.value) {
-                    completion?(webView.load(request))
-                }
+                var request = request
+                request.allHTTPHeaderFields = HTTPCookie.requestHeaderFields(with: [cookie.value])
+                completion?(webView.load(request))
             } else {
                 completion?(webView.load(request))
             }
