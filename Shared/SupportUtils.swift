@@ -18,4 +18,12 @@ public struct SupportUtils {
         }
         return URL(string: "https://support.mozilla.org/1/mobile/\(AppInfo.appVersion)/iOS/\(languageIdentifier)/\(escapedTopic)")
     }
+
+    public static func URLForReportSiteIssue(_ siteUrl: String?) -> URL? {
+        guard let escapedUrl = siteUrl?.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)
+        else {
+            return nil
+        }
+        return URL(string: "https://webcompat.com/issues/new?src=mobile-reporter&url=\(escapedUrl)")
+    }
 }

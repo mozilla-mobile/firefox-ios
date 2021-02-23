@@ -1402,6 +1402,10 @@ extension BrowserViewController: URLBarDelegate {
         let findInPageAction = {
             self.updateFindInPageVisibility(visible: true)
         }
+        
+        let reportSiteIssue = {
+            self.openURLInNewTab(SupportUtils.URLForReportSiteIssue(self.urlBar.currentURL?.absoluteString))
+        }
 
         let successCallback: (String, ButtonToastAction) -> Void = { (successMessage, toastAction) in
             switch toastAction {
@@ -1424,7 +1428,7 @@ extension BrowserViewController: URLBarDelegate {
             let isBookmarked = $0.successValue ?? false
             let isPinned = $1.successValue ?? false
             let pageActions = self.getTabActions(tab: tab, buttonView: button, presentShareMenu: actionMenuPresenter,
-                                                 findInPage: findInPageAction, presentableVC: self, isBookmarked: isBookmarked,
+                                                 findInPage: findInPageAction, reportSiteIssue: reportSiteIssue, presentableVC: self, isBookmarked: isBookmarked,
                                                  isPinned: isPinned, shouldShowNewTabButton: shouldShowNewTabButton, success: successCallback)
             self.presentSheetWith(title: Strings.PageActionMenuTitle, actions: pageActions, on: self, from: button)
         }
