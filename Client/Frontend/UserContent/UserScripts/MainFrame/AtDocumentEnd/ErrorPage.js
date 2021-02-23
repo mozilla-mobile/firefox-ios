@@ -7,7 +7,7 @@
 
 "use strict";
 
-const visitOnceButton = document.getElementById("visitOnce")
+const visitOnceButton = document.getElementById(APP_ID_TOKEN + "__firefox__visitOnce")
 
 if (visitOnceButton != null) {
     visitOnceButton.addEventListener('click', function(e) {
