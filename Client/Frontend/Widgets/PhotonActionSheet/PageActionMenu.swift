@@ -34,6 +34,7 @@ extension PhotonActionSheetProtocol {
     func getTabActions(tab: Tab, buttonView: UIView,
                        presentShareMenu: @escaping (URL, Tab, UIView, UIPopoverArrowDirection) -> Void,
                        findInPage: @escaping () -> Void,
+                       reportSiteIssue: @escaping () -> Void,
                        presentableVC: PresentableVC,
                        isBookmarked: Bool,
                        isPinned: Bool,
@@ -209,12 +210,17 @@ extension PhotonActionSheetProtocol {
         let pinAction = (isPinned ? removeTopSitesPin : pinToTopSites)
         var commonActions = [toggleDesktopSite, pinAction]
 
-        // Disable find in page if document is pdf.
+        // Disable find in page and report site issue if document is pdf.
         if tab.mimeType != MIMEType.PDF {
             let findInPageAction = PhotonActionSheetItem(title: Strings.AppMenuFindInPageTitleString, iconString: "menu-FindInPage") { _, _ in
                 findInPage()
             }
             commonActions.insert(findInPageAction, at: 0)
+            
+            let reportSiteIssueAction = PhotonActionSheetItem(title: Strings.AppMenuReportSiteIssueTitleString, iconString: "menu-reportSiteIssue") { _, _ in
+                reportSiteIssue()
+            }
+            commonActions.insert(reportSiteIssueAction, at: 0)
         }
 
         if shouldShowNewTabButton && tab.readerModeAvailableOrActive {
