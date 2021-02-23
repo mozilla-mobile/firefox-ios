@@ -46,8 +46,11 @@ fi
 # Run carthage
 ./carthage_command.sh
 
-# Install Node.js dependencies and build user scripts
+# Move Glean script to source folder from MozillaAppServices.framework
+# as we don't want to ship our app with this Glean script inside framework
+mv Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
 
+# Install Node.js dependencies and build user scripts
 npm install
 npm run build
 
