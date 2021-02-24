@@ -44,6 +44,11 @@ class DefaultBrowserOnboardingViewModel {
         model = DefaultBrowserOnboardingModel(titleImage: getCorrectImage(), titleText: String.DefaultBrowserCardTitle, descriptionText: [String.DefaultBrowserCardDescription, String.DefaultBrowserOnboardingDescriptionStep1, String.DefaultBrowserOnboardingDescriptionStep2, String.DefaultBrowserOnboardingDescriptionStep3], imageText: String.DefaultBrowserOnboardingScreenshot)
     }
     
+    // Used for theme changes
+    func refreshModelImage() {
+        model?.titleImage = getCorrectImage()
+    }
+    
     static func shouldShowDefaultBrowserOnboarding(userPrefs: Prefs) -> Bool {
         // Show on 3rd session
         let maxSessionCount = 3

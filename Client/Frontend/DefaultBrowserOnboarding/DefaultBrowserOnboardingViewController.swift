@@ -308,7 +308,8 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         self.descriptionLabel1.textColor = fxTextThemeColour
         self.descriptionLabel2.textColor = fxTextThemeColour
         self.descriptionLabel3.textColor = fxTextThemeColour
-        self.descriptionLabel1.textColor = fxTextThemeColour
+        viewModel.refreshModelImage()
+        self.topImageView.image = viewModel.model?.titleImage
     }
     
     deinit {
