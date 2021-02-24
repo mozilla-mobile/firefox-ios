@@ -46,14 +46,14 @@ struct DBOnboardingUX {
 class DefaultBrowserOnboardingViewController: UIViewController {
     // Public constants
     let viewModel = DefaultBrowserOnboardingViewModel()
-    static let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+    let theme = ThemeManager.instance.currentName
     // Private vars
     private var fxTextThemeColour: UIColor {
         // For dark theme we want to show light colours and for light we want to show dark colours
-        return DefaultBrowserOnboardingViewController.theme == .dark ? .white : .black
+        return theme == .dark ? .white : .black
     }
     private var fxBackgroundThemeColour: UIColor {
-        return DefaultBrowserOnboardingViewController.theme == .dark ? UIColor(rgb: 0x1C1C1E) : .white
+        return theme == .dark ? UIColor(rgb: 0x1C1C1E) : .white
     }
     private var descriptionFontSize: CGFloat {
         return screenSize.height > 1000 ? DBOnboardingUX.fontSizeXSmall :
