@@ -34,11 +34,13 @@ struct DBOnboardingUX {
     static let textOffsetSmall = 13
     static let fontSize: CGFloat = 24
     static let fontSizeSmall: CGFloat = 20
-    static let fontSizeXSmall: CGFloat = 15
+    static let fontSizeXSmall: CGFloat = 16
     static let titleSize: CGFloat = 28
+    static let titleSizeSmall: CGFloat = 24
     static let titleSizeLarge: CGFloat = 34
     static let containerViewHeight = 350
     static let containerViewHeightSmall = 300
+    static let containerViewHeightXSmall = 250
 }
 
 class DefaultBrowserOnboardingViewController: UIViewController {
@@ -54,10 +56,13 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         return DefaultBrowserOnboardingViewController.theme == .dark ? UIColor(rgb: 0x1C1C1E) : .white
     }
     private var descriptionFontSize: CGFloat {
-        return screenSize.height > 1000 ? DBOnboardingUX.fontSizeXSmall : (screenSize.height > 668 ? DBOnboardingUX.fontSize : DBOnboardingUX.fontSizeSmall)
+        return screenSize.height > 1000 ? DBOnboardingUX.fontSizeXSmall :
+               screenSize.height > 668 ? DBOnboardingUX.fontSize :
+               screenSize.height > 640 ? DBOnboardingUX.fontSizeSmall : DBOnboardingUX.fontSizeXSmall
     }
     private var titleFontSize: CGFloat {
-        return screenSize.height > 1000 ? DBOnboardingUX.titleSizeLarge : DBOnboardingUX.titleSize
+        return screenSize.height > 1000 ? DBOnboardingUX.titleSizeLarge :
+               screenSize.height > 640 ? DBOnboardingUX.titleSize : DBOnboardingUX.titleSizeSmall
     }
     // Orientation independent screen size
     private let screenSize = DeviceInfo.screenSizeOrientationIndependent()
@@ -212,29 +217,32 @@ class DefaultBrowserOnboardingViewController: UIViewController {
             make.centerX.equalToSuperview()
             make.top.equalTo(closeButton.snp.bottom).offset(10)
             make.height.equalTo(200)
-            make.width.equalTo(350)
+            make.width.equalTo(340)
         }
         let layoutDirection = UIApplication.shared.userInterfaceLayoutDirection
         imageText.snp.makeConstraints { make in
-            make.top.equalTo(topImageView.snp.top).offset(122)
+            make.top.equalTo(topImageView.snp.top).offset(121)
             if layoutDirection == .leftToRight {
                 make.left.equalTo(topImageView.snp.left).inset(20)
             } else {
                 make.right.equalTo(topImageView.snp.right).inset(20)
             }
         }
+        let textOffset = screenSize.height > 668 ? DBOnboardingUX.textOffset : DBOnboardingUX.textOffsetSmall
         textView.snp.makeConstraints { make in
-            make.top.equalTo(topImageView.snp.bottom).offset(DBOnboardingUX.textOffset)
+            make.top.equalTo(topImageView.snp.bottom).offset(textOffset)
             make.left.right.equalToSuperview().inset(36)
             make.bottom.equalTo(goToSettingsButton.snp.top)
         }
         
         let containerViewHeight = screenSize.height > 1000 ? DBOnboardingUX.containerViewHeightSmall :
-            (screenSize.height > 668 ? DBOnboardingUX.containerViewHeight : DBOnboardingUX.containerViewHeightSmall)
+                                  screenSize.height > 668 ? DBOnboardingUX.containerViewHeight :
+                                  screenSize.height > 640 ? DBOnboardingUX.containerViewHeightSmall : DBOnboardingUX.containerViewHeightXSmall
+        let containerViewWidth = screenSize.height > 668 ? 350 : 300
         containerView.snp.makeConstraints { make in
             make.centerY.centerX.equalToSuperview()
             make.height.equalTo(containerViewHeight)
-            make.width.equalTo(350)
+            make.width.equalTo(containerViewWidth)
         }
         
         // Top title label constraints setup
@@ -243,7 +251,6 @@ class DefaultBrowserOnboardingViewController: UIViewController {
             make.left.right.equalToSuperview()
         }
         
-        let textOffset = screenSize.height > 668 ? DBOnboardingUX.textOffset : DBOnboardingUX.textOffsetSmall
         descriptionText.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(textOffset)
             make.left.right.equalToSuperview()
@@ -262,14 +269,19 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         }
         // Bottom settings button constraints
         goToSettingsButton.snp.makeConstraints { make in
-            if (screenSize.height > 1000) {
+            if screenSize.height > 1000 {
                 make.bottom.equalTo(view.safeArea.bottom).offset(-60)
                 make.height.equalTo(50)
-            } else {
+                make.width.equalTo(350)
+            } else if screenSize.height > 640 {
                 make.bottom.equalTo(view.safeArea.bottom).offset(-5)
                 make.height.equalTo(60)
+                make.width.equalTo(350)
+            } else {
+                make.bottom.equalTo(view.safeArea.bottom).offset(-5)
+                make.height.equalTo(50)
+                make.width.equalTo(300)
             }
-            make.width.equalTo(350)
             make.centerX.equalToSuperview()
         }
         // Bottom goto settings button
