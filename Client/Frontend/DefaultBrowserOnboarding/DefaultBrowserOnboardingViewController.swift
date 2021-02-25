@@ -52,9 +52,7 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         // For dark theme we want to show light colours and for light we want to show dark colours
         return theme.currentName == .dark ? .white : .black
     }
-    private var fxBackgroundThemeColour: UIColor {
-        return theme.currentName == .dark ? UIColor(rgb: 0x1C1C1E) : .white
-    }
+    private var fxBackgroundThemeColour: UIColor = UIColor.theme.onboarding.backgroundColor
     private var descriptionFontSize: CGFloat {
         return screenSize.height > 1000 ? DBOnboardingUX.fontSizeXSmall :
                screenSize.height > 668 ? DBOnboardingUX.fontSize :
