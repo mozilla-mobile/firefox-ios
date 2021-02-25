@@ -1101,6 +1101,7 @@ extension String {
     public static let TabTrayAddTabAccessibilityLabel = MZLocalizedString("Add Tab", comment: "Accessibility label for the Add Tab button in the Tab Tray.")
     public static let TabTrayCloseAccessibilityCustomAction = MZLocalizedString("Close", comment: "Accessibility label for action denoting closing a tab in tab list (tray)")
     public static let TabTraySwipeToCloseAccessibilityHint = MZLocalizedString("Swipe right or left with three fingers to close the tab.", comment: "Accessibility hint for tab tray's displayed tab.")
+    public static let TabTrayCurrentlySelectedTabAccessibilityLabel = MZLocalizedString("Currently selected tab.", comment: "Accessibility label for the currently selected tab.")
 }
 
 // URL Bar
