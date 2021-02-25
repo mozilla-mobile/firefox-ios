@@ -231,7 +231,7 @@ open class RustFirefoxAccounts {
     /// Rust FxA notification handlers can call this to update caches and the UI.
     private func update() {
         guard let accountManager = accountManager.peek() else { return }
-        let avatarUrl = accountManager.accountProfile()?.avatar?.url
+        let avatarUrl = accountManager.accountProfile()?.avatar
         if let str = avatarUrl, let url = URL(string: str) {
             avatar = Avatar(url: url)
         }
@@ -313,7 +313,7 @@ public struct FxAUserProfile: Codable, Equatable {
     init(profile: MozillaAppServices.Profile) {
         uid = profile.uid
         email = profile.email
-        avatarUrl = profile.avatar?.url
+        avatarUrl = profile.avatar
         displayName = profile.displayName
     }
 }
