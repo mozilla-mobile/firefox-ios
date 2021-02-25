@@ -210,6 +210,10 @@ class DefaultBrowserCardColor {
     var closeButton: UIColor { return UIColor.Photon.Grey80 }
 }
 
+class OnboardingColor {
+    var backgroundColor: UIColor { return UIColor.white }
+}
+
 protocol Theme {
     var name: String { get }
     var tableView: TableViewColor { get }
@@ -226,6 +230,7 @@ protocol Theme {
     var actionMenu: ActionMenuColor { get }
     var switchToggleTheme: GeneralColor { get }
     var defaultBrowserCard: DefaultBrowserCardColor { get }
+    var onboarding: OnboardingColor { get }
 }
 
 class NormalTheme: Theme {
@@ -244,4 +249,5 @@ class NormalTheme: Theme {
     var actionMenu: ActionMenuColor { return ActionMenuColor() }
     var switchToggleTheme: GeneralColor { return GeneralColor() }
     var defaultBrowserCard: DefaultBrowserCardColor { return DefaultBrowserCardColor() }
+    var onboarding: OnboardingColor { return OnboardingColor() }
 }

@@ -46,15 +46,13 @@ struct DBOnboardingUX {
 class DefaultBrowserOnboardingViewController: UIViewController {
     // Public constants
     let viewModel = DefaultBrowserOnboardingViewModel()
-    static let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+    let theme = ThemeManager.instance
     // Private vars
     private var fxTextThemeColour: UIColor {
         // For dark theme we want to show light colours and for light we want to show dark colours
-        return DefaultBrowserOnboardingViewController.theme == .dark ? .white : .black
+        return theme.currentName == .dark ? .white : .black
     }
-    private var fxBackgroundThemeColour: UIColor {
-        return DefaultBrowserOnboardingViewController.theme == .dark ? UIColor(rgb: 0x1C1C1E) : .white
-    }
+    private var fxBackgroundThemeColour: UIColor = UIColor.theme.onboarding.backgroundColor
     private var descriptionFontSize: CGFloat {
         return screenSize.height > 1000 ? DBOnboardingUX.fontSizeXSmall :
                screenSize.height > 668 ? DBOnboardingUX.fontSize :
@@ -89,7 +87,6 @@ class DefaultBrowserOnboardingViewController: UIViewController {
     private lazy var imageText: UILabel = {
         let label = UILabel()
         label.text = viewModel.model?.imageText
-        label.textColor = fxTextThemeColour
         label.font = UIFont.systemFont(ofSize: 18)
         label.textAlignment = .left
         label.numberOfLines = 1
@@ -98,7 +95,6 @@ class DefaultBrowserOnboardingViewController: UIViewController {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = viewModel.model?.titleText
-        label.textColor = fxTextThemeColour
         label.font = UIFont.boldSystemFont(ofSize: titleFontSize)
         label.textAlignment = .center
         label.numberOfLines = 2
@@ -107,7 +103,6 @@ class DefaultBrowserOnboardingViewController: UIViewController {
     private lazy var descriptionText: UILabel = {
         let label = UILabel()
         label.text = viewModel.model?.descriptionText[0]
-        label.textColor = fxTextThemeColour
         label.font = UIFont.systemFont(ofSize: descriptionFontSize)
         label.textAlignment = .left
         label.numberOfLines = 3
@@ -116,7 +111,6 @@ class DefaultBrowserOnboardingViewController: UIViewController {
     private lazy var descriptionLabel1: UILabel = {
         let label = UILabel()
         label.text = viewModel.model?.descriptionText[1]
-        label.textColor = fxTextThemeColour
         label.font = UIFont.systemFont(ofSize: descriptionFontSize)
         label.textAlignment = .left
         label.numberOfLines = 0
@@ -125,7 +119,6 @@ class DefaultBrowserOnboardingViewController: UIViewController {
     private lazy var descriptionLabel2: UILabel = {
         let label = UILabel()
         label.text = viewModel.model?.descriptionText[2]
-        label.textColor = fxTextThemeColour
         label.font = UIFont.systemFont(ofSize: descriptionFontSize)
         label.textAlignment = .left
         label.numberOfLines = 0
@@ -134,7 +127,6 @@ class DefaultBrowserOnboardingViewController: UIViewController {
     private lazy var descriptionLabel3: UILabel = {
         let label = UILabel()
         label.text = viewModel.model?.descriptionText[3]
-        label.textColor = fxTextThemeColour
         label.font = UIFont.systemFont(ofSize: descriptionFontSize)
         label.textAlignment = .left
         label.numberOfLines = 0
@@ -179,7 +171,7 @@ class DefaultBrowserOnboardingViewController: UIViewController {
     }
     
     func initialViewSetup() {
-        self.view.backgroundColor = fxBackgroundThemeColour
+        updateTheme()
         
         // Initialize
         self.view.addSubview(topImageView)
@@ -196,6 +188,9 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         
         // Constraints
         setupView()
+        
+        // Theme change notification
+        NotificationCenter.default.addObserver(self, selector: #selector(updateTheme), name: .DisplayThemeChanged, object: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -301,5 +296,21 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .goToSettingsDefaultBrowserOnboarding)
         LeanPlumClient.shared.track(event: .goToSettingsDefaultBrowserOnboarding)
     }
+  
+    // Theme
+    @objc func updateTheme() {
+        self.view.backgroundColor = fxBackgroundThemeColour
+        self.imageText.textColor = fxTextThemeColour
+        self.titleLabel.textColor = fxTextThemeColour
+        self.descriptionText.textColor = fxTextThemeColour
+        self.descriptionLabel1.textColor = fxTextThemeColour
+        self.descriptionLabel2.textColor = fxTextThemeColour
+        self.descriptionLabel3.textColor = fxTextThemeColour
+        viewModel.refreshModelImage()
+        self.topImageView.image = viewModel.model?.titleImage
+    }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 }
