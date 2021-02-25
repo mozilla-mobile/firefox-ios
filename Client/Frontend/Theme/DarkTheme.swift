@@ -134,6 +134,10 @@ class DarkDefaultBrowserCardColor: DefaultBrowserCardColor {
     override var closeButton: UIColor { return UIColor.Photon.Grey20 }
 }
 
+class DarkOnboardingColor: OnboardingColor {
+    override var backgroundColor: UIColor { return UIColor(rgb: 0x1C1C1E) }
+}
+
 class DarkTheme: NormalTheme {
     override var name: String { return BuiltinThemeName.dark.rawValue }
     override var tableView: TableViewColor { return DarkTableViewColor() }
@@ -148,4 +152,5 @@ class DarkTheme: NormalTheme {
     override var general: GeneralColor { return DarkGeneralColor() }
     override var actionMenu: ActionMenuColor { return DarkActionMenuColor() }
     override var defaultBrowserCard: DefaultBrowserCardColor { return DarkDefaultBrowserCardColor() }
+    override var onboarding: OnboardingColor { return DarkOnboardingColor() }
 }
