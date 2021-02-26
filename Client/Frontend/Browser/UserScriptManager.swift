@@ -14,8 +14,8 @@ class UserScriptManager {
 
     private let compiledUserScripts: [String : WKUserScript]
 
-    private let noImageModeUserScript = WKUserScript(source: "window.__firefox__.NoImageMode.setEnabled(true)", injectionTime: .atDocumentStart, forMainFrameOnly: true)
-    private let nightModeUserScript = WKUserScript(source: "window.__firefox__.NightMode.setEnabled(true)", injectionTime: .atDocumentStart, forMainFrameOnly: true)
+    private let noImageModeUserScript = WKUserScript.createInDefaultContentWorld(source: "window.__firefox__.NoImageMode.setEnabled(true)", injectionTime: .atDocumentStart, forMainFrameOnly: true)
+    private let nightModeUserScript = WKUserScript.createInDefaultContentWorld(source: "window.__firefox__.NightMode.setEnabled(true)", injectionTime: .atDocumentStart, forMainFrameOnly: true)
 
     private init() {
         var compiledUserScripts: [String : WKUserScript] = [:]
