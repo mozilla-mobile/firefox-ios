@@ -563,6 +563,8 @@
 		D58A202925C9D96400105D25 /* BookmarkPanel.strings in Resources */ = {isa = PBXBuildFile; fileRef = D58A202725C9D96400105D25 /* BookmarkPanel.strings */; };
 		D58A202C25C9D96400105D25 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D58A202A25C9D96400105D25 /* Localizable.strings */; };
 		D58A202F25C9D96400105D25 /* BookmarkPanelDeleteConfirm.strings in Resources */ = {isa = PBXBuildFile; fileRef = D58A202D25C9D96400105D25 /* BookmarkPanelDeleteConfirm.strings */; };
+		D59431ED25E9912900F0BA82 /* WidgetIntents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = D59431F025E9912900F0BA82 /* WidgetIntents.intentdefinition */; };
+		D59431EE25E9912900F0BA82 /* WidgetIntents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = D59431F025E9912900F0BA82 /* WidgetIntents.intentdefinition */; };
 		D59643E325C9B8E000EAB8B9 /* ClearPrivateData.strings in Resources */ = {isa = PBXBuildFile; fileRef = 58E14A8F991610DB13A9F1E1 /* ClearPrivateData.strings */; };
 		D59643E425C9B8E000EAB8B9 /* 3DTouchActions.strings in Resources */ = {isa = PBXBuildFile; fileRef = 514A4C83AE17612AF3025498 /* 3DTouchActions.strings */; };
 		D59643E525C9B8E000EAB8B9 /* AuthenticationManager.strings in Resources */ = {isa = PBXBuildFile; fileRef = 32484895B328A342AED539C8 /* AuthenticationManager.strings */; };
@@ -3254,7 +3256,7 @@
 		D58A202825C9D96400105D25 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/BookmarkPanel.strings; sourceTree = "<group>"; };
 		D58A202B25C9D96400105D25 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D58A202E25C9D96400105D25 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/BookmarkPanelDeleteConfirm.strings; sourceTree = "<group>"; };
-		D595529725D1F5590040B30B /* WidgetIntents.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = WidgetIntents.intentdefinition; sourceTree = "<group>"; };
+		D59431EF25E9912900F0BA82 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; name = Base; path = Base.lproj/WidgetIntents.intentdefinition; sourceTree = "<group>"; };
 		D59ED3CB25D1AF6A0074A720 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/BookmarkPanel.strings; sourceTree = "<group>"; };
 		D59ED3CC25D1AF6A0074A720 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D59ED3CD25D1AF6A0074A720 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/BookmarkPanelDeleteConfirm.strings; sourceTree = "<group>"; };
@@ -4066,7 +4068,7 @@
 				047F9B2D24E1FE1F00CD7DF7 /* Assets.xcassets */,
 				047F9B2F24E1FE1F00CD7DF7 /* Info.plist */,
 				D58A202A25C9D96400105D25 /* Localizable.strings */,
-				D595529725D1F5590040B30B /* WidgetIntents.intentdefinition */,
+				D59431F025E9912900F0BA82 /* WidgetIntents.intentdefinition */,
 			);
 			path = WidgetKit;
 			sourceTree = "<group>";
@@ -7043,6 +7045,7 @@
 				1DF42682251BDB3A0086386A /* FaviconFetcher.swift in Sources */,
 				1DDAD13E24F0651C007623C8 /* TopSitesWidget.swift in Sources */,
 				4392FB20252EC49D00AD3D23 /* SessionData.swift in Sources */,
+				D59431EE25E9912900F0BA82 /* WidgetIntents.intentdefinition in Sources */,
 				047F9B4224E1FF4000CD7DF7 /* ImageButtonWithLabel.swift in Sources */,
 				047F9B2C24E1FE1C00CD7DF7 /* WidgetKit.swift in Sources */,
 				1DA3CE6724EEE86C00422BB2 /* AppInfo.swift in Sources */,
@@ -7704,6 +7707,7 @@
 				E65075571E37F714006961AC /* FaviconFetcher.swift in Sources */,
 				048B4C8024A53EEB001B56E8 /* ImageButtonWithLabel.swift in Sources */,
 				D863C8F21F68BFC20058D95F /* GradientProgressBar.swift in Sources */,
+				D59431ED25E9912900F0BA82 /* WidgetIntents.intentdefinition in Sources */,
 				CAC458F1249429C20042561A /* LoginListSelectionHelper.swift in Sources */,
 				EB9A178E20E525DF00B12184 /* ThemeSettingsController.swift in Sources */,
 				23A50958253F782E008FEBD9 /* NewTabButton.swift in Sources */,
@@ -9867,6 +9871,14 @@
 				D50A700625D7191A00F57D73 /* tr */,
 			);
 			name = BookmarkPanelDeleteConfirm.strings;
+			sourceTree = "<group>";
+		};
+		D59431F025E9912900F0BA82 /* WidgetIntents.intentdefinition */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D59431EF25E9912900F0BA82 /* Base */,
+			);
+			name = WidgetIntents.intentdefinition;
 			sourceTree = "<group>";
 		};
 		F0D8481DAC1E6378ABF1565A /* ClearPrivateDataConfirm.strings */ = {

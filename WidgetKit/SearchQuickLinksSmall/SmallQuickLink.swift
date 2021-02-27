@@ -6,16 +6,18 @@
 import SwiftUI
 import WidgetKit
 
-struct IntentProvider: TimelineProvider {
-    func getSnapshot(in context: Context, completion: @escaping (QuickLinkEntry) -> Void) {
+struct IntentProvider: IntentTimelineProvider {
+    typealias Intent = QuickActionIntent
+    typealias Entry = QuickLinkEntry
+
+    func getSnapshot(for configuration: QuickActionIntent, in context: Context, completion: @escaping (QuickLinkEntry) -> Void) {
         let entry = QuickLinkEntry(date: Date(), link: .search)
         completion(entry)
     }
 
-    func getTimeline(in context: Context, completion: @escaping (Timeline<QuickLinkEntry>) -> Void) {
-        let link = QuickLink.search
-        let entries = [QuickLinkEntry(date: Date(), link: link)]
-        let timeline = Timeline(entries: entries, policy: .atEnd)
+    func getTimeline(for configuration: QuickActionIntent, in context: Context, completion: @escaping (Timeline<QuickLinkEntry>) -> Void) {
+        let entry = QuickLinkEntry(date: Date(), link: QuickLink(rawValue: configuration.actionType.rawValue)!)
+        let timeline = Timeline(entries: [entry], policy: .never)
         completion(timeline)
     }
 
@@ -30,7 +32,7 @@ struct QuickLinkEntry: TimelineEntry {
 }
 
 struct SmallQuickLinkView : View {
-    var entry: QuickLinkEntry
+    var entry: IntentProvider.Entry
 
     @ViewBuilder
     var body: some View {
@@ -44,12 +46,12 @@ struct SmallQuickLinkWidget: Widget {
     private let kind: String = "Quick Actions - Small"
 
     public var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: IntentProvider()) { entry in
+        IntentConfiguration(kind: kind, intent: QuickActionIntent.self, provider: IntentProvider()) { entry in
             SmallQuickLinkView(entry: entry)
         }
         .supportedFamilies([.systemSmall])
-        .configurationDisplayName(String.QuickActionsGalleryTitlev2)
-        .description(String.SearchInFirefoxTitle)
+        .configurationDisplayName(String.QuickActionsGalleryTitle)
+        .description(String.QuickActionGalleryDescription)
     }
 }
 

@@ -1,0 +1,17 @@
+2GqvPe=Quick Actions drop down menu item for Go to Copied Link when widget enters edit mode and drop down menu expands
+PzSrmZ-2GqvPe=Accessibility label to confirm the go to copied link selection
+PzSrmZ-eHmH1H=Accessibility label to confirm the Clear Private Tabs selection
+PzSrmZ-scEmjs=Accessibility label to confirm the New Private Search selection
+PzSrmZ-xRJbBP=Accessibility label to confirm the New Search selection
+ctDNmu=Description of the collection of widgets
+eHmH1H=Quick Actions drop down menu item for lear Private Tabs when widget enters edit mode and drop down menu expands
+eV8mOT=The description of a customizable section of the widget
+eqyNJg=Title of the quick actions widgets
+fi3W24-2GqvPe=Label showing how many widgets match ‘Go to Copied Link’. ${count} is a placeholder fo the number of widgets.
+fi3W24-eHmH1H=Label showing how many widgets match ‘Clear Private Tabs’. ${count} is a placeholder fo the number of widgets.
+fi3W24-scEmjs=Label showing how many widgets match ‘New Private Search’. ${count} is a placeholder fo the number of widgets.
+fi3W24-xRJbBP=Label showing how many widgets match ‘New Search’. ${count} is a placeholder fo the number of widgets.
+scEmjs=Quick Actions drop down menu item for new private search when widget enters edit mode and drop down menu expands
+w9jdPK=Quick Actions left label text for dropdown menu when widget enters edit mode
+xRJbBP=Quick Actions drop down menu item for new search when widget enters edit mode and drop down menu expands
+
