@@ -191,12 +191,12 @@ extension KIFUITestActor {
         }
         var stepResult = KIFTestStepResult.wait
 
-        webView.evaluateJavaScript("typeof KIFHelper") { result, _ in
+        webView.evaluateJavascriptInDefaultContentWorld("typeof KIFHelper") { result, _ in
             if result as! String == "undefined" {
                 let bundle = Bundle(for: BrowserTests.self)
                 let path = bundle.path(forResource: "KIFHelper", ofType: "js")!
                 let source = try! String(contentsOfFile: path, encoding: .utf8)
-                webView.evaluateJavaScript(source, completionHandler: nil)
+                webView.evaluateJavascriptInDefaultContentWorld(source)
             }
             stepResult = KIFTestStepResult.success
         }
