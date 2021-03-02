@@ -1568,6 +1568,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBar(_ urlBar: URLBarView, didEnterText text: String) {
+        urlBar.updateSearchEngineImage()
         if text.isEmpty {
             hideSearchController()
         } else {
@@ -1632,6 +1633,7 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidEnterOverlayMode(_ urlBar: URLBarView) {
         libraryDrawerViewController?.close()
+        urlBar.updateSearchEngineImage()
         guard let profile = profile as? BrowserProfile else {
             return
         }
@@ -1867,11 +1869,16 @@ extension BrowserViewController: SearchViewControllerDelegate {
     }
 
     func presentSearchSettingsController() {
-        let ThemedNavigationController = SearchSettingsTableViewController()
-        ThemedNavigationController.model = self.profile.searchEngines
-        ThemedNavigationController.profile = self.profile
-        let navController = ModalSettingsNavigationController(rootViewController: ThemedNavigationController)
-
+        let searchSettingsTableViewController = SearchSettingsTableViewController()
+        searchSettingsTableViewController.model = self.profile.searchEngines
+        searchSettingsTableViewController.profile = self.profile
+        // Update saerch icon when the searchengine changes
+        searchSettingsTableViewController.updateSearchIcon = {
+            self.urlBar.updateSearchEngineImage()
+            self.searchController?.reloadSearchEngines()
+            self.searchController?.reloadData()
+        }
+        let navController = ModalSettingsNavigationController(rootViewController: searchSettingsTableViewController)
         self.present(navController, animated: true, completion: nil)
     }
 
