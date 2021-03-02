@@ -10,7 +10,7 @@ CARTFILE = 'Cartfile'
 
 def available_tags():
     try:
-        resp = requests.get(APPLICATION_SERVICES_TAGS_INFO, headers={'Authorization': 'Token {}'.format(secret.GITHUB_TOKEN)})
+        resp = requests.get(APPLICATION_SERVICES_TAGS_INFO)
         resp_json = resp.json()
         print (resp_json[0])
         return resp_json[0]
@@ -35,11 +35,12 @@ def read_cartfile_tag_version():
 
             # Find the line that defines the a-s version
             if 'mozilla/application-services' in line:
-                result = line.find("v", 32)
+                version_found = line.find('"v')
                 current_tag_version = ''
-
-                # Starting position for the version
-                for i in range(44, 51):
+                # version format: vXX.Y.Z
+                version_starts = version_found +1
+                version_ends = version_starts +7
+                for i in range(version_starts, version_ends):
                     current_tag_version+=line[i]
                 return(current_tag_version)
 
