@@ -1862,10 +1862,6 @@ extension BrowserViewController: SearchViewControllerDelegate {
         finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: tab)
     }
 
-    func searchViewController(_ searchViewController: SearchViewController, didLongPressSuggestion suggestion: String) {
-        self.urlBar.setLocation(suggestion, search: true)
-    }
-
     func presentSearchSettingsController() {
         let ThemedNavigationController = SearchSettingsTableViewController()
         ThemedNavigationController.model = self.profile.searchEngines
