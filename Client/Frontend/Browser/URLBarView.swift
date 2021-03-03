@@ -18,7 +18,7 @@ private struct URLBarViewUX {
     static let TextFieldBorderWidth: CGFloat = 0
     static let TextFieldBorderWidthSelected: CGFloat = 4
     static let ProgressBarHeight: CGFloat = 3
-
+    static let SearchIconImageWidth: CGFloat = 30
     static let TabsButtonRotationOffset: CGFloat = 1.5
     static let TabsButtonHeight: CGFloat = 18.0
     static let ToolbarButtonInsets = UIEdgeInsets(equalInset: Padding)
@@ -65,7 +65,7 @@ class URLBarView: UIView {
             }
         }
     }
-
+    var searchEngines: SearchEngines?
     weak var delegate: URLBarDelegate?
     weak var tabToolbarDelegate: TabToolbarDelegate?
     var helper: TabToolbarHelper?
@@ -152,10 +152,18 @@ class URLBarView: UIView {
         return button
     }()
 
+    fileprivate lazy var searchIconImageView: UIImageView = {
+        let searchIconImageView = UIImageView()
+        searchIconImageView.isAccessibilityElement = true
+        searchIconImageView.contentMode = .scaleAspectFit
+        searchIconImageView.layer.cornerRadius = 5
+        searchIconImageView.clipsToBounds = true
+        return searchIconImageView
+    }()
+    
     var appMenuButton = ToolbarButton()
     var libraryButton = ToolbarButton()
     var addNewTabButton = ToolbarButton()
-
     var forwardButton = ToolbarButton()
     var multiStateButton = ToolbarButton()
 
@@ -190,6 +198,7 @@ class URLBarView: UIView {
 
     init(profile: Profile) {
         self.profile = profile
+        self.searchEngines = SearchEngines(prefs: profile.prefs, files: profile.files)
         super.init(frame: CGRect())
         commonInit()
     }
@@ -198,12 +207,17 @@ class URLBarView: UIView {
         super.init(coder: aDecoder)
         commonInit()
     }
+    func updateSearchEngineImage() {
+        guard let profile = profile else { return }
+        self.searchIconImageView.image = profile.searchEngines.defaultEngine.image
+    }
 
     fileprivate func commonInit() {
         locationContainer.addSubview(locationView)
-
+        updateSearchEngineImage()
+        
         [scrollToTopButton, line, tabsButton, progressBar, cancelButton, showQRScannerButton,
-         libraryButton, appMenuButton, addNewTabButton, forwardButton, backButton, multiStateButton, locationContainer].forEach {
+         libraryButton, appMenuButton, addNewTabButton, forwardButton, backButton, multiStateButton, locationContainer, searchIconImageView].forEach {
             addSubview($0)
         }
 
@@ -257,6 +271,14 @@ class URLBarView: UIView {
             make.centerY.equalTo(self)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
+        
+        searchIconImageView.snp.remakeConstraints { make in
+            let heightMin = URLBarViewUX.LocationHeight + (URLBarViewUX.TextFieldBorderWidthSelected * 2)
+            make.height.greaterThanOrEqualTo(heightMin)
+            make.centerY.equalTo(self)
+            make.leading.equalTo(self.cancelButton.snp.trailing).offset(URLBarViewUX.LocationLeftPadding)
+            make.width.equalTo(URLBarViewUX.SearchIconImageWidth)
+        }
 
         multiStateButton.snp.makeConstraints { make in
             make.leading.equalTo(self.forwardButton.snp.trailing)
@@ -302,6 +324,7 @@ class URLBarView: UIView {
     override func updateConstraints() {
         super.updateConstraints()
         if inOverlayMode {
+            searchIconImageView.alpha = 1
             // In overlay mode, we always show the location view full width
             self.locationContainer.layer.borderWidth = URLBarViewUX.TextFieldBorderWidthSelected
             self.locationContainer.snp.remakeConstraints { make in
@@ -312,12 +335,14 @@ class URLBarView: UIView {
                 make.centerY.equalTo(self)
             }
             self.locationView.snp.remakeConstraints { make in
-                make.edges.equalTo(self.locationContainer).inset(UIEdgeInsets(equalInset: URLBarViewUX.TextFieldBorderWidthSelected))
+                make.top.bottom.right.equalTo(self.locationContainer).inset(UIEdgeInsets(equalInset: URLBarViewUX.TextFieldBorderWidthSelected))
+                make.leading.equalTo(self.searchIconImageView.snp.trailing)
             }
             self.locationTextField?.snp.remakeConstraints { make in
                 make.edges.equalTo(self.locationView).inset(UIEdgeInsets(top: 0, left: URLBarViewUX.LocationLeftPadding, bottom: 0, right: URLBarViewUX.LocationLeftPadding))
             }
         } else {
+            searchIconImageView.alpha = 0
             self.locationContainer.snp.remakeConstraints { make in
                 if self.toolbarIsShowing {
                     // If we are showing a toolbar, show the text field next to the forward button
@@ -368,9 +393,6 @@ class URLBarView: UIView {
         locationTextField.accessibilityLabel = .URLBarLocationAccessibilityLabel
         locationTextField.attributedPlaceholder = self.locationView.placeholder
         locationContainer.addSubview(locationTextField)
-        locationTextField.snp.remakeConstraints { make in
-            make.edges.equalTo(self.locationView)
-        }
         // Disable dragging urls on iPhones because it conflicts with editing the text
         if UIDevice.current.userInterfaceIdiom != .pad {
             locationTextField.textDragInteraction?.isEnabled = false
@@ -501,6 +523,7 @@ class URLBarView: UIView {
     func prepareOverlayAnimation() {
         // Make sure everything is showing during the transition (we'll hide it afterwards).
         bringSubviewToFront(self.locationContainer)
+        bringSubviewToFront(self.searchIconImageView)
         cancelButton.isHidden = false
         showQRScannerButton.isHidden = false
         progressBar.isHidden = false

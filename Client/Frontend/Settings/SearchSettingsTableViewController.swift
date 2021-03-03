@@ -26,6 +26,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
     var profile: Profile?
     var tabManager: TabManager?
 
+    var updateSearchIcon: (() -> Void)?
     fileprivate var isEditable: Bool {
         // If the default engine is a custom one, make sure we have more than one since we can't edit the default.
         // Otherwise, enable editing if we have at least one custom engine.
@@ -336,6 +337,7 @@ extension SearchSettingsTableViewController: SearchEnginePickerDelegate {
     func searchEnginePicker(_ searchEnginePicker: SearchEnginePicker?, didSelectSearchEngine searchEngine: OpenSearchEngine?) {
         if let engine = searchEngine {
             model.defaultEngine = engine
+            updateSearchIcon?()
             self.tableView.reloadData()
             TelemetryWrapper.recordEvent(category: .action, method: .change, object: .setting, extras: ["pref": "defaultSearchEngine", "to": engine.engineID ?? "custom"])
         }
