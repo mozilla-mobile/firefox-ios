@@ -27,7 +27,7 @@ class TabTrayViewController: UIViewController {
         return label
     }()
     lazy var navigationMenu: UISegmentedControl = {
-        let navigationMenu = UISegmentedControl(items: [UIImage(named: "nav-tabcounter")!.overlayWith(image: countLabel), UIImage(named: "smallPrivateMask")!])
+        let navigationMenu = UISegmentedControl(items: [UIImage(named: "nav-tabcounter")!.overlayWith(image: countLabel), UIImage(named: "smallPrivateMask")!, UIImage(named: "synced_devices")!])
         navigationMenu.accessibilityIdentifier = "navBarTabTray"
         navigationMenu.selectedSegmentIndex = tabManager.selectedTab?.isPrivate ?? false ? 1 : 0
         navigationMenu.addTarget(self, action: #selector(panelChanged), for: .valueChanged)
@@ -104,6 +104,12 @@ class TabTrayViewController: UIViewController {
                 showPanel(tabTrayView)
             }
             tabTrayView.didTogglePrivateMode(true)
+        case 2:
+            if children.first == tabTrayView {
+                hideCurrentPanel()
+                let syncedTabsController = RemoteTabsPanel(profile: self.profile)
+                showPanel(syncedTabsController)
+            }
         default:
             return
         }
