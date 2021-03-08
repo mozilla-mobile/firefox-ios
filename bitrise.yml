@@ -708,7 +708,7 @@ workflows:
       in master
     meta:
       bitrise.io:
-        stack: osx-xcode-12.3.x
+        stack: osx-xcode-12.4.x
     after_run:
     - RunSmokeXCUITests
   RunUITests:
@@ -1252,30 +1252,6 @@ workflows:
             set -x
 
 
-            # Import only the shipping locales (from shipping_locales.txt) on
-            Release
-
-            # builds. Import all locales on Beta and Fennec_Enterprise, except
-            for pull
-
-            # requests.
-
-            git clone https://github.com/boek/ios-l10n-scripts.git -b new_tool || exit 1
-
-            git clone --depth 1 https://github.com/mozilla-l10n/firefoxios-l10n firefoxios-l10n || exit 1
-
-            ./ios-l10n-scripts/ios-l10n-tools --project-path Client.xcodeproj --l10n-project-path ./firefoxios-l10n --import
-        title: Pull in L10n
-    - script@1:
-        inputs:
-        - content: >-
-            #!/usr/bin/env bash
-
-            set -e
-
-            set -x
-
-
             cd Client.xcodeproj
 
             sed -i '' 's/"Fennec Development"/"Bitrise Firefox iOS Dev"/'
@@ -1323,7 +1299,7 @@ workflows:
         inputs:
         - export_uitest_artifacts: 'true'
         - scheme: Fennec_Enterprise_XCUITests
-        - simulator_os_version: '14.0'
+        - simulator_os_version: latest
         - simulator_device: iPhone 11
     - deploy-to-bitrise-io@1.10: {}
     - cache-push@2.2: {}
@@ -1335,7 +1311,7 @@ workflows:
       in master
     meta:
       bitrise.io:
-        stack: osx-xcode-12.3.x
+        stack: osx-xcode-12.4.x
   TEMP:
     steps:
     - activate-ssh-key@4.0:
@@ -1647,30 +1623,6 @@ workflows:
         - content: >-
             #!/usr/bin/env bash
 
-            set -e
-
-            set -x
-
-
-            # Import only the shipping locales (from shipping_locales.txt) on
-            Release
-
-            # builds. Import all locales on Beta and Fennec_Enterprise, except
-            for pull
-
-            # requests.
-
-            git clone https://github.com/boek/ios-l10n-scripts.git -b new_tool || exit 1
-
-            git clone --depth 1 https://github.com/mozilla-l10n/firefoxios-l10n firefoxios-l10n || exit 1
-
-            ./ios-l10n-scripts/ios-l10n-tools --project-path Client.xcodeproj --l10n-project-path ./firefoxios-l10n --import
-        title: Pull in L10N
-    - script@1:
-        inputs:
-        - content: >-
-            #!/usr/bin/env bash
-
             # fail if any commands fails
 
             set -e
@@ -1738,7 +1690,7 @@ workflows:
       in master
     meta:
       bitrise.io:
-        stack: osx-xcode-12.3.x
+        stack: osx-xcode-12.4.x
     after_run:
     - RunUITests
     - RunSmokeXCUITests
@@ -1913,7 +1865,7 @@ workflows:
         inputs:
         - export_uitest_artifacts: 'true'
         - scheme: L10nSnapshotTests
-        - simulator_os_version: '14.0'
+        - simulator_os_version: latest
         - simulator_device: iPhone 11
     - deploy-to-bitrise-io@1.10: {}
     - cache-push@2.2: {}
@@ -2361,7 +2313,7 @@ trigger_map:
 - push_branch: v32.x
   workflow: xcode12-release-and-beta-nocache
 - pull_request_target_branch: main
-  workflow: CommonBuild-UItest-XCUISmoketest
+  workflow: RunUnitTests
 - pull_request_source_branch: '*'
   pull_request_target_branch: chronological-tabs
   workflow: RunUnitTests
