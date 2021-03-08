@@ -5,24 +5,15 @@ from pprint import pprint
 from enum import Enum
 
 
-APPLICATION_SERVICES_TAGS_INFO = 'https://api.github.com/repos/mozilla/application-services/tags'
+GITHUB_REPO = "mozilla/application-services"
 CARTFILE = 'Cartfile'
 
-def available_tags():
-    try:
-        resp = requests.get(APPLICATION_SERVICES_TAGS_INFO)
-        resp_json = resp.json()
-        print (resp_json[0])
-        return resp_json[0]
-    except HTTPError as http_error:
-        print('An HTTP error has occurred: {http_error}')
-    except Exception as err:
-        print('An exception has occurred: {err}')
+def get_latest_as_version():
+    g = Github(github_access_token)
+    repo = g.get_repo(GITHUB_REPO)
 
-def latest_version():
-    tags = available_tags()
-    latest_tag_version = tags['name']
-    return latest_tag_version
+    latest_tag = repo.get_tags()[0].name
+    return (str(latest_tag))
 
 def read_cartfile_tag_version():
     # Read Cartfile to find the current a-s version
@@ -73,7 +64,11 @@ if __name__ == '__main__':
     3. if same version exit, if not, continue 
     4. update both cartfile and cartfile.resolved
     '''
-    as_repo_tag= latest_version()
+    github_access_token = os.getenv("GITHUB_TOKEN")
+    if not github_access_token:
+        print("No GITHUB_TOKEN set. Exiting.")
+
+    as_repo_tag= get_latest_as_version()
     current_tag = read_cartfile_tag_version()
     if compare_versions(current_tag, as_repo_tag):
         update_cartfile_tag_version(current_tag, as_repo_tag, CARTFILE)
