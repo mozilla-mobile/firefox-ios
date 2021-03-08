@@ -27,9 +27,6 @@ private extension TrayToBrowserAnimator {
         let displayedTabs = selectedTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         guard let expandFromIndex = displayedTabs.firstIndex(of: selectedTab) else { return }
 
-        //Disable toolbar until animation completes
-        tabTray.toolbar.isUserInteractionEnabled = false
-
         bvc.view.frame = transitionContext.finalFrame(for: bvc)
 
         // Hide browser components
@@ -74,7 +71,6 @@ private extension TrayToBrowserAnimator {
             container.layoutIfNeeded()
             cell.title.transform = CGAffineTransform(translationX: 0, y: -cell.title.frame.height)
             bvc.tabTrayDidDismiss(tabTray)
-            tabTray.toolbar.transform = CGAffineTransform(translationX: 0, y: UIConstants.BottomToolbarHeight)
             tabCollectionViewSnapshot.transform = CGAffineTransform(scaleX: 0.9, y: 0.9) 
         }
 
@@ -93,8 +89,6 @@ private extension TrayToBrowserAnimator {
             UIApplication.shared.windows.first?.backgroundColor = UIColor.theme.browser.background
             tabTray.navigationController?.setNeedsStatusBarAppearanceUpdate()
             tabCollectionViewSnapshot.alpha = 0
-            tabTray.statusBarBG.alpha = 0
-            tabTray.searchBarHolder.alpha = 0
         }, completion: { finished in
             // Remove any of the views we used for the animation
             cell.removeFromSuperview()
@@ -105,7 +99,6 @@ private extension TrayToBrowserAnimator {
             bvc.webViewContainerBackdrop.isHidden = false
             bvc.firefoxHomeViewController?.view.isHidden = false
             bvc.urlBar.isTransitioning = false
-            tabTray.toolbar.isUserInteractionEnabled = true
             transitionContext.completeTransition(true)
         })
     }
@@ -134,9 +127,6 @@ private extension BrowserToTrayAnimator {
         let displayedTabs = selectedTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         guard let scrollToIndex = displayedTabs.firstIndex(of: selectedTab) else { return }
 
-        //Disable toolbar until animation completes
-        tabTray.toolbar.isUserInteractionEnabled = false
-
         tabTray.view.frame = transitionContext.finalFrame(for: tabTray)
 
         // Insert tab tray below the browser and force a layout so the collection view can get it's frame right
@@ -156,7 +146,6 @@ private extension BrowserToTrayAnimator {
         tabCollectionViewSnapshot.frame = tabTray.collectionView.frame
         tabCollectionViewSnapshot.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
         tabCollectionViewSnapshot.alpha = 0
-        tabTray.view.insertSubview(tabCollectionViewSnapshot, belowSubview: tabTray.toolbar)
 
         if let toast = bvc.clipboardBarDisplayHandler?.clipboardToast {
             toast.removeFromSuperview()
@@ -173,13 +162,6 @@ private extension BrowserToTrayAnimator {
         toggleWebViewVisibility(false, usingTabManager: bvc.tabManager)
         bvc.urlBar.isTransitioning = true
 
-        // On iPhone, fading these in produces a darkening at the top of the screen, and then
-        // it brightens back to full white as they fade in. Setting these to not fade in produces a better effect.
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            tabTray.statusBarBG.alpha = 1
-            tabTray.searchBarHolder.alpha = 1
-        }
-
         // Since we are hiding the collection view and the snapshot API takes the snapshot after the next screen update,
         // the screenshot ends up being blank unless we set the collection view hidden after the screen update happens.
         // To work around this, we dispatch the setting of collection view to hidden after the screen update is completed.
@@ -188,7 +170,6 @@ private extension BrowserToTrayAnimator {
             tabTray.collectionView.isHidden = true
             let finalFrame = calculateCollapsedCellFrameUsingCollectionView(tabTray.collectionView,
                 atIndex: scrollToIndex)
-            tabTray.toolbar.transform = CGAffineTransform(translationX: 0, y: UIConstants.BottomToolbarHeight)
             
             let frameResizeClosure = {
                 cell.frame = finalFrame
@@ -214,10 +195,6 @@ private extension BrowserToTrayAnimator {
                 bvc.urlBar.updateAlphaForSubviews(0)
                 bvc.footer.alpha = 0
                 tabCollectionViewSnapshot.alpha = 1
-
-                tabTray.statusBarBG.alpha = 1
-                tabTray.searchBarHolder.alpha = 1
-                tabTray.toolbar.transform = .identity
                 
                 if !UIAccessibility.isReduceMotionEnabled {
                     frameResizeClosure()
@@ -235,7 +212,6 @@ private extension BrowserToTrayAnimator {
 
                 resetTransformsForViews([bvc.header, bvc.readerModeBar, bvc.footer])
                 bvc.urlBar.isTransitioning = false
-                tabTray.toolbar.isUserInteractionEnabled = true
                 transitionContext.completeTransition(true)
             })
         }
