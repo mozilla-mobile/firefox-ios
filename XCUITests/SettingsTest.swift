@@ -33,12 +33,14 @@ class SettingsTest: BaseTestCase {
         // A default browser card should be available on the home screen
         if #available(iOS 14, *) {
             waitForExistence(app.staticTexts["Set links from websites, emails, and Messages to open automatically in Firefox."], timeout: 5)
+            waitForExistence(app.buttons["Learn More"], timeout: 5)
+            app.buttons["Learn More"].tap()
+
             waitForExistence(app.buttons["Go to Settings"], timeout: 5)
             app.buttons["Go to Settings"].tap()
-
             // Tap on "Default Browser App" and set the browser as a default (Safari is listed first)
-            waitForExistence(iOS_Settings.tables.buttons.element(boundBy: 1), timeout: 5)
-            iOS_Settings.tables.buttons.element(boundBy: 1).tap()
+            waitForExistence(iOS_Settings.tables.cells.element(boundBy: 1), timeout: 5)
+            iOS_Settings.tables.cells.element(boundBy: 2).tap()
             iOS_Settings.tables.staticTexts.element(boundBy: 1).tap()
 
             // Return to the browser
