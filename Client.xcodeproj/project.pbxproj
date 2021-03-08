@@ -4137,6 +4137,7 @@
 				DA3A4FE8254A781A00C4A9C9 /* TabTableViewHeader.swift */,
 				43E9BDFA255E0904005BCB91 /* TabMoreMenuHeader.swift */,
 				DA52E1D925F5961F0092204C /* TabTrayViewController.swift */,
+				2FDE87FD1ABB3817005317B1 /* RemoteTabsPanel.swift */,
 			);
 			path = Tabs;
 			sourceTree = "<group>";
@@ -4979,7 +4980,6 @@
 				274A36D1239EBAD600A21587 /* LibraryViewController */,
 				59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */,
 				745DAB2F1CDAAFAA00D44181 /* RecentlyClosedTabsPanel.swift */,
-				2FDE87FD1ABB3817005317B1 /* RemoteTabsPanel.swift */,
 				274A36C8239EB94000A21587 /* LibraryPanelButton.swift */,
 				274A36CB239EB99400A21587 /* LibraryPanelContextMenu.swift */,
 			);
