@@ -139,6 +139,7 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         button.layer.cornerRadius = UpdateViewControllerUX.StartBrowsingButton.cornerRadius
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UpdateViewControllerUX.StartBrowsingButton.colour
+        button.accessibilityIdentifier = "DefaultBrowserCard.goToSettingsButton"
         return button
     }()
     
