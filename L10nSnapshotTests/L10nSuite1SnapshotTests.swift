@@ -153,4 +153,13 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         app.tables.cells.staticTexts.firstMatch.swipeUp()
         snapshot("TrackingProtectionStrictMoreInfo-02")
     }
+
+    func testSetDefaultBrowser() {
+        if #available(iOS 14, *) {
+            waitForExistence(app.buttons["Home.learnMoreDefaultBrowserbutton"], timeout: 5)
+            app.buttons["Home.learnMoreDefaultBrowserbutton"].tap()
+            waitForExistence(app.buttons["DefaultBrowserCard.goToSettingsButton"], timeout: 5)
+            snapshot("HomeDefaultBrowserLearnMore")
+        }
+    }
 }
