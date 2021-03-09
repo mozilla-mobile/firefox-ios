@@ -34,6 +34,7 @@ class DefaultBrowserCard: UIView {
         button.titleLabel?.textAlignment = .center
         button.layer.cornerRadius = 8
         button.layer.masksToBounds = true
+        button.accessibilityIdentifier = "Home.learnMoreDefaultBrowserbutton"
         return button
     }()
     lazy var image: UIImageView = {
