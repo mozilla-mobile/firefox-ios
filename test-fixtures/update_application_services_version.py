@@ -56,7 +56,7 @@ def compare_versions(current_tag_version, repo_tag_version):
         print("No new versions, skip")
         return False
 
-if __name__ == '__main__':
+def main():
     '''
     STEPS
     1. check Application-Services repo for latest tagged version
@@ -73,3 +73,6 @@ if __name__ == '__main__':
     if compare_versions(current_tag, as_repo_tag):
         update_cartfile_tag_version(current_tag, as_repo_tag, CARTFILE)
         update_cartfile_tag_version(current_tag, as_repo_tag, "Cartfile.resolved")
+
+if __name__ == '__main__':
+    main()
