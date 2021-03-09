@@ -75,3 +75,8 @@ Contributing
 -----------------
 
 Want to contribute to this repository? Check out [Contributing Guidelines](https://github.com/mozilla-mobile/firefox-ios/blob/main/CONTRIBUTING.md)
+
+License
+-----------------
+
+Firefox for iOS is published under [MPL-2.0 License](https://github.com/mozilla-mobile/firefox-ios/blob/main/LICENSE). Do read the license before Contributing.
