@@ -73,7 +73,7 @@
 	<key>INIntentDefinitionNamespace</key>
 	<string>5W2MbK</string>
 	<key>INIntentDefinitionSystemVersion</key>
-	<string>20E5186d</string>
+	<string>20E5196f</string>
 	<key>INIntentDefinitionToolsBuildVersion</key>
 	<string>12D4e</string>
 	<key>INIntentDefinitionToolsVersion</key>
@@ -84,7 +84,7 @@
 			<key>INIntentCategory</key>
 			<string>information</string>
 			<key>INIntentDescription</key>
-			<string>Quick access to various Firefox acions</string>
+			<string>Quick access to various Firefox actions</string>
 			<key>INIntentDescriptionID</key>
 			<string>ctDNmu</string>
 			<key>INIntentEligibleForWidgets</key>
