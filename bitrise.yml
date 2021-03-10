@@ -1787,37 +1787,6 @@ workflows:
             set -x
 
 
-            # Import only the shipping locales (from shipping_locales.txt) on
-            Release
-
-            # builds. Import all locales on Beta and Fennec_Enterprise, except
-            for pull
-
-            # requests.
-
-            git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git ||
-            exit 1
-
-            pip install --user virtualenv
-
-            cd /usr/local/bin
-
-            ln -s /Users/vagrant/Library/Python/3.9/bin/virtualenv .
-
-            cd -
-
-            ./ios-l10n-scripts/import-locales-firefox.sh --release
-        title: Pull in L10n
-    - script@1:
-        inputs:
-        - content: >-
-            #!/usr/bin/env bash
-
-            set -e
-
-            set -x
-
-
             cd Client.xcodeproj
 
             sed -i '' 's/"Fennec Development"/"Bitrise Firefox iOS Dev"/'
@@ -1875,6 +1844,9 @@ workflows:
     description: >-
       This Workflow is to run tests (currently SmokeTest) when there is a merge
       in master
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.4.x
   beta:
     steps:
     - activate-ssh-key@4.0:
@@ -2189,33 +2161,6 @@ workflows:
             # this script to build iOS App
 
             cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
-    - script@1:
-        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
-        inputs:
-        - content: >2-
-
-            #!/usr/bin/env bash
-
-            set -e
-
-            set -x
-
-
-            # Import only the shipping locales (from shipping_locales.txt) on
-            Release
-
-            # builds. Import all locales on Beta and Fennec_Enterprise, except
-            for pull
-
-            # requests.
-
-            git clone https://github.com/boek/ios-l10n-scripts.git -b new_tool || exit 1
-
-            git clone --depth 1 https://github.com/mozilla-l10n/firefoxios-l10n firefoxios-l10n || exit 1
-
-            ./ios-l10n-scripts/ios-l10n-tools --project-path Client.xcodeproj --l10n-project-path ./firefoxios-l10n --import
-
-        title: Pull in L10N
     - script@1:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
         inputs:
