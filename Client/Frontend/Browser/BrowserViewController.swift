@@ -1804,6 +1804,7 @@ extension BrowserViewController {
     
     // Default browser onboarding
     func presentDBOnboardingViewController(_ force: Bool = false) {
+        guard #available(iOS 14.0, *) else { return }
         let shouldShow = DefaultBrowserOnboardingViewModel.shouldShowDefaultBrowserOnboarding(userPrefs: profile.prefs)
         guard force || shouldShow else {
             return
