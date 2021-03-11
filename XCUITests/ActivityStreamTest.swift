@@ -177,6 +177,14 @@ class ActivityStreamTest: BaseTestCase {
     }
 
     func testTopSitesOpenInNewTab() {
+        // Temporary fix until that onboarding is removed from debug builds
+        sleep(1)
+        if #available(iOS 14, *) {
+            if (app.buttons["DefaultBrowserCard.goToSettingsButton"].exists) {
+                waitForExistence(app.buttons["DefaultBrowserCard.goToSettingsButton"], timeout: 5)
+                app.buttons["close large"].tap()
+            }
+        }
         waitForExistence(app.collectionViews.cells["TopSitesCell"], timeout: 5)
         waitForExistence(TopSiteCellgroup.cells["apple"])
         TopSiteCellgroup.cells["apple"].press(forDuration: 1)
