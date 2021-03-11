@@ -177,7 +177,7 @@ class ActivityStreamTest: BaseTestCase {
     }
 
     func testTopSitesOpenInNewTab() {
-        navigator.goto(HomePanelsScreen)
+        waitForExistence(app.cells["TopSitesCell"].cells.element(boundBy: 3), timeout: 5)
         waitForExistence(TopSiteCellgroup.cells["apple"])
         TopSiteCellgroup.cells["apple"].press(forDuration: 1)
         app.tables["Context Menu"].cells["Open in New Tab"].tap()
