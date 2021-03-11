@@ -1,7 +1,7 @@
 name: Create a PR to build the app using newest a-s version available
 on:
   schedule:
-    - cron: '* 9 * * *'
+    - cron: '* 15 * * *'
 
 jobs:
   build:
