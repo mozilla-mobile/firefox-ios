@@ -8,6 +8,7 @@ from github import Github
 
 GITHUB_REPO = "mozilla/application-services"
 CARTFILE = 'Cartfile'
+github_access_token = os.getenv("GITHUB_TOKEN")
 
 def get_latest_as_version():
     g = Github(github_access_token)
