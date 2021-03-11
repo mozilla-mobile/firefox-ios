@@ -3,6 +3,7 @@ import requests
 import datetime
 from pprint import pprint
 from enum import Enum
+from github import Github
 
 
 GITHUB_REPO = "mozilla/application-services"
