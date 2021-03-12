@@ -105,6 +105,7 @@ class BrowserViewController: UIViewController {
 
     fileprivate var keyboardState: KeyboardState?
     var hasTriedToPresentETPAlready = false
+    var hasTriedToPresentDBCardAlready = false
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
 
@@ -2127,6 +2128,8 @@ extension BrowserViewController {
     // Default browser onboarding
     func presentDBOnboardingViewController(_ force: Bool = false) {
         guard #available(iOS 14.0, *) else { return }
+        guard !hasTriedToPresentDBCardAlready || force else { return }
+        hasTriedToPresentDBCardAlready = true
         let shouldShow = DefaultBrowserOnboardingViewModel.shouldShowDefaultBrowserOnboarding(userPrefs: profile.prefs)
         guard force || shouldShow else {
             return
