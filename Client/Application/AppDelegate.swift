@@ -226,9 +226,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         _ = ChronTabsUserResearch()
         // Leanplum setup
 
-        if let profile = self.profile, LeanPlumClient.shouldEnable(profile: profile) {
-            LeanPlumClient.shared.setup(profile: profile)
-            LeanPlumClient.shared.set(enabled: true)
+        if let profile = self.profile {
+            // Leanplum setup
+            if LeanPlumClient.shouldEnable(profile: profile) {
+                LeanPlumClient.shared.setup(profile: profile)
+                LeanPlumClient.shared.set(enabled: true)
+            }
+            
+            let persistedCurrentVersion = InstallType.persistedCurrentVersion()
+            let introScreen = profile.prefs.intForKey(PrefsKeys.IntroSeen)
+            // upgrade install - Intro screen shown & persisted current version does not match
+            if introScreen != nil && persistedCurrentVersion != AppInfo.appVersion {
+                InstallType.set(type: .upgrade)
+                InstallType.updateCurrentVersion(version: AppInfo.appVersion)
+            }
+            
+            // We need to check if the app is a clean install to use for
+            // preventing the What's New URL from appearing.
+            if introScreen == nil {
+                // fresh install - Intro screen not yet shown
+                InstallType.set(type: .fresh)
+                InstallType.updateCurrentVersion(version: AppInfo.appVersion)
+                // Profile and leanplum setup
+                profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
+                LeanPlumClient.shared.track(event: .firstRun)
+            } else if profile.prefs.boolForKey(PrefsKeys.KeySecondRun) == nil {
+                profile.prefs.setBool(true, forKey: PrefsKeys.KeySecondRun)
+                LeanPlumClient.shared.track(event: .secondRun)
+            }
         }
 
         if #available(iOS 13.0, *) {

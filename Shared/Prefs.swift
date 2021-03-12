@@ -35,6 +35,9 @@ public struct PrefsKeys {
     public static let GoogleTopSiteAddedKey = "googleTopSiteAddedKey"
     public static let GoogleTopSiteHideKey = "googleTopSiteHideKey"
     public static let SessionCount = "sessionCount"
+    public static let InstallType = "InstallType"
+    public static let KeyCurrentInstallVersion = "KeyCurrentInstallVersion"
+    public static let KeySecondRun = "SecondRun"
     
     //Activity Stream
     public static let KeyTopSitesCacheIsValid = "topSitesCacheIsValid"

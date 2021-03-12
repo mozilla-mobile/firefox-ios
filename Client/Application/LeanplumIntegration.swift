@@ -234,18 +234,6 @@ class LeanPlumClient {
             // According to the doc all variables should be synced when lp start finishes
             // Relying on this fact and sending the updated AB test variable
             self.finishedStartingLeanplum?()
-            // We need to check if the app is a clean install to use for
-            // preventing the What's New URL from appearing.
-            if self.prefs?.intForKey(PrefsKeys.IntroSeen) == nil {
-                self.prefs?.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
-                self.track(event: .firstRun)
-                self.lpState = .started(startedState: .firstRun)
-            } else if self.prefs?.boolForKey("SecondRun") == nil {
-                self.prefs?.setBool(true, forKey: "SecondRun")
-                self.track(event: .secondRun)
-                self.lpState = .started(startedState: .secondRun)
-            }
-
             self.checkIfAppWasInstalled(key: PrefsKeys.HasFocusInstalled, isAppInstalled: self.focusInstalled(), lpEvent: .downloadedFocus)
             self.checkIfAppWasInstalled(key: PrefsKeys.HasPocketInstalled, isAppInstalled: self.pocketInstalled(), lpEvent: .downloadedPocket)
             self.recordSyncedClients(with: self.profile)

@@ -5,6 +5,35 @@
 import Foundation
 import Shared
 
+enum InstallType: String, Codable {
+    case fresh
+    case upgrade
+    case unknown
+    
+    // Helper methods
+    static func get() -> InstallType {
+        guard let rawValue = UserDefaults.standard.string(forKey: PrefsKeys.InstallType), let type = InstallType(rawValue: rawValue) else {
+            return unknown
+        }
+        return type
+    }
+    
+    static func set(type: InstallType) {
+        UserDefaults.standard.set(type.rawValue, forKey: PrefsKeys.InstallType)
+    }
+    
+    static func persistedCurrentVersion() -> String {
+        guard let currentVersion = UserDefaults.standard.string(forKey: PrefsKeys.KeyCurrentInstallVersion) else {
+            return ""
+        }
+        return currentVersion
+    }
+    
+    static func updateCurrentVersion(version: String) {
+        UserDefaults.standard.set(version, forKey: PrefsKeys.KeyCurrentInstallVersion)
+    }
+}
+
 // Data Model
 struct DefaultBrowserOnboardingModel {
     var titleImage: UIImage
@@ -50,6 +79,8 @@ class DefaultBrowserOnboardingViewModel {
     }
     
     static func shouldShowDefaultBrowserOnboarding(userPrefs: Prefs) -> Bool {
+        // Only show on fresh install
+        guard InstallType.get() == .fresh else { return false }
         // Show on 3rd session
         let maxSessionCount = 3
         var shouldShow = false
