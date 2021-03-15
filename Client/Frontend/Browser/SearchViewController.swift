@@ -322,6 +322,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 }
             } else {
                 self.suggestions = suggestions!
+                 // First suggestion should be what the user is searching
+                self.suggestions?.insert(self.searchQuery, at: 0)
             }
 
             // If there are no suggestions, just use whatever the user typed.
@@ -375,7 +377,13 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         case .searchSuggestions:
             if let site = suggestions?[indexPath.row] {
                 if let cell = cell as? TwoLineTableViewCell {
-                    cell.setLines(site, detailText: nil)
+                    if Locale.current.languageCode == "en" {
+                        let toBold = site.replaceFirstOccurrence(of: searchQuery, with: "")
+                        cell.textLabel?.attributedText = site.attributedText(boldString: toBold, font: DynamicFontHelper.defaultHelper.DeviceFontHistoryPanel)
+                        cell.detailTextLabel?.text = nil
+                    } else {
+                        cell.setLines(site, detailText: nil)
+                    }
                     cell.imageView?.contentMode = .center
                     cell.imageView?.layer.borderWidth = 0
                     cell.imageView?.image = UIImage(named: SearchViewControllerUX.SearchImage)?.withRenderingMode(.alwaysTemplate)
