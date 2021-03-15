@@ -127,7 +127,7 @@ class L10nMktSuiteSnapshotTests: L10nBaseSnapshotTests {
         
         springboard.otherElements["Home screen icons"].buttons.firstMatch.tap()
 
-        springboard.collectionViews.cells["Fennec (isabelrios)"].children(matching: .other).element.children(matching: .other).element(boundBy: 0).children(matching: .other).element.swipeLeft()
+        springboard.collectionViews.cells["Fennec (synctesting)"].children(matching: .other).element.children(matching: .other).element(boundBy: 0).children(matching: .other).element.swipeLeft()
 
         // Scroll to she second screen to select the other widget
         print(springboard.debugDescription)
@@ -145,7 +145,7 @@ class L10nMktSuiteSnapshotTests: L10nBaseSnapshotTests {
         
         springboard.otherElements["Home screen icons"].buttons.firstMatch.tap()
 
-        springboard.collectionViews.cells["Fennec (isabelrios)"].children(matching: .other).element.children(matching: .other).element(boundBy: 0).children(matching: .other).element.swipeLeft()
+        springboard.collectionViews.cells["Fennec (synctesting)"].children(matching: .other).element.children(matching: .other).element(boundBy: 0).children(matching: .other).element.swipeLeft()
 
         // Scroll to she second screen to select the other widget
         springboard.scrollViews.staticTexts.firstMatch.swipeLeft()
