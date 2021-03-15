@@ -816,9 +816,8 @@ experiments:
   experiment_enrollment:
     type: event
     description: |
-      Recorded when a preference is changed and includes the
-      preference that changed as well as the value changed to
-      recorded in the extra keys.
+      Records the experiments the user is enrolled in.
+      Includes experiment ID, name, and variant.
     extra_keys:
       experiment_id:
         description: |
@@ -830,9 +829,9 @@ experiments:
         description: |
           The experiment variant name the user is in.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/7097
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7841
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/7681
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8150
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-12-01"
