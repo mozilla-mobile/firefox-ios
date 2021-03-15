@@ -97,13 +97,13 @@ class IntegrationTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         // This is only to check that the device's name changed
         navigator.goto(SettingsScreen)
-        app.tables.cells.element(boundBy: 0).tap()
+        app.tables.cells.element(boundBy: 1).tap()
         waitForExistence(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"], timeout: 10)
-        XCTAssertEqual(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"].value! as! String, "Fennec (synctesting) on iOS")
+        XCTAssertEqual(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"].value! as! String, "Fennec (administrator) on iOS")
 
         // Sync again just to make sure to sync after new name is shown
         app.buttons["Settings"].tap()
-        app.tables.cells.element(boundBy: 1).tap()
+        app.tables.cells.element(boundBy: 2).tap()
         waitForExistence(app.tables.staticTexts["Sync Now"], timeout: 15)
     }
 
@@ -196,7 +196,7 @@ class IntegrationTests: BaseTestCase {
 
         // Disconnect account
         navigator.goto(SettingsScreen)
-        app.tables.cells.element(boundBy: 0).tap()
+        app.tables.cells.element(boundBy: 1).tap()
         waitForExistence(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"], timeout: 10)
 
         app.cells["SignOut"].tap()
