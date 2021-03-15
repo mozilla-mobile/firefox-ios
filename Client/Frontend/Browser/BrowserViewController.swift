@@ -54,6 +54,7 @@ class BrowserViewController: UIViewController {
     var libraryDrawerViewController: DrawerViewController?
     var webViewContainer: UIView!
     var urlBar: URLBarView!
+    var urlBarHeight: Constraint!
     var clipboardBarDisplayHandler: ClipboardBarDisplayHandler?
     var readerModeBar: ReaderModeBarView?
     var readerModeCache: ReaderModeCache
@@ -507,7 +508,7 @@ class BrowserViewController: UIViewController {
 
         urlBar.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalTo(urlBarTopTabsContainer)
-            make.height.equalTo(UIConstants.TopToolbarHeightMax)
+            self.urlBarHeight = make.height.equalTo(UIConstants.TopToolbarHeightMax).constraint
             make.top.equalTo(topTabsContainer.snp.bottom)
         }
 
@@ -526,6 +527,26 @@ class BrowserViewController: UIViewController {
         statusBarOverlay.snp.remakeConstraints { make in
             make.top.left.right.equalTo(self.view)
             make.height.equalTo(self.view.safeAreaInsets.top)
+        }
+
+        adjustURLBarHeightBasedOnLocationViewHeight()
+    }
+
+    fileprivate func adjustURLBarHeightBasedOnLocationViewHeight() {
+        // Make sure that we have a height to actually base our calculations on
+        guard urlBar.locationContainer.bounds.height != 0 else { return }
+        let locationViewHeight = urlBar.locationView.bounds.height
+        let heightWithPadding = locationViewHeight + 10
+
+        // We have to deactivate the original constraint, and remake the constraint
+        // or else funky conflicts happen
+        urlBarHeight.deactivate()
+        urlBar.snp.makeConstraints { make in
+            if heightWithPadding > UIConstants.TopToolbarHeightMax {
+                self.urlBarHeight = make.height.equalTo(UIConstants.TopToolbarHeight).constraint
+            } else {
+                self.urlBarHeight = make.height.equalTo(heightWithPadding).constraint
+            }
         }
     }
 
