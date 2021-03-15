@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+/* Disabled by default, running locally to get these specific screenshots in specific locales
 import XCTest
 
 class L10nMktSuiteSnapshotTests: L10nBaseSnapshotTests {
@@ -160,3 +161,4 @@ class L10nMktSuiteSnapshotTests: L10nBaseSnapshotTests {
         snapshot("Widget-03")
     }
 }
+*/
