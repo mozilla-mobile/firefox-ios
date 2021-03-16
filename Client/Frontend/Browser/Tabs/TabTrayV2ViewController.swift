@@ -27,6 +27,12 @@ class TabTrayV2ViewController: UIViewController, Themeable {
     lazy var viewModel = TabTrayV2ViewModel(viewController: self)
     let profile: Profile
     private var bottomSheetVC: BottomSheetViewController?
+
+    // https://github.com/mozilla-mobile/firefox-ios/issues/6918
+    // We need a hook into when this ViewController gets dismissed so that we can
+    // focus the URL bar.
+    var onViewDismissed: (() -> Void)? = nil
+
     // Views
     lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -110,6 +116,8 @@ class TabTrayV2ViewController: UIViewController, Themeable {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         viewModel.addPrivateTab()
+        onViewDismissed?()
+        onViewDismissed = nil
     }
     
     private func viewSetup() {

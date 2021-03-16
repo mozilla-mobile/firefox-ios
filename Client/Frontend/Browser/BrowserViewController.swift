@@ -817,7 +817,7 @@ class BrowserViewController: UIViewController {
         })
     }
 
-    func updateInContentHomePanel(_ url: URL?) {
+    func updateInContentHomePanel(_ url: URL?, focusUrlBar: Bool = false) {
         let isAboutHomeURL = url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
         if !urlBar.inOverlayMode {
             guard let url = url else {
@@ -827,6 +827,14 @@ class BrowserViewController: UIViewController {
             }
             if isAboutHomeURL {
                 showFirefoxHome(inline: true)
+
+                if focusUrlBar {
+                    if tabTrayControllerV2 == nil {
+                        urlBar.enterOverlayMode(nil, pasted: false, search: false)
+                    } else {
+                        tabTrayControllerV2?.onViewDismissed = { [weak self] in self?.urlBar.enterOverlayMode(nil, pasted: false, search: false) }
+                    }
+                }
             } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
                 hideFirefoxHome()
                 urlBar.locationView.reloadButton.reloadButtonState = .disabled
@@ -1051,7 +1059,7 @@ class BrowserViewController: UIViewController {
                 NotificationCenter.default.removeObserver(self, name: .DynamicFontChanged, object: nil)
             }
 
-            updateInContentHomePanel(url as URL)
+            updateInContentHomePanel(url as URL, focusUrlBar: true)
         }
     }
 
@@ -1681,7 +1689,8 @@ extension BrowserViewController: TabManagerDelegate {
             topTabsDidChangeTab()
         }
 
-        updateInContentHomePanel(selected?.url as URL?)
+        updateInContentHomePanel(selected?.url as URL?, focusUrlBar: true)
+
         if let tab = selected, NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage {
             if tab.url == nil, !tab.restoring {
                 urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
