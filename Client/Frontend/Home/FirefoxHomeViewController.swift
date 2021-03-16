@@ -755,6 +755,7 @@ extension FirefoxHomeViewController {
     }
 
     @objc func openSyncedTabs() {
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .syncHomeShortcut)
         homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .syncedTabs)
     }
 

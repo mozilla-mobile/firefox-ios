@@ -378,17 +378,21 @@ extension TelemetryWrapper {
         case mediumQuickActionClosePrivate = "medium-quick-action-close-private"
         case mediumTopSitesWidget = "medium-top-sites-widget"
         case pocketStory = "pocket-story"
+        case syncTab = "sync-tab"
+        case syncMenuLibraryList = "sync-library"
+        case syncHomeShortcut = "sync-home-shortcut"
+        case syncSignIn = "sync-sign-in"
+        case syncCreateAccount = "sync-create-account"
+        case libraryPanel = "library-panel"
     }
 
     public enum EventValue: String {
         case activityStream = "activity-stream"
         case appMenu = "app-menu"
         case awesomebarResults = "awesomebar-results"
-        case bookmarksPanel = "bookmarks-panel"
         case browser = "browser"
         case contextMenu = "context-menu"
         case downloadCompleteToast = "download-complete-toast"
-        case downloadsPanel = "downloads-panel"
         case homePanel = "home-panel"
         case homePanelTabButton = "home-panel-tab-button"
         case markAsRead = "mark-as-read"
@@ -408,6 +412,11 @@ extension TelemetryWrapper {
         case privateTab = "private-tab"
         case normalTab = "normal-tab"
         case tabView = "tab-view"
+        case bookmarksPanel = "bookmarks-panel"
+        case historyPanel = "history-panel"
+        case readingPanel = "reading-panel"
+        case downloadsPanel = "downloads-panel"
+        case syncPanel = "sync-panel"
     }
 
     public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue? = nil, extras: [String: Any]? = nil) {
@@ -509,6 +518,18 @@ extension TelemetryWrapper {
             GleanMetrics.Widget.mTopSitesWidget.add()
         case (.action, .tap, .pocketStory, _, _):
             GleanMetrics.Pocket.openStory.add()
+        // Library
+        case (.action, .view, .libraryPanel, let type, _):
+            GleanMetrics.Library.panelPressed[type].add()
+        // Sync
+        case (.action, .open, .syncTab, _, _):
+            GleanMetrics.Sync.openTab.add()
+        case (.action, .tap, .syncHomeShortcut, _, _):
+            GleanMetrics.Sync.openSyncHomeShortcut.add()
+        case (.action, .tap, .syncSignIn, _, _):
+            GleanMetrics.Sync.signInSyncPressed.add()
+        case (.action, .tap, .syncCreateAccount, _, _):
+            GleanMetrics.Sync.createAccountPressed.add()
         // Experiments
         case (.enrollment, .add, .experimentEnrollment, _, let extras):
             if let id = extras?["Experiment id"] as? String, let name = extras?["Experiment name"] as? String, let variant = extras?["Experiment variant"] as? String {
