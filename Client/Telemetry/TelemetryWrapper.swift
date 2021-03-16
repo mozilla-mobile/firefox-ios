@@ -379,7 +379,6 @@ extension TelemetryWrapper {
         case mediumTopSitesWidget = "medium-top-sites-widget"
         case pocketStory = "pocket-story"
         case syncTab = "sync-tab"
-        case syncMenuLibraryList = "sync-library"
         case syncHomeShortcut = "sync-home-shortcut"
         case syncSignIn = "sync-sign-in"
         case syncCreateAccount = "sync-create-account"
