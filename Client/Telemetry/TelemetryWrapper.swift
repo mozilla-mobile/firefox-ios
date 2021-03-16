@@ -517,7 +517,7 @@ extension TelemetryWrapper {
         case (.action, .tap, .pocketStory, _, _):
             GleanMetrics.Pocket.openStory.add()
         // Library
-        case (.action, .view, .libraryPanel, let type, _):
+        case (.action, .tap, .libraryPanel, let type, _):
             GleanMetrics.Library.panelPressed[type].add()
         // Sync
         case (.action, .open, .syncTab, _, _):
