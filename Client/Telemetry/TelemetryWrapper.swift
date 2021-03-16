@@ -393,7 +393,6 @@ extension TelemetryWrapper {
         case contextMenu = "context-menu"
         case downloadCompleteToast = "download-complete-toast"
         case homePanel = "home-panel"
-        case homePanelTabButton = "home-panel-tab-button"
         case markAsRead = "mark-as-read"
         case markAsUnread = "mark-as-unread"
         case pageActionMenu = "page-action-menu"
