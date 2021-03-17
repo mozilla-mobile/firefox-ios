@@ -139,5 +139,17 @@ public struct AppConstants {
         return false
         #endif
     }()
+    
+    public static let URL_SEARCH_LOGO: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+        return false
+        #elseif MOZ_CHANNEL_BETA
+        return true
+        #elseif MOZ_CHANNEL_FENNEC
+        return true
+        #else
+        return false
+        #endif
+    }()
 
 }
