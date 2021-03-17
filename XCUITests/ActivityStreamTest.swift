@@ -146,14 +146,14 @@ class ActivityStreamTest: BaseTestCase {
 
         waitForExistence(app.collectionViews.cells[newTopSite["topSiteLabel"]!])
         XCTAssertTrue(app.collectionViews.cells[newTopSite["topSiteLabel"]!].exists)
-        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
+        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 7)
 
         navigator.goto(ClearPrivateDataSettings)
         navigator.performAction(Action.AcceptClearPrivateData)
         navigator.goto(HomePanelsScreen)
         waitForExistence(app.collectionViews.cells[newTopSite["topSiteLabel"]!])
         XCTAssertTrue(app.collectionViews.cells[newTopSite["topSiteLabel"]!].exists)
-        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
+        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 7)
     }
 
     func testTopSitesShiftAfterRemovingOne() {
