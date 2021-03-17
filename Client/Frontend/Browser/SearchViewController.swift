@@ -373,40 +373,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
-        switch SearchListSection(rawValue: indexPath.section)! {
-        case .searchSuggestions:
-            if let site = suggestions?[indexPath.row] {
-                if let cell = cell as? TwoLineTableViewCell {
-                    if Locale.current.languageCode == "en" {
-                        let toBold = site.replaceFirstOccurrence(of: searchQuery, with: "")
-                        cell.textLabel?.attributedText = site.attributedText(boldString: toBold, font: DynamicFontHelper.defaultHelper.DeviceFontHistoryPanel)
-                        cell.detailTextLabel?.text = nil
-                    } else {
-                        cell.setLines(site, detailText: nil)
-                    }
-                    cell.imageView?.contentMode = .center
-                    cell.imageView?.layer.borderWidth = 0
-                    cell.imageView?.image = UIImage(named: SearchViewControllerUX.SearchImage)?.withRenderingMode(.alwaysTemplate)
-                    cell.imageView?.tintColor = ThemeManager.instance.currentName == .dark ? UIColor.white : UIColor.black
-                    cell.imageView?.backgroundColor = nil
-                }
-            }
-        case .bookmarksAndHistory:
-            if let site = data[indexPath.row] {
-                if let cell = cell as? TwoLineTableViewCell {
-                    let isBookmark = site.bookmarked ?? false
-                    cell.setLines(site.title, detailText: site.url)
-                    cell.setRightBadge(isBookmark ? self.bookmarkedBadge : nil)
-                    cell.imageView?.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
-                    cell.imageView?.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
-                    cell.imageView?.contentMode = .center
-                    cell.imageView?.setImageAndBackground(forIcon: site.icon, website: site.tileURL) { [weak cell] in
-                        cell?.imageView?.image = cell?.imageView?.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
-                    }
-                }
-            }
-        }
-        return cell
+        return getCellForSection(cell, for: SearchListSection(rawValue: indexPath.section)!, indexPath)
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -441,6 +408,39 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         super.applyTheme()
 
         reloadData()
+    }
+    
+    fileprivate func getCellForSection(_ cell: UITableViewCell, for section: SearchListSection, _ indexPath: IndexPath) -> UITableViewCell {
+        switch section {
+        case .searchSuggestions:
+            if let site = suggestions?[indexPath.row], let cell = cell as? TwoLineTableViewCell {
+                if Locale.current.languageCode == "en" {
+                    let toBold = site.replaceFirstOccurrence(of: searchQuery, with: "")
+                    cell.textLabel?.attributedText = site.attributedText(boldString: toBold, font: DynamicFontHelper.defaultHelper.DeviceFontHistoryPanel)
+                    cell.detailTextLabel?.text = nil
+                } else {
+                    cell.setLines(site, detailText: nil)
+                }
+                cell.imageView?.contentMode = .center
+                cell.imageView?.layer.borderWidth = 0
+                cell.imageView?.image = UIImage(named: SearchViewControllerUX.SearchImage)?.withRenderingMode(.alwaysTemplate)
+                cell.imageView?.tintColor = ThemeManager.instance.currentName == .dark ? UIColor.white : UIColor.black
+                cell.imageView?.backgroundColor = nil
+            }
+        case .bookmarksAndHistory:
+            if let site = data[indexPath.row], let cell = cell as? TwoLineTableViewCell {
+                let isBookmark = site.bookmarked ?? false
+                cell.setLines(site.title, detailText: site.url)
+                cell.setRightBadge(isBookmark ? self.bookmarkedBadge : nil)
+                cell.imageView?.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
+                cell.imageView?.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
+                cell.imageView?.contentMode = .center
+                cell.imageView?.setImageAndBackground(forIcon: site.icon, website: site.tileURL) { [weak cell] in
+                    cell?.imageView?.image = cell?.imageView?.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
+                }
+            }
+        }
+        return cell
     }
 }
 
