@@ -21,6 +21,9 @@ extension LibraryViewController: LibraryPanelDelegate {
     }
 
     func libraryPanel(didSelectURL url: URL, visitType: VisitType) {
+        if selectedPanel == .syncedTabs {
+            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .syncTab)
+        }
         delegate?.libraryPanel(didSelectURL: url, visitType: visitType)
         dismiss(animated: true, completion: nil)
     }

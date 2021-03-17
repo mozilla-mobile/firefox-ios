@@ -153,12 +153,21 @@ class LibraryViewController: UIViewController {
             }
 
             selectedPanel = newSelectedPanel
-            if selectedPanel == .bookmarks {
-                TelemetryWrapper.recordEvent(category: .action, method: .view, object: .bookmarksPanel, value: .homePanelTabButton)
-            } else if selectedPanel == .downloads {
-                TelemetryWrapper.recordEvent(category: .action, method: .view, object: .downloadsPanel, value: .homePanelTabButton)
+            // Telemetry
+            switch selectedPanel {
+            case .bookmarks:
+                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .libraryPanel, value: .bookmarksPanel, extras: nil)
+            case .history:
+                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .libraryPanel, value: .historyPanel, extras: nil)
+            case .readingList:
+                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .libraryPanel, value: .readingPanel, extras: nil)
+            case .downloads:
+                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .libraryPanel, value: .downloadsPanel, extras: nil)
+            case .syncedTabs:
+                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .libraryPanel, value: .syncPanel, extras: nil)
+            case .none:
+                print("none")
             }
-            break
         }
     }
 
