@@ -148,7 +148,7 @@ class ActivityStreamTest: BaseTestCase {
 
         waitForExistence(app.collectionViews.cells[newTopSite["topSiteLabel"]!])
         XCTAssertTrue(app.collectionViews.cells[newTopSite["topSiteLabel"]!].exists)
-        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
+        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 7)
 
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
@@ -158,7 +158,7 @@ class ActivityStreamTest: BaseTestCase {
         navigator.goto(HomePanelsScreen)
         waitForExistence(app.collectionViews.cells[newTopSite["topSiteLabel"]!])
         XCTAssertTrue(app.collectionViews.cells[newTopSite["topSiteLabel"]!].exists)
-        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
+        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 7)
     }
 
     func testTopSitesShiftAfterRemovingOne() {
