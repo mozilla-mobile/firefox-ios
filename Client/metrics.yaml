@@ -418,7 +418,6 @@ bookmarks:
       Counts the number of times the bookmarks list is opened
       from either the Home Panel tab button or the App Menu.
     labels:
-      - home-panel
       - app-menu
     bugs:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
@@ -850,3 +849,77 @@ pocket:
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-08-19"
+
+# Library
+library:
+  panel_pressed:
+    type: labeled_counter
+    description: |
+      Counts the number of times a specific library panel
+      button is tapped for Bookmarks, History, Reading List,
+      Downloads and Synced tabs
+    labels:
+      - bookmarks-panel
+      - history-panel
+      - reading-panel
+      - downloads-panel
+      - sync-panel
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8035
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8152
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-06-16"
+
+# Sync
+sync:
+  open_tab:
+    type: counter
+    description: |
+        Counts the number of times a user opens
+        synced tab
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8035
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8152
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-06-16"
+  open_sync_home_shortcut:
+    type: counter
+    description: |
+        Counts the number of times a user opens
+        synced tab list from home view
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8035
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8152
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-06-16"
+  sign_in_sync_pressed:
+    type: counter
+    description: |
+        Counts the number of times a user taps
+        on sign in to sync button in sync
+        library view
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8035
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8152
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-06-16"
+  create_account_pressed:
+    type: counter
+    description: |
+        Counts the number of times a user taps
+        on create account button in sync library view
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8035
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8152
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-06-16"
