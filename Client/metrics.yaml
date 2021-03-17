@@ -875,7 +875,7 @@ app_menu:
       - https://github.com/mozilla-mobile/firefox-ios/pull/8167
     notification_emails:
       - firefox-ios@mozilla.com
-    expires: "2021-08-17"
+    expires: "2021-09-17"
   sign_into_sync:
     type: counter
     description: |
@@ -886,4 +886,4 @@ app_menu:
       - https://github.com/mozilla-mobile/firefox-ios/pull/8167
     notification_emails:
       - firefox-ios@mozilla.com
-    expires: "2021-08-17"
+    expires: "2021-09-17"
