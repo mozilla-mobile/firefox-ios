@@ -378,6 +378,9 @@ extension TelemetryWrapper {
         case mediumQuickActionClosePrivate = "medium-quick-action-close-private"
         case mediumTopSitesWidget = "medium-top-sites-widget"
         case pocketStory = "pocket-story"
+        case library = "library"
+        case logins = "logins-and-passwords"
+        case signIntoSync = "sign-into-sync"
     }
 
     public enum EventValue: String {
@@ -520,6 +523,13 @@ extension TelemetryWrapper {
                 let msg = "Uninstrumented pref metric: \(category), \(method), \(object), \(value), \(String(describing: extras))"
                 Sentry.shared.send(message: msg, severity: .debug)
             }
+        // App menu
+        case (.action, .tap, .library, _, _):
+            GleanMetrics.AppMenu.library.add()
+        case (.action, .tap, .logins, _, _):
+            GleanMetrics.AppMenu.logins.add()
+        case (.action, .tap, .signIntoSync, _, _):
+            GleanMetrics.AppMenu.signIntoSync.add()
         default:
             let msg = "Uninstrumented metric recorded: \(category), \(method), \(object), \(value), \(String(describing: extras))"
             Sentry.shared.send(message: msg, severity: .debug)

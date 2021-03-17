@@ -15,6 +15,7 @@ extension PhotonActionSheetProtocol {
         let openLibrary = PhotonActionSheetItem(title: Strings.AppMenuLibraryTitleString, iconString: "menu-library") { _, _ in
             let bvc = vcDelegate as? BrowserViewController
             bvc?.showLibrary()
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .library)
         }
 
         let openHomePage = PhotonActionSheetItem(title: Strings.AppMenuOpenHomePageTitleString, iconString: "menu-Home") { _, _ in
@@ -85,6 +86,7 @@ extension PhotonActionSheetProtocol {
         let action: ((PhotonActionSheetItem, UITableViewCell) -> Void) = { action,_ in
             let fxaParams = FxALaunchParams(query: ["entrypoint": "browsermenu"])
             showFxA(fxaParams, .emailLoginFlow, .appMenu)
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .signIntoSync)
         }
 
         let rustAccount = RustFirefoxAccounts.shared
