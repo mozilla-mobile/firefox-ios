@@ -404,12 +404,14 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
 
     @objc fileprivate func signIn() {
         if let libraryPanel = self.libraryPanel {
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .syncSignIn)
             libraryPanel.libraryPanelDelegate?.libraryPanelDidRequestToSignIn()
         }
     }
 
     @objc fileprivate func createAnAccount() {
         if let libraryPanel = self.libraryPanel {
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .syncCreateAccount)
             libraryPanel.libraryPanelDelegate?.libraryPanelDidRequestToCreateAccount()
         }
     }
