@@ -7,6 +7,7 @@ import XCTest
 class DataManagementTests: BaseTestCase {
 
     func testWebSiteDataEnterFirstTime() {
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
         navigator.performAction(Action.AcceptClearAllWebsiteData)
         let expectedWebsiteDataEntries2 = app.tables.cells.count
         XCTAssertEqual(expectedWebsiteDataEntries2, 1)
