@@ -58,7 +58,7 @@ class DownloadFilesTests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
 
-        waitForExistence(app.tables["DownloadsTable"])
+        waitForExistence(app.tables["DownloadsTable"], timeout: 5)
         // There should be one item downloaded. It's name and size should be shown
         checkTheNumberOfDownloadedItems(items: 1)
         XCTAssertTrue(app.tables.cells.staticTexts[testFileName].exists)
@@ -179,7 +179,7 @@ class DownloadFilesTests: BaseTestCase {
     }
 
     private func checkTheNumberOfDownloadedItems(items: Int) {
-        waitForExistence(app.tables["DownloadsTable"])
+        waitForExistence(app.tables["DownloadsTable"], timeout: 10)
         let list = app.tables["DownloadsTable"].cells.count
         XCTAssertEqual(list, items, "The number of items in the downloads table is not correct")
     }
