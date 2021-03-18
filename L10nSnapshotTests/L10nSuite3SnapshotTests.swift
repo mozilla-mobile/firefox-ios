@@ -16,7 +16,7 @@ class L10nSuite3SnapshotTests: L10nBaseSnapshotTests {
         navigator.goto(PasscodeSettings)
         app.tables.cells["TurnOnPasscode"].tap()
         snapshot("SetPasscodeScreen-1-nopasscode")
-        
+
         // Type "111111 passcode"
         typePasscode(n: 6, keyNumber: 2)
         snapshot("SetPasscodeScreen-2-typepasscode")
@@ -25,18 +25,18 @@ class L10nSuite3SnapshotTests: L10nBaseSnapshotTests {
         // Type once inkey "2"
         typePasscode(n: 1, keyNumber: 1)
         snapshot("SetPasscodeScreen-3-passcodesmustmatch")
-        
+
         // Confitm passcode
         typePasscode(n: 6, keyNumber: 2)
         typePasscode(n: 6, keyNumber: 2)
         snapshot("SetPasscodeScreen-3")
-        
+
         // Go to interval settings
         app.tables.cells["PasscodeInterval"].tap()
         typePasscode(n: 6, keyNumber: 2)
         snapshot("PasscodeIntervalScreen-1")
     }
-    
+
     func testDefaultTopSites() {
         navigator.goto(HomePanelsScreen)
         snapshot("DefaultTopSites-01")
