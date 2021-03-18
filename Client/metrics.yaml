@@ -850,6 +850,43 @@ pocket:
       - firefox-ios@mozilla.com
     expires: "2021-08-19"
 
+# App menu
+app_menu:
+  library:
+    type: counter
+    description: |
+        Counts the number of times a user taps Your Library in the app menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/1544
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-09-17"
+  logins:
+    type: counter
+    description: |
+        Counts the number of times a user taps Logins & Passwords
+        in the app menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/1544
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-09-17"
+  sign_into_sync:
+    type: counter
+    description: |
+        Counts the number of times a user taps Sign Into Sync in the app menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/1544
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-09-17"
+
 # Library
 library:
   panel_pressed:
