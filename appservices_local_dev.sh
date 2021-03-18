@@ -31,23 +31,19 @@ if [[ "${ACTION}" == "enable" ]]; then
     echo "Please specify the application services directory to use!"
     exit 1
   fi
-  msg "Using local Application Services (${APP_SERVICES_DIR})"
-  if [ ! -h "${FRAMEWORK_LOCATION}" ]; then
-    msg "Replacing Carthage package by symbolic link..."
-    rm -rf "${FRAMEWORK_LOCATION}"
-    ln -s "${APP_SERVICES_DIR}/Carthage/Build/iOS/MozillaAppServices.framework" "${PWD}/Carthage/Build/iOS"
-  fi
   msg "Building Application Services."
   pushd "${APP_SERVICES_DIR}"
   ./build-carthage.sh --no-archive
   popd
   echo ""
+  msg "Copying local Application Services (${APP_SERVICES_DIR}) into Carthage build directory"
+  rsync -ad "${APP_SERVICES_DIR}/Carthage/Build/iOS/MozillaAppServices.framework/" "${FRAMEWORK_LOCATION}/"
   msg "Done! You are now using application-services from ${APP_SERVICES_DIR}"
   msg "Note that any changes to application-services won't be reflected until you re-build the framework!"
   msg "To do so you can re-run this script with the same arguments."
 elif [[ "${ACTION}" == "disable" ]]; then
   if [ -h "${FRAMEWORK_LOCATION}" ]; then
-    msg "Removing symbolic link."
+    msg "Removing locally-copied Application Services."
     rm -rf "${FRAMEWORK_LOCATION}"
     msg "Re-running the bootstrap script."
     carthage bootstrap --platform iOS application-services
