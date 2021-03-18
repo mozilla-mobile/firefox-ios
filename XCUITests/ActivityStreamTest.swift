@@ -205,7 +205,7 @@ class ActivityStreamTest: BaseTestCase {
         waitForNoExistence(app.tables["Context Menu"], timeoutValue: 15)
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(TabTray)
-        waitForExistence(app.cells.staticTexts[defaultTopSite["bookmarkLabel"]!])
+        waitForExistence(app.cells.staticTexts["wikipedia.org"], timeout: 5)
         let numTabsOpen = app.tables.cells.count
         XCTAssertEqual(numTabsOpen, 2, "New tab not open")
     }

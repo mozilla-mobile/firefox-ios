@@ -104,7 +104,7 @@ class PhotonActionSheetTest: BaseTestCase {
         let fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 2)
 
         fennecElement.tap()
-        waitForExistence(app.navigationBars["ShareTo.ShareView"], timeout: 5)
+        waitForExistence(app.navigationBars["ShareTo.ShareView"], timeout: 10)
     }
 
     private func disableFennec() {

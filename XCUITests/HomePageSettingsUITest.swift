@@ -57,6 +57,7 @@ class HomePageSettingsUITests: BaseTestCase {
         let homePageMenuItem = app.cells["menu-Home"]
         waitForExistence(homePageMenuItem)
         homePageMenuItem.tap()
+        waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: "example")
     }
 

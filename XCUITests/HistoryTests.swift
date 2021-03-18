@@ -242,6 +242,7 @@ class HistoryTests: BaseTestCase {
     }
     
     func testClearRecentHistory() {
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
         navigator.performAction(Action.ClearRecentHistory)
         tapOnClearRecentHistoryOption(optionSelected: "The Last Hour")
         // No data will be removed after Action.ClearRecentHistory since there is no recent history created.
