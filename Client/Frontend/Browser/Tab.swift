@@ -555,7 +555,14 @@ class Tab: NSObject {
 
     func toggleChangeUserAgent() {
         changedUserAgent = !changedUserAgent
-        reload()
+
+        if changedUserAgent, let url = url?.withoutMobilePrefix() {
+            let request = URLRequest(url: url)
+            webView?.load(request)
+        } else {
+            reload()
+        }
+
         TabEvent.post(.didToggleDesktopMode, for: self)
     }
 
@@ -765,5 +772,35 @@ class TabWebViewMenuHelper: UIView {
                 tabWebView.delegate?.tabWebView(tabWebView, didSelectFindInPageForSelection: selection)
             }
         }
+    }
+}
+
+extension URL {
+    /**
+    Returns a URL without a mobile prefix (`"m."` or `"mobile."`)
+    */
+    func withoutMobilePrefix() -> URL {
+        let mPrefix = "m."
+        let mobilePrefix = "mobile."
+
+        let foundPrefix: String?
+        if host?.contains(mPrefix) == true {
+            foundPrefix = mPrefix
+        } else if host?.contains(mobilePrefix) == true {
+            foundPrefix = mobilePrefix
+        } else {
+            foundPrefix = nil
+        }
+
+        guard
+            let prefixToRemove = foundPrefix,
+            var components = URLComponents(url: self, resolvingAgainstBaseURL: true),
+            var host = components.host,
+            let range = host.range(of: prefixToRemove) else { return self }
+
+        host.removeSubrange(range)
+        components.host = host
+
+        return components.url ?? self
     }
 }
