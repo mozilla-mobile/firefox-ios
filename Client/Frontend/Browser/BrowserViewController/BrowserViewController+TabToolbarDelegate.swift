@@ -96,6 +96,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
                 loginsVC.shownFromAppMenu = true
                 let navController = ThemedNavigationController(rootViewController: loginsVC)
                 self.present(navController, animated: true)
+                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .logins)
             }
         }
 
