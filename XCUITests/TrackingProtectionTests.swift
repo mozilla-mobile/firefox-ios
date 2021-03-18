@@ -15,6 +15,8 @@ class TrackingProtectionTests: BaseTestCase {
 
     // Smoketest
     func testTrackingProtection() {
+        navigator.goto(URLBarOpen)
+        navigator.back()
         navigator.goto(TrackingProtectionSettings)
 
         // Make sure ETP is enabled by default
@@ -92,6 +94,8 @@ class TrackingProtectionTests: BaseTestCase {
     }
 
     func testDisableETPforSiteIsKeptAfterBrowsing() {
+        navigator.goto(URLBarOpen)
+        navigator.back()
         // Enable Strict TP
         navigator.openURL(websiteWithBlockedElements)
         waitUntilPageLoad()

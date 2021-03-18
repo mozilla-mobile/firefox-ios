@@ -332,6 +332,8 @@ class NavigationTest: BaseTestCase {
 
     // Smoketest
     func testPopUpBlocker() {
+        navigator.goto(URLBarOpen)
+        navigator.back()
         // Check that it is enabled by default
         navigator.goto(SettingsScreen)
         waitForExistence(app.tables["AppSettingsTableViewController.tableView"])
@@ -364,6 +366,8 @@ class NavigationTest: BaseTestCase {
 
     // Smoketest
      func testSSL() {
+        navigator.goto(URLBarOpen)
+        navigator.back()
         navigator.openURL("https://expired.badssl.com/")
         waitForExistence(app.buttons["Advanced"], timeout: 10)
         app.buttons["Advanced"].tap()
@@ -390,6 +394,8 @@ class NavigationTest: BaseTestCase {
 
     // Smoketest
     func testVerifyBrowserTabMenu() {
+        navigator.goto(URLBarOpen)
+        navigator.back()
         navigator.goto(BrowserTabMenu)
         waitForExistence(app.tables["Context Menu"])
 

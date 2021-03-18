@@ -58,6 +58,8 @@ class HistoryTests: BaseTestCase {
 
     func testClearPrivateDataButtonDisabled() {
         //Clear private data from settings and confirm
+        navigator.goto(URLBarOpen)
+        navigator.back()
         navigator.goto(ClearPrivateDataSettings)
         app.tables.cells["ClearPrivateData"].tap()
         app.alerts.buttons["OK"].tap()

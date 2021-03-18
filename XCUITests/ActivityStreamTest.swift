@@ -195,6 +195,8 @@ class ActivityStreamTest: BaseTestCase {
 
     // Smoketest
     func testTopSitesOpenInNewTabDefaultTopSite() {
+        navigator.goto(URLBarOpen)
+        navigator.back()
         // Open one of the sites from Topsites and wait until page is loaded
         waitForExistence(app.cells["TopSitesCell"].cells.element(boundBy: 3), timeout: 3)
         app.cells["TopSitesCell"].cells.element(boundBy: 3).press(forDuration:1)
@@ -212,6 +214,8 @@ class ActivityStreamTest: BaseTestCase {
 
     // Smoketest
     func testTopSitesOpenInNewPrivateTab() {
+        navigator.goto(URLBarOpen)
+        navigator.back()
         navigator.goto(HomePanelsScreen)
         // Long tap on apple top site, second cell
         waitForExistence(app.cells["TopSitesCell"].cells["apple"], timeout: 3)
@@ -241,6 +245,8 @@ class ActivityStreamTest: BaseTestCase {
 
     // Smoketest
     func testTopSitesOpenInNewPrivateTabDefaultTopSite() {
+        navigator.goto(URLBarOpen)
+        navigator.back()
         // Open one of the sites from Topsites and wait until page is loaded
         // Long tap on apple top site, second cell
         waitForExistence(app.cells["TopSitesCell"].cells.element(boundBy: 3), timeout: 3)

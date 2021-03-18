@@ -107,6 +107,7 @@ class BrowserViewController: UIViewController {
     fileprivate var keyboardState: KeyboardState?
     var hasTriedToPresentETPAlready = false
     var hasTriedToPresentDBCardAlready = false
+    var hasPresentedDBCard = false
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
 
@@ -133,6 +134,7 @@ class BrowserViewController: UIViewController {
     let downloadQueue = DownloadQueue()
     var isCmdClickForNewTab = false
 
+    fileprivate var shouldShowIntroScreen: Bool { profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil }
 
     init(profile: Profile, tabManager: TabManager) {
         self.profile = profile
@@ -828,7 +830,7 @@ class BrowserViewController: UIViewController {
             if isAboutHomeURL {
                 showFirefoxHome(inline: true)
 
-                if focusUrlBar {
+                if !hasPresentedDBCard && !shouldShowIntroScreen && focusUrlBar {
                     if tabTrayControllerV2 == nil {
                         urlBar.enterOverlayMode(nil, pasted: false, search: false)
                     } else {
@@ -1046,7 +1048,7 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    func updateUIForReaderHomeStateForTab(_ tab: Tab) {
+    func updateUIForReaderHomeStateForTab(_ tab: Tab, focusUrlBar: Bool = false) {
         updateURLBarDisplayURL(tab)
         scrollController.showToolbars(animated: false)
 
@@ -1059,7 +1061,7 @@ class BrowserViewController: UIViewController {
                 NotificationCenter.default.removeObserver(self, name: .DynamicFontChanged, object: nil)
             }
 
-            updateInContentHomePanel(url as URL, focusUrlBar: true)
+            updateInContentHomePanel(url as URL, focusUrlBar: focusUrlBar)
         }
     }
 
@@ -1743,7 +1745,7 @@ extension BrowserViewController: TabManagerDelegate {
 
         toast.showToast(viewController: self, delay: delay, duration: duration, makeConstraints: { make in
             make.left.right.equalTo(self.view)
-            make.bottom.equalTo(self.webViewContainer?.snp.bottom ?? 0)
+            make.bottom.equalTo(self.alertStackView.snp.bottom)
         })
     }
 
@@ -1785,7 +1787,7 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 
 extension BrowserViewController {
     func presentIntroViewController(_ alwaysShow: Bool = false) {
-        if alwaysShow || profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil {
+        if alwaysShow || shouldShowIntroScreen {
             showProperIntroVC()
         }
     }
@@ -1848,6 +1850,7 @@ extension BrowserViewController {
                 UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
             }
         }
+        hasPresentedDBCard = true
         present(dBOnboardingViewController, animated: true, completion: nil)
     }
     
