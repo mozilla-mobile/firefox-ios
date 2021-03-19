@@ -379,11 +379,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch SearchListSection(rawValue: section)! {
         case .searchSuggestions:
-            if let count = suggestions?.count {
-                return count < 4 ? count : 4
-            } else {
-                return 0
-            }
+            guard let count = suggestions?.count else { return 0 }
+            return count < 4 ? count : 4
         case .bookmarksAndHistory:
             return data.count
         }
