@@ -317,7 +317,7 @@ extension TabTrayV3ViewController: UITableViewDelegate {
         guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: sectionHeaderIdentifier) as? TabTableViewHeader, viewModel.numberOfRowsInSection(section: section) != 0 else {
             return nil
         }
-        headerView.titleLabel.text = viewModel.getSectionDateHeader(section)
+        headerView.titleLabel.text = "Section Title"
         headerView.applyTheme()
         return headerView
     }
@@ -325,6 +325,7 @@ extension TabTrayV3ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return section == TabSection(rawValue: section)?.rawValue && viewModel.numberOfRowsInSection(section: section) != 0 ? UITableView.automaticDimension : 0
     }
+    
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let share = UIContextualAction(style: .normal, title: Strings.ShareContextMenuTitle, handler: { (action, view, completionHandler) in
             guard let tab = self.viewModel.getTab(forIndex: indexPath), let url = tab.url else { return }

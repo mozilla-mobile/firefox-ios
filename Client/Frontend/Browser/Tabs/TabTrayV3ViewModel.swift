@@ -6,22 +6,12 @@ import Foundation
 import Shared
 import Storage
 
-enum TabSectionV3: Int, CaseIterable {
-    case today
-    case yesterday
-    case lastWeek
-    case older
-}
-
 protocol TopTabCellDelegateV3: AnyObject {
     func tabCellDidClose(_ cell: UICollectionViewCell)
 }
 
 class TabTrayV3ViewModel: NSObject {
-    fileprivate var dataStore: [TabSectionV3: [Tab]] = [ .today: Array<Tab>(),
-                                                   .yesterday: Array<Tab>(),
-                                                   .lastWeek: Array<Tab>(),
-                                                   .older: Array<Tab>()]
+    fileprivate var dataStore: [Tab] = Array<Tab>()
     fileprivate let tabManager: TabManager
     fileprivate let viewController: TabTrayV3ViewController
     private var isPrivate = false
@@ -80,85 +70,21 @@ class TabTrayV3ViewModel: NSObject {
     
     func updateTabs() {
         let tabs = getTabs()
-        tabs.forEach { tab in
-            let section = timestampToSection(tab)
-            dataStore[section]?.insert(tab, at: 0)
-        }
-    
-        for (section, list) in dataStore {
-            let sorted = list.sorted {
-                let firstTab = $0.lastExecutedTime ?? $0.sessionData?.lastUsedTime ?? 0
-                let secondTab = $1.lastExecutedTime ?? $1.sessionData?.lastUsedTime ?? 0
-                return firstTab > secondTab
-            }
-            _ = dataStore.updateValue(sorted, forKey: section)
-        }
+        dataStore = tabs
         viewController.tableView.reloadData()
     }
     
     func resetDataStoreTabs() {
         dataStore.removeAll()
-        dataStore = [ .today: Array<Tab>(),
-        .yesterday: Array<Tab>(),
-        .lastWeek: Array<Tab>(),
-        .older: Array<Tab>()]
+        dataStore = Array<Tab>()
     }
-    
-    func timestampToSection(_ tab: Tab) -> TabSectionV3 {
-        let tabDate = Date.fromTimestamp(tab.lastExecutedTime ?? tab.sessionData?.lastUsedTime ?? Date.now())
-        if tabDate.isToday() {
-            return .today
-        } else if tabDate.isYesterday() {
-            return .yesterday
-        } else if tabDate.isWithinLast7Days() {
-            return .lastWeek
-        } else {
-            return .older
-        }
-    }
-    
-    func getSectionDateHeader(_ section: Int) -> String {
-        let section = TabSectionV3(rawValue: section)
-        let sectionHeader: String
-        let date: String
-        let dateFormatter = DateFormatter()
-        let dateIntervalFormatter = DateIntervalFormatter()
-        
-        dateFormatter.dateStyle = .medium
-        dateFormatter.timeStyle = .none
-        dateFormatter.locale = Locale(identifier: Locale.current.identifier)
-        
-        dateIntervalFormatter.dateStyle = .medium
-        dateIntervalFormatter.timeStyle = .none
-        dateIntervalFormatter.locale = Locale(identifier: Locale.current.identifier)
-        
-        switch section {
-        case .today:
-            sectionHeader = "Today"
-            date = dateFormatter.string(from: Date())
-        case .yesterday:
-            sectionHeader = "Yesterday"
-            date = dateFormatter.string(from: Date.yesterday)
-        case .lastWeek:
-            sectionHeader = "Last week"
-            date = dateIntervalFormatter.string(from: Date().lastWeek, to: Date(timeInterval: 6.0 * 24.0 * 3600.0, since: Date().lastWeek))
-        case .older:
-            sectionHeader = "Older"
-            date = ""
-        default:
-            sectionHeader = ""
-            date = ""
-        }
-        
-        return (sectionHeader + (!date.isEmpty ? " — " : " ") + date).uppercased()
-    }
-    
+
     // The user has tapped the close button or has swiped away the cell
     func removeTab(forIndex index: IndexPath) {
-        guard let section = TabSectionV3(rawValue: index.section), let tab = dataStore[section]?[index.row] else {
+        guard index.row <= dataStore.count - 1  else {
             return
         }
-
+        let tab = dataStore[index.row]
         let tabCount = self.getTabs().count
         tabManager.removeTabAndUpdateSelectedIndex(tab)
         if tabCount == 1 && self.getTabs().count == 1 {
@@ -170,7 +96,7 @@ class TabTrayV3ViewModel: NSObject {
     func closeTabsForCurrentTray() {
         viewController.hideDisplayedTabs() {
             let maxTabs = 100
-            let tabs = self.dataStore.compactMap { $0.1 }.flatMap { $0 }
+            let tabs = self.dataStore
             if tabs.count >= maxTabs {
                 self.tabManager.removeTabsAndAddNormalTab(tabs)
             } else {
@@ -185,9 +111,10 @@ class TabTrayV3ViewModel: NSObject {
     }
     
     func didSelectRowAt (index: IndexPath) {
-        guard let section = TabSectionV3(rawValue: index.section), let tab = dataStore[section]?[index.row] else {
+        guard index.row <= dataStore.count - 1  else {
             return
         }
+        let tab = dataStore[index.row]
         tab.lastExecutedTime = Date.now()
         selectTab(tab)
     }
@@ -201,24 +128,19 @@ class TabTrayV3ViewModel: NSObject {
     }
     
     func numberOfSections() -> Int {
-        return TabSectionV3.allCases.count
+        return 1
     }
 
     func getTab(forIndex index: IndexPath) -> Tab? {
-        guard let section = TabSectionV3(rawValue: index.section), let tab = dataStore[section]?[index.row] else {
-            return nil
-        }
-        return tab
+        return dataStore[index.row]
     }
     
     func numberOfRowsInSection(section: Int) -> Int {
-        return dataStore[TabSectionV3(rawValue: section) ?? .today]?.count ?? 0
+        return dataStore.count
     }
     
     func configure(cell: TabTableViewCell, for index: IndexPath) {
-        guard let section = TabSectionV3(rawValue: index.section),
-              let tab = dataStore[section]?[index.row] else { return }
-
+        let tab = dataStore[index.row]
         let baseDomain = tab.sessionData?.urls.last?.baseDomain ?? tab.url?.baseDomain
         let urlLabel = baseDomain != nil ? baseDomain!.contains("local") ? " " : baseDomain : " "
         
@@ -258,12 +180,13 @@ extension TabTrayV3ViewModel: TabManagerDelegate {
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, isRestoring: Bool) { }
     
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
-        for (section, tabs) in dataStore {
-            if let removalIndex = tabs.firstIndex(where: { $0 === tab }) {
-                dataStore[section]?.remove(at: removalIndex)
-                viewController.tableView.deleteRows(at: [IndexPath(row: removalIndex, section: section.rawValue)], with: .automatic)
+//        dataStore.firstIndex(of: <#T##Tab#>)
+//        for tabs in dataStore {
+            if let removalIndex = dataStore.firstIndex(where: { $0 === tab }) {
+                dataStore.remove(at: removalIndex)
+                viewController.tableView.deleteRows(at: [IndexPath(row: removalIndex, section: 0)], with: .automatic)
             }
-        }
+//        }
     }
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
