@@ -88,6 +88,7 @@ class BrowserViewController: UIViewController {
 
     weak var tabTrayController: TabTrayControllerV1?
     weak var tabTrayControllerV2: TabTrayV2ViewController?
+    weak var tabTrayControllerV3: TabTrayV3ViewController?
     let profile: Profile
     let tabManager: TabManager
 
@@ -1743,9 +1744,10 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
+        let tabTrayV3PrivateMode = tabTrayControllerV3?.viewModel.isInPrivateMode
         let tabTrayV2PrivateMode = tabTrayControllerV2?.viewModel.isInPrivateMode
         let tabTrayV1PrivateMode = tabTrayController?.tabDisplayManager.isPrivate
-        guard let toast = toast, !(tabTrayV1PrivateMode ?? (tabTrayV2PrivateMode ?? false)) else {
+        guard let toast = toast, !(tabTrayV1PrivateMode ?? (tabTrayV2PrivateMode ?? (tabTrayV3PrivateMode ?? false))) else {
             return
         }
         show(toast: toast, afterWaiting: ButtonToastUX.ToastDelay)

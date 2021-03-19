@@ -31,7 +31,7 @@ extension BrowserViewController: URLBarDelegate {
             }
         }
         if shouldShowChronTabs {
-            let tabTrayViewController = TabTrayV2ViewController(tabTrayDelegate: self, profile: profile)
+            let tabTrayViewController = TabTrayV3ViewController(tabTrayDelegate: self, profile: profile)
             let controller: UINavigationController
             if #available(iOS 13.0, *) {
                 controller = UINavigationController(rootViewController: tabTrayViewController)
@@ -46,7 +46,24 @@ extension BrowserViewController: URLBarDelegate {
                 controller = themedController
             }
             self.present(controller, animated: true, completion: nil)
-            self.tabTrayControllerV2 = tabTrayViewController
+            self.tabTrayControllerV3 = tabTrayViewController
+//        } else if shouldShowChronTabs {
+//            let tabTrayViewController = TabTrayV2ViewController(tabTrayDelegate: self, profile: profile)
+//            let controller: UINavigationController
+//            if #available(iOS 13.0, *) {
+//                controller = UINavigationController(rootViewController: tabTrayViewController)
+//                controller.presentationController?.delegate = tabTrayViewController
+//                // If we're not using the system theme, override the view's style to match
+//                if !ThemeManager.instance.systemThemeIsOn {
+//                    controller.overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
+//                }
+//            } else {
+//                let themedController = ThemedNavigationController(rootViewController: tabTrayViewController)
+//                themedController.presentingModalViewControllerDelegate = self
+//                controller = themedController
+//            }
+//            self.present(controller, animated: true, completion: nil)
+//            self.tabTrayControllerV2 = tabTrayViewController
         } else {
             let tabTrayController = TabTrayControllerV1(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
             navigationController?.pushViewController(tabTrayController, animated: true)

@@ -299,6 +299,8 @@
 		43AB6FA725DC53D30016B015 /* PanelDataObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AB6FA125DC53D30016B015 /* PanelDataObservers.swift */; };
 		43B137F223A181A200CB7FA0 /* NSUserDefaultsPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B137F123A181A200CB7FA0 /* NSUserDefaultsPrefs.swift */; };
 		43C5A09B2555DF8100BA37AD /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C5A0992555DF8100BA37AD /* BottomSheetViewController.swift */; };
+		43D500D226052B4900D2E894 /* TabTrayV3ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D500D026052B4900D2E894 /* TabTrayV3ViewController.swift */; };
+		43D500D326052B4900D2E894 /* TabTrayV3ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D500D126052B4900D2E894 /* TabTrayV3ViewModel.swift */; };
 		43DDB96A240994370058A068 /* ETPCoverSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DDB969240994360058A068 /* ETPCoverSheetViewController.swift */; };
 		43DDB96C240995A70058A068 /* ETPModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DDB96B240995A70058A068 /* ETPModel.swift */; };
 		43DDB97624099F200058A068 /* ETPViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DDB97524099F200058A068 /* ETPViewModel.swift */; };
@@ -1875,6 +1877,8 @@
 		43B137F123A181A200CB7FA0 /* NSUserDefaultsPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaultsPrefs.swift; sourceTree = "<group>"; };
 		43C5A0992555DF8100BA37AD /* BottomSheetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
 		43CA482EA439A9C486CCA01D /* kk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kk; path = kk.lproj/Shared.strings; sourceTree = "<group>"; };
+		43D500D026052B4900D2E894 /* TabTrayV3ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabTrayV3ViewController.swift; sourceTree = "<group>"; };
+		43D500D126052B4900D2E894 /* TabTrayV3ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabTrayV3ViewModel.swift; sourceTree = "<group>"; };
 		43DDB969240994360058A068 /* ETPCoverSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ETPCoverSheetViewController.swift; sourceTree = "<group>"; };
 		43DDB96B240995A70058A068 /* ETPModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ETPModel.swift; sourceTree = "<group>"; };
 		43DDB97524099F200058A068 /* ETPViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ETPViewModel.swift; sourceTree = "<group>"; };
@@ -4132,6 +4136,8 @@
 		23F2C365244E44FA00FA4496 /* Tabs */ = {
 			isa = PBXGroup;
 			children = (
+				43D500D026052B4900D2E894 /* TabTrayV3ViewController.swift */,
+				43D500D126052B4900D2E894 /* TabTrayV3ViewModel.swift */,
 				23AE36612475A0EF00ACB7BA /* TabTrayV2ViewController.swift */,
 				23B5B498254C955E009AE055 /* TabMoreMenuViewController.swift */,
 				23BD0E4D25533AE50038586B /* TabMoreMenuViewModel.swift */,
@@ -7512,6 +7518,7 @@
 				EBF47E701F7979DF00899189 /* TelemetryWrapper.swift in Sources */,
 				E68F36981EA694000048CF44 /* PanelDataObservers.swift in Sources */,
 				31ADB5DA1E58CEC300E87909 /* ClipboardBarDisplayHandler.swift in Sources */,
+				43D500D326052B4900D2E894 /* TabTrayV3ViewModel.swift in Sources */,
 				4368BC6824FF14650021931D /* NewTabUserResearch.swift in Sources */,
 				745DAB3F1CDAB09E00D44181 /* HistoryBackButton.swift in Sources */,
 				EB9A179D20E69A7F00B12184 /* Theme.swift in Sources */,
@@ -7626,6 +7633,7 @@
 				D0625CA8208FC47A0081F3B2 /* BrowserViewController+DownloadQueueDelegate.swift in Sources */,
 				2F44FCC71A9E8CF500FD20CC /* SearchSettingsTableViewController.swift in Sources */,
 				39A359E41BFCCE94006B9E87 /* UserActivityHandler.swift in Sources */,
+				43D500D226052B4900D2E894 /* TabTrayV3ViewController.swift in Sources */,
 				D88FDAAF1F4E2BA000FD9709 /* PhotonActionSheetAnimator.swift in Sources */,
 				43AB6FA325DC53D30016B015 /* ASFooterView.swift in Sources */,
 				E698FFDA1B4AADF40001F623 /* TabScrollController.swift in Sources */,
