@@ -38,6 +38,7 @@ protocol SearchViewControllerDelegate: AnyObject {
     func searchViewController(_ searchViewController: SearchViewController, didSelectURL url: URL)
     func presentSearchSettingsController()
     func searchViewController(_ searchViewController: SearchViewController, didHighlightText text: String, search: Bool)
+    func searchViewController(_ searchViewController: SearchViewController, didAppend text: String)
 }
 
 class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, LoaderListener {
@@ -451,7 +452,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     @objc func append(_ sender: UIButton) {
         let buttonPosition = sender.convert(CGPoint(), to: tableView)
         if let indexPath = tableView.indexPathForRow(at: buttonPosition), let newQuery = suggestions?[indexPath.row] {
-            searchQuery = newQuery + " "
+            searchDelegate?.searchViewController(self, didAppend: newQuery + " ")
         }
     }
 }
