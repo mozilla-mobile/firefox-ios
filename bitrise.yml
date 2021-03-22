@@ -259,6 +259,16 @@ workflows:
 
             envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
         title: Workaround carthage lipo
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+
+            # Import only the shipping locales (from shipping_locales.txt) onRelease
+            git clone --depth 1 https://github.com/mozilla-l10n/firefoxios-l10n firefoxios-l10n || exit 1
+        title: Pull in L10n
     - carthage@3.2:
         inputs:
         - carthage_options: '--platform ios'
@@ -277,7 +287,7 @@ workflows:
     - script@1:
         title: Copy glean sdk_generator
         inputs:
-        - content: >-
+        - content: |-
             #!/usr/bin/env bash
             # fail if any commands fails
             set -e
@@ -328,7 +338,7 @@ workflows:
       in master
     meta:
       bitrise.io:
-        stack: osx-xcode-12.3.x
+        stack: osx-xcode-12.4.x
   L10nScreenshotsTests:
     steps:
     - activate-ssh-key@4:
@@ -388,7 +398,7 @@ workflows:
       in master
     meta:
       bitrise.io:
-        stack: osx-xcode-12.3.x
+        stack: osx-xcode-12.4.x
   ios13-xcode11.7-28.x-release:
     steps:
     - activate-ssh-key@4.0:
