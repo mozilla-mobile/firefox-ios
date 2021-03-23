@@ -153,8 +153,8 @@ class BookmarkingTests: BaseTestCase {
         navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "www.ebay")
         waitForExistence(app.tables["SiteTable"])
-        waitForExistence(app.buttons["www.ebay.com"])
-        XCTAssertTrue(app.buttons["www.ebay.com"].exists)
+        waitForExistence(app.tables["SiteTable"].cells.staticTexts["www.ebay"], timeout: 5)
+        XCTAssertTrue(app.tables["SiteTable"].cells.staticTexts["www.ebay"].exists)
         typeOnSearchBar(text: ".com")
         typeOnSearchBar(text: "\r")
         navigator.nowAt(BrowserTab)
@@ -182,7 +182,7 @@ class BookmarkingTests: BaseTestCase {
         navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "olx.ro")
         waitForExistence(app.tables["SiteTable"])
-        waitForExistence(app.buttons["olx.ro"])
+        waitForExistence(app.cells.staticTexts["olx.ro"])
         XCTAssertNotEqual(app.tables["SiteTable"].cells.count, 0)
     }
     /* Disable due to https://github.com/mozilla-mobile/firefox-ios/issues/7521
