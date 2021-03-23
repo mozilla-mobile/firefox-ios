@@ -28,11 +28,11 @@ jobs:
         python ./test-fixtures/update_application_services_version.py
     - name: Get new A-S tag to be used in the PR info
       run: |
-        echo pwd
         cd test-fixtures/
         echo "version=$(./read_as_tag.sh)" >> $GITHUB_ENV
     - name: Remove temp file created to store the tag info
       run: |
+        cd test-fixtures/
         rm newest_tag.txt
     - name: Update A-S release in Cartfile
       run: |-

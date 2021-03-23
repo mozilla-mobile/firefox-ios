@@ -77,7 +77,7 @@ def main():
         update_cartfile_tag_version(current_tag, as_repo_tag, "Cartfile.resolved")
 
         # Save the newer version to be used in the PR info
-        f= open("newest_tag.txt","w+")
+        f= open("test-fixtures/newest_tag.txt","w+")
         f.write(as_repo_tag+"\n")
 
 if __name__ == '__main__':
