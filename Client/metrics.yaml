@@ -595,7 +595,7 @@ settings_menu:
       - https://github.com/mozilla-mobile/firefox-ios/issues/7090
     notification_emails:
       - firefox-ios@mozilla.com
-    expires: "2021-03-01"
+    expires: "2021-09-01"
 
 # QR Code metrics
 qr_code:
@@ -623,7 +623,7 @@ default_browser_card:
       - https://github.com/mozilla-mobile/firefox-ios/pull/7245
     notification_emails:
       - firefox-ios@mozilla.com
-    expires: "2021-07-01"
+    expires: "2021-09-01"
   go_to_settings_pressed:
     type: counter
     description: |
@@ -635,7 +635,7 @@ default_browser_card:
       - https://github.com/mozilla-mobile/firefox-ios/pull/7245
     notification_emails:
       - firefox-ios@mozilla.com
-    expires: "2021-03-01"
+    expires: "2021-09-01"
 
 # Default browser onboarding metrics
 default_browser_onboarding:
@@ -678,7 +678,7 @@ app:
       - https://github.com/mozilla-mobile/firefox-ios/pull/7245
     notification_emails:
       - firefox-ios@mozilla.com
-    expires: "2021-03-01"
+    expires: "2021-09-01"
 
 # Legacy IDs for deletion-request purposes
 legacy.ids:
