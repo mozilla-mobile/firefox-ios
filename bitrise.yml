@@ -1284,7 +1284,7 @@ workflows:
         - export_uitest_artifacts: 'true'
         - scheme: Fennec_Enterprise_XCUITests
         - simulator_os_version: latest
-        - simulator_device: iPhone 11
+        - simulator_device: "$IOS_DEVICE"
     - deploy-to-bitrise-io@1.10: {}
     - cache-push@2.2: {}
     - slack@3.1:
@@ -1296,6 +1296,10 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.4.x
+    envs:
+    - opts:
+        is_expand: false
+      IOS_DEVICE: iPhone 11
   TEMP:
     steps:
     - activate-ssh-key@4.0:
