@@ -453,6 +453,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         let buttonPosition = sender.convert(CGPoint(), to: tableView)
         if let indexPath = tableView.indexPathForRow(at: buttonPosition), let newQuery = suggestions?[indexPath.row] {
             searchDelegate?.searchViewController(self, didAppend: newQuery + " ")
+            searchQuery = newQuery + " "
         }
     }
 }
