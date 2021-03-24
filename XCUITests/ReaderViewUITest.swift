@@ -39,6 +39,8 @@ class ReaderViewTest: BaseTestCase {
 
     // Smoketest
     func testAddToReadingList() {
+        navigator.goto(URLBarOpen)
+        navigator.back()
         // Navigate to reading list
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_ReadingList)

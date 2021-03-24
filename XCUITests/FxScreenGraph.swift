@@ -481,7 +481,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.gesture(forAction: Action.OpenSearchBarFromSearchButton, transitionTo: URLBarOpen) {
             userState in app.buttons["TabToolbar.stopReloadButton"].tap()
         }
-
     }
 
     map.addScreenState(LibraryPanel_Bookmarks) { screenState in

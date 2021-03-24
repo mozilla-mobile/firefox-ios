@@ -8,6 +8,8 @@ let websiteUrl = "www.mozilla.org"
 class NewTabSettingsTest: BaseTestCase {
     // Smoketest
     func testCheckNewTabSettingsByDefault() {
+        navigator.goto(URLBarOpen)
+        navigator.back()
         navigator.goto(NewTabSettings)
         waitForExistence(app.navigationBars["New Tab"])
         XCTAssertTrue(app.tables.cells["Firefox Home"].exists)
@@ -17,6 +19,8 @@ class NewTabSettingsTest: BaseTestCase {
 
     // Smoketest
     func testChangeNewTabSettingsShowBlankPage() {
+        navigator.goto(URLBarOpen)
+        navigator.back()
         navigator.goto(NewTabSettings)
         waitForExistence(app.navigationBars["New Tab"])
 
@@ -46,6 +50,8 @@ class NewTabSettingsTest: BaseTestCase {
     }
 
     func testChangeNewTabSettingsShowCustomURL() {
+        navigator.goto(URLBarOpen)
+        navigator.back()
         navigator.goto(NewTabSettings)
         waitForExistence(app.navigationBars["New Tab"])
         // Check the placeholder value

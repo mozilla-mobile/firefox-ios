@@ -6,16 +6,18 @@ import XCTest
 
 class DataManagementTests: BaseTestCase {
 
-    func testWebSiteDataEnterFirstTime() {
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
-        navigator.performAction(Action.AcceptClearAllWebsiteData)
-        let expectedWebsiteDataEntries2 = app.tables.cells.count
-        XCTAssertEqual(expectedWebsiteDataEntries2, 1)
-        navigator.openURL("example.com")
-        navigator.goto(WebsiteDataSettings)
-        let expectedWebsiteDataEntries3 = app.tables.cells.count
-        XCTAssertEqual(expectedWebsiteDataEntries3, 2)
-    }
+//    func testWebSiteDataEnterFirstTime() {
+//        navigator.goto(URLBarOpen)
+//        navigator.back()
+//        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
+//        navigator.performAction(Action.AcceptClearAllWebsiteData)
+//        let expectedWebsiteDataEntries2 = app.tables.cells.count
+//        XCTAssertEqual(expectedWebsiteDataEntries2, 1)
+//        navigator.openURL("example.com")
+//        navigator.goto(WebsiteDataSettings)
+//        let expectedWebsiteDataEntries3 = app.tables.cells.count
+//        XCTAssertEqual(expectedWebsiteDataEntries3, 2)
+//    }
     /* Disabled failing on BR
     // Testing the search bar, search results and 'Show More' option.
     func testWebSiteDataOptions() {
