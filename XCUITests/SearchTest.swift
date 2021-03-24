@@ -37,8 +37,8 @@ class SearchTests: BaseTestCase {
         waitForNoExistence(app.staticTexts[LabelPrompt])
 
         // Suggestions should be shown
-        waitForExistence(app.tables["SiteTable"].buttons.firstMatch)
-        XCTAssertTrue(app.tables["SiteTable"].buttons.firstMatch.exists)
+        waitForExistence(app.tables["SiteTable"].cells.firstMatch)
+        XCTAssertTrue(app.tables["SiteTable"].cells.firstMatch.exists)
 
         // Disable Search suggestion
         app.buttons["urlBar-cancel"].tap()
@@ -49,12 +49,12 @@ class SearchTests: BaseTestCase {
         suggestionsOnOff()
 
         // Suggestions should not be shown
-        waitForNoExistence(app.tables["SiteTable"].buttons.firstMatch)
+        waitForNoExistence(app.tables["SiteTable"].cells.firstMatch)
         navigator.nowAt(BrowserTab)
         navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "foobar")
-        waitForNoExistence(app.tables["SiteTable"].buttons.firstMatch)
-        XCTAssertFalse(app.tables["SiteTable"].buttons.firstMatch.exists)
+        waitForNoExistence(app.tables["SiteTable"].cells.firstMatch)
+        XCTAssertFalse(app.tables["SiteTable"].cells.firstMatch.exists)
 
         // Verify that previous choice is remembered
         app.buttons["urlBar-cancel"].tap()
@@ -62,8 +62,8 @@ class SearchTests: BaseTestCase {
         waitForTabsButton()
 
         typeOnSearchBar(text: "foobar")
-        waitForNoExistence(app.tables["SiteTable"].buttons[SuggestedSite])
-        XCTAssertFalse(app.tables["SiteTable"].buttons.firstMatch.exists)
+        waitForNoExistence(app.tables["SiteTable"].cells[SuggestedSite])
+        XCTAssertFalse(app.tables["SiteTable"].cells.firstMatch.exists)
 
         app.buttons["urlBar-cancel"].tap()
         waitForTabsButton()
@@ -77,26 +77,8 @@ class SearchTests: BaseTestCase {
 
         // Suggestions prompt should appear
         typeOnSearchBar(text: "foobar")
-        waitForExistence(app.tables["SiteTable"].buttons.firstMatch)
-        XCTAssertTrue(app.tables["SiteTable"].buttons.firstMatch.exists)
-    }
-
-    // Promt does not appear once Search has been enabled by default, see bug: 1411184
-    func testDismissPromptPresence() {
-        navigator.goto(URLBarOpen)
-        typeOnSearchBar(text: "foobar")
-        waitForExistence(app.staticTexts[LabelPrompt])
-
-        app.buttons["No"].tap()
-        waitForNoExistence(app.tables["SiteTable"].buttons[SuggestedSite])
-        app.buttons["Go"].tap()
-        navigator.nowAt(BrowserTab)
-        // Verify that it is possible to enable suggestions after selecting No
-        suggestionsOnOff()
-        navigator.nowAt(BrowserTab)
-        navigator.goto(URLBarOpen)
-        typeOnSearchBar(text: "foobar")
-        waitForExistence(app.tables["SiteTable"].buttons[SuggestedSite])
+        waitForExistence(app.tables["SiteTable"].cells.firstMatch)
+        XCTAssertTrue(app.tables["SiteTable"].cells.firstMatch.exists)
     }
 
     func testDoNotShowSuggestionsWhenEnteringURL() {
@@ -108,22 +90,22 @@ class SearchTests: BaseTestCase {
 
         // Suggestions should be shown
         waitForExistence(app.tables["SiteTable"])
-        if !(app.tables["SiteTable"].buttons[SuggestedSite].exists) {
-            if !(app.tables["SiteTable"].buttons[SuggestedSite2].exists) {
-                waitForExistence(app.tables["SiteTable"].buttons[SuggestedSite3])
+        if !(app.tables["SiteTable"].cells.staticTexts[SuggestedSite].exists) {
+            if !(app.tables["SiteTable"].cells.staticTexts[SuggestedSite2].exists) {
+                waitForExistence(app.tables["SiteTable"].cells.staticTexts[SuggestedSite3], timeout: 5)
             }
         }
 
         // Typing / should stop showing suggestions
         app.textFields["address"].typeText("/")
-        waitForNoExistence(app.tables["SiteTable"].buttons[SuggestedSite])
+        waitForNoExistence(app.tables["SiteTable"].cells[SuggestedSite])
 
         // Typing space and char after / should show suggestions again
         app.textFields["address"].typeText(" b")
         waitForExistence(app.tables["SiteTable"])
-        if !(app.tables["SiteTable"].buttons[SuggestedSite4].exists) {
-            if !(app.tables["SiteTable"].buttons[SuggestedSite5].exists) {
-                waitForExistence(app.tables["SiteTable"].buttons[SuggestedSite6])
+        if !(app.tables["SiteTable"].cells.staticTexts[SuggestedSite4].exists) {
+            if !(app.tables["SiteTable"].cells.staticTexts[SuggestedSite5].exists) {
+                waitForExistence(app.tables["SiteTable"].cells.staticTexts[SuggestedSite6])
             }
         }
     }

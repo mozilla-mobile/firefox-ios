@@ -18,6 +18,7 @@ class DataManagementTests: BaseTestCase {
 //        let expectedWebsiteDataEntries3 = app.tables.cells.count
 //        XCTAssertEqual(expectedWebsiteDataEntries3, 2)
 //    }
+
     /* Disabled failing on BR
     // Testing the search bar, search results and 'Show More' option.
     func testWebSiteDataOptions() {

@@ -38,6 +38,7 @@ class L10nSuite3SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testDefaultTopSites() {
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
         navigator.goto(HomePanelsScreen)
         snapshot("DefaultTopSites-01")
     }

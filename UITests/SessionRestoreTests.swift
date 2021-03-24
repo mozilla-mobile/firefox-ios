@@ -56,7 +56,7 @@ class SessionRestoreTests: KIFTestCase {
         tester().tapView(withAccessibilityLabel: "Forward")
         tester().tapView(withAccessibilityLabel: "Forward")
 
-        tester().waitForAnimationsToFinish()
+        tester().waitForAnimationsToFinish(withTimeout: 5)
         tester().waitForWebViewElementWithAccessibilityLabel("Page 3")
         let canGoForward: Bool
         do {
