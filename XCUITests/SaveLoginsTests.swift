@@ -75,6 +75,8 @@ class SaveLoginTest: BaseTestCase {
     }
 
     func testSaveLogin() {
+        navigator.goto(URLBarOpen)
+        navigator.back()
         // Initially the login list should be empty
         openLoginsSettings()
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList)

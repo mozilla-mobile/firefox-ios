@@ -665,7 +665,7 @@ extension BrowserViewController: WKNavigationDelegate {
         self.scrollController.resetZoomState()
 
         if tabManager.selectedTab === tab {
-            updateUIForReaderHomeStateForTab(tab)
+            updateUIForReaderHomeStateForTab(tab, focusUrlBar: true)
         }
     }
 
