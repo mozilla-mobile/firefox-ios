@@ -15,6 +15,7 @@ public struct LaunchArguments {
     public static let DeviceName = "DEVICE_NAME"
     public static let ServerPort = "GCDWEBSERVER_PORT:"
     public static let SkipAddingGoogleTopSite = "SKIP_ADDING_GOOGLE_TOP_SITE"
+    public static let SkipDefaultBrowserOnboarding = "SKIP_DEFAULT_BROWSER_ONBOARDING"
 
     // After the colon, put the name of the file to load from test bundle
     public static let LoadDatabasePrefix = "FIREFOX_LOAD_DB_NAMED:"

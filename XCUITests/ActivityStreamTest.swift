@@ -40,6 +40,7 @@ class ActivityStreamTest: BaseTestCase {
 
     // Smoketest
     func testDefaultSites() {
+        waitForExistence(TopSiteCellgroup, timeout: 5)
         // There should be 5 top sites by default
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
         // Check their names so that test is added to Smoketest
