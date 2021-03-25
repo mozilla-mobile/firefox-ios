@@ -1077,7 +1077,7 @@ class BrowserViewController: UIViewController {
     // MARK: Opening New Tabs
     func switchToPrivacyMode(isPrivate: Bool) {
          if let tabTrayController = self.tabTrayController, tabTrayController.tabDisplayManager.isPrivate != isPrivate {
-            tabTrayController.changePrivacyMode(isPrivate)
+            tabTrayController.didTogglePrivateMode(isPrivate)
         }
         topTabsViewController?.applyUIMode(isPrivate: isPrivate)
     }
@@ -1750,9 +1750,7 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
-        let tabTrayV2PrivateMode = tabTrayControllerV2?.viewModel.isInPrivateMode
-        let tabTrayV1PrivateMode = tabTrayController?.tabDisplayManager.isPrivate
-        guard let toast = toast, !(tabTrayV1PrivateMode ?? (tabTrayV2PrivateMode ?? false)) else {
+        guard let toast = toast, !(tabManager.selectedTab?.isPrivate ?? false) else {
             return
         }
         show(toast: toast, afterWaiting: ButtonToastUX.ToastDelay)
