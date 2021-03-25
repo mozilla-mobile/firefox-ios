@@ -1296,10 +1296,6 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.4.x
-    envs:
-    - opts:
-        is_expand: false
-      IOS_DEVICE: iPhone 11
   TEMP:
     steps:
     - activate-ssh-key@4.0:
