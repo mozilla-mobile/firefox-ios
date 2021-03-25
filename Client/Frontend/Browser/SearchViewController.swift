@@ -432,7 +432,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 appendButton.addTarget(self, action: #selector(append(_ :)), for: .touchUpInside)
                 appendButton.tintColor = ThemeManager.instance.currentName == .dark ? UIColor.white : UIColor.black
                 appendButton.sizeToFit()
-                cell.accessoryView = appendButton
+                cell.accessoryView = indexPath.row > 0 ? appendButton : nil
             }
         case .bookmarksAndHistory:
             if let site = data[indexPath.row], let cell = cell as? TwoLineTableViewCell {
