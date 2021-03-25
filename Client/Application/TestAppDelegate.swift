@@ -95,6 +95,10 @@ class TestAppDelegate: AppDelegate {
             profile.prefs.setInt(1, forKey: PrefsKeys.KeyLastVersionNumber)
         }
 
+        if launchArguments.contains(LaunchArguments.SkipDefaultBrowserOnboarding) {
+            profile.prefs.setBool(true, forKey: PrefsKeys.KeyDidShowDefaultBrowserOnboarding)
+        }
+
         // Skip the intro when requested by for example tests or automation
         if launchArguments.contains(LaunchArguments.SkipIntro) {
             profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
