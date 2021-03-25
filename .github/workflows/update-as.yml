@@ -26,6 +26,14 @@ jobs:
     - name: Modifing Cartfile
       run: |
         python ./test-fixtures/update_application_services_version.py
+    - name: Get new A-S tag to be used in the PR info
+      run: |
+        cd test-fixtures/
+        echo "version=$(./read_as_tag.sh)" >> $GITHUB_ENV
+    - name: Remove temp file created to store the tag info
+      run: |
+        cd test-fixtures/
+        rm newest_tag.txt
     - name: Update A-S release in Cartfile
       run: |-
         git diff
@@ -35,9 +43,10 @@ jobs:
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v3
       with:
-        commit-message: Auto update Cartfile with latest A-S release
+        commit-message: Auto update Cartfile with latest A-S release ${{ env.version }}
         author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
         committer: GitHub <noreply@github.com>
-        title: Auto Update Cartfile
-        branch: update-cartfile-new-as-tag
+        title: Auto Update Cartfile with latest A-S version ${{ env.version }}
+        branch: update-cartfile-new-as-tag-${{ env.version }}
+        labels: Do Not Merge ⛔️
         token: ${{ secrets.GITHUB_TOKEN }}
