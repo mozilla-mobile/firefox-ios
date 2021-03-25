@@ -109,6 +109,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         telemetry = TelemetryWrapper(profile: profile)
 
+        // Start intialzing the Nimbus SDK. This should be done after Glean
+        // has been started.
+        initializeExperiments()
+
         // Set up a web server that serves us static content. Do this early so that it is ready when the UI is presented.
         setUpWebServer(profile)
 
