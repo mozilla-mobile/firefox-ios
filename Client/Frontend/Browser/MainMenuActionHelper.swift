@@ -216,6 +216,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         var section = [PhotonRowActions]()
 
         if !isHomePage && !isFileURL {
+            let zoomSection = getZoomSection()
+            append(to: &section, action: zoomSection)
+
             let findInPageAction = getFindInPageAction()
             append(to: &section, action: findInPageAction)
 
@@ -747,6 +750,31 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                 }
             }
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .removePinnedSite)
+        }
+    }
+
+    // MARK: Zoom
+
+    private func getZoomSection() -> [PhotonRowActions] {
+        var section = [PhotonRowActions]()
+        guard let tab = selectedTab else { return section }
+        let zoomLevel = String(format: "%.0f%%", tab.pageZoom * 100.0)
+        let zoomTitle = SingleActionViewModel(title: .AppMenu.Zoom, text: zoomLevel, isEnabled: false)
+
+        section.append(PhotonRowActions([zoomTitle, getZoomOutAction(tab: tab), getZoomInAction(tab: tab)]))
+        return section
+    }
+
+    
+    private func getZoomOutAction(tab: Tab) -> SingleActionViewModel {
+        return SingleActionViewModel(title: "", iconString: ImageIdentifiers.subtract, isEnabled: tab.pageZoom > 0.5) { _ in
+            tab.zoomOut()
+        }
+    }
+
+    private func getZoomInAction(tab: Tab) -> SingleActionViewModel {
+        return SingleActionViewModel(title: "", iconString: ImageIdentifiers.add, isEnabled: tab.pageZoom < 3.0) { _ in
+            tab.zoomIn()
         }
     }
 
