@@ -8,6 +8,7 @@ import Shared
 import XCGLogger
 
 private let log = Logger.browserLogger
+private let nimbusAppName = "firefox_ios"
 
 /// `Experiments` is the main entry point to use the `Nimbus` experimentation platform in Firefox for iOS.
 ///
@@ -91,8 +92,8 @@ enum Experiments {
         // channel. The values given here should match what `Experimenter`
         // thinks it is.
         let appSettings = NimbusAppSettings(
-            appName: "fxios",
-            channel: AppConstants.BuildChannel.rawValue
+            appName: nimbusAppName,
+            channel: AppConstants.BuildChannel.nimbusString
         )
 
         let errorReporter: NimbusErrorReporter = { err in
@@ -161,5 +162,15 @@ extension NimbusApi {
     func withExperiment<T>(featureId: FeatureId, transform: (String?) -> T) -> T {
         let branch = getExperimentBranch(featureId: featureId.rawValue)
         return transform(branch)
+    }
+}
+
+private extension AppBuildChannel {
+    var nimbusString: String {
+        switch self {
+        case .release: return "release"
+        case .beta: return "beta"
+        case .developer: return "nightly"
+        }
     }
 }
