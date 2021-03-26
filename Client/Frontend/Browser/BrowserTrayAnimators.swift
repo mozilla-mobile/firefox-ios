@@ -8,7 +8,7 @@ import Shared
 class TrayToBrowserAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         if let bvc = transitionContext.viewController(forKey: .to) as? BrowserViewController,
-           let tabTray = transitionContext.viewController(forKey: .from) as? TabTrayControllerV1 {
+           let tabTray = transitionContext.viewController(forKey: .from) as? GridTabViewController {
             transitionFromTray(tabTray, toBrowser: bvc, usingContext: transitionContext)
         }
     }
@@ -19,7 +19,7 @@ class TrayToBrowserAnimator: NSObject, UIViewControllerAnimatedTransitioning {
 }
 
 private extension TrayToBrowserAnimator {
-    func transitionFromTray(_ tabTray: TabTrayControllerV1, toBrowser bvc: BrowserViewController, usingContext transitionContext: UIViewControllerContextTransitioning) {
+    func transitionFromTray(_ tabTray: GridTabViewController, toBrowser bvc: BrowserViewController, usingContext transitionContext: UIViewControllerContextTransitioning) {
         let container = transitionContext.containerView
         guard let selectedTab = bvc.tabManager.selectedTab else { return }
 
@@ -107,7 +107,7 @@ private extension TrayToBrowserAnimator {
 class BrowserToTrayAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         if let bvc = transitionContext.viewController(forKey: .from) as? BrowserViewController,
-           let tabTray = transitionContext.viewController(forKey: .to) as? TabTrayControllerV1 {
+           let tabTray = transitionContext.viewController(forKey: .to) as? GridTabViewController {
             transitionFromBrowser(bvc, toTabTray: tabTray, usingContext: transitionContext)
         }
     }
@@ -118,7 +118,7 @@ class BrowserToTrayAnimator: NSObject, UIViewControllerAnimatedTransitioning {
 }
 
 private extension BrowserToTrayAnimator {
-    func transitionFromBrowser(_ bvc: BrowserViewController, toTabTray tabTray: TabTrayControllerV1, usingContext transitionContext: UIViewControllerContextTransitioning) {
+    func transitionFromBrowser(_ bvc: BrowserViewController, toTabTray tabTray: GridTabViewController, usingContext transitionContext: UIViewControllerContextTransitioning) {
 
         let container = transitionContext.containerView
         guard let selectedTab = bvc.tabManager.selectedTab else { return }
@@ -139,7 +139,7 @@ private extension BrowserToTrayAnimator {
         // Build a tab cell that we will use to animate the scaling of the browser to the tab
         let expandedFrame = calculateExpandedCellFrameFromBVC(bvc)
         let cell = createTransitionCellFromTab(bvc.tabManager.selectedTab, withFrame: expandedFrame)
-        cell.backgroundHolder.layer.cornerRadius = TabTrayControllerUX.CornerRadius
+        cell.backgroundHolder.layer.cornerRadius = GridTabTrayControllerUX.CornerRadius
 
         // Take a snapshot of the collection view to perform the scaling/alpha effect
         let tabCollectionViewSnapshot = tabTray.collectionView.snapshotView(afterScreenUpdates: true)!

@@ -48,6 +48,7 @@ extension BrowserViewController: URLBarDelegate {
         self.present(controller, animated: true, completion: nil)
 
         if let tab = tabManager.selectedTab {
+//            screenshotHelper.takeScreenshot(tab)
             screenshotHelper.takeScreenshot(tab)
         }
         TelemetryWrapper.recordEvent(category: .action, method: .open, object: .tabTray)
