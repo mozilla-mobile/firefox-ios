@@ -12,6 +12,7 @@ class DomainAutocompleteTests: KIFTestCase {
     }
 
     func testAutocomplete() {
+        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         BrowserUtils.addHistoryEntry("Foo bar baz", url: URL(string: "https://foo.bar.baz.org/dingbat")!)
         tester().waitForAnimationsToFinish(withTimeout: 3)
         tester().tapView(withAccessibilityIdentifier: "url")

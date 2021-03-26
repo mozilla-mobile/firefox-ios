@@ -54,11 +54,15 @@ class L10nMktSuiteSnapshotTests: L10nBaseSnapshotTests {
         navigator.goto(HomePanelsScreen)
         snapshot("DefaultTopSites-01")
     }
-    
+    // This test has to run with regular tab tray not chron tabs
+    // For that set that pref to 0 adding:
+    // Client/Application/TestAppDelegate.swift
+    /* if launchArguments.contains(LaunchArguments.ChronTabs) {
+        profile.prefs.setInt(0, forKey: PrefsKeys.ChronTabsPrefKey)
+    }*/
     func test4PrivateBrowsingTabsEmptyState() {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         app.buttons["closeTabButtonTabTray"].tap()
-        waitForExistence(app.tables["Empty list"], timeout: 3)
         snapshot("PrivateBrowsingMode")
     }
     

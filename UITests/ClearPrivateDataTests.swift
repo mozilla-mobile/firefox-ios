@@ -42,6 +42,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
     }
 
     func testRemembersToggles() {
+        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         BrowserUtils.openClearPrivateDataDialogKIF(tester())
         BrowserUtils.clearPrivateData([BrowserUtils.Clearable.History], tester())
         BrowserUtils.acceptClearPrivateData(tester())
@@ -64,10 +65,12 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
     func testClearsHistoryPanel() {
         tester().waitForAnimationsToFinish(withTimeout: 3)
+        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         let urls = visitSites(noOfSites: 2)
 
         let url1 = urls[0].url
         let url2 = urls[1].url
+        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         BrowserUtils.openLibraryMenu(tester())
         // Open History Panel
         tester().tapView(withAccessibilityIdentifier: "LibraryPanels.History")
@@ -91,11 +94,13 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
     func testDisabledHistoryDoesNotClearHistoryPanel() {
         tester().waitForAnimationsToFinish(withTimeout: 3)
+        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         let urls = visitSites(noOfSites: 2)
         var errorOrNil: NSError?
 
         let url1 = urls[0].url
         let url2 = urls[1].url
+        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         BrowserUtils.openClearPrivateDataDialogKIF(tester())
         BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtracting([BrowserUtils.Clearable.History]), tester())
         BrowserUtils.acceptClearPrivateData(tester())
@@ -211,6 +216,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
     }
 
     func testClearsTrackingProtectionSafelist() {
+        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         let wait = expectation(description: "wait for file write")
         ContentBlocker.shared.safelist(enable: true, url: URL(string: "http://www.mozilla.com")!) {
             wait.fulfill()

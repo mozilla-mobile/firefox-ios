@@ -13,6 +13,7 @@ class L10nSuite3SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testPasscodeSettings() {
+        app.buttons["urlBar-cancel"].tap()
         navigator.goto(PasscodeSettings)
         app.tables.cells["TurnOnPasscode"].tap()
         snapshot("SetPasscodeScreen-1-nopasscode")
@@ -39,11 +40,13 @@ class L10nSuite3SnapshotTests: L10nBaseSnapshotTests {
 
     func testDefaultTopSites() {
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
+        app.buttons["urlBar-cancel"].tap()
         navigator.goto(HomePanelsScreen)
         snapshot("DefaultTopSites-01")
     }
 
     func testMenuOnTopSites() {
+        app.buttons["urlBar-cancel"].tap()
         navigator.goto(NewTabScreen)
         navigator.goto(BrowserTabMenu)
         snapshot("MenuOnTopSites-01")
@@ -51,6 +54,7 @@ class L10nSuite3SnapshotTests: L10nBaseSnapshotTests {
 
     func testSettings() {
         let table = app.tables.element(boundBy: 0)
+        app.buttons["urlBar-cancel"].tap()
         navigator.goto(SettingsScreen)
         table.forEachScreen { i in
             snapshot("Settings-main-\(i)")
@@ -65,6 +69,7 @@ class L10nSuite3SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testPrivateBrowsingTabsEmptyState() {
+        app.buttons["urlBar-cancel"].tap()
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         app.tables.cells.element(boundBy: 0).buttons["closeTabButtonTabTray"].tap()
         snapshot("PrivateBrowsingTabsEmptyState-01")

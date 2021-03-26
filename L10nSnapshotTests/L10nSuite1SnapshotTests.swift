@@ -99,6 +99,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         waitForExistence(app.buttons["TabLocationView.pageOptionsButton"], timeout: 5)
         navigator.performAction(Action.Bookmark)
         navigator.createNewTab()
+        app.buttons["urlBar-cancel"].tap()
         // Disable due to issue #7521
         // navigator.goto(BookmarksPanelContextMenu)
         navigator.goto(LibraryPanel_Bookmarks)
@@ -117,6 +118,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
     func testETPperSite() {
         // Enable Strict ETP
+        app.buttons["urlBar-cancel"].tap()
         navigator.goto(TrackingProtectionSettings)
         // Check the warning alert
          app.cells["Settings.TrackingProtectionOption.BlockListStrict"].tap()
@@ -137,6 +139,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testSettingsETP() {
+        app.buttons["urlBar-cancel"].tap()
         navigator.goto(TrackingProtectionSettings)
 
         waitForExistence(app.cells["Settings.TrackingProtectionOption.BlockListBasic"])

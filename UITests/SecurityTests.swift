@@ -59,7 +59,7 @@ class SecurityTests: KIFTestCase {
             newTabcount = tester().waitForView(withAccessibilityIdentifier: "TabToolbar.tabsButton")?.accessibilityValue
         }
         XCTAssert(tabcount != nil && tabcount == newTabcount)
-    }
+        }
 
     /// Tap the New tab exploit button, which tries to piggyback off of an error page
     /// to load the session restore exploit. A new tab will load showing an error page,
@@ -79,6 +79,7 @@ class SecurityTests: KIFTestCase {
         tester().tapView(withAccessibilityIdentifier: "TabToolbar.tabsButton")
         tester().tapView(withAccessibilityIdentifier: "closeAllTabsButtonTabTray")
         tester().tapView(withAccessibilityIdentifier: "TabTrayController.deleteButton.closeAll")
+        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
     }
 
     /// Tap the URL spoof button, which opens a new window to a host with an invalid port.
@@ -98,6 +99,7 @@ class SecurityTests: KIFTestCase {
         tester().tapView(withAccessibilityIdentifier: "TabToolbar.tabsButton")
         tester().tapView(withAccessibilityIdentifier: "closeAllTabsButtonTabTray")
         tester().tapView(withAccessibilityIdentifier: "TabTrayController.deleteButton.closeAll")
+        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
     }
 
     // For blob URLs, just show "blob:" to the user (see bug 1446227)
@@ -133,6 +135,7 @@ class SecurityTests: KIFTestCase {
 
     override func tearDown() {
         BrowserUtils.resetToAboutHomeKIF(tester())
+        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         super.tearDown()
     }
 }

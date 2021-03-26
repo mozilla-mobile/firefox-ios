@@ -30,6 +30,7 @@ class AuthenticationTests: KIFTestCase {
         enterCredentials(usernameValue: "foo", passwordValue: "•••", username: "foo2", password: "bar2")
         enterCredentials(usernameValue: "foo2", passwordValue: "••••", username: "foo3", password: "bar3")
 
+        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         // Use KIFTest framework for checking elements within webView
         tester().waitForWebViewElementWithAccessibilityLabel("auth fail")
 
@@ -57,6 +58,7 @@ class AuthenticationTests: KIFTestCase {
         tester().tapView(withAccessibilityLabel: "smallPrivateMask")
         tester().tapView(withAccessibilityIdentifier: "newTabButtonTabTray")
         tester().waitForAnimationsToFinish()
+        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         loadAuthPage()
 
         // Make sure the auth prompt is shown.

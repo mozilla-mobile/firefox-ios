@@ -13,6 +13,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
                 "LibraryPanels.Downloads",
                 "LibraryPanels.SyncedTabs"
             ]
+            app.buttons["urlBar-cancel"].tap()
             navigator.goto(LibraryPanel_Bookmarks)
             snapshot("PanelsEmptyState-LibraryPanels.Bookmarks")
             libraryPanels.forEach { panel in
@@ -82,6 +83,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testFxASignInPage() {
+        app.buttons["urlBar-cancel"].tap()
         navigator.goto(BrowserTabMenu)
         waitForExistence(app.tables.cells["menu-sync"], timeout: 5)
         navigator.goto(Intro_FxASignin)
