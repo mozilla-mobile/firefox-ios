@@ -2242,7 +2242,7 @@ trigger_map:
 - push_branch: v32.1
   workflow: xcode12-release-and-beta-nocache
 - pull_request_target_branch: main
-  workflow: RunUnitTests
+  workflow: CommonBuild-UItest-XCUISmoketest
 - pull_request_source_branch: '*'
   pull_request_target_branch: chronological-tabs
   workflow: RunUnitTests
