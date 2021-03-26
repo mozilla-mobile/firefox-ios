@@ -53,6 +53,7 @@ class HistoryTests: KIFTestCase {
 
         // Close History (and so Library) panel
         BrowserUtils.closeLibraryMenu(tester())
+        tester().tapView(withAccessibilityIdentifier: "url")
     }
 
     // Could be removed since tested on XCUITets -> AP VERIFY OR ADD
@@ -125,6 +126,7 @@ class HistoryTests: KIFTestCase {
 
         // Close History (and so Library) panel
         BrowserUtils.closeLibraryMenu(tester())
+        tester().tapView(withAccessibilityIdentifier: "url")
     }
 
     override func tearDown() {
