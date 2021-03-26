@@ -1886,7 +1886,7 @@ workflows:
             envman add --key XCODE_XCCONFIG_FILE --value ''
         title: remove carthage lipo workaround
     - script@1:
-        title: Copy glean sdk_generator
+        title: Move glean sdk_generator
         inputs:
         - content: >-
             #!/usr/bin/env bash
@@ -1895,11 +1895,11 @@ workflows:
             # debug log
             set -x
 
-            # Copy Glean script to source folder from
-            # MozillaAppServices.framework as we need
-            # this script to build iOS App
-
-            cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
+            # Move Glean script to source folder from
+            # MozillaAppServices.framework as we don't
+            # want to ship our app with Glean shell
+            # script inside A~S framework
+            mv Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
     - script@1:
         inputs:
         - content: >-
@@ -2039,7 +2039,11 @@ workflows:
     - opts:
         is_expand: false
       BITRISE_SCHEME: Firefox
-    description: ''
+    description: >-
+      This step is to build, archive and upload Firefox Beta
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.4.x    
   NewXcodeVersions:
     steps:
     - script@1:
