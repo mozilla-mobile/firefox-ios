@@ -34,7 +34,7 @@ jobs:
     - name: Remove temp file created to store the tag info
       run: |
         cd test-fixtures/
-        [ -f newest_tag.txt ] && rm newest_tag.txt
+        [ ! -e newest_tag.txt ] || rm newest_tag.txt
     - name: Update A-S release in Cartfile
       run: |-
         git diff
