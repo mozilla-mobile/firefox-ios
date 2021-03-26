@@ -1,4 +1,4 @@
-#!/usr/bin/bas
+#!/bin/bash
 filename="newest_tag.txt"
 while read -r line; do
     name="$line"
