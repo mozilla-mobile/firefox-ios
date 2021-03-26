@@ -61,6 +61,7 @@ class IntegrationTests: BaseTestCase {
     func testFxASyncHistory () {
         // History is generated using the DB so go directly to Sign in
         // Sign into Firefox Accounts
+        app.buttons["urlBar-cancel"].tap()
         navigator.goto(BrowserTabMenu)
         signInFxAccounts()
 
@@ -71,6 +72,7 @@ class IntegrationTests: BaseTestCase {
     func testFxASyncBookmark () {
         // Bookmark is added by the DB
         // Sign into Firefox Accounts
+        app.buttons["urlBar-cancel"].tap()
         signInFxAccounts()
 
         // Wait for initial sync to complete
@@ -79,6 +81,7 @@ class IntegrationTests: BaseTestCase {
 
     func testFxASyncBookmarkDesktop () {
         // Sign into Firefox Accounts
+        app.buttons["urlBar-cancel"].tap()
         signInFxAccounts()
 
         // Wait for initial sync to complete
@@ -133,6 +136,7 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncHistoryDesktop () {
+        app.buttons["urlBar-cancel"].tap()
         // Sign into Firefox Accounts
         signInFxAccounts()
 
@@ -145,6 +149,7 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncPasswordDesktop () {
+        app.buttons["urlBar-cancel"].tap()
         // Sign into Firefox Accounts
         signInFxAccounts()
 
@@ -159,6 +164,7 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncTabsDesktop () {
+        app.buttons["urlBar-cancel"].tap()
         // Sign into Firefox Accounts
         signInFxAccounts()
 
@@ -175,6 +181,7 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxADisconnectConnect() {
+        app.buttons["urlBar-cancel"].tap()
         // Sign into Firefox Accounts
         signInFxAccounts()
         sleep(3)
@@ -188,6 +195,10 @@ class IntegrationTests: BaseTestCase {
         waitForExistence(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"], timeout: 5)
 
         // Check Login
+        navigator.performAction(Action.CloseBookmarkPanel)
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(BrowserTabMenu)
+
         navigator.goto(SettingsScreen)
         navigator.goto(LoginsSettings)
         waitForExistence(app.tables["Login List"], timeout: 3)
@@ -224,6 +235,9 @@ class IntegrationTests: BaseTestCase {
         waitForExistence(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"], timeout: 5)
 
         // Check Logins
+        navigator.performAction(Action.CloseBookmarkPanel)
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(BrowserTabMenu)
         navigator.goto(SettingsScreen)
         navigator.goto(LoginsSettings)
 
