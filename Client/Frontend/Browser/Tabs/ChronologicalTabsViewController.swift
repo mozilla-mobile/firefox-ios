@@ -7,12 +7,12 @@ import Shared
 import SnapKit
 import UIKit
 
-protocol TabTrayV2Delegate: AnyObject {
+protocol ChronologicalTabsDelegate: AnyObject {
     func closeTab(forIndex index: IndexPath)
     func closeTabTray()
 }
 
-struct TabTrayV2ControllerUX {
+struct ChronologicalTabsControllerUX {
     static let cornerRadius = CGFloat(4.0)
     static let screenshotMarginLeftRight = CGFloat(20.0)
     static let screenshotMarginTopBottom = CGFloat(6.0)
@@ -21,7 +21,7 @@ struct TabTrayV2ControllerUX {
     static let backgroundColor = UIColor.Photon.Grey10
 }
 
-class TabTrayV2ViewController: UIViewController, Themeable, TabTrayViewDelegate {
+class ChronologicalTabsViewController: UIViewController, Themeable, TabTrayViewDelegate {
     weak var delegate: TabTrayDelegate?
     // View Model
     lazy var viewModel = TabTrayV2ViewModel(viewController: self)
@@ -53,7 +53,7 @@ class TabTrayV2ViewController: UIViewController, Themeable, TabTrayViewDelegate 
     lazy var normalToolbarItems: [UIBarButtonItem] = {
         let bottomToolbar = [
             UIBarButtonItem(image: UIImage.templateImageNamed("action_delete"), style: .plain, target: self, action: #selector(didTapToolbarDelete)),
-            UIBarButtonItem(systemItem: .flexibleSpace),
+            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
             UIBarButtonItem(customView: NewTabButton(target: self, selector: #selector(didTapToolbarAddTab)))
         ]
         return bottomToolbar
@@ -168,7 +168,7 @@ class TabTrayV2ViewController: UIViewController, Themeable, TabTrayViewDelegate 
 }
 
 // MARK: Datastore
-extension TabTrayV2ViewController: UITableViewDataSource {
+extension ChronologicalTabsViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         shouldShowPrivateTabsView()
@@ -253,7 +253,7 @@ extension TabTrayV2ViewController: UITableViewDataSource {
     }
 }
 
-extension TabTrayV2ViewController: UITableViewDelegate {
+extension ChronologicalTabsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         viewModel.didSelectRowAt(index: indexPath)
         dismissTabTray()
@@ -281,7 +281,7 @@ extension TabTrayV2ViewController: UITableViewDelegate {
             self.navigationController?.isToolbarHidden = true
 
             let moreViewController = TabMoreMenuViewController(tabTrayDelegate: self.delegate, tab: self.viewModel.getTab(forIndex: indexPath), index: indexPath, profile: self.profile)
-            moreViewController.tabTrayV2Delegate = self
+            moreViewController.chronTabsTrayDelegate = self
             moreViewController.bottomSheetDelegate = self
             self.bottomSheetVC?.containerViewController = moreViewController
             self.bottomSheetVC?.showView()
@@ -301,7 +301,7 @@ extension TabTrayV2ViewController: UITableViewDelegate {
     }
 }
 
-extension TabTrayV2ViewController: UIPopoverPresentationControllerDelegate {
+extension ChronologicalTabsViewController: UIPopoverPresentationControllerDelegate {
     func presentActivityViewController(_ url: URL, tab: Tab? = nil) {
         let helper = ShareExtensionHelper(url: url, tab: tab)
 
@@ -318,13 +318,13 @@ extension TabTrayV2ViewController: UIPopoverPresentationControllerDelegate {
     }
 }
 
-extension TabTrayV2ViewController: UIToolbarDelegate {
+extension ChronologicalTabsViewController: UIToolbarDelegate {
     func position(for bar: UIBarPositioning) -> UIBarPosition {
         return .topAttached
     }
 }
 
-extension TabTrayV2ViewController: TabTrayV2Delegate {
+extension ChronologicalTabsViewController: ChronologicalTabsDelegate {
     func closeTab(forIndex index: IndexPath) {
         viewModel.removeTab(forIndex: index)
     }
@@ -333,7 +333,7 @@ extension TabTrayV2ViewController: TabTrayV2Delegate {
     }
 }
 
-extension TabTrayV2ViewController: BottomSheetDelegate {
+extension ChronologicalTabsViewController: BottomSheetDelegate {
     func showBottomToolbar() {
         // Show bottom toolbar when we hide bottom sheet
         navigationController?.isToolbarHidden = false
@@ -344,7 +344,7 @@ extension TabTrayV2ViewController: BottomSheetDelegate {
     }
 }
 
-extension TabTrayV2ViewController: UIAdaptivePresentationControllerDelegate {
+extension ChronologicalTabsViewController: UIAdaptivePresentationControllerDelegate {
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         TelemetryWrapper.recordEvent(category: .action, method: .close, object: .tabTray)
     }

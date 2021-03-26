@@ -26,6 +26,7 @@ class TabTrayViewController: UIViewController {
         label.text = String(tabManager.normalTabs.count)
         return label
     }()
+
     lazy var navigationMenu: UISegmentedControl = {
         let navigationMenu = UISegmentedControl(items: [UIImage(named: "nav-tabcounter")!.overlayWith(image: countLabel), UIImage(named: "smallPrivateMask")!, UIImage(named: "synced_devices")!])
         navigationMenu.accessibilityIdentifier = "navBarTabTray"
@@ -50,9 +51,9 @@ class TabTrayViewController: UIViewController {
         self.tabManager = BrowserViewController.foregroundBVC().tabManager
 
         if showChronTabs {
-            self.tabTrayView = TabTrayV2ViewController(tabTrayDelegate: tabTrayDelegate, profile: profile)
+            self.tabTrayView = ChronologicalTabsViewController(tabTrayDelegate: tabTrayDelegate, profile: profile)
         } else {
-            self.tabTrayView = TabTrayControllerV1(tabManager: self.tabManager, profile: profile, tabTrayDelegate: tabTrayDelegate)
+            self.tabTrayView = GridTabViewController(tabManager: self.tabManager, profile: profile, tabTrayDelegate: tabTrayDelegate)
         }
         super.init(nibName: nil, bundle: nil)
     }
@@ -76,7 +77,11 @@ class TabTrayViewController: UIViewController {
         navigationController?.navigationBar.shadowImage = UIImage()
 
         // Add Subviews
-        view.addSubview(navigationToolbar)
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            view.addSubview(navigationToolbar)
+        } else {
+
+        }
 
         navigationToolbar.snp.makeConstraints { make in
             make.left.right.equalTo(view)
@@ -84,7 +89,7 @@ class TabTrayViewController: UIViewController {
         }
 
         navigationMenu.snp.makeConstraints { make in
-            make.height.equalTo(TabTrayV2ControllerUX.navigationMenuHeight)
+            make.height.equalTo(ChronologicalTabsControllerUX.navigationMenuHeight)
         }
 
         showPanel(tabTrayView)
@@ -120,7 +125,7 @@ class TabTrayViewController: UIViewController {
         panel.beginAppearanceTransition(true, animated: true)
         view.addSubview(panel.view)
         view.bringSubviewToFront(navigationToolbar)
-        panel.additionalSafeAreaInsets = UIEdgeInsets(top: TabTrayControllerUX.NavigationToolbarHeight, left: 0, bottom: 0, right: 0)
+        panel.additionalSafeAreaInsets = UIEdgeInsets(top: GridTabTrayControllerUX.NavigationToolbarHeight, left: 0, bottom: 0, right: 0)
         panel.endAppearanceTransition()
         panel.view.snp.makeConstraints { make in
             make.edges.equalToSuperview()

@@ -7,7 +7,7 @@ import SnapKit
 import Storage
 import Shared
 
-struct TabTrayControllerUX {
+struct GridTabTrayControllerUX {
     static let CornerRadius = CGFloat(6.0)
     static let TextBoxHeight = CGFloat(32.0)
     static let NavigationToolbarHeight = CGFloat(44)
@@ -24,14 +24,14 @@ struct TabTrayControllerUX {
 }
 
 protocol TabTrayDelegate: AnyObject {
-    func tabTrayDidDismiss(_ tabTray: TabTrayControllerV1)
-    func tabTrayDidAddTab(_ tabTray: TabTrayControllerV1, tab: Tab)
+    func tabTrayDidDismiss(_ tabTray: GridTabViewController)
+    func tabTrayDidAddTab(_ tabTray: GridTabViewController, tab: Tab)
     func tabTrayDidAddBookmark(_ tab: Tab)
     func tabTrayDidAddToReadingList(_ tab: Tab) -> ReadingListItem?
     func tabTrayRequestsPresentationOf(_ viewController: UIViewController)
 }
 
-class TabTrayControllerV1: UIViewController, TabTrayViewDelegate {
+class GridTabViewController: UIViewController, TabTrayViewDelegate {
     let tabManager: TabManager
     let profile: Profile
     weak var delegate: TabTrayDelegate?
@@ -45,7 +45,7 @@ class TabTrayControllerV1: UIViewController, TabTrayViewDelegate {
     lazy var normalToolbarItems: [UIBarButtonItem] = {
         let bottomToolbar = [
             UIBarButtonItem(image: UIImage.templateImageNamed("action_delete"), style: .plain, target: self, action: #selector(didTapToolbarDelete)),
-            UIBarButtonItem(systemItem: .flexibleSpace),
+            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
             UIBarButtonItem(customView: NewTabButton(target: self, selector: #selector(didTapToolbarAddTab)))
         ]
         return bottomToolbar
@@ -148,8 +148,9 @@ class TabTrayControllerV1: UIViewController, TabTrayViewDelegate {
 
         if let tab = tabManager.selectedTab, tab.isPrivate {
             tabDisplayManager.togglePrivateMode(isOn: true, createTabOnEmptyPrivateMode: false)
-            toolbar.applyUIMode(isPrivate: true)
-            searchBar.applyUIMode(isPrivate: true)
+            // ROUX: See if these are required.
+//            toolbar.applyUIMode(isPrivate: true)
+//            searchBar.applyUIMode(isPrivate: true)
         }
 
         if traitCollection.forceTouchCapability == .available {
@@ -266,7 +267,7 @@ class TabTrayControllerV1: UIViewController, TabTrayViewDelegate {
     }
 }
 
-extension TabTrayControllerV1: TabManagerDelegate {
+extension GridTabViewController: TabManagerDelegate {
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) {}
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, isRestoring: Bool) {}
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {}
@@ -284,7 +285,7 @@ extension TabTrayControllerV1: TabManagerDelegate {
     }
 }
 
-extension TabTrayControllerV1: TabDisplayer {
+extension GridTabViewController: TabDisplayer {
 
     func focusSelectedTab() {
         self.focusTab()
@@ -300,7 +301,7 @@ extension TabTrayControllerV1: TabDisplayer {
     }
 }
 
-extension TabTrayControllerV1 {
+extension GridTabViewController {
 
     @objc func didTapLearnMore() {
         let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
@@ -353,7 +354,7 @@ extension TabTrayControllerV1 {
 }
 
 // MARK: - App Notifications
-extension TabTrayControllerV1 {
+extension GridTabViewController {
     @objc func appWillResignActiveNotification() {
         if tabDisplayManager.isPrivate {
             webViewContainerBackdrop.alpha = 1
@@ -376,7 +377,7 @@ extension TabTrayControllerV1 {
     }
 }
 
-extension TabTrayControllerV1: TabSelectionDelegate {
+extension GridTabViewController: TabSelectionDelegate {
     func didSelectTabAtIndex(_ index: Int) {
         if let tab = tabDisplayManager.dataStore.at(index) {
             tabManager.selectTab(tab)
@@ -385,13 +386,13 @@ extension TabTrayControllerV1: TabSelectionDelegate {
     }
 }
 
-extension TabTrayControllerV1: PresentingModalViewControllerDelegate {
+extension GridTabViewController: PresentingModalViewControllerDelegate {
     func dismissPresentedModalViewController(_ modalViewController: UIViewController, animated: Bool) {
         dismiss(animated: animated, completion: { self.collectionView.reloadData() })
     }
 }
 
-extension TabTrayControllerV1: UIScrollViewAccessibilityDelegate {
+extension GridTabViewController: UIScrollViewAccessibilityDelegate {
     func accessibilityScrollStatus(for scrollView: UIScrollView) -> String? {
         guard var visibleCells = collectionView.visibleCells as? [TabCell] else { return nil }
         var bounds = collectionView.bounds
@@ -424,7 +425,7 @@ extension TabTrayControllerV1: UIScrollViewAccessibilityDelegate {
     }
 }
 
-extension TabTrayControllerV1: SwipeAnimatorDelegate {
+extension GridTabViewController: SwipeAnimatorDelegate {
     func swipeAnimator(_ animator: SwipeAnimator, viewWillExitContainerBounds: UIView) {
         guard let tabCell = animator.animatingView as? TabCell, let indexPath = collectionView.indexPath(for: tabCell) else { return }
         if let tab = tabDisplayManager.dataStore.at(indexPath.item) {
@@ -439,7 +440,7 @@ extension TabTrayControllerV1: SwipeAnimatorDelegate {
     }
 }
 
-extension TabTrayControllerV1: TabCellDelegate {
+extension GridTabViewController: TabCellDelegate {
     func tabCellDidClose(_ cell: TabCell) {
         if let indexPath = collectionView.indexPath(for: cell), let tab = tabDisplayManager.dataStore.at(indexPath.item) {
             removeByButtonOrSwipe(tab: tab, cell: cell)
@@ -447,7 +448,7 @@ extension TabTrayControllerV1: TabCellDelegate {
     }
 }
 
-extension TabTrayControllerV1: TabPeekDelegate {
+extension GridTabViewController: TabPeekDelegate {
 
     func tabPeekDidAddBookmark(_ tab: Tab) {
         delegate?.tabTrayDidAddBookmark(tab)
@@ -469,7 +470,7 @@ extension TabTrayControllerV1: TabPeekDelegate {
     }
 }
 
-extension TabTrayControllerV1: UIViewControllerPreviewingDelegate {
+extension GridTabViewController: UIViewControllerPreviewingDelegate {
 
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
 
@@ -499,7 +500,7 @@ extension TabTrayControllerV1: UIViewControllerPreviewingDelegate {
     }
 }
 
-extension TabTrayControllerV1: TabDisplayCompletionDelegate {
+extension GridTabViewController: TabDisplayCompletionDelegate {
     func completedAnimation(for type: TabAnimationType) {
         emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
 
@@ -519,14 +520,14 @@ extension TabTrayControllerV1: TabDisplayCompletionDelegate {
     }
 }
 
-extension TabTrayControllerV1 {
+extension GridTabViewController {
     func removeByButtonOrSwipe(tab: Tab, cell: TabCell) {
         tabDisplayManager.tabDisplayCompletionDelegate = self
         tabDisplayManager.closeActionPerformed(forCell: cell)
     }
 }
 
-extension TabTrayControllerV1 {
+extension GridTabViewController {
     @objc func didTapToolbarDelete(_ sender: UIButton) {
         if tabDisplayManager.isDragging {
             return
@@ -557,9 +558,9 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
     fileprivate var numberOfColumns: Int {
         // iPhone 4-6+ portrait
         if traitCollection.horizontalSizeClass == .compact && traitCollection.verticalSizeClass == .regular {
-            return TabTrayControllerUX.CompactNumberOfColumnsThin
+            return GridTabTrayControllerUX.CompactNumberOfColumnsThin
         } else {
-            return TabTrayControllerUX.NumberOfColumnsWide
+            return GridTabTrayControllerUX.NumberOfColumnsWide
         }
     }
 
@@ -570,14 +571,14 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
     }
 
     fileprivate func cellHeightForCurrentDevice() -> CGFloat {
-        let shortHeight = TabTrayControllerUX.TextBoxHeight * 6
+        let shortHeight = GridTabTrayControllerUX.TextBoxHeight * 6
 
         if self.traitCollection.verticalSizeClass == .compact {
             return shortHeight
         } else if self.traitCollection.horizontalSizeClass == .compact {
             return shortHeight
         } else {
-            return TabTrayControllerUX.TextBoxHeight * 8
+            return GridTabTrayControllerUX.TextBoxHeight * 8
         }
     }
 
@@ -586,20 +587,20 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return TabTrayControllerUX.Margin
+        return GridTabTrayControllerUX.Margin
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cellWidth = floor((collectionView.bounds.width - TabTrayControllerUX.Margin * CGFloat(numberOfColumns + 1)) / CGFloat(numberOfColumns))
+        let cellWidth = floor((collectionView.bounds.width - GridTabTrayControllerUX.Margin * CGFloat(numberOfColumns + 1)) / CGFloat(numberOfColumns))
         return CGSize(width: cellWidth, height: self.cellHeightForCurrentDevice())
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(equalInset: TabTrayControllerUX.Margin)
+        return UIEdgeInsets(equalInset: GridTabTrayControllerUX.Margin)
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return TabTrayControllerUX.Margin
+        return GridTabTrayControllerUX.Margin
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -607,7 +608,7 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
     }
 }
 
-extension TabTrayControllerV1: DevicePickerViewControllerDelegate {
+extension GridTabViewController: DevicePickerViewControllerDelegate {
     func devicePickerViewController(_ devicePickerViewController: DevicePickerViewController, didPickDevices devices: [RemoteDevice]) {
         if let item = devicePickerViewController.shareItem {
             _ = self.profile.sendItem(item, toDevices: devices)
@@ -620,7 +621,7 @@ extension TabTrayControllerV1: DevicePickerViewControllerDelegate {
     }
 }
 
-extension TabTrayControllerV1: UIAdaptivePresentationControllerDelegate, UIPopoverPresentationControllerDelegate {
+extension GridTabViewController: UIAdaptivePresentationControllerDelegate, UIPopoverPresentationControllerDelegate {
     // Returning None here makes sure that the Popover is actually presented as a Popover and
     // not as a full-screen modal, which is the default on compact device classes.
     func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
@@ -643,7 +644,7 @@ class TabCell: UICollectionViewCell {
 
     let backgroundHolder: UIView = {
         let view = UIView()
-        view.layer.cornerRadius = TabTrayControllerUX.CornerRadius
+        view.layer.cornerRadius = GridTabTrayControllerUX.CornerRadius
         view.clipsToBounds = true
         view.backgroundColor = UIColor.theme.tabTray.cellBackground
         return view
@@ -683,7 +684,7 @@ class TabCell: UICollectionViewCell {
         button.imageView?.contentMode = .scaleAspectFit
         button.contentMode = .center
         button.tintColor = UIColor.theme.tabTray.cellCloseButton
-        button.imageEdgeInsets = UIEdgeInsets(equalInset: TabTrayControllerUX.CloseButtonEdgeInset)
+        button.imageEdgeInsets = UIEdgeInsets(equalInset: GridTabTrayControllerUX.CloseButtonEdgeInset)
         return button
     }()
 
@@ -715,13 +716,13 @@ class TabCell: UICollectionViewCell {
 
         title.snp.makeConstraints { (make) in
             make.top.left.right.equalTo(backgroundHolder)
-            make.height.equalTo(TabTrayControllerUX.TextBoxHeight)
+            make.height.equalTo(GridTabTrayControllerUX.TextBoxHeight)
         }
 
         favicon.snp.makeConstraints { make in
             make.leading.equalTo(title.contentView).offset(6)
-            make.top.equalTo((TabTrayControllerUX.TextBoxHeight - TabTrayControllerUX.FaviconSize) / 2)
-            make.size.equalTo(TabTrayControllerUX.FaviconSize)
+            make.top.equalTo((GridTabTrayControllerUX.TextBoxHeight - GridTabTrayControllerUX.FaviconSize) / 2)
+            make.size.equalTo(GridTabTrayControllerUX.FaviconSize)
         }
 
         titleText.snp.makeConstraints { (make) in
@@ -731,7 +732,7 @@ class TabCell: UICollectionViewCell {
         }
 
         closeButton.snp.makeConstraints { make in
-            make.size.equalTo(TabTrayControllerUX.CloseButtonSize)
+            make.size.equalTo(GridTabTrayControllerUX.CloseButtonSize)
             make.centerY.trailing.equalTo(title.contentView)
         }
     }
@@ -745,7 +746,7 @@ class TabCell: UICollectionViewCell {
         // create a frame that is "BorderWidth" size bigger than the cell
         layer.shadowOffset = CGSize(width: -TabCell.BorderWidth, height: -TabCell.BorderWidth)
         let shadowPath = CGRect(width: layer.frame.width + (TabCell.BorderWidth * 2), height: layer.frame.height + (TabCell.BorderWidth * 2))
-        layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: TabTrayControllerUX.CornerRadius+TabCell.BorderWidth).cgPath
+        layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: GridTabTrayControllerUX.CornerRadius+TabCell.BorderWidth).cgPath
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -759,7 +760,7 @@ class TabCell: UICollectionViewCell {
         screenshotView.frame = CGRect(size: backgroundHolder.frame.size)
 
         let shadowPath = CGRect(width: layer.frame.width + (TabCell.BorderWidth * 2), height: layer.frame.height + (TabCell.BorderWidth * 2))
-        layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: TabTrayControllerUX.CornerRadius+TabCell.BorderWidth).cgPath
+        layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: GridTabTrayControllerUX.CornerRadius+TabCell.BorderWidth).cgPath
     }
 
     func configureWith(tab: Tab, is selected: Bool) {
