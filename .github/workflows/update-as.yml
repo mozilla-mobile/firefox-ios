@@ -29,7 +29,7 @@ jobs:
     - name: Get new A-S tag to be used in the PR info
       run: |
         cd test-fixtures/
-        chmod u+x read_tag_test.sh
+        chmod u+x read_as_tag.sh
         echo "version=$(./read_as_tag.sh)" >> $GITHUB_ENV
     - name: Remove temp file created to store the tag info
       run: |
