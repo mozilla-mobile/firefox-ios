@@ -127,11 +127,9 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         view.accessibilityLabel = .TabTrayViewAccessibilityLabel
         
         webViewContainerBackdrop = UIView()
-        webViewContainerBackdrop.backgroundColor = UIColor.Photon.Ink90
         webViewContainerBackdrop.alpha = 0
 
         collectionView.alwaysBounceVertical = true
-        collectionView.backgroundColor = UIColor.theme.tabTray.background
         collectionView.keyboardDismissMode = .onDrag
 
         collectionView.dragInteractionEnabled = true
@@ -148,9 +146,6 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
 
         if let tab = tabManager.selectedTab, tab.isPrivate {
             tabDisplayManager.togglePrivateMode(isOn: true, createTabOnEmptyPrivateMode: false)
-            // ROUX: See if these are required.
-//            toolbar.applyUIMode(isPrivate: true)
-//            searchBar.applyUIMode(isPrivate: true)
         }
 
         if traitCollection.forceTouchCapability == .available {
@@ -159,9 +154,15 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
 
         emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
 
+        applyTheme()
+        notificationSetup()
+    }
+
+    private func notificationSetup() {
         NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActiveNotification), name: UIApplication.willResignActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActiveNotification), name: UIApplication.didBecomeActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(dynamicFontChanged), name: .DynamicFontChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(applyTheme), name: .DisplayThemeChanged, object: nil)
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -823,5 +824,13 @@ class TabCell: UICollectionViewCell {
 
     @objc func close() {
         delegate?.tabCellDidClose(self)
+    }
+}
+
+extension GridTabViewController: Themeable {
+
+    @objc func applyTheme() {
+        webViewContainerBackdrop.backgroundColor = UIColor.Photon.Ink90
+        collectionView.backgroundColor = UIColor.theme.tabTray.background
     }
 }
