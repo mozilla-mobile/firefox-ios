@@ -105,6 +105,8 @@
 	<string>$(POCKET_API_KEY)</string>
 	<key>SentryDSN</key>
 	<string>$(SENTRY_DSN)</string>
+	<key>NimbusURL</key>
+	<string>$(NIMBUS_URL)</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>NewYorkMedium-Bold.otf</string>

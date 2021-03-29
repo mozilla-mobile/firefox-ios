@@ -2007,6 +2007,28 @@ workflows:
             /usr/libexec/PlistBuddy -c "Set LeanplumDevelopmentKey
             $LEANPLUM_KEY_DEVELOPMENT" "Client/Info.plist"
         title: Leanplum Variable Setup
+    - script@1:
+        inputs:
+        - content: >-
+            #!/usr/bin/env bash
+
+            # fail if any commands fails
+
+            set -e
+
+            # debug log
+
+            set -x
+
+
+            # write your script here
+
+
+            echo "Setting Nimbus variables"
+
+            /usr/libexec/PlistBuddy -c "Set NimbusURL $NIMBUS_URL"
+            "Client/Info.plist"
+        title: Nimbus Variable Setup
     - deploy-to-bitrise-io@1: {}
     - script@1:
         inputs:
@@ -2043,7 +2065,7 @@ workflows:
       This step is to build, archive and upload Firefox Beta
     meta:
       bitrise.io:
-        stack: osx-xcode-12.4.x    
+        stack: osx-xcode-12.4.x
   NewXcodeVersions:
     steps:
     - script@1:
