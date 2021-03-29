@@ -728,6 +728,7 @@ class SendAnonymousUsageDataSetting: BoolSetting {
                 LeanPlumClient.shared.set(attributes: [LPAttributeKey.telemetryOptIn: $0])
                 LeanPlumClient.shared.set(enabled: $0)
                 Glean.shared.setUploadEnabled($0)
+                Experiments.shared.resetTelemetryIdentifiers()
             }
         )
     }
