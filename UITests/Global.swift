@@ -309,6 +309,8 @@ class BrowserUtils {
     }
 
     class func clearPrivateDataKIF(_ tester: KIFUITestActor) {
+        tester.tapView(withAccessibilityIdentifier: "urlBar-cancel")
+        tester.waitForAnimationsToFinish(withTimeout: 3)
         tester.tapView(withAccessibilityLabel: "Menu")
         tester.tapView(withAccessibilityLabel: "Settings")
         tester.accessibilityScroll(.down)

@@ -24,6 +24,7 @@ private struct SearchViewControllerUX {
     static let EngineButtonBackgroundColor = UIColor.clear.cgColor
 
     static let SearchImage = "search"
+    static let SearchAppendImage = "search-append"
     static let SearchEngineTopBorderWidth = 0.5
     static let SuggestionMargin: CGFloat = 8
 
@@ -37,6 +38,7 @@ protocol SearchViewControllerDelegate: AnyObject {
     func searchViewController(_ searchViewController: SearchViewController, didSelectURL url: URL)
     func presentSearchSettingsController()
     func searchViewController(_ searchViewController: SearchViewController, didHighlightText text: String, search: Bool)
+    func searchViewController(_ searchViewController: SearchViewController, didAppend text: String)
 }
 
 class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, LoaderListener {
@@ -58,6 +60,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     var suggestions: [String]? = []
     static var userAgent: String?
 
+    
     init(profile: Profile, isPrivate: Bool) {
         self.isPrivate = isPrivate
         super.init(profile: profile)
@@ -423,6 +426,13 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 cell.imageView?.image = UIImage(named: SearchViewControllerUX.SearchImage)?.withRenderingMode(.alwaysTemplate)
                 cell.imageView?.tintColor = ThemeManager.instance.currentName == .dark ? UIColor.white : UIColor.black
                 cell.imageView?.backgroundColor = nil
+                
+                let appendButton = UIButton(type: .roundedRect)
+                appendButton.setImage(UIImage(named: SearchViewControllerUX.SearchAppendImage)?.withRenderingMode(.alwaysTemplate), for: .normal)
+                appendButton.addTarget(self, action: #selector(append(_ :)), for: .touchUpInside)
+                appendButton.tintColor = ThemeManager.instance.currentName == .dark ? UIColor.white : UIColor.black
+                appendButton.sizeToFit()
+                cell.accessoryView = indexPath.row > 0 ? appendButton : nil
             }
         case .bookmarksAndHistory:
             if let site = data[indexPath.row], let cell = cell as? TwoLineTableViewCell {
@@ -438,6 +448,13 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             }
         }
         return cell
+    }
+    @objc func append(_ sender: UIButton) {
+        let buttonPosition = sender.convert(CGPoint(), to: tableView)
+        if let indexPath = tableView.indexPathForRow(at: buttonPosition), let newQuery = suggestions?[indexPath.row] {
+            searchDelegate?.searchViewController(self, didAppend: newQuery + " ")
+            searchQuery = newQuery + " "
+        }
     }
 }
 

@@ -152,6 +152,7 @@ class LoginManagerTests: KIFTestCase {
     }*/
 
     func testListIndexView() {
+        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         openLoginManager()
         // Swipe the index view to navigate to bottom section
         tester().wait(forTimeInterval: 1)
@@ -165,6 +166,7 @@ class LoginManagerTests: KIFTestCase {
     }
 
     func testDetailPasswordMenuOptions() {
+        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         openLoginManager()
 
         tester().waitForView(withAccessibilityLabel: "http://a0.com")
@@ -201,6 +203,7 @@ class LoginManagerTests: KIFTestCase {
     }
 
     func testDetailWebsiteMenuCopy() {
+        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         openLoginManager()
 
         tester().waitForView(withAccessibilityLabel: "http://a0.com")
@@ -225,9 +228,11 @@ class LoginManagerTests: KIFTestCase {
         tester().tapView(withAccessibilityIdentifier: "TabToolbar.tabsButton")
         tester().tapView(withAccessibilityIdentifier: "closeAllTabsButtonTabTray")
         tester().tapView(withAccessibilityIdentifier: "TabTrayController.deleteButton.closeAll")
+        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
     }
 
     func testOpenAndFillFromNormalContext() {
+        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         openLoginManager()
 
         tester().waitForView(withAccessibilityLabel: "http://a0.com")
@@ -248,6 +253,7 @@ class LoginManagerTests: KIFTestCase {
         tester().tapView(withAccessibilityIdentifier: "TabToolbar.tabsButton")
         tester().tapView(withAccessibilityIdentifier: "closeAllTabsButtonTabTray")
         tester().tapView(withAccessibilityIdentifier: "TabTrayController.deleteButton.closeAll")
+        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
     }
     // This test is disabled until bug 1486243 is fixed
     /*func testOpenAndFillFromPrivateContext() {
@@ -290,6 +296,7 @@ class LoginManagerTests: KIFTestCase {
     }*/
 
     func testDetailUsernameMenuOptions() {
+        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         openLoginManager()
 
         tester().waitForView(withAccessibilityLabel: "http://a0.com")
@@ -310,6 +317,7 @@ class LoginManagerTests: KIFTestCase {
     }
 
     func testListSelection() {
+        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         openLoginManager()
 
         tester().waitForAnimationsToFinish()
@@ -411,6 +419,7 @@ class LoginManagerTests: KIFTestCase {
     }
 
     func testListSelectAndDelete() {
+        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         openLoginManager()
 
         var list = tester().waitForView(withAccessibilityIdentifier: "Login List") as! UITableView
@@ -466,6 +475,7 @@ class LoginManagerTests: KIFTestCase {
     }
 
     func testSelectAllCancelAndEdit() {
+        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         openLoginManager()
 
         tester().waitForView(withAccessibilityLabel: "Edit")
@@ -578,6 +588,7 @@ class LoginManagerTests: KIFTestCase {
      }
      */
     func testEditingDetailUpdatesPassword() {
+        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         openLoginManager()
 
         tester().waitForView(withAccessibilityLabel: "http://a0.com")
@@ -671,6 +682,7 @@ class LoginManagerTests: KIFTestCase {
     }
 
     func testLoginDetailDisplaysLastModified() {
+        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         openLoginManager()
         tester().wait(forTimeInterval: 1)
         tester().waitForView(withAccessibilityLabel: "http://a0.com")
@@ -687,6 +699,7 @@ class LoginManagerTests: KIFTestCase {
     }
 
     func testPreventBlankPasswordInDetail() {
+        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         openLoginManager()
         tester().waitForAnimationsToFinish(withTimeout: 5)
         tester().waitForView(withAccessibilityLabel: "http://a0.com")
@@ -721,6 +734,7 @@ class LoginManagerTests: KIFTestCase {
     }
 
     func testListEditButton() {
+        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         openLoginManager()
 
         // Check that edit button is enabled when entries are present
