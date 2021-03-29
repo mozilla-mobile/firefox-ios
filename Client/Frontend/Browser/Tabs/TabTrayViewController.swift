@@ -7,6 +7,8 @@ import Shared
 import SnapKit
 import UIKit
 
+//ROUX: TODO fix iPad presentation mode.
+
 protocol TabTrayViewDelegate: UIViewController {
     func didTogglePrivateMode(_ togglePrivateModeOn: Bool)
 }
