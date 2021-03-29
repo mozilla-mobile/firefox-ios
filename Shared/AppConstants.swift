@@ -65,6 +65,7 @@ public struct AppConstants {
     }()
 
     public static let PrefSendUsageData = "settings.sendUsageData"
+    public static let PrefStudiesToggle = "settings.studiesToggle"
 
     /// Enables support for International Domain Names (IDN)
     /// Disabled because of https://bugzilla.mozilla.org/show_bug.cgi?id=1312294

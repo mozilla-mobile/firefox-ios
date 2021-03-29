@@ -69,7 +69,7 @@ enum Experiments {
     }
 
     /// The `NimbusApi` object. This is the entry point to do anything with the Nimbus SDK on device.
-    public static let shared: NimbusApi = {
+    public static var shared: NimbusApi = {
         guard AppConstants.NIMBUS_ENABLED else {
             return NimbusDisabled.shared
         }

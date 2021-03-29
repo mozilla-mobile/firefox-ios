@@ -741,6 +741,32 @@ class SendAnonymousUsageDataSetting: BoolSetting {
     }
 }
 
+class StudiesToggleSetting: BoolSetting {
+    init(prefs: Prefs, delegate: SettingsDelegate?) {
+        let statusText = NSMutableAttributedString()
+        statusText.append(NSAttributedString(string: Strings.SettingsStudiesToggleMessage, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.headerTextLight]))
+        statusText.append(NSAttributedString(string: " "))
+        statusText.append(NSAttributedString(string: Strings.SettingsStudiesToggleLink, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.general.highlightBlue]))
+
+        super.init(
+            prefs: prefs, prefKey: AppConstants.PrefStudiesToggle, defaultValue: true,
+            attributedTitleText: NSAttributedString(string: Strings.SettingsStudiesToggleTitle),
+            attributedStatusText: statusText,
+            settingDidChange: { enabled in
+                Experiments.shared.globalUserParticipation = enabled
+            }
+        )
+    }
+
+    override var url: URL? {
+        return SupportUtils.URLForTopic("studies")
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        setUpAndPushSettingsContentViewController(navigationController, self.url)
+    }
+}
+
 // Opens the SUMO page in a new tab
 class OpenSupportPageSetting: Setting {
     init(delegate: SettingsDelegate?) {
