@@ -1577,6 +1577,10 @@ extension BrowserViewController: SearchViewControllerDelegate {
     func searchViewController(_ searchViewController: SearchViewController, didHighlightText text: String, search: Bool) {
         self.urlBar.setLocation(text, search: search)
     }
+    
+    func searchViewController(_ searchViewController: SearchViewController, didAppend text: String) {
+        self.urlBar.setLocation(text, search: false)
+    }
 }
 
 extension BrowserViewController: TabManagerDelegate {
