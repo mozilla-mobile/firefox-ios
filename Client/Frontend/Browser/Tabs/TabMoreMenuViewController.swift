@@ -69,9 +69,9 @@ class TabMoreMenuViewController: UIViewController, Themeable {
     
     func applyTheme() {
         if ThemeManager.instance.currentName == .normal {
-            tabMoreMenuHeader.backgroundColor = UIColor(rgb: 0xF2F2F7)
+            tabMoreMenuHeader.backgroundColor = UIColor.Photon.Grey11
         } else {
-            tabMoreMenuHeader.backgroundColor = UIColor(rgb: 0x1C1C1E)
+            tabMoreMenuHeader.backgroundColor = UIColor.Photon.Grey85
         }
     }
     

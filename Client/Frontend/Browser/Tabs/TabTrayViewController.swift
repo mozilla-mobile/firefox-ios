@@ -67,6 +67,7 @@ class TabTrayViewController: UIViewController {
         super.viewDidLoad()
         viewSetup()
         applyTheme()
+        setupNotifications()
     }
 
     private func viewSetup() {
@@ -80,7 +81,7 @@ class TabTrayViewController: UIViewController {
         if UIDevice.current.userInterfaceIdiom == .phone {
             view.addSubview(navigationToolbar)
         } else {
-
+            view.addSubview(navigationToolbar)
         }
 
         navigationToolbar.snp.makeConstraints { make in
@@ -89,10 +90,15 @@ class TabTrayViewController: UIViewController {
         }
 
         navigationMenu.snp.makeConstraints { make in
+            make.width.lessThanOrEqualTo(343)
             make.height.equalTo(ChronologicalTabsControllerUX.navigationMenuHeight)
         }
 
         showPanel(tabTrayView)
+    }
+
+    private func setupNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(applyTheme), name: .DisplayThemeChanged, object: nil)
     }
 
     @objc func panelChanged() {
@@ -145,12 +151,12 @@ class TabTrayViewController: UIViewController {
 }
 
 extension TabTrayViewController: Themeable {
-    func applyTheme() {
+    @objc func applyTheme() {
         if #available(iOS 13.0, *) {
             overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
             view.backgroundColor = UIColor.systemGroupedBackground
             navigationController?.navigationBar.tintColor = UIColor.label
-            navigationController?.toolbar.tintColor = UIColor.label
+            navigationController?.toolbar.tintColor = UIColor.theme.tabTray.toolbar
             navigationItem.rightBarButtonItem?.tintColor = UIColor.label
         } else {
             view.backgroundColor = UIColor.theme.tableView.headerBackground
