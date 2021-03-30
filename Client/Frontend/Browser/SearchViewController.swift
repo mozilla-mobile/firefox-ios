@@ -12,6 +12,7 @@ private enum SearchListSection: Int, CaseIterable {
     case searchSuggestions
     case bookmarksAndHistory
     case remoteTabs
+    case openedTabs
 }
 
 private struct SearchViewControllerUX {
@@ -36,6 +37,8 @@ private struct SearchViewControllerUX {
 
 protocol SearchViewControllerDelegate: AnyObject {
     func searchViewController(_ searchViewController: SearchViewController, didSelectURL url: URL)
+    func searchViewController(_ searchViewController: SearchViewController, switchToTabWithUrl url: URL, with uuid: String, isPrivate: Bool)
+    func searchViewController(_ searchViewController: SearchViewController, uuid: String)
     func presentSearchSettingsController()
     func searchViewController(_ searchViewController: SearchViewController, didHighlightText text: String, search: Bool)
     func searchViewController(_ searchViewController: SearchViewController, didAppend text: String)
@@ -52,11 +55,14 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     fileprivate let isPrivate: Bool
     fileprivate var suggestClient: SearchSuggestClient?
     var clientAndTabs: [ClientAndTabs] = [ClientAndTabs]()
-    var remoteTabs = [RemoteTab]()
+//    var remoteTabs = [RemoteTab]()
     var filteredRemoteTabs = [RemoteTab]()
     var filteredClientRemoteTabs = [ClientAndTabs]()
     var remoteClientTabsWrapper = [ClientTabsSearchWrapper]()
     var filteredRemoteClientTabsWrapper = [ClientTabsSearchWrapper]()
+    var openedTabs = [Tab]()
+    var filteredOpenedTabs = [Tab]()
+    var tabManager: TabManager
     
     // Views for displaying the bottom scrollable search engine list. searchEngineScrollView is the
     // scrollable container; searchEngineScrollViewContent contains the actual set of search engine buttons.
@@ -72,8 +78,9 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     static var userAgent: String?
 
     
-    init(profile: Profile, isPrivate: Bool) {
+    init(profile: Profile, isPrivate: Bool, tabManager: TabManager) {
         self.isPrivate = isPrivate
+        self.tabManager = tabManager
         super.init(profile: profile)
     }
 
@@ -87,7 +94,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         view.addSubview(blur)
 
         super.viewDidLoad()
-
+        getCachedTabs()
         KeyboardHelper.defaultHelper.addDelegate(self)
 
         searchEngineContainerView.layer.backgroundColor = SearchViewControllerUX.SearchEngineScrollViewBackgroundColor
@@ -324,15 +331,64 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 return
             }
 
+            self.remoteClientTabsWrapper.removeAll()
             // Update UI with cached data.
             self.clientAndTabs = clientAndTabs
             clientAndTabs.forEach { value in
                 value.tabs.forEach { (tab) in
                     self.remoteClientTabsWrapper.append(ClientTabsSearchWrapper(client: value.client, tab: tab))
                 }
-                self.remoteTabs.append(contentsOf: value.tabs)
+//                self.remoteTabs.append(contentsOf: value.tabs)
             }
         }
+    }
+    
+    func searchTabs(for searchString: String) {
+        let currentTabs = self.isPrivate ? self.tabManager.privateTabs : self.tabManager.normalTabs
+        filteredOpenedTabs = currentTabs.filter { tab in
+            if let url = tab.url, InternalURL.isValid(url: url) {
+                return false
+            }
+            let title = tab.title ?? tab.lastTitle
+            if title?.lowercased().range(of: searchString.lowercased()) != nil {
+                return true
+            }
+            if tab.url?.absoluteString.lowercased().range(of: searchString.lowercased()) != nil {
+                return true
+            }
+            return false
+        }
+    }
+    
+    func searchRemoteTabs(for searchString: String) {
+        
+        filteredRemoteClientTabsWrapper.removeAll()
+        for remoteClientTab in remoteClientTabsWrapper {
+            if remoteClientTab.tab.title.lowercased().contains(searchQuery) {
+                filteredRemoteClientTabsWrapper.append(remoteClientTab)
+            }
+        }
+        
+        
+        let currentTabs = self.remoteClientTabsWrapper
+        self.filteredRemoteClientTabsWrapper = currentTabs.filter { value in
+            let tab = value.tab
+            if InternalURL.isValid(url: tab.URL) {
+                return false
+            }
+            if tab.title.lowercased().range(of: searchString.lowercased()) != nil {
+                return true
+            }
+            if tab.URL.absoluteString.lowercased().range(of: searchString.lowercased()) != nil {
+                return true
+            }
+            return false
+        }
+//        tabDisplayManager.searchedTabs = filteredTabs
+
+//        tabDisplayManager.searchTabsAnimated()
+        
+//        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .tabSearch)
     }
     
     fileprivate func querySuggestClient() {
@@ -344,17 +400,21 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             return
         }
         
-        getCachedTabs()
-        self.filteredRemoteTabs = self.remoteTabs.filter { (tab) -> Bool in
-            tab.title.lowercased().contains(searchQuery)
-            
-        }
+//        getCachedTabs()
+        searchTabs(for: searchQuery)
+//        self.filteredRemoteTabs = self.remoteTabs.filter { (tab) -> Bool in
+//            tab.title.lowercased().contains(searchQuery)
+//
+//        }
         
-        for remoteClientTab in remoteClientTabsWrapper {
-            if remoteClientTab.tab.title.lowercased().contains(searchQuery) {
-                filteredRemoteClientTabsWrapper.append(remoteClientTab)
-            }
-        }
+        searchRemoteTabs(for: searchQuery)
+        
+//        filteredRemoteClientTabsWrapper.removeAll()
+//        for remoteClientTab in remoteClientTabsWrapper {
+//            if remoteClientTab.tab.title.lowercased().contains(searchQuery) {
+//                filteredRemoteClientTabsWrapper.append(remoteClientTab)
+//            }
+//        }
         
 //        self.filteredClientRemoteTabs = self.clientAndTabs.filter { (clientTab) -> Bool in
 //            let tab = clientTab.tabs.filter { (tab) -> Bool in
@@ -418,8 +478,19 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                     TelemetryWrapper.recordEvent(category: .action, method: .open, object: .bookmark, value: .awesomebarResults)
                 }
             }
+        case .openedTabs:
+            print("Opened Tab")
+            let tab = self.filteredOpenedTabs[indexPath.row]
+//            tabManager.selectTab(tab)
+            searchDelegate?.searchViewController(self, uuid: tab.tabUUID)
+//            if let url = tab.url {
+//                searchDelegate?.searchViewController(self, didSelectURL: url)
+//                searchDelegate?.searchViewController(self, switchToTabWithUrl: url, with: tab.tabUUID, isPrivate: isPrivate)
+//            }
         case .remoteTabs:
             print("REMOTE TAB")
+            let remoteTab = self.filteredRemoteClientTabsWrapper[indexPath.row].tab
+            searchDelegate?.searchViewController(self, didSelectURL: remoteTab.URL)
         }
     }
 
@@ -443,8 +514,10 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             return count < 4 ? count : 4
         case .bookmarksAndHistory:
             return data.count
+        case .openedTabs:
+            return filteredOpenedTabs.count
         case .remoteTabs:
-            return filteredRemoteTabs.count
+            return filteredRemoteClientTabsWrapper.count
         }
     }
 
@@ -505,14 +578,24 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                     cell?.imageView?.image = cell?.imageView?.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
                 }
             }
+        case .openedTabs:
+            if self.filteredOpenedTabs.count > indexPath.row, let cell = cell as? TwoLineTableViewCell {
+                let openedTab = self.filteredOpenedTabs[indexPath.row]
+                cell.setLines(openedTab.title, detailText: "Switch to tab")
+                cell.imageView?.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
+                cell.imageView?.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
+                cell.imageView?.contentMode = .center
+                cell.imageView?.image = UIImage(named: "deviceTypeMobile")
+                cell.accessoryView = nil
+            }
         case .remoteTabs:
-            if false {
-            if self.filteredRemoteTabs.count > indexPath.row, let cell = cell as? TwoLineTableViewCell {
-                let remoteTab = self.filteredRemoteTabs[indexPath.row]
+            if self.filteredRemoteClientTabsWrapper.count > indexPath.row, let cell = cell as? TwoLineTableViewCell {
+                let remoteTab = self.filteredRemoteClientTabsWrapper[indexPath.row].tab
+                let remoteClient = self.filteredRemoteClientTabsWrapper[indexPath.row].client
 //            }
 //            if let site = data[indexPath.row], let cell = cell as? TwoLineTableViewCell {
 //                let isBookmark = site.bookmarked ?? false
-                cell.setLines(remoteTab.title, detailText: remoteTab.URL.absoluteString)
+                cell.setLines(remoteTab.title, detailText: remoteClient.name)
 //                cell.setRightBadge(isBookmark ? self.bookmarkedBadge : nil)
                 cell.imageView?.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
                 cell.imageView?.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
@@ -523,10 +606,10 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 //                    cell?.imageView?.image = cell?.imageView?.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
 //                }
             }
-            }
         }
         return cell
     }
+    
     @objc func append(_ sender: UIButton) {
         let buttonPosition = sender.convert(CGPoint(), to: tableView)
         if let indexPath = tableView.indexPathForRow(at: buttonPosition), let newQuery = suggestions?[indexPath.row] {

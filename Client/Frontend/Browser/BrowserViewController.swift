@@ -873,7 +873,7 @@ class BrowserViewController: UIViewController {
         }
 
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        let searchController = SearchViewController(profile: profile, isPrivate: isPrivate)
+        let searchController = SearchViewController(profile: profile, isPrivate: isPrivate, tabManager: tabManager)
         searchController.searchEngines = profile.searchEngines
         searchController.searchDelegate = self
 
@@ -1560,6 +1560,17 @@ extension BrowserViewController: SearchViewControllerDelegate {
         finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: tab)
     }
 
+    func searchViewController(_ searchViewController: SearchViewController, switchToTabWithUrl url: URL, with uuid: String, isPrivate: Bool) {
+       switchToTabForWidgetURLOrOpen(url, uuid: uuid, isPrivate: isPrivate)
+    }
+    
+    func searchViewController(_ searchViewController: SearchViewController, uuid: String) {
+        urlBar.leaveOverlayMode(didCancel: true)
+        if let tab = tabManager.getTabForUUID(uuid: uuid) {
+            tabManager.selectTab(tab)
+        }
+    }
+    
     func presentSearchSettingsController() {
         let searchSettingsTableViewController = SearchSettingsTableViewController()
         searchSettingsTableViewController.model = self.profile.searchEngines
