@@ -156,7 +156,7 @@ extension TabTrayViewController: Themeable {
             overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
             view.backgroundColor = UIColor.systemGroupedBackground
             navigationController?.navigationBar.tintColor = UIColor.label
-            navigationController?.toolbar.tintColor = UIColor.theme.tabTray.toolbar
+            navigationController?.toolbar.tintColor = UIColor.label//UIColor.theme.tabTray.toolbar
             navigationItem.rightBarButtonItem?.tintColor = UIColor.label
         } else {
             view.backgroundColor = UIColor.theme.tableView.headerBackground
