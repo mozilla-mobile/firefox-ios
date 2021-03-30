@@ -50,6 +50,7 @@
         "DisplaySettingTests",
         "DomainAutocompleteTest",
         "DownloadFilesTests\/testDeleteDownloadedFile()",
+        "DownloadFilesTests\/testDownloadBLOBFile()",
         "DownloadFilesTests\/testDownloadFileContextMenu()",
         "DownloadFilesTests\/testDownloadFilesAppMenuFirstTime()",
         "DownloadFilesTests\/testDownloadMoreThanOneFile()",
