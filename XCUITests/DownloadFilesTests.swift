@@ -137,8 +137,7 @@ class DownloadFilesTests: BaseTestCase {
 
     private func downloadBLOBFile() {
         navigator.openURL(testBLOBURL)
-        sleep(3)
-        waitForExistence(app.webViews.links["Download Text"], timeout: 10)
+        waitForExistence(app.webViews.links["Download Text"], timeout: 5)
         app.webViews.links["Download Text"].press(forDuration: 1)
         app.buttons["Download Link"].tap()
     }
