@@ -71,7 +71,8 @@ class TabTrayViewController: UIViewController {
     }
 
     private func viewSetup() {
-        if let window = (UIApplication.shared.delegate?.window)! as UIWindow? {
+        if let appWindow = (UIApplication.shared.delegate?.window),
+           let window = appWindow as UIWindow? {
             window.backgroundColor = .black
         }
 
@@ -104,17 +105,9 @@ class TabTrayViewController: UIViewController {
     @objc func panelChanged() {
         switch navigationMenu.selectedSegmentIndex {
         case 0:
-            if children.first != tabTrayView {
-                hideCurrentPanel()
-                showPanel(tabTrayView)
-            }
-            tabTrayView.didTogglePrivateMode(false)
+            switchBetweenLocalPanels(withPrivateMode: false)
         case 1:
-            if children.first != tabTrayView {
-                hideCurrentPanel()
-                showPanel(tabTrayView)
-            }
-            tabTrayView.didTogglePrivateMode(true)
+            switchBetweenLocalPanels(withPrivateMode: true)
         case 2:
             if children.first == tabTrayView {
                 hideCurrentPanel()
@@ -124,6 +117,14 @@ class TabTrayViewController: UIViewController {
         default:
             return
         }
+    }
+
+    fileprivate func switchBetweenLocalPanels(withPrivateMode privateMode: Bool) {
+        if children.first != tabTrayView {
+            hideCurrentPanel()
+            showPanel(tabTrayView)
+        }
+        tabTrayView.didTogglePrivateMode(privateMode)
     }
 
     fileprivate func showPanel(_ panel: UIViewController) {
@@ -147,6 +148,10 @@ class TabTrayViewController: UIViewController {
             panel.endAppearanceTransition()
             panel.removeFromParent()
         }
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 }
 
