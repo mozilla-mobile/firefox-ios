@@ -50,15 +50,6 @@ class ChronologicalTabsViewController: UIViewController, Themeable, TabTrayViewD
         return emptyView
     }()
 
-    lazy var normalToolbarItems: [UIBarButtonItem] = {
-        let bottomToolbar = [
-            UIBarButtonItem(image: UIImage.templateImageNamed("action_delete"), style: .plain, target: self, action: #selector(didTapToolbarDelete)),
-            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
-            UIBarButtonItem(customView: NewTabButton(target: self, selector: #selector(didTapToolbarAddTab)))
-        ]
-        return bottomToolbar
-    }()
-    
     // Constants
     fileprivate let sectionHeaderIdentifier = "SectionHeader"
     
@@ -86,8 +77,6 @@ class ChronologicalTabsViewController: UIViewController, Themeable, TabTrayViewD
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         parent?.navigationItem.title = Strings.TabTrayV2Title
-        parent?.navigationController?.setToolbarHidden(false, animated: animated)
-        parent?.setToolbarItems(normalToolbarItems, animated: animated)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -167,6 +156,34 @@ class ChronologicalTabsViewController: UIViewController, Themeable, TabTrayViewD
     }
 }
 
+// MARK: - Toolbar Actions
+extension ChronologicalTabsViewController {
+    func performToolbarAction(_ action: TabTrayViewAction, sender: UIButton) {
+        switch action {
+        case .addTab:
+            didTapToolbarAddTab()
+        case .deleteTab:
+            didTapToolbarDelete(sender)
+        }
+    }
+
+    func didTapToolbarAddTab() {
+        viewModel.addTab()
+        dismissTabTray()
+        TelemetryWrapper.recordEvent(category: .action, method: .add, object: .tab, value: viewModel.isInPrivateMode ? .privateTab : .normalTab)
+    }
+
+    func didTapToolbarDelete(_ sender: UIButton) {
+        let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        controller.addAction(UIAlertAction(title: Strings.AppMenuCloseAllTabsTitleString, style: .default, handler: { _ in self.viewModel.closeTabsForCurrentTray() }), accessibilityIdentifier: "TabTrayController.deleteButton.closeAll")
+        controller.addAction(UIAlertAction(title: Strings.CancelString, style: .cancel, handler: nil), accessibilityIdentifier: "TabTrayController.deleteButton.cancel")
+        controller.popoverPresentationController?.sourceView = sender
+        controller.popoverPresentationController?.sourceRect = sender.bounds
+        present(controller, animated: true, completion: nil)
+        TelemetryWrapper.recordEvent(category: .action, method: .deleteAll, object: .tab, value: viewModel.isInPrivateMode ? .privateTab : .normalTab)
+    }
+}
+
 // MARK: Datastore
 extension ChronologicalTabsViewController: UITableViewDataSource {
     
@@ -196,23 +213,7 @@ extension ChronologicalTabsViewController: UITableViewDataSource {
             viewModel.removeTab(forIndex: indexPath)
         }
     }
-    
-    @objc func didTapToolbarAddTab(_ sender: UIBarButtonItem) {
-        viewModel.addTab()
-        dismissTabTray()
-        TelemetryWrapper.recordEvent(category: .action, method: .add, object: .tab, value: viewModel.isInPrivateMode ? .privateTab : .normalTab)
-    }
-    
-    @objc func didTapToolbarDelete(_ sender: UIButton) {
-        let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        controller.addAction(UIAlertAction(title: Strings.AppMenuCloseAllTabsTitleString, style: .default, handler: { _ in self.viewModel.closeTabsForCurrentTray() }), accessibilityIdentifier: "TabTrayController.deleteButton.closeAll")
-        controller.addAction(UIAlertAction(title: Strings.CancelString, style: .cancel, handler: nil), accessibilityIdentifier: "TabTrayController.deleteButton.cancel")
-        controller.popoverPresentationController?.sourceView = sender
-        controller.popoverPresentationController?.sourceRect = sender.bounds
-        present(controller, animated: true, completion: nil)
-        TelemetryWrapper.recordEvent(category: .action, method: .deleteAll, object: .tab, value: viewModel.isInPrivateMode ? .privateTab : .normalTab)
-    }
-    
+
     func didTogglePrivateMode(_ togglePrivateModeOn: Bool) {
         // Toggle private mode
         viewModel.togglePrivateMode(togglePrivateModeOn)

@@ -7,8 +7,14 @@ import Shared
 import SnapKit
 import UIKit
 
+enum TabTrayViewAction {
+    case addTab
+    case deleteTab
+}
+
 protocol TabTrayViewDelegate: UIViewController {
     func didTogglePrivateMode(_ togglePrivateModeOn: Bool)
+    func performToolbarAction(_ action: TabTrayViewAction, sender: UIButton)
 }
 
 class TabTrayViewController: UIViewController {
@@ -42,6 +48,24 @@ class TabTrayViewController: UIViewController {
         return toolbar
     }()
 
+    lazy var bottomToolbarItems: [UIBarButtonItem] = {
+        let bottomToolbar = [
+            UIBarButtonItem(image: UIImage.templateImageNamed("action_delete"), style: .plain, target: self, action: #selector(didTapDeleteTab(_:))),
+            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
+            UIBarButtonItem(customView: NewTabButton(target: self, selector: #selector(didTapAddTab)))
+        ]
+        return bottomToolbar
+    }()
+
+    @objc func didTapDeleteTab(_ sender: UIButton) {
+        tabTrayView.performToolbarAction(.deleteTab, sender: sender)
+    }
+
+    @objc func didTapAddTab(_ sender: UIButton) {
+        tabTrayView.performToolbarAction(.addTab, sender: sender)
+    }
+
+
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
@@ -68,6 +92,13 @@ class TabTrayViewController: UIViewController {
         viewSetup()
         applyTheme()
         setupNotifications()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        navigationController?.isToolbarHidden = false
+        setToolbarItems(bottomToolbarItems, animated: animated)
     }
 
     private func viewSetup() {
@@ -187,6 +218,7 @@ extension TabTrayViewController: UIAdaptivePresentationControllerDelegate, UIPop
     // Returning None here makes sure that the Popover is actually presented as a Popover and
     // not as a full-screen modal, which is the default on compact device classes.
     func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+
         return .none
     }
 

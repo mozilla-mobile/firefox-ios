@@ -42,15 +42,6 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     var webViewContainerBackdrop: UIView!
     var collectionView: UICollectionView!
 
-    lazy var normalToolbarItems: [UIBarButtonItem] = {
-        let bottomToolbar = [
-            UIBarButtonItem(image: UIImage.templateImageNamed("action_delete"), style: .plain, target: self, action: #selector(didTapToolbarDelete)),
-            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
-            UIBarButtonItem(customView: NewTabButton(target: self, selector: #selector(didTapToolbarAddTab)))
-        ]
-        return bottomToolbar
-    }()
-
     fileprivate lazy var emptyPrivateTabsView: EmptyPrivateTabsView = {
         let emptyView = EmptyPrivateTabsView()
         emptyView.learnMoreButton.addTarget(self, action: #selector(didTapLearnMore), for: .touchUpInside)
@@ -88,10 +79,6 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         self.view.layoutIfNeeded()
 
         parent?.navigationItem.title = Strings.TabTrayV2Title
-
-        // Bottom toolbar
-        parent?.navigationController?.isToolbarHidden = false
-        parent?.setToolbarItems(normalToolbarItems, animated: animated)
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -250,13 +237,6 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
 
     fileprivate func privateTabsAreEmpty() -> Bool {
         return tabDisplayManager.isPrivate && tabManager.privateTabs.isEmpty
-    }
-
-    @objc func didTapToolbarAddTab() {
-        if tabDisplayManager.isDragging {
-            return
-        }
-        openNewTab()
     }
 
     func openNewTab(_ request: URLRequest? = nil) {
@@ -527,8 +507,25 @@ extension GridTabViewController {
     }
 }
 
+// MARK: - Toolbar Actions
 extension GridTabViewController {
-    @objc func didTapToolbarDelete(_ sender: UIButton) {
+    func performToolbarAction(_ action: TabTrayViewAction, sender: UIButton) {
+        switch action {
+        case .addTab:
+            didTapToolbarAddTab()
+        case .deleteTab:
+            didTapToolbarDelete(sender)
+        }
+    }
+
+    func didTapToolbarAddTab() {
+        if tabDisplayManager.isDragging {
+            return
+        }
+        openNewTab()
+    }
+
+    func didTapToolbarDelete(_ sender: UIButton) {
         if tabDisplayManager.isDragging {
             return
         }
