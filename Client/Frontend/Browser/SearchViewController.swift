@@ -71,7 +71,17 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     fileprivate let searchEngineScrollViewContent = UIView()
 
     fileprivate lazy var bookmarkedBadge: UIImage = {
-        return UIImage.templateImageNamed("bookmarked_passive")!.tinted(withColor: .lightGray).createScaled(CGSize(width: 16, height: 16))
+        let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+//        return UIImage(named: "switch_tab_light")!
+        return theme == .dark ? UIImage(named: "bookmark_results_dark")! : UIImage(named: "bookmark_results_light")!
+//        return UIImage.templateImageNamed("bookmarked_passive")!.tinted(withColor: .lightGray).createScaled(CGSize(width: 16, height: 16))
+    }()
+    
+    fileprivate lazy var switchAndSyncTabBadge: UIImage = {
+        let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+        return theme == .dark ? UIImage(named: "switch_tab_dark")! : UIImage(named: "switch_tab_light")!
+//        return theme == .normal ? UIImage(named: "switch_tab_dark")! : UIImage(named: "switch_tab_light")!
+//        return UIImage.templateImageNamed("bookmarked_passive")!.tinted(withColor: .lightGray).createScaled(CGSize(width: 16, height: 16))
     }()
 
     var suggestions: [String]? = []
@@ -550,29 +560,30 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             if let site = data[indexPath.row] {
                 let cell = twoLineImageOverlayCell
                 let isBookmark = site.bookmarked ?? false
-//                cell.setLines(site.title, detailText: site.url)
-//                cell.setRightBadge(isBookmark ? self.bookmarkedBadge : nil)
                 cell.titleLabel.text = site.title
                 cell.descriptionLabel.text = site.url
-                cell.leftOverlayImageView.image = self.bookmarkedBadge
+                cell.leftOverlayImageView.image = isBookmark ? self.bookmarkedBadge : nil
                 cell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
                 cell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
                 cell.leftImageView.contentMode = .center
-//                cell.leftImageView.image = self.bookmarkedBadge
                 cell.leftImageView.setImageAndBackground(forIcon: site.icon, website: site.tileURL) { [weak cell] in
                     cell?.leftImageView.image = cell?.leftImageView.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
                 }
                 selectedCell = cell
             }
         case .openedTabs:
-            if self.filteredOpenedTabs.count > indexPath.row, let cell = cell as? TwoLineTableViewCell {
+            if self.filteredOpenedTabs.count > indexPath.row {
+                let cell = twoLineImageOverlayCell
                 let openedTab = self.filteredOpenedTabs[indexPath.row]
-                cell.setLines(openedTab.title, detailText: "Switch to tab")
-                cell.imageView?.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
-                cell.imageView?.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
-                cell.imageView?.contentMode = .center
-                cell.imageView?.image = UIImage(named: "deviceTypeMobile")
-                cell.accessoryView = nil
+                cell.titleLabel.text = openedTab.title
+                cell.descriptionLabel.text = "Switch to tab"
+                cell.leftOverlayImageView.image = switchAndSyncTabBadge
+                cell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
+                cell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
+                cell.leftImageView.contentMode = .center
+                cell.leftImageView.setImageAndBackground(forIcon: openedTab.displayFavicon, website: openedTab.url) { [weak cell] in
+                    cell?.leftImageView.image = cell?.leftImageView.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
+                }
                 selectedCell = cell
             }
         case .remoteTabs:
