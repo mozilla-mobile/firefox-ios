@@ -9,16 +9,10 @@ import SnapKit
 class NewTabButton: UIButton {
     lazy var plusImage: UIImageView = {
         let plusImage = UIImageView()
-        plusImage.image = UIImage(named: "menu-NewTab")?.tinted(withColor: .systemBlue)
+        plusImage.image = UIImage.templateImageNamed("menu-NewTab")
         return plusImage
     }()
-    lazy var newTabTitle: UILabel = {
-        let newTabCopy = UILabel()
-        newTabCopy.text = Strings.NewTabTitle
-        newTabCopy.textColor = .systemBlue
-        return newTabCopy
-    }()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         viewSetup()
@@ -37,17 +31,9 @@ class NewTabButton: UIButton {
 
     private func viewSetup() {
         addSubview(plusImage)
-        addSubview(newTabTitle)
-        
+
         plusImage.snp.makeConstraints { make in
-            make.left.equalTo(newTabTitle.snp.right)
             make.right.equalToSuperview()
-            make.centerY.equalTo(self.snp.centerY)
-        }
-        newTabTitle.snp.makeConstraints { make in
-            make.right.equalTo(plusImage.snp.left).offset(-10)
-            make.left.equalToSuperview()
-            make.height.equalTo(24)
             make.centerY.equalTo(self.snp.centerY)
         }
     }

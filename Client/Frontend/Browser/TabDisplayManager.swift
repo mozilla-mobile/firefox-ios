@@ -208,7 +208,7 @@ class TabDisplayManager: NSObject {
     }
 
     private func recordEventAndBreadcrumb(object: TelemetryWrapper.EventObject, method: TelemetryWrapper.EventMethod) {
-        let isTabTray = tabDisplayer as? TabTrayControllerV1 != nil
+        let isTabTray = tabDisplayer as? GridTabViewController != nil
         let eventValue = isTabTray ? TelemetryWrapper.EventValue.tabTray : TelemetryWrapper.EventValue.topTabs
         TelemetryWrapper.recordEvent(category: .action, method: method, object: object, value: eventValue)
     }
