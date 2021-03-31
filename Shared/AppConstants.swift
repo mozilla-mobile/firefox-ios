@@ -152,4 +152,20 @@ public struct AppConstants {
         #endif
     }()
 
+
+    /// Use the Nimbus experimentation platform. If this is `true` then
+    /// `Experiments.shared` provides access to Nimbus. If false, it is a dummy object.
+    public static let NIMBUS_ENABLED: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+        return false
+        #elseif MOZ_CHANNEL_BETA
+        return false
+        #elseif MOZ_CHANNEL_FENNEC
+        return true
+        #else
+        return false
+        #endif
+    }()
+
+
 }
