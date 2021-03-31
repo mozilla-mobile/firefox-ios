@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import SnapKit
 
 struct TwoLineCellUX {
     static let ImageSize: CGFloat = 29
@@ -13,6 +14,143 @@ struct TwoLineCellUX {
     static let BorderFrameSize: CGFloat = 32
     static let DetailTextTopMargin: CGFloat = 0
 }
+
+
+class TwoLineImageOverlayCell: UITableViewCell, Themeable {
+    // Tableview cell items
+    var leftImageView: UIImageView = {
+        let imgView = UIImageView()
+        imgView.contentMode = .scaleAspectFit
+        imgView.clipsToBounds = true
+        return imgView
+    }()
+    var leftOverlayImageView: UIImageView = {
+        let imgView = UIImageView()
+        imgView.contentMode = .scaleAspectFit
+        imgView.clipsToBounds = true
+        return imgView
+    }()
+    var rightAccessoryImageView: UIImageView = {
+        let imgView = UIImageView()
+        imgView.contentMode = .scaleAspectFit
+        imgView.clipsToBounds = true
+        return imgView
+    }()
+    var titleLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .black
+        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        label.textAlignment = .left
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    var descriptionLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .lightGray
+        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        label.textAlignment = .left
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        initialViewSetup()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func initialViewSetup() {
+        self.selectionStyle = .default
+        contentView.addSubview(leftImageView)
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(descriptionLabel)
+        contentView.addSubview(rightAccessoryImageView)
+        contentView.addSubview(leftOverlayImageView)
+        
+        leftImageView.snp.makeConstraints { make in
+            make.height.width.equalTo(50)
+            make.left.equalToSuperview().inset(10)
+            make.top.equalToSuperview().offset(10)
+            make.bottom.equalToSuperview().offset(-10)
+        }
+
+        leftOverlayImageView.snp.makeConstraints { make in
+            make.height.width.equalTo(25)
+            make.right.equalTo(leftImageView)
+//            make.top.equalTo(leftImageView).offset(10)
+            make.bottom.equalTo(leftImageView)
+        }
+        
+        rightAccessoryImageView.snp.makeConstraints { make in
+            make.height.width.equalTo(50)
+            make.right.equalToSuperview().inset(2)
+            make.top.equalToSuperview().offset(2)
+            make.bottom.equalToSuperview().offset(2)
+        }
+        
+
+        
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(10)
+            make.trailing.equalTo(rightAccessoryImageView).inset(2)
+            make.height.equalTo(20)
+            make.leading.equalTo(leftImageView.snp.trailing).offset(10)
+        }
+//        self.backgroundColor = .brown
+//        titleLabel.text = "HELLO"
+//        titleLabel.snp.makeConstraints { make in
+//            make.centerY.equalTo(self)
+//            make.height.equalTo(50)
+//            make.trailing.equalTo(self)
+//            make.leading.equalTo(self)
+//        }
+        
+        descriptionLabel.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(2)
+            make.trailing.equalTo(rightAccessoryImageView).inset(2)
+            make.height.equalTo(20)
+            make.leading.equalTo(leftImageView.snp.trailing).offset(10)
+        }
+        
+        
+        
+//        addSubview(updateCoverSheetCellImageView)
+//        addSubview(updateCoverSheetCellDescriptionLabel)
+//        updateCoverSheetCellImageView.snp.makeConstraints { make in
+//            make.left.equalToSuperview().inset(UpdateCoverSheetTableViewCellUX.ImageView.paddingLeft)
+//            make.height.width.equalTo(UpdateCoverSheetTableViewCellUX.ImageView.height)
+//            make.top.equalToSuperview().offset(UpdateCoverSheetTableViewCellUX.ImageView.paddingTop)
+//        }
+//
+//        updateCoverSheetCellDescriptionLabel.snp.makeConstraints { make in
+//            make.top.equalToSuperview().offset(UpdateCoverSheetTableViewCellUX.DescriptionLabel.paddingTop)
+//            make.trailing.equalToSuperview().inset(UpdateCoverSheetTableViewCellUX.DescriptionLabel.paddingTrailing)
+//            make.bottom.equalTo(snp.bottom).offset(UpdateCoverSheetTableViewCellUX.DescriptionLabel.bottom)
+//            make.leading.equalTo(updateCoverSheetCellImageView.snp.trailing).offset(UpdateCoverSheetTableViewCellUX.DescriptionLabel.leading)
+//        }
+//        self.clipsToBounds = false
+        applyTheme()
+    }
+    
+    func applyTheme() {
+        let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+        if theme == .dark {
+            self.contentView.backgroundColor = .black
+        } else {
+            self.contentView.backgroundColor = .white
+        }
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+    }
+    
+}
+
 
 class TwoLineTableViewCell: UITableViewCell, Themeable {
     fileprivate let twoLineHelper = TwoLineCellHelper()
