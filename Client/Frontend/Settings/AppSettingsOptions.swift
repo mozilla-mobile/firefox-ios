@@ -733,6 +733,8 @@ class SendAnonymousUsageDataSetting: BoolSetting {
         )
     }
 
+    override var accessibilityIdentifier: String? { return "SendAnonymousUsageData" }
+
     override var url: URL? {
         return SupportUtils.URLForTopic("adjust")
     }
@@ -758,6 +760,8 @@ class StudiesToggleSetting: BoolSetting {
             }
         )
     }
+
+    override var accessibilityIdentifier: String? { return "StudiesToggle" }
 
     override var url: URL? {
         return SupportUtils.URLForTopic("studies")
