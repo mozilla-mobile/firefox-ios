@@ -32,6 +32,10 @@ class TabTrayViewController: UIViewController {
         return UIBarButtonItem(customView: NewTabButton(target: self, selector: #selector(didTapAddTab)))
     }()
 
+    lazy var syncTabButton: UIBarButtonItem = {
+        return UIBarButtonItem(title: Strings.FxASyncNow, style: .plain, target: self, action: #selector(didTapSyncTabs))
+    }()
+
     lazy var flexibleSpace: UIBarButtonItem = {
         return UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
     }()
@@ -48,7 +52,9 @@ class TabTrayViewController: UIViewController {
     lazy var navigationMenu: UISegmentedControl = {
         var navigationMenu: UISegmentedControl
         if UIDevice.current.userInterfaceIdiom == .pad {
-            navigationMenu = UISegmentedControl(items: ["Tabs", "Private", "Synced"])
+            navigationMenu = UISegmentedControl(items: [Strings.TabTraySegmentedControlTitlesTabs,
+                                                        Strings.TabTraySegmentedControlTitlesPrivateTabs,
+                                                        Strings.TabTraySegmentedControlTitlesSyncedTabs])
         } else {
             navigationMenu = UISegmentedControl(items: [UIImage(named: "nav-tabcounter")!.overlayWith(image: countLabel),
                                                         UIImage(named: "smallPrivateMask")!,
@@ -81,8 +87,11 @@ class TabTrayViewController: UIViewController {
     }()
 
     lazy var bottomToolbarItems: [UIBarButtonItem] = {
-        let bottomToolbar = [deleteButton, flexibleSpace, newTabButton]
-        return bottomToolbar
+        return [deleteButton, flexibleSpace, newTabButton]
+    }()
+
+    lazy var bottomToolbarItemsForSync: [UIBarButtonItem] = {
+        return [flexibleSpace, syncTabButton]
     }()
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -167,6 +176,7 @@ class TabTrayViewController: UIViewController {
             if children.first == tabTrayView {
                 hideCurrentPanel()
                 let syncedTabsController = RemoteTabsPanel(profile: self.profile)
+                setToolbarItems(bottomToolbarItemsForSync, animated: true)
                 showPanel(syncedTabsController)
             }
         default:
@@ -179,6 +189,7 @@ class TabTrayViewController: UIViewController {
             hideCurrentPanel()
             showPanel(tabTrayView)
         }
+        setToolbarItems(bottomToolbarItems, animated: true)
         tabTrayView.didTogglePrivateMode(privateMode)
     }
 
@@ -214,6 +225,11 @@ extension TabTrayViewController {
 
     @objc func didTapAddTab(_ sender: UIButton) {
         tabTrayView.performToolbarAction(.addTab, sender: sender)
+    }
+
+    @objc func didTapSyncTabs(_ sender: UIButton) {
+        // TODO: Sync tabs implementation
+        print("I'm a gonna sync dem tabs!")
     }
 }
 

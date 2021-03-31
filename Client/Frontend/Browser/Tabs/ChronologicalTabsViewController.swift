@@ -76,7 +76,9 @@ class ChronologicalTabsViewController: UIViewController, Themeable, TabTrayViewD
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        parent?.navigationItem.title = Strings.TabTrayV2Title
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            parent?.navigationItem.title = Strings.TabTrayV2Title
+        }
     }
 
     override func viewDidDisappear(_ animated: Bool) {
