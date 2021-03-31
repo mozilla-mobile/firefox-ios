@@ -23,7 +23,19 @@ class TabTrayViewController: UIViewController {
 
     let tabTrayView: TabTrayViewDelegate
 
-    // Toolbars
+    // Buttons & Menus
+    lazy var deleteButton: UIBarButtonItem = {
+        return UIBarButtonItem(image: UIImage.templateImageNamed("action_delete"), style: .plain, target: self, action: #selector(didTapDeleteTab(_:)))
+    }()
+
+    lazy var newTabButton: UIBarButtonItem = {
+        return UIBarButtonItem(customView: NewTabButton(target: self, selector: #selector(didTapAddTab)))
+    }()
+
+    lazy var flexibleSpace: UIBarButtonItem = {
+        return UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+    }()
+
     lazy var countLabel: UILabel = {
         let label = UILabel(frame: CGRect(width: 24, height: 24))
         label.font = TabsButtonUX.TitleFont
@@ -34,37 +46,44 @@ class TabTrayViewController: UIViewController {
     }()
 
     lazy var navigationMenu: UISegmentedControl = {
-        let navigationMenu = UISegmentedControl(items: [UIImage(named: "nav-tabcounter")!.overlayWith(image: countLabel), UIImage(named: "smallPrivateMask")!, UIImage(named: "synced_devices")!])
+        var navigationMenu: UISegmentedControl
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            navigationMenu = UISegmentedControl(items: ["Tabs", "Private", "Synced"])
+        } else {
+            navigationMenu = UISegmentedControl(items: [UIImage(named: "nav-tabcounter")!.overlayWith(image: countLabel),
+                                                        UIImage(named: "smallPrivateMask")!,
+                                                        UIImage(named: "synced_devices")!])
+        }
+
         navigationMenu.accessibilityIdentifier = "navBarTabTray"
         navigationMenu.selectedSegmentIndex = tabManager.selectedTab?.isPrivate ?? false ? 1 : 0
         navigationMenu.addTarget(self, action: #selector(panelChanged), for: .valueChanged)
         return navigationMenu
     }()
 
+    // Toolbars
     lazy var navigationToolbar: UIToolbar = {
         let toolbar = UIToolbar()
         toolbar.delegate = self
-        toolbar.setItems([UIBarButtonItem(customView: navigationMenu)], animated: false)
+
+        // Different designs based on iPhone or iPad will require different setups
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            toolbar.setItems([deleteButton,
+                              flexibleSpace,
+                              UIBarButtonItem(customView: navigationMenu),
+                              flexibleSpace,
+                              newTabButton], animated: false)
+        } else {
+            toolbar.setItems([UIBarButtonItem(customView: navigationMenu)], animated: false)
+        }
+
         return toolbar
     }()
 
     lazy var bottomToolbarItems: [UIBarButtonItem] = {
-        let bottomToolbar = [
-            UIBarButtonItem(image: UIImage.templateImageNamed("action_delete"), style: .plain, target: self, action: #selector(didTapDeleteTab(_:))),
-            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
-            UIBarButtonItem(customView: NewTabButton(target: self, selector: #selector(didTapAddTab)))
-        ]
+        let bottomToolbar = [deleteButton, flexibleSpace, newTabButton]
         return bottomToolbar
     }()
-
-    @objc func didTapDeleteTab(_ sender: UIButton) {
-        tabTrayView.performToolbarAction(.deleteTab, sender: sender)
-    }
-
-    @objc func didTapAddTab(_ sender: UIButton) {
-        tabTrayView.performToolbarAction(.addTab, sender: sender)
-    }
-
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -85,7 +104,11 @@ class TabTrayViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
     // Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -97,8 +120,10 @@ class TabTrayViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        navigationController?.isToolbarHidden = false
-        setToolbarItems(bottomToolbarItems, animated: animated)
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            navigationController?.isToolbarHidden = false
+            setToolbarItems(bottomToolbarItems, animated: animated)
+        }
     }
 
     private func viewSetup() {
@@ -109,12 +134,7 @@ class TabTrayViewController: UIViewController {
 
         navigationController?.navigationBar.shadowImage = UIImage()
 
-        // Add Subviews
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            view.addSubview(navigationToolbar)
-        } else {
-            view.addSubview(navigationToolbar)
-        }
+        view.addSubview(navigationToolbar)
 
         navigationToolbar.snp.makeConstraints { make in
             make.left.right.equalTo(view)
@@ -122,7 +142,11 @@ class TabTrayViewController: UIViewController {
         }
 
         navigationMenu.snp.makeConstraints { make in
-            make.width.lessThanOrEqualTo(343)
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                make.width.equalTo(343)
+            } else {
+                make.width.lessThanOrEqualTo(343)
+            }
             make.height.equalTo(ChronologicalTabsControllerUX.navigationMenuHeight)
         }
 
@@ -180,9 +204,16 @@ class TabTrayViewController: UIViewController {
             panel.removeFromParent()
         }
     }
+}
 
-    deinit {
-        NotificationCenter.default.removeObserver(self)
+// MARK: - Actions
+extension TabTrayViewController {
+    @objc func didTapDeleteTab(_ sender: UIButton) {
+        tabTrayView.performToolbarAction(.deleteTab, sender: sender)
+    }
+
+    @objc func didTapAddTab(_ sender: UIButton) {
+        tabTrayView.performToolbarAction(.addTab, sender: sender)
     }
 }
 
@@ -192,7 +223,7 @@ extension TabTrayViewController: Themeable {
             overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
             view.backgroundColor = UIColor.systemGroupedBackground
             navigationController?.navigationBar.tintColor = UIColor.label
-            navigationController?.toolbar.tintColor = UIColor.label//UIColor.theme.tabTray.toolbar
+            navigationController?.toolbar.tintColor = UIColor.label
             navigationItem.rightBarButtonItem?.tintColor = UIColor.label
         } else {
             view.backgroundColor = UIColor.theme.tableView.headerBackground
@@ -218,6 +249,10 @@ extension TabTrayViewController: UIAdaptivePresentationControllerDelegate, UIPop
     // Returning None here makes sure that the Popover is actually presented as a Popover and
     // not as a full-screen modal, which is the default on compact device classes.
     func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            return .overFullScreen
+        }
 
         return .none
     }
