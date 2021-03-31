@@ -20,7 +20,6 @@ struct EmptyPrivateTabsViewUX {
 class EmptyPrivateTabsView: UIView {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.textColor = UIColor.Photon.White100
         label.font = EmptyPrivateTabsViewUX.TitleFont
         label.textAlignment = .center
         return label
@@ -28,7 +27,6 @@ class EmptyPrivateTabsView: UIView {
 
     var descriptionLabel: UILabel = {
         let label = UILabel()
-        label.textColor = UIColor.Photon.White100
         label.font = EmptyPrivateTabsViewUX.DescriptionFont
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -83,9 +81,24 @@ class EmptyPrivateTabsView: UIView {
             make.bottom.lessThanOrEqualTo(self).offset(-EmptyPrivateTabsViewUX.MinBottomMargin).priority(1000)
             make.centerX.equalTo(self)
         }
+
+        applyTheme()
+
+        NotificationCenter.default.addObserver(self, selector: #selector(applyTheme), name: .DisplayThemeChanged, object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+}
+
+extension EmptyPrivateTabsView: Themeable {
+    @objc func applyTheme() {
+        titleLabel.textColor = UIColor.theme.tabTray.tabTitleText
+        descriptionLabel.textColor = UIColor.theme.tabTray.tabTitleText
     }
 }

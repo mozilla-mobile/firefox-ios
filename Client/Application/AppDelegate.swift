@@ -34,7 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
     var window: UIWindow?
     var browserViewController: BrowserViewController!
-    var tabTrayController: TabTrayControllerV1!
+    var tabTrayController: GridTabViewController!
     var rootViewController: UIViewController!
     weak var profile: Profile?
     var tabManager: TabManager!
@@ -124,7 +124,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         }
 
         self.tabManager = TabManager(profile: profile, imageStore: imageStore)
-        self.tabTrayController = TabTrayControllerV1(tabManager: self.tabManager, profile: profile)
+        self.tabTrayController = GridTabViewController(tabManager: self.tabManager, profile: profile)
 
         // Add restoration class, the factory that will return the ViewController we
         // will restore with.

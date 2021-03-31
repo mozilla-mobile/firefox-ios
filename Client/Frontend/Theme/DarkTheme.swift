@@ -51,7 +51,7 @@ fileprivate class DarkToolbarButtonColor: ToolbarButtonColor {
 fileprivate class DarkTabTrayColor: TabTrayColor {
     override var tabTitleText: UIColor { return defaultTextAndTint }
     override var tabTitleBlur: UIBlurEffect.Style { return UIBlurEffect.Style.dark }
-    override var background: UIColor { return UIColor.Photon.Grey90 }
+    override var background: UIColor { return UIColor.Photon.Grey85 }
     override var cellBackground: UIColor { return defaultBackground }
     override var toolbar: UIColor { return UIColor.Photon.Grey80 }
     override var toolbarButtonTint: UIColor { return defaultTextAndTint }
@@ -135,7 +135,7 @@ class DarkDefaultBrowserCardColor: DefaultBrowserCardColor {
 }
 
 class DarkOnboardingColor: OnboardingColor {
-    override var backgroundColor: UIColor { return UIColor(rgb: 0x1C1C1E) }
+    override var backgroundColor: UIColor { return UIColor.Photon.Grey85 }
 }
 
 class DarkTheme: NormalTheme {
