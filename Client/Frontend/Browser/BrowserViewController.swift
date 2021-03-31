@@ -86,8 +86,8 @@ class BrowserViewController: UIViewController {
     var pasteAction: AccessibleAction!
     var copyAddressAction: AccessibleAction!
 
-    weak var tabTrayController: TabTrayControllerV1?
-    weak var tabTrayControllerV2: TabTrayV2ViewController?
+    weak var gridTabTrayController: GridTabViewController?
+    weak var chronTabTrayController: ChronologicalTabsViewController?
     let profile: Profile
     let tabManager: TabManager
 
@@ -831,10 +831,10 @@ class BrowserViewController: UIViewController {
                 showFirefoxHome(inline: true)
 
                 if !hasPresentedDBCard && !shouldShowIntroScreen && focusUrlBar {
-                    if tabTrayControllerV2 == nil {
+                    if chronTabTrayController == nil {
                         urlBar.enterOverlayMode(nil, pasted: false, search: false)
                     } else {
-                        tabTrayControllerV2?.onViewDismissed = { [weak self] in self?.urlBar.enterOverlayMode(nil, pasted: false, search: false) }
+                        chronTabTrayController?.onViewDismissed = { [weak self] in self?.urlBar.enterOverlayMode(nil, pasted: false, search: false) }
                     }
                 }
             } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
@@ -1076,8 +1076,8 @@ class BrowserViewController: UIViewController {
 
     // MARK: Opening New Tabs
     func switchToPrivacyMode(isPrivate: Bool) {
-         if let tabTrayController = self.tabTrayController, tabTrayController.tabDisplayManager.isPrivate != isPrivate {
-            tabTrayController.changePrivacyMode(isPrivate)
+         if let tabTrayController = self.gridTabTrayController, tabTrayController.tabDisplayManager.isPrivate != isPrivate {
+            tabTrayController.didTogglePrivateMode(isPrivate)
         }
         topTabsViewController?.applyUIMode(isPrivate: isPrivate)
     }
@@ -1754,9 +1754,7 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
-        let tabTrayV2PrivateMode = tabTrayControllerV2?.viewModel.isInPrivateMode
-        let tabTrayV1PrivateMode = tabTrayController?.tabDisplayManager.isPrivate
-        guard let toast = toast, !(tabTrayV1PrivateMode ?? (tabTrayV2PrivateMode ?? false)) else {
+        guard let toast = toast, !(tabManager.selectedTab?.isPrivate ?? false) else {
             return
         }
         show(toast: toast, afterWaiting: ButtonToastUX.ToastDelay)
@@ -2203,11 +2201,11 @@ extension BrowserViewController: SessionRestoreHelperDelegate {
 extension BrowserViewController: TabTrayDelegate {
     // This function animates and resets the tab chrome transforms when
     // the tab tray dismisses.
-    func tabTrayDidDismiss(_ tabTray: TabTrayControllerV1) {
+    func tabTrayDidDismiss(_ tabTray: GridTabViewController) {
         resetBrowserChrome()
     }
 
-    func tabTrayDidAddTab(_ tabTray: TabTrayControllerV1, tab: Tab) {}
+    func tabTrayDidAddTab(_ tabTray: GridTabViewController, tab: Tab) {}
 
     func tabTrayDidAddBookmark(_ tab: Tab) {
         guard let url = tab.url?.absoluteString, !url.isEmpty else { return }
@@ -2230,7 +2228,7 @@ extension BrowserViewController: TabTrayDelegate {
 extension BrowserViewController: Themeable {
     func applyTheme() {
         guard self.isViewLoaded else { return }
-        let ui: [Themeable?] = [urlBar, toolbar, readerModeBar, topTabsViewController, firefoxHomeViewController, searchController, libraryViewController, libraryDrawerViewController, tabTrayControllerV2]
+        let ui: [Themeable?] = [urlBar, toolbar, readerModeBar, topTabsViewController, firefoxHomeViewController, searchController, libraryViewController, libraryDrawerViewController, chronTabTrayController]
         ui.forEach { $0?.applyTheme() }
         statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor.Photon.Grey80 : urlBar.backgroundColor
         setNeedsStatusBarAppearanceUpdate()
