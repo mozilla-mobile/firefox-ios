@@ -46,7 +46,7 @@ class TwoLineImageOverlayCell: UITableViewCell, Themeable {
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         label.textAlignment = .left
-        label.numberOfLines = 0
+        label.numberOfLines = 1
         return label
     }()
     
@@ -55,7 +55,7 @@ class TwoLineImageOverlayCell: UITableViewCell, Themeable {
         label.textColor = .darkGray
         label.font = UIFont.systemFont(ofSize: 12.5, weight: .regular)
         label.textAlignment = .left
-        label.numberOfLines = 0
+        label.numberOfLines = 1
         return label
     }()
     
@@ -92,7 +92,7 @@ class TwoLineImageOverlayCell: UITableViewCell, Themeable {
 
         leftImageView.snp.makeConstraints { make in
             make.height.width.equalTo(29)
-            make.left.equalToSuperview().inset(15)
+            make.leading.equalToSuperview().inset(15)
             make.centerY.equalToSuperview()
 //            make.top.equalToSuperview().offset(10)
 //            make.bottom.equalToSuperview().offset(-10)
@@ -100,7 +100,7 @@ class TwoLineImageOverlayCell: UITableViewCell, Themeable {
         
         rightAccessoryImageView.snp.makeConstraints { make in
             make.height.width.equalTo(29)
-            make.right.equalToSuperview().inset(2)
+            make.trailing.equalToSuperview().inset(2)
 //            make.top.equalToSuperview().offset(2)
 //            make.bottom.equalToSuperview().offset(2)
             make.centerX.equalToSuperview()
@@ -124,7 +124,7 @@ class TwoLineImageOverlayCell: UITableViewCell, Themeable {
         
         leftOverlayImageView.snp.makeConstraints { make in
             make.height.width.equalTo(20)
-            make.right.equalTo(leftImageView).offset(7)
+            make.trailing.equalTo(leftImageView).offset(7)
 //            make.top.equalTo(leftImageView).offset(10)
             make.bottom.equalTo(leftImageView).offset(7)
         }

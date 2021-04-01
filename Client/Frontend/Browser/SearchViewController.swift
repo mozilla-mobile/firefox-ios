@@ -10,9 +10,9 @@ import Telemetry
 
 private enum SearchListSection: Int, CaseIterable {
     case searchSuggestions
-    case bookmarksAndHistory
     case remoteTabs
     case openedTabs
+    case bookmarksAndHistory
 }
 
 private struct SearchViewControllerUX {
@@ -77,9 +77,9 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 //        return UIImage.templateImageNamed("bookmarked_passive")!.tinted(withColor: .lightGray).createScaled(CGSize(width: 16, height: 16))
     }()
     
-    fileprivate lazy var switchAndSyncTabBadge: UIImage = {
+    fileprivate lazy var openAndSyncTabBadge: UIImage = {
         let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
-        return theme == .dark ? UIImage(named: "switch_tab_dark")! : UIImage(named: "switch_tab_light")!
+        return theme == .dark ? UIImage(named: "sync_open_tab_dark")! : UIImage(named: "sync_open_tab_light")!
 //        return theme == .normal ? UIImage(named: "switch_tab_dark")! : UIImage(named: "switch_tab_light")!
 //        return UIImage.templateImageNamed("bookmarked_passive")!.tinted(withColor: .lightGray).createScaled(CGSize(width: 16, height: 16))
     }()
@@ -355,14 +355,15 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     func searchTabs(for searchString: String) {
         let currentTabs = self.isPrivate ? self.tabManager.privateTabs : self.tabManager.normalTabs
         filteredOpenedTabs = currentTabs.filter { tab in
-            if let url = tab.url, InternalURL.isValid(url: url) {
-                return false
-            }
             let title = tab.title ?? tab.lastTitle
             if title?.lowercased().range(of: searchString.lowercased()) != nil {
                 return true
             }
-            if tab.url?.absoluteString.lowercased().range(of: searchString.lowercased()) != nil {
+            let tabUrl = tab.url ?? tab.sessionData?.urls.last
+            if let url = tabUrl, InternalURL.isValid(url: url) {
+                return false
+            }
+            if tabUrl?.absoluteString.lowercased().range(of: searchString.lowercased()) != nil {
                 return true
             }
             return false
@@ -455,13 +456,6 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 
                 searchDelegate?.searchViewController(self, didSelectURL: url)
             }
-        case .bookmarksAndHistory:
-            if let site = data[indexPath.row] {
-                if let url = URL(string: site.url) {
-                    searchDelegate?.searchViewController(self, didSelectURL: url)
-                    TelemetryWrapper.recordEvent(category: .action, method: .open, object: .bookmark, value: .awesomebarResults)
-                }
-            }
         case .openedTabs:
             print("Opened Tab")
             let tab = self.filteredOpenedTabs[indexPath.row]
@@ -471,6 +465,13 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             print("REMOTE TAB")
             let remoteTab = self.filteredRemoteClientTabsWrapper[indexPath.row].tab
             searchDelegate?.searchViewController(self, didSelectURL: remoteTab.URL)
+        case .bookmarksAndHistory:
+            if let site = data[indexPath.row] {
+                if let url = URL(string: site.url) {
+                    searchDelegate?.searchViewController(self, didSelectURL: url)
+                    TelemetryWrapper.recordEvent(category: .action, method: .open, object: .bookmark, value: .awesomebarResults)
+                }
+            }
         }
     }
 
@@ -500,12 +501,12 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         case .searchSuggestions:
             guard let count = suggestions?.count else { return 0 }
             return count < 4 ? count : 4
-        case .bookmarksAndHistory:
-            return data.count
         case .openedTabs:
             return filteredOpenedTabs.count
         case .remoteTabs:
             return filteredRemoteClientTabsWrapper.count
+        case .bookmarksAndHistory:
+            return data.count
         }
     }
 
@@ -556,6 +557,55 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 cell.accessoryView = indexPath.row > 0 ? appendButton : nil
                 selectedCell = cell
             }
+        case .openedTabs:
+            if self.filteredOpenedTabs.count > indexPath.row {
+                let openedTab = self.filteredOpenedTabs[indexPath.row]
+                let cell = twoLineImageOverlayCell
+//                let openTabTitle = openedTab.title ?? openedTab.lastTitle
+                cell.titleLabel.text = openedTab.title ?? openedTab.lastTitle
+                cell.descriptionLabel.text = "Switch to tab"
+                cell.leftOverlayImageView.image = openAndSyncTabBadge
+                cell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
+                cell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
+                cell.leftImageView.contentMode = .center
+                cell.leftImageView.setImageAndBackground(forIcon: openedTab.displayFavicon, website: openedTab.url) { [weak cell] in
+                    cell?.leftImageView.image = cell?.leftImageView.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
+                }
+                selectedCell = cell
+            }
+        case .remoteTabs:
+            if self.filteredRemoteClientTabsWrapper.count > indexPath.row {
+                let remoteTab = self.filteredRemoteClientTabsWrapper[indexPath.row].tab
+                let remoteClient = self.filteredRemoteClientTabsWrapper[indexPath.row].client
+                
+                let cell = twoLineImageOverlayCell
+                
+                cell.titleLabel.text = remoteTab.title
+                cell.descriptionLabel.text = remoteClient.name
+                cell.leftOverlayImageView.image = openAndSyncTabBadge
+                cell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
+                cell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
+                cell.leftImageView.contentMode = .center
+                cell.leftImageView.setImageAndBackground(forIcon: nil, website: remoteTab.URL) { [weak cell] in
+                    cell?.leftImageView.image = cell?.leftImageView.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
+                }
+                selectedCell = cell
+                
+//            }
+//            if let site = data[indexPath.row], let cell = cell as? TwoLineTableViewCell {
+//                let isBookmark = site.bookmarked ?? false
+//                cell.setLines(remoteTab.title, detailText: remoteClient.name)
+//                cell.setRightBadge(isBookmark ? self.bookmarkedBadge : nil)
+//                cell.imageView?.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
+//                cell.imageView?.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
+//                cell.imageView?.contentMode = .center
+//                cell.imageView?.image = UIImage(named: "deviceTypeMobile")
+//                cell.accessoryView = nil
+//                selectedCell = cell
+//                cell.imageView?.setImageAndBackground(forIcon: site.icon, website: site.tileURL) { [weak cell] in
+//                    cell?.imageView?.image = cell?.imageView?.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
+//                }
+            }
         case .bookmarksAndHistory:
             if let site = data[indexPath.row] {
                 let cell = twoLineImageOverlayCell
@@ -570,40 +620,6 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                     cell?.leftImageView.image = cell?.leftImageView.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
                 }
                 selectedCell = cell
-            }
-        case .openedTabs:
-            if self.filteredOpenedTabs.count > indexPath.row {
-                let cell = twoLineImageOverlayCell
-                let openedTab = self.filteredOpenedTabs[indexPath.row]
-                cell.titleLabel.text = openedTab.title
-                cell.descriptionLabel.text = "Switch to tab"
-                cell.leftOverlayImageView.image = switchAndSyncTabBadge
-                cell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
-                cell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
-                cell.leftImageView.contentMode = .center
-                cell.leftImageView.setImageAndBackground(forIcon: openedTab.displayFavicon, website: openedTab.url) { [weak cell] in
-                    cell?.leftImageView.image = cell?.leftImageView.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
-                }
-                selectedCell = cell
-            }
-        case .remoteTabs:
-            if self.filteredRemoteClientTabsWrapper.count > indexPath.row, let cell = cell as? TwoLineTableViewCell {
-                let remoteTab = self.filteredRemoteClientTabsWrapper[indexPath.row].tab
-                let remoteClient = self.filteredRemoteClientTabsWrapper[indexPath.row].client
-//            }
-//            if let site = data[indexPath.row], let cell = cell as? TwoLineTableViewCell {
-//                let isBookmark = site.bookmarked ?? false
-                cell.setLines(remoteTab.title, detailText: remoteClient.name)
-//                cell.setRightBadge(isBookmark ? self.bookmarkedBadge : nil)
-                cell.imageView?.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
-                cell.imageView?.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
-                cell.imageView?.contentMode = .center
-                cell.imageView?.image = UIImage(named: "deviceTypeMobile")
-                cell.accessoryView = nil
-                selectedCell = cell
-//                cell.imageView?.setImageAndBackground(forIcon: site.icon, website: site.tileURL) { [weak cell] in
-//                    cell?.imageView?.image = cell?.imageView?.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
-//                }
             }
         }
         return selectedCell
