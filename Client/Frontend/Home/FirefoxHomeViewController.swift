@@ -278,7 +278,19 @@ extension FirefoxHomeViewController {
             switch self {
             case .pocket: return UIImage.templateImageNamed("menu-pocket")
             case .topSites: return UIImage.templateImageNamed("menu-panel-TopSites")
-            case .libraryShortcuts: return UIImage.templateImageNamed("menu-library")
+            case .libraryShortcuts:
+                // We want to validate that the Nimbus experiments library is working, from the UI
+                // all the way back to the data science backend. We're not testing the user's preference
+                // or response, we're end-to-end testing the experiments platform.
+                // So here, we're running multiple identical branches with the same treatment, and if the
+                // user isn't targeted, then we get still get the same treatment.
+                return Experiments.shared.withExperiment(featureId: .nimbusValidation) { branch -> UIImage? in
+                    switch branch {
+                    case .some(ExperimentBranch.a1): return UIImage.templateImageNamed("menu-library")
+                    case .some(ExperimentBranch.a2): return UIImage.templateImageNamed("menu-library")
+                    default: return UIImage.templateImageNamed("menu-library")
+                    }
+                }
             }
         }
 
