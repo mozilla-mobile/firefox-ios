@@ -17,51 +17,6 @@ class TabTrayViewModel {
     let tabTrayView: TabTrayViewDelegate
     let syncedTabsController: RemoteTabsPanel
 
-    // Buttons & Menus
-    lazy var deleteButton: UIBarButtonItem = {
-        return UIBarButtonItem(image: UIImage.templateImageNamed("action_delete"), style: .plain, target: self, action: #selector(didTapDeleteTab(_:)))
-    }()
-
-    lazy var newTabButton: UIBarButtonItem = {
-        return UIBarButtonItem(customView: NewTabButton(target: self, selector: #selector(didTapAddTab)))
-    }()
-
-    lazy var syncTabButton: UIBarButtonItem = {
-        return UIBarButtonItem(title: Strings.FxASyncNow, style: .plain, target: self, action: #selector(didTapSyncTabs))
-    }()
-
-    lazy var flexibleSpace: UIBarButtonItem = {
-        return UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-    }()
-
-    lazy var countLabel: UILabel = {
-        let label = UILabel(frame: CGRect(width: 24, height: 24))
-        label.font = TabsButtonUX.TitleFont
-        label.layer.cornerRadius = TabsButtonUX.CornerRadius
-        label.textAlignment = .center
-        label.text = String(tabManager.normalTabs.count)
-        return label
-    }()
-
-    lazy var iPadNavigationMenu: UISegmentedControl = {
-        return UISegmentedControl(items: [Strings.TabTraySegmentedControlTitlesTabs,
-                                          Strings.TabTraySegmentedControlTitlesPrivateTabs,
-                                          Strings.TabTraySegmentedControlTitlesSyncedTabs])
-    }()
-
-    lazy var iPhoneNavigationMenu: UISegmentedControl = {
-        return UISegmentedControl(items: [UIImage(named: "nav-tabcounter")!.overlayWith(image: countLabel),
-                                          UIImage(named: "smallPrivateMask")!,
-                                          UIImage(named: "synced_devices")!])
-    }()
-
-    lazy var bottomToolbarItems: [UIBarButtonItem] = {
-        return [deleteButton, flexibleSpace, newTabButton]
-    }()
-
-    lazy var bottomToolbarItemsForSync: [UIBarButtonItem] = {
-        return [flexibleSpace, syncTabButton]
-    }()
 
 
     init(tabTrayDelegate: TabTrayDelegate? = nil, profile: Profile, showChronTabs: Bool = false) {
@@ -75,6 +30,20 @@ class TabTrayViewModel {
         }
         self.syncedTabsController = RemoteTabsPanel(profile: self.profile)
 
+    }
+
+    func navTitle(for segmentIndex: Int) -> String? {
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            switch segmentIndex {
+            case 0, 1:
+                return Strings.TabTrayV2Title
+            case 2:
+                return Strings.AppMenuSyncedTabsTitleString
+            default:
+                return nil
+            }
+        }
+        return nil
     }
 }
 

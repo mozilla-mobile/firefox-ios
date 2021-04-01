@@ -77,10 +77,6 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.view.layoutIfNeeded()
-
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            parent?.navigationItem.title = Strings.TabTrayV2Title
-        }
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {

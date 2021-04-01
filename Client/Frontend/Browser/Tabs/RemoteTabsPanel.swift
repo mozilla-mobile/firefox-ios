@@ -60,10 +60,6 @@ class RemoteTabsPanel: SiteTableViewController, LibraryPanel {
         }
 
         tableViewController.didMove(toParent: self)
-
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            parent?.navigationItem.title = Strings.AppMenuSyncedTabsTitleString
-        }
     }
 
     override func applyTheme() {
