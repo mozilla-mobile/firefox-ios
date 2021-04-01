@@ -9,6 +9,7 @@ import XCGLogger
 
 private let log = Logger.browserLogger
 private let nimbusAppName = "firefox_ios"
+private let NIMBUS_URL_KEY = "NimbusURL"
 
 /// `Experiments` is the main entry point to use the `Nimbus` experimentation platform in Firefox for iOS.
 ///
@@ -63,10 +64,14 @@ enum Experiments {
         return dbPath
     }
 
-    static var remoteSettingsURL: String? {
-        // TODO: get URL from build secret. https://jira.mozilla.com/browse/SDK-212
-        return "https://firefox.settings.services.mozilla.com/"
-    }
+    static let remoteSettingsURL: String? = {
+        guard let url = Bundle.main.object(forInfoDictionaryKey: NIMBUS_URL_KEY) as? String else {
+            log.error("No Nimbus URL found in Info.plist")
+            return nil
+        }
+
+        return url
+    }()
 
     /// The `NimbusApi` object. This is the entry point to do anything with the Nimbus SDK on device.
     public static var shared: NimbusApi = {
