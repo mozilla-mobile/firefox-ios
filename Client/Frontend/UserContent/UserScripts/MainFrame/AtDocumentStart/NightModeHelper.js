@@ -50,6 +50,20 @@ function applyInvertFilterToElement(el) {
   el.style.webkitFilter = NIGHT_MODE_INVERT_FILTER_CSS;
 }
 
+function isWebsiteCSSNightMode(){
+  // Fixes FXIOS177 (enabling night mode makes websites with night mode CSS into day mode)
+  var splitRGB=/rgba?\((\d+), *(\d+), *(\d+)(?:, *(\d+\.?\d*))?\)/g;
+  var bodyBG=window.getComputedStyle(document.body).backgroundColor;
+  var bodyBGSplit=splitRGB.exec(bodyBG);
+  bodyBGSplit.shift();
+  if (bodyBGSplit.length==4){
+  	bodyBGSplit.pop();
+  }
+  // https://css-tricks.com/using-javascript-to-adjust-saturation-and-brightness-of-rgb-colors/#how-to-find-the-lightness-of-an-rgb-color
+  var bodyBGBrightness=(Math.max(...bodyBGSplit)+Math.min(...bodyBGSplit))/2/255;
+  return bodyBGBrightness<=0.5;
+}
+
 function removeInvertFilterFromElement(el) {
   el.style.webkitFilter = el.__firefox__NightMode_originalFilter;
   delete el.__firefox__NightMode_originalFilter;
@@ -75,6 +89,10 @@ Object.defineProperty(window.__firefox__.NightMode, "setEnabled", {
   configurable: false,
   writable: false,
   value: function(enabled) {
+    if (isWebsiteCSSNightMode() && enabled){
+      return;
+    }
+    
     if (enabled === window.__firefox__.NightMode.enabled) {
       return;
     }
