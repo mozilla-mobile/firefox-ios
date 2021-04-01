@@ -673,6 +673,22 @@ extension Strings {
     public static let SettingsSiriOpenURL = MZLocalizedString("Settings.Siri.OpenTabShortcut", value: "Open New Tab", comment: "The description of the open new tab siri shortcut")
 }
 
+// Nimbus settings
+extension Strings {
+    public static let SettingsStudiesTitle = MZLocalizedString("Settings.Studies.Title", value: "Studies", comment: "Label used as an item in Settings. Tapping on this item takes you to the Studies panel")
+    public static let SettingsStudiesSectionName = MZLocalizedString("Settings.Studies.SectionName", value: "Studies", comment: "Title displayed in header of the Studies panel")
+    public static let SettingsStudiesActiveSectionTitle = MZLocalizedString("Settings.Studies.Active.SectionName", value: "Active", comment: "Section title for all studies that are currently active")
+    public static let SettingsStudiesCompletedSectionTitle = MZLocalizedString("Settings.Studies.Completed.SectionName", value: "Completed", comment: "Section title for all studies that are completed")
+    public static let SettingsStudiesRemoveButton = MZLocalizedString("Settings.Studies.Remove.Button", value: "Remove", comment: "Button title displayed next to each study allowing the user to opt-out of the study")
+
+    public static let SettingsStudiesToggleTitle = MZLocalizedString("Settings.Studies.Toggle.Title", value: "Studies", comment: "Label used as a toggle item in Settings. When this is off, the user is opting out of all studies.")
+    public static let SettingsStudiesToggleLink = MZLocalizedString("Settings.Studies.Toggle.Link", value: "Learn More.", comment: "Title for a link that explains what Mozilla means by Studies")
+    public static let SettingsStudiesToggleMessage = MZLocalizedString("Settings.Studies.Toggle.Message", value: "Firefox may install and run studies from time to time.", comment: "A short description that explains that Mozilla is running studies")
+
+    public static let SettingsStudiesToggleValueOn = MZLocalizedString("Settings.Studies.Toggle.On", value: "On", comment: "Toggled ON to participate in studies")
+    public static let SettingsStudiesToggleValueOff = MZLocalizedString("Settings.Studies.Toggle.Off", value: "Off", comment: "Toggled OFF to opt-out of studies")
+}
+
 // Do not track
 extension Strings {
     public static let SettingsDoNotTrackTitle = MZLocalizedString("Settings.DNT.Title", value: "Send websites a Do Not Track signal that you don’t want to be tracked", comment: "DNT Settings title")
