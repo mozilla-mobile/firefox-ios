@@ -51,11 +51,12 @@ struct ClientTabsSearchWrapper {
 
 class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, LoaderListener {
     var searchDelegate: SearchViewControllerDelegate?
-
+    var currentTheme: BuiltinThemeName {
+        return BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+    }
     fileprivate let isPrivate: Bool
     fileprivate var suggestClient: SearchSuggestClient?
     var clientAndTabs: [ClientAndTabs] = [ClientAndTabs]()
-//    var remoteTabs = [RemoteTab]()
     var filteredRemoteTabs = [RemoteTab]()
     var filteredClientRemoteTabs = [ClientAndTabs]()
     var remoteClientTabsWrapper = [ClientTabsSearchWrapper]()
@@ -71,17 +72,11 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     fileprivate let searchEngineScrollViewContent = UIView()
 
     fileprivate lazy var bookmarkedBadge: UIImage = {
-        let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
-//        return UIImage(named: "switch_tab_light")!
-        return theme == .dark ? UIImage(named: "bookmark_results_dark")! : UIImage(named: "bookmark_results_light")!
-//        return UIImage.templateImageNamed("bookmarked_passive")!.tinted(withColor: .lightGray).createScaled(CGSize(width: 16, height: 16))
+        return currentTheme == .dark ? UIImage(named: "bookmark_results_dark")! : UIImage(named: "bookmark_results_light")!
     }()
     
     fileprivate lazy var openAndSyncTabBadge: UIImage = {
-        let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
-        return theme == .dark ? UIImage(named: "sync_open_tab_dark")! : UIImage(named: "sync_open_tab_light")!
-//        return theme == .normal ? UIImage(named: "switch_tab_dark")! : UIImage(named: "switch_tab_light")!
-//        return UIImage.templateImageNamed("bookmarked_passive")!.tinted(withColor: .lightGray).createScaled(CGSize(width: 16, height: 16))
+        return currentTheme == .dark ? UIImage(named: "sync_open_tab_dark")! : UIImage(named: "sync_open_tab_light")!
     }()
 
     var suggestions: [String]? = []
@@ -459,7 +454,6 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         case .openedTabs:
             print("Opened Tab")
             let tab = self.filteredOpenedTabs[indexPath.row]
-//            tabManager.selectTab(tab)
             searchDelegate?.searchViewController(self, uuid: tab.tabUUID)
         case .remoteTabs:
             print("REMOTE TAB")
@@ -484,16 +478,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = super.tableView(tableView, cellForRowAt: indexPath)
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifier", for: indexPath)
         let twoLineImageOverlayCell = tableView.dequeueReusableCell(withIdentifier: "TwoLineImageOverlayCell", for: indexPath) as! TwoLineImageOverlayCell
-//        if let cellOverlay = twoLineImageOverlayCell as? TwoLineImageOverlayCell {
-//            cellOverlay.titleLabel.text = "HELLO"
-//            return cellOverlay
-//        }
-//        twoLineImageOverlayCell.titleLabel.text = "HELLO"
-//        return twoLineImageOverlayCell
-        return getCellForSection(cell, twoLineImageOverlayCell: twoLineImageOverlayCell as! TwoLineImageOverlayCell, for: SearchListSection(rawValue: indexPath.section)!, indexPath)
+        return getCellForSection(twoLineImageOverlayCell, for: SearchListSection(rawValue: indexPath.section)!, indexPath)
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -531,37 +517,34 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         reloadData()
     }
     
-    fileprivate func getCellForSection(_ cell: UITableViewCell, twoLineImageOverlayCell: TwoLineImageOverlayCell, for section: SearchListSection, _ indexPath: IndexPath) -> UITableViewCell {
-        var selectedCell = cell
+    fileprivate func getCellForSection(_ cell: TwoLineImageOverlayCell, for section: SearchListSection, _ indexPath: IndexPath) -> UITableViewCell {
         switch section {
         case .searchSuggestions:
-            if let site = suggestions?[indexPath.row], let cell = cell as? TwoLineTableViewCell {
+            if let site = suggestions?[indexPath.row] {
+                cell.titleLabel.text = site
                 if Locale.current.languageCode == "en" {
                     let toBold = site.replaceFirstOccurrence(of: searchQuery, with: "")
-                    cell.textLabel?.attributedText = site.attributedText(boldString: toBold, font: DynamicFontHelper.defaultHelper.DeviceFontHistoryPanel)
-                    cell.detailTextLabel?.text = nil
-                } else {
-                    cell.setLines(site, detailText: nil)
+                    cell.titleLabel.attributedText = site.attributedText(boldString: toBold, font: DynamicFontHelper.defaultHelper.DeviceFontHistoryPanel)
+                    cell.descriptionLabel.text = nil
                 }
-                cell.imageView?.contentMode = .center
-                cell.imageView?.layer.borderWidth = 0
-                cell.imageView?.image = UIImage(named: SearchViewControllerUX.SearchImage)
-                cell.imageView?.tintColor = ThemeManager.instance.currentName == .dark ? UIColor.white : UIColor.black
-                cell.imageView?.backgroundColor = nil
-                
+                cell.descriptionLabel.isHidden = true
+                cell.leftImageView.contentMode = .center
+                cell.leftImageView.layer.borderWidth = 0
+                cell.leftImageView.image = UIImage(named: SearchViewControllerUX.SearchImage)
+                cell.leftImageView.tintColor = ThemeManager.instance.currentName == .dark ? UIColor.white : UIColor.black
+                cell.leftImageView.backgroundColor = nil
+                cell.leftOverlayImageView.image = nil
                 let appendButton = UIButton(type: .roundedRect)
                 appendButton.setImage(UIImage(named: SearchViewControllerUX.SearchAppendImage)?.withRenderingMode(.alwaysTemplate), for: .normal)
                 appendButton.addTarget(self, action: #selector(append(_ :)), for: .touchUpInside)
                 appendButton.tintColor = ThemeManager.instance.currentName == .dark ? UIColor.white : UIColor.black
                 appendButton.sizeToFit()
                 cell.accessoryView = indexPath.row > 0 ? appendButton : nil
-                selectedCell = cell
             }
         case .openedTabs:
             if self.filteredOpenedTabs.count > indexPath.row {
                 let openedTab = self.filteredOpenedTabs[indexPath.row]
-                let cell = twoLineImageOverlayCell
-//                let openTabTitle = openedTab.title ?? openedTab.lastTitle
+                cell.descriptionLabel.isHidden = false
                 cell.titleLabel.text = openedTab.title ?? openedTab.lastTitle
                 cell.descriptionLabel.text = "Switch to tab"
                 cell.leftOverlayImageView.image = openAndSyncTabBadge
@@ -571,15 +554,13 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 cell.leftImageView.setImageAndBackground(forIcon: openedTab.displayFavicon, website: openedTab.url) { [weak cell] in
                     cell?.leftImageView.image = cell?.leftImageView.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
                 }
-                selectedCell = cell
+                cell.accessoryView = nil
             }
         case .remoteTabs:
             if self.filteredRemoteClientTabsWrapper.count > indexPath.row {
                 let remoteTab = self.filteredRemoteClientTabsWrapper[indexPath.row].tab
                 let remoteClient = self.filteredRemoteClientTabsWrapper[indexPath.row].client
-                
-                let cell = twoLineImageOverlayCell
-                
+                cell.descriptionLabel.isHidden = false
                 cell.titleLabel.text = remoteTab.title
                 cell.descriptionLabel.text = remoteClient.name
                 cell.leftOverlayImageView.image = openAndSyncTabBadge
@@ -589,27 +570,12 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 cell.leftImageView.setImageAndBackground(forIcon: nil, website: remoteTab.URL) { [weak cell] in
                     cell?.leftImageView.image = cell?.leftImageView.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
                 }
-                selectedCell = cell
-                
-//            }
-//            if let site = data[indexPath.row], let cell = cell as? TwoLineTableViewCell {
-//                let isBookmark = site.bookmarked ?? false
-//                cell.setLines(remoteTab.title, detailText: remoteClient.name)
-//                cell.setRightBadge(isBookmark ? self.bookmarkedBadge : nil)
-//                cell.imageView?.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
-//                cell.imageView?.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
-//                cell.imageView?.contentMode = .center
-//                cell.imageView?.image = UIImage(named: "deviceTypeMobile")
-//                cell.accessoryView = nil
-//                selectedCell = cell
-//                cell.imageView?.setImageAndBackground(forIcon: site.icon, website: site.tileURL) { [weak cell] in
-//                    cell?.imageView?.image = cell?.imageView?.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
-//                }
+                cell.accessoryView = nil
             }
         case .bookmarksAndHistory:
             if let site = data[indexPath.row] {
-                let cell = twoLineImageOverlayCell
                 let isBookmark = site.bookmarked ?? false
+                cell.descriptionLabel.isHidden = false
                 cell.titleLabel.text = site.title
                 cell.descriptionLabel.text = site.url
                 cell.leftOverlayImageView.image = isBookmark ? self.bookmarkedBadge : nil
@@ -619,10 +585,10 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 cell.leftImageView.setImageAndBackground(forIcon: site.icon, website: site.tileURL) { [weak cell] in
                     cell?.leftImageView.image = cell?.leftImageView.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
                 }
-                selectedCell = cell
+                cell.accessoryView = nil
             }
         }
-        return selectedCell
+        return cell
     }
     
     @objc func append(_ sender: UIButton) {
