@@ -1113,8 +1113,7 @@ workflows:
 
             echo "Setting Nimbus variables"
 
-            /usr/libexec/PlistBuddy -c "Set NimbusURL $NIMBUS_URL"
-            "Client/Info.plist"
+            /usr/libexec/PlistBuddy -c "Set NimbusURL $NIMBUS_URL" "Client/Info.plist"
         title: Nimbus Variable Setup
     - xcode-archive@2:
         inputs:
@@ -2182,8 +2181,7 @@ workflows:
 
             echo "Setting Nimbus variables"
 
-            /usr/libexec/PlistBuddy -c "Set NimbusURL $NIMBUS_URL"
-            "Client/Info.plist"
+            /usr/libexec/PlistBuddy -c "Set NimbusURL $NIMBUS_URL" "Client/Info.plist"
         title: Nimbus Variable Setup
     - script@1:
         inputs:
