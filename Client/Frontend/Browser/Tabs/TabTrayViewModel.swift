@@ -13,8 +13,6 @@ class TabTrayViewModel {
     let tabTrayView: TabTrayViewDelegate
     let syncedTabsController: RemoteTabsPanel
 
-
-
     init(tabTrayDelegate: TabTrayDelegate? = nil, profile: Profile, showChronTabs: Bool = false) {
         self.profile = profile
         self.tabManager = BrowserViewController.foregroundBVC().tabManager
@@ -25,7 +23,6 @@ class TabTrayViewModel {
             self.tabTrayView = GridTabViewController(tabManager: self.tabManager, profile: profile, tabTrayDelegate: tabTrayDelegate)
         }
         self.syncedTabsController = RemoteTabsPanel(profile: self.profile)
-
     }
 
     func navTitle(for segmentIndex: Int) -> String? {
