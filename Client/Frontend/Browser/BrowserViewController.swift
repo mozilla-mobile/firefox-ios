@@ -1095,7 +1095,7 @@ class BrowserViewController: UIViewController {
         }
     }
     
-    func switchToTabForWidgetURLOrOpen(_ url: URL, uuid: String,  isPrivate: Bool = false) {
+    func switchToTabForURLOrOpen(_ url: URL, uuid: String,  isPrivate: Bool = false) {
         guard !isCrashAlertShowing else {
             urlFromAnotherApp = UrlToOpenModel(url: url, isPrivate: isPrivate)
             return
@@ -1558,10 +1558,6 @@ extension BrowserViewController: SearchViewControllerDelegate {
         guard let tab = tabManager.selectedTab else { return }
         searchTelemetry?.shouldSetUrlTypeSearch = true
         finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: tab)
-    }
-
-    func searchViewController(_ searchViewController: SearchViewController, switchToTabWithUrl url: URL, with uuid: String, isPrivate: Bool) {
-       switchToTabForWidgetURLOrOpen(url, uuid: uuid, isPrivate: isPrivate)
     }
     
     func searchViewController(_ searchViewController: SearchViewController, uuid: String) {

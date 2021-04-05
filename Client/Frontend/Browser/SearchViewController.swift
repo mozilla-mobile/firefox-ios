@@ -37,7 +37,6 @@ private struct SearchViewControllerUX {
 
 protocol SearchViewControllerDelegate: AnyObject {
     func searchViewController(_ searchViewController: SearchViewController, didSelectURL url: URL)
-    func searchViewController(_ searchViewController: SearchViewController, switchToTabWithUrl url: URL, with uuid: String, isPrivate: Bool)
     func searchViewController(_ searchViewController: SearchViewController, uuid: String)
     func presentSearchSettingsController()
     func searchViewController(_ searchViewController: SearchViewController, didHighlightText text: String, search: Bool)
