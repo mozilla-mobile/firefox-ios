@@ -359,15 +359,13 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
     
     func searchRemoteTabs(for searchString: String) {
-        
         filteredRemoteClientTabs.removeAll()
         for remoteClientTab in remoteClientTabs {
             if remoteClientTab.tab.title.lowercased().contains(searchQuery) {
                 filteredRemoteClientTabs.append(remoteClientTab)
             }
         }
-        
-        
+
         let currentTabs = self.remoteClientTabs
         self.filteredRemoteClientTabs = currentTabs.filter { value in
             let tab = value.tab
