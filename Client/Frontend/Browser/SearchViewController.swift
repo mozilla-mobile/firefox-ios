@@ -478,7 +478,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let twoLineImageOverlayCell = tableView.dequeueReusableCell(withIdentifier: "TwoLineImageOverlayCell", for: indexPath) as! TwoLineImageOverlayCell
+        let twoLineImageOverlayCell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier, for: indexPath) as! TwoLineImageOverlayCell
         return getCellForSection(twoLineImageOverlayCell, for: SearchListSection(rawValue: indexPath.section)!, indexPath)
     }
 

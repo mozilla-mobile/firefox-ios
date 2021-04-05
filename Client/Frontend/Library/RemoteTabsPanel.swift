@@ -131,9 +131,8 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
         let client = clientTabs.client
         let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: RemoteClientIdentifier) as! TwoLineHeaderFooterView
         view.frame = CGRect(width: tableView.frame.width, height: RemoteTabsPanelUX.HeaderHeight)
-        view.textLabel?.text = client.name
+        view.titleLabel.text = client.name
         view.contentView.backgroundColor = UIColor.theme.tableView.headerBackground
-
         view.showBorder(for: .top, section != 0)
 
         /*
@@ -151,7 +150,7 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
 
         let timestamp = clientTabs.approximateLastSyncTime()
         let label: String = .RemoteTabLastSync
-        view.detailTextLabel?.text = String(format: label, Date.fromTimestamp(timestamp).toRelativeTimeString())
+        view.descriptionLabel.text = String(format: label, Date.fromTimestamp(timestamp).toRelativeTimeString())
 
         let image: UIImage?
         if client.type == "desktop" {
@@ -161,11 +160,9 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
             image = UIImage.templateImageNamed("deviceTypeMobile")
             image?.accessibilityLabel = .RemoteTabMobileAccessibilityLabel
         }
-        view.imageView.tintColor = UIColor.theme.tableView.rowText
-        view.imageView.image = image
-        view.imageView.contentMode = .center
-
-        view.mergeAccessibilityLabels()
+        view.leftImageView.tintColor = UIColor.theme.tableView.rowText
+        view.leftImageView.image = image
+        view.leftImageView.contentMode = .center
         return view
     }
 
@@ -174,9 +171,10 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: RemoteTabIdentifier, for: indexPath) as! TwoLineTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: RemoteTabIdentifier , for: indexPath) as! TwoLineImageOverlayCell
         let tab = tabAtIndexPath(indexPath)
-        cell.setLines(tab.title, detailText: tab.URL.absoluteString)
+        cell.titleLabel.text = tab.title
+        cell.descriptionLabel.text = tab.URL.absoluteString
         // TODO: Bug 1144765 - Populate image with cached favicons.
         return cell
     }
@@ -476,7 +474,7 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
         super.viewDidLoad()
         tableView.addGestureRecognizer(longPressRecognizer)
         tableView.register(TwoLineHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: RemoteClientIdentifier)
-        tableView.register(TwoLineTableViewCell.self, forCellReuseIdentifier: RemoteTabIdentifier)
+        tableView.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: RemoteTabIdentifier)
 
         tableView.rowHeight = RemoteTabsPanelUX.RowHeight
         tableView.separatorInset = .zero

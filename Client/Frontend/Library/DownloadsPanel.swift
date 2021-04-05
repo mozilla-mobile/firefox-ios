@@ -81,7 +81,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
 
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(TwoLineTableViewCell.self, forCellReuseIdentifier: "TwoLineTableViewCell")
+        tableView.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: "TwoLineImageOverlayCell")
         tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: "SiteTableViewHeader")
         tableView.layoutMargins = .zero
         tableView.keyboardDismissMode = .onDrag
@@ -280,7 +280,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     // MARK: - TableView Delegate / DataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TwoLineTableViewCell", for: indexPath) as! TwoLineTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TwoLineImageOverlayCell", for: indexPath) as! TwoLineImageOverlayCell
 
         return configureDownloadedFile(cell, for: indexPath)
     }
@@ -331,8 +331,9 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 
     func configureDownloadedFile(_ cell: UITableViewCell, for indexPath: IndexPath) -> UITableViewCell {
-        if let downloadedFile = downloadedFileForIndexPath(indexPath), let cell = cell as? TwoLineTableViewCell {
-            cell.setLines(downloadedFile.filename, detailText: downloadedFile.formattedSize)
+        if let downloadedFile = downloadedFileForIndexPath(indexPath), let cell = cell as? TwoLineImageOverlayCell {
+            cell.titleLabel.text = downloadedFile.filename
+            cell.descriptionLabel.text = downloadedFile.formattedSize
             cell.imageView?.image = iconForFileExtension(downloadedFile.fileExtension)
         }
         return cell
