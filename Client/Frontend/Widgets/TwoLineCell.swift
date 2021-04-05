@@ -14,7 +14,7 @@ struct TwoLineCellUX {
 
 class TwoLineImageOverlayCell: UITableViewCell, Themeable {
     // Tableview cell items
-    lazy var selectedView: UIView = {
+    var selectedView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.theme.tableView.selectedBackground
         return view
@@ -205,7 +205,7 @@ class TwoLineHeaderFooterView: UITableViewHeaderFooterView, Themeable {
         bordersHelper.showBorder(for: location, show)
     }
 
-    func setDefaultBordersValues() {
+    fileprivate func setDefaultBordersValues() {
         bordersHelper.showBorder(for: .top, true)
         bordersHelper.showBorder(for: .bottom, true)
     }

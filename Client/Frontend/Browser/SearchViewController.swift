@@ -44,6 +44,8 @@ protocol SearchViewControllerDelegate: AnyObject {
     func searchViewController(_ searchViewController: SearchViewController, didAppend text: String)
 }
 
+// Note: ClientAndTabs data structure contains all tabs under a remote client. To make traversal and search easier
+// this wrapper combines them and is helpful in showing Remote Client and Remote tab in our SearchViewController
 struct ClientTabsSearchWrapper {
     var client: RemoteClient
     var tab: RemoteTab
@@ -56,14 +58,11 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
     fileprivate let isPrivate: Bool
     fileprivate var suggestClient: SearchSuggestClient?
-    var clientAndTabs: [ClientAndTabs] = [ClientAndTabs]()
-    var filteredRemoteTabs = [RemoteTab]()
-    var filteredClientRemoteTabs = [ClientAndTabs]()
-    var remoteClientTabsWrapper = [ClientTabsSearchWrapper]()
-    var filteredRemoteClientTabsWrapper = [ClientTabsSearchWrapper]()
-    var openedTabs = [Tab]()
-    var filteredOpenedTabs = [Tab]()
-    var tabManager: TabManager
+    fileprivate var remoteClientTabs = [ClientTabsSearchWrapper]()
+    fileprivate var filteredRemoteClientTabs = [ClientTabsSearchWrapper]()
+    fileprivate var openedTabs = [Tab]()
+    fileprivate var filteredOpenedTabs = [Tab]()
+    fileprivate var tabManager: TabManager
     
     // Views for displaying the bottom scrollable search engine list. searchEngineScrollView is the
     // scrollable container; searchEngineScrollViewContent contains the actual set of search engine buttons.
@@ -321,27 +320,22 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         })
     }
     
-    
     fileprivate func getCachedTabs() {
         assert(Thread.isMainThread)
-
         // Short circuit if the user is not logged in
         guard profile.hasSyncableAccount() else {
             return
         }
-
-        // Get cached tabs.
+        // Get cached tabs
         self.profile.getCachedClientsAndTabs().uponQueue(.main) { result in
             guard let clientAndTabs = result.successValue else {
                 return
             }
-
-            self.remoteClientTabsWrapper.removeAll()
+            self.remoteClientTabs.removeAll()
             // Update UI with cached data.
-            self.clientAndTabs = clientAndTabs
             clientAndTabs.forEach { value in
                 value.tabs.forEach { (tab) in
-                    self.remoteClientTabsWrapper.append(ClientTabsSearchWrapper(client: value.client, tab: tab))
+                    self.remoteClientTabs.append(ClientTabsSearchWrapper(client: value.client, tab: tab))
                 }
             }
         }
@@ -367,16 +361,16 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     
     func searchRemoteTabs(for searchString: String) {
         
-        filteredRemoteClientTabsWrapper.removeAll()
-        for remoteClientTab in remoteClientTabsWrapper {
+        filteredRemoteClientTabs.removeAll()
+        for remoteClientTab in remoteClientTabs {
             if remoteClientTab.tab.title.lowercased().contains(searchQuery) {
-                filteredRemoteClientTabsWrapper.append(remoteClientTab)
+                filteredRemoteClientTabs.append(remoteClientTab)
             }
         }
         
         
-        let currentTabs = self.remoteClientTabsWrapper
-        self.filteredRemoteClientTabsWrapper = currentTabs.filter { value in
+        let currentTabs = self.remoteClientTabs
+        self.filteredRemoteClientTabs = currentTabs.filter { value in
             let tab = value.tab
             if InternalURL.isValid(url: tab.URL) {
                 return false
@@ -452,12 +446,10 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 searchDelegate?.searchViewController(self, didSelectURL: url)
             }
         case .openedTabs:
-            print("Opened Tab")
             let tab = self.filteredOpenedTabs[indexPath.row]
             searchDelegate?.searchViewController(self, uuid: tab.tabUUID)
         case .remoteTabs:
-            print("REMOTE TAB")
-            let remoteTab = self.filteredRemoteClientTabsWrapper[indexPath.row].tab
+            let remoteTab = self.filteredRemoteClientTabs[indexPath.row].tab
             searchDelegate?.searchViewController(self, didSelectURL: remoteTab.URL)
         case .bookmarksAndHistory:
             if let site = data[indexPath.row] {
@@ -490,7 +482,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         case .openedTabs:
             return filteredOpenedTabs.count
         case .remoteTabs:
-            return filteredRemoteClientTabsWrapper.count
+            return filteredRemoteClientTabs.count
         case .bookmarksAndHistory:
             return data.count
         }
@@ -557,9 +549,9 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 cell.accessoryView = nil
             }
         case .remoteTabs:
-            if self.filteredRemoteClientTabsWrapper.count > indexPath.row {
-                let remoteTab = self.filteredRemoteClientTabsWrapper[indexPath.row].tab
-                let remoteClient = self.filteredRemoteClientTabsWrapper[indexPath.row].client
+            if self.filteredRemoteClientTabs.count > indexPath.row {
+                let remoteTab = self.filteredRemoteClientTabs[indexPath.row].tab
+                let remoteClient = self.filteredRemoteClientTabs[indexPath.row].client
                 cell.descriptionLabel.isHidden = false
                 cell.titleLabel.text = remoteTab.title
                 cell.descriptionLabel.text = remoteClient.name
