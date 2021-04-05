@@ -507,7 +507,7 @@ extension GridTabViewController {
 
 // MARK: - Toolbar Actions
 extension GridTabViewController {
-    func performToolbarAction(_ action: TabTrayViewAction, sender: UIButton) {
+    func performToolbarAction(_ action: TabTrayViewAction, sender: UIBarButtonItem) {
         switch action {
         case .addTab:
             didTapToolbarAddTab()
@@ -523,7 +523,7 @@ extension GridTabViewController {
         openNewTab()
     }
 
-    func didTapToolbarDelete(_ sender: UIButton) {
+    func didTapToolbarDelete(_ sender: UIBarButtonItem) {
         if tabDisplayManager.isDragging {
             return
         }
@@ -531,8 +531,7 @@ extension GridTabViewController {
         let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         controller.addAction(UIAlertAction(title: Strings.AppMenuCloseAllTabsTitleString, style: .default, handler: { _ in self.closeTabsForCurrentTray() }), accessibilityIdentifier: "TabTrayController.deleteButton.closeAll")
         controller.addAction(UIAlertAction(title: .TabTrayCloseAllTabsPromptCancel, style: .cancel, handler: nil), accessibilityIdentifier: "TabTrayController.deleteButton.cancel")
-        controller.popoverPresentationController?.sourceView = sender
-        controller.popoverPresentationController?.sourceRect = sender.bounds
+        controller.popoverPresentationController?.barButtonItem = sender
         present(controller, animated: true, completion: nil)
     }
 }

@@ -1,10 +1,6 @@
-//
-//  TabTrayViewModel.swift
-//  Client
-//
-//  Created by Roux Buciu on 2021-04-01.
-//  Copyright © 2021 Mozilla. All rights reserved.
-//
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Shared
 
@@ -49,15 +45,15 @@ class TabTrayViewModel {
 
 // MARK: - Actions
 extension TabTrayViewModel {
-    @objc func didTapDeleteTab(_ sender: UIButton) {
+    @objc func didTapDeleteTab(_ sender: UIBarButtonItem) {
         tabTrayView.performToolbarAction(.deleteTab, sender: sender)
     }
 
-    @objc func didTapAddTab(_ sender: UIButton) {
+    @objc func didTapAddTab(_ sender: UIBarButtonItem) {
         tabTrayView.performToolbarAction(.addTab, sender: sender)
     }
 
-    @objc func didTapSyncTabs(_ sender: UIButton) {
+    @objc func didTapSyncTabs(_ sender: UIBarButtonItem) {
         // TODO: Sync tabs implementation
         print("I'm a gonna sync dem tabs!")
     }
