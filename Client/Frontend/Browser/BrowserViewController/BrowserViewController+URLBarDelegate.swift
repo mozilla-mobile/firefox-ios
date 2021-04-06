@@ -55,6 +55,7 @@ extension BrowserViewController: URLBarDelegate {
                     // Respect LP value
                     shouldShowChronTabs = chronLPValue
                 }
+                profile.prefs.setBool(shouldShowChronTabs, forKey: PrefsKeys.ChronTabsPrefKey)
             }
         }
 
