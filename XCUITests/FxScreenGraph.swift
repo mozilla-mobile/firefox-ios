@@ -223,6 +223,7 @@ class Action {
 
     static let OpenWhatsNewPage = "OpenWhatsNewPage"
     static let OpenSearchBarFromSearchButton = "OpenSearchBarFromSearchButton"
+    static let CloseURLBarOpen = "CloseURLBarOpen"
 
 }
 
@@ -476,6 +477,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
                     app.buttons["TabToolbar.tabsButton"].tap()
                 }
             }
+        }
+        
+        screenState.gesture(forAction: Action.CloseURLBarOpen, transitionTo: HomePanelsScreen) {_ in
+            app.buttons["urlBar-cancel"].tap()
         }
         
         screenState.gesture(forAction: Action.OpenSearchBarFromSearchButton, transitionTo: URLBarOpen) {
