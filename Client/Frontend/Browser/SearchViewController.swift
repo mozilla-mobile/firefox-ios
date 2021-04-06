@@ -535,7 +535,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 let openedTab = self.filteredOpenedTabs[indexPath.row]
                 cell.descriptionLabel.isHidden = false
                 cell.titleLabel.text = openedTab.title ?? openedTab.lastTitle
-                cell.descriptionLabel.text = "Switch to tab"
+                cell.descriptionLabel.text = String.SearchSuggestionCellSwitchToTabLabel
                 cell.leftOverlayImageView.image = openAndSyncTabBadge
                 cell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
                 cell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
