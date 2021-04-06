@@ -394,6 +394,11 @@ extension Strings {
     public static let TabTrayV2OlderHeader = MZLocalizedString("TabTray.Older.Header", value: "Older", comment: "The section header for tabs opened before last week")
     public static let TabTraySwipeMenuMore = MZLocalizedString("TabTray.SwipeMenu.More", value: "More", comment: "The button title to see more options to perform on the tab.")
     public static let TabTrayMoreMenuCopy = MZLocalizedString("TabTray.MoreMenu.Copy", value: "Copy", comment: "The title on the button to copy the tab address.")
+
+    // Segmented Control tites for iPad
+    public static let TabTraySegmentedControlTitlesTabs = MZLocalizedString("TabTray.SegmentedControlTitles.Tabs", value: "Tabs", comment: "The title on the button to look at regular tabs.")
+    public static let TabTraySegmentedControlTitlesPrivateTabs = MZLocalizedString("TabTray.SegmentedControlTitles.PrivateTabs", value: "Private", comment: "The title on the button to look at private tabs.")
+    public static let TabTraySegmentedControlTitlesSyncedTabs = MZLocalizedString("TabTray.SegmentedControlTitles.SyncedTabs", value: "Synced", comment: "The title on the button to look at synced tabs.")
 }
 
 //Clipboard Toast
