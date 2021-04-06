@@ -26,7 +26,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, Themeable {
 
         contentView.addSubview(titleLabel)
 
-        bordersHelper.initBorders(view: self)
+        bordersHelper.initBorders(view: self.contentView)
         setDefaultBordersValues()
 
         // A table view will initialize the header with CGSizeZero before applying the actual size. Hence, the label's constraints

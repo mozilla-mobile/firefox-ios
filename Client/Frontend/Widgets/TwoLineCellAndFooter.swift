@@ -96,7 +96,7 @@ class TwoLineImageOverlayCell: UITableViewCell, Themeable {
         }
 
         stackView.snp.makeConstraints { make in
-            make.height.width.equalTo(35)
+            make.height.equalTo(35)
             make.top.equalToSuperview().offset(6)
             make.bottom.equalToSuperview().offset(-6)
             make.leading.equalTo(leftImageView.snp.trailing).offset(15)
@@ -107,6 +107,95 @@ class TwoLineImageOverlayCell: UITableViewCell, Themeable {
             make.height.width.equalTo(20)
             make.trailing.equalTo(leftImageView).offset(7)
             make.bottom.equalTo(leftImageView).offset(7)
+        }
+
+        selectedBackgroundView = selectedView
+        applyTheme()
+    }
+    
+    func applyTheme() {
+        let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+        if theme == .dark {
+            self.backgroundColor = UIColor.Photon.Grey70
+            self.titleLabel.textColor = .white
+            self.descriptionLabel.textColor = UIColor.Photon.Grey40
+        } else {
+            self.backgroundColor = .white
+            self.titleLabel.textColor = .black
+            self.descriptionLabel.textColor = UIColor.Photon.Grey60
+        }
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.selectionStyle = .default
+        separatorInset = UIEdgeInsets(top: 0, left: TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin, bottom: 0, right: 0)
+        applyTheme()
+    }
+}
+
+
+class SimpleTwoLineCell: UITableViewCell, Themeable {
+    // Tableview cell items
+    var selectedView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.theme.tableView.selectedBackground
+        return view
+    }()
+
+    var titleLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .black
+        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        label.textAlignment = .left
+        label.numberOfLines = 1
+        return label
+    }()
+    
+    var descriptionLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor.Photon.Grey40
+        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        label.textAlignment = .left
+        label.numberOfLines = 1
+        return label
+    }()
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        initialViewSetup()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func initialViewSetup() {
+        separatorInset = UIEdgeInsets(top: 0, left: TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin, bottom: 0, right: 0)
+        self.selectionStyle = .default
+        let containerView = UIView()
+        containerView.addSubview(titleLabel)
+        containerView.addSubview(descriptionLabel)
+        addSubview(containerView)
+        
+        containerView.snp.makeConstraints { make in
+            make.height.equalTo(58)
+            make.top.bottom.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+        }
+        
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(8)
+            make.bottom.equalTo(descriptionLabel.snp.top).offset(-5)
+            make.leading.equalToSuperview().offset(16)
+            make.trailing.equalToSuperview().inset(16)
+        }
+        
+        descriptionLabel.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom)
+            make.leading.equalToSuperview().offset(16)
+            make.trailing.equalToSuperview().inset(16)
         }
 
         selectedBackgroundView = selectedView
@@ -191,7 +280,7 @@ class TwoLineHeaderFooterView: UITableViewHeaderFooterView, Themeable {
         }
 
         stackView.snp.makeConstraints { make in
-            make.height.width.equalTo(35)
+            make.height.equalTo(35)
             make.top.equalToSuperview().offset(6)
             make.bottom.equalToSuperview().offset(-6)
             make.leading.equalTo(leftImageView.snp.trailing).offset(15)
