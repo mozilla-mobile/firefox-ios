@@ -60,16 +60,8 @@ class RemoteTabsPanel: SiteTableViewController, LibraryPanel {
         }
 
         tableViewController.didMove(toParent: self)
-
-        parent?.navigationItem.title = Strings.AppMenuSyncedTabsTitleString
-        parent?.navigationController?.isToolbarHidden = true
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        parent?.navigationItem.setRightBarButton(nil, animated: animated)
-        parent?.navigationController?.setToolbarHidden(true, animated: animated)
-    }
-    
     override func applyTheme() {
         super.applyTheme()
         tableViewController.tableView.backgroundColor = UIColor.theme.tableView.rowBackground
