@@ -24,6 +24,8 @@ class ToolbarTests: BaseTestCase {
      * Tests landscape page navigation enablement with the URL bar with tab switching.
      */
     func testLandscapeNavigationWithTabSwitch() {
+        waitForExistence(app.textFields["url"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
         let urlPlaceholder = "Search or enter address"
         XCTAssert(app.textFields["url"].exists)
         let defaultValuePlaceholder = app.textFields["url"].placeholderValue!
@@ -101,6 +103,7 @@ class ToolbarTests: BaseTestCase {
     // Check that after scrolling on a page, the URL bar is hidden. Tapping one on the status bar will reveal the URL bar, tapping again on the status will scroll to the top
     func testRevealToolbarWhenTappingOnStatusbar() {
         // Workaround when testing on iPhone. If the orientation is in landscape on iPhone the tests will fail.
+        navigator.performAction(Action.CloseURLBarOpen)
         if !iPad() {
             XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
             waitForExistence(app.otherElements["Navigation Toolbar"])
