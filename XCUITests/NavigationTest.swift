@@ -407,7 +407,9 @@ class NavigationTest: BaseTestCase {
         XCTAssertTrue(app.tables.cells["menu-NightMode"].exists)
         XCTAssertTrue(app.tables.cells["whatsnew"].exists)
         XCTAssertTrue(app.tables.cells["menu-Settings"].exists)
-        XCTAssertTrue(app.buttons["PhotonMenu.close"].exists)
+        if !iPad() {
+            XCTAssertTrue(app.buttons["PhotonMenu.close"].exists)
+        }
     }
 
     // Smoketest

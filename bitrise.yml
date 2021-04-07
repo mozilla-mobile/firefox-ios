@@ -721,7 +721,7 @@ workflows:
         inputs:
         - scheme: Fennec_Enterprise_XCUITests
         - xcodebuild_test_options: '-testPlan SmokeXCUITests'
-        - simulator_device: iPhone 11
+        - simulator_device: iPad Air (3rd generation)
         is_always_run: true
     - deploy-to-bitrise-io@1.9: {}
     - cache-push@2.2: {}
