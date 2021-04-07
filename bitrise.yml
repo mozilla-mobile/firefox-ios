@@ -681,7 +681,7 @@ workflows:
     - xcode-test@2:
         inputs:
         - scheme: Fennec
-        - simulator_device: iPhone 8
+        - simulator_device: iPad Air (3rd generation)
     - deploy-to-bitrise-io@1.9: {}
     - cache-push@2.4: {}
     - slack@3.1:
@@ -721,7 +721,7 @@ workflows:
         inputs:
         - scheme: Fennec_Enterprise_XCUITests
         - xcodebuild_test_options: '-testPlan SmokeXCUITests'
-        - simulator_device: iPad Air (3rd generation)
+        - simulator_device: iPad Pro (12.9-inch) (4th generation)
         is_always_run: true
     - deploy-to-bitrise-io@1.9: {}
     - cache-push@2.2: {}
