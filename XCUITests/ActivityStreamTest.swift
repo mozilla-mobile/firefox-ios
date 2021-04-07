@@ -189,10 +189,13 @@ class ActivityStreamTest: BaseTestCase {
         // The new tab is open but curren screen is still Homescreen
         XCTAssert(TopSiteCellgroup.exists)
 
+        navigator.performAction(Action.CloseURLBarOpen)
         navigator.goto(TabTray)
         app.cells.staticTexts["Home"].tap()
         waitForExistence(TopSiteCellgroup.cells["apple"])
         navigator.nowAt(HomePanelsScreen)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(TabTray)
         waitForExistence(app.cells.staticTexts["apple.com"])
         XCTAssertTrue(app.cells.staticTexts["apple.com"].exists, "A new Tab has not been open")
