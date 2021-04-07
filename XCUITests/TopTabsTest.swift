@@ -190,6 +190,7 @@ class TopTabsTest: BaseTestCase {
         // Add several tabs from tab tray menu and check that the  number is correct before closing all
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(NewTabScreen)
+        navigator.performAction(Action.CloseURLBarOpen)
         if !iPad() {
             waitForExistence(app.buttons["TabToolbar.tabsButton"])
         }
@@ -198,6 +199,7 @@ class TopTabsTest: BaseTestCase {
         // Close all tabs and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
         navigator.nowAt(NewTabScreen)
+        navigator.performAction(Action.CloseURLBarOpen)
         if !iPad() {
             waitForExistence(app.buttons["TabToolbar.tabsButton"])
         }
@@ -207,6 +209,7 @@ class TopTabsTest: BaseTestCase {
 
     func testCloseAllTabsPrivateMode() {
         // A different tab than home is open to do the proper checks
+        navigator.performAction(Action.CloseURLBarOpen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
@@ -214,6 +217,7 @@ class TopTabsTest: BaseTestCase {
         // Add several tabs from tab tray menu and check that the  number is correct before closing all
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(NewTabScreen)
+        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         // By default with new chron tab there is one tab in private mode
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 3)
