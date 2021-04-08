@@ -6,6 +6,8 @@ import XCTest
 
 class SettingsTest: BaseTestCase {
     func testHelpOpensSUMOInTab() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
         let settingsTableView = app.tables["AppSettingsTableViewController.tableView"]
 
@@ -25,6 +27,8 @@ class SettingsTest: BaseTestCase {
     }
 
     func testOpenSiriOption() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.OpenSiriFromSettings)
         waitForExistence(app.buttons["Add to Siri"], timeout: 5)
     }
@@ -47,6 +51,9 @@ class SettingsTest: BaseTestCase {
             app.activate()
 
             // Tap on "Set as Default Browser" from the in-browser settings
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+            navigator.performAction(Action.CloseURLBarOpen)
+            navigator.nowAt(NewTabScreen)
             navigator.goto(SettingsScreen)
             let settingsTableView = app.tables["AppSettingsTableViewController.tableView"]
             let defaultBrowserButton = settingsTableView.cells["Set as Default Browser"]

@@ -66,8 +66,12 @@ class ReaderViewTest: BaseTestCase {
     }
 
     func testAddToReadingListPrivateMode() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_ReadingList)
         
@@ -91,7 +95,10 @@ class ReaderViewTest: BaseTestCase {
         checkReadingListNumberOfItems(items: 1)
 
         // Check that it appears on regular mode
-        navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_ReadingList)
         checkReadingListNumberOfItems(items: 1)
     }
@@ -164,6 +171,8 @@ class ReaderViewTest: BaseTestCase {
     }
 
     func testAddToReadingListFromPageOptionsMenu() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         // First time Reading list is empty
         navigator.goto(LibraryPanel_ReadingList)
         checkReadingListNumberOfItems(items: 0)

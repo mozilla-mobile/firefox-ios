@@ -7,7 +7,7 @@ import XCTest
 private let LabelPrompt: String = "Turn on search suggestions?"
 private let SuggestedSite: String = "foobar meaning"
 private let SuggestedSite2: String = "foobar google"
-private let SuggestedSite3: String = "foobar2000 mac"
+private let SuggestedSite3: String = "foobar2000"
 
 private let SuggestedSite4: String = "foo bar baz"
 private let SuggestedSite5: String = "foo bar baz qux"
@@ -182,6 +182,8 @@ class SearchTests: BaseTestCase {
     }
 
     func testDefaultSearchEngine() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(SearchSettings)
         XCTAssert(app.tables.staticTexts["Google"].exists)
     }
@@ -211,8 +213,10 @@ class SearchTests: BaseTestCase {
     }
     
     func testSearchIconOnAboutHome() {
+        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         
         // Search icon is displayed.

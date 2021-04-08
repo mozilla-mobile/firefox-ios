@@ -97,6 +97,8 @@ class ThirdPartySearchTest: BaseTestCase {
     }
     
     private func addCustomSearchEngine() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.AddCustomSearchEngine)
         waitForExistence(app.buttons["customEngineSaveButton"], timeout: 3)
         app.buttons["customEngineSaveButton"].tap()
@@ -114,6 +116,8 @@ class ThirdPartySearchTest: BaseTestCase {
     }
 
     func testCustomEngineFromIncorrectTemplate() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(AddCustomSearchSettings)
         app.textViews["customEngineTitle"].tap()
         app.typeText("Feeling Lucky")
