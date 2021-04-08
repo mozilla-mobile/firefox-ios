@@ -910,25 +910,30 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.backAction = navigationControllerBackAction
     }
 
+    // Both iPad and iPhone use the same accesibility identifiers for buttons,
+    // even thought they may be in separate locations design wise.
     map.addScreenState(TabTray) { screenState in
 
-        if isTablet {
-            screenState.tap(app.buttons["TabTrayController.addTabButton"], forAction: Action.OpenNewTabFromTabTray, transitionTo: NewTabScreen)
-            screenState.tap(app.buttons["TabTrayController.maskButton"], forAction: Action.TogglePrivateMode) { userState in
-            userState.isPrivate = !userState.isPrivate
-            }
+        screenState.tap(app.buttons["newTabButtonTabTray"],
+                        forAction: Action.OpenNewTabFromTabTray,
+                        transitionTo: NewTabScreen)
+        screenState.tap(app.buttons["closeAllTabsButtonTabTray"], to: CloseTabMenu)
+//        screenState.tap(app.buttons["syncNowButtonTabsButtonTabTray"], to: CloseTabMenu)
 
-            screenState.tap(app.buttons["TabTrayController.removeTabsButton"], to: CloseTabMenu)
-        } else {
-            screenState.tap(app.buttons["newTabButtonTabTray"], forAction: Action.OpenNewTabFromTabTray, transitionTo: NewTabScreen)
-            screenState.tap(app.buttons["smallPrivateMask"], forAction: Action.TogglePrivateMode) { userState in
+        screenState.tap(app.navigationBars.segmentedControls.buttons.element(boundBy: 0),
+                        forAction: Action.ToggleRegularMode) { userState in
             userState.isPrivate = !userState.isPrivate
-            }
-            screenState.tap(app.toolbars.segmentedControls.buttons.firstMatch, forAction: Action.ToggleRegularMode) { userState in
-            userState.isPrivate = !userState.isPrivate
-            }
-            screenState.tap(app.buttons["closeAllTabsButtonTabTray"], to: CloseTabMenu)
         }
+
+        screenState.tap(app.navigationBars.segmentedControls.buttons.element(boundBy: 1),
+                        forAction: Action.TogglePrivateMode) { userState in
+            userState.isPrivate = !userState.isPrivate
+        }
+
+        // this is for Sync Now button, which is currently not implemented
+//        screenState.tap(app.navigationBars.segmentedControls.buttons.element(boundBy: 2),
+//                        forAction: Action.TogglePrivateMode) { userState in
+//        }
 
         screenState.onEnter { userState in
             userState.numTabs = Int(app.tables.cells.count)

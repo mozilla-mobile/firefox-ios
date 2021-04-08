@@ -20,21 +20,27 @@ class TabTrayViewController: UIViewController {
 
     // Buttons & Menus
     lazy var deleteButton: UIBarButtonItem = {
-        return UIBarButtonItem(image: UIImage.templateImageNamed("action_delete"),
-                               style: .plain,
-                               target: self,
-                               action: #selector(didTapDeleteTabs(_:)))
+        let button = UIBarButtonItem(image: UIImage.templateImageNamed("action_delete"),
+                                     style: .plain,
+                                     target: self,
+                                     action: #selector(didTapDeleteTabs(_:)))
+        button.accessibilityIdentifier = "closeAllTabsButtonTabTray"
+        return button
     }()
 
     lazy var newTabButton: UIBarButtonItem = {
-        return UIBarButtonItem(customView: NewTabButton(target: self, selector: #selector(didTapAddTab(_:))))
+        let button = UIBarButtonItem(customView: NewTabButton(target: self, selector: #selector(didTapAddTab(_:))))
+        button.accessibilityIdentifier = "newTabButtonTabTray"
+        return button
     }()
 
     lazy var syncTabButton: UIBarButtonItem = {
-        return UIBarButtonItem(title: Strings.FxASyncNow,
-                               style: .plain,
-                               target: self,
-                               action: #selector(didTapSyncTabs))
+        let button = UIBarButtonItem(title: Strings.FxASyncNow,
+                                     style: .plain,
+                                     target: self,
+                                     action: #selector(didTapSyncTabs))
+        button.accessibilityIdentifier = "syncTabsButtonTabTray"
+        return button
     }()
 
     lazy var flexibleSpace: UIBarButtonItem = {
