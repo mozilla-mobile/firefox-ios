@@ -272,6 +272,7 @@ class HistoryTests: BaseTestCase {
     
     private func navigateToGoogle(){
         navigator.openURL("example.com")
+        waitUntilPageLoad()
         navigator.goto(LibraryPanel_History)
         XCTAssertTrue(app.tables.cells.staticTexts["Example Domain"].exists)
     }
