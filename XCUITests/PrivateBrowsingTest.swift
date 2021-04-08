@@ -225,7 +225,9 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
         waitUntilPageLoad()
         // This action to enable private mode is defined on HomePanel Screen that is why we need to open a new tab and be sure we are on that screen to use the correct action
         navigator.goto(NewTabScreen)
+
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarHomePanel)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables["History List"])
         // History without counting Clear Recent History, Recently Closed

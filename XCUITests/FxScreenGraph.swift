@@ -911,14 +911,24 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(TabTray) { screenState in
-        screenState.tap(app.buttons["newTabButtonTabTray"], forAction: Action.OpenNewTabFromTabTray, transitionTo: NewTabScreen)
-        screenState.tap(app.buttons["smallPrivateMask"], forAction: Action.TogglePrivateMode) { userState in
+
+        if isTablet {
+            screenState.tap(app.buttons["TabTrayController.addTabButton"], forAction: Action.OpenNewTabFromTabTray, transitionTo: NewTabScreen)
+            screenState.tap(app.buttons["TabTrayController.maskButton"], forAction: Action.TogglePrivateMode) { userState in
             userState.isPrivate = !userState.isPrivate
-        }
-        screenState.tap(app.toolbars.segmentedControls.buttons.firstMatch, forAction: Action.ToggleRegularMode) { userState in
+            }
+
+            screenState.tap(app.buttons["TabTrayController.removeTabsButton"], to: CloseTabMenu)
+        } else {
+            screenState.tap(app.buttons["newTabButtonTabTray"], forAction: Action.OpenNewTabFromTabTray, transitionTo: NewTabScreen)
+            screenState.tap(app.buttons["smallPrivateMask"], forAction: Action.TogglePrivateMode) { userState in
             userState.isPrivate = !userState.isPrivate
+            }
+            screenState.tap(app.toolbars.segmentedControls.buttons.firstMatch, forAction: Action.ToggleRegularMode) { userState in
+            userState.isPrivate = !userState.isPrivate
+            }
+            screenState.tap(app.buttons["closeAllTabsButtonTabTray"], to: CloseTabMenu)
         }
-        screenState.tap(app.buttons["closeAllTabsButtonTabTray"], to: CloseTabMenu)
 
         screenState.onEnter { userState in
             userState.numTabs = Int(app.tables.cells.count)
@@ -1122,7 +1132,11 @@ extension MMNavigator where T == FxUserState {
     func createNewTab() {
         let app = XCUIApplication()
         self.goto(TabTray)
-        app.buttons["newTabButtonTabTray"].tap()
+        if isTablet {
+            app.buttons["TabTrayController.addTabButton"].tap()
+        } else {
+            app.buttons["newTabButtonTabTray"].tap()
+        }
         self.nowAt(NewTabScreen)
     }
 

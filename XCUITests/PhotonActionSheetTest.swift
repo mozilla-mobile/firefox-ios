@@ -94,14 +94,14 @@ class PhotonActionSheetTest: BaseTestCase {
         navigator.goto(PageOptionsMenu)
         waitForExistence(app.tables["Context Menu"].cells["action_share"], timeout: 5)
         app.tables["Context Menu"].staticTexts["Share Page With…"].tap()
-        if #available(iOS 14.0, *) {
-            waitForExistence(app.collectionViews.buttons["Copy"], timeout: 10)
-        } else {
-            waitForExistence(app.cells["Copy"], timeout: 10)
-        }
+
         // This is not ideal but only way to get the element on iPhone 8
         // for iPhone 11, that would be boundBy: 2
-        let fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 2)
+        var  fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 2)
+        if iPad() {
+            waitForExistence(app.collectionViews.buttons["Copy"], timeout: 10)
+            fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 1)
+        }
 
         fennecElement.tap()
         waitForExistence(app.navigationBars["ShareTo.ShareView"], timeout: 10)
