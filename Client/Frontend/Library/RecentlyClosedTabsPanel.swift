@@ -74,12 +74,15 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
-        guard let twoLineCell = cell as? TwoLineTableViewCell else {
+        guard let twoLineCell = cell as? TwoLineImageOverlayCell else {
             return cell
         }
         let tab = recentlyClosedTabs[indexPath.row]
         let displayURL = tab.url.displayURL ?? tab.url
-        twoLineCell.setLines(tab.title, detailText: displayURL.absoluteDisplayString)
+        twoLineCell.descriptionLabel.isHidden = false
+        twoLineCell.titleLabel.text = tab.title
+        twoLineCell.titleLabel.isHidden = tab.title?.isEmpty ?? true ? true : false
+        twoLineCell.descriptionLabel.text = displayURL.absoluteDisplayString
         let site: Favicon? = (tab.faviconURL != nil) ? Favicon(url: tab.faviconURL!) : nil
         cell.imageView?.layer.borderColor = RecentlyClosedPanelUX.IconBorderColor.cgColor
         cell.imageView?.layer.borderWidth = RecentlyClosedPanelUX.IconBorderWidth

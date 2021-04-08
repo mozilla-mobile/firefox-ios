@@ -27,8 +27,6 @@ class TabTableViewHeader: UITableViewHeaderFooterView, Themeable {
         return headerLabel
     }()
 
-    fileprivate lazy var bordersHelper = ThemedHeaderFooterViewBordersHelper()
-
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         contentView.addSubview(titleLabel)

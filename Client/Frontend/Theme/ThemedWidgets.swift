@@ -81,7 +81,7 @@ class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, Themeable
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         contentView.addSubview(titleLabel)
-        bordersHelper.initBorders(view: self)
+        bordersHelper.initBorders(view: self.contentView)
         setDefaultBordersValues()
         setupInitialConstraints()
         applyTheme()
@@ -162,17 +162,17 @@ class ThemedHeaderFooterViewBordersHelper: Themeable {
         }
     }
 
-    func initBorders(view: UITableViewHeaderFooterView) {
-        view.contentView.addSubview(topBorder)
-        view.contentView.addSubview(bottomBorder)
+    func initBorders(view: UIView) {
+        view.addSubview(topBorder)
+        view.addSubview(bottomBorder)
 
         topBorder.snp.makeConstraints { make in
-            make.left.right.top.equalTo(view.contentView)
+            make.left.right.top.equalTo(view)
             make.height.equalTo(0.25)
         }
 
         bottomBorder.snp.makeConstraints { make in
-            make.left.right.bottom.equalTo(view.contentView)
+            make.left.right.bottom.equalTo(view)
             make.height.equalTo(0.5)
         }
     }

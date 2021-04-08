@@ -248,7 +248,7 @@ enum NavigationPath {
     
     private static func handleWidgetURL(url: URL?, uuid: String, with bvc: BrowserViewController) {
         if let newURL = url {
-            bvc.switchToTabForWidgetURLOrOpen(newURL, uuid: uuid, isPrivate: false)
+            bvc.switchToTabForURLOrOpen(newURL, uuid: uuid, isPrivate: false)
         } else {
             bvc.openBlankNewTab(focusLocationField: true, isPrivate: false)
         }

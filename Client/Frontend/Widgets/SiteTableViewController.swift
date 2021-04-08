@@ -26,7 +26,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, Themeable {
 
         contentView.addSubview(titleLabel)
 
-        bordersHelper.initBorders(view: self)
+        bordersHelper.initBorders(view: self.contentView)
         setDefaultBordersValues()
 
         // A table view will initialize the header with CGSizeZero before applying the actual size. Hence, the label's constraints
@@ -73,8 +73,9 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, Themeable {
  */
 @objcMembers
 class SiteTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, Themeable {
-    fileprivate let CellIdentifier = "CellIdentifier"
-    fileprivate let HeaderIdentifier = "HeaderIdentifier"
+    let CellIdentifier = "CellIdentifier"
+    let OneLineCellIdentifier = "OneLineCellIdentifier"
+    let HeaderIdentifier = "HeaderIdentifier"
     let profile: Profile
 
     var data: Cursor<Site> = Cursor<Site>(status: .success, msg: "No data set")
@@ -105,7 +106,8 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
 
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(SiteTableViewCell.self, forCellReuseIdentifier: CellIdentifier)
+        tableView.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: CellIdentifier)
+        tableView.register(OneLineTableViewCell.self, forCellReuseIdentifier: OneLineCellIdentifier)
         tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: HeaderIdentifier)
         tableView.layoutMargins = .zero
         tableView.keyboardDismissMode = .onDrag

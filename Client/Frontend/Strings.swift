@@ -1067,6 +1067,7 @@ extension String {
     public static let SearchSearchEngineAccessibilityLabel = MZLocalizedString("%@ search", tableName: "Search", comment: "Label for search engine buttons. The argument corresponds to the name of the search engine.")
     public static let SearchSearchEngineSuggestionAccessibilityLabel = MZLocalizedString("Search suggestions from %@", tableName: "Search", comment: "Accessibility label for image of default search engine displayed left to the actual search suggestions from the engine. The parameter substituted for \"%@\" is the name of the search engine. E.g.: Search suggestions from Google")
     public static let SearchSearchSuggestionTapAccessibilityHint = MZLocalizedString("Searches for the suggestion", comment: "Accessibility hint describing the action performed when a search suggestion is clicked")
+    public static let SearchSuggestionCellSwitchToTabLabel = MZLocalizedString("Switch to tab", comment: "Search suggestion cell label that allows user to switch to tab which they searched for in url bar")
 }
 
 // Tab Location View
