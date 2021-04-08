@@ -215,8 +215,13 @@ class ActivityStreamTest: BaseTestCase {
         waitForNoExistence(app.tables["Context Menu"], timeoutValue: 15)
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(TabTray)
-        waitForExistence(app.cells.staticTexts["wikipedia.org"], timeout: 5)
-        let numTabsOpen = app.tables.cells.count
+        var numTabsOpen = app.tables.cells.count
+        if iPad() {
+            waitForExistence(app.cells.staticTexts["Wikipedia"], timeout: 5)
+            numTabsOpen = app.collectionViews.cells.count
+        } else {
+            waitForExistence(app.cells.staticTexts["wikipedia.org"], timeout: 5)
+        }
         XCTAssertEqual(numTabsOpen, 2, "New tab not open")
     }
 
@@ -242,7 +247,11 @@ class ActivityStreamTest: BaseTestCase {
             app.buttons["Show Tabs"].tap()
         }
         navigator.nowAt(TabTray)
-        waitForExistence(app.tables.cells.staticTexts["Apple"])
+        if iPad() {
+            waitForExistence(app.collectionViews.cells.staticTexts["Apple"], timeout: 5)
+        } else {
+            waitForExistence(app.tables.cells.staticTexts["Apple"], timeout: 5)
+        }
         app.cells.staticTexts["Apple"].tap()
 
         // The website is open
@@ -270,7 +279,11 @@ class ActivityStreamTest: BaseTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
 
         waitForExistence(app.cells.staticTexts[defaultTopSite["bookmarkLabel"]!])
-        let numTabsOpen = userState.numTabs
+        var numTabsOpen = userState.numTabs
+        if iPad() {
+            navigator.goto(TabTray)
+            numTabsOpen = app.collectionViews.cells.count
+        }
         XCTAssertEqual(numTabsOpen, 1, "New tab not open")
     }
     /* Disable due to https://github.com/mozilla-mobile/firefox-ios/issues/7521

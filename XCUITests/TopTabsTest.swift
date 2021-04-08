@@ -132,11 +132,18 @@ class TopTabsTest: BaseTestCase {
 
         navigator.goto(URLBarOpen)
         navigator.back()
+        if iPad() {
+            navigator.goto(TabTray)
+            print(app.collectionViews.cells.count)
+        }
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
 
         // Close all tabs, undo it and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
-        app.buttons["Undo"].tap()
+
+        waitForExistence(app.otherElements.buttons.staticTexts["Undo"])
+        app.otherElements.buttons.staticTexts["Undo"].tap()
+        print(app.debugDescription)
         waitForExistence(app.collectionViews.cells["TopSitesCell"], timeout: 5)
         navigator.nowAt(BrowserTab)
         if !iPad() {
@@ -145,6 +152,10 @@ class TopTabsTest: BaseTestCase {
 
         navigator.goto(URLBarOpen)
         navigator.back()
+
+        if iPad() {
+            navigator.goto(TabTray)
+        }
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
 
         waitForExistence(app.cells.staticTexts[urlLabel])
@@ -172,8 +183,11 @@ class TopTabsTest: BaseTestCase {
 
         navigator.goto(URLBarOpen)
         navigator.back()
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 3)
-
+        if iPad() {
+            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+        } else {
+            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 3)
+        }
         // Close all tabs, undo it and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
         waitForExistence(app.staticTexts["Private Browsing"], timeout: 10)
@@ -243,7 +257,9 @@ class TopTabsTest: BaseTestCase {
         // Go back to portrait mode
         XCUIDevice.shared.orientation = .portrait
         // Verify that the '+' is not displayed
-        waitForNoExistence(app.buttons["TabToolbar.addNewTabButton"])
+        if !iPad() {
+            waitForNoExistence(app.buttons["TabToolbar.addNewTabButton"])
+        }
     }
 
     // Smoketest
@@ -297,7 +313,11 @@ class TopTabsTest: BaseTestCase {
 fileprivate extension BaseTestCase {
     func checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: Int) {
         navigator.goto(TabTray)
-        let numTabsOpen = userState.numTabs
+        var numTabsOpen = userState.numTabs
+        if iPad() {
+            numTabsOpen = app.collectionViews.cells.count
+        }
+
         XCTAssertEqual(numTabsOpen, expectedNumberOfTabsOpen, "The number of tabs open is not correct")
     }
 
