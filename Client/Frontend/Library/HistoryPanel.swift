@@ -433,7 +433,6 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAt: indexPath) as! TwoLineImageOverlayCell
         cell.accessoryType = .none
-
         // First section is reserved for recently closed.
         guard indexPath.section > Section.additionalHistoryActions.rawValue else {
             cell.leftImageView.layer.borderWidth = 0

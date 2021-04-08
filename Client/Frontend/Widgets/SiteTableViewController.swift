@@ -74,6 +74,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, Themeable {
 @objcMembers
 class SiteTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, Themeable {
     let CellIdentifier = "CellIdentifier"
+    let OneLineCellIdentifier = "OneLineCellIdentifier"
     let HeaderIdentifier = "HeaderIdentifier"
     let profile: Profile
 
@@ -106,6 +107,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: CellIdentifier)
+        tableView.register(OneLineTableViewCell.self, forCellReuseIdentifier: OneLineCellIdentifier)
         tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: HeaderIdentifier)
         tableView.layoutMargins = .zero
         tableView.keyboardDismissMode = .onDrag

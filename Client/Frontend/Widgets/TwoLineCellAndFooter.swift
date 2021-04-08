@@ -23,6 +23,7 @@ class TwoLineImageOverlayCell: UITableViewCell, Themeable {
     var leftImageView: UIImageView = {
         let imgView = UIImageView()
         imgView.contentMode = .scaleAspectFit
+        imgView.layer.cornerRadius = 5.0
         imgView.clipsToBounds = true
         return imgView
     }()
@@ -33,18 +34,11 @@ class TwoLineImageOverlayCell: UITableViewCell, Themeable {
         imgView.clipsToBounds = true
         return imgView
     }()
-    
-    var rightAccessoryImageView: UIImageView = {
-        let imgView = UIImageView()
-        imgView.contentMode = .scaleAspectFit
-        imgView.clipsToBounds = true
-        return imgView
-    }()
-    
+
     var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         label.textAlignment = .left
         label.numberOfLines = 1
         return label
@@ -53,7 +47,7 @@ class TwoLineImageOverlayCell: UITableViewCell, Themeable {
     var descriptionLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor.Photon.Grey40
-        label.font = UIFont.systemFont(ofSize: 12.5, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         label.textAlignment = .left
         label.numberOfLines = 1
         return label
@@ -68,47 +62,62 @@ class TwoLineImageOverlayCell: UITableViewCell, Themeable {
         fatalError("init(coder:) has not been implemented")
     }
     
+    let containerView = UIView()
+    let midView = UIView()
+    
     private func initialViewSetup() {
         separatorInset = UIEdgeInsets(top: 0, left: TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin, bottom: 0, right: 0)
         self.selectionStyle = .default
-        
-        let stackView = UIStackView(arrangedSubviews: [titleLabel, descriptionLabel])
-        stackView.axis = .vertical
-        stackView.alignment = .leading
-        stackView.distribution = .equalCentering
-        stackView.spacing = 2
+        midView.addSubview(titleLabel)
+        midView.addSubview(descriptionLabel)
 
-        contentView.addSubview(stackView)
-        contentView.addSubview(leftImageView)
-        contentView.addSubview(rightAccessoryImageView)
-        contentView.addSubview(leftOverlayImageView)
+        containerView.addSubview(leftImageView)
+        containerView.addSubview(midView)
+
+        containerView.addSubview(leftOverlayImageView)
+        addSubview(containerView)
+        bringSubviewToFront(containerView)
+
+        containerView.snp.makeConstraints { make in
+            make.height.equalTo(55)
+            make.top.bottom.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalTo(accessoryView?.snp.leading ?? snp.trailing)
+        }
 
         leftImageView.snp.makeConstraints { make in
-            make.height.width.equalTo(29)
-            make.leading.equalToSuperview().inset(15)
-            make.centerY.equalToSuperview()
+            make.height.width.equalTo(34)
+            make.leading.equalTo(containerView.snp.leading).offset(15)
+            make.centerY.equalTo(containerView.snp.centerY)
         }
 
-        rightAccessoryImageView.snp.makeConstraints { make in
-            make.height.width.equalTo(29)
-            make.trailing.equalToSuperview().inset(2)
-            make.centerX.equalToSuperview()
-        }
-
-        stackView.snp.makeConstraints { make in
-            make.height.equalTo(35)
-            make.top.equalToSuperview().offset(6)
-            make.bottom.equalToSuperview().offset(-6)
-            make.leading.equalTo(leftImageView.snp.trailing).offset(15)
-            make.trailing.equalTo(rightAccessoryImageView).inset(2)
-        }
-        
         leftOverlayImageView.snp.makeConstraints { make in
-            make.height.width.equalTo(20)
+            make.height.width.equalTo(22)
             make.trailing.equalTo(leftImageView).offset(7)
             make.bottom.equalTo(leftImageView).offset(7)
         }
 
+        midView.snp.makeConstraints { make in
+            make.height.equalTo(46)
+            make.centerY.equalToSuperview()
+            make.leading.equalTo(leftImageView.snp.trailing).offset(13)
+            make.trailing.equalTo(containerView.snp.trailing).offset(-7)
+        }
+
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalTo(midView.snp.top).offset(4)
+            make.height.equalTo(18)
+            make.leading.equalTo(midView.snp.leading)
+            make.trailing.equalTo(midView.snp.trailing)
+        }
+
+        descriptionLabel.snp.makeConstraints { make in
+            make.height.equalTo(14)
+            make.bottom.equalTo(midView.snp.bottom).offset(-4)
+            make.leading.equalTo(midView.snp.leading)
+            make.trailing.equalTo(midView.snp.trailing)
+        }
+        
         selectedBackgroundView = selectedView
         applyTheme()
     }
@@ -122,7 +131,7 @@ class TwoLineImageOverlayCell: UITableViewCell, Themeable {
         } else {
             self.backgroundColor = .white
             self.titleLabel.textColor = .black
-            self.descriptionLabel.textColor = UIColor.Photon.Grey60
+            self.descriptionLabel.textColor = UIColor.Photon.Grey75A60
         }
     }
     
@@ -131,6 +140,16 @@ class TwoLineImageOverlayCell: UITableViewCell, Themeable {
         self.selectionStyle = .default
         separatorInset = UIEdgeInsets(top: 0, left: TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin, bottom: 0, right: 0)
         applyTheme()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        containerView.snp.remakeConstraints { make in
+            make.height.equalTo(55)
+            make.top.bottom.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalTo(accessoryView?.snp.leading ?? snp.trailing)
+        }
     }
 }
 
@@ -171,29 +190,39 @@ class SimpleTwoLineCell: UITableViewCell, Themeable {
     }
     
     private func initialViewSetup() {
-        separatorInset = UIEdgeInsets(top: 0, left: TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin, bottom: 0, right: 0)
+        separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
         self.selectionStyle = .default
+        let midView = UIView()
+        midView.addSubview(titleLabel)
+        midView.addSubview(descriptionLabel)
         let containerView = UIView()
-        containerView.addSubview(titleLabel)
-        containerView.addSubview(descriptionLabel)
+        containerView.addSubview(midView)
         addSubview(containerView)
         
         containerView.snp.makeConstraints { make in
-            make.height.equalTo(58)
+            make.height.equalTo(65)
             make.top.bottom.equalToSuperview()
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
         }
         
+        midView.snp.makeConstraints { make in
+            make.height.equalTo(46)
+            make.centerY.equalToSuperview()
+            make.leading.equalTo(containerView.snp.leading)
+            make.trailing.equalTo(containerView.snp.trailing)
+        }
+        
         titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(8)
-            make.bottom.equalTo(descriptionLabel.snp.top).offset(-5)
+            make.top.equalTo(midView.snp.top).offset(4)
+            make.height.equalTo(18)
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalToSuperview().inset(16)
         }
         
         descriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom)
+            make.height.equalTo(14)
+            make.bottom.equalTo(midView.snp.bottom).offset(-4)
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalToSuperview().inset(16)
         }
@@ -211,14 +240,14 @@ class SimpleTwoLineCell: UITableViewCell, Themeable {
         } else {
             self.backgroundColor = .white
             self.titleLabel.textColor = .black
-            self.descriptionLabel.textColor = UIColor.Photon.Grey60
+            self.descriptionLabel.textColor = UIColor.Photon.Grey75A60
         }
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
         self.selectionStyle = .default
-        separatorInset = UIEdgeInsets(top: 0, left: TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin, bottom: 0, right: 0)
+        separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
         applyTheme()
     }
 }

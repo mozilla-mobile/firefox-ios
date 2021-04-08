@@ -382,40 +382,37 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
             return super.tableView(tableView, cellForRowAt: indexPath)
         }
 
+        let cell = tableView.dequeueReusableCell(withIdentifier: BookmarkNodeCellIdentifier, for: indexPath) as! OneLineTableViewCell
         switch bookmarkNode {
         case let bookmarkFolder as BookmarkFolder:
-            let cell = tableView.dequeueReusableCell(withIdentifier: BookmarkNodeCellIdentifier, for: indexPath)
             if bookmarkFolder.isRoot, let localizedString = LocalizedRootBookmarkFolderStrings[bookmarkFolder.guid] {
-                cell.textLabel?.text = localizedString
+                cell.titleLabel.text = localizedString
             } else {
-                cell.textLabel?.text = bookmarkFolder.title
+                cell.titleLabel.text = bookmarkFolder.title
             }
 
-            cell.imageView?.image = ThemeManager.instance.currentName == .dark ? bookmarkFolderIconDark : bookmarkFolderIconNormal
-            cell.imageView?.contentMode = .center
+            cell.leftImageView.image = ThemeManager.instance.currentName == .dark ? bookmarkFolderIconDark : bookmarkFolderIconNormal
+            cell.leftImageView.contentMode = .center
             cell.accessoryType = .disclosureIndicator
             cell.editingAccessoryType = .disclosureIndicator
             return cell
         case let bookmarkItem as BookmarkItem:
-            let cell = tableView.dequeueReusableCell(withIdentifier: BookmarkNodeCellIdentifier, for: indexPath)
             if bookmarkItem.title.isEmpty {
-                cell.textLabel?.text = bookmarkItem.url
+                cell.titleLabel.text = bookmarkItem.url
             } else {
-                cell.textLabel?.text = bookmarkItem.title
+                cell.titleLabel.text = bookmarkItem.title
             }
 
-            cell.imageView?.image = nil
+            cell.leftImageView.image = nil
 
             let site = Site(url: bookmarkItem.url, title: bookmarkItem.title, bookmarked: true, guid: bookmarkItem.guid)
             profile.favicons.getFaviconImage(forSite: site).uponQueue(.main) { result in
                 // Check that we successfully retrieved an image (should always happen)
                 // and ensure that the cell we were fetching for is still on-screen.
-                guard let image = result.successValue, let cell = tableView.cellForRow(at: indexPath) else {
-                    return
-                }
+                guard let image = result.successValue else { return }
 
-                cell.imageView?.image = image
-                cell.imageView?.contentMode = .scaleAspectFill
+                cell.leftImageView.image = image
+                cell.leftImageView.contentMode = .scaleAspectFill
                 cell.setNeedsLayout()
             }
 

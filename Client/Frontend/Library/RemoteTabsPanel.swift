@@ -133,10 +133,9 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let clientTabs = self.clientAndTabs[section]
         let client = clientTabs.client
-        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: RemoteClientIdentifier) as! SimpleOneLineFooterView
+        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: RemoteClientIdentifier) as! OneLineFooterView
         view.frame = CGRect(width: tableView.frame.width, height: RemoteTabsPanelUX.HeaderHeight)
         view.titleLabel.text = client.name
-        view.contentView.backgroundColor = UIColor.theme.tableView.headerBackground
         view.showBorder(for: .top, section != 0)
 
         /*
@@ -470,7 +469,7 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.addGestureRecognizer(longPressRecognizer)
-        tableView.register(SimpleOneLineFooterView.self, forHeaderFooterViewReuseIdentifier: RemoteClientIdentifier)
+        tableView.register(OneLineFooterView.self, forHeaderFooterViewReuseIdentifier: RemoteClientIdentifier)
         tableView.register(SimpleTwoLineCell.self, forCellReuseIdentifier: RemoteTabIdentifier)
 
         tableView.rowHeight = RemoteTabsPanelUX.RowHeight

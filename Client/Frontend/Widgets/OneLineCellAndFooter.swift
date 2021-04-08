@@ -11,58 +11,120 @@ struct OneLineCellUX {
 }
 
 class OneLineTableViewCell: UITableViewCell, Themeable {
+    // Tableview cell items
+    var selectedView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.theme.tableView.selectedBackground
+        return view
+    }()
+    
+    var leftImageView: UIImageView = {
+        let imgView = UIImageView()
+        imgView.contentMode = .scaleAspectFit
+        imgView.layer.cornerRadius = 5.0
+        imgView.clipsToBounds = true
+        return imgView
+    }()
+    
+    var leftOverlayImageView: UIImageView = {
+        let imgView = UIImageView()
+        imgView.contentMode = .scaleAspectFit
+        imgView.clipsToBounds = true
+        return imgView
+    }()
+
+    var titleLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .black
+        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        label.textAlignment = .left
+        label.numberOfLines = 1
+        return label
+    }()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-
-        self.separatorInset = .zero
-        self.applyTheme()
+        initialViewSetup()
     }
-
-    required init?(coder aDecoder: NSCoder) {
+    
+    required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        let indentation = CGFloat(indentationLevel) * indentationWidth
-
-        imageView?.translatesAutoresizingMaskIntoConstraints = true
-        imageView?.contentMode = .scaleAspectFill
-        imageView?.layer.cornerRadius = OneLineCellUX.ImageCornerRadius
-        imageView?.layer.masksToBounds = true
-        imageView?.snp.remakeConstraints { make in
-            guard let _ = imageView?.superview else { return }
-
-            make.width.height.equalTo(OneLineCellUX.ImageSize)
-            make.leading.equalTo(indentation + OneLineCellUX.HorizontalMargin)
-            make.centerY.equalToSuperview()
+    
+    let containerView = UIView()
+    let midView = UIView()
+    
+    private func initialViewSetup() {
+        separatorInset = UIEdgeInsets(top: 0, left: TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin, bottom: 0, right: 0)
+        self.selectionStyle = .default
+        midView.addSubview(titleLabel)
+        containerView.addSubview(leftImageView)
+        containerView.addSubview(midView)
+        
+        addSubview(containerView)
+        bringSubviewToFront(containerView)
+        
+        containerView.snp.makeConstraints { make in
+            make.height.equalTo(50)
+            make.top.bottom.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalTo(accessoryView?.snp.leading ?? snp.trailing)
         }
-
-        textLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontHistoryPanel
-        textLabel?.snp.remakeConstraints { make in
-            guard let _ = textLabel?.superview else { return }
-
-            make.leading.equalTo(indentation + OneLineCellUX.ImageSize + OneLineCellUX.HorizontalMargin*2)
-            make.trailing.equalTo(isEditing ? 0 : -OneLineCellUX.HorizontalMargin)
+        
+        leftImageView.snp.makeConstraints { make in
+            make.height.width.equalTo(34)
+            make.leading.equalTo(containerView.snp.leading).offset(15)
+            make.centerY.equalTo(containerView.snp.centerY)
+        }
+        
+        midView.snp.makeConstraints { make in
+            make.height.equalTo(42)
             make.centerY.equalToSuperview()
+            make.leading.equalTo(leftImageView.snp.trailing).offset(13)
+            make.trailing.equalTo(containerView.snp.trailing).offset(-7)
+        }
+        
+        titleLabel.snp.makeConstraints { make in
+            make.height.equalTo(20)
+            make.centerY.equalTo(midView.snp.centerY)
+            make.leading.equalTo(midView.snp.leading)
+            make.trailing.equalTo(midView.snp.trailing)
+        }
+        
+        selectedBackgroundView = selectedView
+        applyTheme()
+    }
+    
+    func applyTheme() {
+        let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+        if theme == .dark {
+            self.backgroundColor = UIColor.Photon.Grey70
+            self.titleLabel.textColor = .white
+        } else {
+            self.backgroundColor = .white
+            self.titleLabel.textColor = .black
         }
     }
-
+    
     override func prepareForReuse() {
         super.prepareForReuse()
-
-        self.applyTheme()
+        self.selectionStyle = .default
+        separatorInset = UIEdgeInsets(top: 0, left: TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin, bottom: 0, right: 0)
+        applyTheme()
     }
-
-    func applyTheme() {
-        backgroundColor = UIColor.theme.tableView.rowBackground
-        textLabel?.textColor = UIColor.theme.tableView.rowText
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        containerView.snp.remakeConstraints { make in
+            make.height.equalTo(50)
+            make.top.bottom.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalTo(accessoryView?.snp.leading ?? snp.trailing)
+        }
     }
 }
 
-
-class SimpleOneLineFooterView: UITableViewHeaderFooterView, Themeable {
+class OneLineFooterView: UITableViewHeaderFooterView, Themeable {
     fileprivate let bordersHelper = ThemedHeaderFooterViewBordersHelper()
 
     var titleLabel: UILabel = {
@@ -82,9 +144,10 @@ class SimpleOneLineFooterView: UITableViewHeaderFooterView, Themeable {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
+    let containerView = UIView()
+    
     private func initialViewSetup() {
-        let containerView = UIView()
         bordersHelper.initBorders(view: containerView)
         setDefaultBordersValues()
         layoutMargins = .zero
@@ -123,10 +186,10 @@ class SimpleOneLineFooterView: UITableViewHeaderFooterView, Themeable {
         // TODO: Replace this color with proper value once tab tray refresh is done
         if theme == .dark {
             self.titleLabel.textColor = .white
-            self.backgroundColor = UIColor(rgb: 0x1C1C1E)
+            self.containerView.backgroundColor = UIColor(rgb: 0x1C1C1E)
         } else {
             self.titleLabel.textColor = .black
-            self.backgroundColor = UIColor(rgb: 0xF2F2F7)
+            self.containerView.backgroundColor = UIColor(rgb: 0xF2F2F7)
         }
         bordersHelper.applyTheme()
     }
