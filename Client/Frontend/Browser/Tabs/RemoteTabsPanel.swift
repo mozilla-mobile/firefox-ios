@@ -122,18 +122,20 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
         return self.clientAndTabs[section].tabs.count
     }
 
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return RemoteTabsPanelUX.HeaderHeight
+        return UITableView.automaticDimension //RemoteTabsPanelUX.HeaderHeight
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let clientTabs = self.clientAndTabs[section]
         let client = clientTabs.client
-        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: RemoteClientIdentifier) as! TwoLineHeaderFooterView
+        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: RemoteClientIdentifier) as! OneLineFooterView
         view.frame = CGRect(width: tableView.frame.width, height: RemoteTabsPanelUX.HeaderHeight)
-        view.textLabel?.text = client.name
-        view.contentView.backgroundColor = UIColor.theme.tableView.headerBackground
-
+        view.titleLabel.text = client.name
         view.showBorder(for: .top, section != 0)
 
         /*
@@ -149,10 +151,6 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
         * This will be the real time that the other client uploaded tabs.
         */
 
-        let timestamp = clientTabs.approximateLastSyncTime()
-        let label: String = .RemoteTabLastSync
-        view.detailTextLabel?.text = String(format: label, Date.fromTimestamp(timestamp).toRelativeTimeString())
-
         let image: UIImage?
         if client.type == "desktop" {
             image = UIImage.templateImageNamed("deviceTypeDesktop")
@@ -161,11 +159,6 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
             image = UIImage.templateImageNamed("deviceTypeMobile")
             image?.accessibilityLabel = .RemoteTabMobileAccessibilityLabel
         }
-        view.imageView.tintColor = UIColor.theme.tableView.rowText
-        view.imageView.image = image
-        view.imageView.contentMode = .center
-
-        view.mergeAccessibilityLabels()
         return view
     }
 
@@ -174,9 +167,10 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: RemoteTabIdentifier, for: indexPath) as! TwoLineTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: RemoteTabIdentifier , for: indexPath) as! SimpleTwoLineCell
         let tab = tabAtIndexPath(indexPath)
-        cell.setLines(tab.title, detailText: tab.URL.absoluteString)
+        cell.titleLabel.text = tab.title
+        cell.descriptionLabel.text = tab.URL.absoluteString
         // TODO: Bug 1144765 - Populate image with cached favicons.
         return cell
     }
@@ -475,8 +469,8 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.addGestureRecognizer(longPressRecognizer)
-        tableView.register(TwoLineHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: RemoteClientIdentifier)
-        tableView.register(TwoLineTableViewCell.self, forCellReuseIdentifier: RemoteTabIdentifier)
+        tableView.register(OneLineFooterView.self, forHeaderFooterViewReuseIdentifier: RemoteClientIdentifier)
+        tableView.register(SimpleTwoLineCell.self, forCellReuseIdentifier: RemoteTabIdentifier)
 
         tableView.rowHeight = RemoteTabsPanelUX.RowHeight
         tableView.separatorInset = .zero

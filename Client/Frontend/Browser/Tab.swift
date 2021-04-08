@@ -342,7 +342,7 @@ class Tab: NSObject {
         func checkTabCount(failures: Int) {
             // Need delay for pool to drain.
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                if appDelegate.tabManager.tabs.count == debugTabCount {
+                if appDelegate.tabManager.remoteTabs.count == debugTabCount {
                     return
                 }
 

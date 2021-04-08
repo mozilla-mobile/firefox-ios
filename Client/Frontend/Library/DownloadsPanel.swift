@@ -44,6 +44,8 @@ struct DownloadedFile: Equatable {
 
 class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSource, LibraryPanel, UIDocumentInteractionControllerDelegate {
     weak var libraryPanelDelegate: LibraryPanelDelegate?
+    let TwoLineImageOverlayCellIdentifier = "TwoLineImageOverlayCellIdentifier"
+    let SiteTableViewHeaderIdentifier = "SiteTableViewHeaderIdentifier"
     let profile: Profile
     var tableView = UITableView()
 
@@ -81,8 +83,8 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
 
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(TwoLineTableViewCell.self, forCellReuseIdentifier: "TwoLineTableViewCell")
-        tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: "SiteTableViewHeader")
+        tableView.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: TwoLineImageOverlayCellIdentifier)
+        tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: SiteTableViewHeaderIdentifier)
         tableView.layoutMargins = .zero
         tableView.keyboardDismissMode = .onDrag
         tableView.accessibilityIdentifier = "DownloadsTable"
@@ -280,7 +282,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     // MARK: - TableView Delegate / DataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TwoLineTableViewCell", for: indexPath) as! TwoLineTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCellIdentifier, for: indexPath) as! TwoLineImageOverlayCell
 
         return configureDownloadedFile(cell, for: indexPath)
     }
@@ -301,7 +303,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard groupedDownloadedFiles.numberOfItemsForSection(section) > 0 else { return nil }
 
-        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "SiteTableViewHeader") as? SiteTableViewHeader
+        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: SiteTableViewHeaderIdentifier) as? SiteTableViewHeader
 
         switch section {
         case 0:
@@ -331,9 +333,10 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 
     func configureDownloadedFile(_ cell: UITableViewCell, for indexPath: IndexPath) -> UITableViewCell {
-        if let downloadedFile = downloadedFileForIndexPath(indexPath), let cell = cell as? TwoLineTableViewCell {
-            cell.setLines(downloadedFile.filename, detailText: downloadedFile.formattedSize)
-            cell.imageView?.image = iconForFileExtension(downloadedFile.fileExtension)
+        if let downloadedFile = downloadedFileForIndexPath(indexPath), let cell = cell as? TwoLineImageOverlayCell {
+            cell.titleLabel.text = downloadedFile.filename
+            cell.descriptionLabel.text = downloadedFile.formattedSize
+            cell.leftImageView.image = iconForFileExtension(downloadedFile.fileExtension)
         }
         return cell
     }

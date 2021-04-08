@@ -313,19 +313,19 @@ class BookmarkDetailPanel: SiteTableViewController {
 
             // Disable folder selection when creating a new bookmark or folder.
             if isNew {
-                cell.textLabel?.alpha = 0.5
-                cell.imageView?.alpha = 0.5
+                cell.titleLabel.alpha = 0.5
+                cell.leftImageView.alpha = 0.5
                 cell.selectionStyle = .none
                 cell.isUserInteractionEnabled = false
             } else {
-                cell.textLabel?.alpha = 1.0
-                cell.imageView?.alpha = 1.0
+                cell.titleLabel.alpha = 1.0
+                cell.leftImageView.alpha = 1.0
                 cell.selectionStyle = .default
                 cell.isUserInteractionEnabled = true
             }
 
-            cell.imageView?.image = UIImage(named: "bookmarkFolder")?.createScaled(BookmarkDetailPanelUX.FolderIconSize)
-            cell.imageView?.contentMode = .center
+            cell.leftImageView.image = UIImage(named: "bookmarkFolder")?.createScaled(BookmarkDetailPanelUX.FolderIconSize)
+            cell.leftImageView.contentMode = .center
             cell.indentationWidth = BookmarkDetailPanelUX.IndentationWidth
 
             if isFolderListExpanded {
@@ -334,9 +334,9 @@ class BookmarkDetailPanel: SiteTableViewController {
                 }
 
                 if item.folder.isRoot, let localizedString = LocalizedRootBookmarkFolderStrings[item.folder.guid] {
-                    cell.textLabel?.text = localizedString
+                    cell.titleLabel.text = localizedString
                 } else {
-                    cell.textLabel?.text = item.folder.title
+                    cell.titleLabel.text = item.folder.title
                 }
 
                 cell.indentationLevel = min(item.indent, maxIndentationLevel)
@@ -347,9 +347,9 @@ class BookmarkDetailPanel: SiteTableViewController {
                 }
             } else {
                 if parentBookmarkFolder.isRoot, let localizedString = LocalizedRootBookmarkFolderStrings[parentBookmarkFolder.guid] {
-                    cell.textLabel?.text = localizedString
+                    cell.titleLabel.text = localizedString
                 } else {
-                    cell.textLabel?.text = parentBookmarkFolder.title
+                    cell.titleLabel.text = parentBookmarkFolder.title
                 }
 
                 cell.indentationLevel = 0
