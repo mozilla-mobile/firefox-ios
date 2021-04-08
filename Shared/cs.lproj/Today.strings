@@ -82,6 +82,9 @@
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Rychlé akce";
 
+/* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
+"TodayWidget.QuickActionsGalleryTitleV2" = "Zkratky Firefoxu";
+
 /* Sub label for medium size quick action widget */
 "TodayWidget.QuickActionsSubLabel" = "Firefox - Rychlé akce";
 

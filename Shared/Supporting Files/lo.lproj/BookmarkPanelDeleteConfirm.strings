@@ -1,0 +1,12 @@
+/* Button label to cancel deletion when the user tried to delete a non-empty folder. */
+"Bookmarks.DeleteFolderWarning.CancelButton.Label" = "ຍົກເລີກ";
+
+/* Button label for the button that deletes a folder and all of its children. */
+"Bookmarks.DeleteFolderWarning.DeleteButton.Label" = "ລຶບ";
+
+/* Main body of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
+"Bookmarks.DeleteFolderWarning.Description" = "ທ່ານຫມັ້ນໃຈແລ້ວບໍ່ວ່າຕ້ອງການລຶບໂຟລເດີ ແລະ ເນື້ອຫາທັງຫມົດໃນນັ້ນ?";
+
+/* Title of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
+"Bookmarks.DeleteFolderWarning.Title" = "ໂຟລເດີນີ້ມີຂໍ້ມູນຢູ່";
+

@@ -1645,7 +1645,7 @@
 "TopSites.EmptyState.Title" = "Καλώς ορίσατε στις κορυφαίες ιστοσελίδες";
 
 /* Button shown in editing mode to remove this site from the top sites panel. */
-"TopSites.RemovePage.Button" = "Αφαίρεση σελίδας - %@";
+"TopSites.RemovePage.Button" = "Αφαίρεση σελίδας — %@";
 
 /* Button to disallow the page to be translated to the user locale language */
 "TranslationToastHandler.PromptTranslate.Cancel" = "Όχι";

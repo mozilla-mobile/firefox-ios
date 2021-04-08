@@ -1,6 +1,9 @@
 /* Button string to open settings that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Button" = "開啟設定";
 
+/* Button string to learn how to set your default browser. */
+"DefaultBrowserCard.Button.v2" = "更多資訊";
+
 /* Description for small card shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "設定使用 Firefox 自動開啟網站、郵件、簡訊當中的鏈結。";
 

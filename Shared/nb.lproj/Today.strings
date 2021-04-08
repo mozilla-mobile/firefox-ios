@@ -11,7 +11,7 @@
 "TodayWidget.CopiedLinkLabelFromPasteBoardV1" = "Kopierte lenke fra utklippstavlen";
 
 /* Quick Actions drop down menu item for lear Private Tabs when widget enters edit mode and drop down menu expands */
-"TodayWidget.DropDownMenuItemClearPrivateTabs" = "Tøm private faner";
+"TodayWidget.DropDownMenuItemClearPrivateTabs" = "Fjern private faner";
 
 /* Quick Actions drop down menu item for Go to Copied Link when widget enters edit mode and drop down menu expands */
 "TodayWidget.DropDownMenuItemGoToCopiedLink" = "Gå til kopiert lenke";

@@ -74,13 +74,13 @@
 "TodayWidget.QuickActionDescription" = "选择要添加至主屏幕的 Firefox 快捷方式。";
 
 /* Quick Actions left label text for dropdown menu when widget enters edit mode */
-"TodayWidget.QuickActionDropDownMenu" = "快捷操作";
+"TodayWidget.QuickActionDropDownMenu" = "快速操作";
 
 /* Description for small size widget to add it to home screen */
 "TodayWidget.QuickActionGalleryDescription" = "将 Firefox 快捷方式添加至主屏幕。小组件添加后，轻触并按住即可进行编辑，或选择其他快捷方式。";
 
 /* Quick Actions title when widget enters edit mode */
-"TodayWidget.QuickActionsGalleryTitle" = "快捷操作";
+"TodayWidget.QuickActionsGalleryTitle" = "快速操作";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
 "TodayWidget.QuickActionsGalleryTitleV2" = "Firefox 快捷方式";

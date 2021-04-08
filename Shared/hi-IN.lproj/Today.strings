@@ -70,6 +70,9 @@
 /* Quick action description when widget enters edit mode */
 "TodayWidget.QuickActionDescription" = "अपने मुख्य पृष्ठ पर जोड़ने के लिए Firefox शॉर्टकट चुनें।";
 
+/* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
+"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox शॉर्टकट";
+
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "अपने खुले टैब में शॉर्टकट जोड़ें।";
 

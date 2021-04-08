@@ -416,7 +416,7 @@
 "fxa.signin.use-email-instead" = "ელფოსტის გამოყენება სანაცვლოდ";
 
 /* Button label to sign into Sync */
-"FxA.SignIntoSync" = "Sync-ში შესვლა";
+"FxA.SignIntoSync" = "დასინქრონება – შესვლა";
 
 /* Label explaining what sync does */
 "FxA.SyncExplain" = "მიიღეთ წვდომა თქვენს ჩანართებთან, სანიშნებთან და პაროლებთან, ყველა თქვენი მოწყობილობიდან.";
@@ -440,13 +440,13 @@
 "FxAPush_DeviceDisconnected_ThisDevice_body" = "მოწყობილობა წარმატებით გამოითიშა Firefox Sync-იდან.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync-თან კავშირი გათიშულია";
+"FxAPush_DeviceDisconnected_ThisDevice_title" = "დასინქრონება გათიშულია";
 
 /* Title of a notification displayed when named device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_title" = "Sync-თან კავშირი გათიშულია";
+"FxAPush_DeviceDisconnected_title" = "დასინქრონება გათიშულია";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "მოწყობილობა გამოთიშულია Firefox Sync-იდან";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "მოწყობილობა გამოთიშულია Firefox-სინქრონიზაციიდან";
 
 /* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
 "Get your open tabs, bookmarks, and passwords from your other devices." = "მიიღეთ წვდომა თქვენს გახსნილ ჩანართებთან, სანიშნებთან და პაროლებთან, ყველა თქვენი მოწყობილობიდან.";
@@ -691,7 +691,7 @@
 "Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox ზღუდავს საიტთაშორის ფუნთუშებს, სოც. ქსელის მეთვალყურეებს, კრიპტოგამომმუშავებლებსა და მომხმარებლის ამომცნობებს.";
 
 /* Description for having strict ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox ზღუდავს საიტთაშორის, სოც. ქსელის მეთვალყურეებს, კრიპტოგამომმუშავებლებს, მომხმარებლის ამომცნობებსა და თვალის მდევნელ შიგთავსს.";
+"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox ზღუდავს საიტთაშორის, სოც. ქსელის, კრიპტო, ამომცნობ და მეთვალყურე შიგთავსს.";
 
 /* Label for the button displayed in the menu used to stop the reload of the webpage */
 "Menu.Library.StopReload" = "შეწყვეტა";
@@ -1353,7 +1353,7 @@
 "Settings.TrackingProtection.Alert.Description" = "თუ საიტი არ მუშაობს სათანადოდ, შეეხეთ ფარის ნიშანს მისამართების ველში, თვალთვალისგან გაძლიერებული დაცვის გამოსართავად ამ გვერდზე.";
 
 /* Title for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Title" = "ფრთხილად!";
+"Settings.TrackingProtection.Alert.Title" = "ყურადღება!";
 
 /* Header description for tracking protection options section where Basic/Strict block list can be selected */
 "Settings.TrackingProtection.BlockListsHeader" = "აირჩიეთ სია, რომლის მიხედვითაც Firefox შეზღუდავს ვებგვერდის იმ ნაწილებს, რომელიც შეიძლება თვალყურს ადევნებდეს თქვენს მოქმედებებს.";
@@ -1537,10 +1537,10 @@
 "SyncState.Logins.Title" = "ანგარიშის მონაცემები";
 
 /* Title for Sync status message when Sync failed to start. */
-"SyncState.NotStarted.Title" = "Sync მიუწვდომელია";
+"SyncState.NotStarted.Title" = "დასინქრონება მიუწვდომელია";
 
 /* Title for Sync status message when Sync failed due to being offline */
-"SyncState.Offline.Title" = "Sync კავშირგარეშეა";
+"SyncState.Offline.Title" = "დასინქრონება კავშირგარეშეა";
 
 /* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
 "SyncState.Partial.Title" = "ხარვეზები, %@ს დასინქრონებისას";

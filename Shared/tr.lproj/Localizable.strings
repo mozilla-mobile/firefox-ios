@@ -171,7 +171,7 @@
 "ClipboardToast.GoToCopiedLink.Button" = "Git";
 
 /* Message displayed when the user has a copied link on the clipboard */
-"ClipboardToast.GoToCopiedLink.Title" = "Kopyalanan bağlantıya gidilsin mi?";
+"ClipboardToast.GoToCopiedLink.Title" = "Kopyalanan linke gidilsin mi?";
 
 /* Accessibility label for action denoting closing a tab in tab list (tray) */
 "Close" = "Kapat";
@@ -691,7 +691,7 @@
 "Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox; siteler arası takipçileri, sosyal takipçileri, kripto madencileri ve parmak izi toplayıcıları engeller.";
 
 /* Description for having strict ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox; siteler arası takipçileri, sosyal takipçileri, kripto madencileri, parmak izi toplayıcıları ve takip amaçlı içerikleri engeller.";
+"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox; siteler arası takipçileri, sosyal takipçileri, kripto madencileri, parmak izi toplayıcıları ve takip içeriklerini engeller.";
 
 /* Label for the button displayed in the menu used to stop the reload of the webpage */
 "Menu.Library.StopReload" = "Durdur";

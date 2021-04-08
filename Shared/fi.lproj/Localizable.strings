@@ -104,6 +104,9 @@
 /* Toggle bookmarks syncing setting */
 "Bookmarks" = "Kirjanmerkit";
 
+/* The button on the snackbar to edit a bookmark after adding it. */
+"Bookmarks.Edit.Button" = "Muokkaa";
+
 /* The button to edit a bookmark */
 "Bookmarks.EditBookmark.Label" = "Muokkaa kirjanmerkkiä";
 
@@ -387,6 +390,12 @@
 
 /* FxA sign in view subtitle */
 "fxa.signin.camera-signin" = "Kirjaudu sisään kamerallasi";
+
+/* FxA sign in create account label. */
+"fxa.signin.create-account-pt-1" = "Synkronoi Firefox laitteiden välillä tilillä.";
+
+/* FxA sign in create account label. This will be linked to the site to create an account. */
+"fxa.signin.create-account-pt-2" = "Luo Firefox-tili.";
 
 /* FxA sign in view qr code instructions */
 "fxa.signin.qr-link-instruction" = "Avaa tietokoneellasi Firefox ja siirry osoitteeseen firefox.com/pair";
@@ -1030,6 +1039,9 @@
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Lähetä";
 
+/* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
+"SendTo.SignIn.Button" = "Kirjaudu Firefoxiin";
+
 /* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
 "SentTab_TabArrivingNotification_NoDevice_body" = "Uusi välilehti vastaanotettu toiselta laitteelta.";
 
@@ -1484,6 +1496,9 @@
 
 /* Message displayed when the user syncs for the first time */
 "Sync.FirstTimeMessage.Label" = "Ensimmäinen synkronointi saattaa kestää hetken";
+
+/* String displayed on Sign In to Sync page that allows the user to create a new account. */
+"Sync.NoAccount.Description" = "Vailla tiliä? Luo tili synkronoidaksesi Firefox laitteiden välillä.";
 
 /* Message displayed when the user's account is syncing with no ellipsis */
 "Sync.Syncing.Label" = "Synkronoidaan";

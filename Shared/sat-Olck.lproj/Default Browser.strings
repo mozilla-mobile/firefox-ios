@@ -1,11 +1,29 @@
 /* Button string to open settings that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Button" = "ᱥᱟᱡᱟᱣ ᱠᱚ ᱨᱮ ᱪᱟᱞᱟᱜ ᱢᱮ";
 
+/* Button string to learn how to set your default browser. */
+"DefaultBrowserCard.Button.v2" = "ᱪᱮᱫᱢᱮ ᱚᱠᱟᱞᱠᱟ";
+
 /* Description for small card shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "ᱞᱤᱱᱠ ᱠᱚ ᱥᱟᱡᱟᱣ ᱢᱮ ᱣᱮᱵᱥᱟᱭᱤᱴ, ᱤᱢᱮᱞ, ᱟᱨ ᱢᱮᱥᱮᱡ ᱠᱷᱚᱱ Firefox ᱨᱮ ᱟᱪᱛᱮ ᱡᱷᱤᱜ ᱞᱚᱜᱤᱛ.";
 
 /* Title for small card shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "ᱟᱢᱟᱜ ᱢᱩᱞ ᱯᱟᱱᱛᱮᱭᱟᱜ ᱵᱚᱫᱚᱞ ᱢᱮ";
+
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserOnboarding.Button" = "ᱥᱟᱡᱟᱣ ᱨᱮ ᱪᱟᱞᱟᱜ ᱢᱮ";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description1" = "1. ᱥᱟᱡᱟᱣ ᱛᱮ ᱪᱟᱞᱟᱜ ᱢᱮ";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description2" = "2. ᱢᱩᱞ ᱵᱨᱟᱩᱡᱽᱟᱹᱨ ᱮᱯ ᱨᱮ ᱚᱛᱟᱭ ᱢᱮ";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description3" = "3. Firefox ᱵᱟᱪᱷᱟᱣᱢᱮ";
+
+/* Text for the screenshot of the iOS system settings page for Firefox. */
+"DefaultBrowserOnboarding.Screenshot" = "ᱢᱩᱞ ᱵᱨᱟᱩᱡᱽᱟᱹᱨ ᱮᱯ";
 
 /* Menu option for setting Firefox as default browser. */
 "Settings.DefaultBrowserMenuItem" = "ᱢᱩᱞ ᱯᱟᱱᱛᱮᱭᱟᱜ ᱞᱮᱠᱟ ᱥᱟᱡᱟᱣ ᱢᱮ";

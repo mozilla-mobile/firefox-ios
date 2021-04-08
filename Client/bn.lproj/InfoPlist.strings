@@ -1,6 +1,9 @@
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "এটা আপনাকে ছবি তুলতে এবং আপলোড করার সুযোগ দেবে।";
 
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "আপনার সংরক্ষিত লগইনগুলি অ্যাক্সেস করতে Firefox এর ফেস আইডির প্রয়োজন।";
+
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
