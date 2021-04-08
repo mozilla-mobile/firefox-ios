@@ -122,8 +122,8 @@ class TopTabsTest: BaseTestCase {
         if iPad() {
             waitForExistence(app.buttons["TopTabsViewController.tabsButton"], timeout: 10)
             app.buttons["TopTabsViewController.tabsButton"].tap()
-            waitForExistence(app.buttons["TabTrayController.addTabButton"], timeout: 10)
-            app.buttons["TabTrayController.addTabButton"].tap()
+            waitForExistence(app.buttons["newTabButtonTabTray"], timeout: 10)
+            app.buttons["newTabButtonTabTray"].tap()
         }
         else {
             navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -173,8 +173,8 @@ class TopTabsTest: BaseTestCase {
         if iPad() {
             waitForExistence(app.buttons["TopTabsViewController.tabsButton"], timeout: 10)
             app.buttons["TopTabsViewController.tabsButton"].tap()
-            waitForExistence(app.buttons["TabTrayController.addTabButton"], timeout: 10)
-            app.buttons["TabTrayController.addTabButton"].tap()
+            waitForExistence(app.buttons["newTabButtonTabTray"], timeout: 10)
+            app.buttons["newTabButtonTabTray"].tap()
         }
         else {
             navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -315,7 +315,7 @@ fileprivate extension BaseTestCase {
         navigator.goto(TabTray)
         var numTabsOpen = userState.numTabs
         if iPad() {
-            numTabsOpen = app.collectionViews.cells.count
+            numTabsOpen = app.collectionViews.element(boundBy: 2).cells.count
         }
 
         XCTAssertEqual(numTabsOpen, expectedNumberOfTabsOpen, "The number of tabs open is not correct")

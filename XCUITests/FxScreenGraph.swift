@@ -1137,11 +1137,7 @@ extension MMNavigator where T == FxUserState {
     func createNewTab() {
         let app = XCUIApplication()
         self.goto(TabTray)
-        if isTablet {
-            app.buttons["TabTrayController.addTabButton"].tap()
-        } else {
-            app.buttons["newTabButtonTabTray"].tap()
-        }
+        app.buttons["newTabButtonTabTray"].tap()
         self.nowAt(NewTabScreen)
     }
 

@@ -34,8 +34,8 @@ class AuthenticationTest: BaseTestCase {
 
     // Smoketest
     func testPromptPassCodeUponReentry() {
-        navigator.goto(URLBarOpen)
-        navigator.back()
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SetPasscode)
         navigator.goto(SettingsScreen)
         navigator.performAction(Action.UnlockLoginsSettings)
