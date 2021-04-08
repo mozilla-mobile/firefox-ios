@@ -8,10 +8,11 @@ import Storage
 import MozillaAppServices
 import Telemetry
 
-private enum SearchListSection: Int {
+private enum SearchListSection: Int, CaseIterable {
     case searchSuggestions
+    case remoteTabs
+    case openedTabs
     case bookmarksAndHistory
-    static let Count = 2
 }
 
 private struct SearchViewControllerUX {
@@ -36,17 +37,32 @@ private struct SearchViewControllerUX {
 
 protocol SearchViewControllerDelegate: AnyObject {
     func searchViewController(_ searchViewController: SearchViewController, didSelectURL url: URL)
+    func searchViewController(_ searchViewController: SearchViewController, uuid: String)
     func presentSearchSettingsController()
     func searchViewController(_ searchViewController: SearchViewController, didHighlightText text: String, search: Bool)
     func searchViewController(_ searchViewController: SearchViewController, didAppend text: String)
 }
 
+// Note: ClientAndTabs data structure contains all tabs under a remote client. To make traversal and search easier
+// this wrapper combines them and is helpful in showing Remote Client and Remote tab in our SearchViewController
+struct ClientTabsSearchWrapper {
+    var client: RemoteClient
+    var tab: RemoteTab
+}
+
 class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, LoaderListener {
     var searchDelegate: SearchViewControllerDelegate?
-
+    var currentTheme: BuiltinThemeName {
+        return BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+    }
     fileprivate let isPrivate: Bool
     fileprivate var suggestClient: SearchSuggestClient?
-
+    fileprivate var remoteClientTabs = [ClientTabsSearchWrapper]()
+    fileprivate var filteredRemoteClientTabs = [ClientTabsSearchWrapper]()
+    fileprivate var openedTabs = [Tab]()
+    fileprivate var filteredOpenedTabs = [Tab]()
+    fileprivate var tabManager: TabManager
+    
     // Views for displaying the bottom scrollable search engine list. searchEngineScrollView is the
     // scrollable container; searchEngineScrollViewContent contains the actual set of search engine buttons.
     fileprivate let searchEngineContainerView = UIView()
@@ -54,15 +70,20 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     fileprivate let searchEngineScrollViewContent = UIView()
 
     fileprivate lazy var bookmarkedBadge: UIImage = {
-        return UIImage.templateImageNamed("bookmarked_passive")!.tinted(withColor: .lightGray).createScaled(CGSize(width: 16, height: 16))
+        return currentTheme == .dark ? UIImage(named: "bookmark_results_dark")! : UIImage(named: "bookmark_results_light")!
+    }()
+    
+    fileprivate lazy var openAndSyncTabBadge: UIImage = {
+        return currentTheme == .dark ? UIImage(named: "sync_open_tab_dark")! : UIImage(named: "sync_open_tab_light")!
     }()
 
     var suggestions: [String]? = []
     static var userAgent: String?
 
     
-    init(profile: Profile, isPrivate: Bool) {
+    init(profile: Profile, isPrivate: Bool, tabManager: TabManager) {
         self.isPrivate = isPrivate
+        self.tabManager = tabManager
         super.init(profile: profile)
     }
 
@@ -76,7 +97,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         view.addSubview(blur)
 
         super.viewDidLoad()
-
+        getCachedTabs()
         KeyboardHelper.defaultHelper.addDelegate(self)
 
         searchEngineContainerView.layer.backgroundColor = SearchViewControllerUX.SearchEngineScrollViewBackgroundColor
@@ -301,7 +322,68 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             self.view.layoutIfNeeded()
         })
     }
+    
+    fileprivate func getCachedTabs() {
+        assert(Thread.isMainThread)
+        // Short circuit if the user is not logged in
+        guard profile.hasSyncableAccount() else { return }
+        // Get cached tabs
+        self.profile.getCachedClientsAndTabs().uponQueue(.main) { result in
+            guard let clientAndTabs = result.successValue else {
+                return
+            }
+            self.remoteClientTabs.removeAll()
+            // Update UI with cached data.
+            clientAndTabs.forEach { value in
+                value.tabs.forEach { (tab) in
+                    self.remoteClientTabs.append(ClientTabsSearchWrapper(client: value.client, tab: tab))
+                }
+            }
+        }
+    }
+    
+    func searchTabs(for searchString: String) {
+        let currentTabs = self.isPrivate ? self.tabManager.privateTabs : self.tabManager.normalTabs
+        filteredOpenedTabs = currentTabs.filter { tab in
+            let title = tab.title ?? tab.lastTitle
+            if title?.lowercased().range(of: searchString.lowercased()) != nil {
+                return true
+            }
+            let tabUrl = tab.url ?? tab.sessionData?.urls.last
+            if let url = tabUrl, InternalURL.isValid(url: url) {
+                return false
+            }
+            if tabUrl?.absoluteString.lowercased().range(of: searchString.lowercased()) != nil {
+                return true
+            }
+            return false
+        }
+    }
+    
+    func searchRemoteTabs(for searchString: String) {
+        filteredRemoteClientTabs.removeAll()
+        for remoteClientTab in remoteClientTabs {
+            if remoteClientTab.tab.title.lowercased().contains(searchQuery) {
+                filteredRemoteClientTabs.append(remoteClientTab)
+            }
+        }
 
+        let currentTabs = self.remoteClientTabs
+        self.filteredRemoteClientTabs = currentTabs.filter { value in
+            let tab = value.tab
+            if InternalURL.isValid(url: tab.URL) {
+                return false
+            }
+            if tab.title.lowercased().range(of: searchString.lowercased()) != nil {
+                return true
+            }
+            if tab.URL.absoluteString.lowercased().range(of: searchString.lowercased()) != nil {
+                return true
+            }
+            return false
+        }
+    }
+    
     fileprivate func querySuggestClient() {
         suggestClient?.cancelPendingRequest()
 
@@ -310,7 +392,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             tableView.reloadData()
             return
         }
-
+        
+        
         suggestClient?.query(searchQuery, callback: { suggestions, error in
             if let error = error {
                 let isSuggestClientError = error.domain == SearchSuggestClientErrorDomain
@@ -338,6 +421,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 self.suggestions = [self.searchQuery]
             }
 
+            self.searchTabs(for: self.searchQuery)
+            self.searchRemoteTabs(for: self.searchQuery)
             // Reload the tableView to show the new list of search suggestions.
             self.tableView.reloadData()
         })
@@ -360,6 +445,12 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 
                 searchDelegate?.searchViewController(self, didSelectURL: url)
             }
+        case .openedTabs:
+            let tab = self.filteredOpenedTabs[indexPath.row]
+            searchDelegate?.searchViewController(self, uuid: tab.tabUUID)
+        case .remoteTabs:
+            let remoteTab = self.filteredRemoteClientTabs[indexPath.row].tab
+            searchDelegate?.searchViewController(self, didSelectURL: remoteTab.URL)
         case .bookmarksAndHistory:
             if let site = data[indexPath.row] {
                 if let url = URL(string: site.url) {
@@ -379,8 +470,9 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = super.tableView(tableView, cellForRowAt: indexPath)
-        return getCellForSection(cell, for: SearchListSection(rawValue: indexPath.section)!, indexPath)
+        let twoLineImageOverlayCell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier, for: indexPath) as! TwoLineImageOverlayCell
+        let oneLineTableViewCell = tableView.dequeueReusableCell(withIdentifier: OneLineCellIdentifier, for: indexPath) as! OneLineTableViewCell
+        return getCellForSection(twoLineImageOverlayCell, oneLineCell: oneLineTableViewCell, for: SearchListSection(rawValue: indexPath.section)!, indexPath)
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -388,13 +480,17 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         case .searchSuggestions:
             guard let count = suggestions?.count else { return 0 }
             return count < 4 ? count : 4
+        case .openedTabs:
+            return filteredOpenedTabs.count
+        case .remoteTabs:
+            return filteredRemoteClientTabs.count
         case .bookmarksAndHistory:
             return data.count
         }
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return SearchListSection.Count
+        return SearchListSection.allCases.count
     }
 
     func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
@@ -414,45 +510,83 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         reloadData()
     }
     
-    fileprivate func getCellForSection(_ cell: UITableViewCell, for section: SearchListSection, _ indexPath: IndexPath) -> UITableViewCell {
+    fileprivate func getCellForSection(_ twoLineCell: TwoLineImageOverlayCell, oneLineCell: OneLineTableViewCell, for section: SearchListSection, _ indexPath: IndexPath) -> UITableViewCell {
+        var cell = UITableViewCell()
         switch section {
         case .searchSuggestions:
-            if let site = suggestions?[indexPath.row], let cell = cell as? TwoLineTableViewCell {
+            if let site = suggestions?[indexPath.row] {
+                oneLineCell.titleLabel.text = site
                 if Locale.current.languageCode == "en" {
                     let toBold = site.replaceFirstOccurrence(of: searchQuery, with: "")
-                    cell.textLabel?.attributedText = site.attributedText(boldString: toBold, font: DynamicFontHelper.defaultHelper.DeviceFontHistoryPanel)
-                    cell.detailTextLabel?.text = nil
-                } else {
-                    cell.setLines(site, detailText: nil)
+                    oneLineCell.titleLabel.attributedText = site.attributedText(boldString: toBold, font: DynamicFontHelper().DefaultStandardFont)
                 }
-                cell.imageView?.contentMode = .center
-                cell.imageView?.layer.borderWidth = 0
-                cell.imageView?.image = UIImage(named: SearchViewControllerUX.SearchImage)?.withRenderingMode(.alwaysTemplate)
-                cell.imageView?.tintColor = ThemeManager.instance.currentName == .dark ? UIColor.white : UIColor.black
-                cell.imageView?.backgroundColor = nil
-                
+                oneLineCell.leftImageView.contentMode = .center
+                oneLineCell.leftImageView.layer.borderWidth = 0
+                oneLineCell.leftImageView.image = UIImage(named: SearchViewControllerUX.SearchImage)
+                oneLineCell.leftImageView.tintColor = ThemeManager.instance.currentName == .dark ? UIColor.white : UIColor.black
+                oneLineCell.leftImageView.backgroundColor = nil
                 let appendButton = UIButton(type: .roundedRect)
                 appendButton.setImage(UIImage(named: SearchViewControllerUX.SearchAppendImage)?.withRenderingMode(.alwaysTemplate), for: .normal)
                 appendButton.addTarget(self, action: #selector(append(_ :)), for: .touchUpInside)
                 appendButton.tintColor = ThemeManager.instance.currentName == .dark ? UIColor.white : UIColor.black
                 appendButton.sizeToFit()
-                cell.accessoryView = indexPath.row > 0 ? appendButton : nil
+                oneLineCell.accessoryView = indexPath.row > 0 ? appendButton : nil
+                cell = oneLineCell
+            }
+        case .openedTabs:
+            if self.filteredOpenedTabs.count > indexPath.row {
+                let openedTab = self.filteredOpenedTabs[indexPath.row]
+                twoLineCell.descriptionLabel.isHidden = false
+                twoLineCell.titleLabel.text = openedTab.title ?? openedTab.lastTitle
+                twoLineCell.descriptionLabel.text = String.SearchSuggestionCellSwitchToTabLabel
+                twoLineCell.leftOverlayImageView.image = openAndSyncTabBadge
+                twoLineCell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
+                twoLineCell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
+                twoLineCell.leftImageView.contentMode = .center
+                twoLineCell.leftImageView.setImageAndBackground(forIcon: openedTab.displayFavicon, website: openedTab.url) { [weak twoLineCell] in
+                    twoLineCell?.leftImageView.image = twoLineCell?.leftImageView.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
+                }
+                twoLineCell.accessoryView = nil
+                cell = twoLineCell
+            }
+        case .remoteTabs:
+            if self.filteredRemoteClientTabs.count > indexPath.row {
+                let remoteTab = self.filteredRemoteClientTabs[indexPath.row].tab
+                let remoteClient = self.filteredRemoteClientTabs[indexPath.row].client
+                twoLineCell.descriptionLabel.isHidden = false
+                twoLineCell.titleLabel.text = remoteTab.title
+                twoLineCell.descriptionLabel.text = remoteClient.name
+                twoLineCell.leftOverlayImageView.image = openAndSyncTabBadge
+                twoLineCell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
+                twoLineCell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
+                twoLineCell.leftImageView.contentMode = .center
+                twoLineCell.leftImageView.setImageAndBackground(forIcon: nil, website: remoteTab.URL) { [weak twoLineCell] in
+                    twoLineCell?.leftImageView.image = twoLineCell?.leftImageView.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
+                }
+                twoLineCell.accessoryView = nil
+                cell = twoLineCell
             }
         case .bookmarksAndHistory:
-            if let site = data[indexPath.row], let cell = cell as? TwoLineTableViewCell {
+            if let site = data[indexPath.row] {
                 let isBookmark = site.bookmarked ?? false
-                cell.setLines(site.title, detailText: site.url)
-                cell.setRightBadge(isBookmark ? self.bookmarkedBadge : nil)
-                cell.imageView?.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
-                cell.imageView?.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
-                cell.imageView?.contentMode = .center
-                cell.imageView?.setImageAndBackground(forIcon: site.icon, website: site.tileURL) { [weak cell] in
-                    cell?.imageView?.image = cell?.imageView?.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
+                cell = twoLineCell
+                twoLineCell.descriptionLabel.isHidden = false
+                twoLineCell.titleLabel.text = site.title
+                twoLineCell.descriptionLabel.text = site.url
+                twoLineCell.leftOverlayImageView.image = isBookmark ? self.bookmarkedBadge : nil
+                twoLineCell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
+                twoLineCell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
+                twoLineCell.leftImageView.contentMode = .center
+                twoLineCell.leftImageView.setImageAndBackground(forIcon: site.icon, website: site.tileURL) { [weak twoLineCell] in
+                    twoLineCell?.leftImageView.image = twoLineCell?.leftImageView.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
                 }
+                twoLineCell.accessoryView = nil
+                cell = twoLineCell
             }
         }
         return cell
     }
+    
     @objc func append(_ sender: UIButton) {
         let buttonPosition = sender.convert(CGPoint(), to: tableView)
         if let indexPath = tableView.indexPathForRow(at: buttonPosition), let newQuery = suggestions?[indexPath.row] {
