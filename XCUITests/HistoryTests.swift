@@ -69,6 +69,7 @@ class HistoryTests: BaseTestCase {
     func testClearPrivateDataButtonDisabled() {
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
         //Clear private data from settings and confirm
         navigator.goto(ClearPrivateDataSettings)
         app.tables.cells["ClearPrivateData"].tap()

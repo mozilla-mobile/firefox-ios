@@ -9,6 +9,7 @@ class NewTabSettingsTest: BaseTestCase {
     // Smoketest
     func testCheckNewTabSettingsByDefault() {
         navigator.performAction(Action.CloseURLBarOpen)
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
         navigator.nowAt(NewTabScreen)
         navigator.goto(NewTabSettings)
         waitForExistence(app.navigationBars["New Tab"])
@@ -20,6 +21,7 @@ class NewTabSettingsTest: BaseTestCase {
     // Smoketest
     func testChangeNewTabSettingsShowBlankPage() {
         navigator.performAction(Action.CloseURLBarOpen)
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
         navigator.nowAt(NewTabScreen)
         navigator.goto(NewTabSettings)
         waitForExistence(app.navigationBars["New Tab"])

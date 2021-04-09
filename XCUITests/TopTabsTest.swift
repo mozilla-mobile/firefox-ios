@@ -19,6 +19,7 @@ let toastUrl = ["url": "twitter.com", "link": "About", "urlLabel": "about"]
 class TopTabsTest: BaseTestCase {
     func testAddTabFromTabTray() {
         navigator.performAction(Action.CloseURLBarOpen)
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         navigator.goto(TabTray)
