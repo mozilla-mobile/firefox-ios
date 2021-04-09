@@ -30,6 +30,8 @@ class HomePageSettingsUITests: BaseTestCase {
         super.setUp()
     }
     func testCheckHomeSettingsByDefault() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
         XCTAssertTrue(app.tables.cells["Firefox Home"].exists)
         XCTAssertTrue(app.tables.cells["HomeAsCustomURL"].exists)
@@ -39,6 +41,8 @@ class HomePageSettingsUITests: BaseTestCase {
     }
 
     func testTyping() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
         // Enter a webpage
         enterWebPageAsHomepage(text: "example.com")
@@ -84,6 +88,8 @@ class HomePageSettingsUITests: BaseTestCase {
     }*/
 
     func testClipboard() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         // Check that what's in clipboard is copied
         UIPasteboard.general.string = websiteUrl1
         navigator.goto(HomeSettings)
@@ -123,6 +129,8 @@ class HomePageSettingsUITests: BaseTestCase {
 
     func testSetFirefoxHomeAsHome() {
         // Start by setting to History since FF Home is default
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
         enterWebPageAsHomepage(text: websiteUrl1)
         navigator.performAction(Action.GoToHomePage)
@@ -137,12 +145,16 @@ class HomePageSettingsUITests: BaseTestCase {
     }
 
     func testSetCustomURLAsHome() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
         // Enter a webpage
         enterWebPageAsHomepage(text: websiteUrl1)
 
         // Open a new tab and tap on Home option
         navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         navigator.performAction(Action.GoToHomePage)
 
@@ -153,6 +165,8 @@ class HomePageSettingsUITests: BaseTestCase {
     }
     
     func testTopSitesCustomNumberOfRows() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         var topSitesPerRow:Int
         //Ensure testing in portrait mode
         XCUIDevice.shared.orientation = .portrait
@@ -181,12 +195,16 @@ class HomePageSettingsUITests: BaseTestCase {
                 navigator.performAction(Action.SelectTopSitesRows)
                 XCTAssertEqual(app.tables.cells["TopSitesRows"].label as String, "Top Sites, Rows: " + String(n))
                 navigator.performAction(Action.GoToHomePage)
+                navigator.performAction(Action.CloseURLBarOpen)
+                navigator.nowAt(NewTabScreen)
                 checkNumberOfExpectedTopSites(numberOfExpectedTopSites: (n * topSitesPerRow))
             }
         }
     }
     
     func testChangeHomeSettingsLabel() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         //Go to New Tab settings and select Custom URL option
         navigator.performAction(Action.SelectHomeAsCustomURL)
         navigator.nowAt(HomeSettings)

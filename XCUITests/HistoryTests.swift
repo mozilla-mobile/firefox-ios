@@ -29,6 +29,8 @@ class HistoryTests: BaseTestCase {
     }
 
     func testEmptyHistoryListFirstTime() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         // Go to History List from Top Sites and check it is empty
         navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables.cells["HistoryPanel.recentlyClosedCell"])
@@ -36,18 +38,25 @@ class HistoryTests: BaseTestCase {
     }
 
     func testOpenSyncDevices() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_SyncedTabs)
         waitForExistence(app.tables.cells.staticTexts["Firefox Sync"])
         XCTAssertTrue(app.tables.buttons["Sign in to Sync"].exists, "Sing in button does not appear")
     }
 
     func testClearHistoryFromSettings() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         // Browse to have an item in history list
         navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables.cells["HistoryPanel.recentlyClosedCell"], timeout: 5)
         XCTAssertTrue(app.tables.cells.staticTexts[webpage["label"]!].exists)
 
         // Go to Clear Data
+        navigator.goto(NewTabScreen)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.AcceptClearPrivateData)
 
         // Back on History panel view check that there is not any item
@@ -56,10 +65,13 @@ class HistoryTests: BaseTestCase {
         XCTAssertFalse(app.tables.cells.staticTexts[webpage["label"]!].exists)
     }
 
+    // Smoketest
     func testClearPrivateDataButtonDisabled() {
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
         //Clear private data from settings and confirm
-        navigator.goto(URLBarOpen)
-        navigator.back()
         navigator.goto(ClearPrivateDataSettings)
         app.tables.cells["ClearPrivateData"].tap()
         app.alerts.buttons["OK"].tap()
@@ -75,6 +87,8 @@ class HistoryTests: BaseTestCase {
     }
 
     func testRecentlyClosedOptionAvailable() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(HistoryRecentlyClosed)
         waitForNoExistence(app.tables["Recently Closed Tabs List"])
 
@@ -86,6 +100,9 @@ class HistoryTests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         // Workaround to bug 1508368
         navigator.goto(LibraryPanel_Bookmarks)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_History)
         navigator.goto(HistoryRecentlyClosed)
         waitForNoExistence(app.tables["Recently Closed Tabs List"])
@@ -98,6 +115,7 @@ class HistoryTests: BaseTestCase {
         waitForTabsButton()
         navigator.goto(TabTray)
         navigator.performAction(Action.AcceptRemovingAllTabs)
+        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
         navigator.goto(HistoryRecentlyClosed)
@@ -112,6 +130,8 @@ class HistoryTests: BaseTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(NewTabScreen)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
         navigator.goto(HistoryRecentlyClosed)
         waitForExistence(app.tables["Recently Closed Tabs List"])
@@ -125,6 +145,7 @@ class HistoryTests: BaseTestCase {
         waitForTabsButton()
         navigator.goto(TabTray)
         navigator.performAction(Action.AcceptRemovingAllTabs)
+        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
         navigator.goto(HistoryRecentlyClosed)
@@ -133,6 +154,7 @@ class HistoryTests: BaseTestCase {
         XCTAssertTrue(app.tables.cells.staticTexts[closedWebPageLabel].exists)
 
         navigator.goto(HomePanelsScreen)
+        navigator.nowAt(NewTabScreen)
 
         // Go to settings and clear private data
         navigator.performAction(Action.AcceptClearPrivateData)
@@ -149,6 +171,8 @@ class HistoryTests: BaseTestCase {
         waitForTabsButton()
         navigator.goto(TabTray)
         navigator.performAction(Action.AcceptRemovingAllTabs)
+
+        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
         navigator.goto(HistoryRecentlyClosed)
@@ -167,6 +191,7 @@ class HistoryTests: BaseTestCase {
         waitForTabsButton()
         navigator.goto(TabTray)
         navigator.performAction(Action.AcceptRemovingAllTabs)
+        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(HistoryRecentlyClosed)
         waitForExistence(app.tables["Recently Closed Tabs List"])
@@ -188,6 +213,7 @@ class HistoryTests: BaseTestCase {
         waitForTabsButton()
         navigator.goto(TabTray)
         navigator.performAction(Action.AcceptRemovingAllTabs)
+        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(HistoryRecentlyClosed)
         waitForExistence(app.tables["Recently Closed Tabs List"])
@@ -204,6 +230,8 @@ class HistoryTests: BaseTestCase {
     }
 
     func testPrivateClosedSiteDoesNotAppearOnRecentlyClosed() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         // Open the default website
@@ -220,6 +248,8 @@ class HistoryTests: BaseTestCase {
 
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.goto(HomePanelsScreen)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_History)
         XCTAssertFalse(app.cells.staticTexts["Recently Closed"].isSelected)
         waitForNoExistence(app.tables["Recently Closed Tabs List"])
@@ -227,6 +257,8 @@ class HistoryTests: BaseTestCase {
         // Now verify that on regular mode the recently closed list is empty too
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.goto(NewTabScreen)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_History)
         XCTAssertFalse(app.cells.staticTexts["Recently Closed"].isSelected)
         waitForNoExistence(app.tables["Recently Closed Tabs List"])

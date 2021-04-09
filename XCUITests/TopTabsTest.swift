@@ -18,8 +18,9 @@ let toastUrl = ["url": "twitter.com", "link": "About", "urlLabel": "about"]
 
 class TopTabsTest: BaseTestCase {
     func testAddTabFromTabTray() {
-        navigator.goto(URLBarOpen)
-        navigator.back()
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         navigator.goto(TabTray)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
@@ -265,9 +266,10 @@ class TopTabsTest: BaseTestCase {
     // Smoketest
     func testLongTapTabCounter() {
         if !iPad() {
-            navigator.goto(URLBarOpen)
-            navigator.back()
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
             // Long tap on Tab Counter should show the correct options
+            navigator.performAction(Action.CloseURLBarOpen)
+            navigator.nowAt(NewTabScreen)
             waitForExistence(app.buttons["Show Tabs"], timeout: 10)
             app.buttons["Show Tabs"].press(forDuration: 1)
             waitForExistence(app.cells["quick_action_new_tab"])

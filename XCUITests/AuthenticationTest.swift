@@ -47,7 +47,7 @@ class AuthenticationTest: BaseTestCase {
         navigator.performAction(Action.SetPasscode)
         navigator.goto(SettingsScreen)
         navigator.performAction(Action.UnlockLoginsSettings)
-        waitForExistence(app.tables["Login List"])
+        waitForExistence(app.tables["Login List"], timeout: 5)
 
         //send app to background, and re-enter
         XCUIDevice.shared.press(.home)
