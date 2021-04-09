@@ -17,6 +17,9 @@ class AuthenticationTest: BaseTestCase {
     }
 
     func testTurnOnOff() {
+        waitForExistence(app.textFields["url"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SetPasscode)
         setInterval("Immediately")
         XCTAssertTrue(app.staticTexts["Immediately"].exists)
@@ -24,6 +27,9 @@ class AuthenticationTest: BaseTestCase {
     }
 
     func testChangePassCode() {
+        waitForExistence(app.textFields["url"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SetPasscode)
 
         userState.newPasscode = "222222"
@@ -34,8 +40,10 @@ class AuthenticationTest: BaseTestCase {
 
     // Smoketest
     func testPromptPassCodeUponReentry() {
-        navigator.goto(URLBarOpen)
-        navigator.back()
+        waitForExistence(app.textFields["url"], timeout: 5)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)        
+        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SetPasscode)
         navigator.goto(SettingsScreen)
         navigator.performAction(Action.UnlockLoginsSettings)
@@ -55,6 +63,9 @@ class AuthenticationTest: BaseTestCase {
     }
 
     func testPromptPassCodeUponReentryWithDelay() {
+        waitForExistence(app.textFields["url"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SetPasscode)
         setInterval("After 5 minutes")
         navigator.performAction(Action.UnlockLoginsSettings)
@@ -70,6 +81,9 @@ class AuthenticationTest: BaseTestCase {
     }
 
     func testChangePasscodeShowsErrorStates() {
+        waitForExistence(app.textFields["url"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SetPasscode)
 
         userState.passcode = "222222"
@@ -105,6 +119,9 @@ class AuthenticationTest: BaseTestCase {
     }
 
     func testChangeRequirePasscodeInterval() {
+        waitForExistence(app.textFields["url"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SetPasscode)
         navigator.goto(PasscodeIntervalSettings)
 
@@ -130,6 +147,9 @@ class AuthenticationTest: BaseTestCase {
     }
 
     func testEnteringLoginsUsingPasscode() {
+        waitForExistence(app.textFields["url"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SetPasscode)
 
         // Enter login
@@ -147,6 +167,9 @@ class AuthenticationTest: BaseTestCase {
     }
 
     func testEnteringLoginsUsingPasscodeWithFiveMinutesInterval() {
+        waitForExistence(app.textFields["url"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SetPasscode)
         setInterval("After 5 minutes")
 
@@ -169,6 +192,9 @@ class AuthenticationTest: BaseTestCase {
 
     func testEnteringLoginsWithNoPasscode() {
         // It is disabled
+        waitForExistence(app.textFields["url"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(PasscodeSettings)
         waitForExistence(app.tables["AuthenticationManager.settingsTableView"].staticTexts["Turn Passcode On"])
 
@@ -177,6 +203,9 @@ class AuthenticationTest: BaseTestCase {
     }
 
     func testWrongPasscodeDisplaysAttemptsAndMaxError() {
+        waitForExistence(app.textFields["url"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SetPasscode)
         setInterval("After 5 minutes")
 
@@ -195,7 +224,10 @@ class AuthenticationTest: BaseTestCase {
     }
 
     func testWrongPasscodeAttemptsPersistAcrossEntryAndConfirmation() {
-         navigator.performAction(Action.SetPasscode)
+        waitForExistence(app.textFields["url"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
+        navigator.performAction(Action.SetPasscode)
 
         // Enter wrong passcode on Logins
         navigator.goto(LockedLoginsSettings)
@@ -220,6 +252,9 @@ class AuthenticationTest: BaseTestCase {
     }
 
     func testChangedPasswordMustBeNew() {
+        waitForExistence(app.textFields["url"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SetPasscode)
         userState.newPasscode = "111111"
 
@@ -232,6 +267,9 @@ class AuthenticationTest: BaseTestCase {
     }
 
     func testPasscodesMustMatchWhenCreating() {
+        waitForExistence(app.textFields["url"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SetPasscodeTypeOnce)
         waitForExistence(app.staticTexts["Re-enter passcode"])
 
@@ -243,6 +281,9 @@ class AuthenticationTest: BaseTestCase {
     }
 
     func testPasscodeMustBeCorrectWhenRemoving() {
+        waitForExistence(app.textFields["url"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SetPasscode)
         XCTAssertTrue(app.staticTexts["Immediately"].exists)
 
@@ -254,6 +295,9 @@ class AuthenticationTest: BaseTestCase {
     }
 
     func testChangingIntervalResetsValidationTimer() {
+        waitForExistence(app.textFields["url"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SetPasscode)
 
         // Enter login, since the default is 'set immediately,' it will ask for passcode
@@ -271,6 +315,9 @@ class AuthenticationTest: BaseTestCase {
     }
 
     func testBasicHTTPAuthenticationPromptVisible() {
+        waitForExistence(app.textFields["url"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.openURL(testBasicHTTPAuthURL)
 
         waitForExistence(app.staticTexts["Authentication required"], timeout: 5)
