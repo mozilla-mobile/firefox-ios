@@ -8,8 +8,9 @@ let websiteUrl = "www.mozilla.org"
 class NewTabSettingsTest: BaseTestCase {
     // Smoketest
     func testCheckNewTabSettingsByDefault() {
-        navigator.goto(URLBarOpen)
-        navigator.back()
+        navigator.performAction(Action.CloseURLBarOpen)
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(NewTabSettings)
         waitForExistence(app.navigationBars["New Tab"])
         XCTAssertTrue(app.tables.cells["Firefox Home"].exists)
@@ -19,8 +20,9 @@ class NewTabSettingsTest: BaseTestCase {
 
     // Smoketest
     func testChangeNewTabSettingsShowBlankPage() {
-        navigator.goto(URLBarOpen)
-        navigator.back()
+        navigator.performAction(Action.CloseURLBarOpen)
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(NewTabSettings)
         waitForExistence(app.navigationBars["New Tab"])
 
@@ -34,7 +36,8 @@ class NewTabSettingsTest: BaseTestCase {
     
     func testChangeNewTabSettingsShowFirefoxHome() {
         // Set to history page first since FF Home is default
-        navigator.goto(NewTabSettings)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SelectNewTabAsBlankPage)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         waitForNoExistence(app.collectionViews.cells["TopSitesCell"])
@@ -74,6 +77,8 @@ class NewTabSettingsTest: BaseTestCase {
     }
     
     func testChangeNewTabSettingsLabel() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         //Go to New Tab settings and select Custom URL option
         navigator.performAction(Action.SelectNewTabAsCustomURL)
         navigator.nowAt(NewTabSettings)

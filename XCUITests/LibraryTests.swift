@@ -28,7 +28,8 @@ class LibraryTestsIphone: IphoneOnlyTestCase {
     
     func testLibraryShortcutHomePage () {
         if skipPlatform {return}
-
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         waitForExistence(app.staticTexts["libraryTitle"], timeout: 3)
         waitForExistence(app.buttons["menu Bookmark"])
         waitForExistence(app.buttons["menu panel ReadingList"])
@@ -41,7 +42,7 @@ class LibraryTestsIphone: IphoneOnlyTestCase {
         navigator.nowAt(LibraryPanel_Bookmarks)
         waitForExistence(app.tables["Bookmarks List"])
         navigator.goto(HomePanelsScreen)
-        
+
         // Check if clicking on Reading List option shows reading list
         app.buttons["menu panel ReadingList"].tap()
         navigator.nowAt(LibraryPanel_ReadingList)
