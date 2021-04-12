@@ -11,7 +11,7 @@ let allDefaultTopSites = ["facebook", "youtube", "amazon", "wikipedia", "twitter
 class ActivityStreamTest: BaseTestCase {
     let TopSiteCellgroup = XCUIApplication().cells["TopSitesCell"]
 
-    let testWithDB = ["testActivityStreamPages","testTopSitesAdd", "testTopSitesOpenInNewTab", "testTopSitesOpenInNewPrivateTab", "testTopSitesBookmarkNewTopSite", "testTopSitesShareNewTopSite", "testContextMenuInLandscape"]
+    let testWithDB = ["testActivityStreamPages","testTopSites2Add", "testTopSites4OpenInNewTab", "testTopSitesOpenInNewPrivateTab", "testTopSitesBookmarkNewTopSite", "testTopSitesShareNewTopSite", "testContextMenuInLandscape"]
 
     // Using the DDDBBs created for these tests containing enough entries for the tests that used them listed above
     let pagesVisitediPad = "browserActivityStreamPagesiPad.db"
@@ -51,7 +51,7 @@ class ActivityStreamTest: BaseTestCase {
         XCTAssertTrue(TopSiteCellgroup.cells["facebook"].exists)
     }
 
-    func testTopSitesAdd() {
+    func testTopSites2Add() {
         navigator.goto(URLBarOpen)
         if iPad() {
             checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 12)
@@ -80,7 +80,7 @@ class ActivityStreamTest: BaseTestCase {
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
     }*/
 
-    func testTopSitesRemoveDefaultTopSite() {
+    func testTopSites3RemoveDefaultTopSite() {
         TopSiteCellgroup.cells[defaultTopSite["topSiteLabel"]!].press(forDuration: 1)
 
         // Tap on Remove and check that now there should be only 4 default top sites
@@ -181,7 +181,7 @@ class ActivityStreamTest: BaseTestCase {
         XCTAssertTrue(topSiteFirstCellAfter == topSiteCells["youtube"].label, "First top site does not match")
     }
 
-    func testTopSitesOpenInNewTab() {
+    func testTopSites4OpenInNewTab() {
         navigator.goto(HomePanelsScreen)
         waitForExistence(TopSiteCellgroup.cells["apple"])
         TopSiteCellgroup.cells["apple"].press(forDuration: 1)
@@ -206,7 +206,6 @@ class ActivityStreamTest: BaseTestCase {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         navigator.performAction(Action.CloseURLBarOpen)
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
-        navigator.nowAt(NewTabScreen)
         // Open one of the sites from Topsites and wait until page is loaded
         waitForExistence(app.cells["TopSitesCell"].cells.element(boundBy: 3), timeout: 3)
         app.cells["TopSitesCell"].cells.element(boundBy: 3).press(forDuration:1)
@@ -232,8 +231,7 @@ class ActivityStreamTest: BaseTestCase {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         navigator.performAction(Action.CloseURLBarOpen)
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(HomePanelsScreen)
+
         // Long tap on apple top site, second cell
         waitForExistence(app.cells["TopSitesCell"].cells["apple"], timeout: 3)
         app.cells["TopSitesCell"].cells["apple"].press(forDuration:1)
@@ -347,7 +345,7 @@ class ActivityStreamTest: BaseTestCase {
         XCTAssertFalse(app.tables["Bookmarks List"].staticTexts[newTopSite["bookmarkLabel"]!].exists)
     }*/
 
-    func testTopSitesShareDefaultTopSite() {
+    func testTopSites1ShareDefaultTopSite() {
         TopSiteCellgroup.cells[defaultTopSite["topSiteLabel"]!]
             .press(forDuration: 1)
 

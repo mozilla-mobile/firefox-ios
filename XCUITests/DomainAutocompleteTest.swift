@@ -11,7 +11,7 @@ let websiteExample = ["url": "www.example.com", "value": "www.example.com"]
 
 class DomainAutocompleteTest: BaseTestCase {
 
-    let testWithDB = ["testAutocomplete","testAutocompleteDeletingChars","testDeleteEntireString","testNoMatches","testMixedCaseAutocompletion", "testDeletingCharsUpdateTheResults"]
+    let testWithDB = ["test1Autocomplete","test3AutocompleteDeletingChars","test5NoMatches","testMixedCaseAutocompletion", "testDeletingCharsUpdateTheResults"]
 
     // This DB contains 3 entries mozilla.com/github.com/git.es
     let historyDB = "browserAutocomplete.db"
@@ -27,7 +27,7 @@ class DomainAutocompleteTest: BaseTestCase {
         super.setUp()
     }
 
-    func testAutocomplete() {
+    func test1Autocomplete() {
         // Basic autocompletion cases
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("w")
@@ -44,7 +44,7 @@ class DomainAutocompleteTest: BaseTestCase {
         XCTAssertEqual(value2 as? String, website["value"]!, "Wrong autocompletion")
     }
     // Test that deleting characters works correctly with autocomplete
-    func testAutocompleteDeletingChars() {
+    func test3AutocompleteDeletingChars() {
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("www.moz")
 
@@ -61,7 +61,7 @@ class DomainAutocompleteTest: BaseTestCase {
         XCTAssertEqual(value as? String, website["value"]!, "Wrong autocompletion")
     }
     // Delete the entire string and verify that the home panels are shown again.
-    func testDeleteEntireString() {
+    func test6DeleteEntireString() {
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("www.moz")
         waitForExistence(app.buttons["Clear text"])
@@ -75,7 +75,7 @@ class DomainAutocompleteTest: BaseTestCase {
     }
 
     // Ensure that the scheme is included in the autocompletion.
-    func testEnsureSchemeIncludedAutocompletion() {
+    func test4EnsureSchemeIncludedAutocompletion() {
         navigator.openURL(websiteExample["url"]!)
         waitUntilPageLoad()
         navigator.goto(URLBarOpen)
@@ -85,7 +85,7 @@ class DomainAutocompleteTest: BaseTestCase {
         XCTAssertEqual(value as? String, "http://www.example.com", "Wrong autocompletion")
     }
     // Non-matches.
-    func testNoMatches() {
+    func test5NoMatches() {
         navigator.openURL("twitter.com/login")
         waitUntilPageLoad()
         navigator.goto(URLBarOpen)
@@ -130,7 +130,7 @@ class DomainAutocompleteTest: BaseTestCase {
         XCTAssertEqual(value7 as? String, "login", "Wrong autocompletion")
     }
     // Test default domains.
-    func testDefaultDomains() {
+    func test2DefaultDomains() {
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("a")
         waitForValueContains(app.textFields["address"], value: ".com")

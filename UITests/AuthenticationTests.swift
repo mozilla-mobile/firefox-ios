@@ -69,7 +69,7 @@ class AuthenticationTests: KIFTestCase {
     }
 
     fileprivate func loadAuthPage() {
-        tester().wait(forTimeInterval: 3)
+        tester().wait(forTimeInterval: 5)
         BrowserUtils.enterUrlAddressBar(tester(), typeUrl: "\(webRoot!)/auth.html")
     }
 

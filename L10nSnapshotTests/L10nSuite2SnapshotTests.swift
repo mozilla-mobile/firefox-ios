@@ -83,7 +83,9 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testFxASignInPage() {
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         app.buttons["urlBar-cancel"].tap()
+        navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
         waitForExistence(app.tables.cells["menu-sync"], timeout: 5)
         navigator.goto(Intro_FxASignin)

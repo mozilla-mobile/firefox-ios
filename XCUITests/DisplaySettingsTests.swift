@@ -7,6 +7,9 @@ import XCTest
 class DisplaySettingTests: BaseTestCase {
 
     func testCheckDisplaySettingsDefault() {
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(DisplaySettings)
         waitForExistence(app.navigationBars["Theme"])
         XCTAssertTrue(app.tables["DisplayTheme.Setting.Options"].exists)
@@ -15,6 +18,9 @@ class DisplaySettingTests: BaseTestCase {
     }
 
     func testCheckSystemThemeChanges() {
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(DisplaySettings)
         waitForExistence(app.switches["SystemThemeSwitchValue"])
         navigator.performAction(Action.SystemThemeSwitch)
