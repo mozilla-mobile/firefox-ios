@@ -36,6 +36,8 @@ class SaveLoginTest: BaseTestCase {
     }
     
     func testLoginsListFromBrowserTabMenu() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         //Make sure you can access empty Login List from Browser Tab Menu
         navigator.goto(LoginsSettings)
@@ -53,6 +55,8 @@ class SaveLoginTest: BaseTestCase {
     }
     
     func testPasscodeLoginsListFromBrowserTabMenu() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SetPasscode)
         navigator.nowAt(PasscodeSettings)
         navigator.goto(SettingsScreen)
@@ -75,8 +79,9 @@ class SaveLoginTest: BaseTestCase {
     }
 
     func testSaveLogin() {
-        navigator.goto(URLBarOpen)
-        navigator.back()
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         // Initially the login list should be empty
         openLoginsSettings()
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList)

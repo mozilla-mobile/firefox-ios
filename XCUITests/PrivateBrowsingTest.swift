@@ -44,6 +44,8 @@ class PrivateBrowsingTest: BaseTestCase {
 
     func testTabCountShowsOnlyNormalOrPrivateTabCount() {
         // Open two tabs in normal browsing and check the number of tabs open
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.openNewURL(urlString: url2)
         waitUntilPageLoad()
         waitForTabsButton()
@@ -79,6 +81,8 @@ class PrivateBrowsingTest: BaseTestCase {
 
     func testClosePrivateTabsOptionClosesPrivateTabs() {
         // Check that Close Private Tabs when closing the Private Browsing Button is off by default
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
         navigator.goto(SettingsScreen)
         let settingsTableView = app.tables["AppSettingsTableViewController.tableView"]
@@ -105,6 +109,8 @@ class PrivateBrowsingTest: BaseTestCase {
 
         // Now the enable the Close Private Tabs when closing the Private Browsing Button
         app.cells.staticTexts[url2Label].tap()
+        // Workaround to issue 8295 while it is fixed
+        app.buttons["urlBar-cancel"].tap()
         waitForTabsButton()
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
         navigator.nowAt(BrowserTab)
@@ -127,6 +133,8 @@ class PrivateBrowsingTest: BaseTestCase {
      https://bugzilla.mozilla.org/show_bug.cgi?id=1646756
      */
     func testClearIndexedDB() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         enableClosePrivateBrowsingOptionWhenLeaving()
 
         func checkIndexedDBIsCreated() {
@@ -147,6 +155,8 @@ class PrivateBrowsingTest: BaseTestCase {
     }
 
     func testPrivateBrowserPanelView() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         // If no private tabs are open, there should be a initial screen with label Private Browsing
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
 

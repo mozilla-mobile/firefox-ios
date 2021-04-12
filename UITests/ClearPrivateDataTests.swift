@@ -165,6 +165,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         let cachedServer = CachedPageServer()
         let cacheRoot = cachedServer.start()
         let url = "\(cacheRoot)/cachedPage.html"
+        tester().wait(forTimeInterval: 3)
         BrowserUtils.enterUrlAddressBar(tester(), typeUrl: url)
         tester().waitForWebViewElementWithAccessibilityLabel("Cache test")
 
