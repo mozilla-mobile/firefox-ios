@@ -1375,7 +1375,7 @@ workflows:
         inputs:
         - xcodebuild_options: >-
             CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
-            CODE_SIGNING_ALLOWED=NO
+            CODE_SIGNING_ALLOWED=NO -testPlan SmokeXCUITests
         - scheme: Fennec_Enterprise_XCUITests
     - xcode-test@2.4:
         inputs:
