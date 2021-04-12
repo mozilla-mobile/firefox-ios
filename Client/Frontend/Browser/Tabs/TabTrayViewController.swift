@@ -204,6 +204,7 @@ class TabTrayViewController: UIViewController {
         case 1:
             switchBetweenLocalPanels(withPrivateMode: true)
         case 2:
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .libraryPanel, value: .syncPanel, extras: nil)
             if children.first == viewModel.tabTrayView {
                 hideCurrentPanel()
                 updateToolbarItems(forSyncTabs: true)
@@ -338,11 +339,13 @@ extension TabTrayViewController: RemotePanelDelegate {
         }
         
         func remotePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
+            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .syncTab)
             self.openInNewTab?(url, isPrivate)
             self.dismissVC()
         }
         
         func remotePanel(didSelectURL url: URL, visitType: VisitType) {
+            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .syncTab)
             self.didSelectUrl?(url, visitType)
             self.dismissVC()
         }
