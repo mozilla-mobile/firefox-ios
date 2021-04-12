@@ -408,6 +408,7 @@ class NavigationTest: BaseTestCase {
 
     // Smoketest
     func testVerifyBrowserTabMenu() {
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         navigator.performAction(Action.CloseURLBarOpen)
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
         navigator.nowAt(NewTabScreen)
