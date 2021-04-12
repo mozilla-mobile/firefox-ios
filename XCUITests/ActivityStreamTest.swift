@@ -206,7 +206,6 @@ class ActivityStreamTest: BaseTestCase {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         navigator.performAction(Action.CloseURLBarOpen)
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
-        navigator.nowAt(NewTabScreen)
         // Open one of the sites from Topsites and wait until page is loaded
         waitForExistence(app.cells["TopSitesCell"].cells.element(boundBy: 3), timeout: 3)
         app.cells["TopSitesCell"].cells.element(boundBy: 3).press(forDuration:1)
@@ -232,8 +231,7 @@ class ActivityStreamTest: BaseTestCase {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         navigator.performAction(Action.CloseURLBarOpen)
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(HomePanelsScreen)
+
         // Long tap on apple top site, second cell
         waitForExistence(app.cells["TopSitesCell"].cells["apple"], timeout: 3)
         app.cells["TopSitesCell"].cells["apple"].press(forDuration:1)
