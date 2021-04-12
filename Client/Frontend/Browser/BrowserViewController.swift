@@ -46,6 +46,7 @@ enum ReferringPage {
     case appMenu
     case settings
     case none
+    case tabTray
 }
 
 class BrowserViewController: UIViewController {
@@ -88,6 +89,7 @@ class BrowserViewController: UIViewController {
 
     weak var gridTabTrayController: GridTabViewController?
     weak var chronTabTrayController: ChronologicalTabsViewController?
+    var tabTrayViewController: TabTrayViewController? 
     let profile: Profile
     let tabManager: TabManager
 
@@ -1931,40 +1933,8 @@ extension BrowserViewController {
         }
     }
 
-    /// This function is called to determine if FxA sign in flow or settings page should be shown
-    /// - Parameters:
-    ///     - deepLinkParams: FxALaunchParams from deeplink query
-    ///     - flowType: FxAPageType is used to determine if email login, qr code login, or user settings page should be presented
-    ///     - referringPage: ReferringPage enum is used to handle telemetry events correctly for the view event and the FxA sign in tap events, need to know which route we took to get to them
-    func getSignInOrFxASettingsVC(_ deepLinkParams: FxALaunchParams? = nil, flowType: FxAPageType, referringPage: ReferringPage) -> UIViewController {
-        // Show the settings page if we have already signed in. If we haven't then show the signin page
-        let parentType: FxASignInParentType
-        let object: TelemetryWrapper.EventObject
-        guard profile.hasSyncableAccount() else {
-            switch referringPage {
-            case .appMenu, .none:
-                parentType = .appMenu
-                object = .appMenu
-            case .onboarding:
-                parentType = .onboarding
-                object = .onboarding
-            case .settings:
-                parentType = .settings
-                object = .settings
-            }
-
-            let signInVC = FirefoxAccountSignInViewController(profile: profile, parentType: parentType, deepLinkParams: deepLinkParams)
-            TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .view, object: object)
-            return signInVC
-        }
-
-        let settingsTableViewController = SyncContentSettingsViewController()
-        settingsTableViewController.profile = profile
-        return settingsTableViewController
-    }
-
     func presentSignInViewController(_ fxaOptions: FxALaunchParams? = nil, flowType: FxAPageType = .emailLoginFlow, referringPage: ReferringPage = .none) {
-        let vcToPresent = getSignInOrFxASettingsVC(fxaOptions, flowType: flowType, referringPage: referringPage)
+        let vcToPresent = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaOptions, flowType: flowType, referringPage: referringPage, profile: profile)
         presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: vcToPresent, topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad)
     }
 

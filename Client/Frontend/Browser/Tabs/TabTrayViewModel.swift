@@ -3,10 +3,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Shared
+import Storage
 
 class TabTrayViewModel {
 
-    fileprivate let profile: Profile
+    let profile: Profile
     let tabManager: TabManager
 
     // Tab Tray Views
@@ -37,6 +38,10 @@ class TabTrayViewModel {
             }
         }
         return nil
+    }
+    
+    func reloadRemoteTabs() {
+        syncedTabsController.forceRefreshTabs()
     }
 }
 

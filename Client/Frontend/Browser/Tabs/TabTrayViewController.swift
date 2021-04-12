@@ -4,6 +4,7 @@
 
 import SnapKit
 import Shared
+import Storage
 
 enum TabTrayViewAction {
     case addTab
@@ -17,7 +18,9 @@ protocol TabTrayViewDelegate: UIViewController {
 
 class TabTrayViewController: UIViewController {
     var viewModel: TabTrayViewModel
-
+    var openInNewTab: ((_ url: URL, _ isPrivate: Bool) -> Void)?
+    var didSelectUrl: ((_ url: URL, _ visitType: VisitType) -> Void)?
+    
     // Buttons & Menus
     lazy var deleteButton: UIBarButtonItem = {
         let button = UIBarButtonItem(image: UIImage.templateImageNamed("action_delete"),
@@ -141,6 +144,8 @@ class TabTrayViewController: UIViewController {
     }
 
     private func viewSetup() {
+        viewModel.syncedTabsController.remotePanelDelegate = self
+        
         if let appWindow = (UIApplication.shared.delegate?.window),
            let window = appWindow as UIWindow? {
             window.backgroundColor = .black
@@ -319,4 +324,37 @@ extension TabTrayViewController {
     @objc func didTapSyncTabs(_ sender: UIBarButtonItem) {
         viewModel.didTapSyncTabs(sender)
     }
+}
+
+// MARK: - RemoteTabsPanel : LibraryPanelDelegate
+
+extension TabTrayViewController: RemotePanelDelegate {
+        func remotePanelDidRequestToSignIn() {
+            fxaSignInOrCreateAccountHelper()
+        }
+        
+        func remotePanelDidRequestToCreateAccount() {
+            fxaSignInOrCreateAccountHelper()
+        }
+        
+        func remotePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
+            self.openInNewTab?(url, isPrivate)
+            self.dismissVC()
+        }
+        
+        func remotePanel(didSelectURL url: URL, visitType: VisitType) {
+            self.didSelectUrl?(url, visitType)
+            self.dismissVC()
+        }
+    
+        // Sign In and Create Account Helper
+        func fxaSignInOrCreateAccountHelper() {
+            let fxaParams = FxALaunchParams(query: ["entrypoint": "homepanel"])
+            let controller = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaParams, flowType: .emailLoginFlow, referringPage: .tabTray, profile: viewModel.profile)
+            (controller as? FirefoxAccountSignInViewController)?.shouldReload = { [weak self] in
+                self?.viewModel.reloadRemoteTabs()
+            }
+            presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: controller, topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad)
+        }
+        
 }
