@@ -56,7 +56,6 @@ extension TabTrayViewModel {
     }
 
     @objc func didTapSyncTabs(_ sender: UIBarButtonItem) {
-        // TODO: Sync tabs implementation
-        print("I'm a gonna sync dem tabs!")
+        reloadRemoteTabs()
     }
 }
