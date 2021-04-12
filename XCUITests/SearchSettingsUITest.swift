@@ -10,6 +10,8 @@ let customSearchEngine = ["name": "youtube", "url": "https://youtube.com/search?
 
 class SearchSettingsUITests: BaseTestCase {
     func testDefaultSearchEngine() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(SearchSettings)
         // Check the default browser
         let defaultSearchEngine = app.tables.cells.element(boundBy: 0)
@@ -23,6 +25,8 @@ class SearchSettingsUITests: BaseTestCase {
     }
 
     func testCustomSearchEngineIsEditable() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(SearchSettings)
         // Add a custom search engine
         addCustomSearchEngine()
@@ -52,6 +56,8 @@ class SearchSettingsUITests: BaseTestCase {
     }
 
     func testCustomSearchEngineAsDefaultIsNotEditable() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(SearchSettings)
         // Edit is disabled
         XCTAssertFalse(app.buttons["Edit"].isEnabled)
@@ -70,6 +76,8 @@ class SearchSettingsUITests: BaseTestCase {
     }
 
     func testNavigateToSearchPickerTurnsOffEditing() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(SearchSettings)
         // Edit is disabled
         XCTAssertFalse(app.buttons["Edit"].isEnabled)
@@ -94,6 +102,8 @@ class SearchSettingsUITests: BaseTestCase {
     }
 
     func testDeletingLastCustomEngineExitsEditing() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(SearchSettings)
         // Edit is disabled
         XCTAssertFalse(app.buttons["Edit"].isEnabled)

@@ -40,6 +40,9 @@ extension ScreenGraphTest {
     }
 
     func testBackStack() {
+        wait(forElement: app.buttons["urlBar-cancel"], timeout: 5)
+        app.buttons["urlBar-cancel"].tap()
+        navigator.nowAt(BrowserTab)
         // We'll go through the browser tab, through the menu.
         navigator.goto(SettingsScreen)
         // Going back, there is no explicit way back to the browser tab,
@@ -50,6 +53,9 @@ extension ScreenGraphTest {
     }
 
     func testSimpleToggleAction() {
+        wait(forElement: app.buttons["urlBar-cancel"], timeout: 5)
+        app.buttons["urlBar-cancel"].tap()
+        navigator.nowAt(BrowserTab)
         // Switch night mode on, by toggling.
         navigator.performAction(TestActions.ToggleNightMode)
         XCTAssertTrue(navigator.userState.nightMode)
@@ -92,6 +98,9 @@ extension ScreenGraphTest {
     }
 
     func testConditionalEdgesSimple() {
+        wait(forElement: app.buttons["urlBar-cancel"], timeout: 5)
+        app.buttons["urlBar-cancel"].tap()
+        navigator.nowAt(BrowserTab)
         XCTAssertTrue(navigator.can(goto: PasscodeSettingsOff))
         XCTAssertFalse(navigator.can(goto: PasscodeSettingsOn))
         navigator.goto(PasscodeSettingsOff)
@@ -99,6 +108,8 @@ extension ScreenGraphTest {
     }
 
     func testConditionalEdgesRerouting() {
+        app.buttons["urlBar-cancel"].tap()
+        navigator.nowAt(BrowserTab)
         // The navigator should dynamically reroute to the target screen
         // if the userState changes.
         // This test adds to the graph a passcode setting screen. In that screen,

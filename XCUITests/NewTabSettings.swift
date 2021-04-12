@@ -8,6 +8,7 @@ let websiteUrl = "www.mozilla.org"
 class NewTabSettingsTest: BaseTestCase {
     // Smoketest
     func testCheckNewTabSettingsByDefault() {
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         navigator.performAction(Action.CloseURLBarOpen)
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
         navigator.nowAt(NewTabScreen)
@@ -20,6 +21,7 @@ class NewTabSettingsTest: BaseTestCase {
 
     // Smoketest
     func testChangeNewTabSettingsShowBlankPage() {
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         navigator.performAction(Action.CloseURLBarOpen)
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
         navigator.nowAt(NewTabScreen)
@@ -53,8 +55,9 @@ class NewTabSettingsTest: BaseTestCase {
     }
 
     func testChangeNewTabSettingsShowCustomURL() {
-        navigator.goto(URLBarOpen)
-        navigator.back()
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(NewTabSettings)
         waitForExistence(app.navigationBars["New Tab"])
         // Check the placeholder value

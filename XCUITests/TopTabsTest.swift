@@ -278,8 +278,7 @@ class TopTabsTest: BaseTestCase {
 
             // Open New Tab
             app.cells["quick_action_new_tab"].tap()
-            navigator.goto(URLBarOpen)
-            navigator.back()
+            navigator.performAction(Action.CloseURLBarOpen)
 
             waitForTabsButton()
             checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
