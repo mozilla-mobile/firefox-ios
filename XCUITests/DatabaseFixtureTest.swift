@@ -15,14 +15,17 @@ class DatabaseFixtureTest: BaseTestCase {
         launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + fixtures[key]!]
         super.setUp()
     }
-
-    func testOneBookmark() {
+    /* Disabled due to issue with db: 8281*/
+    /*func testOneBookmark() {
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_Bookmarks)
         waitForExistence(app.cells.staticTexts["Mobile Bookmarks"], timeout: 5)
         navigator.goto(MobileBookmarks)
         let list = app.tables["Bookmarks List"].cells.count
         XCTAssertEqual(list, 1, "There should be an entry in the bookmarks list")
-    }
+    }*/
 
     // Disabled due to #7789
     /*func testBookmarksDatabaseFixture() {
@@ -39,6 +42,9 @@ class DatabaseFixtureTest: BaseTestCase {
     }*/
 
     func testHistoryDatabaseFixture() {
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_History)
 
         // History list has two cells that are for recently closed and synced devices that should not count as history items,
