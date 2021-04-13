@@ -254,7 +254,7 @@
 "Downloads.Toast.Failed.LabelText" = "Неуспешно изтегляне";
 
 /* The button to retry a failed download from the Download Failed toast. */
-"Downloads.Toast.Failed.RetryButton" = "Повторен опит";
+"Downloads.Toast.Failed.RetryButton" = "Нов опит";
 
 /* The button to open a new tab with the Downloads home panel */
 "Downloads.Toast.GoToDownloads.Button" = "Изтегляния";
@@ -1127,6 +1127,9 @@
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Действия чрез Siri";
 
+/* Dismiss button for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Button" = "Добре, разбрах";
+
 /* Header description for tracking protection options section where Basic/Strict block list can be selected */
 "Settings.TrackingProtection.BlockListsHeader" = "Може да изберете кой списък да използва Firefox, за да блокира елементи от страниците, които следят вашето поведение в Мрежата.";
 
@@ -1173,10 +1176,10 @@
 "Settings.WebsiteData.ButtonShowMore" = "Повече";
 
 /* Description of the confirmation dialog shown when a user tries to clear their private data. */
-"Settings.WebsiteData.ConfirmPrompt" = "Това действие ще изчисти всичките ви данни за сайтове. Това е безвъзвратно.";
+"Settings.WebsiteData.ConfirmPrompt" = "Това действие ще изчисти всички ваши данни от страници. Това е безвъзвратно.";
 
 /* Title displayed in header of the Data Management panel. */
-"Settings.WebsiteData.Title" = "Данни за сайтове";
+"Settings.WebsiteData.Title" = "Данни от страници";
 
 /* Action label on share extension to add page to the Firefox reading list. */
 "ShareExtension.AddToReadingListAction.Title" = "Добавяне към списъка за четене";

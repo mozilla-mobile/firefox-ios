@@ -104,6 +104,9 @@
 /* Toggle bookmarks syncing setting */
 "Bookmarks" = "ບຸກມາກ";
 
+/* The button on the snackbar to edit a bookmark after adding it. */
+"Bookmarks.Edit.Button" = "ແກ້ໄຂ";
+
 /* The button to edit a bookmark */
 "Bookmarks.EditBookmark.Label" = "ແກ້ໄຂບຸກມາກ";
 
@@ -384,6 +387,9 @@
 
 /* FxA sign in view subtitle */
 "fxa.signin.camera-signin" = "ເຂົ້າລະບົບດ້ວຍກ້ອງຂອງທ່ານ";
+
+/* FxA sign in create account label. This will be linked to the site to create an account. */
+"fxa.signin.create-account-pt-2" = "ສ້າງບັນຊີ Firefox.";
 
 /* FxA sign in view qr code instructions */
 "fxa.signin.qr-link-instruction" = "ເປີດ Firefox ໃນຄອມພິວເຕີຂອງທ່ານ ແລະ ໄປທີ່ firefox.com/pair";
@@ -1021,6 +1027,9 @@
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "ສົ່ງ";
 
+/* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
+"SendTo.SignIn.Button" = "ລົງຊື່ເຂົ້າໃຊ້ Firefox";
+
 /* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
 "SentTab_TabArrivingNotification_NoDevice_body" = "ມີແທັບໃຫມ່ເຂົ້າມາຈາກອຸປະກ່ອນອື່ນ.";
 
@@ -1542,11 +1551,32 @@
 /* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.CloseTab.KeyCodeTitle" = "ປິດແທັບທີ່ເລືອກໄວ້";
 
+/* The section header for tabs opened last week */
+"TabTray.LastWeek.Header" = "ອາ​ທິດ​ແລ້ວ";
+
+/* The title on the button to copy the tab address. */
+"TabTray.MoreMenu.Copy" = "ກັອບປີ້";
+
+/* The section header for tabs opened before last week */
+"TabTray.Older.Header" = "ເກົ່າກວ່າ";
+
 /* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "ເປີດແທັບໃຫມ່";
 
 /* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenSelectedTab.KeyCodeTitle" = "ເປີດແທັບທີ່ເລືອກໄວ້";
+
+/* The button title to see more options to perform on the tab. */
+"TabTray.SwipeMenu.More" = "ເພີ່ມເຕີມ";
+
+/* The title for the tab tray */
+"TabTray.Title" = "ເປີດແທັບ";
+
+/* The section header for tabs opened today */
+"TabTray.Today.Header" = "ມື້ນີ້";
+
+/* The section header for tabs opened yesterday */
+"TabTray.Yesterday.Header" = "ມື້ວານ";
 
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "ຫນ້າເວັບນີ້ບໍ່ສາມາດສະແດງຢູ່ໃນ Reader View.";

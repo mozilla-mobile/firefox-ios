@@ -47,7 +47,7 @@
 "TodayWidget.NewSearchButtonLabelV1" = "Hľadať vo Firefoxe";
 
 /* Open New Tab button label */
-"TodayWidget.NewTabButtonLabelV1" = "Nové vyhľadávanie";
+"TodayWidget.NewTabButtonLabelV1" = "Nové hľadanie";
 
 /* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
 "TodayWidget.NoOpenTabsLabel" = "Žiadne otvorené karty.";

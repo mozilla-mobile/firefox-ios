@@ -74,19 +74,19 @@
 "TodayWidget.QuickActionDescription" = "選擇要加到主畫面的 Firefox 捷徑。";
 
 /* Quick Actions left label text for dropdown menu when widget enters edit mode */
-"TodayWidget.QuickActionDropDownMenu" = "快速操作";
+"TodayWidget.QuickActionDropDownMenu" = "快速動作";
 
 /* Description for small size widget to add it to home screen */
 "TodayWidget.QuickActionGalleryDescription" = "把 Firefox 捷徑加到主畫面。新增小工具之後，請長按小工具選擇不同的捷徑。";
 
 /* Quick Actions title when widget enters edit mode */
-"TodayWidget.QuickActionsGalleryTitle" = "快速操作";
+"TodayWidget.QuickActionsGalleryTitle" = "快速動作";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
 "TodayWidget.QuickActionsGalleryTitleV2" = "Firefox 捷徑";
 
 /* Sub label for medium size quick action widget */
-"TodayWidget.QuickActionsSubLabel" = "Firefox - 快速操作";
+"TodayWidget.QuickActionsSubLabel" = "Firefox - 快速動作";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescription" = "直接從主畫面開啟分頁清單。";

@@ -1,11 +1,14 @@
 /* Button string to open settings that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Button" = "Ayarlara git";
 
+/* Button string to learn how to set your default browser. */
+"DefaultBrowserCard.Button.v2" = "Nasıl yapılacağını öğren";
+
 /* Description for small card shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "Web siteleri, e-postalar ve Mesajlar’daki bağlantılar Firefox’ta açılsın.";
 
 /* Title for small card shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Title" = "Varsayılan tarayıcınızı değiştirin";
+"DefaultBrowserCard.Title" = "Saptanmış tarayıcınızı değiştirin";
 
 /* Button string to open settings that allows user to switch their default browser to Firefox. */
 "DefaultBrowserOnboarding.Button" = "Ayarlar’a git";
@@ -23,5 +26,5 @@
 "DefaultBrowserOnboarding.Screenshot" = "Saptanmış Tarayıcı Uygulaması";
 
 /* Menu option for setting Firefox as default browser. */
-"Settings.DefaultBrowserMenuItem" = "Varsayılan tarayıcı yap";
+"Settings.DefaultBrowserMenuItem" = "Saptanmış tarayıcı yap";
 

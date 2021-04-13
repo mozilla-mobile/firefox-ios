@@ -140,6 +140,9 @@
 /* Status label for the empty Bookmarks state. */
 "BookmarksPanel.EmptyState.Title" = "بک مارک جو آپ محفوظ کرنے ہیں یہاں نظر آئیں گی۔";
 
+/* Describes the date on which the breach occurred */
+"BreachAlerts.BreachDate" = "یہ خلاف ورزی ہوئی ہے";
+
 /* Link to monitor.firefox.com to learn more about breached passwords */
 "BreachAlerts.LearnMoreButton" = "مزید سیکھیں";
 
@@ -150,7 +153,7 @@
 "BreachAlerts.Title" = "ویب سائٹ کی خلاف ورزی";
 
 /* Accessibility label for brightness adjustment slider in Reader Mode display settings */
-"Brightness" = "چمک";
+"Brightness" = "اُجلا پن";
 
 /* Label for Cancel button */
 "Cancel" = "منسوخ کریں";
@@ -226,6 +229,9 @@
 
 /* Title for the new dark mode change in the version 22 app release. */
 "CoverSheet.v22.DarkMode.Title" = "ڈارک تھیم میں اب ڈارک کی بورڈ اور ڈارک سپلیش سکرین شامل ہے۔";
+
+/* Description for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Description" = "بلٹ ان بہتر ٹریکنگ پروٹیکشن اشتہارات کو ہر جگہ دکھنے سے روکنے میں مدد کرتا ہے۔ اور بھی زیادہ ٹریکرز ، اشتہارات اور پاپ اپ کو روکنے کے لئے اسٹرکٹ موڈ کو آن کریں۔";
 
 /* Text for the new ETP settings button */
 "CoverSheet.v24.ETP.Settings.Button" = "سیٹنگز پر جائیں";
@@ -387,6 +393,9 @@
 
 /* FxA sign in view subtitle */
 "fxa.signin.camera-signin" = "اپنے کیمرے کے ساتھ سائن ان کریں";
+
+/* FxA sign in create account label. */
+"fxa.signin.create-account-pt-1" = "کسی اکاؤنٹ کے ذریعہ آلات کے مابین Firefox کو سینک کریں۔";
 
 /* FxA sign in create account label. This will be linked to the site to create an account. */
 "fxa.signin.create-account-pt-2" = "Firefox اکاؤنٹ بنائیں";
@@ -657,6 +666,9 @@
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "نشانی شامل کردی گئی";
 
+/* Toast displayed to the user after adding the item to the Top Sites. */
+"Menu.AddPin.Confirm" = "سر فہرست سائٹوں پر پن کریں ";
+
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "مطالعہ فہرست میں شامل کر دیا گیا";
 
@@ -671,6 +683,12 @@
 
 /* A switch to enable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtectionOn.Title" = "اس سائٹ کیلئے بہتر ٹریکنگ پروٹیکشن چالو ہے۔";
+
+/* Description for having standard ETP protection with ITP offered in iOS14+ */
+"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox نے کراس سائٹ ٹریکرز ، سوشل ٹریکرز ، کرپٹومینرز اور فنگر پرنٹرز کو مسدود کردیا ہے۔";
+
+/* Description for having strict ETP protection with ITP offered in iOS14+ */
+"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox نے کراس سائٹ ٹریکرز ، سوشل ٹریکرز ، کرپٹومینرز ، فنگر پرنٹرز اور ٹریکنگ مواد کو مسدود کردیا ہے۔";
 
 /* Label for the button displayed in the menu used to stop the reload of the webpage */
 "Menu.Library.StopReload" = "رکیں";
@@ -1352,6 +1370,9 @@
 /* 'More Info' link on the Tracking Protection settings screen. */
 "Settings.TrackingProtection.MoreInfo" = "مزید معلومات…";
 
+/* Additional information about your Enhanced Tracking Protection */
+"Settings.TrackingProtection.ProtectionCellFooter" = "چنے گئے اشتہارات کو کم کرتا ہے اور مشتھرین کو آپ کے براؤزنگ سے باخبر رہنے سے روکنے میں مدد کرتا ہے۔";
+
 /* Footer information for tracker protection level. */
 "Settings.TrackingProtection.ProtectionLevel.Footer" = "اگر کوئی سائٹ توقع کے مطابق کام نہیں کرتی ہے تو ، ایڈریس بار میں ڈھال کو تھپتھپائیں اور اس صفحے کے لئے بہتر ٹریکنگ پروٹیکشن کو بند کردیں۔";
 
@@ -1484,6 +1505,9 @@
 
 /* Message displayed when the user syncs for the first time */
 "Sync.FirstTimeMessage.Label" = "آپ کی پہلی ہمہ وقت سازی شاید کچھ وقت لے";
+
+/* String displayed on Sign In to Sync page that allows the user to create a new account. */
+"Sync.NoAccount.Description" = "کوئی اکاؤنٹ نہیں ہے؟ آلات کے مابین Firefox کو مطابقت پذیر بنانے کیلئے کریں۔";
 
 /* Message displayed when the user's account is syncing with no ellipsis */
 "Sync.Syncing.Label" = "ہم وقت سازی کر رہا ہے";

@@ -1,6 +1,9 @@
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "۔یہ آُپ کو تصاویر لینے اور اپلوڈ کرنے دیتا ہے۔";
 
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Firefox کو آپ کے محفوظ کردہ لاگ ان تک رسائی حاصل کرنے کے لئے Face ID کی ضرورت ہوتی ہے۔";
+
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */

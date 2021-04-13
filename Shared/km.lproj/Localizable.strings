@@ -137,6 +137,15 @@
 /* Status label for the empty Bookmarks state. */
 "BookmarksPanel.EmptyState.Title" = "ចំណាំ​ដែល​អ្នក​រក្សាទុក​នឹង​បង្ហាញ​នៅ​ត្រង់​នេះ។";
 
+/* Link to monitor.firefox.com to learn more about breached passwords */
+"BreachAlerts.LearnMoreButton" = "ស្វែងយល់​បន្ថែម";
+
+/* Leads to a link to the breached website */
+"BreachAlerts.Link" = "ចូលទៅ";
+
+/* Title for the Breached Login Detail View. */
+"BreachAlerts.Title" = "ការបំពានគេហទំព័រ";
+
 /* Accessibility label for brightness adjustment slider in Reader Mode display settings */
 "Brightness" = "ពន្លឺ";
 
@@ -208,6 +217,18 @@
 
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "មិន​អាច​ផ្ទុក​ទំព័រ​បាន​ទេ។";
+
+/* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
+"CoverSheet.v22.DarkMode.Description" = "សម្រាប់អ្នកប្រើ iOS 13 ឥឡូវនេះ Firefox ប្តូរទៅជារចនាប័ទ្ម​ងងឹតនៅពេលទូរសព្ទរបស់អ្នកត្រូវបានកំណត់ទៅជាមុខងារ​ងងឹត។ ដើម្បីផ្លាស់ប្តូរឥរិយាបថនេះ សូម​ចូលទៅកាន់ ការកំណត់ > រចនាប័ទ្ម។";
+
+/* Title for the new dark mode change in the version 22 app release. */
+"CoverSheet.v22.DarkMode.Title" = "ឥឡូវនេះ រចនាប័ទ្ម​ងងឹតរួម​បញ្ចូល​ទាំង​ក្តារ​ចុច​ងងឹត ​និង​អេក្រង់​ស្វាគមន៍​ងងឹត។";
+
+/* Text for the new ETP settings button */
+"CoverSheet.v24.ETP.Settings.Button" = "ចូល​ទៅ​កាន់​ការ​កំណត់";
+
+/* Title for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Title" = "ការការពារប្រឆាំងនឹងការតាមដានការផ្សាយពាណិជ្ជកម្ម";
 
 /* See http://mzl.la/1Qtkf0j */
 "Create an account" = "បង្កើត​គណនី";
@@ -345,6 +366,15 @@
 
 /* Button label to open Sync preferences */
 "FxA.OpenSyncPreferences" = "បើក​ចំណូលចិត្ត​ធ្វើ​សមកាលកម្ម";
+
+/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
+"FxA.RemoveAccount" = "យកចេញ";
+
+/* Description string for alert view that gets presented when user tries to remove an account. */
+"FxA.RemoveAccountAlertMessage" = "យកចេញ​គណនី Firefox ដែល​បាន​ភ្ជាប់ជាមួយឧបករណ៍នេះ ដើម្បីចូលជាអ្នកប្រើប្រាស់​ផ្សេងមួយ។";
+
+/* Remove account alert is the final confirmation before user removes their firefox account */
+"FxA.RemoveAccountAlertTitle" = "លុប​គណនី";
 
 /* Button label to resend email */
 "FxA.ResendEmail" = "ផ្ញើអ៊ីមែលឡើងវិញ";
@@ -562,6 +592,12 @@
 /* Prompt for saving a password with no username. The parameter is the hostname of the site. */
 "LoginsHelper.PromptSavePassword.Title" = "រក្សាទុក​ពាក្យ​សម្ងាត់​សម្រាប់ %@ ដែរ ឬ​ទេ?";
 
+/* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
+"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "ធ្វើបច្ចុប្បន្នភាពការចូលសម្រាប់ %@ ដែរ​ឬ​ទេ?";
+
+/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "ធ្វើ​បច្ចុប្បន្នភាព​ការ​ចូល %1$@ សម្រាប់ %2$@ ដែរឬ​ទេ?";
+
 /* Button to save the user's password */
 "LoginsHelper.SaveLogin.Button" = "រក្សាទុក​ការ​ចូល";
 
@@ -636,6 +672,93 @@
 /* Title on tracking protection menu for blocked items. */
 "Menu.TrackingProtection.BlockedTitle" = "បាន​ទប់ស្កាត់";
 
+/* Message in menu when no trackers blocked. */
+"Menu.TrackingProtection.NoTrackersBlockedTitle" = "មិនមានកម្មវិធីតាមដានដែលស្គាល់ដោយ Firefox ត្រូវបានរកឃើញនៅលើទំព័រនេះទេ ។";
+
+/* The title for tracking protection settings */
+"Menu.TrackingProtection.ProtectionSettings.Title" = "ការកំណត់ការការពារ";
+
+/* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
+"Menu.TrackingProtection.TitlePrefix" = "ការការពារសម្រាប់ %@";
+
+/* The title that shows the number of content cookies blocked */
+"Menu.TrackingProtectionBlockedContent.Title" = "កំពុងតាមដានខ្លឹមសារ";
+
+/* The title that shows the number of social URLs blocked */
+"Menu.TrackingProtectionBlockedSocial.Title" = "អ្នកតាមដានសង្គម";
+
+/* Description of the Tracking protection menu when TP is blocking parts of the page */
+"Menu.TrackingProtectionBlocking.Description" = "Firefox កំពុង​ទប់ស្កាត់​ផ្នែក​នៃ​ទំព័រ​ដែល​អាច​តាមដាន​ការរុករក​របស់អ្នក។";
+
+/* The description of the Tracking Protection menu item when tracking is enabled */
+"Menu.TrackingProtectionBlockingDisabled.Description" = "ទប់ស្កាត់​កម្មវិធី​តាមដាន​លើ​អ៊ីនធឺណិត";
+
+/* The title that shows the number of cross-site cookies blocked */
+"Menu.TrackingProtectionCrossSiteCookies.Title" = "ខូឃី​ដែល​តាមដាន​ឆ្លង​គេហទំព័រ";
+
+/* The title that shows the number of cross-site URLs blocked */
+"Menu.TrackingProtectionCrossSiteTrackers.Title" = "កម្មវិធី​តាមដានឆ្លង​គេហទំព័រ";
+
+/* The title that shows the number of cryptomining scripts blocked */
+"Menu.TrackingProtectionCryptominersBlocked.Title" = "Cryptominer";
+
+/* Description of content trackers. */
+"Menu.TrackingProtectionDescription.ContentTrackers" = "គេហទំព័រអាចផ្ទុក​ការផ្សាយ​ពាណិជ្ជកម្ម វីដេអូ និងមាតិកាផ្សេងទៀត​ខាងក្រៅ​ដែលមានបង្កប់កម្មវិធីតាមដាន។ ការទប់ស្កាត់​នេះអាចធ្វើឱ្យគេហទំព័រដំណើរការលឿនជាងមុន ប៉ុន្តែប៊ូតុង ទម្រង់ និងកន្លែង​​ចូល ប្រហែលមិនដំណើរការទេ។";
+
+/* Description of cross-site trackers. */
+"Menu.TrackingProtectionDescription.CrossSiteNew" = "ខូឃីទាំងនេះតាមដានអ្នកពីគេហទំព័រមួយទៅគេហទំព័រមួយ ដើម្បីប្រមូលទិន្នន័យអំពីអ្វីដែលអ្នកធ្វើនៅលើអ៊ីនធឺណិត។ ខូឃី​ទាំងនេះ​ត្រូវបានកំណត់ដោយភាគីទីបី​ដូចជា ក្រុមហ៊ុនផ្សាយពាណិជ្ជកម្ម និងក្រុមហ៊ុនវិភាគ។";
+
+/* Description of cryptominers. */
+"Menu.TrackingProtectionDescription.CryptominersNew" = "Cryptominers ប្រើប្រាស់​ថាមពលគណនា​របស់​ប្រព័ន្ធ​ដោយសម្ងាត់ ដើម្បីរកប្រាក់ឌីជីថល។ Cryptominers ធ្វើឱ្យថ្មរបស់អ្នកអន់ថយ កុំព្យូទ័ររបស់អ្នកយឺត និងអាចបង្កើនវិក្កយបត្រថាមពលរបស់អ្នក។";
+
+/* Description of social network trackers. */
+"Menu.TrackingProtectionDescription.SocialNetworksNew" = "បណ្តាញ​សង្គម​ដាក់​កម្មវិធី​តាម​ដាន​នៅ​លើ​គេហទំព័រ​ផ្សេងៗ ​ដើម្បី​បង្កើត​​កម្រង​ព័ត៌មាន​​របស់​អ្នក​ពេញលេញ​ និង​ស្មុគ្រស្មាញ។ ទប់ស្កាត់​កម្មវិធី​តាម​ដាន​ទាំង​នេះ​អាច​កាត់​បន្ថយ​ចំនួន​ប្រព័ន្ធ​ផ្សព្វផ្សាយ​សង្គម​អាច​​មើល​ឃើញ​ព័ត៌មាន​ដែល​អ្នក​ប្រើប្រាស់​នៅ​លើ​អ៊ីនធឺណិត ។";
+
+/* The button that disabled TP for a site. */
+"Menu.TrackingProtectionDisable1.Title" = "បាន​បិទ​សម្រាប់​គេហទំព័រ​នេះ";
+
+/* The confirmation toast once tracking protection has been disabled */
+"Menu.TrackingProtectionDisabled.Title" = "ឥឡូវនេះ ការការពារ​ការតាមដាន​ត្រូវ​បិទសម្រាប់គេហទំព័រនេះហើយ។";
+
+/* A button to enable tracking protection inside the menu. */
+"Menu.TrackingProtectionEnable.Title" = "បើកការការពារការតាមដាន";
+
+/* A button to enable tracking protection inside the menu. */
+"Menu.TrackingProtectionEnable1.Title" = "បាន​បើក​សម្រាប់​គេហទំព័រនេះ";
+
+/* The confirmation toast once tracking protection has been enabled */
+"Menu.TrackingProtectionEnabled.Title" = "ឥឡូវនេះ ការការពារការតាមដាន​ត្រូវបាន​បើក​សម្រាប់​គេហទំព័រ​នេះ។";
+
+/* The title that shows the number of fingerprinting scripts blocked */
+"Menu.TrackingProtectionFingerprintersBlocked.Title" = "ស្នាមម្រាមដៃ";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "ខូឃី​ការតាមដាន​ឆ្លង​គេហទំព័រ​ត្រូវបានទប់ស្កាត់";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Cryptominers" = "Cryptominers ត្រូវបានទប់ស្កាត់";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Fingerprinters" = "ស្នាមម្រាមដៃ​ត្រូវបានទប់ស្កាត់";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Social" = "កម្មវិធី​តាមដានសង្គម​ត្រូវបានទប់ស្កាត់";
+
+/* more info about what tracking protection is about */
+"Menu.TrackingProtectionMoreInfo.Description" = "ស្វែងយល់បន្ថែមអំពីវិធីការពារការតាមដាន​ទប់ស្កាត់​កម្មវិធី​តាមដានលើ​អ៊ីនធឺណិត ដែលប្រមូលទិន្នន័យរុករករបស់អ្នក​នៅលើគេហទំព័រជាច្រើន។";
+
+/* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
+"Menu.TrackingProtectionNoBlocking.Description" = "រក​មិន​ឃើញ​ធាតុ​ដែលបាន​​តាមដាន​នៅ​លើ​ទំព័រ​នេះ​ទេ។";
+
+/* label for the menu item to show when the website is whitelisted from blocking trackers. */
+"Menu.TrackingProtectionOption.WhiteListOnDescription" = "គេហទំព័រនេះ មានធាតុដែលអាចតាមដានការរុករករបស់អ្នក។ អ្នកបានបិទការការពារ ។";
+
+/* label for the menu item that lets you remove a website from the tracking protection whitelist */
+"Menu.TrackingProtectionWhitelistRemove.Title" = "បើកសម្រាប់គេហទំព័រនេះ";
+
+/* The title for the option to view the What's new page. */
+"Menu.WhatsNew.Title" = "មានអ្វី​​ថ្មី";
+
 /* Accessibility label for Mobile Device image in remote tabs list */
 "mobile device" = "ឧបករណ៍​ចល័ត";
 
@@ -682,11 +805,29 @@
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "មិនអាចបើកទំព័រ​បាន​ទេ";
 
+/* Accessibility label for the Page Options menu button */
+"Page Options Menu" = "ម៉ឺនុយជម្រើសទំព័រ";
+
 /* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
 "Panel Chooser" = "កម្មវិធី​ជ្រើស​ស្លាបព្រិល";
 
 /* Password textbox in Authentication prompt */
 "Password" = "ពាក្យ​សម្ងាត់";
+
+/* Error message shown in the remote tabs panel */
+"PasswordAutoFill.NoPasswordsFoundTitle" = "អ្នកមិនមានព័ត៌មាន​ផ្ទៀងផ្ទាត់​ណាមួយដែលបានធ្វើសមកាលកម្មពីគណនី Firefox របស់អ្នកទេ";
+
+/* Header for the list of credentials table */
+"PasswordAutoFill.PasswordsListTitle" = "ព័ត៌មាន​ផ្ទៀងផ្ទាត់​ដែលមាន៖";
+
+/* Title of the extension that shows firefox passwords */
+"PasswordAutoFill.SectionTitle" = "ព័ត៌មាន​ផ្ទៀងផ្ទាត់ Firefox";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "វា​អនុញ្ញាត​ឱ្យ​អ្នក​អាច​រក្សាទុក​រូបភាព​ទៅ​ក្នុង​របុំ​កាមេរ៉ា​របស់អ្នក។";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox ចង់​ចូល​​​ប្រើ​រូបថត​របស់​អ្នក";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "បិទ";
@@ -724,6 +865,18 @@
 /* Name for button removing current article from reading list in reader mode */
 "Remove from Reading List" = "លុប​ចេញពី​បញ្ជី​អាន";
 
+/* Cancel button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Cancel" = "បោះបង់";
+
+/* Reopen button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Reopen" = "បើកឡើងវិញ";
+
+/* Reopen alert title shown at home page. */
+"ReopenAlert.Title" = "បើកផ្ទាំងដែលបានបិទចុងក្រោយ";
+
+/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"ReopenClosedTab.KeyCodeTitle" = "បើកផ្ទាំងដែលបានបិទឡើងវិញ";
+
 /* Accessibility label for button resetting font size in display settings of reader mode */
 "Reset text size" = "កំណត់ទំហំអក្សរឡើងវិញ";
 
@@ -738,6 +891,12 @@
 
 /* Text for the instructions label, displayed in the QR scanner view */
 "ScanQRCode.Instructions.Label" = "តម្រង់​កូដ QR នៅក្នុងស៊ុម ដើម្បីស្កេន";
+
+/* Text of the prompt that is shown to the user when the data is invalid */
+"ScanQRCode.InvalidDataError.Message" = "ទិន្នន័យនេះមិនត្រឹមត្រូវ​ទេ";
+
+/* Text of the prompt user to setup the camera authorization. */
+"ScanQRCode.PermissionError.Message" = "សូមអនុញ្ញាតិឱ្យ Firefox ចូលប្រើកាមេរ៉ារបស់ឧបករណ៍អ្នកនៅក្នុង “ការកំណត់” -> “ឯកជនភាព” -> “កាមេរ៉ា” ។";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "ស្កេនកូដ QR";
@@ -802,6 +961,9 @@
    Close button in top navigation bar */
 "SendTo.Cancel.Button" = "បោះបង់​";
 
+/* Header for the list of devices table */
+"SendTo.DeviceList.Text" = "ឧបករណ៍​​ដែល​អាចប្រើបាន៖";
+
 /* Message in error prompt explaining why the URL is invalid. */
 "SendTo.Error.Message" = "មាន​តែ​តំណ HTTP និង HTTPS អាច​ចែករំលែក​បាន។";
 
@@ -810,6 +972,21 @@
 
 /* Title of error prompt displayed when an invalid URL is shared. */
 "SendTo.Error.Title" = "តំណ​ដែល​អ្នក​កំពុង​ព្យាយាម​ចែករំលែក​មិន​អាច​ចែករំលែក​បាន​ទេ។";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"SendTo.NavBar.Title" = "ផ្ញើ​ផ្ទាំង";
+
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message" = "អ្នក​មិន​មាន​ឧបករណ៍​ផ្សេង​ណា​មួយ​បាន​ភ្ជាប់​ទៅ​គណនី Firefox ដែល​អាច​ប្រើ ​​ដើម្បី​ធ្វើ​សមកាលកម្ម​​បាននោះ​ទេ។";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Message" = "សូម​បើក​កម្មវិធី Firefox រួច​ទៅ​កាន់​ ការ​កំណត់ និង​ចូល​ដើម្បី​បន្ត។";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Title" = "អ្នក​មិន​បាន​ចូល​ទៅ​គណនី Firefox របស់​អ្នក​ទេ។";
+
+/* Navigation bar button to Send the current page to a device */
+"SendTo.SendAction.Text" = "ផ្ញើ";
 
 /* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
 "SentTab_TabArrivingNotification_NoDevice_body" = "ផ្ទាំងថ្មី ដែលបានមកពីឧបករណ៍​ផ្សេង។";
@@ -822,6 +999,12 @@
 
 /* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
 "SentTab_TabArrivingNotification_WithDevice_title" = "ផ្ទាំងដែលទទួលបានមកពី %@";
+
+/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
+"SentTab.AddToReadingListAction.Title" = "បញ្ចូល​​ទៅ​បញ្ជី​អាន";
+
+/* Label for an action used to bookmark one or more tabs from a notification. */
+"SentTab.BookmarkAction.title" = "ចំណាំ";
 
 /* Body of notification received after a spurious message from FxA has been received. */
 "SentTab.NoTabArrivingNotification.body" = "ចុច ដើម្បីចាប់ផ្ដើម";
@@ -862,6 +1045,9 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (ជំនួសសំណួរជាមួយ %s)";
 
+/* Button in Data Management that clears private data for the selected items. */
+"Settings.ClearAllWebsiteData.Clear.Button" = "ជម្រះទិន្នន័យគេហទំព័រទាំងអស់";
+
 /* Button in settings that clears private data for the selected items. */
 "Settings.ClearPrivateData.Clear.Button" = "សម្អាត​ទិន្នន័យ​ឯកជន​";
 
@@ -870,6 +1056,21 @@
 
 /* Title displayed in header of the setting panel. */
 "Settings.ClearPrivateData.Title" = "សម្អាត​ទិន្នន័យ​ឯកជន​";
+
+/* Copy app version alert shown in settings. */
+"Settings.CopyAppVersion.Title" = "​ចម្លង​ទៅកាន់​អង្គ​ចងចាំ";
+
+/* Default text in search bar for Data Management */
+"Settings.DataManagement.SearchLabel" = "តម្រងគេហទំព័រ";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.DataManagement.SectionName" = "ការ​គ្រប់​គ្រង​ទិន្នន័យ";
+
+/* Title displayed in header of the setting panel. */
+"Settings.DataManagement.Title" = "ការ​គ្រប់​គ្រង​ទិន្នន័យ";
+
+/* Body of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Body" = "Firefox នឹង​ឈប់​ធ្វើ​សមកាលកម្ម​ជាមួយ​គណនី​របស់​អ្នក ប៉ុន្តែ​នឹង​មិន​លុប​ទិន្នន័យ​​ដែលរុករក​​​របស់​អ្នក​​​នៅ​លើ​ឧបករណ៍​នេះ​ទេ។";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "ផ្តាច់​ការធ្វើ​សមកាលកម្ម";
@@ -883,6 +1084,46 @@
 /* Title of the alert when prompting the user asking to disconnect. */
 "Settings.Disconnect.Title" = "ផ្តាច់ដែរ​ឬទេ?";
 
+/* Display (theme) settings label to show if manually switch theme is enabled. */
+"Settings.DisplayTheme.Manual.StatusLabel" = "ដោយ​ខ្លួន​ឯង";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Manually'. */
+"Settings.DisplayTheme.Manual.SwitchSubtitle" = "ជ្រើស​រើស​រចនាប័ទ្ម​​ណាមួយ​ដែល​អ្នក​ចង់​បាន";
+
+/* Display (theme) setting to choose the theme manually. */
+"Settings.DisplayTheme.Manual.SwitchTitle" = "ដោយ​​ខ្លួន​​ឯង";
+
+/* Option choice in display theme settings for dark theme */
+"Settings.DisplayTheme.OptionDark" = "ងងឹត";
+
+/* Option choice in display theme settings for light theme */
+"Settings.DisplayTheme.OptionLight" = "ភ្លឺ";
+
+/* Display (theme) settings footer describing how the brightness slider works. */
+"Settings.DisplayTheme.SectionFooter" = "រចនាប័ទ្ម​នឹងផ្លាស់ប្តូរដោយស្វ័យប្រវត្តិតាម​ពន្លឺបង្ហាញរបស់អ្នក។ អ្នកអាចកំណត់ចំណុច​ដែលរចនាប័ទ្ម​ផ្លាស់ប្តូរ។ រង្វង់បង្ហាញពីពន្លឺបច្ចុប្បន្ននៃអេក្រង់របស់អ្នក។";
+
+/* Switch mode settings section title */
+"Settings.DisplayTheme.SwitchMode.SectionHeader" = "ប្ដូរមុខងារ";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Automatically'. */
+"Settings.DisplayTheme.SwitchSubtitle" = "ប្តូរដោយស្វ័យប្រវត្តិ​តាម​ពន្លឺអេក្រង់";
+
+/* Display (theme) settings label to show if automatically switch theme is enabled.
+   Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
+"Settings.DisplayTheme.SwitchTitle" = "ដោយស្វ័យប្រវត្តិ";
+
+/* System theme settings section title */
+"Settings.DisplayTheme.SystemTheme.SectionHeader" = "រចនាប័ទ្ម​ប្រព័ន្ធ";
+
+/* System theme settings switch to choose whether to use the same theme as the system */
+"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "ប្រើមុខងារ​ងងឹត/ភ្លឺច្បាស់របស់ប្រព័ន្ធ";
+
+/* Theme picker settings section title */
+"Settings.DisplayTheme.ThemePicker.SectionHeader" = "ឧបករណ៍​ជ្រើសរើស​រចនាប័ទ្ម";
+
+/* Title in main app settings for Theme settings */
+"Settings.DisplayTheme.Title.v2" = "រចនាប័ទ្ម";
+
 /* DNT Settings option for always on */
 "Settings.DNT.OptionAlwaysOn" = "ជានិច្ច";
 
@@ -894,6 +1135,15 @@
 
 /* Label used for the device name settings section. */
 "Settings.FxA.DeviceName" = "ឈ្មោះឧបករណ៍";
+
+/* Label used as a section title in the Firefox Accounts Settings screen. */
+"Settings.FxA.Sync.SectionName" = "ធ្វើសមកាលកម្ម​ការកំណត់";
+
+/* Title displayed in header of the FxA settings panel. */
+"Settings.FxA.Title" = "គណនី Firefox";
+
+/* General settings section title */
+"Settings.General.SectionName" = "ទូទៅ";
 
 /* Button in settings to clear the home page. */
 "Settings.HomePage.Clear.Button" = "សម្អាត";
@@ -919,20 +1169,65 @@
 /* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
 "Settings.HomePage.UseDefault.Button" = "ប្រើ​លំនាំ​ដើម​";
 
+/* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
+"Settings.LoginsAndPasswordsTitle" = "ការចូល និង​ពាក្យ​សម្ងាត់";
+
+/* Label used to set a custom url as the new tab option (homepage). */
+"Settings.NewTab.CustomURL" = "URL ផ្ទាល់ខ្លួន";
+
 /* A description in settings of what the new tab choice means */
 "Settings.NewTab.Description" = "នៅ​ពេល​អ្នក​បើក​ផ្ទាំង​ថ្មី៖";
+
+/* The title of the section in newtab that lets you modify the topsites panel */
+"Settings.NewTab.Option.ASTitle" = "ប្តូរគេហទំព័រពេញនិយម​តាមបំណង";
 
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "ទំព័រទទេ";
 
+/* Option in settings to show bookmarks when you open a new tab */
+"Settings.NewTab.Option.Bookmarks" = "ចំណាំ";
+
+/* The footer for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeFooter" = "គេហទំព័រ​ដែល​អ្នក​មើល​ច្រើន​បំផុត";
+
+/* The title for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeTitle" = "ប្ដូរ​ទំព័រដើម Firefox តាមបំណង";
+
+/* Option in settings to show Firefox Home when you open a new tab */
+"Settings.NewTab.Option.FirefoxHome" = "ទំព័រដើម Firefox";
+
+/* Option in the settings to turn off recent bookmarks in the Highlights section */
+"Settings.NewTab.Option.HighlightsBookmarks" = "ចំណាំថ្មីៗ";
+
 /* Option in settings to turn off history in the highlights section */
 "Settings.NewTab.Option.HighlightsHistory" = "បានទស្សនា";
+
+/* Option in settings to show history when you open a new tab */
+"Settings.NewTab.Option.History" = "ប្រវត្តិ";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.HomePage" = "ទំព័រ​ដើម";
+
+/* Option in settings to turn on off pocket recommendations */
+"Settings.NewTab.Option.Pocket" = "កំពុង​ពេញនិយម​នៅ​លើ Pocket";
+
+/* Footer caption for pocket settings */
+"Settings.NewTab.Option.PocketFooter" = "មាតិកា​​ប្រសើរបំផុត​ពី​គេហទំព័រ​នានា។";
 
 /* Option in settings to show reading list when you open a new tab */
 "Settings.NewTab.Option.ReadingList" = "បង្ហាញ​បញ្ជី​អាន​របស់​អ្នក";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "ផ្ទាំង​ថ្មី​";
+
+/* Title displayed in header of the setting panel. */
+"Settings.NewTab.Title" = "ផ្ទាំង​ថ្មី";
+
+/* Label at the top of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionName" = "បង្ហាញ";
+
+/* Footer at the bottom of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionNameFooter" = "ជ្រើសរើសអ្វីដែលត្រូវផ្ទុកនៅពេលបើកផ្ទាំងថ្មី";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "នៅពេលបើក Firefox";
@@ -946,17 +1241,62 @@
 /* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
 "Settings.OpenWith.SectionName" = "កម្មវិធី Mail";
 
+/* Setting to enable the built-in password manager */
+"Settings.SaveLogins.Title" = "រក្សាទុក​ការ​ចូល";
+
 /* Button displayed at the top of the search settings. */
 "Settings.Search.Done.Button" = "ធ្វើ​រួច​";
 
 /* Button displayed at the top of the search settings. */
 "Settings.Search.Edit.Button" = "កែសម្រួល​​";
 
+/* title for a link that explains how mozilla collects telemetry */
+"Settings.SendUsage.Link" = "ស្វែងយល់បន្ថែម។";
+
+/* A short description that explains why mozilla collects usage data. */
+"Settings.SendUsage.Message" = "Mozilla ខិតខំប្រមូលតែអ្វីដែល​យើងត្រូវការដើម្បីផ្តល់ និងធ្វើឱ្យ Firefox ប្រសើរឡើងសម្រាប់អ្នកគ្រប់គ្នា។";
+
+/* The title for the setting to send usage data. */
+"Settings.SendUsage.Title" = "ផ្ញើទិន្នន័យការប្រើប្រាស់";
+
+/* Setting to show Logins & Passwords quick access in the application menu */
+"Settings.ShowLoginsInAppMenu.Title" = "បង្ហាញនៅក្នុងម៉ឺនុយកម្មវិធី";
+
+/* The description of the open new tab siri shortcut */
+"Settings.Siri.OpenTabShortcut" = "បើក​ផ្ទាំង​ថ្មី";
+
+/* The description that describes what siri shortcuts are */
+"Settings.Siri.SectionDescription" = "ប្រើផ្លូវកាត់ Siri ដើម្បីបើក Firefox តាមរយៈកម្មវិធី Siri";
+
+/* The option that takes you to the siri shortcuts settings page */
+"Settings.Siri.SectionName" = "ផ្លូវកាត់ Siri";
+
 /* Header description for tracking protection options section where Basic/Strict block list can be selected */
 "Settings.TrackingProtection.BlockListsHeader" = "អ្នកអាចជ្រើសរើសបញ្ជីដែល Firefox នឹងប្រើដើម្បីទប់ស្កាត់ធាតុបណ្តាញដែលអាចតាមដានសកម្មភាពរុករករបស់អ្នក។";
 
+/* Explanation of basic mode. */
+"Settings.TrackingProtection.Info.BasicTitle" = "តុល្យភាពសម្រាប់ការពារ និងការដំណើរការ។";
+
+/* The Title on info view which shows a list of all blocked websites */
+"Settings.TrackingProtection.Info.BlocksTitle" = "ការទប់ស្កាត់";
+
+/* Explanation of strict mode. */
+"Settings.TrackingProtection.Info.StrictTitle" = "ផ្តល់ជូនការការពារខ្លាំងជាងមុន ប៉ុន្តែអាចបណ្តាលឱ្យគេហទំព័រមួយចំនួនខូច។";
+
+/* 'More Info' link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.MoreInfo" = "ព័ត៌មាន​បន្ថែម…";
+
+/* Title for tracking protection options section where level can be selected. */
+"Settings.TrackingProtection.ProtectionLevelTitle" = "កម្រិតការការពារ";
+
 /* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
 "Settings.TrackingProtection.SectionName" = "ការការពារការតាមដាន";
+
+/* Additional information about the strict level setting */
+"Settings.TrackingProtection.StrictLevelInfoFooter" = "ការទប់ស្កាត់កម្មវិធីតាមដានអាចប៉ះពាល់ដល់មុខងារខ្លះនៃគេហទំព័រមួយចំនួន។";
+
+/* Tracking protection settings option for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BasicBlockList" = "ស្តង់ដារ (លំនាំដើម)";
 
 /* Tracking protection settings option description for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BlockListBasicDescription" = "អនុញាតកម្មវិធីតាមដានខ្លះ ដើម្បីឱ្យវេបសាយដំណើរការបានត្រឹមត្រូវ។";
@@ -970,8 +1310,71 @@
 /* Description label shown on tracking protection options screen. */
 "Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "ការតាមដានគឺជាការប្រមូលទិន្នន័យរុករករបស់អ្នកនៅលើ​គេហទំព័រ​ច្រើន។";
 
+/* Settings option to specify that Tracking Protection is on */
+"Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "ការការពារការតាមដានដែលបានកែលម្អ";
+
+/* Translation settings footer describing how language detection and translation happens. */
+"Settings.TranslateSnackBar.SectionFooter" = "ភាសាទំព័របណ្តាញត្រូវបានរកឃើញនៅលើឧបករណ៍ ហើយការបកប្រែពីសេវាកម្មពីចម្ងាយត្រូវបានផ្តល់ជូន។";
+
+/* Translation settings section title */
+"Settings.TranslateSnackBar.SectionHeader" = "សេវាកម្ម";
+
+/* Switch to choose if the language of a page is detected and offer to translate. */
+"Settings.TranslateSnackBar.SwitchSubtitle" = "ការផ្តល់ជូនដើម្បីបកប្រែគេហទំព័រណាមួយដែលបានសរសេរជាភាសាខុសគ្នាពីភាសាលំនាំដើមរបស់អ្នក។";
+
+/* Switch to choose if the language of a page is detected and offer to translate. */
+"Settings.TranslateSnackBar.SwitchTitle" = "ការផ្តល់ជូនការបកប្រែ";
+
+/* Title in main app settings for Translation toast settings */
+"Settings.TranslateSnackBar.Title" = "ការបកប្រែ";
+
 /* Title of link to help page to find out how to solve Sync issues */
-"Settings.TroubleShootSync.Title" = "ដោះស្រាយ​បញ្ហា​";
+"Settings.TroubleShootSync.Title" = "ដំណោះស្រាយ​បញ្ហា​";
+
+/* Button to delete website in search results */
+"Settings.WebsiteData.ButtonDelete" = "លុប";
+
+/* Button to exit edit website search results */
+"Settings.WebsiteData.ButtonDone" = "រួចរាល់";
+
+/* Button to edit website search results */
+"Settings.WebsiteData.ButtonEdit" = "កែសម្រួល";
+
+/* Button shows all websites on website data tableview */
+"Settings.WebsiteData.ButtonShowMore" = "បង្ហាញច្រើនទៀត";
+
+/* Description of the confirmation dialog shown when a user tries to clear their private data. */
+"Settings.WebsiteData.ConfirmPrompt" = "សកម្មភាពនេះនឹងលុបទិន្នន័យគេហទំព័ររបស់អ្នកទាំងអស់។ វាមិនអាចធ្វើវិញបានទេ។";
+
+/* Title displayed in header of the Data Management panel. */
+"Settings.WebsiteData.Title" = "ទិន្នន័យគេហទំព័រ";
+
+/* Action label on share extension to add page to the Firefox reading list. */
+"ShareExtension.AddToReadingListAction.Title" = "បញ្ចូល​ទៅកាន់​បញ្ជី​អាន";
+
+/* Share extension label shown after user has performed 'Add to Reading List' action. */
+"ShareExtension.AddToReadingListActionDone.Title" = "បានបញ្ចូល​ទៅ​បញ្ជី​អាន";
+
+/* Action label on share extension to bookmark the page in Firefox. */
+"ShareExtension.BookmarkThisPageAction.Title" = "កត់ចំណាំ​ទំព័រ​នេះ";
+
+/* Share extension label shown after user has performed 'Bookmark this Page' action. */
+"ShareExtension.BookmarkThisPageActionDone.Title" = "បាន​ចំណាំ";
+
+/* Action label on share extension to load the page in Firefox when user switches apps to bring it to foreground. */
+"ShareExtension.LoadInBackgroundAction.Title" = "ផ្ទុកនៅផ្ទៃខាងក្រោយ";
+
+/* Share extension label shown after user has performed 'Load in Background' action. */
+"ShareExtension.LoadInBackgroundActionDone.Title" = "កំពុងផ្ទុកក្នុង Firefox";
+
+/* Action label on share extension to immediately open page in Firefox. */
+"ShareExtension.OpenInFirefoxAction.Title" = "បើកក្នុង Firefox";
+
+/* Action label on share extension to immediately open page in Firefox in private mode. */
+"ShareExtension.OpenInPrivateModeAction.Title" = "បើកជាមុខងារឯកជន";
+
+/* Action label on share extension to search for the selected text in Firefox. */
+"ShareExtension.SeachInFirefoxAction.Title" = "ស្វែងរកក្នុង Firefox";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "បង្ហាញ​​សំណើ​ស្វែងរក";
@@ -992,6 +1395,12 @@
 /* Accessibility hint for tab tray's displayed tab. */
 "Swipe right or left with three fingers to close the tab." = "អូស​ម្រាម​ដៃ​បី​​ទៅ​ស្ដាំ ឬ​ឆ្វេង​​ដើម្បី​បិទ​ផ្ទាំង។";
 
+/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"SwitchToNonPBM.KeyCodeTitle" = "មុខងារ​រុករក​ធម្មតា";
+
+/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"SwitchToPBM.KeyCodeTitle" = "មុខងារ​រុករក​ឯកជន";
+
 /* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
 "Sync your tabs, bookmarks, passwords and more." = "ធ្វើ​សមកាលកម្ម​ផ្ទាំង ចំណាំ ពាក្យ​សម្ងាត់​របស់​អ្នក និង​អ្វី​​ច្រើន​ទៀត។";
 
@@ -1006,6 +1415,9 @@
 
 /* Message displayed when the user's account is syncing with ellipsis at the end */
 "Sync.SyncingEllipsis.Label" = "កំពុង​ធ្វើ​សមកាលកម្ម...";
+
+/* Panel accessibility label */
+"Synced Tabs" = "ផ្ទាំង​ដែល​បាន​ធ្វើ​សមកាលកម្ម";
 
 /* The Bookmark sync component, used in SyncState.Partial.Title */
 "SyncState.Bookmark.Title" = "ចំណាំ​";
@@ -1037,6 +1449,9 @@
 /* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
 "Tab %@ of %@" = "ផ្ទាំង %1$@ នៃ %2$@";
 
+/* Hardware shortcut to open the tab tray from a tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"Tab.ShowTabTray.KeyCodeTitle" = "បង្ហាញ​ផ្ទាំង​ទាំងអស់";
+
 /* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
 "Tabs %@ to %@ of %@" = "ផ្ទាំង %1$@ ដល់ %2$@ នៃ %3$@";
 
@@ -1048,6 +1463,21 @@
 
 /* The label indicating that all the tabs were closed */
 "Tabs.DeleteAllUndo.Title" = "បាន​បិទ​ផ្ទាំង %d";
+
+/* The placeholder text for the tab search bar */
+"Tabs.Search.PlaceholderText" = "ផ្ទាំងស្វែងរក";
+
+/* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseAllTabs.KeyCodeTitle" = "បិទ​ផ្ទាំង​ទាំងអស់";
+
+/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseTab.KeyCodeTitle" = "បិទផ្ទាំងដែលបានជ្រើសរើស";
+
+/* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenNewTab.KeyCodeTitle" = "បើក​​ផ្ទាំង​ថ្មី";
+
+/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenSelectedTab.KeyCodeTitle" = "បើក​ផ្ទាំង​ដែល​​បាន​ជ្រើស";
 
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "មិន​អាច​បង្ហាញ​ទំព័រ​នៅ​ក្នុង​ទិដ្ឋភាព​អ្នក​អាន​បាន​ទេ។";
@@ -1061,6 +1491,12 @@
 /* Relative date for date in past week. */
 "this week" = "សប្ដាហ៍​នេះ";
 
+/* label for Not Now button */
+"Toasts.NotNow" = "កុំទាន់អាល";
+
+/* Open App Store button */
+"Toasts.OpenAppStore" = "បើក App Store";
+
 /* History tableview section header */
 "Today" = "ថ្ងៃ​នេះ";
 
@@ -1069,6 +1505,9 @@
 
 /* Accessibility label for the Menu button. */
 "Toolbar.Menu.AccessibilityLabel" = "​ម៉ឺនុយ​";
+
+/* Accessibility label for the Close All Tabs menu button. */
+"Toolbar.Menu.CloseAllTabs" = "បិទ​ផ្ទាំង​ទាំងអស់";
 
 /* Description label for the empty Top Sites state. */
 "TopSites.EmptyState.Description" = "វេបសាយ​ដែល​អ្នក​ចូលមើល​ច្រើន​បំផុត​នឹង​បង្ហាញ​នៅ​ទីនេះ។";
@@ -1079,14 +1518,35 @@
 /* Button shown in editing mode to remove this site from the top sites panel. */
 "TopSites.RemovePage.Button" = "យក​ទំព័រ​ចេញ - %@";
 
+/* Button to disallow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.Cancel" = "ទេ";
+
+/* Button to allow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.OK" = "បាទ/ចាស";
+
+/* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
+"TranslationToastHandler.PromptTranslate.Title" = "ទំព័រនេះបង្ហាញជា %1$@ តើចង់បកប្រែទៅជា %2$@ ជាមួយ %3$@ ដែរឫទេ?";
+
 /* Tile title for Twitter */
 "Twitter" = "Twitter";
+
+/* The menu item that pastes the current contents of the clipboard into the URL bar and navigates to the page */
+"UIMenuItem.PasteGo" = "ដាក់ចូល និង​ទៅ";
+
+/* Search in New Tab Text selection menu item */
+"UIMenuItem.SearchWithFirefox" = "ស្វែងរកជាមួយ Firefox";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "មិន​ទាន់​អាន";
 
+/* Text message in the settings table view */
+"Upgrade Firefox to connect" = "ដំឡើងកំណែ Firefox ដើម្បីតភ្ជាប់";
+
 /* Username textbox in Authentication prompt */
 "Username" = "ឈ្មោះ​អ្នក​ប្រើ";
+
+/* Text message in the settings table view */
+"Verify your email address" = "ផ្ទៀងផ្ទាត់អាសយដ្ឋាន​អ៊ីមែល​របស់​អ្នក";
 
 /* Version number of Firefox shown in settings */
 "Version %@ (%@)" = "កំណែ %1$@ (%2$@)";

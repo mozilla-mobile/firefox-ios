@@ -1185,7 +1185,7 @@
 "Settings.DisplayTheme.SystemTheme.SectionHeader" = "Systemtema";
 
 /* System theme settings switch to choose whether to use the same theme as the system */
-"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "Använd systemets ljust/mörkt läge";
+"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "Använd systemets ljusa/mörka läge";
 
 /* Theme picker settings section title */
 "Settings.DisplayTheme.ThemePicker.SectionHeader" = "Temaväljare";

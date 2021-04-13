@@ -44,7 +44,7 @@
 "Intro.Slides.Safe.Sync.Title" = "सुरक्षित सिंक";
 
 /* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "कुछ अलग खोज रहे हैं? सेटिंग में दूसरा (या अपने पसंद का) डिफ़ॉल्ट खोज इंजन चुनें।";
+"Intro.Slides.Search.Description" = "कुछ अलग खोज रहे हैं? सेटिंग में दूसरा (या अपने पसंद का) तयशुदा खोज इंजन चुनें।";
 
 /* Title for the second  panel 'Search' in the First Run tour. */
 "Intro.Slides.Search.Title" = "आपकी खोज, आपका तरीका";

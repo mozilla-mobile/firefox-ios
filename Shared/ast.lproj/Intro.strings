@@ -1,3 +1,18 @@
+/* Title for the first item in the table related to automatic privacy */
+"Intro.Slides.Automatic.Privacy.Title" = "Privacidá automática";
+
+/* Next button on the first intro screen. */
+"Intro.Slides.Button.Next" = "Siguiente";
+
+/* Sign in to Firefox account button on second intro screen. */
+"Intro.Slides.Button.SignIn" = "Aniciar sesión";
+
+/* Sign up to Firefox account button on second intro screen. */
+"Intro.Slides.Button.SignUp" = "Rexistrase";
+
+/* Title for the second item in the table related to fast searching via address bar */
+"Intro.Slides.Fast.Search.Title" = "Busca rápida";
+
 /* Description for the 'Private Browsing' panel in the First Run tour. */
 "Intro.Slides.Private.Description" = "Toca l'iconu de la mázcara pa entrar nel mou de Restolar en privao.";
 
@@ -10,6 +25,18 @@
 /* Title for the second  panel 'Search' in the First Run tour. */
 "Intro.Slides.Search.Title" = "Busques al to xeitu";
 
+/* Description for the 'Sync' panel in the First Run tour. */
+"Intro.Slides.TrailheadSync.Description" = "Anicia sesión na to cuenta pa sincronizar y acceder a más carauterístiques.";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description.v2" = "La rapidez y privacidá acompáñente.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title.v2" = "Afáyate en Firefox";
+
 /* See http://mzl.la/1T8gxwo */
 "Start Browsing" = "Comenzar a restolar";
+
+/* The button that opens the sign in page for sync. See http://mzl.la/1T8gxwo */
+"Turn on Sync…" = "Activar Sync…";
 
