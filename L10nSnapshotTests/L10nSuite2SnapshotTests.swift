@@ -13,7 +13,9 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
                 "LibraryPanels.Downloads",
                 "LibraryPanels.SyncedTabs"
             ]
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
             app.buttons["urlBar-cancel"].tap()
+            waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
             navigator.goto(LibraryPanel_Bookmarks)
             snapshot("PanelsEmptyState-LibraryPanels.Bookmarks")
             libraryPanels.forEach { panel in
