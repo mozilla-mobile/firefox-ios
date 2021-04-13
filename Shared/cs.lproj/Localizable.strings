@@ -1242,7 +1242,7 @@
 "Settings.LoginsAndPasswordsTitle" = "Přihlašovací údaje";
 
 /* Label used to set a custom url as the new tab option (homepage). */
-"Settings.NewTab.CustomURL" = "Vlastní adresu";
+"Settings.NewTab.CustomURL" = "Vlastní adresa";
 
 /* A description in settings of what the new tab choice means */
 "Settings.NewTab.Description" = "Když otevřete nový panel:";
@@ -1251,7 +1251,7 @@
 "Settings.NewTab.Option.ASTitle" = "Přizpůsobit top stránky";
 
 /* Option in settings to show a blank page when you open a new tab */
-"Settings.NewTab.Option.BlankPage" = "Prázdnou stránku";
+"Settings.NewTab.Option.BlankPage" = "Prázdná stránka";
 
 /* Option in settings to show bookmarks when you open a new tab */
 "Settings.NewTab.Option.Bookmarks" = "Záložky";
@@ -1263,7 +1263,7 @@
 "Settings.NewTab.Option.CustomizeTitle" = "Přizpůsobení domovské stránky Firefoxu";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Výchozí domovskou stránku";
+"Settings.NewTab.Option.FirefoxHome" = "Výchozí";
 
 /* Option in the settings to turn off recent bookmarks in the Highlights section */
 "Settings.NewTab.Option.HighlightsBookmarks" = "Naposledy přidané";
@@ -1293,10 +1293,10 @@
 "Settings.NewTab.Title" = "Nový panel";
 
 /* Label at the top of the New Tab screen after entering New Tab in settings */
-"Settings.NewTab.TopSectionName" = "Zobrazit";
+"Settings.NewTab.TopSectionName" = "Stránka v novém panelu";
 
 /* Footer at the bottom of the New Tab screen after entering New Tab in settings */
-"Settings.NewTab.TopSectionNameFooter" = "Vyberte, co chcete vidět při otevření nového panelu";
+"Settings.NewTab.TopSectionNameFooter" = "Vyberte si stránku zobrazovanou při otevření nového panelu";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "při otevření Firefoxu";

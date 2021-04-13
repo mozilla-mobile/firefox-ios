@@ -17,10 +17,10 @@
 "About" = "Про програму";
 
 /* The title for the pinning a topsite action */
-"ActivityStream.ContextMenu.PinTopsite" = "Прикріпити до популярних сайтів";
+"ActivityStream.ContextMenu.PinTopsite" = "Прикріпити";
 
 /* The title for removing a pinned topsite action */
-"ActivityStream.ContextMenu.RemovePinTopsite" = "Вилучити прикріплений сайт";
+"ActivityStream.ContextMenu.RemovePinTopsite" = "Відкріпити";
 
 /* The description of a highlight if it is a site the user has bookmarked */
 "ActivityStream.Highlights.Bookmark" = "Закладено";
@@ -29,7 +29,7 @@
 "ActivityStream.Highlights.Visited" = "Відвідано";
 
 /* Section title label for recently bookmarked websites */
-"ActivityStream.NewRecentBookmarks.Title" = "Останні закладки";
+"ActivityStream.NewRecentBookmarks.Title" = "Недавні закладки";
 
 /* The link that shows more Pocket trending stories */
 "ActivityStream.Pocket.MoreLink" = "Більше";
@@ -50,7 +50,7 @@
 "ActivityStream.TopSites.RowSettingFooter" = "Встановити рядки";
 
 /* Section title label for Top Sites */
-"ActivityStream.TopSites.SectionTitle" = "Популярні сайти";
+"ActivityStream.TopSites.SectionTitle" = "Часті сайти";
 
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "Add Tab" = "Додати вкладку";
@@ -87,7 +87,7 @@
 "Back" = "Назад";
 
 /* Block pop-up windows setting */
-"Block Pop-up Windows" = "Блокувати виринаючі вікна";
+"Block Pop-up Windows" = "Блокувати спливні вікна";
 
 /* The header title for the fields when editing a Bookmark */
 "Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "Закладка";
@@ -132,7 +132,7 @@
 "Bookmarks.NewSeparator.Label" = "Новий розділювач";
 
 /* The label for the title of a bookmark */
-"Bookmarks.Title.Label" = "Заголовок";
+"Bookmarks.Title.Label" = "Назва";
 
 /* The label for the URL of a bookmark */
 "Bookmarks.URL.Label" = "URL";
@@ -234,7 +234,7 @@
 "CoverSheet.v22.DarkMode.Title" = "Темний режим тепер має темну клавіатуру і екран привітання.";
 
 /* Description for the new ETP mode i.e. standard vs strict */
-"CoverSheet.v24.ETP.Description" = "Вбудований розширений захист від стеження допомагає зупинити рекламу від переслідування вас. Увімкніть надійний захист, щоб заблокувати ще більше реклами, стеження і виринаючих вікон.";
+"CoverSheet.v24.ETP.Description" = "Вбудований розширений захист від стеження допомагає зупинити рекламу від переслідування вас. Увімкніть надійний захист, щоб заблокувати ще більше реклами, стеження і спливних вікон.";
 
 /* Text for the new ETP settings button */
 "CoverSheet.v24.ETP.Settings.Button" = "Перейти до параметрів";
@@ -917,7 +917,7 @@
 "RecentlyClosedTabsPanel.Title" = "Недавно закриті";
 
 /* Accessibility Label for the tab toolbar Reload button */
-"Reload" = "Перезавантажити";
+"Reload" = "Оновити";
 
 /* Accessibility label for the reload button */
 "Reload page" = "Перезавантажити сторінку";
@@ -988,7 +988,7 @@
 "Search.ThirdPartyEngines.DuplicateErrorMessage" = "Засіб пошуку з такою назвою чи URL-адресою вже було додано.";
 
 /* A title stating that we failed to add custom search engine. */
-"Search.ThirdPartyEngines.DuplicateErrorTitle" = "Не вдалося";
+"Search.ThirdPartyEngines.DuplicateErrorTitle" = "Невдача";
 
 /* A title explaining that we failed to add a search engine */
 "Search.ThirdPartyEngines.FailedMessage" = "Не вдалося додати засіб пошуку.";
@@ -1106,7 +1106,7 @@
 "Settings.AddCustomEngine.TitlePlaceholder" = "Засіб пошуку";
 
 /* The title for URL Field */
-"Settings.AddCustomEngine.URLLabel" = "Адреса URL";
+"Settings.AddCustomEngine.URLLabel" = "URL";
 
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "Адреса URL (%s заміниться на запит)";
@@ -1383,7 +1383,7 @@
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Дозволяє деяке стеження для правильної роботи вебсайтів.";
 
 /* Description for strict level tracker protection */
-"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "Блокує більше стеження, реклами і виринаючих вікон. Сторінки завантажуються швидше, але деякі функції можуть не працювати.";
+"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "Блокує більше стеження, реклами і спливних вікон. Сторінки завантажуються швидше, але деякі функції можуть не працювати.";
 
 /* Title for tracking protection options section where level can be selected. */
 "Settings.TrackingProtection.ProtectionLevelTitle" = "Рівень захисту";
@@ -1486,7 +1486,7 @@
 "Show Tour" = "Показати знайомство";
 
 /* Accessibility Label for the tab toolbar Stop button */
-"Stop" = "Стоп";
+"Stop" = "Зупинити";
 
 /* Support section title */
 "Support" = "Підтримка";

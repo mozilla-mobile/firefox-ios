@@ -8,5 +8,5 @@
 "Bookmarks.DeleteFolderWarning.Description" = "Desira tu vermente deler illo e su contentos?";
 
 /* Title of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
-"Bookmarks.DeleteFolderWarning.Title" = "Iste plica non es vacue.";
+"Bookmarks.DeleteFolderWarning.Title" = "Iste dossier non es vacue.";
 

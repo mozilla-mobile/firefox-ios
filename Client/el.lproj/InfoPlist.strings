@@ -1,8 +1,8 @@
-/* (No Comment) */
-"1Password Fill Browser Action" = "Ενέργεια συμπλήρωσης 1Password";
-
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Επιτρέπει τη λήψη και μεταφόρτωση φωτογραφιών.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Το Firefox απαιτεί το Face ID για πρόσβαση στις αποθηκευμένες συνδέσεις σας.";
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this

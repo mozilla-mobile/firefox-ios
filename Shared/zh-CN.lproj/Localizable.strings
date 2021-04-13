@@ -171,7 +171,7 @@
 "ClipboardToast.GoToCopiedLink.Button" = "转到";
 
 /* Message displayed when the user has a copied link on the clipboard */
-"ClipboardToast.GoToCopiedLink.Title" = "转到复制的链接？";
+"ClipboardToast.GoToCopiedLink.Title" = "要打开复制的链接吗？";
 
 /* Accessibility label for action denoting closing a tab in tab list (tray) */
 "Close" = "关闭";
@@ -1302,7 +1302,7 @@
 "Settings.OfferClipboardBar.Status" = "当打开 Firefox 时";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Title" = "询问打开已复制的链接";
+"Settings.OfferClipboardBar.Title" = "询问打开复制的链接";
 
 /* Title for Open With Settings */
 "Settings.OpenWith.PageTitle" = "打开邮件链接于";

@@ -599,7 +599,7 @@
 "LoginsDetailView.LoginModified" = "संशोधित";
 
 /* Title for the login detail view */
-"LoginsDetailView.LoginTitle" = "लॉग इन";
+"LoginsDetailView.LoginTitle" = "लॉगिन";
 
 /* Button to not save the user's password */
 "LoginsHelper.DontSave.Button" = "सहेजें नहीं";
@@ -671,6 +671,9 @@
 
 /* A switch to enable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtectionOn.Title" = "इस साइट के लिए उन्नत ट्रैकिंग सुरक्षा चालू है।";
+
+/* Label for the button displayed in the menu used to stop the reload of the webpage */
+"Menu.Library.StopReload" = "रूकें";
 
 /* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label" = "नाईट मोड सक्रिय करें";
@@ -894,6 +897,9 @@
 
 /* Accessibility Label for the tab toolbar Reload button */
 "Reload" = "फिर लोड करें";
+
+/* Accessibility label for the reload button */
+"Reload page" = "पेज फिर लोड करें";
 
 /* Title for the button that removes a reading list item */
 "Remove" = "हटाएं";
@@ -1182,7 +1188,7 @@
 "Settings.FxA.Sync.SectionName" = "सिंक सेटिंग";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Firefox खाता";
+"Settings.FxA.Title" = "Firefox Account";
 
 /* General settings section title */
 "Settings.General.SectionName" = "सामान्य";
@@ -1212,7 +1218,7 @@
 "Settings.HomePage.UseDefault.Button" = "तयशुदा का प्रयोग करें";
 
 /* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
-"Settings.LoginsAndPasswordsTitle" = "लॉगइन एवं पासवर्ड";
+"Settings.LoginsAndPasswordsTitle" = "लॉगिन एवं पासवर्ड";
 
 /* Label used to set a custom url as the new tab option (homepage). */
 "Settings.NewTab.CustomURL" = "विशिष्ट URL";
@@ -1284,7 +1290,7 @@
 "Settings.OpenWith.SectionName" = "मेल ऐप";
 
 /* Setting to enable the built-in password manager */
-"Settings.SaveLogins.Title" = "लॉगइन सहेजें";
+"Settings.SaveLogins.Title" = "लॉगिन सहेजें";
 
 /* Button displayed at the top of the search settings. */
 "Settings.Search.Done.Button" = "संपन्न";
@@ -1539,17 +1545,26 @@
 /* The title on the button to copy the tab address. */
 "TabTray.MoreMenu.Copy" = "कॉपी करें";
 
+/* The section header for tabs opened before last week */
+"TabTray.Older.Header" = "पुराना";
+
 /* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "नया टैब खोलें";
 
 /* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenSelectedTab.KeyCodeTitle" = "चयनित टैब खोलें";
 
+/* The button title to see more options to perform on the tab. */
+"TabTray.SwipeMenu.More" = "अधिक";
+
 /* The title for the tab tray */
 "TabTray.Title" = "टैब खोलें";
 
 /* The section header for tabs opened today */
 "TabTray.Today.Header" = "आज";
+
+/* The section header for tabs opened yesterday */
+"TabTray.Yesterday.Header" = "कल";
 
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "पृष्ठ पाठक परिदृश्य में प्रदर्शित नहीं किया जा सकता है।";

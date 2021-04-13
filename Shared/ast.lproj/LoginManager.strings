@@ -25,9 +25,15 @@
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "Abrir y rellenar";
 
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Contraseña";
+
 /* Title for the search field at the top of the Logins list screen */
 "Search" = "Buscar";
 
 /* Label for the button used to select all logins. */
 "Select All" = "Esbillar too";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "Sitiu web";
 

@@ -1,6 +1,9 @@
 /* Button string to open settings that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Button" = "Shko te Rregullimet";
 
+/* Button string to learn how to set your default browser. */
+"DefaultBrowserCard.Button.v2" = "Mësoni Se Si";
+
 /* Description for small card shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "Caktoni lidhje prej sajtesh, email-esh dhe Mesazhe për hapje automatike në Firefox.";
 

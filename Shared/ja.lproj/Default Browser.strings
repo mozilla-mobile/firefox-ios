@@ -1,6 +1,9 @@
 /* Button string to open settings that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Button" = "環境設定を開く";
 
+/* Button string to learn how to set your default browser. */
+"DefaultBrowserCard.Button.v2" = "手順を見る";
+
 /* Description for small card shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "ウェブサイト、メール、メッセージのリンクを自動的に Firefox で開くように設定します。";
 

@@ -1,6 +1,9 @@
 /* Button string to open settings that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Button" = "설정으로 이동";
 
+/* Button string to learn how to set your default browser. */
+"DefaultBrowserCard.Button.v2" = "방법 알아보기";
+
 /* Description for small card shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "Firefox에서 자동으로 열리도록 웹 사이트, 이메일 및 메시지의 링크를 설정합니다.";
 

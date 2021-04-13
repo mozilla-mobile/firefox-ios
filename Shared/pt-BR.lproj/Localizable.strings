@@ -1395,7 +1395,7 @@
 "Settings.TrackingProtection.StrictLevelInfoFooter" = "Bloquear rastreadores pode afetar a funcionalidade de alguns sites.";
 
 /* Tracking protection settings option for using the basic blocklist. */
-"Settings.TrackingProtectionOption.BasicBlockList" = "Padrão (predefinido)";
+"Settings.TrackingProtectionOption.BasicBlockList" = "Normal (padrão)";
 
 /* Tracking protection settings option description for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BlockListBasicDescription" = "Permite alguns rastreadores para que os sites funcionem corretamente.";

@@ -1,0 +1,12 @@
+/* Button label to cancel deletion when the user tried to delete a non-empty folder. */
+"Bookmarks.DeleteFolderWarning.CancelButton.Label" = "বাতিল";
+
+/* Button label for the button that deletes a folder and all of its children. */
+"Bookmarks.DeleteFolderWarning.DeleteButton.Label" = "মুছে ফেলুন";
+
+/* Main body of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
+"Bookmarks.DeleteFolderWarning.Description" = "আপনি কি নিশ্চিত যে আপনি এইগুলো মুছে ফেলতে চান?";
+
+/* Title of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
+"Bookmarks.DeleteFolderWarning.Title" = "এই ফোল্ডারটি খালি নয়।";
+

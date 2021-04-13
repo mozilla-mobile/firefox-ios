@@ -1,6 +1,9 @@
 /* Button string to open settings that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Button" = "Vés als paràmetres";
 
+/* Button string to learn how to set your default browser. */
+"DefaultBrowserCard.Button.v2" = "Vegeu com fer-ho";
+
 /* Description for small card shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "Feu que els enllaços dels llocs web, del correu electrònic i de Missatges s'obrin automàticament en el Firefox.";
 

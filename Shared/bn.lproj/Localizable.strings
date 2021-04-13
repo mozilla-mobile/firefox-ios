@@ -104,6 +104,9 @@
 /* Toggle bookmarks syncing setting */
 "Bookmarks" = "বুকমার্কসমূহ";
 
+/* The button on the snackbar to edit a bookmark after adding it. */
+"Bookmarks.Edit.Button" = "সম্পাদনা";
+
 /* The button to edit a bookmark */
 "Bookmarks.EditBookmark.Label" = "বুকমার্ক সম্পাদনা";
 
@@ -136,6 +139,21 @@
 
 /* Status label for the empty Bookmarks state. */
 "BookmarksPanel.EmptyState.Title" = "আপনার সংরক্ষণ করা বুকমার্ক এখানে দেখানো হবে।";
+
+/* Describes the date on which the breach occurred */
+"BreachAlerts.BreachDate" = "এই ব্রিচটি ঘটেছে";
+
+/* Description of what a breach is */
+"BreachAlerts.Description" = "আপনি সর্বশেষ আপনার পাসওয়ার্ড পরিবর্তন করার পরে পাসওয়ার্ড ফাঁস বা চুরি হয়ে গেছে। এই অ্যাকাউন্টটি সুরক্ষিত করতে, সাইটে লগ ইন করুন এবং আপনার পাসওয়ার্ড পরিবর্তন করুন।";
+
+/* Link to monitor.firefox.com to learn more about breached passwords */
+"BreachAlerts.LearnMoreButton" = "আরও জানুন";
+
+/* Leads to a link to the breached website */
+"BreachAlerts.Link" = "যান";
+
+/* Title for the Breached Login Detail View. */
+"BreachAlerts.Title" = "ওয়েবসাইট ব্রিচ";
 
 /* Accessibility label for brightness adjustment slider in Reader Mode display settings */
 "Brightness" = "উজ্জ্বলতা";
@@ -209,8 +227,20 @@
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "পেজ লোড করা যাচ্ছে না";
 
+/* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
+"CoverSheet.v22.DarkMode.Description" = "iOS 13 ব্যাবহারকারিদের জন্য, এখন আপনার ফোন ডার্ক মোডে সেট করা থাকলে, Firefox স্বয়ংক্রিয়ভাবেই ডার্ক থিমে পরিবর্তন করে নেয়। এই আচরণটি পরিবর্তন করার জন্য, সেটিংস> থিম এ যান।";
+
 /* Title for the new dark mode change in the version 22 app release. */
 "CoverSheet.v22.DarkMode.Title" = "ডার্ক কীবোর্ড এবং ডার্ক স্প্ল্যাশ স্ক্রিন এখন ডার্ক থিম এর অন্তর্ভুক্ত।";
+
+/* Description for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Description" = "অন্তর্নির্মিত বর্ধিত ট্র্যাকিং সুরক্ষা বিজ্ঞাপনকে আপনার চারপাশে অনুসরণ করা থেকে বিরত রাখতে সহায়তা করে। আরও বেশি ট্র্যাকার, বিজ্ঞাপন এবং পপআপগুলি অবরুদ্ধ করতে স্ট্রাইক চালু করুন।";
+
+/* Text for the new ETP settings button */
+"CoverSheet.v24.ETP.Settings.Button" = "সেটিংস এ যান";
+
+/* Title for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Title" = "বিজ্ঞাপন ট্র্যাকিংয়ের বিরুদ্ধে সুরক্ষা";
 
 /* See http://mzl.la/1Qtkf0j */
 "Create an account" = "একটি অ্যাকাউন্ট তৈরি করুন";
@@ -349,6 +379,9 @@
 /* Button label to open Sync preferences */
 "FxA.OpenSyncPreferences" = "সিঙ্ক এর পছন্দের অপশন খুলুন";
 
+/* Instructions shown on qr code scanning view */
+"fxa.qr-scanning-view.instructions" = "firefox.com/pair এ QR কোডটি স্ক্যান করুন";
+
 /* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
 "FxA.RemoveAccount" = "অপসারণ করুন";
 
@@ -360,6 +393,27 @@
 
 /* Button label to resend email */
 "FxA.ResendEmail" = "পুনরায় ইমেল পাঠান";
+
+/* FxA sign in view subtitle */
+"fxa.signin.camera-signin" = "আপনার ক্যামেরা দিয়ে সাইন ইন করুন";
+
+/* FxA sign in create account label. */
+"fxa.signin.create-account-pt-1" = "অ্যাকাউন্টের মাধ্যমে ডিভাইসের মধ্যে Firefox সিঙ্ক করুন।";
+
+/* FxA sign in create account label. This will be linked to the site to create an account. */
+"fxa.signin.create-account-pt-2" = "Firefox অ্যাকাউন্ট খুলুন।";
+
+/* FxA sign in view qr code instructions */
+"fxa.signin.qr-link-instruction" = "আপনার কম্পিউটারে Firefox খুলুন এবং firefox.com/pair এ যান";
+
+/* FxA sign in view qr code scan button */
+"fxa.signin.ready-to-scan" = "স্ক্যান করার জন্য প্রস্তুত";
+
+/* FxA sign in view title */
+"fxa.signin.turn-on-sync" = "সিঙ্ক চালু করুন";
+
+/* FxA sign in view email login button */
+"fxa.signin.use-email-instead" = "পরিবর্তে ইমেল ব্যবহার করুন";
 
 /* Button label to sign into Sync */
 "FxA.SignIntoSync" = "সিঙ্ক করতে সাইন ইন করুন";
@@ -574,6 +628,12 @@
 /* Prompt for saving a password with no username. The parameter is the hostname of the site. */
 "LoginsHelper.PromptSavePassword.Title" = "%@ টার জন্য পাসওয়ার্ড সেভ করুন?";
 
+/* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
+"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "%@ এর জন্য লগইন আপডেট করবেন?";
+
+/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "%1$@ এর জন্য %2$@ লগইন আপডেট করবেন?";
+
 /* Button to save the user's password */
 "LoginsHelper.SaveLogin.Button" = "লগইন সেভ করুন";
 
@@ -609,6 +669,9 @@
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "বুকমার্ক করা হয়েছে";
 
+/* Toast displayed to the user after adding the item to the Top Sites. */
+"Menu.AddPin.Confirm" = "টপ সাইটগুলোতে পিন করা হয়েছে";
+
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "পঠন তালিকায় যোগ করা হয়েছে";
 
@@ -617,6 +680,21 @@
 
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "URL ক্লিপবোর্ডে কপি করা হয়েছে";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "উন্নত ট্র্যাকিং সুরক্ষা এখন এই সাইটের জন্য বন্ধ আছে।";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "উন্নত ট্র্যাকিং সুরক্ষা এই সাইটের জন্য চালু আছে।";
+
+/* Description for having standard ETP protection with ITP offered in iOS14+ */
+"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox ক্রস-সাইট ট্র্যাকার, সোশ্যাল ট্র্যাকার, ক্রিপ্টোমিনিয়ারস এবং ফিঙ্গারপ্রিন্টারগুলিকে অবরুদ্ধ করে।";
+
+/* Description for having strict ETP protection with ITP offered in iOS14+ */
+"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox ক্রস-সাইট ট্র্যাকার, সোশ্যাল ট্র্যাকার, ক্রিপ্টোমিনিয়ারস, ফিঙ্গারপ্রিন্টারগুলি ও ট্র্যাকিং কন্টেন্টকে অবরুদ্ধ করে।";
+
+/* Label for the button displayed in the menu used to stop the reload of the webpage */
+"Menu.Library.StopReload" = "থামুন";
 
 /* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label" = "নাইট মোড সক্রিয় করুন";
@@ -641,6 +719,9 @@
 
 /* Toast displayed to the user after a bookmark has been removed. */
 "Menu.RemoveBookmark.Confirm" = "বুকমার্ক অপসারণ";
+
+/* Toast displayed to the user after removing the item from the Top Sites. */
+"Menu.RemovePin.Confirm" = "টপ সাইটগুলো থেকে সরানো হয়েছে";
 
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "ট্যাব প্রেরিত";
@@ -838,6 +919,9 @@
 /* Accessibility Label for the tab toolbar Reload button */
 "Reload" = "পুনরায় লোড";
 
+/* Accessibility label for the reload button */
+"Reload page" = "পেইজ রিলোড করুন";
+
 /* Title for the button that removes a reading list item */
 "Remove" = "অপসারণ করুন";
 
@@ -966,6 +1050,9 @@
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "পাঠান";
+
+/* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
+"SendTo.SignIn.Button" = "Firefox এ সাইন ইন করুন";
 
 /* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
 "SentTab_TabArrivingNotification_NoDevice_body" = "অন্য ডিভাইস থেকে নতুন ট্যাব এসেছে।";
@@ -1241,6 +1328,12 @@
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "ব্যবহারের উপাত্ত প্রেরণ করুন";
 
+/* Description displayed under the ”Show Link Previews” option */
+"Settings.ShowLinkPreviews.Status" = "যখন দীর্ঘক্ষন-টিপে ধরে রাখা লিঙ্কগুলি";
+
+/* Title of setting to enable link previews when long-pressing links. */
+"Settings.ShowLinkPreviews.Title" = "লিঙ্ক প্রিভিউ দেখান";
+
 /* Setting to show Logins & Passwords quick access in the application menu */
 "Settings.ShowLoginsInAppMenu.Title" = "অ্যাপ্লিকেশন মেনুতে দেখাও";
 
@@ -1252,6 +1345,15 @@
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri শর্টকাটসমূহ";
+
+/* Dismiss button for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Button" = "ঠিক আছে, বুঝেছি";
+
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "যদি কোন সাইট প্রত্যাশিতভাবে কাজ না করে তবে ঠিকানা বারে শিল্ডটিতে ট্যাপ করুন এবং সেই পৃষ্ঠার জন্য বর্ধিত ট্র্যাকিং সুরক্ষা বন্ধ করুন।";
+
+/* Title for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Title" = "প্রস্তুত হোন!";
 
 /* Header description for tracking protection options section where Basic/Strict block list can be selected */
 "Settings.TrackingProtection.BlockListsHeader" = "আপনাকে ট্রাকিং করে এমন ওয়েব এলিমেন্টসমূহ ব্লক করতে, Firefox কোন তালিকা ব্যবহার করবে তা আপনি পছন্দ করে দিতে পারবেন।";
@@ -1265,8 +1367,23 @@
 /* Explanation of strict mode. */
 "Settings.TrackingProtection.Info.StrictTitle" = "শক্তিশালী নিরাপত্তা দেয় , কিন্তু কিছু সাইট ঠিকঠাক কাজ নাও করতে পারে ।";
 
+/* 'Learn more' info link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.LearnMore" = "আরও জানুন";
+
 /* 'More Info' link on the Tracking Protection settings screen. */
 "Settings.TrackingProtection.MoreInfo" = "আরও তথ্য…";
+
+/* Additional information about your Enhanced Tracking Protection */
+"Settings.TrackingProtection.ProtectionCellFooter" = "লক্ষ্যযুক্ত বিজ্ঞাপনগুলি হ্রাস করে এবং বিজ্ঞাপনদাতাদেরকে আপনার ব্রাউজিং ট্র্যাক করা থেকে বিরত রাখতে সহায়তা করে।";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "যদি কোন সাইট প্রত্যাশিতভাবে কাজ না করে তবে ঠিকানা বারে শিল্ডটিতে ট্যাপ করুন এবং সেই পৃষ্ঠার জন্য বর্ধিত ট্র্যাকিং সুরক্ষা বন্ধ করুন।";
+
+/* Description for standard level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "কিছু অ্যাড ট্র্যাকিং অনুমোদন করুন যেন ওয়েবসাইট সঠিকভাবে চলতে পারে।";
+
+/* Description for strict level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "আরও ট্র্যাকার, বিজ্ঞাপন এবং পপআপ ব্লক করে। পৃষ্ঠাগুলি দ্রুত লোড হয়, তবে কিছু কার্যকারিতা কাজ নাও করতে পারে।";
 
 /* Title for tracking protection options section where level can be selected. */
 "Settings.TrackingProtection.ProtectionLevelTitle" = "সুরক্ষা স্তর";
@@ -1392,6 +1509,9 @@
 /* Message displayed when the user syncs for the first time */
 "Sync.FirstTimeMessage.Label" = "আপনার প্রথম সিঙ্কে একটু সময়ে নিতে পারে";
 
+/* String displayed on Sign In to Sync page that allows the user to create a new account. */
+"Sync.NoAccount.Description" = "কোন অ্যাকাউন্ট নেই? ডিভাইসের মধ্যে Firefox সিঙ্ক করতে একটি তৈরি করুন।";
+
 /* Message displayed when the user's account is syncing with no ellipsis */
 "Sync.Syncing.Label" = "সিঙ্ক করা হচ্ছে";
 
@@ -1449,17 +1569,41 @@
 /* The placeholder text for the tab search bar */
 "Tabs.Search.PlaceholderText" = "অনুসন্ধান ট্যাব";
 
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"TabTray.AddTab.Button" = "ট্যাব যোগ করুন";
+
 /* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.CloseAllTabs.KeyCodeTitle" = "সকল ট্যাব বন্ধ করুন";
 
 /* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.CloseTab.KeyCodeTitle" = "নির্বাচিত ট্যাব বন্ধ করুন";
 
+/* The section header for tabs opened last week */
+"TabTray.LastWeek.Header" = "গত সপ্তাহ";
+
+/* The title on the button to copy the tab address. */
+"TabTray.MoreMenu.Copy" = "অনুলিপি";
+
+/* The section header for tabs opened before last week */
+"TabTray.Older.Header" = "পুরাতন";
+
 /* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "নতুন ট্যাব খুলুন";
 
 /* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenSelectedTab.KeyCodeTitle" = "নির্বাচিত ট্যাব খুলুন";
+
+/* The button title to see more options to perform on the tab. */
+"TabTray.SwipeMenu.More" = "আরো";
+
+/* The title for the tab tray */
+"TabTray.Title" = "ট্যাব খুলুন";
+
+/* The section header for tabs opened today */
+"TabTray.Today.Header" = "আজ";
+
+/* The section header for tabs opened yesterday */
+"TabTray.Yesterday.Header" = "গতকাল";
 
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "পেজটি রিডার ভিউতে দেখানো যাচ্ছে না।";
@@ -1478,6 +1622,9 @@
 
 /* Open App Store button */
 "Toasts.OpenAppStore" = "অ্যাপ ষ্টোর খুলুন";
+
+/* Label for button to undo the action just performed */
+"Toasts.Undo" = "পূর্বাবস্থায় ফিরুন";
 
 /* History tableview section header */
 "Today" = "আজ";
@@ -1523,6 +1670,9 @@
 
 /* Text message in the settings table view */
 "Upgrade Firefox to connect" = "সংযোগ স্থাপন করতে Firefox আপগ্রেড করুন।";
+
+/* Debug option */
+"Use stage servers" = "স্টেজ সার্ভার ব্যবহার করুন";
 
 /* Username textbox in Authentication prompt */
 "Username" = "উজারনেম";
