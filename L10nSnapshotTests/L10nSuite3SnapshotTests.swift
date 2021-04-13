@@ -13,7 +13,9 @@ class L10nSuite3SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testPasscodeSettings() {
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         app.buttons["urlBar-cancel"].tap()
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
         navigator.goto(PasscodeSettings)
         app.tables.cells["TurnOnPasscode"].tap()
         snapshot("SetPasscodeScreen-1-nopasscode")
