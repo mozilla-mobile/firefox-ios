@@ -55,7 +55,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         case showRecentlyClosedTabs
 
         // Use to enable/disable the additional history action rows.
-        static func setStyle(enabled: Bool, forCell cell: TwoLineImageOverlayCell) {
+        static func setStyle(enabled: Bool, forCell cell: OneLineTableViewCell) {
             if enabled {
                 cell.titleLabel.alpha = 1.0
                 cell.leftImageView.alpha = 1.0
@@ -81,7 +81,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
     var currentFetchOffset = 0
     var isFetchInProgress = false
 
-    var clearHistoryCell: TwoLineImageOverlayCell?
+    var clearHistoryCell: OneLineTableViewCell?
 
     var hasRecentlyClosed: Bool {
         return profile.recentlyClosedTabs.tabs.count > 0
@@ -308,10 +308,9 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         return sitesInSection[safe: indexPath.row]
     }
 
-    func configureClearHistory(_ cell: TwoLineImageOverlayCell, for indexPath: IndexPath) -> TwoLineImageOverlayCell {
+    func configureClearHistory(_ cell: OneLineTableViewCell, for indexPath: IndexPath) -> OneLineTableViewCell {
         clearHistoryCell = cell
         cell.titleLabel.text = Strings.HistoryPanelClearHistoryButtonTitle
-        cell.descriptionLabel.isHidden = true
         cell.leftImageView.image = UIImage.templateImageNamed("forget")
         cell.leftImageView.tintColor = HistoryPanelUX.actionIconColor
         cell.leftImageView.backgroundColor = UIColor.theme.homePanel.historyHeaderIconsBackground
@@ -328,10 +327,9 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         return cell
     }
 
-    func configureRecentlyClosed(_ cell: TwoLineImageOverlayCell, for indexPath: IndexPath) -> TwoLineImageOverlayCell {
+    func configureRecentlyClosed(_ cell: OneLineTableViewCell, for indexPath: IndexPath) -> OneLineTableViewCell {
         cell.accessoryType = .disclosureIndicator
         cell.titleLabel.text = Strings.RecentlyClosedTabsButtonTitle
-        cell.descriptionLabel.isHidden = true
         cell.leftImageView.image = UIImage.templateImageNamed("recently_closed")
         cell.leftImageView.tintColor = HistoryPanelUX.actionIconColor
         cell.leftImageView.backgroundColor = UIColor.theme.homePanel.historyHeaderIconsBackground
@@ -442,11 +440,13 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
                 return cell
             }
 
+            let oneLineCell = tableView.dequeueReusableCell(withIdentifier: OneLineCellIdentifier, for: indexPath) as! OneLineTableViewCell
+
             switch row {
             case .clearRecent:
-                return configureClearHistory(cell, for: indexPath)
+                return configureClearHistory(oneLineCell, for: indexPath)
             case .showRecentlyClosedTabs:
-                return configureRecentlyClosed(cell, for: indexPath)
+                return configureRecentlyClosed(oneLineCell, for: indexPath)
             }
         }
 
