@@ -13,7 +13,9 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
                 "LibraryPanels.Downloads",
                 "LibraryPanels.SyncedTabs"
             ]
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
             app.buttons["urlBar-cancel"].tap()
+            waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
             navigator.goto(LibraryPanel_Bookmarks)
             snapshot("PanelsEmptyState-LibraryPanels.Bookmarks")
             libraryPanels.forEach { panel in
@@ -86,6 +88,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         app.buttons["urlBar-cancel"].tap()
         navigator.nowAt(NewTabScreen)
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
         navigator.goto(BrowserTabMenu)
         waitForExistence(app.tables.cells["menu-sync"], timeout: 5)
         navigator.goto(Intro_FxASignin)
