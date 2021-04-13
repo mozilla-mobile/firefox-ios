@@ -321,7 +321,8 @@ class RemoteTabsErrorCell: UITableViewCell {
         emptyStateImageView.tintColor = UIColor.theme.tableView.rowText
         titleLabel.textColor = UIColor.theme.tableView.headerTextDark
         instructionsLabel.textColor = UIColor.theme.tableView.headerTextDark
-        backgroundColor = UIColor.theme.homePanel.panelBackground
+        backgroundColor = UIColor.theme.tabTray.background
+
     }
 }
 
@@ -401,7 +402,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         titleLabel.textColor = UIColor.theme.tableView.headerTextDark
         instructionsLabel.textColor = UIColor.theme.tableView.headerTextDark
         signInButton.backgroundColor = RemoteTabsPanelUX.EmptyStateSignInButtonColor
-        backgroundColor = UIColor.theme.homePanel.panelBackground
+        backgroundColor = UIColor.theme.tabTray.background
     }
 
     @objc fileprivate func signIn() {

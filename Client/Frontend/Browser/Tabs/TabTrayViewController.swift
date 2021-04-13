@@ -250,8 +250,8 @@ class TabTrayViewController: UIViewController {
 
     fileprivate func updateToolbarItems(forSyncTabs showSyncItems: Bool = false) {
         if UIDevice.current.userInterfaceIdiom == .pad {
-            if showSyncItems {
-                navigationItem.rightBarButtonItem = syncTabButton
+            if showSyncItems || navigationMenu.selectedSegmentIndex == 2 {
+                navigationItem.rightBarButtonItem = nil
                 navigationItem.leftBarButtonItem = nil
             } else {
                 navigationItem.rightBarButtonItem = newTabButton
@@ -259,7 +259,8 @@ class TabTrayViewController: UIViewController {
             }
 
         } else {
-            let newToolbarItems = showSyncItems ? bottomToolbarItemsForSync : bottomToolbarItems
+            navigationController?.isToolbarHidden = showSyncItems || navigationMenu.selectedSegmentIndex == 2
+            let newToolbarItems = showSyncItems ? nil : bottomToolbarItems
             setToolbarItems(newToolbarItems, animated: true)
         }
     }
@@ -285,6 +286,7 @@ extension TabTrayViewController: Themeable {
             navigationToolbar.barTintColor = UIColor.theme.tabTray.toolbar
             navigationToolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
         }
+        viewModel.syncedTabsController.applyTheme()
         setNeedsStatusBarAppearanceUpdate()
     }
 }
