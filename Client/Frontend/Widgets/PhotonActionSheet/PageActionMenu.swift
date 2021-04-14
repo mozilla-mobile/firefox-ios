@@ -88,6 +88,18 @@ extension PhotonActionSheetProtocol {
             self.profile.places.deleteBookmarksWithURL(url: url.absoluteString).uponQueue(.main) { result in
                 if result.isSuccess {
                     success(Strings.AppMenuRemoveBookmarkConfirmMessage, .removeBookmark)
+                    // Get most recent bookmark
+                    self.profile.places.getRecentBookmarks(limit: 1).uponQueue(.main) { result in
+                        guard let bookmarkItems = result.successValue else { return }
+                        if bookmarkItems.count == 0 {
+                            // Remove the openLastBookmark shortcut
+                            QuickActions.sharedInstance.removeDynamicApplicationShortcutItemOfType(.openLastBookmark, fromApplication: .shared)
+                        } else {
+                            // Update the last bookmark shortcut
+                            let userData = [QuickActions.TabURLKey: bookmarkItems[0].url, QuickActions.TabTitleKey: bookmarkItems[0].title]
+                            QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark, withUserData: userData, toApplication: .shared)
+                        }
+                    }
                 }
             }
 
