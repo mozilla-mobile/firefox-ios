@@ -215,6 +215,21 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
             return
         }
 
+        func removeShortcut() {
+            // Get most recent bookmark
+            profile.places.getRecentBookmarks(limit: 1).uponQueue(.main) { result in
+                guard let bookmarkItems = result.successValue else { return }
+                if bookmarkItems.count == 0 {
+                    // Remove the openLastBookmark shortcut
+                    QuickActions.sharedInstance.removeDynamicApplicationShortcutItemOfType(.openLastBookmark, fromApplication: .shared)
+                } else {
+                    // Update the last bookmark shortcut
+                    let userData = [QuickActions.TabURLKey: bookmarkItems[0].url, QuickActions.TabTitleKey: bookmarkItems[0].title]
+                    QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark, withUserData: userData, toApplication: .shared)
+                }
+            }
+        }
+
         func doDelete() {
             // Perform the delete asynchronously even though we update the
             // table view data source immediately for responsiveness.
@@ -228,6 +243,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
             }
             tableView.deleteRows(at: [indexPath], with: .left)
             tableView.endUpdates()
+            removeShortcut()
         }
 
         // If this node is a folder and it is not empty, we need
