@@ -81,7 +81,8 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     func testTopSitesMenu() {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         app.buttons["urlBar-cancel"].tap()
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(HomePanel_TopSites)
         navigator.goto(TopSitesPanelContextMenu)
         snapshot("TopSitesMenu-01")
@@ -122,7 +123,8 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     func testETPperSite() {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         app.buttons["urlBar-cancel"].tap()
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        navigator.nowAt(NewTabScreen)
         // Enable Strict ETP
         navigator.goto(TrackingProtectionSettings)
         // Check the warning alert
@@ -146,7 +148,8 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     func testSettingsETP() {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         app.buttons["urlBar-cancel"].tap()
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(TrackingProtectionSettings)
 
         waitForExistence(app.cells["Settings.TrackingProtectionOption.BlockListBasic"])

@@ -15,7 +15,8 @@ class L10nSuite3SnapshotTests: L10nBaseSnapshotTests {
     func testPasscodeSettings() {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         app.buttons["urlBar-cancel"].tap()
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(PasscodeSettings)
         app.tables.cells["TurnOnPasscode"].tap()
         snapshot("SetPasscodeScreen-1-nopasscode")
@@ -43,15 +44,14 @@ class L10nSuite3SnapshotTests: L10nBaseSnapshotTests {
     func testDefaultTopSites() {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         app.buttons["urlBar-cancel"].tap()
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
-        navigator.goto(HomePanelsScreen)
+        navigator.nowAt(NewTabScreen)
         snapshot("DefaultTopSites-01")
     }
 
     func testMenuOnTopSites() {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         app.buttons["urlBar-cancel"].tap()
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
         snapshot("MenuOnTopSites-01")
@@ -61,7 +61,8 @@ class L10nSuite3SnapshotTests: L10nBaseSnapshotTests {
         let table = app.tables.element(boundBy: 0)
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         app.buttons["urlBar-cancel"].tap()
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
         table.forEachScreen { i in
             snapshot("Settings-main-\(i)")
@@ -78,7 +79,8 @@ class L10nSuite3SnapshotTests: L10nBaseSnapshotTests {
     func testPrivateBrowsingTabsEmptyState() {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         app.buttons["urlBar-cancel"].tap()
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         app.tables.cells.element(boundBy: 0).buttons["closeTabButtonTabTray"].tap()
         snapshot("PrivateBrowsingTabsEmptyState-01")
