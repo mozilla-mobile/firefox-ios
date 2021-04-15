@@ -126,16 +126,37 @@ extension BrowserViewController: URLBarDelegate {
 
         let deferredBookmarkStatus: Deferred<Maybe<Bool>> = fetchBookmarkStatus(for: urlString)
         let deferredPinnedTopSiteStatus: Deferred<Maybe<Bool>> = fetchPinnedTopSiteStatus(for: urlString)
-
+       
+        
+        var pageActions = Array<[PAMItem]>()
         // Wait for both the bookmark status and the pinned status
         deferredBookmarkStatus.both(deferredPinnedTopSiteStatus).uponQueue(.main) {
             let shouldShowNewTabButton = false
             let isBookmarked = $0.successValue ?? false
             let isPinned = $1.successValue ?? false
-            let pageActions = self.getTabActions(tab: tab, buttonView: button, presentShareMenu: actionMenuPresenter,
+             pageActions = self.getTabActions(tab: tab, buttonView: button, presentShareMenu: actionMenuPresenter,
                                                  findInPage: findInPageAction, reportSiteIssue: reportSiteIssue, presentableVC: self, isBookmarked: isBookmarked,
                                                  isPinned: isPinned, shouldShowNewTabButton: shouldShowNewTabButton, success: successCallback)
-            self.presentSheetWith(title: Strings.PageActionMenuTitle, actions: pageActions, on: self, from: button)
+           
+            
+        }
+        if #available(iOS 14.0, *) {
+            var menus = Array<UIMenu>()
+            for menu in pageActions {
+                var children = Array<UIAction>()
+                for item in menu {
+                    let action = UIAction(title: item.title, image: UIImage(named: item.iconString), handler: item.tapHandler!)
+                    children.append(action)
+                }
+                let submenu = UIMenu(title: "", options: .displayInline, children: children)
+                menus.append(submenu)
+            }
+//            let menu = UIMenu(title: "", children: menus)
+            button.menu = button.menu?.replacingChildren(menus)
+            button.showsMenuAsPrimaryAction = true
+        } else {
+            // Fallback on earlier versions
+//                self.presentSheetWith(title: Strings.PageActionMenuTitle, actions: pageActions, on: self, from: button)
         }
     }
 
