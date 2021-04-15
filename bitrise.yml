@@ -517,7 +517,7 @@ workflows:
         inputs:
         - scheme: Fennec_Enterprise_XCUITests
         - xcodebuild_test_options: '-testPlan SmokeXCUITests'
-        - simulator_device: iPad Pro (12.9-inch) (4th generation)
+        - simulator_device: iPhone 11
         is_always_run: true
     - deploy-to-bitrise-io@1.9: {}
     - cache-push@2.2: {}
@@ -1382,7 +1382,7 @@ workflows:
         - scheme: Fennec_Enterprise_XCUITests
         - xcodebuild_test_options: '-testPlan SmokeXCUITests'
         - simulator_os_version: latest
-        - simulator_device: iPad Pro (12.9-inch) (4th generation) 
+        - simulator_device: iPad Pro (12.9-inch) (4th generation)
     - deploy-to-bitrise-io@1.10: {}
     - cache-push@2.2: {}
     - slack@3.1:
