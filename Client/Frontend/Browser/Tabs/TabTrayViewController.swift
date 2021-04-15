@@ -153,7 +153,6 @@ class TabTrayViewController: UIViewController {
 
         navigationController?.navigationBar.shadowImage = UIImage()
 
-
         if UIDevice.current.userInterfaceIdiom == .pad {
             iPadViewSetup()
         } else {
@@ -266,7 +265,6 @@ class TabTrayViewController: UIViewController {
     }
 }
 
-
 extension TabTrayViewController: Themeable {
     @objc func applyTheme() {
         if #available(iOS 13.0, *) {
@@ -361,5 +359,4 @@ extension TabTrayViewController: RemotePanelDelegate {
             }
             presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: controller, topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad)
         }
-        
 }
