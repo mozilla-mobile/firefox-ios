@@ -2,13 +2,16 @@
 "2GqvPe" = "Gå til kopiert lenke";
 
 /* (No Comment) */
-"eHmH1H" = "Fjern private faner";
+"ctDNmu" = "Rask tilgang til forskjellige Firefox-aktiviteter";
 
 /* (No Comment) */
-"eqyNJg" = "Hurtig handling";
+"eHmH1H" = "Tøm private faner";
 
 /* (No Comment) */
-"eV8mOT" = "Hurtig handlingstype";
+"eqyNJg" = "Hurtighandling";
+
+/* (No Comment) */
+"eV8mOT" = "Hurtighandlingstype";
 
 /* (No Comment) */
 "fi3W24-2GqvPe" = "Det er ${count} alternativer som samsvarer med «Gå til kopiert lenke».";
@@ -26,19 +29,19 @@
 "PzSrmZ-2GqvPe" = "For å bekrefte, du vil «Gå til kopiert lenke»?";
 
 /* (No Comment) */
-"PzSrmZ-eHmH1H" = "For å bekrefte, du vil \"Fjern private faner\"?";
+"PzSrmZ-eHmH1H" = "For å bekrefte, du vil «Fjerne private faner»?";
 
 /* (No Comment) */
-"PzSrmZ-scEmjs" = "For å bekrefte, du vil «Nytt privat søk»?";
+"PzSrmZ-scEmjs" = "For å bekrefte, du vil ha «Nytt privat søk»?";
 
 /* (No Comment) */
-"PzSrmZ-xRJbBP" = "For å bekrefte, du vil «Nytt søk»?";
+"PzSrmZ-xRJbBP" = "For å bekrefte, du vil ha «Nytt søk»?";
 
 /* (No Comment) */
 "scEmjs" = "Nytt privat søk";
 
 /* (No Comment) */
-"w9jdPK" = "Hurtig handling";
+"w9jdPK" = "Hurtighandling";
 
 /* (No Comment) */
 "xRJbBP" = "Nytt søk";

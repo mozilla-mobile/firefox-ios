@@ -4,9 +4,6 @@
 /* Description for default browser onboarding card. */
 "DefaultBrowserOnboarding.Description3" = "3. Valitse Firefox";
 
-/* Text for the screenshot of the iOS system settings page for Firefox. */
-"DefaultBrowserOnboarding.Screenshot" = "Oletusselain";
-
 /* Menu option for setting Firefox as default browser. */
 "Settings.DefaultBrowserMenuItem" = "Aseta oletusselaimeksi";
 

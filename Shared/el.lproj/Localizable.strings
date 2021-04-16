@@ -19,8 +19,14 @@
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite" = "Καρφίτσωμα σε κορυφαίες ιστοσελίδες";
 
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite2" = "Καρφίτσωμα";
+
 /* The title for removing a pinned topsite action */
 "ActivityStream.ContextMenu.RemovePinTopsite" = "Ξεκαρφίτσωμα ιστοσελίδας";
+
+/* The title for the unpinning a topsite action */
+"ActivityStream.ContextMenu.UnpinTopsite" = "Ξεκαρφίτσωμα";
 
 /* The description of a highlight if it is a site the user has bookmarked */
 "ActivityStream.Highlights.Bookmark" = "Σε σελιδοδείκτη";
@@ -37,11 +43,17 @@
 /* Section title label for Recommended by Pocket section */
 "ActivityStream.Pocket.SectionTitle" = "Τάσεις του Pocket";
 
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle2" = "Προτείνεται από το Pocket";
+
 /* The description of a Pocket Story */
 "ActivityStream.Pocket.Trending" = "Τάσεις";
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Πρόσφατες επισκέψεις";
+
+/* Section title label for Shortcuts */
+"ActivityStream.Shortcuts.SectionTitle" = "Συντομεύσεις";
 
 /* label showing how many rows of topsites are shown. %d represents a number */
 "ActivityStream.TopSites.RowCount" = "Γραμμές: %d";
@@ -82,6 +94,9 @@
 
 /* Authentication prompt title */
 "Authentication required" = "Απαιτείται πιστοποίηση";
+
+/* Title for button to suggest searching with a search engine. First argument is the name of the search engine to select */
+"Awesomebar.SearchWithEngine.Title" = "Αναζήτηση με %@";
 
 /* Accessibility label for the Back button in the tab toolbar. */
 "Back" = "Πίσω";
@@ -211,6 +226,12 @@
 
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "Άνοιγμα σε νέα καρτέλα";
+
+/* Context menu item for opening a link in a new private tab */
+"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "Άνοιγμα συνδέσμου σε νέα ιδιωτική καρτέλα";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenLinkInNewTabButtonTitle" = "Άνοιγμα συνδέσμου σε νέα καρτέλα";
 
 /* Context menu item for saving an image */
 "ContextMenu.SaveImageButtonTitle" = "Αποθήκευση εικόνας";
@@ -675,11 +696,17 @@
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "Προστέθηκε στη λίστα ανάγνωσης";
 
+/* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
+"Menu.Bookmarks.Label" = "Σελιδοδείκτες";
+
 /* The title for the button that lets you copy the url from the location bar. */
 "Menu.Copy.Title" = "Αντιγραφή διεύθυνσης";
 
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "Το URL αντιγράφτηκε στο πρόχειρο";
+
+/* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
+"Menu.Downloads.Label" = "Λήψεις";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtectionOff.Title" = "Η ενισχυμένη προστασία από καταγραφή είναι ανενεργή για αυτή την ιστοσελίδα.";
@@ -693,8 +720,14 @@
 /* Description for having strict ETP protection with ITP offered in iOS14+ */
 "Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Το Firefox αποκλείει ιχνηλάτες μεταξύ σελίδων, κοινωνικών δικτύων, cryptominers, fingerprinters και περιεχόμενο καταγραφής.";
 
+/* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
+"Menu.History.Label" = "Ιστορικό";
+
 /* Label for the button displayed in the menu used to stop the reload of the webpage */
 "Menu.Library.StopReload" = "Διακοπή";
+
+/* Label for the button, displayed in the menu, takes you to screen to manage account when pressed. First argument is the display name for the current account */
+"Menu.ManageAccount.Label" = "Διαχείριση λογαριασμού %@";
 
 /* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label" = "Νυχτερινή λειτουργία";
@@ -705,11 +738,17 @@
 /* Label for title in page action menu. */
 "Menu.PageActions.Title" = "Ενέργειες σελίδας";
 
+/* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
+"Menu.Passwords.Label" = "Κωδικοί πρόσβασης";
+
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "Επικόλληση";
 
 /* The title for the button that lets you paste and go to a URL */
 "Menu.PasteAndGo.Title" = "Επικόλληση & μετάβαση";
+
+/* Label for the button, displayed in the menu, takes you to to Reading List screen when pressed. */
+"Menu.ReadingList.Label" = "Λίστα ανάγνωσης";
 
 /* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
 "Menu.ReloadWithoutTrackingProtection.Title" = "Ανανέωση χωρίς προστασία από καταγραφή";
@@ -1046,7 +1085,7 @@
 "SendTo.NotSignedIn.Message" = "Παρακαλούμε ανοίξτε το Firefox, μεταβείτε στις Ρυθμίσεις και συνδεθείτε για να συνεχίσετε.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "Δεν έχετε συνδεθεί στο λογαριασμό Firefox σας.";
+"SendTo.NotSignedIn.Title" = "Δεν έχετε συνδεθεί στον λογαριασμό Firefox σας.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Αποστολή";
@@ -1346,6 +1385,21 @@
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Συντομεύσεις Siri";
 
+/* Button title displayed next to each study allowing the user to opt-out of the study */
+"Settings.Studies.Remove.Button" = "Αφαίρεση";
+
+/* Title displayed in header of the Studies panel */
+"Settings.Studies.SectionName" = "Μελέτες";
+
+/* Label used as an item in Settings. Tapping on this item takes you to the Studies panel */
+"Settings.Studies.Title" = "Μελέτες";
+
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Toggle.Link" = "Μάθετε περισσότερα.";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Toggle.Title" = "Μελέτες";
+
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "OK, το 'πιασα";
 
@@ -1593,6 +1647,12 @@
 /* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenSelectedTab.KeyCodeTitle" = "Άνοιγμα επιλεγμένης καρτέλας";
 
+/* The title for the tab tray in private mode */
+"TabTray.PrivateTitle" = "Ιδιωτικές καρτέλες";
+
+/* The title on the button to look at regular tabs. */
+"TabTray.SegmentedControlTitles.Tabs" = "Καρτέλες";
+
 /* The button title to see more options to perform on the tab. */
 "TabTray.SwipeMenu.More" = "Περισσότερα";
 
@@ -1645,7 +1705,7 @@
 "TopSites.EmptyState.Title" = "Καλώς ορίσατε στις κορυφαίες ιστοσελίδες";
 
 /* Button shown in editing mode to remove this site from the top sites panel. */
-"TopSites.RemovePage.Button" = "Αφαίρεση σελίδας — %@";
+"TopSites.RemovePage.Button" = "Αφαίρεση σελίδας - %@";
 
 /* Button to disallow the page to be translated to the user locale language */
 "TranslationToastHandler.PromptTranslate.Cancel" = "Όχι";

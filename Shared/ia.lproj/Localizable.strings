@@ -19,8 +19,14 @@
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite" = "Fixar al sitos popular";
 
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite2" = "Appunctar";
+
 /* The title for removing a pinned topsite action */
 "ActivityStream.ContextMenu.RemovePinTopsite" = "Remover sito fixate";
+
+/* The title for the unpinning a topsite action */
+"ActivityStream.ContextMenu.UnpinTopsite" = "Disclavar";
 
 /* The description of a highlight if it is a site the user has bookmarked */
 "ActivityStream.Highlights.Bookmark" = "Marcapaginas addite";
@@ -37,11 +43,17 @@
 /* Section title label for Recommended by Pocket section */
 "ActivityStream.Pocket.SectionTitle" = "Tendentias sur Pocket";
 
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle2" = "Recommendate per Pocket";
+
 /* The description of a Pocket Story */
 "ActivityStream.Pocket.Trending" = "Tendentias";
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Visitate recentemente";
+
+/* Section title label for Shortcuts */
+"ActivityStream.Shortcuts.SectionTitle" = "Vias breve";
 
 /* label showing how many rows of topsites are shown. %d represents a number */
 "ActivityStream.TopSites.RowCount" = "Lineas: %d";
@@ -82,6 +94,9 @@
 
 /* Authentication prompt title */
 "Authentication required" = "Authentication requirite";
+
+/* Title for button to suggest searching with a search engine. First argument is the name of the search engine to select */
+"Awesomebar.SearchWithEngine.Title" = "Cercar con %@";
 
 /* Accessibility label for the Back button in the tab toolbar. */
 "Back" = "Retro";
@@ -211,6 +226,9 @@
 
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "Aperir in un nove scheda";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenLinkInNewTabButtonTitle" = "Aperir le ligamine in un nove scheda";
 
 /* Context menu item for saving an image */
 "ContextMenu.SaveImageButtonTitle" = "Salvar le imagine";
@@ -675,11 +693,17 @@
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "Addite al lista de lectura";
 
+/* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
+"Menu.Bookmarks.Label" = "Marcapaginas";
+
 /* The title for the button that lets you copy the url from the location bar. */
 "Menu.Copy.Title" = "Copiar le adresse";
 
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "URL copiate al area de transferentia";
+
+/* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
+"Menu.Downloads.Label" = "Discargamentos";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtectionOff.Title" = "Le protection antitraciamento reinfortiate es INACTIVE pro iste sito.";
@@ -693,8 +717,14 @@
 /* Description for having strict ETP protection with ITP offered in iOS14+ */
 "Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox bloca traciatores inter sitos, traciatores de medios social, cryptominatores, dactylogrammatores e contento que te tracia.";
 
+/* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
+"Menu.History.Label" = "Chronologia";
+
 /* Label for the button displayed in the menu used to stop the reload of the webpage */
 "Menu.Library.StopReload" = "Stoppar";
+
+/* Label for the button, displayed in the menu, takes you to screen to manage account when pressed. First argument is the display name for the current account */
+"Menu.ManageAccount.Label" = "Gerer le conto %@";
 
 /* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label" = "Activar le modo nocturne";
@@ -702,14 +732,23 @@
 /* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
 "Menu.NoImageModeBlockImages.Label" = "Blocar imagines";
 
+/* Label for the button, displayed in the menu, shows images on the webpage when pressed. */
+"Menu.NoImageModeShowImages.Label" = "Monstrar le imagines";
+
 /* Label for title in page action menu. */
 "Menu.PageActions.Title" = "Actiones del pagina";
+
+/* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
+"Menu.Passwords.Label" = "Contrasignos";
 
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "Collar";
 
 /* The title for the button that lets you paste and go to a URL */
 "Menu.PasteAndGo.Title" = "Collar e ir";
+
+/* Label for the button, displayed in the menu, takes you to to Reading List screen when pressed. */
+"Menu.ReadingList.Label" = "Lista de lectura";
 
 /* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
 "Menu.ReloadWithoutTrackingProtection.Title" = "Recargar sin protection contra traciamento";
@@ -971,6 +1010,9 @@
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "Insere un adresse o face un recerca";
+
+/* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
+"Search.Awesomebar.SwitchToTab" = "Mutar al scheda";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "Le nove motor de recerca apparera in le barra de recerca rapide.";
@@ -1259,6 +1301,9 @@
 /* The footer for the section to customize top sites in the new tab settings page. */
 "Settings.NewTab.Option.CustomizeFooter" = "Le sitos que tu visita le plus";
 
+/* The footer for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeFooter2" = "Sitos que tu salva o visita";
+
 /* The title for the section to customize top sites in the new tab settings page. */
 "Settings.NewTab.Option.CustomizeTitle" = "Personalisar le pagina initial de Firefox";
 
@@ -1345,6 +1390,33 @@
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Accessos directe de Siri";
+
+/* Section title for all studies that are currently active */
+"Settings.Studies.Active.SectionName" = "Active";
+
+/* Section title for all studies that are completed */
+"Settings.Studies.Completed.SectionName" = "Completate";
+
+/* Button title displayed next to each study allowing the user to opt-out of the study */
+"Settings.Studies.Remove.Button" = "Remover";
+
+/* Title displayed in header of the Studies panel */
+"Settings.Studies.SectionName" = "Studios";
+
+/* Label used as an item in Settings. Tapping on this item takes you to the Studies panel */
+"Settings.Studies.Title" = "Studios";
+
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Toggle.Link" = "Saper plus.";
+
+/* Toggled OFF to opt-out of studies */
+"Settings.Studies.Toggle.Off" = "Inactive";
+
+/* Toggled ON to participate in studies */
+"Settings.Studies.Toggle.On" = "Active";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Toggle.Title" = "Studios";
 
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "De accordo";
@@ -1592,6 +1664,15 @@
 
 /* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenSelectedTab.KeyCodeTitle" = "Aperir le scheda seligite";
+
+/* The title for the tab tray in private mode */
+"TabTray.PrivateTitle" = "Schedas anonyme";
+
+/* The title on the button to look at private tabs. */
+"TabTray.SegmentedControlTitles.PrivateTabs" = "Anonyme";
+
+/* The title on the button to look at regular tabs. */
+"TabTray.SegmentedControlTitles.Tabs" = "Schedas";
 
 /* The button title to see more options to perform on the tab. */
 "TabTray.SwipeMenu.More" = "Plus";

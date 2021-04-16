@@ -16,11 +16,20 @@
 /* About settings section title */
 "About" = "เกี่ยวกับ";
 
+/* The title for the pinning a shortcut action */
+"ActivityStream.ContextMenu.AddToShortcuts" = "เพิ่มทางลัด";
+
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite" = "ปักหมุดไปยังไซต์เด่น";
 
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite2" = "ปักหมุด";
+
 /* The title for removing a pinned topsite action */
 "ActivityStream.ContextMenu.RemovePinTopsite" = "เอาไซต์ที่ปักหมุดออก";
+
+/* The title for the unpinning a topsite action */
+"ActivityStream.ContextMenu.UnpinTopsite" = "ถอนหมุด";
 
 /* The description of a highlight if it is a site the user has bookmarked */
 "ActivityStream.Highlights.Bookmark" = "เพิ่มที่คั่นหน้าแล้ว";
@@ -37,11 +46,17 @@
 /* Section title label for Recommended by Pocket section */
 "ActivityStream.Pocket.SectionTitle" = "กำลังนิยมใน Pocket";
 
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle2" = "แนะนำโดย Pocket";
+
 /* The description of a Pocket Story */
 "ActivityStream.Pocket.Trending" = "กำลังนิยม";
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "เยี่ยมชมล่าสุด";
+
+/* Section title label for Shortcuts */
+"ActivityStream.Shortcuts.SectionTitle" = "ทางลัด";
 
 /* label showing how many rows of topsites are shown. %d represents a number */
 "ActivityStream.TopSites.RowCount" = "แถว: %d";
@@ -82,6 +97,12 @@
 
 /* Authentication prompt title */
 "Authentication required" = "ต้องมีการรับรองความถูกต้อง";
+
+/* Description for button to suggest searching with a search engine. First argument is the name of the search engine to select */
+"Awesomebar.SearchWithEngine.Description" = "ค้นหา %@ โดยตรงจากแถบที่อยู่";
+
+/* Title for button to suggest searching with a search engine. First argument is the name of the search engine to select */
+"Awesomebar.SearchWithEngine.Title" = "ค้นหาด้วย %@";
 
 /* Accessibility label for the Back button in the tab toolbar. */
 "Back" = "ย้อนกลับ";
@@ -211,6 +232,12 @@
 
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "เปิดในแท็บใหม่";
+
+/* Context menu item for opening a link in a new private tab */
+"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "เปิดลิงก์ในแท็บส่วนตัวใหม่";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenLinkInNewTabButtonTitle" = "เปิดลิงก์ในแท็บใหม่";
 
 /* Context menu item for saving an image */
 "ContextMenu.SaveImageButtonTitle" = "บันทึกภาพ";
@@ -675,11 +702,17 @@
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "เพิ่มไปยังรายการอ่านแล้ว";
 
+/* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
+"Menu.Bookmarks.Label" = "ที่คั่นหน้า";
+
 /* The title for the button that lets you copy the url from the location bar. */
 "Menu.Copy.Title" = "คัดลอกที่อยู่";
 
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "คัดลอก URL ไปยังคลิปบอร์ดแล้ว";
+
+/* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
+"Menu.Downloads.Label" = "ดาวน์โหลด";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtectionOff.Title" = "การป้องกันการติดตามที่มากขึ้นถูก ปิด สำหรับไซต์นี้";
@@ -693,8 +726,14 @@
 /* Description for having strict ETP protection with ITP offered in iOS14+ */
 "Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox จะปิดกั้นตัวติดตามข้ามไซต์ ตัวติดตามสังคมออนไลน์ ตัวขุดเหรียญดิจิทัล ลายนิ้วมือดิจิทัล และเนื้อหาสำหรับการติดตาม";
 
+/* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
+"Menu.History.Label" = "ประวัติ";
+
 /* Label for the button displayed in the menu used to stop the reload of the webpage */
 "Menu.Library.StopReload" = "หยุด";
+
+/* Label for the button, displayed in the menu, takes you to screen to manage account when pressed. First argument is the display name for the current account */
+"Menu.ManageAccount.Label" = "จัดการบัญชี %@";
 
 /* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label" = "เปิดใช้งานโหมดกลางคืน";
@@ -702,14 +741,23 @@
 /* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
 "Menu.NoImageModeBlockImages.Label" = "ปิดกั้นภาพ";
 
+/* Label for the button, displayed in the menu, shows images on the webpage when pressed. */
+"Menu.NoImageModeShowImages.Label" = "แสดงภาพ";
+
 /* Label for title in page action menu. */
 "Menu.PageActions.Title" = "การกระทำหน้า";
+
+/* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
+"Menu.Passwords.Label" = "รหัสผ่าน";
 
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "วาง";
 
 /* The title for the button that lets you paste and go to a URL */
 "Menu.PasteAndGo.Title" = "วางแล้วไป";
+
+/* Label for the button, displayed in the menu, takes you to to Reading List screen when pressed. */
+"Menu.ReadingList.Label" = "รายการอ่าน";
 
 /* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
 "Menu.ReloadWithoutTrackingProtection.Title" = "โหลดใหม่โดยไม่มีการป้องกันการติดตาม";
@@ -971,6 +1019,9 @@
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "ค้นหาหรือป้อนที่อยู่";
+
+/* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
+"Search.Awesomebar.SwitchToTab" = "สลับไปยังแท็บ";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "เครื่องมือค้นหาใหม่จะปรากฏในแถบค้นหาด่วน";
@@ -1346,6 +1397,33 @@
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "คำสั่งลัด Siri";
 
+/* Section title for all studies that are currently active */
+"Settings.Studies.Active.SectionName" = "ทำงานอยู่";
+
+/* Section title for all studies that are completed */
+"Settings.Studies.Completed.SectionName" = "เสร็จสมบูรณ์";
+
+/* Button title displayed next to each study allowing the user to opt-out of the study */
+"Settings.Studies.Remove.Button" = "ลบ";
+
+/* Title displayed in header of the Studies panel */
+"Settings.Studies.SectionName" = "การศึกษา";
+
+/* Label used as an item in Settings. Tapping on this item takes you to the Studies panel */
+"Settings.Studies.Title" = "การศึกษา";
+
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Toggle.Link" = "เรียนรู้เพิ่มเติม";
+
+/* Toggled OFF to opt-out of studies */
+"Settings.Studies.Toggle.Off" = "ปิด";
+
+/* Toggled ON to participate in studies */
+"Settings.Studies.Toggle.On" = "เปิด";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Toggle.Title" = "การศึกษา";
+
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "ตกลง เข้าใจแล้ว";
 
@@ -1592,6 +1670,18 @@
 
 /* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenSelectedTab.KeyCodeTitle" = "เปิดแท็บที่เลือก";
+
+/* The title for the tab tray in private mode */
+"TabTray.PrivateTitle" = "แท็บส่วนตัว";
+
+/* The title on the button to look at private tabs. */
+"TabTray.SegmentedControlTitles.PrivateTabs" = "ส่วนตัว";
+
+/* The title on the button to look at synced tabs. */
+"TabTray.SegmentedControlTitles.SyncedTabs" = "ซิงค์แล้ว";
+
+/* The title on the button to look at regular tabs. */
+"TabTray.SegmentedControlTitles.Tabs" = "แท็บ";
 
 /* The button title to see more options to perform on the tab. */
 "TabTray.SwipeMenu.More" = "เพิ่มเติม";
