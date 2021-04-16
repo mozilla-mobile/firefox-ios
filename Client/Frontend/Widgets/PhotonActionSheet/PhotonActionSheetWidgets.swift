@@ -39,7 +39,6 @@ public enum PhotonActionSheetCellAccessoryType {
     case Disclosure
     case Switch
     case Text
-    case Sync // Sync is a special case.
     case None
 }
 

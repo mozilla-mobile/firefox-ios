@@ -26,7 +26,6 @@ class PhotonActionSheetCell: UITableViewCell {
     static let VerticalPadding: CGFloat = 2
     static let IconSize = 16
 
-    var syncButton: SyncMenuButton?
     var badgeOverlay: BadgeWithBackdrop?
 
     private func createLabel() -> UILabel {
@@ -172,7 +171,7 @@ class PhotonActionSheetCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(with action: PhotonActionSheetItem, syncManager: SyncManager? = nil) {
+    func configure(with action: PhotonActionSheetItem) {
         titleLabel.text = action.title
         titleLabel.textColor = UIColor.theme.tableView.rowText
         titleLabel.textColor = action.accessory == .Text ? titleLabel.textColor.withAlphaComponent(0.6) : titleLabel.textColor
@@ -235,9 +234,6 @@ class PhotonActionSheetCell: UITableViewCell {
         } else {
             statusIcon.removeFromSuperview()
         }
-        if action.accessory != .Sync {
-            syncButton?.removeFromSuperview()
-        }
 
         if let name = action.badgeIconName, action.isEnabled, let parent = statusIcon.superview {
             badgeOverlay = BadgeWithBackdrop(imageName: name)
@@ -260,23 +256,6 @@ class PhotonActionSheetCell: UITableViewCell {
         case .Switch:
             toggleSwitch.setOn(action.isEnabled)
             stackView.addArrangedSubview(toggleSwitch.mainView)
-        case .Sync:
-            if let manager = syncManager {
-                let padding = PhotonActionSheetCell.Padding
-                if syncButton == nil {
-                    syncButton = SyncMenuButton(with: manager)
-                    syncButton?.contentHorizontalAlignment = .center
-                    syncButton?.snp.makeConstraints { make in
-                        make.width.equalTo(40 + padding)
-                        make.height.equalTo(40)
-                    }
-                }
-                stackView.addArrangedSubview(syncButton ?? SyncMenuButton(with: manager))
-                syncButton?.updateAnimations()
-                stackView.snp.remakeConstraints { make in
-                    make.edges.equalTo(contentView).inset(UIEdgeInsets(top: 0, left: padding, bottom: 0, right: 0))
-                }
-            }
         default:
             break // Do nothing. The rest are not supported yet.
         }

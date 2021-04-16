@@ -298,8 +298,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         let cell = tableView.dequeueReusableCell(withIdentifier: PhotonActionSheetUX.CellName, for: indexPath) as! PhotonActionSheetCell
         let action = actions[indexPath.section][indexPath.row]
         cell.tintColor = self.tintColor
-        let syncManager = action.accessory == .Sync ? self.syncManager : nil
-        cell.configure(with: action, syncManager: syncManager)
+        cell.configure(with: action)
         return cell
     }
 

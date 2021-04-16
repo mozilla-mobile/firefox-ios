@@ -85,7 +85,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         let syncAction = syncMenuButton(showFxA: presentSignInViewController)
         let isLoginsButtonShowing = LoginListViewController.shouldShowAppMenuShortcut(forPrefs: profile.prefs)
         let viewLogins: PhotonActionSheetItem? = !isLoginsButtonShowing ? nil :
-            PhotonActionSheetItem(title: Strings.LoginsAndPasswordsTitle, iconString: "key", iconType: .Image, iconAlignment: .left, isEnabled: true) { _, _ in
+            PhotonActionSheetItem(title: Strings.AppMenuPasswords, iconString: "key", iconType: .Image, iconAlignment: .left, isEnabled: true) { _, _ in
             guard let navController = self.navigationController else { return }
             let navigationHandler: ((_ url: URL?) -> Void) = { url in
                 UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
@@ -99,20 +99,21 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
                 TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .logins)
             }
         }
-
-        let optionalActions = [syncAction, viewLogins].compactMap { $0 }
+        
+        var section1 = getLibraryActions(vcDelegate: self)
+        var section2 = getOtherPanelActions(vcDelegate: self)
+        let section3 = getSettingsAction(vcDelegate: self)
+        
+        let optionalActions = [viewLogins, syncAction].compactMap { $0 }
         if !optionalActions.isEmpty {
-            actions.append(optionalActions)
+            section1.append(contentsOf: optionalActions)
         }
-
-        actions.append(getLibraryActions(vcDelegate: self))
-        actions.append(getOtherPanelActions(vcDelegate: self))
-
-        if let whatsNewAction = whatsNewAction, var lastGroup = actions.last, lastGroup.count > 1 {
-            lastGroup.insert(whatsNewAction, at: lastGroup.count - 1)
-            actions.removeLast()
-            actions.append(lastGroup)
+        
+        if let whatsNewAction = whatsNewAction {
+            section2.append(whatsNewAction)
         }
+        
+        actions.append(contentsOf: [section1, section2, section3])
 
         // force a modal if the menu is being displayed in compact split screen
         let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
