@@ -48,7 +48,7 @@ extension PhotonActionSheetProtocol {
         let noImageEnabled = NoImageModeHelper.isActivated(profile.prefs)
         let imageModeTitle = noImageEnabled ? Strings.AppMenuShowImageMode : Strings.AppMenuNoImageMode
         let iconString = noImageEnabled ? "" : "menu-NoImageMode"
-        let noImageMode = PhotonActionSheetItem(title: imageModeTitle, iconString: iconString, isEnabled: noImageEnabled, accessory: .Switch) { action,_ in
+        let noImageMode = PhotonActionSheetItem(title: imageModeTitle, iconString: iconString, isEnabled: noImageEnabled) { action,_ in
             NoImageModeHelper.toggle(isEnabled: action.isEnabled, profile: self.profile, tabManager: self.tabManager)
         }
 
@@ -56,7 +56,7 @@ extension PhotonActionSheetProtocol {
 
         let nightModeEnabled = NightModeHelper.isActivated(profile.prefs)
         let nightModeTitle = nightModeEnabled ? Strings.AppMenuTurnOffNightMode : Strings.AppMenuTurnOnNightMode
-        let nightMode = PhotonActionSheetItem(title: nightModeTitle, iconString: "menu-NightMode", isEnabled: nightModeEnabled, accessory: .Switch) { _, _ in
+        let nightMode = PhotonActionSheetItem(title: nightModeTitle, iconString: "menu-NightMode", isEnabled: nightModeEnabled) { _, _ in
             NightModeHelper.toggle(self.profile.prefs, tabManager: self.tabManager)
             // If we've enabled night mode and the theme is normal, enable dark theme
             if NightModeHelper.isActivated(self.profile.prefs), ThemeManager.instance.currentName == .normal {
