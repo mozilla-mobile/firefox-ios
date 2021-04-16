@@ -50,18 +50,6 @@ public enum PhotonActionSheetIconType {
     case None
 }
 
-public struct PAMItem {
-    public fileprivate(set) var title: String
-    public fileprivate(set) var iconString: String
-    public fileprivate(set) var tapHandler: ((Any) -> Void)?
-    
-    init(title: String, iconString: String, tapHandler: ((Any) -> Void)? = nil) {
-        self.title = title
-        self.iconString = iconString
-        self.tapHandler = tapHandler
-    }
-}
-
 public struct PhotonActionSheetItem {
     public enum IconAlignment {
         case left

@@ -182,22 +182,14 @@ class TabLocationView: UIView {
     lazy var pageOptionsButton: ToolbarButton = {
         let pageOptionsButton = ToolbarButton(frame: .zero)
         pageOptionsButton.setImage(UIImage.templateImageNamed("menu-More-Options"), for: .normal)
-//        pageOptionsButton.addTarget(self, action: #selector(didPressPageOptionsButton), for: .touchUpInside)
+        pageOptionsButton.addTarget(self, action: #selector(didPressPageOptionsButton), for: .touchUpInside)
         pageOptionsButton.isAccessibilityElement = true
         pageOptionsButton.isHidden = true
         pageOptionsButton.imageView?.contentMode = .left
         pageOptionsButton.accessibilityLabel = .TabLocationPageOptionsAccessibilityLabel
         pageOptionsButton.accessibilityIdentifier = "TabLocationView.pageOptionsButton"
-        //let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressPageOptionsButton))
-        //pageOptionsButton.addGestureRecognizer(longPressGesture)
-        
-        if #available(iOS 14.0, *) {
-            pageOptionsButton.showsMenuAsPrimaryAction = true
-            pageOptionsButton.menu = UIMenu(options: .displayInline, children: [])
-            pageOptionsButton.addAction(UIAction { (action) in
-                self.didPressPageOptionsButton(pageOptionsButton)
-            }, for: .primaryActionTriggered)
-        }
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressPageOptionsButton))
+        pageOptionsButton.addGestureRecognizer(longPressGesture)
         return pageOptionsButton
     }()
 
