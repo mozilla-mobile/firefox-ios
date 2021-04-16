@@ -108,6 +108,8 @@ class TabTrayViewController: UIViewController {
         return .lightContent
     }
 
+    var onViewDismissed: (() -> Void)? = nil
+
     // Initializers
     init(tabTrayDelegate: TabTrayDelegate? = nil, profile: Profile, showChronTabs: Bool = false) {
 
@@ -118,6 +120,11 @@ class TabTrayViewController: UIViewController {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        onViewDismissed?()
     }
 
     deinit {

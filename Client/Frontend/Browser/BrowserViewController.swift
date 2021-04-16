@@ -829,20 +829,31 @@ class BrowserViewController: UIViewController {
                 urlBar.locationView.reloadButton.reloadButtonState = .disabled
                 return
             }
+
             if isAboutHomeURL {
                 showFirefoxHome(inline: true)
 
                 if !hasPresentedDBCard && !shouldShowIntroScreen && focusUrlBar {
-                    if chronTabTrayController == nil {
+                    if chronTabTrayController == nil && tabTrayViewController == nil {
                         urlBar.enterOverlayMode(nil, pasted: false, search: false)
                     } else {
-                        chronTabTrayController?.onViewDismissed = { [weak self] in self?.urlBar.enterOverlayMode(nil, pasted: false, search: false) }
+                        let onViewDismissed = { [weak self] in
+                            let shouldEnterOverlay = self?.tabManager.selectedTab?.url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
+                            if shouldEnterOverlay {
+                                self?.urlBar.enterOverlayMode(nil, pasted: false, search: false)
+                            }
+                        }
+
+                        tabTrayViewController?.onViewDismissed = onViewDismissed
+                        chronTabTrayController?.onViewDismissed = onViewDismissed
                     }
                 }
+
             } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
                 hideFirefoxHome()
                 urlBar.locationView.reloadButton.reloadButtonState = .disabled
             }
+            
         } else if isAboutHomeURL {
             showFirefoxHome(inline: false)
         }

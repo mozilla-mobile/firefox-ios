@@ -920,19 +920,29 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.buttons["closeAllTabsButtonTabTray"], to: CloseTabMenu)
 //        screenState.tap(app.buttons["syncNowButtonTabsButtonTabTray"], to: CloseTabMenu)
 
-        screenState.tap(app.navigationBars.segmentedControls.buttons.element(boundBy: 0),
-                        forAction: Action.ToggleRegularMode) { userState in
+        var regularModeSelector: XCUIElement
+        var privateModeSelector: XCUIElement
+//        var syncModeSelector: XCUIElement
+
+        if isTablet {
+            regularModeSelector = app.navigationBars.segmentedControls.buttons.element(boundBy: 0)
+            privateModeSelector = app.navigationBars.segmentedControls.buttons.element(boundBy: 1)
+        } else {
+            regularModeSelector =             app.toolbars["Toolbar"].segmentedControls["navBarTabTray"].buttons.element(boundBy: 0)
+            privateModeSelector =             app.toolbars["Toolbar"].segmentedControls["navBarTabTray"].buttons.element(boundBy: 0)
+
+        }
+
+        screenState.tap(regularModeSelector, forAction: Action.ToggleRegularMode) { userState in
             userState.isPrivate = !userState.isPrivate
         }
 
-        screenState.tap(app.navigationBars.segmentedControls.buttons.element(boundBy: 1),
-                        forAction: Action.TogglePrivateMode) { userState in
+        screenState.tap(privateModeSelector, forAction: Action.TogglePrivateMode) { userState in
             userState.isPrivate = !userState.isPrivate
         }
-
+        
         // this is for Sync Now button, which is currently not implemented
-//        screenState.tap(app.navigationBars.segmentedControls.buttons.element(boundBy: 2),
-//                        forAction: Action.TogglePrivateMode) { userState in
+//        screenState.tap(syncModeSelector, forAction: Action.TogglePrivateMode) { userState in
 //        }
 
         screenState.onEnter { userState in
