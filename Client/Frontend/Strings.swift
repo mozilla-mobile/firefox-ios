@@ -66,6 +66,7 @@ extension Strings {
     public static let PinTopsiteActionTitle2 = MZLocalizedString("ActivityStream.ContextMenu.PinTopsite2", value: "Pin", comment: "The title for the pinning a topsite action")
     public static let UnpinTopsiteActionTitle2 = MZLocalizedString("ActivityStream.ContextMenu.UnpinTopsite", value: "Unpin", comment: "The title for the unpinning a topsite action")
     public static let AddToShortcutsActionTitle = MZLocalizedString("ActivityStream.ContextMenu.AddToShortcuts", value: "Add to Shortcuts", comment: "The title for the pinning a shortcut action")
+    public static let RemoveFromShortcutsActionTitle = MZLocalizedString("ActivityStream.ContextMenu.RemoveFromShortcuts", value: "Remove from Shortcuts", comment: "The title for removing a shortcut action")
     public static let RemovePinTopsiteActionTitle = MZLocalizedString("ActivityStream.ContextMenu.RemovePinTopsite", value: "Remove Pinned Site", comment: "The title for removing a pinned topsite action")
 }
 
