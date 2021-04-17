@@ -837,15 +837,12 @@ class BrowserViewController: UIViewController {
                     if chronTabTrayController == nil && tabTrayViewController == nil {
                         urlBar.enterOverlayMode(nil, pasted: false, search: false)
                     } else {
-                        let onViewDismissed = { [weak self] in
+                        tabTrayViewController?.onViewDismissed = { [weak self] in
                             let shouldEnterOverlay = self?.tabManager.selectedTab?.url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
                             if shouldEnterOverlay {
                                 self?.urlBar.enterOverlayMode(nil, pasted: false, search: false)
                             }
                         }
-
-                        tabTrayViewController?.onViewDismissed = onViewDismissed
-                        chronTabTrayController?.onViewDismissed = onViewDismissed
                     }
                 }
 
