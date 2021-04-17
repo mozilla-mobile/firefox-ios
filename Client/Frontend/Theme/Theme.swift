@@ -57,7 +57,7 @@ class ActionMenuColor {
 class URLBarColor {
     var border: UIColor { return UIColor.Photon.Grey90A10 }
     func activeBorder(_ isPrivate: Bool) -> UIColor { 
-        return !isPrivate ? UIColor.Photon.Blue40A30 : UIColor.Defaults.MobilePrivatePurple
+        return !isPrivate ? UIColor.Photon.Blue20A40 : UIColor.Defaults.MobilePrivatePurple
     }
     var tint: UIColor { return UIColor.Photon.Blue40A30 }
 
@@ -122,7 +122,7 @@ class TabTrayColor {
 }
 
 class TopTabsColor {
-    var background: UIColor { return UIColor.Photon.Grey80 }
+    var background: UIColor { return UIColor.Photon.LightGrey20 }
     var tabBackgroundSelected: UIColor { return UIColor.Photon.Grey10 }
     var tabBackgroundUnselected: UIColor { return UIColor.Photon.Grey80 }
     var tabForegroundSelected: UIColor { return UIColor.Photon.Grey90 }
@@ -130,7 +130,7 @@ class TopTabsColor {
     func tabSelectedIndicatorBar(_ isPrivate: Bool) -> UIColor {
         return !isPrivate ? UIColor.Photon.Blue40 : UIColor.Photon.Purple60
     }
-    var buttonTint: UIColor { return UIColor.Photon.Grey40 }
+    var buttonTint: UIColor { return UIColor.Photon.Grey80 }
     var privateModeButtonOffTint: UIColor { return buttonTint }
     var privateModeButtonOnTint: UIColor { return UIColor.Photon.Grey10 }
     var closeButtonSelectedTab: UIColor { return tabBackgroundUnselected }
@@ -139,8 +139,8 @@ class TopTabsColor {
 }
 
 class TextFieldColor {
-    var background: UIColor { return UIColor.Photon.Grey25 }
-    var backgroundInOverlay: UIColor { return UIColor.Photon.Grey25 }
+    var background: UIColor { return UIColor.Photon.LightGrey20 }
+    var backgroundInOverlay: UIColor { return UIColor.Photon.LightGrey20 }
     var textAndTint: UIColor { return defaultTextAndTint }
     var separator: UIColor { return .white }
 }

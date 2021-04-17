@@ -84,9 +84,6 @@ class TopTabsViewController: UIViewController {
         tabDisplayManager = TabDisplayManager(collectionView: self.collectionView, tabManager: self.tabManager, tabDisplayer: self, reuseID: TopTabCell.Identifier)
         collectionView.dataSource = tabDisplayManager
         collectionView.delegate = tabLayoutDelegate
-        [UICollectionView.elementKindSectionHeader, UICollectionView.elementKindSectionFooter].forEach {
-            collectionView.register(TopTabsHeaderFooter.self, forSupplementaryViewOfKind: $0, withReuseIdentifier: "HeaderFooter")
-        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -240,10 +237,14 @@ extension TopTabsViewController: Themeable, PrivateModeUI {
     }
 
     func applyTheme() {
-        tabsButton.applyTheme()
-        newTab.tintColor = UIColor.theme.topTabs.buttonTint
         view.backgroundColor = UIColor.theme.topTabs.background
+        tabsButton.applyTheme()
+        privateModeButton.onTint = UIColor.theme.topTabs.privateModeButtonOnTint
+        privateModeButton.offTint = UIColor.theme.topTabs.privateModeButtonOffTint
+        privateModeButton.applyTheme()
+        newTab.tintColor = UIColor.theme.topTabs.buttonTint
         collectionView.backgroundColor = view.backgroundColor
+        (collectionView.visibleCells as? [TopTabCell])?.forEach { $0.applyTheme() }
         tabDisplayManager.refreshStore()
     }
 }

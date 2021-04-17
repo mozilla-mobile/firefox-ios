@@ -247,12 +247,6 @@ extension TabDisplayManager: UICollectionViewDataSource {
             return cell
         }
     }
-
-    @objc func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "HeaderFooter", for: indexPath) as? TopTabsHeaderFooter else { return UICollectionReusableView() }
-        view.arrangeLine(kind)
-        return view
-    }
 }
 
 extension TabDisplayManager: TabSelectionDelegate {
