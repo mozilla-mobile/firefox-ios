@@ -401,8 +401,6 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
                 let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header", for: indexPath) as! ASHeaderView
-                view.iconView.isHidden = false
-                view.iconView.image = Section(indexPath.section).headerImage
                 let title = Section(indexPath.section).title
                 switch Section(indexPath.section) {
                 case .pocket:
@@ -413,19 +411,16 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                     view.titleLabel.textColor = UIColor.Pocket.red
                     view.titleLabel.accessibilityIdentifier = "pocketTitle"
                     view.moreButton.setTitleColor(UIColor.Pocket.red, for: .normal)
-                    view.iconView.tintColor = UIColor.Pocket.red
                     return view
                 case .topSites:
                     view.title = title
                     view.titleLabel.accessibilityIdentifier = "topSitesTitle"
                     view.moreButton.isHidden = true
+                    view.titleLabel.textColor = .black
                     return view
                 case .libraryShortcuts:
                     view.title = title
-                    view.moreButton.isHidden = false
-                    view.moreButton.setTitle(Strings.AppMenuLibrarySeeAllTitleString, for: .normal)
-                    view.moreButton.addTarget(self, action: #selector(openHistory), for: .touchUpInside)
-                    view.moreButton.accessibilityIdentifier = "libraryMoreButton"
+                    view.titleLabel.textColor = .black
                     view.titleLabel.accessibilityIdentifier = "libraryTitle"
                     return view
             }
@@ -551,7 +546,7 @@ extension FirefoxHomeViewController {
 
     func configureLibraryShortcutsCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let libraryCell = cell as! ASLibraryCell
-        let targets = [#selector(openBookmarks), #selector(openReadingList), #selector(openDownloads), #selector(openSyncedTabs)]
+        let targets = [#selector(openBookmarks), #selector(openHistory), #selector(openDownloads), #selector(openReadingList)]
         libraryCell.libraryButtons.map({ $0.button }).zip(targets).forEach { (button, selector) in
             button.removeTarget(nil, action: nil, for: .allEvents)
             button.addTarget(self, action: selector, for: .touchUpInside)
@@ -764,11 +759,6 @@ extension FirefoxHomeViewController {
 
     @objc func openHistory() {
         homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .history)
-    }
-
-    @objc func openSyncedTabs() {
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .syncHomeShortcut)
-        homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .syncedTabs)
     }
 
     @objc func openReadingList() {

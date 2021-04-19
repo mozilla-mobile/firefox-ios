@@ -216,12 +216,13 @@ class ActivityStreamTest: BaseTestCase {
         waitForNoExistence(app.tables["Context Menu"], timeoutValue: 15)
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(TabTray)
-        var numTabsOpen = app.tables.cells.count
+        var numTabsOpen: Int
         if iPad() {
             waitForExistence(app.cells.staticTexts["Wikipedia"], timeout: 5)
-            numTabsOpen = app.collectionViews.cells.count
+            numTabsOpen = app.collectionViews.element(boundBy: 2).cells.count
         } else {
             waitForExistence(app.cells.staticTexts["wikipedia.org"], timeout: 5)
+            numTabsOpen = app.tables.cells.count
         }
         XCTAssertEqual(numTabsOpen, 2, "New tab not open")
     }
@@ -231,7 +232,6 @@ class ActivityStreamTest: BaseTestCase {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         navigator.performAction(Action.CloseURLBarOpen)
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
-
         // Long tap on apple top site, second cell
         waitForExistence(app.cells["TopSitesCell"].cells["apple"], timeout: 3)
         app.cells["TopSitesCell"].cells["apple"].press(forDuration:1)
@@ -254,7 +254,7 @@ class ActivityStreamTest: BaseTestCase {
         } else {
             waitForExistence(app.tables.cells.staticTexts["Apple"], timeout: 5)
         }
-        app.cells.staticTexts["Apple"].tap()
+        app.cells.staticTexts["Apple"].firstMatch.tap()
 
         // The website is open
         XCTAssertFalse(TopSiteCellgroup.exists)
@@ -286,7 +286,7 @@ class ActivityStreamTest: BaseTestCase {
         var numTabsOpen = userState.numTabs
         if iPad() {
             navigator.goto(TabTray)
-            numTabsOpen = app.collectionViews.cells.count
+            numTabsOpen = app.collectionViews.element(boundBy: 1).cells.count
         }
         XCTAssertEqual(numTabsOpen, 1, "New tab not open")
     }

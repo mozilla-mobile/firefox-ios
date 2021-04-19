@@ -94,8 +94,8 @@ class TrackingProtectionTests: BaseTestCase {
     }
 
     func testDisableETPforSiteIsKeptAfterBrowsing() {
-        navigator.goto(URLBarOpen)
-        navigator.back()
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         // Enable Strict TP
         navigator.openURL(websiteWithBlockedElements)
         waitUntilPageLoad()
@@ -128,6 +128,7 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.openURL(websiteWithBlockedElements)
         waitUntilPageLoad()
         navigator.goto(TrackingProtectionContextMenuDetails)
+        print(app.debugDescription)
         XCTAssertFalse(app.cells.images["enabled"].exists)
         XCTAssertTrue(app.tables.cells.staticTexts[disabledStrictTPString].exists, "ETP menu with elements blocked is not right")
 
