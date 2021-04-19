@@ -910,10 +910,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.backAction = navigationControllerBackAction
     }
 
-    // Both iPad and iPhone use the same accesibility identifiers for buttons,
-    // even thought they may be in separate locations design wise.
     map.addScreenState(TabTray) { screenState in
 
+        // Both iPad and iPhone use the same accesibility identifiers for buttons,
+        // even thought they may be in separate locations design wise.
         screenState.tap(app.buttons["newTabButtonTabTray"],
                         forAction: Action.OpenNewTabFromTabTray,
                         transitionTo: NewTabScreen)
@@ -927,9 +927,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         if isTablet {
             regularModeSelector = app.navigationBars.segmentedControls.buttons.element(boundBy: 0)
             privateModeSelector = app.navigationBars.segmentedControls.buttons.element(boundBy: 1)
+//            syncModeSelector = app.navigationBars.segmentedControls.buttons.element(boundBy: 2)
         } else {
-            regularModeSelector =             app.toolbars["Toolbar"].segmentedControls["navBarTabTray"].buttons.element(boundBy: 0)
-            privateModeSelector =             app.toolbars["Toolbar"].segmentedControls["navBarTabTray"].buttons.element(boundBy: 0)
+            regularModeSelector = app.toolbars["Toolbar"].segmentedControls["navBarTabTray"].buttons.element(boundBy: 0)
+            privateModeSelector = app.toolbars["Toolbar"].segmentedControls["navBarTabTray"].buttons.element(boundBy: 1)
+//            syncModeSelector = app.toolbars["Toolbar"].segmentedControls["navBarTabTray"].buttons.element(boundBy: 2)
 
         }
 
@@ -941,8 +943,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             userState.isPrivate = !userState.isPrivate
         }
         
-        // this is for Sync Now button, which is currently not implemented
-//        screenState.tap(syncModeSelector, forAction: Action.TogglePrivateMode) { userState in
+//        screenState.tap(syncModeSelector, forAction: Action.ToggleSyncMode) { userState in
 //        }
 
         screenState.onEnter { userState in
