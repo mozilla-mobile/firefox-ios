@@ -912,23 +912,39 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(TabTray) { screenState in
 
-        if isTablet {
-            screenState.tap(app.buttons["TabTrayController.addTabButton"], forAction: Action.OpenNewTabFromTabTray, transitionTo: NewTabScreen)
-            screenState.tap(app.buttons["TabTrayController.maskButton"], forAction: Action.TogglePrivateMode) { userState in
-            userState.isPrivate = !userState.isPrivate
-            }
+        // Both iPad and iPhone use the same accesibility identifiers for buttons,
+        // even thought they may be in separate locations design wise.
+        screenState.tap(app.buttons["newTabButtonTabTray"],
+                        forAction: Action.OpenNewTabFromTabTray,
+                        transitionTo: NewTabScreen)
+        screenState.tap(app.buttons["closeAllTabsButtonTabTray"], to: CloseTabMenu)
+//        screenState.tap(app.buttons["syncNowButtonTabsButtonTabTray"], to: CloseTabMenu)
 
-            screenState.tap(app.buttons["TabTrayController.removeTabsButton"], to: CloseTabMenu)
+        var regularModeSelector: XCUIElement
+        var privateModeSelector: XCUIElement
+//        var syncModeSelector: XCUIElement
+
+        if isTablet {
+            regularModeSelector = app.navigationBars.segmentedControls.buttons.element(boundBy: 0)
+            privateModeSelector = app.navigationBars.segmentedControls.buttons.element(boundBy: 1)
+//            syncModeSelector = app.navigationBars.segmentedControls.buttons.element(boundBy: 2)
         } else {
-            screenState.tap(app.buttons["newTabButtonTabTray"], forAction: Action.OpenNewTabFromTabTray, transitionTo: NewTabScreen)
-            screenState.tap(app.buttons["smallPrivateMask"], forAction: Action.TogglePrivateMode) { userState in
-            userState.isPrivate = !userState.isPrivate
-            }
-            screenState.tap(app.toolbars.segmentedControls.buttons.firstMatch, forAction: Action.ToggleRegularMode) { userState in
-            userState.isPrivate = !userState.isPrivate
-            }
-            screenState.tap(app.buttons["closeAllTabsButtonTabTray"], to: CloseTabMenu)
+            regularModeSelector = app.toolbars["Toolbar"].segmentedControls["navBarTabTray"].buttons.element(boundBy: 0)
+            privateModeSelector = app.toolbars["Toolbar"].segmentedControls["navBarTabTray"].buttons.element(boundBy: 1)
+//            syncModeSelector = app.toolbars["Toolbar"].segmentedControls["navBarTabTray"].buttons.element(boundBy: 2)
+
         }
+
+        screenState.tap(regularModeSelector, forAction: Action.ToggleRegularMode) { userState in
+            userState.isPrivate = !userState.isPrivate
+        }
+
+        screenState.tap(privateModeSelector, forAction: Action.TogglePrivateMode) { userState in
+            userState.isPrivate = !userState.isPrivate
+        }
+        
+//        screenState.tap(syncModeSelector, forAction: Action.ToggleSyncMode) { userState in
+//        }
 
         screenState.onEnter { userState in
             userState.numTabs = Int(app.tables.cells.count)
@@ -1132,11 +1148,7 @@ extension MMNavigator where T == FxUserState {
     func createNewTab() {
         let app = XCUIApplication()
         self.goto(TabTray)
-        if isTablet {
-            app.buttons["TabTrayController.addTabButton"].tap()
-        } else {
-            app.buttons["newTabButtonTabTray"].tap()
-        }
+        app.buttons["newTabButtonTabTray"].tap()
         self.nowAt(NewTabScreen)
     }
 

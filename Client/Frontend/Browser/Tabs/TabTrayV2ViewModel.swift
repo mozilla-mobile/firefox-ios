@@ -23,7 +23,7 @@ class TabTrayV2ViewModel: NSObject {
                                                    .lastWeek: Array<Tab>(),
                                                    .older: Array<Tab>()]
     fileprivate let tabManager: TabManager
-    fileprivate let viewController: TabTrayV2ViewController
+    fileprivate let viewController: ChronologicalTabsViewController
     private var isPrivate = false
     var isInPrivateMode: Bool {
         return isPrivate
@@ -32,7 +32,7 @@ class TabTrayV2ViewModel: NSObject {
         return isPrivate && getTabs().isEmpty
     }
 
-    init(viewController: TabTrayV2ViewController) {
+    init(viewController: ChronologicalTabsViewController) {
         self.viewController = viewController
         self.tabManager = BrowserViewController.foregroundBVC().tabManager
         self.isPrivate = tabManager.selectedTab?.isPrivate ?? false

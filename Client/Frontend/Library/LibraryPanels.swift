@@ -27,7 +27,6 @@ enum LibraryPanelType: Int {
     case history = 1
     case readingList = 2
     case downloads = 3
-    case syncedTabs = 4
 }
 
 /**
@@ -104,15 +103,6 @@ class LibraryPanels {
             profile: profile,
             imageName: "Downloads",
             accessibilityLabel: .LibraryPanelDownloadsAccessibilityLabel,
-            accessibilityIdentifier: "LibraryPanels.Downloads"),
-
-        LibraryPanelDescriptor(
-            makeViewController: { profile in
-                return RemoteTabsPanel(profile: profile)
-            },
-            profile: profile,
-            imageName: "SyncedTabs",
-            accessibilityLabel: .LibraryPanelSyncedTabsAccessibilityLabel,
-            accessibilityIdentifier: "LibraryPanels.SyncedTabs"),
+            accessibilityIdentifier: "LibraryPanels.Downloads")
     ]
 }

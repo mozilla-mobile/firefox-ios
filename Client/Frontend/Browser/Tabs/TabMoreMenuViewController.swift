@@ -9,7 +9,7 @@ import UIKit
 
 class TabMoreMenuViewController: UIViewController, Themeable {
     weak var delegate: TabTrayDelegate?
-    var tabTrayV2Delegate: TabTrayV2Delegate?
+    var chronTabsTrayDelegate: ChronologicalTabsDelegate?
     var bottomSheetDelegate: BottomSheetDelegate?
     weak var tab: Tab?
     lazy var viewModel = TabMoreMenuViewModel(viewController: self, profile: profile)
@@ -69,9 +69,9 @@ class TabMoreMenuViewController: UIViewController, Themeable {
     
     func applyTheme() {
         if ThemeManager.instance.currentName == .normal {
-            tabMoreMenuHeader.backgroundColor = UIColor(rgb: 0xF2F2F7)
+            tabMoreMenuHeader.backgroundColor = UIColor.Photon.Grey11
         } else {
-            tabMoreMenuHeader.backgroundColor = UIColor(rgb: 0x1C1C1E)
+            tabMoreMenuHeader.backgroundColor = UIColor.Photon.Grey85
         }
     }
     
@@ -211,7 +211,7 @@ extension TabMoreMenuViewController: UITableViewDelegate {
                 self.presentActivityViewController(url, tab: tab)
             case 2:
                 dismissMenu()
-                tabTrayV2Delegate?.closeTabTray()
+                chronTabsTrayDelegate?.closeTabTray()
                 viewModel.sendToDevice()
             default:
                 return
@@ -231,7 +231,7 @@ extension TabMoreMenuViewController: UITableViewDelegate {
                 return
             }
         case 2:
-            tabTrayV2Delegate?.closeTab(forIndex: tabIndex)
+            chronTabsTrayDelegate?.closeTab(forIndex: tabIndex)
             dismissMenu()
         default:
             return

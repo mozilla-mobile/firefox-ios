@@ -46,6 +46,7 @@ enum ReferringPage {
     case appMenu
     case settings
     case none
+    case tabTray
 }
 
 class BrowserViewController: UIViewController {
@@ -86,8 +87,9 @@ class BrowserViewController: UIViewController {
     var pasteAction: AccessibleAction!
     var copyAddressAction: AccessibleAction!
 
-    weak var tabTrayController: TabTrayControllerV1?
-    weak var tabTrayControllerV2: TabTrayV2ViewController?
+    weak var gridTabTrayController: GridTabViewController?
+    weak var chronTabTrayController: ChronologicalTabsViewController?
+    var tabTrayViewController: TabTrayViewController? 
     let profile: Profile
     let tabManager: TabManager
 
@@ -827,20 +829,28 @@ class BrowserViewController: UIViewController {
                 urlBar.locationView.reloadButton.reloadButtonState = .disabled
                 return
             }
+
             if isAboutHomeURL {
                 showFirefoxHome(inline: true)
 
                 if !hasPresentedDBCard && !shouldShowIntroScreen && focusUrlBar {
-                    if tabTrayControllerV2 == nil {
+                    if chronTabTrayController == nil && tabTrayViewController == nil {
                         urlBar.enterOverlayMode(nil, pasted: false, search: false)
                     } else {
-                        tabTrayControllerV2?.onViewDismissed = { [weak self] in self?.urlBar.enterOverlayMode(nil, pasted: false, search: false) }
+                        tabTrayViewController?.onViewDismissed = { [weak self] in
+                            let shouldEnterOverlay = self?.tabManager.selectedTab?.url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
+                            if shouldEnterOverlay {
+                                self?.urlBar.enterOverlayMode(nil, pasted: false, search: false)
+                            }
+                        }
                     }
                 }
+
             } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
                 hideFirefoxHome()
                 urlBar.locationView.reloadButton.reloadButtonState = .disabled
             }
+            
         } else if isAboutHomeURL {
             showFirefoxHome(inline: false)
         }
@@ -1076,8 +1086,8 @@ class BrowserViewController: UIViewController {
 
     // MARK: Opening New Tabs
     func switchToPrivacyMode(isPrivate: Bool) {
-         if let tabTrayController = self.tabTrayController, tabTrayController.tabDisplayManager.isPrivate != isPrivate {
-            tabTrayController.changePrivacyMode(isPrivate)
+         if let tabTrayController = self.gridTabTrayController, tabTrayController.tabDisplayManager.isPrivate != isPrivate {
+            tabTrayController.didTogglePrivateMode(isPrivate)
         }
         topTabsViewController?.applyUIMode(isPrivate: isPrivate)
     }
@@ -1761,9 +1771,7 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
-        let tabTrayV2PrivateMode = tabTrayControllerV2?.viewModel.isInPrivateMode
-        let tabTrayV1PrivateMode = tabTrayController?.tabDisplayManager.isPrivate
-        guard let toast = toast, !(tabTrayV1PrivateMode ?? (tabTrayV2PrivateMode ?? false)) else {
+        guard let toast = toast, !(tabManager.selectedTab?.isPrivate ?? false) else {
             return
         }
         show(toast: toast, afterWaiting: ButtonToastUX.ToastDelay)
@@ -1933,40 +1941,8 @@ extension BrowserViewController {
         }
     }
 
-    /// This function is called to determine if FxA sign in flow or settings page should be shown
-    /// - Parameters:
-    ///     - deepLinkParams: FxALaunchParams from deeplink query
-    ///     - flowType: FxAPageType is used to determine if email login, qr code login, or user settings page should be presented
-    ///     - referringPage: ReferringPage enum is used to handle telemetry events correctly for the view event and the FxA sign in tap events, need to know which route we took to get to them
-    func getSignInOrFxASettingsVC(_ deepLinkParams: FxALaunchParams? = nil, flowType: FxAPageType, referringPage: ReferringPage) -> UIViewController {
-        // Show the settings page if we have already signed in. If we haven't then show the signin page
-        let parentType: FxASignInParentType
-        let object: TelemetryWrapper.EventObject
-        guard profile.hasSyncableAccount() else {
-            switch referringPage {
-            case .appMenu, .none:
-                parentType = .appMenu
-                object = .appMenu
-            case .onboarding:
-                parentType = .onboarding
-                object = .onboarding
-            case .settings:
-                parentType = .settings
-                object = .settings
-            }
-
-            let signInVC = FirefoxAccountSignInViewController(profile: profile, parentType: parentType, deepLinkParams: deepLinkParams)
-            TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .view, object: object)
-            return signInVC
-        }
-
-        let settingsTableViewController = SyncContentSettingsViewController()
-        settingsTableViewController.profile = profile
-        return settingsTableViewController
-    }
-
     func presentSignInViewController(_ fxaOptions: FxALaunchParams? = nil, flowType: FxAPageType = .emailLoginFlow, referringPage: ReferringPage = .none) {
-        let vcToPresent = getSignInOrFxASettingsVC(fxaOptions, flowType: flowType, referringPage: referringPage)
+        let vcToPresent = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaOptions, flowType: flowType, referringPage: referringPage, profile: profile)
         presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: vcToPresent, topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad)
     }
 
@@ -2210,11 +2186,11 @@ extension BrowserViewController: SessionRestoreHelperDelegate {
 extension BrowserViewController: TabTrayDelegate {
     // This function animates and resets the tab chrome transforms when
     // the tab tray dismisses.
-    func tabTrayDidDismiss(_ tabTray: TabTrayControllerV1) {
+    func tabTrayDidDismiss(_ tabTray: GridTabViewController) {
         resetBrowserChrome()
     }
 
-    func tabTrayDidAddTab(_ tabTray: TabTrayControllerV1, tab: Tab) {}
+    func tabTrayDidAddTab(_ tabTray: GridTabViewController, tab: Tab) {}
 
     func tabTrayDidAddBookmark(_ tab: Tab) {
         guard let url = tab.url?.absoluteString, !url.isEmpty else { return }
@@ -2237,7 +2213,7 @@ extension BrowserViewController: TabTrayDelegate {
 extension BrowserViewController: Themeable {
     func applyTheme() {
         guard self.isViewLoaded else { return }
-        let ui: [Themeable?] = [urlBar, toolbar, readerModeBar, topTabsViewController, firefoxHomeViewController, searchController, libraryViewController, libraryDrawerViewController, tabTrayControllerV2]
+        let ui: [Themeable?] = [urlBar, toolbar, readerModeBar, topTabsViewController, firefoxHomeViewController, searchController, libraryViewController, libraryDrawerViewController, chronTabTrayController]
         ui.forEach { $0?.applyTheme() }
         statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor.Photon.Grey80 : urlBar.backgroundColor
         setNeedsStatusBarAppearanceUpdate()

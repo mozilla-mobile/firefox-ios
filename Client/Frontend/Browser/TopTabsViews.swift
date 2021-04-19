@@ -134,7 +134,7 @@ class TopTabCell: UICollectionViewCell, PrivateModeUI {
 
         favicon.snp.makeConstraints { make in
             make.centerY.equalTo(self).offset(TopTabsUX.TabNudge)
-            make.size.equalTo(TabTrayControllerUX.FaviconSize)
+            make.size.equalTo(GridTabTrayControllerUX.FaviconSize)
             make.leading.equalTo(self).offset(TopTabsUX.TabTitlePadding)
         }
         titleText.snp.makeConstraints { make in

@@ -33,6 +33,20 @@ extension LibraryPanelContextMenu {
 
         return contextMenu
     }
+    
+    func getRemoteTabContexMenuActions(for site: Site, remotePanelDelegate: RemotePanelDelegate?) ->  [PhotonActionSheetItem]? {
+        guard let siteURL = URL(string: site.url) else { return nil }
+
+        let openInNewTabAction = PhotonActionSheetItem(title: Strings.OpenInNewTabContextMenuTitle, iconString: "quick_action_new_tab") { _, _ in
+            remotePanelDelegate?.remotePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
+        }
+
+        let openInNewPrivateTabAction = PhotonActionSheetItem(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { _, _ in
+            remotePanelDelegate?.remotePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
+        }
+
+        return [openInNewTabAction, openInNewPrivateTabAction]
+    }
 
     func getDefaultContextMenuActions(for site: Site, libraryPanelDelegate: LibraryPanelDelegate?) -> [PhotonActionSheetItem]? {
         guard let siteURL = URL(string: site.url) else { return nil }

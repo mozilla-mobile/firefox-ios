@@ -117,7 +117,7 @@ enum NavigationPath {
         }
     }
 
-    static func handle(nav: NavigationPath, with bvc: BrowserViewController, tray: TabTrayControllerV1) {
+    static func handle(nav: NavigationPath, with bvc: BrowserViewController, tray: GridTabViewController) {
         switch nav {
         case .fxa(let params): NavigationPath.handleFxA(params: params, with: bvc)
         case .deepLink(let link): NavigationPath.handleDeepLink(link, with: bvc)
@@ -213,7 +213,7 @@ enum NavigationPath {
         bvc.presentSignInViewController(params)
     }
 
-    private static func handleClosePrivateTabs(with bvc: BrowserViewController, tray: TabTrayControllerV1) {
+    private static func handleClosePrivateTabs(with bvc: BrowserViewController, tray: GridTabViewController) {
         bvc.tabManager.removeTabs(bvc.tabManager.privateTabs)
          guard let tab = mostRecentTab(inTabs: bvc.tabManager.normalTabs) else {
              bvc.tabManager.selectTab(bvc.tabManager.addTab())
@@ -296,7 +296,7 @@ enum NavigationPath {
             viewController.tabManager = tabManager
             controller.pushViewController(viewController, animated: true)
         case .fxa:
-            let viewController = bvc.getSignInOrFxASettingsVC(flowType: .emailLoginFlow, referringPage: .settings)
+            let viewController = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(flowType: .emailLoginFlow, referringPage: .settings, profile: bvc.profile)
             controller.pushViewController(viewController, animated: true)
         case .theme:
             controller.pushViewController(ThemeSettingsController(), animated: true)

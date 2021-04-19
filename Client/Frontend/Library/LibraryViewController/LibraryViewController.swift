@@ -163,8 +163,6 @@ class LibraryViewController: UIViewController {
                 TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .libraryPanel, value: .readingPanel, extras: nil)
             case .downloads:
                 TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .libraryPanel, value: .downloadsPanel, extras: nil)
-            case .syncedTabs:
-                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .libraryPanel, value: .syncPanel, extras: nil)
             case .none:
                 print("none")
             }

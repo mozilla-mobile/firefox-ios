@@ -48,7 +48,7 @@ class ViewMemoryLeakTests: KIFTestCase, UITextFieldDelegate {
         // Enter the tab tray.
         tester().tapViewWithAccessibilityLabel("Show Tabs")
         tester().waitForViewWithAccessibilityLabel("Tabs Tray")
-        weak var tabTrayController = getTopViewController()
+        weak var gridTabTrayController = getTopViewController()
         weak var tabCell = tester().waitForTappableViewWithAccessibilityLabel("home")
         XCTAssertNotNil(tabTrayController, "Got tab tray reference")
         XCTAssertNotNil(tabCell, "Got tab cell reference")

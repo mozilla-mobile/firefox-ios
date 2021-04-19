@@ -11,10 +11,61 @@ extension BrowserViewController: URLBarDelegate {
         Sentry.shared.clearBreadcrumbs()
 
         updateFindInPageVisibility(visible: false)
+
+        self.tabTrayViewController = TabTrayViewController(tabTrayDelegate: self,
+                                                          profile: profile,
+                                                          showChronTabs: shouldShowChronTabs())
         
+        tabTrayViewController?.openInNewTab = { url, isPrivate in
+            let tab = self.tabManager.addTab(URLRequest(url: url), afterTab: self.tabManager.selectedTab, isPrivate: isPrivate)
+            // If we are showing toptabs a user can just use the top tab bar
+            // If in overlay mode switching doesnt correctly dismiss the homepanels
+            guard !self.topTabsVisible, !self.urlBar.inOverlayMode else {
+                return
+            }
+            // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
+            let toast = ButtonToast(labelText: Strings.ContextMenuButtonToastNewTabOpenedLabelText, buttonText: Strings.ContextMenuButtonToastNewTabOpenedButtonText, completion: { buttonPressed in
+                if buttonPressed {
+                    self.tabManager.selectTab(tab)
+                }
+            })
+            self.show(toast: toast)
+        }
+        
+        tabTrayViewController?.didSelectUrl = { url, visitType in
+            guard let tab = self.tabManager.selectedTab else { return }
+            self.finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
+        }
+        
+        guard self.tabTrayViewController != nil else { return }
+        
+        let controller: UINavigationController
+
+        if #available(iOS 13.0, *) {
+            controller = UINavigationController(rootViewController: tabTrayViewController!)
+            controller.presentationController?.delegate = tabTrayViewController
+            // If we're not using the system theme, override the view's style to match
+            if !ThemeManager.instance.systemThemeIsOn {
+                controller.overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
+            }
+        } else {
+            let themedController = ThemedNavigationController(rootViewController: tabTrayViewController!)
+            themedController.presentingModalViewControllerDelegate = self
+            controller = themedController
+        }
+        self.present(controller, animated: true, completion: nil)
+
+        if let tab = tabManager.selectedTab {
+            screenshotHelper.takeScreenshot(tab)
+        }
+        TelemetryWrapper.recordEvent(category: .action, method: .open, object: .tabTray)
+    }
+
+    private func shouldShowChronTabs() -> Bool {
         var shouldShowChronTabs = false // default don't show
         let chronDebugValue = profile.prefs.boolForKey(PrefsKeys.ChronTabsPrefKey)
         let chronLPValue = chronTabsUserResearch?.chronTabsState ?? false
+
         // Only allow chron tabs on iPhone
         if UIDevice.current.userInterfaceIdiom == .phone {
             // Respect debug mode chron tab value on
@@ -28,35 +79,11 @@ extension BrowserViewController: URLBarDelegate {
                     // Respect LP value
                     shouldShowChronTabs = chronLPValue
                 }
+                profile.prefs.setBool(shouldShowChronTabs, forKey: PrefsKeys.ChronTabsPrefKey)
             }
-        }
-        if shouldShowChronTabs {
-            let tabTrayViewController = TabTrayV2ViewController(tabTrayDelegate: self, profile: profile)
-            let controller: UINavigationController
-            if #available(iOS 13.0, *) {
-                controller = UINavigationController(rootViewController: tabTrayViewController)
-                controller.presentationController?.delegate = tabTrayViewController
-                // If we're not using the system theme, override the view's style to match
-                if !ThemeManager.instance.systemThemeIsOn {
-                    controller.overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
-                }
-            } else {
-                let themedController = ThemedNavigationController(rootViewController: tabTrayViewController)
-                themedController.presentingModalViewControllerDelegate = self
-                controller = themedController
-            }
-            self.present(controller, animated: true, completion: nil)
-            self.tabTrayControllerV2 = tabTrayViewController
-        } else {
-            let tabTrayController = TabTrayControllerV1(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
-            navigationController?.pushViewController(tabTrayController, animated: true)
-            self.tabTrayController = tabTrayController
         }
 
-        if let tab = tabManager.selectedTab {
-            screenshotHelper.takeScreenshot(tab)
-        }
-        TelemetryWrapper.recordEvent(category: .action, method: .open, object: .tabTray)
+        return shouldShowChronTabs
     }
 
     func urlBarDidPressReload(_ urlBar: URLBarView) {
