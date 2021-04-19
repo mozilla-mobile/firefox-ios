@@ -1,6 +1,9 @@
 /* Button string to open settings that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Button" = "ਸੈਟਿੰਗਾਂ ਉੱਤੇ ਜਾਓ";
 
+/* Button string to learn how to set your default browser. */
+"DefaultBrowserCard.Button.v2" = "ਹੋਰ ਸਿੱਖੋ";
+
 /* Description for small card shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "ਵੈੱਬਸਾਈਟਾਂ, ਈਮੇਲਾਂ ਅਤੇ ਸੁਨੇਹਿਆਂ ਵਿੱਚੋਂ ਲਿੰਕਾਂ ਨੂੰ Firefox ਵਿੱਚ ਸਿੱਧਾ ਖੋਲ੍ਹਣ ਲਈ ਸੈੱਟ ਕਰੋ।";
 

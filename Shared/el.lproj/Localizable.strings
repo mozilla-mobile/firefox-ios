@@ -16,6 +16,9 @@
 /* About settings section title */
 "About" = "Σχετικά";
 
+/* The title for the pinning a shortcut action */
+"ActivityStream.ContextMenu.AddToShortcuts" = "Προσθήκη στις συντομεύσεις";
+
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite" = "Καρφίτσωμα σε κορυφαίες ιστοσελίδες";
 
@@ -94,6 +97,9 @@
 
 /* Authentication prompt title */
 "Authentication required" = "Απαιτείται πιστοποίηση";
+
+/* Description for button to suggest searching with a search engine. First argument is the name of the search engine to select */
+"Awesomebar.SearchWithEngine.Description" = "Αναζήτηση %@ απευθείας από τη γραμμή διευθύνσεων";
 
 /* Title for button to suggest searching with a search engine. First argument is the name of the search engine to select */
 "Awesomebar.SearchWithEngine.Title" = "Αναζήτηση με %@";
@@ -693,8 +699,14 @@
 /* Toast displayed to the user after adding the item to the Top Sites. */
 "Menu.AddPin.Confirm" = "Καρφιτσώθηκε στις κορυφαίες ιστοσελίδες";
 
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"Menu.AddPin.Confirm2" = "Προστέθηκε στις συντομεύσεις";
+
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "Προστέθηκε στη λίστα ανάγνωσης";
+
+/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
+"Menu.BackUpAndSync.Label" = "Αντιγραφή και συγχρονισμός δεδομένων";
 
 /* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "Σελιδοδείκτες";
@@ -729,11 +741,20 @@
 /* Label for the button, displayed in the menu, takes you to screen to manage account when pressed. First argument is the display name for the current account */
 "Menu.ManageAccount.Label" = "Διαχείριση λογαριασμού %@";
 
+/* Label for the button, displayed in the menu, turns off night mode. */
+"Menu.NightModeTurnOff.Label2" = "Απενεργοποίηση νυχτερινής λειτουργίας";
+
 /* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label" = "Νυχτερινή λειτουργία";
 
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label2" = "Ενεργοποίηση νυχτερινής λειτουργίας";
+
 /* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
 "Menu.NoImageModeBlockImages.Label" = "Φραγή εικόνων";
+
+/* Label for the button, displayed in the menu, shows images on the webpage when pressed. */
+"Menu.NoImageModeShowImages.Label" = "Εμφάνιση εικόνων";
 
 /* Label for title in page action menu. */
 "Menu.PageActions.Title" = "Ενέργειες σελίδας";
@@ -761,6 +782,9 @@
 
 /* Toast displayed to the user after removing the item from the Top Sites. */
 "Menu.RemovePin.Confirm" = "Αφαιρέθηκε από τις κορυφαίες ιστοσελίδες";
+
+/* Toast displayed to the user after removing the item to the Shortcuts. */
+"Menu.RemovePin.Confirm2" = "Αφαιρέθηκε από τις συντομεύσεις";
 
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "Η καρτέλα απεστάλη";
@@ -1010,6 +1034,9 @@
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "Αναζήτηση ή εισαγωγή διεύθυνσης";
+
+/* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
+"Search.Awesomebar.SwitchToTab" = "Εναλλαγή σε καρτέλα";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "Η νέα μηχανή αναζήτησης θα εμφανιστεί στη γραμμή γρήγορης αναζήτησης.";
@@ -1298,6 +1325,9 @@
 /* The footer for the section to customize top sites in the new tab settings page. */
 "Settings.NewTab.Option.CustomizeFooter" = "Οι ιστοσελίδες που επισκέπτεστε πιο συχνά";
 
+/* The footer for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeFooter2" = "Ιστοσελίδες από σελιδοδείκτες και ιστορικό";
+
 /* The title for the section to customize top sites in the new tab settings page. */
 "Settings.NewTab.Option.CustomizeTitle" = "Προσαρμογή αρχικής σελίδας Firefox";
 
@@ -1324,6 +1354,12 @@
 
 /* Option in settings to show reading list when you open a new tab */
 "Settings.NewTab.Option.ReadingList" = "Εμφάνιση λίστας ανάγνωσης";
+
+/* Option in settings to turn on off pocket recommendations First argument is the pocket brand name */
+"Settings.NewTab.Option.RecommendedByPocket" = "Προτείνεται από το %@";
+
+/* Descriptoin for the option in settings to turn on off pocket recommendations. First argument is the pocket brand name, second argument is the pocket product name. */
+"Settings.NewTab.Option.RecommendedByPocketDescription" = "Εξαιρετικό περιεχόμενο από το %1$@, μέλος της οικογένειας του %2$@";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "Νέα καρτέλα";
@@ -1385,6 +1421,12 @@
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Συντομεύσεις Siri";
 
+/* Section title for all studies that are currently active */
+"Settings.Studies.Active.SectionName" = "Ενεργές";
+
+/* Section title for all studies that are completed */
+"Settings.Studies.Completed.SectionName" = "Ολοκληρωμένες";
+
 /* Button title displayed next to each study allowing the user to opt-out of the study */
 "Settings.Studies.Remove.Button" = "Αφαίρεση";
 
@@ -1396,6 +1438,15 @@
 
 /* Title for a link that explains what Mozilla means by Studies */
 "Settings.Studies.Toggle.Link" = "Μάθετε περισσότερα.";
+
+/* A short description that explains that Mozilla is running studies */
+"Settings.Studies.Toggle.Message" = "Το Firefox ενδέχεται να εγκαθιστά και να εκτελεί περιστασιακά μελέτες.";
+
+/* Toggled OFF to opt-out of studies */
+"Settings.Studies.Toggle.Off" = "Ανενεργό";
+
+/* Toggled ON to participate in studies */
+"Settings.Studies.Toggle.On" = "Ενεργό";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Μελέτες";
@@ -1632,6 +1683,9 @@
 /* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.CloseTab.KeyCodeTitle" = "Κλείσιμο επιλεγμένης καρτέλας";
 
+/* Accessibility label for the currently selected tab. */
+"TabTray.CurrentSelectedTab.A11Y" = "Τρέχουσα επιλεγμένη καρτέλα.";
+
 /* The section header for tabs opened last week */
 "TabTray.LastWeek.Header" = "Τελευταία εβδομάδα";
 
@@ -1649,6 +1703,12 @@
 
 /* The title for the tab tray in private mode */
 "TabTray.PrivateTitle" = "Ιδιωτικές καρτέλες";
+
+/* The title on the button to look at private tabs. */
+"TabTray.SegmentedControlTitles.PrivateTabs" = "Ιδιωτικές";
+
+/* The title on the button to look at synced tabs. */
+"TabTray.SegmentedControlTitles.SyncedTabs" = "Συγχρονισμένες";
 
 /* The title on the button to look at regular tabs. */
 "TabTray.SegmentedControlTitles.Tabs" = "Καρτέλες";

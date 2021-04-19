@@ -2,6 +2,9 @@
 "2GqvPe" = "Ir al ligamine copiate";
 
 /* (No Comment) */
+"ctDNmu" = "Accesso rapide a varie actiones de Firefox";
+
+/* (No Comment) */
 "eHmH1H" = "Clauder schedas private";
 
 /* (No Comment) */
@@ -21,6 +24,18 @@
 
 /* (No Comment) */
 "fi3W24-xRJbBP" = "Il ha ${count} optiones que corresponde a ‘Nove recerca’.";
+
+/* (No Comment) */
+"PzSrmZ-2GqvPe" = "Solo pro confirmar, voleva tu ‘Ir al ligamine copiate’?";
+
+/* (No Comment) */
+"PzSrmZ-eHmH1H" = "Solo pro confirmar, voleva tu ‘Eliminar schedas private’?";
+
+/* (No Comment) */
+"PzSrmZ-scEmjs" = "Solo pro confirmar, voleva tu un ‘Nove recerca private’?";
+
+/* (No Comment) */
+"PzSrmZ-xRJbBP" = "Solo pro confirmar, voleva tu un ‘Nove recerca’?";
 
 /* (No Comment) */
 "scEmjs" = "Nove recerca private";

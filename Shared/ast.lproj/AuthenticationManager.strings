@@ -37,9 +37,6 @@
 /* Label for the Passcode item in Settings */
 "Passcode For Logins" = "Códigu de pasu p'anicios de sesión";
 
-/* Error message displayed to user when their confirming passcode doesn't match the first code. */
-"Passcodes didn’t match. Try again." = "Los códigos de pasu nun concasen. Volvi tentalo.";
-
 /* Label for the Touch ID/Passcode item in Settings */
 "Touch ID & Passcode" = "Touch ID y códigu de pasu";
 

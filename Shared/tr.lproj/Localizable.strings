@@ -98,6 +98,9 @@
 /* Authentication prompt title */
 "Authentication required" = "Kimlik doğrulaması gerekli";
 
+/* Description for button to suggest searching with a search engine. First argument is the name of the search engine to select */
+"Awesomebar.SearchWithEngine.Description" = "%@ ile doğrudan adres çubuğundan arama yapın";
+
 /* Title for button to suggest searching with a search engine. First argument is the name of the search engine to select */
 "Awesomebar.SearchWithEngine.Title" = "%@ ile ara";
 
@@ -1429,6 +1432,9 @@
 
 /* Label used as an item in Settings. Tapping on this item takes you to the Studies panel */
 "Settings.Studies.Title" = "Araştırmalar";
+
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Toggle.Link" = "Daha fazla bilgi alın.";
 
 /* A short description that explains that Mozilla is running studies */
 "Settings.Studies.Toggle.Message" = "Firefox zaman zaman araştırmalar yükleyip çalıştırabilir.";

@@ -2,6 +2,9 @@
 "2GqvPe" = "Ir para a ligação copiada";
 
 /* (No Comment) */
+"ctDNmu" = "Acesso rápido a várias ações do Firefox";
+
+/* (No Comment) */
 "eHmH1H" = "Limpar separadores privados";
 
 /* (No Comment) */
@@ -11,28 +14,28 @@
 "eV8mOT" = "Tipo de ação rápida";
 
 /* (No Comment) */
-"fi3W24-2GqvPe" = "Existem {count} opções que correspondem a ‘Ir para a ligação copiada’.";
+"fi3W24-2GqvPe" = "Existem ${count} opções coincidentes com ‘Ir para a ligação copiada’.";
 
 /* (No Comment) */
-"fi3W24-eHmH1H" = "Existem ${count} opções que correspondem a ‘Limpar separadores privados’.";
+"fi3W24-eHmH1H" = "Existem ${count} opções coincidentes com ‘Limpar separadores privados’.";
 
 /* (No Comment) */
-"fi3W24-scEmjs" = "Existem ${count} opções que correspondem a ‘Nova pesquisa privada’.";
+"fi3W24-scEmjs" = "Existem ${count} opções coincidentes com ‘Nova pesquisa privada’.";
 
 /* (No Comment) */
-"fi3W24-xRJbBP" = "Existem ${count} opções que correspondem a ‘Nova pesquisa’.";
+"fi3W24-xRJbBP" = "Existem ${count} opções coincidentes com ‘Nova pesquisa’.";
 
 /* (No Comment) */
-"PzSrmZ-2GqvPe" = "Apenas para confirmar, você queria ‘Ir para a ligação copiada’?";
+"PzSrmZ-2GqvPe" = "Apenas para confirmar, pretendia ‘Ir para a ligação copiada’?";
 
 /* (No Comment) */
-"PzSrmZ-eHmH1H" = "Apenas para confirmar, você queria ‘Limpar separadores privados’?";
+"PzSrmZ-eHmH1H" = "Apenas para confirmar, pretendia ‘Limpar os separadores privados’?";
 
 /* (No Comment) */
-"PzSrmZ-scEmjs" = "Apenas para confirmar, você queria uma ‘Nova pesquisa privada’?";
+"PzSrmZ-scEmjs" = "Apenas para confirmar, pretendia uma ‘Nova pesquisa privada’?";
 
 /* (No Comment) */
-"PzSrmZ-xRJbBP" = "Apenas para confirmar, você queria uma ‘Nova pesquisa’?";
+"PzSrmZ-xRJbBP" = "Apenas para confirmar, pretendia uma ‘Nova pesquisa’?";
 
 /* (No Comment) */
 "scEmjs" = "Nova pesquisa privada";

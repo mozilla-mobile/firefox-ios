@@ -26,10 +26,10 @@
 "Hide" = "Ẩn";
 
 /* Prompt message warning the user that deleting non-synced logins will permanently remove them */
-"Logins will be permanently removed." = "Đăng nhập sẽ bị xóa vĩnh viễn.";
+"Logins will be permanently removed." = "Thông tin đăng nhập sẽ bị xóa vĩnh viễn.";
 
 /* Prompt message warning the user that deleted logins will remove logins from all connected devices */
-"Logins will be removed from all connected devices." = "Đăng nhập sẽ bị xóa khỏi tất cả các thiết bị được kết nối.";
+"Logins will be removed from all connected devices." = "Thông tin đăng nhập sẽ bị xóa khỏi tất cả các thiết bị được kết nối.";
 
 /* Label describing when the current login was last modified with the timestamp as the parameter. */
 "Modified %@" = "Đã sửa đổi %@";

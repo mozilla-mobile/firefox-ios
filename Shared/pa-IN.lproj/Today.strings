@@ -121,6 +121,9 @@
 /* Sub label for Top Sites widget */
 "TodayWidget.TopSitesSubLabel" = "ਫਾਇਰਫਾਕਸ - ਮੁੱਖ ਸਾਈਟਾਂ";
 
+/* Sub label for Shortcuts widget */
+"TodayWidget.TopSitesSubLabel2" = "Firefox - ਵੈੱਬਸਾਈਟ ਸ਼ਾਰਟਕੱਟ";
+
 /* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
 "TodayWidget.ViewMore" = "ਹੋਰ ਵੇਖੋ";
 

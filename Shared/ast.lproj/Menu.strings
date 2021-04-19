@@ -1,5 +1,5 @@
 /* Label for the button, displayed in the menu, used to add a page to the reading list. */
-"Menu.AddToReadingList.Title" = "Amestar a la llista de llectura";
+"Menu.AddToReadingList.Title" = "Amestar a Llista de Llectura";
 
 /* Label for the button, displayed in the menu, used to close all tabs currently open. */
 "Menu.CloseAllTabsAction.Title" = "Zarrar toles llingüetes";
@@ -32,10 +32,10 @@
 "Menu.OpenSettingsAction.Title" = "Axustes";
 
 /* Accessibility label for the button, displayed in the menu, used to open the Top Sites home panel. */
-"Menu.OpenTopSitesAction.AccessibilityLabel" = "Sitios destacaos";
+"Menu.OpenTopSitesAction.AccessibilityLabel" = "Sitios Principales";
 
 /* Label for the button, displayed in the menu, used to delete an existing bookmark for the current website. */
-"Menu.RemoveBookmarkAction.Title" = "Desaniciar el marcador";
+"Menu.RemoveBookmarkAction.Title" = "Quitar el marcador";
 
 /* Label for the button, displayed in the menu, used to open the QR code scanner. */
 "Menu.ScanQRCodeAction.Title" = "Escaniar un códigu QR";

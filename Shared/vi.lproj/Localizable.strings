@@ -635,7 +635,7 @@
 "Log in" = "Đăng nhập";
 
 /* Toggle logins syncing setting */
-"Logins" = "Đăng nhập";
+"Logins" = "Thông tin đăng nhập";
 
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Đã sửa đổi";
@@ -650,7 +650,7 @@
 "LoginsHelper.DontUpdate.Button" = "Không cập nhật";
 
 /* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptSaveLogin.Title" = "Lưu đăng nhập %1$@ cho %2$@?";
+"LoginsHelper.PromptSaveLogin.Title" = "Lưu thông tin đăng nhập %1$@ cho %2$@?";
 
 /* Prompt for saving a password with no username. The parameter is the hostname of the site. */
 "LoginsHelper.PromptSavePassword.Title" = "Lưu mật khẩu cho %@?";
@@ -659,16 +659,16 @@
 "LoginsHelper.PromptUpdateLogin.Title.OneArg" = "Cập nhật thông tin đăng nhập cho %@?";
 
 /* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "Cập nhật đăng nhập %1$@ cho %2$@?";
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "Cập nhật thông tin đăng nhập %1$@ cho %2$@?";
 
 /* Button to save the user's password */
-"LoginsHelper.SaveLogin.Button" = "Lưu đăng nhập";
+"LoginsHelper.SaveLogin.Button" = "Lưu thông tin đăng nhập";
 
 /* Button to update the user's password */
 "LoginsHelper.Update.Button" = "Cập nhật";
 
 /* For filtering the login list, search only the login names */
-"LoginsList.LoginsListFilterLogin" = "Đăng nhập";
+"LoginsList.LoginsListFilterLogin" = "Thông tin đăng nhập";
 
 /* For filtering the login list, search both website and login names. */
 "LoginsList.LoginsListFilterSearchAll" = "Tất cả";
@@ -680,7 +680,7 @@
 "LoginsList.LoginsListSearchPlaceholder" = "Bộ lọc";
 
 /* Title for the list of logins */
-"LoginsList.Title" = "ĐĂNG NHẬP ĐÃ LƯU";
+"LoginsList.Title" = "THÔNG TIN ĐĂNG NHẬP ĐÃ LƯU";
 
 /* Restore Tabs Prompt Description */
 "Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Có vẻ như Firefox đã gặp sự cố trước đó. Bạn có muốn khôi phục các thẻ của bạn?";
@@ -1305,7 +1305,7 @@
 "Settings.HomePage.UseDefault.Button" = "Sử dụng mặc định";
 
 /* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
-"Settings.LoginsAndPasswordsTitle" = "Đăng nhập & mật khẩu";
+"Settings.LoginsAndPasswordsTitle" = "Thông tin đăng nhập";
 
 /* Label used to set a custom url as the new tab option (homepage). */
 "Settings.NewTab.CustomURL" = "URL tùy chỉnh";
@@ -1386,7 +1386,7 @@
 "Settings.OpenWith.SectionName" = "Ứng dụng Mail";
 
 /* Setting to enable the built-in password manager */
-"Settings.SaveLogins.Title" = "Lưu đăng nhập";
+"Settings.SaveLogins.Title" = "Lưu thông tin đăng nhập";
 
 /* Button displayed at the top of the search settings. */
 "Settings.Search.Done.Button" = "Xong";
@@ -1639,7 +1639,7 @@
 "SyncState.History.Title" = "Lịch sử";
 
 /* The Logins sync component, used in SyncState.Partial.Title */
-"SyncState.Logins.Title" = "Đăng nhập";
+"SyncState.Logins.Title" = "Thông tin đăng nhập";
 
 /* Title for Sync status message when Sync failed to start. */
 "SyncState.NotStarted.Title" = "Đồng bộ hóa không khả dụng";
