@@ -29,7 +29,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         }
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
-        let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
+        let shouldSuppress = UIDevice.current.userInterfaceIdiom != .pad
         presentSheetWith(actions: [urlActions], on: self, from: button, suppressPopover: shouldSuppress)
     }
 
@@ -115,9 +115,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         
         actions.append(contentsOf: [section1, section2, section3])
 
-        // force a modal if the menu is being displayed in compact split screen
-        let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
-        presentSheetWith(actions: actions, on: self, from: button, suppressPopover: shouldSuppress)
+        presentSheetWith(actions: actions, on: self, from: button)
     }
 
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -178,13 +176,10 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         actions.append(getTabToolbarLongPressActionsForModeSwitching())
         actions.append(getMoreTabToolbarLongPressActions())
 
-        // Force a modal if the menu is being displayed in compact split screen.
-        let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
-
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
 
-        presentSheetWith(actions: actions, on: self, from: button, suppressPopover: shouldSuppress)
+        presentSheetWith(actions: actions, on: self, from: button, suppressPopover: true)
     }
 
     func showBackForwardList() {

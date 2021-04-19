@@ -12,8 +12,6 @@ import Shared
 class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, Themeable {
     fileprivate(set) var actions: [[PhotonActionSheetItem]]
 
-    var syncManager: SyncManager? // used to display the sync button
-
     private var site: Site?
     private let style: PresentationStyle
     private var tintColor = UIColor.theme.actionMenu.foreground
@@ -105,9 +103,10 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         }
 
         if style == .popover {
+            let width = UIDevice.current.userInterfaceIdiom == .pad ? 400 : 250
             tableView.snp.makeConstraints { make in
                 make.top.bottom.equalTo(self.view)
-                make.width.equalTo(400)
+                make.width.equalTo(width)
             }
         } else {
             tableView.snp.makeConstraints { make in
@@ -172,20 +171,16 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         tableView.register(PhotonActionSheetCell.self, forCellReuseIdentifier: PhotonActionSheetUX.CellName)
         tableView.register(PhotonActionSheetSiteHeaderView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.SiteHeaderName)
         tableView.register(PhotonActionSheetTitleHeaderView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.TitleHeaderName)
-        tableView.register(PhotonActionSheetSeparator.self, forHeaderFooterViewReuseIdentifier: "SeparatorSectionHeader")
         tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "EmptyHeader")
 
         tableView.isScrollEnabled = true
         tableView.showsVerticalScrollIndicator = false
         tableView.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
-        tableView.separatorStyle = .none
+        tableView.separatorInset = .zero
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.accessibilityIdentifier = "Context Menu"
 
-        tableView.tableFooterView = UIView(frame: CGRect(width: tableView.frame.width, height: PhotonActionSheetUX.Padding))
-
-        // UITableView has a large default footer height, remove this extra space
-        tableView.sectionFooterHeight = 1
+        tableView.tableFooterView = UIView()
 
         applyTheme()
 
@@ -303,25 +298,33 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         return cell
     }
 
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 0
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return UIView()
+    }
+    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 0 {
             if site != nil {
                 return PhotonActionSheetUX.TitleHeaderSectionHeightWithSite
             } else if title != nil {
                 return PhotonActionSheetUX.TitleHeaderSectionHeight
+            } else {
+                if #available(iOS 13.0, *) { return 0 } else { return 1 }
             }
-            return 6
+        } else {
+            if site != nil || title != nil {
+                return 0
+            }
         }
 
         return PhotonActionSheetUX.SeparatorRowHeight
     }
-
+    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        // If we have multiple sections show a separator for each one except the first.
-        if section > 0 {
-            return tableView.dequeueReusableHeaderFooterView(withIdentifier: "SeparatorSectionHeader")
-        }
-
         if let site = site {
             let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheetUX.SiteHeaderName) as! PhotonActionSheetSiteHeaderView
             header.tintColor = self.tintColor
@@ -333,12 +336,10 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
             header.configure(with: title)
             return header
         }
-
-        // A header height of at least 1 is required to make sure the default header size isnt used when laying out with AutoLayout
-        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "EmptyHeader")
-        view?.snp.makeConstraints { make in
-            make.height.equalTo(1)
+        else {
+            let view = UIView()
+            view.backgroundColor = UIColor(rgba: 0x7878804c)
+            return view
         }
-        return view
     }
 }
