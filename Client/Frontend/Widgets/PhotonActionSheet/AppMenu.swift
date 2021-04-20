@@ -10,13 +10,28 @@ extension PhotonActionSheetProtocol {
     //Returns a list of actions which is used to build a menu
     //OpenURL is a closure that can open a given URL in some view controller. It is up to the class using the menu to know how to open it
     func getLibraryActions(vcDelegate: PageOptionsVC) -> [PhotonActionSheetItem] {
-        let openLibrary = PhotonActionSheetItem(title: Strings.AppMenuLibraryTitleString, iconString: "menu-library") { _, _ in
+        let bookmarks = PhotonActionSheetItem(title: Strings.AppMenuBookmarks, iconString: "menu-panel-Bookmarks") { _, _ in
             let bvc = vcDelegate as? BrowserViewController
-            bvc?.showLibrary()
+            bvc?.showLibrary(panel: .bookmarks)
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .bookmarksPanel)
+        }
+        let history = PhotonActionSheetItem(title: Strings.AppMenuHistory, iconString: "menu-panel-History") { _, _ in
+            let bvc = vcDelegate as? BrowserViewController
+            bvc?.showLibrary(panel: .history)
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .library)
+        }
+        let downloads = PhotonActionSheetItem(title: Strings.AppMenuDownloads, iconString: "menu-panel-Downloads") { _, _ in
+            let bvc = vcDelegate as? BrowserViewController
+            bvc?.showLibrary(panel: .downloads)
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .downloadsPanel)
+        }
+        let readingList = PhotonActionSheetItem(title: Strings.AppMenuReadingList, iconString: "menu-panel-ReadingList") { _, _ in
+            let bvc = vcDelegate as? BrowserViewController
+            bvc?.showLibrary(panel: .readingList)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .library)
         }
 
-        return [openLibrary]
+        return [bookmarks, history, downloads, readingList]
     }
 
     func getSettingsAction(vcDelegate: Self.PageOptionsVC) -> [PhotonActionSheetItem] {
