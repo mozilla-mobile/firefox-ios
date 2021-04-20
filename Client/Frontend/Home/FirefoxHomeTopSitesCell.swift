@@ -9,16 +9,15 @@ import Storage
 
 private struct TopSiteCellUX {
     static let TitleHeight: CGFloat = 20
-    static let TitleFont = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
     static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
-    static let CellCornerRadius: CGFloat = 4
+    static let CellCornerRadius: CGFloat = 8
     static let TitleOffset: CGFloat = 5
     static let OverlayColor = UIColor(white: 0.0, alpha: 0.25)
-    static let IconSizePercent: CGFloat = 0.8
+    static let IconSizePercent: CGFloat = 0.7
+    static let IconCornerRadius: CGFloat = 4
     static let BorderColor = UIColor(white: 0, alpha: 0.1)
     static let BorderWidth: CGFloat = 0.5
     static let PinIconSize: CGFloat = 12
-    static let PinColor = UIColor.Photon.Grey60
 }
 
 /*
@@ -30,7 +29,7 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
 
     lazy var imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.layer.masksToBounds = true
+        imageView.layer.cornerRadius = TopSiteCellUX.IconCornerRadius
         return imageView
     }()
 
@@ -42,17 +41,17 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
 
     lazy fileprivate var titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.layer.masksToBounds = true
         titleLabel.textAlignment = .center
-        titleLabel.font = TopSiteCellUX.TitleFont
+        titleLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
         return titleLabel
     }()
 
     lazy private var faviconBG: UIView = {
         let view = UIView()
         view.layer.cornerRadius = TopSiteCellUX.CellCornerRadius
-        view.layer.masksToBounds = true
         view.layer.borderWidth = TopSiteCellUX.BorderWidth
+        view.layer.shadowOffset = CGSize(width: 0, height: 2)
+        view.layer.shadowRadius = 6
         return view
     }()
 
@@ -101,6 +100,10 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
         faviconBG.snp.makeConstraints { make in
             make.top.left.right.equalTo(contentView)
             make.bottom.equalTo(contentView).inset(TopSiteCellUX.TitleHeight)
+        }
+
+        pinImageView.snp.makeConstraints { make in
+            make.width.height.equalTo(TopSiteCellUX.PinIconSize)
         }
     }
 
@@ -151,27 +154,17 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
         }
 
         accessibilityLabel = titleLabel.text
-        faviconBG.backgroundColor = .clear
-        self.imageView.setFaviconOrDefaultIcon(forSite: site) { [weak self] in
-            self?.imageView.snp.remakeConstraints { make in
-                guard let faviconBG = self?.faviconBG , let frame = self?.frame else { return }
-                if self?.imageView.backgroundColor == nil {
-                    make.size.equalTo(frame.width)
-                } else {
-                    make.size.equalTo(floor(frame.width * TopSiteCellUX.IconSizePercent))
-                }
-                make.center.equalTo(faviconBG)
-            }
-
-            self?.faviconBG.backgroundColor = self?.imageView.backgroundColor
-        }
+        self.imageView.setFaviconOrDefaultIcon(forSite: site) {}
 
         applyTheme()
     }
 
     func applyTheme() {
-        imageView.tintColor = TopSiteCellUX.PinColor
+        pinImageView.tintColor = UIColor.theme.homePanel.topSitePin
+        faviconBG.backgroundColor = UIColor.theme.homePanel.shortcutBackground
         faviconBG.layer.borderColor = TopSiteCellUX.BorderColor.cgColor
+        faviconBG.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
+        faviconBG.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
         selectedOverlay.backgroundColor = TopSiteCellUX.OverlayColor
         titleBorder.backgroundColor = TopSiteCellUX.BorderColor.cgColor
         titleLabel.backgroundColor = UIColor.clear

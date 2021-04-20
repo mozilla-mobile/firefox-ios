@@ -264,7 +264,7 @@ extension FirefoxHomeViewController {
 
         var title: String? {
             switch self {
-            case .pocket: return Strings.ASPocketTitle
+            case .pocket: return Strings.ASPocketTitle2
             case .topSites: return Strings.ASShortcutsTitle
             case .libraryShortcuts: return Strings.AppMenuLibraryTitleString
             }
@@ -272,26 +272,6 @@ extension FirefoxHomeViewController {
 
         var headerHeight: CGSize {
             return CGSize(width: 50, height: 40)
-        }
-
-        var headerImage: UIImage? {
-            switch self {
-            case .pocket: return UIImage.templateImageNamed("menu-pocket")
-            case .topSites: return UIImage.templateImageNamed("menu-panel-TopSites")
-            case .libraryShortcuts:
-                // We want to validate that the Nimbus experiments library is working, from the UI
-                // all the way back to the data science backend. We're not testing the user's preference
-                // or response, we're end-to-end testing the experiments platform.
-                // So here, we're running multiple identical branches with the same treatment, and if the
-                // user isn't targeted, then we get still get the same treatment.
-                return Experiments.shared.withExperiment(featureId: .nimbusValidation) { branch -> UIImage? in
-                    switch branch {
-                    case .some(ExperimentBranch.a1): return UIImage.templateImageNamed("menu-library")
-                    case .some(ExperimentBranch.a2): return UIImage.templateImageNamed("menu-library")
-                    default: return UIImage.templateImageNamed("menu-library")
-                    }
-                }
-            }
         }
 
         var footerHeight: CGSize {
@@ -400,27 +380,26 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-            let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header", for: indexPath) as! ASHeaderView
-            let title = Section(indexPath.section).title
-            switch Section(indexPath.section) {
-            case .pocket:
-                view.title = title
-                view.moreButton.isHidden = false
-                view.moreButton.setTitle(Strings.PocketMoreStoriesText, for: .normal)
-                view.moreButton.addTarget(self, action: #selector(showMorePocketStories), for: .touchUpInside)
-                view.titleLabel.textColor = UIColor.Pocket.red
-                view.titleLabel.accessibilityIdentifier = "pocketTitle"
-                view.moreButton.setTitleColor(UIColor.Pocket.red, for: .normal)
-                return view
-            case .topSites:
-                view.title = title
-                view.titleLabel.accessibilityIdentifier = "topSitesTitle"
-                view.moreButton.isHidden = true
-                return view
-            case .libraryShortcuts:
-                view.title = title
-                view.titleLabel.accessibilityIdentifier = "libraryTitle"
-                return view
+                let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header", for: indexPath) as! ASHeaderView
+                let title = Section(indexPath.section).title
+                switch Section(indexPath.section) {
+                case .pocket:
+                    view.title = title
+                    view.moreButton.isHidden = false
+                    view.moreButton.setTitle(Strings.PocketMoreStoriesText, for: .normal)
+                    view.moreButton.addTarget(self, action: #selector(showMorePocketStories), for: .touchUpInside)
+                    view.titleLabel.accessibilityIdentifier = "pocketTitle"
+                    return view
+                case .topSites:
+                    view.title = title
+                    view.titleLabel.accessibilityIdentifier = "topSitesTitle"
+                    view.moreButton.isHidden = true
+                    return view
+                case .libraryShortcuts:
+                    view.title = title
+                    view.moreButton.isHidden = true
+                    view.titleLabel.accessibilityIdentifier = "libraryTitle"
+                    return view
             }
         case UICollectionView.elementKindSectionFooter:
                 let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "Footer", for: indexPath) as! ASFooterView

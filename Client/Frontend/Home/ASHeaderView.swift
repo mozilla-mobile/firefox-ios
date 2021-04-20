@@ -7,8 +7,6 @@ import SnapKit
 // MARK: - Section Header View
 public struct FirefoxHomeHeaderViewUX {
     static var SeparatorColor: UIColor { return UIColor.theme.homePanel.separator }
-    static let TextFont = DynamicFontHelper.defaultHelper.DefaultStandardFontBold
-    static let ButtonFont = DynamicFontHelper.defaultHelper.MediumSizeBoldFontAS
     static let SeparatorHeight = 0.5
     static let Insets: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? FirefoxHomeUX.SectionInsetsForIpad + FirefoxHomeUX.MinimumInsets : FirefoxHomeUX.MinimumInsets
     static let TitleTopInset: CGFloat = 5
@@ -20,8 +18,8 @@ class ASHeaderView: UICollectionReusableView {
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.text = self.title
-        titleLabel.textColor = UIColor.theme.homePanel.topSiteHeaderTitle
-        titleLabel.font = FirefoxHomeHeaderViewUX.TextFont
+        titleLabel.textColor = UIColor.theme.homePanel.activityStreamHeaderText
+        titleLabel.font = UIFont.preferredFont(forTextStyle: .title3)
         titleLabel.minimumScaleFactor = 0.6
         titleLabel.numberOfLines = 1
         titleLabel.adjustsFontSizeToFitWidth = true
@@ -33,9 +31,9 @@ class ASHeaderView: UICollectionReusableView {
     lazy var moreButton: UIButton = {
         let button = UIButton()
         button.isHidden = true
-        button.titleLabel?.font = FirefoxHomeHeaderViewUX.ButtonFont
+        button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
         button.contentHorizontalAlignment = .right
-        button.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
+        button.setTitleColor(UIColor.theme.homePanel.activityStreamHeaderButton, for: .normal)
         button.setTitleColor(UIColor.Photon.Grey50, for: .highlighted)
         return button
     }()
@@ -62,7 +60,8 @@ class ASHeaderView: UICollectionReusableView {
         moreButton.accessibilityIdentifier = nil;
         titleLabel.text = nil
         moreButton.removeTarget(nil, action: nil, for: .allEvents)
-        moreButton.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
+        titleLabel.textColor = UIColor.theme.homePanel.activityStreamHeaderText
+        moreButton.setTitleColor(UIColor.theme.homePanel.activityStreamHeaderButton, for: .normal)
     }
 
     override init(frame: CGRect) {
@@ -76,7 +75,7 @@ class ASHeaderView: UICollectionReusableView {
         }
         moreButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(self.safeArea.leading).inset(titleInsets)
+            self.leftConstraint = make.leading.equalTo(self.safeArea.leading).inset(titleInsets).constraint
             make.trailing.equalTo(moreButton.snp.leading).inset(-FirefoxHomeHeaderViewUX.TitleTopInset)
             make.top.equalTo(self.snp.top).offset(ASHeaderView.verticalInsets)
             make.bottom.equalToSuperview().offset(-ASHeaderView.verticalInsets)

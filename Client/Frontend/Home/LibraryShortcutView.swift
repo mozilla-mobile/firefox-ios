@@ -11,35 +11,38 @@ import SyncTelemetry
 import SnapKit
 
 class LibraryShortcutView: UIView {
-    static let spacing: CGFloat = 15
-
-    var button = UIButton()
-    var title = UILabel()
+    lazy var button: UIButton = {
+        let button = UIButton()
+        button.imageView?.layer.masksToBounds = true
+        button.layer.cornerRadius = 8
+        button.layer.borderColor = UIColor(white: 0.0, alpha: 0.1).cgColor
+        button.layer.borderWidth = 0.5
+        button.layer.shadowOffset = CGSize(width: 0, height: 2)
+        button.layer.shadowRadius = 6
+        return button
+    }()
+    lazy var titleLabel: UILabel = {
+        let titleLabel = UILabel()
+        titleLabel.textAlignment = .center
+        titleLabel.lineBreakMode = .byTruncatingTail
+        titleLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
+        return titleLabel
+    }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(button)
-        addSubview(title)
+        addSubview(titleLabel)
         button.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.centerX.equalToSuperview()
-            make.width.equalTo(self).offset(-LibraryShortcutView.spacing)
-            make.height.equalTo(self.snp.width).offset(-LibraryShortcutView.spacing)
+            make.top.leading.trailing.equalToSuperview()
+            make.bottom.equalToSuperview().inset(20)
         }
-        title.adjustsFontSizeToFitWidth = true
-        title.minimumScaleFactor = 0.7
-        title.lineBreakMode = .byTruncatingTail
-        title.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
-        title.textAlignment = .center
-        title.snp.makeConstraints { make in
-            make.top.equalTo(button.snp.bottom).offset(5)
-            make.leading.trailing.equalToSuperview()
+        titleLabel.snp.makeConstraints { make in
+            make.height.equalTo(20)
+            make.leading.equalToSuperview().offset(5)
+            make.trailing.equalToSuperview().inset(5)
+            make.bottom.equalToSuperview()
         }
-        button.imageView?.contentMode = .scaleToFill
-        button.contentVerticalAlignment = .fill
-        button.contentHorizontalAlignment = .fill
-        button.imageEdgeInsets = UIEdgeInsets(equalInset: LibraryShortcutView.spacing)
-        button.tintColor = .white
     }
 
     required init(coder: NSCoder) {
@@ -47,7 +50,10 @@ class LibraryShortcutView: UIView {
     }
 
     override func layoutSubviews() {
-        button.layer.cornerRadius = (self.frame.width - LibraryShortcutView.spacing) / 2
+        button.imageView?.snp.remakeConstraints { make in
+            make.size.equalTo(floor(frame.width * 0.7))
+            make.center.equalToSuperview()
+        }
         super.layoutSubviews()
     }
 }
