@@ -114,7 +114,7 @@ extension PhotonActionSheetProtocol {
             }
         }
 
-        let removeTopSitesPin = PhotonActionSheetItem(title: Strings.RemovePinTopsiteActionTitle, iconString: "panelIconTopSites") { _,_  in
+        let removeFromShortcuts = PhotonActionSheetItem(title: Strings.RemoveFromShortcutsActionTitle, iconString: "panelIconTopSites") { _,_  in
             guard let url = tab.url?.displayURL, let sql = self.profile.history as? SQLiteHistory else { return }
 
             sql.getSites(forURLs: [url.absoluteString]).bind { val -> Success in
@@ -199,7 +199,7 @@ extension PhotonActionSheetProtocol {
             refreshActions.append(toggleTP)
         }
         
-        let pinAction = (isPinned ? removeTopSitesPin : addToShortcuts)
+        let pinAction = (isPinned ? removeFromShortcuts : addToShortcuts)
         var section1 = [pinAction]
         var section2 = [toggleDesktopSite]
         var section3 = [sharePage]
