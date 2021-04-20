@@ -172,7 +172,9 @@ class IntegrationTests: BaseTestCase {
         waitForInitialSyncComplete()
 
         // Check synced Tabs
-        navigator.goto(LibraryPanel_SyncedTabs)
+        navigator.goto(NewTabScreen)
+        navigator.goto(TabTray)
+        navigator.performAction(Action.ToggleSyncMode)
 
         // Need to swipe to get the data on the screen on focus
         app.swipeDown()
