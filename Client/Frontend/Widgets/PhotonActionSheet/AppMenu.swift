@@ -47,7 +47,7 @@ extension PhotonActionSheetProtocol {
 
         let noImageEnabled = NoImageModeHelper.isActivated(profile.prefs)
         let imageModeTitle = noImageEnabled ? Strings.AppMenuShowImageMode : Strings.AppMenuNoImageMode
-        let iconString = noImageEnabled ? "" : "menu-NoImageMode"
+        let iconString = noImageEnabled ? "menu-ShowImages" : "menu-NoImageMode"
         let noImageMode = PhotonActionSheetItem(title: imageModeTitle, iconString: iconString, isEnabled: noImageEnabled) { action,_ in
             NoImageModeHelper.toggle(isEnabled: action.isEnabled, profile: self.profile, tabManager: self.tabManager)
         }
