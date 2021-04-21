@@ -171,11 +171,16 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         tableView.register(PhotonActionSheetCell.self, forCellReuseIdentifier: PhotonActionSheetUX.CellName)
         tableView.register(PhotonActionSheetSiteHeaderView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.SiteHeaderName)
         tableView.register(PhotonActionSheetTitleHeaderView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.TitleHeaderName)
+        tableView.register(PhotonActionSheetSeparator.self, forHeaderFooterViewReuseIdentifier: "SeparatorSectionHeader")
         tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "EmptyHeader")
 
         tableView.isScrollEnabled = true
         tableView.showsVerticalScrollIndicator = false
         tableView.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
+        // Don't show separators on ETP menu
+        if title != nil {
+            tableView.separatorStyle = .none
+        }
         tableView.separatorInset = .zero
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.accessibilityIdentifier = "Context Menu"
@@ -317,7 +322,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
             }
         } else {
             if site != nil || title != nil {
-                return 0
+                return PhotonActionSheetUX.SeparatorRowHeight
             }
         }
 
@@ -331,10 +336,14 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
             header.configure(with: site)
             return header
         } else if let title = title {
-            let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheetUX.TitleHeaderName) as! PhotonActionSheetTitleHeaderView
-            header.tintColor = self.tintColor
-            header.configure(with: title)
-            return header
+            if section > 0 {
+                return tableView.dequeueReusableHeaderFooterView(withIdentifier: "SeparatorSectionHeader")
+            } else {
+                let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheetUX.TitleHeaderName) as! PhotonActionSheetTitleHeaderView
+                header.tintColor = self.tintColor
+                header.configure(with: title)
+                return header
+            }
         }
         else {
             let view = UIView()

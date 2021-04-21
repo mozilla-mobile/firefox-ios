@@ -29,7 +29,7 @@ extension PhotonActionSheetProtocol {
             popoverVC.delegate = viewController
             popoverVC.sourceView = view
             popoverVC.sourceRect = view.bounds
-            popoverVC.permittedArrowDirections = UIPopoverArrowDirection(rawValue: 0)
+            popoverVC.permittedArrowDirections = .any
         }
         viewController.present(sheet, animated: true, completion: nil)
     }
