@@ -274,8 +274,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
             self.dismiss(nil)
             return
         }
-        action.isEnabled = !action.isEnabled
-
+        
         // Switches can be toggled on/off without dismissing the menu
         if action.accessory == .Switch {
             let generator = UIImpactFeedbackGenerator(style: .medium)
@@ -285,6 +284,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
             self.tableView.deselectRow(at: indexPath, animated: true)
             self.tableView.reloadData()
         } else {
+            action.isEnabled = !action.isEnabled
             self.dismiss(nil)
         }
 
