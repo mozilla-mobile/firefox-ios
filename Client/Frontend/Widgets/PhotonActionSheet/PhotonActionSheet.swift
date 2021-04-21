@@ -151,7 +151,8 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
 
         tintColor = UIColor.theme.actionMenu.foreground
         closeButton.backgroundColor = UIColor.theme.actionMenu.closeButtonBackground
-
+        tableView.headerView(forSection: 0)?.backgroundColor = UIColor.Photon.DarkGrey05
+        
         tableView.reloadData()
     }
 
@@ -347,7 +348,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         }
         else {
             let view = UIView()
-            view.backgroundColor = UIColor(rgba: 0x7878804c)
+            view.backgroundColor = UIColor.theme.tableView.separator
             return view
         }
     }
