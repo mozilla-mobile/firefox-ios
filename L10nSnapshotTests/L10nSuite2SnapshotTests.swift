@@ -10,8 +10,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         let libraryPanels = [
                 "LibraryPanels.History",
                 "LibraryPanels.ReadingList",
-                "LibraryPanels.Downloads",
-                "LibraryPanels.SyncedTabs"
+                "LibraryPanels.Downloads"
             ]
             waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
             app.buttons["urlBar-cancel"].tap()

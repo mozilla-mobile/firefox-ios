@@ -98,14 +98,12 @@ let LibraryPanel_Bookmarks = "LibraryPanel.Bookmarks.1"
 let LibraryPanel_History = "LibraryPanel.History.2"
 let LibraryPanel_ReadingList = "LibraryPanel.ReadingList.3"
 let LibraryPanel_Downloads = "LibraryPanel.Downloads.4"
-let LibraryPanel_SyncedTabs = "LibraryPanel.SyncedTabs.5"
 
 let allHomePanels = [
     LibraryPanel_Bookmarks,
     LibraryPanel_History,
     LibraryPanel_ReadingList,
-    LibraryPanel_Downloads,
-    LibraryPanel_SyncedTabs
+    LibraryPanel_Downloads
 ]
 
 let iOS_Settings = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
@@ -129,6 +127,7 @@ class Action {
 
     static let ToggleRegularMode = "ToggleRegularMode"
     static let TogglePrivateMode = "TogglePrivateBrowing"
+    static let ToggleSyncMode = "ToggleSyncMode"
     static let TogglePrivateModeFromTabBarHomePanel = "TogglePrivateModeFromTabBarHomePanel"
     static let TogglePrivateModeFromTabBarBrowserTab = "TogglePrivateModeFromTabBarBrowserTab"
     static let TogglePrivateModeFromTabBarNewTab = "TogglePrivateModeFromTabBarNewTab"
@@ -562,17 +561,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
     }
 
-    map.addScreenState(LibraryPanel_SyncedTabs) { screenState in
-        screenState.dismissOnUse = true
-        let syncedTabsElement = app.navigationBars["Synced Tabs"]
-        screenState.gesture(forAction: Action.CloseSyncedTabsPanel, transitionTo: HomePanelsScreen) { userState in
-            if isTablet {
-                app.buttons["TabToolbar.libraryButton"].tap()
-            } else {
-                syncedTabsElement.press(forDuration: 2, thenDragTo: app.buttons["LibraryPanels.SyncedTabs"])
-            }
-        }
-    }
 
     map.addScreenState(LibraryPanel_ReadingList) { screenState in
         screenState.dismissOnUse = true
@@ -922,29 +910,25 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         var regularModeSelector: XCUIElement
         var privateModeSelector: XCUIElement
-//        var syncModeSelector: XCUIElement
+        var syncModeSelector: XCUIElement
 
         if isTablet {
             regularModeSelector = app.navigationBars.segmentedControls.buttons.element(boundBy: 0)
             privateModeSelector = app.navigationBars.segmentedControls.buttons.element(boundBy: 1)
-//            syncModeSelector = app.navigationBars.segmentedControls.buttons.element(boundBy: 2)
+            syncModeSelector = app.navigationBars.segmentedControls.buttons.element(boundBy: 2)
         } else {
             regularModeSelector = app.toolbars["Toolbar"].segmentedControls["navBarTabTray"].buttons.element(boundBy: 0)
             privateModeSelector = app.toolbars["Toolbar"].segmentedControls["navBarTabTray"].buttons.element(boundBy: 1)
-//            syncModeSelector = app.toolbars["Toolbar"].segmentedControls["navBarTabTray"].buttons.element(boundBy: 2)
-
+            syncModeSelector = app.toolbars["Toolbar"].segmentedControls["navBarTabTray"].buttons.element(boundBy: 2)
         }
-
         screenState.tap(regularModeSelector, forAction: Action.ToggleRegularMode) { userState in
             userState.isPrivate = !userState.isPrivate
         }
-
         screenState.tap(privateModeSelector, forAction: Action.TogglePrivateMode) { userState in
             userState.isPrivate = !userState.isPrivate
         }
-        
-//        screenState.tap(syncModeSelector, forAction: Action.ToggleSyncMode) { userState in
-//        }
+        screenState.tap(syncModeSelector, forAction: Action.ToggleSyncMode) { userState in
+        }
 
         screenState.onEnter { userState in
             userState.numTabs = Int(app.tables.cells.count)
@@ -1092,7 +1076,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.buttons["LibraryPanels.History"], to: LibraryPanel_History)
         screenState.tap(app.buttons["LibraryPanels.ReadingList"], to: LibraryPanel_ReadingList)
         screenState.tap(app.buttons["LibraryPanels.Downloads"], to: LibraryPanel_Downloads)
-        screenState.tap(app.buttons["LibraryPanels.SyncedTabs"], to: LibraryPanel_SyncedTabs)
     }
 
     map.addScreenState(BrowserTabMenu) { screenState in
