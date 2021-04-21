@@ -109,8 +109,7 @@ class PrivateBrowsingTest: BaseTestCase {
 
         // Now the enable the Close Private Tabs when closing the Private Browsing Button
         app.cells.staticTexts[url2Label].tap()
-        // Workaround to issue 8295 while it is fixed
-        app.buttons["urlBar-cancel"].tap()
+
         waitForTabsButton()
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
         navigator.nowAt(BrowserTab)

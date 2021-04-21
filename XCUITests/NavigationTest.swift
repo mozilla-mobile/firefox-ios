@@ -120,7 +120,8 @@ class NavigationTest: BaseTestCase {
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         // Open FxAccount from remote tab panel and check the Sign in to Firefox scren
-        navigator.goto(LibraryPanel_SyncedTabs)
+        navigator.goto(TabTray)
+        navigator.performAction(Action.ToggleSyncMode)
 
         app.tables.buttons["Sign in to Sync"].tap()
         waitForExistence(app.buttons["EmailSignIn.button"], timeout: 10)
