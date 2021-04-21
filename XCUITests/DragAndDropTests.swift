@@ -224,7 +224,8 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         XCTAssert(secondWebsite.url.contains(app.textFields["url"].value! as! String), "The tab has not been dropped correctly")
     }
         
-    func testRearrangeTabsTabTrayIsKeptinTopTabs() {
+    // Disabled due to https://github.com/mozilla-mobile/firefox-ios/issues/8358
+    /* func testRearrangeTabsTabTrayIsKeptinTopTabs() {
         if skipPlatform { return }
         openTwoWebsites()
         checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
@@ -237,7 +238,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         // Leave Tab Tray and check order in Top Tabs
         app.collectionViews.cells[firstWebsite.tabName].tap()
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
-    }
+    }*/
 
     // This test drags the address bar and since it is not possible to drop it on another app, lets do it in a search box
     /* Disable since the drag and drop is not working fine in this scenario on simulator
@@ -259,12 +260,16 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         if skipPlatform { return }
 
         // Drop a bookmark/history entry is only allowed on other apps. This test is to check that nothing happens within the app
+        waitForExistence(app.textFields["url"], timeout: 5)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_History)
 
         let firstEntryOnList = app.tables["History List"].cells.element(boundBy:
-            6).staticTexts[exampleDomainTitle]
-        let secondEntryOnList = app.tables["History List"].cells.element(boundBy: 3).staticTexts[twitterTitle]
+            5).staticTexts[exampleDomainTitle]
+        let secondEntryOnList = app.tables["History List"].cells.element(boundBy: 2).staticTexts[twitterTitle]
 
         XCTAssertTrue(firstEntryOnList.exists, "first entry before is not correct")
         XCTAssertTrue(secondEntryOnList.exists, "second entry before is not correct")
@@ -279,6 +284,10 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
     func testDragAndDropBookmarkEntry() {
         if skipPlatform { return }
 
+        waitForExistence(app.textFields["url"], timeout: 5)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(MobileBookmarks)
         waitForExistence(app.tables["Bookmarks List"])
 
