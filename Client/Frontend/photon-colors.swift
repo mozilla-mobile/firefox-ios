@@ -47,10 +47,12 @@ extension UIColor {
         static let Blue05 = UIColor(rgb: 0xaaf2ff)
         static let Blue10 = UIColor(rgb: 0x80ebff)
         static let Blue20 = UIColor(rgb: 0x00ddff)
+        static let Blue20A40 = UIColor(rgba: 0x00ddff28)
         static let Blue30 = UIColor(rgb: 0x00b3f4)
         static let Blue40 = UIColor(rgb: 0x0090ed)
         static let Blue40A30 = UIColor(rgba: 0x0090ed4c)
         static let Blue50 = UIColor(rgb: 0x0060df)
+        static let Blue50A40 = UIColor(rgba: 0x0060df28)
         static let Blue60 = UIColor(rgb: 0x0250bb)
         static let Blue70 = UIColor(rgb: 0x054096)
         static let Blue80 = UIColor(rgb: 0x073072)
@@ -78,7 +80,7 @@ extension UIColor {
         static let Yellow70 = UIColor(rgb: 0xc45a27)
         static let Yellow80 = UIColor(rgb: 0xa7341f)
         static let Yellow90 = UIColor(rgb: 0x960e18)
-     
+
         static let Red05 = UIColor(rgb: 0xffdfe7)
         static let Red10 = UIColor(rgb: 0xffbdc5)
         static let Red20 = UIColor(rgb: 0xff9aa2)
@@ -136,7 +138,7 @@ extension UIColor {
 
         static let White100 = UIColor(rgb: 0xffffff)
 
-        static let Grey10 = UIColor(rgb: 0xf9f9fa) // change to LightGrey10 - in the future, grey should be redefined into LightGrey and DarkGrey wherever possible
+        static let Grey10 = UIColor(rgb: 0xf9f9fb) // change to LightGrey10 - in the future, grey should be redefined into LightGrey and DarkGrey wherever possible
         static let Grey11 = UIColor(rgb: 0xf2f2f7) // system background / light / secondary
         static let Grey10A10 = UIColor(rgba: 0xf9f9fa19)
         static let Grey10A20 = UIColor(rgba: 0xf9f9fa33)
@@ -183,7 +185,7 @@ extension UIColor {
     struct Pocket {
         static let red = UIColor(rgb: 0xEF4156)
     }
-    
+
     struct Custom {
         static let selectedHighlightDark = UIColor(rgb: 0x2D2D2D)
         static let selectedHighlightLight = UIColor(rgb: 0xd1d1d6)
