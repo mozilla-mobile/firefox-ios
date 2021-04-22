@@ -441,7 +441,6 @@ extension ReadingListPanel: Themeable {
     func applyTheme() {
         tableView.separatorColor = UIColor.theme.tableView.separator
         view.backgroundColor = UIColor.theme.tableView.rowBackground
-
         refreshReadingList()
     }
 }

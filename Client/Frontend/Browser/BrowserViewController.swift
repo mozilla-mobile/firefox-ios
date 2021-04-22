@@ -53,6 +53,7 @@ class BrowserViewController: UIViewController {
     var firefoxHomeViewController: FirefoxHomeViewController?
     var libraryViewController: LibraryViewController?
     var libraryDrawerViewController: DrawerViewController?
+    var libraryNativeViewController: LibraryNativeViewController?
     var webViewContainer: UIView!
     var urlBar: URLBarView!
     var urlBarHeightConstraint: Constraint!
@@ -869,12 +870,26 @@ class BrowserViewController: UIViewController {
             libraryViewController.selectedPanel = panel
         }
 
-        let libraryDrawerViewController = self.libraryDrawerViewController ?? DrawerViewController(childViewController: libraryViewController)
-        self.libraryDrawerViewController = libraryDrawerViewController
-
-        addChild(libraryDrawerViewController)
-        view.addSubview(libraryDrawerViewController.view)
-        libraryDrawerViewController.view.snp.remakeConstraints(constraintsForLibraryDrawerView)
+//        let nativeLibraryViewController = LibraryNativeViewController()
+//        nativeLibraryViewController.childViewController = libraryViewController
+//        present(nativeLibraryViewController, animated: true, completion: nil)
+        
+        if #available(iOS 13.0, *) {
+            libraryViewController.modalPresentationStyle = .formSheet
+            self.present(libraryViewController, animated: true, completion: nil)
+        } else {
+            self.presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: libraryViewController, topTabsVisible: self.topTabsVisible)
+        }
+//        self.present(controller, animated: true, completion: nil)
+        
+        
+        
+//        let libraryDrawerViewController = self.libraryDrawerViewController ?? DrawerViewController(childViewController: libraryViewController)
+//        self.libraryDrawerViewController = libraryDrawerViewController
+//
+//        addChild(libraryDrawerViewController)
+//        view.addSubview(libraryDrawerViewController.view)
+//        libraryDrawerViewController.view.snp.remakeConstraints(constraintsForLibraryDrawerView)
     }
 
     fileprivate func createSearchControllerIfNeeded() {

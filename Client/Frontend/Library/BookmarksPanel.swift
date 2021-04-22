@@ -449,7 +449,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return section == BookmarksSection.recent.rawValue && !recentBookmarks.isEmpty ? UITableView.automaticDimension : 0
+        return section == BookmarksSection.recent.rawValue && !recentBookmarks.isEmpty ? SiteTableViewControllerUX.HeaderHeight : 0
     }
 
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

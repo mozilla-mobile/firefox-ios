@@ -131,7 +131,7 @@ class TwoLineImageOverlayCell: UITableViewCell, Themeable {
         } else {
             self.backgroundColor = .white
             self.titleLabel.textColor = .black
-            self.descriptionLabel.textColor = UIColor.Photon.Grey75A60
+            self.descriptionLabel.textColor = UIColor.Photon.DarkGrey05
         }
     }
     
@@ -240,7 +240,7 @@ class SimpleTwoLineCell: UITableViewCell, Themeable {
         } else {
             self.backgroundColor = .white
             self.titleLabel.textColor = .black
-            self.descriptionLabel.textColor = UIColor.Photon.Grey75A60
+            self.descriptionLabel.textColor = UIColor.Photon.DarkGrey05
         }
     }
     

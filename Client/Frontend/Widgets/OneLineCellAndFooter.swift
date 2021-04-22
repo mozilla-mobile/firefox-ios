@@ -127,6 +127,7 @@ class OneLineTableViewCell: UITableViewCell, Themeable {
 class OneLineFooterView: UITableViewHeaderFooterView, Themeable {
     fileprivate let bordersHelper = ThemedHeaderFooterViewBordersHelper()
 
+    
     var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
@@ -146,6 +147,8 @@ class OneLineFooterView: UITableViewHeaderFooterView, Themeable {
     }
     
     let containerView = UIView()
+    var shortheight: Bool = false
+    private var shortHeight = 32
     
     private func initialViewSetup() {
         bordersHelper.initBorders(view: containerView)
@@ -156,7 +159,7 @@ class OneLineFooterView: UITableViewHeaderFooterView, Themeable {
         addSubview(containerView)
         
         containerView.snp.makeConstraints { make in
-            make.height.equalTo(58)
+            make.height.equalTo(shortheight ? 32 : 58)
             make.top.bottom.equalToSuperview()
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
@@ -186,16 +189,31 @@ class OneLineFooterView: UITableViewHeaderFooterView, Themeable {
         // TODO: Replace this color with proper value once tab tray refresh is done
         if theme == .dark {
             self.titleLabel.textColor = .white
-            self.containerView.backgroundColor = UIColor(rgb: 0x1C1C1E)
+            self.containerView.backgroundColor = UIColor.Photon.Grey80
         } else {
             self.titleLabel.textColor = .black
-            self.containerView.backgroundColor = UIColor(rgb: 0xF2F2F7)
+            self.containerView.backgroundColor = UIColor.Photon.Grey10
         }
         bordersHelper.applyTheme()
     }
 
+//    override func layoutSubviews() {
+//        super.layoutSubviews()
+//        setupHeaderConstraint()
+//    }
+    
+    func setupHeaderConstraint() {
+        containerView.snp.remakeConstraints { make in
+            make.height.equalTo(shortheight ? 32 : 58)
+            make.top.bottom.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+        }
+    }
+    
     override func prepareForReuse() {
         super.prepareForReuse()
+        setupHeaderConstraint()
         setDefaultBordersValues()
         applyTheme()
     }

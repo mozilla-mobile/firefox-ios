@@ -66,7 +66,6 @@ extension UIColor {
         static let Orange90 = UIColor(rgb: 0x3e1300)
 
         static let Grey10 = UIColor(rgb: 0xf9f9fa)
-        static let Grey11 = UIColor(rgb: 0xf2f2f7) // system background / light / secondary
         static let Grey10A10 = UIColor(rgba: 0xf9f9fa19)
         static let Grey10A20 = UIColor(rgba: 0xf9f9fa33)
         static let Grey10A40 = UIColor(rgba: 0xf9f9fa66)
@@ -79,10 +78,7 @@ extension UIColor {
         static let Grey50 = UIColor(rgb: 0x737373)
         static let Grey60 = UIColor(rgb: 0x4a4a4f)
         static let Grey70 = UIColor(rgb: 0x38383d)
-        static let Grey75 = UIColor(rgb: 0x3C3C43)
-        static let Grey75A60 = UIColor(rgba: 0x3C3C4399)
         static let Grey80 = UIColor(rgb: 0x2a2a2e)
-        static let Grey85 = UIColor(rgb: 0x1C1C1e) // system background / dark / secondary
         static let Grey90 = UIColor(rgb: 0x0c0c0d)
         static let Grey90A05 = UIColor(rgba: 0x0c0c0d0c)
         static let Grey90A10 = UIColor(rgba: 0x0c0c0d19)
@@ -94,6 +90,8 @@ extension UIColor {
         static let Grey90A70 = UIColor(rgba: 0x0c0c0db2)
         static let Grey90A80 = UIColor(rgba: 0x0c0c0dcc)
         static let Grey90A90 = UIColor(rgba: 0x0c0c0de5)
+        
+        static let DarkGrey05 = UIColor(rgb: 0x5B5B66)
 
         static let Ink40 = UIColor(rgb: 0x7175A8)
         static let Ink50 = UIColor(rgb: 0x595E91)
