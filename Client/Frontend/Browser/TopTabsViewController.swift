@@ -20,6 +20,7 @@ struct TopTabsUX {
     static let AnimationSpeed: TimeInterval = 0.1
     static let SeparatorYOffset: CGFloat = 7
     static let SeparatorHeight: CGFloat = 32
+    static let TabCornerRadius: CGFloat = 8
 }
 
 protocol TopTabsDelegate: AnyObject {

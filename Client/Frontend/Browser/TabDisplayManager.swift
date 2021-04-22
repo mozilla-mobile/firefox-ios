@@ -318,6 +318,24 @@ extension TabDisplayManager: UICollectionViewDragDelegate {
 
 @available(iOS 11.0, *)
 extension TabDisplayManager: UICollectionViewDropDelegate {
+    private func dragPreviewParameters(_ collectionView: UICollectionView, dragPreviewParametersForItemAt indexPath: IndexPath) -> UIDragPreviewParameters? {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? TopTabCell else { return nil }
+        let previewParams = UIDragPreviewParameters()
+
+        let path = UIBezierPath(roundedRect: cell.selectedBackground.frame, cornerRadius: TopTabsUX.TabCornerRadius)
+        previewParams.visiblePath = path
+
+        return previewParams
+    }
+
+    func collectionView(_ collectionView: UICollectionView, dragPreviewParametersForItemAt indexPath: IndexPath) -> UIDragPreviewParameters? {
+        return dragPreviewParameters(collectionView, dragPreviewParametersForItemAt: indexPath)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, dropPreviewParametersForItemAt indexPath: IndexPath) -> UIDragPreviewParameters? {
+        return dragPreviewParameters(collectionView, dragPreviewParametersForItemAt: indexPath)
+    }
+
     func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
         guard collectionView.hasActiveDrag, let destinationIndexPath = coordinator.destinationIndexPath, let dragItem = coordinator.items.first?.dragItem, let tab = dragItem.localObject as? Tab, let sourceIndex = dataStore.index(of: tab) else {
             return

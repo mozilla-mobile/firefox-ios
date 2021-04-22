@@ -26,7 +26,7 @@ class TopTabCell: UICollectionViewCell, Themeable {
         let view = UIView()
         view.clipsToBounds = false
         view.backgroundColor = UIColor.theme.topTabs.tabBackgroundSelected
-        view.layer.cornerRadius = 8
+        view.layer.cornerRadius = TopTabsUX.TabCornerRadius
         view.layer.shadowColor = UIColor(rgb: 0x3a3944).cgColor
         view.layer.shadowRadius = 2
         view.layer.shadowOpacity = 0.1
@@ -139,11 +139,6 @@ class TopTabCell: UICollectionViewCell, Themeable {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        self.layer.shadowOpacity = 0
     }
 
     @objc func closeTab() {
