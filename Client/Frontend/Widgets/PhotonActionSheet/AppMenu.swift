@@ -13,22 +13,18 @@ extension PhotonActionSheetProtocol {
         let bookmarks = PhotonActionSheetItem(title: Strings.AppMenuBookmarks, iconString: "menu-panel-Bookmarks") { _, _ in
             let bvc = vcDelegate as? BrowserViewController
             bvc?.showLibrary(panel: .bookmarks)
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .bookmarksPanel)
         }
         let history = PhotonActionSheetItem(title: Strings.AppMenuHistory, iconString: "menu-panel-History") { _, _ in
             let bvc = vcDelegate as? BrowserViewController
             bvc?.showLibrary(panel: .history)
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .library)
         }
         let downloads = PhotonActionSheetItem(title: Strings.AppMenuDownloads, iconString: "menu-panel-Downloads") { _, _ in
             let bvc = vcDelegate as? BrowserViewController
             bvc?.showLibrary(panel: .downloads)
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .downloadsPanel)
         }
         let readingList = PhotonActionSheetItem(title: Strings.AppMenuReadingList, iconString: "menu-panel-ReadingList") { _, _ in
             let bvc = vcDelegate as? BrowserViewController
             bvc?.showLibrary(panel: .readingList)
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .library)
         }
 
         return [bookmarks, history, downloads, readingList]
