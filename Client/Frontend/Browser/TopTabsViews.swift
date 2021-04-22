@@ -5,81 +5,36 @@
 import Foundation
 import Shared
 
-struct TopTabsSeparatorUX {
-    static let Identifier = "Separator"
-    static let Width: CGFloat = 1
-}
-
-class TopTabsSeparator: UICollectionReusableView {
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.backgroundColor = UIColor.theme.topTabs.separator
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
-class TopTabsHeaderFooter: UICollectionReusableView {
-    let line = UIView()
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        line.semanticContentAttribute = .forceLeftToRight
-        addSubview(line)
-        line.backgroundColor = UIColor.theme.topTabs.separator
-    }
-
-    func arrangeLine(_ kind: String) {
-        line.snp.removeConstraints()
-        switch kind {
-        case UICollectionView.elementKindSectionHeader:
-                line.snp.makeConstraints { make in
-                    make.trailing.equalTo(self)
-                }
-        case UICollectionView.elementKindSectionFooter:
-                line.snp.makeConstraints { make in
-                    make.leading.equalTo(self)
-                }
-            default:
-                break
-        }
-        line.snp.makeConstraints { make in
-            make.height.equalTo(TopTabsUX.SeparatorHeight)
-            make.width.equalTo(TopTabsUX.SeparatorWidth)
-            make.top.equalTo(self).offset(TopTabsUX.SeparatorYOffset)
-        }
-    }
-
-    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
-        layer.zPosition = CGFloat(layoutAttributes.zIndex)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
-class TopTabCell: UICollectionViewCell, PrivateModeUI {
+class TopTabCell: UICollectionViewCell, Themeable {
 
     static let Identifier = "TopTabCellIdentifier"
     static let ShadowOffsetSize: CGFloat = 2 //The shadow is used to hide the tab separator
 
     var selectedTab = false {
         didSet {
-            backgroundColor = selectedTab ? UIColor.theme.topTabs.tabBackgroundSelected : UIColor.theme.topTabs.tabBackgroundUnselected
-            titleText.textColor = selectedTab ? UIColor.theme.topTabs.tabForegroundSelected : UIColor.theme.topTabs.tabForegroundUnselected
-            highlightLine.isHidden = !selectedTab
-            closeButton.tintColor = selectedTab ? UIColor.theme.topTabs.closeButtonSelectedTab : UIColor.theme.topTabs.closeButtonUnselectedTab
+            backgroundColor = .clear
+            titleText.textColor = UIColor.theme.topTabs.tabForegroundSelected
+            closeButton.tintColor = UIColor.theme.topTabs.closeButtonSelectedTab
             closeButton.backgroundColor = backgroundColor
             closeButton.layer.shadowColor = backgroundColor?.cgColor
-            if selectedTab {
-                drawShadow()
-            } else {
-                self.layer.shadowOpacity = 0
-            }
+            closeButton.isHidden = !selectedTab
+            selectedBackground.isHidden = !selectedTab
         }
     }
+
+    let selectedBackground: UIView = {
+        let view = UIView()
+        view.clipsToBounds = false
+        view.backgroundColor = UIColor.theme.topTabs.tabBackgroundSelected
+        view.layer.cornerRadius = TopTabsUX.TabCornerRadius
+        view.layer.shadowColor = UIColor(rgb: 0x3a3944).cgColor
+        view.layer.shadowRadius = 2
+        view.layer.shadowOpacity = 0.1
+        view.layer.shadowOffset = CGSize(width: 0, height: 2)
+        view.layer.masksToBounds = false
+
+        return view
+    }()
 
     let titleText: UILabel = {
         let titleText = UILabel()
@@ -112,25 +67,19 @@ class TopTabCell: UICollectionViewCell, PrivateModeUI {
         return closeButton
     }()
 
-    let highlightLine: UIView = {
-        let line = UIView()
-        line.backgroundColor = UIColor.Photon.Blue60
-        line.isHidden = true
-        line.semanticContentAttribute = .forceLeftToRight
-        return line
-    }()
-
     weak var delegate: TopTabCellDelegate?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
         closeButton.addTarget(self, action: #selector(closeTab), for: .touchUpInside)
+        [selectedBackground, titleText, closeButton, favicon].forEach(addSubview)
 
-        contentView.addSubview(titleText)
-        contentView.addSubview(closeButton)
-        contentView.addSubview(favicon)
-        contentView.addSubview(highlightLine)
+        selectedBackground.snp.makeConstraints { make in
+            make.width.equalTo(self)
+            make.height.equalTo(self).multipliedBy(0.82)
+            make.center.equalTo(self)
+        }
 
         favicon.snp.makeConstraints { make in
             make.centerY.equalTo(self).offset(TopTabsUX.TabNudge)
@@ -149,24 +98,11 @@ class TopTabCell: UICollectionViewCell, PrivateModeUI {
             make.width.equalTo(self.snp.height).offset(-TopTabsUX.TabTitlePadding)
             make.trailing.equalTo(self.snp.trailing)
         }
-        highlightLine.snp.makeConstraints { make in
-            make.top.equalTo(self)
-            make.leading.equalTo(self).offset(-TopTabCell.ShadowOffsetSize)
-            make.trailing.equalTo(self).offset(TopTabCell.ShadowOffsetSize)
-            make.height.equalTo(TopTabsUX.HighlightLineWidth)
-        }
 
         self.clipsToBounds = false
-
-        applyUIMode(isPrivate: false)
-    }
-
-    func applyUIMode(isPrivate: Bool) {
-        highlightLine.backgroundColor = UIColor.theme.topTabs.tabSelectedIndicatorBar(isPrivate)
     }
 
     func configureWith(tab: Tab, isSelected: Bool) {
-        applyUIMode(isPrivate: tab.isPrivate)
         self.titleText.text = tab.displayTitle
 
         if tab.displayTitle.isEmpty {
@@ -205,28 +141,16 @@ class TopTabCell: UICollectionViewCell, PrivateModeUI {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        self.layer.shadowOpacity = 0
-    }
-
     @objc func closeTab() {
         delegate?.tabCellDidClose(self)
     }
 
-    // When a tab is selected the shadow prevents the tab separators from showing.
-    func drawShadow() {
-        self.layer.masksToBounds = false
-        self.layer.shadowColor = backgroundColor?.cgColor
-        self.layer.shadowOpacity  = 1
-        self.layer.shadowRadius = 0
-
-        self.layer.shadowPath = UIBezierPath(roundedRect: CGRect(width: self.frame.size.width + (TopTabCell.ShadowOffsetSize * 2), height: self.frame.size.height), cornerRadius: 0).cgPath
-        self.layer.shadowOffset = CGSize(width: -TopTabCell.ShadowOffsetSize, height: 0)
-    }
-
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
         layer.zPosition = CGFloat(layoutAttributes.zIndex)
+    }
+
+    func applyTheme() {
+        selectedBackground.backgroundColor = UIColor.theme.topTabs.tabBackgroundSelected
     }
 }
 

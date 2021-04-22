@@ -5,7 +5,7 @@
 import Foundation
 
 // Convenience reference to these normal mode colors which are used in a few color classes.
-fileprivate let defaultBackground = UIColor.Photon.Grey80
+fileprivate let defaultBackground = UIColor.Photon.DarkGrey60
 fileprivate let defaultSeparator = UIColor.Photon.Grey60
 fileprivate let defaultTextAndTint = UIColor.Photon.Grey10
 
@@ -36,6 +36,10 @@ fileprivate class DarkURLBarColor: URLBarColor {
         return (labelMode: color.withAlphaComponent(0.25), textFieldMode: color)
 
     }
+
+    override func activeBorder(_ isPrivate: Bool) -> UIColor {
+        return !isPrivate ? UIColor.Photon.Blue20A40 : UIColor.Defaults.MobilePrivatePurple
+    }
 }
 
 fileprivate class DarkBrowserColor: BrowserColor {
@@ -62,18 +66,19 @@ fileprivate class DarkTabTrayColor: TabTrayColor {
 }
 
 fileprivate class DarkTopTabsColor: TopTabsColor {
-    override var background: UIColor { return UIColor.Photon.Grey80 }
-    override var tabBackgroundSelected: UIColor { return UIColor.Photon.Grey80 }
+    override var background: UIColor { UIColor.Photon.DarkGrey80 }
+    override var tabBackgroundSelected: UIColor { return UIColor.Photon.DarkGrey30 }
     override var tabBackgroundUnselected: UIColor { return UIColor.Photon.Grey80 }
     override var tabForegroundSelected: UIColor { return UIColor.Photon.Grey10 }
     override var tabForegroundUnselected: UIColor { return UIColor.Photon.Grey40 }
     override var closeButtonSelectedTab: UIColor { return tabForegroundSelected }
     override var closeButtonUnselectedTab: UIColor { return tabForegroundUnselected }
     override var separator: UIColor { return UIColor.Photon.Grey50 }
+    override var buttonTint: UIColor { return UIColor.Photon.Grey10 }
 }
 
 fileprivate class DarkTextFieldColor: TextFieldColor {
-    override var background: UIColor { return UIColor.Photon.Grey60 }
+    override var background: UIColor { return UIColor.Photon.DarkGrey80 }
     override var backgroundInOverlay: UIColor { return self.background }
 
     override var textAndTint: UIColor { return defaultTextAndTint }

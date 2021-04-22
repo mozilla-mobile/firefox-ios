@@ -97,7 +97,8 @@ class BrowserViewController: UIViewController {
     var header: UIView!
     var footer: UIView!
     fileprivate var topTouchArea: UIButton!
-    let urlBarTopTabsContainer = UIView(frame: CGRect.zero)
+    let urlBarTopTabsContainer = UIView(frame: .zero)
+
     var topTabsVisible: Bool {
         return topTabsViewController != nil
     }
@@ -193,16 +194,7 @@ class BrowserViewController: UIViewController {
   }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        guard urlBar != nil else {
-            return ThemeManager.instance.statusBarStyle
-        }
-        
-        // top-tabs are always dark, so special-case this to light
-        if urlBar.topTabsIsShowing {
-            return .lightContent
-        } else {
-            return ThemeManager.instance.statusBarStyle
-        }
+        ThemeManager.instance.statusBarStyle
     }
 
     @objc func displayThemeChanged(notification: Notification) {
@@ -333,11 +325,7 @@ class BrowserViewController: UIViewController {
         displayedPopoverController?.dismiss(animated: true, completion: nil)
         coordinator.animate(alongsideTransition: { context in
             self.scrollController.showToolbars(animated: false)
-            if self.isViewLoaded {
-                self.statusBarOverlay.backgroundColor = self.shouldShowTopTabsForTraitCollection(self.traitCollection) ? UIColor.Photon.Grey80 : self.urlBar.backgroundColor
-                self.setNeedsStatusBarAppearanceUpdate()
-            }
-            }, completion: nil)
+        }, completion: nil)
     }
 
     func dismissVisibleMenus() {
@@ -391,7 +379,6 @@ class BrowserViewController: UIViewController {
             self.topTabsViewController?.switchForegroundStatus(isInForeground: true)
             self.presentedViewController?.popoverPresentationController?.containerView?.alpha = 1
             self.presentedViewController?.view.alpha = 1
-            self.view.backgroundColor = UIColor.clear
         }, completion: { _ in
             self.webViewContainerBackdrop.alpha = 0
             self.view.sendSubviewToBack(self.webViewContainerBackdrop)
@@ -416,14 +403,14 @@ class BrowserViewController: UIViewController {
         webViewContainer = UIView()
         view.addSubview(webViewContainer)
 
-        // Temporary work around for covering the non-clipped web view content
-        statusBarOverlay = UIView()
-        view.addSubview(statusBarOverlay)
-
         topTouchArea = UIButton()
         topTouchArea.isAccessibilityElement = false
         topTouchArea.addTarget(self, action: #selector(tappedTopArea), for: .touchUpInside)
         view.addSubview(topTouchArea)
+
+        // Temporary work around for covering the non-clipped web view content
+        statusBarOverlay = UIView()
+        view.addSubview(statusBarOverlay)
 
         // Setup the URL bar, wrapped in a view to get transparency effect
         urlBar = URLBarView(profile: profile)
@@ -532,7 +519,6 @@ class BrowserViewController: UIViewController {
             make.top.left.right.equalTo(self.view)
             make.height.equalTo(self.view.safeAreaInsets.top)
         }
-
         adjustURLBarHeightBasedOnLocationViewHeight()
     }
 
@@ -698,6 +684,7 @@ class BrowserViewController: UIViewController {
         [header, footer, readerModeBar].forEach { view in
                 view?.transform = .identity
         }
+
         statusBarOverlay.isHidden = false
     }
 
@@ -2215,7 +2202,8 @@ extension BrowserViewController: Themeable {
         guard self.isViewLoaded else { return }
         let ui: [Themeable?] = [urlBar, toolbar, readerModeBar, topTabsViewController, firefoxHomeViewController, searchController, libraryViewController, libraryDrawerViewController, chronTabTrayController]
         ui.forEach { $0?.applyTheme() }
-        statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor.Photon.Grey80 : urlBar.backgroundColor
+
+        statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor.theme.topTabs.background : urlBar.backgroundColor
         setNeedsStatusBarAppearanceUpdate()
 
         (presentedViewController as? Themeable)?.applyTheme()
