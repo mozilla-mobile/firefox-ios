@@ -44,10 +44,6 @@ class ReaderViewTest: BaseTestCase {
         // Navigate to reading list
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_ReadingList)
-        
-        // Check that ReadingList and Bookmarks button is enabled
-        XCTAssertFalse(app.buttons["LibraryPanels.Bookmarks"].isSelected)
-        XCTAssertTrue(app.buttons["LibraryPanels.ReadingList"].isSelected)
 
         // Check to make sure the reading list is empty
         checkReadingListNumberOfItems(items: 0)
