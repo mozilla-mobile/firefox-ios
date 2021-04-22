@@ -14,7 +14,7 @@ class TopTabsLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout {
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let items = collectionView.numberOfItems(inSection: 0)
         var width = collectionView.frame.width / CGFloat(items)
-        width = max(72, min(width, 220))
+        width = max(TopTabsUX.MinTabWidth, min(width, TopTabsUX.MaxTabWidth))
         return CGSize(width: width, height: collectionView.frame.height)
     }
 
@@ -61,25 +61,6 @@ class TopTabsViewLayout: UICollectionViewFlowLayout {
     override func layoutAttributesForSupplementaryView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         let attributes = super.layoutAttributesForSupplementaryView(ofKind: elementKind, at: indexPath)
         attributes?.zIndex = SeparatorZIndex
-        return attributes
-    }
-
-    override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-        var attributes = super.layoutAttributesForElements(in: rect)!
-
-        // Create attributes for the Tab Separator.
-        for i in attributes {
-            guard i.representedElementKind != UICollectionView.elementKindSectionHeader && i.representedElementKind != UICollectionView.elementKindSectionFooter else {
-                i.zIndex = SeparatorZIndex
-                continue
-            }
-            i.zIndex = 10
-
-            // Only add the seperator if it will be shown.
-            if i.indexPath.row != 0 && i.indexPath.row < self.collectionView!.numberOfItems(inSection: 0) {
-            }
-        }
-
         return attributes
     }
 }
