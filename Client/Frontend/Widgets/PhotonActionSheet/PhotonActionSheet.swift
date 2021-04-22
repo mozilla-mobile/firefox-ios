@@ -182,6 +182,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         if title != nil {
             tableView.separatorStyle = .none
         }
+        tableView.separatorColor = UIColor.clear
         tableView.separatorInset = .zero
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.accessibilityIdentifier = "Context Menu"
@@ -301,6 +302,16 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         let action = actions[indexPath.section][indexPath.row]
         cell.tintColor = self.tintColor
         cell.configure(with: action)
+        
+        // For menus other than ETP, don't show top and bottom separator lines
+        if (title == nil) {
+            let bottomBorder = CALayer()
+            bottomBorder.frame = CGRect(x: 0.0, y: 43.0, width: cell.contentView.frame.size.width, height: 1.0)
+            bottomBorder.backgroundColor = UIColor.theme.tableView.separator.cgColor
+            if (indexPath != [tableView.numberOfSections - 1, tableView.numberOfRows(inSection: tableView.numberOfSections - 1) - 1]) {
+                cell.contentView.layer.addSublayer(bottomBorder)
+            }
+        }
         return cell
     }
 
