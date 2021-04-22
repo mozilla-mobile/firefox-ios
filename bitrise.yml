@@ -355,9 +355,8 @@ workflows:
             set -e
             set -x
             BRANCH=$BITRISE_GIT_BRANCH
-            echo $BRANCH
 
-            if [[ $BRANCH == NoBug-* ]]
+            if [[ $BRANCH == update-cartfile-new-as-tag-* ]]
             then
                 echo "Building with new A-S version"
                 envman add --key NEW_AS_VERSION --value New_AS_Version
