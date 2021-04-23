@@ -19,7 +19,7 @@ class ASHeaderView: UICollectionReusableView {
         let titleLabel = UILabel()
         titleLabel.text = self.title
         titleLabel.textColor = UIColor.theme.homePanel.activityStreamHeaderText
-        titleLabel.font = UIFont.preferredFont(forTextStyle: .title3)
+        titleLabel.font = UIFont.preferredFont(forTextStyle: .title3, weight: .bold)
         titleLabel.minimumScaleFactor = 0.6
         titleLabel.numberOfLines = 1
         titleLabel.adjustsFontSizeToFitWidth = true

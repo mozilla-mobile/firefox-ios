@@ -14,6 +14,7 @@ private struct TopSiteCellUX {
     static let TitleOffset: CGFloat = 5
     static let OverlayColor = UIColor(white: 0.0, alpha: 0.25)
     static let IconSizePercent: CGFloat = 0.7
+    static let IconSize = CGSize(width: 36, height: 36)
     static let IconCornerRadius: CGFloat = 4
     static let BorderColor = UIColor(white: 0, alpha: 0.1)
     static let BorderWidth: CGFloat = 0.5
@@ -30,6 +31,7 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
     lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = TopSiteCellUX.IconCornerRadius
+        imageView.layer.masksToBounds = true
         return imageView
     }()
 
@@ -81,15 +83,18 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
         faviconBG.addSubview(imageView)
         contentView.addSubview(selectedOverlay)
 
+        contentView.snp.makeConstraints { make in
+            make.width.equalTo(75)
+        }
+
         titleLabel.snp.makeConstraints { make in
-            make.left.equalTo(contentView).offset(TopSiteCellUX.TitleOffset)
-            make.right.equalTo(contentView).offset(-TopSiteCellUX.TitleOffset)
+            make.left.right.bottom.equalTo(contentView)
+            make.width.equalTo(75)
             make.height.equalTo(TopSiteCellUX.TitleHeight)
-            make.bottom.equalTo(contentView)
         }
 
         imageView.snp.makeConstraints { make in
-            make.size.equalTo(floor(frame.width * TopSiteCellUX.IconSizePercent))
+            make.size.equalTo(TopSiteCellUX.IconSize)
             make.center.equalTo(faviconBG)
         }
 
@@ -98,8 +103,9 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
         }
 
         faviconBG.snp.makeConstraints { make in
-            make.top.left.right.equalTo(contentView)
+            make.top.centerX.equalTo(contentView)
             make.bottom.equalTo(contentView).inset(TopSiteCellUX.TitleHeight)
+            make.height.width.equalTo(60)
         }
 
         pinImageView.snp.makeConstraints { make in
@@ -191,7 +197,7 @@ private struct ASHorizontalScrollCellUX {
     static let TopSiteCellIdentifier = "TopSiteItemCell"
     static let TopSiteEmptyCellIdentifier = "TopSiteItemEmptyCell"
 
-    static let TopSiteItemSize = CGSize(width: 75, height: 75)
+    static let TopSiteItemSize = CGSize(width: 75, height: 80)
     static let BackgroundColor = UIColor.Photon.White100
     static let MinimumInsets: CGFloat = 14
 }
@@ -275,20 +281,19 @@ class HorizontalFlowLayout: UICollectionViewLayout {
 
         let horizontalItemsCount = maxHorizontalItemsCount(width: width) // 8
 
-        // Take the number of cells and subtract its space in the view from the height. The left over space is the white space.
-        // The left over space is then devided evenly into (n + 1) parts to figure out how much space should be inbetween a cell
-        let insets = ASHorizontalScrollCellUX.MinimumInsets
-
         var estimatedItemSize = itemSize
-        estimatedItemSize.width = floor((width - (CGFloat(horizontalItemsCount + 1) * insets)) / CGFloat(horizontalItemsCount))
         estimatedItemSize.height = estimatedItemSize.width + TopSiteCellUX.TitleHeight
 
         //calculate our estimates.
         let rows = CGFloat(ceil(Double(Float(cellCount)/Float(horizontalItemsCount))))
-        let estimatedHeight = (rows * estimatedItemSize.height) + (insets * rows)
+        let estimatedHeight = (rows * estimatedItemSize.height) + (ASHorizontalScrollCellUX.MinimumInsets * rows)
         let estimatedSize = CGSize(width: width, height: estimatedHeight)
 
-        let estimatedInsets = UIEdgeInsets(equalInset: insets)
+        // Take the number of cells and subtract its space in the view from the widthg. The left over space is the white space.
+        // The left over space is then divided evenly into (n - 1) parts to figure out how much space should be in between a cell
+        let calculatedSpacing = floor((width - (CGFloat(horizontalItemsCount) * estimatedItemSize.width)) / CGFloat(horizontalItemsCount - 1))
+        let insets = max(ASHorizontalScrollCellUX.MinimumInsets, calculatedSpacing)
+        let estimatedInsets = UIEdgeInsets(top: ASHorizontalScrollCellUX.MinimumInsets, left: insets, bottom: ASHorizontalScrollCellUX.MinimumInsets, right: insets)
         return (size: estimatedSize, cellSize: estimatedItemSize, cellInsets: estimatedInsets)
     }
 
@@ -365,7 +370,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
 
         let attr = UICollectionViewLayoutAttributes(forCellWith: indexPath)
         var frame = CGRect.zero
-        frame.origin.x = CGFloat(columnPosition) * (itemSize.width + insets.left) + insets.left
+        frame.origin.x = CGFloat(columnPosition) * (itemSize.width + insets.left)
         frame.origin.y = CGFloat(rowPosition) * (itemSize.height + insets.top)
 
         frame.size = itemSize
@@ -378,7 +383,6 @@ class HorizontalFlowLayout: UICollectionViewLayout {
     Defines the number of items to show in topsites for different size classes.
 */
 private struct ASTopSiteSourceUX {
-    static let verticalItemsForTraitSizes: [UIUserInterfaceSizeClass: Int] = [.compact: 1, .regular: 2, .unspecified: 0]
     static let CellIdentifier = "TopSiteItemCell"
 }
 
@@ -398,8 +402,6 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
     var urlPressedHandler: ((URL, IndexPath) -> Void)?
     // The current traits that define the parent ViewController. Used to determine how many rows/columns should be created.
     var currentTraits: UITraitCollection?
-
-    var numberOfRows: Int = 2
 
     // Size classes define how many items to show per row/column.
     func numberOfVerticalItems() -> Int {

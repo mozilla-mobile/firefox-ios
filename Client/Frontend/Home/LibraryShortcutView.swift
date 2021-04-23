@@ -26,6 +26,7 @@ class LibraryShortcutView: UIView {
         titleLabel.textAlignment = .center
         titleLabel.lineBreakMode = .byTruncatingTail
         titleLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
+        titleLabel.preferredMaxLayoutWidth = 75
         return titleLabel
     }()
 
@@ -34,14 +35,14 @@ class LibraryShortcutView: UIView {
         addSubview(button)
         addSubview(titleLabel)
         button.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
+            make.width.height.equalTo(60)
+            make.centerX.equalToSuperview()
             make.bottom.equalToSuperview().inset(20)
         }
         titleLabel.snp.makeConstraints { make in
+            make.width.equalTo(75)
             make.height.equalTo(20)
-            make.leading.equalToSuperview().offset(5)
-            make.trailing.equalToSuperview().inset(5)
-            make.bottom.equalToSuperview()
+            make.leading.trailing.centerX.bottom.equalToSuperview()
         }
     }
 
@@ -51,7 +52,7 @@ class LibraryShortcutView: UIView {
 
     override func layoutSubviews() {
         button.imageView?.snp.remakeConstraints { make in
-            make.size.equalTo(floor(frame.width * 0.7))
+            make.size.equalTo(22)
             make.center.equalToSuperview()
         }
         super.layoutSubviews()

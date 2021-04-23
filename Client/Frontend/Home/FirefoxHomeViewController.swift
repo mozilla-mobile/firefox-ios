@@ -22,8 +22,8 @@ struct FirefoxHomeUX {
     static let SectionInsetsForIphone: CGFloat = 20
     static let MinimumInsets: CGFloat = 20
     static let TopSitesInsets: CGFloat = 6
-    static let LibraryShortcutsHeight: CGFloat = 100
-    static let LibraryShortcutsMaxWidth: CGFloat = 350
+    static let LibraryShortcutsHeight: CGFloat = 80
+    static let LibraryShortcutsMaxWidth: CGFloat = 375
 }
 /*
  Size classes are the way Apple requires us to specify our UI.
@@ -276,8 +276,8 @@ extension FirefoxHomeViewController {
 
         var footerHeight: CGSize {
             switch self {
-            case .pocket: return .zero
-            case .topSites, .libraryShortcuts: return CGSize(width: 50, height: 5)
+            case .libraryShortcuts: return CGSize(width: 50, height: 14)
+            default: return .zero
             }
         }
 
@@ -300,17 +300,10 @@ extension FirefoxHomeViewController {
                 currentTraits = UITraitCollection(horizontalSizeClass: .compact)
             }
             var insets = FirefoxHomeUX.sectionInsetsForSizeClass[currentTraits.horizontalSizeClass]
-
-            switch self {
-            case .pocket, .libraryShortcuts:
-                let window = UIApplication.shared.keyWindow
-                let safeAreaInsets = window?.safeAreaInsets.left ?? 0
-                insets += FirefoxHomeUX.MinimumInsets + safeAreaInsets
-                return insets
-            case .topSites:
-                insets += FirefoxHomeUX.TopSitesInsets
-                return insets
-            }
+            let window = UIApplication.shared.keyWindow
+            let safeAreaInsets = window?.safeAreaInsets.left ?? 0
+            insets += FirefoxHomeUX.MinimumInsets + safeAreaInsets
+            return insets
         }
 
         func numberOfItemsForRow(_ traits: UITraitCollection) -> CGFloat {
@@ -380,38 +373,33 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-                let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header", for: indexPath) as! ASHeaderView
-                let title = Section(indexPath.section).title
-                switch Section(indexPath.section) {
-                case .pocket:
-                    view.title = title
-                    view.moreButton.isHidden = false
-                    view.moreButton.setTitle(Strings.PocketMoreStoriesText, for: .normal)
-                    view.moreButton.addTarget(self, action: #selector(showMorePocketStories), for: .touchUpInside)
-                    view.titleLabel.accessibilityIdentifier = "pocketTitle"
-                    return view
-                case .topSites:
-                    view.title = title
-                    view.titleLabel.accessibilityIdentifier = "topSitesTitle"
-                    view.moreButton.isHidden = true
-                    return view
-                case .libraryShortcuts:
-                    view.title = title
-                    view.moreButton.isHidden = true
-                    view.titleLabel.accessibilityIdentifier = "libraryTitle"
-                    return view
-            }
+            let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header", for: indexPath) as! ASHeaderView
+            let title = Section(indexPath.section).title
+            switch Section(indexPath.section) {
+            case .pocket:
+                view.title = title
+                view.moreButton.isHidden = false
+                view.moreButton.setTitle(Strings.PocketMoreStoriesText, for: .normal)
+                view.moreButton.addTarget(self, action: #selector(showMorePocketStories), for: .touchUpInside)
+                view.titleLabel.accessibilityIdentifier = "pocketTitle"
+                return view
+            case .topSites:
+                view.title = title
+                view.titleLabel.accessibilityIdentifier = "topSitesTitle"
+                view.moreButton.isHidden = true
+                return view
+            case .libraryShortcuts:
+                view.title = title
+                view.moreButton.isHidden = true
+                view.titleLabel.accessibilityIdentifier = "libraryTitle"
+                return view
+        }
         case UICollectionView.elementKindSectionFooter:
-                let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "Footer", for: indexPath) as! ASFooterView
-                switch Section(indexPath.section) {
-                case .topSites, .pocket:
-                    return view
-                case .libraryShortcuts:
-                    view.separatorLineView?.isHidden = true
-                    return view
-            }
-            default:
-                return UICollectionReusableView()
+            let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "Footer", for: indexPath) as! ASFooterView
+                view.separatorLineView?.isHidden = true
+                return view
+        default:
+            return UICollectionReusableView()
         }
     }
 
@@ -432,10 +420,8 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
         case .pocket:
             return cellSize
         case .libraryShortcuts:
-            let numberofshortcuts: CGFloat = 4
-            let titleSpacing: CGFloat = 10
             let width = min(FirefoxHomeUX.LibraryShortcutsMaxWidth, cellSize.width)
-            return CGSize(width: width, height: (width / numberofshortcuts) + titleSpacing)
+            return CGSize(width: width, height: cellSize.height)
         }
     }
 
