@@ -265,7 +265,7 @@ extension FirefoxHomeViewController {
         var title: String? {
             switch self {
             case .pocket: return Strings.ASPocketTitle
-            case .topSites: return Strings.ASTopSitesTitle
+            case .topSites: return Strings.ASShortcutsTitle
             case .libraryShortcuts: return Strings.AppMenuLibraryTitleString
             }
         }
