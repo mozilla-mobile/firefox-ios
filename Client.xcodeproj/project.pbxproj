@@ -563,7 +563,6 @@
 		D3FA777B1A43B2990010CD32 /* SearchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FA777A1A43B2990010CD32 /* SearchTests.swift */; };
 		D3FEC38D1AC4B42F00494F45 /* AutocompleteTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FEC38C1AC4B42F00494F45 /* AutocompleteTextField.swift */; };
 		D437C4FD25FF5A3E00316F2C /* L10nMktSuiteSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D437C4FC25FF5A3E00316F2C /* L10nMktSuiteSnapshotTests.swift */; };
-		D4416A152603A4D800CE1D5C /* L10nSuite3SnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4416A142603A4D800CE1D5C /* L10nSuite3SnapshotTests.swift */; };
 		D47A50F7254840210019A838 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		D4C4BDCE2253725E00986F04 /* LibraryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C4BDCD2253725E00986F04 /* LibraryTests.swift */; };
 		D4F3D789232F960600FBB9AA /* WhatsNewTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F3D788232F960600FBB9AA /* WhatsNewTest.swift */; };
@@ -3189,7 +3188,6 @@
 		D3FA77831A43B2CE0010CD32 /* OpenSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenSearch.swift; sourceTree = "<group>"; };
 		D3FEC38C1AC4B42F00494F45 /* AutocompleteTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutocompleteTextField.swift; sourceTree = "<group>"; };
 		D437C4FC25FF5A3E00316F2C /* L10nMktSuiteSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = L10nMktSuiteSnapshotTests.swift; sourceTree = "<group>"; };
-		D4416A142603A4D800CE1D5C /* L10nSuite3SnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = L10nSuite3SnapshotTests.swift; sourceTree = "<group>"; };
 		D4574C1988EB984BD5A9CAD7 /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/3DTouchActions.strings"; sourceTree = "<group>"; };
 		D45E40209531804D1FFFC9DB /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		D486426E953609DD218A8798 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
@@ -4844,7 +4842,6 @@
 				E40AFC531DD0E93300DA5651 /* L10nPermissionStringsSnapshotTests.swift */,
 				7B3632D31C2983F000D12AF9 /* L10nSuite2SnapshotTests.swift */,
 				D437C4FC25FF5A3E00316F2C /* L10nMktSuiteSnapshotTests.swift */,
-				D4416A142603A4D800CE1D5C /* L10nSuite3SnapshotTests.swift */,
 			);
 			path = L10nSnapshotTests;
 			sourceTree = "<group>";
@@ -7555,7 +7552,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7BEB64441C7345600092C02E /* L10nSuite2SnapshotTests.swift in Sources */,
-				D4416A152603A4D800CE1D5C /* L10nSuite3SnapshotTests.swift in Sources */,
 				7BEB64451C7345600092C02E /* SnapshotHelper.swift in Sources */,
 				D88C01B722B29EC200936951 /* ScreenGraphTest.swift in Sources */,
 				E40AFC541DD0E93300DA5651 /* L10nPermissionStringsSnapshotTests.swift in Sources */,

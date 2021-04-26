@@ -175,4 +175,42 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
             snapshot("HomeDefaultBrowserLearnMore")
         }
     }
+
+    func testMenuOnTopSites() {
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        app.buttons["urlBar-cancel"].tap()
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(BrowserTabMenu)
+        snapshot("MenuOnTopSites-01")
+    }
+
+    func testSettings() {
+        let table = app.tables.element(boundBy: 0)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        app.buttons["urlBar-cancel"].tap()
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(SettingsScreen)
+        table.forEachScreen { i in
+            snapshot("Settings-main-\(i)")
+        }
+
+        allSettingsScreens.forEach { nodeName in
+            self.navigator.goto(nodeName)
+            table.forEachScreen { i in
+                snapshot("Settings-\(nodeName)-\(i)")
+            }
+        }
+    }
+
+    func testPrivateBrowsingTabsEmptyState() {
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        app.buttons["urlBar-cancel"].tap()
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        navigator.nowAt(NewTabScreen)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        app.tables.cells.element(boundBy: 0).buttons["closeTabButtonTabTray"].tap()
+        snapshot("PrivateBrowsingTabsEmptyState-01")
+    }
 }
