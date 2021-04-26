@@ -95,4 +95,47 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         waitForExistence(app.navigationBars.staticTexts["FxASingin.navBar"], timeout: 10)
         snapshot("FxASignInScreen-01")
     }
+
+    private func typePasscode(n: Int, keyNumber: Int) {
+        for _ in 1...n {
+            app.keys.element(boundBy: keyNumber).tap()
+            sleep(1)
+        }
+    }
+
+    func testPasscodeSettings() {
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        app.buttons["urlBar-cancel"].tap()
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(PasscodeSettings)
+        app.tables.cells["TurnOnPasscode"].tap()
+        snapshot("SetPasscodeScreen-1-nopasscode")
+
+        // Type "111111 passcode"
+        typePasscode(n: 6, keyNumber: 2)
+        snapshot("SetPasscodeScreen-2-typepasscode")
+        // Type incorrect passcode "111112"
+        typePasscode(n: 5, keyNumber: 2)
+        // Type once inkey "2"
+        typePasscode(n: 1, keyNumber: 1)
+        snapshot("SetPasscodeScreen-3-passcodesmustmatch")
+
+        // Confitm passcode
+        typePasscode(n: 6, keyNumber: 2)
+        typePasscode(n: 6, keyNumber: 2)
+        snapshot("SetPasscodeScreen-3")
+
+        // Go to interval settings
+        app.tables.cells["PasscodeInterval"].tap()
+        typePasscode(n: 6, keyNumber: 2)
+        snapshot("PasscodeIntervalScreen-1")
+    }
+
+    func testDefaultTopSites() {
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        app.buttons["urlBar-cancel"].tap()
+        navigator.nowAt(NewTabScreen)
+        snapshot("DefaultTopSites-01")
+    }
 }
