@@ -98,7 +98,7 @@ class OneLineTableViewCell: UITableViewCell, Themeable {
     func applyTheme() {
         let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
         if theme == .dark {
-            self.backgroundColor = UIColor.Photon.Grey70
+            self.backgroundColor = UIColor.Photon.Grey80
             self.titleLabel.textColor = .white
         } else {
             self.backgroundColor = .white
@@ -185,13 +185,8 @@ class OneLineFooterView: UITableViewHeaderFooterView, Themeable {
 
     func applyTheme() {
         let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
-        if theme == .dark {
-            self.titleLabel.textColor = .white
-            self.containerView.backgroundColor = UIColor.Photon.Grey80
-        } else {
-            self.titleLabel.textColor = .black
-            self.containerView.backgroundColor = UIColor.Photon.Grey10
-        }
+        self.containerView.backgroundColor = UIColor.theme.tableView.selectedBackground
+        self.titleLabel.textColor =  theme == .dark ? .white : .black
         bordersHelper.applyTheme()
     }
     

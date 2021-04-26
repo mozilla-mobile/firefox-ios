@@ -38,7 +38,7 @@ class TwoLineImageOverlayCell: UITableViewCell, Themeable {
     var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.textAlignment = .left
         label.numberOfLines = 1
         return label
@@ -112,7 +112,7 @@ class TwoLineImageOverlayCell: UITableViewCell, Themeable {
         }
 
         descriptionLabel.snp.makeConstraints { make in
-            make.height.equalTo(14)
+            make.height.equalTo(16)
             make.bottom.equalTo(midView.snp.bottom).offset(-4)
             make.leading.equalTo(midView.snp.leading)
             make.trailing.equalTo(midView.snp.trailing)
@@ -125,7 +125,7 @@ class TwoLineImageOverlayCell: UITableViewCell, Themeable {
     func applyTheme() {
         let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
         if theme == .dark {
-            self.backgroundColor = UIColor.Photon.Grey70
+            self.backgroundColor = UIColor.Photon.Grey80
             self.titleLabel.textColor = .white
             self.descriptionLabel.textColor = UIColor.Photon.Grey40
         } else {
@@ -234,7 +234,7 @@ class SimpleTwoLineCell: UITableViewCell, Themeable {
     func applyTheme() {
         let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
         if theme == .dark {
-            self.backgroundColor = UIColor.Photon.Grey70
+            self.backgroundColor = UIColor.Photon.Grey80
             self.titleLabel.textColor = .white
             self.descriptionLabel.textColor = UIColor.Photon.Grey40
         } else {
@@ -330,6 +330,7 @@ class TwoLineHeaderFooterView: UITableViewHeaderFooterView, Themeable {
 
     func applyTheme() {
         let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+        self.backgroundColor = UIColor.theme.tableView.selectedBackground
         if theme == .dark {
             self.titleLabel.textColor = .white
             self.descriptionLabel.textColor = UIColor.Photon.Grey40

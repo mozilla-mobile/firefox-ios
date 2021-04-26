@@ -82,7 +82,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         tableView.addGestureRecognizer(tableViewLongPressRecognizer)
         tableView.accessibilityIdentifier = "Bookmarks List"
         tableView.allowsSelectionDuringEditing = true
-
+        tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
         self.editBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit) { _ in
             self.enableEditMode()
         }

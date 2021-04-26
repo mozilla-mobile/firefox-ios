@@ -149,7 +149,7 @@ class HomePanelColor {
     var toolbarBackground: UIColor { return defaultBackground }
     var toolbarHighlight: UIColor { return UIColor.Photon.Blue40 }
     var toolbarTint: UIColor { return UIColor.Photon.Grey50 }
-
+    var topSiteHeaderTitle: UIColor { return .black }
     var panelBackground: UIColor { return UIColor.Photon.White100 }
 
     var separator: UIColor { return defaultSeparator }
