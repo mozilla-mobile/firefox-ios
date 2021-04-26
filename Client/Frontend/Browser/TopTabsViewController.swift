@@ -10,7 +10,8 @@ import WebKit
 struct TopTabsUX {
     static let TopTabsViewHeight: CGFloat = 44
     static let TopTabsBackgroundShadowWidth: CGFloat = 12
-    static let TabWidth: CGFloat = 190
+    static let MinTabWidth: CGFloat = 72
+    static let MaxTabWidth: CGFloat = 220
     static let FaderPading: CGFloat = 8
     static let SeparatorWidth: CGFloat = 1
     static let HighlightLineWidth: CGFloat = 3
@@ -19,6 +20,7 @@ struct TopTabsUX {
     static let AnimationSpeed: TimeInterval = 0.1
     static let SeparatorYOffset: CGFloat = 7
     static let SeparatorHeight: CGFloat = 32
+    static let TabCornerRadius: CGFloat = 8
 }
 
 protocol TopTabsDelegate: AnyObject {
@@ -84,9 +86,6 @@ class TopTabsViewController: UIViewController {
         tabDisplayManager = TabDisplayManager(collectionView: self.collectionView, tabManager: self.tabManager, tabDisplayer: self, reuseID: TopTabCell.Identifier)
         collectionView.dataSource = tabDisplayManager
         collectionView.delegate = tabLayoutDelegate
-        [UICollectionView.elementKindSectionHeader, UICollectionView.elementKindSectionFooter].forEach {
-            collectionView.register(TopTabsHeaderFooter.self, forSupplementaryViewOfKind: $0, withReuseIdentifier: "HeaderFooter")
-        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -240,10 +239,14 @@ extension TopTabsViewController: Themeable, PrivateModeUI {
     }
 
     func applyTheme() {
-        tabsButton.applyTheme()
-        newTab.tintColor = UIColor.theme.topTabs.buttonTint
         view.backgroundColor = UIColor.theme.topTabs.background
+        tabsButton.applyTheme()
+        privateModeButton.onTint = UIColor.theme.topTabs.privateModeButtonOnTint
+        privateModeButton.offTint = UIColor.theme.topTabs.privateModeButtonOffTint
+        privateModeButton.applyTheme()
+        newTab.tintColor = UIColor.theme.topTabs.buttonTint
         collectionView.backgroundColor = view.backgroundColor
+        (collectionView.visibleCells as? [TopTabCell])?.forEach { $0.applyTheme() }
         tabDisplayManager.refreshStore()
     }
 }

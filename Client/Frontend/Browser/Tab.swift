@@ -718,7 +718,6 @@ class TabWebView: WKWebView, MenuHelperInterface {
             let backgroundColor = ThemeManager.instance.current.browser.background.hexString
             evaluateJavascriptInDefaultContentWorld("document.documentElement.style.backgroundColor = '\(backgroundColor)';")
         }
-        window?.backgroundColor = UIColor.theme.browser.background
     }
 
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {

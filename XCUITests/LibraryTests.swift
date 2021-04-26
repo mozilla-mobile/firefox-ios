@@ -8,6 +8,8 @@ class LibraryTestsIpad: IpadOnlyTestCase {
 
     func testLibraryShortcut() {
         if skipPlatform {return}
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 3)
+        navigator.performAction(Action.CloseURLBarOpen)
         // Open Library from shortcut
         waitForExistence(app.buttons["TabToolbar.libraryButton"])
         let libraryShorcutButton = app.buttons["TabToolbar.libraryButton"]
@@ -34,8 +36,6 @@ class LibraryTestsIphone: IphoneOnlyTestCase {
         waitForExistence(app.buttons["menu Bookmark"])
         waitForExistence(app.buttons["menu panel ReadingList"])
         waitForExistence(app.buttons["menu panel Downloads"])
-        waitForExistence(app.buttons["menu sync"])
-        waitForExistence(app.buttons["libraryMoreButton"])
         
         // Check if clicking on Bookmark option shows bookmarks
         app.buttons["menu Bookmark"].tap()
@@ -53,18 +53,6 @@ class LibraryTestsIphone: IphoneOnlyTestCase {
         app.buttons["menu panel Downloads"].tap()
         navigator.nowAt(LibraryPanel_Downloads)
         waitForExistence(app.tables["DownloadsTable"])
-        navigator.goto(HomePanelsScreen)
-
-         // Check if clicking on Synced Tabs option shows synced tabs
-        app.buttons["menu sync"].tap()
-        navigator.nowAt(LibraryPanel_SyncedTabs)
-        waitForExistence(app.tables["Synced Tabs"])
-        navigator.goto(HomePanelsScreen)
-
-        // Check if clicking on the See All option shows history
-        app.buttons["libraryMoreButton"].tap()
-        navigator.nowAt(LibraryPanel_History)
-        waitForExistence(app.tables["History List"])
         navigator.goto(HomePanelsScreen)
     }
 }

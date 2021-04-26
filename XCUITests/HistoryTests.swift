@@ -40,7 +40,8 @@ class HistoryTests: BaseTestCase {
     func testOpenSyncDevices() {
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
-        navigator.goto(LibraryPanel_SyncedTabs)
+        navigator.goto(TabTray)
+        navigator.performAction(Action.ToggleSyncMode)
         waitForExistence(app.tables.cells.staticTexts["Firefox Sync"])
         XCTAssertTrue(app.tables.buttons["Sign in to Sync"].exists, "Sing in button does not appear")
     }
