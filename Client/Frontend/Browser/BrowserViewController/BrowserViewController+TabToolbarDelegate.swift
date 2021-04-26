@@ -47,11 +47,11 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         showBackForwardList()
     }
 
-    func tabToolbarDidPressLibrary(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+    func tabToolbarDidPressBookmarks(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         if let libraryDrawerViewController = self.libraryDrawerViewController, libraryDrawerViewController.isOpen {
             libraryDrawerViewController.close()
         } else {
-            showLibrary()
+            showLibrary(panel: .bookmarks)
         }
     }
     
