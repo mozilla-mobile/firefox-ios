@@ -70,7 +70,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             // Redraw the toolbar so the badge hides from the appMenu button.
             updateToolbarStateForTraitCollection(view.traitCollection)
         }
-        whatsNewAction = PhotonActionSheetItem(title: Strings.WhatsNewString, iconString: "whatsnew", isEnabled: showBadgeForWhatsNew, badgeIconNamed: "menuBadge") { _, _ in
+        whatsNewAction = PhotonActionSheetItem(title: Strings.WhatsNewString, iconString: "whatsnew", isEnabled: showBadgeForWhatsNew) { _, _ in
             if let whatsNewTopic = AppInfo.whatsNewTopic, let whatsNewURL = SupportUtils.URLForTopic(whatsNewTopic) {
                 TelemetryWrapper.recordEvent(category: .action, method: .open, object: .whatsNew)
                 self.openURLInNewTab(whatsNewURL)
