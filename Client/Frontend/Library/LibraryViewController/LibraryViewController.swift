@@ -108,18 +108,22 @@ class LibraryViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = UIColor.theme.browser.background
         self.edgesForExtendedLayout = []
-//        bottomBorder.backgroundColor = UIColor.theme.tableView.separator
         view.addSubview(controllerContainerView)
         view.addSubview(librarySegmentControl)
         view.addSubview(titleLabel)
         view.addSubview(titleContainerView)
         view.addSubview(bottomBorder)
         view.addSubview(topRightButton)
+        var topPadding = 0
+        if #available(iOS 13, *) {} else {
+            topPadding = 20
+        }
+        
         titleContainerView.addSubview(titleLabel)
         titleContainerView.addSubview(topLeftButton)
         titleContainerView.snp.makeConstraints { make in
             make.leading.trailing.equalTo(view)
-            make.top.equalTo(view.snp.top)
+            make.top.equalTo(view.snp.top).inset(topPadding)
             make.height.equalTo(58)
         }
         
@@ -165,7 +169,7 @@ class LibraryViewController: UIViewController {
             make.bottom.equalTo(view.snp.bottom)
             make.leading.trailing.equalTo(view)
         }
-        
+
         if selectedPanel == nil {
             selectedPanel = .bookmarks
         }
@@ -270,7 +274,11 @@ extension LibraryViewController: Themeable {
         }
         if #available(iOS 13.0, *) {
             overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
+            librarySegmentControl.tintColor = .white
+        } else {
+            librarySegmentControl.tintColor = UIColor.theme.tabTray.tabTitleText
         }
+        
         titleLabel.textColor = UIColor.theme.tabTray.tabTitleText
         bottomBorder.backgroundColor = UIColor.theme.tableView.separator
         view.backgroundColor = UIColor.theme.homePanel.toolbarBackground

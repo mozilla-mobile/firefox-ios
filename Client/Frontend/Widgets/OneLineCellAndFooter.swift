@@ -72,7 +72,7 @@ class OneLineTableViewCell: UITableViewCell, Themeable {
         }
         
         leftImageView.snp.makeConstraints { make in
-            make.height.width.equalTo(34)
+            make.height.width.equalTo(28)
             make.leading.equalTo(containerView.snp.leading).offset(15)
             make.centerY.equalTo(containerView.snp.centerY)
         }
@@ -127,7 +127,6 @@ class OneLineTableViewCell: UITableViewCell, Themeable {
 class OneLineFooterView: UITableViewHeaderFooterView, Themeable {
     fileprivate let bordersHelper = ThemedHeaderFooterViewBordersHelper()
 
-    
     var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
@@ -186,7 +185,6 @@ class OneLineFooterView: UITableViewHeaderFooterView, Themeable {
 
     func applyTheme() {
         let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
-        // TODO: Replace this color with proper value once tab tray refresh is done
         if theme == .dark {
             self.titleLabel.textColor = .white
             self.containerView.backgroundColor = UIColor.Photon.Grey80
@@ -196,11 +194,6 @@ class OneLineFooterView: UITableViewHeaderFooterView, Themeable {
         }
         bordersHelper.applyTheme()
     }
-
-//    override func layoutSubviews() {
-//        super.layoutSubviews()
-//        setupHeaderConstraint()
-//    }
     
     func setupHeaderConstraint() {
         containerView.snp.remakeConstraints { make in

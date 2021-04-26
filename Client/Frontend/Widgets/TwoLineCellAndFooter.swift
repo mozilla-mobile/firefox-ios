@@ -86,7 +86,7 @@ class TwoLineImageOverlayCell: UITableViewCell, Themeable {
         }
 
         leftImageView.snp.makeConstraints { make in
-            make.height.width.equalTo(34)
+            make.height.width.equalTo(28)
             make.leading.equalTo(containerView.snp.leading).offset(15)
             make.centerY.equalTo(containerView.snp.centerY)
         }
