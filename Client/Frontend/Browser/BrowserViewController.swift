@@ -229,16 +229,11 @@ class BrowserViewController: UIViewController {
     }
 
     @objc fileprivate func appMenuBadgeUpdate() {
-        let hideImagesOn = NoImageModeHelper.isActivated(profile.prefs)
-        let showWhatsNew = shouldShowWhatsNew() && !(AppInfo.whatsNewTopic?.isEmpty ?? true)
         let actionNeeded = RustFirefoxAccounts.shared.isActionNeeded
-        let showWarningBadge = actionNeeded 
-        let showMenuBadge = showWarningBadge ? false : hideImagesOn || showWhatsNew
+        let showWarningBadge = actionNeeded
 
         urlBar.warningMenuBadge(setVisible: showWarningBadge)
-        urlBar.appMenuBadge(setVisible: showMenuBadge)
         toolbar?.warningMenuBadge(setVisible: showWarningBadge)
-        toolbar?.appMenuBadge(setVisible: showMenuBadge)
     }
 
     func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator? = nil) {

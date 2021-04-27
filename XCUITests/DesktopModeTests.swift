@@ -101,7 +101,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         navigator.nowAt(BrowserTab)
         navigator.goto(PageOptionsMenu)
         // Select Mobile site here, the identifier is the same but the Text is not
-        navigator.goto(RequestDesktopSite)
+        navigator.goto(RequestMobileSite)
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
     }

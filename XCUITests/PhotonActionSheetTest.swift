@@ -93,7 +93,7 @@ class PhotonActionSheetTest: BaseTestCase {
         waitForNoExistence(app.staticTexts["Fennec pasted from CoreSimulatorBridge"])
         navigator.goto(PageOptionsMenu)
         waitForExistence(app.tables["Context Menu"].cells["action_share"], timeout: 5)
-        app.tables["Context Menu"].staticTexts["Share Page With…"].tap()
+        app.tables["Context Menu"].staticTexts["Share"].tap()
 
         // This is not ideal but only way to get the element on iPhone 8
         // for iPhone 11, that would be boundBy: 2
@@ -111,7 +111,7 @@ class PhotonActionSheetTest: BaseTestCase {
         navigator.nowAt(BrowserTab)
         navigator.goto(PageOptionsMenu)
         waitForExistence(app.tables["Context Menu"])
-        app.tables["Context Menu"].staticTexts["Share Page With…"].tap()
+        app.tables["Context Menu"].staticTexts["Share"].tap()
         waitForExistence(app.buttons["Copy"])
         let moreElement = app.collectionViews.cells.collectionViews.containing(.button, identifier:"Reminders").buttons["More"]
         moreElement.tap()
