@@ -106,7 +106,7 @@ class LibraryViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.theme.browser.background
+        view.backgroundColor =  UIColor.theme.homePanel.panelBackground
         self.edgesForExtendedLayout = []
         view.addSubview(controllerContainerView)
         view.addSubview(librarySegmentControl)
@@ -281,7 +281,7 @@ extension LibraryViewController: Themeable {
         
         titleLabel.textColor = UIColor.theme.tabTray.tabTitleText
         bottomBorder.backgroundColor = UIColor.theme.tableView.separator
-        view.backgroundColor = UIColor.theme.homePanel.toolbarBackground
+        view.backgroundColor =  UIColor.theme.homePanel.panelBackground
         buttonTintColor = UIColor.theme.homePanel.toolbarTint
         buttonSelectedTintColor = UIColor.theme.homePanel.toolbarHighlight
     }

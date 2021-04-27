@@ -79,7 +79,7 @@ class TwoLineImageOverlayCell: UITableViewCell, Themeable {
         bringSubviewToFront(containerView)
 
         containerView.snp.makeConstraints { make in
-            make.height.equalTo(55)
+            make.height.equalTo(58)
             make.top.bottom.equalToSuperview()
             make.leading.equalToSuperview()
             make.trailing.equalTo(accessoryView?.snp.leading ?? snp.trailing)

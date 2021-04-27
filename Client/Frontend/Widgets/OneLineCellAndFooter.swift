@@ -65,7 +65,7 @@ class OneLineTableViewCell: UITableViewCell, Themeable {
         bringSubviewToFront(containerView)
         
         containerView.snp.makeConstraints { make in
-            make.height.equalTo(50)
+            make.height.equalTo(44)
             make.top.bottom.equalToSuperview()
             make.leading.equalToSuperview()
             make.trailing.equalTo(accessoryView?.snp.leading ?? snp.trailing)
@@ -97,6 +97,7 @@ class OneLineTableViewCell: UITableViewCell, Themeable {
     
     func applyTheme() {
         let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+        selectedView.backgroundColor = UIColor.theme.tableView.selectedBackground
         if theme == .dark {
             self.backgroundColor = UIColor.Photon.Grey80
             self.titleLabel.textColor = .white

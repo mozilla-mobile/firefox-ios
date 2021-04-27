@@ -70,7 +70,7 @@ class RemoteTabsPanel: UIViewController, Themeable {
 
     func applyTheme() {
         view.backgroundColor = UIColor.theme.tabTray.background
-        tableViewController.tableView.backgroundColor = UIColor.theme.remotePanel.background //.green //UIColor.theme.tabTray.background
+        tableViewController.tableView.backgroundColor =  UIColor.theme.homePanel.panelBackground
         tableViewController.tableView.separatorColor = UIColor.theme.tableView.separator
         tableViewController.tableView.reloadData()
         tableViewController.refreshTabs()
