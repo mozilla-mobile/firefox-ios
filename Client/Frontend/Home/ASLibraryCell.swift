@@ -24,7 +24,7 @@ class ASLibraryCell: UICollectionViewCell, Themeable {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        mainView.distribution = .equalSpacing
+        mainView.distribution = .equalCentering
         addSubview(mainView)
         mainView.snp.makeConstraints { make in
             make.edges.equalTo(self)
@@ -35,7 +35,7 @@ class ASLibraryCell: UICollectionViewCell, Themeable {
             view.button.setImage(item.image, for: .normal)
             view.titleLabel.text = item.title
             let words = view.titleLabel.text?.components(separatedBy: NSCharacterSet.whitespacesAndNewlines).count
-            view.titleLabel.numberOfLines = words == 1 ? 1 :2
+            view.titleLabel.numberOfLines = words == 1 ? 1 : 2
             view.button.tintColor = item.color
             view.button.setTitleColor(UIColor.theme.homePanel.topSiteDomain, for: .normal)
             view.accessibilityLabel = item.title

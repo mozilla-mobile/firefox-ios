@@ -13,7 +13,6 @@ private struct TopSiteCellUX {
     static let CellCornerRadius: CGFloat = 8
     static let TitleOffset: CGFloat = 5
     static let OverlayColor = UIColor(white: 0.0, alpha: 0.25)
-    static let IconSizePercent: CGFloat = 0.7
     static let IconSize = CGSize(width: 36, height: 36)
     static let IconCornerRadius: CGFloat = 4
     static let BorderColor = UIColor(white: 0, alpha: 0.1)
@@ -35,6 +34,8 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
         return imageView
     }()
 
+    lazy var titleWrapper = UIView()
+
     lazy var pinImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage.templateImageNamed("pin_small")
@@ -45,6 +46,7 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
         let titleLabel = UILabel()
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
+        titleLabel.preferredMaxLayoutWidth = 75
         return titleLabel
     }()
 
@@ -78,19 +80,25 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
         super.init(frame: frame)
         isAccessibilityElement = true
         accessibilityIdentifier = "TopSite"
-        contentView.addSubview(titleLabel)
+        contentView.addSubview(titleWrapper)
+        titleWrapper.addSubview(titleLabel)
         contentView.addSubview(faviconBG)
         faviconBG.addSubview(imageView)
         contentView.addSubview(selectedOverlay)
 
         contentView.snp.makeConstraints { make in
-            make.width.equalTo(75)
+            make.centerX.equalToSuperview()
+            make.width.lessThanOrEqualTo(75)
+        }
+
+        titleWrapper.snp.makeConstraints { make in
+            make.top.equalTo(faviconBG.snp.bottom).offset(8)
+            make.bottom.centerX.equalTo(contentView)
+            make.width.lessThanOrEqualTo(75)
         }
 
         titleLabel.snp.makeConstraints { make in
-            make.left.right.bottom.equalTo(contentView)
-            make.width.equalTo(75)
-            make.height.equalTo(TopSiteCellUX.TitleHeight)
+            make.leading.trailing.equalTo(titleWrapper)
         }
 
         imageView.snp.makeConstraints { make in
@@ -144,18 +152,18 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
 
         // If its a pinned site add a bullet point to the front
         if let _ = site as? PinnedSite {
-            contentView.addSubview(pinImageView)
+            titleWrapper.addSubview(pinImageView)
             pinImageView.snp.makeConstraints { make in
-                make.right.equalTo(self.titleLabel.snp.left)
+                make.trailing.equalTo(self.titleLabel.snp.leading)
                 make.size.equalTo(TopSiteCellUX.PinIconSize)
                 make.centerY.equalTo(self.titleLabel.snp.centerY)
             }
             titleLabel.snp.updateConstraints { make in
-                make.left.equalTo(contentView).offset(TopSiteCellUX.PinIconSize)
+                make.leading.equalTo(titleWrapper).offset(TopSiteCellUX.PinIconSize)
             }
         } else {
             titleLabel.snp.updateConstraints { make in
-                make.left.equalTo(contentView).offset(TopSiteCellUX.TitleOffset)
+                make.leading.equalTo(titleWrapper)
             }
         }
 
@@ -181,11 +189,21 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
 // An empty cell to show when a row is incomplete
 class EmptyTopsiteDecorationCell: UICollectionReusableView {
 
+    lazy private var emptyBG: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = TopSiteCellUX.CellCornerRadius
+        view.layer.borderWidth = TopSiteCellUX.BorderWidth
+        view.layer.borderColor = TopSiteCellUX.BorderColor.cgColor
+        return view
+    }()
+
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.layer.cornerRadius = TopSiteCellUX.CellCornerRadius
-        self.layer.borderWidth = TopSiteCellUX.BorderWidth
-        self.layer.borderColor = TopSiteCellUX.BorderColor.cgColor
+        addSubview(emptyBG)
+        emptyBG.snp.makeConstraints { make in
+            make.top.centerX.equalToSuperview()
+            make.height.width.equalTo(60)
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -197,9 +215,9 @@ private struct ASHorizontalScrollCellUX {
     static let TopSiteCellIdentifier = "TopSiteItemCell"
     static let TopSiteEmptyCellIdentifier = "TopSiteItemEmptyCell"
 
-    static let TopSiteItemSize = CGSize(width: 75, height: 80)
+    static let TopSiteItemSize = CGSize(width: 75, height: 90)
     static let BackgroundColor = UIColor.Photon.White100
-    static let MinimumInsets: CGFloat = 14
+    static let MinimumInsets: CGFloat = 8
 }
 
 /*
@@ -286,14 +304,15 @@ class HorizontalFlowLayout: UICollectionViewLayout {
 
         //calculate our estimates.
         let rows = CGFloat(ceil(Double(Float(cellCount)/Float(horizontalItemsCount))))
-        let estimatedHeight = (rows * estimatedItemSize.height) + (ASHorizontalScrollCellUX.MinimumInsets * rows)
+        let estimatedHeight = (rows * estimatedItemSize.height) + (8 * rows)
         let estimatedSize = CGSize(width: width, height: estimatedHeight)
 
-        // Take the number of cells and subtract its space in the view from the widthg. The left over space is the white space.
+        // Take the number of cells and subtract its space in the view from the width. The left over space is the white space.
         // The left over space is then divided evenly into (n - 1) parts to figure out how much space should be in between a cell
         let calculatedSpacing = floor((width - (CGFloat(horizontalItemsCount) * estimatedItemSize.width)) / CGFloat(horizontalItemsCount - 1))
         let insets = max(ASHorizontalScrollCellUX.MinimumInsets, calculatedSpacing)
         let estimatedInsets = UIEdgeInsets(top: ASHorizontalScrollCellUX.MinimumInsets, left: insets, bottom: ASHorizontalScrollCellUX.MinimumInsets, right: insets)
+
         return (size: estimatedSize, cellSize: estimatedItemSize, cellInsets: estimatedInsets)
     }
 
@@ -402,14 +421,6 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
     var urlPressedHandler: ((URL, IndexPath) -> Void)?
     // The current traits that define the parent ViewController. Used to determine how many rows/columns should be created.
     var currentTraits: UITraitCollection?
-
-    // Size classes define how many items to show per row/column.
-    func numberOfVerticalItems() -> Int {
-        guard let traits = currentTraits else {
-            return 0
-        }
-        return ASTopSiteSourceUX.verticalItemsForTraitSizes[traits.verticalSizeClass]!
-    }
 
     func numberOfHorizontalItems() -> Int {
         guard let traits = currentTraits else {

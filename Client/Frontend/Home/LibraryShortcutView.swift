@@ -24,9 +24,9 @@ class LibraryShortcutView: UIView {
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.textAlignment = .center
-        titleLabel.lineBreakMode = .byTruncatingTail
+        titleLabel.lineBreakMode = .byWordWrapping
         titleLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
-        titleLabel.preferredMaxLayoutWidth = 75
+        titleLabel.preferredMaxLayoutWidth = 70
         return titleLabel
     }()
 
@@ -34,14 +34,16 @@ class LibraryShortcutView: UIView {
         super.init(frame: frame)
         addSubview(button)
         addSubview(titleLabel)
+        self.snp.makeConstraints { make in
+            make.width.greaterThanOrEqualTo(60)
+            make.width.lessThanOrEqualTo(75)
+        }
         button.snp.makeConstraints { make in
             make.width.height.equalTo(60)
             make.centerX.equalToSuperview()
             make.bottom.equalToSuperview().inset(20)
         }
         titleLabel.snp.makeConstraints { make in
-            make.width.equalTo(75)
-            make.height.equalTo(20)
             make.leading.trailing.centerX.bottom.equalToSuperview()
         }
     }

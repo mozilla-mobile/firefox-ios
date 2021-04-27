@@ -171,7 +171,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
 
         Section.allValues.forEach { self.collectionView?.register(Section($0.rawValue).cellType, forCellWithReuseIdentifier: Section($0.rawValue).cellIdentifier) }
         self.collectionView?.register(ASHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header")
-        self.collectionView?.register(ASFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "Footer")
         collectionView?.keyboardDismissMode = .onDrag
 
         if #available(iOS 14.0, *), !UserDefaults.standard.bool(forKey: "DidDismissDefaultBrowserCard") {
@@ -271,14 +270,7 @@ extension FirefoxHomeViewController {
         }
 
         var headerHeight: CGSize {
-            return CGSize(width: 50, height: 40)
-        }
-
-        var footerHeight: CGSize {
-            switch self {
-            case .libraryShortcuts: return CGSize(width: 50, height: 14)
-            default: return .zero
-            }
+            return CGSize(width: 50, height: 56)
         }
 
         func cellHeight(_ traits: UITraitCollection, width: CGFloat) -> CGFloat {
@@ -394,10 +386,6 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                 view.titleLabel.accessibilityIdentifier = "libraryTitle"
                 return view
         }
-        case UICollectionView.elementKindSectionFooter:
-            let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "Footer", for: indexPath) as! ASFooterView
-                view.separatorLineView?.isHidden = true
-                return view
         default:
             return UICollectionReusableView()
         }
@@ -437,14 +425,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        switch Section(section) {
-        case .pocket:
-            return .zero
-        case .topSites:
-            return Section(section).footerHeight
-        case .libraryShortcuts:
-            return UIDevice.current.userInterfaceIdiom == .pad ? CGSize.zero : Section(section).footerHeight
-        }
+        return .zero
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
