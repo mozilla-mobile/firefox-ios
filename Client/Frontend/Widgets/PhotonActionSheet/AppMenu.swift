@@ -43,6 +43,7 @@ extension PhotonActionSheetProtocol {
                 controller.modalPresentationStyle = .fullScreen
             }
             controller.presentingModalViewControllerDelegate = vcDelegate
+            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .settings)
             
             // Wait to present VC in an async dispatch queue to prevent a case where dismissal
             // of this popover on iPad seems to block the presentation of the modal VC.
