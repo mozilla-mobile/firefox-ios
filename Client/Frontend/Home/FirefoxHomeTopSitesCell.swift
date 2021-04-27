@@ -46,7 +46,7 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
         let titleLabel = UILabel()
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
-        titleLabel.preferredMaxLayoutWidth = 75
+        titleLabel.preferredMaxLayoutWidth = 65
         return titleLabel
     }()
 
@@ -88,13 +88,13 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
 
         contentView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.width.lessThanOrEqualTo(75)
+            make.width.lessThanOrEqualTo(65)
         }
 
         titleWrapper.snp.makeConstraints { make in
             make.top.equalTo(faviconBG.snp.bottom).offset(8)
             make.bottom.centerX.equalTo(contentView)
-            make.width.lessThanOrEqualTo(75)
+            make.width.lessThanOrEqualTo(65)
         }
 
         titleLabel.snp.makeConstraints { make in
@@ -149,6 +149,9 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
         } else {
             titleLabel.text = site.tileURL.shortDisplayString
         }
+
+        let words = titleLabel.text?.components(separatedBy: NSCharacterSet.whitespacesAndNewlines).count
+        titleLabel.numberOfLines = words == 1 ? 1 : 2
 
         // If its a pinned site add a bullet point to the front
         if let _ = site as? PinnedSite {
@@ -215,9 +218,9 @@ private struct ASHorizontalScrollCellUX {
     static let TopSiteCellIdentifier = "TopSiteItemCell"
     static let TopSiteEmptyCellIdentifier = "TopSiteItemEmptyCell"
 
-    static let TopSiteItemSize = CGSize(width: 75, height: 90)
+    static let TopSiteItemSize = CGSize(width: 65, height: 90)
     static let BackgroundColor = UIColor.Photon.White100
-    static let MinimumInsets: CGFloat = 8
+    static let MinimumInsets: CGFloat = 6
 }
 
 /*
@@ -298,9 +301,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
         }
 
         let horizontalItemsCount = maxHorizontalItemsCount(width: width) // 8
-
-        var estimatedItemSize = itemSize
-        estimatedItemSize.height = estimatedItemSize.width + TopSiteCellUX.TitleHeight
+        let estimatedItemSize = itemSize
 
         //calculate our estimates.
         let rows = CGFloat(ceil(Double(Float(cellCount)/Float(horizontalItemsCount))))
