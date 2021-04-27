@@ -275,6 +275,7 @@ class HistoryTests: BaseTestCase {
         navigator.openURL("example.com")
         waitUntilPageLoad()
         navigator.goto(LibraryPanel_History)
+        sleep(1)
         XCTAssertTrue(app.tables.cells.staticTexts["Example Domain"].exists)
     }
 

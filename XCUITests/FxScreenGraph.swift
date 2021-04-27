@@ -552,8 +552,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             if isTablet {
                 app.buttons["TabToolbar.libraryButton"].tap()
             } else {
-                let historyButton = app.segmentedControls["librarySegmentControl"].buttons.element(boundBy: 1)
-                historyListElement.press(forDuration: 2, thenDragTo: historyButton)
+                historyListElement.press(forDuration: 2, thenDragTo: app.segmentedControls["librarySegmentControl"].buttons.element(boundBy: 1))
             }
         }
     }
