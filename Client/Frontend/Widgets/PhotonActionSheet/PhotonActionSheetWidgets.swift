@@ -24,7 +24,7 @@ struct PhotonActionSheetUX {
     static let CellName = "PhotonActionSheetCell"
     static let CloseButtonHeight: CGFloat  = 56
     static let TablePadding: CGFloat = 6
-    static let SeparatorRowHeight: CGFloat = 13
+    static let SeparatorRowHeight: CGFloat = 8
     static let TitleHeaderSectionHeight: CGFloat = 40
     static let TitleHeaderSectionHeightWithSite: CGFloat = 70
 }
@@ -39,7 +39,6 @@ public enum PhotonActionSheetCellAccessoryType {
     case Disclosure
     case Switch
     case Text
-    case Sync // Sync is a special case.
     case None
 }
 

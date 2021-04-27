@@ -11,7 +11,7 @@ protocol TabToolbarProtocol: AnyObject {
     var addNewTabButton: ToolbarButton { get }
     var tabsButton: TabsButton { get }
     var appMenuButton: ToolbarButton { get }
-    var libraryButton: ToolbarButton { get }
+    var bookmarksButton: ToolbarButton { get }
     var forwardButton: ToolbarButton { get }
     var backButton: ToolbarButton { get }
     var multiStateButton: ToolbarButton { get }
@@ -23,7 +23,6 @@ protocol TabToolbarProtocol: AnyObject {
     func updatePageStatus(_ isWebPage: Bool)
     func updateTabCount(_ count: Int, animated: Bool)
     func privateModeBadge(visible: Bool)
-    func appMenuBadge(setVisible: Bool)
     func warningMenuBadge(setVisible: Bool)
 }
 
@@ -36,7 +35,7 @@ protocol TabToolbarDelegate: AnyObject {
     func tabToolbarDidLongPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressStop(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton)
-    func tabToolbarDidPressLibrary(_ tabToolbar: TabToolbarProtocol, button: UIButton)
+    func tabToolbarDidPressBookmarks(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressSearch(_ tabToolbar: TabToolbarProtocol, button: UIButton)
@@ -120,11 +119,11 @@ open class TabToolbarHelper: NSObject {
         toolbar.appMenuButton.addTarget(self, action: #selector(didClickMenu), for: .touchUpInside)
         toolbar.appMenuButton.accessibilityIdentifier = "TabToolbar.menuButton"
 
-        toolbar.libraryButton.contentMode = .center
-        toolbar.libraryButton.setImage(UIImage.templateImageNamed("menu-library"), for: .normal)
-        toolbar.libraryButton.accessibilityLabel = Strings.AppMenuButtonAccessibilityLabel
-        toolbar.libraryButton.addTarget(self, action: #selector(didClickLibrary), for: .touchUpInside)
-        toolbar.libraryButton.accessibilityIdentifier = "TabToolbar.libraryButton"
+        toolbar.bookmarksButton.contentMode = .center
+        toolbar.bookmarksButton.setImage(UIImage.templateImageNamed("menu-panel-Bookmarks"), for: .normal)
+        toolbar.bookmarksButton.accessibilityLabel = Strings.AppMenuButtonAccessibilityLabel
+        toolbar.bookmarksButton.addTarget(self, action: #selector(didClickLibrary), for: .touchUpInside)
+        toolbar.bookmarksButton.accessibilityIdentifier = "TabToolbar.libraryButton"
         setTheme(forButtons: toolbar.actionButtons)
     }
 
@@ -161,7 +160,7 @@ open class TabToolbarHelper: NSObject {
     }
 
     func didClickLibrary() {
-        toolbar.tabToolbarDelegate?.tabToolbarDidPressLibrary(toolbar, button: toolbar.appMenuButton)
+        toolbar.tabToolbarDelegate?.tabToolbarDidPressBookmarks(toolbar, button: toolbar.appMenuButton)
     }
     
     func didClickAddNewTab() {
@@ -256,7 +255,7 @@ class TabToolbar: UIView {
     let tabsButton = TabsButton()
     let addNewTabButton = ToolbarButton()
     let appMenuButton = ToolbarButton()
-    let libraryButton = ToolbarButton()
+    let bookmarksButton = ToolbarButton()
     let forwardButton = ToolbarButton()
     let backButton = ToolbarButton()
     let multiStateButton = ToolbarButton()
@@ -335,15 +334,6 @@ class TabToolbar: UIView {
 extension TabToolbar: TabToolbarProtocol {
     func privateModeBadge(visible: Bool) {
         privateModeBadge.show(visible)
-    }
-
-    func appMenuBadge(setVisible: Bool) {
-        // Warning badges should take priority over the standard badge
-        guard warningMenuBadge.badge.isHidden else {
-            return
-        }
-
-        appMenuBadge.show(setVisible)
     }
 
     func warningMenuBadge(setVisible: Bool) {
