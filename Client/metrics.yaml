@@ -39,7 +39,8 @@ app_menu:
   block_images_enabled:
     type: counter
     description: |
-        Counts the number of times a user enables Block Images in the app menu
+        Counts the number of times a user enables Block Images
+        in the app menu
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/8147
     data_reviews:
@@ -50,7 +51,8 @@ app_menu:
   block_images_disabled:
     type: counter
     description: |
-        Counts the number of times a user disables Block Images in the app menu
+        Counts the number of times a user disables Block Images
+        in the app menu
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/8147
     data_reviews:
@@ -61,7 +63,8 @@ app_menu:
   night_mode_enabled:
     type: counter
     description: |
-        Counts the number of times a user taps Enable Night Mode in the app menu
+        Counts the number of times a user taps Enable Night Mode
+        in the app menu
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/8147
     data_reviews:
@@ -72,7 +75,8 @@ app_menu:
   night_mode_disabled:
     type: counter
     description: |
-        Counts the number of times a user taps Disable Night Mode in the app menu
+        Counts the number of times a user taps Disable Night Mode
+        in the app menu
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/8147
     data_reviews:
@@ -117,7 +121,8 @@ app_menu:
   sign_into_sync:
     type: counter
     description: |
-        Counts the number of times a user taps Sign Into Sync in the app menu
+        Counts the number of times a user taps Sign Into Sync
+        in the app menu
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/1544
     data_reviews:
