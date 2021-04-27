@@ -15,8 +15,8 @@ class BookmarkingTests: BaseTestCase {
     private func bookmark() {
         waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"], timeout: 5)
         navigator.goto(PageOptionsMenu)
-        waitForExistence(app.tables.cells["Bookmark This Page"], timeout: 15)
-        app.tables.cells["Bookmark This Page"].tap()
+        waitForExistence(app.tables.cells["Add Bookmark"], timeout: 15)
+        app.tables.cells["Add Bookmark"].tap()
         navigator.nowAt(BrowserTab)
     }
 
@@ -49,7 +49,7 @@ class BookmarkingTests: BaseTestCase {
 
     private func checkUnbookmarked() {
         navigator.goto(PageOptionsMenu)
-        waitForExistence(app.tables.cells["Bookmark This Page"])
+        waitForExistence(app.tables.cells["Add Bookmark"])
         if iPad() {
             app.otherElements["PopoverDismissRegion"].tap()
             navigator.nowAt(BrowserTab)

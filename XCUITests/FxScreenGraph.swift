@@ -275,12 +275,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     let cancelBackAction = {
-        if isTablet {
-            // There is no Cancel option in iPad.
-            app.otherElements["PopoverDismissRegion"].tap()
-        } else {
-            app.buttons["PhotonMenu.close"].tap()
-        }
+        app.otherElements["PopoverDismissRegion"].tap()
     }
 
     let cancelTypePasscode = {
@@ -1050,9 +1045,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     // make sure after the menu action, navigator.nowAt() is used to set the current state
     map.addScreenState(PageOptionsMenu) {screenState in
         screenState.tap(app.tables["Context Menu"].cells["menu-RequestDesktopSite"], to: RequestDesktopSite)
+        screenState.tap(app.tables["Context Menu"].cells["menu-ViewMobile"], to: RequestMobileSite)
         screenState.tap(app.tables["Context Menu"].cells["menu-FindInPage"], to: FindInPage)
         screenState.tap(app.tables["Context Menu"].cells["menu-Bookmark"], forAction: Action.BookmarkThreeDots, Action.Bookmark)
-        screenState.tap(app.tables.cells["action_pin"], forAction: Action.PinToTopSitesPAM)
+        screenState.tap(app.tables.cells["panelIconTopSites"], forAction: Action.PinToTopSitesPAM)
         screenState.tap(app.tables.cells["menu-Copy-Link"], forAction: Action.CopyAddressPAM)
         screenState.backAction = cancelBackAction
         screenState.dismissOnUse = true
@@ -1068,6 +1064,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(RequestDesktopSite) { _ in }
 
+    map.addScreenState(RequestMobileSite) { _ in }
+
     map.addScreenState(HomePanel_Library) { screenState in
         screenState.dismissOnUse = true
         screenState.backAction = navigationControllerBackAction
@@ -1082,7 +1080,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.tables.cells["menu-Settings"], to: SettingsScreen)
         screenState.tap(app.tables.cells["menu-sync"], to: Intro_FxASignin, if: "fxaUsername == nil")
         screenState.tap(app.tables.cells["key"], to: LoginsSettings)
-        screenState.tap(app.tables.cells["menu-library"], to: HomePanel_Library)
+        screenState.tap(app.tables.cells["menu-panel-Bookmarks"], to: LibraryPanel_Bookmarks)
+        screenState.tap(app.tables.cells["menu-panel-History"], to: LibraryPanel_History)
+        screenState.tap(app.tables.cells["menu-panel-Downloads"], to: LibraryPanel_Downloads)
+        screenState.tap(app.tables.cells["menu-panel-ReadingList"], to: LibraryPanel_ReadingList)
         screenState.tap(app.tables.cells["placeholder-avatar"], to: FxAccountManagementPage)
 
         screenState.tap(app.tables.cells["menu-NoImageMode"], forAction: Action.ToggleNoImageMode, transitionTo: BrowserTabMenu) { userState in
@@ -1091,9 +1092,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         screenState.tap(app.tables.cells["menu-NightMode"], forAction: Action.ToggleNightMode, transitionTo: BrowserTabMenu) { userState in
             userState.nightMode = !userState.nightMode
-        }
-
-        screenState.tap(app.tables.cells["menu-Home"], forAction: Action.GoToHomePage) { userState in
         }
         screenState.tap(app.tables.cells["whatsnew"], forAction: Action.OpenWhatsNewPage) { userState in
         }
@@ -1172,7 +1170,7 @@ enum BrowserPerformAction: String {
     case copyURLOption = "menu-Copy-Link"
     case findInPageOption = "menu-FindInPage"
     case toggleDesktopOption = "menu-RequestDesktopSite"
-    case pinToTopSitesOption = "action_pin"
+    case pinToTopSitesOption = "panelIconTopSites"
     case sendToDeviceOption = "menu-Send-to-Device"
     case shareOption = "action_share"
 

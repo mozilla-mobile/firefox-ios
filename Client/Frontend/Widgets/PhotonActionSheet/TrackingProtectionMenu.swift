@@ -164,12 +164,12 @@ extension PhotonActionSheetProtocol {
         }
         addToSafelistSwitch.accessibilityId = "tp.add-to-safelist"
         addToSafelistSwitch.customHeight = { _ in
-            return PhotonActionSheetUX.RowHeight
+            return PhotonActionSheetUX.RowHeight + 20
         }
         
         var addToSafelistNoSwitch = PhotonActionSheetItem(title: Strings.ETPOn, accessory: .Text)
         addToSafelistNoSwitch.customHeight = { _ in
-            return PhotonActionSheetUX.RowHeight
+            return PhotonActionSheetUX.RowHeight + 20
         }
         addToSafelistNoSwitch.customRender = { label, _ in
             label.textColor = UIColor.theme.tableView.headerTextLight

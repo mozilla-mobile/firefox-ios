@@ -23,7 +23,6 @@ protocol TabToolbarProtocol: AnyObject {
     func updatePageStatus(_ isWebPage: Bool)
     func updateTabCount(_ count: Int, animated: Bool)
     func privateModeBadge(visible: Bool)
-    func appMenuBadge(setVisible: Bool)
     func warningMenuBadge(setVisible: Bool)
 }
 
@@ -335,15 +334,6 @@ class TabToolbar: UIView {
 extension TabToolbar: TabToolbarProtocol {
     func privateModeBadge(visible: Bool) {
         privateModeBadge.show(visible)
-    }
-
-    func appMenuBadge(setVisible: Bool) {
-        // Warning badges should take priority over the standard badge
-        guard warningMenuBadge.badge.isHidden else {
-            return
-        }
-
-        appMenuBadge.show(setVisible)
     }
 
     func warningMenuBadge(setVisible: Bool) {

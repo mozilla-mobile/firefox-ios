@@ -416,17 +416,16 @@ class NavigationTest: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         waitForExistence(app.tables["Context Menu"])
 
-        XCTAssertTrue(app.tables.cells["menu-sync"].exists)
+        XCTAssertTrue(app.tables.cells["menu-panel-Bookmarks"].exists)
+        XCTAssertTrue(app.tables.cells["menu-panel-History"].exists)
+        XCTAssertTrue(app.tables.cells["menu-panel-Downloads"].exists)
+        XCTAssertTrue(app.tables.cells["menu-panel-ReadingList"].exists)
         XCTAssertTrue(app.tables.cells["key"].exists)
-        XCTAssertTrue(app.tables.cells["menu-Home"].exists)
-        XCTAssertTrue(app.tables.cells["menu-library"].exists)
+        XCTAssertTrue(app.tables.cells["menu-sync"].exists)
         XCTAssertTrue(app.tables.cells["menu-NoImageMode"].exists)
         XCTAssertTrue(app.tables.cells["menu-NightMode"].exists)
         XCTAssertTrue(app.tables.cells["whatsnew"].exists)
         XCTAssertTrue(app.tables.cells["menu-Settings"].exists)
-        if !iPad() {
-            XCTAssertTrue(app.buttons["PhotonMenu.close"].exists)
-        }
     }
 
     // Smoketest

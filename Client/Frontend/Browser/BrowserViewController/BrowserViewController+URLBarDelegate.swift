@@ -135,7 +135,7 @@ extension BrowserViewController: URLBarDelegate {
             let pageActions = self.getTabActions(tab: tab, buttonView: button, presentShareMenu: actionMenuPresenter,
                                                  findInPage: findInPageAction, reportSiteIssue: reportSiteIssue, presentableVC: self, isBookmarked: isBookmarked,
                                                  isPinned: isPinned, shouldShowNewTabButton: shouldShowNewTabButton, success: successCallback)
-            self.presentSheetWith(title: Strings.PageActionMenuTitle, actions: pageActions, on: self, from: button)
+            self.presentSheetWith(actions: pageActions, on: self, from: button)
         }
     }
 
@@ -156,7 +156,8 @@ extension BrowserViewController: URLBarDelegate {
             let title = String.localizedStringWithFormat(Strings.TPPageMenuTitle, tab.url?.host ?? "")
             LeanPlumClient.shared.track(event: .trackingProtectionMenu)
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
-            self.presentSheetWith(title: title, actions: trackingProtectionMenu, on: self, from: urlBar)
+            let shouldSuppress = UIDevice.current.userInterfaceIdiom != .pad
+            self.presentSheetWith(title: title, actions: trackingProtectionMenu, on: self, from: urlBar, suppressPopover: shouldSuppress)
         }
     }
 
@@ -247,7 +248,9 @@ extension BrowserViewController: URLBarDelegate {
         let urlActions = self.getLongPressLocationBarActions(with: urlBar, webViewContainer: self.webViewContainer)
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
-        self.presentSheetWith(actions: [urlActions], on: self, from: urlBar)
+        
+        let shouldSuppress = UIDevice.current.userInterfaceIdiom != .pad
+        self.presentSheetWith(actions: [urlActions], on: self, from: urlBar, suppressPopover: shouldSuppress)
     }
 
     func urlBarDidPressScrollToTop(_ urlBar: URLBarView) {
