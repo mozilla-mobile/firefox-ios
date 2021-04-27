@@ -64,9 +64,9 @@ class ConnectSetting: WithoutAccountSetting {
 class SyncNowSetting: WithAccountSetting {
     let imageView = UIImageView(frame: CGRect(width: 30, height: 30))
     let syncIconWrapper = UIImage.createWithColor(CGSize(width: 30, height: 30), color: UIColor.clear)
-    let syncBlueIcon = UIImage(named: "FxA-Sync-Blue")?.createScaled(CGSize(width: 20, height: 20))
+    let syncBlueIcon = UIImage(named: "FxA-Sync-Blue")
     let syncIcon: UIImage? = {
-        let image = UIImage(named: "FxA-Sync")?.createScaled(CGSize(width: 20, height: 20))
+        let image = UIImage(named: "FxA-Sync")
         return ThemeManager.instance.currentName == .dark ? image?.tinted(withColor: .white) : image
     }()
 
