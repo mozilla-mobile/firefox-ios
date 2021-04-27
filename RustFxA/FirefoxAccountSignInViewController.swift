@@ -63,8 +63,8 @@ class FirefoxAccountSignInViewController: UIViewController {
         let button = UIButton()
         button.backgroundColor = UIColor.Photon.Blue50
         button.layer.cornerRadius = 8
-        button.setImage(UIImage(named: "qr-code-icon-white"), for: .normal)
-        button.setImage(UIImage(named: "qr-code-icon-white"), for: .highlighted)
+        button.setImage(UIImage(named: "qr-code-icon-white")?.tinted(withColor: .white), for: .normal)
+        button.setImage(UIImage(named: "qr-code-icon-white")?.tinted(withColor: .white), for: .highlighted)
         let imageWidth = button.imageView?.frame.width ?? 0.0
         button.setTitle(Strings.FxASignin_QRScanSignin, for: .normal)
         button.accessibilityIdentifier = "QRCodeSignIn.button"
