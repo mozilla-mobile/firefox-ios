@@ -70,11 +70,11 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     fileprivate let searchEngineScrollViewContent = UIView()
 
     fileprivate lazy var bookmarkedBadge: UIImage = {
-        return currentTheme == .dark ? UIImage(named: "bookmark_results_dark")! : UIImage(named: "bookmark_results_light")!
+        return UIImage(named: "bookmark_results")!
     }()
     
     fileprivate lazy var openAndSyncTabBadge: UIImage = {
-        return currentTheme == .dark ? UIImage(named: "sync_open_tab_dark")! : UIImage(named: "sync_open_tab_light")!
+        return UIImage(named: "sync_open_tab")!
     }()
 
     var suggestions: [String]? = []
