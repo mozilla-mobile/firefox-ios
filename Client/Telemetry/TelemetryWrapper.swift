@@ -379,6 +379,11 @@ extension TelemetryWrapper {
         case mediumTopSitesWidget = "medium-top-sites-widget"
         case pocketStory = "pocket-story"
         case library = "library"
+        case home = "home-page"
+        case blockImagesEnabled = "block-images-enabled"
+        case blockImagesDisabled = "block-images-disabled"
+        case nightModeEnabled = "night-mode-enabled"
+        case nightModeDisabled = "night-mode-disabled"
         case logins = "logins-and-passwords"
         case signIntoSync = "sign-into-sync"
         case syncTab = "sync-tab"
@@ -386,6 +391,15 @@ extension TelemetryWrapper {
         case syncSignIn = "sync-sign-in"
         case syncCreateAccount = "sync-create-account"
         case libraryPanel = "library-panel"
+        case sharePageWith = "share-page-with"
+        case sendToDevice = "send-to-device"
+        case copyAddress = "copy-address"
+        case reportSiteIssue = "report-site-issue"
+        case findInPage = "find-in-page"
+        case requestDesktopSite = "request-desktop-site"
+        case requestMobileSite = "request-mobile-site"
+        case pinToTopSites = "pin-to-top-sites"
+        case removePinnedSite = "remove-pinned-site"
     }
 
     public enum EventValue: String {
@@ -543,12 +557,47 @@ extension TelemetryWrapper {
                 Sentry.shared.send(message: msg, severity: .debug)
             }
         // App menu
-        case (.action, .tap, .library, _, _):
-            GleanMetrics.AppMenu.library.add()
         case (.action, .tap, .logins, _, _):
             GleanMetrics.AppMenu.logins.add()
         case (.action, .tap, .signIntoSync, _, _):
             GleanMetrics.AppMenu.signIntoSync.add()
+        case (.action, .tap, .home, _, _):
+            GleanMetrics.AppMenu.home.add()
+        case (.action, .tap, .library, _, _):
+            GleanMetrics.AppMenu.library.add()
+        case (.action, .tap, .blockImagesEnabled, _, _):
+            GleanMetrics.AppMenu.blockImagesEnabled.add()
+        case (.action, .tap, .blockImagesDisabled, _, _):
+            GleanMetrics.AppMenu.blockImagesDisabled.add()
+        case (.action, .tap, .nightModeEnabled, _, _):
+            GleanMetrics.AppMenu.nightModeEnabled.add()
+        case (.action, .tap, .nightModeDisabled, _, _):
+            GleanMetrics.AppMenu.nightModeDisabled.add()
+        case (.action, .tap, .whatsNew, _, _):
+            GleanMetrics.AppMenu.whatsNew.add()
+        case (.action, .open, .settings, _, _):
+            GleanMetrics.AppMenu.settings.add()
+
+        // Page Menu
+        case (.action, .tap, .sharePageWith, _, _):
+            GleanMetrics.PageActionMenu.sharePageWith.add()
+        case (.action, .tap, .sendToDevice, _, _):
+            GleanMetrics.PageActionMenu.sendToDevice.add()
+        case (.action, .tap, .copyAddress, _, _):
+            GleanMetrics.PageActionMenu.copyAddress.add()
+        case (.action, .tap, .reportSiteIssue, _, _):
+            GleanMetrics.PageActionMenu.reportSiteIssue.add()
+        case (.action, .tap, .findInPage, _, _):
+            GleanMetrics.PageActionMenu.findInPage.add()
+        case (.action, .tap, .pinToTopSites, _, _):
+            GleanMetrics.PageActionMenu.pinToTopSites.add()
+        case (.action, .tap, .removePinnedSite, _, _):
+            GleanMetrics.PageActionMenu.removePinnedSite.add()
+        case (.action, .tap, .requestDesktopSite, _, _):
+            GleanMetrics.PageActionMenu.requestDesktopSite.add()
+        case (.action, .tap, .requestMobileSite, _, _):
+            GleanMetrics.PageActionMenu.requestMobileSite.add()
+
         default:
             let msg = "Uninstrumented metric recorded: \(category), \(method), \(object), \(value), \(String(describing: extras))"
             Sentry.shared.send(message: msg, severity: .debug)

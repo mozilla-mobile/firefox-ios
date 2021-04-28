@@ -6,51 +6,137 @@
 # automatically converted to Kotlin code at build time using the `glean_parser`
 # PyPI package.
 
+# This file is organized (roughly) alphabetically by metric names
+# for easy navigation
+
 ---
 $schema: moz://mozilla.org/schemas/glean/metrics/1-0-0
 
-# Search and search releated metrics
-search:
-  counts:
-    type: labeled_counter
-    description: |
-      The labels for this counter are `{search-engine-name}.{source}`
-
-      If the search engine is bundled with Firefox-iOS, then
-      `search-engine-name` will be the name of the search engine. If
-      it is a custom search engine, the value will be `custom`.
-
-      The value of `source` will reflect the source from which the
-      search started.  One of:
-      * quicksearch
-      * suggestion
-      * actionbar
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    notification_emails:
-      - firefox-ios@mozilla.com
-    expires: "2021-07-01"
-  default_engine:
-    type: string
-    lifetime: application
-    description: |
-      The default search engine identifier if the search engine is
-      pre-loaded with Firefox-iOS.  If it's a custom search engine,
-      then the value will be 'custom'.
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    notification_emails:
-      - firefox-ios@mozilla.com
-    expires: "2021-07-01"
-  start_search_pressed:
+# App menu
+app_menu:
+  library:
     type: counter
     description: |
-      Counts the number of times the start search button is
-      pressed
+        Counts the number of times a user taps Library in the app menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/1544
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-09-17"
+  home:
+    type: counter
+    description: |
+        Counts the number of times a user taps Home in the app menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8147
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-11-01"
+  block_images_enabled:
+    type: counter
+    description: |
+        Counts the number of times a user enables Block Images
+        in the app menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8147
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-11-01"
+  block_images_disabled:
+    type: counter
+    description: |
+        Counts the number of times a user disables Block Images
+        in the app menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8147
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-11-01"
+  night_mode_enabled:
+    type: counter
+    description: |
+        Counts the number of times a user taps Enable Night Mode
+        in the app menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8147
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-11-01"
+  night_mode_disabled:
+    type: counter
+    description: |
+        Counts the number of times a user taps Disable Night Mode
+        in the app menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8147
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-11-01"
+  whats_new:
+    type: counter
+    description: |
+        Counts the number of times a user taps What's New in the app menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8147
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-11-01"
+  settings:
+    type: counter
+    description: |
+        Counts the number of times a user taps Settings in the app menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8147
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-11-01"
+  logins:
+    type: counter
+    description: |
+        Counts the number of times a user taps Logins & Passwords
+        in the app menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/1544
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-09-17"
+  sign_into_sync:
+    type: counter
+    description: |
+        Counts the number of times a user taps Sign Into Sync
+        in the app menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/1544
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-09-17"
+
+# Application Services metrics
+application_services:
+  pocket_stories_visible:
+    type: boolean
+    description: |
+      Measures the state of the show Pocket stories preference.
     bugs:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
@@ -58,29 +144,389 @@ search:
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
-  in_content:
-    type: labeled_counter
+  bookmark_highlights_visible:
+    type: boolean
     description: |
-      Records the type of interaction a user has on SERP pages.
+      Measures the state of the show bookmark highlights
+      preference.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/7602
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/7702
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     notification_emails:
       - firefox-ios@mozilla.com
-    expires: "2021-05-07"
-  google_topsite_pressed:
+    expires: "2021-07-01"
+  recent_highlights_visible:
+    type: boolean
+    description: |
+      Measures the state of the show recent highlights
+      preference.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+
+# Bookmark metrics
+bookmarks:
+  view_list:
     type: labeled_counter
     description: |
-      Counts the number of times the google top site button
-      is pressed
+      Counts the number of times the bookmarks list is opened
+      from either the Home Panel tab button or the App Menu.
+    labels:
+      - app-menu
     bugs:
-      - https://jira.mozilla.com/browse/FXIOS-1223
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
-      - https://jira.mozilla.com/browse/FXIOS-1223
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  add:
+    type: labeled_counter
+    description: |
+      Counts the number of times a bookmark is added from the
+      following:
+      * Page Action Menu
+      * Share Menu
+
+    labels:
+      - page-action-menu
+      - share-menu
+      - activity-stream
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  delete:
+    type: labeled_counter
+    description: |
+      Counts the number of times a bookmark is deleted from
+      the following:
+      * Page Action Menu
+      * Activity Stream
+      * Bookmarks Panel
+    labels:
+      - page-action-menu
+      - activity-stream
+      - bookmarks-panel
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  open:
+    type: labeled_counter
+    description: |
+      Counts the number of times a bookmark is opened from
+      the following:
+      * Awesomebar results
+      * Bookmarks Panel
+    labels:
+      - awesomebar-results
+      - bookmarks-panel
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+
+# Default browser card metrics
+default_browser_card:
+  dismiss_pressed:
+    type: counter
+    description: |
+      Counts the number of times default browser card is dismissed.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7151
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7245
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-09-01"
+  go_to_settings_pressed:
+    type: counter
+    description: |
+      Counts the number of times the Go To Settings button on
+      default browser card is clicked.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7151
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7245
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-09-01"
+
+# Default browser onboarding metrics
+default_browser_onboarding:
+  dismiss_pressed:
+    type: counter
+    description: |
+      Counts the number of times default browser onboarding is dismissed.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7870
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7245
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-08-01"
+  go_to_settings_pressed:
+    type: counter
+    description: |
+      Counts the number of times the Go To Settings button on
+      default browser onboarding is clicked.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7870
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7245
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-08-01"
+
+app:
+  opened_as_default_browser:
+    type: counter
+    description: |
+      Counts the number of times the app is opened from an external
+      link, implying the client has Firefox set as a default browser.
+
+      Currently this is our most accurate way of measuring how
+      often Firefox is set as the default browser.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7151
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7245
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-09-01"
+
+# Experiments
+experiments:
+  experiment_enrollment:
+    type: event
+    description: |
+      Records the experiments the user is enrolled in.
+      Includes experiment ID, name, and variant.
+    extra_keys:
+      experiment_id:
+        description: |
+          The experiment ID.
+      experiment_name:
+        description: |
+          The experiment name.
+      experiment_variant:
+        description: |
+          The experiment variant name the user is in.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7841
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8150
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-12-01"
+
+# Library
+library:
+  panel_pressed:
+    type: labeled_counter
+    description: |
+      Counts the number of times a specific library panel
+      button is tapped for Bookmarks, History, Reading List,
+      Downloads and Synced tabs
+    labels:
+      - bookmarks-panel
+      - history-panel
+      - reading-panel
+      - downloads-panel
+      - sync-panel
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8035
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8152
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-06-16"
+
+# Legacy IDs for deletion-request purposes
+legacy.ids:
+  client_id:
+    type: uuid
+    lifetime: user
+    description: |
+      The client id from legacy telemetry.
+    send_in_pings:
+      - deletion-request
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1635427
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1635427
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: never
+
+deletion:
+  sync_device_id:
+    type: string
+    lifetime: user
+    description: |
+      The FxA device id.
+    send_in_pings:
+      - deletion-request
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/6933
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7629#issuecomment-723312428
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: never
+
+# Page Action menu
+page_action_menu:
+  share_page_with:
+    type: counter
+    description: |
+        Counts the number of times a user taps Share Page With in the
+        page action menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8147
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-11-01"
+  add_to_reading_list:
+    type: counter
+    description: |
+        Counts the number of times a user taps Add to Reading List
+        in the page action menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8147
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-11-01"
+  send_to_device:
+    type: counter
+    description: |
+        Counts the number of times a user taps Send to Device
+        in the page action menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8147
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-11-01"
+  copy_address:
+    type: counter
+    description: |
+        Counts the number of times a user taps Copy Address
+        in the page action menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8147
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-11-01"
+  report_site_issue:
+    type: counter
+    description: |
+        Counts the number of times a user taps Report Site Issue
+        in the page action menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8147
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-11-01"
+  find_in_page:
+    type: counter
+    description: |
+        Counts the number of times a user taps Find in Page
+        in the page action menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8147
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-11-01"
+  request_desktop_site:
+    type: counter
+    description: |
+        Counts the number of times a user taps Request Desktop Site
+        in the page action menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8147
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-11-01"
+  request_mobile_site:
+    type: counter
+    description: |
+        Counts the number of times a user taps Request Mobile Site
+        in the page action menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8147
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-11-01"
+  pin_to_top_sites:
+    type: counter
+    description: |
+        Counts the number of times a user taps Pin to Top Sites
+        in the page action menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8147
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-11-01"
+  remove_pinned_site:
+    type: counter
+    description: |
+        Counts the number of times a user taps Pin to Top Sites
+        in the page action menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8147
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-11-01"
+
+# Pocket
+pocket:
+  open_story:
+    type: counter
+    description: |
+        Counts the number of times a user opens
+        Pocket article from Firefox home Pocket feed
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/6195
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8009
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-08-19"
 
 # Preference metrics
 preferences:
@@ -179,36 +625,12 @@ preferences:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
 
-# Application Services metrics
-application_services:
-  pocket_stories_visible:
-    type: boolean
+# QR Code metrics
+qr_code:
+  scanned:
+    type: counter
     description: |
-      Measures the state of the show Pocket stories preference.
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    notification_emails:
-      - firefox-ios@mozilla.com
-    expires: "2021-07-01"
-  bookmark_highlights_visible:
-    type: boolean
-    description: |
-      Measures the state of the show bookmark highlights
-      preference.
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    notification_emails:
-      - firefox-ios@mozilla.com
-    expires: "2021-07-01"
-  recent_highlights_visible:
-    type: boolean
-    description: |
-      Measures the state of the show recent highlights
-      preference.
+      Counts the number of times a QR code is scanned.
     bugs:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
@@ -217,13 +639,20 @@ application_services:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
 
-# Enhanced Tracking Protection metrics
-tracking_protection:
-  enabled:
-    type: boolean
+# Reading List metrics
+reading_list:
+  add:
+    type: labeled_counter
     description: |
-      Measures the state of the tracking-protection enabled
-      preference.
+      Counts the number of times an item is added to the reading
+      list from the following:
+      * Reader Mode Toolbar
+      * Share Extension
+      * Page Action Menu
+    labels:
+      - reader-mode-toolbar
+      - share-extension
+      - page-action-menu
     bugs:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
@@ -231,13 +660,52 @@ tracking_protection:
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
-  strength:
-    type: string
+  open:
+    type: counter
     description: |
-      A string representing the selected strength of the
-      tracking-protection that is enabled. One of:
-      * basic
-      * strict
+      Counts the number of times an item is opened from the
+      Reading List
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  delete:
+    type: labeled_counter
+    description: |
+      Counts the number of times an item is added to the
+      reading list from the following:
+      * Reader Mode Toolbar
+      * Reading List Panel
+    labels:
+      - reader-mode-toolbar
+      - reading-list-panel
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  mark_read:
+    type: counter
+    description: |
+      Counts the number of times a reading list item is
+      marked as read.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  mark_unread:
+    type: counter
+    description: |
+      Counts the number of times a reading list item is
+      marked as unread.
     bugs:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
@@ -246,13 +714,12 @@ tracking_protection:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
 
-# Theme metrics
-theme:
-  use_system_theme:
-    type: boolean
+# Reader Mode metrics
+reader_mode:
+  open:
+    type: counter
     description: |
-      Measures the state of the "Use System Light/Dark Mode"
-      theme preference.
+      Counts how many times the reader mode is opened.
     bugs:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
@@ -260,11 +727,10 @@ theme:
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
-  automatic_mode:
-    type: boolean
+  close:
+    type: counter
     description: |
-      Measures the state of the "Manual/Automatic" theme
-      preference.
+      Counts how many times the reader mode is closed.
     bugs:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
@@ -272,11 +738,52 @@ theme:
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
-  automatic_slider_value:
+
+# Default Browser Settings Menu Option
+settings_menu:
+  set_as_default_browser_pressed:
+    type: counter
+    description: |
+      Counts the number of times setting as default
+      browser menu option is tapped.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7090
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7090
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-09-01"
+
+# Search and search releated metrics
+search:
+  counts:
+    type: labeled_counter
+    description: |
+      The labels for this counter are `{search-engine-name}.{source}`
+
+      If the search engine is bundled with Firefox-iOS, then
+      `search-engine-name` will be the name of the search engine. If
+      it is a custom search engine, the value will be `custom`.
+
+      The value of `source` will reflect the source from which the
+      search started.  One of:
+      * quicksearch
+      * suggestion
+      * actionbar
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  default_engine:
     type: string
+    lifetime: application
     description: |
-      Measures the string representation of the current slider
-      value of the automatic theme switching slider.
+      The default search engine identifier if the search engine is
+      pre-loaded with Firefox-iOS.  If it's a custom search engine,
+      then the value will be 'custom'.
     bugs:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
@@ -284,12 +791,11 @@ theme:
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
-  name:
-    type: string
+  start_search_pressed:
+    type: counter
     description: |
-      Measures the name of the current theme.  One of:
-      * normal
-      * dark
+      Counts the number of times the start search button is
+      pressed
     bugs:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
@@ -297,6 +803,81 @@ theme:
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
+  in_content:
+    type: labeled_counter
+    description: |
+      Records the type of interaction a user has on SERP pages.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7602
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7702
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-05-07"
+  google_topsite_pressed:
+    type: labeled_counter
+    description: |
+      Counts the number of times the google top site button
+      is pressed
+    bugs:
+      - https://jira.mozilla.com/browse/FXIOS-1223
+    data_reviews:
+      - https://jira.mozilla.com/browse/FXIOS-1223
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-09-01"
+
+# Sync
+sync:
+  open_tab:
+    type: counter
+    description: |
+        Counts the number of times a user opens
+        synced tab
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8035
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8152
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-06-16"
+  open_sync_home_shortcut:
+    type: counter
+    description: |
+        Counts the number of times a user opens
+        synced tab list from home view
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8035
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8152
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-06-16"
+  sign_in_sync_pressed:
+    type: counter
+    description: |
+        Counts the number of times a user taps
+        on sign in to sync button in sync
+        library view
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8035
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8152
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-06-16"
+  create_account_pressed:
+    type: counter
+    description: |
+        Counts the number of times a user taps
+        on create account button in sync library view
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8035
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8152
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-06-16"
 
 # Tab metrics
 tabs:
@@ -410,15 +991,13 @@ tabs:
       - firefox-ios@mozilla.com
     expires: "2021-11-03"
 
-# Bookmark metrics
-bookmarks:
-  view_list:
-    type: labeled_counter
+# Theme metrics
+theme:
+  use_system_theme:
+    type: boolean
     description: |
-      Counts the number of times the bookmarks list is opened
-      from either the Home Panel tab button or the App Menu.
-    labels:
-      - app-menu
+      Measures the state of the "Use System Light/Dark Mode"
+      theme preference.
     bugs:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
@@ -426,18 +1005,11 @@ bookmarks:
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
-  add:
-    type: labeled_counter
+  automatic_mode:
+    type: boolean
     description: |
-      Counts the number of times a bookmark is added from the
-      following:
-      * Page Action Menu
-      * Share Menu
-      * Activity Stream context menu
-    labels:
-      - page-action-menu
-      - share-menu
-      - activity-stream
+      Measures the state of the "Manual/Automatic" theme
+      preference.
     bugs:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
@@ -445,273 +1017,60 @@ bookmarks:
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
-  delete:
-    type: labeled_counter
-    description: |
-      Counts the number of times a bookmark is deleted from
-      the following:
-      * Page Action Menu
-      * Activity Stream
-      * Bookmarks Panel
-    labels:
-      - page-action-menu
-      - activity-stream
-      - bookmarks-panel
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    notification_emails:
-      - firefox-ios@mozilla.com
-    expires: "2021-07-01"
-  open:
-    type: labeled_counter
-    description: |
-      Counts the number of times a bookmark is opened from
-      the following:
-      * Awesomebar results
-      * Bookmarks Panel
-    labels:
-      - awesomebar-results
-      - bookmarks-panel
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    notification_emails:
-      - firefox-ios@mozilla.com
-    expires: "2021-07-01"
-
-# Reader Mode metrics
-reader_mode:
-  open:
-    type: counter
-    description: |
-      Counts how many times the reader mode is opened.
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    notification_emails:
-      - firefox-ios@mozilla.com
-    expires: "2021-07-01"
-  close:
-    type: counter
-    description: |
-      Counts how many times the reader mode is closed.
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    notification_emails:
-      - firefox-ios@mozilla.com
-    expires: "2021-07-01"
-
-# Reading List metrics
-reading_list:
-  add:
-    type: labeled_counter
-    description: |
-      Counts the number of times an item is added to the reading
-      list from the following:
-      * Reader Mode Toolbar
-      * Share Extension
-      * Page Action Menu
-    labels:
-      - reader-mode-toolbar
-      - share-extension
-      - page-action-menu
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    notification_emails:
-      - firefox-ios@mozilla.com
-    expires: "2021-07-01"
-  open:
-    type: counter
-    description: |
-      Counts the number of times an item is opened from the
-      Reading List
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    notification_emails:
-      - firefox-ios@mozilla.com
-    expires: "2021-07-01"
-  delete:
-    type: labeled_counter
-    description: |
-      Counts the number of times an item is added to the
-      reading list from the following:
-      * Reader Mode Toolbar
-      * Reading List Panel
-    labels:
-      - reader-mode-toolbar
-      - reading-list-panel
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    notification_emails:
-      - firefox-ios@mozilla.com
-    expires: "2021-07-01"
-  mark_read:
-    type: counter
-    description: |
-      Counts the number of times a reading list item is
-      marked as read.
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    notification_emails:
-      - firefox-ios@mozilla.com
-    expires: "2021-07-01"
-  mark_unread:
-    type: counter
-    description: |
-      Counts the number of times a reading list item is
-      marked as unread.
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    notification_emails:
-      - firefox-ios@mozilla.com
-    expires: "2021-07-01"
-
-# Default Browser Settings Menu Option
-settings_menu:
-  set_as_default_browser_pressed:
-    type: counter
-    description: |
-      Counts the number of times setting as default
-      browser menu option is tapped.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/7090
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/7090
-    notification_emails:
-      - firefox-ios@mozilla.com
-    expires: "2021-09-01"
-
-# QR Code metrics
-qr_code:
-  scanned:
-    type: counter
-    description: |
-      Counts the number of times a QR code is scanned.
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    notification_emails:
-      - firefox-ios@mozilla.com
-    expires: "2021-07-01"
-
-# Default browser card metrics
-default_browser_card:
-  dismiss_pressed:
-    type: counter
-    description: |
-      Counts the number of times default browser card is dismissed.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/7151
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/7245
-    notification_emails:
-      - firefox-ios@mozilla.com
-    expires: "2021-09-01"
-  go_to_settings_pressed:
-    type: counter
-    description: |
-      Counts the number of times the Go To Settings button on
-      default browser card is clicked.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/7151
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/7245
-    notification_emails:
-      - firefox-ios@mozilla.com
-    expires: "2021-09-01"
-
-# Default browser onboarding metrics
-default_browser_onboarding:
-  dismiss_pressed:
-    type: counter
-    description: |
-      Counts the number of times default browser onboarding is dismissed.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/7870
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/7245
-    notification_emails:
-      - firefox-ios@mozilla.com
-    expires: "2021-08-01"
-  go_to_settings_pressed:
-    type: counter
-    description: |
-      Counts the number of times the Go To Settings button on
-      default browser onboarding is clicked.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/7870
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/7245
-    notification_emails:
-      - firefox-ios@mozilla.com
-    expires: "2021-08-01"
-
-app:
-  opened_as_default_browser:
-    type: counter
-    description: |
-      Counts the number of times the app is opened from an external
-      link, implying the client has Firefox set as a default browser.
-
-      Currently this is our most accurate way of measuring how
-      often Firefox is set as the default browser.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/7151
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/7245
-    notification_emails:
-      - firefox-ios@mozilla.com
-    expires: "2021-09-01"
-
-# Legacy IDs for deletion-request purposes
-legacy.ids:
-  client_id:
-    type: uuid
-    lifetime: user
-    description: |
-      The client id from legacy telemetry.
-    send_in_pings:
-      - deletion-request
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1635427
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1635427
-    notification_emails:
-      - firefox-ios@mozilla.com
-    expires: never
-
-deletion:
-  sync_device_id:
+  automatic_slider_value:
     type: string
-    lifetime: user
     description: |
-      The FxA device id.
-    send_in_pings:
-      - deletion-request
+      Measures the string representation of the current slider
+      value of the automatic theme switching slider.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/6933
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/7629#issuecomment-723312428
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     notification_emails:
       - firefox-ios@mozilla.com
-    expires: never
+    expires: "2021-07-01"
+  name:
+    type: string
+    description: |
+      Measures the name of the current theme.  One of:
+      * normal
+      * dark
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+
+# Enhanced Tracking Protection metrics
+tracking_protection:
+  enabled:
+    type: boolean
+    description: |
+      Measures the state of the tracking-protection enabled
+      preference.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  strength:
+    type: string
+    description: |
+      A string representing the selected strength of the
+      tracking-protection that is enabled. One of:
+      * basic
+      * strict
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
 
 # iOS 14 widget metrics
 # m: medium, s: small, l: large
@@ -809,154 +1168,3 @@ widget:
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-12-01"
-
-# Experiments
-experiments:
-  experiment_enrollment:
-    type: event
-    description: |
-      Records the experiments the user is enrolled in.
-      Includes experiment ID, name, and variant.
-    extra_keys:
-      experiment_id:
-        description: |
-          The experiment ID.
-      experiment_name:
-        description: |
-          The experiment name.
-      experiment_variant:
-        description: |
-          The experiment variant name the user is in.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/7841
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8150
-    notification_emails:
-      - firefox-ios@mozilla.com
-    expires: "2021-12-01"
-
-# Pocket
-pocket:
-  open_story:
-    type: counter
-    description: |
-        Counts the number of times a user opens
-        Pocket article from Firefox home Pocket feed
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/6195
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8009
-    notification_emails:
-      - firefox-ios@mozilla.com
-    expires: "2021-08-19"
-
-# App menu
-app_menu:
-  library:
-    type: counter
-    description: |
-        Counts the number of times a user taps Your Library in the app menu
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/1544
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
-    notification_emails:
-      - firefox-ios@mozilla.com
-    expires: "2021-09-17"
-  logins:
-    type: counter
-    description: |
-        Counts the number of times a user taps Logins & Passwords
-        in the app menu
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/1544
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
-    notification_emails:
-      - firefox-ios@mozilla.com
-    expires: "2021-09-17"
-  sign_into_sync:
-    type: counter
-    description: |
-        Counts the number of times a user taps Sign Into Sync in the app menu
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/1544
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
-    notification_emails:
-      - firefox-ios@mozilla.com
-    expires: "2021-09-17"
-
-# Library
-library:
-  panel_pressed:
-    type: labeled_counter
-    description: |
-      Counts the number of times a specific library panel
-      button is tapped for Bookmarks, History, Reading List,
-      Downloads and Synced tabs
-    labels:
-      - bookmarks-panel
-      - history-panel
-      - reading-panel
-      - downloads-panel
-      - sync-panel
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/8035
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8152
-    notification_emails:
-      - firefox-ios@mozilla.com
-    expires: "2021-06-16"
-
-# Sync
-sync:
-  open_tab:
-    type: counter
-    description: |
-        Counts the number of times a user opens
-        synced tab
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/8035
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8152
-    notification_emails:
-      - firefox-ios@mozilla.com
-    expires: "2021-06-16"
-  open_sync_home_shortcut:
-    type: counter
-    description: |
-        Counts the number of times a user opens
-        synced tab list from home view
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/8035
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8152
-    notification_emails:
-      - firefox-ios@mozilla.com
-    expires: "2021-06-16"
-  sign_in_sync_pressed:
-    type: counter
-    description: |
-        Counts the number of times a user taps
-        on sign in to sync button in sync
-        library view
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/8035
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8152
-    notification_emails:
-      - firefox-ios@mozilla.com
-    expires: "2021-06-16"
-  create_account_pressed:
-    type: counter
-    description: |
-        Counts the number of times a user taps
-        on create account button in sync library view
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/8035
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8152
-    notification_emails:
-      - firefox-ios@mozilla.com
-    expires: "2021-06-16"
