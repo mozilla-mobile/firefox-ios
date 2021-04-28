@@ -1051,7 +1051,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.tables["Context Menu"].cells["menu-ViewMobile"], to: RequestMobileSite)
         screenState.tap(app.tables["Context Menu"].cells["menu-FindInPage"], to: FindInPage)
         screenState.tap(app.tables["Context Menu"].cells["menu-Bookmark"], forAction: Action.BookmarkThreeDots, Action.Bookmark)
-        screenState.tap(app.tables.cells["panelIconTopSites"], forAction: Action.PinToTopSitesPAM)
+        screenState.tap(app.tables.cells["action_pin"], forAction: Action.PinToTopSitesPAM)
         screenState.tap(app.tables.cells["menu-Copy-Link"], forAction: Action.CopyAddressPAM)
         screenState.backAction = cancelBackAction
         screenState.dismissOnUse = true
@@ -1173,7 +1173,7 @@ enum BrowserPerformAction: String {
     case copyURLOption = "menu-Copy-Link"
     case findInPageOption = "menu-FindInPage"
     case toggleDesktopOption = "menu-RequestDesktopSite"
-    case pinToTopSitesOption = "panelIconTopSites"
+    case pinToTopSitesOption = "action_pin"
     case sendToDeviceOption = "menu-Send-to-Device"
     case shareOption = "action_share"
 
