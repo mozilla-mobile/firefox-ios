@@ -103,7 +103,7 @@ extension PhotonActionSheetProtocol {
             TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .bookmark, value: .pageActionMenu)
         }
 
-        let addToShortcuts = PhotonActionSheetItem(title: Strings.AddToShortcutsActionTitle, iconString: "panelIconTopSites") { _,_  in
+        let addToShortcuts = PhotonActionSheetItem(title: Strings.AddToShortcutsActionTitle, iconString: "action_pin") { _,_  in
             guard let url = tab.url?.displayURL, let sql = self.profile.history as? SQLiteHistory else { return }
 
             sql.getSites(forURLs: [url.absoluteString]).bind { val -> Success in
@@ -119,7 +119,7 @@ extension PhotonActionSheetProtocol {
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .pinToTopSites)
         }
 
-        let removeFromShortcuts = PhotonActionSheetItem(title: Strings.RemoveFromShortcutsActionTitle, iconString: "panelIconTopSites") { _,_  in
+        let removeFromShortcuts = PhotonActionSheetItem(title: Strings.RemoveFromShortcutsActionTitle, iconString: "action_unpin") { _,_  in
             guard let url = tab.url?.displayURL, let sql = self.profile.history as? SQLiteHistory else { return }
 
             sql.getSites(forURLs: [url.absoluteString]).bind { val -> Success in
