@@ -18,7 +18,7 @@ class TabMoreMenuViewController: UIViewController, Themeable {
 
     let titles: [Int: [String]] = [ 1: [Strings.ShareAddToReadingList,
                                         Strings.BookmarkContextMenuTitle,
-                                        Strings.PinTopsiteActionTitle],
+                                        Strings.AddToShortcutsActionTitle],
                                     2: [Strings.CloseTabTitle],
                                     0: [Strings.CopyAddressTitle,
                                         Strings.ShareContextMenuTitle,
