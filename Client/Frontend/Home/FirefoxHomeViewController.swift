@@ -416,19 +416,12 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                 view.title = title
                 view.titleLabel.accessibilityIdentifier = "topSitesTitle"
                 view.moreButton.isHidden = true
+                return view
             case .libraryShortcuts:
                 view.title = title
                 view.titleLabel.accessibilityIdentifier = "libraryTitle"
+                return view
             }
-
-            let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
-            if theme == .dark {
-                view.titleLabel.textColor = .white
-            } else {
-                view.titleLabel.textColor = .black
-            }
-            return view
-
         case UICollectionView.elementKindSectionFooter:
                 let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "Footer", for: indexPath) as! ASFooterView
                 switch Section(indexPath.section) {
