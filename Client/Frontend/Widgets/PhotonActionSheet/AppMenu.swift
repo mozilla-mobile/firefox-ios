@@ -43,6 +43,7 @@ extension PhotonActionSheetProtocol {
                 controller.modalPresentationStyle = .fullScreen
             }
             controller.presentingModalViewControllerDelegate = vcDelegate
+            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .settings)
             
             // Wait to present VC in an async dispatch queue to prevent a case where dismissal
             // of this popover on iPad seems to block the presentation of the modal VC.
@@ -61,6 +62,11 @@ extension PhotonActionSheetProtocol {
         let iconString = noImageEnabled ? "menu-ShowImages" : "menu-NoImageMode"
         let noImageMode = PhotonActionSheetItem(title: imageModeTitle, iconString: iconString, isEnabled: noImageEnabled) { action,_ in
             NoImageModeHelper.toggle(isEnabled: action.isEnabled, profile: self.profile, tabManager: self.tabManager)
+            if noImageEnabled {
+                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .blockImagesDisabled)
+            } else {
+                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .blockImagesEnabled)
+            }
         }
 
         items.append(noImageMode)
@@ -69,6 +75,13 @@ extension PhotonActionSheetProtocol {
         let nightModeTitle = nightModeEnabled ? Strings.AppMenuTurnOffNightMode : Strings.AppMenuTurnOnNightMode
         let nightMode = PhotonActionSheetItem(title: nightModeTitle, iconString: "menu-NightMode", isEnabled: nightModeEnabled) { _, _ in
             NightModeHelper.toggle(self.profile.prefs, tabManager: self.tabManager)
+
+            if nightModeEnabled {
+                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .nightModeDisabled)
+            } else {
+                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .nightModeDisabled)
+            }
+
             // If we've enabled night mode and the theme is normal, enable dark theme
             if NightModeHelper.isActivated(self.profile.prefs), ThemeManager.instance.currentName == .normal {
                 ThemeManager.instance.current = DarkTheme()

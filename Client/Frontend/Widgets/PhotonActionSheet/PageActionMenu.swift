@@ -27,7 +27,7 @@ extension PhotonActionSheetProtocol {
             popoverPresentationController.sourceRect = buttonView.bounds
             popoverPresentationController.permittedArrowDirections = .up
         }
-
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
         presentableVC.present(controller, animated: true, completion: nil)
     }
 
@@ -53,19 +53,23 @@ extension PhotonActionSheetProtocol {
         let defaultUAisDesktop = UserAgent.isDesktop(ua: UserAgent.getUserAgent())
         let toggleActionTitle: String
         let toggleActionIcon: String
+        let siteTypeTelemetryObject: TelemetryWrapper.EventObject
         if defaultUAisDesktop {
             toggleActionTitle = tab.changedUserAgent ? Strings.AppMenuViewDesktopSiteTitleString : Strings.AppMenuViewMobileSiteTitleString
             toggleActionIcon = tab.changedUserAgent ?
                 "menu-RequestDesktopSite" : "menu-ViewMobile"
+            siteTypeTelemetryObject = .requestDesktopSite
         } else {
             toggleActionTitle = tab.changedUserAgent ? Strings.AppMenuViewMobileSiteTitleString : Strings.AppMenuViewDesktopSiteTitleString
             toggleActionIcon = tab.changedUserAgent ?
                 "menu-ViewMobile" : "menu-RequestDesktopSite"
+            siteTypeTelemetryObject = .requestMobileSite
         }
         let toggleDesktopSite = PhotonActionSheetItem(title: toggleActionTitle, iconString: toggleActionIcon) { _,_  in
             if let url = tab.url {
                 tab.toggleChangeUserAgent()
                 Tab.ChangeUserAgent.updateDomainList(forUrl: url, isChangedUA: tab.changedUserAgent, isPrivate: tab.isPrivate)
+                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: siteTypeTelemetryObject)
             }
         }
 
@@ -112,6 +116,7 @@ extension PhotonActionSheetProtocol {
                     success(Strings.AppMenuAddPinToShortcutsConfirmMessage, .pinPage)
                 }
             }
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .pinToTopSites)
         }
 
         let removeFromShortcuts = PhotonActionSheetItem(title: Strings.RemoveFromShortcutsActionTitle, iconString: "panelIconTopSites") { _,_  in
@@ -128,6 +133,7 @@ extension PhotonActionSheetProtocol {
                     success(Strings.AppMenuRemovePinFromShortcutsConfirmMessage, .removePinPage)
                 }
             }
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .removePinnedSite)
         }
 
         let sendToDevice = PhotonActionSheetItem(title: Strings.SendLinkToDeviceTitle, iconString: "menu-Send-to-Device") { _,_  in
@@ -147,12 +153,14 @@ extension PhotonActionSheetProtocol {
             devicePickerViewController.profileNeedsShutdown = false
             let navigationController = UINavigationController(rootViewController: devicePickerViewController)
             navigationController.modalPresentationStyle = .formSheet
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sendToDevice)
             bvc.present(navigationController, animated: true, completion: nil)
         }
 
         let sharePage = PhotonActionSheetItem(title: Strings.ShareContextMenuTitle, iconString: "action_share") { _,_  in
             guard let url = tab.canonicalURL?.displayURL else { return }
 
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
             if let temporaryDocument = tab.temporaryDocument {
                 temporaryDocument.getURL().uponQueue(.main, block: { tempDocURL in
                     // If we successfully got a temp file URL, share it like a downloaded file,
@@ -169,6 +177,7 @@ extension PhotonActionSheetProtocol {
         }
 
         let copyURL = PhotonActionSheetItem(title: Strings.AppMenuCopyLinkTitleString, iconString: "menu-Copy-Link") { _,_ in
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .copyAddress)
             if let url = tab.canonicalURL?.displayURL {
                 UIPasteboard.general.url = url
                 success(Strings.AppMenuCopyURLConfirmMessage, .copyUrl)
