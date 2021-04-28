@@ -276,21 +276,21 @@ class TabTrayViewController: UIViewController {
 extension TabTrayViewController: Themeable {
     @objc func applyTheme() {
         if #available(iOS 13.0, *) {
-            overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
-            view.backgroundColor = UIColor.systemGroupedBackground
-            navigationToolbar.tintColor = UIColor.label
-            navigationController?.navigationBar.tintColor = UIColor.label
-            navigationController?.toolbar.tintColor = UIColor.label
-            navigationItem.rightBarButtonItem?.tintColor = UIColor.label
+            overrideUserInterfaceStyle =  ThemeManager.instance.userInterfaceStyle
+        }
+        view.backgroundColor = UIColor.theme.tabTray.background
+        navigationController?.navigationBar.barTintColor = UIColor.theme.tabTray.toolbar
+        navigationController?.navigationBar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
+        navigationController?.toolbar.barTintColor = UIColor.theme.tabTray.toolbar
+        navigationController?.toolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
+        navigationItem.rightBarButtonItem?.tintColor = UIColor.theme.tabTray.toolbarButtonTint
+        navigationToolbar.barTintColor = UIColor.theme.tabTray.toolbar
+        navigationToolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
+        let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+        if theme == .dark {
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         } else {
-            view.backgroundColor = UIColor.theme.tableView.headerBackground
-            navigationController?.navigationBar.barTintColor = UIColor.theme.tabTray.toolbar
-            navigationController?.navigationBar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
-            navigationController?.toolbar.barTintColor = UIColor.theme.tabTray.toolbar
-            navigationController?.toolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
-            navigationItem.rightBarButtonItem?.tintColor = UIColor.theme.tabTray.toolbarButtonTint
-            navigationToolbar.barTintColor = UIColor.theme.tabTray.toolbar
-            navigationToolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
         }
         viewModel.syncedTabsController.applyTheme()
         setNeedsStatusBarAppearanceUpdate()

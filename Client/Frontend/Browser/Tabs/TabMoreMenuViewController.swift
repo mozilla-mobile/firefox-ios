@@ -69,9 +69,9 @@ class TabMoreMenuViewController: UIViewController, Themeable {
     
     func applyTheme() {
         if ThemeManager.instance.currentName == .normal {
-            tabMoreMenuHeader.backgroundColor = UIColor.Photon.Grey11
+            tabMoreMenuHeader.backgroundColor = UIColor.Photon.Grey10
         } else {
-            tabMoreMenuHeader.backgroundColor = UIColor.Photon.Grey85
+            tabMoreMenuHeader.backgroundColor = UIColor.Photon.Grey90
         }
     }
     
@@ -144,7 +144,7 @@ class TabMoreMenuViewController: UIViewController, Themeable {
         headerView.descriptionLabel.text = baseDomain != nil ? baseDomain!.contains("local") ? " " : baseDomain : " "
         headerView.titleLabel.text = tab.displayTitle
         headerView.imageView.image = tab.screenshot ?? UIImage()
-        headerView.backgroundColor = UIColor(rgb: 0xF2F2F7)
+        headerView.backgroundColor = UIColor.Photon.Grey10
     }
     
     func dismissMenu() {

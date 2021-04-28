@@ -12,30 +12,81 @@ private enum LibraryViewControllerUX {
     static let ButtonContainerHeight: CGFloat = 50
 }
 
+extension LibraryViewController: UIToolbarDelegate {
+    func position(for bar: UIBarPositioning) -> UIBarPosition {
+        return .topAttached
+    }
+}
+
 class LibraryViewController: UIViewController {
     let profile: Profile
     let panelDescriptors: [LibraryPanelDescriptor]
-
+    // Delegate
     weak var delegate: LibraryPanelDelegate?
-
-    fileprivate lazy var buttonContainerView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.alignment = .fill
-        stackView.distribution = .fillEqually
-        stackView.spacing = 0
-        stackView.clipsToBounds = true
-        stackView.accessibilityNavigationStyle = .combined
-        stackView.accessibilityLabel = .LibraryPanelChooserAccessibilityLabel
-        return stackView
-    }()
-
+    // Views
     fileprivate var controllerContainerView = UIView()
+    fileprivate var titleContainerView = UIView()
+    fileprivate var bottomBorder = UIView()
     fileprivate var buttons: [LibraryPanelButton] = []
-
+    // Colors
     fileprivate var buttonTintColor: UIColor?
     fileprivate var buttonSelectedTintColor: UIColor?
+    // Segment Control
+    lazy var librarySegmentControl: UISegmentedControl = {
+        var librarySegmentControl: UISegmentedControl
+        librarySegmentControl = UISegmentedControl(items: [UIImage(named: "library-bookmark")!,
+                                                           UIImage(named: "library-history")!,
+                                                           UIImage(named: "library-downloads")!,
+                                                           UIImage(named: "library-readinglist")!])
+        librarySegmentControl.accessibilityIdentifier = "librarySegmentControl"
+        librarySegmentControl.selectedSegmentIndex = 1
+        librarySegmentControl.addTarget(self, action: #selector(panelChanged), for: .valueChanged)
+        return librarySegmentControl
+    }()
 
+    fileprivate lazy var titleLabel: UILabel = {
+        let titleLabel = UILabel()
+        titleLabel.font = DynamicFontHelper.defaultHelper.DefaultStandardFontBold
+        titleLabel.textColor = UIColor.theme.tabTray.tabTitleText
+        titleLabel.textAlignment = .center
+        titleLabel.numberOfLines = 1
+        return titleLabel
+    }()
+
+    fileprivate lazy var topLeftButton: UIButton =  {
+        let button = UIButton()
+        button.setTitle(Strings.BackTitle, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        button.setTitleColor(UIColor.systemBlue, for: .normal)
+        button.addTarget(self, action: #selector(topLeftButtonAction), for: .touchUpInside)
+        return button
+    }()
+    
+    fileprivate lazy var topRightButton: UIButton =  {
+        let button = UIButton()
+        button.setTitle(String.AppSettingsDone, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        button.setTitleColor(UIColor.systemBlue, for: .normal)
+        button.addTarget(self, action: #selector(topRightButtonAction), for: .touchUpInside)
+        return button
+    }()
+    
+    
+    @objc func panelChanged() {
+        switch librarySegmentControl.selectedSegmentIndex {
+        case 0:
+            selectedPanel = .bookmarks
+        case 1:
+            selectedPanel = .history
+        case 2:
+            selectedPanel = .downloads
+        case 3:
+            selectedPanel = .readingList
+        default:
+            return
+        }
+    }
+    
     init(profile: Profile) {
         self.profile = profile
 
@@ -48,30 +99,82 @@ class LibraryViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        topLeftButtonSetup()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.theme.browser.background
+        view.backgroundColor =  UIColor.theme.homePanel.panelBackground
         self.edgesForExtendedLayout = []
-
-        view.addSubview(buttonContainerView)
         view.addSubview(controllerContainerView)
+        view.addSubview(librarySegmentControl)
+        view.addSubview(titleLabel)
+        view.addSubview(titleContainerView)
+        view.addSubview(bottomBorder)
+        view.addSubview(topRightButton)
+        var topPadding = 0
+        if #available(iOS 13, *) {} else {
+            topPadding = 20
+        }
+        
+        titleContainerView.addSubview(titleLabel)
+        titleContainerView.addSubview(topLeftButton)
+        titleContainerView.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(view)
+            make.top.equalTo(view.snp.top).inset(topPadding)
+            make.height.equalTo(58)
+        }
+        
+        titleLabel.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(titleContainerView)
+            make.centerY.equalTo(titleContainerView)
+            make.height.equalTo(30)
+        }
+        
+        topLeftButton.snp.makeConstraints { make in
+            make.leading.equalTo(titleContainerView).offset(20)
+            make.centerY.equalTo(titleContainerView)
+            make.width.equalTo(50)
+            make.height.equalTo(30)
+        }
+        
+        topRightButton.snp.makeConstraints { make in
+            make.trailing.equalTo(titleContainerView).offset(-20)
+            make.centerY.equalTo(titleContainerView)
+            make.width.equalTo(50)
+            make.height.equalTo(30)
+        }
+        
+        librarySegmentControl.snp.makeConstraints { make in
+            make.leading.equalTo(view).offset(16)
+            make.trailing.equalTo(view).offset(-16)
+            make.top.equalTo(titleContainerView.snp.bottom)
+        }
 
-        buttonContainerView.snp.makeConstraints { make in
-            make.bottom.equalTo(self.view.safeArea.bottom)
-            make.leading.trailing.equalTo(self.view).inset(14)
-            make.height.equalTo(LibraryViewControllerUX.ButtonContainerHeight)
+        librarySegmentControl.snp.makeConstraints { make in
+            make.width.lessThanOrEqualTo(343)
+            make.height.equalTo(32)
+        }
+        
+        bottomBorder.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            make.top.equalTo(librarySegmentControl.snp.bottom).offset(10)
+            make.height.equalTo(1)
         }
 
         controllerContainerView.snp.makeConstraints { make in
-            make.leading.trailing.top.equalTo(self.view)
-            make.bottom.equalTo(buttonContainerView.snp.top)
+            make.top.equalTo(bottomBorder.snp.bottom)
+            make.bottom.equalTo(view.snp.bottom)
+            make.leading.trailing.equalTo(view)
         }
 
-        updateButtons()
-        applyTheme()
         if selectedPanel == nil {
             selectedPanel = .bookmarks
         }
+        
+        applyTheme()
     }
 
     var selectedPanel: LibraryPanelType? = nil {
@@ -105,15 +208,36 @@ class LibraryViewController: UIViewController {
                     }
                 }
             }
-            self.updateButtonTints()
+            titleLabel.text = selectedPanel!.title
+            librarySegmentControl.selectedSegmentIndex = selectedPanel!.rawValue
         }
     }
 
+    func topLeftButtonSetup() {
+        topLeftButton.isHidden = true
+        if let panel = children.first as? UINavigationController, panel.viewControllers.count > 1 {
+            topLeftButton.isHidden = false
+        }
+        children.first?.navigationController?.toolbar.backgroundColor = .red
+    }
+    
+    @objc func topLeftButtonAction() {
+        if let panel = children.first as? UINavigationController, panel.viewControllers.count > 1 {
+            panel.popViewController(animated: true)
+        }
+    }
+    
+    @objc func topRightButtonAction() {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
     func setupLibraryPanel(_ panel: UIViewController, accessibilityLabel: String) {
         (panel as? LibraryPanel)?.libraryPanelDelegate = self
         panel.view.accessibilityNavigationStyle = .combined
         panel.view.accessibilityLabel = accessibilityLabel
         panel.title = accessibilityLabel
+        panel.navigationController?.setNavigationBarHidden(true, animated: false)
+        panel.navigationController?.isNavigationBarHidden = true
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -130,78 +254,15 @@ class LibraryViewController: UIViewController {
         }
     }
 
-    fileprivate func showPanel(_ panel: UIViewController) {
-        addChild(panel)
-        panel.beginAppearanceTransition(true, animated: false)
-        controllerContainerView.addSubview(panel.view)
-        panel.endAppearanceTransition()
-        panel.view.snp.makeConstraints { make in
+    fileprivate func showPanel(_ libraryPanel: UIViewController) {
+        addChild(libraryPanel)
+        libraryPanel.beginAppearanceTransition(true, animated: false)
+        controllerContainerView.addSubview(libraryPanel.view)
+        libraryPanel.endAppearanceTransition()
+        libraryPanel.view.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        panel.didMove(toParent: self)
-    }
-
-    @objc func tappedButton(_ sender: UIButton!) {
-        for (index, button) in buttons.enumerated() where button == sender {
-            let newSelectedPanel = LibraryPanelType(rawValue: index)
-
-            // If we're already on the selected panel and the user has
-            // tapped for a second time, pop it to the root view controller.
-            if newSelectedPanel == selectedPanel {
-                let panel = self.panelDescriptors[safe: index]?.navigationController
-                panel?.popToRootViewController(animated: true)
-            }
-
-            selectedPanel = newSelectedPanel
-            // Telemetry
-            switch selectedPanel {
-            case .bookmarks:
-                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .libraryPanel, value: .bookmarksPanel, extras: nil)
-            case .history:
-                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .libraryPanel, value: .historyPanel, extras: nil)
-            case .readingList:
-                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .libraryPanel, value: .readingPanel, extras: nil)
-            case .downloads:
-                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .libraryPanel, value: .downloadsPanel, extras: nil)
-            case .none:
-                print("none")
-            }
-        }
-    }
-
-    fileprivate func updateButtons() {
-        for panel in panelDescriptors {
-            let button = LibraryPanelButton()
-            button.addTarget(self, action: #selector(tappedButton), for: .touchUpInside)
-            if let image = UIImage.templateImageNamed(panel.imageName) {
-                button.setImage(image, for: .normal)
-            }
-
-            button.nameLabel.text = panel.accessibilityLabel
-            button.accessibilityLabel = panel.accessibilityLabel
-            button.accessibilityIdentifier = panel.accessibilityIdentifier
-            buttons.append(button)
-            self.buttonContainerView.addArrangedSubview(button)
-        }
-    }
-
-    func updateButtonTints() {
-        for (index, button) in self.buttons.enumerated() {
-            let image: String
-            if index == self.selectedPanel?.rawValue {
-                button.tintColor = self.buttonSelectedTintColor
-                button.nameLabel.textColor = self.buttonSelectedTintColor
-                image = panelDescriptors[index].activeImageName
-            } else {
-                button.tintColor = self.buttonTintColor
-                button.nameLabel.textColor = self.buttonTintColor
-                image = panelDescriptors[index].imageName
-            }
-
-            if let image = UIImage.templateImageNamed(image) {
-                button.setImage(image, for: .normal)
-            }
-        }
+        libraryPanel.didMove(toParent: self)
     }
 }
 
@@ -211,10 +272,17 @@ extension LibraryViewController: Themeable {
         panelDescriptors.forEach { item in
             (item.viewController as? Themeable)?.applyTheme()
         }
-        buttonContainerView.backgroundColor = UIColor.theme.homePanel.toolbarBackground
-        view.backgroundColor = UIColor.theme.homePanel.toolbarBackground
+        if #available(iOS 13.0, *) {
+            overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
+            librarySegmentControl.tintColor = .white
+        } else {
+            librarySegmentControl.tintColor = UIColor.theme.tabTray.tabTitleText
+        }
+        
+        titleLabel.textColor = UIColor.theme.tabTray.tabTitleText
+        bottomBorder.backgroundColor = UIColor.theme.tableView.separator
+        view.backgroundColor =  UIColor.theme.homePanel.panelBackground
         buttonTintColor = UIColor.theme.homePanel.toolbarTint
         buttonSelectedTintColor = UIColor.theme.homePanel.toolbarHighlight
-        updateButtonTints()
     }
 }

@@ -65,14 +65,14 @@ class OneLineTableViewCell: UITableViewCell, Themeable {
         bringSubviewToFront(containerView)
         
         containerView.snp.makeConstraints { make in
-            make.height.equalTo(50)
+            make.height.equalTo(44)
             make.top.bottom.equalToSuperview()
             make.leading.equalToSuperview()
             make.trailing.equalTo(accessoryView?.snp.leading ?? snp.trailing)
         }
         
         leftImageView.snp.makeConstraints { make in
-            make.height.width.equalTo(34)
+            make.height.width.equalTo(28)
             make.leading.equalTo(containerView.snp.leading).offset(15)
             make.centerY.equalTo(containerView.snp.centerY)
         }
@@ -97,8 +97,9 @@ class OneLineTableViewCell: UITableViewCell, Themeable {
     
     func applyTheme() {
         let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+        selectedView.backgroundColor = UIColor.theme.tableView.selectedBackground
         if theme == .dark {
-            self.backgroundColor = UIColor.Photon.Grey70
+            self.backgroundColor = UIColor.Photon.Grey80
             self.titleLabel.textColor = .white
         } else {
             self.backgroundColor = .white
@@ -146,6 +147,8 @@ class OneLineFooterView: UITableViewHeaderFooterView, Themeable {
     }
     
     let containerView = UIView()
+    var shortheight: Bool = false
+    private var shortHeight = 32
     
     private func initialViewSetup() {
         bordersHelper.initBorders(view: containerView)
@@ -156,7 +159,7 @@ class OneLineFooterView: UITableViewHeaderFooterView, Themeable {
         addSubview(containerView)
         
         containerView.snp.makeConstraints { make in
-            make.height.equalTo(58)
+            make.height.equalTo(shortheight ? 32 : 58)
             make.top.bottom.equalToSuperview()
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
@@ -183,19 +186,23 @@ class OneLineFooterView: UITableViewHeaderFooterView, Themeable {
 
     func applyTheme() {
         let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
-        // TODO: Replace this color with proper value once tab tray refresh is done
-        if theme == .dark {
-            self.titleLabel.textColor = .white
-            self.containerView.backgroundColor = UIColor(rgb: 0x1C1C1E)
-        } else {
-            self.titleLabel.textColor = .black
-            self.containerView.backgroundColor = UIColor(rgb: 0xF2F2F7)
-        }
+        self.containerView.backgroundColor = UIColor.theme.tableView.selectedBackground
+        self.titleLabel.textColor =  theme == .dark ? .white : .black
         bordersHelper.applyTheme()
     }
-
+    
+    func setupHeaderConstraint() {
+        containerView.snp.remakeConstraints { make in
+            make.height.equalTo(shortheight ? 32 : 58)
+            make.top.bottom.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+        }
+    }
+    
     override func prepareForReuse() {
         super.prepareForReuse()
+        setupHeaderConstraint()
         setDefaultBordersValues()
         applyTheme()
     }

@@ -490,7 +490,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             if isTablet {
                 app.buttons["TabToolbar.libraryButton"].tap()
             } else {
-                bookmarksElement.press(forDuration: 2, thenDragTo: app.buttons["LibraryPanels.Bookmarks"])
+                let bookmarksButton = app.segmentedControls["librarySegmentControl"].buttons.element(boundBy: 0)
+                bookmarksElement.press(forDuration: 2, thenDragTo: bookmarksButton)
             }
         }
 
@@ -551,7 +552,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             if isTablet {
                 app.buttons["TabToolbar.libraryButton"].tap()
             } else {
-                historyListElement.press(forDuration: 2, thenDragTo: app.buttons["LibraryPanels.History"])
+                historyListElement.press(forDuration: 2, thenDragTo: app.segmentedControls["librarySegmentControl"].buttons.element(boundBy: 1))
             }
         }
     }
@@ -564,7 +565,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             if isTablet {
                 app.buttons["TabToolbar.libraryButton"].tap()
             } else {
-                readingListElement.press(forDuration: 2, thenDragTo: app.buttons["LibraryPanels.ReadingList"])
+                let readinglistButton = app.segmentedControls["librarySegmentControl"].buttons.element(boundBy: 3)
+                readingListElement.press(forDuration: 2, thenDragTo: readinglistButton)
             }
         }
     }
@@ -576,7 +578,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             if isTablet {
                 app.buttons["TabToolbar.libraryButton"].tap()
             } else {
-                downloadsElement.press(forDuration: 2, thenDragTo: app.buttons["LibraryPanels.Downloads"])
+                let downloadsButton = app.segmentedControls["librarySegmentControl"].buttons.element(boundBy: 2)
+                downloadsElement.press(forDuration: 2, thenDragTo: downloadsButton)
             }
         }
     }
@@ -1070,10 +1073,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.dismissOnUse = true
         screenState.backAction = navigationControllerBackAction
 
-        screenState.tap(app.buttons["LibraryPanels.Bookmarks"], to: LibraryPanel_Bookmarks)
-        screenState.tap(app.buttons["LibraryPanels.History"], to: LibraryPanel_History)
-        screenState.tap(app.buttons["LibraryPanels.ReadingList"], to: LibraryPanel_ReadingList)
-        screenState.tap(app.buttons["LibraryPanels.Downloads"], to: LibraryPanel_Downloads)
+        screenState.tap(app.segmentedControls["librarySegmentControl"].buttons.element(boundBy: 0), to: LibraryPanel_Bookmarks)
+        screenState.tap(app.segmentedControls["librarySegmentControl"].buttons.element(boundBy: 1), to: LibraryPanel_History)
+        screenState.tap(app.segmentedControls["librarySegmentControl"].buttons.element(boundBy: 2), to: LibraryPanel_Downloads)
+        screenState.tap(app.segmentedControls["librarySegmentControl"].buttons.element(boundBy: 3), to: LibraryPanel_ReadingList)
     }
 
     map.addScreenState(BrowserTabMenu) { screenState in

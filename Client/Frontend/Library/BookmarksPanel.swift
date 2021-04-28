@@ -82,7 +82,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         tableView.addGestureRecognizer(tableViewLongPressRecognizer)
         tableView.accessibilityIdentifier = "Bookmarks List"
         tableView.allowsSelectionDuringEditing = true
-
+        tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
         self.editBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit) { _ in
             self.enableEditMode()
         }
@@ -449,7 +449,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return section == BookmarksSection.recent.rawValue && !recentBookmarks.isEmpty ? UITableView.automaticDimension : 0
+        return section == BookmarksSection.recent.rawValue && !recentBookmarks.isEmpty ? SiteTableViewControllerUX.HeaderHeight : 0
     }
 
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

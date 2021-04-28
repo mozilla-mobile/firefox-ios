@@ -22,11 +22,24 @@ protocol LibraryPanelDelegate: AnyObject {
     func libraryPanel(didSelectURLString url: String, visitType: VisitType)
 }
 
-enum LibraryPanelType: Int {
+enum LibraryPanelType: Int, CaseIterable {
     case bookmarks = 0
     case history = 1
-    case readingList = 2
-    case downloads = 3
+    case downloads = 2
+    case readingList = 3
+    
+    var title: String {
+        switch self {
+        case .bookmarks:
+            return Strings.AppMenuBookmarksTitleString
+        case .history:
+            return Strings.AppMenuHistoryTitleString
+        case .downloads:
+            return Strings.AppMenuDownloadsTitleString
+        case .readingList:
+            return Strings.AppMenuReadingListTitleString
+        }
+    }
 }
 
 /**
@@ -89,20 +102,20 @@ class LibraryPanels {
 
         LibraryPanelDescriptor(
             makeViewController: { profile in
-                return ReadingListPanel(profile: profile)
-            },
-            profile: profile,
-            imageName: "ReadingList",
-            accessibilityLabel: .LibraryPanelReadingListAccessibilityLabel,
-            accessibilityIdentifier: "LibraryPanels.ReadingList"),
-
-        LibraryPanelDescriptor(
-            makeViewController: { profile in
                 return DownloadsPanel(profile: profile)
             },
             profile: profile,
             imageName: "Downloads",
             accessibilityLabel: .LibraryPanelDownloadsAccessibilityLabel,
-            accessibilityIdentifier: "LibraryPanels.Downloads")
+            accessibilityIdentifier: "LibraryPanels.Downloads"),
+
+        LibraryPanelDescriptor(
+            makeViewController: { profile in
+                return ReadingListPanel(profile: profile)
+            },
+            profile: profile,
+            imageName: "ReadingList",
+            accessibilityLabel: .LibraryPanelReadingListAccessibilityLabel,
+            accessibilityIdentifier: "LibraryPanels.ReadingList")
     ]
 }

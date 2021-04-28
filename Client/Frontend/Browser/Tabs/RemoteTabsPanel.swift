@@ -36,12 +36,14 @@ protocol RemotePanelDelegate: AnyObject {
     func remotePanel(didSelectURL url: URL, visitType: VisitType)
 }
 
-class RemoteTabsPanel: SiteTableViewController {
+class RemoteTabsPanel: UIViewController, Themeable {
     var remotePanelDelegate: RemotePanelDelegate?
+    var profile: Profile
     fileprivate lazy var tableViewController = RemoteTabsTableViewController()
-
-    override init(profile: Profile) {
-        super.init(profile: profile)
+    
+    init(profile: Profile) {
+        self.profile = profile
+        super.init(nibName: nil, bundle: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: .FirefoxAccountChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: .ProfileDidFinishSyncing, object: nil)
     }
@@ -52,12 +54,8 @@ class RemoteTabsPanel: SiteTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         tableViewController.profile = profile
         tableViewController.remoteTabsPanel = self
-
-        view.backgroundColor = UIColor.theme.tableView.rowBackground
-        tableViewController.tableView.backgroundColor = .clear
         addChild(tableViewController)
         self.view.addSubview(tableViewController.view)
 
@@ -66,11 +64,13 @@ class RemoteTabsPanel: SiteTableViewController {
         }
 
         tableViewController.didMove(toParent: self)
+        
+        applyTheme()
     }
 
-    override func applyTheme() {
-        super.applyTheme()
-        tableViewController.tableView.backgroundColor = UIColor.theme.tableView.rowBackground
+    func applyTheme() {
+        view.backgroundColor = UIColor.theme.tabTray.background
+        tableViewController.tableView.backgroundColor =  UIColor.theme.homePanel.panelBackground
         tableViewController.tableView.separatorColor = UIColor.theme.tableView.separator
         tableViewController.tableView.reloadData()
         tableViewController.refreshTabs()
@@ -143,9 +143,10 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let clientTabs = self.clientAndTabs[section]
         let client = clientTabs.client
-        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: RemoteClientIdentifier) as! OneLineFooterView
+        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: RemoteClientIdentifier) as! SiteTableViewHeader
         view.frame = CGRect(width: tableView.frame.width, height: RemoteTabsPanelUX.HeaderHeight)
         view.titleLabel.text = client.name
+        view.showBorder(for: .bottom, true)
         view.showBorder(for: .top, section != 0)
 
         /*
@@ -193,7 +194,7 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
     }
 }
 
-// MARK: -
+// MARK: - RemoteTabsPanelErrorDataSource
 
 class RemoteTabsPanelErrorDataSource: NSObject, RemoteTabsPanelDataSource {
     weak var remoteTabsPanel: RemoteTabsPanel?
@@ -247,7 +248,7 @@ class RemoteTabsPanelErrorDataSource: NSObject, RemoteTabsPanelDataSource {
 
 fileprivate let emptySyncImageName = "emptySync"
 
-// MARK: -
+// MARK: - RemoteTabsErrorCell
 
 class RemoteTabsErrorCell: UITableViewCell {
     static let Identifier = "RemoteTabsErrorCell"
@@ -308,7 +309,7 @@ class RemoteTabsErrorCell: UITableViewCell {
             make.top.greaterThanOrEqualTo(contentView.snp.top).offset(20).priority(1000)
         }
 
-        containerView.backgroundColor = .clear
+        containerView.backgroundColor =  .clear
 
         applyTheme()
     }
@@ -326,7 +327,7 @@ class RemoteTabsErrorCell: UITableViewCell {
     }
 }
 
-// MARK: -
+// MARK: - RemoteTabsNotLoggedInCell
 
 class RemoteTabsNotLoggedInCell: UITableViewCell {
     static let Identifier = "RemoteTabsNotLoggedInCell"
@@ -478,7 +479,7 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.addGestureRecognizer(longPressRecognizer)
-        tableView.register(OneLineFooterView.self, forHeaderFooterViewReuseIdentifier: RemoteClientIdentifier)
+        tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: RemoteClientIdentifier)
         tableView.register(SimpleTwoLineCell.self, forCellReuseIdentifier: RemoteTabIdentifier)
 
         tableView.rowHeight = RemoteTabsPanelUX.RowHeight
@@ -503,7 +504,7 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
             addRefreshControl()
         }
 
-        onRefreshPulled()
+        refreshTabs(updateCache: true)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -513,7 +514,7 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
         }
     }
 
-    // MARK: - Refreshing TableView
+// MARK: - Refreshing TableView
 
     func addRefreshControl() {
         let control = UIRefreshControl()

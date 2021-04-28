@@ -55,7 +55,7 @@ fileprivate class DarkToolbarButtonColor: ToolbarButtonColor {
 fileprivate class DarkTabTrayColor: TabTrayColor {
     override var tabTitleText: UIColor { return defaultTextAndTint }
     override var tabTitleBlur: UIBlurEffect.Style { return UIBlurEffect.Style.dark }
-    override var background: UIColor { return UIColor.Photon.Grey85 }
+    override var background: UIColor { return UIColor.Photon.Grey80 }
     override var cellBackground: UIColor { return defaultBackground }
     override var toolbar: UIColor { return UIColor.Photon.Grey80 }
     override var toolbarButtonTint: UIColor { return defaultTextAndTint }
@@ -89,11 +89,12 @@ fileprivate class DarkHomePanelColor: HomePanelColor {
     override var toolbarBackground: UIColor { return defaultBackground }
     override var toolbarHighlight: UIColor { return UIColor.Photon.Blue40 }
     override var toolbarTint: UIColor { return UIColor.Photon.Grey30 }
-    override var panelBackground: UIColor { return UIColor.Photon.Grey90 }
+    override var topSiteHeaderTitle: UIColor { return UIColor.Photon.White100 }
+    override var panelBackground: UIColor { return UIColor.Photon.Grey80 }
     override var separator: UIColor { return defaultSeparator }
     override var border: UIColor { return UIColor.Photon.Grey60 }
     override var buttonContainerBorder: UIColor { return separator }
-
+    
     override var welcomeScreenText: UIColor { return UIColor.Photon.Grey30 }
     override var bookmarkIconBorder: UIColor { return UIColor.Photon.Grey30 }
     override var bookmarkFolderBackground: UIColor { return UIColor.Photon.Grey80 }
@@ -140,7 +141,11 @@ class DarkDefaultBrowserCardColor: DefaultBrowserCardColor {
 }
 
 class DarkOnboardingColor: OnboardingColor {
-    override var backgroundColor: UIColor { return UIColor.Photon.Grey85 }
+    override var backgroundColor: UIColor { return UIColor.Photon.Grey90 }
+}
+
+class DarkRemoteTabTrayColor: RemoteTabTrayColor {
+    override var background: UIColor { return UIColor.Photon.Grey70 }
 }
 
 class DarkTheme: NormalTheme {
@@ -158,4 +163,5 @@ class DarkTheme: NormalTheme {
     override var actionMenu: ActionMenuColor { return DarkActionMenuColor() }
     override var defaultBrowserCard: DefaultBrowserCardColor { return DarkDefaultBrowserCardColor() }
     override var onboarding: OnboardingColor { return DarkOnboardingColor() }
+    override var remotePanel: RemoteTabTrayColor { return DarkRemoteTabTrayColor() }
 }

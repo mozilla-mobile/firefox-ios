@@ -38,7 +38,7 @@ class TwoLineImageOverlayCell: UITableViewCell, Themeable {
     var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.textAlignment = .left
         label.numberOfLines = 1
         return label
@@ -79,14 +79,14 @@ class TwoLineImageOverlayCell: UITableViewCell, Themeable {
         bringSubviewToFront(containerView)
 
         containerView.snp.makeConstraints { make in
-            make.height.equalTo(55)
+            make.height.equalTo(58)
             make.top.bottom.equalToSuperview()
             make.leading.equalToSuperview()
             make.trailing.equalTo(accessoryView?.snp.leading ?? snp.trailing)
         }
 
         leftImageView.snp.makeConstraints { make in
-            make.height.width.equalTo(34)
+            make.height.width.equalTo(28)
             make.leading.equalTo(containerView.snp.leading).offset(15)
             make.centerY.equalTo(containerView.snp.centerY)
         }
@@ -112,7 +112,7 @@ class TwoLineImageOverlayCell: UITableViewCell, Themeable {
         }
 
         descriptionLabel.snp.makeConstraints { make in
-            make.height.equalTo(14)
+            make.height.equalTo(16)
             make.bottom.equalTo(midView.snp.bottom).offset(-4)
             make.leading.equalTo(midView.snp.leading)
             make.trailing.equalTo(midView.snp.trailing)
@@ -125,13 +125,13 @@ class TwoLineImageOverlayCell: UITableViewCell, Themeable {
     func applyTheme() {
         let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
         if theme == .dark {
-            self.backgroundColor = UIColor.Photon.Grey70
+            self.backgroundColor = UIColor.Photon.Grey80
             self.titleLabel.textColor = .white
             self.descriptionLabel.textColor = UIColor.Photon.Grey40
         } else {
             self.backgroundColor = .white
             self.titleLabel.textColor = .black
-            self.descriptionLabel.textColor = UIColor.Photon.Grey75A60
+            self.descriptionLabel.textColor = UIColor.Photon.DarkGrey05
         }
     }
     
@@ -234,13 +234,13 @@ class SimpleTwoLineCell: UITableViewCell, Themeable {
     func applyTheme() {
         let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
         if theme == .dark {
-            self.backgroundColor = UIColor.Photon.Grey70
+            self.backgroundColor = UIColor.Photon.Grey80
             self.titleLabel.textColor = .white
             self.descriptionLabel.textColor = UIColor.Photon.Grey40
         } else {
             self.backgroundColor = .white
             self.titleLabel.textColor = .black
-            self.descriptionLabel.textColor = UIColor.Photon.Grey75A60
+            self.descriptionLabel.textColor = UIColor.Photon.DarkGrey05
         }
     }
     
@@ -330,6 +330,7 @@ class TwoLineHeaderFooterView: UITableViewHeaderFooterView, Themeable {
 
     func applyTheme() {
         let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+        self.backgroundColor = UIColor.theme.tableView.selectedBackground
         if theme == .dark {
             self.titleLabel.textColor = .white
             self.descriptionLabel.textColor = UIColor.Photon.Grey40
