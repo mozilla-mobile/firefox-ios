@@ -352,6 +352,20 @@ workflows:
         inputs:
         - content: |-
             #!/usr/bin/env bash
+            set -e
+            set -x
+            BRANCH=$BITRISE_GIT_BRANCH
+
+            if [[ $BRANCH == update-cartfile-new-as-tag-* ]]
+            then
+                echo "Building with new A-S version"
+                envman add --key NEW_AS_VERSION --value New_AS_Version
+            fi
+        title: Save Branch Name
+    - script@1.1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
             # fail if any commands fails
             set -e
             # debug log
@@ -483,6 +497,12 @@ workflows:
     - slack@3.1:
         inputs:
         - webhook_url: $WEBHOOK_SLACK_TOKEN
+    - slack@3.1:
+        run_if: '{{getenv "NEW_AS_VERSION" | eq "New_AS_Version"}}'
+        inputs:
+        - channel: "#firefox-ios"
+        - text: Build status using latest A-S
+        - webhook_url: $WEBHOOK_SLACK_TOKEN_2
     description: >-
       This Workflow is to run tests (currently SmokeTest) when there is a merge
       in master

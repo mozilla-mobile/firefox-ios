@@ -35,7 +35,13 @@ jobs:
       run: |
         cd test-fixtures/
         [ ! -e newest_tag.txt ] || rm newest_tag.txt
+    - name: Script to check if branch exists to not commit again
+      run: |-
+        branch=$(curl -X GET -s -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/mozilla-mobile/firefox-ios/branches?per_page=100 | jq -r '.[].name | select(contains("update-cartfile-new-as-tag-${{ env.version }}"))')
+        echo $branch
+        if [ -z "$branch" ]; then echo "BRANCH_CREATED=false" >> $GITHUB_ENV; else echo "BRANCH_CREATED=true"  >> $GITHUB_ENV;fi
     - name: Update A-S release in Cartfile
+      if: env.BRANCH_CREATED == 'false'
       run: |-
         git diff
         git config --global user.email "firefox-test-engineering@mozilla.com"
@@ -43,6 +49,7 @@ jobs:
         git diff --quiet || (git add Cartfile Cartfile.resolved)
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v3
+      if: env.BRANCH_CREATED == 'false'
       with:
         commit-message: Auto update Cartfile with latest A-S release ${{ env.version }}
         author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
