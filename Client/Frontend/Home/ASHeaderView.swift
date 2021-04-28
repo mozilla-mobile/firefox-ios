@@ -25,6 +25,8 @@ class ASHeaderView: UICollectionReusableView {
         titleLabel.minimumScaleFactor = 0.6
         titleLabel.numberOfLines = 1
         titleLabel.adjustsFontSizeToFitWidth = true
+        let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+        titleLabel.textColor = theme == .dark ? .white : .black
         return titleLabel
     }()
 
@@ -74,7 +76,7 @@ class ASHeaderView: UICollectionReusableView {
         }
         moreButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         titleLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(25)
+            make.leading.equalTo(self.safeArea.leading).inset(titleInsets)
             make.trailing.equalTo(moreButton.snp.leading).inset(-FirefoxHomeHeaderViewUX.TitleTopInset)
             make.top.equalTo(self.snp.top).offset(ASHeaderView.verticalInsets)
             make.bottom.equalToSuperview().offset(-ASHeaderView.verticalInsets)

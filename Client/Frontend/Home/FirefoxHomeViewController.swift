@@ -400,29 +400,27 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-                let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header", for: indexPath) as! ASHeaderView
-                let title = Section(indexPath.section).title
-                switch Section(indexPath.section) {
-                case .pocket:
-                    view.title = title
-                    view.moreButton.isHidden = false
-                    view.moreButton.setTitle(Strings.PocketMoreStoriesText, for: .normal)
-                    view.moreButton.addTarget(self, action: #selector(showMorePocketStories), for: .touchUpInside)
-                    view.titleLabel.textColor = UIColor.Pocket.red
-                    view.titleLabel.accessibilityIdentifier = "pocketTitle"
-                    view.moreButton.setTitleColor(UIColor.Pocket.red, for: .normal)
-                    return view
-                case .topSites:
-                    view.title = title
-                    view.titleLabel.accessibilityIdentifier = "topSitesTitle"
-                    view.moreButton.isHidden = true
-                    view.titleLabel.textColor = .black
-                    return view
-                case .libraryShortcuts:
-                    view.title = title
-                    view.titleLabel.textColor = .black
-                    view.titleLabel.accessibilityIdentifier = "libraryTitle"
-                    return view
+            let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header", for: indexPath) as! ASHeaderView
+            let title = Section(indexPath.section).title
+            switch Section(indexPath.section) {
+            case .pocket:
+                view.title = title
+                view.moreButton.isHidden = false
+                view.moreButton.setTitle(Strings.PocketMoreStoriesText, for: .normal)
+                view.moreButton.addTarget(self, action: #selector(showMorePocketStories), for: .touchUpInside)
+                view.titleLabel.textColor = UIColor.Pocket.red
+                view.titleLabel.accessibilityIdentifier = "pocketTitle"
+                view.moreButton.setTitleColor(UIColor.Pocket.red, for: .normal)
+                return view
+            case .topSites:
+                view.title = title
+                view.titleLabel.accessibilityIdentifier = "topSitesTitle"
+                view.moreButton.isHidden = true
+                return view
+            case .libraryShortcuts:
+                view.title = title
+                view.titleLabel.accessibilityIdentifier = "libraryTitle"
+                return view
             }
         case UICollectionView.elementKindSectionFooter:
                 let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "Footer", for: indexPath) as! ASFooterView
