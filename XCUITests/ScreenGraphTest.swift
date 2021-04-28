@@ -62,13 +62,10 @@ extension ScreenGraphTest {
 
         navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenu)
-//        navigator.back()
         XCTAssertEqual(navigator.screenState, BrowserTabMenu)
 
         // Nothing should happen here, because night mode is already on.
         navigator.toggleOn(navigator.userState.nightMode, withAction: TestActions.ToggleNightMode)
-//        navigator.nowAt(BrowserTab)
-//        navigator.goto(BrowserTabMenu)
         XCTAssertTrue(navigator.userState.nightMode)
         XCTAssertEqual(navigator.screenState, BrowserTabMenu)
         
@@ -77,8 +74,7 @@ extension ScreenGraphTest {
         // Switch night mode off.
         navigator.toggleOff(navigator.userState.nightMode, withAction: TestActions.ToggleNightMode)
         XCTAssertFalse(navigator.userState.nightMode)
-//        navigator.back()
-//        XCTAssertEqual(navigator.screenState, BrowserTabMenu)
+        XCTAssertEqual(navigator.screenState, BrowserTabMenu)
     }
 
     func testChainedActionPerf1() {
