@@ -851,12 +851,8 @@ class BrowserViewController: UIViewController {
             libraryViewController.selectedPanel = panel
         }
 
-        let libraryDrawerViewController = self.libraryDrawerViewController ?? DrawerViewController(childViewController: libraryViewController)
-        self.libraryDrawerViewController = libraryDrawerViewController
-
-        addChild(libraryDrawerViewController)
-        view.addSubview(libraryDrawerViewController.view)
-        libraryDrawerViewController.view.snp.remakeConstraints(constraintsForLibraryDrawerView)
+        libraryViewController.modalPresentationStyle = .formSheet
+        self.present(libraryViewController, animated: true, completion: nil)
     }
 
     fileprivate func createSearchControllerIfNeeded() {

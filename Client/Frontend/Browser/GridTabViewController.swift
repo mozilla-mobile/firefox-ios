@@ -640,7 +640,7 @@ class TabCell: UICollectionViewCell {
         let view = UIView()
         view.layer.cornerRadius = GridTabTrayControllerUX.CornerRadius
         view.clipsToBounds = true
-        view.backgroundColor = UIColor.theme.tabTray.cellBackground
+        view.backgroundColor =  .blue// UIColor.theme.tabTray.cellBackground
         return view
     }()
 

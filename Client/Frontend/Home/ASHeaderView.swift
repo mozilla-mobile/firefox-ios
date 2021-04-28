@@ -20,7 +20,7 @@ class ASHeaderView: UICollectionReusableView {
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.text = self.title
-        titleLabel.textColor = .black
+        titleLabel.textColor = UIColor.theme.homePanel.topSiteHeaderTitle
         titleLabel.font = FirefoxHomeHeaderViewUX.TextFont
         titleLabel.minimumScaleFactor = 0.6
         titleLabel.numberOfLines = 1
@@ -60,7 +60,6 @@ class ASHeaderView: UICollectionReusableView {
         moreButton.accessibilityIdentifier = nil;
         titleLabel.text = nil
         moreButton.removeTarget(nil, action: nil, for: .allEvents)
-        titleLabel.textColor = .black
         moreButton.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
     }
 
@@ -86,6 +85,7 @@ class ASHeaderView: UICollectionReusableView {
         super.layoutSubviews()
         leftConstraint?.update(offset: titleInsets)
         rightConstraint?.update(offset: -titleInsets)
+        titleLabel.textColor = UIColor.theme.homePanel.topSiteHeaderTitle
     }
 
     required init?(coder aDecoder: NSCoder) {

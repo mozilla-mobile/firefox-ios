@@ -114,6 +114,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         tableView.addGestureRecognizer(longPressRecognizer)
         tableView.accessibilityIdentifier = "History List"
         tableView.prefetchDataSource = self
+        tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -481,7 +482,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let header = view as? UITableViewHeaderFooterView {
             header.textLabel?.textColor = UIColor.theme.tableView.headerTextDark
-            header.contentView.backgroundColor = UIColor.theme.tableView.headerBackground
+            header.contentView.backgroundColor = UIColor.theme.tableView.selectedBackground
         }
     }
 

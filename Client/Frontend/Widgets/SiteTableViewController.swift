@@ -54,7 +54,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, Themeable {
 
     func applyTheme() {
         titleLabel.textColor = UIColor.theme.tableView.headerTextDark
-        contentView.backgroundColor = UIColor.theme.tableView.headerBackground
+        contentView.backgroundColor = UIColor.theme.tableView.selectedBackground
         bordersHelper.applyTheme()
     }
 
@@ -198,7 +198,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.headerTextDark]
         setNeedsStatusBarAppearanceUpdate()
 
-        tableView.backgroundColor = UIColor.theme.tableView.rowBackground
+        tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
         tableView.separatorColor = UIColor.theme.tableView.separator
         if let rows = tableView.indexPathsForVisibleRows {
             tableView.reloadRows(at: rows, with: .none)

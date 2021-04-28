@@ -107,7 +107,7 @@ class LoadingBarColor {
 class TabTrayColor {
     var tabTitleText: UIColor { return UIColor.black }
     var tabTitleBlur: UIBlurEffect.Style { return UIBlurEffect.Style.extraLight }
-    var background: UIColor { return UIColor.Photon.Grey11 }
+    var background: UIColor { return UIColor.Photon.LightGrey10 }
     var cellBackground: UIColor { return defaultBackground }
     var toolbar: UIColor { return defaultBackground }
     var toolbarButtonTint: UIColor { return defaultTextAndTint }
@@ -149,7 +149,7 @@ class HomePanelColor {
     var toolbarBackground: UIColor { return defaultBackground }
     var toolbarHighlight: UIColor { return UIColor.Photon.Blue40 }
     var toolbarTint: UIColor { return UIColor.Photon.Grey50 }
-
+    var topSiteHeaderTitle: UIColor { return .black }
     var panelBackground: UIColor { return UIColor.Photon.White100 }
 
     var separator: UIColor { return defaultSeparator }
@@ -214,6 +214,10 @@ class OnboardingColor {
     var backgroundColor: UIColor { return UIColor.white }
 }
 
+class RemoteTabTrayColor {
+    var background: UIColor { return UIColor.white }
+}
+
 protocol Theme {
     var name: String { get }
     var tableView: TableViewColor { get }
@@ -231,6 +235,7 @@ protocol Theme {
     var switchToggleTheme: GeneralColor { get }
     var defaultBrowserCard: DefaultBrowserCardColor { get }
     var onboarding: OnboardingColor { get }
+    var remotePanel: RemoteTabTrayColor { get }
 }
 
 class NormalTheme: Theme {
@@ -250,4 +255,5 @@ class NormalTheme: Theme {
     var switchToggleTheme: GeneralColor { return GeneralColor() }
     var defaultBrowserCard: DefaultBrowserCardColor { return DefaultBrowserCardColor() }
     var onboarding: OnboardingColor { return OnboardingColor() }
+    var remotePanel: RemoteTabTrayColor { return RemoteTabTrayColor() }
 }

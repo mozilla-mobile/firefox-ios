@@ -187,7 +187,7 @@ extension UIColor {
     }
 
     struct Custom {
-        static let selectedHighlightDark = UIColor(rgb: 0x2D2D2D)
-        static let selectedHighlightLight = UIColor(rgb: 0xd1d1d6)
+        static let selectedHighlightDark = UIColor.Photon.Grey70
+        static let selectedHighlightLight = UIColor.Photon.LightGrey20
     }
 }
