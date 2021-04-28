@@ -265,7 +265,7 @@ extension FirefoxHomeViewController {
         var title: String? {
             switch self {
             case .pocket: return Strings.ASPocketTitle
-            case .topSites: return Strings.ASTopSitesTitle
+            case .topSites: return Strings.ASShortcutsTitle
             case .libraryShortcuts: return Strings.AppMenuLibraryTitleString
             }
         }
@@ -866,11 +866,11 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
             self.hideURLFromTopSites(site)
         })
 
-        let pinTopSite = PhotonActionSheetItem(title: Strings.PinTopsiteActionTitle, iconString: "action_pin", handler: { _, _ in
+        let pinTopSite = PhotonActionSheetItem(title: Strings.AddToShortcutsActionTitle, iconString: "action_pin", handler: { _, _ in
             self.pinTopSite(site)
         })
 
-        let removePinTopSite = PhotonActionSheetItem(title: Strings.RemovePinTopsiteActionTitle, iconString: "action_unpin", handler: { _, _ in
+        let removePinTopSite = PhotonActionSheetItem(title: Strings.RemoveFromShortcutsActionTitle, iconString: "action_unpin", handler: { _, _ in
             self.removePinTopSite(site)
         })
 
