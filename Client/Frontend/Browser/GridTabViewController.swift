@@ -93,7 +93,16 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     
     func focusTab() {
         guard let currentTab = tabManager.selectedTab, let index = self.tabDisplayManager.dataStore.index(of: currentTab) else { return }
-        self.collectionView.scrollToItem(at: IndexPath(item: index, section: 0), at: [.centeredVertically, .centeredHorizontally] , animated: false)
+        let indexPath = IndexPath(item: index, section: 0)
+        guard var rect = self.collectionView.layoutAttributesForItem(at: indexPath)?.frame else { return }
+        if index >= self.tabDisplayManager.dataStore.count - 2 {
+            DispatchQueue.main.async {
+                rect.origin.y += 10
+                self.collectionView.scrollRectToVisible(rect, animated: false)
+            }
+        } else {
+            self.collectionView.scrollToItem(at: indexPath, at: [.centeredVertically, .centeredHorizontally] , animated: false)
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
