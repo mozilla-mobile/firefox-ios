@@ -887,9 +887,12 @@ tabs:
       Measures the current open tab count as the application
       goes to background. Each background event adds to this
       metric, making it the cumulative sum of all open tabs
-      when the app goes to background. This can be divided by
-      the number of baseline pings to determine the average
-      open tab count.
+      when the app goes to background during the period of
+      time covered by a single metrics ping. This can be
+      divided by the number of baseline pings with
+      `ping_info.reason="inactive"` from the `start_time` to
+      the `end_time` of the metrics ping to determine the
+      average open tabs per foreground "session".
     bugs:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
