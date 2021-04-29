@@ -45,7 +45,8 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
 
         // Check that it appears in the reading list home panel
         BrowserUtils.openLibraryMenu(tester())
-        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.ReadingList")
+        tester().tapView(withAccessibilityIdentifier:
+                            "menu-panel-ReadingList")
 
         // Tap to open it
         let firstIndexPath = IndexPath(row: 0, section: 0)
@@ -58,12 +59,10 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
 
         // Check that it no longer appears in the reading list home panel
         BrowserUtils.openLibraryMenu(tester())
-        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.Bookmarks")
-        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.ReadingList")
+        tester().tapView(withAccessibilityIdentifier: "menu-panel-ReadingList")
         waitForEmptyReadingList()
 
         // Close the menu
-        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.History")
         BrowserUtils.closeLibraryMenu(tester())
     }
 
@@ -80,7 +79,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
 
         // Check that it appears in the reading list home panel and make sure it marked as unread
         BrowserUtils.openLibraryMenu(tester())
-        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.ReadingList")
+        tester().tapView(withAccessibilityIdentifier: "menu-panel-ReadingList")
 
         tester().waitForView(withAccessibilityLabel: "Readable page, unread, localhost")
         // Select to Read
@@ -90,6 +89,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
 
         // Go back to the reading list panel
         BrowserUtils.openLibraryMenu(tester())
+        tester().tapView(withAccessibilityIdentifier: "menu-panel-ReadingList")
 
         // Make sure the article is marked as read
         tester().waitForView(withAccessibilityLabel: "Readable page, read, localhost")
@@ -113,7 +113,6 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
         waitForEmptyReadingList()
 
         // Close Reading (and so Library) panel
-        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.History")
         BrowserUtils.closeLibraryMenu(tester())
     }
 

@@ -59,19 +59,22 @@ extension ScreenGraphTest {
         // Switch night mode on, by toggling.
         navigator.performAction(TestActions.ToggleNightMode)
         XCTAssertTrue(navigator.userState.nightMode)
-        navigator.back()
-        XCTAssertEqual(navigator.screenState, BrowserTab)
+
+        navigator.nowAt(BrowserTab)
+        navigator.goto(BrowserTabMenu)
+        XCTAssertEqual(navigator.screenState, BrowserTabMenu)
 
         // Nothing should happen here, because night mode is already on.
         navigator.toggleOn(navigator.userState.nightMode, withAction: TestActions.ToggleNightMode)
         XCTAssertTrue(navigator.userState.nightMode)
-        XCTAssertEqual(navigator.screenState, BrowserTab)
-
+        XCTAssertEqual(navigator.screenState, BrowserTabMenu)
+        
+        
+        navigator.nowAt(BrowserTabMenu)
         // Switch night mode off.
         navigator.toggleOff(navigator.userState.nightMode, withAction: TestActions.ToggleNightMode)
         XCTAssertFalse(navigator.userState.nightMode)
-        navigator.back()
-        XCTAssertEqual(navigator.screenState, BrowserTab)
+        XCTAssertEqual(navigator.screenState, BrowserTabMenu)
     }
 
     func testChainedActionPerf1() {
@@ -213,7 +216,8 @@ fileprivate func createTestGraph(for test: XCTestCase, with app: XCUIApplication
         screenState.gesture(forAction: TestActions.LoadURLByPasting, TestActions.LoadURL) { userState in
             UIPasteboard.general.string = userState.url ?? defaultURL
             app.textFields["url"].press(forDuration: 1.0)
-            app.tables["Context Menu"].cells["menu-PasteAndGo"].firstMatch.tap()
+            print(app.debugDescription)
+            app.tables["Context Menu"].cells["menu-PasteAndGo"].tap()
         }
     }
 
@@ -228,7 +232,6 @@ fileprivate func createTestGraph(for test: XCTestCase, with app: XCUIApplication
 
     map.addScreenState(BrowserTabMenu) { screenState in
         screenState.dismissOnUse = true
-        screenState.onEnterWaitFor(element: app.tables["Context Menu"])
         screenState.tap(app.tables.cells["Settings"], to: SettingsScreen)
 
         screenState.tap(app.cells["menu-NightMode"], forAction: TestActions.ToggleNightMode, transitionTo: BrowserTabMenu) { userState in

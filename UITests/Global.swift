@@ -248,7 +248,7 @@ class BrowserUtils {
     }
 
     class func dismissFirstRunUI(_ tester: KIFUITestActor) {
-        tester.waitForAnimationsToFinish(withTimeout: 3)
+        tester.waitForAnimationsToFinish(withTimeout: 10)
         if (tester.viewExistsWithLabel("Next")) {
             tester.tapView(withAccessibilityIdentifier: "nextOnboardingButton")
             tester.waitForAnimationsToFinish(withTimeout: 3)
@@ -361,7 +361,6 @@ class BrowserUtils {
         tester.waitForView(withAccessibilityIdentifier: "TabToolbar.menuButton")
         tester.tapView(withAccessibilityIdentifier: "TabToolbar.menuButton")
         tester.waitForAnimationsToFinish()
-        tester.tapView(withAccessibilityIdentifier: "menu-library")
     }
 
     class func closeLibraryMenu(_ tester: KIFUITestActor) {
@@ -369,11 +368,7 @@ class BrowserUtils {
             tester.tapView(withAccessibilityIdentifier: "TabToolbar.libraryButton")
         } else {
             // Workaround to be able to swipe the view and close the library panel
-            tester.tapView(withAccessibilityLabel: "Downloads")
-            tester.waitForAnimationsToFinish(withTimeout: 3)
-
-            let view=tester.waitForView(withAccessibilityIdentifier: "Downloads")
-            view?.drag(from: CGPoint(x: 150, y: 80), to: CGPoint(x: 150, y: 530))
+            tester.tapView(withAccessibilityLabel: "Done")
         }
         tester.waitForAnimationsToFinish()
     }

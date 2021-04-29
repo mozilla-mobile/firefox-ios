@@ -484,14 +484,13 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(LibraryPanel_Bookmarks) { screenState in
         let bookmarkCell = app.tables["Bookmarks List"].cells.element(boundBy: 0)
-        let bookmarksElement = app.navigationBars["Bookmarks"].staticTexts["Bookmarks"]
+
         screenState.tap(app.cells.staticTexts["Mobile Bookmarks"], to: MobileBookmarks)
         screenState.gesture(forAction: Action.CloseBookmarkPanel, transitionTo: HomePanelsScreen) { userState in
             if isTablet {
                 app.buttons["TabToolbar.libraryButton"].tap()
             } else {
-                let bookmarksButton = app.segmentedControls["librarySegmentControl"].buttons.element(boundBy: 0)
-                bookmarksElement.press(forDuration: 2, thenDragTo: bookmarksButton)
+                app.buttons["Done"].tap()
             }
         }
 
@@ -547,12 +546,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.gesture(forAction: Action.ClearRecentHistory) { userState in
             app.tables["History List"].cells.matching(identifier: "HistoryPanel.clearHistory").element(boundBy: 0).tap()
         }
-        let historyListElement = app.navigationBars["History"]
         screenState.gesture(forAction: Action.CloseHistoryListPanel, transitionTo: HomePanelsScreen) { userState in
             if isTablet {
                 app.buttons["TabToolbar.libraryButton"].tap()
             } else {
-                historyListElement.press(forDuration: 2, thenDragTo: app.segmentedControls["librarySegmentControl"].buttons.element(boundBy: 1))
+                app.buttons["Done"].tap()
             }
         }
     }
@@ -560,26 +558,22 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(LibraryPanel_ReadingList) { screenState in
         screenState.dismissOnUse = true
-        let readingListElement = app.navigationBars["Reading list"]
         screenState.gesture(forAction: Action.CloseReadingListPanel, transitionTo: HomePanelsScreen) { userState in
             if isTablet {
                 app.buttons["TabToolbar.libraryButton"].tap()
             } else {
-                let readinglistButton = app.segmentedControls["librarySegmentControl"].buttons.element(boundBy: 3)
-                readingListElement.press(forDuration: 2, thenDragTo: readinglistButton)
+                app.buttons["Done"].tap()
             }
         }
     }
 
     map.addScreenState(LibraryPanel_Downloads) { screenState in
         screenState.dismissOnUse = true
-        let downloadsElement = app.navigationBars["Downloads"]
         screenState.gesture(forAction: Action.CloseDownloadsPanel, transitionTo: HomePanelsScreen) { userState in
             if isTablet {
                 app.buttons["TabToolbar.libraryButton"].tap()
             } else {
-                let downloadsButton = app.segmentedControls["librarySegmentControl"].buttons.element(boundBy: 2)
-                downloadsElement.press(forDuration: 2, thenDragTo: downloadsButton)
+                app.buttons["Done"].tap()
             }
         }
     }
