@@ -29,6 +29,22 @@ extension PhotonActionSheetProtocol {
 
         return [bookmarks, history, downloads, readingList]
     }
+    
+    func getHomeAction(vcDelegate: Self.PageOptionsVC) -> [PhotonActionSheetItem] {
+        guard let tab = self.tabManager.selectedTab else { return [] }
+        
+        let openHomePage = PhotonActionSheetItem(title: Strings.AppMenuOpenHomePageTitleString, iconString: "menu-Home") { _, _ in
+            let page = NewTabAccessors.getHomePage(self.profile.prefs)
+            if page == .homePage, let homePageURL = HomeButtonHomePageAccessors.getHomePage(self.profile.prefs) {
+                tab.loadRequest(PrivilegedRequest(url: homePageURL) as URLRequest)
+            } else if let homePanelURL = page.url {
+                tab.loadRequest(PrivilegedRequest(url: homePanelURL) as URLRequest)
+            }
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .home)
+        }
+        
+        return [openHomePage]
+    }
 
     func getSettingsAction(vcDelegate: Self.PageOptionsVC) -> [PhotonActionSheetItem] {
         let openSettings = PhotonActionSheetItem(title: Strings.AppMenuSettingsTitleString, iconString: "menu-Settings") { _, _ in
@@ -56,7 +72,6 @@ extension PhotonActionSheetProtocol {
     
     func getOtherPanelActions(vcDelegate: PageOptionsVC) -> [PhotonActionSheetItem] {
         var items: [PhotonActionSheetItem] = []
-
         let noImageEnabled = NoImageModeHelper.isActivated(profile.prefs)
         let imageModeTitle = noImageEnabled ? Strings.AppMenuShowImageMode : Strings.AppMenuNoImageMode
         let iconString = noImageEnabled ? "menu-ShowImages" : "menu-NoImageMode"

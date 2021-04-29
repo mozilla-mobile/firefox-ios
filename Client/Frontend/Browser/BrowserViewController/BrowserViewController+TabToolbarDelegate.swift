@@ -5,6 +5,9 @@
 import Shared
 
 extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
+    func tabToolbarDidPressLibrary(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+    }
+    
     func tabToolbarDidPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         tabManager.selectedTab?.goBack()
     }
@@ -100,6 +103,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             }
         }
         
+        let section0 = getHomeAction(vcDelegate: self)
         var section1 = getLibraryActions(vcDelegate: self)
         var section2 = getOtherPanelActions(vcDelegate: self)
         let section3 = getSettingsAction(vcDelegate: self)
@@ -113,7 +117,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             section2.append(whatsNewAction)
         }
         
-        actions.append(contentsOf: [section1, section2, section3])
+        actions.append(contentsOf: [section0, section1, section2, section3])
 
         presentSheetWith(actions: actions, on: self, from: button)
     }
