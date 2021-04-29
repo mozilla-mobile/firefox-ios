@@ -493,8 +493,8 @@ workflows:
         - scheme: Fennec
         - simulator_device: iPhone 8
     - deploy-to-bitrise-io@1.13: {}
-    - cache-push@2.5:
-        - run_if: true
+    - cache-push@2.5: 
+        run_if: true
     - slack@3.1:
         inputs:
         - webhook_url: $WEBHOOK_SLACK_TOKEN
