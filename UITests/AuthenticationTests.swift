@@ -9,6 +9,7 @@ class AuthenticationTests: KIFTestCase {
 
     override func setUp() {
         super.setUp()
+        tester().wait(forTimeInterval: 10)
         webRoot = SimplePageServer.start()
         BrowserUtils.dismissFirstRunUI(tester())
 	}
