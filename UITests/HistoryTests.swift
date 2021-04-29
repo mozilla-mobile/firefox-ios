@@ -108,8 +108,6 @@ class HistoryTests: KIFTestCase {
         tester().waitForView(withAccessibilityLabel: "Page 102")
 
         let firstIndexPath = IndexPath(row: 4, section: 1)
-//        tester().waitForView(withAccessibilityIdentifier: "History List") as? UITableView
-        
         let row = tester().waitForCell(at: firstIndexPath, inTableViewWithAccessibilityIdentifier: "History List")
         tester().swipeView(withAccessibilityLabel: row?.accessibilityLabel, value: row?.accessibilityValue, in: KIFSwipeDirection.left)
      
