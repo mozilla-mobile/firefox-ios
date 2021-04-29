@@ -836,6 +836,10 @@ class BrowserViewController: UIViewController {
         } else if isAboutHomeURL {
             showFirefoxHome(inline: false)
         }
+
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            topTabsViewController?.refreshTabs()
+        }
     }
 
     func showLibrary(panel: LibraryPanelType? = nil) {

@@ -96,6 +96,10 @@ class TopTabsViewController: UIViewController {
         super.viewWillAppear(animated)
         view.setNeedsLayout()
         view.layoutIfNeeded()
+        refreshTabs()
+    }
+
+    func refreshTabs() {
         tabDisplayManager.refreshStore(evenIfHidden: true)
     }
 
