@@ -538,7 +538,8 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         // Check if this response should be downloaded.
-        if let downloadHelper = DownloadHelper(request: request, response: response, canShowInWebView: canShowInWebView, forceDownload: forceDownload, browserViewController: self) {
+        let cookieStore = webView.configuration.websiteDataStore.httpCookieStore
+        if let downloadHelper = DownloadHelper(request: request, response: response, cookieStore: cookieStore, canShowInWebView: canShowInWebView, forceDownload: forceDownload, browserViewController: self) {
             // Clear the network activity indicator since our helper is handling the request.
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
 
