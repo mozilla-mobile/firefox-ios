@@ -77,6 +77,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.view.layoutIfNeeded()
+        focusTab()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -91,10 +92,8 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     }
     
     func focusTab() {
-        guard let currentTab = tabManager.selectedTab, let index = self.tabDisplayManager.dataStore.index(of: currentTab), let rect = self.collectionView.layoutAttributesForItem(at: IndexPath(item: index, section: 0))?.frame else {
-            return
-        }
-        self.collectionView.scrollRectToVisible(rect, animated: false)
+        guard let currentTab = tabManager.selectedTab, let index = self.tabDisplayManager.dataStore.index(of: currentTab) else { return }
+        self.collectionView.scrollToItem(at: IndexPath(item: index, section: 0), at: [.centeredVertically, .centeredHorizontally] , animated: false)
     }
 
     required init?(coder aDecoder: NSCoder) {
