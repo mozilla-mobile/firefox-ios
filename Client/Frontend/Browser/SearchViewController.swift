@@ -78,6 +78,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }()
 
     var suggestions: [String]? = []
+    var savedQuery: String = ""
     static var userAgent: String?
 
     
@@ -392,8 +393,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             tableView.reloadData()
             return
         }
-        
-        
+
+        let tempSearchQuery = searchQuery
         suggestClient?.query(searchQuery, callback: { suggestions, error in
             if let error = error {
                 let isSuggestClientError = error.domain == SearchSuggestClientErrorDomain
@@ -424,6 +425,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             self.searchTabs(for: self.searchQuery)
             self.searchRemoteTabs(for: self.searchQuery)
             // Reload the tableView to show the new list of search suggestions.
+            self.savedQuery = tempSearchQuery
             self.tableView.reloadData()
         })
     }
@@ -506,8 +508,22 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
     override func applyTheme() {
         super.applyTheme()
-
         reloadData()
+    }
+
+    func getAttributedBoldSearchSuggestions(searchPhrase: String, query: String) -> NSAttributedString {
+        let boldAttributes = [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: DynamicFontHelper().DefaultStandardFont.pointSize)]
+        let regularAttributes = [NSAttributedString.Key.font : DynamicFontHelper().DefaultStandardFont]
+        let attributedString = NSMutableAttributedString(string: "", attributes: regularAttributes)
+        let phraseString = NSAttributedString(string: searchPhrase, attributes: regularAttributes)
+        let suggestion = searchPhrase.components(separatedBy: query)
+        guard searchPhrase != query, suggestion.count > 1 else { return phraseString }
+        // split suggestion into searchQuery and suggested part
+        let searchString = NSAttributedString(string: query, attributes: regularAttributes)
+        let restOfSuggestion = NSAttributedString(string: suggestion[1], attributes: boldAttributes)
+        attributedString.append(searchString)
+        attributedString.append(restOfSuggestion)
+        return attributedString
     }
     
     fileprivate func getCellForSection(_ twoLineCell: TwoLineImageOverlayCell, oneLineCell: OneLineTableViewCell, for section: SearchListSection, _ indexPath: IndexPath) -> UITableViewCell {
@@ -517,8 +533,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             if let site = suggestions?[indexPath.row] {
                 oneLineCell.titleLabel.text = site
                 if Locale.current.languageCode == "en" {
-                    let toBold = site.replaceFirstOccurrence(of: searchQuery, with: "")
-                    oneLineCell.titleLabel.attributedText = site.attributedText(boldString: toBold, font: DynamicFontHelper().DefaultStandardFont)
+                    oneLineCell.titleLabel.attributedText = getAttributedBoldSearchSuggestions(searchPhrase: site, query: savedQuery)
                 }
                 oneLineCell.leftImageView.contentMode = .center
                 oneLineCell.leftImageView.layer.borderWidth = 0
