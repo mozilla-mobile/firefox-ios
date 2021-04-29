@@ -48,14 +48,10 @@ struct MIMEType {
     }
 }
 
-protocol OpenInHelper {
-    init?(request: URLRequest?, response: URLResponse, canShowInWebView: Bool, forceDownload: Bool, browserViewController: BrowserViewController)
-    func open()
-}
-
-class DownloadHelper: NSObject, OpenInHelper {
+class DownloadHelper: NSObject {
     fileprivate let request: URLRequest
     fileprivate let preflightResponse: URLResponse
+    fileprivate let cookieStore: WKHTTPCookieStore
     fileprivate let browserViewController: BrowserViewController
 
     static func requestDownload(url: URL, tab: Tab) {
@@ -64,7 +60,7 @@ class DownloadHelper: NSObject, OpenInHelper {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .downloadLinkButton)
     }
     
-    required init?(request: URLRequest?, response: URLResponse, canShowInWebView: Bool, forceDownload: Bool, browserViewController: BrowserViewController) {
+    required init?(request: URLRequest?, response: URLResponse, cookieStore: WKHTTPCookieStore, canShowInWebView: Bool, forceDownload: Bool, browserViewController: BrowserViewController) {
         guard let request = request else {
             return nil
         }
@@ -82,6 +78,7 @@ class DownloadHelper: NSObject, OpenInHelper {
             return nil
         }
 
+        self.cookieStore = cookieStore
         self.request = request
         self.preflightResponse = response
         self.browserViewController = browserViewController
@@ -92,7 +89,7 @@ class DownloadHelper: NSObject, OpenInHelper {
             return
         }
 
-        guard let download = HTTPDownload(preflightResponse: preflightResponse, request: request) else {
+        guard let download = HTTPDownload(cookieStore: cookieStore, preflightResponse: preflightResponse, request: request) else {
             return
         }
 
@@ -125,7 +122,7 @@ class DownloadHelper: NSObject, OpenInHelper {
     }
 }
 
-class OpenPassBookHelper: NSObject, OpenInHelper {
+class OpenPassBookHelper: NSObject {
     fileprivate var url: URL
 
     fileprivate let browserViewController: BrowserViewController
@@ -163,7 +160,7 @@ class OpenPassBookHelper: NSObject, OpenInHelper {
     }
 }
 
-class OpenQLPreviewHelper: NSObject, OpenInHelper, QLPreviewControllerDataSource {
+class OpenQLPreviewHelper: NSObject, QLPreviewControllerDataSource {
     var url: NSURL
 
     fileprivate let browserViewController: BrowserViewController
