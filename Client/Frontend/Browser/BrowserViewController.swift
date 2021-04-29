@@ -80,8 +80,6 @@ class BrowserViewController: UIViewController {
     var displayedPopoverController: UIViewController?
     var updateDisplayedPopoverProperties: (() -> Void)?
 
-    var openInHelper: OpenInHelper?
-
     // location label actions
     var pasteGoAction: AccessibleAction!
     var pasteAction: AccessibleAction!
