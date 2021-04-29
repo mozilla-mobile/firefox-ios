@@ -72,7 +72,6 @@ extension PhotonActionSheetProtocol {
     
     func getOtherPanelActions(vcDelegate: PageOptionsVC) -> [PhotonActionSheetItem] {
         var items: [PhotonActionSheetItem] = []
-        
         let noImageEnabled = NoImageModeHelper.isActivated(profile.prefs)
         let imageModeTitle = noImageEnabled ? Strings.AppMenuShowImageMode : Strings.AppMenuNoImageMode
         let iconString = noImageEnabled ? "menu-ShowImages" : "menu-NoImageMode"
