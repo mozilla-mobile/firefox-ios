@@ -39,7 +39,7 @@ class HistoryTests: KIFTestCase {
 
         // Check that both appear in the history home panel
         BrowserUtils.openLibraryMenu(tester())
-        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.History")
+        tester().tapView(withAccessibilityIdentifier: "menu-panel-History")
 
         // Wait until the dialog shows up
         tester().waitForAnimationsToFinish()
@@ -102,8 +102,8 @@ class HistoryTests: KIFTestCase {
         tester().waitForAnimationsToFinish()
         BrowserUtils.openLibraryMenu(tester())
         tester().waitForAnimationsToFinish(withTimeout: 10)
-        tester().waitForView(withAccessibilityIdentifier: "LibraryPanels.History")
-        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.History")
+        tester().waitForView(withAccessibilityIdentifier: "menu-panel-History")
+        tester().tapView(withAccessibilityIdentifier: "menu-panel-History")
         tester().waitForView(withAccessibilityLabel: "Page 102")
 
         let firstIndexPath = IndexPath(row: 0, section: 1)

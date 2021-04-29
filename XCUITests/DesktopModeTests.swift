@@ -74,7 +74,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
         navigator.goto(PageOptionsMenu)
-        navigator.goto(RequestDesktopSite)
+        navigator.goto(RequestMobileSite)
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
 
@@ -127,7 +127,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         waitForExistence(app.buttons["Reload"], timeout: 5)
         app.buttons["Reload"].tap()
         navigator.goto(PageOptionsMenu)
-        navigator.goto(RequestDesktopSite) // toggle off
+        navigator.goto(RequestMobileSite) // toggle off
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
 
