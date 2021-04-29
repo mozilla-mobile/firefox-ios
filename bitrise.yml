@@ -347,6 +347,11 @@ workflows:
     steps:
     - activate-ssh-key@4.0:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - script@1.1:
+        inputs:
+        - content: |-
+            envman add --key BITRISEIO_PULL_REQUEST_REPOSITORY_URL --value '$GIT_REPOSITORY_URL'
+            echo $BITRISEIO_PULL_REQUEST_REPOSITORY_URL
     - git-clone@5.0: {}
     - script@1.1:
         inputs:
@@ -494,6 +499,7 @@ workflows:
         - simulator_device: iPhone 8
     - deploy-to-bitrise-io@1.13: {}
     - cache-push@2.5: 
+        is_always_run: true
         run_if: true
     - slack@3.1:
         inputs:
@@ -511,7 +517,7 @@ workflows:
       bitrise.io:
         stack: osx-xcode-12.4.x
     after_run:
-    - RunSmokeXCUITests
+    #- RunSmokeXCUITests
   benchmark_test:
     steps:
     - activate-ssh-key@4.0:
