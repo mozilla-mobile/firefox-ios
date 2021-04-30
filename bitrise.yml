@@ -350,9 +350,9 @@ workflows:
     - script@1.1:
         inputs:
         - content: |-
-            envman add --key BITRISEIO_PULL_REQUEST_REPOSITORY_URL --value 'https://github.com/mozilla-mobile/firefox-ios.git'
+            envman add --key BITRISEIO_PULL_REQUEST_REPOSITORY_URL --value https://github.com/mozilla-mobile/firefox-ios.git
             echo $BITRISEIO_PULL_REQUEST_REPOSITORY_URL
-            envman add --key BITRISE_CACHE_API_URL --value '$BITRISE_CACHE_API_URL'
+            envman add --key BITRISE_CACHE_API_URL --value $BITRISE_CACHE_API_URL
     - git-clone@5.0: {}
     - script@1.1:
         inputs:
