@@ -20,7 +20,7 @@
 "Intro.Slides.Fast.Search.Title" = "ਤੇਜ਼ ਖੋਜ";
 
 /* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "ਇਸ ਡਿਵਾਈਸ 'ਤੇ ਫਾਇਰਫਾਕਸ ਵਿੱਚ ਬੁੱਕਮਾਰਕ, ਅਤੀਤ ਅਤੇ ਪਾਸਵਰਡ ਲਿਆਓ।";
+"Intro.Slides.Firefox.Account.Sync.Description" = "ਇਸ ਡਿਵਾਈਸ 'ਤੇ ਫਾਇਰਫਾਕਸ ਵਿੱਚ ਬੁੱਕਮਾਰਕ, ਇਤਿਹਾਸ ਅਤੇ ਪਾਸਵਰਡ ਲਿਆਓ।";
 
 /* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
 "Intro.Slides.Firefox.Account.Sync.Title" = "ਡਿਵਾਈਸਾਂ ਵਿਚਕਾਰ ਫਾਇਰਫਾਕਸ ਨੂੰ ਸਿੰਕ ਕਰੋ";

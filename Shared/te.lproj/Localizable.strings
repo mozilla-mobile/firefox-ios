@@ -104,6 +104,9 @@
 /* Toggle bookmarks syncing setting */
 "Bookmarks" = "ఇష్టాంశాలు";
 
+/* The button on the snackbar to edit a bookmark after adding it. */
+"Bookmarks.Edit.Button" = "మార్చు";
+
 /* The button to edit a bookmark */
 "Bookmarks.EditBookmark.Label" = "ఇష్టాంశాన్ని సవరించు";
 

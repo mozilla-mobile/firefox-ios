@@ -2,7 +2,7 @@
 "NSCameraUsageDescription" = "ສິ່ງນີ້ຈະເຮັດໃຫ້ທ່ານຖ່າຍ ແລະ ອັບໂຫລດຮູບພາບໄດ້.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox ຕ້ອງການ Face ID ເພື່ອເຂົ້າໄປຫາການລັອກອິນຂອງທ່ານທີ່ໄດ້ບັນທຶກໄວ້.";
+"NSFaceIDUsageDescription" = "Firefox ຕ້ອງການ Face ID ເພື່ອນຳໃຊ້ການລັອກອິນທີ່ທ່ານບັນໄດ້ທຶກໄວ້.";
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this

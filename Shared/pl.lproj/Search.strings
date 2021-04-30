@@ -1,5 +1,5 @@
 /* Label for search engine buttons. The argument corresponds to the name of the search engine. */
-"%@ search" = "Wyszukaj z %@";
+"%@ search" = "Wyszukaj w %@";
 
 /* Label for search settings button. */
 "Search Settings" = "Ustawienia wyszukiwania";

@@ -143,6 +143,9 @@
 /* Link to monitor.firefox.com to learn more about breached passwords */
 "BreachAlerts.LearnMoreButton" = "अधिक जानें";
 
+/* Title for the Breached Login Detail View. */
+"BreachAlerts.Title" = "वेबसाइट उल्लंघन";
+
 /* Accessibility label for brightness adjustment slider in Reader Mode display settings */
 "Brightness" = "चमक";
 
@@ -599,7 +602,7 @@
 "LoginsDetailView.LoginModified" = "संशोधित";
 
 /* Title for the login detail view */
-"LoginsDetailView.LoginTitle" = "लॉगिन";
+"LoginsDetailView.LoginTitle" = "लॉग इन";
 
 /* Button to not save the user's password */
 "LoginsHelper.DontSave.Button" = "सहेजें नहीं";
@@ -1188,7 +1191,7 @@
 "Settings.FxA.Sync.SectionName" = "सिंक सेटिंग";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Firefox Account";
+"Settings.FxA.Title" = "Firefox खाता";
 
 /* General settings section title */
 "Settings.General.SectionName" = "सामान्य";
@@ -1218,7 +1221,7 @@
 "Settings.HomePage.UseDefault.Button" = "तयशुदा का प्रयोग करें";
 
 /* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
-"Settings.LoginsAndPasswordsTitle" = "लॉगिन एवं पासवर्ड";
+"Settings.LoginsAndPasswordsTitle" = "लॉगइन एवं पासवर्ड";
 
 /* Label used to set a custom url as the new tab option (homepage). */
 "Settings.NewTab.CustomURL" = "विशिष्ट URL";
@@ -1290,7 +1293,7 @@
 "Settings.OpenWith.SectionName" = "मेल ऐप";
 
 /* Setting to enable the built-in password manager */
-"Settings.SaveLogins.Title" = "लॉगिन सहेजें";
+"Settings.SaveLogins.Title" = "लॉगइन सहेजें";
 
 /* Button displayed at the top of the search settings. */
 "Settings.Search.Done.Button" = "संपन्न";
@@ -1345,6 +1348,12 @@
 
 /* 'More Info' link on the Tracking Protection settings screen. */
 "Settings.TrackingProtection.MoreInfo" = "अधिक जानकारी…";
+
+/* Description for standard level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "कुछ विज्ञापन ट्रैकर्स को अनुमति दें ताकि वेबसाइटें सही तरह से कार्य कर सकें।";
+
+/* Description for strict level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "अधिक ट्रैकर, विज्ञापन और पॉपअप ब्लॉक करता है। पेज तेज़ी से लोड होते हैं, लेकिन कुछ कार्यक्षमता काम नहीं कर सकती है।";
 
 /* Title for tracking protection options section where level can be selected. */
 "Settings.TrackingProtection.ProtectionLevelTitle" = "सुरक्षा स्तर";

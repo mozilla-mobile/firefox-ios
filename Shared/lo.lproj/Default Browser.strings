@@ -2,10 +2,13 @@
 "DefaultBrowserCard.Button" = "ໄປທີ່ການຕັ້ງຄ່າ";
 
 /* Button string to learn how to set your default browser. */
-"DefaultBrowserCard.Button.v2" = "ຮຽນຮູ້ວິທີໃຊ້";
+"DefaultBrowserCard.Button.v2" = "ຮຽນຮູ້ວິທີການ";
+
+/* Description for small card shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Description" = "ຕັ້ງໃຫ້ເປີດລີ້ງຈາກເວັບໄຊທ, ອີເມລ ແລະ ຂໍ້ຄວາມແບບອັດຕະໂນມັດໃນ Firefox.";
 
 /* Title for small card shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Title" = "ປ່ຽນ Browser Default ຂອງທ່ານ";
+"DefaultBrowserCard.Title" = "ປ່ຽນບຣາວເຊີຫລັກຂອງທ່ານ";
 
 /* Button string to open settings that allows user to switch their default browser to Firefox. */
 "DefaultBrowserOnboarding.Button" = "ໄປທີ່ການຕັ້ງຄ່າ";
@@ -14,8 +17,14 @@
 "DefaultBrowserOnboarding.Description1" = "1. ໄປທີ່ການຕັ້ງຄ່າ";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description2" = "2. ແຕະແອັບ Default Browser";
+"DefaultBrowserOnboarding.Description2" = "2. ແຕະໃສ່ແອັບບຣາວເຊີຫລັກ";
 
 /* Description for default browser onboarding card. */
 "DefaultBrowserOnboarding.Description3" = "3. ເລືອກ Firefox";
+
+/* Text for the screenshot of the iOS system settings page for Firefox. */
+"DefaultBrowserOnboarding.Screenshot" = "ບຣາວເຊີຫລັກ";
+
+/* Menu option for setting Firefox as default browser. */
+"Settings.DefaultBrowserMenuItem" = "ຕັ້ງໃຫ້ເປັນບຣາວເຊີຫລັກ";
 

@@ -153,7 +153,7 @@
 "BreachAlerts.Title" = "ویب سائٹ کی خلاف ورزی";
 
 /* Accessibility label for brightness adjustment slider in Reader Mode display settings */
-"Brightness" = "اُجلا پن";
+"Brightness" = "چمک";
 
 /* Label for Cancel button */
 "Cancel" = "منسوخ کریں";

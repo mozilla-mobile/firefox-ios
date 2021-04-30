@@ -5,10 +5,10 @@
 "+" = "+";
 
 /* Authentication prompt message with no realm. Parameter is the hostname of the site */
-"A username and password are being requested by %@." = "Un nomine de usator e un contrasigno es requirite per %@.";
+"A username and password are being requested by %@." = "Le sito %@ demanda un nomine de usator e un contrasigno.";
 
 /* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
-"A username and password are being requested by %@. The site says: %@" = "Un nomine de usator e un contrasigno es requirite per %1$@. Le sito dice: %2$@";
+"A username and password are being requested by %@. The site says: %@" = "Le sito %1$@ demanda un nomine de usator e un contrasigno. Le sito dice: %2$@";
 
 /* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
 "Aa" = "Aa";
@@ -16,11 +16,24 @@
 /* About settings section title */
 "About" = "A proposito";
 
+/* The title for the pinning a shortcut action */
+"ActivityStream.ContextMenu.AddToShortcuts" = "Adder al accessos directe";
+
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite" = "Fixar al sitos preferite";
+
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite" = "Fixar al sitos popular";
+"ActivityStream.ContextMenu.PinTopsite2" = "Fixar";
+
+/* The title for removing a shortcut action */
+"ActivityStream.ContextMenu.RemoveFromShortcuts" = "Remover del accessos directe";
 
 /* The title for removing a pinned topsite action */
 "ActivityStream.ContextMenu.RemovePinTopsite" = "Remover sito fixate";
+
+/* The title for the unpinning a topsite action */
+"ActivityStream.ContextMenu.UnpinTopsite" = "Distachar";
 
 /* The description of a highlight if it is a site the user has bookmarked */
 "ActivityStream.Highlights.Bookmark" = "Marcapaginas addite";
@@ -37,11 +50,17 @@
 /* Section title label for Recommended by Pocket section */
 "ActivityStream.Pocket.SectionTitle" = "Tendentias sur Pocket";
 
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle2" = "Recommendate per Pocket";
+
 /* The description of a Pocket Story */
 "ActivityStream.Pocket.Trending" = "Tendentias";
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Visitate recentemente";
+
+/* Section title label for Shortcuts */
+"ActivityStream.Shortcuts.SectionTitle" = "Accessos directe";
 
 /* label showing how many rows of topsites are shown. %d represents a number */
 "ActivityStream.TopSites.RowCount" = "Lineas: %d";
@@ -50,7 +69,7 @@
 "ActivityStream.TopSites.RowSettingFooter" = "Selige le numero de lineas";
 
 /* Section title label for Top Sites */
-"ActivityStream.TopSites.SectionTitle" = "Sitos popular";
+"ActivityStream.TopSites.SectionTitle" = "Sitos preferite";
 
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "Add Tab" = "Adder un scheda";
@@ -82,6 +101,12 @@
 
 /* Authentication prompt title */
 "Authentication required" = "Authentication requirite";
+
+/* Description for button to suggest searching with a search engine. First argument is the name of the search engine to select */
+"Awesomebar.SearchWithEngine.Description" = "Cercar %@ directemente per le barra de adresse";
+
+/* Title for button to suggest searching with a search engine. First argument is the name of the search engine to select */
+"Awesomebar.SearchWithEngine.Title" = "Cercar con %@";
 
 /* Accessibility label for the Back button in the tab toolbar. */
 "Back" = "Retro";
@@ -212,6 +237,12 @@
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "Aperir in un nove scheda";
 
+/* Context menu item for opening a link in a new private tab */
+"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "Aperir le ligamine in un nove scheda anonyme";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenLinkInNewTabButtonTitle" = "Aperir le ligamine in un nove scheda";
+
 /* Context menu item for saving an image */
 "ContextMenu.SaveImageButtonTitle" = "Salvar le imagine";
 
@@ -237,7 +268,7 @@
 "CoverSheet.v24.ETP.Description" = "Le Protection traciamento augmentate integrate, adjuta blocar avisos publicitari de sequer te circum. Elige le modo Rigorose pro blocar ancora plus traciatores, avisos publicitari e messages emergente.";
 
 /* Text for the new ETP settings button */
-"CoverSheet.v24.ETP.Settings.Button" = "Ir a configurationes";
+"CoverSheet.v24.ETP.Settings.Button" = "Ir al Parametros";
 
 /* Title for the new ETP mode i.e. standard vs strict */
 "CoverSheet.v24.ETP.Title" = "Protection contra avisos traciamento";
@@ -356,13 +387,13 @@
 "Forward" = "Avante";
 
 /* Label stating how to disconnect account */
-"FxA.AccountVerificationDetails" = "Email incorrecte? Disconnecte te a basso pro recomenciar.";
+"FxA.AccountVerificationDetails" = "Adresse de e-mail incorrecte? Disconnecte te a basso pro recomenciar.";
 
 /* Label stating your account is not verified */
 "FxA.AccountVerificationRequired" = "Verification del conto necessari";
 
 /* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "Tu debe verificar %@. Cerca in tu email le ligamine de verification de Firefox.";
+"FxA.AccountVerificationRequiredSurface" = "Tu debe verificar %@. Cerca in tu e-mail le ligamine de verification de Firefox.";
 
 /* Button label to connect another device to Sync */
 "FxA.ConnectAnotherDevice" = "Connecter un altere apparato";
@@ -670,16 +701,28 @@
 "Menu.AddBookmark.Confirm" = "Marcapaginas addite";
 
 /* Toast displayed to the user after adding the item to the Top Sites. */
-"Menu.AddPin.Confirm" = "Appunctate al sitos popular";
+"Menu.AddPin.Confirm" = "Fixate al sitos preferite";
+
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"Menu.AddPin.Confirm2" = "Addite al accessos directe";
 
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "Addite al lista de lectura";
+
+/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
+"Menu.BackUpAndSync.Label" = "Salveguardar et synchronisar le datos";
+
+/* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
+"Menu.Bookmarks.Label" = "Marcapaginas";
 
 /* The title for the button that lets you copy the url from the location bar. */
 "Menu.Copy.Title" = "Copiar le adresse";
 
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "URL copiate al area de transferentia";
+
+/* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
+"Menu.Downloads.Label" = "Discargas";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtectionOff.Title" = "Le protection antitraciamento reinfortiate es INACTIVE pro iste sito.";
@@ -693,23 +736,44 @@
 /* Description for having strict ETP protection with ITP offered in iOS14+ */
 "Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox bloca traciatores inter sitos, traciatores de medios social, cryptominatores, dactylogrammatores e contento que te tracia.";
 
+/* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
+"Menu.History.Label" = "Chronologia";
+
 /* Label for the button displayed in the menu used to stop the reload of the webpage */
 "Menu.Library.StopReload" = "Stoppar";
+
+/* Label for the button, displayed in the menu, takes you to screen to manage account when pressed. First argument is the display name for the current account */
+"Menu.ManageAccount.Label" = "Gerer le conto %@";
+
+/* Label for the button, displayed in the menu, turns off night mode. */
+"Menu.NightModeTurnOff.Label2" = "Disactivar le modo nocturne";
 
 /* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label" = "Activar le modo nocturne";
 
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label2" = "Activar le modo nocturne";
+
 /* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
 "Menu.NoImageModeBlockImages.Label" = "Blocar imagines";
 
+/* Label for the button, displayed in the menu, shows images on the webpage when pressed. */
+"Menu.NoImageModeShowImages.Label" = "Monstrar le imagines";
+
 /* Label for title in page action menu. */
 "Menu.PageActions.Title" = "Actiones del pagina";
+
+/* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
+"Menu.Passwords.Label" = "Contrasignos";
 
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "Collar";
 
 /* The title for the button that lets you paste and go to a URL */
 "Menu.PasteAndGo.Title" = "Collar e ir";
+
+/* Label for the button, displayed in the menu, takes you to to Reading List screen when pressed. */
+"Menu.ReadingList.Label" = "Lectura";
 
 /* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
 "Menu.ReloadWithoutTrackingProtection.Title" = "Recargar sin protection contra traciamento";
@@ -721,7 +785,10 @@
 "Menu.RemoveBookmark.Confirm" = "Marcapaginas removite";
 
 /* Toast displayed to the user after removing the item from the Top Sites. */
-"Menu.RemovePin.Confirm" = "Removite del sitos popular";
+"Menu.RemovePin.Confirm" = "Removite del sitos preferite";
+
+/* Toast displayed to the user after removing the item to the Shortcuts. */
+"Menu.RemovePin.Confirm2" = "Removite del accessos directe";
 
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "Scheda inviate";
@@ -766,7 +833,7 @@
 "Menu.TrackingProtectionDescription.CrossSiteNew" = "Iste cookies te seque de sito a sito pro colliger datos sur lo que tu face in linea. Illos es deponite per tertios como companias de publicitate e de analyse de datos.";
 
 /* Description of cryptominers. */
-"Menu.TrackingProtectionDescription.CryptominersNew" = "Le cryptominatores usa secretemente potentia de calculo de tu systema pro cavar moneta digital. Scripts del cryptominatores exhauri tu batteria, relenta tu computator e pote accrescer le factura de tu energia.";
+"Menu.TrackingProtectionDescription.CryptominersNew" = "Le cryptominatores usa secretemente le potentia de calculo de tu systema pro excavar monetas digital. Le scripts de cryptominage exhauri tu batteria, relenta tu computator e pote augmentar tu factura de energia.";
 
 /* Description of fingerprinters. */
 "Menu.TrackingProtectionDescription.Fingerprinters" = "Le parametros sur tu navigator e computator es unic. Dactylogrammatores collige un varietate de iste parametros unic pro crear un profilo de te, que pote esser usate pro traciar te quando tu naviga.";
@@ -970,7 +1037,10 @@
 "Search" = "Cercar";
 
 /* The text shown in the URL bar on about:home */
-"Search or enter address" = "Insere un adresse o face un recerca";
+"Search or enter address" = "Cerca o insere adresse";
+
+/* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
+"Search.Awesomebar.SwitchToTab" = "Mutar al scheda";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "Le nove motor de recerca apparera in le barra de recerca rapide.";
@@ -1109,7 +1179,7 @@
 "Settings.AddCustomEngine.URLLabel" = "URL";
 
 /* The placeholder for URL Field when saving a custom search engine */
-"Settings.AddCustomEngine.URLPlaceholder" = "URL (Reimplaciar le recerca per %s)";
+"Settings.AddCustomEngine.URLPlaceholder" = "URL (insere %s in loco del parolas a cercar)";
 
 /* Button in Data Management that clears private data for the selected items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Eliminar tote le datos de sitos web";
@@ -1197,7 +1267,7 @@
 "Settings.DNT.OptionAlwaysOn" = "Sempre";
 
 /* DNT Settings option for only turning on when Tracking Protection is also on */
-"Settings.DNT.OptionOnWithTP" = "Solmente durante que usar le protection contra le traciamento";
+"Settings.DNT.OptionOnWithTP" = "Solmente quando es active le protection contra le traciamento";
 
 /* DNT Settings title */
 "Settings.DNT.Title" = "Inviar al sitos web un signal pro non traciar, indicante que tu non vole esser traciate";
@@ -1248,7 +1318,7 @@
 "Settings.NewTab.Description" = "Quando tu aperi un nove scheda:";
 
 /* The title of the section in newtab that lets you modify the topsites panel */
-"Settings.NewTab.Option.ASTitle" = "Personalisar sitos popular";
+"Settings.NewTab.Option.ASTitle" = "Personalisar sitos preferite";
 
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "Pagina vacue";
@@ -1258,6 +1328,9 @@
 
 /* The footer for the section to customize top sites in the new tab settings page. */
 "Settings.NewTab.Option.CustomizeFooter" = "Le sitos que tu visita le plus";
+
+/* The footer for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeFooter2" = "Sitos que tu salva o visita";
 
 /* The title for the section to customize top sites in the new tab settings page. */
 "Settings.NewTab.Option.CustomizeTitle" = "Personalisar le pagina initial de Firefox";
@@ -1286,6 +1359,12 @@
 /* Option in settings to show reading list when you open a new tab */
 "Settings.NewTab.Option.ReadingList" = "Monstrar tu lista de lectura";
 
+/* Option in settings to turn on off pocket recommendations First argument is the pocket brand name */
+"Settings.NewTab.Option.RecommendedByPocket" = "Recommendate per %@";
+
+/* Descriptoin for the option in settings to turn on off pocket recommendations. First argument is the pocket brand name, second argument is the pocket product name. */
+"Settings.NewTab.Option.RecommendedByPocketDescription" = "Contento exceptional seligite per %1$@, parte del familia %2$@";
+
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "Nove scheda";
 
@@ -1305,7 +1384,7 @@
 "Settings.OfferClipboardBar.Title" = "Proponer aperir le ligamines copiate";
 
 /* Title for Open With Settings */
-"Settings.OpenWith.PageTitle" = "Aperir ligamines de email per";
+"Settings.OpenWith.PageTitle" = "Aperir ligamines de e-mail con";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
 "Settings.OpenWith.SectionName" = "Application de posta electronic";
@@ -1346,11 +1425,41 @@
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Accessos directe de Siri";
 
+/* Section title for all studies that are currently active */
+"Settings.Studies.Active.SectionName" = "Active";
+
+/* Section title for all studies that are completed */
+"Settings.Studies.Completed.SectionName" = "Completate";
+
+/* Button title displayed next to each study allowing the user to opt-out of the study */
+"Settings.Studies.Remove.Button" = "Remover";
+
+/* Title displayed in header of the Studies panel */
+"Settings.Studies.SectionName" = "Studios";
+
+/* Label used as an item in Settings. Tapping on this item takes you to the Studies panel */
+"Settings.Studies.Title" = "Studios";
+
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Toggle.Link" = "Saper plus.";
+
+/* A short description that explains that Mozilla is running studies */
+"Settings.Studies.Toggle.Message" = "Firefox pote installar e conducer studios de tempore in tempore.";
+
+/* Toggled OFF to opt-out of studies */
+"Settings.Studies.Toggle.Off" = "Inactive";
+
+/* Toggled ON to participate in studies */
+"Settings.Studies.Toggle.On" = "Active";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Toggle.Title" = "Studios";
+
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "De accordo";
 
 /* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Si un sito non functiona como expectate, tocca le escudo in le barra de adresse e disactiva Protection traciamento augmentate pro ille pagina.";
+"Settings.TrackingProtection.Alert.Description" = "Si un sito non functiona como expectate, tocca le scuto in le barra de adresse e disactiva Protection antitraciamento reinfortiate pro ille pagina.";
 
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Attention!";
@@ -1377,7 +1486,7 @@
 "Settings.TrackingProtection.ProtectionCellFooter" = "Reduce le annuncios personalisate e adjuta a impedir que le annunciatores seque tu navigation.";
 
 /* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Si un sito non functiona como expectate, tocca le escudo in le barra de adresse e disactiva Protection traciamento augmentate pro ille pagina.";
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "Si un sito non functiona como expectate, tocca le scuto in le barra de adresse e disactiva Protection antitraciamento reinfortiate pro ille pagina.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Permitter alcun avisos traciatores a fin que le sitos web functiona correctemente.";
@@ -1519,7 +1628,7 @@
 "Sync.SyncingEllipsis.Label" = "Synchronisante…";
 
 /* Panel accessibility label */
-"Synced Tabs" = "Schedas synchronisate";
+"Synced Tabs" = "Schedas sync.";
 
 /* The Bookmark sync component, used in SyncState.Partial.Title */
 "SyncState.Bookmark.Title" = "Marcapaginas";
@@ -1578,6 +1687,9 @@
 /* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.CloseTab.KeyCodeTitle" = "Clauder le scheda seligite";
 
+/* Accessibility label for the currently selected tab. */
+"TabTray.CurrentSelectedTab.A11Y" = "Scheda actualmente seligite.";
+
 /* The section header for tabs opened last week */
 "TabTray.LastWeek.Header" = "Le ultime septimana";
 
@@ -1592,6 +1704,18 @@
 
 /* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenSelectedTab.KeyCodeTitle" = "Aperir le scheda seligite";
+
+/* The title for the tab tray in private mode */
+"TabTray.PrivateTitle" = "Schedas anonyme";
+
+/* The title on the button to look at private tabs. */
+"TabTray.SegmentedControlTitles.PrivateTabs" = "Anonyme";
+
+/* The title on the button to look at synced tabs. */
+"TabTray.SegmentedControlTitles.SyncedTabs" = "Synchronisate";
+
+/* The title on the button to look at regular tabs. */
+"TabTray.SegmentedControlTitles.Tabs" = "Schedas";
 
 /* The button title to see more options to perform on the tab. */
 "TabTray.SwipeMenu.More" = "Plus";
@@ -1642,7 +1766,7 @@
 "TopSites.EmptyState.Description" = "Tu sitos plus visitate essera monstrate hic.";
 
 /* The title for the empty Top Sites state */
-"TopSites.EmptyState.Title" = "Benvenite al sitos popular";
+"TopSites.EmptyState.Title" = "Benvenite al sitos preferite";
 
 /* Button shown in editing mode to remove this site from the top sites panel. */
 "TopSites.RemovePage.Button" = "Remover pagina — %@";

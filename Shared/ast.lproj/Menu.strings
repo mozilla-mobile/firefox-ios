@@ -10,6 +10,9 @@
 /* Label for the button, displayed in the menu, used to copy the page url to the clipboard. */
 "Menu.CopyAddress.Title" = "Copiar la direción";
 
+/* Label for the button, displayed in the menu, used to copy the current page link to the clipboard. */
+"Menu.CopyLink.Title" = "Copiar l'enllaz";
+
 /* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
 "Menu.FindInPageAction.Title" = "Atopar na páxina";
 
@@ -66,7 +69,6 @@
 
 /* Label for the button, displayed in the menu, used to translate the current page. */
 "Menu.TranslatePageAction.Title" = "Traducir la páxina";
-
 /* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
 "Menu.ViewDekstopSiteAction.Title" = "Pidir el sitiu d'escritoriu";
 

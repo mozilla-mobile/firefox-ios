@@ -7,17 +7,19 @@
 /* Close Private Tabs */
 "TodayWidget.ClosePrivateTabsLabelV3" = "ປິດແທັບສ່ວນຕົວ";
 
+/* Copied Link from clipboard displayed */
+"TodayWidget.CopiedLinkLabelFromPasteBoardV1" = "ສຳເນົາລີ້ງຈາກຄລິບບອດ";
+
 /* Quick Actions drop down menu item for lear Private Tabs when widget enters edit mode and drop down menu expands */
 "TodayWidget.DropDownMenuItemClearPrivateTabs" = "ລົບລ້າງແທັບສ່ວນຕົວ";
 
 /* Quick Actions drop down menu item for Go to Copied Link when widget enters edit mode and drop down menu expands */
-"TodayWidget.DropDownMenuItemGoToCopiedLink" = "ໄປທີ່ລີ້ງໄດ້ກັອບປີ້ໄວ້";
+"TodayWidget.DropDownMenuItemGoToCopiedLink" = "ໄປລີ້ງທີ່ໄດ້ສຳເນົາໄວ້";
 
 /* Quick Actions drop down menu item for new private search when widget enters edit mode and drop down menu expands */
-"TodayWidget.DropDownMenuItemNewPrivateSearch" = "ຄົ້ນຫາແທັບສ່ວນຕົວໃໝ່";
+"TodayWidget.DropDownMenuItemNewPrivateSearch" = "ຄົ້ນຫາແບບສ່ວນຕົວໃຫມ່";
 
 /* Quick Actions drop down menu item for new search when widget enters edit mode and drop down menu expands */
-"TodayWidget.DropDownMenuItemNewSearch" = "ການຄົ້ນຫາໃໝ່";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
 "TodayWidget.FirefoxShortcutGalleryDescription" = "ເພີ່ມທາງລັດເຂົ້າ Firefox ໄປຫນ້າຈໍຫລັກຂອງທ່ານ";
@@ -90,4 +92,5 @@
 
 /* View More… for Firefox Pocket stories widget where we don't know how many articles are available. */
 "TodayWidget.ViewMoreDots" = "ເບິງເພີ່ມເຕີມ…";
+"TodayWidget.DropDownMenuItemNewSearch" = "ການຄົ້ນຫາໃຫມ່";
 

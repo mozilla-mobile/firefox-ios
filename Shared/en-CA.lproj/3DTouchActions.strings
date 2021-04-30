@@ -7,6 +7,9 @@
 /* Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard */
 "Copy URL" = "Copy URL";
 
+/* Label for preview action on Tab Tray Tab to send the current link to another device */
+"Menu.SendLinkToDevice" = "Send Link to Device";
+
 /* String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch */
 "Open Last Bookmark" = "Open Last Bookmark";
 
