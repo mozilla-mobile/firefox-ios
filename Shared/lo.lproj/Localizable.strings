@@ -16,11 +16,23 @@
 /* About settings section title */
 "About" = "ກ່ຽວກັບ";
 
+/* The title for the pinning a shortcut action */
+"ActivityStream.ContextMenu.AddToShortcuts" = "ເພີ່ມໄປທີ່ທາງລັດ";
+
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite" = "Pin ໄປທີ່ເວັບໄຊທ໌ຍອດນິຍົມ";
 
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite2" = "ປັກໝຸດ";
+
+/* The title for removing a shortcut action */
+"ActivityStream.ContextMenu.RemoveFromShortcuts" = "ລຶບອອກຈາກທາງລັດ";
+
 /* The title for removing a pinned topsite action */
 "ActivityStream.ContextMenu.RemovePinTopsite" = "ລຶບເວັບໄຊທ໌ທີ່ໄດ້ Pin ໄວ້";
+
+/* The title for the unpinning a topsite action */
+"ActivityStream.ContextMenu.UnpinTopsite" = "ຍົກເລີກປັກໝຸດ";
 
 /* The description of a highlight if it is a site the user has bookmarked */
 "ActivityStream.Highlights.Bookmark" = "ບຸກມາກໄວ້ແລ້ວ";
@@ -37,11 +49,17 @@
 /* Section title label for Recommended by Pocket section */
 "ActivityStream.Pocket.SectionTitle" = "ກຳລັງນິຍົມໃນ Pocket";
 
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle2" = "ແນະນຳໂດຍ Pocket";
+
 /* The description of a Pocket Story */
 "ActivityStream.Pocket.Trending" = "ກຳລັງນິຍົມ";
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "ເຂົ້າໄປເບິງມາແລ້ວ";
+
+/* Section title label for Shortcuts */
+"ActivityStream.Shortcuts.SectionTitle" = "ທາງລັດ";
 
 /* label showing how many rows of topsites are shown. %d represents a number */
 "ActivityStream.TopSites.RowCount" = "ແຖວ: %d";
@@ -82,6 +100,12 @@
 
 /* Authentication prompt title */
 "Authentication required" = "ຕ້ອງການການພິສູດຕົວຕົນ";
+
+/* Description for button to suggest searching with a search engine. First argument is the name of the search engine to select */
+"Awesomebar.SearchWithEngine.Description" = "ຄົ້ນຫາ %@ ໂດຍກົງຈາກແຖບທີ່ຢູ່ ";
+
+/* Title for button to suggest searching with a search engine. First argument is the name of the search engine to select */
+"Awesomebar.SearchWithEngine.Title" = "ຄົ້ນຫາດ້ວຍ %@";
 
 /* Accessibility label for the Back button in the tab toolbar. */
 "Back" = "ກັບຄືນ";
@@ -140,11 +164,17 @@
 /* Status label for the empty Bookmarks state. */
 "BookmarksPanel.EmptyState.Title" = "ບຸກມາກທີ່ທ່ານບັນທຶກໄວ້ຈະສະແດງຂື້ນຢູ່ທີ່ນີ້.";
 
+/* Describes the date on which the breach occurred */
+"BreachAlerts.BreachDate" = "ການຮົ່ວໄຫລນີ້ໄດ້ເກີດຂື້ນເມື່ອ";
+
 /* Link to monitor.firefox.com to learn more about breached passwords */
 "BreachAlerts.LearnMoreButton" = "ຮຽນຮູ້ເພີ່ມເຕີມ";
 
 /* Leads to a link to the breached website */
 "BreachAlerts.Link" = "ໄປ​ທີ່";
+
+/* Title for the Breached Login Detail View. */
+"BreachAlerts.Title" = "ການຮົ່ວໄຫລຂອງເວັບໄຊທ";
 
 /* Accessibility label for brightness adjustment slider in Reader Mode display settings */
 "Brightness" = "ຄວາມສະຫວ່າງ";
@@ -202,6 +232,12 @@
 
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "ເປີດໃນແທັບໃຫມ່";
+
+/* Context menu item for opening a link in a new private tab */
+"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "ເປີດລີ້ງໃນແທັບສ່ວນຕົວໃຫມ່";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenLinkInNewTabButtonTitle" = "ເປີດລີ້ງໃນແທັບໃຫມ່";
 
 /* Context menu item for saving an image */
 "ContextMenu.SaveImageButtonTitle" = "ບັນທຶກຮູບພາບ";
@@ -387,6 +423,9 @@
 
 /* FxA sign in view subtitle */
 "fxa.signin.camera-signin" = "ເຂົ້າລະບົບດ້ວຍກ້ອງຂອງທ່ານ";
+
+/* FxA sign in create account label. */
+"fxa.signin.create-account-pt-1" = "Sync Firefox ລະຫວ່າງອຸປະກອນຕ່າງດ້ວຍບັນຊີ.";
 
 /* FxA sign in create account label. This will be linked to the site to create an account. */
 "fxa.signin.create-account-pt-2" = "ສ້າງບັນຊີ Firefox.";
@@ -657,8 +696,20 @@
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "ເພີ່ມບຸກມາກແລ້ວ";
 
+/* Toast displayed to the user after adding the item to the Top Sites. */
+"Menu.AddPin.Confirm" = "ປັດໝຸດໄປໄວ້ໃນເວັບໄຊທຍອດນິຍົມ";
+
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"Menu.AddPin.Confirm2" = "ເພີ່ມໄປໄວ້ໃນທາງລັດ";
+
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "ເພີ່ມເຂົ້າໄປໃນລາຍການອ່ານແລ້ວ";
+
+/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
+"Menu.BackUpAndSync.Label" = "ສຳຮອງ ແລະ Sync ຂໍ້ມູນ";
+
+/* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
+"Menu.Bookmarks.Label" = "ບຸກມາກ";
 
 /* The title for the button that lets you copy the url from the location bar. */
 "Menu.Copy.Title" = "ສຳເນົາທີ່ຢູ່";
@@ -666,29 +717,53 @@
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "URL ໄດ້ຖືກບັນທຶກໄປໄວ້ໃນ Clipboard ແລ້ວ";
 
+/* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
+"Menu.Downloads.Label" = "ດາວໂຫລດ";
+
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtectionOff.Title" = "ການປັບປຸງການປ້ອງກັນການຕິດຕາມຖືກປິດສຳລັບເວບໄຊທ໌ນີ້.";
 
 /* A switch to enable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtectionOn.Title" = "ການປັບປຸງການປ້ອງກັນການຕິດຕາມແມ່ນເປີດສຳລັບເວບໄຊທ໌ນີ້.";
 
+/* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
+"Menu.History.Label" = "ປະຫວັດການໃຊ້ງານ";
+
 /* Label for the button displayed in the menu used to stop the reload of the webpage */
 "Menu.Library.StopReload" = "ຢຸດ";
+
+/* Label for the button, displayed in the menu, takes you to screen to manage account when pressed. First argument is the display name for the current account */
+"Menu.ManageAccount.Label" = "ຈັດການບັນຊີ %@";
+
+/* Label for the button, displayed in the menu, turns off night mode. */
+"Menu.NightModeTurnOff.Label2" = "ປິດໂຫມດກາງຄືນ";
 
 /* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label" = "ເປີດໃຊ້ງານໂຫມດກາງຄືນ";
 
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label2" = "ເປີດໂຫມດກາງຄືນ";
+
 /* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
 "Menu.NoImageModeBlockImages.Label" = "ບັອກຮູບພາບ";
 
+/* Label for the button, displayed in the menu, shows images on the webpage when pressed. */
+"Menu.NoImageModeShowImages.Label" = "ສະແດງຮູບພາບ";
+
 /* Label for title in page action menu. */
 "Menu.PageActions.Title" = "ການກະທຳຂອງຫນ້າ";
+
+/* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
+"Menu.Passwords.Label" = "ລະຫັດຜ່ານ";
 
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "ວາງ";
 
 /* The title for the button that lets you paste and go to a URL */
 "Menu.PasteAndGo.Title" = "ວາງ & ໄປ";
+
+/* Label for the button, displayed in the menu, takes you to to Reading List screen when pressed. */
+"Menu.ReadingList.Label" = "ລາຍການອ່ານ";
 
 /* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
 "Menu.ReloadWithoutTrackingProtection.Title" = "ລີໂຫລດໂດຍປາສະຈາກການປ້ອງກັນການຕິດຕາມ";
@@ -698,6 +773,12 @@
 
 /* Toast displayed to the user after a bookmark has been removed. */
 "Menu.RemoveBookmark.Confirm" = "ລຶບບຸກມາກອອກແລ້ວ";
+
+/* Toast displayed to the user after removing the item from the Top Sites. */
+"Menu.RemovePin.Confirm" = "ລຶບອອກຈາກເວັບໄຊທຍອດນິຍົມແລ້ວ";
+
+/* Toast displayed to the user after removing the item to the Shortcuts. */
+"Menu.RemovePin.Confirm2" = "ລຶບອອກຈາກທາງລັດແລ້ວ";
 
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "ແທັບຖືກສົ່ງແລ້ວ";
@@ -947,6 +1028,9 @@
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "ປ້ອນທີ່ຢູ່ຂອງເວັບໄຊທ໌ ຫລື ສີ່ງທີ່ທ່ານຕ້ອງການຄົ້ນຫາໃສ່ນີ້";
+
+/* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
+"Search.Awesomebar.SwitchToTab" = "ປ່ຽນໄປຫາແທັບ";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "ເຄື່ອງມືການຄົ້ນຫາໃຫມ່ຈະປະກົດຢູ່ໃນບາຂອງການຄົ້ນຫາ.";
@@ -1235,6 +1319,9 @@
 /* The footer for the section to customize top sites in the new tab settings page. */
 "Settings.NewTab.Option.CustomizeFooter" = "ເວັບໄຊທທີ່ທ່ານເຂົ້າໄປເບິ່ງຫລາຍທີ່ສຸດ";
 
+/* The footer for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeFooter2" = "ເວັບໄຊທທີ່ທ່ານໄດ້ບັນທຶກໄວ້ ຫລື ເຂົ້າໄປເບິງມາ";
+
 /* The title for the section to customize top sites in the new tab settings page. */
 "Settings.NewTab.Option.CustomizeTitle" = "ປັບແຕ່ງຫນ້າຫລັກຂອງ Firefox";
 
@@ -1261,6 +1348,9 @@
 
 /* Option in settings to show reading list when you open a new tab */
 "Settings.NewTab.Option.ReadingList" = "ສະແດງລາຍການອ່ານຂອງທ່ານ";
+
+/* Option in settings to turn on off pocket recommendations First argument is the pocket brand name */
+"Settings.NewTab.Option.RecommendedByPocket" = "ໄດ້ຮັບການແນະນຳໂດຍ %@";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "ແທັບໃຫມ່";
@@ -1321,6 +1411,27 @@
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "ທາງລັດ Siri";
+
+/* Section title for all studies that are completed */
+"Settings.Studies.Completed.SectionName" = "ສຳເລັດແລ້ວ";
+
+/* Button title displayed next to each study allowing the user to opt-out of the study */
+"Settings.Studies.Remove.Button" = "ລຶບ";
+
+/* Title displayed in header of the Studies panel */
+"Settings.Studies.SectionName" = "ການສຶກສາ";
+
+/* Label used as an item in Settings. Tapping on this item takes you to the Studies panel */
+"Settings.Studies.Title" = "ການສຶກສາ";
+
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Toggle.Link" = "ຮຽນຮູ້ເພີ່ມເຕີມ.";
+
+/* Toggled OFF to opt-out of studies */
+"Settings.Studies.Toggle.Off" = "ປິດ";
+
+/* Toggled ON to participate in studies */
+"Settings.Studies.Toggle.On" = "ເປີດ";
 
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "ໂອເຄ, ເຂົ້າໃຈແລ້ວ";
@@ -1555,16 +1666,27 @@
 "TabTray.LastWeek.Header" = "ອາ​ທິດ​ແລ້ວ";
 
 /* The title on the button to copy the tab address. */
-"TabTray.MoreMenu.Copy" = "ກັອບປີ້";
-
 /* The section header for tabs opened before last week */
 "TabTray.Older.Header" = "ເກົ່າກວ່າ";
+"TabTray.MoreMenu.Copy" = "ສຳເນົາ";
 
 /* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "ເປີດແທັບໃຫມ່";
 
 /* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenSelectedTab.KeyCodeTitle" = "ເປີດແທັບທີ່ເລືອກໄວ້";
+
+/* The title for the tab tray in private mode */
+"TabTray.PrivateTitle" = "ແທັບສ່ວນຕົວ";
+
+/* The title on the button to look at private tabs. */
+"TabTray.SegmentedControlTitles.PrivateTabs" = "ສ່ວນຕົວ";
+
+/* The title on the button to look at synced tabs. */
+"TabTray.SegmentedControlTitles.SyncedTabs" = "Synced";
+
+/* The title on the button to look at regular tabs. */
+"TabTray.SegmentedControlTitles.Tabs" = "ແທັບ";
 
 /* The button title to see more options to perform on the tab. */
 "TabTray.SwipeMenu.More" = "ເພີ່ມເຕີມ";

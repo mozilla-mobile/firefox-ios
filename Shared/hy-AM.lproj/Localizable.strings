@@ -16,11 +16,23 @@
 /* About settings section title */
 "About" = "Ծրագրի մասին";
 
+/* The title for the pinning a shortcut action */
+"ActivityStream.ContextMenu.AddToShortcuts" = "Ավելացնել դյուրանցումներին";
+
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite" = "Ամրացնել Լավագույն կայքերին";
 
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite2" = "Ամրացնել";
+
+/* The title for removing a shortcut action */
+"ActivityStream.ContextMenu.RemoveFromShortcuts" = "Հեռացնել դյուրանցումներից";
+
 /* The title for removing a pinned topsite action */
 "ActivityStream.ContextMenu.RemovePinTopsite" = "Հեռացնել Ամրացված կայքը";
+
+/* The title for the unpinning a topsite action */
+"ActivityStream.ContextMenu.UnpinTopsite" = "Ապամրացնել";
 
 /* The description of a highlight if it is a site the user has bookmarked */
 "ActivityStream.Highlights.Bookmark" = "Էջանշված է";
@@ -37,11 +49,17 @@
 /* Section title label for Recommended by Pocket section */
 "ActivityStream.Pocket.SectionTitle" = "Միտված է Pocket-ում";
 
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle2" = "Առաջարկվում է Pocket-ի կողմից";
+
 /* The description of a Pocket Story */
 "ActivityStream.Pocket.Trending" = "Միտում";
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Վերջերս այցելված";
+
+/* Section title label for Shortcuts */
+"ActivityStream.Shortcuts.SectionTitle" = "Դյուրանցումներ";
 
 /* label showing how many rows of topsites are shown. %d represents a number */
 "ActivityStream.TopSites.RowCount" = "Տողեր․ %d";

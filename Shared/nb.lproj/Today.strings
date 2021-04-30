@@ -11,7 +11,7 @@
 "TodayWidget.CopiedLinkLabelFromPasteBoardV1" = "Kopierte lenke fra utklippstavlen";
 
 /* Quick Actions drop down menu item for lear Private Tabs when widget enters edit mode and drop down menu expands */
-"TodayWidget.DropDownMenuItemClearPrivateTabs" = "Fjern private faner";
+"TodayWidget.DropDownMenuItemClearPrivateTabs" = "Tøm private faner";
 
 /* Quick Actions drop down menu item for Go to Copied Link when widget enters edit mode and drop down menu expands */
 "TodayWidget.DropDownMenuItemGoToCopiedLink" = "Gå til kopiert lenke";
@@ -120,6 +120,9 @@
 
 /* Sub label for Top Sites widget */
 "TodayWidget.TopSitesSubLabel" = "Firefox - Mest besøkte";
+
+/* Sub label for Shortcuts widget */
+"TodayWidget.TopSitesSubLabel2" = "Firefox - snarveier til nettsteder";
 
 /* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
 "TodayWidget.ViewMore" = "Vis mer";

@@ -83,7 +83,7 @@
 "TodayWidget.QuickActionsGalleryTitle" = "სწრაფი მოქმედებები";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox-ის მალსახმობები";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox მალსახმობები";
 
 /* Sub label for medium size quick action widget */
 "TodayWidget.QuickActionsSubLabel" = "Firefox – სწრაფი მოქმედებები";
@@ -120,6 +120,9 @@
 
 /* Sub label for Top Sites widget */
 "TodayWidget.TopSitesSubLabel" = "Firefox – რჩეული საიტები";
+
+/* Sub label for Shortcuts widget */
+"TodayWidget.TopSitesSubLabel2" = "Firefox - ვებსაიტის მალსახმობები";
 
 /* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
 "TodayWidget.ViewMore" = "მეტის ნახვა";

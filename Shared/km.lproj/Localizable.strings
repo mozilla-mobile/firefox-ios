@@ -16,11 +16,23 @@
 /* About settings section title */
 "About" = "អំពី";
 
+/* The title for the pinning a shortcut action */
+"ActivityStream.ContextMenu.AddToShortcuts" = "បញ្ចូល​ទៅ​ផ្លូវកាត់";
+
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite" = "ខ្ទាស់ទៅ​គេហទំព័រ​ពេញនិយម";
 
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite2" = "ខ្ទាស់";
+
+/* The title for removing a shortcut action */
+"ActivityStream.ContextMenu.RemoveFromShortcuts" = "ដកចេញ​ពី​ផ្លូវកាត់";
+
 /* The title for removing a pinned topsite action */
 "ActivityStream.ContextMenu.RemovePinTopsite" = "ដក​គេហទំព័រ​ដែល​បាន​ខ្ទាស់​ចេញ";
+
+/* The title for the unpinning a topsite action */
+"ActivityStream.ContextMenu.UnpinTopsite" = "ដកខ្ទាស់";
 
 /* The description of a highlight if it is a site the user has bookmarked */
 "ActivityStream.Highlights.Bookmark" = "បាន​ចំណាំ";
@@ -37,11 +49,17 @@
 /* Section title label for Recommended by Pocket section */
 "ActivityStream.Pocket.SectionTitle" = "កំពុង​ពេញនិយម​នៅ​លើ ហៅប៉ៅ";
 
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle2" = "បាន​ណែនាំ​ដោយ Pocket";
+
 /* The description of a Pocket Story */
 "ActivityStream.Pocket.Trending" = "កំពុង​ពេញនិយម";
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "បាន​ចូលមើល​ថ្មីៗ";
+
+/* Section title label for Shortcuts */
+"ActivityStream.Shortcuts.SectionTitle" = "ផ្លូវកាត់";
 
 /* label showing how many rows of topsites are shown. %d represents a number */
 "ActivityStream.TopSites.RowCount" = "ជួរដេក៖ %d";
@@ -83,6 +101,12 @@
 /* Authentication prompt title */
 "Authentication required" = "ទាមទារ​​ការ​ផ្ដល់​សិទ្ធិ​អនុញ្ញាត";
 
+/* Description for button to suggest searching with a search engine. First argument is the name of the search engine to select */
+"Awesomebar.SearchWithEngine.Description" = "ស្វែងរក %@ ដោយ​ផ្ទាល់​ពី​របារ​អាសយដ្ឋាន";
+
+/* Title for button to suggest searching with a search engine. First argument is the name of the search engine to select */
+"Awesomebar.SearchWithEngine.Title" = "ស្វែងរក​ជាមួយ %@";
+
 /* Accessibility label for the Back button in the tab toolbar. */
 "Back" = "ថយក្រោយ";
 
@@ -103,6 +127,9 @@
 
 /* Toggle bookmarks syncing setting */
 "Bookmarks" = "ចំណាំ";
+
+/* The button on the snackbar to edit a bookmark after adding it. */
+"Bookmarks.Edit.Button" = "កែ";
 
 /* The button to edit a bookmark */
 "Bookmarks.EditBookmark.Label" = "កែ​ចំណាំ";
@@ -136,6 +163,12 @@
 
 /* Status label for the empty Bookmarks state. */
 "BookmarksPanel.EmptyState.Title" = "ចំណាំ​ដែល​អ្នក​រក្សាទុក​នឹង​បង្ហាញ​នៅ​ត្រង់​នេះ។";
+
+/* Describes the date on which the breach occurred */
+"BreachAlerts.BreachDate" = "ការបំពាន​នេះ​បាន​កើតឡើង​នៅ";
+
+/* Description of what a breach is */
+"BreachAlerts.Description" = "ពាក្យសម្ងាត់​ត្រូវបាន​បែកធ្លាយ ឬ​លួច​តាំងពី​អ្នក​បាន​ផ្លាស់ប្ដូរ​ពាក្យ​សម្ងាត់​របស់​អ្នក​​ចុងក្រោយ។ ដើម្បីការពារ​គណនី​នេះ សូម​ចូល​ទៅ​គេហទំព័រ រួច​ផ្លាស់ប្ដូរ​ពាក្យ​សម្ងាត់​របស់​អ្នក។";
 
 /* Link to monitor.firefox.com to learn more about breached passwords */
 "BreachAlerts.LearnMoreButton" = "ស្វែងយល់​បន្ថែម";
@@ -202,6 +235,12 @@
 
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "បើក​ក្នុង​ផ្ទាំង​ថ្មី";
+
+/* Context menu item for opening a link in a new private tab */
+"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "បើក​តំណ​ក្នុង​ផ្ទាំង​ឯកជន​ថ្មី";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenLinkInNewTabButtonTitle" = "បើក​តំណ​ក្នុង​ផ្ទាំង​ថ្មី";
 
 /* Context menu item for saving an image */
 "ContextMenu.SaveImageButtonTitle" = "រក្សាទុក​រូបភាព";
@@ -1329,7 +1368,6 @@
 "Settings.TranslateSnackBar.Title" = "ការបកប្រែ";
 
 /* Title of link to help page to find out how to solve Sync issues */
-"Settings.TroubleShootSync.Title" = "ដំណោះស្រាយ​បញ្ហា​";
 
 /* Button to delete website in search results */
 "Settings.WebsiteData.ButtonDelete" = "លុប";
@@ -1375,6 +1413,7 @@
 
 /* Action label on share extension to search for the selected text in Firefox. */
 "ShareExtension.SeachInFirefoxAction.Title" = "ស្វែងរកក្នុង Firefox";
+"Settings.TroubleShootSync.Title" = "ដោះស្រាយ​បញ្ហា​";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "បង្ហាញ​​សំណើ​ស្វែងរក";

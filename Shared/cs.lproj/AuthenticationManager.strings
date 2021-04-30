@@ -14,7 +14,7 @@
 "After 15 minutes" = "Po 15 minutách";
 
 /* Label used as a setting item and title of the following screen to change the current passcode */
-"Change Passcode" = "Změnit hlavní heslo";
+"Change Passcode" = "Změnit heslo";
 
 /* Text displayed above the input field when changing the existing passcode */
 "Enter a new passcode" = "Zadejte nové heslo";
@@ -29,7 +29,7 @@
 "Enter Passcode" = "Zadejte heslo";
 
 /* Label for the Face ID/Passcode item in Settings */
-"Face ID & Passcode" = "Face ID & Hlavní heslo";
+"Face ID & Passcode" = "Face ID & Heslo";
 
 /* 'Immediately' interval item for selecting when to require passcode */
 "Immediately" = "Okamžitě";
@@ -65,7 +65,7 @@
 "Set Passcode" = "Nastavení hlavního hesla";
 
 /* Label for the Touch ID/Passcode item in Settings */
-"Touch ID & Passcode" = "Touch ID & Hlavní heslo";
+"Touch ID & Passcode" = "Touch ID & Heslo";
 
 /* Touch ID prompt subtitle when disabling Touch ID */
 "touchid.disable.reason.label" = "Použijte svůj otisk prstu pro vypnutí Touch ID.";
@@ -74,10 +74,10 @@
 "touchid.require.passcode.reason.label" = "Použijte svůj otisk prstu pro přístup ke konfiguraci intervalu zadávání hesla.";
 
 /* Label used as a setting item to turn off passcode */
-"Turn Passcode Off" = "Přestat používat hlavní heslo";
+"Turn Passcode Off" = "Přestat používat heslo";
 
 /* Label used as a setting item to turn on passcode */
-"Turn Passcode On" = "Používat hlavní heslo";
+"Turn Passcode On" = "Používat heslo";
 
 /* List section title for when to use Face ID */
 "Use Face ID" = "Použít Face ID";

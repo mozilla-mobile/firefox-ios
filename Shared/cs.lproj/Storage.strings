@@ -1,5 +1,5 @@
 /* The name of the folder that contains desktop bookmarks in the menu. This should match bookmarks.folder.menu.label on Android. */
-"Bookmarks Menu" = "Nabídka záložky";
+"Bookmarks Menu" = "Nabídka záložek";
 
 /* The name of the folder that contains desktop bookmarks in the toolbar. This should match bookmarks.folder.toolbar.label on Android. */
 "Bookmarks Toolbar" = "Lišta záložek";
