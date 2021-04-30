@@ -351,10 +351,10 @@ workflows:
         inputs:
         - content: |-
             envman add --key BITRISEIO_PULL_REQUEST_REPOSITORY_URL --value '$GIT_REPOSITORY_URL'
-            envman add --key TEST --value TEST
+            envman add --key TEST --value 'anyValue'
             echo $TEST
             echo $BITRISEIO_PULL_REQUEST_REPOSITORY_URL
-            envman add --key BITRISE_CACHE_API_URL --value $BITRISE_CACHE_API_URL
+            envman add --key BITRISE_CACHE_API_URL --value '$BITRISE_CACHE_API_URL'
     - git-clone@5.0: {}
     - script@1.1:
         inputs:
