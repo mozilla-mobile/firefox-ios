@@ -1,5 +1,8 @@
 /* (No Comment) */
-"2GqvPe" = "Ir para link copiado";
+"2GqvPe" = "Usar link copiado";
+
+/* (No Comment) */
+"ctDNmu" = "Acesso rápido a várias ações do Firefox";
 
 /* (No Comment) */
 "eHmH1H" = "Limpar abas privativas";
@@ -11,28 +14,28 @@
 "eV8mOT" = "Tipo de ação rápida";
 
 /* (No Comment) */
-"fi3W24-2GqvPe" = "Há ${count} opções que correspondem a ‘Ir para link copiado’.";
+"fi3W24-2GqvPe" = "Há ${count} opções de ‘Usar link copiado’.";
 
 /* (No Comment) */
-"fi3W24-eHmH1H" = "Há ${count} opções que correspondem a ‘Limpar abas privativas’.";
+"fi3W24-eHmH1H" = "Há ${count} opções de ‘Limpar abas privativas’.";
 
 /* (No Comment) */
-"fi3W24-scEmjs" = "Há ${count} opções que correspondem a ‘Nova pesquisa privativa’.";
+"fi3W24-scEmjs" = "Há ${count} opções de ‘Nova pesquisa privativa’.";
 
 /* (No Comment) */
-"fi3W24-xRJbBP" = "Há ${count} opções que correspondem a ‘Nova pesquisa’.";
+"fi3W24-xRJbBP" = "Há ${count} opções de ‘Nova pesquisa’.";
 
 /* (No Comment) */
-"PzSrmZ-2GqvPe" = "Só para confirmar, você quer ‘Ir para link copiado’?";
+"PzSrmZ-2GqvPe" = "Só para confirmar, você quer usar o link copiado?";
 
 /* (No Comment) */
-"PzSrmZ-eHmH1H" = "Só para confirmar, você quer ‘Limpar abas privativas’?";
+"PzSrmZ-eHmH1H" = "Só para confirmar, você quer limpar abas privativas?";
 
 /* (No Comment) */
-"PzSrmZ-scEmjs" = "Só para confirmar, você quer ‘Nova pesquisa privativa’?";
+"PzSrmZ-scEmjs" = "Só para confirmar, você quer nova pesquisa privativa?";
 
 /* (No Comment) */
-"PzSrmZ-xRJbBP" = "Só para confirmar, você quer ‘Nova pesquisa’?";
+"PzSrmZ-xRJbBP" = "Só para confirmar, você quer nova pesquisa?";
 
 /* (No Comment) */
 "scEmjs" = "Nova pesquisa privativa";

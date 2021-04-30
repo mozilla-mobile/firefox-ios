@@ -31,6 +31,9 @@
 /* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
 "TodayWidget.NoOpenTabsLabel" = "Ei avoimia välilehtiä.";
 
+/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.NoOpenTabsLabelV2" = "Ei avoimia välilehtiä";
+
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
 "TodayWidget.OpenFirefoxLabel" = "Avaa Firefox";
 

@@ -5,8 +5,8 @@
 "Bookmarks.DeleteFolderWarning.DeleteButton.Label" = "احذف";
 
 /* Main body of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
-"Bookmarks.DeleteFolderWarning.Description" = "أمتأكّد من حذفه و حذف محتوياته؟";
+"Bookmarks.DeleteFolderWarning.Description" = "أمتأكّد من حذفه وحذف محتوياته؟";
 
 /* Title of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
-"Bookmarks.DeleteFolderWarning.Title" = "المجلد ليس فارغا.";
+"Bookmarks.DeleteFolderWarning.Title" = "هذا المجلد ليس فارغًا.";
 

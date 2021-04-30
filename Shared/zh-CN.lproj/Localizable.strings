@@ -16,11 +16,23 @@
 /* About settings section title */
 "About" = "关于";
 
+/* The title for the pinning a shortcut action */
+"ActivityStream.ContextMenu.AddToShortcuts" = "添加快捷指令";
+
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite" = "固定在常用网站";
 
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite2" = "固定";
+
+/* The title for removing a shortcut action */
+"ActivityStream.ContextMenu.RemoveFromShortcuts" = "从快捷指令删除";
+
 /* The title for removing a pinned topsite action */
 "ActivityStream.ContextMenu.RemovePinTopsite" = "从常用网站中去除";
+
+/* The title for the unpinning a topsite action */
+"ActivityStream.ContextMenu.UnpinTopsite" = "取消固定";
 
 /* The description of a highlight if it is a site the user has bookmarked */
 "ActivityStream.Highlights.Bookmark" = "已加书签";
@@ -37,11 +49,17 @@
 /* Section title label for Recommended by Pocket section */
 "ActivityStream.Pocket.SectionTitle" = "Pocket 流行";
 
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle2" = "Pocket 推荐";
+
 /* The description of a Pocket Story */
 "ActivityStream.Pocket.Trending" = "趋势";
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "最近访问";
+
+/* Section title label for Shortcuts */
+"ActivityStream.Shortcuts.SectionTitle" = "快捷指令";
 
 /* label showing how many rows of topsites are shown. %d represents a number */
 "ActivityStream.TopSites.RowCount" = "行数：%d";
@@ -82,6 +100,12 @@
 
 /* Authentication prompt title */
 "Authentication required" = "需要验证身份";
+
+/* Description for button to suggest searching with a search engine. First argument is the name of the search engine to select */
+"Awesomebar.SearchWithEngine.Description" = "直接从地址栏使用 %@ 搜索";
+
+/* Title for button to suggest searching with a search engine. First argument is the name of the search engine to select */
+"Awesomebar.SearchWithEngine.Title" = "使用 %@ 搜索";
 
 /* Accessibility label for the Back button in the tab toolbar. */
 "Back" = "后退";
@@ -171,7 +195,7 @@
 "ClipboardToast.GoToCopiedLink.Button" = "转到";
 
 /* Message displayed when the user has a copied link on the clipboard */
-"ClipboardToast.GoToCopiedLink.Title" = "要打开复制的链接吗？";
+"ClipboardToast.GoToCopiedLink.Title" = "转到复制的链接？";
 
 /* Accessibility label for action denoting closing a tab in tab list (tray) */
 "Close" = "关闭";
@@ -212,6 +236,12 @@
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "新建标签页打开";
 
+/* Context menu item for opening a link in a new private tab */
+"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "新建隐私标签页打开链接";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenLinkInNewTabButtonTitle" = "新建标签页打开链接";
+
 /* Context menu item for saving an image */
 "ContextMenu.SaveImageButtonTitle" = "保存图像";
 
@@ -243,7 +273,7 @@
 "CoverSheet.v24.ETP.Title" = "保护不受广告跟踪";
 
 /* See http://mzl.la/1Qtkf0j */
-"Create an account" = "注册账号";
+"Create an account" = "注册账户";
 
 /* Dark theme setting in Reading View settings */
 "Dark" = "深邃";
@@ -359,7 +389,7 @@
 "FxA.AccountVerificationDetails" = "邮箱错误？断开连接以重新开始。";
 
 /* Label stating your account is not verified */
-"FxA.AccountVerificationRequired" = "需要验证账号";
+"FxA.AccountVerificationRequired" = "需要验证账户";
 
 /* Message explaining that user needs to check email for Firefox Account verfication link. */
 "FxA.AccountVerificationRequiredSurface" = "您需要验证 %@。请检查您的邮箱找到验证链接以确认链接 Firefox。";
@@ -368,10 +398,10 @@
 "FxA.ConnectAnotherDevice" = "连接其他设备";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Firefox 账号";
+"FxA.FirefoxAccount" = "Firefox 账户";
 
 /* Button label to go to Firefox Account settings */
-"FxA.ManageAccount" = "管理账号和设备";
+"FxA.ManageAccount" = "管理账户和设备";
 
 /* Label when no internet is present */
 "FxA.NoInternetConnection" = "无互联网连接";
@@ -485,7 +515,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "登录以查看来自您的其他设备的标签页列表。";
 
 /* Description for the empty synced tabs 'not yet verified' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "您的账号需要验证。";
+"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "您的账户需要验证。";
 
 /* Description for the empty synced tabs 'single device Sync' state in the History Panel */
 "HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "想查看您在其他设备上的标签页吗？";
@@ -672,14 +702,26 @@
 /* Toast displayed to the user after adding the item to the Top Sites. */
 "Menu.AddPin.Confirm" = "已固定至常用网站";
 
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"Menu.AddPin.Confirm2" = "快捷指令已添加";
+
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "已添加到阅读列表";
+
+/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
+"Menu.BackUpAndSync.Label" = "备份与同步数据";
+
+/* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
+"Menu.Bookmarks.Label" = "书签";
 
 /* The title for the button that lets you copy the url from the location bar. */
 "Menu.Copy.Title" = "复制地址";
 
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "网址已复制到剪贴板";
+
+/* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
+"Menu.Downloads.Label" = "下载";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtectionOff.Title" = "已关闭对此网站的增强型跟踪保护。";
@@ -693,23 +735,44 @@
 /* Description for having strict ETP protection with ITP offered in iOS14+ */
 "Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox 可拦截跨网站跟踪器、社交跟踪器、加密货币挖矿程序和数字指纹跟踪程序，以及跟踪性内容。";
 
+/* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
+"Menu.History.Label" = "历史";
+
 /* Label for the button displayed in the menu used to stop the reload of the webpage */
 "Menu.Library.StopReload" = "停止";
+
+/* Label for the button, displayed in the menu, takes you to screen to manage account when pressed. First argument is the display name for the current account */
+"Menu.ManageAccount.Label" = "管理账户 %@";
+
+/* Label for the button, displayed in the menu, turns off night mode. */
+"Menu.NightModeTurnOff.Label2" = "关闭夜间模式";
 
 /* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label" = "启用夜间模式";
 
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label2" = "开启夜间模式";
+
 /* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
 "Menu.NoImageModeBlockImages.Label" = "屏蔽图像";
 
+/* Label for the button, displayed in the menu, shows images on the webpage when pressed. */
+"Menu.NoImageModeShowImages.Label" = "显示图像";
+
 /* Label for title in page action menu. */
 "Menu.PageActions.Title" = "页面动作";
+
+/* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
+"Menu.Passwords.Label" = "密码";
 
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "粘贴";
 
 /* The title for the button that lets you paste and go to a URL */
 "Menu.PasteAndGo.Title" = "粘贴并前往";
+
+/* Label for the button, displayed in the menu, takes you to to Reading List screen when pressed. */
+"Menu.ReadingList.Label" = "阅读列表";
 
 /* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
 "Menu.ReloadWithoutTrackingProtection.Title" = "重新加载，不使用跟踪保护";
@@ -722,6 +785,9 @@
 
 /* Toast displayed to the user after removing the item from the Top Sites. */
 "Menu.RemovePin.Confirm" = "已从常用网站移除";
+
+/* Toast displayed to the user after removing the item to the Shortcuts. */
+"Menu.RemovePin.Confirm2" = "已从快捷指令删除";
 
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "标签页已发送";
@@ -972,6 +1038,9 @@
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "搜索或输入网址";
 
+/* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
+"Search.Awesomebar.SwitchToTab" = "切换到标签页";
+
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "新的搜索引擎将在快捷搜索栏中显示。";
 
@@ -1040,13 +1109,13 @@
 "SendTo.NavBar.Title" = "发送标签页";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "您没有其他已连接此 Firefox 账号的设备可用于同步。";
+"SendTo.NoDevicesFound.Message" = "您没有其他已连接此 Firefox 账户的设备可用于同步。";
 
 /* See http://mzl.la/1ISlXnU */
 "SendTo.NotSignedIn.Message" = "请打开 Firefox，转至“设置”并登录以继续。";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "您尚未登录您的 Firefox 账号。";
+"SendTo.NotSignedIn.Title" = "您尚未登录您的 Firefox 账户。";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "发送";
@@ -1136,7 +1205,7 @@
 "Settings.DataManagement.Title" = "数据管理";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox 将停止与您的账号的同步，但不会删除此设备上的任何浏览数据。";
+"Settings.Disconnect.Body" = "Firefox 将停止与您的账户的同步，但不会删除此设备上的任何浏览数据。";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "断开同步";
@@ -1259,6 +1328,9 @@
 /* The footer for the section to customize top sites in the new tab settings page. */
 "Settings.NewTab.Option.CustomizeFooter" = "您经常访问的网站";
 
+/* The footer for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeFooter2" = "您保存或访问过的网站";
+
 /* The title for the section to customize top sites in the new tab settings page. */
 "Settings.NewTab.Option.CustomizeTitle" = "定制 Firefox 主页";
 
@@ -1286,6 +1358,12 @@
 /* Option in settings to show reading list when you open a new tab */
 "Settings.NewTab.Option.ReadingList" = "显示您的阅读列表";
 
+/* Option in settings to turn on off pocket recommendations First argument is the pocket brand name */
+"Settings.NewTab.Option.RecommendedByPocket" = "%@ 推荐";
+
+/* Descriptoin for the option in settings to turn on off pocket recommendations. First argument is the pocket brand name, second argument is the pocket product name. */
+"Settings.NewTab.Option.RecommendedByPocketDescription" = "由 %2$@ 旗下产品 %1$@ 提供的精选内容";
+
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "新标签页";
 
@@ -1302,7 +1380,7 @@
 "Settings.OfferClipboardBar.Status" = "当打开 Firefox 时";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Title" = "询问打开复制的链接";
+"Settings.OfferClipboardBar.Title" = "询问打开已复制的链接";
 
 /* Title for Open With Settings */
 "Settings.OpenWith.PageTitle" = "打开邮件链接于";
@@ -1341,10 +1419,40 @@
 "Settings.Siri.OpenTabShortcut" = "打开新标签页";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "使用 Siri 捷径快速开启 Firefox";
+"Settings.Siri.SectionDescription" = "使用 Siri 快捷指令快速开启 Firefox";
 
 /* The option that takes you to the siri shortcuts settings page */
-"Settings.Siri.SectionName" = "Siri 捷径";
+"Settings.Siri.SectionName" = "Siri 快捷指令";
+
+/* Section title for all studies that are currently active */
+"Settings.Studies.Active.SectionName" = "进行中";
+
+/* Section title for all studies that are completed */
+"Settings.Studies.Completed.SectionName" = "已完成";
+
+/* Button title displayed next to each study allowing the user to opt-out of the study */
+"Settings.Studies.Remove.Button" = "移除";
+
+/* Title displayed in header of the Studies panel */
+"Settings.Studies.SectionName" = "研究";
+
+/* Label used as an item in Settings. Tapping on this item takes you to the Studies panel */
+"Settings.Studies.Title" = "研究";
+
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Toggle.Link" = "详细了解。";
+
+/* A short description that explains that Mozilla is running studies */
+"Settings.Studies.Toggle.Message" = "Firefox 可能会不时地安装并运行一些研究项目。";
+
+/* Toggled OFF to opt-out of studies */
+"Settings.Studies.Toggle.Off" = "关闭";
+
+/* Toggled ON to participate in studies */
+"Settings.Studies.Toggle.On" = "开启";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Toggle.Title" = "研究";
 
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "好，知道了";
@@ -1578,6 +1686,9 @@
 /* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.CloseTab.KeyCodeTitle" = "关闭所选标签页";
 
+/* Accessibility label for the currently selected tab. */
+"TabTray.CurrentSelectedTab.A11Y" = "当前选择的标签页。";
+
 /* The section header for tabs opened last week */
 "TabTray.LastWeek.Header" = "上周";
 
@@ -1592,6 +1703,18 @@
 
 /* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenSelectedTab.KeyCodeTitle" = "打开所选标签页";
+
+/* The title for the tab tray in private mode */
+"TabTray.PrivateTitle" = "隐私标签页";
+
+/* The title on the button to look at private tabs. */
+"TabTray.SegmentedControlTitles.PrivateTabs" = "隐私";
+
+/* The title on the button to look at synced tabs. */
+"TabTray.SegmentedControlTitles.SyncedTabs" = "已同步";
+
+/* The title on the button to look at regular tabs. */
+"TabTray.SegmentedControlTitles.Tabs" = "标签页";
 
 /* The button title to see more options to perform on the tab. */
 "TabTray.SwipeMenu.More" = "更多";

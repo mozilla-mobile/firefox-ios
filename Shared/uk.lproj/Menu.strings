@@ -1,6 +1,9 @@
 /* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
 "Menu.AddBookmarkAction.Title" = "Додати закладку";
 
+/* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
+"Menu.AddBookmarkAction2.Title" = "Додати закладку";
+
 /* Label for the button, displayed in the menu, used to add a page to the reading list. */
 "Menu.AddToReadingList.Title" = "Додати до списку читання";
 
@@ -9,6 +12,9 @@
 
 /* Label for the button, displayed in the menu, used to copy the page url to the clipboard. */
 "Menu.CopyAddress.Title" = "Копіювати адресу";
+
+/* Label for the button, displayed in the menu, used to copy the current page link to the clipboard. */
+"Menu.CopyLink.Title" = "Копіювати посилання";
 
 /* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
 "Menu.FindInPageAction.Title" = "Знайти на сторінці";
@@ -47,7 +53,7 @@
 "Menu.OpenSyncedTabsAction.AccessibilityLabel.v2" = "Вкладки";
 
 /* Accessibility label for the button, displayed in the menu, used to open the Top Sites home panel. */
-"Menu.OpenTopSitesAction.AccessibilityLabel" = "Часті сайти";
+"Menu.OpenTopSitesAction.AccessibilityLabel" = "Популярні сайти";
 
 /* Label for the button, displayed in the menu, used to show the html page source */
 "Menu.PageSourceAction.Title" = "Програмний код сторінки";

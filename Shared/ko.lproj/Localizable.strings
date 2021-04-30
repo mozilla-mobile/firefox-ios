@@ -16,11 +16,23 @@
 /* About settings section title */
 "About" = "상세정보";
 
+/* The title for the pinning a shortcut action */
+"ActivityStream.ContextMenu.AddToShortcuts" = "바로가기 추가";
+
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite" = "상위 사이트에 고정";
 
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite2" = "고정";
+
+/* The title for removing a shortcut action */
+"ActivityStream.ContextMenu.RemoveFromShortcuts" = "바로 가기에서 제거";
+
 /* The title for removing a pinned topsite action */
 "ActivityStream.ContextMenu.RemovePinTopsite" = "고정된 사이트에서 삭제";
+
+/* The title for the unpinning a topsite action */
+"ActivityStream.ContextMenu.UnpinTopsite" = "고정 해제";
 
 /* The description of a highlight if it is a site the user has bookmarked */
 "ActivityStream.Highlights.Bookmark" = "북마크 완료";
@@ -37,11 +49,17 @@
 /* Section title label for Recommended by Pocket section */
 "ActivityStream.Pocket.SectionTitle" = "Pocket 트랜드";
 
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle2" = "Pocket 추천";
+
 /* The description of a Pocket Story */
 "ActivityStream.Pocket.Trending" = "트랜드";
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "최근에 방문함";
+
+/* Section title label for Shortcuts */
+"ActivityStream.Shortcuts.SectionTitle" = "바로 가기";
 
 /* label showing how many rows of topsites are shown. %d represents a number */
 "ActivityStream.TopSites.RowCount" = "행: %d";
@@ -82,6 +100,12 @@
 
 /* Authentication prompt title */
 "Authentication required" = "인증 필요";
+
+/* Description for button to suggest searching with a search engine. First argument is the name of the search engine to select */
+"Awesomebar.SearchWithEngine.Description" = "주소 표시줄에서 %@ 직접 검색";
+
+/* Title for button to suggest searching with a search engine. First argument is the name of the search engine to select */
+"Awesomebar.SearchWithEngine.Title" = "%@ 검색";
 
 /* Accessibility label for the Back button in the tab toolbar. */
 "Back" = "뒤로";
@@ -211,6 +235,12 @@
 
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "새 탭에서 열기";
+
+/* Context menu item for opening a link in a new private tab */
+"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "새 사생활 탭에서 링크 열기";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenLinkInNewTabButtonTitle" = "새 탭에 링크 열기";
 
 /* Context menu item for saving an image */
 "ContextMenu.SaveImageButtonTitle" = "이미지 저장";
@@ -672,14 +702,26 @@
 /* Toast displayed to the user after adding the item to the Top Sites. */
 "Menu.AddPin.Confirm" = "상위 사이트에 고정";
 
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"Menu.AddPin.Confirm2" = "바로가기에 추가됨";
+
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "읽기 목록에 추가됨";
+
+/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
+"Menu.BackUpAndSync.Label" = "데이터 백업과 동기화";
+
+/* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
+"Menu.Bookmarks.Label" = "즐겨찾기";
 
 /* The title for the button that lets you copy the url from the location bar. */
 "Menu.Copy.Title" = "주소 복사";
 
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "클립보드에 URL 복사됨";
+
+/* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
+"Menu.Downloads.Label" = "다운로드";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtectionOff.Title" = "이 사이트에 향상된 추적 방지 기능이 꺼져 있습니다.";
@@ -693,23 +735,44 @@
 /* Description for having strict ETP protection with ITP offered in iOS14+ */
 "Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox는 교차 사이트 추적기, 소셜 추적기, 암호화폐 채굴기, 디지털 지문 및 추적 콘텐츠를 차단합니다.";
 
+/* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
+"Menu.History.Label" = "방문 기록";
+
 /* Label for the button displayed in the menu used to stop the reload of the webpage */
 "Menu.Library.StopReload" = "중지";
+
+/* Label for the button, displayed in the menu, takes you to screen to manage account when pressed. First argument is the display name for the current account */
+"Menu.ManageAccount.Label" = "%@ 계정 관리";
+
+/* Label for the button, displayed in the menu, turns off night mode. */
+"Menu.NightModeTurnOff.Label2" = "야간 모드 끄기";
 
 /* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label" = "야간 모드 켬";
 
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label2" = "야간 모드 켜기";
+
 /* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
 "Menu.NoImageModeBlockImages.Label" = "이미지 차단";
 
+/* Label for the button, displayed in the menu, shows images on the webpage when pressed. */
+"Menu.NoImageModeShowImages.Label" = "이미지 보기";
+
 /* Label for title in page action menu. */
 "Menu.PageActions.Title" = "페이지 작업";
+
+/* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
+"Menu.Passwords.Label" = "비밀번호";
 
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "붙여넣기";
 
 /* The title for the button that lets you paste and go to a URL */
 "Menu.PasteAndGo.Title" = "붙여넣고 바로 가기";
+
+/* Label for the button, displayed in the menu, takes you to to Reading List screen when pressed. */
+"Menu.ReadingList.Label" = "읽기 목록";
 
 /* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
 "Menu.ReloadWithoutTrackingProtection.Title" = "추적 방지 기능을 끄고 새로 고침";
@@ -722,6 +785,9 @@
 
 /* Toast displayed to the user after removing the item from the Top Sites. */
 "Menu.RemovePin.Confirm" = "상위 사이트에서 삭제";
+
+/* Toast displayed to the user after removing the item to the Shortcuts. */
+"Menu.RemovePin.Confirm2" = "바로 가기에서 제거됨";
 
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "보낸 탭";
@@ -971,6 +1037,9 @@
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "검색어나 주소 입력";
+
+/* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
+"Search.Awesomebar.SwitchToTab" = "탭으로 전환";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "새 검색 엔진이 빠른 검색창에 나타날 것입니다.";
@@ -1259,6 +1328,9 @@
 /* The footer for the section to customize top sites in the new tab settings page. */
 "Settings.NewTab.Option.CustomizeFooter" = "가장 많이 방문한 사이트";
 
+/* The footer for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeFooter2" = "저장하거나 방문한 사이트";
+
 /* The title for the section to customize top sites in the new tab settings page. */
 "Settings.NewTab.Option.CustomizeTitle" = "Firefox 홈 개인화";
 
@@ -1285,6 +1357,12 @@
 
 /* Option in settings to show reading list when you open a new tab */
 "Settings.NewTab.Option.ReadingList" = "읽기 목록 보이기";
+
+/* Option in settings to turn on off pocket recommendations First argument is the pocket brand name */
+"Settings.NewTab.Option.RecommendedByPocket" = "%@ 추천";
+
+/* Descriptoin for the option in settings to turn on off pocket recommendations. First argument is the pocket brand name, second argument is the pocket product name. */
+"Settings.NewTab.Option.RecommendedByPocketDescription" = "%2$@ 패밀리의 일부인 %1$@에 의해서 선별된 최고의 콘텐츠";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "새 탭";
@@ -1345,6 +1423,36 @@
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri 단축키";
+
+/* Section title for all studies that are currently active */
+"Settings.Studies.Active.SectionName" = "활성화";
+
+/* Section title for all studies that are completed */
+"Settings.Studies.Completed.SectionName" = "완료됨";
+
+/* Button title displayed next to each study allowing the user to opt-out of the study */
+"Settings.Studies.Remove.Button" = "삭제";
+
+/* Title displayed in header of the Studies panel */
+"Settings.Studies.SectionName" = "연구";
+
+/* Label used as an item in Settings. Tapping on this item takes you to the Studies panel */
+"Settings.Studies.Title" = "연구";
+
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Toggle.Link" = "자세히 알아보기";
+
+/* A short description that explains that Mozilla is running studies */
+"Settings.Studies.Toggle.Message" = "Firefox는 때때로 연구를 설치하고 실행할 수 있습니다.";
+
+/* Toggled OFF to opt-out of studies */
+"Settings.Studies.Toggle.Off" = "끄기";
+
+/* Toggled ON to participate in studies */
+"Settings.Studies.Toggle.On" = "켜기";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Toggle.Title" = "연구";
 
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "네, 알겠습니다";
@@ -1578,6 +1686,9 @@
 /* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.CloseTab.KeyCodeTitle" = "선택한 탭 닫기";
 
+/* Accessibility label for the currently selected tab. */
+"TabTray.CurrentSelectedTab.A11Y" = "현재 선택된 탭입니다.";
+
 /* The section header for tabs opened last week */
 "TabTray.LastWeek.Header" = "지난주";
 
@@ -1592,6 +1703,18 @@
 
 /* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenSelectedTab.KeyCodeTitle" = "선택한 탭 열기";
+
+/* The title for the tab tray in private mode */
+"TabTray.PrivateTitle" = "사생활 보호 탭";
+
+/* The title on the button to look at private tabs. */
+"TabTray.SegmentedControlTitles.PrivateTabs" = "사생활 보호 탭";
+
+/* The title on the button to look at synced tabs. */
+"TabTray.SegmentedControlTitles.SyncedTabs" = "동기화됨";
+
+/* The title on the button to look at regular tabs. */
+"TabTray.SegmentedControlTitles.Tabs" = "탭";
 
 /* The button title to see more options to perform on the tab. */
 "TabTray.SwipeMenu.More" = "더보기";

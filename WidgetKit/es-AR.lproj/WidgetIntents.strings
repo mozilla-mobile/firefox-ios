@@ -2,6 +2,9 @@
 "2GqvPe" = "Ir al enlace copiado";
 
 /* (No Comment) */
+"ctDNmu" = "Acceso rápido a varias acciones de Firefox";
+
+/* (No Comment) */
 "eHmH1H" = "Eliminar pestañas privadas";
 
 /* (No Comment) */
@@ -11,16 +14,16 @@
 "eV8mOT" = "Acciones rápidas";
 
 /* (No Comment) */
-"fi3W24-2GqvPe" = "Hay opciones ${count} que coinciden con 'Ir al enlace copiado'.";
+"fi3W24-2GqvPe" = "Hay ${count} opciones que coinciden con 'Ir al enlace copiado'.";
 
 /* (No Comment) */
-"fi3W24-eHmH1H" = "Hay $ {count} opciones que coinciden con \"Eliminar pestañas privadas\".";
+"fi3W24-eHmH1H" = "Hay ${count} opciones que coinciden con \"Eliminar pestañas privadas\".";
 
 /* (No Comment) */
-"fi3W24-scEmjs" = "Hay $ {count} opciones que coinciden con \"Nueva búsqueda privada\".";
+"fi3W24-scEmjs" = "Hay ${count} opciones que coinciden con \"Nueva búsqueda privada\".";
 
 /* (No Comment) */
-"fi3W24-xRJbBP" = "Hay $ {count} opciones que coinciden con \"Nueva búsqueda\".";
+"fi3W24-xRJbBP" = "Hay ${count} opciones que coinciden con \"Nueva búsqueda\".";
 
 /* (No Comment) */
 "PzSrmZ-2GqvPe" = "Solo para confirmar, ¿querías \"Ir al enlace copiado\"?";

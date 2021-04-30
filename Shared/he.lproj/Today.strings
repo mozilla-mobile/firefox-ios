@@ -85,6 +85,9 @@
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "הוספת קיצורי דרך ללשוניות הפתוחות שלך.";
 
+/* Title for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryTitle" = "תצוגה מהירה";
+
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewLargeGalleryDescription" = "הוספת קיצורי דרך ללשוניות הפתוחות שלך.";
 
@@ -108,6 +111,9 @@
 
 /* Sub label for Top Sites widget */
 "TodayWidget.TopSitesSubLabel" = "‏Firefox - אתרים מובילים";
+
+/* Sub label for Shortcuts widget */
+"TodayWidget.TopSitesSubLabel2" = "‏Firefox - קיצורי דרך לאתרים";
 
 /* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
 "TodayWidget.ViewMore" = "הצגת עוד";

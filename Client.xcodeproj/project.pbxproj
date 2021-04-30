@@ -3298,6 +3298,7 @@
 		D5588454261FC938008D5ED2 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/BookmarkPanel.strings"; sourceTree = "<group>"; };
 		D5588455261FC938008D5ED2 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/BookmarkPanelDeleteConfirm.strings"; sourceTree = "<group>"; };
 		D5588456261FC938008D5ED2 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/WidgetIntents.strings"; sourceTree = "<group>"; };
+		D55C98AD263C72250000DA62 /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D5605B1D261FC8BD005228ED /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/WidgetIntents.strings; sourceTree = "<group>"; };
 		D561138625D1AE0000EAEE66 /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/BookmarkPanel.strings; sourceTree = "<group>"; };
 		D561138725D1AE0000EAEE66 /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -3443,6 +3444,10 @@
 		D5E5B1E425D1ADE200DE1FD4 /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D5E5B1E525D1ADE200DE1FD4 /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/BookmarkPanel.strings; sourceTree = "<group>"; };
 		D5E5B1E625D1ADE200DE1FD4 /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/BookmarkPanelDeleteConfirm.strings; sourceTree = "<group>"; };
+		D5E79E94263C729200D1E356 /* te */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = te; path = te.lproj/BookmarkPanel.strings; sourceTree = "<group>"; };
+		D5E79E95263C729200D1E356 /* te */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = te; path = te.lproj/BookmarkPanelDeleteConfirm.strings; sourceTree = "<group>"; };
+		D5E79E96263C729200D1E356 /* te */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = te; path = "te.lproj/Default Browser.strings"; sourceTree = "<group>"; };
+		D5E79E97263C729200D1E356 /* te */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = te; path = te.lproj/WidgetIntents.strings; sourceTree = "<group>"; };
 		D5EA692B25D717920036F841 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/BookmarkPanel.strings; sourceTree = "<group>"; };
 		D5EA692C25D717920036F841 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/BookmarkPanelDeleteConfirm.strings; sourceTree = "<group>"; };
 		D5F0400B261FC9E500EDB60D /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/WidgetIntents.strings; sourceTree = "<group>"; };
@@ -9512,6 +9517,7 @@
 				D51D7600261FC9EF00EEE7B6 /* bn */,
 				D5311CB4261FC9F500A2FC94 /* ast */,
 				D5E16120261FCA2200F02D6E /* eo */,
+				D5E79E96263C729200D1E356 /* te */,
 			);
 			name = "Default Browser.strings";
 			sourceTree = "<group>";
@@ -9972,6 +9978,7 @@
 				D5E1611F261FCA2200F02D6E /* eo */,
 				D52F7F4D261FCA3700C30D73 /* es */,
 				D5C974D9261FCA5F004631C7 /* lo */,
+				D5E79E94263C729200D1E356 /* te */,
 			);
 			name = BookmarkPanel.strings;
 			sourceTree = "<group>";
@@ -10038,6 +10045,7 @@
 				D5090FD8261FCA2D007733E5 /* fr */,
 				D52F7F4E261FCA3700C30D73 /* es */,
 				D5C974DA261FCA5F004631C7 /* lo */,
+				D55C98AD263C72250000DA62 /* he */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -10107,6 +10115,7 @@
 				D5E16121261FCA2200F02D6E /* eo */,
 				D52F7F4F261FCA3700C30D73 /* es */,
 				D5C974DB261FCA5F004631C7 /* lo */,
+				D5E79E95263C729200D1E356 /* te */,
 			);
 			name = BookmarkPanelDeleteConfirm.strings;
 			sourceTree = "<group>";
@@ -10175,6 +10184,7 @@
 				D5510B24261FCA8100198AF0 /* th */,
 				D565C290261FCA8600907C43 /* tr */,
 				D5781476261FCA8C003595F6 /* pa-IN */,
+				D5E79E97263C729200D1E356 /* te */,
 			);
 			name = WidgetIntents.intentdefinition;
 			sourceTree = "<group>";

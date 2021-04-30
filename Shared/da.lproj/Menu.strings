@@ -1,6 +1,9 @@
 /* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
 "Menu.AddBookmarkAction.Title" = "Tilføj bogmærke";
 
+/* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
+"Menu.AddBookmarkAction2.Title" = "Tilføj bogmærke";
+
 /* Label for the button, displayed in the menu, used to add a page to the reading list. */
 "Menu.AddToReadingList.Title" = "Føj til læseliste";
 
@@ -9,6 +12,9 @@
 
 /* Label for the button, displayed in the menu, used to copy the page url to the clipboard. */
 "Menu.CopyAddress.Title" = "Kopier adresse";
+
+/* Label for the button, displayed in the menu, used to copy the current page link to the clipboard. */
+"Menu.CopyLink.Title" = "Kopier link";
 
 /* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
 "Menu.FindInPageAction.Title" = "Find på side";

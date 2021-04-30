@@ -11,7 +11,7 @@
 "TodayWidget.CopiedLinkLabelFromPasteBoardV1" = "Ligamine copiate del area de transferentia";
 
 /* Quick Actions drop down menu item for lear Private Tabs when widget enters edit mode and drop down menu expands */
-"TodayWidget.DropDownMenuItemClearPrivateTabs" = "Eliminar schedas private";
+"TodayWidget.DropDownMenuItemClearPrivateTabs" = "Clauder schedas private";
 
 /* Quick Actions drop down menu item for Go to Copied Link when widget enters edit mode and drop down menu expands */
 "TodayWidget.DropDownMenuItemGoToCopiedLink" = "Ir al ligamine copiate";
@@ -120,6 +120,9 @@
 
 /* Sub label for Top Sites widget */
 "TodayWidget.TopSitesSubLabel" = "Firefox - Sitos preferite";
+
+/* Sub label for Shortcuts widget */
+"TodayWidget.TopSitesSubLabel2" = "Firefox - Accessos directe a sitos web";
 
 /* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
 "TodayWidget.ViewMore" = "Vider plus";

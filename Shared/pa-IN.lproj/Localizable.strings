@@ -16,11 +16,23 @@
 /* About settings section title */
 "About" = "ਇਸ ਦੇ ਬਾਰੇ";
 
+/* The title for the pinning a shortcut action */
+"ActivityStream.ContextMenu.AddToShortcuts" = "ਸ਼ਾਰਟਕੱਟਾਂ ਵਿੱਚ ਜੋੜੋ";
+
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite" = "ਚੋਟੀਆਂ ਦੀਆਂ ਸਾਈਟਾਂ 'ਚ ਟੰਗੋ";
 
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite2" = "ਟੰਗੋ";
+
+/* The title for removing a shortcut action */
+"ActivityStream.ContextMenu.RemoveFromShortcuts" = "ਸ਼ਾਰਟਕੱਟ ਵਿੱਚੋਂ ਹਟਾਓ";
+
 /* The title for removing a pinned topsite action */
 "ActivityStream.ContextMenu.RemovePinTopsite" = "ਟੰਗੀ ਹੋਈ ਸਾਈਟ ਨੂੰ ਹਟਾਓ";
+
+/* The title for the unpinning a topsite action */
+"ActivityStream.ContextMenu.UnpinTopsite" = "ਲਾਹੋ";
 
 /* The description of a highlight if it is a site the user has bookmarked */
 "ActivityStream.Highlights.Bookmark" = "ਬੁੱਕਮਾਰਕ ਕੀਤਾ";
@@ -37,11 +49,17 @@
 /* Section title label for Recommended by Pocket section */
 "ActivityStream.Pocket.SectionTitle" = "ਪਾਕੇਟ ਉੱਤੇ ਰੁਝਾਨ";
 
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle2" = "Pocket ਵਲੋਂ ਸਿਫਾਰਸ਼ੀ";
+
 /* The description of a Pocket Story */
 "ActivityStream.Pocket.Trending" = "ਰੁਝਾਨ";
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "ਹਾਲ ਦੇ ਖੋਲ੍ਹੇ ਗਏ";
+
+/* Section title label for Shortcuts */
+"ActivityStream.Shortcuts.SectionTitle" = "ਸ਼ਾਰਟਕੱਟ";
 
 /* label showing how many rows of topsites are shown. %d represents a number */
 "ActivityStream.TopSites.RowCount" = "ਕਤਾਰਾਂ: %d";
@@ -83,6 +101,12 @@
 /* Authentication prompt title */
 "Authentication required" = "ਪ੍ਰਮਾਣਿਕਤਾ ਲੋੜੀਂਦੀ ਹੈ";
 
+/* Description for button to suggest searching with a search engine. First argument is the name of the search engine to select */
+"Awesomebar.SearchWithEngine.Description" = "ਸਿਰਨਾਵਾਂ ਪੱਟੀ ਵਿੱਚੋਂ %@ ਸਿ਼ੱਧਾ ਖੋਜੋ";
+
+/* Title for button to suggest searching with a search engine. First argument is the name of the search engine to select */
+"Awesomebar.SearchWithEngine.Title" = "%@ ਨਾਲ ਖੋਜੋ";
+
 /* Accessibility label for the Back button in the tab toolbar. */
 "Back" = "ਪਿੱਛੇ";
 
@@ -102,7 +126,7 @@
 "Bookmark.DetailFieldURL.Label" = "URL";
 
 /* Toggle bookmarks syncing setting */
-"Bookmarks" = "ਬੁੱਕਮਾਰਕ";
+"Bookmarks" = "ਵਰਕਾ ਨਿਸ਼ਾਨੀਆਂ";
 
 /* The button on the snackbar to edit a bookmark after adding it. */
 "Bookmarks.Edit.Button" = "ਸੋਧੋ";
@@ -211,6 +235,12 @@
 
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "ਨਵੇਂ ਟੈਬ ਵਿੱਚ ਖੋਲ੍ਹੋ";
+
+/* Context menu item for opening a link in a new private tab */
+"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "ਲਿੰਕ ਨਵੀਂ ਪ੍ਰਾਈਵੇਟ ਤੈਬ ਵਿੱਚ ਖੋਲ੍ਹੋ";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenLinkInNewTabButtonTitle" = "ਨਵੀਂ ਟੈਬ ਵਿੱਚ ਲਿੰਕ ਖੋਲ੍ਹੋ";
 
 /* Context menu item for saving an image */
 "ContextMenu.SaveImageButtonTitle" = "ਚਿੱਤਰ ਸੰਭਾਲੋ";
@@ -672,14 +702,26 @@
 /* Toast displayed to the user after adding the item to the Top Sites. */
 "Menu.AddPin.Confirm" = "ਚੋਟੀ ਦੀਆਂ ਸਾਈਟਾਂ 'ਤੇ ਟੰਗੇ ਗਏ";
 
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"Menu.AddPin.Confirm2" = "ਸ਼ਾਰਟਕੱਟਾਂ ਵਿੱਚ ਜੋੜਿਆ";
+
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "ਪੜ੍ਹਨ ਸੂਚੀ 'ਚ ਜੋੜਿਆ";
+
+/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
+"Menu.BackUpAndSync.Label" = "ਡਾਟਾ ਬੈਕਅੱਪ ਅਤੇ ਸਿੰਕ ਕਰੋ";
+
+/* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
+"Menu.Bookmarks.Label" = "ਬੁੱਕਮਾਰਕ";
 
 /* The title for the button that lets you copy the url from the location bar. */
 "Menu.Copy.Title" = "ਸਿਰਨਾਵਾਂ ਕਾਪੀ ਕਰੋ";
 
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "URL ਕਲਿੱਪਬੋਰਡ 'ਚ ਕਾਪੀ ਕੀਤਾ";
+
+/* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
+"Menu.Downloads.Label" = "ਡਾਊਨਲੋਡ";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtectionOff.Title" = "ਇਸ ਸਾਈਟ ਲਈ ਵਾਧਾ ਕੀਤੀ ਟਰੈਕਿੰਗ ਸੁਰੱਖਿਆ ਬੰਦ ਹੈ।";
@@ -693,23 +735,44 @@
 /* Description for having strict ETP protection with ITP offered in iOS14+ */
 "Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox ਸਾਈਟਾਂ ਵਿਚਲੇ ਟਰੈਕਰਾਂ, ਸਮਾਜਿਕ ਟਰੈਕਰਾਂ, ਕ੍ਰਿਪਟੋਮਾਈਨਰਾਂ, ਫਿੰਗਰਪਰਿੰਟਰਾਂ ਅਤੇ ਟਰੈਕ ਕਰਨ ਵਾਲੀ ਸਮੱਗਰੀ ਉੱਤੇ ਪਾਬੰਦੀ ਲਾਉਂਦਾ ਹੈ।";
 
+/* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
+"Menu.History.Label" = "ਅਤੀਤ";
+
 /* Label for the button displayed in the menu used to stop the reload of the webpage */
 "Menu.Library.StopReload" = "ਰੋਕੋ";
+
+/* Label for the button, displayed in the menu, takes you to screen to manage account when pressed. First argument is the display name for the current account */
+"Menu.ManageAccount.Label" = "%@ ਖਾਤੇ ਦਾ ਇੰਤਜ਼ਾਮ ਕਰੋ";
+
+/* Label for the button, displayed in the menu, turns off night mode. */
+"Menu.NightModeTurnOff.Label2" = "ਰਾਤ ਦਾ ਢੰਗ ਬੰਦ ਕਰੋ";
 
 /* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label" = "ਰਾਤ ਢੰਗ ਚਾਲੂ ਕਰੋ";
 
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label2" = "ਰਾਤ ਦਾ ਢੰਗ ਚਾਲੂ ਕਰੋ";
+
 /* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
 "Menu.NoImageModeBlockImages.Label" = "ਚਿੱਤਰਾਂ ਤੇ ਪਾਬੰਦੀ ਲਾਓ";
 
+/* Label for the button, displayed in the menu, shows images on the webpage when pressed. */
+"Menu.NoImageModeShowImages.Label" = "ਚਿੱਤਰ ਵੇਖਾਓ";
+
 /* Label for title in page action menu. */
 "Menu.PageActions.Title" = "ਸਫ਼ਾ ਕਾਰਵਾਈਆਂ";
+
+/* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
+"Menu.Passwords.Label" = "ਪਾਸਵਰਡ";
 
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "ਚੇਪੋ";
 
 /* The title for the button that lets you paste and go to a URL */
 "Menu.PasteAndGo.Title" = "ਚੇਪੋ ਤੇ ਜਾਓ";
+
+/* Label for the button, displayed in the menu, takes you to to Reading List screen when pressed. */
+"Menu.ReadingList.Label" = "ਪੜ੍ਹਨ ਸੂਚੀ";
 
 /* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
 "Menu.ReloadWithoutTrackingProtection.Title" = "ਟਰੈਕਿੰਗ ਸੁਰੱਖਿਆ ਤੋਂ ਬਿਨਾਂ ਮੁੜ-ਲੋਡ ਕਰੋ";
@@ -722,6 +785,9 @@
 
 /* Toast displayed to the user after removing the item from the Top Sites. */
 "Menu.RemovePin.Confirm" = "ਸਿਖਰਲੀਆਂ ਸਾਈਟਾਂ ਤੋਂ ਹਟਾਇਆ ਗਿਆ";
+
+/* Toast displayed to the user after removing the item to the Shortcuts. */
+"Menu.RemovePin.Confirm2" = "ਸ਼ਾਰਟਕੱਟਾਂ ਵਿੱਚੋਂ ਹਟਾਇਆ";
 
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "ਟੈਬ ਭੇਜੋ";
@@ -971,6 +1037,9 @@
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "ਖੋਜੋ ਜਾਂ ਸਿਰਨਾਵਾਂ ਦਿਓ";
+
+/* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
+"Search.Awesomebar.SwitchToTab" = "ਟੈਬ ਉੱਤੇ ਜਾਓ";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "ਨਵਾਂ ਖੋਜ ਇੰਜਣ ਤੁਰੰਤ ਖੋਜ ਪੱਟੀ ਵਿੱਚ ਦਿਖਾਈ ਦੇਵੇਗਾ।";
@@ -1259,6 +1328,9 @@
 /* The footer for the section to customize top sites in the new tab settings page. */
 "Settings.NewTab.Option.CustomizeFooter" = "ਤੁਹਾਡੇ ਵਲੋਂ ਸਭ ਤੋਂਂ ਵੱਧ ਖੋਲ੍ਹੀਆਂ ਸਾਈਟਾਂ";
 
+/* The footer for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeFooter2" = "ਸਾਈਟਾਂ ਤੁਸੀਂ ਸੰਭਾਲੀਆਂ ਜਾਂ ਖੋਲ੍ਹੀਆਂ";
+
 /* The title for the section to customize top sites in the new tab settings page. */
 "Settings.NewTab.Option.CustomizeTitle" = "ਫਾਇਰਫਾਕਸ ਮੁੱਖ-ਸਫ਼ੇ ਨੂੰ ਪਸੰਦ ਮੁਤਾਬਕ ਬਣਾਓ";
 
@@ -1285,6 +1357,12 @@
 
 /* Option in settings to show reading list when you open a new tab */
 "Settings.NewTab.Option.ReadingList" = "ਆਪਣੀ ਪੜ੍ਹਨ ਸੂਚੀ ਨੂੰ ਵੇਖੋ";
+
+/* Option in settings to turn on off pocket recommendations First argument is the pocket brand name */
+"Settings.NewTab.Option.RecommendedByPocket" = "%@ ਵਲੋਂ ਸਿਫਾਰਸ਼ ਕੀਤੇ";
+
+/* Descriptoin for the option in settings to turn on off pocket recommendations. First argument is the pocket brand name, second argument is the pocket product name. */
+"Settings.NewTab.Option.RecommendedByPocketDescription" = "%2$@ ਸਮਹੂ ਦੇ ਹਿੱਸੇ ਵਜੋਂ %1$@ ਵਲੋਂ ਪੇਸ਼ ਕੀਤੀ ਖ਼ਾਸ ਸਮਗੱਰੀ";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "ਨਵੀਂ ਟੈਬ";
@@ -1345,6 +1423,36 @@
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "ਸੀਰੀ ਸ਼ਾਰਟਕੱਟ";
+
+/* Section title for all studies that are currently active */
+"Settings.Studies.Active.SectionName" = "ਸਰਗਰਮ";
+
+/* Section title for all studies that are completed */
+"Settings.Studies.Completed.SectionName" = "ਪੂਰਾ ਹੋਏ";
+
+/* Button title displayed next to each study allowing the user to opt-out of the study */
+"Settings.Studies.Remove.Button" = "ਹਟਾਓ";
+
+/* Title displayed in header of the Studies panel */
+"Settings.Studies.SectionName" = "ਅਧਿਐਨ";
+
+/* Label used as an item in Settings. Tapping on this item takes you to the Studies panel */
+"Settings.Studies.Title" = "ਅਧਿਐਨ";
+
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Toggle.Link" = "ਹੋਰ ਜਾਣੋ।";
+
+/* A short description that explains that Mozilla is running studies */
+"Settings.Studies.Toggle.Message" = " Firefox ਸਮੇਂ ਸਮੇਂ ਉੱਤੇ ਅਧਿਐਨ ਇੰਸਟਾਲ ਅਤੇ ਚਲਾ ਸਕਦਾ ਹੈ।";
+
+/* Toggled OFF to opt-out of studies */
+"Settings.Studies.Toggle.Off" = "ਬੰਦ";
+
+/* Toggled ON to participate in studies */
+"Settings.Studies.Toggle.On" = "ਚਾਲੂ";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Toggle.Title" = "ਅਧਿਐਨ";
 
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "ਠੀਕ ਹੈ, ਸਮਝ ਗਏ";
@@ -1578,6 +1686,9 @@
 /* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.CloseTab.KeyCodeTitle" = "ਚੁਣੀ ਟੈਬ ਨੂੰ ਬੰਦ ਕਰੋ";
 
+/* Accessibility label for the currently selected tab. */
+"TabTray.CurrentSelectedTab.A11Y" = "ਇਸ ਵੇਲੇ ਚੁਣੀ ਟੈਬ ਹੈ।";
+
 /* The section header for tabs opened last week */
 "TabTray.LastWeek.Header" = "ਪਿਛਲੇ ਹਫ਼ਤੇ";
 
@@ -1592,6 +1703,18 @@
 
 /* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenSelectedTab.KeyCodeTitle" = "ਚੁਣੀ ਟੈਬ ਨੂੰ ਬੰਦ ਕਰੋ";
+
+/* The title for the tab tray in private mode */
+"TabTray.PrivateTitle" = "ਪ੍ਰਾਈਵੇਟ ਟੈਬਾਂ";
+
+/* The title on the button to look at private tabs. */
+"TabTray.SegmentedControlTitles.PrivateTabs" = "ਪ੍ਰਾਈਵੇਟ";
+
+/* The title on the button to look at synced tabs. */
+"TabTray.SegmentedControlTitles.SyncedTabs" = "ਸਿੰਕ ਕੀਤੀਆਂ";
+
+/* The title on the button to look at regular tabs. */
+"TabTray.SegmentedControlTitles.Tabs" = "ਟੈਬਾਂ";
 
 /* The button title to see more options to perform on the tab. */
 "TabTray.SwipeMenu.More" = "ਹੋਰ";

@@ -2,7 +2,7 @@
 "DefaultBrowserCard.Button" = "Баптауларға өту";
 
 /* Button string to learn how to set your default browser. */
-"DefaultBrowserCard.Button.v2" = "Көбірек білу";
+"DefaultBrowserCard.Button.v2" = "Қалай екенін білу";
 
 /* Description for small card shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "Веб-сайттар, эл. пошта хаттары және хабарламалардан сілтемелерді Firefox-та автоматты түрде ашылатындай етіп баптау.";
@@ -14,13 +14,13 @@
 "DefaultBrowserOnboarding.Button" = "Баптауларға өту";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description1" = "1. Баптауларға өтіңіз";
+"DefaultBrowserOnboarding.Description1" = "1. Баптауларға өту";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description2" = "2. \"Негізгі браузер қолданбасы\" шертіңіз";
+"DefaultBrowserOnboarding.Description2" = "2. Негізгі браузер қолданбасын шерту";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Firefox таңдаңыз";
+"DefaultBrowserOnboarding.Description3" = "3. Firefox таңдау";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Негізгі браузер қолданбасы";

@@ -47,7 +47,7 @@
 "TodayWidget.NewSearchButtonLabelV1" = "Hľadať vo Firefoxe";
 
 /* Open New Tab button label */
-"TodayWidget.NewTabButtonLabelV1" = "Nové hľadanie";
+"TodayWidget.NewTabButtonLabelV1" = "Nové vyhľadávanie";
 
 /* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
 "TodayWidget.NoOpenTabsLabel" = "Žiadne otvorené karty.";
@@ -120,6 +120,9 @@
 
 /* Sub label for Top Sites widget */
 "TodayWidget.TopSitesSubLabel" = "Firefox - Top stránky";
+
+/* Sub label for Shortcuts widget */
+"TodayWidget.TopSitesSubLabel2" = "Firefox - Skratky pre webové stránky";
 
 /* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
 "TodayWidget.ViewMore" = "Ďalšie";

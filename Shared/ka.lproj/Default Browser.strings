@@ -11,7 +11,7 @@
 "DefaultBrowserCard.Title" = "აქციეთ მთავარ ბრაუზერად";
 
 /* Button string to open settings that allows user to switch their default browser to Firefox. */
-"DefaultBrowserOnboarding.Button" = "გადადით პარამეტრებზე";
+"DefaultBrowserOnboarding.Button" = "პარამეტრებზე გადასვლა";
 
 /* Description for default browser onboarding card. */
 "DefaultBrowserOnboarding.Description1" = "1. გადადით პარამეტრებზე";

@@ -16,11 +16,20 @@
 /* About settings section title */
 "About" = "عن";
 
+/* The title for the pinning a shortcut action */
+"ActivityStream.ContextMenu.AddToShortcuts" = "أضِف إلى الاختصارات";
+
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite" = "ثبّت في المواقع المهمة";
 
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite2" = "ثبّت";
+
 /* The title for removing a pinned topsite action */
 "ActivityStream.ContextMenu.RemovePinTopsite" = "احذف الموقع المثبّت";
+
+/* The title for the unpinning a topsite action */
+"ActivityStream.ContextMenu.UnpinTopsite" = "ألغِ التثبيت";
 
 /* The description of a highlight if it is a site the user has bookmarked */
 "ActivityStream.Highlights.Bookmark" = "معلّم";
@@ -37,11 +46,17 @@
 /* Section title label for Recommended by Pocket section */
 "ActivityStream.Pocket.SectionTitle" = "الشائع في Pocket";
 
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle2" = "يُوصي به Pocket";
+
 /* The description of a Pocket Story */
 "ActivityStream.Pocket.Trending" = "مُتداول";
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "أحدث ما زرت";
+
+/* Section title label for Shortcuts */
+"ActivityStream.Shortcuts.SectionTitle" = "الاختصارات";
 
 /* label showing how many rows of topsites are shown. %d represents a number */
 "ActivityStream.TopSites.RowCount" = "الصفوف: %d";
@@ -82,6 +97,12 @@
 
 /* Authentication prompt title */
 "Authentication required" = "الاستيثاق مطلوب";
+
+/* Description for button to suggest searching with a search engine. First argument is the name of the search engine to select */
+"Awesomebar.SearchWithEngine.Description" = "ابحث مستعملًا %@ مباشرة من شريط العنوان";
+
+/* Title for button to suggest searching with a search engine. First argument is the name of the search engine to select */
+"Awesomebar.SearchWithEngine.Title" = "ابحث مستعملًا %@";
 
 /* Accessibility label for the Back button in the tab toolbar. */
 "Back" = "السابق";
@@ -211,6 +232,12 @@
 
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "افتح في لسان جديد";
+
+/* Context menu item for opening a link in a new private tab */
+"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "افتح الرابط في لسان خاص جديد";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenLinkInNewTabButtonTitle" = "افتح الرابط في لسان جديد";
 
 /* Context menu item for saving an image */
 "ContextMenu.SaveImageButtonTitle" = "احفظ الصورة";
@@ -672,14 +699,26 @@
 /* Toast displayed to the user after adding the item to the Top Sites. */
 "Menu.AddPin.Confirm" = "ثُبّت في المواقع المهمة";
 
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"Menu.AddPin.Confirm2" = "أُضيف إلى الاختصارات";
+
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "أُضيفت إلى قائمة القراءة";
+
+/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
+"Menu.BackUpAndSync.Label" = "النسخ الاحتياطي ومزامنة البيانات";
+
+/* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
+"Menu.Bookmarks.Label" = "العلامات";
 
 /* The title for the button that lets you copy the url from the location bar. */
 "Menu.Copy.Title" = "انسخ العنوان";
 
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "نُسخ المسار إلى الحافظة";
+
+/* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
+"Menu.Downloads.Label" = "التنزيلات";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtectionOff.Title" = "عُطّلت الحماية الموسّعة من التعقب في هذا الموقع.";
@@ -693,23 +732,44 @@
 /* Description for having strict ETP protection with ITP offered in iOS14+ */
 "Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "يحجب Firefox المتعقّبات بين المواقع، والمتعقّبات الاجتماعية، والمُعدّنات المعمّاة، ومسجّلات البصمات والمحتوى المتعقّب.";
 
+/* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
+"Menu.History.Label" = "التأريخ";
+
 /* Label for the button displayed in the menu used to stop the reload of the webpage */
 "Menu.Library.StopReload" = "أوقِف";
+
+/* Label for the button, displayed in the menu, takes you to screen to manage account when pressed. First argument is the display name for the current account */
+"Menu.ManageAccount.Label" = "أدِر حساب %@";
+
+/* Label for the button, displayed in the menu, turns off night mode. */
+"Menu.NightModeTurnOff.Label2" = "عطّل الوضع الليلي";
 
 /* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label" = "فعّل الوضع الليلي";
 
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label2" = "فعّل الوضع الليلي";
+
 /* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
 "Menu.NoImageModeBlockImages.Label" = "احجب الصور";
 
+/* Label for the button, displayed in the menu, shows images on the webpage when pressed. */
+"Menu.NoImageModeShowImages.Label" = "أظهِر الصور";
+
 /* Label for title in page action menu. */
 "Menu.PageActions.Title" = "إجراءات الصفحة";
+
+/* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
+"Menu.Passwords.Label" = "كلمات السر";
 
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "ألصِق";
 
 /* The title for the button that lets you paste and go to a URL */
 "Menu.PasteAndGo.Title" = "ألصِق وانتقل";
+
+/* Label for the button, displayed in the menu, takes you to to Reading List screen when pressed. */
+"Menu.ReadingList.Label" = "قائمة القراءة";
 
 /* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
 "Menu.ReloadWithoutTrackingProtection.Title" = "أعِد التحميل بدون الحماية من التعقب";
@@ -722,6 +782,9 @@
 
 /* Toast displayed to the user after removing the item from the Top Sites. */
 "Menu.RemovePin.Confirm" = "أُزيل من المواقع المهمة";
+
+/* Toast displayed to the user after removing the item to the Shortcuts. */
+"Menu.RemovePin.Confirm2" = "أُزيلت من الاختصارات";
 
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "أُرسل اللسان";
@@ -971,6 +1034,9 @@
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "ابحث أو أدخِل عنوانا";
+
+/* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
+"Search.Awesomebar.SwitchToTab" = "انتقل إلى اللسان";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "سيظهر محرك البحث الجديد في شريط البحث السريع.";
@@ -1259,6 +1325,9 @@
 /* The footer for the section to customize top sites in the new tab settings page. */
 "Settings.NewTab.Option.CustomizeFooter" = "أكثر المواقع المزارة";
 
+/* The footer for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeFooter2" = "المواقع التي حفظتها أو زرتها";
+
 /* The title for the section to customize top sites in the new tab settings page. */
 "Settings.NewTab.Option.CustomizeTitle" = "خصّص شاشة بداية Firefox";
 
@@ -1285,6 +1354,9 @@
 
 /* Option in settings to show reading list when you open a new tab */
 "Settings.NewTab.Option.ReadingList" = "اعرض قائمة القراءة";
+
+/* Option in settings to turn on off pocket recommendations First argument is the pocket brand name */
+"Settings.NewTab.Option.RecommendedByPocket" = "ينصح به %@";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "اللسان الجديد";
@@ -1345,6 +1417,36 @@
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "اختصارات سيري";
+
+/* Section title for all studies that are currently active */
+"Settings.Studies.Active.SectionName" = "النشطة";
+
+/* Section title for all studies that are completed */
+"Settings.Studies.Completed.SectionName" = "المكتملة";
+
+/* Button title displayed next to each study allowing the user to opt-out of the study */
+"Settings.Studies.Remove.Button" = "أزِل";
+
+/* Title displayed in header of the Studies panel */
+"Settings.Studies.SectionName" = "الدراسات";
+
+/* Label used as an item in Settings. Tapping on this item takes you to the Studies panel */
+"Settings.Studies.Title" = "الدراسات";
+
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Toggle.Link" = "اطّلع على المزيد.";
+
+/* A short description that explains that Mozilla is running studies */
+"Settings.Studies.Toggle.Message" = "قد يثبّت Firefox بعض الدراسات ويشغّلها من وقت لآخر.";
+
+/* Toggled OFF to opt-out of studies */
+"Settings.Studies.Toggle.Off" = "معطّل";
+
+/* Toggled ON to participate in studies */
+"Settings.Studies.Toggle.On" = "مفعّل";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Toggle.Title" = "الدراسات";
 
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "حسنًا، فهمت";
@@ -1578,6 +1680,9 @@
 /* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.CloseTab.KeyCodeTitle" = "أغلق اللسان المنتقى";
 
+/* Accessibility label for the currently selected tab. */
+"TabTray.CurrentSelectedTab.A11Y" = "اللسان المحدّد حاليًا.";
+
 /* The section header for tabs opened last week */
 "TabTray.LastWeek.Header" = "الأسبوع الماضي";
 
@@ -1592,6 +1697,18 @@
 
 /* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenSelectedTab.KeyCodeTitle" = "افتح اللسان المنتقى";
+
+/* The title for the tab tray in private mode */
+"TabTray.PrivateTitle" = "الألسنة الخاصة";
+
+/* The title on the button to look at private tabs. */
+"TabTray.SegmentedControlTitles.PrivateTabs" = "خاص";
+
+/* The title on the button to look at synced tabs. */
+"TabTray.SegmentedControlTitles.SyncedTabs" = "مُزامَن";
+
+/* The title on the button to look at regular tabs. */
+"TabTray.SegmentedControlTitles.Tabs" = "الألسنة";
 
 /* The button title to see more options to perform on the tab. */
 "TabTray.SwipeMenu.More" = "أكثر";

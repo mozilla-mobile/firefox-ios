@@ -53,7 +53,7 @@
 "Passcode For Logins" = "Codice d’accessu per l’identificazioni di cunnessione";
 
 /* Error message displayed to user when their confirming passcode doesn't match the first code. */
-"Passcodes didn’t match. Try again." = "I codici d’accessu ùn currispundenu micca. Pruvate torna.";
+"Passcodes didn’t match. Try again." = "I codici d’accessu ùn currispondenu micca. Pruvate torna.";
 
 /* Text displayed above the input field when confirming a passcode */
 "Re-enter passcode" = "Torna à scrive u codice d’accessu";

@@ -2,6 +2,9 @@
 "2GqvPe" = "Avrir l'adressa copiada";
 
 /* (No Comment) */
+"ctDNmu" = "Access direct a differentas acziuns da Firefox";
+
+/* (No Comment) */
 "eHmH1H" = "Stizzar ils tabs privats";
 
 /* (No Comment) */
@@ -29,10 +32,10 @@
 "PzSrmZ-eHmH1H" = "Vulevas ti propi tscherner «Stizzar ils tabs privats»?";
 
 /* (No Comment) */
-"PzSrmZ-scEmjs" = "Vulevas ti propi tscherner «Nova tschertga privata»?";
+"PzSrmZ-scEmjs" = "Pos ti confermar che ti vuls «Nova tschertga privata»?";
 
 /* (No Comment) */
-"PzSrmZ-xRJbBP" = "Vulevas ti propi tscherner «Nova tschertga»?";
+"PzSrmZ-xRJbBP" = "Pos ti confermar che ti vuls «Nova tschertga»?";
 
 /* (No Comment) */
 "scEmjs" = "Nova tschertga privata";

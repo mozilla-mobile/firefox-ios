@@ -669,17 +669,26 @@
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "Lisätty lukulistaan";
 
+/* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
+"Menu.Bookmarks.Label" = "Kirjanmerkit";
+
 /* The title for the button that lets you copy the url from the location bar. */
 "Menu.Copy.Title" = "Kopioi osoite";
 
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "Osoite kopioitu leikepöydälle";
 
+/* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
+"Menu.Downloads.Label" = "Lataukset";
+
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtectionOff.Title" = "Tehostettu seurannan suojaus on POIS PÄÄLTÄ tällä sivustolla.";
 
 /* A switch to enable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtectionOn.Title" = "Tehostettu seurannan suojaus on PÄÄLLÄ tällä sivustolla.";
+
+/* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
+"Menu.History.Label" = "Historia";
 
 /* Label for the button displayed in the menu used to stop the reload of the webpage */
 "Menu.Library.StopReload" = "Pysäytä";
@@ -692,6 +701,9 @@
 
 /* Label for title in page action menu. */
 "Menu.PageActions.Title" = "Sivutoiminnot";
+
+/* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
+"Menu.Passwords.Label" = "Salasanat";
 
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "Liitä";
@@ -1040,7 +1052,7 @@
 "SendTo.SendAction.Text" = "Lähetä";
 
 /* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
-"SendTo.SignIn.Button" = "Kirjaudu Firefoxiin";
+"SendTo.SignIn.Button" = "Kirjaudu sisään Firefoxiin";
 
 /* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
 "SentTab_TabArrivingNotification_NoDevice_body" = "Uusi välilehti vastaanotettu toiselta laitteelta.";

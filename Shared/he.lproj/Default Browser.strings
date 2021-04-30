@@ -7,6 +7,9 @@
 /* Title for small card shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "החלפת דפדפן ברירת המחדל שלך";
 
+/* Text for the screenshot of the iOS system settings page for Firefox. */
+"DefaultBrowserOnboarding.Screenshot" = "יישומון דפדפן ברירת המחדל";
+
 /* Menu option for setting Firefox as default browser. */
 "Settings.DefaultBrowserMenuItem" = "הגדרה כדפדפן ברירת המחדל";
 

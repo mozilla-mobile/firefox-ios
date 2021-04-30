@@ -5,7 +5,7 @@
 "DefaultBrowserCard.Button.v2" = "Scopri come fare";
 
 /* Description for small card shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Apri i link di siti web, email e messaggi in Firefox per impostazione predefinita.";
+"DefaultBrowserCard.Description" = "Utilizza automaticamente Firefox per aprire link in siti web, email e messaggi.";
 
 /* Title for small card shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Cambia il browser predefinito";

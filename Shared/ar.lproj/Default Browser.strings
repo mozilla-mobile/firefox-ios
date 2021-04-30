@@ -2,7 +2,7 @@
 "DefaultBrowserCard.Button" = "انتقل إلى الإعدادات";
 
 /* Button string to learn how to set your default browser. */
-"DefaultBrowserCard.Button.v2" = "اطّلع على المزيد";
+"DefaultBrowserCard.Button.v2" = "اطّلع على الطريقة";
 
 /* Description for small card shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "اضبط روابط المواقع والبريد الإلكتروني والرسائل لتفتح تلقائيًا في Firefox.";
@@ -17,7 +17,7 @@
 "DefaultBrowserOnboarding.Description1" = "1. انتقل إلى الإعدادات";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description2" = "2. انقر \"تطبيق المتصفح الافتراضي\"";
+"DefaultBrowserOnboarding.Description2" = "2. انقر ”تطبيق المتصفح الافتراضي“";
 
 /* Description for default browser onboarding card. */
 "DefaultBrowserOnboarding.Description3" = "3. اختر Firefox";
