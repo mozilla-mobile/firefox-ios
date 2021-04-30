@@ -501,6 +501,7 @@ workflows:
     - cache-push@2.5: 
         is_always_run: true
         run_if: true
+        inputs:
         - paths: /Users/vagrant/git/Carthage -> /Users/vagrant/git/Carthage/Cachefile
     - slack@3.1:
         inputs:
