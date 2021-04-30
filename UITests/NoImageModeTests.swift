@@ -49,10 +49,7 @@ class NoImageModeTests: KIFTestCase {
         } else {
             tester().tapView(withAccessibilityLabel: "Menu")
         }
-
-        tester().tapView(withAccessibilityLabel: "Block Images")
-        //Need to tap out of the browser tab menu to dismiss it (there is close button in iphone but not ipad)
-        tester().tapView(withAccessibilityLabel: "Close")
+        tester().tapView(withAccessibilityIdentifier: "menu-NoImageMode")
 
         checkHiding(isOn: true)
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
@@ -61,8 +58,7 @@ class NoImageModeTests: KIFTestCase {
         } else {
              tester().tapView(withAccessibilityLabel: "Menu")
         }
-        tester().tapView(withAccessibilityLabel: "Block Images")
-        tester().tapView(withAccessibilityLabel: "Close")
+        tester().tapView(withAccessibilityIdentifier: "menu-ShowImages")
         tester().tapView(withAccessibilityIdentifier: "url")
     }
 }

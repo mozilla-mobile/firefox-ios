@@ -104,11 +104,10 @@ class HistoryTests: KIFTestCase {
         tester().waitForAnimationsToFinish(withTimeout: 10)
         tester().waitForView(withAccessibilityIdentifier: "menu-panel-History")
         tester().tapView(withAccessibilityIdentifier: "menu-panel-History")
+        tester().waitForAnimationsToFinish(withTimeout: 10)
         tester().waitForView(withAccessibilityLabel: "Page 102")
 
-        let firstIndexPath = IndexPath(row: 0, section: 1)
-        let list = tester().waitForView(withAccessibilityIdentifier: "LibraryPanels.History") as? UITableView
-        
+        let firstIndexPath = IndexPath(row: 4, section: 1)
         let row = tester().waitForCell(at: firstIndexPath, inTableViewWithAccessibilityIdentifier: "History List")
         tester().swipeView(withAccessibilityLabel: row?.accessibilityLabel, value: row?.accessibilityValue, in: KIFSwipeDirection.left)
      
@@ -117,12 +116,11 @@ class HistoryTests: KIFTestCase {
         }
 
         // The history list still exists
-       
         tester().waitForView(withAccessibilityIdentifier: "History List")
         tester().waitForView(withAccessibilityLabel: oldestUrl)
 
         // check page 1 does not exist
-        tester().waitForAbsenceOfView(withAccessibilityLabel: "Page 97")
+        tester().waitForAbsenceOfView(withAccessibilityLabel: "Page 102")
 
         // Close History (and so Library) panel
         BrowserUtils.closeLibraryMenu(tester())

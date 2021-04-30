@@ -38,7 +38,7 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
 
         let clear = self.expectation(description: "clearing")
         ContentBlocker.shared.clearSafelist() { clear.fulfill() }
-        waitForExpectations(timeout: 2, handler: nil)
+        waitForExpectations(timeout: 15, handler: nil)
 
         register(self, forTabEvents: .didChangeContentBlocking)
     }
