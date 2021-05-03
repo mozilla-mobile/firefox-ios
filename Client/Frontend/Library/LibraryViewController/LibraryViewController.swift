@@ -234,18 +234,11 @@ class LibraryViewController: UIViewController {
     }
 
     func updatePanelViewState() {
-        if let panel = children.first as? UINavigationController, panel.viewControllers.count > 1 {
+        if librarySegmentControl.selectedSegmentIndex == 0,
+           let panel = children.first as? UINavigationController,
+           panel.viewControllers.count > 1 {
             if panelViewState == .standard {
                 panelViewState = .bookmarksFolder
-            } else if panelViewState == .bookmarksFolder, let bookmarkPanel = panel.viewControllers.last as? BookmarksPanel {
-                if bookmarkPanel.tableView.isEditing {
-                    panelViewState = .bookmarksFolderEditMode
-                } else {
-                    panelViewState = .bookmarksFolder
-                }
-
-            } else if panelViewState == .bookmarksFolderEditMode, let _ = panel.viewControllers.last as? BookmarkDetailPanel {
-                panelViewState = .bookmarkEditMode
             }
         } else {
             panelViewState = .standard
@@ -262,6 +255,7 @@ class LibraryViewController: UIViewController {
             topLeftButton.setTitle(Strings.BackTitle, for: .normal)
         case .bookmarksFolderEditMode:
             topLeftButton.isHidden = false
+            // TODO: Figure out how to add the iOS .add sign. We're using a UIButton vs the UIBarButtonItem? Does it work?
             topLeftButton.setTitle("+", for: .normal)
         case .bookmarkEditMode:
             topLeftButton.isHidden = false
@@ -300,6 +294,7 @@ class LibraryViewController: UIViewController {
             print("Add new tab")
 
         case .bookmarkEditMode:
+            panelViewState = .bookmarksFolderEditMode
             print("Cancel tab!")
         }
         updateViewWithState()
@@ -314,11 +309,11 @@ class LibraryViewController: UIViewController {
             self.dismiss(animated: true, completion: nil)
 
         case .bookmarksFolder:
-//            panelViewState = .bookmarksFolderEditMode
+            panelViewState = .bookmarksFolderEditMode
             bookmarksPanel.enableEditMode()
 
         case .bookmarksFolderEditMode:
-//            panelViewState = .bookmarksFolder
+            panelViewState = .bookmarksFolder
             bookmarksPanel.disableEditMode()
 
         case .bookmarkEditMode:
