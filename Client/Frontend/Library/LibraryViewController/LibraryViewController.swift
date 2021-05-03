@@ -236,7 +236,7 @@ class LibraryViewController: UIViewController {
     }
 
     func topRightButtonSetup() {
-        if isViewingBookmarkFolder && !isInEditingMode{
+        if isViewingBookmarkFolder && !isInEditingMode {
             topRightButton.setTitle(Strings.BookmarksEdit, for: .normal)
         } else {
             topRightButton.setTitle(String.AppSettingsDone, for: .normal)
@@ -246,6 +246,8 @@ class LibraryViewController: UIViewController {
     @objc func topLeftButtonAction() {
         if let panel = children.first as? UINavigationController, panel.viewControllers.count > 1 {
             panel.popViewController(animated: true)
+            isViewingBookmarkFolder = false
+            isInEditingMode = false
         }
     }
 
@@ -256,9 +258,9 @@ class LibraryViewController: UIViewController {
             if let panel = children.first as? UINavigationController,
                let test = panel.viewControllers.first as? BookmarksPanel {
                 if isInEditingMode {
-                    test.disableEditMode()
-                } else {
                     test.enableEditMode()
+                } else {
+                    test.disableEditMode()
                 }
             }
         } else {
