@@ -143,8 +143,6 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
-        setupBackButtonGestureRecognizer()
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -198,25 +196,13 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
             }
         }
     }
-    
-    fileprivate func enableEditMode() {
-        self.tableView.setEditing(true, animated: true)
-        self.navigationItem.leftBarButtonItem = self.newBarButtonItem
-        self.navigationItem.rightBarButtonItem = self.doneBarButtonItem
-    }
-    
-    fileprivate func disableEditMode() {
-        self.tableView.setEditing(false, animated: true)
-        self.navigationItem.leftBarButtonItem = nil
-        self.navigationItem.rightBarButtonItem = self.editBarButtonItem
-        self.setupBackButtonGestureRecognizer()
-    }
 
-    fileprivate func setupBackButtonGestureRecognizer() {
-        if let backButtonView = self.backButtonView() {
-            let backButtonViewLongPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressBackButtonView))
-            backButtonView.addGestureRecognizer(backButtonViewLongPressRecognizer)
-        }
+    func enableEditMode() {
+        self.tableView.setEditing(true, animated: true)
+    }
+    
+    func disableEditMode() {
+        self.tableView.setEditing(false, animated: true)
     }
 
     fileprivate func backButtonView() -> UIView? {
@@ -353,7 +339,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
             nextController.libraryPanelDelegate = libraryPanelDelegate
             navigationController?.pushViewController(nextController, animated: true)
         case let bookmarkItem as BookmarkItem:
-            libraryPanelDelegate?.libraryPanel(didSelectURLString: bookmarkItem.url, visitType: .bookmark)
+//            libraryPanelDelegate?.libraryPanel(didSelectURLString: bookmarkItem.url, visitType: .bookmark)
             LeanPlumClient.shared.track(event: .openedBookmark)
             TelemetryWrapper.recordEvent(category: .action, method: .open, object: .bookmark, value: .bookmarksPanel)
         default:
