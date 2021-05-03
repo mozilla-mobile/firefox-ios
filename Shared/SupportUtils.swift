@@ -24,6 +24,6 @@ public struct SupportUtils {
         else {
             return nil
         }
-        return URL(string: "https://webcompat.com/issues/new?src=mobile-reporter&url=\(escapedUrl)")
+        return URL(string: "https://webcompat.com/issues/new?src=mobile-reporter&label=browser-firefox-ios&url=\(escapedUrl)")
     }
 }
