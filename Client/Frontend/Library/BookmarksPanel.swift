@@ -43,10 +43,6 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
 
     let bookmarkFolderGUID: GUID
 
-    var editBarButtonItem: UIBarButtonItem!
-    var doneBarButtonItem: UIBarButtonItem!
-    var newBarButtonItem: UIBarButtonItem!
-
     var bookmarkFolder: BookmarkFolder?
     var bookmarkNodes = [BookmarkNode]()
     var recentBookmarks = [BookmarkNode]()
@@ -83,10 +79,6 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         tableView.accessibilityIdentifier = "Bookmarks List"
         tableView.allowsSelectionDuringEditing = true
         tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
-
-        if bookmarkFolderGUID != BookmarkRoots.RootGUID {
-            navigationItem.rightBarButtonItem = editBarButtonItem
-        }
     }
     
     func addNewBookmarkItemAction() {
