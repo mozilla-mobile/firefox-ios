@@ -313,7 +313,6 @@ class LibraryViewController: UIViewController {
         switch bookmarkPanelState {
         case .home:
             self.dismiss(animated: true, completion: nil)
-
         case .inFolder:
             guard let bookmarksPanel = panel.viewControllers.last as? BookmarksPanel else { return }
             bookmarkPanelState = .inFolderEditMode
