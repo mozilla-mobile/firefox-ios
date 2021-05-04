@@ -92,53 +92,57 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         }
 
         self.newBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add) { _ in
-            let newBookmark = PhotonActionSheetItem(title: Strings.BookmarksNewBookmark, iconString: "action_bookmark", handler: { _, _ in
-                guard let bookmarkFolder = self.bookmarkFolder else {
-                    return
-                }
 
-                let detailController = BookmarkDetailPanel(profile: self.profile, withNewBookmarkNodeType: .bookmark, parentBookmarkFolder: bookmarkFolder)
-                self.navigationController?.pushViewController(detailController, animated: true)
-            })
-
-            let newFolder = PhotonActionSheetItem(title: Strings.BookmarksNewFolder, iconString: "bookmarkFolder", handler: { _, _ in
-                guard let bookmarkFolder = self.bookmarkFolder else {
-                    return
-                }
-
-                let detailController = BookmarkDetailPanel(profile: self.profile, withNewBookmarkNodeType: .folder, parentBookmarkFolder: bookmarkFolder)
-                self.navigationController?.pushViewController(detailController, animated: true)
-            })
-
-            let newSeparator = PhotonActionSheetItem(title: Strings.BookmarksNewSeparator, iconString: "nav-menu", handler: { _, _ in
-                let centerVisibleRow = self.centerVisibleRow()
-
-                self.profile.places.createSeparator(parentGUID: self.bookmarkFolderGUID, position: UInt32(centerVisibleRow)) >>== { guid in
-                    self.profile.places.getBookmark(guid: guid).uponQueue(.main) { result in
-                        guard let bookmarkNode = result.successValue, let bookmarkSeparator = bookmarkNode as? BookmarkSeparator else {
-                            return
-                        }
-
-                        let indexPath = IndexPath(row: centerVisibleRow, section: BookmarksSection.bookmarks.rawValue)
-                        self.tableView.beginUpdates()
-                        self.bookmarkNodes.insert(bookmarkSeparator, at: centerVisibleRow)
-                        self.tableView.insertRows(at: [indexPath], with: .automatic)
-                        self.tableView.endUpdates()
-
-                        self.flashRow(at: indexPath)
-                    }
-                }
-            })
-
-            let sheet = PhotonActionSheet(actions: [[newBookmark, newFolder, newSeparator]])
-            sheet.modalPresentationStyle = .overFullScreen
-            sheet.modalTransitionStyle = .crossDissolve
-            self.present(sheet, animated: true)
         }
 
         if bookmarkFolderGUID != BookmarkRoots.RootGUID {
             navigationItem.rightBarButtonItem = editBarButtonItem
         }
+    }
+    
+    func addNewBookmarkItemAction() {
+        let newBookmark = PhotonActionSheetItem(title: Strings.BookmarksNewBookmark, iconString: "action_bookmark", handler: { _, _ in
+            guard let bookmarkFolder = self.bookmarkFolder else {
+                return
+            }
+
+            let detailController = BookmarkDetailPanel(profile: self.profile, withNewBookmarkNodeType: .bookmark, parentBookmarkFolder: bookmarkFolder)
+            self.navigationController?.pushViewController(detailController, animated: true)
+        })
+
+        let newFolder = PhotonActionSheetItem(title: Strings.BookmarksNewFolder, iconString: "bookmarkFolder", handler: { _, _ in
+            guard let bookmarkFolder = self.bookmarkFolder else {
+                return
+            }
+
+            let detailController = BookmarkDetailPanel(profile: self.profile, withNewBookmarkNodeType: .folder, parentBookmarkFolder: bookmarkFolder)
+            self.navigationController?.pushViewController(detailController, animated: true)
+        })
+
+        let newSeparator = PhotonActionSheetItem(title: Strings.BookmarksNewSeparator, iconString: "nav-menu", handler: { _, _ in
+            let centerVisibleRow = self.centerVisibleRow()
+
+            self.profile.places.createSeparator(parentGUID: self.bookmarkFolderGUID, position: UInt32(centerVisibleRow)) >>== { guid in
+                self.profile.places.getBookmark(guid: guid).uponQueue(.main) { result in
+                    guard let bookmarkNode = result.successValue, let bookmarkSeparator = bookmarkNode as? BookmarkSeparator else {
+                        return
+                    }
+
+                    let indexPath = IndexPath(row: centerVisibleRow, section: BookmarksSection.bookmarks.rawValue)
+                    self.tableView.beginUpdates()
+                    self.bookmarkNodes.insert(bookmarkSeparator, at: centerVisibleRow)
+                    self.tableView.insertRows(at: [indexPath], with: .automatic)
+                    self.tableView.endUpdates()
+
+                    self.flashRow(at: indexPath)
+                }
+            }
+        })
+
+        let sheet = PhotonActionSheet(actions: [[newBookmark, newFolder, newSeparator]])
+        sheet.modalPresentationStyle = .overFullScreen
+        sheet.modalTransitionStyle = .crossDissolve
+        self.present(sheet, animated: true)
     }
 
     override func viewDidAppear(_ animated: Bool) {

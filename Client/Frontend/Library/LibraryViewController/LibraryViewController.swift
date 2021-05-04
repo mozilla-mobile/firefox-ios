@@ -253,20 +253,23 @@ class LibraryViewController: UIViewController {
         case .bookmarksFolder:
             topLeftButton.isHidden = false
             topLeftButton.setTitle(Strings.BackTitle, for: .normal)
+            topLeftButton.setImage(nil, for: .normal)
         case .bookmarksFolderEditMode:
             topLeftButton.isHidden = false
-            // TODO: Figure out how to add the iOS .add sign. We're using a UIButton vs the UIBarButtonItem? Does it work?
-            topLeftButton.setTitle("+", for: .normal)
+            let img = UIImage.templateImageNamed("nav-add")
+            topLeftButton.setTitle("", for: .normal)
+            topLeftButton.setImage(img, for: .normal)
         case .bookmarkEditMode:
             topLeftButton.isHidden = false
             topLeftButton.setTitle(Strings.CancelString, for: .normal)
+            topLeftButton.setImage(nil, for: .normal)
         }
     }
 
     func topRightButtonSetup() {
         switch panelViewState {
         case .standard:
-            topRightButton.setTitle(Strings.CloseButtonTitle, for: .normal)
+            topRightButton.setTitle(String.AppSettingsDone, for: .normal)
         case .bookmarksFolder:
             topRightButton.setTitle(Strings.BookmarksEdit, for: .normal)
         case .bookmarksFolderEditMode:
@@ -277,25 +280,20 @@ class LibraryViewController: UIViewController {
     }
 
     @objc func topLeftButtonAction() {
-        guard let panel = children.first as? UINavigationController,
-              let bookmarksPanel = panel.viewControllers.last as? BookmarksPanel else { return }
-
+        guard let panel = children.first as? UINavigationController, let bookmarksPanel = panel.viewControllers.last as? BookmarksPanel else { return }
         switch panelViewState {
         case .standard:
             return
-
         case .bookmarksFolder:
             if panel.viewControllers.count > 1 {
                 panelViewState = .standard
                 panel.popViewController(animated: true)
             }
-
         case .bookmarksFolderEditMode:
-            print("Add new tab")
-
+            print("Add new folder")
         case .bookmarkEditMode:
             panelViewState = .bookmarksFolderEditMode
-            print("Cancel tab!")
+            print("Edit mode")
         }
         updateViewWithState()
     }
