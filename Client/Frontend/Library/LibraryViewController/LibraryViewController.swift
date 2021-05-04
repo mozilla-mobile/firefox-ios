@@ -19,8 +19,8 @@ extension LibraryViewController: UIToolbarDelegate {
 }
 
 /// This enum describes the different states the Bookmarks panel,
-/// in the Library Panel, can have. All other Library Panel's do
-/// do not have states associated with them, allowing this one
+/// in the Library Panel, can have. All other Library Panels do
+/// not have states associated with them, allowing this one
 /// state to be persisted.
 enum BookmarksPanelState {
     case home
