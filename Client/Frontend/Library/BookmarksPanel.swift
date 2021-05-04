@@ -332,7 +332,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
             nextController.libraryPanelDelegate = libraryPanelDelegate
             navigationController?.pushViewController(nextController, animated: true)
         case let bookmarkItem as BookmarkItem:
-//            libraryPanelDelegate?.libraryPanel(didSelectURLString: bookmarkItem.url, visitType: .bookmark)
+            libraryPanelDelegate?.libraryPanel(didSelectURLString: bookmarkItem.url, visitType: .bookmark)
             LeanPlumClient.shared.track(event: .openedBookmark)
             TelemetryWrapper.recordEvent(category: .action, method: .open, object: .bookmark, value: .bookmarksPanel)
         default:
