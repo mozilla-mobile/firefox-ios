@@ -150,7 +150,7 @@ class LibraryViewController: UIViewController {
         topLeftButton.snp.makeConstraints { make in
             make.leading.equalTo(titleContainerView).offset(20)
             make.centerY.equalTo(titleContainerView)
-            make.width.equalTo(50)
+            make.width.equalTo(60)
             make.height.equalTo(30)
         }
         
@@ -239,6 +239,9 @@ class LibraryViewController: UIViewController {
            panel.viewControllers.count > 1 {
             if panelViewState == .standard {
                 panelViewState = .bookmarksFolder
+            } else if panelViewState == .bookmarksFolderEditMode,
+                 let _ = panel.viewControllers.last as? BookmarkDetailPanel {
+                panelViewState = .bookmarkEditMode
             }
         } else {
             panelViewState = .standard
@@ -280,7 +283,7 @@ class LibraryViewController: UIViewController {
     }
 
     @objc func topLeftButtonAction() {
-        guard let panel = children.first as? UINavigationController, let bookmarksPanel = panel.viewControllers.last as? BookmarksPanel else { return }
+        guard let panel = children.first as? UINavigationController else { return }
         switch panelViewState {
         case .standard:
             return
@@ -290,31 +293,34 @@ class LibraryViewController: UIViewController {
                 panel.popViewController(animated: true)
             }
         case .bookmarksFolderEditMode:
+            guard let bookmarksPanel = panel.viewControllers.last as? BookmarksPanel else { return }
             print("Add new folder")
         case .bookmarkEditMode:
             panelViewState = .bookmarksFolderEditMode
-            print("Edit mode")
+            panel.popViewController(animated: true)
         }
         updateViewWithState()
     }
 
     @objc func topRightButtonAction() {
-        guard let panel = children.first as? UINavigationController,
-              let bookmarksPanel = panel.viewControllers.last as? BookmarksPanel else { return }
+        guard let panel = children.first as? UINavigationController else { return }
 
         switch panelViewState {
         case .standard:
             self.dismiss(animated: true, completion: nil)
 
         case .bookmarksFolder:
+            guard let bookmarksPanel = panel.viewControllers.last as? BookmarksPanel else { return }
             panelViewState = .bookmarksFolderEditMode
             bookmarksPanel.enableEditMode()
 
         case .bookmarksFolderEditMode:
+            guard let bookmarksPanel = panel.viewControllers.last as? BookmarksPanel else { return }
             panelViewState = .bookmarksFolder
             bookmarksPanel.disableEditMode()
 
         case .bookmarkEditMode:
+            guard let bookmarkEditView = panel.viewControllers.last as? BookmarkDetailPanel else { return }
             panelViewState = .bookmarksFolderEditMode
             print("SAVE STUFF!")
         }
