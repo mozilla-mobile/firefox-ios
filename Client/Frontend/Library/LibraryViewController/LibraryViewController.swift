@@ -18,11 +18,25 @@ extension LibraryViewController: UIToolbarDelegate {
     }
 }
 
+/// This enum describes the different states the Bookmarks panel,
+/// in the Library Panel, can have. All other Library Panels do
+/// not have states associated with them, allowing this one
+/// state to be persisted.
+enum BookmarksPanelState {
+    case home
+    case inFolder
+    case inFolderEditMode
+    case bookmarkEditMode
+}
+
 class LibraryViewController: UIViewController {
+
     let profile: Profile
     let panelDescriptors: [LibraryPanelDescriptor]
     // Delegate
     weak var delegate: LibraryPanelDelegate?
+    // Variables
+    fileprivate var bookmarkPanelState: BookmarksPanelState = .home
     // Views
     fileprivate var controllerContainerView = UIView()
     fileprivate var titleContainerView = UIView()
@@ -70,8 +84,7 @@ class LibraryViewController: UIViewController {
         button.addTarget(self, action: #selector(topRightButtonAction), for: .touchUpInside)
         return button
     }()
-    
-    
+
     @objc func panelChanged() {
         switch librarySegmentControl.selectedSegmentIndex {
         case 0:
@@ -105,12 +118,13 @@ class LibraryViewController: UIViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        topLeftButtonSetup()
+        updateViewWithState()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor =  UIColor.theme.homePanel.panelBackground
+        bookmarkPanelState = .home
         self.edgesForExtendedLayout = []
         view.addSubview(controllerContainerView)
         view.addSubview(librarySegmentControl)
@@ -140,7 +154,7 @@ class LibraryViewController: UIViewController {
         topLeftButton.snp.makeConstraints { make in
             make.leading.equalTo(titleContainerView).offset(20)
             make.centerY.equalTo(titleContainerView)
-            make.width.equalTo(50)
+            make.width.equalTo(60)
             make.height.equalTo(30)
         }
         
@@ -217,22 +231,108 @@ class LibraryViewController: UIViewController {
         }
     }
 
-    func topLeftButtonSetup() {
-        topLeftButton.isHidden = true
-        if let panel = children.first as? UINavigationController, panel.viewControllers.count > 1 {
-            topLeftButton.isHidden = false
+    func updateViewWithState() {
+        updateBookmarkPanelState()
+        topLeftButtonSetup()
+        topRightButtonSetup()
+    }
+
+    func updateBookmarkPanelState() {
+        if librarySegmentControl.selectedSegmentIndex == 0 {
+            if let panel = children.first as? UINavigationController,
+               panel.viewControllers.count > 1 {
+                if bookmarkPanelState == .home {
+                    bookmarkPanelState = .inFolder
+                } else if bookmarkPanelState == .inFolderEditMode,
+                     let _ = panel.viewControllers.last as? BookmarkDetailPanel {
+                    bookmarkPanelState = .bookmarkEditMode
+                }
+            } else {
+                bookmarkPanelState = .home
+            }
         }
         children.first?.navigationController?.toolbar.backgroundColor = .red
     }
-    
-    @objc func topLeftButtonAction() {
-        if let panel = children.first as? UINavigationController, panel.viewControllers.count > 1 {
-            panel.popViewController(animated: true)
+
+    func topLeftButtonSetup() {
+        switch bookmarkPanelState {
+        case .home:
+            topLeftButton.isHidden = true
+        case .inFolder:
+            topLeftButton.isHidden = false
+            topLeftButton.setTitle(Strings.BackTitle, for: .normal)
+            topLeftButton.setImage(nil, for: .normal)
+        case .inFolderEditMode:
+            topLeftButton.isHidden = false
+            topLeftButton.setTitle("", for: .normal)
+            let img = UIImage.templateImageNamed("nav-add")
+            topLeftButton.setImage(img, for: .normal)
+        case .bookmarkEditMode:
+            topLeftButton.isHidden = false
+            topLeftButton.setTitle(Strings.CancelString, for: .normal)
+            topLeftButton.setImage(nil, for: .normal)
         }
     }
-    
+
+    func topRightButtonSetup() {
+        switch bookmarkPanelState {
+        case .home:
+            topRightButton.setTitle(String.AppSettingsDone, for: .normal)
+        case .inFolder:
+            topRightButton.setTitle(Strings.BookmarksEdit, for: .normal)
+        case .inFolderEditMode:
+            topRightButton.setTitle(String.AppSettingsDone, for: .normal)
+        case .bookmarkEditMode:
+            topRightButton.setTitle(Strings.SettingsAddCustomEngineSaveButtonText, for: .normal)
+        }
+    }
+
+    @objc func topLeftButtonAction() {
+        guard let panel = children.first as? UINavigationController else { return }
+        switch bookmarkPanelState {
+        case .home:
+            return
+        case .inFolder:
+            if panel.viewControllers.count > 1 {
+                bookmarkPanelState = .home
+                panel.popViewController(animated: true)
+            }
+        case .inFolderEditMode:
+            guard let bookmarksPanel = panel.viewControllers.last as? BookmarksPanel else { return }
+            bookmarksPanel.addNewBookmarkItemAction()
+        case .bookmarkEditMode:
+            bookmarkPanelState = .inFolderEditMode
+            panel.popViewController(animated: true)
+        }
+        updateViewWithState()
+    }
+
     @objc func topRightButtonAction() {
-        self.dismiss(animated: true, completion: nil)
+        guard let panel = children.first as? UINavigationController else { return }
+
+        switch bookmarkPanelState {
+        case .home:
+            self.dismiss(animated: true, completion: nil)
+        case .inFolder:
+            guard let bookmarksPanel = panel.viewControllers.last as? BookmarksPanel else { return }
+            bookmarkPanelState = .inFolderEditMode
+            bookmarksPanel.enableEditMode()
+        case .inFolderEditMode:
+            guard let bookmarksPanel = panel.viewControllers.last as? BookmarksPanel else { return }
+            bookmarkPanelState = .inFolder
+            bookmarksPanel.disableEditMode()
+        case .bookmarkEditMode:
+            guard let bookmarkEditView = panel.viewControllers.last as? BookmarkDetailPanel else { return }
+            bookmarkEditView.save().uponQueue(.main) { _ in
+                self.bookmarkPanelState = .inFolderEditMode
+                panel.popViewController(animated: true)
+                if bookmarkEditView.isNew,
+                   let bookmarksPanel = panel.navigationController?.visibleViewController as? BookmarksPanel {
+                    bookmarksPanel.didAddBookmarkNode()
+                }
+            }
+        }
+        updateViewWithState()
     }
     
     func setupLibraryPanel(_ panel: UIViewController, accessibilityLabel: String) {

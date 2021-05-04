@@ -60,15 +60,15 @@ class OneLineTableViewCell: UITableViewCell, Themeable {
         midView.addSubview(titleLabel)
         containerView.addSubview(leftImageView)
         containerView.addSubview(midView)
-        
-        addSubview(containerView)
+
+        contentView.addSubview(containerView)
         bringSubviewToFront(containerView)
         
         containerView.snp.makeConstraints { make in
             make.height.equalTo(44)
             make.top.bottom.equalToSuperview()
             make.leading.equalToSuperview()
-            make.trailing.equalTo(accessoryView?.snp.leading ?? snp.trailing)
+            make.trailing.equalTo(accessoryView?.snp.leading ?? contentView.snp.trailing)
         }
         
         leftImageView.snp.makeConstraints { make in
@@ -112,16 +112,6 @@ class OneLineTableViewCell: UITableViewCell, Themeable {
         self.selectionStyle = .default
         separatorInset = UIEdgeInsets(top: 0, left: TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin, bottom: 0, right: 0)
         applyTheme()
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        containerView.snp.remakeConstraints { make in
-            make.height.equalTo(50)
-            make.top.bottom.equalToSuperview()
-            make.leading.equalToSuperview()
-            make.trailing.equalTo(accessoryView?.snp.leading ?? snp.trailing)
-        }
     }
 }
 
