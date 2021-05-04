@@ -1,3 +1,4 @@
+---
 format_version: '6'
 default_step_lib_source: 'https://github.com/bitrise-io/bitrise-steplib.git'
 project_type: ios
@@ -57,13 +58,19 @@ workflows:
         title: Workaround carthage lipo
     - script@1:
         inputs:
-        - content: |-
+        - content: >-
             #!/usr/bin/env bash
+
             set -e
+
             set -x
 
-            # Import only the shipping locales (from shipping_locales.txt) onRelease
-            git clone --depth 1 https://github.com/mozilla-l10n/firefoxios-l10n firefoxios-l10n || exit 1
+
+            # Import only the shipping locales (from shipping_locales.txt)
+            onRelease
+
+            git clone --depth 1 https://github.com/mozilla-l10n/firefoxios-l10n
+            firefoxios-l10n || exit 1
         title: Pull in L10n
     - carthage@3.2:
         inputs:
@@ -83,16 +90,25 @@ workflows:
     - script@1:
         title: Copy glean sdk_generator
         inputs:
-        - content: |-
+        - content: >-
             #!/usr/bin/env bash
+
             # fail if any commands fails
+
             set -e
+
             # debug log
+
             set -x
+
             # Copy Glean script to source folder from
+
             # MozillaAppServices.framework as we need
+
             # this script to build iOS App
-            cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
+
+            cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh
+            ./
     - script@1.1:
         title: NPM install and build
         inputs:
@@ -144,18 +160,32 @@ workflows:
     - script@1:
         title: Pull in L10n
         inputs:
-        - content: |
+        - content: >
             #!/usr/bin/env bash
+
             set -e
+
             set -x
-            # Import only the shipping locales (from shipping_locales.txt) on Release
-            # builds. Import all locales on Beta and Fennec_Enterprise, except for pull
+
+            # Import only the shipping locales (from shipping_locales.txt) on
+            Release
+
+            # builds. Import all locales on Beta and Fennec_Enterprise, except
+            for pull
+
             # requests.
-            git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git ||exit 1
+
+            git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git
+            ||exit 1
+
             pip install --user virtualenv
+
             cd /usr/local/bin
+
             ln -s /Users/vagrant/Library/Python/3.9/bin/virtualenv .
+
             cd -
+
             ./ios-l10n-scripts/import-locales-firefox.sh --release
     - script@1:
         inputs:
@@ -423,17 +453,15 @@ workflows:
         title: Copy glean sdk_generator
         inputs:
         - content: >-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
+            #!/usr/bin/env bash # fail if any commands fails set -e # debug log
             set -x
 
-            # Copy Glean script to source folder from
-            # MozillaAppServices.framework as we need
-            # this script to build iOS App
+            # Copy Glean script to source folder from #
+            MozillaAppServices.framework as we need # this script to build iOS
+            App
 
-            cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
+            cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh
+            ./
     - script@1:
         inputs:
         - content: >-
@@ -500,7 +528,7 @@ workflows:
     - slack@3.1:
         run_if: '{{getenv "NEW_AS_VERSION" | eq "New_AS_Version"}}'
         inputs:
-        - channel: "#firefox-ios"
+        - channel: '#firefox-ios'
         - text: Build status using latest A-S
         - webhook_url: $WEBHOOK_SLACK_TOKEN_2
     description: >-
@@ -577,17 +605,15 @@ workflows:
         title: Copy glean sdk_generator
         inputs:
         - content: >-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
+            #!/usr/bin/env bash # fail if any commands fails set -e # debug log
             set -x
 
-            # Copy Glean script to source folder from
-            # MozillaAppServices.framework as we need
-            # this script to build iOS App
+            # Copy Glean script to source folder from #
+            MozillaAppServices.framework as we need # this script to build iOS
+            App
 
-            cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
+            cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh
+            ./
     - script@1:
         inputs:
         - content: >-
@@ -648,8 +674,7 @@ workflows:
         - simulator_device: iPhone 8
     - deploy-to-bitrise-io@1.9: {}
     - cache-push@2.4: {}
-    description: >-
-      This Workflow is to run unit and smoketest in a testing environment
+    description: This Workflow is to run unit and smoketest in a testing environment
     meta:
       bitrise.io:
         stack: osx-xcode-12.4.x
@@ -748,49 +773,15 @@ workflows:
         title: Move glean sdk_generator
         inputs:
         - content: >-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
+            #!/usr/bin/env bash # fail if any commands fails set -e # debug log
             set -x
 
-            # Move Glean script to source folder from
-            # MozillaAppServices.framework as we don't
-            # want to ship our app with Glean shell
-            # script inside A~S framework
+            # Move Glean script to source folder from #
+            MozillaAppServices.framework as we don't # want to ship our app with
+            Glean shell # script inside A~S framework
 
-            mv Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
-    - script@1:
-        inputs:
-        - content: >-
-            #!/usr/bin/env bash
-
-            set -e
-
-            set -x
-
-
-            # Import only the shipping locales (from shipping_locales.txt) on
-            Release
-
-            # builds. Import all locales on Beta and Fennec_Enterprise, except
-            for pull
-
-            # requests.
-
-            git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git ||
-            exit 1
-
-            pip install --user virtualenv
-
-            cd /usr/local/bin
-
-            ln -s /Users/vagrant/Library/Python/3.9/bin/virtualenv .
-
-            cd -
-
-            ./ios-l10n-scripts/import-locales-firefox.sh --release
-        title: Pull in L10N
+            mv Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh
+            ./
     - script@1:
         inputs:
         - content: >-
@@ -886,7 +877,8 @@ workflows:
 
             echo "Setting Nimbus variables"
 
-            /usr/libexec/PlistBuddy -c "Set NimbusURL $NIMBUS_URL" "Client/Info.plist"
+            /usr/libexec/PlistBuddy -c "Set NimbusURL $NIMBUS_URL"
+            "Client/Info.plist"
         title: Nimbus Variable Setup
     - xcode-archive@2:
         inputs:
@@ -932,8 +924,7 @@ workflows:
     - opts:
         is_expand: false
       BITRISE_SCHEME: Firefox
-    description: >-
-      This step is to build, archive and upload Firefox Release and Beta
+    description: 'This step is to build, archive and upload Firefox Release and Beta'
     meta:
       bitrise.io:
         stack: osx-xcode-12.4.x
@@ -1009,17 +1000,15 @@ workflows:
         title: Copy glean sdk_generator
         inputs:
         - content: >-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
+            #!/usr/bin/env bash # fail if any commands fails set -e # debug log
             set -x
 
-            # Copy Glean script to source folder from
-            # MozillaAppServices.framework as we need
-            # this script to build iOS App
+            # Copy Glean script to source folder from #
+            MozillaAppServices.framework as we need # this script to build iOS
+            App
 
-            cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
+            cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh
+            ./
     - script@1:
         inputs:
         - content: >-
@@ -1078,7 +1067,7 @@ workflows:
         - export_uitest_artifacts: 'true'
         - scheme: Fennec_Enterprise_XCUITests
         - simulator_os_version: latest
-        - simulator_device: "$IOS_DEVICE"
+        - simulator_device: $IOS_DEVICE
     - deploy-to-bitrise-io@1.10: {}
     - cache-push@2.2: {}
     - slack@3.1:
@@ -1162,17 +1151,15 @@ workflows:
         title: Copy glean sdk_generator
         inputs:
         - content: >-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
+            #!/usr/bin/env bash # fail if any commands fails set -e # debug log
             set -x
 
-            # Copy Glean script to source folder from
-            # MozillaAppServices.framework as we need
-            # this script to build iOS App
+            # Copy Glean script to source folder from #
+            MozillaAppServices.framework as we need # this script to build iOS
+            App
 
-            cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
+            cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh
+            ./
     - script@1:
         inputs:
         - content: >-
@@ -1321,17 +1308,15 @@ workflows:
         title: Copy glean sdk_generator
         inputs:
         - content: >-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
+            #!/usr/bin/env bash # fail if any commands fails set -e # debug log
             set -x
 
-            # Copy Glean script to source folder from
-            # MozillaAppServices.framework as we need
-            # this script to build iOS App
+            # Copy Glean script to source folder from #
+            MozillaAppServices.framework as we need # this script to build iOS
+            App
 
-            cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
+            cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh
+            ./
     - script@1:
         inputs:
         - content: >-
@@ -1396,8 +1381,7 @@ workflows:
     - slack@3.1:
         inputs:
         - webhook_url: $WEBHOOK_SLACK_TOKEN
-    description: >-
-      This Workflow is to run SmokeTest on iPad simulator device
+    description: This Workflow is to run SmokeTest on iPad simulator device
     meta:
       bitrise.io:
         stack: osx-xcode-12.4.x
@@ -1405,27 +1389,41 @@ workflows:
     steps:
     - script@1:
         inputs:
-        - content: |-
+        - content: >-
             #!/usr/bin/env bash
+
             # fail if any commands fails
+
             set -e
+
             # debug log
+
             set -x
+
 
             YESTERDAY=`date -v -1d '+%Y-%m-%d'`
 
+
             brew install jq
 
-            resp=$(curl -X GET -s -H 'Accept: application/vnd.github.v3+json' -H "authorization: Bearer ${GITHUB_ACCESS_TOKEN}" https://api.github.com/repos/mozilla-mobile/firefox-ios/commits\?sha\=main\&since\=$YESTERDAY | jq -r '.[].commit.message | select(contains("Auto Update Bitrise.YML"))')
+
+            resp=$(curl -X GET -s -H 'Accept: application/vnd.github.v3+json' -H
+            "authorization: Bearer ${GITHUB_ACCESS_TOKEN}"
+            https://api.github.com/repos/mozilla-mobile/firefox-ios/commits\?sha\=main\&since\=$YESTERDAY
+            | jq -r '.[].commit.message | select(contains("Auto Update
+            Bitrise.YML"))')
+
             echo $resp
+
             if [ -z "$resp" ]
+
             then
                 echo "There is not any new commit, stop building"
             else
                 echo "There is a new commit, continue building"
                 envman add --key NEW_XCODE_VERSION --value New_Version_Found
             fi
-        title: "Check main branch for recent activity before continuing"
+        title: Check main branch for recent activity before continuing
     - activate-ssh-key@4.0:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@4.0: {}
@@ -1495,17 +1493,15 @@ workflows:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
         inputs:
         - content: >-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
+            #!/usr/bin/env bash # fail if any commands fails set -e # debug log
             set -x
 
-            # Copy Glean script to source folder from
-            # MozillaAppServices.framework as we need
-            # this script to build iOS App
+            # Copy Glean script to source folder from #
+            MozillaAppServices.framework as we need # this script to build iOS
+            App
 
-            cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
+            cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh
+            ./
     - script@1:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
         inputs:
@@ -1573,7 +1569,7 @@ workflows:
     - slack@3.1:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
         inputs:
-        - channel: "#firefox-ios"
+        - channel: '#firefox-ios'
         - text: Build status using latest Xcode detected
         - webhook_url: $WEBHOOK_SLACK_TOKEN
     description: >-
@@ -1582,8 +1578,6 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
-    #after_run:
-    #- RunSmokeXCUITests
   xcode12-beta:
     steps:
     - activate-ssh-key@4.0:
@@ -1592,24 +1586,39 @@ workflows:
     - certificate-and-profile-installer@1.10: {}
     - script@1:
         inputs:
-        - content: |-
+        - content: >-
             #!/usr/bin/env bash
+
             # fail if any commands fails
+
             set -e
+
             # debug log
+
             set -x
 
-            echo 'EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_simulator__NATIVE_ARCH_64_BIT_x86_64=arm64 arm64e armv7 armv7s armv6 armv8' > /tmp/tmp.xcconfig
-            echo 'EXCLUDED_ARCHS=$(inherited) $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(EFFECTIVE_PLATFORM_SUFFIX)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT))' >> /tmp/tmp.xcconfig
+
+            echo
+            'EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_simulator__NATIVE_ARCH_64_BIT_x86_64=arm64
+            arm64e armv7 armv7s armv6 armv8' > /tmp/tmp.xcconfig
+
+            echo 'EXCLUDED_ARCHS=$(inherited)
+            $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(EFFECTIVE_PLATFORM_SUFFIX)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT))'
+            >> /tmp/tmp.xcconfig
+
             echo 'IPHONEOS_DEPLOYMENT_TARGET=11.4' >> /tmp/tmp.xcconfig
+
             echo 'SWIFT_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig
+
             echo 'GCC_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig
+
             export XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig
+
             envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
         title: Workaround carthage lipo bug
     - carthage@3.2:
         inputs:
-        - carthage_options: " --platform ios --cache-builds"
+        - carthage_options: ' --platform ios --cache-builds'
     - script@1:
         inputs:
         - content: |-
@@ -1626,48 +1635,98 @@ workflows:
     - script@1:
         title: Move glean sdk_generator
         inputs:
-        - content: "#!/usr/bin/env bash # fail if any commands fails set -e # debug
-            log set -x\n# Move Glean script to source folder from # MozillaAppServices.framework
-            as we don't # want to ship our app with Glean shell # script inside A~S
-            framework\n\necho -e \"-------------------------\"\necho -e \"Printing
-            carthage A~S framework\"\nls Carthage/Build/iOS/MozillaAppServices.framework/\necho
-            -e \"-------------------------\"\necho -e \"Printing root ./\" \nls ./\necho
-            -e \"-------------------------\"\necho -e \"moving sdk generator\" \nmv
-            Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./\necho
-            -e \"-------------------------\"\necho -e \"AFTER MOVE Printing carthage
-            A~S framework\"\nls Carthage/Build/iOS/MozillaAppServices.framework/\necho
-            -e \"-------------------------\"\necho -e \"AFTER MOVE Printing root ./\"
-            \nls ./\necho -e \"-------------------------\""
-    - script@1:
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            set -e
+        - content: >-
+            #!/usr/bin/env bash # fail if any commands fails set -e # debug log
             set -x
 
-            # Import only the shipping locales (from shipping_locales.txt) on Release
-            # builds. Import all locales on Beta and Fennec_Enterprise, except for pull
+            # Move Glean script to source folder from #
+            MozillaAppServices.framework as we don't # want to ship our app with
+            Glean shell # script inside A~S framework
+
+
+            echo -e "-------------------------"
+
+            echo -e "Printing carthage A~S framework"
+
+            ls Carthage/Build/iOS/MozillaAppServices.framework/
+
+            echo -e "-------------------------"
+
+            echo -e "Printing root ./"
+
+            ls ./
+
+            echo -e "-------------------------"
+
+            echo -e "moving sdk generator"
+
+            mv Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh
+            ./
+
+            echo -e "-------------------------"
+
+            echo -e "AFTER MOVE Printing carthage A~S framework"
+
+            ls Carthage/Build/iOS/MozillaAppServices.framework/
+
+            echo -e "-------------------------"
+
+            echo -e "AFTER MOVE Printing root ./"
+
+            ls ./
+
+            echo -e "-------------------------"
+    - script@1:
+        inputs:
+        - content: >-
+            #!/usr/bin/env bash
+
+            set -e
+
+            set -x
+
+
+            # Import only the shipping locales (from shipping_locales.txt) on
+            Release
+
+            # builds. Import all locales on Beta and Fennec_Enterprise, except
+            for pull
+
             # requests.
-            git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git || exit 1
+
+            git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git ||
+            exit 1
+
             pip install --user virtualenv
+
             cd /usr/local/bin
+
             ln -s /Users/vagrant/Library/Python/3.9/bin/virtualenv .
+
             cd -
+
             ./ios-l10n-scripts/import-locales-firefox.sh --release
         title: Pull in L10N
     - script@1:
         inputs:
-        - content: |-
+        - content: >-
             #!/usr/bin/env bash
+
             set -e
+
             set -x
 
+
             cd Client.xcodeproj
-            sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = "iPhone Distribution"/' project.pbxproj
+
+            sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone
+            Developer"/CODE_SIGN_IDENTITY = "iPhone Distribution"/'
+            project.pbxproj
+
             cd -
         title: Set xcodeproj code_sign_identity
     - script@1.1:
-        title: NPM, ContentBlockerGen
+        title: 'NPM, ContentBlockerGen'
         inputs:
         - content: |-
             #!/usr/bin/env bash
@@ -1697,40 +1756,61 @@ workflows:
         - plist_path: WidgetKit/Info.plist
     - script@1:
         inputs:
-        - content: |-
+        - content: >-
             #!/usr/bin/env bash
+
             # fail if any commands fails
+
             set -e
+
             # debug log
+
             set -x
+
 
             # write your script here
 
-            echo "Setting Leanplum environment to PRODUCTION for $BUDDYBUILD_SCHEME"
-            /usr/libexec/PlistBuddy -c "Set LeanplumAppId $LEANPLUM_APP_ID" "Client/Info.plist"
-            /usr/libexec/PlistBuddy -c "Set LeanplumProductionKey $LEANPLUM_KEY_PRODUCTION" "Client/Info.plist"
-            /usr/libexec/PlistBuddy -c "Set LeanplumDevelopmentKey $LEANPLUM_KEY_DEVELOPMENT" "Client/Info.plist"
+
+            echo "Setting Leanplum environment to PRODUCTION for
+            $BUDDYBUILD_SCHEME"
+
+            /usr/libexec/PlistBuddy -c "Set LeanplumAppId $LEANPLUM_APP_ID"
+            "Client/Info.plist"
+
+            /usr/libexec/PlistBuddy -c "Set LeanplumProductionKey
+            $LEANPLUM_KEY_PRODUCTION" "Client/Info.plist"
+
+            /usr/libexec/PlistBuddy -c "Set LeanplumDevelopmentKey
+            $LEANPLUM_KEY_DEVELOPMENT" "Client/Info.plist"
         title: Leanplum Variable Setup
     - script@1:
         inputs:
-        - content: |-
+        - content: >-
             #!/usr/bin/env bash
+
 
             # fail if any commands fails
 
+
             set -e
 
+
             # debug log
+
 
             set -x
 
 
+
             # write your script here
+
 
 
             echo "Setting Nimbus variables"
 
-            /usr/libexec/PlistBuddy -c "Set NimbusURL $NIMBUS_URL" "Client/Info.plist"
+
+            /usr/libexec/PlistBuddy -c "Set NimbusURL $NIMBUS_URL"
+            "Client/Info.plist"
         title: Nimbus Variable Setup
     - script@1:
         inputs:
@@ -1743,7 +1823,7 @@ workflows:
         title: debug-sleep
     - slack@3.1:
         inputs:
-        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
+        - webhook_url: $WEBHOOK_SLACK_TOKEN
     - xcode-archive@2:
         inputs:
         - compile_bitcode: 'no'
@@ -1756,14 +1836,14 @@ workflows:
         title: 'FirefoxBeta: Xcode Archive & Export for iOS'
     - deploy-to-itunesconnect-application-loader@0:
         inputs:
-        - app_password: "$APPLE_ACCOUNT_PW"
-        - itunescon_user: "$APPLE_ACCOUNT_ID"
+        - app_password: $APPLE_ACCOUNT_PW
+        - itunescon_user: $APPLE_ACCOUNT_ID
         title: 'FirefoxBeta: Deploy to iTunes Connect'
     envs:
     - opts:
         is_expand: false
       BITRISE_SCHEME: Firefox
-    description: This step is to build, archive and upload Firefox Release and Beta
+    description: 'This step is to build, archive and upload Firefox Release and Beta'
     meta:
       bitrise.io:
         stack: osx-xcode-12.4.x
