@@ -321,7 +321,6 @@ class LibraryViewController: UIViewController {
             guard let bookmarksPanel = panel.viewControllers.last as? BookmarksPanel else { return }
             bookmarkPanelState = .inFolder
             bookmarksPanel.disableEditMode()
-
         case .bookmarkEditMode:
             guard let bookmarkEditView = panel.viewControllers.last as? BookmarkDetailPanel else { return }
             bookmarkEditView.save().uponQueue(.main) { _ in
