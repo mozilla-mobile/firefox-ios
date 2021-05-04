@@ -324,7 +324,6 @@ class LibraryViewController: UIViewController {
 
         case .bookmarkEditMode:
             guard let bookmarkEditView = panel.viewControllers.last as? BookmarkDetailPanel else { return }
-
             bookmarkEditView.save().uponQueue(.main) { _ in
                 self.bookmarkPanelState = .inFolderEditMode
                 panel.popViewController(animated: true)
