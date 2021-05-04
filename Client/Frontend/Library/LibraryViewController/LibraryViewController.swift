@@ -294,7 +294,6 @@ class LibraryViewController: UIViewController {
             }
         case .bookmarksFolderEditMode:
             guard let bookmarksPanel = panel.viewControllers.last as? BookmarksPanel else { return }
-            print("Add new folder")
             bookmarksPanel.addNewBookmarkItemAction()
         case .bookmarkEditMode:
             panelViewState = .bookmarksFolderEditMode

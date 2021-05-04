@@ -83,17 +83,6 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         tableView.accessibilityIdentifier = "Bookmarks List"
         tableView.allowsSelectionDuringEditing = true
         tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
-        self.editBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit) { _ in
-            self.enableEditMode()
-        }
-
-        self.doneBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done) { _ in
-            self.disableEditMode()
-        }
-
-        self.newBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add) { _ in
-
-        }
 
         if bookmarkFolderGUID != BookmarkRoots.RootGUID {
             navigationItem.rightBarButtonItem = editBarButtonItem

@@ -122,20 +122,6 @@ class BookmarkDetailPanel: SiteTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel) { _ in
-            self.navigationController?.popViewController(animated: true)
-        }
-
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save) { _ in
-            self.save().uponQueue(.main) { _ in
-                self.navigationController?.popViewController(animated: true)
-
-                if self.isNew, let bookmarksPanel = self.navigationController?.visibleViewController as? BookmarksPanel {
-                    bookmarksPanel.didAddBookmarkNode()
-                }
-            }
-        }
-
         if isNew, bookmarkNodeType == .bookmark {
             bookmarkItemURL = "https://"
         }
