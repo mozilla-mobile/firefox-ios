@@ -65,6 +65,7 @@
 		<string>org-appextension-feature-password-management</string>
 		<string>googlegmail</string>
 		<string>fastmail</string>
+		<string>whatsapp</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
