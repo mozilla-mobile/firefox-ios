@@ -15,9 +15,15 @@ private let schemesAllowedToBeOpenedAsPopups = ["http", "https", "javascript", "
 extension BrowserViewController: WKUIDelegate {
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
         guard let parentTab = tabManager[webView] else { return nil }
-
         guard !navigationAction.isInternalUnprivileged, shouldRequestBeOpenedAsPopup(navigationAction.request) else {
             print("Denying popup from request: \(navigationAction.request)")
+            
+            guard let url = navigationAction.request.url else { return nil }
+            
+            if url.scheme == "whatsapp" && UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url, options: [:])
+            }
+            
             return nil
         }
 
