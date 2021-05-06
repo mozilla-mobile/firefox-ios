@@ -18,17 +18,6 @@ extension LibraryViewController: UIToolbarDelegate {
     }
 }
 
-/// This enum describes the different states the Bookmarks panel,
-/// in the Library Panel, can have. All other Library Panels do
-/// not have states associated with them, allowing this one
-/// state to be persisted.
-enum BookmarksPanelState {
-    case home
-    case inFolder
-    case inFolderEditMode
-    case bookmarkEditMode
-}
-
 class LibraryViewController: UIViewController {
 
     let profile: Profile
@@ -72,6 +61,7 @@ class LibraryViewController: UIViewController {
         button.setTitle(Strings.BackTitle, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         button.setTitleColor(UIColor.systemBlue, for: .normal)
+        button.titleLabel?.textAlignment = .left
         button.addTarget(self, action: #selector(topLeftButtonAction), for: .touchUpInside)
         return button
     }()
@@ -154,7 +144,7 @@ class LibraryViewController: UIViewController {
         topLeftButton.snp.makeConstraints { make in
             make.leading.equalTo(titleContainerView).offset(20)
             make.centerY.equalTo(titleContainerView)
-            make.width.equalTo(60)
+            make.width.equalTo(80)
             make.height.equalTo(30)
         }
         
