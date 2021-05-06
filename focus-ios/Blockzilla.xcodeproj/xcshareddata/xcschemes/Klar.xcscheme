@@ -72,6 +72,9 @@
                <Test
                   Identifier = "SettingAppearanceTest/testOpenInSafari()">
                </Test>
+               <Test
+                  Identifier = "UserAgentTest">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
