@@ -1,8 +1,8 @@
 import XCTest
 
-let testFileName = "1Mio.dat"
-let testFileSize = "1 MB"
-let testURL = "http://www.ovh.net/files/"
+let testFileName = "Small.zip"
+let testFileSize = "178 bytes"
+let testURL = "http://demo.borland.com/testsite/download_testpage.php"
 let testBLOBURL = "http://bennadel.github.io/JavaScript-Demos/demos/href-download-text-blob/"
 let testBLOBFileSize = "35 bytes"
 
@@ -44,7 +44,8 @@ class DownloadFilesTests: BaseTestCase {
         navigator.openURL(testURL)
         waitUntilPageLoad()
         // Verify that the context menu prior to download a file is correct
-        app.webViews.links["1 Mio file"].firstMatch.tap()
+        app.webViews.staticTexts[testFileName].firstMatch.tap()
+        app.webViews.buttons["Download"].tap()
 
         waitForExistence(app.tables["Context Menu"])
         XCTAssertTrue(app.tables["Context Menu"].staticTexts[testFileName].exists)
@@ -132,8 +133,11 @@ class DownloadFilesTests: BaseTestCase {
         navigator.openURL(testURL)
         waitUntilPageLoad()
         for _ in 0..<numberOfDownlowds {
-            app.webViews.links["1 Mio file"].firstMatch.tap()
-            waitForExistence(app.tables["Context Menu"])
+            waitForExistence(app.webViews.staticTexts[testFileName], timeout: 5)
+            app.webViews.staticTexts[testFileName].firstMatch.tap()
+            waitForExistence(app.webViews.buttons["Download"])
+            app.webViews.buttons["Download"].tap()
+            waitForExistence(app.tables["Context Menu"], timeout: 5)
             app.tables["Context Menu"].cells["download"].tap()
         }
     }
