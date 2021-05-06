@@ -208,7 +208,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
             }
         }
 
-        return max(UITableView.automaticDimension, PhotonActionSheetUX.RowHeight)
+        return UITableView.automaticDimension
     }
 
     override func viewDidLayoutSubviews() {
