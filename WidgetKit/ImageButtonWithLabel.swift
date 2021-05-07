@@ -71,7 +71,7 @@ struct ImageButtonWithLabel: View {
                     HStack(alignment: .top) {
                         VStack(alignment: .leading){
                                 Text(link.label)
-                                    .font(.headline)
+                                    .font(.footnote)
                                     .minimumScaleFactor(0.75)
                                     .layoutPriority(1000)
                         }
