@@ -813,7 +813,7 @@ search:
       - https://github.com/mozilla-mobile/firefox-ios/pull/7702
     notification_emails:
       - firefox-ios@mozilla.com
-    expires: "2021-05-07"
+    expires: "2021-11-07"
   google_topsite_pressed:
     type: labeled_counter
     description: |
