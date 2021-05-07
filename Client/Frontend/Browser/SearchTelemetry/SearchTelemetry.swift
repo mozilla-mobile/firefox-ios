@@ -85,6 +85,7 @@ class SearchTelemetry {
         } else if let webUrl = webView.url {
             let components = URLComponents(url: webUrl, resolvingAgainstBaseURL: false)!
             let clientValue = components.valueForQuery("client")
+            let sClientValue = components.valueForQuery("sclient")
             // Special case google followOn search
             if (tab.urlType == .googleTopSite || tab.urlType == .googleTopSiteFollowOn) && clientValue == code {
                 tab.urlType = .googleTopSiteFollowOn
@@ -93,7 +94,7 @@ class SearchTelemetry {
             } else if (tab.urlType == .search || tab.urlType == .followOnSearch) && clientValue == code {
                 tab.urlType = .followOnSearch
                 self.trackSAPFollowOn()
-            } else if provider == .google {
+            } else if provider == .google && sClientValue != nil {
                 tab.urlType = .organicSearch
                 self.trackOrganic()
             } else {
