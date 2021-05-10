@@ -36,17 +36,6 @@ enum LibraryPanelMainState: Equatable {
     }
 }
 
-/// This enum describes the different states the Bookmarks panel,
-/// in the Library Panel, can have. All other Library Panels do
-/// not have states associated with them, allowing this one
-/// state to be persisted.
-enum BookmarksPanelState {
-    case home
-    case inFolder
-    case inFolderEditMode
-    case bookmarkEditMode
-}
-
 enum LibraryPanelSubState {
     case mainView
     case inFolder
