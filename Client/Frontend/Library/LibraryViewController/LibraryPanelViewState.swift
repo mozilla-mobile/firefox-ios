@@ -2,6 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+/// Describes the main views of the Library Panel using an enum with
+/// an associated value as each main state may have different substates.
 enum LibraryPanelMainState: Equatable {
     case bookmarks(state: LibraryPanelSubState)
     case history(state: LibraryPanelSubState)
@@ -36,6 +38,8 @@ enum LibraryPanelMainState: Equatable {
     }
 }
 
+/// Describes the available substates for LibaryPanel states. These are universal
+/// and thus can be used on each particular panel to describe it's current state.
 enum LibraryPanelSubState {
     case mainView
     case inFolder
@@ -71,6 +75,10 @@ enum LibraryPanelSubState {
     }
 }
 
+/// The `LibraryPanelViewState` class is a state machine that will keep track of the
+/// current state of each panel of the Library Panel. The current state is accessed/updated
+/// through the `currentState` variable, which will ensure that specific substates for each
+/// are preserved.
 class LibraryPanelViewState {
     private var state: LibraryPanelMainState = .bookmarks(state: .mainView)
     var currentState: LibraryPanelMainState {
