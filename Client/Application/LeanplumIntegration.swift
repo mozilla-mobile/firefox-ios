@@ -192,59 +192,8 @@ class LeanPlumClient {
     }
 
     fileprivate func start() {
-        guard let settings = getSettings(), isLocaleSupported(), !Leanplum.hasStarted() else {
-            enabled = false
-            Sentry.shared.send(message: "LeanplumIntegration - Could not be started | isLocaleSupported: \(isLocaleSupported()) | Leanplum has not started: \(!Leanplum.hasStarted())")
-            log.error("LeanplumIntegration - Could not be started")
-            return
-        }
-
-        if UIDevice.current.name.contains("MozMMADev") {
-            log.info("LeanplumIntegration - Setting up for Development")
-            Leanplum.setDeviceId(UIDevice.current.identifierForVendor?.uuidString)
-            Leanplum.setAppId(settings.appId, withDevelopmentKey: settings.developmentKey)
-            setupType = .debug
-        } else {
-            log.info("LeanplumIntegration - Setting up for Production")
-            Leanplum.setAppId(settings.appId, withProductionKey: settings.productionKey)
-            setupType = .production
-        }
-
-        Leanplum.syncResourcesAsync(true)
-
-        let attributes: [AnyHashable: Any] = [
-            LPAttributeKey.mailtoIsDefault: mailtoIsDefault(),
-            LPAttributeKey.focusInstalled: focusInstalled(),
-            LPAttributeKey.klarInstalled: klarInstalled(),
-            LPAttributeKey.pocketInstalled: pocketInstalled(),
-            LPAttributeKey.signedInSync: profile?.hasAccount() ?? false,
-            LPAttributeKey.fxaAccountVerified: profile?.hasSyncableAccount() ?? false,
-            LPAttributeKey.isReleaseBuild: AppConstants.BuildChannel == .release
-        ]
-
-        self.setupCustomTemplates()
-
-        lpState = .willStart
-        Leanplum.start(withUserId: nil, userAttributes: attributes, responseHandler: { _ in
-            self.track(event: .openedApp)
-
-            assert(Thread.isMainThread)
-            self.lpState = .started(startedState: .normalRun)
-            // https://docs.leanplum.com/reference#callbacks
-            // According to the doc all variables should be synced when lp start finishes
-            // Relying on this fact and sending the updated AB test variable
-            self.finishedStartingLeanplum?()
-            self.checkIfAppWasInstalled(key: PrefsKeys.HasFocusInstalled, isAppInstalled: self.focusInstalled(), lpEvent: .downloadedFocus)
-            self.checkIfAppWasInstalled(key: PrefsKeys.HasPocketInstalled, isAppInstalled: self.pocketInstalled(), lpEvent: .downloadedPocket)
-            self.recordSyncedClients(with: self.profile)
-            self.recordPushTests()
-        })
-
-        NotificationCenter.default.addObserver(forName: .FirefoxAccountChanged, object: nil, queue: .main) { _ in
-            if !RustFirefoxAccounts.shared.hasAccount() {
-                LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: false])
-            }
-        }
+//        Leanplum is being removed hence no events should be tracked in this commit
+//        https://github.com/mozilla-mobile/firefox-ios/issues/8462
     }
     
     // Send data to telemetry for a/b tests that send messages
@@ -276,37 +225,18 @@ class LeanPlumClient {
 
     // Events
     func track(event: LPEvent, withParameters parameters: [String: String]? = nil) {
-        guard isLPEnabled() else {
-            return
-        }
-        ensureMainThread {
-            guard !self.isPrivateMode() else {
-                return
-            }
-            if let params = parameters {
-                Leanplum.track(event.rawValue, withParameters: params)
-            } else {
-                Leanplum.track(event.rawValue)
-            }
-        }
+//        Leanplum is being removed hence no events should be tracked in this commit
+//        https://github.com/mozilla-mobile/firefox-ios/issues/8462
     }
 
     func set(attributes: [AnyHashable: Any]) {
-        guard isLPEnabled() else {
-            return
-        }
-        ensureMainThread {
-            if !self.isPrivateMode() {
-                Leanplum.setUserAttributes(attributes)
-            }
-        }
+//        Leanplum is being removed hence no events should be tracked in this commit
+//        https://github.com/mozilla-mobile/firefox-ios/issues/8462
     }
 
     func set(enabled: Bool) {
-        // Setting up Test Mode stops sending things to server.
-        if enabled { start() }
-        self.enabled = enabled
-        Leanplum.setTestModeEnabled(!enabled)
+//        Leanplum is being removed hence no events should be tracked in this commit
+//        https://github.com/mozilla-mobile/firefox-ios/issues/8462
     }
 
     func isFxAPrePushEnabled() -> Bool {

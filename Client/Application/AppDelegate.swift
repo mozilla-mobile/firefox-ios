@@ -230,12 +230,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // Leanplum setup
 
         if let profile = self.profile {
-            // Leanplum setup
-            if LeanPlumClient.shouldEnable(profile: profile) {
-                LeanPlumClient.shared.setup(profile: profile)
-                LeanPlumClient.shared.set(enabled: true)
-            }
-            
             let persistedCurrentVersion = InstallType.persistedCurrentVersion()
             let introScreen = profile.prefs.intForKey(PrefsKeys.IntroSeen)
             // upgrade install - Intro screen shown & persisted current version does not match
