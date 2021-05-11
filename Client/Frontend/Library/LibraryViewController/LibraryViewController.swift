@@ -296,11 +296,11 @@ class LibraryViewController: UIViewController {
         case .bookmarks:
             panelState.currentState = .bookmarks(state: .mainView)
         case .downloads:
-            panelState.currentState = .downloads(state: .mainView)
+            panelState.currentState = .downloads
         case .history:
             panelState.currentState = .history(state: .mainView)
         case .readingList:
-            panelState.currentState = .readingList(state: .mainView)
+            panelState.currentState = .readingList
         default:
             return
         }

@@ -7,30 +7,31 @@
 enum LibraryPanelMainState: Equatable {
     case bookmarks(state: LibraryPanelSubState)
     case history(state: LibraryPanelSubState)
-    case downloads(state: LibraryPanelSubState)
-    case readingList(state: LibraryPanelSubState)
-    
+    case downloads
+    case readingList
+
+    // When comparing states, we must also ensure we're comparing substates,
+    // in the cases where they are present.
     static func ==(lhs: LibraryPanelMainState, rhs: LibraryPanelMainState) -> Bool {
         switch (lhs, rhs) {
-        case (let .bookmarks(subState1), let .bookmarks(subState2)):
+        case (let .bookmarks(subState1), let .bookmarks(subState2)),
+             (let .history(subState1), let .history(subState2)):
             return subState1 == subState2
-        case (let .history(subState1), let .history(subState2)):
-            return subState1 == subState2
-        case (let .downloads(subState1), let .downloads(subState2)):
-            return subState1 == subState2
-        case (let .readingList(subState1), let .readingList(subState2)):
-            return subState1 == subState2
+        case (.downloads, .downloads),
+             (.readingList, .readingList):
+            return true
         default:
             return false
         }
     }
 
+    // Allows detecting whether we're changing main panels or not
     func panelIsDifferentFrom(_ newState: LibraryPanelMainState) -> Bool {
         switch (self, newState) {
         case (.bookmarks(_), .bookmarks(_)),
              (.history(_), .history(_)),
-             (.downloads(_), .downloads(_)),
-             (.readingList(_), .readingList(_)):
+             (.downloads, .downloads),
+             (.readingList, .readingList):
             return false
         default:
             return true
@@ -45,6 +46,10 @@ enum LibraryPanelSubState {
     case inFolder
     case inFolderEditMode
     case itemEditMode
+
+    // The following two functions enable checking that substate moves are legal.
+    // For example, you can move from .mainView to .inFolder, but not from
+    // .mainView to .inFolderEditMode
 
     func isParentState(of oldState: LibraryPanelSubState) -> Bool {
         switch self {
@@ -88,15 +93,19 @@ class LibraryPanelViewState {
         }
     }
 
+    // All states with a substate must have their own variable in order to keep
+    // track of what substate we were in such that, when the user returns to
+    // that panel, we retain the correct state.
     private var bookmarksState: LibraryPanelMainState = .bookmarks(state: .mainView)
     private var historyState: LibraryPanelMainState = .history(state: .mainView)
-    private var downloadsState: LibraryPanelMainState = .downloads(state: .mainView)
-    private var readingListState: LibraryPanelMainState = .readingList(state: .mainView)
 
     private func updateState(to newState: LibraryPanelMainState) {
         let changingPanels = state.panelIsDifferentFrom(newState)
         storeCurrentState()
         switch newState {
+
+        // All cases where we have substates must use the `updateStateVariables`
+        // function in order to check if it's a legal update
         case .bookmarks(let newSubviewState):
             guard case .bookmarks(let oldSubviewState) = bookmarksState else { return }
             updateStateVariables(for: newState,
@@ -113,21 +122,11 @@ class LibraryPanelViewState {
                                  and: oldSubviewState,
                                  isChangingPanels: changingPanels)
 
-        case .downloads(let newSubviewState):
-            guard case .downloads(let oldSubviewState) = downloadsState else { return }
-            updateStateVariables(for: newState,
-                                 andCategory: downloadsState,
-                                 with: newSubviewState,
-                                 and: oldSubviewState,
-                                 isChangingPanels: changingPanels)
-
-        case .readingList(let newSubviewState):
-            guard case .readingList(let oldSubviewState) = readingListState else { return }
-            updateStateVariables(for: newState,
-                                 andCategory: readingListState,
-                                 with: newSubviewState,
-                                 and: oldSubviewState,
-                                 isChangingPanels: changingPanels)
+        // In the case of panels without substates, we can just update
+        // the state directly without worry.
+        case .downloads,
+             .readingList:
+            self.state = newState
         }
     }
 
@@ -137,10 +136,8 @@ class LibraryPanelViewState {
             bookmarksState = state
         case .history(_):
             historyState = state
-        case .downloads(_):
-            downloadsState = state
-        case .readingList(_):
-            readingListState = state
+        case .downloads, .readingList:
+            return
         }
     }
 
