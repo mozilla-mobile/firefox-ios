@@ -335,7 +335,7 @@ private extension LoginListViewController {
 extension LoginListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         // Headers are hidden except for the first login section, which has a title (see also viewForHeaderInSection)
-        return section == 1 ? 44 : 0
+        return section == 1 ? UITableView.automaticDimension : 0
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -347,6 +347,7 @@ extension LoginListViewController: UITableViewDelegate {
             return nil
         }
         headerView.titleLabel.text = Strings.LoginsListTitle
+        headerView.titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmall
         // not using a grouped table: show header borders
         headerView.showBorder(for: .top, true)
         headerView.showBorder(for: .bottom, true)
@@ -358,7 +359,7 @@ extension LoginListViewController: UITableViewDelegate {
         if indexPath.section == LoginsSettingsSection, searchController.isActive || tableView.isEditing {
             return 0
         }
-        return indexPath.section == LoginsSettingsSection ? 44 : LoginListViewModel.LoginListUX.RowHeight
+        return UITableView.automaticDimension
     }
 
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
