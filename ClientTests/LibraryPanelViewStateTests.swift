@@ -148,7 +148,7 @@ class LibraryPanelViewStateTests: XCTestCase {
         panelState?.currentState = .bookmarks(state: .inFolderEditMode)
         panelState?.currentState = .history(state: .mainView)
         panelState?.currentState = .history(state: .inFolder)
-        panelState?.currentState = .downloads(state: .mainView)
+        panelState?.currentState = .downloads
         panelState?.currentState = .bookmarks(state: .mainView)
 
         var actualState = panelState?.currentState
