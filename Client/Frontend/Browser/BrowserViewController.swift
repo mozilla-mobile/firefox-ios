@@ -933,6 +933,17 @@ class BrowserViewController: UIViewController {
             userData[QuickActions.TabTitleKey] = title
         }
         QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark, withUserData: userData, toApplication: .shared)
+
+        showBookmarksToast()
+    }
+
+    private func showBookmarksToast() {
+        let toast = ButtonToast(labelText: Strings.AppMenuAddBookmarkConfirmMessage,
+                                buttonText: Strings.BookmarksEdit,
+                                textAlignment: .left) { isButtonTapped in
+//                isButtonTapped ? SHOW EDIT FOLDER THING : nil
+        }
+        self.show(toast: toast)
     }
 
     override func accessibilityPerformEscape() -> Bool {
@@ -1978,7 +1989,6 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 
             let bookmarkAction = UIAlertAction(title: Strings.ContextMenuBookmarkLink, style: .default) { _ in
                 self.addBookmark(url: url.absoluteString, title: elements.title)
-                SimpleToast().showAlertWithText(Strings.AppMenuAddBookmarkConfirmMessage, bottomContainer: self.webViewContainer)
                 TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .contextMenu)
             }
             actionSheetController.addAction(bookmarkAction, accessibilityIdentifier: "linkContextMenu.bookmarkLink")
