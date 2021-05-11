@@ -7,16 +7,17 @@ import XCTest
 class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
 
     func testPanelsEmptyState() {
-            waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
-            app.buttons["urlBar-cancel"].tap()
-            waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
-            navigator.nowAt(NewTabScreen)
-            navigator.goto(LibraryPanel_Bookmarks)
-            snapshot("PanelsEmptyState-LibraryPanels.Bookmarks")
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        app.buttons["urlBar-cancel"].tap()
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(LibraryPanel_Bookmarks)
+        snapshot("PanelsEmptyState-LibraryPanels.Bookmarks")
         // Tap on each of the library buttons
-        for i in 1...3 {                app.segmentedControls["librarySegmentControl"].buttons.element(boundBy: i).tap()
-                snapshot("PanelsEmptyState-\(i)")
-            }
+        for i in 1...3 {
+            app.segmentedControls["librarySegmentControl"].buttons.element(boundBy: i).tap()
+            snapshot("PanelsEmptyState-\(i)")
+        }
     }
 
     // From here on it is fine to load pages
