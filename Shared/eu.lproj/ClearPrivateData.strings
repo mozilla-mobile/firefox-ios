@@ -1,0 +1,18 @@
+/* Settings item for clearing browsing history */
+"Browsing History" = "Nabigatze-historia";
+
+/* Settings item for clearing the cache */
+"Cache" = "Cachea";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Cookieak";
+
+/* Settings item for deleting downloaded files */
+"Downloaded Files" = "Deskargatutako fitxategiak";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Lineaz kanpoko datuak";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Gordetako saio-hasierak";
+

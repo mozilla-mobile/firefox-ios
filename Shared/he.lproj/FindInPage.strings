@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "סיום";
+
+/* Text selection menu item */
+"Find in Page" = "חיפוש בדף";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "התוצאה הבאה בעמוד";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "התוצאה הקודמת בעמוד";
+

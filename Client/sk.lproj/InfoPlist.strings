@@ -1,0 +1,26 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Toto vám umožňuje tvoriť a nahrávať fotky.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Pre prístup k uloženým prihláseniam vyžaduje Firefox Face ID.";
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSLocationWhenInUseUsageDescription" = "Stránky, ktoré navštevujete, môžu žiadať prezradiť vašu polohu.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Toto vám umožňuje tvoriť a nahrávať videá.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Toto vám umožňuje ukladať fotky.";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "Nová súkromná karta";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "Nová karta";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "Skenovanie QR kódu";
+

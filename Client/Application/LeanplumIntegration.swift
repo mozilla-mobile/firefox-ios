@@ -8,6 +8,7 @@ import Shared
 import Leanplum
 import Account
 
+private let abTestMessageNames = ["Live_DefBrowser_CAB_ALL_Push_EN_121720", "Live_DefBrowser_AutAB_ALL_Push_EN_121820"] // list of the names of all a/b tests that send messages
 private let LPAppIdKey = "LeanplumAppId"
 private let LPProductionKeyKey = "LeanplumProductionKey"
 private let LPDevelopmentKeyKey = "LeanplumDevelopmentKey"
@@ -70,6 +71,12 @@ enum LPEvent: String {
     case trackingProtectionSafeList = "E_Added_Site_To_Tracking_Protection_Safelist"
     case fxaSyncedNewDevice = "E_FXA_Synced_New_Device"
     case onboardingTestLoadedTooSlow = "E_Onboarding_Was_Swiped_Before_AB_Test_Could_Start"
+    case dismissDefaultBrowserCard = "E_Dismissed_Default_Browser_Card"
+    case goToSettingsDefaultBrowserCard = "E_Default_Browser_Card_Clicked_Go_To_Settings"
+    case appOpenedAsDefaultBrowser = "E_App_Opened_as_Default_Browser"
+    case settingsSetAsDefaultBrowser = "E_Settings_Clicked_Set_Default_Browser"
+    case goToSettingsDefaultBrowserOnboarding = "E_Default_Browser_Onboarding_Clicked_Go_To_Settings"
+    case dismissDefaultBrowserOnboarding = "E_Dismissed_Default_Browser_Onboarding"
 }
 
 struct LPAttributeKey {
@@ -84,6 +91,7 @@ struct LPAttributeKey {
     static let experimentName = "Experiment name"
     static let experimentId = "Experiment id"
     static let experimentVariant = "Experiment variant"
+    static let isReleaseBuild = "Build channel is Release"
 }
 
 struct MozillaAppSchemes {
@@ -184,104 +192,51 @@ class LeanPlumClient {
     }
 
     fileprivate func start() {
-        guard let settings = getSettings(), isLocaleSupported(), !Leanplum.hasStarted() else {
-            enabled = false
-            Sentry.shared.send(message: "LeanplumIntegration - Could not be started | isLocaleSupported: \(isLocaleSupported()) | Leanplum has not started: \(!Leanplum.hasStarted())")
-            log.error("LeanplumIntegration - Could not be started")
+//        Leanplum is being removed hence no events should be tracked in this commit
+//        https://github.com/mozilla-mobile/firefox-ios/issues/8462
+    }
+    
+    // Send data to telemetry for a/b tests that send messages
+    func recordPushTests() {
+        var lpData: Dictionary<String, Any>?
+        guard let variants = Leanplum.variants() as? [Dictionary<String, Any>] else {
             return
         }
-
-        if UIDevice.current.name.contains("MozMMADev") {
-            log.info("LeanplumIntegration - Setting up for Development")
-            Leanplum.setDeviceId(UIDevice.current.identifierForVendor?.uuidString)
-            Leanplum.setAppId(settings.appId, withDevelopmentKey: settings.developmentKey)
-            setupType = .debug
-        } else {
-            log.info("LeanplumIntegration - Setting up for Production")
-            Leanplum.setAppId(settings.appId, withProductionKey: settings.productionKey)
-            setupType = .production
-        }
-
-        Leanplum.syncResourcesAsync(true)
-
-        let attributes: [AnyHashable: Any] = [
-            LPAttributeKey.mailtoIsDefault: mailtoIsDefault(),
-            LPAttributeKey.focusInstalled: focusInstalled(),
-            LPAttributeKey.klarInstalled: klarInstalled(),
-            LPAttributeKey.pocketInstalled: pocketInstalled(),
-            LPAttributeKey.signedInSync: profile?.hasAccount() ?? false,
-            LPAttributeKey.fxaAccountVerified: profile?.hasSyncableAccount() ?? false
-        ]
-
-        self.setupCustomTemplates()
-
-        lpState = .willStart
-        Leanplum.start(withUserId: nil, userAttributes: attributes, responseHandler: { _ in
-            self.track(event: .openedApp)
-
-            assert(Thread.isMainThread)
-            self.lpState = .started(startedState: .normalRun)
-            // https://docs.leanplum.com/reference#callbacks
-            // According to the doc all variables should be synced when lp start finishes
-            // Relying on this fact and sending the updated AB test variable
-            self.finishedStartingLeanplum?()
-            // We need to check if the app is a clean install to use for
-            // preventing the What's New URL from appearing.
-            if self.prefs?.intForKey(PrefsKeys.IntroSeen) == nil {
-                self.prefs?.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
-                self.track(event: .firstRun)
-                self.lpState = .started(startedState: .firstRun)
-            } else if self.prefs?.boolForKey("SecondRun") == nil {
-                self.prefs?.setBool(true, forKey: "SecondRun")
-                self.track(event: .secondRun)
-                self.lpState = .started(startedState: .secondRun)
-            }
-
-            self.checkIfAppWasInstalled(key: PrefsKeys.HasFocusInstalled, isAppInstalled: self.focusInstalled(), lpEvent: .downloadedFocus)
-            self.checkIfAppWasInstalled(key: PrefsKeys.HasPocketInstalled, isAppInstalled: self.pocketInstalled(), lpEvent: .downloadedPocket)
-            self.recordSyncedClients(with: self.profile)
-        })
-
-        NotificationCenter.default.addObserver(forName: .FirefoxAccountChanged, object: nil, queue: .main) { _ in
-            if !RustFirefoxAccounts.shared.hasAccount() {
-                LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: false])
+        variants.forEach {
+            if abTestMessageNames.contains($0["abTestName"] as? String ?? "") {
+                lpData = $0
             }
         }
+        guard lpData != nil else {
+            return
+        }
+        var abTestId = ""
+        if let value = lpData?["abTestId"] as? Int64 {
+                abTestId = "\(value)"
+        }
+        let abTestName = lpData?["abTestName"] as? String ?? ""
+        let abTestVariant = lpData?["name"] as? String ?? ""
+        let attributesExtras = [LPAttributeKey.experimentId: abTestId, LPAttributeKey.experimentName: abTestName, LPAttributeKey.experimentVariant: abTestVariant]
+        // Leanplum telemetry
+        LeanPlumClient.shared.set(attributes: attributesExtras)
+        // Legacy telemetry
+        TelemetryWrapper.recordEvent(category: .enrollment, method: .add, object: .experimentEnrollment, extras: attributesExtras)
     }
 
     // Events
     func track(event: LPEvent, withParameters parameters: [String: String]? = nil) {
-        guard isLPEnabled() else {
-            return
-        }
-        ensureMainThread {
-            guard !self.isPrivateMode() else {
-                return
-            }
-            if let params = parameters {
-                Leanplum.track(event.rawValue, withParameters: params)
-            } else {
-                Leanplum.track(event.rawValue)
-            }
-        }
+//        Leanplum is being removed hence no events should be tracked in this commit
+//        https://github.com/mozilla-mobile/firefox-ios/issues/8462
     }
 
     func set(attributes: [AnyHashable: Any]) {
-        guard isLPEnabled() else {
-            return
-        }
-        ensureMainThread {
-            if !self.isPrivateMode() {
-                Leanplum.setUserAttributes(attributes)
-            }
-        }
+//        Leanplum is being removed hence no events should be tracked in this commit
+//        https://github.com/mozilla-mobile/firefox-ios/issues/8462
     }
 
     func set(enabled: Bool) {
-        // Setting up Test Mode stops sending things to server.
-        if enabled { start() }
-        self.enabled = enabled
-        Leanplum.setTestModeEnabled(!enabled)
+//        Leanplum is being removed hence no events should be tracked in this commit
+//        https://github.com/mozilla-mobile/firefox-ios/issues/8462
     }
 
     func isFxAPrePushEnabled() -> Bool {

@@ -55,15 +55,15 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         case showRecentlyClosedTabs
 
         // Use to enable/disable the additional history action rows.
-        static func setStyle(enabled: Bool, forCell cell: UITableViewCell) {
+        static func setStyle(enabled: Bool, forCell cell: OneLineTableViewCell) {
             if enabled {
-                cell.textLabel?.alpha = 1.0
-                cell.imageView?.alpha = 1.0
+                cell.titleLabel.alpha = 1.0
+                cell.leftImageView.alpha = 1.0
                 cell.selectionStyle = .default
                 cell.isUserInteractionEnabled = true
             } else {
-                cell.textLabel?.alpha = 0.5
-                cell.imageView?.alpha = 0.5
+                cell.titleLabel.alpha = 0.5
+                cell.leftImageView.alpha = 0.5
                 cell.selectionStyle = .none
                 cell.isUserInteractionEnabled = false
             }
@@ -81,7 +81,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
     var currentFetchOffset = 0
     var isFetchInProgress = false
 
-    var clearHistoryCell: UITableViewCell?
+    var clearHistoryCell: OneLineTableViewCell?
 
     var hasRecentlyClosed: Bool {
         return profile.recentlyClosedTabs.tabs.count > 0
@@ -114,6 +114,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         tableView.addGestureRecognizer(longPressRecognizer)
         tableView.accessibilityIdentifier = "History List"
         tableView.prefetchDataSource = self
+        tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -236,7 +237,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
     func pinToTopSites(_ site: Site) {
         _ = profile.history.addPinnedTopSite(site).uponQueue(.main) { result in
             if result.isSuccess {
-                SimpleToast().showAlertWithText(Strings.AppMenuAddPinToTopSitesConfirmMessage, bottomContainer: self.view)
+                SimpleToast().showAlertWithText(Strings.AppMenuAddPinToShortcutsConfirmMessage, bottomContainer: self.view)
             }
         }
     }
@@ -308,13 +309,12 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         return sitesInSection[safe: indexPath.row]
     }
 
-    func configureClearHistory(_ cell: UITableViewCell, for indexPath: IndexPath) -> UITableViewCell {
+    func configureClearHistory(_ cell: OneLineTableViewCell, for indexPath: IndexPath) -> OneLineTableViewCell {
         clearHistoryCell = cell
-        cell.textLabel?.text = Strings.HistoryPanelClearHistoryButtonTitle
-        cell.detailTextLabel?.text = ""
-        cell.imageView?.image = UIImage.templateImageNamed("forget")
-        cell.imageView?.tintColor = HistoryPanelUX.actionIconColor
-        cell.imageView?.backgroundColor = UIColor.theme.homePanel.historyHeaderIconsBackground
+        cell.titleLabel.text = Strings.HistoryPanelClearHistoryButtonTitle
+        cell.leftImageView.image = UIImage.templateImageNamed("forget")
+        cell.leftImageView.tintColor = HistoryPanelUX.actionIconColor
+        cell.leftImageView.backgroundColor = UIColor.theme.homePanel.historyHeaderIconsBackground
         cell.accessibilityIdentifier = "HistoryPanel.clearHistory"
 
         var isEmpty = true
@@ -328,27 +328,28 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         return cell
     }
 
-    func configureRecentlyClosed(_ cell: UITableViewCell, for indexPath: IndexPath) -> UITableViewCell {
+    func configureRecentlyClosed(_ cell: OneLineTableViewCell, for indexPath: IndexPath) -> OneLineTableViewCell {
         cell.accessoryType = .disclosureIndicator
-        cell.textLabel?.text = Strings.RecentlyClosedTabsButtonTitle
-        cell.detailTextLabel?.text = ""
-        cell.imageView?.image = UIImage.templateImageNamed("recently_closed")
-        cell.imageView?.tintColor = HistoryPanelUX.actionIconColor
-        cell.imageView?.backgroundColor = UIColor.theme.homePanel.historyHeaderIconsBackground
+        cell.titleLabel.text = Strings.RecentlyClosedTabsButtonTitle
+        cell.leftImageView.image = UIImage.templateImageNamed("recently_closed")
+        cell.leftImageView.tintColor = HistoryPanelUX.actionIconColor
+        cell.leftImageView.backgroundColor = UIColor.theme.homePanel.historyHeaderIconsBackground
         AdditionalHistoryActionRow.setStyle(enabled: hasRecentlyClosed, forCell: cell)
         cell.accessibilityIdentifier = "HistoryPanel.recentlyClosedCell"
         return cell
     }
 
     func configureSite(_ cell: UITableViewCell, for indexPath: IndexPath) -> UITableViewCell {
-        if let site = siteForIndexPath(indexPath), let cell = cell as? TwoLineTableViewCell {
-            cell.setLines(site.title, detailText: site.url)
-
-            cell.imageView?.layer.borderColor = HistoryPanelUX.IconBorderColor.cgColor
-            cell.imageView?.layer.borderWidth = HistoryPanelUX.IconBorderWidth
-            cell.imageView?.contentMode = .center
-            cell.imageView?.setImageAndBackground(forIcon: site.icon, website: site.tileURL) { [weak cell] in
-                cell?.imageView?.image = cell?.imageView?.image?.createScaled(CGSize(width: HistoryPanelUX.IconSize, height: HistoryPanelUX.IconSize))
+        if let site = siteForIndexPath(indexPath), let cell = cell as? TwoLineImageOverlayCell {
+            cell.titleLabel.text = site.title
+            cell.titleLabel.isHidden = site.title.isEmpty ? true : false
+            cell.descriptionLabel.isHidden = false
+            cell.descriptionLabel.text = site.url
+            cell.leftImageView.layer.borderColor = HistoryPanelUX.IconBorderColor.cgColor
+            cell.leftImageView.layer.borderWidth = HistoryPanelUX.IconBorderWidth
+            cell.leftImageView.contentMode = .center
+            cell.leftImageView.setImageAndBackground(forIcon: site.icon, website: site.tileURL) { [weak cell] in
+                cell?.leftImageView.image = cell?.leftImageView.image?.createScaled(CGSize(width: HistoryPanelUX.IconSize, height: HistoryPanelUX.IconSize))
             }
         }
         return cell
@@ -429,23 +430,24 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = super.tableView(tableView, cellForRowAt: indexPath)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath) as! TwoLineImageOverlayCell
         cell.accessoryType = .none
-
         // First section is reserved for recently closed.
         guard indexPath.section > Section.additionalHistoryActions.rawValue else {
-            cell.imageView?.layer.borderWidth = 0
+            cell.leftImageView.layer.borderWidth = 0
 
             guard let row = AdditionalHistoryActionRow(rawValue: indexPath.row) else {
                 assertionFailure("Bad row number")
                 return cell
             }
 
+            let oneLineCell = tableView.dequeueReusableCell(withIdentifier: OneLineCellIdentifier, for: indexPath) as! OneLineTableViewCell
+
             switch row {
             case .clearRecent:
-                return configureClearHistory(cell, for: indexPath)
+                return configureClearHistory(oneLineCell, for: indexPath)
             case .showRecentlyClosedTabs:
-                return configureRecentlyClosed(cell, for: indexPath)
+                return configureRecentlyClosed(oneLineCell, for: indexPath)
             }
         }
 
@@ -480,7 +482,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let header = view as? UITableViewHeaderFooterView {
             header.textLabel?.textColor = UIColor.theme.tableView.headerTextDark
-            header.contentView.backgroundColor = UIColor.theme.tableView.headerBackground
+            header.contentView.backgroundColor = UIColor.theme.tableView.selectedBackground
         }
     }
 
@@ -520,7 +522,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         if indexPath.section == Section.additionalHistoryActions.rawValue {
             return []
         }
-        let title = NSLocalizedString("Delete", tableName: "HistoryPanel", comment: "Action button for deleting history entries in the history panel.")
+        let title: String = .HistoryPanelDelete
 
         let delete = UITableViewRowAction(style: .default, title: title, handler: { (action, indexPath) in
             self.removeHistoryForURLAtIndexPath(indexPath: indexPath)
@@ -631,7 +633,7 @@ extension HistoryPanel: LibraryPanelContextMenu {
             self.removeHistoryForURLAtIndexPath(indexPath: indexPath)
         })
 
-        let pinTopSite = PhotonActionSheetItem(title: Strings.PinTopsiteActionTitle, iconString: "action_pin", handler: { _, _ in
+        let pinTopSite = PhotonActionSheetItem(title: Strings.AddToShortcutsActionTitle, iconString: "action_pin", handler: { _, _ in
             self.pinToTopSites(site)
         })
         actions.append(pinTopSite)

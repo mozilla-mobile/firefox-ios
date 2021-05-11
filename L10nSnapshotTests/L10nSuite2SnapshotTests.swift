@@ -4,65 +4,34 @@
 
 import XCTest
 
-let testPageBase = "http://www.example.com"
-let loremIpsumURL = "\(testPageBase)"
-
 class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
-    func test1DefaultTopSites() {
-        navigator.toggleOff(userState.pocketInNewTab, withAction: Action.TogglePocketInNewTab)
-        navigator.goto(HomePanelsScreen)
-        snapshot("DefaultTopSites-01")
-        navigator.toggleOn(userState.pocketInNewTab, withAction: Action.TogglePocketInNewTab)
-        navigator.goto(HomePanelsScreen)
-        snapshot("DefaultTopSites-with-pocket-02")
-    }
 
-    func test2MenuOnTopSites() {
-        navigator.goto(NewTabScreen)
-        navigator.goto(BrowserTabMenu)
-        snapshot("MenuOnTopSites-01")
-    }
-
-    func test3Settings() {
-        let table = app.tables.element(boundBy: 0)
-        navigator.goto(SettingsScreen)
-        table.forEachScreen { i in
-            snapshot("Settings-main-\(i)")
-        }
-
-        allSettingsScreens.forEach { nodeName in
-            self.navigator.goto(nodeName)
-            table.forEachScreen { i in
-                snapshot("Settings-\(nodeName)-\(i)")
-            }
-        }
-    }
-
-    func test4PrivateBrowsingTabsEmptyState() {
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        snapshot("PrivateBrowsingTabsEmptyState-01")
-    }
-
-    func test5PanelsEmptyState() {
+    func testPanelsEmptyState() {
         let libraryPanels = [
-            "LibraryPanels.History",
-            "LibraryPanels.ReadingList",
-            "LibraryPanels.Downloads",
-            "LibraryPanels.SyncedTabs"
-        ]
-        navigator.goto(LibraryPanel_Bookmarks)
-        snapshot("PanelsEmptyState-LibraryPanels.Bookmarks")
-        libraryPanels.forEach { panel in
-            app.buttons[panel].tap()
-            snapshot("PanelsEmptyState-\(panel)")
-        }
+                "LibraryPanels.History",
+                "LibraryPanels.ReadingList",
+                "LibraryPanels.Downloads"
+            ]
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+            app.buttons["urlBar-cancel"].tap()
+            waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+            navigator.nowAt(NewTabScreen)
+            navigator.goto(LibraryPanel_Bookmarks)
+            snapshot("PanelsEmptyState-LibraryPanels.Bookmarks")
+            libraryPanels.forEach { panel in
+                app.buttons[panel].tap()
+                snapshot("PanelsEmptyState-\(panel)")
+            }
     }
 
     // From here on it is fine to load pages
-    func test6LongPressOnTextOptions() {
+    func testLongPressOnTextOptions() {
         navigator.openURL(loremIpsumURL)
+        waitUntilPageLoad()
+        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
 
         // Select some text and long press to find the option
+        waitForExistence(app.webViews.element(boundBy: 0).staticTexts.element(boundBy: 0), timeout: 10)
         app.webViews.element(boundBy: 0).staticTexts.element(boundBy: 0).press(forDuration: 1)
         snapshot("LongPressTextOptions-01")
         if(app.menuItems["show.next.items.menu.button"].exists) {
@@ -71,7 +40,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         }
     }
 
-    func test7URLBar() {
+    func testURLBar() {
         navigator.goto(URLBarOpen)
         snapshot("URLBar-01")
 
@@ -80,7 +49,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         snapshot("URLBar-02")
     }
 
-    func test8URLBarContextMenu() {
+    func testURLBarContextMenu() {
         // Long press with nothing on the clipboard
         navigator.goto(URLBarLongPressMenu)
         snapshot("LocationBarContextMenu-01-no-url")
@@ -92,8 +61,9 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         snapshot("LocationBarContextMenu-02-with-url")
     }
 
-    func test10MenuOnWebPage() {
+    func testMenuOnWebPage() {
         navigator.openURL(loremIpsumURL)
+        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         navigator.goto(BrowserTabMenu)
         snapshot("MenuOnWebPage-01")
         navigator.back()
@@ -105,15 +75,67 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         navigator.back()
     }
 
-    func test10PageMenuOnWebPage() {
-           navigator.goto(PageOptionsMenu)
-           snapshot("MenuOnWebPage-03")
-           navigator.back()
-       }
+    func testPageMenuOnWebPage() {
+        navigator.goto(BrowserTab)
+        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
+        waitForExistence(app.buttons["TabLocationView.pageOptionsButton"], timeout: 15)
+        navigator.goto(PageOptionsMenu)
+        snapshot("MenuOnWebPage-03")
+        navigator.back()
+    }
 
-    func test11FxASignInPage() {
+    func testFxASignInPage() {
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        app.buttons["urlBar-cancel"].tap()
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(BrowserTabMenu)
+        waitForExistence(app.tables.cells["menu-sync"], timeout: 5)
         navigator.goto(Intro_FxASignin)
-        waitForExistence(app.navigationBars.staticTexts["FxASingin.navBar"])
+        waitForExistence(app.navigationBars.staticTexts["FxASingin.navBar"], timeout: 10)
         snapshot("FxASignInScreen-01")
+    }
+
+    private func typePasscode(n: Int, keyNumber: Int) {
+        for _ in 1...n {
+            app.keys.element(boundBy: keyNumber).tap()
+            sleep(1)
+        }
+    }
+
+    func testPasscodeSettings() {
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        app.buttons["urlBar-cancel"].tap()
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(PasscodeSettings)
+        app.tables.cells["TurnOnPasscode"].tap()
+        snapshot("SetPasscodeScreen-1-nopasscode")
+
+        // Type "111111 passcode"
+        typePasscode(n: 6, keyNumber: 2)
+        snapshot("SetPasscodeScreen-2-typepasscode")
+        // Type incorrect passcode "111112"
+        typePasscode(n: 5, keyNumber: 2)
+        // Type once inkey "2"
+        typePasscode(n: 1, keyNumber: 1)
+        snapshot("SetPasscodeScreen-3-passcodesmustmatch")
+
+        // Confitm passcode
+        typePasscode(n: 6, keyNumber: 2)
+        typePasscode(n: 6, keyNumber: 2)
+        snapshot("SetPasscodeScreen-3")
+
+        // Go to interval settings
+        app.tables.cells["PasscodeInterval"].tap()
+        typePasscode(n: 6, keyNumber: 2)
+        snapshot("PasscodeIntervalScreen-1")
+    }
+
+    func testDefaultTopSites() {
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        app.buttons["urlBar-cancel"].tap()
+        navigator.nowAt(NewTabScreen)
+        snapshot("DefaultTopSites-01")
     }
 }

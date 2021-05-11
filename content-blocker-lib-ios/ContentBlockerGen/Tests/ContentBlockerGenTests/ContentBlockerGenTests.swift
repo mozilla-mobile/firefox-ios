@@ -19,8 +19,12 @@ let blocklist = """
 
 let entitylist = """
 {
-    "2leep.com": { "properties": [ "2leep.com" ], "resources": [ "2leep.com" ] },
-    "adnologies": { "properties": [ "adnologies.com", "heias.com" ], "resources": [ "adnologies.com", "heias.com" ] }
+"license": "Copyright 2010-2020 Disconnect, Inc.",
+"entities":
+    {
+        "2leep.com": { "properties": [ "2leep.com" ], "resources": [ "2leep.com" ] },
+        "adnologies": { "properties": [ "adnologies.com", "heias.com" ], "resources": [ "adnologies.com", "heias.com" ] }
+    }
 }
 """
 

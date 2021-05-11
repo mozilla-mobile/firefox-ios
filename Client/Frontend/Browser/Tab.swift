@@ -49,6 +49,15 @@ struct TabState {
     var favicon: Favicon?
 }
 
+enum TabUrlType: String {
+    case regular
+    case search
+    case followOnSearch
+    case organicSearch
+    case googleTopSite
+    case googleTopSiteFollowOn
+}
+
 class Tab: NSObject {
     fileprivate var _isPrivate: Bool = false
     internal fileprivate(set) var isPrivate: Bool {
@@ -61,7 +70,7 @@ class Tab: NSObject {
             }
         }
     }
-
+    var urlType: TabUrlType = .regular
     var tabState: TabState {
         return TabState(isPrivate: _isPrivate, url: url, title: displayTitle, favicon: displayFavicon)
     }
@@ -71,6 +80,21 @@ class Tab: NSObject {
     var pageMetadata: PageMetadata?
 
     var consecutiveCrashes: UInt = 0
+    
+    // Setting defualt page as topsites
+    var newTabPageType: NewTabPage = .topSites
+    var tabUUID: String = UUID().uuidString
+
+    // To check if current URL is the starting page i.e. either blank page or internal page like topsites
+    var isURLStartingPage: Bool {
+        guard url != nil else {
+            return true
+        }
+        if url!.absoluteString.hasPrefix("internal://") {
+            return true
+        }
+        return false
+    }
 
     var canonicalURL: URL? {
         if let string = pageMetadata?.siteURL,
@@ -96,7 +120,11 @@ class Tab: NSObject {
     var tabDelegate: TabDelegate?
     weak var urlDidChangeDelegate: URLChangeDelegate?     // TODO: generalize this.
     var bars = [SnackBar]()
-    var favicons = [Favicon]()
+    var favicons = [Favicon]() {
+        didSet {
+            updateFaviconCache()
+        }
+    }
     var lastExecutedTime: Timestamp?
     var sessionData: SessionData?
     fileprivate var lastRequest: URLRequest?
@@ -111,7 +139,7 @@ class Tab: NSObject {
     }
     var mimeType: String?
     var isEditing: Bool = false
-
+    var currentFaviconUrl: URL?
     // When viewing a non-HTML content type in the webview (like a PDF document), this URL will
     // point to a tempfile containing the content so it can be shared to external applications.
     var temporaryDocument: TemporaryDocument?
@@ -143,7 +171,7 @@ class Tab: NSObject {
                 return
             }
 
-            webView?.evaluateJavaScript("window.__firefox__.NightMode.setEnabled(\(nightMode))")
+            webView?.evaluateJavascriptInDefaultContentWorld("window.__firefox__.NightMode.setEnabled(\(nightMode))")
             // For WKWebView background color to take effect, isOpaque must be false,
             // which is counter-intuitive. Default is true. The color is previously
             // set to black in the WKWebView init.
@@ -200,7 +228,7 @@ class Tab: NSObject {
 
         debugTabCount += 1
 
-        UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .tab, value: isPrivate ? .privateTab : .normalTab)
+        TelemetryWrapper.recordEvent(category: .action, method: .add, object: .tab, value: isPrivate ? .privateTab : .normalTab)
     }
 
     class func toRemoteTab(_ tab: Tab) -> RemoteTab? {
@@ -246,7 +274,7 @@ class Tab: NSObject {
             let webView = TabWebView(frame: .zero, configuration: configuration)
             webView.delegate = self
 
-            webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
+            webView.accessibilityLabel = .WebViewAccessibilityLabel
             webView.allowsBackForwardNavigationGestures = true
 
             if #available(iOS 13, *) {
@@ -314,7 +342,7 @@ class Tab: NSObject {
         func checkTabCount(failures: Int) {
             // Need delay for pool to drain.
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                if appDelegate.tabManager.tabs.count == debugTabCount {
+                if appDelegate.tabManager.remoteTabs.count == debugTabCount {
                     return
                 }
 
@@ -327,7 +355,7 @@ class Tab: NSObject {
         #endif
     }
 
-    func closeAndRemovePrivateBrowsingData() {
+    func close() {
         contentScriptManager.uninstall(tab: self)
 
         webView?.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
@@ -336,21 +364,9 @@ class Tab: NSObject {
             tabDelegate?.tab?(self, willDeleteWebView: webView)
         }
 
-        if isPrivate {
-            removeAllBrowsingData()
-        }
-
         webView?.navigationDelegate = nil
         webView?.removeFromSuperview()
         webView = nil
-    }
-
-    func removeAllBrowsingData(completionHandler: @escaping () -> Void = {}) {
-        let dataTypes = WKWebsiteDataStore.allWebsiteDataTypes()
-
-        webView?.configuration.websiteDataStore.removeData(ofTypes: dataTypes,
-                                                     modifiedSince: Date.distantPast,
-                                                 completionHandler: completionHandler)
     }
 
     var loading: Bool {
@@ -539,7 +555,14 @@ class Tab: NSObject {
 
     func toggleChangeUserAgent() {
         changedUserAgent = !changedUserAgent
-        reload()
+
+        if changedUserAgent, let url = url?.withoutMobilePrefix() {
+            let request = URLRequest(url: url)
+            webView?.load(request)
+        } else {
+            reload()
+        }
+
         TabEvent.post(.didToggleDesktopMode, for: self)
     }
 
@@ -576,17 +599,6 @@ class Tab: NSObject {
         return sequence(first: parent) { $0?.parent }.contains { $0 == ancestor }
     }
 
-    func injectUserScriptWith(fileName: String, type: String = "js", injectionTime: WKUserScriptInjectionTime = .atDocumentEnd, mainFrameOnly: Bool = true) {
-        guard let webView = self.webView else {
-            return
-        }
-        if let path = Bundle.main.path(forResource: fileName, ofType: type),
-            let source = try? String(contentsOfFile: path) {
-            let userScript = WKUserScript(source: source, injectionTime: injectionTime, forMainFrameOnly: mainFrameOnly)
-            webView.configuration.userContentController.addUserScript(userScript)
-        }
-    }
-
     func observeURLChanges(delegate: URLChangeDelegate) {
         self.urlDidChangeDelegate = delegate
     }
@@ -599,6 +611,32 @@ class Tab: NSObject {
 
     func applyTheme() {
         UITextField.appearance().keyboardAppearance = isPrivate ? .dark : (ThemeManager.instance.currentName == .dark ? .dark : .light)
+    }
+    
+    func getProviderForUrl() -> SearchEngine {
+        guard let url = self.webView?.url else {
+            return .none
+        }
+        for provider in SearchEngine.allCases {
+            if (url.absoluteString.contains(provider.rawValue)) {
+                return provider
+            }
+        }
+        return .none
+    }
+    
+    func updateFaviconCache() {
+        guard let displayFavicon = displayFavicon?.url, let faviconUrl = URL(string: displayFavicon), let baseDomain = url?.baseDomain else {
+            return
+        }
+
+        if currentFaviconUrl == nil {
+            currentFaviconUrl = faviconUrl
+        } else if !faviconUrl.isEqual(currentFaviconUrl!) {
+            return
+        }
+        
+        FaviconFetcher.downloadFaviconAndCache(imageURL: currentFaviconUrl, imageKey: baseDomain)
     }
 }
 
@@ -656,7 +694,7 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
         // If this helper handles script messages, then get the handler name and register it. The Browser
         // receives all messages and then dispatches them to the right TabHelper.
         if let scriptMessageHandlerName = helper.scriptMessageHandlerName() {
-            tab.webView?.configuration.userContentController.add(self, name: scriptMessageHandlerName)
+            tab.webView?.configuration.userContentController.addInDefaultContentWorld(scriptMessageHandler: self, name: scriptMessageHandlerName)
         }
     }
 
@@ -678,9 +716,8 @@ class TabWebView: WKWebView, MenuHelperInterface {
     func applyTheme() {
         if url == nil {
             let backgroundColor = ThemeManager.instance.current.browser.background.hexString
-            evaluateJavaScript("document.documentElement.style.backgroundColor = '\(backgroundColor)';")
+            evaluateJavascriptInDefaultContentWorld("document.documentElement.style.backgroundColor = '\(backgroundColor)';")
         }
-        window?.backgroundColor = UIColor.theme.browser.background
     }
 
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
@@ -688,14 +725,14 @@ class TabWebView: WKWebView, MenuHelperInterface {
     }
 
     @objc func menuHelperFindInPage() {
-        evaluateJavaScript("getSelection().toString()") { result, _ in
+        evaluateJavascriptInDefaultContentWorld("getSelection().toString()") { result, _ in
             let selection = result as? String ?? ""
             self.delegate?.tabWebView(self, didSelectFindInPageForSelection: selection)
         }
     }
 
     @objc func menuHelperSearchWithFirefox() {
-        evaluateJavaScript("getSelection().toString()") { result, _ in
+        evaluateJavascriptInDefaultContentWorld("getSelection().toString()") { result, _ in
             let selection = result as? String ?? ""
             self.delegate?.tabWebViewSearchWithFirefox(self, didSelectSearchWithFirefoxForSelection: selection)
         }
@@ -707,6 +744,14 @@ class TabWebView: WKWebView, MenuHelperInterface {
 
         return super.hitTest(point, with: event)
     }
+    
+    /// Override evaluateJavascript - should not be called directly on TabWebViews any longer
+    // We should only be calling evaluateJavascriptInDefaultContentWorld in the future
+    @available(*, unavailable, message:"Do not call evaluateJavaScript directly on TabWebViews, should only be called on super class")
+    override func evaluateJavaScript(_ javaScriptString: String, completionHandler: ((Any?, Error?) -> Void)? = nil) {
+        super.evaluateJavaScript(javaScriptString, completionHandler: completionHandler)
+    }
+    
 }
 
 ///
@@ -721,10 +766,40 @@ class TabWebView: WKWebView, MenuHelperInterface {
 class TabWebViewMenuHelper: UIView {
     @objc func swizzledMenuHelperFindInPage() {
         if let tabWebView = superview?.superview as? TabWebView {
-            tabWebView.evaluateJavaScript("getSelection().toString()") { result, _ in
+            tabWebView.evaluateJavascriptInDefaultContentWorld("getSelection().toString()") { result, _ in
                 let selection = result as? String ?? ""
                 tabWebView.delegate?.tabWebView(tabWebView, didSelectFindInPageForSelection: selection)
             }
         }
+    }
+}
+
+extension URL {
+    /**
+    Returns a URL without a mobile prefix (`"m."` or `"mobile."`)
+    */
+    func withoutMobilePrefix() -> URL {
+        let mPrefix = "m."
+        let mobilePrefix = "mobile."
+
+        let foundPrefix: String?
+        if host?.contains(mPrefix) == true {
+            foundPrefix = mPrefix
+        } else if host?.contains(mobilePrefix) == true {
+            foundPrefix = mobilePrefix
+        } else {
+            foundPrefix = nil
+        }
+
+        guard
+            let prefixToRemove = foundPrefix,
+            var components = URLComponents(url: self, resolvingAgainstBaseURL: true),
+            var host = components.host,
+            let range = host.range(of: prefixToRemove) else { return self }
+
+        host.removeSubrange(range)
+        components.host = host
+
+        return components.url ?? self
     }
 }

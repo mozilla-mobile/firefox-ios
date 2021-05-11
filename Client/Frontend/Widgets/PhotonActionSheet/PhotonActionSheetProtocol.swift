@@ -19,22 +19,17 @@ extension PhotonActionSheetProtocol {
     typealias IsPrivateTab = Bool
     typealias URLOpenAction = (URL?, IsPrivateTab) -> Void
 
-    func presentSheetWith(title: String? = nil, actions: [[PhotonActionSheetItem]], on viewController: PresentableVC, from view: UIView, closeButtonTitle: String = Strings.CloseButtonTitle, suppressPopover: Bool = false) {
-        let style: UIModalPresentationStyle = (UIDevice.current.userInterfaceIdiom == .pad && !suppressPopover) ? .popover : .overCurrentContext
+    func presentSheetWith(title: String? = nil, actions: [[PhotonActionSheetItem]], on viewController: PresentableVC, from view: UIView, closeButtonTitle: String = Strings.CloseButtonTitle, suppressPopover: Bool? = false) {
+        let style: UIModalPresentationStyle =  !(suppressPopover ?? false) ? .popover : .overCurrentContext
         let sheet = PhotonActionSheet(title: title, actions: actions, closeButtonTitle: closeButtonTitle, style: style)
         sheet.modalPresentationStyle = style
         sheet.photonTransitionDelegate = PhotonActionSheetAnimator()
 
-        if profile.hasSyncableAccount() {
-            // the sync manager is only needed when we have a logged in user with sync in a good state
-            sheet.syncManager = profile.syncManager // the syncmanager is used to display the sync button in the browser menu
-        }
-
         if let popoverVC = sheet.popoverPresentationController, sheet.modalPresentationStyle == .popover {
             popoverVC.delegate = viewController
             popoverVC.sourceView = view
-            popoverVC.sourceRect = CGRect(x: view.frame.width/2, y: view.frame.size.height * 0.75, width: 1, height: 1)
-            popoverVC.permittedArrowDirections = .up
+            popoverVC.sourceRect = view.bounds
+            popoverVC.permittedArrowDirections = .any
         }
         viewController.present(sheet, animated: true, completion: nil)
     }
@@ -49,7 +44,7 @@ extension PhotonActionSheetProtocol {
         return self.profile.history.isPinnedTopSite(url)
     }
 
-    func getLongPressLocationBarActions(with urlBar: URLBarView) -> [PhotonActionSheetItem] {
+    func getLongPressLocationBarActions(with urlBar: URLBarView, webViewContainer: UIView) -> [PhotonActionSheetItem] {
         let pasteGoAction = PhotonActionSheetItem(title: Strings.PasteAndGoTitle, iconString: "menu-PasteAndGo") { _, _ in
             if let pasteboardContents = UIPasteboard.general.string {
                 urlBar.delegate?.urlBar(urlBar, didSubmitText: pasteboardContents)
@@ -63,6 +58,7 @@ extension PhotonActionSheetProtocol {
         let copyAddressAction = PhotonActionSheetItem(title: Strings.CopyAddressTitle, iconString: "menu-Copy-Link") { _, _ in
             if let url = self.tabManager.selectedTab?.canonicalURL?.displayURL ?? urlBar.currentURL {
                 UIPasteboard.general.url = url
+                SimpleToast().showAlertWithText(Strings.AppMenuCopyURLConfirmMessage, bottomContainer: webViewContainer)
             }
         }
         if UIPasteboard.general.string != nil {
@@ -92,7 +88,7 @@ extension PhotonActionSheetProtocol {
             }
         }
 
-        if let url = tab.webView?.url, let helper = tab.contentBlocker, helper.isEnabled {
+        if let url = tab.webView?.url, let helper = tab.contentBlocker, helper.isEnabled, helper.blockingStrengthPref == .strict {
             let isSafelisted = helper.status == .safelisted
 
             let title = !isSafelisted ? Strings.TrackingProtectionReloadWithout : Strings.TrackingProtectionReloadWith

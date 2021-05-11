@@ -1,0 +1,18 @@
+/* Settings item for clearing browsing history */
+"Browsing History" = "Historique de navigation";
+
+/* Settings item for clearing the cache */
+"Cache" = "Cache";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Cookies";
+
+/* Settings item for deleting downloaded files */
+"Downloaded Files" = "Fichiers téléchargés";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Données hors connexion";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Identifiants enregistrés";
+

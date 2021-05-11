@@ -169,7 +169,7 @@ class ErrorPageHandler: InternalSchemeResponse {
             "short_description": errDomain,
             ]
 
-        let tryAgain = NSLocalizedString("Try again", tableName: "ErrorPages", comment: "Shown in error pages on a button that will try to load the page again")
+        let tryAgain: String = .ErrorPageTryAgain
         var actions = "<script>function reloader() { location.replace((new URL(location.href)).searchParams.get(\"url\")); }" +
                     "</script><button onclick='reloader()'>\(tryAgain)</button>"
 
@@ -179,7 +179,7 @@ class ErrorPageHandler: InternalSchemeResponse {
             }
         } else if errDomain == MozDomain {
             if errCode == MozErrorDownloadsNotEnabled {
-                let downloadInSafari = NSLocalizedString("Open in Safari", tableName: "ErrorPages", comment: "Shown in error pages for files that can't be shown and need to be downloaded.")
+                let downloadInSafari: String = .ErrorPageOpenInSafari
 
                 // Overwrite the normal try-again action.
                 actions = "<button onclick='webkit.messageHandlers.errorPageHelperMessageManager.postMessage({type: \"\(MessageOpenInSafari)\"})'>\(downloadInSafari)</button>"
@@ -201,7 +201,7 @@ class ErrorPageHandler: InternalSchemeResponse {
             variables["warning_advanced1"] = Strings.ErrorPagesAdvancedWarning1
             variables["warning_advanced2"] = Strings.ErrorPagesAdvancedWarning2
             variables["warning_actions"] =
-            "<p><a href='javascript:webkit.messageHandlers.errorPageHelperMessageManager.postMessage({type: \"\(MessageCertVisitOnce)\"})'>\(Strings.ErrorPagesVisitOnceButton)</button></p>"
+                "<p><a id='\(UserScriptManager.appIdToken)__firefox__visitOnce' href='#'>\(Strings.ErrorPagesVisitOnceButton)</button></p>"
         }
 
         variables["actions"] = actions

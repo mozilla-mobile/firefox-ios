@@ -181,7 +181,7 @@ extension URL {
     }
 
     public var displayURL: URL? {
-        if AppConstants.IsRunningTest, path.contains("test-fixture/") {
+        if AppConstants.IsRunningTest || AppConstants.IsRunningPerfTest, path.contains("test-fixture/") {
             return self
         }
 
@@ -286,7 +286,7 @@ extension URL {
      */
     public var schemeIsValid: Bool {
         guard let scheme = scheme else { return false }
-        return permanentURISchemes.contains(scheme.lowercased())
+        return permanentURISchemes.contains(scheme.lowercased()) && self.absoluteURL.absoluteString.lowercased() != scheme + ":"
     }
 
     public func havingRemovedAuthorisationComponents() -> URL {

@@ -74,7 +74,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
         navigator.goto(PageOptionsMenu)
-        navigator.goto(RequestDesktopSite)
+        navigator.goto(RequestMobileSite)
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
 
@@ -82,6 +82,26 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.OpenNewTabLongPressTabsButton)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        waitUntilPageLoad()
+        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+    }
+    
+    // Smoketest
+    func testChangeModeInSameTab() {
+        if skipPlatform { return }
+
+        navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        waitUntilPageLoad()
+        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+        navigator.goto(PageOptionsMenu)
+        navigator.goto(RequestDesktopSite)
+        waitUntilPageLoad()
+        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
+        
+        navigator.nowAt(BrowserTab)
+        navigator.goto(PageOptionsMenu)
+        // Select Mobile site here, the identifier is the same but the Text is not
+        navigator.goto(RequestMobileSite)
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
     }
@@ -102,8 +122,12 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         navigator.nowAt(BrowserTab)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        // Workaround to be sure the snackbar dissapers
+        waitUntilPageLoad()
+        waitForExistence(app.buttons["Reload"], timeout: 5)
+        app.buttons["Reload"].tap()
         navigator.goto(PageOptionsMenu)
-        navigator.goto(RequestDesktopSite) // toggle off
+        navigator.goto(RequestMobileSite) // toggle off
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
 
@@ -125,13 +149,16 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
 
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        waitUntilPageLoad()
+        // Workaround
+        app.buttons["Reload"].tap()
         navigator.goto(PageOptionsMenu)
         navigator.goto(RequestDesktopSite)
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
 
         navigator.nowAt(BrowserTab)
-        navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
@@ -153,7 +180,9 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
 
         navigator.performAction(Action.AcceptRemovingAllTabs)
-
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         // Covering scenario that when closing a tab and re-opening should preserve Desktop mode
         navigator.createNewTab()
         navigator.openURL(path(forTestPage: "test-user-agent.html"))

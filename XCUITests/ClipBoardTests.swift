@@ -45,6 +45,7 @@ class ClipBoardTests: BaseTestCase {
         checkCopiedUrl()
 
         navigator.createNewTab()
+        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         navigator.goto(URLBarOpen)
         app.textFields["address"].press(forDuration: 3)
         app.menuItems["Paste"].tap()
@@ -55,11 +56,14 @@ class ClipBoardTests: BaseTestCase {
     func testClipboardPasteAndGo() {
         navigator.openURL(url)
         waitUntilPageLoad()
+        waitForNoExistence(app.staticTexts["Fennec pasted from XCUITests-Runner"])
         navigator.goto(PageOptionsMenu)
         navigator.performAction(Action.CopyAddressPAM)
 
         checkCopiedUrl()
+        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         navigator.createNewTab()
+        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         app.textFields["url"].press(forDuration: 3)
         waitForExistence(app.tables["Context Menu"])
         app.cells["menu-PasteAndGo"].tap()

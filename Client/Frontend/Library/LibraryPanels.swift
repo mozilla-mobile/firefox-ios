@@ -22,12 +22,24 @@ protocol LibraryPanelDelegate: AnyObject {
     func libraryPanel(didSelectURLString url: String, visitType: VisitType)
 }
 
-enum LibraryPanelType: Int {
+enum LibraryPanelType: Int, CaseIterable {
     case bookmarks = 0
     case history = 1
-    case readingList = 2
-    case downloads = 3
-    case syncedTabs = 4
+    case downloads = 2
+    case readingList = 3
+    
+    var title: String {
+        switch self {
+        case .bookmarks:
+            return Strings.AppMenuBookmarksTitleString
+        case .history:
+            return Strings.AppMenuHistoryTitleString
+        case .downloads:
+            return Strings.AppMenuDownloadsTitleString
+        case .readingList:
+            return Strings.AppMenuReadingListTitleString
+        }
+    }
 }
 
 /**
@@ -76,7 +88,7 @@ class LibraryPanels {
             },
             profile: profile,
             imageName: "Bookmarks",
-            accessibilityLabel: NSLocalizedString("Bookmarks", comment: "Panel accessibility label"),
+            accessibilityLabel: .LibraryPanelBookmarksAccessibilityLabel,
             accessibilityIdentifier: "LibraryPanels.Bookmarks"),
 
         LibraryPanelDescriptor(
@@ -85,17 +97,8 @@ class LibraryPanels {
             },
             profile: profile,
             imageName: "History",
-            accessibilityLabel: NSLocalizedString("History", comment: "Panel accessibility label"),
+            accessibilityLabel: .LibraryPanelHistoryAccessibilityLabel,
             accessibilityIdentifier: "LibraryPanels.History"),
-
-        LibraryPanelDescriptor(
-            makeViewController: { profile in
-                return ReadingListPanel(profile: profile)
-            },
-            profile: profile,
-            imageName: "ReadingList",
-            accessibilityLabel: NSLocalizedString("Reading list", comment: "Panel accessibility label"),
-            accessibilityIdentifier: "LibraryPanels.ReadingList"),
 
         LibraryPanelDescriptor(
             makeViewController: { profile in
@@ -103,16 +106,16 @@ class LibraryPanels {
             },
             profile: profile,
             imageName: "Downloads",
-            accessibilityLabel: NSLocalizedString("Downloads", comment: "Panel accessibility label"),
+            accessibilityLabel: .LibraryPanelDownloadsAccessibilityLabel,
             accessibilityIdentifier: "LibraryPanels.Downloads"),
 
         LibraryPanelDescriptor(
             makeViewController: { profile in
-                return RemoteTabsPanel(profile: profile)
+                return ReadingListPanel(profile: profile)
             },
             profile: profile,
-            imageName: "SyncedTabs",
-            accessibilityLabel: NSLocalizedString("Synced Tabs", comment: "Panel accessibility label"),
-            accessibilityIdentifier: "LibraryPanels.SyncedTabs"),
+            imageName: "ReadingList",
+            accessibilityLabel: .LibraryPanelReadingListAccessibilityLabel,
+            accessibilityIdentifier: "LibraryPanels.ReadingList")
     ]
 }

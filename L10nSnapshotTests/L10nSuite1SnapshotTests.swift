@@ -3,16 +3,25 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import XCTest
-let testPageBase2 = "http://www.example.com"
-let loremIpsumURL2 = "\(testPageBase2)"
 
 class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
-    override var skipIntro: Bool {
-        return false
+
+    var noSkipIntroTest = ["testIntro"]
+
+    override func setUp() {
+        // Test name looks like: "[Class testFunc]", parse out the function name
+        let parts = name.replacingOccurrences(of: "]", with: "").split(separator: " ")
+                let key = String(parts[1])
+        if noSkipIntroTest.contains(key) {
+            args = [LaunchArguments.ClearProfile, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet]
+        }
+        super.setUp()
     }
 
     func testIntro() {
         var num = 1
+        waitForExistence(app.buttons["nextOnboardingButton"])
+        navigator.nowAt(Intro_Welcome)
         allIntroPages.forEach { screenName in
             navigator.goto(screenName)
             snapshot("Intro-\(num)-\(screenName)")
@@ -20,7 +29,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         }
     }
     
-    func test1WebViewContextMenu() {
+    func testWebViewContextMenu() {
         // Drag the context menu up to show all the options
         func drag() {
             let window = XCUIApplication().windows.element(boundBy: 0)
@@ -31,6 +40,8 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
         // Link
         navigator.openURL("http://wikipedia.org")
+        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
+        waitForExistence(app.webViews.element(boundBy: 0).links.element(boundBy: 0), timeout: 5)
         navigator.goto(WebLinkContextMenu)
         drag()
         snapshot("WebViewContextMenu-01-link")
@@ -38,87 +49,64 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
         // Image
         navigator.openURL("http://wikipedia.org")
+        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
+        waitForExistence(app.webViews.element(boundBy: 0).images.element(boundBy: 0), timeout: 5)
         navigator.goto(WebImageContextMenu)
         drag()
         snapshot("WebViewContextMenu-02-image")
         navigator.back()
     }
 
-    func test2WebViewAuthenticationDialog() {
+    func testWebViewAuthenticationDialog() {
         navigator.openURL("https://jigsaw.w3.org/HTTP/Basic/", waitForLoading: false)
+        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         navigator.goto(BasicAuthDialog)
         snapshot("WebViewAuthenticationDialog-01", waitForLoadingIndicator: false)
         navigator.back()
     }
-    
-    func test3ReloadButtonContextMenu() {
-        navigator.toggleOn(userState.trackingProtectionSettingOnNormalMode == true, withAction: Action.SwitchETP)
-        navigator.goto(BrowserTab)
 
-        navigator.openURL(loremIpsumURL2)
+    func test3ReloadButtonContextMenu() {
+        navigator.openURL(loremIpsumURL)
+        waitUntilPageLoad()
+        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
+        
         navigator.toggleOff(userState.requestDesktopSite, withAction: Action.ToggleRequestDesktopSite)
         navigator.goto(ReloadLongPressMenu)
         snapshot("ContextMenuReloadButton-01")
         navigator.toggleOn(userState.requestDesktopSite, withAction: Action.ToggleRequestDesktopSite)
         navigator.goto(ReloadLongPressMenu)
         snapshot("ContextMenuReloadButton-02", waitForLoadingIndicator: false)
-
-        navigator.toggleOff(userState.trackingProtectionPerTabEnabled, withAction: Action.ToggleTrackingProtectionPerTabEnabled)
-        navigator.goto(ReloadLongPressMenu)
-
-        // Snapshot of 'Reload *with* tracking protection' label, because trackingProtectionPerTabEnabled is false.
-        snapshot("ContextMenuReloadButton-03", waitForLoadingIndicator: false)
     }
 
-    private func typePasscode(n: Int, keyNumber: Int) {
-        for _ in 1...n {
-            app.keys.element(boundBy: keyNumber).tap()
-            sleep(1)
-        }
-    }
-
-    func test4PasscodeSettings() {
-        navigator.goto(PasscodeSettings)
-        app.tables.cells["TurnOnPasscode"].tap()
-        snapshot("SetPasscodeScreen-1-nopasscode")
-        
-        // Type "111111 passcode"
-        typePasscode(n: 6, keyNumber: 2)
-        snapshot("SetPasscodeScreen-2-typepasscode")
-        // Type incorrect passcode "111112"
-        typePasscode(n: 5, keyNumber: 2)
-        // Type once inkey "2"
-        typePasscode(n: 1, keyNumber: 1)
-        snapshot("SetPasscodeScreen-3-passcodesmustmatch")
-        
-        // Confitm passcode
-        typePasscode(n: 6, keyNumber: 2)
-        typePasscode(n: 6, keyNumber: 2)
-        snapshot("SetPasscodeScreen-3")
-        
-        // Go to interval settings
-        app.tables.cells["PasscodeInterval"].tap()
-        typePasscode(n: 6, keyNumber: 2)
-        snapshot("PasscodeIntervalScreen-1")
-    }
-
-    func test5TopSitesMenu() {
+    func testTopSitesMenu() {
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        app.buttons["urlBar-cancel"].tap()
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(HomePanel_TopSites)
         navigator.goto(TopSitesPanelContextMenu)
         snapshot("TopSitesMenu-01")
     }
 
-    func test6HistoryTableContextMenu() {
-        navigator.openURL(loremIpsumURL2)
+    func testHistoryTableContextMenu() {
+        navigator.openURL(loremIpsumURL)
+        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
+        
         navigator.goto(HistoryPanelContextMenu)
         snapshot("HistoryTableContextMenu-01")
     }
 
-    func test7BookmarksTableContextMenu() {
-        navigator.openURL(loremIpsumURL2)
+    func testBookmarksTableContextMenu() {
+        navigator.openURL(loremIpsumURL)
+        // There is no other way the test work with the new Copied.. snackbar ahow on iOS14
+        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
+        waitForExistence(app.buttons["TabLocationView.pageOptionsButton"], timeout: 5)
         navigator.performAction(Action.Bookmark)
         navigator.createNewTab()
-        navigator.goto(BookmarksPanelContextMenu)
+        app.buttons["urlBar-cancel"].tap()
+        // Disable due to issue #7521
+        // navigator.goto(BookmarksPanelContextMenu)
+        navigator.goto(LibraryPanel_Bookmarks)
         snapshot("BookmarksTableContextMenu-01")
     }
 
@@ -132,32 +120,38 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         snapshot("21ReaderModeSettingsMenu-01")
     }*/
 
-    func test8ETPperSite() {
+    func testETPperSite() {
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        app.buttons["urlBar-cancel"].tap()
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        navigator.nowAt(NewTabScreen)
+        // Enable Strict ETP
+        navigator.goto(TrackingProtectionSettings)
+        // Check the warning alert
+         app.cells["Settings.TrackingProtectionOption.BlockListStrict"].tap()
+
+         snapshot("TrackingProtectionStrictWarning-01")
+         app.alerts.buttons.firstMatch.tap()
+
         // Website without blocked elements
-        navigator.openURL(loremIpsumURL2)
+        navigator.openURL(loremIpsumURL)
+        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
+        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"], timeout: 5)
         navigator.goto(TrackingProtectionContextMenuDetails)
         snapshot("TrackingProtectionEnabledPerSite-01")
-        navigator.performAction(Action.TrackingProtectionperSiteToggle)
-        snapshot("TrackingProtectionDisabledPerSite-02")
 
-        // Website with blocked elements
-        navigator.openNewURL(urlString: "twitter.com")
-        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"])
-        navigator.goto(TrackingProtectionContextMenuDetails)
-        snapshot("TrackingProtectionBlockedElements-01")
-        // Tap on the block element to get more details
-        app.cells.element(boundBy: 2).tap()
-        snapshot("TrackingProtectionBlockedElements-02")
+        // Disable the toggle so that TP is off
+        app.cells["tp.add-to-safelist"].tap()
+        snapshot("TrackingProtectionDisabledPerSite-02")
     }
 
-    func test9SettingsETP() {
+    func testSettingsETP() {
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        app.buttons["urlBar-cancel"].tap()
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(TrackingProtectionSettings)
-        
-       // Check the warning alert
-        app.cells["Settings.TrackingProtectionOption.BlockListStrict"].tap()
 
-        snapshot("TrackingProtectionStrictWarning-01")
-        app.alerts.buttons.firstMatch.tap()
         waitForExistence(app.cells["Settings.TrackingProtectionOption.BlockListBasic"])
         app.cells["Settings.TrackingProtectionOption.BlockListBasic"].buttons.firstMatch.tap()
         snapshot("TrackingProtectionBasicMoreInfo-01")
@@ -171,5 +165,52 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         app.cells["Settings.TrackingProtectionOption.BlockListStrict"].buttons.firstMatch.tap()
         app.tables.cells.staticTexts.firstMatch.swipeUp()
         snapshot("TrackingProtectionStrictMoreInfo-02")
+    }
+
+    func testSetDefaultBrowser() {
+        if #available(iOS 14, *) {
+            waitForExistence(app.buttons["Home.learnMoreDefaultBrowserbutton"], timeout: 5)
+            app.buttons["Home.learnMoreDefaultBrowserbutton"].tap()
+            waitForExistence(app.buttons["DefaultBrowserCard.goToSettingsButton"], timeout: 5)
+            snapshot("HomeDefaultBrowserLearnMore")
+        }
+    }
+
+    func testMenuOnTopSites() {
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        app.buttons["urlBar-cancel"].tap()
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(BrowserTabMenu)
+        snapshot("MenuOnTopSites-01")
+    }
+
+    func testSettings() {
+        let table = app.tables.element(boundBy: 0)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        app.buttons["urlBar-cancel"].tap()
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(SettingsScreen)
+        table.forEachScreen { i in
+            snapshot("Settings-main-\(i)")
+        }
+
+        allSettingsScreens.forEach { nodeName in
+            self.navigator.goto(nodeName)
+            table.forEachScreen { i in
+                snapshot("Settings-\(nodeName)-\(i)")
+            }
+        }
+    }
+
+    func testPrivateBrowsingTabsEmptyState() {
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        app.buttons["urlBar-cancel"].tap()
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        navigator.nowAt(NewTabScreen)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        app.tables.cells.element(boundBy: 0).buttons["closeTabButtonTabTray"].tap()
+        snapshot("PrivateBrowsingTabsEmptyState-01")
     }
 }

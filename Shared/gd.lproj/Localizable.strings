@@ -1,0 +1,1712 @@
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "Tha ainm-cleachdaiche is facal-faire gan iarraidh le %@.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "Tha ainm-cleachdaiche is facal-faire gan iarraidh le %1$@. Tha an làrach ag ràdh: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Àà";
+
+/* About settings section title */
+"About" = "Mu dhèidhinn";
+
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite" = "Prìnich ri brod nan làrach";
+
+/* The title for removing a pinned topsite action */
+"ActivityStream.ContextMenu.RemovePinTopsite" = "Thoir air falbh an làrach phrìnichte";
+
+/* The description of a highlight if it is a site the user has bookmarked */
+"ActivityStream.Highlights.Bookmark" = "Na chomharra-lìn";
+
+/* The description of a highlight if it is a site the user has visited */
+"ActivityStream.Highlights.Visited" = "Air tadhal air";
+
+/* Section title label for recently bookmarked websites */
+"ActivityStream.NewRecentBookmarks.Title" = "Comharran-lìn ùra";
+
+/* The link that shows more Pocket trending stories */
+"ActivityStream.Pocket.MoreLink" = "Barrachd";
+
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle" = "A’ treandadh air Pocket";
+
+/* The description of a Pocket Story */
+"ActivityStream.Pocket.Trending" = "A’ treandadh";
+
+/* Section title label for recently visited websites */
+"ActivityStream.RecentHistory.Title" = "Air tadhal orra o chionn goirid";
+
+/* label showing how many rows of topsites are shown. %d represents a number */
+"ActivityStream.TopSites.RowCount" = "Ràghan: %d";
+
+/* The title for the setting page which lets you select the number of top site rows */
+"ActivityStream.TopSites.RowSettingFooter" = "Suidhich na ràghan";
+
+/* Section title label for Top Sites */
+"ActivityStream.TopSites.SectionTitle" = "Brod nan làrach";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Cuir taba ris";
+
+/* Accessibility label for action adding current page to reading list.
+   Name for button adding current article to reading list in reader mode */
+"Add to Reading List" = "Cuir ris an liosta-leughaidh";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Chaidh an duilleag a chur ris an liosta-leughaidh";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "Ceart ma-thà";
+
+/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Message" = "Thachair mearachd fhad ’s a bha sinn a’ cur a’ phas ris an sporan. Feuch ris a-rithist an ceann greis.";
+
+/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Title" = "Cha b’ urrainn dhuinn am pas a chur ris";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Seòladh is lorg";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Cuir an-còmhnaidh";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "Feum air dearbhadh";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "Air ais";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Bac priob-uinneagan";
+
+/* The header title for the fields when editing a Bookmark */
+"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "Comharra-lìn";
+
+/* The header title for the fields when editing a Folder */
+"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "Pasgan";
+
+/* The label for the Title field when editing a bookmark */
+"Bookmark.DetailFieldTitle.Label" = "Tiotal";
+
+/* The label for the URL field when editing a bookmark */
+"Bookmark.DetailFieldURL.Label" = "URL";
+
+/* Toggle bookmarks syncing setting */
+"Bookmarks" = "Comharran-lìn";
+
+/* The button on the snackbar to edit a bookmark after adding it. */
+"Bookmarks.Edit.Button" = "Deasaich";
+
+/* The button to edit a bookmark */
+"Bookmarks.EditBookmark.Label" = "Deasaich an comharra-lìn";
+
+/* The button to edit a folder */
+"Bookmarks.EditFolder.Label" = "Deasaich am pasgan";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "Pasgan";
+
+/* The label for the location of the new folder */
+"Bookmarks.FolderLocation.Label" = "Ionad";
+
+/* The label for the title of the new folder */
+"Bookmarks.FolderName.Label" = "Ainm aʼ phasgain";
+
+/* The button to create a new bookmark */
+"Bookmarks.NewBookmark.Label" = "Comharra-lìn ùr";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "Pasgan ùr";
+
+/* The button to create a new separator */
+"Bookmarks.NewSeparator.Label" = "Sgaradair ùr";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "Tiotal";
+
+/* The label for the URL of a bookmark */
+"Bookmarks.URL.Label" = "URL";
+
+/* Status label for the empty Bookmarks state. */
+"BookmarksPanel.EmptyState.Title" = "Nochdaidh na comharran-lìn a shàbhaileas tu an-seo.";
+
+/* Describes the date on which the breach occurred */
+"BreachAlerts.BreachDate" = "Bhriseadh a-steach air";
+
+/* Description of what a breach is */
+"BreachAlerts.Description" = "Chaidh faclan-faire a ghoid no leigeil air èalaidh on turas mu dheireadh a dh’atharraich thu am facal-faire agad. Airson an cunntas seo a dhìon, clàraich a-steach dhan làrach agus atharraich am facal-faire agad.";
+
+/* Link to monitor.firefox.com to learn more about breached passwords */
+"BreachAlerts.LearnMoreButton" = "Barrachd fiosrachaidh";
+
+/* Leads to a link to the breached website */
+"BreachAlerts.Link" = "Tadhail air";
+
+/* Title for the Breached Login Detail View. */
+"BreachAlerts.Title" = "Bhriseadh a-steach air làrach-lìn";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Soilleireachd";
+
+/* Label for Cancel button */
+"Cancel" = "Sguir dheth";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Atharraichidh seo ùrlar nan dathan.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Atharraichidh seo seòrsa a’ chruth-chlò.";
+
+/* The button to open a new tab with the copied link */
+"ClipboardToast.GoToCopiedLink.Button" = "Siuthad";
+
+/* Message displayed when the user has a copied link on the clipboard */
+"ClipboardToast.GoToCopiedLink.Title" = "A bheil thu airson tadhal air a’ cheangal a rinn thu lethbhreac dheth?";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Dùin";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "A’ dùnadh an taba";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "coimpiutair";
+
+/* Context menu item for bookmarking a link URL */
+"ContextMenu.BookmarkLinkButtonTitle" = "Dèan comharra-lìn dhen cheangal";
+
+/* The button text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Dèan suids";
+
+/* The label text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Chaidh taba prìobhaideach ùr fhosgladh";
+
+/* The button text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "Dèan suids";
+
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText" = "Chaidh taba ùr fhosgladh";
+
+/* Context menu item for copying an image to the clipboard */
+"ContextMenu.CopyImageButtonTitle" = "Dèan lethbhreac dhen dealbh";
+
+/* Context menu item for copying an image URL to the clipboard */
+"ContextMenu.CopyImageLinkButtonTitle" = "Dèan lethbhreac de cheangal an deilbh";
+
+/* Context menu item for copying a link URL to the clipboard */
+"ContextMenu.CopyLinkButtonTitle" = "Dèan lethbhreac dhen cheangal";
+
+/* Context menu item for downloading a link URL */
+"ContextMenu.DownloadLinkButtonTitle" = "Luchdaich a-nuas an ceangal";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenInNewTabButtonTitle" = "Fosgail ann an taba ùr";
+
+/* Context menu item for saving an image */
+"ContextMenu.SaveImageButtonTitle" = "Sàbhail an dealbh";
+
+/* Context menu item for sharing a link URL */
+"ContextMenu.ShareLinkButtonTitle" = "Co-roinn an ceangal";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "Cha b’ urrainn dhuinn an duilleag a chur ris an liosta-leughaidh";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it’s already there?" = "Cha b’ urrainn dhuinn an duilleag a chur ris an liosta-leughaidh. Saoil a bheil e air mu thràth?";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "Cha b’ urrainn dhuinn an duilleag a luchdadh.";
+
+/* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
+"CoverSheet.v22.DarkMode.Description" = "Dùisgidh Firefox an t-ùrlar dorcha gu fèin-obrachail a-nis air iOS 13 ma bhios am fòn agad sa mhodh dorcha. Airson an giùlan seo atharrachadh, tadhail air “Roghainnean” > “An t-ùrlar”.";
+
+/* Title for the new dark mode change in the version 22 app release. */
+"CoverSheet.v22.DarkMode.Title" = "Tha an t-ùrlar dorcha a’ gabhail a-staigh meur-chlàr dorcha agus sgrìn spladh dorch a-nis.";
+
+/* Description for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Description" = "Cuiridh an dìon adhartach o thracadh na bhroinn casg air sanasachd o bhith gad leantainn air feadh an àite. Cleachd tracadh teann airson casg a chur air fiù barrachd thracaichean, sanasachd is priob-uinneagan.";
+
+/* Text for the new ETP settings button */
+"CoverSheet.v24.ETP.Settings.Button" = "Tadhail air na roghainnean";
+
+/* Title for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Title" = "Dìon o thracadh sanasachd";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Cruthaich cunntas";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Dorcha";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Lùghdaich meud a’ chrutha-chlò";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "An t-einnsean-luirg bunaiteach";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Roghainnean taisbeanaidh";
+
+/* Used as a button label for crash dialog prompt */
+"Don’t Send" = "Na cuir";
+
+/* Done button on left side of the Settings view controller title bar */
+"Done" = "Deiseil";
+
+/* Panel accessibility label */
+"Downloads" = "Luchdaidhean a-nuas";
+
+/* The label of the button the user will press to start downloading a file */
+"Downloads.Alert.DownloadNow" = "Luchdaich a-nuas an-dràsta";
+
+/* Button confirming the cancellation of the download. */
+"Downloads.CancelDialog.Cancel" = "Sguir dheth";
+
+/* Alert dialog body when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Message" = "A bheil thu cinnteach gu bheil thu airson sgur dhen luchdadh a-nuas seo?";
+
+/* Button declining the cancellation of the download. */
+"Downloads.CancelDialog.Resume" = "Lean air";
+
+/* Alert dialog title when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Title" = "Sguir dhen luchdadh a-nuas";
+
+/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
+"Downloads.Error.Message" = "Chan urrainnear luchdadh a-nuas ann am Firefox fhathast.";
+
+/* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
+"Downloads.Toast.Cancelled.LabelText" = "Sguireadh dhen luchdadh a-nuas";
+
+/* The label text in the Download Failed toast for showing confirmation that the download has failed. */
+"Downloads.Toast.Failed.LabelText" = "Dh’fhàillig an luchdadh a-nuas";
+
+/* The button to retry a failed download from the Download Failed toast. */
+"Downloads.Toast.Failed.RetryButton" = "Feuch ris a-rithist";
+
+/* The button to open a new tab with the Downloads home panel */
+"Downloads.Toast.GoToDownloads.Button" = "Luchdaidhean a-nuas";
+
+/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. */
+"Downloads.Toast.MultipleFiles.DescriptionText" = "1 à %d faidhlichean";
+
+/* The description text in the Download progress toast for showing the number of files (1$) and download progress (2$). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where 1$ is Downloads.Toast.MultipleFiles.DescriptionText and 2$ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and 1$ should come before 2$ everywhere except for right-to-left locales. */
+"Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";
+
+/* The description text in the Download progress toast for showing the downloaded file size (1$) out of the total expected file size (2$). */
+"Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
+
+/* Action button for deleting downloaded files in the Downloads panel. */
+"DownloadsPanel.Delete.Title" = "Sguab às";
+
+/* Title for the Downloads Panel empty state. */
+"DownloadsPanel.EmptyState.Title" = "Nochdaidh faidhlichean a luchdaich thu a-nuas an-seo.";
+
+/* Action button for sharing downloaded files in the Downloads panel. */
+"DownloadsPanel.Share.Title" = "Co-roinn";
+
+/* Text message in the settings table view */
+"Enter your password to connect" = "Cuir a-steach am facal-faire agad airson ceangal a dhèanamh";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "Adhartach";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "Rabhadh: chan urrainn dhuinn dearbhadh gu bheil an ceangal ris an làrach-lìn seo tèarainte.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "Dh’fhaoidte gu bheil e air a dhroch-rèiteachadh no gu bheil cuideigin a’ toirt ionnsaigh air. Lean air d’ adhart ma tha thu leagte ris a leithid a chunnart.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "Rinn an neach aig a bheil %@ droch-rèiteachadh air an làrach-lìn aca. Cha do rinn Firefox ceangal ris an làrach-lìn seo air eagal ’s gun rachadh dàta a ghoid ort.";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "Chan eil earbsa sa cheangal";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "Air ais";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "Tadhail air an làrach co-dhiù";
+
+/* Question shown to user when tapping a link that opens the App Store app */
+"ExternalLink.AppStore.ConfirmationTitle" = "A bheil thu airson an ceangal seo fhosgladh san App Store?";
+
+/* Question shown to user when tapping an SMS or MailTo link that opens the external app for those. */
+"ExternalLink.AppStore.GenericConfirmationTitle" = "A bheil thu airson an ceangal seo fhosgladh san aplacaid air an taobh a-muigh?";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Title for firefox about:home page in tab history list */
+"Firefox.HomePage.Title" = "Duilleag mhòr Firefox";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "Air adhart";
+
+/* Label stating how to disconnect account */
+"FxA.AccountVerificationDetails" = "Post-d cearr? Dì-cheangail gu h-ìosal is tòisich às ùr.";
+
+/* Label stating your account is not verified */
+"FxA.AccountVerificationRequired" = "Feum air dearbhadh a’ chunntais";
+
+/* Message explaining that user needs to check email for Firefox Account verfication link. */
+"FxA.AccountVerificationRequiredSurface" = "Feumaidh tu %@ a dhearbhadh. Thoir sùil air a’ phost-d agad airson a’ cheangail dearbhaidh o Firefox.";
+
+/* Button label to connect another device to Sync */
+"FxA.ConnectAnotherDevice" = "Ceangail uidheam eile ris";
+
+/* Settings section title for Firefox Account */
+"FxA.FirefoxAccount" = "Cunntas Firefox";
+
+/* Button label to go to Firefox Account settings */
+"FxA.ManageAccount" = "Stiùirich an cunntas ⁊ na h-uidheaman";
+
+/* Label when no internet is present */
+"FxA.NoInternetConnection" = "Chan eil ceangal ris an eadar-lìon";
+
+/* Button label to open Sync preferences */
+"FxA.OpenSyncPreferences" = "Fosgail na roghainnean sioncronachaidh";
+
+/* Instructions shown on qr code scanning view */
+"fxa.qr-scanning-view.instructions" = "Sganaich an còd QR a chì thu aig firefox.com/pair";
+
+/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
+"FxA.RemoveAccount" = "Thoir air falbh";
+
+/* Description string for alert view that gets presented when user tries to remove an account. */
+"FxA.RemoveAccountAlertMessage" = "Thoir air falbh an cunntas Firefox a tha co-cheangailte ris an uidheam seo airson clàradh a-steach mar chleachdaiche eile.";
+
+/* Remove account alert is the final confirmation before user removes their firefox account */
+"FxA.RemoveAccountAlertTitle" = "Thoir an cunntas air falbh";
+
+/* Button label to resend email */
+"FxA.ResendEmail" = "Cuir am post-d às ùr";
+
+/* FxA sign in view subtitle */
+"fxa.signin.camera-signin" = "Clàraich a-steach leis a’ chamara agad";
+
+/* FxA sign in create account label. */
+"fxa.signin.create-account-pt-1" = "Sioncronaich Firefox eadar uidheaman le cunntas.";
+
+/* FxA sign in create account label. This will be linked to the site to create an account. */
+"fxa.signin.create-account-pt-2" = "Cruthaich cunntas Firefox.";
+
+/* FxA sign in view qr code instructions */
+"fxa.signin.qr-link-instruction" = "Fosgail Firefox air a’ choimpiutair agad is tadhail air firefox.com/pair";
+
+/* FxA sign in view qr code scan button */
+"fxa.signin.ready-to-scan" = "Deiseil airson sganadh";
+
+/* FxA sign in view title */
+"fxa.signin.turn-on-sync" = "Cuir an sioncronachadh air";
+
+/* FxA sign in view email login button */
+"fxa.signin.use-email-instead" = "Cleachd post-d na àite";
+
+/* Button label to sign into Sync */
+"FxA.SignIntoSync" = "Clàraich a-steach gu gleus an t-sioncronachaidh";
+
+/* Label explaining what sync does */
+"FxA.SyncExplain" = "Faigh na tabaichean, comharran-lìn is faclan-faire o na h-uidheaman eile agad.";
+
+/* Button label to Sync your Firefox Account */
+"FxA.SyncNow" = "Sioncronaich an-dràsta";
+
+/* Call to action for sign into sync button */
+"FxA.TakeYourWebWithYou" = "Thoir leat an lìon";
+
+/* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
+"FxAPush_DeviceConnected_body" = "Cheangail gleus sioncronachadh Firefox ri %@";
+
+/* Title of a notification displayed when another device has connected to FxA. */
+"FxAPush_DeviceConnected_title" = "Rinn gleus an t-sioncronachaidh ceangal";
+
+/* Body of a notification displayed when named device has been disconnected from FxA. %@ refers to the name of the disconnected device. */
+"FxAPush_DeviceDisconnected_body" = "Chaidh %@ a dhì-cheangal.";
+
+/* Body of a notification displayed when this device has been disconnected from FxA by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Chaidh an t-uidheam seo a dhì-cheangal o ghleus sioncronachadh Firefox.";
+
+/* Title of a notification displayed when this device has been disconnected by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_title" = "Chaidh gleus an t-sioncronachaidh a dhì-cheangal";
+
+/* Title of a notification displayed when named device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_title" = "Chaidh gleus an t-sioncronachaidh a dhì-cheangal";
+
+/* Body of a notification displayed when unnamed device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Dhì-cheangail uidheam o ghleus sioncronachadh Firefox";
+
+/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "Faigh tabaichean fosgailte, comharran-lìn is faclan-faire o uidheaman eile agad.";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Cobhair";
+
+/* Toggle history syncing setting */
+"History" = "Eachdraidh";
+
+/* Title for button in the history panel to clear recent history */
+"HistoryPanel.ClearHistoryButtonTitle" = "Glan an eachdraidh faisg ort…";
+
+/* Option title to clear all browsing history. */
+"HistoryPanel.ClearHistoryMenuOptionEverything" = "A h-uile rud";
+
+/* Button to perform action to clear history for the last hour */
+"HistoryPanel.ClearHistoryMenuOptionTheLastHour" = "An uair a thìde seo chaidh";
+
+/* Button to perform action to clear history for today only */
+"HistoryPanel.ClearHistoryMenuOptionToday" = "An-diugh";
+
+/* Button to perform action to clear history for yesterday and today */
+"HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "An-diugh ’s an-dè";
+
+/* Title for popup action menu to clear recent history. */
+"HistoryPanel.ClearHistoryMenuTitle" = "Ma dh’fhalamhaicheas tu an eachdraidh o chionn goirid, bheir seo air falbh an eachdraidh, briosgaidean is dàta eile a’ bhrabhsair.";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "Nochdaidh làraichean air an to thadhail thu o chionn goirid an-seo.";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "Nochdaidh na tabaichean a tha agad air uidheaman eile an-seo.";
+
+/* Description for the empty synced tabs 'not signed in' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Clàraich a-steach airson liosta de thabaichean a tha agad air uidheaman eile.";
+
+/* Description for the empty synced tabs 'not yet verified' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "Tha an cunntas agad feumach air dearbhadh.";
+
+/* Description for the empty synced tabs 'single device Sync' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "A bheil thu airson na tabaichean a tha agad air uidheaman eile fhaicinn an-seo?";
+
+/* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Cuir air sioncronachadh nan tabaichean airson cothrom fhaighinn air na tabaichean agad o uidheaman eile.";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "Sioncronachadh Firefox";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "An eachdraidh";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "Air a dhùnadh o chionn goirid";
+
+/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d uidheam(an) ceangailte";
+
+/* Title for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Title" = "Uidheaman sioncronaichte";
+
+/* Button cancelling changes setting the home page for the first time. */
+"HomePage.Set.Dialog.Cancel" = "Sguir dheth";
+
+/* Alert dialog body when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Message" = "ʼS urrainn dhut seo atharrachadh uair sam bith sna roghainnean";
+
+/* Button accepting changes setting the home page for the first time. */
+"HomePage.Set.Dialog.OK" = "Suidhich an duilleag mhòr";
+
+/* Alert dialog title when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Title" = "A bheil thu airson an duilleag seo a chleachdadh mar an duilleag-dhachaidh agad?";
+
+/* The title for the Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Bookmark" = "Comharra-lìn";
+
+/* The title for the Delete from History context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.DeleteFromHistory" = "Sguab às an eachdraidh";
+
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab" = "Fosgail ann an taba prìobhaideach ùr";
+
+/* The title for the Open in New Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewTab" = "Fosgail ann an taba ùr";
+
+/* The title for the Remove context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Remove" = "Thoir air falbh";
+
+/* The title for the Remove Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.RemoveBookmark" = "Thoir an comharra-lìn air falbh";
+
+/* The title for the Share context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Share" = "Co-roinn";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Back.DiscoveryTitle" = "Air ais";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.CloseTab.DiscoveryTitle" = "Dùin an taba";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Find.DiscoveryTitle" = "Lorg";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Forward.DiscoveryTitle" = "Air adhart";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "Taba prìobhaideach ùr";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewTab.DiscoveryTitle" = "Taba ùr";
+
+/* Label to switch to normal browsing mode */
+"Hotkeys.NormalMode.DiscoveryTitle" = "Am modh brabhsaidh àbhaisteach";
+
+/* Label to switch to private browsing mode */
+"Hotkeys.PrivateMode.DiscoveryTitle" = "Am modh brabhsaidh prìobhaideach";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Reload.DiscoveryTitle" = "Ath-luchdaich an duilleag";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "Tagh bar an ionaid";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "Seall an ath-thaba";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Seall an taba roimhe";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Meudaich an cruth-clò";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "an-dràsta fhèin";
+
+/* History tableview section header */
+"Last month" = "Am mìos seo chaidh";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "An sioncronachadh mu dheireadh: %@";
+
+/* History tableview section header */
+"Last week" = "An t-seachdain seo chaidh";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Ceadachasan";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Sorcha";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "Luchdaich an duilleag thùsail";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "A’ luchdadh na susbaint…";
+
+/* Authentication prompt log in button */
+"Log in" = "Clàraich a-steach";
+
+/* Toggle logins syncing setting */
+"Logins" = "Clàraidhean a-steach";
+
+/* Login detail view field name for the last modified date */
+"LoginsDetailView.LoginModified" = "Air atharrachadh";
+
+/* Title for the login detail view */
+"LoginsDetailView.LoginTitle" = "Clàradh a-steach";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "Na sàbhail";
+
+/* Button to not update the user's password */
+"LoginsHelper.DontUpdate.Button" = "Na ùraich";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "A bheil thu airson an login %1$@ airson %2$@ a shàbhaladh?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "Sàbhail am facal-faire airson %@?";
+
+/* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
+"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "A bheil thu airson an login airson %@ ùrachadh?";
+
+/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "A bheil thu airson an login %1$@ airson %2$@ ùrachadh?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "Sàbhail an login";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "Ùraich";
+
+/* For filtering the login list, search only the login names */
+"LoginsList.LoginsListFilterLogin" = "Clàradh a-steach";
+
+/* For filtering the login list, search both website and login names. */
+"LoginsList.LoginsListFilterSearchAll" = "Na h-uile";
+
+/* For filtering the login list, search only the website names */
+"LoginsList.LoginsListFilterWebsite" = "Làrach-lìn";
+
+/* Placeholder test for search box in logins list view. */
+"LoginsList.LoginsListSearchPlaceholder" = "Criathrag";
+
+/* Title for the list of logins */
+"LoginsList.Title" = "CLÀRAIDHEAN A-STEACH A SHÀBHAILEADH";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Tha coltas gun do thuislich Firefox roimhe. A bheil thu ag iarraidh nan tabaichean air ais?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "Comharraich gun deach a leughadh";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Comharraich nach deach a leughadh";
+
+/* Toast displayed to the user after a bookmark has been added. */
+"Menu.AddBookmark.Confirm" = "Chaidh an comharra-lìn a chur ris";
+
+/* Toast displayed to the user after adding the item to the Top Sites. */
+"Menu.AddPin.Confirm" = "Prìnichte ri brod nan làrach";
+
+/* Toast displayed to the user after adding the item to their reading list. */
+"Menu.AddToReadingList.Confirm" = "Air a chur ris an liosta-leughaidh";
+
+/* The title for the button that lets you copy the url from the location bar. */
+"Menu.Copy.Title" = "Dèan lethbhreac dhen t-seòladh";
+
+/* Toast displayed to user after copy url pressed. */
+"Menu.CopyURL.Confirm" = "Chaidh lethbhreac dhen URL a chur air an stòr-bhòrd";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "Tha an dìon adhartach o thracadh dheth air an làrach seo.";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "Tha an dìon adhartach o thracadh air air an làrach seo.";
+
+/* Description for having standard ETP protection with ITP offered in iOS14+ */
+"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Bacaidh Firefox tracaichean thar-làraich, tracaichean sòisealta, criopto-mhèinneadairean agus lorgaichean-meòir.";
+
+/* Description for having strict ETP protection with ITP offered in iOS14+ */
+"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Bacaidh Firefox tracaichean thar-làraich, tracaichean sòisealta, criopto-mhèinneadairean, lorgaichean-meòir agus susbaint tracaidh.";
+
+/* Label for the button displayed in the menu used to stop the reload of the webpage */
+"Menu.Library.StopReload" = "Sguir dheth";
+
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label" = "Cuir modh na h-oidhche an comas";
+
+/* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
+"Menu.NoImageModeBlockImages.Label" = "Bac dealbhan";
+
+/* Label for title in page action menu. */
+"Menu.PageActions.Title" = "Gnìomhan na duilleige";
+
+/* The title for the button that lets you paste into the location bar */
+"Menu.Paste.Title" = "Cuir ann";
+
+/* The title for the button that lets you paste and go to a URL */
+"Menu.PasteAndGo.Title" = "Cuir ann ⁊ tadhail air";
+
+/* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
+"Menu.ReloadWithoutTrackingProtection.Title" = "Ath-luchdaich gun dìon o thracadh";
+
+/* Label for the button, displayed in the menu, used to reload the current website with Tracking Protection enabled */
+"Menu.ReloadWithTrackingProtection.Title" = "Ath-luchdaich le dìon o thracadh";
+
+/* Toast displayed to the user after a bookmark has been removed. */
+"Menu.RemoveBookmark.Confirm" = "Chaidh an comharra-lìn a thoirt air falbh";
+
+/* Toast displayed to the user after removing the item from the Top Sites. */
+"Menu.RemovePin.Confirm" = "Air a thoirt air falbh o bhrod nan làrach";
+
+/* Toast displayed to the user after a tab has been sent successfully. */
+"Menu.TabSent.Confirm" = "Chaidh an taba a chur";
+
+/* Title on tracking protection menu for blocked items. */
+"Menu.TrackingProtection.BlockedTitle" = "Air a bhacadh";
+
+/* Message in menu when no trackers blocked. */
+"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Cha do mhothaich sinn do thracaiche as aithne dha Firefox air an duilleag seo.";
+
+/* The title for tracking protection settings */
+"Menu.TrackingProtection.ProtectionSettings.Title" = "Roghainnean an dìon";
+
+/* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
+"Menu.TrackingProtection.TitlePrefix" = "Dìon airson %@";
+
+/* The title that shows the number of content cookies blocked */
+"Menu.TrackingProtectionBlockedContent.Title" = "Susbaint tracaidh";
+
+/* The title that shows the number of social URLs blocked */
+"Menu.TrackingProtectionBlockedSocial.Title" = "Tracaichean sòisealta";
+
+/* Description of the Tracking protection menu when TP is blocking parts of the page */
+"Menu.TrackingProtectionBlocking.Description" = "Tha Firefox a’ bacadh nan rudan air an duilleag a dhèanadh tracadh ort.";
+
+/* The description of the Tracking Protection menu item when tracking is enabled */
+"Menu.TrackingProtectionBlockingDisabled.Description" = "Bac tracaichean air loidhne";
+
+/* The title that shows the number of cross-site cookies blocked */
+"Menu.TrackingProtectionCrossSiteCookies.Title" = "Briosgaidean tracaidh thar làraichean";
+
+/* The title that shows the number of cross-site URLs blocked */
+"Menu.TrackingProtectionCrossSiteTrackers.Title" = "Tracaichean thar làraichean";
+
+/* The title that shows the number of cryptomining scripts blocked */
+"Menu.TrackingProtectionCryptominersBlocked.Title" = "Criopto-mhèinneadairean";
+
+/* Description of content trackers. */
+"Menu.TrackingProtectionDescription.ContentTrackers" = "Faodaidh gun luchdaich làraichean-lìn sanasachd, videothan is susbaint eile on taobh a-muigh anns am bi tracaichean falaichte. Ma bhacas tu seo, faodaidh gun luchdaich iad nas luaithe ach dh’fhaoidte gum bi putanan, foirmean is raointean clàraidh a-steach ann nach obraich tuilleadh.";
+
+/* Description of cross-site trackers. */
+"Menu.TrackingProtectionDescription.CrossSiteNew" = "Leanaidh na briosgaidean seo thu o làrach gu làrach airson dàta a chruinneachadh mu na nì thu air loidhne. ’S e treas-phàrtaidhean mar luchd-sanasachd agus companaidhean anailise a shuidhicheas iad.";
+
+/* Description of cryptominers. */
+"Menu.TrackingProtectionDescription.CryptominersNew" = "Cleachdaidh criopto-mhèinneadairean comasan an t-siostaim agad airson airgead digiteach a chosnadh gun fhiosta. Traoghaidh criopto-mhèinneadairean am bataraidh agad, nì iad an coimpiutair agad slaodach agus faodaidh gun èirich cosgaisean dealain dhut.";
+
+/* Description of fingerprinters. */
+"Menu.TrackingProtectionDescription.Fingerprinters" = "Tha na roghainnean àraidh aig a’ bhrabhsair agus aig a’ choimpiutair agad. Tha lorgaichean-meur ann a chruinnicheas badan dhe na roghainnean àraidh seo airson pròifil a chruthachadh dhìot agus gabhaidh do thracadh air an lìon leotha.";
+
+/* Description of social network trackers. */
+"Menu.TrackingProtectionDescription.SocialNetworksNew" = "Cuiridh lìonraidhean sòisealta tracaichean air làraichean-lìn eile airson pròifil nas iomlaine dhìot a chruthachadh. Ma bhacas tu na tracaichean seo, chì companaidhean nam meadhan sòisealta nas lugha dhe na nì thu air loidhne.";
+
+/* The button that disabled TP for a site. */
+"Menu.TrackingProtectionDisable1.Title" = "À comas air an làrach seo";
+
+/* The confirmation toast once tracking protection has been disabled */
+"Menu.TrackingProtectionDisabled.Title" = "Tha an dìon o thracadh dheth air an làrach seo a-nis.";
+
+/* A button to enable tracking protection inside the menu. */
+"Menu.TrackingProtectionEnable.Title" = "Cuir an dìon o thracadh an comas";
+
+/* A button to enable tracking protection inside the menu. */
+"Menu.TrackingProtectionEnable1.Title" = "An comas air an làrach seo";
+
+/* The confirmation toast once tracking protection has been enabled */
+"Menu.TrackingProtectionEnabled.Title" = "Tha an dìon o thracadh air air an làrach seo a-nis.";
+
+/* The title that shows the number of fingerprinting scripts blocked */
+"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Lorgaichean-meur";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "Briosgaidean tracaidh thar làraichean bacte";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Cryptominers" = "Criopto-mhèinneadairean bacte";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Fingerprinters" = "Lorgaichean-meur bacte";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Social" = "Tracaichean sòisealta bacte";
+
+/* more info about what tracking protection is about */
+"Menu.TrackingProtectionMoreInfo.Description" = "Faigh barrachd fiosrachaidh mar a bhacas an dìon o thracadh thu o thracaichean air loidhne a chruinnicheas an dàta brabhsaidh agad air feadh diofar làraichean-lìn.";
+
+/* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
+"Menu.TrackingProtectionNoBlocking.Description" = "Cha do lorg sinn dad air an duilleag a nì tracadh.";
+
+/* label for the menu item to show when the website is whitelisted from blocking trackers. */
+"Menu.TrackingProtectionOption.WhiteListOnDescription" = "Tha rudan air an làrach seo a nì tracadh ort ma dh’fhaoidte. Chuir thu an dìon à comas.";
+
+/* label for the menu item that lets you remove a website from the tracking protection whitelist */
+"Menu.TrackingProtectionWhitelistRemove.Title" = "Cuir an comas air an làrach seo";
+
+/* The title for the option to view the What's new page. */
+"Menu.WhatsNew.Title" = "Na tha ùr";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "uidheam mobile";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "barrachd air mìos air ais";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "barrachd air seachdain air ais";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Bàr-inneal na seòladaireachd";
+
+/* Accessibility label for the New Tab button in the tab toolbar.
+   Accessibility Label for the tab toolbar New tab button */
+"New Tab" = "Taba ùr";
+
+/* Restore Tabs Negative Action */
+"No" = "Chan eil";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "Gun tabaichean";
+
+/* OK button */
+"OK" = "OK";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "Ceart ma-thà";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "Ìoc! Thuislich Firefox";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Fosgail artaigilean san t-sealladh leughaidh le gnogag air ìomhaigheag an leabhair nuair a nochdas e ann am bàr an tiotail.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Fosgail na roghainnean";
+
+/* Toggle tabs syncing setting */
+"Open Tabs" = "Tabaichean fosgailte";
+
+/* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
+"OpenURL.Error.Message" = "Chan urrainn dha Firefox an duilleag fhosgladh a chionn ’s gu bheul an seòladh cearr.";
+
+/* Title of the message shown when the user attempts to navigate to an invalid link. */
+"OpenURL.Error.Title" = "Cha ghabh an duilleag fhosgladh";
+
+/* Accessibility label for the Page Options menu button */
+"Page Options Menu" = "Clàr-taice roghainnean na duilleige";
+
+/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
+"Panel Chooser" = "Roghnaichear nam panail";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Facal-faire";
+
+/* Error message shown in the remote tabs panel */
+"PasswordAutoFill.NoPasswordsFoundTitle" = "Chan eil ainm-cleachdaiche ’s facal-faire sam bith ann a chaidh a shioncronachadh a-nall on chunntas Firefox agad";
+
+/* Header for the list of credentials table */
+"PasswordAutoFill.PasswordsListTitle" = "Teisteasan a tha ri làimh:";
+
+/* Title of the extension that shows firefox passwords */
+"PasswordAutoFill.SectionTitle" = "Teisteasan Firefox";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Bheir seo comas dhut an dealbh a shàbhaladh ann an albam a’ chamara agad.";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Bu mhath le Firefox cothrom air na dealbhan agad";
+
+/* Button for closing the menu action sheet */
+"PhotonMenu.close" = "Dùin";
+
+/* Privacy section title */
+"Privacy" = "Prìobhaideachd";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "Am poileasaidh prìobhaideachd";
+
+/* Title for quick-search engines settings section. */
+"Quick-Search Engines" = "Einnseanan grad-luirg";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "air a leughadh";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "An sealladh leughaidh";
+
+/* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
+"ReaderMode.Available.VoiceOverAnnouncement" = "Tha modh leughadair ri làimh";
+
+/* Panel accessibility label */
+"Reading list" = "An liosta leughaidh";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "Air a dhùnadh o chionn goirid";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "Ath-luchdaich";
+
+/* Accessibility label for the reload button */
+"Reload page" = "Ath-luchdaich an duilleag";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Thoir air falbh";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Thoir air falbh on liosta-leughaidh";
+
+/* Cancel button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Cancel" = "Sguir dheth";
+
+/* Reopen button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Reopen" = "Ath-fhosgail";
+
+/* Reopen alert title shown at home page. */
+"ReopenAlert.Title" = "Ath-fhosgail an taba mu dheireadh a chaidh a dhùnadh";
+
+/* Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"ReopenClosedTab.KeyCodeTitle" = "Ath-fhosgail an taba a chaidh a dhùnadh";
+
+/* Accessibility label for button resetting font size in display settings of reader mode */
+"Reset text size" = "Ath-shuidhich meud an teacsa";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans-serif";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Sàbhail duilleagan air an liosta leughaidh le gnogag air ìomhaigheag an leabhair ann an uidheaman-smachd an t-seallaidh leughaidh.";
+
+/* OK button to dismiss the error prompt. */
+"ScanQRCode.Error.OK.Button" = "Ceart ma-thà";
+
+/* Text for the instructions label, displayed in the QR scanner view */
+"ScanQRCode.Instructions.Label" = "Cuir an còd QR a-rèir an fhrèam airson a sganadh";
+
+/* Text of the prompt that is shown to the user when the data is invalid */
+"ScanQRCode.InvalidDataError.Message" = "Tha an dàta mì-dhligheach";
+
+/* Text of the prompt user to setup the camera authorization. */
+"ScanQRCode.PermissionError.Message" = "Thoir inntrigeadh do chamara an uidheim agad dha Firefox ann an “Roghainnean” » “Prìobhaideachd” » “Camara”.";
+
+/* Title for the QR code scanner view. */
+"ScanQRCode.View.Title" = "Sganaich an còd QR";
+
+/* Accessibility Label for the tab toolbar Search button
+   Navigation title for search settings.
+   Open search section of settings */
+"Search" = "Lorg";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Dèan lorg no cuir a-steach seòladh";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "Nochdaidh an t-einnsean-luirg ùr ann am bàr nan lorg gu luath.";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "Chaidh an t-einnsean-luirg a chur ris!";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "A bheil thu airson an solaraiche luirg a chur ris?";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "Sguir dheth";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.DuplicateErrorMessage" = "Chaidh einnsean-luirg aig a bheil an tiotal no URL seo a chur ris mu thràth.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.DuplicateErrorTitle" = "Dh’fhàillig e";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "Cha bʼ urrainn dhuinn an solaraiche luirg a chur ris.";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "Air fàilligeadh";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.FormErrorMessage" = "Lìon gach raon mar bu chòir.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.FormErrorTitle" = "Dh’fhàillig seo";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "Ceart ma-thà";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "Lorgaidh seo am moladh";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "Ceangal tèarainte";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "A bheil thu deònach aithisg a chur gu Mozilla mun tuisleadh ach an urrainn dhuinn a chàradh?";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "Cuir thugainn do bheachdan";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "Cuir an aithisg";
+
+/* Button title for cancelling share screen
+   Close button in top navigation bar */
+"SendTo.Cancel.Button" = "Sguir dheth";
+
+/* Header for the list of devices table */
+"SendTo.DeviceList.Text" = "Uidheaman a tha ri làimh:";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "Chan urrainnear ach ceanglaichean HTTP agus HTTPS a cho-roinneadh.";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "Ceart ma-thà";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "Cha ghabh ceangal mar sin a cho-roinneadh.";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"SendTo.NavBar.Title" = "Cuir an taba";
+
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message" = "Cha do cheangail thu uidheam sam bith eile ris a’ chunntas Firefox seo as urrainn dhut sioncronachadh.";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Message" = "Fosgail na roghainnean ann am Firefox is clàraich a-steach a leantainn air adhart.";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Title" = "Cha do rinn thu clàradh a-steach dhan chunntas Firefox agad.";
+
+/* Navigation bar button to Send the current page to a device */
+"SendTo.SendAction.Text" = "Cuir";
+
+/* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
+"SendTo.SignIn.Button" = "Clàraich a-steach gu Firefox";
+
+/* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_body" = "Ràinig taba ùr o uidheam eile.";
+
+/* Title of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_title" = "Fhuair thu taba";
+
+/* Body of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the app name. */
+"SentTab_TabArrivingNotification_WithDevice_body" = "Ràinig taba ùr ann an %@";
+
+/* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
+"SentTab_TabArrivingNotification_WithDevice_title" = "Fhuair thu taba o %@";
+
+/* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
+"SentTab.AddToReadingListAction.Title" = "Cuir ris an liosta-leughaidh";
+
+/* Label for an action used to bookmark one or more tabs from a notification. */
+"SentTab.BookmarkAction.title" = "Comharra-lìn";
+
+/* Body of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.body" = "Thoir gnogag airson tòiseachadh";
+
+/* Title of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.title" = "Sioncronachadh Firefox";
+
+/* Label for an action used to view one or more tabs from a notification. */
+"SentTab.ViewAction.title" = "Sealladh";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Sepia";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serif";
+
+/* Title in the settings view controller title bar */
+"Settings" = "Roghainnean";
+
+/* The button text in Search Settings that opens the Custom Search Engine view. */
+"Settings.AddCustomEngine" = "Cuir einnsean-luirg ris";
+
+/* The text on the Save button when saving a custom search engine */
+"Settings.AddCustomEngine.SaveButtonText" = "Sàbhail";
+
+/* The title of the  Custom Search Engine view. */
+"Settings.AddCustomEngine.Title" = "Cuir einnsean-luirg ris";
+
+/* The title for the field which sets the title for a custom search engine. */
+"Settings.AddCustomEngine.TitleLabel" = "Tiotal";
+
+/* The placeholder for Title Field when saving a custom search engine. */
+"Settings.AddCustomEngine.TitlePlaceholder" = "Einnsean-luirg";
+
+/* The title for URL Field */
+"Settings.AddCustomEngine.URLLabel" = "URL";
+
+/* The placeholder for URL Field when saving a custom search engine */
+"Settings.AddCustomEngine.URLPlaceholder" = "URL (Cuir %s an àite na ceist)";
+
+/* Button in Data Management that clears private data for the selected items. */
+"Settings.ClearAllWebsiteData.Clear.Button" = "Falamhaich dàta nan làraichean-lìn air fad";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "Falamhaich an dàta prìobhaideach";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "Falamhaich an dàta prìobhaideach";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "Falamhaich an dàta prìobhaideach";
+
+/* Copy app version alert shown in settings. */
+"Settings.CopyAppVersion.Title" = "Air lethbhreac a chur air an stòr-bhòrd";
+
+/* Default text in search bar for Data Management */
+"Settings.DataManagement.SearchLabel" = "Criathraich na làraichean";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.DataManagement.SectionName" = "Stiùireadh dàta";
+
+/* Title displayed in header of the setting panel. */
+"Settings.DataManagement.Title" = "Stiùireadh dàta";
+
+/* Body of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Body" = "Sguiridh Firefox de shioncronachadh a’ chunntais agad ach cha sguab e às gin dhen dàta brabhsaidh agad air an uidheam seo.";
+
+/* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
+"Settings.Disconnect.Button" = "Dì-cheangail gleus an t-sioncronachaidh";
+
+/* Cancel action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.CancelButton" = "Sguir dheth";
+
+/* Destructive action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.DestructiveButton" = "Dì-cheangail";
+
+/* Title of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Title" = "A bheil thu airson gleus an t-sioncronachaidh a dhì-cheangal?";
+
+/* Section header for brightness slider. */
+"Settings.DisplayTheme.BrightnessThreshold.SectionHeader" = "Stairsneach";
+
+/* Display (theme) settings label to show if manually switch theme is enabled. */
+"Settings.DisplayTheme.Manual.StatusLabel" = "De làimh";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Manually'. */
+"Settings.DisplayTheme.Manual.SwitchSubtitle" = "Tagh an t-ùrlar a tha thu ag iarraidh";
+
+/* Display (theme) setting to choose the theme manually. */
+"Settings.DisplayTheme.Manual.SwitchTitle" = "De làimh";
+
+/* Option choice in display theme settings for dark theme */
+"Settings.DisplayTheme.OptionDark" = "Dorcha";
+
+/* Option choice in display theme settings for light theme */
+"Settings.DisplayTheme.OptionLight" = "Soilleir";
+
+/* Display (theme) settings footer describing how the brightness slider works. */
+"Settings.DisplayTheme.SectionFooter" = "Thèid an t-ùrlar atharrachadh gu fèin-obrachail a-rèir soilleireachd na sgrìn agad. ’S urrainn dhut stairsneach a shuidheachadh aig an atharraich an t-ùrlar. Tha an cearcall ag innse dè cho soilleir ’s a tha an sgrìn agad an-dràsta.";
+
+/* Switch mode settings section title */
+"Settings.DisplayTheme.SwitchMode.SectionHeader" = "Leum gu modh eile";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Automatically'. */
+"Settings.DisplayTheme.SwitchSubtitle" = "Leum gu fèin-obrachail a-rèir soilleireachd na sgrìn";
+
+/* Display (theme) settings label to show if automatically switch theme is enabled.
+   Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
+"Settings.DisplayTheme.SwitchTitle" = "Gu fèin-obrachail";
+
+/* System theme settings section title */
+"Settings.DisplayTheme.SystemTheme.SectionHeader" = "Ùrlar an t-siostaim";
+
+/* System theme settings switch to choose whether to use the same theme as the system */
+"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "Cleachd modh soilleir/dorcha an t-siostaim";
+
+/* Theme picker settings section title */
+"Settings.DisplayTheme.ThemePicker.SectionHeader" = "Roghnaichear an ùrlair";
+
+/* Title in main app settings for Theme settings */
+"Settings.DisplayTheme.Title.v2" = "An t-ùrlar";
+
+/* DNT Settings option for always on */
+"Settings.DNT.OptionAlwaysOn" = "An-còmhnaidh";
+
+/* DNT Settings option for only turning on when Tracking Protection is also on */
+"Settings.DNT.OptionOnWithTP" = "Dìreach nuair a chleachdar dìon o thracadh";
+
+/* DNT Settings title */
+"Settings.DNT.Title" = "Cuir sanas “Na dèan tracadh orm” gu làraichean-lìn a dh’innseas nach eil thu ag iarraidh gun dèanar tracadh ort";
+
+/* Label used for the device name settings section. */
+"Settings.FxA.DeviceName" = "Ainm an uidheim";
+
+/* Label used as a section title in the Firefox Accounts Settings screen. */
+"Settings.FxA.Sync.SectionName" = "Roghainnean sioncronachaidh";
+
+/* Title displayed in header of the FxA settings panel. */
+"Settings.FxA.Title" = "Cunntas Firefox";
+
+/* General settings section title */
+"Settings.General.SectionName" = "Coitcheann";
+
+/* Button in settings to clear the home page. */
+"Settings.HomePage.Clear.Button" = "Falamhaich";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "An duilleag mhòr";
+
+/* Title displayed in header of the setting panel. */
+"Settings.HomePage.Title" = "Roghainnean na duilleige mhòr";
+
+/* Placeholder text in the homepage setting when no homepage has been set. */
+"Settings.HomePage.URL.Placeholder" = "Cuir a-steach duilleag-lìn";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "An duilleag mhòr làithreach";
+
+/* Button in settings to use the current link on the clipboard as home page. */
+"Settings.HomePage.UseCopiedLink.Button" = "Cleachd lethbhreac aʼ cheangail";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "Cleachd an duilleag làithreach";
+
+/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
+"Settings.HomePage.UseDefault.Button" = "Cleachd aʼ bhun-roghainn";
+
+/* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
+"Settings.LoginsAndPasswordsTitle" = "Clàraidhean a-steach ⁊ faclan-faire";
+
+/* Label used to set a custom url as the new tab option (homepage). */
+"Settings.NewTab.CustomURL" = "URL gnàthaichte";
+
+/* A description in settings of what the new tab choice means */
+"Settings.NewTab.Description" = "Nuair a dh’fhosglas tu taba ùr:";
+
+/* The title of the section in newtab that lets you modify the topsites panel */
+"Settings.NewTab.Option.ASTitle" = "Gnàthaich brod nan làrach";
+
+/* Option in settings to show a blank page when you open a new tab */
+"Settings.NewTab.Option.BlankPage" = "Duilleag bhàn";
+
+/* Option in settings to show bookmarks when you open a new tab */
+"Settings.NewTab.Option.Bookmarks" = "Comharran-lìn";
+
+/* The footer for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeFooter" = "Na làraichean air an tadhail thu as trice";
+
+/* The title for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeTitle" = "Gnàthaich dachaigh Firefox";
+
+/* Option in settings to show Firefox Home when you open a new tab */
+"Settings.NewTab.Option.FirefoxHome" = "Dachaigh Firefox";
+
+/* Option in the settings to turn off recent bookmarks in the Highlights section */
+"Settings.NewTab.Option.HighlightsBookmarks" = "Comharran-lìn ùra";
+
+/* Option in settings to turn off history in the highlights section */
+"Settings.NewTab.Option.HighlightsHistory" = "Air tadhal air";
+
+/* Option in settings to show history when you open a new tab */
+"Settings.NewTab.Option.History" = "An eachdraidh";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.HomePage" = "Duilleag-dhachaigh";
+
+/* Option in settings to turn on off pocket recommendations */
+"Settings.NewTab.Option.Pocket" = "A’ treandadh air Pocket";
+
+/* Footer caption for pocket settings */
+"Settings.NewTab.Option.PocketFooter" = "Brod na susbaint o fheadh an lìn.";
+
+/* Option in settings to show reading list when you open a new tab */
+"Settings.NewTab.Option.ReadingList" = "Seall an liosta-leughaidh agad";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
+"Settings.NewTab.SectionName" = "Taba ùr";
+
+/* Title displayed in header of the setting panel. */
+"Settings.NewTab.Title" = "Taba ùr";
+
+/* Label at the top of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionName" = "Seall";
+
+/* Footer at the bottom of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionNameFooter" = "Tagh na thèid fhosgladh nuair a dh’fhosglas tu taba ùr";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Status" = "Nuair a dh’fhosglas mi Firefox";
+
+/* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Title" = "faighnich a bheil mi airson ceangal a rinn mi lethbhreac dheth fhosgladh";
+
+/* Title for Open With Settings */
+"Settings.OpenWith.PageTitle" = "Fosgail ceanglaichean puist ann an";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
+"Settings.OpenWith.SectionName" = "Aplacaid a’ phuist";
+
+/* Setting to enable the built-in password manager */
+"Settings.SaveLogins.Title" = "Sàbhail clàraidhean a-steach";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "Deiseil";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "Deasaich";
+
+/* title for a link that explains how mozilla collects telemetry */
+"Settings.SendUsage.Link" = "Barrachd fiosrachaidh.";
+
+/* A short description that explains why mozilla collects usage data. */
+"Settings.SendUsage.Message" = "Tha Mozilla an dealas dìreach an dàta a chruinneachadh a dh’fheumas sinn airson Firefox a sholar is a leasachadh dhan a h-uile duine.";
+
+/* The title for the setting to send usage data. */
+"Settings.SendUsage.Title" = "Cuir an dàta cleachdaidh";
+
+/* Description displayed under the ”Show Link Previews” option */
+"Settings.ShowLinkPreviews.Status" = "Nuair a nithear brùthadh fada air ceangal";
+
+/* Title of setting to enable link previews when long-pressing links. */
+"Settings.ShowLinkPreviews.Title" = "Seall ro-sheallaidhean cheanglaichean";
+
+/* Setting to show Logins & Passwords quick access in the application menu */
+"Settings.ShowLoginsInAppMenu.Title" = "Seall ann an clàr-taice na h-aplacaid";
+
+/* The description of the open new tab siri shortcut */
+"Settings.Siri.OpenTabShortcut" = "Fosgail taba ùr";
+
+/* The description that describes what siri shortcuts are */
+"Settings.Siri.SectionDescription" = "Cleachd ath-ghoiridean Siri airson Firefox fhosgladh gu luath le Siri";
+
+/* The option that takes you to the siri shortcuts settings page */
+"Settings.Siri.SectionName" = "Ath-ghoiridean Siri";
+
+/* Dismiss button for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Button" = "Ceart, tha mi agaibh";
+
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "Mur eil làrach ag obair mar bu chòir, thoir gnogag air an sgiath ann am bàr an t-seòlaidh agus cuir dheth an dìon leasaichte o thracadh air an duilleag sin.";
+
+/* Title for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Title" = "An aire!";
+
+/* Header description for tracking protection options section where Basic/Strict block list can be selected */
+"Settings.TrackingProtection.BlockListsHeader" = "’S urrainn dhut fhèin taghadh dè an liosta a chleachdadh Firefox gus eileamaidean-lìn a bhacadh a thracaicheas na nì thu air loidhne ma dh’fhaoidte.";
+
+/* Explanation of basic mode. */
+"Settings.TrackingProtection.Info.BasicTitle" = "Cothromachadh eadar dìon is dèanadas.";
+
+/* The Title on info view which shows a list of all blocked websites */
+"Settings.TrackingProtection.Info.BlocksTitle" = "AIR AM BACADH";
+
+/* Explanation of strict mode. */
+"Settings.TrackingProtection.Info.StrictTitle" = "Bheir seo dhut dìon nas làidire ach dh’fhaoidte gum bris seo cuid a làraichean.";
+
+/* 'Learn more' info link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.LearnMore" = "Barrachd fiosrachaidh";
+
+/* 'More Info' link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.MoreInfo" = "Barrachd fiosrachaidh…";
+
+/* Additional information about your Enhanced Tracking Protection */
+"Settings.TrackingProtection.ProtectionCellFooter" = "Lùghdaichidh seo an t-sanasachd thargaidichte agus cuiridh e bacadh air luchd-sanasachd o bhith a’ tracadh na nì thu air an lìon.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "Mur eil làrach ag obair mar bu chòir, thoir gnogag air an sgiath ann am bàr an t-seòlaidh agus cuir dheth an dìon leasaichte o thracadh air an duilleag sin.";
+
+/* Description for standard level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Bheir seo cead do chuid a thracadh sanasachd ach an obraich làraichean-lìn mar bu chòir.";
+
+/* Description for strict level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "Bacaidh seo barrachd thracaichean, sanasachd is priob-uinneagan. Thèid duilleagan a luchdadh nas luaithe ach dh’fhaoidte nach obraich gach rud mar bu chòir.";
+
+/* Title for tracking protection options section where level can be selected. */
+"Settings.TrackingProtection.ProtectionLevelTitle" = "Ìre an dìon";
+
+/* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
+"Settings.TrackingProtection.SectionName" = "Dìon o thracadh";
+
+/* Additional information about the strict level setting */
+"Settings.TrackingProtection.StrictLevelInfoFooter" = "Ma bhacas tu tracaichean, dh’fhaoidte gum bi droch-bhuaidh air a’ chomas obrachaidh aig cuid a làraichean-lìn.";
+
+/* Tracking protection settings option for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BasicBlockList" = "Stannardach (bun-roghainn)";
+
+/* Tracking protection settings option description for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BlockListBasicDescription" = "Bheir seo cead do chuid a thracairean ach an obraich làraichean-lìn mar bu chòir.";
+
+/* Tracking protection settings option for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrict" = "Teann";
+
+/* Tracking protection settings option description for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrictDescription" = "Bacaidh seo tracairean air a bheil daoine eòlach. Dh’fhaoidte nach obraich gach làrach-lìn mar bu chòir.";
+
+/* Description label shown on tracking protection options screen. */
+"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "Tha “tracadh” a’ ciallachadh gun cruinnichear an dàta brabhsaidh agad air feadh iomadh làrach-lìn.";
+
+/* Settings option to specify that Tracking Protection is on */
+"Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "Dìon adhartach o thracadh";
+
+/* Translation settings footer describing how language detection and translation happens. */
+"Settings.TranslateSnackBar.SectionFooter" = "Mothaichear do chànan na làraich-lìn air an uidheam agus thèid eadar-theangachadh o sheirbheis chèin a thairgsinn.";
+
+/* Translation settings section title */
+"Settings.TranslateSnackBar.SectionHeader" = "Seirbheisean";
+
+/* Switch to choose if the language of a page is detected and offer to translate. */
+"Settings.TranslateSnackBar.SwitchSubtitle" = "Tairg eadar-theangachadh de làrach sam bith a tha sgrìobhte ann an cànan a tha eadar-dhealaichte on chànan bhunaiteach agad.";
+
+/* Switch to choose if the language of a page is detected and offer to translate. */
+"Settings.TranslateSnackBar.SwitchTitle" = "Tairg eadar-theangachadh";
+
+/* Title in main app settings for Translation toast settings */
+"Settings.TranslateSnackBar.Title" = "Eadar-theangachadh";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "Fuasgail duilgheadasan";
+
+/* Button to delete website in search results */
+"Settings.WebsiteData.ButtonDelete" = "Sguab às";
+
+/* Button to exit edit website search results */
+"Settings.WebsiteData.ButtonDone" = "Deiseil";
+
+/* Button to edit website search results */
+"Settings.WebsiteData.ButtonEdit" = "Deasaich";
+
+/* Button shows all websites on website data tableview */
+"Settings.WebsiteData.ButtonShowMore" = "Seall an corr";
+
+/* Description of the confirmation dialog shown when a user tries to clear their private data. */
+"Settings.WebsiteData.ConfirmPrompt" = "Falamhaichidh an gnìomh seo dàta nan làraichean-lìn air fad agad. Cha ghabh a neo-dhèanamh.";
+
+/* Title displayed in header of the Data Management panel. */
+"Settings.WebsiteData.Title" = "Dàta nan làraichean-lìn";
+
+/* Action label on share extension to add page to the Firefox reading list. */
+"ShareExtension.AddToReadingListAction.Title" = "Cuir ris an liosta-leughaidh";
+
+/* Share extension label shown after user has performed 'Add to Reading List' action. */
+"ShareExtension.AddToReadingListActionDone.Title" = "Air a chur ris an liosta-leughaidh";
+
+/* Action label on share extension to bookmark the page in Firefox. */
+"ShareExtension.BookmarkThisPageAction.Title" = "Cruthaich comharra-lìn dhan duilleag seo";
+
+/* Share extension label shown after user has performed 'Bookmark this Page' action. */
+"ShareExtension.BookmarkThisPageActionDone.Title" = "Na chomharra-lìn";
+
+/* Action label on share extension to load the page in Firefox when user switches apps to bring it to foreground. */
+"ShareExtension.LoadInBackgroundAction.Title" = "Luchdaich sa chùlaibh";
+
+/* Share extension label shown after user has performed 'Load in Background' action. */
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Ga luchdadh ann am Firefox";
+
+/* Action label on share extension to immediately open page in Firefox. */
+"ShareExtension.OpenInFirefoxAction.Title" = "Fosgail ann am Firefox";
+
+/* Action label on share extension to immediately open page in Firefox in private mode. */
+"ShareExtension.OpenInPrivateModeAction.Title" = "Fosgail sa mhodh phrìobhaideach";
+
+/* Action label on share extension to search for the selected text in Firefox. */
+"ShareExtension.SeachInFirefoxAction.Title" = "Lorg ann am Firefox";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "Seall molaidhean-luirg";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "Seall na tabaichean";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "Seall an turas";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "Sguir dheth";
+
+/* Support section title */
+"Support" = "Taic";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Grad-shlaighd gun taobh deas no clì le trì corragan gus an taba a dhùnadh.";
+
+/* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"SwitchToNonPBM.KeyCodeTitle" = "Am modh brabhsaidh àbhaisteach";
+
+/* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"SwitchToPBM.KeyCodeTitle" = "Am modh brabhsaidh prìobhaideach";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, bookmarks, passwords and more." = "Sioncronaich na tabaichean, comharran-lìn, faclan-faire is mòran a bharrachd.";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, passwords and more." = "Sioncronaich na tabaichean, faclan-faire is mòran a bharrachd.";
+
+/* Message displayed when the user syncs for the first time */
+"Sync.FirstTimeMessage.Label" = "Dhʼfhaoidte gun doir aʼ chiad sionsronachadh greiseig mhath.";
+
+/* String displayed on Sign In to Sync page that allows the user to create a new account. */
+"Sync.NoAccount.Description" = "Nach eil cunntas agad? Cruthaich fear airson Firefox a shioncronachadh eadar uidheaman.";
+
+/* Message displayed when the user's account is syncing with no ellipsis */
+"Sync.Syncing.Label" = "ʼGa shioncronachadh";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "ʼGa shioncronachadh…";
+
+/* Panel accessibility label */
+"Synced Tabs" = "Tabaichean sioncronaichte";
+
+/* The Bookmark sync component, used in SyncState.Partial.Title */
+"SyncState.Bookmark.Title" = "Comharran-lìn";
+
+/* The Remote Clients sync component, used in SyncState.Partial.Title */
+"SyncState.Clients.Title" = "Cliantan cèin";
+
+/* Title for Sync status message when synchronization failed to complete */
+"SyncState.Failed.Title" = "Dhʼfhàillig an sionsronachadh";
+
+/* The History sync component, used in SyncState.Partial.Title */
+"SyncState.History.Title" = "An eachdraidh";
+
+/* The Logins sync component, used in SyncState.Partial.Title */
+"SyncState.Logins.Title" = "Clàraidhean a-steach";
+
+/* Title for Sync status message when Sync failed to start. */
+"SyncState.NotStarted.Title" = "Chan eil an sioncronachadh ri làimh";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "Tha an sioncronachadh far loidhne";
+
+/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
+"SyncState.Partial.Title" = "Tha duilgheadasan le sioncronachadh %@";
+
+/* The Tabs sync component, used in SyncState.Partial.Title */
+"SyncState.Tabs.Title" = "Tabaichean";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "Taba %1$@ à %2$@";
+
+/* Hardware shortcut to open the tab tray from a tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"Tab.ShowTabTray.KeyCodeTitle" = "Seall gach taba";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "Tabaichean %1$@ to %2$@ à %3$@";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Treidhe nan taba";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "Neo-dhèan";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "%d taba(ichean) air an dùnadh";
+
+/* The placeholder text for the tab search bar */
+"Tabs.Search.PlaceholderText" = "Lorg sna tabaichean";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"TabTray.AddTab.Button" = "Cuir taba ris";
+
+/* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseAllTabs.KeyCodeTitle" = "Dùin a h-uile taba";
+
+/* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseTab.KeyCodeTitle" = "Dùin an taba a thagh thu";
+
+/* The section header for tabs opened last week */
+"TabTray.LastWeek.Header" = "An t-seachdain seo chaidh";
+
+/* The title on the button to copy the tab address. */
+"TabTray.MoreMenu.Copy" = "Dèan lethbhreac";
+
+/* The section header for tabs opened before last week */
+"TabTray.Older.Header" = "Nas sine";
+
+/* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenNewTab.KeyCodeTitle" = "Fosgail taba ùr";
+
+/* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.OpenSelectedTab.KeyCodeTitle" = "Fosgail an taba a thagh thu";
+
+/* The button title to see more options to perform on the tab. */
+"TabTray.SwipeMenu.More" = "Barrachd";
+
+/* The title for the tab tray */
+"TabTray.Title" = "Tabaichean fosgailte";
+
+/* The section header for tabs opened today */
+"TabTray.Today.Header" = "An-diugh";
+
+/* The section header for tabs opened yesterday */
+"TabTray.Yesterday.Header" = "An-dè";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "Cha b’ urrainn dhuinn an duilleag a thaisbeanadh ann an sealladh an leughadair.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Bha duilgheadas againn a’ faighinn cothrom air na tabaichean agad air uidheaman eile. Feuch ris a-rithist ann an greiseag.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "Thachair mearachd rè iompachadh na duilleige";
+
+/* Relative date for date in past week. */
+"this week" = "an t-seachdain-sa";
+
+/* label for Not Now button */
+"Toasts.NotNow" = "Chan ann an-dràsta";
+
+/* Open App Store button */
+"Toasts.OpenAppStore" = "Fosgail an App Store";
+
+/* Label for button to undo the action just performed */
+"Toasts.Undo" = "Neo-dhèan";
+
+/* History tableview section header */
+"Today" = "An-diugh";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "an-diugh aig %@";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "Clàr-taice";
+
+/* Accessibility label for the Close All Tabs menu button. */
+"Toolbar.Menu.CloseAllTabs" = "Dùin a h-uile taba";
+
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "Nochdaidh na làraichean air an tadhail thu gu tric an-seo.";
+
+/* The title for the empty Top Sites state */
+"TopSites.EmptyState.Title" = "Fàilte gu brod nan làrach";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "Thoir an duilleag air falbh - %@";
+
+/* Button to disallow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.Cancel" = "Chan eil";
+
+/* Button to allow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.OK" = "Tha";
+
+/* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
+"TranslationToastHandler.PromptTranslate.Title" = "Tha coltas gu bheil an duilleag seo sa chànan seo: %1$@. A bheil thu airson ’s gun cuir %3$@ na leanas air: %2$@?";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* The menu item that pastes the current contents of the clipboard into the URL bar and navigates to the page */
+"UIMenuItem.PasteGo" = "Cuir ann ⁊ tadhail air";
+
+/* Search in New Tab Text selection menu item */
+"UIMenuItem.SearchWithFirefox" = "Lorg le Firefox";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "gun leughadh";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect" = "Àrdaich Firefox ma tha thu airson ceangal";
+
+/* Debug option */
+"Use stage servers" = "Cleachd frithealaichean stèidse";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Ainm-cleachdaiche";
+
+/* Text message in the settings table view */
+"Verify your email address" = "Dealbh am post-d agad";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "Tionndadh %1$@ (%2$@)";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Susbaint-lìn";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Fàilte gun liosta-leughaidh agad";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "An-dà, tha seo a’ cur nàire oirnn.";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Uicipeid";
+
+/* Relative date for yesterday. */
+"yesterday" = "an-dè";
+
+/* History tableview section header */
+"Yesterday" = "An-dè";
+
+/* Error message in the remote tabs panel */
+"You don’t have any tabs open in Firefox on your other devices." = "Chan eil taba sam bith fosgailte agad ann am Firefox air uidheaman eile.";
+
+/* Your Rights settings section title */
+"Your Rights" = "Do chòraichean";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+

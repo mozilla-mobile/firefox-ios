@@ -1,0 +1,63 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "آیا اطمینان دارید؟";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "لغو";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "پاک‌سازی جست‌وجو";
+
+/* Copy password text selection menu item */
+"Copy" = "نسخه‌برداری";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "ایجاد شده %@";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "حذف";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "عدم انتخاب همه";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "وارد‌کردن حالت جست‌و‌جو";
+
+/* Hide password text selection menu item */
+"Hide" = "مخفی کردن";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "ورود‌ها برای همیشه حذف شد.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "ورود‌ها بر روی تمامی دستگاه‌ها حذف شد.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "تغییر یافته %@";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "هیچ ورودی یافت نشد";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "باز‌شده و پر";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "کلمه عبور";
+
+/* Reveal password text selection menu item */
+"Reveal" = "آشکارساختن";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "جست و جو";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "بخش ورود اطلاعات جست‌و‌جو";
+
+/* Label for the button used to select all logins. */
+"Select All" = "انتخاب همه";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "نام کاربری";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "پایگاه اینترنتی";
+

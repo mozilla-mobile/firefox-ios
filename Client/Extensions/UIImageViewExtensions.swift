@@ -16,6 +16,13 @@ extension UIColor {
         getRed(&r, green: &g, blue: &b, alpha: &a)
         return (r, g, b, a)
     }
+
+    func image(_ size: CGSize = CGSize(width: 1, height: 1)) -> UIImage {
+        return UIGraphicsImageRenderer(size: size).image { rendererContext in
+            self.setFill()
+            rendererContext.fill(CGRect(origin: .zero, size: size))
+        }
+    }
 }
 
 public extension UIImageView {
@@ -94,3 +101,14 @@ open class ImageOperation: NSObject, SDWebImageOperation {
     }
 }
 
+extension UIImage {
+    func overlayWith(image: UILabel) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: size.width, height: size.height), false, 0.0)
+        draw(in: CGRect(origin: CGPoint.zero, size: size))
+        image.draw(CGRect(origin: CGPoint.zero, size: image.frame.size))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        
+        return newImage
+    }
+}

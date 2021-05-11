@@ -6,6 +6,7 @@ import Foundation
 import XCTest
 import Shared
 @testable import SyncTelemetry
+@testable import Client
 
 class EventTests: XCTestCase {
     func testPickling() {

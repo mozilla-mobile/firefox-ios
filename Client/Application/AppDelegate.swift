@@ -9,18 +9,17 @@ import XCGLogger
 import MessageUI
 import SDWebImage
 import SwiftKeychainWrapper
+import SyncTelemetry
 import LocalAuthentication
 import SyncTelemetry
 import Sync
 import CoreSpotlight
 import UserNotifications
 import Account
-import Glean
 
 #if canImport(BackgroundTasks)
  import BackgroundTasks
 #endif
-
 
 private let log = Logger.browserLogger
 
@@ -35,20 +34,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
     var window: UIWindow?
     var browserViewController: BrowserViewController!
+    var tabTrayController: GridTabViewController!
     var rootViewController: UIViewController!
     weak var profile: Profile?
     var tabManager: TabManager!
-    var adjustIntegration: AdjustIntegration?
     var applicationCleanlyBackgrounded = true
     var shutdownWebServer: DispatchSourceTimer?
-
+    var orientationLock = UIInterfaceOrientationMask.all
     weak var application: UIApplication?
     var launchOptions: [AnyHashable: Any]?
 
     var receivedURLs = [URL]()
-    var unifiedTelemetry: UnifiedTelemetry?
-
-    var glean = Glean.shared
+    var telemetry: TelemetryWrapper?
 
     func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         //
@@ -73,7 +70,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         self.launchOptions = launchOptions
 
         self.window = UIWindow(frame: UIScreen.main.bounds)
-        self.window?.backgroundColor = UIColor.theme.browser.background
 
         // If the 'Save logs to Files app on next launch' toggle
         // is turned on in the Settings app, copy over old logs.
@@ -110,15 +106,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         let profile = getProfile(application)
 
-        unifiedTelemetry = UnifiedTelemetry(profile: profile)
-        
-        // Get legacy telemetry ID
-        if let uuidString = UserDefaults.standard.string(forKey: "telemetry-key-prefix-clientId"), let uuid = UUID(uuidString: uuidString) {
-            GleanMetrics.LegacyIds.clientId.set(uuid)
-        }
-        
-        // Initialize Glean telemetry
-        glean.initialize(uploadEnabled: sendUsageData, configuration: Configuration(channel: AppConstants.BuildChannel.rawValue))
+        telemetry = TelemetryWrapper(profile: profile)
+
+        // Start intialzing the Nimbus SDK. This should be done after Glean
+        // has been started.
+        initializeExperiments()
 
         // Set up a web server that serves us static content. Do this early so that it is ready when the UI is presented.
         setUpWebServer(profile)
@@ -131,6 +123,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         }
 
         self.tabManager = TabManager(profile: profile, imageStore: imageStore)
+        self.tabTrayController = GridTabViewController(tabManager: self.tabManager, profile: profile)
 
         // Add restoration class, the factory that will return the ViewController we
         // will restore with.
@@ -143,8 +136,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
                 profile.readingList.createRecordWithURL(url.absoluteString, title: title, addedBy: UIDevice.current.name)
             }
         }
-
-        adjustIntegration = AdjustIntegration(profile: profile)
 
         self.updateAuthenticationInfo()
         SystemUtils.onFirstRun()
@@ -207,8 +198,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // Override point for customization after application launch.
         var shouldPerformAdditionalDelegateHandling = true
 
-        adjustIntegration?.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
-
         UIScrollView.doBadSwizzleStuff()
 
         window!.makeKeyAndVisible()
@@ -234,13 +223,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         pushNotificationSetup()
 
-        // Leanplum usersearch variable setup for onboarding research
-        _ = OnboardingUserResearch()
+        // Leanplum user research variable setup for New tab user research
+        _ = NewTabUserResearch()
+        // Leanplum user research variable setup for Chron tabs user research
+        _ = ChronTabsUserResearch()
         // Leanplum setup
 
-        if let profile = self.profile, LeanPlumClient.shouldEnable(profile: profile) {
-            LeanPlumClient.shared.setup(profile: profile)
-            LeanPlumClient.shared.set(enabled: true)
+        if let profile = self.profile {
+            let persistedCurrentVersion = InstallType.persistedCurrentVersion()
+            let introScreen = profile.prefs.intForKey(PrefsKeys.IntroSeen)
+            // upgrade install - Intro screen shown & persisted current version does not match
+            if introScreen != nil && persistedCurrentVersion != AppInfo.appVersion {
+                InstallType.set(type: .upgrade)
+                InstallType.updateCurrentVersion(version: AppInfo.appVersion)
+            }
+            
+            // We need to check if the app is a clean install to use for
+            // preventing the What's New URL from appearing.
+            if introScreen == nil {
+                // fresh install - Intro screen not yet shown
+                InstallType.set(type: .fresh)
+                InstallType.updateCurrentVersion(version: AppInfo.appVersion)
+                // Profile and leanplum setup
+                profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
+                LeanPlumClient.shared.track(event: .firstRun)
+            } else if profile.prefs.boolForKey(PrefsKeys.KeySecondRun) == nil {
+                profile.prefs.setBool(true, forKey: PrefsKeys.KeySecondRun)
+                LeanPlumClient.shared.track(event: .secondRun)
+            }
         }
 
         if #available(iOS 13.0, *) {
@@ -276,8 +286,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
                 }
             }
         }
+        updateSessionCount()
 
         return shouldPerformAdditionalDelegateHandling
+    }
+
+    func updateSessionCount() {
+        var sessionCount: Int32 = 0
+        
+        // Get the session count from preferences
+        if let currentSessionCount = profile?.prefs.intForKey(PrefsKeys.SessionCount) {
+            sessionCount = currentSessionCount
+        }
+        // increase session count value
+        profile?.prefs.setInt(sessionCount + 1, forKey: PrefsKeys.SessionCount)
     }
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
@@ -287,15 +309,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         if let profile = profile, let _ = profile.prefs.boolForKey(PrefsKeys.AppExtensionTelemetryOpenUrl) {
             profile.prefs.removeObjectForKey(PrefsKeys.AppExtensionTelemetryOpenUrl)
-            var object = UnifiedTelemetry.EventObject.url
+            var object = TelemetryWrapper.EventObject.url
             if case .text(_) = routerpath {
                 object = .searchText
             }
-            UnifiedTelemetry.recordEvent(category: .appExtensionAction, method: .applicationOpenUrl, object: object)
+            TelemetryWrapper.recordEvent(category: .appExtensionAction, method: .applicationOpenUrl, object: object)
         }
 
         DispatchQueue.main.async {
-            NavigationPath.handle(nav: routerpath, with: BrowserViewController.foregroundBVC())
+            NavigationPath.handle(nav: routerpath, with: BrowserViewController.foregroundBVC(), tray: self.tabTrayController)
         }
         return true
     }
@@ -341,7 +363,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             quickActions.launchedShortcutItem = nil
         }
 
-        UnifiedTelemetry.recordEvent(category: .action, method: .foreground, object: .app)
+        TelemetryWrapper.recordEvent(category: .action, method: .foreground, object: .app)
 
         // Delay these operations until after UIKit/UIApp init is complete
         // - loadQueuedTabs accesses the DB and shows up as a hot path in profiling
@@ -352,11 +374,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             self.receivedURLs.removeAll()
             application.applicationIconBadgeNumber = 0
         }
-
+        // Create fx favicon cache directory
+        FaviconFetcher.createWebImageCacheDirectory()
+        // update top sites widget
+        updateTopSitesWidget()
+        
         // Cleanup can be a heavy operation, take it out of the startup path. Instead check after a few seconds.
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
             self.profile?.cleanupHistoryIfNeeded()
         }
+    }
+    
+    func applicationWillResignActive(_ application: UIApplication) {
+        // update top sites widget
+        updateTopSitesWidget()
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
@@ -373,7 +404,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // TODO: iOS 13 needs to iterate all the BVCs.
         BrowserViewController.foregroundBVC().downloadQueue.pauseAll()
 
-        UnifiedTelemetry.recordEvent(category: .action, method: .background, object: .app)
+        TelemetryWrapper.recordEvent(category: .action, method: .background, object: .app)
 
         let singleShotTimer = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
         // 2 seconds is ample for a localhost request to be completed by GCDWebServer. <500ms is expected on newer devices.
@@ -390,6 +421,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         } else {
             syncOnDidEnterBackground(application: application)
         }
+        
+        tabManager.preserveTabs()
+    }
+    
+    private func updateTopSitesWidget() {
+        // Since we only need the topSites data in the archiver, let's write it
+        // only if iOS 14 is available.
+        if #available(iOS 14.0, *) {
+            guard let profile = profile else { return }
+            TopSitesHandler.writeWidgetKitTopSites(profile: profile)
+        }
     }
 
     fileprivate func syncOnDidEnterBackground(application: UIApplication) {
@@ -401,8 +443,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         // Create an expiring background task. This allows plenty of time for db locks to be released
         // async. Otherwise we are getting crashes due to db locks not released yet.
-        var taskId: UIBackgroundTaskIdentifier = UIBackgroundTaskIdentifier(rawValue: 0)
-        taskId = application.beginBackgroundTask (expirationHandler: {
+        var taskId = UIBackgroundTaskIdentifier(rawValue: 0)
+        taskId = application.beginBackgroundTask(expirationHandler: {
             print("Running out of background time, but we have a profile shutdown pending.")
             self.shutdownProfileWhenNotActive(application)
             application.endBackgroundTask(taskId)
@@ -459,7 +501,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             InternalSchemeHandler.responders[path] = responder
         }
 
-        if AppConstants.IsRunningTest {
+        if AppConstants.IsRunningTest || AppConstants.IsRunningPerfTest {
             registerHandlersForTestMethods(server: server.server)
         }
 
@@ -509,7 +551,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
             // Check for fxa sign-in code and launch the login screen directly
             if query["signin"] != nil {
-                bvc.launchFxAFromDeeplinkURL(url)
+                // bvc.launchFxAFromDeeplinkURL(url) // Was using Adjust. Consider hooking up again when replacement system in-place.
                 return true
             }
 
@@ -600,5 +642,26 @@ extension AppDelegate: MFMailComposeViewControllerDelegate {
 extension UIApplication {
     static var isInPrivateMode: Bool {
         return BrowserViewController.foregroundBVC().tabManager.selectedTab?.isPrivate ?? false
+    }
+}
+
+// Orientation lock for views that use new modal presenter 
+extension AppDelegate {
+    /// ref: https://stackoverflow.com/questions/28938660/
+    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+        return self.orientationLock
+    }
+    
+    struct AppUtility {
+        static func lockOrientation(_ orientation: UIInterfaceOrientationMask) {
+            if let delegate = UIApplication.shared.delegate as? AppDelegate {
+                delegate.orientationLock = orientation
+            }
+        }
+
+        static func lockOrientation(_ orientation: UIInterfaceOrientationMask, andRotateTo rotateOrientation:UIInterfaceOrientation) {
+            self.lockOrientation(orientation)
+            UIDevice.current.setValue(rotateOrientation.rawValue, forKey: "orientation")
+        }
     }
 }

@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import FxA
+
 import Shared
 import SwiftyJSON
 
@@ -71,7 +71,7 @@ public class PushSubscription: NSObject, NSCoding {
     public let authKey: String
 
     init(channelID: String, endpoint: URL, p256dhPrivateKey: String, p256dhPublicKey: String, authKey: String) {
-        self.channelID =  channelID
+        self.channelID = channelID
         self.endpoint = endpoint
         self.p256dhPrivateKey = p256dhPrivateKey
         self.p256dhPublicKey = p256dhPublicKey

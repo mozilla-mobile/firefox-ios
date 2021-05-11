@@ -3,6 +3,8 @@ import XCTest
 let testFileName = "Small.zip"
 let testFileSize = "178 bytes"
 let testURL = "http://demo.borland.com/testsite/download_testpage.php"
+let testBLOBURL = "http://bennadel.github.io/JavaScript-Demos/demos/href-download-text-blob/"
+let testBLOBFileSize = "35 bytes"
 
 class DownloadFilesTests: BaseTestCase {
 
@@ -28,6 +30,9 @@ class DownloadFilesTests: BaseTestCase {
     }
 
     func testDownloadFilesAppMenuFirstTime() {
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_Downloads)
         XCTAssertTrue(app.tables["DownloadsTable"].exists)
         // Check that there is not any items and the default text shown is correct
@@ -39,9 +44,9 @@ class DownloadFilesTests: BaseTestCase {
         navigator.openURL(testURL)
         waitUntilPageLoad()
         // Verify that the context menu prior to download a file is correct
-        app.webViews.staticTexts[testFileName].tap()
-        waitForExistence(app.webViews.buttons["Download"])
+        app.webViews.staticTexts[testFileName].firstMatch.tap()
         app.webViews.buttons["Download"].tap()
+
         waitForExistence(app.tables["Context Menu"])
         XCTAssertTrue(app.tables["Context Menu"].staticTexts[testFileName].exists)
         XCTAssertTrue(app.tables["Context Menu"].cells["download"].exists)
@@ -50,17 +55,31 @@ class DownloadFilesTests: BaseTestCase {
         navigator.goto(LibraryPanel_Downloads)
         checkTheNumberOfDownloadedItems(items: 0)
     }
-
+    
+    // Smoketest
     func testDownloadFile() {
         downloadFile(fileName: testFileName, numberOfDownlowds: 1)
+        navigator.goto(BrowserTabMenu)
+        navigator.goto(LibraryPanel_Downloads)
+
+        waitForExistence(app.tables["DownloadsTable"], timeout: 5)
+        // There should be one item downloaded. It's name and size should be shown
+        checkTheNumberOfDownloadedItems(items: 1)
+        XCTAssertTrue(app.tables.cells.staticTexts[testFileName].exists)
+        XCTAssertTrue(app.tables.cells.staticTexts[testFileSize].exists)
+    }
+
+    func testDownloadBLOBFile() {
+        downloadBLOBFile()
+        waitForExistence(app.buttons["Downloads"])
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
 
         waitForExistence(app.tables["DownloadsTable"])
         // There should be one item downloaded. It's name and size should be shown
         checkTheNumberOfDownloadedItems(items: 1)
-        XCTAssertTrue(app.tables.cells.staticTexts[testFileName].exists)
-        XCTAssertTrue(app.tables.cells.staticTexts[testFileSize].exists)
+        // We can only check for the BLOB file size since the name is generated
+        XCTAssertTrue(app.tables.cells.staticTexts[testBLOBFileSize].exists)
     }
 
     func testDeleteDownloadedFile() {
@@ -114,12 +133,20 @@ class DownloadFilesTests: BaseTestCase {
         navigator.openURL(testURL)
         waitUntilPageLoad()
         for _ in 0..<numberOfDownlowds {
-            app.webViews.staticTexts[fileName].tap()
+            waitForExistence(app.webViews.staticTexts[testFileName], timeout: 5)
+            app.webViews.staticTexts[testFileName].firstMatch.tap()
             waitForExistence(app.webViews.buttons["Download"])
             app.webViews.buttons["Download"].tap()
-            waitForExistence(app.tables["Context Menu"])
+            waitForExistence(app.tables["Context Menu"], timeout: 5)
             app.tables["Context Menu"].cells["download"].tap()
         }
+    }
+
+    private func downloadBLOBFile() {
+        navigator.openURL(testBLOBURL)
+        waitForExistence(app.webViews.links["Download Text"], timeout: 5)
+        app.webViews.links["Download Text"].press(forDuration: 1)
+        app.buttons["Download Link"].tap()
     }
 
     func testDownloadMoreThanOneFile() {
@@ -132,6 +159,8 @@ class DownloadFilesTests: BaseTestCase {
     }
 
     func testRemoveUserDataRemovesDownloadedFiles() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         // The option to remove downloaded files from clear private data is off by default
         navigator.goto(ClearPrivateDataSettings)
         XCTAssertTrue(app.cells.switches["Downloaded Files"].isEnabled, "The switch is not set correclty by default")
@@ -147,6 +176,10 @@ class DownloadFilesTests: BaseTestCase {
         checkTheNumberOfDownloadedItems(items: 1)
 
         // Remove private data once the switch to remove downloaded files is enabled
+        navigator.goto(NewTabScreen)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(ClearPrivateDataSettings)
         app.cells.switches["Downloaded Files"].tap()
         navigator.performAction(Action.AcceptClearPrivateData)
@@ -158,11 +191,11 @@ class DownloadFilesTests: BaseTestCase {
     }
 
     private func checkTheNumberOfDownloadedItems(items: Int) {
-        waitForExistence(app.tables["DownloadsTable"])
+        waitForExistence(app.tables["DownloadsTable"], timeout: 10)
         let list = app.tables["DownloadsTable"].cells.count
         XCTAssertEqual(list, items, "The number of items in the downloads table is not correct")
     }
-
+    // Smoketest
     func testToastButtonToGoToDownloads() {
         downloadFile(fileName: testFileName, numberOfDownlowds: 1)
         waitForExistence(app.buttons["Downloads"])

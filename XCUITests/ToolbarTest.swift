@@ -24,6 +24,8 @@ class ToolbarTests: BaseTestCase {
      * Tests landscape page navigation enablement with the URL bar with tab switching.
      */
     func testLandscapeNavigationWithTabSwitch() {
+        waitForExistence(app.textFields["url"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
         let urlPlaceholder = "Search or enter address"
         XCTAssert(app.textFields["url"].exists)
         let defaultValuePlaceholder = app.textFields["url"].placeholderValue!
@@ -60,8 +62,8 @@ class ToolbarTests: BaseTestCase {
         // Open new tab and then go back to previous tab to test navigation buttons.
         waitForTabsButton()
         navigator.goto(TabTray)
-        waitForExistence(app.collectionViews.cells[website1["label"]!])
-        app.collectionViews.cells[website1["label"]!].tap()
+        waitForExistence(app.cells.staticTexts[website1["label"]!])
+        app.cells.staticTexts[website1["label"]!].tap()
         XCTAssertEqual(valueMozilla, urlValueLong)
 
         // Test to see if all the buttons are enabled then close tab.
@@ -73,8 +75,8 @@ class ToolbarTests: BaseTestCase {
         waitForTabsButton()
         navigator.goto(TabTray)
 
-        waitForExistence(app.collectionViews.cells[website1["label"]!])
-        app.collectionViews.cells[website1["label"]!].swipeRight()
+        waitForExistence(app.cells.staticTexts[website1["label"]!])
+        app.tables.cells.element(boundBy: 0).buttons["closeTabButtonTabTray"].tap()
 
         // Go Back to other tab to see if all buttons are disabled.
         navigator.nowAt(BrowserTab)
@@ -101,6 +103,7 @@ class ToolbarTests: BaseTestCase {
     // Check that after scrolling on a page, the URL bar is hidden. Tapping one on the status bar will reveal the URL bar, tapping again on the status will scroll to the top
     func testRevealToolbarWhenTappingOnStatusbar() {
         // Workaround when testing on iPhone. If the orientation is in landscape on iPhone the tests will fail.
+        navigator.performAction(Action.CloseURLBarOpen)
         if !iPad() {
             XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
             waitForExistence(app.otherElements["Navigation Toolbar"])

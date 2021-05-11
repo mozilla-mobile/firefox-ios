@@ -1,0 +1,18 @@
+/* Settings item for clearing browsing history */
+"Browsing History" = "Historial de navegació";
+
+/* Settings item for clearing the cache */
+"Cache" = "Memòria cau";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Galetes";
+
+/* Settings item for deleting downloaded files */
+"Downloaded Files" = "Fitxers baixats";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Dades de llocs fora de línia";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Inicis de sessió desats";
+

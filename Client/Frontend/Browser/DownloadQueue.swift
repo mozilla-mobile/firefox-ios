@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import WebKit
 
 protocol DownloadDelegate {
     func download(_ download: Download, didCompleteWithError error: Error?)
@@ -65,6 +66,7 @@ class HTTPDownload: Download {
 
     fileprivate(set) var session: URLSession?
     fileprivate(set) var task: URLSessionDownloadTask?
+    fileprivate(set) var cookieStore: WKHTTPCookieStore
 
     private var resumeData: Data?
 
@@ -74,9 +76,15 @@ class HTTPDownload: Download {
         return string.components(separatedBy: allowed.inverted).joined()
      }
 
-    init(preflightResponse: URLResponse, request: URLRequest) {
+    init?(cookieStore: WKHTTPCookieStore, preflightResponse: URLResponse, request: URLRequest) {
+        self.cookieStore = cookieStore
         self.preflightResponse = preflightResponse
         self.request = request
+        
+        // Verify scheme is a secure http or https scheme before moving forward with HTTPDownload initialization
+        guard let scheme = request.url?.scheme, (scheme == "http" || scheme == "https") else {
+            return nil
+        }
 
         super.init()
 
@@ -89,8 +97,8 @@ class HTTPDownload: Download {
         }
 
         self.totalBytesExpected = preflightResponse.expectedContentLength > 0 ? preflightResponse.expectedContentLength : nil
-
-        self.session = URLSession(configuration: .default, delegate: self, delegateQueue: .main)
+        
+        self.session = URLSession(configuration: .ephemeral, delegate: self, delegateQueue: .main)
         self.task = session?.downloadTask(with: request)
     }
 
@@ -105,13 +113,19 @@ class HTTPDownload: Download {
     }
 
     override func resume() {
-        guard let resumeData = self.resumeData else {
-            task?.resume()
-            return
-        }
+        cookieStore.getAllCookies { [self] cookies in
+            cookies.forEach { cookie in
+                session?.configuration.httpCookieStorage?.setCookie(cookie)
+            }
 
-        task = session?.downloadTask(withResumeData: resumeData)
-        task?.resume()
+            guard let resumeData = self.resumeData else {
+                self.task?.resume()
+                return
+            }
+
+            self.task = session?.downloadTask(withResumeData: resumeData)
+            self.task?.resume()
+        }
     }
 }
 

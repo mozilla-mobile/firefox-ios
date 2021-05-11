@@ -4,6 +4,7 @@
 
 import Shared
 import SwiftyJSON
+import SyncTelemetry
 import Account
 import SwiftKeychainWrapper
 import os.log
@@ -80,12 +81,16 @@ extension FxAPushMessageHandler {
                     os_log("%{public}@", log: OSLog(subsystem: "org.mozilla.firefox", category: "firefoxnotificationservice"), type: OSLogType.debug, "Multiple events arrived, only handling the first event.")
                 }
                 switch firstEvent {
-                case .incomingDeviceCommand(let deviceCommand):
+                case .commandReceived(let deviceCommand):
                     switch deviceCommand {
                     case .tabReceived(_, let tabData):
-                        let title = tabData.last?.title ?? ""
-                        let url = tabData.last?.url ?? ""
+                        let title = tabData.entries.last?.title ?? ""
+                        let url = tabData.entries.last?.url ?? ""
                         let message = PushMessage.commandReceived(tab: ["title": title, "url": url])
+                        if let json = try? accountManager.gatherTelemetry() {
+                            let events = FxATelemetry.parseTelemetry(fromJSONString: json)
+                            events.forEach { $0.record(intoPrefs: self.profile.prefs) }
+                        }
                         deferred.fill(Maybe(success: message))
                     }
                 case .deviceConnected(let deviceName):
@@ -119,6 +124,9 @@ extension FxAPushMessageHandler {
 
                         deferred.fill(Maybe(success: message))
                     }
+                default:
+                    // There are other events, but we ignore them at this level.
+                    do {}
                 }
             }
         }

@@ -33,6 +33,12 @@ class WeakTabManagerDelegate {
     }
 }
 
+extension TabManager: TabEventHandler {
+    func tab(_ tab: Tab, didLoadFavicon favicon: Favicon?, with: Data?) {
+        store.preserveTabs(tabs, selectedTab: selectedTab)
+    }
+}
+
 // TabManager must extend NSObjectProtocol in order to implement WKNavigationDelegate
 class TabManager: NSObject {
     fileprivate var delegates = [WeakTabManagerDelegate]()
@@ -65,6 +71,7 @@ class TabManager: NSObject {
 
     public static func makeWebViewConfig(isPrivate: Bool, prefs: Prefs?) -> WKWebViewConfiguration {
         let configuration = WKWebViewConfiguration()
+        configuration.dataDetectorTypes = [.phoneNumber]
         configuration.processPool = WKProcessPool()
         let blockPopups = prefs?.boolForKey(PrefsKeys.KeyBlockPopups) ?? true
         configuration.preferences.javaScriptCanOpenWindowsAutomatically = !blockPopups
@@ -112,6 +119,8 @@ class TabManager: NSObject {
 
         self.store = TabManagerStore(imageStore: imageStore)
         super.init()
+
+        register(self, forTabEvents: .didLoadFavicon)
 
         addNavigationDelegate(self)
 
@@ -194,7 +203,6 @@ class TabManager: NSObject {
         } else {
             _selectedIndex = -1
         }
-        assert(_selectedIndex > -1, "Tab expected to be in `tabs`")
 
         store.preserveTabs(tabs, selectedTab: selectedTab)
 
@@ -210,6 +218,11 @@ class TabManager: NSObject {
             TabEvent.post(.didGainFocus, for: tab)
             tab.applyTheme()
         }
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .tab)
+    }
+    
+    func preserveTabs() {
+        store.preserveTabs(tabs, selectedTab: selectedTab)
     }
 
     func shouldClearPrivateTabs() -> Bool {
@@ -341,6 +354,7 @@ class TabManager: NSObject {
             tab.loadRequest(request)
         } else if !isPopup {
             let newTabChoice = NewTabAccessors.getNewTabPage(profile.prefs)
+            tab.newTabPageType = newTabChoice
             switch newTabChoice {
             case .homePage:
                 // We definitely have a homepage if we've got here
@@ -398,8 +412,13 @@ class TabManager: NSObject {
         removeTab(tab, flushToDisk: true, notify: true)
         updateIndexAfterRemovalOf(tab, deletedIndex: index)
         hideNetworkActivitySpinner()
-        
-        UnifiedTelemetry.recordEvent(category: .action, method: .close, object: .tab)
+
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .close,
+            object: .tab,
+            value: tab.isPrivate ? .privateTab : .normalTab
+        )
     }
 
     private func updateIndexAfterRemovalOf(_ tab: Tab, deletedIndex: Int) {
@@ -440,11 +459,11 @@ class TabManager: NSObject {
         tabs.remove(at: removalIndex)
         assert(count == prevCount - 1, "Make sure the tab count was actually removed")
 
-        if (tab.isPrivate && privateTabs.count < 1) {
+        if tab.isPrivate && privateTabs.count < 1 {
             privateConfiguration = TabManager.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
         }
 
-        tab.closeAndRemovePrivateBrowsingData()
+        tab.close()
 
         if notify {
             delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: store.isRestoringTabs) }
@@ -475,13 +494,23 @@ class TabManager: NSObject {
         if selectedTab?.isPrivate ?? false {
             _selectedIndex = -1
         }
-        privateTabs.forEach { $0.closeAndRemovePrivateBrowsingData() }
+        privateTabs.forEach { $0.close() }
         tabs = normalTabs
 
         privateConfiguration = TabManager.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
     }
 
-    func removeTabsWithUndoToast(_ tabs: [Tab]) {
+    func removeTabsAndAddNormalTab(_ tabs: [Tab]) {
+        for tab in tabs {
+            self.removeTab(tab, flushToDisk: false, notify: true)
+        }
+        if normalTabs.isEmpty {
+            selectTab(addTab())
+        }
+        storeChanges()
+    }
+    
+    func removeTabsWithToast(_ tabs: [Tab]) {
         recentlyClosedForUndo = normalTabs.compactMap {
             SavedTab(tab: $0, isSelected: selectedTab === $0)
         }
@@ -552,6 +581,14 @@ class TabManager: NSObject {
         assert(Thread.isMainThread)
         return tabs.filter({ $0.webView?.url == url }).first
     }
+    
+    func getTabForUUID(uuid: String) -> Tab? {
+        assert(Thread.isMainThread)
+        let filterdTabs = tabs.filter { tab -> Bool in
+            tab.tabUUID == uuid
+        }
+        return filterdTabs.first
+    }
 
     @objc func prefsDidChange() {
         DispatchQueue.main.async {
@@ -593,7 +630,7 @@ extension TabManager {
         return store.hasTabsToRestoreAtStartup
     }
 
-    func restoreTabs() {
+    func restoreTabs(_ forced: Bool = false) {
         defer {
             // Always make sure there is a single normal tab.
             if normalTabs.isEmpty {
@@ -603,7 +640,8 @@ extension TabManager {
                 }
             }
         }
-        guard count == 0, !AppConstants.IsRunningTest, !DebugSettingsBundleOptions.skipSessionRestore, store.hasTabsToRestoreAtStartup else {
+        
+        guard forced || count == 0, !AppConstants.IsRunningTest, !DebugSettingsBundleOptions.skipSessionRestore, store.hasTabsToRestoreAtStartup else {
             return
         }
 
@@ -613,11 +651,11 @@ extension TabManager {
             tabToSelect = addTab(isPrivate: true)
         }
 
+        selectTab(tabToSelect)
+        
         for delegate in self.delegates {
             delegate.get()?.tabManagerDidRestoreTabs(self)
         }
-
-        selectTab(tabToSelect)
     }
 }
 
@@ -638,7 +676,7 @@ extension TabManager: WKNavigationDelegate {
         guard let tab = self[webView] else { return }
 
         if let tpHelper = tab.contentBlocker, !tpHelper.isEnabled {
-            webView.evaluateJavaScript("window.__firefox__.TrackingProtectionStats.setEnabled(false, \(UserScriptManager.securityToken))")
+            webView.evaluateJavascriptInDefaultContentWorld("window.__firefox__.TrackingProtectionStats.setEnabled(false, \(UserScriptManager.appIdToken))")
         }
     }
 

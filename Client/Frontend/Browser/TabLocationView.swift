@@ -13,6 +13,7 @@ protocol TabLocationViewDelegate {
     func tabLocationViewDidTapLocation(_ tabLocationView: TabLocationView)
     func tabLocationViewDidLongPressLocation(_ tabLocationView: TabLocationView)
     func tabLocationViewDidTapReaderMode(_ tabLocationView: TabLocationView)
+    func tabLocationViewDidTapReload(_ tabLocationView: TabLocationView)
     func tabLocationViewDidTapShield(_ tabLocationView: TabLocationView)
     func tabLocationViewDidTapPageOptions(_ tabLocationView: TabLocationView, from button: UIButton)
     func tabLocationViewDidLongPressPageOptions(_ tabLocationVIew: TabLocationView)
@@ -20,6 +21,7 @@ protocol TabLocationViewDelegate {
 
     /// - returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions for even starting handling long-press were not satisfied
     @discardableResult func tabLocationViewDidLongPressReaderMode(_ tabLocationView: TabLocationView) -> Bool
+    func tabLocationViewDidLongPressReload(_ tabLocationView: TabLocationView)
     func tabLocationViewLocationAccessibilityActions(_ tabLocationView: TabLocationView) -> [UIAccessibilityCustomAction]?
 }
 
@@ -47,6 +49,11 @@ class TabLocationView: UIView {
     }
 
     func showLockIcon(forSecureContent isSecure: Bool) {
+        if url?.absoluteString == "about:blank" {
+            // Matching the desktop behaviour, we don't mark these pages as secure.
+            lockImageView.isHidden = true
+            return
+        }
         lockImageView.isHidden = !isSecure
     }
 
@@ -86,8 +93,7 @@ class TabLocationView: UIView {
     }
 
     lazy var placeholder: NSAttributedString = {
-        let placeholderText = NSLocalizedString("Search or enter address", comment: "The text shown in the URL bar on about:home")
-        return NSAttributedString(string: placeholderText, attributes: [NSAttributedString.Key.foregroundColor: UIColor.Photon.Grey50])
+        return NSAttributedString(string: .TabLocationURLPlaceholder, attributes: [NSAttributedString.Key.foregroundColor: UIColor.Photon.Grey50])
     }()
 
     lazy var urlTextField: UITextField = {
@@ -101,6 +107,8 @@ class TabLocationView: UIView {
         urlTextField.font = UIConstants.DefaultChromeFont
         urlTextField.backgroundColor = .clear
         urlTextField.accessibilityLabel = "Address Bar"
+        urlTextField.font = UIFont.preferredFont(forTextStyle: .body)
+        urlTextField.adjustsFontForContentSizeCategory = true
 
         // Remove the default drop interaction from the URL text field so that our
         // custom drop interaction on the BVC can accept dropped URLs.
@@ -115,7 +123,7 @@ class TabLocationView: UIView {
         let lockImageView = UIImageView(image: UIImage.templateImageNamed("lock_verified"))
         lockImageView.isAccessibilityElement = true
         lockImageView.contentMode = .center
-        lockImageView.accessibilityLabel = NSLocalizedString("Secure connection", comment: "Accessibility label for the lock icon, which is only present if the connection is secure")
+        lockImageView.accessibilityLabel = .TabLocationLockIconAccessibilityLabel
         return lockImageView
     }()
 
@@ -152,12 +160,25 @@ class TabLocationView: UIView {
         readerModeButton.isHidden = true
         readerModeButton.imageView?.contentMode = .scaleAspectFit
         readerModeButton.contentHorizontalAlignment = .left
-        readerModeButton.accessibilityLabel = NSLocalizedString("Reader View", comment: "Accessibility label for the Reader View button")
+        readerModeButton.accessibilityLabel = .TabLocationReaderModeAccessibilityLabel
         readerModeButton.accessibilityIdentifier = "TabLocationView.readerModeButton"
-        readerModeButton.accessibilityCustomActions = [UIAccessibilityCustomAction(name: NSLocalizedString("Add to Reading List", comment: "Accessibility label for action adding current page to reading list."), target: self, selector: #selector(readerModeCustomAction))]
+        readerModeButton.accessibilityCustomActions = [UIAccessibilityCustomAction(name: .TabLocationReaderModeAddToReadingListAccessibilityLabel, target: self, selector: #selector(readerModeCustomAction))]
         return readerModeButton
     }()
 
+    lazy var reloadButton: StatefulButton = {
+        let reloadButton = StatefulButton(frame: .zero, state: .disabled)
+        reloadButton.addTarget(self, action: #selector(tapReloadButton), for: .touchUpInside)
+        reloadButton.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(longPressReloadButton)))
+        reloadButton.tintColor = UIColor.Photon.Grey50
+        reloadButton.imageView?.contentMode = .scaleAspectFit
+        reloadButton.contentHorizontalAlignment = .left
+        reloadButton.accessibilityLabel = .TabLocationReloadAccessibilityLabel
+        reloadButton.accessibilityIdentifier = "TabLocationView.reloadButton"
+        reloadButton.isAccessibilityElement = true
+        return reloadButton
+    }()
+    
     lazy var pageOptionsButton: ToolbarButton = {
         let pageOptionsButton = ToolbarButton(frame: .zero)
         pageOptionsButton.setImage(UIImage.templateImageNamed("menu-More-Options"), for: .normal)
@@ -165,7 +186,7 @@ class TabLocationView: UIView {
         pageOptionsButton.isAccessibilityElement = true
         pageOptionsButton.isHidden = true
         pageOptionsButton.imageView?.contentMode = .left
-        pageOptionsButton.accessibilityLabel = NSLocalizedString("Page Options Menu", comment: "Accessibility label for the Page Options menu button")
+        pageOptionsButton.accessibilityLabel = .TabLocationPageOptionsAccessibilityLabel
         pageOptionsButton.accessibilityIdentifier = "TabLocationView.pageOptionsButton"
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressPageOptionsButton))
         pageOptionsButton.addGestureRecognizer(longPressGesture)
@@ -207,7 +228,7 @@ class TabLocationView: UIView {
 
         pageOptionsButton.separatorLine = separatorLineForPageOptions
 
-        let subviews = [trackingProtectionButton, separatorLineForTP, space10px, lockImageView, urlTextField, readerModeButton, separatorLineForPageOptions, pageOptionsButton]
+        let subviews = [trackingProtectionButton, separatorLineForTP, space10px, lockImageView, urlTextField, readerModeButton, reloadButton, separatorLineForPageOptions, pageOptionsButton]
         contentView = UIStackView(arrangedSubviews: subviews)
         contentView.distribution = .fill
         contentView.alignment = .center
@@ -241,6 +262,10 @@ class TabLocationView: UIView {
             make.width.equalTo(TabLocationViewUX.ReaderModeButtonWidth)
             make.height.equalTo(TabLocationViewUX.ButtonSize)
         }
+        reloadButton.snp.makeConstraints { make in
+            make.width.equalTo(TabLocationViewUX.ReaderModeButtonWidth)
+            make.height.equalTo(TabLocationViewUX.ButtonSize)
+        }
 
         // Setup UIDragInteraction to handle dragging the location
         // bar for dropping its URL into other apps.
@@ -257,7 +282,7 @@ class TabLocationView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private lazy var _accessibilityElements = [urlTextField, readerModeButton, pageOptionsButton, trackingProtectionButton]
+    private lazy var _accessibilityElements = [urlTextField, readerModeButton, reloadButton, pageOptionsButton, trackingProtectionButton]
 
     override var accessibilityElements: [Any]? {
         get {
@@ -278,9 +303,19 @@ class TabLocationView: UIView {
         delegate?.tabLocationViewDidTapReaderMode(self)
     }
 
+    @objc func tapReloadButton() {
+        delegate?.tabLocationViewDidTapReload(self)
+    }
+
     @objc func longPressReaderModeButton(_ recognizer: UILongPressGestureRecognizer) {
         if recognizer.state == .began {
             delegate?.tabLocationViewDidLongPressReaderMode(self)
+        }
+    }
+
+    @objc func longPressReloadButton(_ recognizer: UILongPressGestureRecognizer) {
+        if recognizer.state == .began {
+            delegate?.tabLocationViewDidLongPressReload(self)
         }
     }
 
@@ -343,7 +378,7 @@ extension TabLocationView: UIDragInteractionDelegate {
             return []
         }
 
-        UnifiedTelemetry.recordEvent(category: .action, method: .drag, object: .locationBar)
+        TelemetryWrapper.recordEvent(category: .action, method: .drag, object: .locationBar)
 
         let dragItem = UIDragItem(itemProvider: itemProvider)
         return [dragItem]
@@ -365,7 +400,6 @@ extension TabLocationView: AccessibilityActionsSource {
 
 extension TabLocationView: Themeable {
     func applyTheme() {
-        backgroundColor = UIColor.theme.textField.background
         urlTextField.textColor = UIColor.theme.textField.textAndTint
         readerModeButton.selectedTintColor = UIColor.theme.urlbar.readerModeButtonSelected
         readerModeButton.unselectedTintColor = UIColor.theme.urlbar.readerModeButtonUnselected
@@ -408,11 +442,46 @@ extension TabLocationView: TabEventHandler {
 
     func tabDidGainFocus(_ tab: Tab) {
         updateBlockerStatus(forTab: tab)
-        menuBadge.show(tab.changedUserAgent)
+    }
+}
+
+enum ReloadButtonState: String {
+    case reload = "Reload"
+    case stop = "Stop"
+    case disabled = "Disabled"
+}
+
+class StatefulButton: UIButton {
+    convenience init(frame: CGRect, state: ReloadButtonState) {
+        self.init(frame: frame)
+        reloadButtonState = state
     }
 
-    func tabDidToggleDesktopMode(_ tab: Tab) {
-        menuBadge.show(tab.changedUserAgent)
+    required override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    var _reloadButtonState = ReloadButtonState.disabled
+    
+    var reloadButtonState: ReloadButtonState {
+        get {
+            return _reloadButtonState
+        }
+        set (newReloadButtonState) {
+            _reloadButtonState = newReloadButtonState
+            switch _reloadButtonState {
+            case .reload:
+                setImage(UIImage.templateImageNamed("nav-refresh"), for: .normal)
+            case .stop:
+                setImage(UIImage.templateImageNamed("nav-stop"), for: .normal)
+            case .disabled:
+                self.isHidden = true
+            }
+        }
     }
 }
 

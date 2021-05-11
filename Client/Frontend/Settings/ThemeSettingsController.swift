@@ -133,7 +133,7 @@ class ThemeSettingsController: ThemedTableViewController {
             } else if ThemeManager.instance.automaticBrightnessIsOn {
                 ThemeManager.instance.updateCurrentThemeBasedOnScreenBrightness()
             }
-            UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .setting, value: .systemThemeSwitch, extras: ["to": control.isOn])
+            TelemetryWrapper.recordEvent(category: .action, method: .press, object: .setting, value: .systemThemeSwitch, extras: ["to": control.isOn])
         }
         // Switch animation must begin prior to scheduling table view update animation (or the switch will be auto-synchronized to the slower tableview animation and makes the switch behaviour feel slow and non-standard).
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -267,11 +267,11 @@ class ThemeSettingsController: ThemedTableViewController {
             ThemeManager.instance.automaticBrightnessIsOn = indexPath.row != 0
             tableView.reloadSections(IndexSet(integer: Section.lightDarkPicker.rawValue), with: .automatic)
             tableView.reloadSections(IndexSet(integer: Section.automaticBrightness.rawValue), with: .none)
-            UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .setting, value: indexPath.row == 0 ? .themeModeManually : .themeModeAutomatically)
+            TelemetryWrapper.recordEvent(category: .action, method: .press, object: .setting, value: indexPath.row == 0 ? .themeModeManually : .themeModeAutomatically)
         } else if indexPath.section == Section.lightDarkPicker.rawValue {
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
             ThemeManager.instance.current = indexPath.row == 0 ? NormalTheme() : DarkTheme()
-            UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .setting, value: indexPath.row == 0 ? .themeLight : .themeDark)
+            TelemetryWrapper.recordEvent(category: .action, method: .press, object: .setting, value: indexPath.row == 0 ? .themeLight : .themeDark)
         }
         applyTheme()
     }

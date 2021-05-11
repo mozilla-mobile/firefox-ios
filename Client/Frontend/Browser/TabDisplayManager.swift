@@ -123,7 +123,7 @@ class TabDisplayManager: NSObject {
         isPrivate = isOn
         UserDefaults.standard.set(isPrivate, forKey: "wasLastSessionPrivate")
 
-        UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .privateBrowsingButton, extras: ["is-private": isOn.description] )
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .privateBrowsingButton, extras: ["is-private": isOn.description] )
 
         searchedTabs = nil
         refreshStore()
@@ -207,10 +207,10 @@ class TabDisplayManager: NSObject {
         tabManager.removeTabAndUpdateSelectedIndex(tab)
     }
 
-    private func recordEventAndBreadcrumb(object: UnifiedTelemetry.EventObject, method: UnifiedTelemetry.EventMethod) {
-        let isTabTray = tabDisplayer as? TabTrayControllerV1 != nil
-        let eventValue = isTabTray ? UnifiedTelemetry.EventValue.tabTray : UnifiedTelemetry.EventValue.topTabs
-        UnifiedTelemetry.recordEvent(category: .action, method: method, object: object, value: eventValue)
+    private func recordEventAndBreadcrumb(object: TelemetryWrapper.EventObject, method: TelemetryWrapper.EventMethod) {
+        let isTabTray = tabDisplayer as? GridTabViewController != nil
+        let eventValue = isTabTray ? TelemetryWrapper.EventValue.tabTray : TelemetryWrapper.EventValue.topTabs
+        TelemetryWrapper.recordEvent(category: .action, method: method, object: object, value: eventValue)
     }
 
     // When using 'Close All', hide all the tabs so they don't animate their deletion individually
@@ -247,12 +247,6 @@ extension TabDisplayManager: UICollectionViewDataSource {
             return cell
         }
     }
-
-    @objc func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "HeaderFooter", for: indexPath) as? TopTabsHeaderFooter else { return UICollectionReusableView() }
-        view.arrangeLine(kind)
-        return view
-    }
 }
 
 extension TabDisplayManager: TabSelectionDelegate {
@@ -261,7 +255,7 @@ extension TabDisplayManager: TabSelectionDelegate {
         if tabsToDisplay.firstIndex(of: tab) != nil {
             tabManager.selectTab(tab)
         }
-        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .tab)
+        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .tab)
     }
 }
 
@@ -324,6 +318,24 @@ extension TabDisplayManager: UICollectionViewDragDelegate {
 
 @available(iOS 11.0, *)
 extension TabDisplayManager: UICollectionViewDropDelegate {
+    private func dragPreviewParameters(_ collectionView: UICollectionView, dragPreviewParametersForItemAt indexPath: IndexPath) -> UIDragPreviewParameters? {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? TopTabCell else { return nil }
+        let previewParams = UIDragPreviewParameters()
+
+        let path = UIBezierPath(roundedRect: cell.selectedBackground.frame, cornerRadius: TopTabsUX.TabCornerRadius)
+        previewParams.visiblePath = path
+
+        return previewParams
+    }
+
+    func collectionView(_ collectionView: UICollectionView, dragPreviewParametersForItemAt indexPath: IndexPath) -> UIDragPreviewParameters? {
+        return dragPreviewParameters(collectionView, dragPreviewParametersForItemAt: indexPath)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, dropPreviewParametersForItemAt indexPath: IndexPath) -> UIDragPreviewParameters? {
+        return dragPreviewParameters(collectionView, dragPreviewParametersForItemAt: indexPath)
+    }
+
     func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
         guard collectionView.hasActiveDrag, let destinationIndexPath = coordinator.destinationIndexPath, let dragItem = coordinator.items.first?.dragItem, let tab = dragItem.localObject as? Tab, let sourceIndex = dataStore.index(of: tab) else {
             return

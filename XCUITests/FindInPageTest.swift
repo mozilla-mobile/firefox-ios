@@ -21,8 +21,9 @@ class FindInPageTests: BaseTestCase {
         // Workaround until FxSGraph is fixed to allow the previos way with goto
         navigator.nowAt(BrowserTab)
 
-        waitForExistence(app/*@START_MENU_TOKEN@*/.buttons["TabLocationView.pageOptionsButton"]/*[[".buttons[\"Page Options Menu\"]",".buttons[\"TabLocationView.pageOptionsButton\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/, timeout: 15)
-        app/*@START_MENU_TOKEN@*/.buttons["TabLocationView.pageOptionsButton"]/*[[".buttons[\"Page Options Menu\"]",".buttons[\"TabLocationView.pageOptionsButton\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        waitForNoExistence(app.staticTexts["Fennec pasted from XCUITests-Runner"])
+        waitForExistence(app.buttons["TabLocationView.pageOptionsButton"], timeout: 15)
+        app.buttons["TabLocationView.pageOptionsButton"].tap()
         waitForExistence(app.tables["Context Menu"].cells["menu-FindInPage"], timeout: 10)
         app.tables["Context Menu"].cells["menu-FindInPage"].tap()
 
@@ -138,8 +139,8 @@ class FindInPageTests: BaseTestCase {
         // Going to tab tray and back to the website hides the search field.
         navigator.goto(TabTray)
 
-        waitForExistence(app.collectionViews.cells["The Book of Mozilla"])
-        app.collectionViews.cells["The Book of Mozilla"].tap()
+        waitForExistence(app.cells.staticTexts["The Book of Mozilla"])
+        app.cells.staticTexts["The Book of Mozilla"].tap()
         XCTAssertFalse(app.textFields[""].exists)
         XCTAssertFalse(app.buttons["FindInPage.find_next"].exists)
         XCTAssertFalse(app.buttons["FindInPage.find_previous"].exists)

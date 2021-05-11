@@ -7,7 +7,7 @@ import Shared
 import Account
 import SwiftKeychainWrapper
 import LocalAuthentication
-import Glean
+import MozillaAppServices
 
 // This file contains all of the settings available in the main settings screen of the app.
 
@@ -48,7 +48,7 @@ class ConnectSetting: WithoutAccountSetting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         let viewController = FirefoxAccountSignInViewController(profile: profile, parentType: .settings, deepLinkParams: nil)
-        UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
+        TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
         navigationController?.pushViewController(viewController, animated: true)
     }
 
@@ -64,9 +64,9 @@ class ConnectSetting: WithoutAccountSetting {
 class SyncNowSetting: WithAccountSetting {
     let imageView = UIImageView(frame: CGRect(width: 30, height: 30))
     let syncIconWrapper = UIImage.createWithColor(CGSize(width: 30, height: 30), color: UIColor.clear)
-    let syncBlueIcon = UIImage(named: "FxA-Sync-Blue")?.createScaled(CGSize(width: 20, height: 20))
+    let syncBlueIcon = UIImage(named: "FxA-Sync-Blue")
     let syncIcon: UIImage? = {
-        let image = UIImage(named: "FxA-Sync")?.createScaled(CGSize(width: 20, height: 20))
+        let image = UIImage(named: "FxA-Sync")
         return ThemeManager.instance.currentName == .dark ? image?.tinted(withColor: .white) : image
     }()
 
@@ -339,7 +339,7 @@ class AccountStatusSetting: WithAccountSetting {
     override func onClick(_ navigationController: UINavigationController?) {
         guard !profile.rustFxA.accountNeedsReauth() else {
             let vc = FirefoxAccountSignInViewController(profile: profile, parentType: .settings, deepLinkParams: nil)
-            UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
+            TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
             navigationController?.pushViewController(vc, animated: true)
             return
         }
@@ -543,24 +543,6 @@ class ShowEtpCoverSheet: HiddenSetting {
     }
 }
 
-class ToggleOnboarding: HiddenSetting {
-    override var title: NSAttributedString? {
-        return NSAttributedString(string: "Debug: Toggle onboarding type", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        let onboardingResearch = OnboardingUserResearch()
-        let type = onboardingResearch.onboardingScreenType
-        var newOnboardingType: OnboardingScreenType = .versionV2
-        if type == nil {
-            newOnboardingType = .versionV1
-        } else if type == .versionV2 {
-            newOnboardingType = .versionV1
-        }
-        OnboardingUserResearch().onboardingScreenType = newOnboardingType
-    }
-}
-
 class LeanplumStatus: HiddenSetting {
     let lplumSetupType = LeanPlumClient.shared.lpSetupType()
     override var title: NSAttributedString? {
@@ -583,15 +565,39 @@ class LeanplumStatus: HiddenSetting {
     }
 }
 
-class ClearOnboardingABVariables: HiddenSetting {
+///Note: We have disabed it until we find best way to test newTabToolbarButton
+//class ToggleNewTabToolbarButton: HiddenSetting {
+//    override var title: NSAttributedString? {
+//        return NSAttributedString(string: "Debug: Toggle new tab toolbar button", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+//    }
+//
+//    override func onClick(_ navigationController: UINavigationController?) {
+//        let currentValue = settings.profile.prefs.boolForKey(PrefsKeys.ShowNewTabToolbarButton) ?? false
+//        settings.profile.prefs.setBool(!currentValue, forKey: PrefsKeys.ShowNewTabToolbarButton)
+//    }
+//}
+
+class ToggleChronTabs: HiddenSetting {
+    var currentChronStatus: Bool {
+        return settings.profile.prefs.boolForKey(PrefsKeys.ChronTabsPrefKey) ?? false
+    }
+
     override var title: NSAttributedString? {
         // If we are running an A/B test this will also fetch the A/B test variables from leanplum. Re-open app to see the effect.
-        return NSAttributedString(string: "Debug: Clear onboarding AB variables", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        let toNewStatus = currentChronStatus ? "OFF" : "ON"
+        return NSAttributedString(string: "Debug: Toggle chronological tabs \(toNewStatus)",
+                                  attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        settings.profile.prefs.removeObjectForKey(PrefsKeys.IntroSeen)
-        OnboardingUserResearch().onboardingScreenType = nil
+        settings.profile.prefs.setBool(!currentChronStatus, forKey: PrefsKeys.ChronTabsPrefKey)
+        updateCell(navigationController)
+    }
+
+    func updateCell(_ navigationController: UINavigationController?) {
+        let controller = navigationController?.topViewController
+        let tableView = (controller as? AppSettingsTableViewController)?.tableView
+        tableView?.reloadData()
     }
 }
 
@@ -607,7 +613,7 @@ class VersionSetting: Setting {
     }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: String(format: NSLocalizedString("Version %@ (%@)", comment: "Version number of Firefox shown in settings"),  VersionSetting.appVersion, VersionSetting.appBuildNumber), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: "\(AppName.longName) \(VersionSetting.appVersion) (\(VersionSetting.appBuildNumber))", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
     
     public static var appVersion: String {
@@ -658,7 +664,7 @@ class VersionSetting: Setting {
 // Opens the license page in a new tab
 class LicenseAndAcknowledgementsSetting: Setting {
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Licenses", comment: "Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: .AppSettingsLicenses, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override var url: URL? {
@@ -666,14 +672,14 @@ class LicenseAndAcknowledgementsSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        setUpAndPushSettingsContentViewController(navigationController)
+        setUpAndPushSettingsContentViewController(navigationController, self.url)
     }
 }
 
 // Opens about:rights page in the content view controller
 class YourRightsSetting: Setting {
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Your Rights", comment: "Your Rights settings section title"), attributes:
+        return NSAttributedString(string: .AppSettingsYourRights, attributes:
             [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
@@ -682,7 +688,7 @@ class YourRightsSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        setUpAndPushSettingsContentViewController(navigationController)
+        setUpAndPushSettingsContentViewController(navigationController, self.url)
     }
 }
 
@@ -694,7 +700,7 @@ class ShowIntroductionSetting: Setting {
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
-        super.init(title: NSAttributedString(string: NSLocalizedString("Show Tour", comment: "Show the on-boarding screen again from the settings"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
+        super.init(title: NSAttributedString(string: .AppSettingsShowTour, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -706,7 +712,7 @@ class ShowIntroductionSetting: Setting {
 
 class SendFeedbackSetting: Setting {
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Send Feedback", comment: "Menu item in settings used to open input.mozilla.org where people can submit feedback"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: .AppSettingsSendFeedback, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override var url: URL? {
@@ -715,7 +721,7 @@ class SendFeedbackSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        setUpAndPushSettingsContentViewController(navigationController)
+        setUpAndPushSettingsContentViewController(navigationController, self.url)
     }
 }
 
@@ -731,27 +737,55 @@ class SendAnonymousUsageDataSetting: BoolSetting {
             attributedTitleText: NSAttributedString(string: Strings.SendUsageSettingTitle),
             attributedStatusText: statusText,
             settingDidChange: {
-                AdjustIntegration.setEnabled($0)
-                LeanPlumClient.shared.set(attributes: [LPAttributeKey.telemetryOptIn: $0])
-                LeanPlumClient.shared.set(enabled: $0)
                 Glean.shared.setUploadEnabled($0)
+                Experiments.shared.resetTelemetryIdentifiers()
             }
         )
     }
+
+    override var accessibilityIdentifier: String? { return "SendAnonymousUsageData" }
 
     override var url: URL? {
         return SupportUtils.URLForTopic("adjust")
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        setUpAndPushSettingsContentViewController(navigationController)
+        setUpAndPushSettingsContentViewController(navigationController, self.url)
+    }
+}
+
+class StudiesToggleSetting: BoolSetting {
+    init(prefs: Prefs, delegate: SettingsDelegate?) {
+        let statusText = NSMutableAttributedString()
+        statusText.append(NSAttributedString(string: Strings.SettingsStudiesToggleMessage, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.headerTextLight]))
+        statusText.append(NSAttributedString(string: " "))
+        statusText.append(NSAttributedString(string: Strings.SettingsStudiesToggleLink, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.general.highlightBlue]))
+
+        super.init(
+            prefs: prefs, prefKey: AppConstants.PrefStudiesToggle, defaultValue: true,
+            attributedTitleText: NSAttributedString(string: Strings.SettingsStudiesToggleTitle),
+            attributedStatusText: statusText,
+            settingDidChange: { enabled in
+                Experiments.shared.globalUserParticipation = enabled
+            }
+        )
+    }
+
+    override var accessibilityIdentifier: String? { return "StudiesToggle" }
+
+    override var url: URL? {
+        return SupportUtils.URLForTopic("studies")
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        setUpAndPushSettingsContentViewController(navigationController, self.url)
     }
 }
 
 // Opens the SUMO page in a new tab
 class OpenSupportPageSetting: Setting {
     init(delegate: SettingsDelegate?) {
-        super.init(title: NSAttributedString(string: NSLocalizedString("Help", comment: "Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]),
+        super.init(title: NSAttributedString(string: .AppSettingsHelp, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]),
             delegate: delegate)
     }
 
@@ -778,7 +812,7 @@ class SearchSetting: Setting {
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
-        super.init(title: NSAttributedString(string: NSLocalizedString("Search", comment: "Open search section of settings"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
+        super.init(title: NSAttributedString(string: .AppSettingsSearch, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -819,7 +853,12 @@ class LoginsSetting: Setting {
         deselectRow()
         
         guard let navController = navigationController else { return }
-        LoginListViewController.create(authenticateInNavigationController: navController, profile: profile, settingsDelegate: BrowserViewController.foregroundBVC()).uponQueue(.main) { loginsVC in
+        let navigationHandler: ((_ url: URL?) -> Void) = { url in
+            guard let url = url else { return }
+            UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
+            self.delegate?.settingsOpenURLInNewTab(url)
+        }
+        LoginListViewController.create(authenticateInNavigationController: navController, profile: profile, settingsDelegate: BrowserViewController.foregroundBVC(), webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
             guard let loginsVC = loginsVC else { return }
             LeanPlumClient.shared.track(event: .openedLogins)
             navController.pushViewController(loginsVC, animated: true)
@@ -843,12 +882,12 @@ class TouchIDPasscodeSetting: Setting {
         let title: String
         if localAuthContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
             if localAuthContext.biometryType == .faceID {
-                title = AuthenticationStrings.faceIDPasscodeSetting
+                title = .AuthenticationFaceIDPasscodeSetting
             } else {
-                title = AuthenticationStrings.touchIDPasscodeSetting
+                title = .AuthenticationTouchIDPasscodeSetting
             }
         } else {
-            title = AuthenticationStrings.passcode
+            title = .AuthenticationPasscode
         }
         super.init(title: NSAttributedString(string: title, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]),
                    delegate: delegate)
@@ -907,7 +946,7 @@ class ClearPrivateDataSetting: Setting {
 
 class PrivacyPolicySetting: Setting {
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Privacy Policy", comment: "Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: .AppSettingsPrivacyPolicy, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override var url: URL? {
@@ -915,7 +954,7 @@ class PrivacyPolicySetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        setUpAndPushSettingsContentViewController(navigationController)
+        setUpAndPushSettingsContentViewController(navigationController, self.url)
     }
 }
 
@@ -952,7 +991,7 @@ class ChinaSyncServiceSetting: Setting {
     }
 
     @objc func switchValueChanged(_ toggle: UISwitch) {
-        UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .chinaServerSwitch)
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .chinaServerSwitch)
         guard profile.rustFxA.hasAccount() else {
             prefs.setObject(toggle.isOn, forKey: prefKey)
             RustFirefoxAccounts.reconfig(prefs: profile.prefs)
@@ -1059,6 +1098,21 @@ class SiriPageSetting: Setting {
     }
 }
 
+@available(iOS 14.0, *)
+class DefaultBrowserSetting: Setting {
+    override var accessibilityIdentifier: String? { return "DefaultBrowserSettings" }
+
+    init() {
+        super.init(title: NSAttributedString(string: String.DefaultBrowserMenuItem, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowActionAccessory]))
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .settingsMenuSetAsDefaultBrowser)
+        LeanPlumClient.shared.track(event: .settingsSetAsDefaultBrowser)
+        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
+    }
+}
+
 class OpenWithSetting: Setting {
     let profile: Profile
 
@@ -1147,18 +1201,3 @@ class ThemeSetting: Setting {
     }
 }
 
-class TranslationSetting: Setting {
-    let profile: Profile
-    override var accessoryView: UIImageView? { return disclosureIndicator }
-    override var style: UITableViewCell.CellStyle { return .value1 }
-    override var accessibilityIdentifier: String? { return "TranslationOption" }
-
-    init(settings: SettingsTableViewController) {
-        self.profile = settings.profile
-        super.init(title: NSAttributedString(string: Strings.SettingTranslateSnackBarTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        navigationController?.pushViewController(TranslationSettingsController(profile), animated: true)
-    }
-}

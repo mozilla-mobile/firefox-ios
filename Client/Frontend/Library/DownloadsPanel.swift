@@ -44,6 +44,8 @@ struct DownloadedFile: Equatable {
 
 class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSource, LibraryPanel, UIDocumentInteractionControllerDelegate {
     weak var libraryPanelDelegate: LibraryPanelDelegate?
+    let TwoLineImageOverlayCellIdentifier = "TwoLineImageOverlayCellIdentifier"
+    let SiteTableViewHeaderIdentifier = "SiteTableViewHeaderIdentifier"
     let profile: Profile
     var tableView = UITableView()
 
@@ -81,8 +83,8 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
 
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(TwoLineTableViewCell.self, forCellReuseIdentifier: "TwoLineTableViewCell")
-        tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: "SiteTableViewHeader")
+        tableView.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: TwoLineImageOverlayCellIdentifier)
+        tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: SiteTableViewHeaderIdentifier)
         tableView.layoutMargins = .zero
         tableView.keyboardDismissMode = .onDrag
         tableView.accessibilityIdentifier = "DownloadsTable"
@@ -280,7 +282,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     // MARK: - TableView Delegate / DataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TwoLineTableViewCell", for: indexPath) as! TwoLineTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCellIdentifier, for: indexPath) as! TwoLineImageOverlayCell
 
         return configureDownloadedFile(cell, for: indexPath)
     }
@@ -288,7 +290,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let header = view as? UITableViewHeaderFooterView {
             header.textLabel?.textColor = UIColor.theme.tableView.headerTextDark
-            header.contentView.backgroundColor = UIColor.theme.tableView.headerBackground
+            header.contentView.backgroundColor = UIColor.theme.tableView.selectedBackground //UIColor.theme.tableView.headerBackground
         }
     }
 
@@ -301,7 +303,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard groupedDownloadedFiles.numberOfItemsForSection(section) > 0 else { return nil }
 
-        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "SiteTableViewHeader") as? SiteTableViewHeader
+        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: SiteTableViewHeaderIdentifier) as? SiteTableViewHeader
 
         switch section {
         case 0:
@@ -331,9 +333,10 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 
     func configureDownloadedFile(_ cell: UITableViewCell, for indexPath: IndexPath) -> UITableViewCell {
-        if let downloadedFile = downloadedFileForIndexPath(indexPath), let cell = cell as? TwoLineTableViewCell {
-            cell.setLines(downloadedFile.filename, detailText: downloadedFile.formattedSize)
-            cell.imageView?.image = iconForFileExtension(downloadedFile.fileExtension)
+        if let downloadedFile = downloadedFileForIndexPath(indexPath), let cell = cell as? TwoLineImageOverlayCell {
+            cell.titleLabel.text = downloadedFile.filename
+            cell.descriptionLabel.text = downloadedFile.formattedSize
+            cell.leftImageView.image = iconForFileExtension(downloadedFile.fileExtension)
         }
         return cell
     }
@@ -342,7 +345,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.deselectRow(at: indexPath, animated: true)
 
         if let downloadedFile = downloadedFileForIndexPath(indexPath) {
-            UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .download, value: .downloadsPanel)
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .download, value: .downloadsPanel)
 
             if downloadedFile.mimeType == MIMEType.Calendar {
                 let dc = UIDocumentInteractionController(url: downloadedFile.path)
@@ -382,14 +385,14 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
                     self.tableView.deleteRows(at: [indexPath], with: .right)
                     self.tableView.endUpdates()
                     self.updateEmptyPanelState()
-                    UnifiedTelemetry.recordEvent(category: .action, method: .delete, object: .download, value: .downloadsPanel)
+                    TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .download, value: .downloadsPanel)
                 }
             }
         })
         let share = UITableViewRowAction(style: .normal, title: shareTitle, handler: { (action, indexPath) in
             if let downloadedFile = self.downloadedFileForIndexPath(indexPath) {
                 self.shareDownloadedFile(downloadedFile, indexPath: indexPath)
-                UnifiedTelemetry.recordEvent(category: .action, method: .share, object: .download, value: .downloadsPanel)
+                TelemetryWrapper.recordEvent(category: .action, method: .share, object: .download, value: .downloadsPanel)
             }
         })
         share.backgroundColor = view.tintColor
@@ -408,7 +411,7 @@ extension DownloadsPanel: Themeable {
         emptyStateOverlayView = createEmptyStateOverlayView()
         updateEmptyPanelState()
 
-        tableView.backgroundColor = UIColor.theme.tableView.rowBackground
+        tableView.backgroundColor =  UIColor.theme.homePanel.panelBackground
         tableView.separatorColor = UIColor.theme.tableView.separator
 
         reloadData()

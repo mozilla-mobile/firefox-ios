@@ -8,8 +8,6 @@ import Storage
 import SDWebImage
 
 class FaviconHandler {
-    static let MaximumFaviconSize = 1 * 1024 * 1024 // 1 MiB file size limit
-
     private let backgroundQueue = OperationQueue()
 
     init() {
@@ -30,7 +28,7 @@ class FaviconHandler {
         var fetch: SDWebImageOperation?
 
         let onProgress: SDWebImageDownloaderProgressBlock = { (receivedSize, expectedSize, _) -> Void in
-            if receivedSize > FaviconHandler.MaximumFaviconSize || expectedSize > FaviconHandler.MaximumFaviconSize {
+            if receivedSize > FaviconFetcher.MaximumFaviconSize || expectedSize > FaviconFetcher.MaximumFaviconSize {
                 fetch?.cancel()
             }
         }
@@ -106,11 +104,5 @@ extension FaviconHandler: TabEventHandler {
     }
     func tabMetadataNotAvailable(_ tab: Tab) {
         tab.favicons.removeAll(keepingCapacity: false)
-    }
-}
-
-class FaviconError: MaybeErrorType {
-    internal var description: String {
-        return "No Image Loaded"
     }
 }

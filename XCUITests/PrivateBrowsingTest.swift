@@ -44,12 +44,14 @@ class PrivateBrowsingTest: BaseTestCase {
 
     func testTabCountShowsOnlyNormalOrPrivateTabCount() {
         // Open two tabs in normal browsing and check the number of tabs open
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.openNewURL(urlString: url2)
         waitUntilPageLoad()
         waitForTabsButton()
         navigator.goto(TabTray)
 
-        waitForExistence(app.collectionViews.cells[url2Label])
+        waitForExistence(app.cells.staticTexts[url2Label])
         let numTabs = userState.numTabs
         XCTAssertEqual(numTabs, 2, "The number of regular tabs is not correct")
 
@@ -64,21 +66,23 @@ class PrivateBrowsingTest: BaseTestCase {
         waitForTabsButton()
         navigator.goto(TabTray)
         print(app.debugDescription)
-        waitForExistence(app.collectionViews.cells[url1And3Label])
+        waitForExistence(app.cells.staticTexts[url1And3Label])
         let numPrivTabs = userState.numTabs
-        XCTAssertEqual(numPrivTabs, 1, "The number of private tabs is not correct")
+        XCTAssertEqual(numPrivTabs, 2, "The number of private tabs is not correct")
 
         // Go back to regular mode and check the total number of tabs
-        navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
 
-        waitForExistence(app.collectionViews.cells[url2Label])
-        waitForNoExistence(app.collectionViews.cells[url1And3Label])
+        waitForExistence(app.cells.staticTexts[url2Label])
+        waitForNoExistence(app.cells.staticTexts[url1And3Label])
         let numRegularTabs = userState.numTabs
         XCTAssertEqual(numRegularTabs, 2, "The number of regular tabs is not correct")
     }
 
     func testClosePrivateTabsOptionClosesPrivateTabs() {
         // Check that Close Private Tabs when closing the Private Browsing Button is off by default
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
         navigator.goto(SettingsScreen)
         let settingsTableView = app.tables["AppSettingsTableViewController.tableView"]
@@ -96,15 +100,16 @@ class PrivateBrowsingTest: BaseTestCase {
         waitForTabsButton()
 
         // Go back to regular browser
-        navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
 
         // Go back to private browsing and check that the tab has not been closed
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        waitForExistence(app.collectionViews.cells[url2Label], timeout: 5)
+        waitForExistence(app.cells.staticTexts[url2Label], timeout: 5)
         checkOpenTabsBeforeClosingPrivateMode()
 
         // Now the enable the Close Private Tabs when closing the Private Browsing Button
-        app.collectionViews.cells[url2Label].tap()
+        app.cells.staticTexts[url2Label].tap()
+
         waitForTabsButton()
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
         navigator.nowAt(BrowserTab)
@@ -114,30 +119,11 @@ class PrivateBrowsingTest: BaseTestCase {
         waitForTabsButton()
 
         // Go back to regular browsing and check that the private tab has been closed and that the initial Private Browsing message appears when going back to Private Browsing
-        navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
 
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
 
-        waitForNoExistence(app.collectionViews.cells[url2Label])
-        checkOpenTabsAfterClosingPrivateMode()
-    }
-
-    func testClosePrivateTabsOptionClosesPrivateTabsDirectlyFromTabTray() {
-        // See scenario described in bug 1434545 for more info about this scenario
-        enableClosePrivateBrowsingOptionWhenLeaving()
-        navigator.openURL(url3)
-        waitUntilPageLoad()
-        app.webViews.links.staticTexts["More information..."].press(forDuration: 3)
-        app.buttons["Open in New Private Tab"].tap()
-        waitUntilPageLoad()
-        waitForTabsButton()
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-
-        // Check there is one tab
-        navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        checkOpenTabsBeforeClosingPrivateMode()
-
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        waitForNoExistence(app.cells.staticTexts[url2Label])
         checkOpenTabsAfterClosingPrivateMode()
     }
 
@@ -146,6 +132,8 @@ class PrivateBrowsingTest: BaseTestCase {
      https://bugzilla.mozilla.org/show_bug.cgi?id=1646756
      */
     func testClearIndexedDB() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         enableClosePrivateBrowsingOptionWhenLeaving()
 
         func checkIndexedDBIsCreated() {
@@ -158,7 +146,7 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         checkIndexedDBIsCreated()
 
-        navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
         checkIndexedDBIsCreated()
 
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -166,12 +154,14 @@ class PrivateBrowsingTest: BaseTestCase {
     }
 
     func testPrivateBrowserPanelView() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         // If no private tabs are open, there should be a initial screen with label Private Browsing
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
 
-        XCTAssertTrue(app.staticTexts["Private Browsing"].exists, "Private Browsing screen is not shown")
         let numPrivTabsFirstTime = userState.numTabs
-        XCTAssertEqual(numPrivTabsFirstTime, 0, "The number of tabs is not correct, there should not be any private tab yet")
+        // With the chron tab implementation there is one tab by default
+        XCTAssertEqual(numPrivTabsFirstTime, 1, "The number of tabs is not correct, there should not be any private tab yet")
 
         // If a private tab is open Private Browsing screen is not shown anymore
         navigator.goto(BrowserTab)
@@ -179,7 +169,7 @@ class PrivateBrowsingTest: BaseTestCase {
         //Wait until the page loads and go to regular browser
         waitUntilPageLoad()
         waitForTabsButton()
-        navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
 
         // Go back to private browsing
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -188,20 +178,19 @@ class PrivateBrowsingTest: BaseTestCase {
         XCTAssertFalse(app.staticTexts["Private Browsing"].exists, "Private Browsing screen is shown")
         navigator.nowAt(TabTray)
         let numPrivTabsOpen = userState.numTabs
-        XCTAssertEqual(numPrivTabsOpen, 1, "The number of tabs is not correct, there should be one private tab")
+        XCTAssertEqual(numPrivTabsOpen, 2, "The number of tabs is not correct, there should be two private tab")
     }
 }
 
 fileprivate extension BaseTestCase {
     func checkOpenTabsBeforeClosingPrivateMode() {
-        let numPrivTabs = app.collectionViews.cells.count
-        XCTAssertEqual(numPrivTabs, 1, "The number of tabs is not correct, the private tab should not have been closed")
+        let numPrivTabs = app.tables.cells.count
+        XCTAssertEqual(numPrivTabs, 2, "The number of tabs is not correct, the private tab should not have been closed")
     }
 
     func checkOpenTabsAfterClosingPrivateMode() {
         let numPrivTabsAfterClosing = userState.numTabs
-        XCTAssertEqual(numPrivTabsAfterClosing, 0, "The number of tabs is not correct, the private tab should have been closed")
-        XCTAssertTrue(app.staticTexts["Private Browsing"].exists, "Private Browsing screen is not shown")
+        XCTAssertEqual(numPrivTabsAfterClosing, 1, "The number of tabs is not correct, the private tab should have been closed")
     }
 
     func enableClosePrivateBrowsingOptionWhenLeaving() {
@@ -245,7 +234,9 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
         waitUntilPageLoad()
         // This action to enable private mode is defined on HomePanel Screen that is why we need to open a new tab and be sure we are on that screen to use the correct action
         navigator.goto(NewTabScreen)
+
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarHomePanel)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables["History List"])
         // History without counting Clear Recent History, Recently Closed

@@ -26,7 +26,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, Themeable {
 
         contentView.addSubview(titleLabel)
 
-        bordersHelper.initBorders(view: self)
+        bordersHelper.initBorders(view: self.contentView)
         setDefaultBordersValues()
 
         // A table view will initialize the header with CGSizeZero before applying the actual size. Hence, the label's constraints
@@ -54,7 +54,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, Themeable {
 
     func applyTheme() {
         titleLabel.textColor = UIColor.theme.tableView.headerTextDark
-        contentView.backgroundColor = UIColor.theme.tableView.headerBackground
+        contentView.backgroundColor = UIColor.theme.tableView.selectedBackground
         bordersHelper.applyTheme()
     }
 
@@ -73,8 +73,9 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, Themeable {
  */
 @objcMembers
 class SiteTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, Themeable {
-    fileprivate let CellIdentifier = "CellIdentifier"
-    fileprivate let HeaderIdentifier = "HeaderIdentifier"
+    let CellIdentifier = "CellIdentifier"
+    let OneLineCellIdentifier = "OneLineCellIdentifier"
+    let HeaderIdentifier = "HeaderIdentifier"
     let profile: Profile
 
     var data: Cursor<Site> = Cursor<Site>(status: .success, msg: "No data set")
@@ -105,7 +106,8 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
 
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(SiteTableViewCell.self, forCellReuseIdentifier: CellIdentifier)
+        tableView.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: CellIdentifier)
+        tableView.register(OneLineTableViewCell.self, forCellReuseIdentifier: OneLineCellIdentifier)
         tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: HeaderIdentifier)
         tableView.layoutMargins = .zero
         tableView.keyboardDismissMode = .onDrag
@@ -196,7 +198,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.headerTextDark]
         setNeedsStatusBarAppearanceUpdate()
 
-        tableView.backgroundColor = UIColor.theme.tableView.rowBackground
+        tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
         tableView.separatorColor = UIColor.theme.tableView.separator
         if let rows = tableView.indexPathsForVisibleRows {
             tableView.reloadRows(at: rows, with: .none)
@@ -212,7 +214,7 @@ extension SiteTableViewController: UITableViewDragDelegate {
             return []
         }
 
-        UnifiedTelemetry.recordEvent(category: .action, method: .drag, object: .url, value: .homePanel)
+        TelemetryWrapper.recordEvent(category: .action, method: .drag, object: .url, value: .homePanel)
 
         let dragItem = UIDragItem(itemProvider: itemProvider)
         dragItem.localObject = site

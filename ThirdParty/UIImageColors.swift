@@ -193,7 +193,7 @@ extension UIImage {
         var sortedColors = NSMutableArray(capacity: imageColors.count)
         while let kolor = enumerator.nextObject() as? UIColor {
             let colorCount = imageColors.count(for: kolor)
-            if randomColorsThreshold < colorCount  {
+            if randomColorsThreshold < colorCount {
                 sortedColors.add(PCCountedColor(color: kolor, count: colorCount))
             }
         }

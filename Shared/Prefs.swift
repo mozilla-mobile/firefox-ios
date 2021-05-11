@@ -7,7 +7,6 @@ import Foundation
 public struct PrefsKeys {
     // When this pref is set (by the user) it overrides default behaviour which is just based on app locale.
     public static let KeyEnableChinaSyncService = "useChinaSyncService"
-
     public static let KeyLastRemoteTabSyncTime = "lastRemoteTabSyncTime"
     public static let KeyLastSyncFinishTime = "lastSyncFinishTime"
     public static let KeyDefaultHomePageURL = "KeyDefaultHomePageURL"
@@ -27,10 +26,19 @@ public struct PrefsKeys {
     public static let LoginsShowShortcutMenuItem = "showLoginsInAppMenu"
     public static let KeyInstallSession = "installSessionNumber"
     public static let KeyETPCoverSheetShowType = "etpCoverSheetShowType"
-
+    public static let KeyDefaultBrowserCardShowType = "defaultBrowserCardShowType"
+    public static let KeyDidShowDefaultBrowserOnboarding = "didShowDefaultBrowserOnboarding"
+    public static let ShowNewTabToolbarButton = "newTabToolbarButton"
     public static let ContextMenuShowLinkPreviews = "showLinkPreviews"
-
     public static let NewTabCustomUrlPrefKey = "HomePageURLPref"
+    public static let ChronTabsPrefKey = "chronTabsPrefKey"
+    public static let GoogleTopSiteAddedKey = "googleTopSiteAddedKey"
+    public static let GoogleTopSiteHideKey = "googleTopSiteHideKey"
+    public static let SessionCount = "sessionCount"
+    public static let InstallType = "InstallType"
+    public static let KeyCurrentInstallVersion = "KeyCurrentInstallVersion"
+    public static let KeySecondRun = "SecondRun"
+    
     //Activity Stream
     public static let KeyTopSitesCacheIsValid = "topSitesCacheIsValid"
     public static let KeyTopSitesCacheSize = "topSitesCacheSize"
@@ -39,7 +47,6 @@ public struct PrefsKeys {
     public static let ASRecentHighlightsVisible = "ASRecentHighlightsVisible"
     public static let ASBookmarkHighlightsVisible = "ASBookmarkHighlightsVisible"
     public static let ASLastInvalidation = "ASLastInvalidation"
-
     public static let KeyUseCustomSyncTokenServerOverride = "useCustomSyncTokenServerOverride"
     public static let KeyCustomSyncTokenServerOverride = "customSyncTokenServerOverride"
     public static let KeyUseCustomFxAContentServer = "useCustomFxAContentServer"
@@ -47,11 +54,13 @@ public struct PrefsKeys {
     public static let UseStageServer = "useStageSyncService"
     public static let KeyFxALastCommandIndex = "FxALastCommandIndex"
     public static let KeyFxAHandledCommands = "FxAHandledCommands"
-
     public static let AppExtensionTelemetryOpenUrl = "AppExtensionTelemetryOpenUrl"
     public static let AppExtensionTelemetryEventArray = "AppExtensionTelemetryEvents"
-
     public static let KeyBlockPopups = "blockPopups"
+    
+    // Widgetkit Key
+    public static let WidgetKitSimpleTabKey = "WidgetKitSimpleTabKey"
+    public static let WidgetKitSimpleTopTab = "WidgetKitSimpleTopTab"
 }
 
 public struct PrefsDefaults {

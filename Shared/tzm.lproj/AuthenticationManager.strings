@@ -1,0 +1,57 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "ⴷⴼⴼⵉⵔ 1 ⵜⵙⵔⴰⴳⵜ";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "ⴷⴼⴼⵉⵔ 1 ⵜⵓⵙⴷⵉⴷⵜ";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "ⴷⴼⴼⵉⵔ 5 ⵜⵓⵙⴷⵉⴷⵉⵏ";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "ⴷⴼⴼⵉⵔ 10 ⵜⵓⵙⴷⵉⴷⵉⵏ";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "ⴷⴼⴼⵉⵔ 15 ⵜⵓⵙⴷⵉⴷⵉⵏ";
+
+/* Label used as a setting item and title of the following screen to change the current passcode */
+"Change Passcode" = "ⵙⵏⴼⵍ ⵜⴰⵏⴳⴰⵍⵜ ⵏ ⵓⵣⵔⴰⵢ";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter a new passcode" = "ⵙⵙⴽⵛⵎ ⵜⴰⵏⴳⴰⵍⵜ ⵏ ⵓⵣⵔⴰⵢ ⵜⴰⵎⴰⵢⵏⵓⵜ";
+
+/* Text displayed above the input field when entering a new passcode */
+"Enter a passcode" = "ⵙⵙⴽⵛⵎ ⵜⴰⵏⴳⴰⵍⵜ ⵏ ⵓⵣⵔⴰⵢ";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter passcode" = "ⵙⵙⴽⵛⵎ ⵜⴰⵏⴳⴰⵍⵜ ⵏ ⵓⵣⵔⴰⵢ";
+
+/* Title of the dialog used to request the passcode */
+"Enter Passcode" = "ⵙⵙⴽⵛⵎ ⵜⴰⵏⴳⴰⵍⵜ ⵏ ⵓⵣⵔⴰⵢ";
+
+/* Label for the Face ID/Passcode item in Settings */
+"Face ID & Passcode" = "ⴰⵙⵎⴰⴳⵉ ⵏ ⵡⵓⴷⵎ ⴷ ⵜⴰⵏⴳⴰⵍⵜ ⵏ ⵓⵣⵔⴰⵢ";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "ⵖⵉⴽⴽ ⵖⵉⴽⴽ";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "ⵜⴰⵏⴳⴰⵍⵜ ⵏ ⵓⵣⵔⴰⵢ ⵓⵔ ⵢⵓⵖⴷⵏ. ⴰⵔⵎ ⴷⴰⵖ (ⵜⵓⵔⵎⵉⵜⵉⵏ ⵉⵙⵓⵍⵏ : %d).";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "ⵜⴰⵏⴳⴰⵍⵜ ⵏ ⵓⵣⵔⴰⵢ ⵓⵔ ⵢⵓⵖⵉⴷⵏ. ⴰⵔⵎ ⴷⴰⵖ.";
+
+/* Text displayed above the input field when confirming a passcode */
+"Re-enter passcode" = "ⴰⵍⵙ ⵙⴽⵛⵎ ⵜⴰⵏⴳⴰⵍⵜ ⵏ ⵓⵣⵔⴰⵢ";
+
+/* Label used as a setting item to turn off passcode */
+"Turn Passcode Off" = "ⵙⵙⵅⵙⵉ ⵜⴰⵏⴳⴰⵍⵜ ⵏ ⵓⵣⵔⴰⵢ";
+
+/* Label used as a setting item to turn on passcode */
+"Turn Passcode On" = "ⵙⵙⵔⵖ ⵜⴰⵏⴳⴰⵍⵜ ⵏ ⵓⵣⵔⴰⵢ";
+
+/* List section title for when to use Face ID */
+"Use Face ID" = "ⵙⵙⵎⵔⵙ ⴰⵙⵎⴰⴳⵉ ⵏ ⵡⵓⴷⵎ";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "ⵙⵙⵎⵔⵙ ⴰⵙⵎⴰⴳⵉ ⵏ ⵓⵙⵍⴰⵢ";
+

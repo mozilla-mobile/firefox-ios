@@ -6,7 +6,7 @@ import Foundation
 import SnapKit
 import Shared
 
-private struct TabsButtonUX {
+struct TabsButtonUX {
     static let CornerRadius: CGFloat = 2
     static let TitleFont: UIFont = UIConstants.DefaultChromeSmallFontBold
     static let BorderStrokeWidth: CGFloat = 1.5
@@ -16,7 +16,6 @@ class TabsButton: UIButton {
     var textColor = UIColor.Photon.Blue40 {
         didSet {
             countLabel.textColor = textColor
-            borderView.color = textColor
         }
     }
     var titleBackgroundColor = UIColor.Photon.Blue40 {
@@ -34,16 +33,6 @@ class TabsButton: UIButton {
 
     // Re-entrancy guard to ensure the function is complete before starting another animation.
     private var isUpdatingTabCount = false
-
-    override var isHighlighted: Bool {
-        didSet {
-            if isHighlighted {
-                borderView.color = titleBackgroundColor
-            } else {
-                borderView.color = textColor
-            }
-        }
-    }
 
     override var transform: CGAffineTransform {
         didSet {
@@ -74,11 +63,9 @@ class TabsButton: UIButton {
         return background
     }()
 
-    fileprivate lazy var borderView: InnerStrokedView = {
-        let border = InnerStrokedView()
-        border.strokeWidth = TabsButtonUX.BorderStrokeWidth
-        border.cornerRadius = TabsButtonUX.CornerRadius
-        border.isUserInteractionEnabled = false
+    fileprivate lazy var borderView: UIImageView = {
+        let border = UIImageView(image: UIImage(named: "nav-tabcounter")?.withRenderingMode(.alwaysTemplate))
+        border.tintColor = UIColor.theme.browser.tint
         return border
     }()
 
@@ -129,10 +116,6 @@ class TabsButton: UIButton {
 
         button.labelBackground.backgroundColor = labelBackground.backgroundColor
         button.labelBackground.layer.cornerRadius = labelBackground.layer.cornerRadius
-
-        button.borderView.strokeWidth = borderView.strokeWidth
-        button.borderView.color = borderView.color
-        button.borderView.cornerRadius = borderView.cornerRadius
         
         return button
     }
@@ -207,7 +190,7 @@ class TabsButton: UIButton {
                 self.insideButton.layer.opacity = 1
                 self.insideButton.layer.transform = CATransform3DIdentity
             }
-            self.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) tab toolbar")
+            self.accessibilityLabel = .TabsButtonShowTabsAccessibilityLabel
             self.countLabel.text = self.countToBe
             self.accessibilityValue = self.countToBe
             self.isUpdatingTabCount = false
@@ -227,6 +210,7 @@ class TabsButton: UIButton {
 
 extension TabsButton: Themeable {
     func applyTheme() {
+        borderView.tintColor = UIColor.theme.browser.tint
         if inTopTabs {
             textColor = UIColor.theme.topTabs.buttonTint
         } else {

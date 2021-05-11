@@ -1,0 +1,45 @@
+/* Next button on the first intro screen. */
+"Intro.Slides.Button.Next" = "Næsti";
+
+/* Sign in to Firefox account button on second intro screen. */
+"Intro.Slides.Button.SignIn" = "Innskráning";
+
+/* Sign up to Firefox account button on second intro screen. */
+"Intro.Slides.Button.SignUp" = "Skráðu þig";
+
+/* Description for the 'Mail' panel in the First Run tour. */
+"Intro.Slides.Mail.Description" = "Nota hvaða tölvupóstforrit - ekki aðeins Mail - í Firefox.";
+
+/* Title for the fourth panel 'Mail' in the First Run tour. */
+"Intro.Slides.Mail.Title" = "Þú hefur fengið póst... valkosti";
+
+/* Description for the 'Private Browsing' panel in the First Run tour. */
+"Intro.Slides.Private.Description" = "Snerta grímu íkonið til að fara í hulisvöfrun.";
+
+/* Title for the third panel 'Private Browsing' in the First Run tour. */
+"Intro.Slides.Private.Title" = "Vafra eins og enginn sjái til";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "Ertu að leita að einhverjum nýju? Kjósa aðra sjálfgefna leitarvél (eða bæta við nýja) í stillingum.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "Leitin þín, leiðin þín";
+
+/* Description for the 'Sync' panel in the First Run tour. */
+"Intro.Slides.TrailheadSync.Description" = "Skráðu þig inn með reikningi þínum til að samstilla og fá aðgang að fleiri valkostum.";
+
+/* Title for the second panel 'Sync' in the First Run tour. */
+"Intro.Slides.TrailheadSync.Title.v2" = "Samstilltu bókamerkin þín, ferli og lykilorð yfir í símann þinn.";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description.v2" = "Hraður, persónulegur og með þér í liði.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title.v2" = "Verið velkomin í Firefox";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "Fara að vafra";
+
+/* The button that opens the sign in page for sync. See http://mzl.la/1T8gxwo */
+"Turn on Sync…" = "Kveikja á samstillingu…";
+

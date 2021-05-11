@@ -26,6 +26,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
     var profile: Profile?
     var tabManager: TabManager?
 
+    var updateSearchIcon: (() -> Void)?
     fileprivate var isEditable: Bool {
         // If the default engine is a custom one, make sure we have more than one since we can't edit the default.
         // Otherwise, enable editing if we have at least one custom engine.
@@ -38,7 +39,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.title = NSLocalizedString("Search", comment: "Navigation title for search settings.")
+        navigationItem.title = .SearchSettingsTitle
 
         // To allow re-ordering the list of search engines at all times.
         tableView.isEditing = true
@@ -78,14 +79,14 @@ class SearchSettingsTableViewController: ThemedTableViewController {
             case ItemDefaultEngine:
                 engine = model.defaultEngine
                 cell.editingAccessoryType = .disclosureIndicator
-                cell.accessibilityLabel = NSLocalizedString("Default Search Engine", comment: "Accessibility label for default search engine setting.")
+                cell.accessibilityLabel = .SearchSettingsDefaultSearchEngineAccessibilityLabel
                 cell.accessibilityValue = engine.shortName
                 cell.textLabel?.text = engine.shortName
                 cell.imageView?.image = engine.image.createScaled(IconSize)
                 cell.imageView?.layer.cornerRadius = 4
                 cell.imageView?.layer.masksToBounds = true
             case ItemDefaultSuggestions:
-                cell.textLabel?.text = NSLocalizedString("Show Search Suggestions", comment: "Label for show search suggestions setting.")
+                cell.textLabel?.text = .SearchSettingsShowSearchSuggestions
                 let toggle = UISwitchThemed()
                 toggle.onTintColor = UIColor.theme.tableView.controlTint
                 toggle.addTarget(self, action: #selector(didToggleSearchSuggestions), for: .valueChanged)
@@ -214,9 +215,9 @@ class SearchSettingsTableViewController: ThemedTableViewController {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as! ThemedTableSectionHeaderFooterView
         var sectionTitle: String
         if section == SectionDefault {
-            sectionTitle = NSLocalizedString("Default Search Engine", comment: "Title for default search engine settings section.")
+            sectionTitle = .SearchSettingsDefaultSearchEngineTitle
         } else {
-            sectionTitle = NSLocalizedString("Quick-Search Engines", comment: "Title for quick-search engines settings section.")
+            sectionTitle = .SearchSettingsQuickSearchEnginesTitle
         }
         headerView.titleLabel.text = sectionTitle
 
@@ -336,8 +337,9 @@ extension SearchSettingsTableViewController: SearchEnginePickerDelegate {
     func searchEnginePicker(_ searchEnginePicker: SearchEnginePicker?, didSelectSearchEngine searchEngine: OpenSearchEngine?) {
         if let engine = searchEngine {
             model.defaultEngine = engine
+            updateSearchIcon?()
             self.tableView.reloadData()
-            UnifiedTelemetry.recordEvent(category: .action, method: .change, object: .setting, value: "defaultSearchEngine", extras: ["to": engine.engineID ?? "custom"])
+            TelemetryWrapper.recordEvent(category: .action, method: .change, object: .setting, extras: ["pref": "defaultSearchEngine", "to": engine.engineID ?? "custom"])
         }
         _ = navigationController?.popViewController(animated: true)
     }

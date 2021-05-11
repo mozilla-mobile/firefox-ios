@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 import Foundation
 
-protocol Themeable:  AnyObject {
+protocol Themeable: AnyObject {
     func applyTheme()
 }
 
@@ -57,7 +57,7 @@ class ActionMenuColor {
 class URLBarColor {
     var border: UIColor { return UIColor.Photon.Grey90A10 }
     func activeBorder(_ isPrivate: Bool) -> UIColor { 
-        return !isPrivate ? UIColor.Photon.Blue40A30 : UIColor.Defaults.MobilePrivatePurple
+        return !isPrivate ? UIColor.Photon.Blue20A40 : UIColor.Defaults.MobilePrivatePurple
     }
     var tint: UIColor { return UIColor.Photon.Blue40A30 }
 
@@ -107,7 +107,8 @@ class LoadingBarColor {
 class TabTrayColor {
     var tabTitleText: UIColor { return UIColor.black }
     var tabTitleBlur: UIBlurEffect.Style { return UIBlurEffect.Style.extraLight }
-    var background: UIColor { return UIColor.Photon.Grey80 }
+    var background: UIColor { return UIColor.Photon.LightGrey30 }
+    var screenshotBackground: UIColor { return UIColor.Photon.Grey10 }
     var cellBackground: UIColor { return defaultBackground }
     var toolbar: UIColor { return defaultBackground }
     var toolbarButtonTint: UIColor { return defaultTextAndTint }
@@ -117,12 +118,12 @@ class TabTrayColor {
     var privateModeButtonOnTint: UIColor { return UIColor.Photon.Grey10 }
     var cellCloseButton: UIColor { return UIColor.Photon.Grey50 }
     var cellTitleBackground: UIColor { return UIColor.clear }
-    var faviconTint: UIColor { return UIColor.Photon.White100 }
+    var faviconTint: UIColor { return UIColor.black }
     var searchBackground: UIColor { return UIColor.Photon.Grey30 }
 }
 
 class TopTabsColor {
-    var background: UIColor { return UIColor.Photon.Grey80 }
+    var background: UIColor { return UIColor.Photon.LightGrey20 }
     var tabBackgroundSelected: UIColor { return UIColor.Photon.Grey10 }
     var tabBackgroundUnselected: UIColor { return UIColor.Photon.Grey80 }
     var tabForegroundSelected: UIColor { return UIColor.Photon.Grey90 }
@@ -130,7 +131,7 @@ class TopTabsColor {
     func tabSelectedIndicatorBar(_ isPrivate: Bool) -> UIColor {
         return !isPrivate ? UIColor.Photon.Blue40 : UIColor.Photon.Purple60
     }
-    var buttonTint: UIColor { return UIColor.Photon.Grey40 }
+    var buttonTint: UIColor { return UIColor.Photon.Grey80 }
     var privateModeButtonOffTint: UIColor { return buttonTint }
     var privateModeButtonOnTint: UIColor { return UIColor.Photon.Grey10 }
     var closeButtonSelectedTab: UIColor { return tabBackgroundUnselected }
@@ -139,8 +140,8 @@ class TopTabsColor {
 }
 
 class TextFieldColor {
-    var background: UIColor { return UIColor.Photon.Grey25 }
-    var backgroundInOverlay: UIColor { return UIColor.Photon.Grey25 }
+    var background: UIColor { return UIColor.Photon.LightGrey20 }
+    var backgroundInOverlay: UIColor { return UIColor.Photon.LightGrey20 }
     var textAndTint: UIColor { return defaultTextAndTint }
     var separator: UIColor { return .white }
 }
@@ -149,7 +150,7 @@ class HomePanelColor {
     var toolbarBackground: UIColor { return defaultBackground }
     var toolbarHighlight: UIColor { return UIColor.Photon.Blue40 }
     var toolbarTint: UIColor { return UIColor.Photon.Grey50 }
-
+    var topSiteHeaderTitle: UIColor { return .black }
     var panelBackground: UIColor { return UIColor.Photon.White100 }
 
     var separator: UIColor { return defaultSeparator }
@@ -166,8 +167,8 @@ class HomePanelColor {
     var siteTableHeaderBorder: UIColor { return UIColor.Photon.Grey30.withAlphaComponent(0.8) }
 
     var topSiteDomain: UIColor { return UIColor.black }
-    var topSitesGradientStart:  UIColor { return UIColor.white }
-    var topSitesGradientEnd:  UIColor { return UIColor(rgb: 0xf8f8f8) }
+    var topSitesGradientStart: UIColor { return UIColor.white }
+    var topSitesGradientEnd: UIColor { return UIColor(rgb: 0xf8f8f8) }
     var topSitesBackground: UIColor { return UIColor.white }
 
     var activityStreamHeaderText: UIColor { return UIColor.Photon.Grey50 }
@@ -203,6 +204,21 @@ class GeneralColor {
     var switchToggle: UIColor { return UIColor.Photon.Grey90A40 }
 }
 
+class DefaultBrowserCardColor {
+    var backgroundColor: UIColor { return UIColor.Photon.Grey30 }
+    var textColor: UIColor { return UIColor.black }
+    var closeButtonBackground: UIColor { return UIColor.Photon.Grey20 }
+    var closeButton: UIColor { return UIColor.Photon.Grey80 }
+}
+
+class OnboardingColor {
+    var backgroundColor: UIColor { return UIColor.white }
+}
+
+class RemoteTabTrayColor {
+    var background: UIColor { return UIColor.white }
+}
+
 protocol Theme {
     var name: String { get }
     var tableView: TableViewColor { get }
@@ -218,6 +234,9 @@ protocol Theme {
     var general: GeneralColor { get }
     var actionMenu: ActionMenuColor { get }
     var switchToggleTheme: GeneralColor { get }
+    var defaultBrowserCard: DefaultBrowserCardColor { get }
+    var onboarding: OnboardingColor { get }
+    var remotePanel: RemoteTabTrayColor { get }
 }
 
 class NormalTheme: Theme {
@@ -235,4 +254,7 @@ class NormalTheme: Theme {
     var general: GeneralColor { return GeneralColor() }
     var actionMenu: ActionMenuColor { return ActionMenuColor() }
     var switchToggleTheme: GeneralColor { return GeneralColor() }
+    var defaultBrowserCard: DefaultBrowserCardColor { return DefaultBrowserCardColor() }
+    var onboarding: OnboardingColor { return OnboardingColor() }
+    var remotePanel: RemoteTabTrayColor { return RemoteTabTrayColor() }
 }

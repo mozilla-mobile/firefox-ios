@@ -93,3 +93,10 @@ Client/Assets/AllFramesAtDocumentEnd.js
 Client/Assets/MainFrameAtDocumentStart.js
 Client/Assets/MainFrameAtDocumentEnd.js
 Client/Assets/*.js.LICENSE.txt
+
+# L10n
+/firefoxios-l10n
+/ios-l10n-scripts
+
+# Glean 
+sdk_generator.sh

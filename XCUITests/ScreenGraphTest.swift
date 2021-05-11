@@ -40,6 +40,9 @@ extension ScreenGraphTest {
     }
 
     func testBackStack() {
+        wait(forElement: app.buttons["urlBar-cancel"], timeout: 5)
+        app.buttons["urlBar-cancel"].tap()
+        navigator.nowAt(BrowserTab)
         // We'll go through the browser tab, through the menu.
         navigator.goto(SettingsScreen)
         // Going back, there is no explicit way back to the browser tab,
@@ -50,28 +53,35 @@ extension ScreenGraphTest {
     }
 
     func testSimpleToggleAction() {
+        wait(forElement: app.buttons["urlBar-cancel"], timeout: 5)
+        app.buttons["urlBar-cancel"].tap()
+        navigator.nowAt(BrowserTab)
         // Switch night mode on, by toggling.
         navigator.performAction(TestActions.ToggleNightMode)
         XCTAssertTrue(navigator.userState.nightMode)
-        navigator.back()
-        XCTAssertEqual(navigator.screenState, BrowserTab)
+
+        navigator.nowAt(BrowserTab)
+        navigator.goto(BrowserTabMenu)
+        XCTAssertEqual(navigator.screenState, BrowserTabMenu)
 
         // Nothing should happen here, because night mode is already on.
         navigator.toggleOn(navigator.userState.nightMode, withAction: TestActions.ToggleNightMode)
         XCTAssertTrue(navigator.userState.nightMode)
-        XCTAssertEqual(navigator.screenState, BrowserTab)
-
+        XCTAssertEqual(navigator.screenState, BrowserTabMenu)
+        
+        
+        navigator.nowAt(BrowserTabMenu)
         // Switch night mode off.
         navigator.toggleOff(navigator.userState.nightMode, withAction: TestActions.ToggleNightMode)
         XCTAssertFalse(navigator.userState.nightMode)
-        navigator.back()
-        XCTAssertEqual(navigator.screenState, BrowserTab)
+        XCTAssertEqual(navigator.screenState, BrowserTabMenu)
     }
 
     func testChainedActionPerf1() {
         let navigator = self.navigator!
         measure {
             navigator.userState.url = defaultURL
+            wait(forElement: app.textFields.firstMatch, timeout: 3)
             navigator.performAction(TestActions.LoadURLByPasting)
             XCTAssertEqual(navigator.screenState, WebPageLoading)
         }
@@ -91,6 +101,9 @@ extension ScreenGraphTest {
     }
 
     func testConditionalEdgesSimple() {
+        wait(forElement: app.buttons["urlBar-cancel"], timeout: 5)
+        app.buttons["urlBar-cancel"].tap()
+        navigator.nowAt(BrowserTab)
         XCTAssertTrue(navigator.can(goto: PasscodeSettingsOff))
         XCTAssertFalse(navigator.can(goto: PasscodeSettingsOn))
         navigator.goto(PasscodeSettingsOff)
@@ -98,6 +111,8 @@ extension ScreenGraphTest {
     }
 
     func testConditionalEdgesRerouting() {
+        app.buttons["urlBar-cancel"].tap()
+        navigator.nowAt(BrowserTab)
         // The navigator should dynamically reroute to the target screen
         // if the userState changes.
         // This test adds to the graph a passcode setting screen. In that screen,
@@ -201,7 +216,8 @@ fileprivate func createTestGraph(for test: XCTestCase, with app: XCUIApplication
         screenState.gesture(forAction: TestActions.LoadURLByPasting, TestActions.LoadURL) { userState in
             UIPasteboard.general.string = userState.url ?? defaultURL
             app.textFields["url"].press(forDuration: 1.0)
-            app.tables["Context Menu"].cells["menu-PasteAndGo"].firstMatch.tap()
+            print(app.debugDescription)
+            app.tables["Context Menu"].cells["menu-PasteAndGo"].tap()
         }
     }
 
@@ -216,7 +232,6 @@ fileprivate func createTestGraph(for test: XCTestCase, with app: XCUIApplication
 
     map.addScreenState(BrowserTabMenu) { screenState in
         screenState.dismissOnUse = true
-        screenState.onEnterWaitFor(element: app.tables["Context Menu"])
         screenState.tap(app.tables.cells["Settings"], to: SettingsScreen)
 
         screenState.tap(app.cells["menu-NightMode"], forAction: TestActions.ToggleNightMode, transitionTo: BrowserTabMenu) { userState in

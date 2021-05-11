@@ -30,6 +30,8 @@ class HomePageSettingsUITests: BaseTestCase {
         super.setUp()
     }
     func testCheckHomeSettingsByDefault() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
         XCTAssertTrue(app.tables.cells["Firefox Home"].exists)
         XCTAssertTrue(app.tables.cells["HomeAsCustomURL"].exists)
@@ -39,6 +41,8 @@ class HomePageSettingsUITests: BaseTestCase {
     }
 
     func testTyping() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
         // Enter a webpage
         enterWebPageAsHomepage(text: "example.com")
@@ -57,6 +61,7 @@ class HomePageSettingsUITests: BaseTestCase {
         let homePageMenuItem = app.cells["menu-Home"]
         waitForExistence(homePageMenuItem)
         homePageMenuItem.tap()
+        waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: "example")
     }
 
@@ -83,12 +88,13 @@ class HomePageSettingsUITests: BaseTestCase {
     }*/
 
     func testClipboard() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         // Check that what's in clipboard is copied
         UIPasteboard.general.string = websiteUrl1
         navigator.goto(HomeSettings)
         app.textFields["HomeAsCustomURLTextField"].tap()
         app.textFields["HomeAsCustomURLTextField"].press(forDuration: 3)
-        print(app.debugDescription)
         waitForExistence(app.menuItems["Paste"])
         app.menuItems["Paste"].tap()
         waitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: "mozilla")
@@ -120,11 +126,11 @@ class HomePageSettingsUITests: BaseTestCase {
 
         XCTAssertEqual("Enter a webpage", value as! String)
     }*/
-    
-    // Disabled due to xcode 11.3 udpate Issue 5937
-    /*
+
     func testSetFirefoxHomeAsHome() {
         // Start by setting to History since FF Home is default
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
         enterWebPageAsHomepage(text: websiteUrl1)
         navigator.performAction(Action.GoToHomePage)
@@ -136,25 +142,31 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.performAction(Action.SelectHomeAsFirefoxHomePage)
         navigator.performAction(Action.GoToHomePage)
         waitForExistence(app.collectionViews.cells["TopSitesCell"])
-    }*/
+    }
 
     func testSetCustomURLAsHome() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
         // Enter a webpage
         enterWebPageAsHomepage(text: websiteUrl1)
 
         // Open a new tab and tap on Home option
         navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         navigator.performAction(Action.GoToHomePage)
 
         // Workaroud needed after xcode 11.3 update Issue 5937
         // Lets check only that website is open
-        // waitForExistence(app.textFields["url"], timeout: 5)
-        // waitForValueContains(app.textFields["url"], value: "mozilla")
+        waitForExistence(app.textFields["url"], timeout: 5)
+        waitForValueContains(app.textFields["url"], value: "mozilla")
     }
     
     func testTopSitesCustomNumberOfRows() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         var topSitesPerRow:Int
         //Ensure testing in portrait mode
         XCUIDevice.shared.orientation = .portrait
@@ -183,12 +195,16 @@ class HomePageSettingsUITests: BaseTestCase {
                 navigator.performAction(Action.SelectTopSitesRows)
                 XCTAssertEqual(app.tables.cells["TopSitesRows"].label as String, "Top Sites, Rows: " + String(n))
                 navigator.performAction(Action.GoToHomePage)
+                navigator.performAction(Action.CloseURLBarOpen)
+                navigator.nowAt(NewTabScreen)
                 checkNumberOfExpectedTopSites(numberOfExpectedTopSites: (n * topSitesPerRow))
             }
         }
     }
     
     func testChangeHomeSettingsLabel() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         //Go to New Tab settings and select Custom URL option
         navigator.performAction(Action.SelectHomeAsCustomURL)
         navigator.nowAt(HomeSettings)

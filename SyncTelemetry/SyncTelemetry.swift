@@ -89,7 +89,7 @@ open class SyncTelemetry {
         formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
         let date = formatter.string(from: NSDate() as Date)
-        let displayVersion =  [
+        let displayVersion = [
             AppInfo.appVersion,
             "b",
             AppInfo.buildNumber

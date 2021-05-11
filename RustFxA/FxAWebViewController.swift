@@ -8,6 +8,7 @@ import Shared
 
 enum DismissType {
     case dismiss
+    case popToTabTray
     case popToRootVC
 }
 
@@ -21,7 +22,8 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
     /// Used to show a second WKWebView to browse help links.
     fileprivate var helpBrowser: WKWebView?
     fileprivate let viewModel: FxAWebViewModel
-
+    /// Closure for dismissing higher up FxA Sign in view controller
+    var shouldDismissFxASignInViewController: (() -> Void)?
     /**
      init() FxAWebView.
 
@@ -42,12 +44,13 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
         config.userContentController = contentController
         webView = WKWebView(frame: .zero, configuration: config)
         webView.allowsLinkPreview = false
-        webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
+        webView.accessibilityLabel = .FxAWebContentAccessibilityLabel
         webView.scrollView.bounces = false  // Don't allow overscrolling.
         webView.customUserAgent = FxAWebViewModel.mobileUserAgent
 
         super.init(nibName: nil, bundle: nil)
-        contentController.add(self, name: "accountsCommandHandler")
+        let scriptMessageHandler = WKScriptMessageHandleDelegate(self)
+        contentController.add(scriptMessageHandler, name: "accountsCommandHandler")
         webView.navigationDelegate = self
         webView.uiDelegate = self
     }
@@ -67,7 +70,7 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
         
         viewModel.setupFirstPage { [weak self] (request, telemetryEventMethod) in
             if let method = telemetryEventMethod {
-                UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: method, object: .accountConnected)
+                TelemetryWrapper.recordEvent(category: .firefoxAccount, method: method, object: .accountConnected)
             }
             self?.webView.load(request)
         }
@@ -83,6 +86,9 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
     override func dismiss(animated: Bool, completion: (() -> Void)? = nil) {
         if dismissType == .dismiss {
             super.dismiss(animated: animated, completion: completion)
+        } else if dismissType == .popToTabTray {
+            print("SOMETHING")
+            shouldDismissFxASignInViewController?()
         } else {
             navigationController?.popToRootViewController(animated: true)
             completion?()
@@ -104,7 +110,7 @@ extension FxAWebViewController: WKScriptMessageHandler {
 extension FxAWebViewController {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         let hideLongpress = "document.body.style.webkitTouchCallout='none';"
-        webView.evaluateJavaScript(hideLongpress)
+        webView.evaluateJavascriptInDefaultContentWorld(hideLongpress)
 
         //The helpBrowser shows the current URL in the navbar, the main fxa webview does not.
         guard webView !== helpBrowser else {
@@ -146,5 +152,24 @@ extension FxAWebViewController: WKUIDelegate {
         navigationItem.title = nil
         self.navigationItem.leftBarButtonItem = nil
         self.navigationItem.hidesBackButton = false
+    }
+}
+
+// WKScriptMessageHandleDelegate uses for holding weak `self` to prevent retain cycle.
+// self - webview - configuration
+//   \                    /
+//   userContentController
+private class WKScriptMessageHandleDelegate: NSObject, WKScriptMessageHandler {
+    weak var delegate: WKScriptMessageHandler?
+
+    init(_ delegate: WKScriptMessageHandler) {
+        self.delegate = delegate
+    }
+
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        guard let delegate = delegate else {
+            return
+        }
+        delegate.userContentController(userContentController, didReceive: message)
     }
 }

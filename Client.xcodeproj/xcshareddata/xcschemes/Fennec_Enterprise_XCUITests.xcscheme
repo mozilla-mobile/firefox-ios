@@ -192,6 +192,21 @@
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
+      <TestPlans>
+         <TestPlanReference
+            reference = "container:XCUITests/Fennec_Enterprise_XCUITests.xctestplan"
+            default = "YES">
+         </TestPlanReference>
+         <TestPlanReference
+            reference = "container:XCUITests/PerformanceTestPlan.xctestplan">
+         </TestPlanReference>
+         <TestPlanReference
+            reference = "container:XCUITests/SyncIntegrationTestPlan.xctestplan">
+         </TestPlanReference>
+         <TestPlanReference
+            reference = "container:XCUITests/SmokeXCUITests.xctestplan">
+         </TestPlanReference>
+      </TestPlans>
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -235,6 +250,9 @@
                </Test>
                <Test
                   Identifier = "ClipBoardTests/testClipboardPasteAndGo()">
+               </Test>
+               <Test
+                  Identifier = "CronTabsPerformanceTest">
                </Test>
                <Test
                   Identifier = "DataManagementTests/testWebSiteDataEnterFirstTime()">

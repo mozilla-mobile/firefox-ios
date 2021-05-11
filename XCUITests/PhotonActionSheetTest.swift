@@ -29,31 +29,36 @@ class PhotonActionSheetTest: BaseTestCase {
         cell.press(forDuration: 2)
         waitForExistence(app.cells["action_pin"])
     }
-    // Disable issue #5554
 
     func testShareOptionIsShown() {
         navigator.goto(BrowserTab)
+        waitUntilPageLoad()
+        navigator.goto(PageOptionsMenu)
+        waitForExistence(app.tables["Context Menu"].cells["action_share"], timeout: 3)
         navigator.browserPerformAction(.shareOption)
 
         // Wait to see the Share options sheet
-        waitForExistence(app.cells["Copy"], timeout: 10)
+        waitForExistence(app.buttons["Copy"], timeout: 10)
     }
 
     // Smoketest
     func testShareOptionIsShownFromShortCut() {
         navigator.goto(BrowserTab)
         waitUntilPageLoad()
-        waitForExistence(app.buttons["TabLocationView.pageOptionsButton"])
+        waitForExistence(app.buttons["TabLocationView.pageOptionsButton"], timeout: 3)
         let pageObjectButton = app.buttons["TabLocationView.pageOptionsButton"]
         // Fix to bug 1467393, url bar long press is shown sometimes instead of the share menu
         let pageObjectButtonCenter = pageObjectButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0))
         pageObjectButtonCenter.press(forDuration: 1)
 
-        waitForExistence(app.cells["Copy"], timeout: 10)
+        // Wait to see the Share options sheet
+        waitForExistence(app.buttons["Copy"], timeout: 15)
     }
 
     func testSendToDeviceFromPageOptionsMenu() {
         // User not logged in
+        navigator.goto(BrowserTab)
+        waitUntilPageLoad()
         navigator.browserPerformAction(.sendToDeviceOption)
         waitForExistence(app.navigationBars["Client.InstructionsView"])
         XCTAssertTrue(app.staticTexts["You are not signed in to your Firefox Account."].exists)
@@ -84,22 +89,29 @@ class PhotonActionSheetTest: BaseTestCase {
 
     private func openNewShareSheet() {
         navigator.openURL("example.com")
+        waitUntilPageLoad()
+        waitForNoExistence(app.staticTexts["Fennec pasted from CoreSimulatorBridge"])
         navigator.goto(PageOptionsMenu)
-        app.tables["Context Menu"].staticTexts["Share Page With…"].tap()
-        waitForExistence(app.cells["Copy"], timeout: 5)
+        waitForExistence(app.tables["Context Menu"].cells["action_share"], timeout: 5)
+        app.tables["Context Menu"].staticTexts["Share"].tap()
+
         // This is not ideal but only way to get the element on iPhone 8
         // for iPhone 11, that would be boundBy: 2
-        let fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 1)
+        var  fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 2)
+        if iPad() {
+            waitForExistence(app.collectionViews.buttons["Copy"], timeout: 10)
+            fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 1)
+        }
 
         fennecElement.tap()
-        waitForExistence(app.navigationBars["ShareTo.ShareView"], timeout: 5)
+        waitForExistence(app.navigationBars["ShareTo.ShareView"], timeout: 10)
     }
 
     private func disableFennec() {
         navigator.nowAt(BrowserTab)
         navigator.goto(PageOptionsMenu)
         waitForExistence(app.tables["Context Menu"])
-        app.tables["Context Menu"].staticTexts["Share Page With…"].tap()
+        app.tables["Context Menu"].staticTexts["Share"].tap()
         waitForExistence(app.buttons["Copy"])
         let moreElement = app.collectionViews.cells.collectionViews.containing(.button, identifier:"Reminders").buttons["More"]
         moreElement.tap()

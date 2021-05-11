@@ -1,0 +1,18 @@
+/* Settings item for clearing browsing history */
+"Browsing History" = "ᱱᱟᱜᱟᱢ ᱯᱟᱱᱛᱮ";
+
+/* Settings item for clearing the cache */
+"Cache" = "ᱥᱟᱯ";
+
+/* Settings item for clearing cookies */
+"Cookies" = "ᱠᱩᱠᱤ ᱠᱚ";
+
+/* Settings item for deleting downloaded files */
+"Downloaded Files" = "ᱨᱮᱫ ᱟᱹᱛᱩᱨ ᱟᱬᱜᱚ";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "ᱟᱺᱯᱷᱞᱟᱤᱱ ᱣᱮᱵ ᱥᱟᱭᱤᱴ ᱥᱟᱹᱠᱷᱤᱭᱟᱹᱛ";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "ᱵᱚᱞᱚ ᱠᱚ ᱥᱟᱸᱪᱟᱣ";
+

@@ -6,7 +6,6 @@ import XCTest
 
 let website_1 = ["url": "www.mozilla.org", "label": "Internet for people, not profit — Mozilla", "value": "mozilla.org"]
 let website_2 = ["url": "www.example.com", "label": "Example", "value": "example", "link": "More information...", "moreLinkLongPressUrl": "http://www.iana.org/domains/example", "moreLinkLongPressInfo": "iana"]
-
 let urlAddons = "addons.mozilla.org"
 let urlGoogle = "www.google.com"
 let popUpTestUrl = path(forTestPage: "test-popup-blocker.html")
@@ -74,6 +73,8 @@ class NavigationTest: BaseTestCase {
     }
 
     func testTapSignInShowsFxAFromTour() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         // Open FxAccount from tour option in settings menu and go throughout all the screens there
         navigator.goto(Intro_FxASignin)
         navigator.performAction(Action.OpenEmailToSignIn)
@@ -86,6 +87,8 @@ class NavigationTest: BaseTestCase {
     }
     
     func testTapSigninShowsFxAFromSettings() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
         // Open FxAccount from settings menu and check the Sign in to Firefox scren
         let signInToFirefoxStaticText = app.tables["AppSettingsTableViewController.tableView"].staticTexts["Sign in to Sync"]
@@ -114,8 +117,11 @@ class NavigationTest: BaseTestCase {
     }
 
     func testTapSignInShowsFxAFromRemoteTabPanel() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         // Open FxAccount from remote tab panel and check the Sign in to Firefox scren
-        navigator.goto(LibraryPanel_SyncedTabs)
+        navigator.goto(TabTray)
+        navigator.performAction(Action.ToggleSyncMode)
 
         app.tables.buttons["Sign in to Sync"].tap()
         waitForExistence(app.buttons["EmailSignIn.button"], timeout: 10)
@@ -176,7 +182,7 @@ class NavigationTest: BaseTestCase {
         navigator.openURL(path(forTestPage: "test-example.html"))
         waitForExistence(app.webViews.links[website_2["link"]!], timeout: 30)
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
-        waitForExistence(app.scrollViews.staticTexts[website_2["moreLinkLongPressUrl"]!])
+        waitForExistence(app.otherElements.collectionViews.element(boundBy: 0), timeout: 5)
 
         XCTAssertTrue(app.buttons["Open in New Tab"].exists, "The option is not shown")
         XCTAssertTrue(app.buttons["Open in New Private Tab"].exists, "The option is not shown")
@@ -187,10 +193,14 @@ class NavigationTest: BaseTestCase {
     }
 
     func testLongPressLinkOptionsPrivateMode() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+
         navigator.openURL(path(forTestPage: "test-example.html"))
+        waitForExistence(app.webViews.links[website_2["link"]!], timeout: 5)
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
-        waitForExistence(app.scrollViews.staticTexts[website_2["moreLinkLongPressUrl"]!])
+        waitForExistence(app.collectionViews.staticTexts[website_2["moreLinkLongPressUrl"]!], timeout: 3)
         XCTAssertFalse(app.buttons["Open in New Tab"].exists, "The option is not shown")
         XCTAssertTrue(app.buttons["Open in New Private Tab"].exists, "The option is not shown")
         XCTAssertTrue(app.buttons["Copy Link"].exists, "The option is not shown")
@@ -210,6 +220,8 @@ class NavigationTest: BaseTestCase {
     }
 
     func testCopyLinkPrivateMode() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         longPressLinkOptions(optionSelected: "Copy Link")
         navigator.goto(NewTabScreen)
@@ -270,8 +282,6 @@ class NavigationTest: BaseTestCase {
             XCTAssertTrue(app.menuItems["Copy"].exists)
             XCTAssertTrue(app.menuItems["Cut"].exists)
             XCTAssertTrue(app.menuItems["Look Up"].exists)
-            XCTAssertTrue(app.menuItems["Paste & Go"].exists)
-            XCTAssertTrue(app.menuItems["Share…"].exists)
         }
     }
 
@@ -303,15 +313,17 @@ class NavigationTest: BaseTestCase {
 
     func testShareLink() {
         longPressLinkOptions(optionSelected: "Share Link")
-        waitForExistence(app.collectionViews.cells["Copy"])
-        XCTAssertTrue(app.collectionViews.cells["Copy"].exists, "The share menu is not shown")
+        waitForExistence(app.buttons["Copy"], timeout: 3)
+        XCTAssertTrue(app.buttons["Copy"].exists, "The share menu is not shown")
     }
 
     func testShareLinkPrivateMode() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         longPressLinkOptions(optionSelected: "Share Link")
-        waitForExistence(app.collectionViews.cells["Copy"])
-        XCTAssertTrue(app.collectionViews.cells["Copy"].exists, "The share menu is not shown")
+        waitForExistence(app.buttons["Copy"], timeout: 3)
+        XCTAssertTrue(app.buttons["Copy"].exists, "The share menu is not shown")
     }
 
     // Disable, no Cancel button now and no option to
@@ -333,6 +345,8 @@ class NavigationTest: BaseTestCase {
 
     // Smoketest
     func testPopUpBlocker() {
+        navigator.goto(URLBarOpen)
+        navigator.back()
         // Check that it is enabled by default
         navigator.goto(SettingsScreen)
         waitForExistence(app.tables["AppSettingsTableViewController.tableView"])
@@ -364,7 +378,9 @@ class NavigationTest: BaseTestCase {
     }
 
     // Smoketest
-    func testSSL() {
+     func testSSL() {
+        navigator.goto(URLBarOpen)
+        navigator.back()
         navigator.openURL("https://expired.badssl.com/")
         waitForExistence(app.buttons["Advanced"], timeout: 10)
         app.buttons["Advanced"].tap()
@@ -377,6 +393,8 @@ class NavigationTest: BaseTestCase {
 
     // In this test, the parent window opens a child and in the child it creates a fake link 'link-created-by-parent'
     func testWriteToChildPopupTab() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
         waitForExistence(app.tables["AppSettingsTableViewController.tableView"])
         let switchBlockPopUps = app.tables.cells.switches["blockPopups"]
@@ -384,7 +402,45 @@ class NavigationTest: BaseTestCase {
         let switchValueAfter = switchBlockPopUps.value!
         XCTAssertEqual(switchValueAfter as? String, "0")
         navigator.goto(BrowserTab)
+        waitUntilPageLoad()
         navigator.openURL(path(forTestPage: "test-window-opener.html"))
         waitForExistence(app.links["link-created-by-parent"], timeout: 10)
+    }
+
+    // Smoketest
+    func testVerifyBrowserTabMenu() {
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(BrowserTabMenu)
+        waitForExistence(app.tables["Context Menu"])
+
+        XCTAssertTrue(app.tables.cells["menu-panel-Bookmarks"].exists)
+        XCTAssertTrue(app.tables.cells["menu-panel-History"].exists)
+        XCTAssertTrue(app.tables.cells["menu-panel-Downloads"].exists)
+        XCTAssertTrue(app.tables.cells["menu-panel-ReadingList"].exists)
+        XCTAssertTrue(app.tables.cells["key"].exists)
+        XCTAssertTrue(app.tables.cells["menu-sync"].exists)
+        XCTAssertTrue(app.tables.cells["menu-NoImageMode"].exists)
+        XCTAssertTrue(app.tables.cells["menu-NightMode"].exists)
+        XCTAssertTrue(app.tables.cells["whatsnew"].exists)
+        XCTAssertTrue(app.tables.cells["menu-Settings"].exists)
+    }
+
+    // Smoketest
+    func testURLBar() {
+        let urlBar = app.textFields["url"]
+        waitForExistence(urlBar, timeout: 5)
+        urlBar.tap()
+        
+        let addressBar = app.textFields["address"]
+        XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
+        XCTAssert(app.keyboards.count > 0, "The keyboard is not shown")
+        app.typeText("example.com\n")
+
+        waitUntilPageLoad()
+        waitForValueContains(urlBar, value: "example.com/")
+        XCTAssertFalse(app.keyboards.count > 0, "The keyboard is shown")
     }
  }

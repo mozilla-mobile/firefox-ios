@@ -99,7 +99,7 @@ public class RustLogins {
         self.encryptionKey = encryptionKey
         self.salt = salt
 
-        self.queue =  DispatchQueue(label: "RustLogins queue: \(databasePath)", attributes: [])
+        self.queue = DispatchQueue(label: "RustLogins queue: \(databasePath)", attributes: [])
         self.storage = LoginsStorage(databasePath: databasePath)
     }
 
@@ -136,12 +136,6 @@ public class RustLogins {
                 // location and start over.
                 case .invalidKey(let message):
                     log.error(message)
-
-                    if !didAttemptToMoveToBackup {
-                        RustShared.moveDatabaseFileToBackupLocation(databasePath: databasePath)
-                        didAttemptToMoveToBackup = true
-                        return open()
-                    }
                 case .panic(let message):
                     Sentry.shared.sendWithStacktrace(message: "Panicked when opening Rust Logins database", tag: SentryTag.rustLogins, severity: .error, description: message)
                 default:
@@ -149,6 +143,12 @@ public class RustLogins {
                 }
             } else {
                 Sentry.shared.sendWithStacktrace(message: "Unknown error when opening Rust Logins database", tag: SentryTag.rustLogins, severity: .error, description: err.localizedDescription)
+            }
+
+            if !didAttemptToMoveToBackup {
+                RustShared.moveDatabaseFileToBackupLocation(databasePath: databasePath)
+                didAttemptToMoveToBackup = true
+                return open()
             }
 
             return err

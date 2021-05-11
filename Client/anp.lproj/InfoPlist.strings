@@ -1,0 +1,23 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "इ सेॅ तोय आपनो फोटो ले आरू अपलोड कैर सके छौ";
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSLocationWhenInUseUsageDescription" = "आपनो द्वारा देखलोॅ गेल वेबसाइटें तोहरो लोकेशन मांगी रहलो छै";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "इ सेॅ तोय आपनो विडियो ले आरू अपलोड कैर सके छौ";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "इ सेॅ तोय आपनो फोटों सहेज सके छौ";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "नया गोपनीय टैब";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "नया टैब";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "QR कोड स्कैन करोॅ";
+

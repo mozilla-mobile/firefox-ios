@@ -1,0 +1,9 @@
+/* The cancel button when confirming clear private data. */
+"Cancel" = "Kanselleer";
+
+/* The button that clears private data. */
+"OK" = "Goed";
+
+/* Description of the confirmation dialog shown when a user tries to clear their private data. */
+"This action will clear all of your private data. It cannot be undone." = "Dié aksie sal al u private data skrap. Dit kan nie ongedaan gemaak word nie.";
+

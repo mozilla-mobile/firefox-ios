@@ -1,3 +1,5 @@
+**NOTE:** We have switched to using Glean to record telemetry and new documentation is in [`docs/metrics.md`](https://github.com/mozilla-mobile/firefox-ios/blob/main/Docs/metrics.md)
+
 # Mozilla's Telemetry Service Pings
 
 > **NOTE:** If there is anything in this document that is not clear, is incorrect, or that requires more detail, please file a request through [Bugzilla](https://bugzilla.mozilla.org/enter_bug.cgi?product=Firefox%20for%20iOS&component=Telemetry). Also feel free to submit corrections or additional information.
@@ -226,6 +228,12 @@ The event ping contains a list of events ([see event format on readthedocs.io](h
 | Event                                                               | category | method    | object  | value            | extras                                            |
 |---------------------------------------------------------------------|----------|-----------|---------|------------------|---------------------------------------------------|
 | Allow user to search or add url from tab tray search button  | action   | tap | start-search-button | -n/a-          | -n/a-                     |
+
+### Url Bar  
+
+| Event                                                               | category | method    | object  | value            | extras                                            |
+|---------------------------------------------------------------------|----------|-----------|---------|------------------|---------------------------------------------------|
+| Allow user to open a new tab from the url bar and when in landscape mode  | action   | tap | add-new-tab-button | -n/a-          | -n/a-                     |
 
 
 ## Limits

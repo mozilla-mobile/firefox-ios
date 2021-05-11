@@ -13,7 +13,7 @@ func path(forTestPage page: String) -> String {
 
 class BaseTestCase: XCTestCase {
     var navigator: MMNavigator<FxUserState>!
-    let app =  XCUIApplication()
+    let app = XCUIApplication()
     var userState: FxUserState!
 
     // leave empty for non-specific tests
@@ -21,7 +21,7 @@ class BaseTestCase: XCTestCase {
 
     // These are used during setUp(). Change them prior to setUp() for the app to launch with different args,
     // or, use restart() to re-launch with custom args.
-    var launchArguments = [LaunchArguments.ClearProfile, LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.StageServer, LaunchArguments.DeviceName, "\(LaunchArguments.ServerPort)\(serverPort)"]
+    var launchArguments = [LaunchArguments.ClearProfile, LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.StageServer, LaunchArguments.SkipDefaultBrowserOnboarding, LaunchArguments.DeviceName, "\(LaunchArguments.ServerPort)\(serverPort)"]
 
     func setUpScreenGraph() {
         navigator = createScreenGraph(for: self, with: app).navigator()
@@ -29,7 +29,11 @@ class BaseTestCase: XCTestCase {
     }
 
     func setUpApp() {
-        app.launchArguments = [LaunchArguments.Test] + launchArguments
+        if !launchArguments.contains("FIREFOX_PERFORMANCE_TEST") {
+            app.launchArguments = [LaunchArguments.Test] + launchArguments
+        } else {
+            app.launchArguments = [LaunchArguments.PerformanceTest] + launchArguments
+        }
         app.launch()
     }
 

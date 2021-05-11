@@ -5,7 +5,7 @@
 import UIKit
 import Shared
 import SnapKit
-import FxA
+
 import Account
 
 fileprivate class CustomFxAContentServerEnableSetting: BoolSetting {
@@ -61,7 +61,7 @@ class AdvancedAccountSettingViewController: SettingsTableViewController {
     override func generateSettings() -> [SettingSection] {
         let prefs = profile.prefs
 
-        let useStage = BoolSetting(prefs: prefs, prefKey: PrefsKeys.UseStageServer, defaultValue: false, attributedTitleText: NSAttributedString(string: NSLocalizedString("Use stage servers", comment: "Debug option"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
+        let useStage = BoolSetting(prefs: prefs, prefKey: PrefsKeys.UseStageServer, defaultValue: false, attributedTitleText: NSAttributedString(string: .AdvancedAccountUseStageServer, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
         { isOn in
             self.settings = self.generateSettings()
             self.tableView.reloadData()

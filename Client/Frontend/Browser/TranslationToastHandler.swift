@@ -51,19 +51,19 @@ class TranslationToastHandler: TabEventHandler {
         let cancel = SnackButton(title: Strings.TranslateSnackBarNo, accessibilityIdentifier: "TranslationPrompt.dontTranslate", bold: false) { bar in
             tab.removeSnackbar(bar)
 
-            UnifiedTelemetry.recordEvent(category: .action, method: .translate, object: .tab, extras: ["action": "decline", "from": pageLanguage, "to": myLanguage])
+            TelemetryWrapper.recordEvent(category: .action, method: .translate, object: .tab, extras: ["action": "decline", "from": pageLanguage, "to": myLanguage])
         }
         let ok = SnackButton(title: Strings.TranslateSnackBarYes, accessibilityIdentifier: "TranslationPrompt.doTranslate", bold: true) { bar in
             tab.removeSnackbar(bar)
             self.translate(tab, from: pageLanguage, to: myLanguage)
 
-            UnifiedTelemetry.recordEvent(category: .action, method: .translate, object: .tab, extras: ["action": "accept", "from": pageLanguage, "to": myLanguage])
+            TelemetryWrapper.recordEvent(category: .action, method: .translate, object: .tab, extras: ["action": "accept", "from": pageLanguage, "to": myLanguage])
         }
         snackBar.addButton(cancel)
         snackBar.addButton(ok)
         tab.addSnackbar(snackBar)
 
-        UnifiedTelemetry.recordEvent(category: .prompt, method: .translate, object: .tab, extras: ["from": pageLanguage, "to": myLanguage])
+        TelemetryWrapper.recordEvent(category: .prompt, method: .translate, object: .tab, extras: ["from": pageLanguage, "to": myLanguage])
     }
 
     func translate(_ tab: Tab, from pageLanguage: String, to myLanguage: String) {

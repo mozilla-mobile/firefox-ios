@@ -122,20 +122,6 @@ class BookmarkDetailPanel: SiteTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel) { _ in
-            self.navigationController?.popViewController(animated: true)
-        }
-
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save) { _ in
-            self.save().uponQueue(.main) { _ in
-                self.navigationController?.popViewController(animated: true)
-
-                if self.isNew, let bookmarksPanel = self.navigationController?.visibleViewController as? BookmarksPanel {
-                    bookmarksPanel.didAddBookmarkNode()
-                }
-            }
-        }
-
         if isNew, bookmarkNodeType == .bookmark {
             bookmarkItemURL = "https://"
         }
@@ -184,13 +170,19 @@ class BookmarkDetailPanel: SiteTableViewController {
             var bookmarkFolders: [(folder: BookmarkFolder, indent: Int)] = []
 
             func addFolder(_ folder: BookmarkFolder, indent: Int = 0) {
-                // Do not append the top "root" folder to this list as
+                // Do not append itself and the top "root" folder to this list as
                 // bookmarks cannot be stored directly within it.
-                if folder.guid != BookmarkRoots.RootGUID {
+                if folder.guid != BookmarkRoots.RootGUID && folder.guid != self.bookmarkNodeGUID {
                     bookmarkFolders.append((folder, indent))
                 }
 
-                for case let childFolder as BookmarkFolder in folder.children ?? [] {
+                var folderChildren: [BookmarkNode]? = nil
+                // Suitable to be appended
+                if folder.guid != self.bookmarkNodeGUID {
+                    folderChildren = folder.children
+                }
+
+                for case let childFolder as BookmarkFolder in folderChildren ?? [] {
                     // Any "root" folders (i.e. "Mobile Bookmarks") should
                     // have an indentation of 0.
                     if childFolder.isRoot {
@@ -307,19 +299,19 @@ class BookmarkDetailPanel: SiteTableViewController {
 
             // Disable folder selection when creating a new bookmark or folder.
             if isNew {
-                cell.textLabel?.alpha = 0.5
-                cell.imageView?.alpha = 0.5
+                cell.titleLabel.alpha = 0.5
+                cell.leftImageView.alpha = 0.5
                 cell.selectionStyle = .none
                 cell.isUserInteractionEnabled = false
             } else {
-                cell.textLabel?.alpha = 1.0
-                cell.imageView?.alpha = 1.0
+                cell.titleLabel.alpha = 1.0
+                cell.leftImageView.alpha = 1.0
                 cell.selectionStyle = .default
                 cell.isUserInteractionEnabled = true
             }
 
-            cell.imageView?.image = UIImage(named: "bookmarkFolder")?.createScaled(BookmarkDetailPanelUX.FolderIconSize)
-            cell.imageView?.contentMode = .center
+            cell.leftImageView.image = UIImage(named: "bookmarkFolder")?.createScaled(BookmarkDetailPanelUX.FolderIconSize)
+            cell.leftImageView.contentMode = .center
             cell.indentationWidth = BookmarkDetailPanelUX.IndentationWidth
 
             if isFolderListExpanded {
@@ -328,9 +320,9 @@ class BookmarkDetailPanel: SiteTableViewController {
                 }
 
                 if item.folder.isRoot, let localizedString = LocalizedRootBookmarkFolderStrings[item.folder.guid] {
-                    cell.textLabel?.text = localizedString
+                    cell.titleLabel.text = localizedString
                 } else {
-                    cell.textLabel?.text = item.folder.title
+                    cell.titleLabel.text = item.folder.title
                 }
 
                 cell.indentationLevel = min(item.indent, maxIndentationLevel)
@@ -341,9 +333,9 @@ class BookmarkDetailPanel: SiteTableViewController {
                 }
             } else {
                 if parentBookmarkFolder.isRoot, let localizedString = LocalizedRootBookmarkFolderStrings[parentBookmarkFolder.guid] {
-                    cell.textLabel?.text = localizedString
+                    cell.titleLabel.text = localizedString
                 } else {
-                    cell.textLabel?.text = parentBookmarkFolder.title
+                    cell.titleLabel.text = parentBookmarkFolder.title
                 }
 
                 cell.indentationLevel = 0

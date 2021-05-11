@@ -1,0 +1,18 @@
+/* Settings item for clearing browsing history */
+"Browsing History" = "ব্রাউজিং ইতিহাস";
+
+/* Settings item for clearing the cache */
+"Cache" = "ক্যাশে";
+
+/* Settings item for clearing cookies */
+"Cookies" = "কুকি";
+
+/* Settings item for deleting downloaded files */
+"Downloaded Files" = "ডাউনলোড করা ফাইল";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "অফলাইন ওয়েবসাইটের তথ্য";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "সংরক্ষিত লগইন";
+

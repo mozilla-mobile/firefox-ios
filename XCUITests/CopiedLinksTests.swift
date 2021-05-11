@@ -7,6 +7,10 @@ import XCTest
 class CopiedLinksTests: BaseTestCase {
     // This test is enable Offer to open copied links, when opening firefox
     func testCopiedLinks() {
+        waitForExistence(app.textFields["url"], timeout: 5)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
 
         //Check Offer to open copied links, when opening firefox is off

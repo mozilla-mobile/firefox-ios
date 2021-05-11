@@ -16,8 +16,8 @@ class LocalRequestHelper: TabContentScript {
 
         let params = message.body as! [String: String]
 
-        guard let token = params["securitytoken"], token == UserScriptManager.securityToken else {
-            print("Missing required security token.")
+        guard let token = params["appIdToken"], token == UserScriptManager.appIdToken else {
+            print("Missing required appid token.")
             return
         }
 

@@ -51,10 +51,7 @@ let TabTrayLongPressMenu = "TabTrayLongPressMenu"
 let HistoryRecentlyClosed = "HistoryRecentlyClosed"
 let TrackingProtectionContextMenuDetails = "TrackingProtectionContextMenuDetails"
 let DisplaySettings = "DisplaySettings"
-let TranslationSettings = "TranslationSettings"
 let HomePanel_Library = "HomePanel_Library"
-let TranslatePageMenu = "TranslatePageMenu"
-let DontTranslatePageMenu = "DontTranslatePageMenu"
 let MobileBookmarks = "MobileBookmarks"
 let MobileBookmarksEdit = "MobileBookmarksEdit"
 let MobileBookmarksAdd = "MobileBookmarksAdd"
@@ -72,7 +69,6 @@ let allSettingsScreens = [
     NewTabSettings,
     OpenWithSettings,
     DisplaySettings,
-    TranslationSettings,
 
     LoginsSettings,
     PasscodeSettings,
@@ -102,15 +98,15 @@ let LibraryPanel_Bookmarks = "LibraryPanel.Bookmarks.1"
 let LibraryPanel_History = "LibraryPanel.History.2"
 let LibraryPanel_ReadingList = "LibraryPanel.ReadingList.3"
 let LibraryPanel_Downloads = "LibraryPanel.Downloads.4"
-let LibraryPanel_SyncedTabs = "LibraryPanel.SyncedTabs.5"
 
 let allHomePanels = [
     LibraryPanel_Bookmarks,
     LibraryPanel_History,
     LibraryPanel_ReadingList,
-    LibraryPanel_Downloads,
-    LibraryPanel_SyncedTabs
+    LibraryPanel_Downloads
 ]
+
+let iOS_Settings = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
 
 class Action {
     static let LoadURL = "LoadURL"
@@ -129,7 +125,9 @@ class Action {
     static let OpenNewTabFromTabTray = "OpenNewTabFromTabTray"
     static let AcceptRemovingAllTabs = "AcceptRemovingAllTabs"
 
+    static let ToggleRegularMode = "ToggleRegularMode"
     static let TogglePrivateMode = "TogglePrivateBrowing"
+    static let ToggleSyncMode = "ToggleSyncMode"
     static let TogglePrivateModeFromTabBarHomePanel = "TogglePrivateModeFromTabBarHomePanel"
     static let TogglePrivateModeFromTabBarBrowserTab = "TogglePrivateModeFromTabBarBrowserTab"
     static let TogglePrivateModeFromTabBarNewTab = "TogglePrivateModeFromTabBarNewTab"
@@ -181,6 +179,8 @@ class Action {
     static let OpenSettingsFromTPMenu = "OpenSettingsFromTPMenu"
     static let SwitchETP = "SwitchETP"
     static let CloseTPContextMenu = "CloseTPContextMenu"
+    static let EnableStrictMode = "EnableStrictMode"
+    static let EnableStandardMode = "EnableStandardMode"
 
     static let CloseTab = "CloseTab"
     static let CloseTabFromTabTrayLongPressMenu = "CloseTabFromTabTrayLongPressMenu"
@@ -200,11 +200,6 @@ class Action {
     static let SelectManually = "SelectManually"
     static let SystemThemeSwitch = "SystemThemeSwitch"
 
-    static let SelectTranslateThisPage = "SelectTranslateThisPage"
-    static let SelectDontTranslateThisPage = "SelectDontTranslateThisPage"
-    
-    static let EnableTranslation = "EnableTranlation"
-    static let DisableTranslation = "DisableTranlation"
     static let SelectGoogle = "SelectGoogle"
     static let SelectBing = "SelectBing"
     
@@ -226,6 +221,9 @@ class Action {
     static let SaveCreatedBookmark = "SaveCreatedBookmark"
 
     static let OpenWhatsNewPage = "OpenWhatsNewPage"
+    static let OpenSearchBarFromSearchButton = "OpenSearchBarFromSearchButton"
+    static let CloseURLBarOpen = "CloseURLBarOpen"
+
 }
 
 @objcMembers
@@ -277,12 +275,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     let cancelBackAction = {
-        if isTablet {
-            // There is no Cancel option in iPad.
-            app.otherElements["PopoverDismissRegion"].tap()
-        } else {
-            app.buttons["PhotonMenu.close"].tap()
-        }
+        app.otherElements["PopoverDismissRegion"].tap()
     }
 
     let cancelTypePasscode = {
@@ -384,20 +377,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             userState.trackingProtectionPerTabEnabled = !userState.trackingProtectionPerTabEnabled
         }
 
-        screenState.gesture(forAction: Action.OpenSettingsFromTPMenu) { userState in
+        screenState.gesture(forAction: Action.OpenSettingsFromTPMenu, transitionTo: TrackingProtectionSettings) { userState in
             app.cells["settings"].tap()
         }
 
         screenState.gesture(forAction: Action.CloseTPContextMenu) { userState in
-            if isTablet {
-                // There is no Cancel option in iPad.
-                app.otherElements["PopoverDismissRegion"].tap()
-            } else {
-                app.buttons["PhotonMenu.close"].tap()
-            }
-        }
-
-        screenState.backAction = {
             if isTablet {
                 // There is no Cancel option in iPad.
                 app.otherElements["PopoverDismissRegion"].tap()
@@ -488,17 +472,25 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
                 }
             }
         }
+        
+        screenState.gesture(forAction: Action.CloseURLBarOpen, transitionTo: HomePanelsScreen) {_ in
+            app.buttons["urlBar-cancel"].tap()
+        }
+        
+        screenState.gesture(forAction: Action.OpenSearchBarFromSearchButton, transitionTo: URLBarOpen) {
+            userState in app.buttons["TabToolbar.stopReloadButton"].tap()
+        }
     }
 
     map.addScreenState(LibraryPanel_Bookmarks) { screenState in
         let bookmarkCell = app.tables["Bookmarks List"].cells.element(boundBy: 0)
-        let bookmarksElement = app.navigationBars["Bookmarks"].staticTexts["Bookmarks"]
+
         screenState.tap(app.cells.staticTexts["Mobile Bookmarks"], to: MobileBookmarks)
         screenState.gesture(forAction: Action.CloseBookmarkPanel, transitionTo: HomePanelsScreen) { userState in
             if isTablet {
                 app.buttons["TabToolbar.libraryButton"].tap()
             } else {
-                bookmarksElement.press(forDuration: 2, thenDragTo: app.buttons["LibraryPanels.Bookmarks"])
+                app.buttons["Done"].tap()
             }
         }
 
@@ -554,55 +546,41 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.gesture(forAction: Action.ClearRecentHistory) { userState in
             app.tables["History List"].cells.matching(identifier: "HistoryPanel.clearHistory").element(boundBy: 0).tap()
         }
-        let historyListElement = app.navigationBars["History"]
         screenState.gesture(forAction: Action.CloseHistoryListPanel, transitionTo: HomePanelsScreen) { userState in
             if isTablet {
                 app.buttons["TabToolbar.libraryButton"].tap()
             } else {
-                historyListElement.press(forDuration: 2, thenDragTo: app.buttons["LibraryPanels.History"])
+                app.buttons["Done"].tap()
             }
         }
     }
 
-    map.addScreenState(LibraryPanel_SyncedTabs) { screenState in
-        screenState.dismissOnUse = true
-        let syncedTabsElement = app.navigationBars["Synced Tabs"]
-        screenState.gesture(forAction: Action.CloseSyncedTabsPanel, transitionTo: HomePanelsScreen) { userState in
-            if isTablet {
-                app.buttons["TabToolbar.libraryButton"].tap()
-            } else {
-                syncedTabsElement.press(forDuration: 2, thenDragTo: app.buttons["LibraryPanels.SyncedTabs"])
-            }
-        }
-    }
 
     map.addScreenState(LibraryPanel_ReadingList) { screenState in
         screenState.dismissOnUse = true
-        let readingListElement = app.navigationBars["Reading list"]
         screenState.gesture(forAction: Action.CloseReadingListPanel, transitionTo: HomePanelsScreen) { userState in
             if isTablet {
                 app.buttons["TabToolbar.libraryButton"].tap()
             } else {
-                readingListElement.press(forDuration: 2, thenDragTo: app.buttons["LibraryPanels.ReadingList"])
+                app.buttons["Done"].tap()
             }
         }
     }
 
     map.addScreenState(LibraryPanel_Downloads) { screenState in
         screenState.dismissOnUse = true
-        let downloadsElement = app.navigationBars["Downloads"]
         screenState.gesture(forAction: Action.CloseDownloadsPanel, transitionTo: HomePanelsScreen) { userState in
             if isTablet {
                 app.buttons["TabToolbar.libraryButton"].tap()
             } else {
-                downloadsElement.press(forDuration: 2, thenDragTo: app.buttons["LibraryPanels.Downloads"])
+                app.buttons["Done"].tap()
             }
         }
     }
 
     map.addScreenState(HistoryRecentlyClosed) { screenState in
         screenState.dismissOnUse = true
-        screenState.tap(app.buttons["History"].firstMatch, to: LibraryPanel_History)
+        screenState.tap(app.buttons["Back"].firstMatch, to: LibraryPanel_History)
     }
 
     map.addScreenState(HistoryPanelContextMenu) { screenState in
@@ -627,7 +605,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(table.cells["Home"], to: HomeSettings)
         screenState.tap(table.cells["OpenWith.Setting"], to: OpenWithSettings)
         screenState.tap(table.cells["DisplayThemeOption"], to: DisplaySettings)
-        screenState.tap(table.cells["TranslationOption"], to: TranslationSettings)
         screenState.tap(table.cells["SiriSettings"], to: SiriSettings)
         screenState.tap(table.cells["TouchIDPasscode"], to: PasscodeSettings)
         screenState.tap(table.cells["Logins"], to: LoginsSettings, if: "passcode == nil")
@@ -648,22 +625,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
         screenState.gesture(forAction: Action.SystemThemeSwitch) { userState in
             app.switches["SystemThemeSwitchValue"].tap()
-        }
-        screenState.backAction = navigationControllerBackAction
-    }
-
-    map.addScreenState(TranslationSettings) { screenState in
-        screenState.gesture(forAction: Action.DisableTranslation) { userState in
-                app.switches["TranslateSwitchValue"].tap()
-        }
-        screenState.gesture(forAction: Action.EnableTranslation) { userState in
-            app.switches["TranslateSwitchValue"].tap()
-        }
-        screenState.gesture(forAction: Action.SelectGoogle) { userstate in
-            app.tables.cells.element(boundBy:1).tap()
-        }
-        screenState.gesture(forAction: Action.SelectBing) { userstate in
-                app.tables.cells.element(boundBy:2).tap()
         }
         screenState.backAction = navigationControllerBackAction
     }
@@ -915,6 +876,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.switches["prefkey.trackingprotection.normalbrowsing"], forAction: Action.SwitchETP) { userState in
             userState.trackingProtectionSettingOnNormalMode = !userState.trackingProtectionSettingOnNormalMode
         }
+
+        screenState.tap(app.cells["Settings.TrackingProtectionOption.BlockListStrict"], forAction: Action.EnableStrictMode) { userState in
+                userState.trackingProtectionPerTabEnabled = !userState.trackingProtectionPerTabEnabled
+        }
     }
 
     map.addScreenState(Intro_FxASignin) { screenState in
@@ -926,14 +891,39 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(TabTray) { screenState in
-        screenState.tap(app.buttons["TabTrayController.addTabButton"], forAction: Action.OpenNewTabFromTabTray, transitionTo: NewTabScreen)
-        screenState.tap(app.buttons["TabTrayController.maskButton"], forAction: Action.TogglePrivateMode) { userState in
+
+        // Both iPad and iPhone use the same accesibility identifiers for buttons,
+        // even thought they may be in separate locations design wise.
+        screenState.tap(app.buttons["newTabButtonTabTray"],
+                        forAction: Action.OpenNewTabFromTabTray,
+                        transitionTo: NewTabScreen)
+        screenState.tap(app.buttons["closeAllTabsButtonTabTray"], to: CloseTabMenu)
+//        screenState.tap(app.buttons["syncNowButtonTabsButtonTabTray"], to: CloseTabMenu)
+
+        var regularModeSelector: XCUIElement
+        var privateModeSelector: XCUIElement
+        var syncModeSelector: XCUIElement
+
+        if isTablet {
+            regularModeSelector = app.navigationBars.segmentedControls.buttons.element(boundBy: 0)
+            privateModeSelector = app.navigationBars.segmentedControls.buttons.element(boundBy: 1)
+            syncModeSelector = app.navigationBars.segmentedControls.buttons.element(boundBy: 2)
+        } else {
+            regularModeSelector = app.toolbars["Toolbar"].segmentedControls["navBarTabTray"].buttons.element(boundBy: 0)
+            privateModeSelector = app.toolbars["Toolbar"].segmentedControls["navBarTabTray"].buttons.element(boundBy: 1)
+            syncModeSelector = app.toolbars["Toolbar"].segmentedControls["navBarTabTray"].buttons.element(boundBy: 2)
+        }
+        screenState.tap(regularModeSelector, forAction: Action.ToggleRegularMode) { userState in
             userState.isPrivate = !userState.isPrivate
         }
-        screenState.tap(app.buttons["TabTrayController.removeTabsButton"], to: CloseTabMenu)
+        screenState.tap(privateModeSelector, forAction: Action.TogglePrivateMode) { userState in
+            userState.isPrivate = !userState.isPrivate
+        }
+        screenState.tap(syncModeSelector, forAction: Action.ToggleSyncMode) { userState in
+        }
 
         screenState.onEnter { userState in
-            userState.numTabs = Int(app.collectionViews.cells.count)
+            userState.numTabs = Int(app.tables.cells.count)
         }
     }
 
@@ -992,7 +982,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.press(image, to: WebImageContextMenu)
         
         if !isTablet {
-            let reloadButton = app.buttons["TabToolbar.stopReloadButton"]
+            let reloadButton = app.buttons["TabToolbar.multiStateButton"]
         screenState.press(reloadButton, to: ReloadLongPressMenu)
         screenState.tap(reloadButton, forAction: Action.ReloadURL, transitionTo: WebPageLoading) { _ in }
         } else {
@@ -1018,20 +1008,9 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             }
         }
 
-        screenState.tap(app.buttons["Private Mode"], forAction: Action.TogglePrivateModeFromTabBarBrowserTab) { userState in
+        screenState.tap(app.buttons["smallPrivateMask"], forAction: Action.TogglePrivateModeFromTabBarBrowserTab) { userState in
             userState.isPrivate = !userState.isPrivate
         }
-
-        screenState.noop(to: TranslatePageMenu, if: "localeIsExpectedDifferent == true")
-    }
-
-    map.addScreenState(TranslatePageMenu) { screenState in
-        screenState.onEnterWaitFor(element: app.buttons["TranslationPrompt.doTranslate"])
-
-        screenState.tap(app.buttons["TranslationPrompt.dontTranslate"], forAction: Action.SelectDontTranslateThisPage)
-
-        screenState.tap(app.buttons["TranslationPrompt.doTranslate"], forAction: Action.SelectTranslateThisPage, transitionTo: WebPageLoading)
-        screenState.dismissOnUse = true
     }
 
     map.addScreenState(ReloadLongPressMenu) { screenState in
@@ -1063,6 +1042,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     // make sure after the menu action, navigator.nowAt() is used to set the current state
     map.addScreenState(PageOptionsMenu) {screenState in
         screenState.tap(app.tables["Context Menu"].cells["menu-RequestDesktopSite"], to: RequestDesktopSite)
+        screenState.tap(app.tables["Context Menu"].cells["menu-ViewMobile"], to: RequestMobileSite)
         screenState.tap(app.tables["Context Menu"].cells["menu-FindInPage"], to: FindInPage)
         screenState.tap(app.tables["Context Menu"].cells["menu-Bookmark"], forAction: Action.BookmarkThreeDots, Action.Bookmark)
         screenState.tap(app.tables.cells["action_pin"], forAction: Action.PinToTopSitesPAM)
@@ -1081,22 +1061,26 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(RequestDesktopSite) { _ in }
 
+    map.addScreenState(RequestMobileSite) { _ in }
+
     map.addScreenState(HomePanel_Library) { screenState in
         screenState.dismissOnUse = true
         screenState.backAction = navigationControllerBackAction
 
-        screenState.tap(app.buttons["LibraryPanels.Bookmarks"], to: LibraryPanel_Bookmarks)
-        screenState.tap(app.buttons["LibraryPanels.History"], to: LibraryPanel_History)
-        screenState.tap(app.buttons["LibraryPanels.ReadingList"], to: LibraryPanel_ReadingList)
-        screenState.tap(app.buttons["LibraryPanels.Downloads"], to: LibraryPanel_Downloads)
-        screenState.tap(app.buttons["LibraryPanels.SyncedTabs"], to: LibraryPanel_SyncedTabs)
+        screenState.tap(app.segmentedControls["librarySegmentControl"].buttons.element(boundBy: 0), to: LibraryPanel_Bookmarks)
+        screenState.tap(app.segmentedControls["librarySegmentControl"].buttons.element(boundBy: 1), to: LibraryPanel_History)
+        screenState.tap(app.segmentedControls["librarySegmentControl"].buttons.element(boundBy: 2), to: LibraryPanel_Downloads)
+        screenState.tap(app.segmentedControls["librarySegmentControl"].buttons.element(boundBy: 3), to: LibraryPanel_ReadingList)
     }
 
     map.addScreenState(BrowserTabMenu) { screenState in
         screenState.tap(app.tables.cells["menu-Settings"], to: SettingsScreen)
         screenState.tap(app.tables.cells["menu-sync"], to: Intro_FxASignin, if: "fxaUsername == nil")
         screenState.tap(app.tables.cells["key"], to: LoginsSettings)
-        screenState.tap(app.tables.cells["menu-library"], to: HomePanel_Library)
+        screenState.tap(app.tables.cells["menu-panel-Bookmarks"], to: LibraryPanel_Bookmarks)
+        screenState.tap(app.tables.cells["menu-panel-History"], to: LibraryPanel_History)
+        screenState.tap(app.tables.cells["menu-panel-Downloads"], to: LibraryPanel_Downloads)
+        screenState.tap(app.tables.cells["menu-panel-ReadingList"], to: LibraryPanel_ReadingList)
         screenState.tap(app.tables.cells["placeholder-avatar"], to: FxAccountManagementPage)
 
         screenState.tap(app.tables.cells["menu-NoImageMode"], forAction: Action.ToggleNoImageMode, transitionTo: BrowserTabMenu) { userState in
@@ -1109,6 +1093,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         screenState.tap(app.tables.cells["menu-Home"], forAction: Action.GoToHomePage) { userState in
         }
+
         screenState.tap(app.tables.cells["whatsnew"], forAction: Action.OpenWhatsNewPage) { userState in
         }
 
@@ -1145,7 +1130,7 @@ extension MMNavigator where T == FxUserState {
     func createNewTab() {
         let app = XCUIApplication()
         self.goto(TabTray)
-        app.buttons["TabTrayController.addTabButton"].tap()
+        app.buttons["newTabButtonTabTray"].tap()
         self.nowAt(NewTabScreen)
     }
 
@@ -1218,7 +1203,7 @@ extension XCUIElement {
                 let cell = cells.element(boundBy: Int(i))
                 // if the cell's bottom is beyond the table's bottom
                 // i.e. if the cell isn't completely visible.
-                if self.frame.maxY <= cell.frame.maxY  {
+                if self.frame.maxY <= cell.frame.maxY {
                     return i
                 }
             }

@@ -17,7 +17,8 @@ class TabToolbarHelperTests: XCTestCase {
     let libraryButtonImage = UIImage.templateImageNamed("menu-library")
     let stopButtonImage = UIImage.templateImageNamed("nav-stop")
     let searchButtonImage = UIImage.templateImageNamed("search")
-
+    let ImageNewTab = UIImage.templateImageNamed("nav-add")
+    
     override func setUp() {
         super.setUp()
         mockToolbar = MockTabToolbar()
@@ -25,35 +26,29 @@ class TabToolbarHelperTests: XCTestCase {
     }
 
     func testSetsInitialImages() {
-        XCTAssertEqual(mockToolbar.stopReloadButton.image(for: .normal), refreshButtonImage)
+        XCTAssertEqual(mockToolbar.multiStateButton.image(for: .normal), refreshButtonImage)
         XCTAssertEqual(mockToolbar.backButton.image(for: .normal), backButtonImage)
         XCTAssertEqual(mockToolbar.forwardButton.image(for: .normal), forwardButtonImage)
     }
 
-    func testSetLoadingStateImages() {
-        subject.loading = true
-        XCTAssertEqual(mockToolbar.stopReloadButton.image(for: .normal), stopButtonImage)
+    func testStopStateImages() {
+        subject.setMiddleButtonState(.stop)
+        XCTAssertEqual(mockToolbar.multiStateButton.image(for: .normal), stopButtonImage)
     }
 
-    func testSetLoadedStateImages() {
-        subject.loading = false
-        XCTAssertEqual(mockToolbar.stopReloadButton.image(for: .normal), refreshButtonImage)
+    func testReloadStateImages() {
+        subject.setMiddleButtonState(.reload)
+        XCTAssertEqual(mockToolbar.multiStateButton.image(for: .normal), refreshButtonImage)
     }
 
     func testSearchStateImages() {
-        subject.isSearch = true
-        XCTAssertEqual(mockToolbar.stopReloadButton.image(for: .normal), searchButtonImage)
+        subject.setMiddleButtonState(.search)
+        XCTAssertEqual(mockToolbar.multiStateButton.image(for: .normal), searchButtonImage)
     }
 
-    func testSearchStoppedStateImages() {
-        subject.isSearch = false
-        XCTAssertEqual(mockToolbar.stopReloadButton.image(for: .normal), stopButtonImage)
-    }
-
-    func testLoadingDoesNotOverwriteSearchState() {
-        subject.isSearch = true
-        subject.loading = true
-        XCTAssertEqual(mockToolbar.stopReloadButton.image(for: .normal), searchButtonImage)
+    func testNewTabStateImages() {
+        subject.setMiddleButtonState(.newTab)
+        XCTAssertEqual(mockToolbar.multiStateButton.image(for: .normal), ImageNewTab)
     }
 }
 
@@ -88,6 +83,12 @@ class MockTabToolbar: TabToolbarProtocol {
         get { _tabsButton }
     }
 
+    var _bookmarksButton = MockToolbarButton()
+    var bookmarksButton: ToolbarButton { get { _bookmarksButton } }
+    
+    var _addNewTabButton = MockToolbarButton()
+    var addNewTabButton: ToolbarButton { get { _addNewTabButton } }
+    
     var _appMenuButton = MockToolbarButton()
     var appMenuButton: ToolbarButton { get { _appMenuButton } }
 
@@ -100,8 +101,8 @@ class MockTabToolbar: TabToolbarProtocol {
     var _backButton = MockToolbarButton()
     var backButton: ToolbarButton { get { _backButton } }
 
-    var _stopReloadButton = MockToolbarButton()
-    var stopReloadButton: ToolbarButton { get { _stopReloadButton } }
+    var _multiStateButton = MockToolbarButton()
+    var multiStateButton: ToolbarButton { get { _multiStateButton } }
     var actionButtons: [Themeable & UIButton] {
         get { return [] }
     }
@@ -114,14 +115,14 @@ class MockTabToolbar: TabToolbarProtocol {
 
     }
 
+    func updateMiddleButtonState(_ state: MiddleButtonState) {
+        
+    }
+
     func updateReloadStatus(_ isLoading: Bool) {
     }
 
     func updatePageStatus(_ isWebPage: Bool) {
-
-    }
-
-    func updateIsSearchStatus(_ isHomePage: Bool) {
 
     }
 

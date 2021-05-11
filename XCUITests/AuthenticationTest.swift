@@ -4,6 +4,8 @@
 
 import XCTest
 
+let testBasicHTTPAuthURL = "https://jigsaw.w3.org/HTTP/Basic/"
+
 class AuthenticationTest: BaseTestCase {
 
     fileprivate func setInterval(_ interval: String = "Immediately") {
@@ -15,6 +17,9 @@ class AuthenticationTest: BaseTestCase {
     }
 
     func testTurnOnOff() {
+        waitForExistence(app.textFields["url"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SetPasscode)
         setInterval("Immediately")
         XCTAssertTrue(app.staticTexts["Immediately"].exists)
@@ -22,6 +27,9 @@ class AuthenticationTest: BaseTestCase {
     }
 
     func testChangePassCode() {
+        waitForExistence(app.textFields["url"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SetPasscode)
 
         userState.newPasscode = "222222"
@@ -32,24 +40,32 @@ class AuthenticationTest: BaseTestCase {
 
     // Smoketest
     func testPromptPassCodeUponReentry() {
+        waitForExistence(app.textFields["url"], timeout: 5)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)        
+        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SetPasscode)
         navigator.goto(SettingsScreen)
         navigator.performAction(Action.UnlockLoginsSettings)
-        waitForExistence(app.tables["Login List"])
+        waitForExistence(app.tables["Login List"], timeout: 5)
 
         //send app to background, and re-enter
         XCUIDevice.shared.press(.home)
+
+        // Let's be sure the app is backgrounded
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        waitForExistence(springboard.icons["XCUITests-Runner"], timeout: 10)
         app.activate()
-        let contentView = app.navigationBars["Client.FxAContentView"]
-        if contentView.exists {
-            app.navigationBars["Client.FxAContentView"].buttons["Settings"].tap()
-        }
-        navigator.nowAt(SettingsScreen)
-        navigator.goto(LockedLoginsSettings)
-        waitForExistence(app.navigationBars["Enter Passcode"])
+
+        // Need to be sure the app is ready
+        navigator.nowAt(LockedLoginsSettings)
+        waitForExistence(app.navigationBars["Enter Passcode"], timeout: 10)
     }
 
     func testPromptPassCodeUponReentryWithDelay() {
+        waitForExistence(app.textFields["url"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SetPasscode)
         setInterval("After 5 minutes")
         navigator.performAction(Action.UnlockLoginsSettings)
@@ -58,16 +74,16 @@ class AuthenticationTest: BaseTestCase {
         // Send app to background, and re-enter
         XCUIDevice.shared.press(.home)
         app.activate()
-        let contentView = app.navigationBars["Client.FxAContentView"]
-        if contentView.exists {
-            app.navigationBars["Client.FxAContentView"].buttons["Settings"].tap()
-        }
-        navigator.nowAt(SettingsScreen)
-        navigator.goto(LockedLoginsSettings)
-        waitForExistence(app.tables["Login List"])
+
+        // Login List is shown since the delay is set to 5min
+        navigator.nowAt(LockedLoginsSettings)
+        waitForExistence(app.tables["Login List"], timeout: 3)
     }
 
     func testChangePasscodeShowsErrorStates() {
+        waitForExistence(app.textFields["url"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SetPasscode)
 
         userState.passcode = "222222"
@@ -103,6 +119,9 @@ class AuthenticationTest: BaseTestCase {
     }
 
     func testChangeRequirePasscodeInterval() {
+        waitForExistence(app.textFields["url"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SetPasscode)
         navigator.goto(PasscodeIntervalSettings)
 
@@ -128,12 +147,16 @@ class AuthenticationTest: BaseTestCase {
     }
 
     func testEnteringLoginsUsingPasscode() {
+        waitForExistence(app.textFields["url"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SetPasscode)
 
         // Enter login
         navigator.performAction(Action.UnlockLoginsSettings)
         waitForExistence(app.tables["Login List"])
         navigator.goto(SettingsScreen)
+        navigator.goto(NewTabScreen)
         // Trying again should display passcode screen since we've set the interval to be immediately.
         navigator.goto(LockedLoginsSettings)
         waitForExistence(app.navigationBars["Enter Passcode"], timeout: 3)
@@ -144,6 +167,9 @@ class AuthenticationTest: BaseTestCase {
     }
 
     func testEnteringLoginsUsingPasscodeWithFiveMinutesInterval() {
+        waitForExistence(app.textFields["url"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SetPasscode)
         setInterval("After 5 minutes")
 
@@ -156,6 +182,9 @@ class AuthenticationTest: BaseTestCase {
         navigator.goto(LockedLoginsSettings)
         waitForExistence(app.tables["Login List"])
 
+        app.buttons["Settings"].tap()
+        navigator.nowAt(SettingsScreen)
+
         navigator.goto(PasscodeSettings)
         waitForExistence(app.staticTexts["After 5 minutes"])
         navigator.performAction(Action.DisablePasscode)
@@ -163,6 +192,9 @@ class AuthenticationTest: BaseTestCase {
 
     func testEnteringLoginsWithNoPasscode() {
         // It is disabled
+        waitForExistence(app.textFields["url"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(PasscodeSettings)
         waitForExistence(app.tables["AuthenticationManager.settingsTableView"].staticTexts["Turn Passcode On"])
 
@@ -171,6 +203,9 @@ class AuthenticationTest: BaseTestCase {
     }
 
     func testWrongPasscodeDisplaysAttemptsAndMaxError() {
+        waitForExistence(app.textFields["url"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SetPasscode)
         setInterval("After 5 minutes")
 
@@ -189,7 +224,10 @@ class AuthenticationTest: BaseTestCase {
     }
 
     func testWrongPasscodeAttemptsPersistAcrossEntryAndConfirmation() {
-         navigator.performAction(Action.SetPasscode)
+        waitForExistence(app.textFields["url"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
+        navigator.performAction(Action.SetPasscode)
 
         // Enter wrong passcode on Logins
         navigator.goto(LockedLoginsSettings)
@@ -214,6 +252,9 @@ class AuthenticationTest: BaseTestCase {
     }
 
     func testChangedPasswordMustBeNew() {
+        waitForExistence(app.textFields["url"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SetPasscode)
         userState.newPasscode = "111111"
 
@@ -226,6 +267,9 @@ class AuthenticationTest: BaseTestCase {
     }
 
     func testPasscodesMustMatchWhenCreating() {
+        waitForExistence(app.textFields["url"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SetPasscodeTypeOnce)
         waitForExistence(app.staticTexts["Re-enter passcode"])
 
@@ -237,6 +281,9 @@ class AuthenticationTest: BaseTestCase {
     }
 
     func testPasscodeMustBeCorrectWhenRemoving() {
+        waitForExistence(app.textFields["url"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SetPasscode)
         XCTAssertTrue(app.staticTexts["Immediately"].exists)
 
@@ -248,6 +295,9 @@ class AuthenticationTest: BaseTestCase {
     }
 
     func testChangingIntervalResetsValidationTimer() {
+        waitForExistence(app.textFields["url"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SetPasscode)
 
         // Enter login, since the default is 'set immediately,' it will ask for passcode
@@ -262,5 +312,30 @@ class AuthenticationTest: BaseTestCase {
         navigator.goto(LockedLoginsSettings)
         waitForExistence(app.navigationBars["Enter Passcode"])
         navigator.performAction(Action.UnlockLoginsSettings)
+    }
+
+    func testBasicHTTPAuthenticationPromptVisible() {
+        waitForExistence(app.textFields["url"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
+        navigator.openURL(testBasicHTTPAuthURL)
+
+        waitForExistence(app.staticTexts["Authentication required"], timeout: 5)
+        waitForExistence(app.staticTexts["A username and password are being requested by jigsaw.w3.org. The site says: test"])
+
+        let placeholderValueUsername = app.alerts.textFields.element(boundBy: 0).value as! String
+        let placeholderValuePassword = app.alerts.secureTextFields.element(boundBy: 0).value as! String
+
+        XCTAssertEqual(placeholderValueUsername, "Username")
+        XCTAssertEqual(placeholderValuePassword, "Password")
+
+        waitForExistence(app.alerts.buttons["Cancel"])
+        waitForExistence(app.alerts.buttons["Log in"])
+
+        // Skip login due to HTTP Basic Authentication crash in #5757
+
+        // Dismiss authentication prompt
+        app.alerts.buttons["Cancel"].tap()
+        waitForNoExistence(app.alerts.buttons["Cancel"], timeoutValue:5)
     }
 }
