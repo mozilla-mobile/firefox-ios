@@ -39,10 +39,10 @@ extension BrowserViewController: URLBarDelegate {
         
         guard self.tabTrayViewController != nil else { return }
         
-        let controller: UINavigationController
+        let controller: DismissableNavigationViewController
 
         if #available(iOS 13.0, *) {
-            controller = UINavigationController(rootViewController: tabTrayViewController!)
+            controller = DismissableNavigationViewController(rootViewController: tabTrayViewController!)
             controller.presentationController?.delegate = tabTrayViewController
             // If we're not using the system theme, override the view's style to match
             if !ThemeManager.instance.systemThemeIsOn {
