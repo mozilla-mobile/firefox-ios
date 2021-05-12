@@ -6,6 +6,20 @@ import Shared
 import Storage
 import Telemetry
 
+protocol OnViewDismissable: class {
+    var onViewDismissed: (() -> Void)? { get set }
+}
+
+class DismissableNavigationViewController: UINavigationController, OnViewDismissable {
+    var onViewDismissed: (() -> Void)? = nil
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        onViewDismissed?()
+        onViewDismissed = nil
+    }
+}
+
 extension BrowserViewController: URLBarDelegate {
     func showTabTray() {
         Sentry.shared.clearBreadcrumbs()

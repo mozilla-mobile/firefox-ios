@@ -27,20 +27,6 @@ private let KVOs: [KVOConstants] = [
     .title,
 ]
 
-protocol OnViewDismissable: class {
-    var onViewDismissed: (() -> Void)? { get set }
-}
-
-class DismissableNavigationViewController: UINavigationController, OnViewDismissable {
-    var onViewDismissed: (() -> Void)? = nil
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        onViewDismissed?()
-        onViewDismissed = nil
-    }
-}
-
 private let ActionSheetTitleMaxLength = 120
 
 private struct BrowserViewControllerUX {
