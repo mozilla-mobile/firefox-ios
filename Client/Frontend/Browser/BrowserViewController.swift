@@ -822,6 +822,7 @@ class BrowserViewController: UIViewController {
                             if shouldEnterOverlay {
                                 self?.urlBar.enterOverlayMode(nil, pasted: false, search: false)
                             }
+                            self?.tabTrayViewController = nil
                         }
                     }
                 }
@@ -829,6 +830,7 @@ class BrowserViewController: UIViewController {
             } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
                 hideFirefoxHome()
                 urlBar.locationView.reloadButton.reloadButtonState = .disabled
+                tabTrayViewController = nil
             }
             
         } else if isAboutHomeURL {
