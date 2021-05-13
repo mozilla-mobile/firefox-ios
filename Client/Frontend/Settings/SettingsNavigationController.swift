@@ -4,7 +4,7 @@
 
 import UIKit
 
-class ThemedNavigationController: UINavigationController {
+class ThemedNavigationController: DismissableNavigationViewController {
     var presentingModalViewControllerDelegate: PresentingModalViewControllerDelegate?
 
     @objc func done() {
