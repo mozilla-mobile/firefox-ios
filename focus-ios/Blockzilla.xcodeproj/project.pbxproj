@@ -34,7 +34,6 @@
 		16D7169C2114EF76000C8A66 /* BlockerToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D7169B2114EF72000C8A66 /* BlockerToggle.swift */; };
 		16D7169E2114F00E000C8A66 /* TrackingProtectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D7169D2114F00E000C8A66 /* TrackingProtectionViewController.swift */; };
 		16D716A5211503CD000C8A66 /* PageActionSheetItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D716A4211503CD000C8A66 /* PageActionSheetItems.swift */; };
-		1C91A6DFF604CDDAE5C3F1F2 /* BuddyBuildSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 885AD5B8AB73EB0DA9702536 /* BuddyBuildSDK.framework */; };
 		1D199EF220D813D300CDF976 /* DragAndDropTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D199EF120D813D300CDF976 /* DragAndDropTest.swift */; };
 		1D3BEDF920C5E6C70019B722 /* FindInPage.js in Resources */ = {isa = PBXBuildFile; fileRef = 1D3BEDF820C5E6C70019B722 /* FindInPage.js */; };
 		1D3BEDFB20C5E76B0019B722 /* FindInPageBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3BEDFA20C5E76A0019B722 /* FindInPageBar.swift */; };
@@ -555,7 +554,6 @@
 		74F9507E1FD9D08A0047E629 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Intro.strings; sourceTree = "<group>"; };
 		74F950801FD9D0A00047E629 /* af */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = af; path = af.lproj/Intro.strings; sourceTree = "<group>"; };
 		80D9AA926EFBD788739486EB /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
-		885AD5B8AB73EB0DA9702536 /* BuddyBuildSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BuddyBuildSDK.framework; sourceTree = "<group>"; };
 		A89766D31F57DCA8008183C5 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		A89766D41F57DCA8008183C5 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		A89766D51F57DCA8008183C5 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -582,7 +580,6 @@
 		D0967A801EC50002009D937F /* TelemetryIntegration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TelemetryIntegration.swift; sourceTree = "<group>"; };
 		D30179061BC6CB19009AD388 /* BlockerEnabledDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockerEnabledDetector.swift; sourceTree = "<group>"; };
 		D30179C21BCC6F65009AD388 /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
-		D30179C51BCD78E1009AD388 /* Blockzilla-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Blockzilla-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		D30AEEBA1DE4CB1B0096A2E7 /* FileManagerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileManagerExtensions.swift; sourceTree = "<group>"; };
 		D30DF93D1DC1634F0064736C /* Toast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		D328171E1BD0689800185845 /* disconnect-advertising.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-advertising.json"; path = "Lists/disconnect-advertising.json"; sourceTree = SOURCE_ROOT; };
@@ -988,7 +985,6 @@
 				5AFDBB0CF3A9FBA175D2B693 /* AVFoundation.framework in Frameworks */,
 				2F2F84BCF076B21DE42D1F29 /* CoreMedia.framework in Frameworks */,
 				58BD00527359D003DADE601E /* CoreVideo.framework in Frameworks */,
-				1C91A6DFF604CDDAE5C3F1F2 /* BuddyBuildSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1192,7 +1188,6 @@
 				E47F9AE51DB929D800A93285 /* AdSupport.framework */,
 				29B90C056305836CB297FF79 /* AssetsLibrary.framework */,
 				427B752EF11959F9C38B12D6 /* AVFoundation.framework */,
-				885AD5B8AB73EB0DA9702536 /* BuddyBuildSDK.framework */,
 				C652A61E213D254A86DF5736 /* CoreMedia.framework */,
 				80D9AA926EFBD788739486EB /* CoreTelephony.framework */,
 				F4C4943B406FCA9B74B4E186 /* CoreText.framework */,
@@ -1282,7 +1277,6 @@
 				B3AFC2B91F7C0B66001AEF38 /* Modules */,
 				B31DAAC71F7D87E800A11A74 /* Lib */,
 				D3E54FD41DEFB25B003E1AFF /* SearchPlugins */,
-				D30179C51BCD78E1009AD388 /* Blockzilla-Bridging-Header.h */,
 				D3DA778B1DC2C60E009C114E /* errorPage.html */,
 				E4BF2DE21BACE8CA00DA9D68 /* Info.plist */,
 				D3C047BC1DCBD8ED00402FFB /* SearchEngines.plist */,
@@ -3730,14 +3724,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				OTHER_LDFLAGS = (
-					"-framework",
-					BuddyBuildSDK,
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.enterprise;
 				PRODUCT_NAME = "Firefox Focus";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "FOCUS BUDDYBUILD";
-				SWIFT_OBJC_BRIDGING_HEADER = "Blockzilla-Bridging-Header.h";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = FOCUS;
 				SWIFT_VERSION = 4.2;
 				VALID_ARCHS = "$(ARCHS_STANDARD)";
 			};
@@ -3841,14 +3830,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				OTHER_LDFLAGS = (
-					"-framework",
-					BuddyBuildSDK,
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar.enterprise;
 				PRODUCT_NAME = "Firefox Klar";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "KLAR BUDDYBUILD";
-				SWIFT_OBJC_BRIDGING_HEADER = "Blockzilla-Bridging-Header.h";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = KLAR;
 				SWIFT_VERSION = 4.2;
 				VALID_ARCHS = "$(ARCHS_STANDARD)";
 			};
@@ -4011,16 +3995,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				OTHER_LDFLAGS = (
-					"-framework",
-					BuddyBuildSDK,
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus;
 				PRODUCT_NAME = "Firefox Focus";
 				PROVISIONING_PROFILE = "12379ceb-99e8-48c2-b270-64131bd2fb24";
 				PROVISIONING_PROFILE_SPECIFIER = "Focus Development Profile";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "FOCUS DEBUG BUDDYBUILD";
-				SWIFT_OBJC_BRIDGING_HEADER = "Blockzilla-Bridging-Header.h";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "FOCUS DEBUG";
 				SWIFT_VERSION = 4.2;
 				VALID_ARCHS = "$(ARCHS_STANDARD)";
 			};
@@ -4130,7 +4109,6 @@
 				PRODUCT_NAME = "Firefox Focus";
 				PROVISIONING_PROFILE = "a0e006fd-308f-466b-8037-c39e3e78188e";
 				PROVISIONING_PROFILE_SPECIFIER = "bitrise focus";
-				SWIFT_OBJC_BRIDGING_HEADER = "Blockzilla-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				VALID_ARCHS = "$(ARCHS_STANDARD)";
 			};
@@ -5030,14 +5008,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				OTHER_LDFLAGS = (
-					"-framework",
-					BuddyBuildSDK,
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar;
 				PRODUCT_NAME = "Firefox Klar";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "KLAR DEBUG BUDDYBUILD";
-				SWIFT_OBJC_BRIDGING_HEADER = "Blockzilla-Bridging-Header.h";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "KLAR DEBUG";
 				SWIFT_VERSION = 4.2;
 				VALID_ARCHS = "$(ARCHS_STANDARD)";
 			};
@@ -5070,7 +5043,6 @@
 				PRODUCT_NAME = "Firefox Klar";
 				PROVISIONING_PROFILE = "3d0198ab-c4fb-4dd9-8140-927873f44e85";
 				PROVISIONING_PROFILE_SPECIFIER = "bitrise klar";
-				SWIFT_OBJC_BRIDGING_HEADER = "Blockzilla-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				VALID_ARCHS = "$(ARCHS_STANDARD)";
 			};

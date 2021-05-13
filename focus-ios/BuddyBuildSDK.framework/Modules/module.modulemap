@@ -1,6 +1,0 @@
-module BuddyBuildSDK {
-  umbrella header "Headers/BuddyBuildSDK.h"
-  
-  export *
-  module * { export * }
-}

@@ -48,7 +48,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             }
             UserDefaults.standard.removePersistentDomain(forName: AppInfo.sharedContainerIdentifier)
         }
-        setupContinuousDeploymentTooling()
         setupErrorTracking()
         setupTelemetry()
         TPStatsBlocklistChecker.shared.startup()
@@ -343,12 +342,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
 
 // MARK: - Telemetry & Tooling setup
 extension AppDelegate {
-
-    func setupContinuousDeploymentTooling() {
-        #if BUDDYBUILD
-            BuddyBuildSDK.setup()
-        #endif
-    }
 
     func setupErrorTracking() {
         // Set up Sentry
