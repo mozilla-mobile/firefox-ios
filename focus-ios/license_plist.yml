@@ -4,8 +4,6 @@ github:
   - owner: mozilla-mobile
     name: focus-ios
     version: 3.9
-  - owner: stefanceriu
-    name: SCSiriWaveformView
 
 rename:
     focus-ios: Firefox Focus
