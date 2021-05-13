@@ -46,6 +46,11 @@
                BlueprintName = "ClientTests"
                ReferencedContainer = "container:Blockzilla.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "SearchEngineTests/testResponseConsistency()">
+               </Test>
+            </SkippedTests>
          </TestableReference>
          <TestableReference
             skipped = "NO">
