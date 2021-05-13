@@ -96,35 +96,30 @@ class TPAccessoryInfo: ThemedTableViewController {
         let cell = ThemedTableViewCell(style: .subtitle, reuseIdentifier: nil)
         if indexPath.section == 0 {
             if indexPath.row == 0 {
-                cell.imageView?.image = UIImage(imageLiteralResourceName: "tp-socialtracker")
                 cell.textLabel?.text = Strings.TPSocialBlocked
             } else {
                 cell.textLabel?.text = Strings.TPCategoryDescriptionSocial
             }
         } else if indexPath.section == 1 {
             if indexPath.row == 0 {
-                cell.imageView?.image = UIImage(imageLiteralResourceName: "tp-cookie")
                 cell.textLabel?.text = Strings.TPCrossSiteBlocked
             } else {
                 cell.textLabel?.text = Strings.TPCategoryDescriptionCrossSite
             }
         } else if indexPath.section == 2 {
             if indexPath.row == 0 {
-                cell.imageView?.image = UIImage(imageLiteralResourceName: "tp-cryptominer")
                 cell.textLabel?.text = Strings.TPCryptominersBlocked
             } else {
                 cell.textLabel?.text = Strings.TPCategoryDescriptionCryptominers
             }
         } else if indexPath.section == 3 {
             if indexPath.row == 0 {
-                cell.imageView?.image = UIImage(imageLiteralResourceName: "tp-fingerprinter")
                 cell.textLabel?.text = Strings.TPFingerprintersBlocked
             } else {
                 cell.textLabel?.text = Strings.TPCategoryDescriptionFingerprinters
             }
         } else if indexPath.section == 4 {
             if indexPath.row == 0 {
-                cell.imageView?.image = UIImage(imageLiteralResourceName: "tp-contenttracker")
                 cell.textLabel?.text = Strings.TPContentBlocked
             } else {
                 cell.textLabel?.text = Strings.TPCategoryDescriptionContentTrackers
