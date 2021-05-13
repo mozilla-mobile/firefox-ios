@@ -6,6 +6,20 @@ import Shared
 import Storage
 import Telemetry
 
+protocol OnViewDismissable: class {
+    var onViewDismissed: (() -> Void)? { get set }
+}
+
+class DismissableNavigationViewController: UINavigationController, OnViewDismissable {
+    var onViewDismissed: (() -> Void)? = nil
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        onViewDismissed?()
+        onViewDismissed = nil
+    }
+}
+
 extension BrowserViewController: URLBarDelegate {
     func showTabTray() {
         Sentry.shared.clearBreadcrumbs()
@@ -39,10 +53,10 @@ extension BrowserViewController: URLBarDelegate {
         
         guard self.tabTrayViewController != nil else { return }
         
-        let controller: UINavigationController
+        let controller: DismissableNavigationViewController
 
         if #available(iOS 13.0, *) {
-            controller = UINavigationController(rootViewController: tabTrayViewController!)
+            controller = DismissableNavigationViewController(rootViewController: tabTrayViewController!)
             controller.presentationController?.delegate = tabTrayViewController
             // If we're not using the system theme, override the view's style to match
             if !ThemeManager.instance.systemThemeIsOn {

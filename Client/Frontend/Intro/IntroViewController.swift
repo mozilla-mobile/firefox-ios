@@ -8,7 +8,8 @@ import SnapKit
 import Shared
 import Leanplum
 
-class IntroViewController: UIViewController {
+class IntroViewController: UIViewController, OnViewDismissable {
+    var onViewDismissed: (() -> Void)? = nil
     // private var
     // Private views
     private lazy var welcomeCard: IntroScreenWelcomeView = {
@@ -36,6 +37,12 @@ class IntroViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initialViewSetup()
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        onViewDismissed?()
+        onViewDismissed = nil
     }
     
     // MARK: View setup

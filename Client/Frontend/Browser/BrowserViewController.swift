@@ -108,7 +108,6 @@ class BrowserViewController: UIViewController {
     fileprivate var keyboardState: KeyboardState?
     var hasTriedToPresentETPAlready = false
     var hasTriedToPresentDBCardAlready = false
-    var hasPresentedDBCard = false
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
 
@@ -813,16 +812,16 @@ class BrowserViewController: UIViewController {
             if isAboutHomeURL {
                 showFirefoxHome(inline: true)
 
-                if !hasPresentedDBCard && !shouldShowIntroScreen && focusUrlBar {
-                    if chronTabTrayController == nil && tabTrayViewController == nil {
-                        urlBar.enterOverlayMode(nil, pasted: false, search: false)
-                    } else {
-                        tabTrayViewController?.onViewDismissed = { [weak self] in
+                if focusUrlBar {
+                    if let viewcontroller = presentedViewController as? OnViewDismissable {
+                        viewcontroller.onViewDismissed = { [weak self] in
                             let shouldEnterOverlay = self?.tabManager.selectedTab?.url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
                             if shouldEnterOverlay {
                                 self?.urlBar.enterOverlayMode(nil, pasted: false, search: false)
                             }
                         }
+                    } else {
+                        self.urlBar.enterOverlayMode(nil, pasted: false, search: false)
                     }
                 }
 
@@ -1849,7 +1848,7 @@ extension BrowserViewController {
                 UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
             }
         }
-        hasPresentedDBCard = true
+
         present(dBOnboardingViewController, animated: true, completion: nil)
     }
     
