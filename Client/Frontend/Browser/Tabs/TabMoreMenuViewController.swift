@@ -24,8 +24,8 @@ class TabMoreMenuViewController: UIViewController, Themeable {
                                         Strings.ShareContextMenuTitle,
                                         Strings.SendToDeviceTitle]
     ]
-    let imageViews: [Int: [UIImageView]] = [ 1: [UIImageView(image: UIImage.templateImageNamed("panelIconReadingList")),
-                                                 UIImageView(image: UIImage.templateImageNamed("panelIconBookmarks")),
+    let imageViews: [Int: [UIImageView]] = [ 1: [UIImageView(image: UIImage.templateImageNamed("library-readinglist")),
+                                                 UIImageView(image: UIImage.templateImageNamed("bookmark")),
                                                  UIImageView(image: UIImage.templateImageNamed("action_pin"))],
                                              2: [UIImageView(image: UIImage.templateImageNamed("menu-CloseTabs"))],
                                              0: [UIImageView(image: UIImage.templateImageNamed("menu-Copy-Link")),

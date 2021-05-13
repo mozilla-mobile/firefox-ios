@@ -14,7 +14,7 @@ private let BookmarkDetailFolderCellIdentifier = "BookmarkDetailFolderCellIdenti
 
 private struct BookmarkDetailPanelUX {
     static let FieldRowHeight: CGFloat = 58
-    static let FolderIconSize = CGSize(width: 20, height: 20)
+    static let FolderIconSize = CGSize(width: 24, height: 24)
     static let IndentationWidth: CGFloat = 20
     static let MinIndentedContentWidth: CGFloat = 100
 }

@@ -14,7 +14,7 @@ private let BookmarkSeparatorCellIdentifier = "BookmarkSeparatorCellIdentifier"
 private let BookmarkSectionHeaderIdentifier = "BookmarkSectionHeaderIdentifier"
 
 private struct BookmarksPanelUX {
-    static let FolderIconSize = CGSize(width: 20, height: 20)
+    static let FolderIconSize = CGSize(width: 24, height: 24)
     static let RowFlashDelay: TimeInterval = 0.4
 }
 
