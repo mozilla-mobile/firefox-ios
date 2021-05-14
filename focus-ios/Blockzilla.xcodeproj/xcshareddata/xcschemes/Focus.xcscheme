@@ -66,6 +66,9 @@
                   Identifier = "CopyTest">
                </Test>
                <Test
+                  Identifier = "FindInPageTest/testActivityMenuFindInPageAction()">
+               </Test>
+               <Test
                   Identifier = "FindInPageTest/testFindInPageURLBarElement()">
                </Test>
                <Test
