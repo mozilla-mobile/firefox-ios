@@ -63,7 +63,6 @@
 		745DC5E41F39221100661635 /* ShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 745DC5DA1F39221100661635 /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7460BD671F58B1B10096B745 /* GradientProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7460BD661F58B1B10096B745 /* GradientProgressBar.swift */; };
 		746BD91A1F75881D00BE8DB9 /* SentryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746BD9191F75881D00BE8DB9 /* SentryIntegration.swift */; };
-		746BD91E1F758C0800BE8DB9 /* Sentry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 746BD91D1F758C0700BE8DB9 /* Sentry.framework */; };
 		746BD9241F758FDA00BE8DB9 /* Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746BD9231F758FDA00BE8DB9 /* Bytes.swift */; };
 		746BD9261F75C43C00BE8DB9 /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746BD9251F75C43C00BE8DB9 /* DataExtensions.swift */; };
 		746BD9281F75C45A00BE8DB9 /* DictionaryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746BD9271F75C45A00BE8DB9 /* DictionaryExtensions.swift */; };
@@ -188,6 +187,7 @@
 		F7FF8B5B2194084000CCA80F /* UIDeviceExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FF8B5A2194084000CCA80F /* UIDeviceExtensions.swift */; };
 		F805722F1DBEE504004339C1 /* WebCacheUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F805722E1DBEE504004339C1 /* WebCacheUtils.swift */; };
 		F8324C2F264C807C007E4BFA /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F8324C2E264C807C007E4BFA /* SnapKit */; };
+		F8324C78264DA5F1007E4BFA /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = F8324C77264DA5F1007E4BFA /* Sentry */; };
 		F84AFE751DE77FE6005C4DD1 /* LaunchScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = F84AFE721DE77FE6005C4DD1 /* LaunchScreen.png */; };
 		F84AFE761DE77FE6005C4DD1 /* LaunchScreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F84AFE731DE77FE6005C4DD1 /* LaunchScreen@2x.png */; };
 		F84AFE771DE77FE6005C4DD1 /* LaunchScreen@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F84AFE741DE77FE6005C4DD1 /* LaunchScreen@3x.png */; };
@@ -459,7 +459,6 @@
 		7460BD661F58B1B10096B745 /* GradientProgressBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientProgressBar.swift; sourceTree = "<group>"; };
 		746BD9191F75881D00BE8DB9 /* SentryIntegration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentryIntegration.swift; sourceTree = "<group>"; };
 		746BD91B1F758BEC00BE8DB9 /* Carthage */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Carthage; sourceTree = "<group>"; };
-		746BD91D1F758C0700BE8DB9 /* Sentry.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sentry.framework; path = Carthage/Build/iOS/Sentry.framework; sourceTree = "<group>"; };
 		746BD9231F758FDA00BE8DB9 /* Bytes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bytes.swift; sourceTree = "<group>"; };
 		746BD9251F75C43C00BE8DB9 /* DataExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensions.swift; sourceTree = "<group>"; };
 		746BD9271F75C45A00BE8DB9 /* DictionaryExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryExtensions.swift; sourceTree = "<group>"; };
@@ -969,7 +968,6 @@
 				163BFFE22124EBAF0007CEBC /* Intents.framework in Frameworks */,
 				D5B10AAB1FD5EFA40044523A /* OnePasswordExtension.framework in Frameworks */,
 				F8324C2F264C807C007E4BFA /* SnapKit in Frameworks */,
-				746BD91E1F758C0800BE8DB9 /* Sentry.framework in Frameworks */,
 				D3AAC2911EAE9146005B7E8C /* AutocompleteTextField.framework in Frameworks */,
 				E47F9AE71DB929D800A93285 /* AdSupport.framework in Frameworks */,
 				E47F9AE81DB929D800A93285 /* iAd.framework in Frameworks */,
@@ -981,6 +979,7 @@
 				D5D2F041252FA71B00761DC8 /* Glean.framework in Frameworks */,
 				D00A44111EB8F80A00DB0218 /* Telemetry.framework in Frameworks */,
 				2825C3665AB14081B262F767 /* SystemConfiguration.framework in Frameworks */,
+				F8324C78264DA5F1007E4BFA /* Sentry in Frameworks */,
 				34056D10515852F370C83A01 /* QuartzCore.framework in Frameworks */,
 				5AFDBB0CF3A9FBA175D2B693 /* AVFoundation.framework in Frameworks */,
 				2F2F84BCF076B21DE42D1F29 /* CoreMedia.framework in Frameworks */,
@@ -1182,7 +1181,6 @@
 				163BFFE32124F8E10007CEBC /* IntentsUI.framework */,
 				163BFFE12124EBAF0007CEBC /* Intents.framework */,
 				747ADA1D1FCE0B7B00970132 /* OnePasswordExtension.framework */,
-				746BD91D1F758C0700BE8DB9 /* Sentry.framework */,
 				746BD91B1F758BEC00BE8DB9 /* Carthage */,
 				D3AAC28C1EAE8F5A005B7E8C /* AutocompleteTextField.framework */,
 				E47F9AE51DB929D800A93285 /* AdSupport.framework */,
@@ -1484,6 +1482,7 @@
 			name = Blockzilla;
 			packageProductDependencies = (
 				F8324C2E264C807C007E4BFA /* SnapKit */,
+				F8324C77264DA5F1007E4BFA /* Sentry */,
 			);
 			productName = Blockzilla;
 			productReference = E4BF2DD31BACE8CA00DA9D68 /* Firefox Klar.app */;
@@ -1660,6 +1659,7 @@
 			mainGroup = E4BF2DCA1BACE8CA00DA9D68;
 			packageReferences = (
 				F8324C2D264C807C007E4BFA /* XCRemoteSwiftPackageReference "SnapKit" */,
+				F8324C76264DA5F1007E4BFA /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 			);
 			productRefGroup = E4BF2DD41BACE8CA00DA9D68 /* Products */;
 			projectDirPath = "";
@@ -1780,7 +1780,6 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Fuzi.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/AutocompleteTextField.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Telemetry.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/Sentry.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/OnePasswordExtension.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Glean.framework",
 			);
@@ -5212,6 +5211,14 @@
 				version = 5.0.1;
 			};
 		};
+		F8324C76264DA5F1007E4BFA /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/getsentry/sentry-cocoa";
+			requirement = {
+				kind = exactVersion;
+				version = 5.2.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -5219,6 +5226,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F8324C2D264C807C007E4BFA /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		F8324C77264DA5F1007E4BFA /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F8324C76264DA5F1007E4BFA /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
