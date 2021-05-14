@@ -63,7 +63,10 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "CopyTest/testCopyMenuItem()">
+                  Identifier = "CopyTest">
+               </Test>
+               <Test
+                  Identifier = "FindInPageTest/testActivityMenuFindInPageAction()">
                </Test>
                <Test
                   Identifier = "QuickAddAutocompleteURLTest/testURLContextMenu()">
@@ -79,6 +82,9 @@
                </Test>
                <Test
                   Identifier = "UserAgentTest">
+               </Test>
+               <Test
+                  Identifier = "WebsiteAccessTests/testAutocompleteCustomDomain()">
                </Test>
             </SkippedTests>
          </TestableReference>

@@ -66,6 +66,9 @@
                   Identifier = "CopyTest">
                </Test>
                <Test
+                  Identifier = "FindInPageTest/testFindInPageURLBarElement()">
+               </Test>
+               <Test
                   Identifier = "QuickAddAutocompleteURLTest/testURLContextMenu()">
                </Test>
                <Test
@@ -79,6 +82,9 @@
                </Test>
                <Test
                   Identifier = "UserAgentTest">
+               </Test>
+               <Test
+                  Identifier = "WebsiteAccessTests/testAutocompleteCustomDomain()">
                </Test>
             </SkippedTests>
          </TestableReference>
