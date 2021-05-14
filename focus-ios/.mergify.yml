@@ -1,0 +1,29 @@
+pull_request_rules:
+  - name: Resolve conflict
+    conditions:
+      - conflict
+    actions:
+        comment:
+          message: This pull request has conflicts when rebasing. Can you please fix it @{{author}}? 🙏
+  - name: Needs landing - Rebase
+    conditions:
+      - label=Needs Landing
+      - "#approved-reviews-by>=1"
+      - -draft
+      - label!=Work In Progress
+      - label!=Do Not Land
+    actions:
+      merge:
+        method: rebase
+        strict: smart
+  - name: Needs landing - Squash
+    conditions:
+      - label=Needs Landing (Squash)
+      - "#approved-reviews-by>=1"
+      - -draft
+      - label!=work in progress
+      - label!=do not land
+    actions:
+      merge:
+        method: squash
+        strict: smart
