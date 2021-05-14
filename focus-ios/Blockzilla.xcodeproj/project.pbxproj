@@ -142,7 +142,6 @@
 		D3E2C96D1DA3077400DEBE3D /* CharacterSetExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E2C96C1DA3077400DEBE3D /* CharacterSetExtensions.swift */; };
 		D3E2C96F1DA3093D00DEBE3D /* BrowserToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E2C96E1DA3093D00DEBE3D /* BrowserToolbar.swift */; };
 		D3E3CA7D1DA827AD0079C94B /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E3CA7C1DA827AD0079C94B /* HomeView.swift */; };
-		D3E54FCD1DEFA92F003E1AFF /* Fuzi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3E54FCC1DEFA92F003E1AFF /* Fuzi.framework */; };
 		D3E54FCF1DEFAE80003E1AFF /* OpenSearchParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E54FCE1DEFAE80003E1AFF /* OpenSearchParser.swift */; };
 		D3E54FD11DEFB063003E1AFF /* SearchEngineManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E54FD01DEFB063003E1AFF /* SearchEngineManager.swift */; };
 		D3E54FD51DEFB25B003E1AFF /* SearchPlugins in Resources */ = {isa = PBXBuildFile; fileRef = D3E54FD41DEFB25B003E1AFF /* SearchPlugins */; };
@@ -187,6 +186,7 @@
 		F7FF8B5B2194084000CCA80F /* UIDeviceExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FF8B5A2194084000CCA80F /* UIDeviceExtensions.swift */; };
 		F805722F1DBEE504004339C1 /* WebCacheUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F805722E1DBEE504004339C1 /* WebCacheUtils.swift */; };
 		F8324C2F264C807C007E4BFA /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F8324C2E264C807C007E4BFA /* SnapKit */; };
+		F8324CBA264DC8ED007E4BFA /* Fuzi in Frameworks */ = {isa = PBXBuildFile; productRef = F8324CB9264DC8ED007E4BFA /* Fuzi */; };
 		F8324C78264DA5F1007E4BFA /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = F8324C77264DA5F1007E4BFA /* Sentry */; };
 		F84AFE751DE77FE6005C4DD1 /* LaunchScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = F84AFE721DE77FE6005C4DD1 /* LaunchScreen.png */; };
 		F84AFE761DE77FE6005C4DD1 /* LaunchScreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F84AFE731DE77FE6005C4DD1 /* LaunchScreen@2x.png */; };
@@ -634,7 +634,6 @@
 		D3E3CA7C1DA827AD0079C94B /* HomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		D3E3CA801DA83FAF0079C94B /* Focus.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Focus.entitlements; sourceTree = "<group>"; };
 		D3E3CA811DA83FAF0079C94B /* FocusEnterprise.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = FocusEnterprise.entitlements; sourceTree = "<group>"; };
-		D3E54FCC1DEFA92F003E1AFF /* Fuzi.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Fuzi.framework; path = Carthage/Build/iOS/Fuzi.framework; sourceTree = "<group>"; };
 		D3E54FCE1DEFAE80003E1AFF /* OpenSearchParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenSearchParser.swift; sourceTree = "<group>"; };
 		D3E54FD01DEFB063003E1AFF /* SearchEngineManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEngineManager.swift; sourceTree = "<group>"; };
 		D3E54FD41DEFB25B003E1AFF /* SearchPlugins */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SearchPlugins; path = Search/SearchPlugins; sourceTree = SOURCE_ROOT; };
@@ -971,7 +970,6 @@
 				D3AAC2911EAE9146005B7E8C /* AutocompleteTextField.framework in Frameworks */,
 				E47F9AE71DB929D800A93285 /* AdSupport.framework in Frameworks */,
 				E47F9AE81DB929D800A93285 /* iAd.framework in Frameworks */,
-				D3E54FCD1DEFA92F003E1AFF /* Fuzi.framework in Frameworks */,
 				D38D693D1C471A98003EF211 /* GCDWebServers.framework in Frameworks */,
 				4285B8E0671F40DA543A2E58 /* AssetsLibrary.framework in Frameworks */,
 				A57245250F88CCA4993E55B2 /* CoreText.framework in Frameworks */,
@@ -982,6 +980,7 @@
 				F8324C78264DA5F1007E4BFA /* Sentry in Frameworks */,
 				34056D10515852F370C83A01 /* QuartzCore.framework in Frameworks */,
 				5AFDBB0CF3A9FBA175D2B693 /* AVFoundation.framework in Frameworks */,
+				F8324CBA264DC8ED007E4BFA /* Fuzi in Frameworks */,
 				2F2F84BCF076B21DE42D1F29 /* CoreMedia.framework in Frameworks */,
 				58BD00527359D003DADE601E /* CoreVideo.framework in Frameworks */,
 			);
@@ -1190,7 +1189,6 @@
 				80D9AA926EFBD788739486EB /* CoreTelephony.framework */,
 				F4C4943B406FCA9B74B4E186 /* CoreText.framework */,
 				BC16C41C8D4A74C79A493D42 /* CoreVideo.framework */,
-				D3E54FCC1DEFA92F003E1AFF /* Fuzi.framework */,
 				D38D693B1C471A98003EF211 /* GCDWebServers.framework */,
 				E47F9AE61DB929D800A93285 /* iAd.framework */,
 				AAB8E622E994545108473554 /* QuartzCore.framework */,
@@ -1482,6 +1480,7 @@
 			name = Blockzilla;
 			packageProductDependencies = (
 				F8324C2E264C807C007E4BFA /* SnapKit */,
+				F8324CB9264DC8ED007E4BFA /* Fuzi */,
 				F8324C77264DA5F1007E4BFA /* Sentry */,
 			);
 			productName = Blockzilla;
@@ -1659,6 +1658,7 @@
 			mainGroup = E4BF2DCA1BACE8CA00DA9D68;
 			packageReferences = (
 				F8324C2D264C807C007E4BFA /* XCRemoteSwiftPackageReference "SnapKit" */,
+				F8324CB8264DC8ED007E4BFA /* XCRemoteSwiftPackageReference "Fuzi" */,
 				F8324C76264DA5F1007E4BFA /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 			);
 			productRefGroup = E4BF2DD41BACE8CA00DA9D68 /* Products */;
@@ -1777,7 +1777,6 @@
 			);
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/GCDWebServers.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/Fuzi.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/AutocompleteTextField.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Telemetry.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/OnePasswordExtension.framework",
@@ -5211,6 +5210,14 @@
 				version = 5.0.1;
 			};
 		};
+		F8324CB8264DC8ED007E4BFA /* XCRemoteSwiftPackageReference "Fuzi" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/cezheng/Fuzi";
+			requirement = {
+				kind = exactVersion;
+				version = 3.1.3;
+			};
+		};
 		F8324C76264DA5F1007E4BFA /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/getsentry/sentry-cocoa";
@@ -5226,6 +5233,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F8324C2D264C807C007E4BFA /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		F8324CB9264DC8ED007E4BFA /* Fuzi */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F8324CB8264DC8ED007E4BFA /* XCRemoteSwiftPackageReference "Fuzi" */;
+			productName = Fuzi;
 		};
 		F8324C77264DA5F1007E4BFA /* Sentry */ = {
 			isa = XCSwiftPackageProductDependency;
