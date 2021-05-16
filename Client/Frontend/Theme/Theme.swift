@@ -166,18 +166,18 @@ class HomePanelColor {
     
     var siteTableHeaderBorder: UIColor { return UIColor.Photon.Grey30.withAlphaComponent(0.8) }
 
-    var topSiteDomain: UIColor { return UIColor.Firefox.DarkGrey90 }
-    var topSitePin: UIColor { return UIColor.Firefox.DarkGrey5 }
-    var topSitesBackground: UIColor { return UIColor.Firefox.LightGrey10 }
+    var topSiteDomain: UIColor { return UIColor.Photon.DarkGrey90 }
+    var topSitePin: UIColor { return UIColor.Photon.DarkGrey05 }
+    var topSitesBackground: UIColor { return UIColor.Photon.LightGrey10 }
 
     var shortcutBackground: UIColor { return .white }
     var shortcutShadowColor: CGColor { return UIColor(red: 0.23, green: 0.22, blue: 0.27, alpha: 1.0).cgColor }
     var shortcutShadowOpacity: Float { return 0.2 }
 
-    var activityStreamHeaderText: UIColor { return UIColor.Firefox.DarkGrey90 }
-    var activityStreamHeaderButton: UIColor { return UIColor.Firefox.Blue50 }
-    var activityStreamCellTitle: UIColor { return UIColor.black }
-    var activityStreamCellDescription: UIColor { return UIColor.Photon.Grey60 }
+    var activityStreamHeaderText: UIColor { return UIColor.Photon.DarkGrey90 }
+    var activityStreamHeaderButton: UIColor { return UIColor.Photon.Blue50 }
+    var activityStreamCellTitle: UIColor { return UIColor.Photon.DarkGrey90 }
+    var activityStreamCellDescription: UIColor { return UIColor.Photon.DarkGrey05 }
 
     var readingListActive: UIColor { return defaultTextAndTint }
     var readingListDimmed: UIColor { return UIColor.Photon.Grey40 }

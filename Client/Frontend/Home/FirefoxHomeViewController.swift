@@ -172,6 +172,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
         Section.allValues.forEach { self.collectionView?.register(Section($0.rawValue).cellType, forCellWithReuseIdentifier: Section($0.rawValue).cellIdentifier) }
         self.collectionView?.register(ASHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header")
         collectionView?.keyboardDismissMode = .onDrag
+        collectionView?.backgroundColor = .clear
 
         if #available(iOS 14.0, *), !UserDefaults.standard.bool(forKey: "DidDismissDefaultBrowserCard") {
             self.view.addSubview(defaultBrowserCard)
@@ -238,7 +239,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
 
     func applyTheme() {
         defaultBrowserCard.applyTheme()
-        collectionView?.backgroundColor = UIColor.theme.homePanel.topSitesBackground
         self.view.backgroundColor = UIColor.theme.homePanel.topSitesBackground
         topSiteCell.collectionView.reloadData()
         if let collectionView = self.collectionView, collectionView.numberOfSections > 0, collectionView.numberOfItems(inSection: 0) > 0 {
@@ -808,8 +808,8 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
 
         let shareAction = PhotonActionSheetItem(title: Strings.ShareContextMenuTitle, iconString: "action_share", handler: { _, _ in
             let helper = ShareExtensionHelper(url: siteURL, tab: nil)
-            let controller = helper.createActivityViewController({ (_, _) in })
-            if UI_USER_INTERFACE_IDIOM() == .pad, let popoverController = controller.popoverPresentationController {
+            let controller = helper.createActivityViewController { (_, _) in }
+            if UIDevice.current.userInterfaceIdiom == .pad, let popoverController = controller.popoverPresentationController {
                 let cellRect = sourceView?.frame ?? .zero
                 let cellFrameInSuperview = self.collectionView?.convert(cellRect, to: self.collectionView) ?? .zero
 

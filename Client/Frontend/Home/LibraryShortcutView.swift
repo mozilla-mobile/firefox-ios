@@ -21,6 +21,7 @@ class LibraryShortcutView: UIView {
         button.layer.shadowRadius = 6
         return button
     }()
+
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.textAlignment = .center
@@ -32,17 +33,21 @@ class LibraryShortcutView: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+
         addSubview(button)
         addSubview(titleLabel)
+
         self.snp.makeConstraints { make in
             make.width.greaterThanOrEqualTo(60)
             make.width.lessThanOrEqualTo(75)
         }
+
         button.snp.makeConstraints { make in
-            make.width.height.equalTo(60)
+            make.size.equalTo(60)
             make.centerX.equalToSuperview()
             make.bottom.equalToSuperview().inset(20)
         }
+
         titleLabel.snp.makeConstraints { make in
             make.leading.trailing.centerX.bottom.equalToSuperview()
         }
@@ -57,6 +62,7 @@ class LibraryShortcutView: UIView {
             make.size.equalTo(22)
             make.center.equalToSuperview()
         }
+
         super.layoutSubviews()
     }
 }

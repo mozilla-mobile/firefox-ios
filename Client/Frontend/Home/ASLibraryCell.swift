@@ -37,7 +37,6 @@ class ASLibraryCell: UICollectionViewCell, Themeable {
             let words = view.titleLabel.text?.components(separatedBy: NSCharacterSet.whitespacesAndNewlines).count
             view.titleLabel.numberOfLines = words == 1 ? 1 : 2
             view.button.tintColor = item.color
-            view.button.setTitleColor(UIColor.theme.homePanel.topSiteDomain, for: .normal)
             view.accessibilityLabel = item.title
             mainView.addArrangedSubview(view)
             libraryButtons.append(view)

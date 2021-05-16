@@ -46,7 +46,7 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
         let titleLabel = UILabel()
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
-        titleLabel.preferredMaxLayoutWidth = 65
+        titleLabel.preferredMaxLayoutWidth = 70
         return titleLabel
     }()
 
@@ -113,11 +113,11 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
         faviconBG.snp.makeConstraints { make in
             make.top.centerX.equalTo(contentView)
             make.bottom.equalTo(contentView).inset(TopSiteCellUX.TitleHeight)
-            make.height.width.equalTo(60)
+            make.size.equalTo(60)
         }
 
         pinImageView.snp.makeConstraints { make in
-            make.width.height.equalTo(TopSiteCellUX.PinIconSize)
+            make.size.equalTo(TopSiteCellUX.PinIconSize)
         }
     }
 
@@ -157,12 +157,11 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
         if let _ = site as? PinnedSite {
             titleWrapper.addSubview(pinImageView)
             pinImageView.snp.makeConstraints { make in
-                make.trailing.equalTo(self.titleLabel.snp.leading)
-                make.size.equalTo(TopSiteCellUX.PinIconSize)
+                make.trailing.equalTo(self.titleLabel.snp.leading).offset(-4)
                 make.centerY.equalTo(self.titleLabel.snp.centerY)
             }
             titleLabel.snp.updateConstraints { make in
-                make.leading.equalTo(titleWrapper).offset(TopSiteCellUX.PinIconSize)
+                make.leading.equalTo(titleWrapper).offset(TopSiteCellUX.PinIconSize + 4)
             }
         } else {
             titleLabel.snp.updateConstraints { make in

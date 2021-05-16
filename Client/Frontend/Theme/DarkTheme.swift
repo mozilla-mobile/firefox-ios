@@ -103,16 +103,16 @@ fileprivate class DarkHomePanelColor: HomePanelColor {
     override var bookmarkCurrentFolderText: UIColor { return UIColor.Photon.White100 }
     override var bookmarkBackNavCellBackground: UIColor { return UIColor.Photon.Grey70 }
     
-    override var activityStreamHeaderText: UIColor { return UIColor.Firefox.LightGrey5 }
-    override var activityStreamHeaderButton: UIColor { return UIColor.Firefox.Blue20 }
-    override var activityStreamCellTitle: UIColor { return UIColor.Photon.Grey20 }
-    override var activityStreamCellDescription: UIColor { return UIColor.Photon.Grey30 }
+    override var activityStreamHeaderText: UIColor { return UIColor.Photon.LightGrey05 }
+    override var activityStreamHeaderButton: UIColor { return UIColor.Photon.Blue20 }
+    override var activityStreamCellTitle: UIColor { return UIColor.Photon.LightGrey05 }
+    override var activityStreamCellDescription: UIColor { return UIColor.Photon.LightGrey50 }
 
-    override var topSiteDomain: UIColor { return UIColor.Firefox.LightGrey5 }
-    override var topSitePin: UIColor { return UIColor.Firefox.LightGrey5 }
-    override var topSitesBackground: UIColor { return UIColor.Firefox.DarkGrey60 }
+    override var topSiteDomain: UIColor { return UIColor.Photon.LightGrey05 }
+    override var topSitePin: UIColor { return UIColor.Photon.LightGrey05 }
+    override var topSitesBackground: UIColor { return UIColor.Photon.DarkGrey60 }
 
-    override var shortcutBackground: UIColor { return UIColor.Firefox.DarkGrey30 }
+    override var shortcutBackground: UIColor { return UIColor.Photon.DarkGrey30 }
     override var shortcutShadowColor: CGColor { return UIColor(red: 0.11, green: 0.11, blue: 0.13, alpha: 1.0).cgColor }
     override var shortcutShadowOpacity: Float { return 0.5 }
 
