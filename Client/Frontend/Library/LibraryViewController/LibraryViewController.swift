@@ -125,7 +125,7 @@ class LibraryViewController: UIViewController {
         topLeftButton.snp.makeConstraints { make in
             make.leading.equalTo(titleContainerView).offset(20)
             make.centerY.equalTo(titleContainerView)
-            make.width.equalTo(80)
+            make.width.equalTo(30)
             make.height.equalTo(30)
         }
         
@@ -308,21 +308,20 @@ class LibraryViewController: UIViewController {
 
     // MARK: - Buttons
     fileprivate func topLeftButtonSetup() {
+        topLeftButton.setTitle("", for: .normal)
         switch panelState.currentState {
         case .bookmarks(state: .inFolder),
              .history(state: .inFolder):
             topLeftButton.isHidden = false
-            topLeftButton.setTitle(Strings.BackTitle, for: .normal)
-            topLeftButton.setImage(nil, for: .normal)
+            let img = UIImage.templateImageNamed("goBack")
+            topLeftButton.setImage(img, for: .normal)
         case .bookmarks(state: .inFolderEditMode):
             topLeftButton.isHidden = false
-            topLeftButton.setTitle("", for: .normal)
             let img = UIImage.templateImageNamed("nav-add")
             topLeftButton.setImage(img, for: .normal)
         case .bookmarks(state: .itemEditMode):
-            topLeftButton.isHidden = false
-            topLeftButton.setTitle(Strings.CancelString, for: .normal)
-            topLeftButton.setImage(nil, for: .normal)
+            let img = UIImage.templateImageNamed("nav-stop")
+            topLeftButton.setImage(img, for: .normal)
         default:
             topLeftButton.isHidden = true
         }
