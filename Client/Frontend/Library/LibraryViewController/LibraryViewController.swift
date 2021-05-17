@@ -313,7 +313,7 @@ class LibraryViewController: UIViewController {
         case .bookmarks(state: .inFolder),
              .history(state: .inFolder):
             topLeftButton.isHidden = false
-            let img = UIImage.templateImageNamed("nav-back")
+            let img = UIImage.templateImageNamed("goBack")
             topLeftButton.setImage(img, for: .normal)
         case .bookmarks(state: .inFolderEditMode):
             topLeftButton.isHidden = false
