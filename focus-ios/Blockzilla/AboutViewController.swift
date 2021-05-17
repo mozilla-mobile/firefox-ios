@@ -123,7 +123,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
         case 1:
             url = URL(string: "https://support.mozilla.org/\(AppInfo.config.supportPath)")
         case 2:
-            url = LocalWebServer.sharedInstance.URLForPath("/\(AppInfo.config.rightsFile)")
+            url = Bundle.main.url(forResource: AppInfo.config.rightsFile, withExtension: nil)
         case 3:
             url = URL(string: "https://www.mozilla.org/privacy/firefox-focus")
         default: break

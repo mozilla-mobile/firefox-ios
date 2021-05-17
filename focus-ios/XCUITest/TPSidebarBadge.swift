@@ -45,7 +45,7 @@ class TrackingProtectionMenu: BaseTestCase {
         waitforExistence(element: app.staticTexts["Your browsing history has been erased."])
 
         // Load another website known for zero (0) trackers
-        loadWebPage("http://localhost:6573/licenses.html\n")
+        loadWebPage("https://www.example.com\n")
         waitForWebPageLoad()
 
         // Open the tracking protection menu

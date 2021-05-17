@@ -5,7 +5,7 @@
 import UIKit
 
 class SafariInstructionsViewController: UIViewController {
-    private let detector = BlockerEnabledDetector.makeInstance()
+    private let detector = BlockerEnabledDetector()
     private let disabledStateView = DisabledStateView()
 
     override func viewDidLoad() {

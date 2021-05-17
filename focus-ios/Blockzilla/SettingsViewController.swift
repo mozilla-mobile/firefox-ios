@@ -282,7 +282,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     // Hold a strong reference to the block detector so it isn't deallocated
     // in the middle of its detection.
-    private let detector = BlockerEnabledDetector.makeInstance()
+    private let detector = BlockerEnabledDetector()
     private let biometryType = BiometryType(context: LAContext())
     private var isSafariEnabled = false
     private let searchEngineManager: SearchEngineManager

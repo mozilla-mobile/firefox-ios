@@ -75,8 +75,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         // Re-register the blocking lists at startup in case they've changed.
         Utils.reloadSafariContentBlocker()
 
-        LocalWebServer.sharedInstance.start()
-
         window = UIWindow(frame: UIScreen.main.bounds)
 
         browserViewController.modalDelegate = self

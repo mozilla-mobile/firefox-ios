@@ -7,13 +7,13 @@ import XCTest
 class FindInPageTest: BaseTestCase {
     func testFindInPageURLBarElement() {
         // Navigate to website
-        loadWebPage("http://localhost:6573/licenses.html\n")
+        loadWebPage("https://www.example.com")
         waitForWebPageLoad()
         
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
         // Activate the find in page bar
         app.textFields["Search or enter address"].tap()
-        app.textFields["Search or enter address"].typeText("mozilla")
+        app.textFields["Search or enter address"].typeText("domain")
 
         // Try all functions of find in page bar
         waitforHittable(element: app.buttons["FindInPageBar.button"])
@@ -34,14 +34,14 @@ class FindInPageTest: BaseTestCase {
 
     func testActivityMenuFindInPageAction() {
         // Navigate to website
-        loadWebPage("http://localhost:6573/licenses.html\n")
+        loadWebPage("https://www.example.com")
         waitforExistence(element: app.buttons["URLBar.pageActionsButton"])
         app.buttons["URLBar.pageActionsButton"].tap()
 
         // Activate find in page activity item and search for a keyword
         waitforHittable(element: app.cells["Find in Page"])
         app.cells["Find in Page"].tap()
-        app.typeText("Moz")
+        app.typeText("Domain")
 
         // Try all functions of find in page bar
         waitforHittable(element: app.buttons["FindInPage.find_previous"])

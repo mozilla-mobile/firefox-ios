@@ -1,4 +1,3 @@
-github "swisspol/GCDWebServer" ~> 3.3.3
 github "mozilla-mobile/AutocompleteTextField" "master"
 github "mozilla-mobile/telemetry-ios" ~> 1.1
 github "AgileBits/onepassword-extension" "new/carthage+ios10"

@@ -9,7 +9,7 @@ import XCTest
 class CopyTest: BaseTestCase {
     func testCopyMenuItem() {
         let urlBarTextField = app.textFields["URLBar.urlText"]
-        loadWebPage("http://localhost:6573/licenses.html")
+        loadWebPage("https://www.example.com")
 
         // Must offset textfield press to support 5S.
         urlBarTextField.coordinate(withNormalizedOffset: CGVector.zero).withOffset(CGVector(dx: 10, dy: 0)).press(forDuration: 1.5)
