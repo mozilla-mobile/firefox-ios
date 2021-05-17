@@ -236,7 +236,8 @@ class TabTrayViewController: UIViewController {
         panel.beginAppearanceTransition(true, animated: true)
         view.addSubview(panel.view)
         view.bringSubviewToFront(navigationToolbar)
-        panel.additionalSafeAreaInsets = UIEdgeInsets(top: GridTabTrayControllerUX.NavigationToolbarHeight, left: 0, bottom: 0, right: 0)
+        let topEdgeInset = UIDevice.current.userInterfaceIdiom == .pad ? 0 : GridTabTrayControllerUX.NavigationToolbarHeight
+        panel.additionalSafeAreaInsets = UIEdgeInsets(top: topEdgeInset, left: 0, bottom: 0, right: 0)
         panel.endAppearanceTransition()
         panel.view.snp.makeConstraints { make in
             make.edges.equalToSuperview()
