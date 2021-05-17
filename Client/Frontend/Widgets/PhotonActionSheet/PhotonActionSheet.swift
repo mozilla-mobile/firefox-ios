@@ -62,6 +62,8 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         super.init(nibName: nil, bundle: nil)
         self.title = title
         self.closeButton.setTitle(closeButtonTitle, for: .normal)
+
+        self.tableView.estimatedRowHeight = PhotonActionSheetUX.RowHeight
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -206,7 +208,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
             }
         }
 
-        return PhotonActionSheetUX.RowHeight
+        return UITableView.automaticDimension
     }
 
     override func viewDidLayoutSubviews() {
@@ -305,11 +307,8 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         
         // For menus other than ETP, don't show top and bottom separator lines
         if (title == nil) {
-            let bottomBorder = CALayer()
-            bottomBorder.frame = CGRect(x: 0.0, y: 43.0, width: cell.contentView.frame.size.width, height: 1.0)
-            bottomBorder.backgroundColor = UIColor.theme.tableView.separator.cgColor
             if (indexPath != [tableView.numberOfSections - 1, tableView.numberOfRows(inSection: tableView.numberOfSections - 1) - 1]) {
-                cell.contentView.layer.addSublayer(bottomBorder)
+                cell.addSubBorder()
             }
         }
         return cell

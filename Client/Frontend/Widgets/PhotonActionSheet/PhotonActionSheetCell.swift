@@ -171,12 +171,19 @@ class PhotonActionSheetCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func addSubBorder() {
+        let bottomBorder = CALayer()
+        bottomBorder.frame = CGRect(x: 0.0, y: self.contentView.frame.origin.y, width: self.contentView.frame.width, height: 1.0)
+        bottomBorder.backgroundColor = UIColor.theme.tableView.separator.cgColor
+        self.contentView.layer.addSublayer(bottomBorder)
+    }
+    
     func configure(with action: PhotonActionSheetItem) {
         titleLabel.text = action.title
         titleLabel.textColor = UIColor.theme.tableView.rowText
         titleLabel.textColor = action.accessory == .Text ? titleLabel.textColor.withAlphaComponent(0.6) : titleLabel.textColor
         titleLabel.adjustsFontSizeToFitWidth = false
-        titleLabel.numberOfLines = 2
+        titleLabel.numberOfLines = 0
         titleLabel.lineBreakMode = .byTruncatingTail
         titleLabel.minimumScaleFactor = 0.5
 
@@ -259,7 +266,6 @@ class PhotonActionSheetCell: UITableViewCell {
         default:
             break // Do nothing. The rest are not supported yet.
         }
-
         action.customRender?(titleLabel, contentView)
     }
 }
