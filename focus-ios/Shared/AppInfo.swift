@@ -70,4 +70,8 @@ class AppInfo {
     open class func testRequestsReset() -> Bool {
         return ProcessInfo.processInfo.arguments.contains("testMode")
     }
+    
+    open class func isFirstRunUIEnabled() -> Bool {
+        return !ProcessInfo.processInfo.arguments.contains("disableFirstRunUI")
+    }
 }

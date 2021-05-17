@@ -4,19 +4,33 @@
 
 import XCTest
 
-class OnboardingTest: BaseTestCase {
+class OnboardingTest: XCTestCase {
+    let app = XCUIApplication()
 
     override func setUp() {
         super.setUp()
+        continueAfterFailure = false
+        app.launchArguments = ["testMode"]
+        app.launch()
     }
 
     override func tearDown() {
-        app.terminate()
         super.tearDown()
+        app.terminate()
+    }
+
+    // Copied from BaseTestCase
+    private func waitforExistence(element: XCUIElement, file: String = #file, line: UInt = #line) {
+        expectation(for: NSPredicate(format: "exists == true"), evaluatedWith: element, handler: nil)
+        waitForExpectations(timeout: 30) {(error) -> Void in
+            if (error != nil) {
+                let message = "Failed to find \(element) after 30 seconds."
+                self.recordFailure(withDescription: message, inFile: file, atLine: Int(line), expected: true)
+            }
+        }
     }
 
     func testPressingDots() {
-
         let stackElement = app.otherElements["Intro.stackView"]
         let pageIndicatorButton1 = stackElement.children(matching: .button).matching(identifier: "page indicator").element(boundBy: 0)
         let pageIndicatorButton2 = stackElement.children(matching: .button).matching(identifier: "page indicator").element(boundBy: 1)

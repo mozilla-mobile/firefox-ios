@@ -5,17 +5,6 @@
 import XCTest
 
 class WebsiteMemoryTest: BaseTestCase {
-
-    override func setUp() {
-        super.setUp()
-        dismissFirstRunUI()
-    }
-
-    override func tearDown() {
-        XCUIApplication().terminate()
-        super.tearDown()
-    }
-
     func testGoogleTextField() {
         let app = XCUIApplication()
         var googleSearchField: XCUIElement = app.webViews.otherElements["Search"]

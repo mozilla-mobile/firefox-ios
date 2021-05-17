@@ -5,17 +5,6 @@
 import XCTest
 
 class CollapsedURLTest: BaseTestCase {
-
-    override func setUp() {
-        super.setUp()
-        dismissFirstRunUI()
-    }
-
-    override func tearDown() {
-        app.terminate()
-        super.tearDown()
-    }
-
     func testCheckCollapsedURL() {
         let app = XCUIApplication()
 

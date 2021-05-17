@@ -5,16 +5,6 @@
 import XCTest
 
 class QuickAddAutocompleteURLTest: BaseTestCase {
-    override func setUp() {
-        super.setUp()
-        dismissFirstRunUI()
-    }
-
-    override func tearDown() {
-        app.terminate()
-        super.tearDown()
-    }
-
     func testURLContextMenu() {
 
         let urlBarTextField = app.textFields["URLBar.urlText"]

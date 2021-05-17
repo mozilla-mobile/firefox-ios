@@ -5,17 +5,6 @@
 import XCTest
 
 class FindInPageTest: BaseTestCase {
-
-    override func setUp() {
-        super.setUp()
-        dismissFirstRunUI()
-    }
-
-    override func tearDown() {
-        app.terminate()
-        super.tearDown()
-    }
-
     func testFindInPageURLBarElement() {
         // Navigate to website
         loadWebPage("http://localhost:6573/licenses.html\n")

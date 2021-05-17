@@ -5,17 +5,6 @@
 import XCTest
 
 class AsianLocaleTest: BaseTestCase {
-
-	override func setUp() {
-		super.setUp()
-		dismissFirstRunUI()
-	}
-
-	override func tearDown() {
-		app.terminate()
-		super.tearDown()
-	}
-
 	func testSearchinLocale() {
         // Set search engine to Google
 		app.buttons["Settings"].tap()

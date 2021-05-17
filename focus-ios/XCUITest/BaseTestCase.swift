@@ -11,12 +11,13 @@ class BaseTestCase: XCTestCase {
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
-        app.launchArguments = ["testMode"]
+        app.launchArguments = ["testMode", "disableFirstRunUI"]
         app.launch()
     }
 
     override func tearDown() {
         super.tearDown()
+        app.terminate()
     }
 
     //If it is a first run, first run window should be gone

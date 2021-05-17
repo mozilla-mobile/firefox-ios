@@ -5,16 +5,6 @@
 import XCTest
 
 class SettingAppearanceTest: BaseTestCase {
-    override func setUp() {
-        super.setUp()
-        dismissFirstRunUI()
-    }
-
-    override func tearDown() {
-        app.terminate()
-        super.tearDown()
-    }
-
     // Check for the basic appearance of the Settings Menu
     func testCheckSetting() {
         waitforHittable(element: app.buttons["Settings"])

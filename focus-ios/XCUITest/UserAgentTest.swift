@@ -6,16 +6,6 @@ import XCTest
 
 class UserAgentTest: BaseTestCase {
 
-    override func setUp() {
-        super.setUp()
-        dismissFirstRunUI()
-    }
-
-    override func tearDown() {
-        app.terminate()
-        super.tearDown()
-    }
-
     func testSignInWithGoogle() {
         loadWebPage("https://getpocket.com/")
         let btn = app.links["Sign up with Google"]

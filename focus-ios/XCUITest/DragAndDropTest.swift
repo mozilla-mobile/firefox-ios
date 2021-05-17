@@ -11,16 +11,6 @@ import XCTest
 class DragAndDropTest: BaseTestCase {
     let websiteWithSearchField = ["url": "https://developer.mozilla.org/en-US/search", "urlSearchField": "Search the docs"]
 
-    override func setUp() {
-        super.setUp()
-        dismissFirstRunUI()
-    }
-
-    override func tearDown() {
-        app.terminate()
-        super.tearDown()
-    }
-
     func testDragElement() {
         if UIDevice.current.userInterfaceIdiom == .pad {
             let urlBarTextField = app.textFields["URLBar.urlText"]

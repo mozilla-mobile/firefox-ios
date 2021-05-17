@@ -5,17 +5,6 @@
 import XCTest
 
 class WebsiteAccessTests: BaseTestCase {
-
-    override func setUp() {
-        super.setUp()
-        dismissFirstRunUI()
-    }
-
-    override func tearDown() {
-        app.terminate()
-        super.tearDown()
-    }
-
     func testVisitWebsite() {
         // Check initial page
         checkForHomeScreen()

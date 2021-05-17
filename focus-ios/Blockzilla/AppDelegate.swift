@@ -93,10 +93,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
 
         let prefIntroDone = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone)
 
+        // Short circuit if we are testing. We special case the first run handling and completely
+        // skip the what's new handling. This logic could be put below but that is already way
+        // too complicated. Everything under this commen should really be refactored.
+        
         if AppInfo.isTesting() {
-            let firstRunViewController = IntroViewController()
-            firstRunViewController.modalPresentationStyle = .fullScreen
-            self.browserViewController.present(firstRunViewController, animated: false, completion: nil)
+            // Only show the First Run UI if the test asks for it.
+            if AppInfo.isFirstRunUIEnabled() {
+                let firstRunViewController = IntroViewController()
+                firstRunViewController.modalPresentationStyle = .fullScreen
+                self.browserViewController.present(firstRunViewController, animated: false, completion: nil)
+            }
             return true
         }
 

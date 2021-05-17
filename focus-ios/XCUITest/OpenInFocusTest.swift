@@ -5,17 +5,6 @@
 import XCTest
 
 class OpenInFocusTest: BaseTestCase {
-
-    override func setUp() {
-        super.setUp()
-        dismissFirstRunUI()
-    }
-
-    override func tearDown() {
-        app.terminate()
-        super.tearDown()
-    }
-
     func xtestOpenViaSafari() {
         waitforHittable(element: app.textFields["URLBar.urlText"]) // wait for app.label
         let sharedExtName = app.label.contains("Klar") ? "Firefox Klar" : "Firefox Focus" as String

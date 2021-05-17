@@ -5,17 +5,6 @@
 import XCTest
 
 class TrackingProtectionSettings: BaseTestCase {
-
-    override func setUp() {
-        super.setUp()
-        dismissFirstRunUI()
-    }
-
-    override func tearDown() {
-        app.terminate()
-        super.tearDown()
-    }
-
     func testInactiveSettings() {
 
         // Go to in-app settings

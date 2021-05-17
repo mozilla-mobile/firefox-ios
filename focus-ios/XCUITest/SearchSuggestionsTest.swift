@@ -5,17 +5,6 @@
 import XCTest
 
 class SearchSuggestionsPromptTest: BaseTestCase {
-
-    override func setUp() {
-        super.setUp()
-        dismissFirstRunUI()
-    }
-
-    override func tearDown() {
-        app.terminate()
-        super.tearDown()
-    }
-
     func checkToggle(isOn: Bool) {
         let targetValue = isOn ? "1" : "0"
         XCTAssertEqual(app.tables.switches["BlockerToggle.enableSearchSuggestions"].value as! String, targetValue)

@@ -5,17 +5,6 @@
 import XCTest
 
 class TrackingProtectionMenu: BaseTestCase {
-
-    override func setUp() {
-        super.setUp()
-        dismissFirstRunUI()
-    }
-
-    override func tearDown() {
-        app.terminate()
-        super.tearDown()
-    }
-
     func testActiveProtectionSidebar() {
 
         // Visit https://www.mozilla.org

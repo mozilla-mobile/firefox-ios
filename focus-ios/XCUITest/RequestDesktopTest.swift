@@ -5,17 +5,6 @@
 import XCTest
 
 class RequestDesktopTest: BaseTestCase {
-
-    override func setUp() {
-        super.setUp()
-        dismissFirstRunUI()
-    }
-
-    override func tearDown() {
-        app.terminate()
-        super.tearDown()
-    }
-
     func testLongPressReloadButton() {
         let urlBarTextField = app.textFields["URLBar.urlText"]
 

@@ -5,17 +5,6 @@
 import XCTest
 
 class PastenGoTest: BaseTestCase {
-
-    override func setUp() {
-        super.setUp()
-        dismissFirstRunUI()
-    }
-
-    override func tearDown() {
-        XCUIApplication().terminate()
-        super.tearDown()
-    }
-
     // Test the clipboard contents are displayed/updated properly
     func testClipboard() {
         let app = XCUIApplication()
