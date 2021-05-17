@@ -85,7 +85,7 @@ class OneLineTableViewCell: UITableViewCell, Themeable {
         }
         
         titleLabel.snp.makeConstraints { make in
-            make.height.equalTo(20)
+            make.height.equalTo(40)
             make.centerY.equalTo(midView.snp.centerY)
             make.leading.equalTo(midView.snp.leading)
             make.trailing.equalTo(midView.snp.trailing)
