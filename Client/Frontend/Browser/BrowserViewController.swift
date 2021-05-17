@@ -934,16 +934,24 @@ class BrowserViewController: UIViewController {
         }
         QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark, withUserData: userData, toApplication: .shared)
 
-        showBookmarksToast()
+        showBookmarksToast(for: shareItem)
     }
 
-    private func showBookmarksToast() {
+    private func showBookmarksToast(for shareItem: ShareItem) {
         let toast = ButtonToast(labelText: Strings.AppMenuAddBookmarkConfirmMessage,
                                 buttonText: Strings.BookmarksEdit,
                                 textAlignment: .left) { isButtonTapped in
-//                isButtonTapped ? SHOW EDIT FOLDER THING : nil
+            isButtonTapped ? self.openBookmarkEditPanel(for: shareItem) : nil
         }
         self.show(toast: toast)
+    }
+
+    private func openBookmarkEditPanel(for shareItem: ShareItem) {
+
+//        let detailController = BookmarkDetailPanel(profile: profile,
+//                                                   bookmarkNode: bookmarkNode,
+//                                                   parentBookmarkFolder: bookmarkFolder)
+//        let controller = DismissableNavigationViewController(rootViewController: detailController)
     }
 
     override func accessibilityPerformEscape() -> Bool {
