@@ -123,6 +123,8 @@ class PhotonActionSheetCell: UITableViewCell {
         }
     }
 
+    let bottomBorder = UIView()
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         self.statusIcon.image = nil
@@ -165,17 +167,23 @@ class PhotonActionSheetCell: UITableViewCell {
         stackView.snp.makeConstraints { make in
             make.edges.equalTo(contentView).inset(UIEdgeInsets(top: topPadding, left: padding, bottom: topPadding, right: padding))
         }
+        addSubBorder()
+        // Hiding bottom border by default
+        bottomBorder.isHidden = true
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     func addSubBorder() {
-        let bottomBorder = CALayer()
-        bottomBorder.frame = CGRect(x: 0.0, y: self.contentView.frame.origin.y, width: self.contentView.frame.width, height: 1.0)
-        bottomBorder.backgroundColor = UIColor.theme.tableView.separator.cgColor
-        self.contentView.layer.addSublayer(bottomBorder)
+        bottomBorder.backgroundColor = UIColor.theme.tableView.separator
+        self.contentView.addSubview(bottomBorder)
+        bottomBorder.snp.makeConstraints { make in
+            make.bottom.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(1)
+        }
     }
     
     func configure(with action: PhotonActionSheetItem) {
@@ -191,7 +199,9 @@ class PhotonActionSheetCell: UITableViewCell {
         subtitleLabel.textColor = UIColor.theme.tableView.rowText
         subtitleLabel.isHidden = action.text == nil
         subtitleLabel.numberOfLines = 0
-        titleLabel.font = action.bold ? DynamicFontHelper.defaultHelper.DeviceFontLargeBold : DynamicFontHelper.defaultHelper.LargeSizeRegularWeightAS
+        titleLabel.font = action.bold ? DynamicFontHelper.defaultHelper.DeviceFontLargeBold : DynamicFontHelper.defaultHelper.MediumSizeRegularWeightAS
+        
+        
         accessibilityIdentifier = action.iconString ?? action.accessibilityId
         accessibilityLabel = action.title
         selectionStyle = action.tapHandler != nil ? .default : .none
@@ -263,8 +273,10 @@ class PhotonActionSheetCell: UITableViewCell {
         case .Switch:
             toggleSwitch.setOn(action.isEnabled)
             stackView.addArrangedSubview(toggleSwitch.mainView)
-        default:
-            break // Do nothing. The rest are not supported yet.
+        case .None:
+            titleLabel.snp.makeConstraints { make in
+                make.top.bottom.equalTo(contentView).inset(10)
+            }
         }
         action.customRender?(titleLabel, contentView)
     }

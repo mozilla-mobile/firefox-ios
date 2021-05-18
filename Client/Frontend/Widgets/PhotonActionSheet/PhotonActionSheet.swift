@@ -307,9 +307,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         
         // For menus other than ETP, don't show top and bottom separator lines
         if (title == nil) {
-            if (indexPath != [tableView.numberOfSections - 1, tableView.numberOfRows(inSection: tableView.numberOfSections - 1) - 1]) {
-                cell.addSubBorder()
-            }
+            cell.bottomBorder.isHidden = !(indexPath != [tableView.numberOfSections - 1, tableView.numberOfRows(inSection: tableView.numberOfSections - 1) - 1])
         }
         return cell
     }
