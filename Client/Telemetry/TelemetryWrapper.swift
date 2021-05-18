@@ -400,6 +400,7 @@ extension TelemetryWrapper {
         case requestMobileSite = "request-mobile-site"
         case pinToTopSites = "pin-to-top-sites"
         case removePinnedSite = "remove-pinned-site"
+        case firefoxHomepage = "firefox-homepage"
     }
 
     public enum EventValue: String {
@@ -432,6 +433,7 @@ extension TelemetryWrapper {
         case readingPanel = "reading-panel"
         case downloadsPanel = "downloads-panel"
         case syncPanel = "sync-panel"
+        case yourLibrarySection = "your-library-section"
     }
 
     public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue? = nil, extras: [String: Any]? = nil) {
@@ -597,6 +599,12 @@ extension TelemetryWrapper {
             GleanMetrics.PageActionMenu.requestDesktopSite.add()
         case (.action, .tap, .requestMobileSite, _, _):
             GleanMetrics.PageActionMenu.requestMobileSite.add()
+
+        // Firefox Homepage
+        case (.action, .tap, .firefoxHomepage, EventValue.yourLibrarySection.rawValue, let extras):
+            if let panel = extras?[EventObject.libraryPanel.rawValue] as? String {
+                GleanMetrics.FirefoxHomePage.yourLibrary[panel].add()
+            }
 
         default:
             let msg = "Uninstrumented metric recorded: \(category), \(method), \(object), \(value), \(String(describing: extras))"
