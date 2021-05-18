@@ -350,7 +350,7 @@ firefox_home_page:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/8503
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8152
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8544
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-12-18"
