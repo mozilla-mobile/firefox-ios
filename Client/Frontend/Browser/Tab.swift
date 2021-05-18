@@ -779,25 +779,13 @@ extension URL {
     Returns a URL without a mobile prefix (`"m."` or `"mobile."`)
     */
     func withoutMobilePrefix() -> URL {
-        let mPrefix = "m."
-        let mobilePrefix = "mobile."
-
-        let foundPrefix: String?
-        if host?.contains(mPrefix) == true {
-            foundPrefix = mPrefix
-        } else if host?.contains(mobilePrefix) == true {
-            foundPrefix = mobilePrefix
-        } else {
-            foundPrefix = nil
-        }
-
         guard
-            let prefixToRemove = foundPrefix,
             var components = URLComponents(url: self, resolvingAgainstBaseURL: true),
             var host = components.host,
-            let range = host.range(of: prefixToRemove) else { return self }
+            let range = host.range(of: "^(mobile|m)\\.", options: .regularExpression) else { return self }
 
         host.removeSubrange(range)
+        guard host != publicSuffix else { return self }
         components.host = host
 
         return components.url ?? self
