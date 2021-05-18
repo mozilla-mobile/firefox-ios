@@ -175,7 +175,6 @@ class PhotonActionSheetCell: UITableViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
     func addSubBorder() {
         bottomBorder.backgroundColor = UIColor.theme.tableView.separator
         self.contentView.addSubview(bottomBorder)
