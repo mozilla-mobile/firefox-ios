@@ -14,6 +14,7 @@ class TrackingProtectionMenu: BaseTestCase {
         waitForWebPageLoad()
 
         // Open the tracking protection sidebar
+        waitforExistence(element: app.otherElements["URLBar.trackingProtectionIcon"])
         app.otherElements["URLBar.trackingProtectionIcon"].tap()
 
         // Wait for menu to open

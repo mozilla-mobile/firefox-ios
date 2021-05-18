@@ -11,6 +11,7 @@ class WebsiteMemoryTest: BaseTestCase {
 
         // Enter 'google' on the search field to go to google site
         loadWebPage("google.com")
+
         if app.webViews.otherElements["Search"].exists {
             // Do nothing, it's the initially expected type
         } else if  app.webViews.searchFields["Search"].exists {

@@ -146,25 +146,18 @@ class BaseTestCase: XCTestCase {
     }
 
     func loadWebPage(_ url: String, waitForLoadToFinish: Bool = true) {
-        let storedUrl = UIPasteboard.general.string
         let app = XCUIApplication()
-        let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
-
-        UIPasteboard.general.string = url
-        waitforHittable(element: searchOrEnterAddressTextField)
-        waitforExistence(element: searchOrEnterAddressTextField)
-        // Must press this way in order to support iPhone 5s
-        searchOrEnterAddressTextField.tap()
-        searchOrEnterAddressTextField.coordinate(withNormalizedOffset: CGVector.zero).withOffset(CGVector(dx: 10, dy: 0)).press(forDuration: 1.5)
-        waitforExistence(element: app.menuItems["Paste & Go"])
-        app.menuItems["Paste & Go"].tap()
+        app.textFields["URLBar.urlText"].tap()
+        app.textFields["URLBar.urlText"].typeText(url+"\n")
 
         if waitForLoadToFinish {
             let finishLoadingTimeout: TimeInterval = 30
             let progressIndicator = app.progressIndicators.element(boundBy: 0)
-            waitFor(progressIndicator, with: "exists != true", description: "Problem loading \(url)", timeout: finishLoadingTimeout)
+            waitFor(progressIndicator,
+                    with: "exists != true",
+                    description: "Problem loading \(url)",
+                    timeout: finishLoadingTimeout)
         }
-        UIPasteboard.general.string = storedUrl
     }
 
     private func waitFor(_ element: XCUIElement, with predicateString: String, description: String? = nil, timeout: TimeInterval = 5.0) {
