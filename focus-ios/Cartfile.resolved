@@ -1,3 +1,2 @@
-github "AgileBits/onepassword-extension" "a614e290396346e3cb69e4951656eb8033390f8c"
 github "mozilla-services/shavar-prod-lists" "c938da47c4880a48ac40d535caff74dac1d4d77b"
 github "mozilla/glean" "v36.0.0"

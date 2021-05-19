@@ -142,7 +142,6 @@
 		D597608C1F9FEFB300A2D212 /* TrackingProtection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D597608B1F9FEFB300A2D212 /* TrackingProtection.swift */; };
 		D5ABA3D91FCC846800D5C060 /* AddCustomDomainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5ABA3D71FCC846800D5C060 /* AddCustomDomainViewController.swift */; };
 		D5ABA3DA1FCC846800D5C060 /* AutocompleteSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5ABA3D81FCC846800D5C060 /* AutocompleteSettingViewController.swift */; };
-		D5B10AAB1FD5EFA40044523A /* OnePasswordExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 747ADA1D1FCE0B7B00970132 /* OnePasswordExtension.framework */; };
 		D5D067FB252F945D00C35227 /* metrics.yaml in Resources */ = {isa = PBXBuildFile; fileRef = D5D067FA252F945D00C35227 /* metrics.yaml */; };
 		D5D2F02B252FA6AE00761DC8 /* Metrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D2F02A252FA6AE00761DC8 /* Metrics.swift */; };
 		D5D2F041252FA71B00761DC8 /* Glean.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5D067F0252F926E00C35227 /* Glean.framework */; };
@@ -460,7 +459,6 @@
 		746BD9251F75C43C00BE8DB9 /* DataExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensions.swift; sourceTree = "<group>"; };
 		746BD9271F75C45A00BE8DB9 /* DictionaryExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryExtensions.swift; sourceTree = "<group>"; };
 		747ADA171FC38EFC00970132 /* IntroViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
-		747ADA1D1FCE0B7B00970132 /* OnePasswordExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OnePasswordExtension.framework; path = Carthage/Build/iOS/OnePasswordExtension.framework; sourceTree = "<group>"; };
 		74CC0ADA1FAD28DB00972A78 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		74CC0ADB1FAD28DC00972A78 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		74CC0ADC1FAD28DD00972A78 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -960,7 +958,6 @@
 			files = (
 				163BFFE42124F8E10007CEBC /* IntentsUI.framework in Frameworks */,
 				163BFFE22124EBAF0007CEBC /* Intents.framework in Frameworks */,
-				D5B10AAB1FD5EFA40044523A /* OnePasswordExtension.framework in Frameworks */,
 				F8324C2F264C807C007E4BFA /* SnapKit in Frameworks */,
 				E47F9AE71DB929D800A93285 /* AdSupport.framework in Frameworks */,
 				E47F9AE81DB929D800A93285 /* iAd.framework in Frameworks */,
@@ -1159,7 +1156,6 @@
 				D5D067F0252F926E00C35227 /* Glean.framework */,
 				163BFFE32124F8E10007CEBC /* IntentsUI.framework */,
 				163BFFE12124EBAF0007CEBC /* Intents.framework */,
-				747ADA1D1FCE0B7B00970132 /* OnePasswordExtension.framework */,
 				746BD91B1F758BEC00BE8DB9 /* Carthage */,
 				E47F9AE51DB929D800A93285 /* AdSupport.framework */,
 				29B90C056305836CB297FF79 /* AssetsLibrary.framework */,
@@ -1770,7 +1766,6 @@
 			files = (
 			);
 			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/OnePasswordExtension.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Glean.framework",
 			);
 			name = "Run Script (Carthage)";
