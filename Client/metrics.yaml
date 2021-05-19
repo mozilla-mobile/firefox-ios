@@ -335,6 +335,26 @@ experiments:
       - firefox-ios@mozilla.com
     expires: "2021-12-01"
 
+# HomePage
+firefox_home_page:
+  your_library:
+    type: labeled_counter
+    description: |
+      Counts the number of times the user taps the Bookmarks,
+      History, Reading List, or Downloads buttons
+    labels:
+      - bookmarks-panel
+      - history-panel
+      - reading-list-panel
+      - downloads-panel
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8503
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8544
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-12-18"
+
 # Library
 library:
   panel_pressed:

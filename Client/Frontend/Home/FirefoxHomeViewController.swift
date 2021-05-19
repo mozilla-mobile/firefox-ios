@@ -753,18 +753,38 @@ extension FirefoxHomeViewController: DataObserverDelegate {
 extension FirefoxHomeViewController {
     @objc func openBookmarks() {
         homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .bookmarks)
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .firefoxHomepage,
+                                     value: .yourLibrarySection,
+                                     extras: [TelemetryWrapper.EventObject.libraryPanel.rawValue: TelemetryWrapper.EventValue.bookmarksPanel.rawValue])
     }
 
     @objc func openHistory() {
         homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .history)
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .firefoxHomepage,
+                                     value: .yourLibrarySection,
+                                     extras: [TelemetryWrapper.EventObject.libraryPanel.rawValue: TelemetryWrapper.EventValue.historyPanel.rawValue])
     }
 
     @objc func openReadingList() {
         homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .readingList)
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .firefoxHomepage,
+                                     value: .yourLibrarySection,
+                                     extras: [TelemetryWrapper.EventObject.libraryPanel.rawValue: TelemetryWrapper.EventValue.readingListPanel.rawValue])
     }
 
     @objc func openDownloads() {
         homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .downloads)
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .firefoxHomepage,
+                                     value: .yourLibrarySection,
+                                     extras: [TelemetryWrapper.EventObject.libraryPanel.rawValue: TelemetryWrapper.EventValue.downloadsPanel.rawValue])
     }
 }
 
