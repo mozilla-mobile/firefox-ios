@@ -23,6 +23,7 @@ private struct PhotonActionSheetCellUX {
 class PhotonActionSheetCell: UITableViewCell {
     static let Padding: CGFloat = 16
     static let HorizontalPadding: CGFloat = 1
+    static let topBottomPadding: CGFloat = 10
     static let VerticalPadding: CGFloat = 2
     static let IconSize = 16
 
@@ -163,7 +164,7 @@ class PhotonActionSheetCell: UITableViewCell {
         }
 
         let padding = PhotonActionSheetCell.Padding
-        let topPadding = PhotonActionSheetCell.HorizontalPadding
+        let topPadding = PhotonActionSheetCell.topBottomPadding
         stackView.snp.makeConstraints { make in
             make.edges.equalTo(contentView).inset(UIEdgeInsets(top: topPadding, left: padding, bottom: topPadding, right: padding))
         }
@@ -273,10 +274,8 @@ class PhotonActionSheetCell: UITableViewCell {
         case .Switch:
             toggleSwitch.setOn(action.isEnabled)
             stackView.addArrangedSubview(toggleSwitch.mainView)
-        case .None:
-            titleLabel.snp.makeConstraints { make in
-                make.top.bottom.equalTo(contentView).inset(10)
-            }
+        default:
+            break // Do nothing. The rest are not supported yet.
         }
         action.customRender?(titleLabel, contentView)
     }
