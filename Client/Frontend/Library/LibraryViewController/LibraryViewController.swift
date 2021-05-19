@@ -164,7 +164,8 @@ class LibraryViewController: UIViewController {
         onViewDismissed = nil
     }
 
-    override var preferredStatusBarStyle: UIStatusBarStyle { return ThemeManager.instance.currentName == .dark ? .lightContent : .default
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return ThemeManager.instance.currentName == .dark ? .lightContent : .default
     }
 
     func updateViewWithState() {
@@ -181,8 +182,7 @@ class LibraryViewController: UIViewController {
 
     private func shouldShowBottomToolbar() {
         switch panelState.currentState {
-        case .bookmarks(state: let subState),
-             .history(state: let subState):
+        case .bookmarks(state: let subState):
             if subState == .mainView {
                 navigationController?.setToolbarHidden(true, animated: true)
             } else {
@@ -307,7 +307,6 @@ class LibraryViewController: UIViewController {
                 panelState.currentState = .history(state: .mainView)
             }
         }
-        children.first?.navigationController?.toolbar.backgroundColor = .red
     }
 
     fileprivate func updateStateOnShowPanel(to panelType: LibraryPanelType?) {
@@ -336,8 +335,11 @@ class LibraryViewController: UIViewController {
     fileprivate func topLeftButtonSetup() {
         switch panelState.currentState {
         case .bookmarks(state: .inFolder),
-             .bookmarks(state: .itemEditMode),
              .history(state: .inFolder):
+            topLeftButton.image = UIImage.templateImageNamed("goBack")
+            navigationItem.leftBarButtonItem = topLeftButton
+        case .bookmarks(state: .itemEditMode):
+            topLeftButton.image = UIImage.templateImageNamed("nav-stop")
             navigationItem.leftBarButtonItem = topLeftButton
         default:
             navigationItem.leftBarButtonItem = nil
