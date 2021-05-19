@@ -257,6 +257,7 @@ extension URL {
         if let range = host.range(of: "^(www|mobile|m)\\.", options: .regularExpression) {
             host.replaceSubrange(range, with: "")
         }
+        guard host != publicSuffix else { return nil }
 
         return host
     }
