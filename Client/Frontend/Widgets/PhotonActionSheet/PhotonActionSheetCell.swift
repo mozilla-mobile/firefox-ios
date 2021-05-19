@@ -202,7 +202,6 @@ class PhotonActionSheetCell: UITableViewCell {
         subtitleLabel.numberOfLines = 0
         titleLabel.font = action.bold ? DynamicFontHelper.defaultHelper.DeviceFontLargeBold : DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
         
-        
         accessibilityIdentifier = action.iconString ?? action.accessibilityId
         accessibilityLabel = action.title
         selectionStyle = action.tapHandler != nil ? .default : .none
