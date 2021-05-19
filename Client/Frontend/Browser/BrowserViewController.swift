@@ -855,17 +855,9 @@ class BrowserViewController: UIViewController {
             libraryViewController.selectedPanel = panel
         }
 
-//        libraryViewController.modalPresentationStyle = .formSheet
-
         let controller: DismissableNavigationViewController
         controller = DismissableNavigationViewController(rootViewController: libraryViewController)
-//        controller.presentationController?.delegate = libraryViewController
-//            // If we're not using the system theme, override the view's style to match
-//            if !ThemeManager.instance.systemThemeIsOn {
-//                controller.overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
-//            }
         self.present(controller, animated: true, completion: nil)
-//        self.present(libraryViewController, animated: true, completion: nil)
     }
 
     fileprivate func createSearchControllerIfNeeded() {

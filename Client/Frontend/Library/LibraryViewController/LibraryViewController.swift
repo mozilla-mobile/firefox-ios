@@ -35,7 +35,8 @@ class LibraryViewController: UIViewController {
     // Colors
     fileprivate var buttonTintColor: UIColor?
     fileprivate var buttonSelectedTintColor: UIColor?
-    // Segment Control
+
+    // UI Elements
     lazy var librarySegmentControl: UISegmentedControl = {
         var librarySegmentControl: UISegmentedControl
         librarySegmentControl = UISegmentedControl(items: [UIImage(named: "library-bookmark")!,
@@ -56,20 +57,12 @@ class LibraryViewController: UIViewController {
         return toolbar
     }()
 
-    fileprivate lazy var titleLabel: UILabel = {
-        let titleLabel = UILabel()
-        titleLabel.font = DynamicFontHelper.defaultHelper.DefaultStandardFontBold
-        titleLabel.textColor = UIColor.theme.tabTray.tabTitleText
-        titleLabel.textAlignment = .center
-        titleLabel.numberOfLines = 1
-        return titleLabel
-    }()
-
     fileprivate lazy var topLeftButton: UIBarButtonItem =  {
         let button = UIBarButtonItem(image: UIImage.templateImageNamed("goBack"),
                                      style: .plain,
                                      target: self,
                                      action: #selector(topLeftButtonAction))
+        button.accessibilityIdentifier = "libraryPanelTopLeftButton"
         return button
     }()
 
@@ -78,15 +71,16 @@ class LibraryViewController: UIViewController {
                                      style: .done,
                                      target: self,
                                      action: #selector(topRightButtonAction))
+        button.accessibilityIdentifier = "libraryPanelTopRightButton"
         return button
     }()
 
     fileprivate lazy var bottomLeftButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(image: UIImage.templateImageNamed("nav-add")
+        let button = UIBarButtonItem(image: UIImage.templateImageNamed("nav-add"),
                                      style: .plain,
                                      target: self,
                                      action: #selector(bottomLeftButtonAction))
-        button.accessibilityIdentifier = "bookmarksPanelBottomLeftButton"
+        button.accessibilityIdentifier = "libraryPanelBottomLeftButton"
         return button
     }()
 
@@ -109,12 +103,11 @@ class LibraryViewController: UIViewController {
         return [bottomLeftButton, flexibleSpace, bottomRightButton]
     }()
 
-    fileprivate lazy var bottomToolbarItemsOneButton: [UIBarButtonItem] = {
+    fileprivate lazy var bottomToolbarItemsSingleButton: [UIBarButtonItem] = {
         return [flexibleSpace, bottomRightButton]
     }()
 
     // MARK: - Initializers
-
     init(profile: Profile) {
         self.profile = profile
 
@@ -136,12 +129,9 @@ class LibraryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor =  UIColor.theme.homePanel.panelBackground
-        self.edgesForExtendedLayout = []
         view.addSubview(controllerContainerView)
 
-        navigationController?.navigationBar.shadowImage = UIImage()
-        setToolbarItems(bottomToolbarItemsOneButton, animated: false)
-        navigationItem.leftBarButtonItem = topLeftButton
+        setToolbarItems(bottomToolbarItemsSingleButton, animated: false)
         navigationItem.rightBarButtonItem = topRightButton
 
         view.addSubview(navigationToolbar)
@@ -156,7 +146,7 @@ class LibraryViewController: UIViewController {
         }
 
         controllerContainerView.snp.makeConstraints { make in
-            make.top.equalTo(view.snp.top)
+            make.top.equalTo(navigationToolbar.snp.bottom)
             make.bottom.equalTo(view.snp.bottom)
             make.leading.trailing.equalTo(view)
         }
@@ -284,6 +274,7 @@ class LibraryViewController: UIViewController {
         addChild(libraryPanel)
         libraryPanel.beginAppearanceTransition(true, animated: false)
         controllerContainerView.addSubview(libraryPanel.view)
+        view.bringSubviewToFront(navigationToolbar)
         libraryPanel.endAppearanceTransition()
         libraryPanel.view.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -338,7 +329,7 @@ class LibraryViewController: UIViewController {
     fileprivate func setupButtons() {
         topLeftButtonSetup()
         topRightButtonSetup()
-        bottomLeftButtonSetup()
+        bottomToolbarButtonSetup()
         bottomRightButtonSetup()
     }
 
@@ -356,7 +347,7 @@ class LibraryViewController: UIViewController {
     fileprivate func topRightButtonSetup() {
         switch panelState.currentState {
         case .bookmarks(state: .inFolderEditMode):
-            navigationItem.leftBarButtonItem = nil
+            navigationItem.rightBarButtonItem = nil
         case .bookmarks(state: .itemEditMode):
             topRightButton.title = Strings.SettingsAddCustomEngineSaveButtonText
             navigationItem.rightBarButtonItem = topRightButton
@@ -366,25 +357,22 @@ class LibraryViewController: UIViewController {
         }
     }
 
-    fileprivate func bottomLeftButtonSetup() {
+    fileprivate func bottomToolbarButtonSetup() {
         switch panelState.currentState {
         case .bookmarks(state: .inFolderEditMode):
-            navigationController?.toolbarItems = bottomToolbarItemsBothButtons
+            setToolbarItems(bottomToolbarItemsBothButtons, animated: true)
         default:
-            navigationController?.toolbarItems = bottomToolbarItemsOneButton
+            setToolbarItems(bottomToolbarItemsSingleButton, animated: false)
         }
     }
 
     fileprivate func bottomRightButtonSetup() {
         switch panelState.currentState {
         case .bookmarks(state: let subState):
-            switch subState {
-            case .mainView, .inFolder:
+            if subState == .inFolder {
                 bottomRightButton.title = Strings.BookmarksEdit
-            case .inFolderEditMode:
+            } else if subState == .inFolderEditMode {
                 bottomRightButton.title = String.AppSettingsDone
-            case .itemEditMode:
-                bottomRightButton.title = Strings.BookmarksDeleteFolderCancelButtonLabel
             }
         default:
             return
@@ -394,13 +382,23 @@ class LibraryViewController: UIViewController {
     // MARK: - Nav bar button actions
     @objc func topLeftButtonAction() {
         guard let panel = children.first as? UINavigationController else { return }
-        panel.popViewController(animated: true)
+        switch panelState.currentState {
+        case .bookmarks(state: let subState):
+            leftButtonBookmarkActions(for: subState, onPanel: panel)
+        default:
+            panel.popViewController(animated: true)
+        }
         updateViewWithState()
     }
 
 
     @objc func topRightButtonAction() {
-        self.dismiss(animated: true, completion: nil)
+        switch panelState.currentState {
+        case .bookmarks(state: .itemEditMode):
+            rightButtonBookmarkActions(for: .itemEditMode)
+        default:
+            self.dismiss(animated: true, completion: nil)
+        }
         updateViewWithState()
     }
 
@@ -419,10 +417,6 @@ class LibraryViewController: UIViewController {
     fileprivate func leftButtonBookmarkActions(for state: LibraryPanelSubState, onPanel panel: UINavigationController) {
 
         switch state {
-        case .mainView,
-             .inFolder:
-            return
-
         case .inFolder:
             if panel.viewControllers.count > 1 {
                 panelState.currentState = .bookmarks(state: .mainView)
@@ -436,6 +430,9 @@ class LibraryViewController: UIViewController {
         case .itemEditMode:
             panelState.currentState = .bookmarks(state: .inFolderEditMode)
             panel.popViewController(animated: true)
+
+        default:
+            return
         }
     }
 
@@ -452,7 +449,7 @@ class LibraryViewController: UIViewController {
     fileprivate func rightButtonBookmarkActions(for state: LibraryPanelSubState) {
         guard let panel = children.first as? UINavigationController else { return }
         switch state {
-        case .mainView, .inFolder:
+        case .inFolder:
             guard let bookmarksPanel = panel.viewControllers.last as? BookmarksPanel else { return }
             panelState.currentState = .bookmarks(state: .inFolderEditMode)
             bookmarksPanel.enableEditMode()
@@ -472,6 +469,8 @@ class LibraryViewController: UIViewController {
                     bookmarksPanel.didAddBookmarkNode()
                 }
             }
+        default:
+            return
         }
     }
 }
@@ -489,10 +488,15 @@ extension LibraryViewController: Themeable {
             librarySegmentControl.tintColor = UIColor.theme.tabTray.tabTitleText
         }
         
-        titleLabel.textColor = UIColor.theme.tabTray.tabTitleText
         bottomBorder.backgroundColor = UIColor.theme.tableView.separator
         view.backgroundColor =  UIColor.theme.homePanel.panelBackground
         buttonTintColor = UIColor.theme.homePanel.toolbarTint
         buttonSelectedTintColor = UIColor.theme.homePanel.toolbarHighlight
+        navigationController?.navigationBar.barTintColor = UIColor.theme.tabTray.toolbar
+        navigationController?.navigationBar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
+        navigationController?.toolbar.barTintColor = UIColor.theme.tabTray.toolbar
+        navigationController?.toolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
+        navigationToolbar.barTintColor = UIColor.theme.tabTray.toolbar
+        navigationToolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
     }
 }
