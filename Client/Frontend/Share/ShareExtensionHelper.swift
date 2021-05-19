@@ -40,7 +40,12 @@ class ShareExtensionHelper: NSObject {
         }
         activityItems.append(self)
 
-        let activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+        var activityViewController: UIActivityViewController
+        if isFile(url: url) {
+            activityViewController = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        } else {
+            activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+        }
 
         // Hide 'Add to Reading List' which currently uses Safari.
         // We would also hide View Later, if possible, but the exclusion list doesn't currently support
