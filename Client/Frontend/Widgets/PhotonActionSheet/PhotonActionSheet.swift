@@ -83,7 +83,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         view.accessibilityIdentifier = "Action Sheet"
 
         tableView.backgroundColor = .clear
-
+        tableView.addObserver(self, forKeyPath: "contentSize", options: .new, context: nil)
         // In a popover the popover provides the blur background
         // Not using a background color allows the view to style correctly with the popover arrow
         if self.popoverPresentationController == nil {
@@ -164,6 +164,11 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         }
     }
 
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        tableView.removeObserver(self, forKeyPath: "contentSize")
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
@@ -200,6 +205,12 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         }
     }
 
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if style == .popover {
+            self.preferredContentSize = tableView.contentSize
+        }
+    }
+    
     // Nested tableview rows get additional height
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if let section = actions[safe: indexPath.section], let action = section[safe: indexPath.row] {
@@ -220,9 +231,6 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
             heightConstraint?.deactivate()
             // The height of the menu should be no more than 85 percent of the screen
             heightConstraint = make.height.equalTo(min(self.tableView.contentSize.height, maxHeight * 0.90)).constraint
-        }
-        if style == .popover {
-            self.preferredContentSize = self.tableView.contentSize
         }
     }
 
@@ -307,9 +315,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         
         // For menus other than ETP, don't show top and bottom separator lines
         if (title == nil) {
-            if (indexPath != [tableView.numberOfSections - 1, tableView.numberOfRows(inSection: tableView.numberOfSections - 1) - 1]) {
-                cell.addSubBorder()
-            }
+            cell.bottomBorder.isHidden = !(indexPath != [tableView.numberOfSections - 1, tableView.numberOfRows(inSection: tableView.numberOfSections - 1) - 1])
         }
         return cell
     }
