@@ -1,0 +1,512 @@
+---
+format_version: '5'
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+project_type: ios
+trigger_map:
+- push_branch: main
+  workflow: runParallelTests
+- push_branch: v8.1.7
+  workflow: release
+- pull_request_source_branch: "*"
+  workflow: runParallelTests
+- tag: "*"
+  workflow: release
+workflows:
+  deploy:
+    steps:
+    - activate-ssh-key@3.1.1:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@4.0.11: {}
+    - cache-pull@2.0.1: {}
+    - script@1.1.5:
+        title: Do anything with Script step
+    - certificate-and-profile-installer@1.9.3: {}
+    - carthage@3.1.4:
+        inputs:
+        - carthage_command: bootstrap
+    - xcode-test@1.18.14:
+        inputs:
+        - project_path: "$BITRISE_PROJECT_PATH"
+        - scheme: "$BITRISE_SCHEME"
+    - xcode-archive@2.4.8:
+        inputs:
+        - project_path: "$BITRISE_PROJECT_PATH"
+        - scheme: "$BITRISE_SCHEME"
+        - export_method: "$BITRISE_EXPORT_METHOD"
+    - deploy-to-bitrise-io@1.3.12: {}
+    - cache-push@2.0.5: {}
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.2.x
+  primary:
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@4: {}
+    - cache-pull@2: {}
+    - certificate-and-profile-installer@1: {}
+    - script@1:
+        title: Workaround carthage lipo bug
+        inputs:
+        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
+            log\nset -x\n\necho 'EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_simulator__NATIVE_ARCH_64_BIT_x86_64=arm64
+            arm64e armv7 armv7s armv6 armv8' > /tmp/tmp.xcconfig\necho 'EXCLUDED_ARCHS=$(inherited)
+            $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(EFFECTIVE_PLATFORM_SUFFIX)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT))'
+            >> /tmp/tmp.xcconfig\necho 'IPHONEOS_DEPLOYMENT_TARGET=11.4' >> /tmp/tmp.xcconfig\necho
+            'SWIFT_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig\necho 'GCC_TREAT_WARNINGS_AS_ERRORS=NO'
+            >> /tmp/tmp.xcconfig\nexport XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig\nenvman
+            add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig "
+    - carthage@3.2:
+        inputs:
+        - carthage_options: " --platform ios --cache-builds"
+        - carthage_command: bootstrap
+    - script@1:
+        inputs:
+        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
+            log\nset -x\n\n\nrm /tmp/tmp.xcconfig \nenvman add --key XCODE_XCCONFIG_FILE
+            --value ''"
+        title: remove carthage lipo workaround
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            cd content-blocker-lib-ios/ContentBlockerGen && swift run
+        title: NPM, ContentBlockerGen
+    - cache-push@2:
+        inputs:
+        - cache_paths: |
+            $BITRISE_CACHE_DIR
+            ./Carthage -> ./Carthage/Cachefile
+    - set-xcode-build-number@1:
+        inputs:
+        - plist_path: Blockzilla/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - plist_path: ContentBlocker/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - plist_path: FocusIntentExtension/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - plist_path: OpenInFocus/Info.plist
+    - xcode-archive@2:
+        inputs:
+        - scheme: Focus
+        - export_method: app-store
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.0.x
+  primary-xcode-10:
+    steps:
+    - activate-ssh-key@3.1.1:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@4.0.11: {}
+    - cache-pull@2.0.1: {}
+    - script@1.1.5:
+        title: Do anything with Script step
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            # write your script here
+            echo "Hello World!"
+
+            ./build-disconnect.py
+    - certificate-and-profile-installer@1.9.3: {}
+    - carthage@3.1.4:
+        inputs:
+        - carthage_options: "--platform ios"
+        - carthage_command: bootstrap
+    - xcode-test@1.18.14:
+        inputs:
+        - project_path: "$BITRISE_PROJECT_PATH"
+        - scheme: "$BITRISE_SCHEME"
+    - deploy-to-bitrise-io@1.3.12: {}
+    - cache-push@2.0.5:
+        inputs:
+        - cache_paths: |
+            $BITRISE_CACHE_DIR
+            ./Carthage -> ./Carthage/Cachefile
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.0.x
+  runTests:
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@4: {}
+    - cache-pull@2: {}
+    - certificate-and-profile-installer@1: {}
+    - script@1:
+        title: Workaround carthage lipo bug
+        inputs:
+        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
+            log\nset -x\n\necho 'EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_simulator__NATIVE_ARCH_64_BIT_x86_64=arm64
+            arm64e armv7 armv7s armv6 armv8' > /tmp/tmp.xcconfig\necho 'EXCLUDED_ARCHS=$(inherited)
+            $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(EFFECTIVE_PLATFORM_SUFFIX)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT))'
+            >> /tmp/tmp.xcconfig\necho 'IPHONEOS_DEPLOYMENT_TARGET=11.4' >> /tmp/tmp.xcconfig\necho
+            'SWIFT_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig\necho 'GCC_TREAT_WARNINGS_AS_ERRORS=NO'
+            >> /tmp/tmp.xcconfig\nexport XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig\nenvman
+            add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig "
+    - carthage@3.2:
+        inputs:
+        - carthage_options: "--platform ios"
+        - carthage_command: bootstrap
+    - script@1:
+        inputs:
+        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
+            log\nset -x\n\n\nrm /tmp/tmp.xcconfig \nenvman add --key XCODE_XCCONFIG_FILE
+            --value ''"
+        title: remove carthage lipo workaround
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            cd content-blocker-lib-ios/ContentBlockerGen && swift run
+        title: NPM, ContentBlockerGen
+    - xcode-build-for-simulator@0:
+        inputs:
+        - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+        - configuration: FocusDebug
+        - scheme: Focus
+    - xcode-test@2:
+        inputs:
+        - scheme: Focus
+        - simulator_device: iPhone 8
+    - xcode-build-for-simulator@0:
+        inputs:
+        - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+        - scheme: Klar
+        - configuration: KlarDebug
+        is_always_run: true
+    - xcode-test@2:
+        inputs:
+        - scheme: Klar
+        is_always_run: true
+    - cache-push@2:
+        inputs:
+        - cache_paths: |
+            $BITRISE_CACHE_DIR
+            ./Carthage -> ./Carthage/Cachefile
+    - deploy-to-bitrise-io@1: {}
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.4.x
+  primary-nocache:
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@4: {}
+    - certificate-and-profile-installer@1: {}
+    - script@1:
+        title: Workaround carthage lipo bug
+        inputs:
+        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
+            log\nset -x\n\necho 'EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_simulator__NATIVE_ARCH_64_BIT_x86_64=arm64
+            arm64e armv7 armv7s armv6 armv8' > /tmp/tmp.xcconfig\necho 'EXCLUDED_ARCHS=$(inherited)
+            $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(EFFECTIVE_PLATFORM_SUFFIX)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT))'
+            >> /tmp/tmp.xcconfig\necho 'IPHONEOS_DEPLOYMENT_TARGET=11.4' >> /tmp/tmp.xcconfig\necho
+            'SWIFT_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig\necho 'GCC_TREAT_WARNINGS_AS_ERRORS=NO'
+            >> /tmp/tmp.xcconfig\nexport XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig\nenvman
+            add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig "
+    - carthage@3.2:
+        inputs:
+        - carthage_options: " --platform ios --cache-builds"
+        - carthage_command: bootstrap
+    - script@1:
+        inputs:
+        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
+            log\nset -x\n\n\nrm /tmp/tmp.xcconfig \nenvman add --key XCODE_XCCONFIG_FILE
+            --value ''"
+        title: remove carthage lipo workaround
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            cd content-blocker-lib-ios/ContentBlockerGen && swift run
+        title: NPM, ContentBlockerGen
+    - set-xcode-build-number@1:
+        inputs:
+        - plist_path: Blockzilla/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - plist_path: ContentBlocker/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - plist_path: FocusIntentExtension/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - plist_path: OpenInFocus/Info.plist
+    - xcode-archive@2:
+        inputs:
+        - scheme: Focus
+        - export_method: app-store
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.0.x
+  clone and build dependencies:
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@4: {}
+    - certificate-and-profile-installer@1: {}
+    - script@1:
+        title: Workaround carthage lipo bug
+        inputs:
+        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
+            log\nset -x\n\necho 'EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_simulator__NATIVE_ARCH_64_BIT_x86_64=arm64
+            arm64e armv7 armv7s armv6 armv8' > /tmp/tmp.xcconfig\necho 'EXCLUDED_ARCHS=$(inherited)
+            $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(EFFECTIVE_PLATFORM_SUFFIX)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT))'
+            >> /tmp/tmp.xcconfig\necho 'IPHONEOS_DEPLOYMENT_TARGET=11.4' >> /tmp/tmp.xcconfig\necho
+            'SWIFT_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig\necho 'GCC_TREAT_WARNINGS_AS_ERRORS=NO'
+            >> /tmp/tmp.xcconfig\nexport XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig\nenvman
+            add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig "
+    - carthage@3.2:
+        inputs:
+        - carthage_options: " --platform ios --cache-builds"
+        - carthage_command: bootstrap
+    - script@1:
+        inputs:
+        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
+            log\nset -x\n\n\nrm /tmp/tmp.xcconfig \nenvman add --key XCODE_XCCONFIG_FILE
+            --value ''"
+        title: remove carthage lipo workaround
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            cd content-blocker-lib-ios/ContentBlockerGen && swift run
+        title: NPM, ContentBlockerGen
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.0.x
+    description: Clones the repo and builds dependencies
+  Set project version:
+    steps:
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_GIT_TAG"
+        - build_version_offset: '3250'
+        - plist_path: Blockzilla/Info.plist
+        title: Set Blockzilla version numbers
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_GIT_TAG"
+        - build_version_offset: '3250'
+        - plist_path: ContentBlocker/Info.plist
+        title: Set ContentBlocker version numbers
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_GIT_TAG"
+        - build_version_offset: '3250'
+        - plist_path: FocusIntentExtension/Info.plist
+        title: Set FocusIntentExtension version numbers
+    - set-xcode-build-number@1:
+        inputs:
+        - build_version_offset: '3250'
+        - build_short_version_string: "$BITRISE_GIT_TAG"
+        - plist_path: OpenInFocus/Info.plist
+        title: Set OpenInFocus version numbers
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.0.x
+    before_run: []
+  release:
+    steps:
+    - certificate-and-profile-installer@1: {}
+    - xcode-archive@2:
+        inputs:
+        - scheme: Focus
+        - team_id: 43AQ936H96
+        - export_method: app-store
+        title: Build Focus
+    - deploy-to-itunesconnect-application-loader@0:
+        inputs:
+        - app_password: "$APPLE_ACCOUNT_PW"
+        - itunescon_user: "$APPLE_ACCOUNT_ID"
+    - xcode-archive@2:
+        inputs:
+        - scheme: Klar
+        - export_method: app-store
+        title: Build Klar
+    - deploy-to-itunesconnect-application-loader@0:
+        inputs:
+        - app_password: "$APPLE_ACCOUNT_PW"
+        - itunescon_user: "$APPLE_ACCOUNT_ID"
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.4.x
+    before_run:
+    - clone and build dependencies
+    - Set project version
+  runParallelTests:
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - cache-pull@2: {}
+    - cache-push@2:
+        inputs:
+        - cache_paths: "/Users/vagrant/git"
+    - build-router-start@0:
+        inputs:
+        - wait_for_builds: 'true'
+        - access_token: "$FOCUS_PARALLEL"
+        - workflows: |-
+            runFocus
+            runKlar
+    - build-router-wait@0:
+        inputs:
+        - access_token: "$FOCUS_PARALLEL"
+    - cache-push@2:
+        inputs:
+        - cache_paths: |
+            $BITRISE_CACHE_DIR
+            ./Carthage -> ./Carthage/Cachefile
+    - deploy-to-bitrise-io@1: {}
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.4.x
+  runFocus:
+    steps:
+    - git-clone@4: {}
+    - cache-pull@2: {}
+    - certificate-and-profile-installer@1: {}
+    - script@1:
+        title: Workaround carthage lipo bug
+        inputs:
+        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
+            log\nset -x\n\necho 'EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_simulator__NATIVE_ARCH_64_BIT_x86_64=arm64
+            arm64e armv7 armv7s armv6 armv8' > /tmp/tmp.xcconfig\necho 'EXCLUDED_ARCHS=$(inherited)
+            $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(EFFECTIVE_PLATFORM_SUFFIX)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT))'
+            >> /tmp/tmp.xcconfig\necho 'IPHONEOS_DEPLOYMENT_TARGET=11.4' >> /tmp/tmp.xcconfig\necho
+            'SWIFT_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig\necho 'GCC_TREAT_WARNINGS_AS_ERRORS=NO'
+            >> /tmp/tmp.xcconfig\nexport XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig\nenvman
+            add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig "
+    - carthage@3.2:
+        inputs:
+        - carthage_options: "--platform ios"
+        - carthage_command: bootstrap
+    - script@1:
+        inputs:
+        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
+            log\nset -x\n\n\nrm /tmp/tmp.xcconfig \nenvman add --key XCODE_XCCONFIG_FILE
+            --value ''"
+        title: remove carthage lipo workaround
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            cd content-blocker-lib-ios/ContentBlockerGen && swift run
+        title: NPM, ContentBlockerGen
+    - xcode-build-for-simulator@0:
+        inputs:
+        - configuration: FocusDebug
+        - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+        - scheme: Focus
+    - xcode-test@2:
+        inputs:
+        - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+            CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2
+        - scheme: Focus
+    - cache-push@2:
+        inputs:
+        - cache_paths: |
+            $BITRISE_CACHE_DIR
+            ./Carthage -> ./Carthage/Cachefile
+    - deploy-to-bitrise-io@1: {}
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.4.x
+  runKlar:
+    steps:
+    - git-clone@4: {}
+    - cache-pull@2: {}
+    - certificate-and-profile-installer@1: {}
+    - script@1:
+        title: Workaround carthage lipo bug
+        inputs:
+        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
+            log\nset -x\n\necho 'EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_simulator__NATIVE_ARCH_64_BIT_x86_64=arm64
+            arm64e armv7 armv7s armv6 armv8' > /tmp/tmp.xcconfig\necho 'EXCLUDED_ARCHS=$(inherited)
+            $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(EFFECTIVE_PLATFORM_SUFFIX)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT))'
+            >> /tmp/tmp.xcconfig\necho 'IPHONEOS_DEPLOYMENT_TARGET=11.4' >> /tmp/tmp.xcconfig\necho
+            'SWIFT_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig\necho 'GCC_TREAT_WARNINGS_AS_ERRORS=NO'
+            >> /tmp/tmp.xcconfig\nexport XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig\nenvman
+            add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig "
+    - carthage@3.2:
+        inputs:
+        - carthage_options: "--platform ios"
+        - carthage_command: bootstrap
+    - script@1:
+        inputs:
+        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
+            log\nset -x\n\n\nrm /tmp/tmp.xcconfig \nenvman add --key XCODE_XCCONFIG_FILE
+            --value ''"
+        title: remove carthage lipo workaround
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            cd content-blocker-lib-ios/ContentBlockerGen && swift run
+        title: NPM, ContentBlockerGen
+    - xcode-build-for-simulator@0:
+        inputs:
+        - configuration: FocusDebug
+        - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+        - scheme: Klar
+    - xcode-test@2:
+        inputs:
+        - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+            CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2
+        - scheme: Klar
+    - cache-push@2:
+        inputs:
+        - cache_paths: |
+            $BITRISE_CACHE_DIR
+            ./Carthage -> ./Carthage/Cachefile
+    - deploy-to-bitrise-io@1: {}
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.4.x
+app:
+  envs:
+  - opts:
+      is_expand: false
+    BITRISE_PROJECT_PATH: Blockzilla.xcodeproj
+  - opts:
+      is_expand: false
+    BITRISE_EXPORT_METHOD: app-store
