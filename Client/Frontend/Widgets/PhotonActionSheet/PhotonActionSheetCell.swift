@@ -200,7 +200,7 @@ class PhotonActionSheetCell: UITableViewCell {
         subtitleLabel.textColor = UIColor.theme.tableView.rowText
         subtitleLabel.isHidden = action.text == nil
         subtitleLabel.numberOfLines = 0
-        titleLabel.font = action.bold ? DynamicFontHelper.defaultHelper.DeviceFontLargeBold : DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
+        titleLabel.font = action.bold ? DynamicFontHelper.defaultHelper.DeviceFontLargeBold : DynamicFontHelper.defaultHelper.SemiMediumRegularWeightAS
         
         accessibilityIdentifier = action.iconString ?? action.accessibilityId
         accessibilityLabel = action.title
