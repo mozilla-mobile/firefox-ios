@@ -1,3 +1,2 @@
-github "mozilla-mobile/telemetry-ios" ~> 1.1
 github "AgileBits/onepassword-extension" "new/carthage+ios10"
 github "mozilla/glean" "v36.0.0"
