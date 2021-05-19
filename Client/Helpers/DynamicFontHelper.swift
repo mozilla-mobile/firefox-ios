@@ -87,6 +87,11 @@ class DynamicFontHelper: NSObject {
      Small = 14, medium = 18, larger = 20
      */
 
+    var SemiMediumRegularWeightAS: UIFont {
+        let size = max(deviceFontSize, 16.5)
+        return UIFont.systemFont(ofSize: size)
+    }
+    
     var MediumSizeRegularWeightAS: UIFont {
         let size = max(deviceFontSize, 18)
         return UIFont.systemFont(ofSize: size)
