@@ -15,6 +15,8 @@ private struct TopSiteCellUX {
     static let OverlayColor = UIColor(white: 0.0, alpha: 0.25)
     static let IconSize = CGSize(width: 36, height: 36)
     static let IconCornerRadius: CGFloat = 4
+    static let BackgroundSize = CGSize(width: 60, height: 60)
+    static let ShadowRadius: CGFloat = 6
     static let BorderColor = UIColor(white: 0, alpha: 0.1)
     static let BorderWidth: CGFloat = 0.5
     static let PinIconSize: CGFloat = 12
@@ -46,7 +48,7 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
         let titleLabel = UILabel()
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
-        titleLabel.preferredMaxLayoutWidth = 70
+        titleLabel.preferredMaxLayoutWidth = TopSiteCellUX.BackgroundSize.width + TopSiteCellUX.ShadowRadius
         return titleLabel
     }()
 
@@ -55,7 +57,7 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
         view.layer.cornerRadius = TopSiteCellUX.CellCornerRadius
         view.layer.borderWidth = TopSiteCellUX.BorderWidth
         view.layer.shadowOffset = CGSize(width: 0, height: 2)
-        view.layer.shadowRadius = 6
+        view.layer.shadowRadius = TopSiteCellUX.ShadowRadius
         return view
     }()
 
@@ -63,11 +65,6 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
         let selectedOverlay = UIView()
         selectedOverlay.isHidden = true
         return selectedOverlay
-    }()
-
-    lazy var titleBorder: CALayer = {
-        let border = CALayer()
-        return border
     }()
 
     override var isSelected: Bool {
@@ -86,18 +83,14 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
         faviconBG.addSubview(imageView)
         contentView.addSubview(selectedOverlay)
 
-        contentView.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.width.lessThanOrEqualTo(65)
-        }
-
         titleWrapper.snp.makeConstraints { make in
             make.top.equalTo(faviconBG.snp.bottom).offset(8)
             make.bottom.centerX.equalTo(contentView)
-            make.width.lessThanOrEqualTo(65)
+            make.width.lessThanOrEqualTo(TopSiteCellUX.BackgroundSize)
         }
 
         titleLabel.snp.makeConstraints { make in
+            make.top.equalTo(titleWrapper)
             make.leading.trailing.equalTo(titleWrapper)
         }
 
@@ -112,18 +105,12 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
 
         faviconBG.snp.makeConstraints { make in
             make.top.centerX.equalTo(contentView)
-            make.bottom.equalTo(contentView).inset(TopSiteCellUX.TitleHeight)
-            make.size.equalTo(60)
+            make.size.equalTo(TopSiteCellUX.BackgroundSize)
         }
 
         pinImageView.snp.makeConstraints { make in
             make.size.equalTo(TopSiteCellUX.PinIconSize)
         }
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        titleBorder.frame = CGRect(x: 0, y: frame.height - TopSiteCellUX.TitleHeight -  TopSiteCellUX.BorderWidth, width: frame.width, height: TopSiteCellUX.BorderWidth)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -182,7 +169,6 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
         faviconBG.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         faviconBG.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
         selectedOverlay.backgroundColor = TopSiteCellUX.OverlayColor
-        titleBorder.backgroundColor = TopSiteCellUX.BorderColor.cgColor
         titleLabel.backgroundColor = UIColor.clear
         titleLabel.textColor = UIColor.theme.homePanel.topSiteDomain
     }
@@ -204,7 +190,7 @@ class EmptyTopsiteDecorationCell: UICollectionReusableView {
         addSubview(emptyBG)
         emptyBG.snp.makeConstraints { make in
             make.top.centerX.equalToSuperview()
-            make.height.width.equalTo(60)
+            make.size.equalTo(TopSiteCellUX.BackgroundSize)
         }
     }
 
@@ -218,8 +204,8 @@ private struct ASHorizontalScrollCellUX {
     static let TopSiteEmptyCellIdentifier = "TopSiteItemEmptyCell"
 
     static let TopSiteItemSize = CGSize(width: 65, height: 90)
-    static let BackgroundColor = UIColor.Photon.White100
-    static let MinimumInsets: CGFloat = 6
+    static let MinimumInsets: CGFloat = 4
+    static let VerticalInsets: CGFloat = 16
 }
 
 /*
@@ -234,7 +220,7 @@ class ASHorizontalScrollCell: UICollectionViewCell {
         collectionView.register(TopSiteItemCell.self, forCellWithReuseIdentifier: ASHorizontalScrollCellUX.TopSiteCellIdentifier)
         collectionView.backgroundColor = UIColor.clear
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.isPagingEnabled = true
+        collectionView.layer.masksToBounds = false
         return collectionView
     }()
 
@@ -311,7 +297,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
         // The left over space is then divided evenly into (n - 1) parts to figure out how much space should be in between a cell
         let calculatedSpacing = floor((width - (CGFloat(horizontalItemsCount) * estimatedItemSize.width)) / CGFloat(horizontalItemsCount - 1))
         let insets = max(ASHorizontalScrollCellUX.MinimumInsets, calculatedSpacing)
-        let estimatedInsets = UIEdgeInsets(top: ASHorizontalScrollCellUX.MinimumInsets, left: insets, bottom: ASHorizontalScrollCellUX.MinimumInsets, right: insets)
+        let estimatedInsets = UIEdgeInsets(top: ASHorizontalScrollCellUX.VerticalInsets, left: insets, bottom: ASHorizontalScrollCellUX.VerticalInsets, right: insets)
 
         return (size: estimatedSize, cellSize: estimatedItemSize, cellInsets: estimatedInsets)
     }

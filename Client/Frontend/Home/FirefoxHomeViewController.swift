@@ -19,9 +19,7 @@ struct FirefoxHomeUX {
     static let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 20)
     static let numberOfItemsPerRowForSizeClassIpad = UXSizeClasses(compact: 3, regular: 4, other: 2)
     static let SectionInsetsForIpad: CGFloat = 101
-    static let SectionInsetsForIphone: CGFloat = 20
     static let MinimumInsets: CGFloat = 20
-    static let TopSitesInsets: CGFloat = 6
     static let LibraryShortcutsHeight: CGFloat = 80
     static let LibraryShortcutsMaxWidth: CGFloat = 375
 }
@@ -231,6 +229,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         self.topSitesManager.currentTraits = self.traitCollection
+        applyTheme()
     }
 
     @objc func reload(notification: Notification) {
