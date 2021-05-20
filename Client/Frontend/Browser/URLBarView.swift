@@ -208,7 +208,6 @@ class URLBarView: UIView {
         commonInit()
     }
     func updateSearchEngineImage() {
-        guard AppConstants.URL_SEARCH_LOGO else { return }
         guard let profile = profile else { return }
         self.searchIconImageView.image = profile.searchEngines.defaultEngine.image
     }
@@ -221,10 +220,8 @@ class URLBarView: UIView {
             addSubview($0)
         }
 
-        if AppConstants.URL_SEARCH_LOGO {
-            addSubview(searchIconImageView)
-            updateSearchEngineImage()
-        }
+        addSubview(searchIconImageView)
+        updateSearchEngineImage()
         
         privateModeBadge.add(toParent: self)
         appMenuBadge.add(toParent: self)
@@ -277,14 +274,12 @@ class URLBarView: UIView {
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
         
-        if AppConstants.URL_SEARCH_LOGO {
-            searchIconImageView.snp.remakeConstraints { make in
-                let heightMin = URLBarViewUX.LocationHeight + (URLBarViewUX.TextFieldBorderWidthSelected * 2)
-                make.height.greaterThanOrEqualTo(heightMin)
-                make.centerY.equalTo(self)
-                make.leading.equalTo(self.cancelButton.snp.trailing).offset(URLBarViewUX.LocationLeftPadding)
-                make.width.equalTo(URLBarViewUX.SearchIconImageWidth)
-            }
+        searchIconImageView.snp.remakeConstraints { make in
+            let heightMin = URLBarViewUX.LocationHeight + (URLBarViewUX.TextFieldBorderWidthSelected * 2)
+            make.height.greaterThanOrEqualTo(heightMin)
+            make.centerY.equalTo(self)
+            make.leading.equalTo(self.cancelButton.snp.trailing).offset(URLBarViewUX.LocationLeftPadding)
+            make.width.equalTo(URLBarViewUX.SearchIconImageWidth)
         }
 
         multiStateButton.snp.makeConstraints { make in
@@ -342,12 +337,8 @@ class URLBarView: UIView {
                 make.centerY.equalTo(self)
             }
             self.locationView.snp.remakeConstraints { make in
-                if AppConstants.URL_SEARCH_LOGO {
-                    make.top.bottom.right.equalTo(self.locationContainer).inset(UIEdgeInsets(equalInset: URLBarViewUX.TextFieldBorderWidthSelected))
-                    make.leading.equalTo(self.searchIconImageView.snp.trailing)
-                } else {
-                    make.edges.equalTo(self.locationContainer).inset(UIEdgeInsets(equalInset: URLBarViewUX.TextFieldBorderWidthSelected))
-                }
+                make.top.bottom.right.equalTo(self.locationContainer).inset(UIEdgeInsets(equalInset: URLBarViewUX.TextFieldBorderWidthSelected))
+                make.leading.equalTo(self.searchIconImageView.snp.trailing)
             }
             self.locationTextField?.snp.remakeConstraints { make in
                 make.edges.equalTo(self.locationView).inset(UIEdgeInsets(top: 0, left: URLBarViewUX.LocationLeftPadding, bottom: 0, right: URLBarViewUX.LocationLeftPadding))
