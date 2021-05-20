@@ -14,7 +14,7 @@ struct TopSitesWidget: Widget {
             TopSitesView(entry: entry)
         }
         .supportedFamilies([.systemMedium])
-        .configurationDisplayName(String.TopSitesGalleryTitle)
+        .configurationDisplayName(String.TopSitesGalleryTitleV2)
         .description(String.TopSitesGalleryDescription)
     }
 }

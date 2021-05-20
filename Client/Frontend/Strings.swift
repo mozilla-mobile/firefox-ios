@@ -930,6 +930,7 @@ extension String {
     
     // Top Sites - Medium Size - Gallery View
     public static let TopSitesGalleryTitle = MZLocalizedString("TodayWidget.TopSitesGalleryTitle", tableName: "Today", value: "Top Sites", comment: "Title for top sites widget to add Firefox top sites shotcuts to home screen")
+    public static let TopSitesGalleryTitleV2 = MZLocalizedString("TodayWidget.TopSitesGalleryTitleV2", tableName: "Today", value: "Website Shortcuts", comment: "Title for top sites widget to add Firefox top sites shotcuts to home screen")
     public static let TopSitesGalleryDescription = MZLocalizedString("TodayWidget.TopSitesGalleryDescription", tableName: "Today", value: "Add shortcuts to frequently and recently visited sites.", comment: "Description for top sites widget to add Firefox top sites shotcuts to home screen")
 
     // Quick View Open Tabs - Medium Size Widget
