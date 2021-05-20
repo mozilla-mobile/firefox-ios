@@ -37,7 +37,7 @@ workflows:
     - cache-push@2.0.5: {}
     meta:
       bitrise.io:
-        stack: osx-xcode-12.2.x
+        stack: osx-xcode-12.5.x
   primary:
     steps:
     - activate-ssh-key@4:
@@ -100,7 +100,7 @@ workflows:
         - export_method: app-store
     meta:
       bitrise.io:
-        stack: osx-xcode-12.0.x
+        stack: osx-xcode-12.5.x
   primary-xcode-10:
     steps:
     - activate-ssh-key@3.1.1:
@@ -138,7 +138,7 @@ workflows:
             ./Carthage -> ./Carthage/Cachefile
     meta:
       bitrise.io:
-        stack: osx-xcode-12.0.x
+        stack: osx-xcode-12.5.x
   runTests:
     steps:
     - activate-ssh-key@4:
@@ -205,7 +205,7 @@ workflows:
     - deploy-to-bitrise-io@1: {}
     meta:
       bitrise.io:
-        stack: osx-xcode-12.4.x
+        stack: osx-xcode-12.5.x
   primary-nocache:
     steps:
     - activate-ssh-key@4:
@@ -262,7 +262,7 @@ workflows:
         - export_method: app-store
     meta:
       bitrise.io:
-        stack: osx-xcode-12.0.x
+        stack: osx-xcode-12.5.x
   clone and build dependencies:
     steps:
     - activate-ssh-key@4:
@@ -303,7 +303,7 @@ workflows:
         title: NPM, ContentBlockerGen
     meta:
       bitrise.io:
-        stack: osx-xcode-12.0.x
+        stack: osx-xcode-12.5.x
     description: Clones the repo and builds dependencies
   Set project version:
     steps:
@@ -333,7 +333,7 @@ workflows:
         title: Set OpenInFocus version numbers
     meta:
       bitrise.io:
-        stack: osx-xcode-12.0.x
+        stack: osx-xcode-12.5.x
     before_run: []
   release:
     steps:
@@ -359,7 +359,7 @@ workflows:
         - itunescon_user: "$APPLE_ACCOUNT_ID"
     meta:
       bitrise.io:
-        stack: osx-xcode-12.4.x
+        stack: osx-xcode-12.5.x
     before_run:
     - clone and build dependencies
     - Set project version
@@ -389,7 +389,7 @@ workflows:
     - deploy-to-bitrise-io@1: {}
     meta:
       bitrise.io:
-        stack: osx-xcode-12.4.x
+        stack: osx-xcode-12.5.x
   runFocus:
     steps:
     - git-clone@4: {}
@@ -445,7 +445,7 @@ workflows:
     - deploy-to-bitrise-io@1: {}
     meta:
       bitrise.io:
-        stack: osx-xcode-12.4.x
+        stack: osx-xcode-12.5.x
   runKlar:
     steps:
     - git-clone@4: {}
@@ -501,7 +501,7 @@ workflows:
     - deploy-to-bitrise-io@1: {}
     meta:
       bitrise.io:
-        stack: osx-xcode-12.4.x
+        stack: osx-xcode-12.5.x
 app:
   envs:
   - opts:

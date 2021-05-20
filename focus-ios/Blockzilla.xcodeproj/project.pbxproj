@@ -144,7 +144,6 @@
 		D5ABA3DA1FCC846800D5C060 /* AutocompleteSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5ABA3D81FCC846800D5C060 /* AutocompleteSettingViewController.swift */; };
 		D5D067FB252F945D00C35227 /* metrics.yaml in Resources */ = {isa = PBXBuildFile; fileRef = D5D067FA252F945D00C35227 /* metrics.yaml */; };
 		D5D2F02B252FA6AE00761DC8 /* Metrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D2F02A252FA6AE00761DC8 /* Metrics.swift */; };
-		D5D2F041252FA71B00761DC8 /* Glean.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5D067F0252F926E00C35227 /* Glean.framework */; };
 		D803D37420EF1A49001F2819 /* UserAgentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D803D37320EF1A49001F2819 /* UserAgentTests.swift */; };
 		D831FEE2205247A400EAE19A /* BrowserViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D831FEE1205247A400EAE19A /* BrowserViewControllerTests.swift */; };
 		D8E0152C1FB4136E00CA3B9F /* AddSearchEngineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E0152B1FB4136E00CA3B9F /* AddSearchEngineViewController.swift */; };
@@ -176,18 +175,19 @@
 		F7FF8B5B2194084000CCA80F /* UIDeviceExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FF8B5A2194084000CCA80F /* UIDeviceExtensions.swift */; };
 		F805722F1DBEE504004339C1 /* WebCacheUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F805722E1DBEE504004339C1 /* WebCacheUtils.swift */; };
 		F81DF84F2653477F00C83C61 /* AutocompleteTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = F81DF84E2653477F00C83C61 /* AutocompleteTextField.swift */; };
-		F8324C2F264C807C007E4BFA /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F8324C2E264C807C007E4BFA /* SnapKit */; };
-		F8324C78264DA5F1007E4BFA /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = F8324C77264DA5F1007E4BFA /* Sentry */; };
-		F8324CBA264DC8ED007E4BFA /* Fuzi in Frameworks */ = {isa = PBXBuildFile; productRef = F8324CB9264DC8ED007E4BFA /* Fuzi */; };
 		F8324CE4264EA223007E4BFA /* gpl.html in Resources */ = {isa = PBXBuildFile; fileRef = F8324CDF264EA223007E4BFA /* gpl.html */; };
 		F8324CE5264EA223007E4BFA /* licenses.html in Resources */ = {isa = PBXBuildFile; fileRef = F8324CE0264EA223007E4BFA /* licenses.html */; };
 		F8324CE6264EA223007E4BFA /* style.css in Resources */ = {isa = PBXBuildFile; fileRef = F8324CE1264EA223007E4BFA /* style.css */; };
 		F8324CE7264EA223007E4BFA /* rights-focus.html in Resources */ = {isa = PBXBuildFile; fileRef = F8324CE2264EA223007E4BFA /* rights-focus.html */; };
 		F8324CE8264EA223007E4BFA /* rights-klar.html in Resources */ = {isa = PBXBuildFile; fileRef = F8324CE3264EA223007E4BFA /* rights-klar.html */; };
-		F8324E0926556E45007E4BFA /* Telemetry in Frameworks */ = {isa = PBXBuildFile; productRef = F8324E0826556E45007E4BFA /* Telemetry */; };
 		F84AFE751DE77FE6005C4DD1 /* LaunchScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = F84AFE721DE77FE6005C4DD1 /* LaunchScreen.png */; };
 		F84AFE761DE77FE6005C4DD1 /* LaunchScreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F84AFE731DE77FE6005C4DD1 /* LaunchScreen@2x.png */; };
 		F84AFE771DE77FE6005C4DD1 /* LaunchScreen@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F84AFE741DE77FE6005C4DD1 /* LaunchScreen@3x.png */; };
+		F85F7A292655AD5800395515 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A282655AD5800395515 /* SnapKit */; };
+		F85F7A2B2655AD5800395515 /* Fuzi in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A2A2655AD5800395515 /* Fuzi */; };
+		F85F7A2D2655AD5800395515 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A2C2655AD5800395515 /* Sentry */; };
+		F85F7A2F2655AD5800395515 /* Telemetry in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A2E2655AD5800395515 /* Telemetry */; };
+		F85F7A352656885C00395515 /* Glean in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A342656885C00395515 /* Glean */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -247,6 +247,16 @@
 				E4BF2DF51BACE92400DA9D68 /* ContentBlocker.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F85F7A322655ADC000395515 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -630,7 +640,6 @@
 		D597608B1F9FEFB300A2D212 /* TrackingProtection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtection.swift; sourceTree = "<group>"; };
 		D5ABA3D71FCC846800D5C060 /* AddCustomDomainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddCustomDomainViewController.swift; sourceTree = "<group>"; };
 		D5ABA3D81FCC846800D5C060 /* AutocompleteSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutocompleteSettingViewController.swift; sourceTree = "<group>"; };
-		D5D067F0252F926E00C35227 /* Glean.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Glean.framework; path = Carthage/Build/iOS/Glean.framework; sourceTree = "<group>"; };
 		D5D067FA252F945D00C35227 /* metrics.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = metrics.yaml; sourceTree = "<group>"; };
 		D5D2F02A252FA6AE00761DC8 /* Metrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Metrics.swift; sourceTree = "<group>"; };
 		D803D37320EF1A49001F2819 /* UserAgentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAgentTests.swift; sourceTree = "<group>"; };
@@ -958,20 +967,20 @@
 			files = (
 				163BFFE42124F8E10007CEBC /* IntentsUI.framework in Frameworks */,
 				163BFFE22124EBAF0007CEBC /* Intents.framework in Frameworks */,
-				F8324C2F264C807C007E4BFA /* SnapKit in Frameworks */,
 				E47F9AE71DB929D800A93285 /* AdSupport.framework in Frameworks */,
+				F85F7A292655AD5800395515 /* SnapKit in Frameworks */,
 				E47F9AE81DB929D800A93285 /* iAd.framework in Frameworks */,
-				F8324E0926556E45007E4BFA /* Telemetry in Frameworks */,
 				4285B8E0671F40DA543A2E58 /* AssetsLibrary.framework in Frameworks */,
+				F85F7A2F2655AD5800395515 /* Telemetry in Frameworks */,
 				A57245250F88CCA4993E55B2 /* CoreText.framework in Frameworks */,
 				2B36326E97D2E67E9C684B4B /* CoreTelephony.framework in Frameworks */,
-				D5D2F041252FA71B00761DC8 /* Glean.framework in Frameworks */,
 				2825C3665AB14081B262F767 /* SystemConfiguration.framework in Frameworks */,
-				F8324C78264DA5F1007E4BFA /* Sentry in Frameworks */,
+				F85F7A2B2655AD5800395515 /* Fuzi in Frameworks */,
 				34056D10515852F370C83A01 /* QuartzCore.framework in Frameworks */,
+				F85F7A2D2655AD5800395515 /* Sentry in Frameworks */,
 				5AFDBB0CF3A9FBA175D2B693 /* AVFoundation.framework in Frameworks */,
-				F8324CBA264DC8ED007E4BFA /* Fuzi in Frameworks */,
 				2F2F84BCF076B21DE42D1F29 /* CoreMedia.framework in Frameworks */,
+				F85F7A352656885C00395515 /* Glean in Frameworks */,
 				58BD00527359D003DADE601E /* CoreVideo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1153,7 +1162,6 @@
 		D77FE464056F274978E025ED /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D5D067F0252F926E00C35227 /* Glean.framework */,
 				163BFFE32124F8E10007CEBC /* IntentsUI.framework */,
 				163BFFE12124EBAF0007CEBC /* Intents.framework */,
 				746BD91B1F758BEC00BE8DB9 /* Carthage */,
@@ -1454,7 +1462,7 @@
 				E4BF2DD01BACE8CA00DA9D68 /* Frameworks */,
 				E4BF2DD11BACE8CA00DA9D68 /* Resources */,
 				E4BF2DF91BACE92400DA9D68 /* Embed App Extensions */,
-				D38D693F1C471AC7003EF211 /* Run Script (Carthage) */,
+				F85F7A322655ADC000395515 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1465,10 +1473,11 @@
 			);
 			name = Blockzilla;
 			packageProductDependencies = (
-				F8324C2E264C807C007E4BFA /* SnapKit */,
-				F8324CB9264DC8ED007E4BFA /* Fuzi */,
-				F8324C77264DA5F1007E4BFA /* Sentry */,
-				F8324E0826556E45007E4BFA /* Telemetry */,
+				F85F7A282655AD5800395515 /* SnapKit */,
+				F85F7A2A2655AD5800395515 /* Fuzi */,
+				F85F7A2C2655AD5800395515 /* Sentry */,
+				F85F7A2E2655AD5800395515 /* Telemetry */,
+				F85F7A342656885C00395515 /* Glean */,
 			);
 			productName = Blockzilla;
 			productReference = E4BF2DD31BACE8CA00DA9D68 /* Firefox Klar.app */;
@@ -1650,6 +1659,7 @@
 				F8324CB8264DC8ED007E4BFA /* XCRemoteSwiftPackageReference "Fuzi" */,
 				F8324C76264DA5F1007E4BFA /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 				F8324E0726556E45007E4BFA /* XCRemoteSwiftPackageReference "telemetry-ios" */,
+				F85F7A332656885C00395515 /* XCRemoteSwiftPackageReference "glean-swift" */,
 			);
 			productRefGroup = E4BF2DD41BACE8CA00DA9D68 /* Products */;
 			projectDirPath = "";
@@ -1760,21 +1770,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		D38D693F1C471AC7003EF211 /* Run Script (Carthage) */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/Glean.framework",
-			);
-			name = "Run Script (Carthage)";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
-		};
 		D5D067F9252F939600C35227 /* Glean */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -5213,28 +5208,41 @@
 				kind = branch;
 			};
 		};
+		F85F7A332656885C00395515 /* XCRemoteSwiftPackageReference "glean-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/badboy/glean-swift/";
+			requirement = {
+				kind = exactVersion;
+				version = 38.0.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		F8324C2E264C807C007E4BFA /* SnapKit */ = {
+		F85F7A282655AD5800395515 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F8324C2D264C807C007E4BFA /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
 		};
-		F8324C77264DA5F1007E4BFA /* Sentry */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F8324C76264DA5F1007E4BFA /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
-			productName = Sentry;
-		};
-		F8324CB9264DC8ED007E4BFA /* Fuzi */ = {
+		F85F7A2A2655AD5800395515 /* Fuzi */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F8324CB8264DC8ED007E4BFA /* XCRemoteSwiftPackageReference "Fuzi" */;
 			productName = Fuzi;
 		};
-		F8324E0826556E45007E4BFA /* Telemetry */ = {
+		F85F7A2C2655AD5800395515 /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F8324C76264DA5F1007E4BFA /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
+		};
+		F85F7A2E2655AD5800395515 /* Telemetry */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F8324E0726556E45007E4BFA /* XCRemoteSwiftPackageReference "telemetry-ios" */;
 			productName = Telemetry;
+		};
+		F85F7A342656885C00395515 /* Glean */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F85F7A332656885C00395515 /* XCRemoteSwiftPackageReference "glean-swift" */;
+			productName = Glean;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
