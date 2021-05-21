@@ -38,7 +38,7 @@ extension ExperimentsBranchesViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ExperimentsTableView.CellIdentifier, for: indexPath)
         let branch = experiment.branches[indexPath.row]
-        let optedIn = Experiments.shared.getExperimentBranch(featureId: branch.feature!.featureId) == branch.slug
+        let optedIn = Experiments.shared.getExperimentBranch(experimentId: experiment.slug) == branch.slug
 
         cell.textLabel?.text = branch.slug
         cell.accessoryType = optedIn ? .checkmark : .none
@@ -49,7 +49,11 @@ extension ExperimentsBranchesViewController: UITableViewDataSource {
 extension ExperimentsBranchesViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let branch = experiment.branches[indexPath.row]
-        Experiments.shared.optIn(experiment.slug, branch: branch.slug)
+        if Experiments.shared.getExperimentBranch(experimentId: experiment.slug) != branch.slug {
+            Experiments.shared.optIn(experiment.slug, branch: branch.slug)
+        } else {
+            Experiments.shared.optOut(experiment.slug)
+        }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
             tableView.reloadData()
         }

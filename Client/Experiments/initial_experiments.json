@@ -1,0 +1,236 @@
+{
+    "data": [{
+            "slug": "feature-text-variables-validation-android",
+            "appId": "org.mozilla.fenix",
+            "appName": "fenix",
+            "channel": "nightly",
+            "branches": [{
+                    "slug": "control",
+                    "ratio": 100,
+                    "feature": {
+                        "value": {},
+                        "enabled": true,
+                        "featureId": "nimbus-validation"
+                    }
+                },
+                {
+                    "slug": "a1",
+                    "ratio": 0,
+                    "feature": {
+                        "value": {
+                            "settings-title": "settings-title",
+                            "settings-title-punctuation": "…"
+                        },
+                        "enabled": true,
+                        "featureId": "nimbus-validation"
+                    }
+                },
+                {
+                    "slug": "a2",
+                    "ratio": 0,
+                    "feature": {
+                        "value": {
+                            "settings-title": "preferences_category_general",
+                            "settings-title-punctuation": "!"
+                        },
+                        "enabled": true,
+                        "featureId": "nimbus-validation"
+                    }
+                }
+            ],
+            "outcomes": [],
+            "arguments": {},
+            "probeSets": [],
+            "startDate": null,
+            "targeting": "true",
+            "featureIds": [
+                "nimbus-validation"
+            ],
+            "application": "org.mozilla.firefox_beta",
+            "bucketConfig": {
+                "count": 0,
+                "start": 0,
+                "total": 10000,
+                "namespace": "nimbus-validation-2",
+                "randomizationUnit": "nimbus_id"
+            },
+            "schemaVersion": "1.5.0",
+            "userFacingName": "Nimbus Text Variables Validation",
+            "referenceBranch": "control",
+            "proposedDuration": 14,
+            "isEnrollmentPaused": false,
+            "proposedEnrollment": 7,
+            "userFacingDescription": "Demonstration experiment to make trivial visible changes to text in Settings",
+            "last_modified": 1621443780172
+        },
+        {
+            "slug": "feature-icon-variables-validation-android",
+            "appId": "org.mozilla.fenix",
+            "appName": "fenix",
+            "channel": "nightly",
+            "branches": [{
+                    "slug": "control",
+                    "ratio": 100,
+                    "feature": {
+                        "value": {},
+                        "enabled": true,
+                        "featureId": "nimbus-validation"
+                    }
+                },
+                {
+                    "slug": "treatment",
+                    "ratio": 0,
+                    "feature": {
+                        "value": {
+                            "settings-title": "Fancy Settings",
+                            "settings-icon": "ic_edit"
+                        },
+                        "enabled": true,
+                        "featureId": "nimbus-validation"
+                    }
+                }
+            ],
+            "outcomes": [],
+            "arguments": {},
+            "probeSets": [],
+            "startDate": null,
+            "targeting": "true",
+            "featureIds": [
+                "nimbus-validation"
+            ],
+            "application": "org.mozilla.firefox_beta",
+            "bucketConfig": {
+                "count": 0,
+                "start": 0,
+                "total": 10000,
+                "namespace": "nimbus-validation-2",
+                "randomizationUnit": "nimbus_id"
+            },
+            "schemaVersion": "1.5.0",
+            "userFacingName": "Nimbus Icon Variables Validation",
+            "referenceBranch": "control",
+            "proposedDuration": 14,
+            "isEnrollmentPaused": false,
+            "proposedEnrollment": 7,
+            "userFacingDescription": "Demonstration experiment to make trivial visible changes to icons in Settings",
+            "last_modified": 1621443780172
+        },
+
+        {
+            "slug": "feature-text-variables-validation-ios",
+            "appId": "org.mozilla.ios.Fennec",
+            "appName": "firefox_ios",
+            "channel": "nightly",
+            "branches": [{
+                    "slug": "control",
+                    "ratio": 100,
+                    "feature": {
+                        "value": {},
+                        "enabled": true,
+                        "featureId": "nimbus-validation"
+                    }
+                },
+                {
+                    "slug": "a1",
+                    "ratio": 0,
+                    "feature": {
+                        "value": {
+                            "settings-title": "Menu/Menu.OpenSettingsAction.Title",
+                            "settings-title-punctuation": "…"
+                        },
+                        "enabled": true,
+                        "featureId": "nimbus-validation"
+                    }
+                },
+                {
+                    "slug": "a2",
+                    "ratio": 0,
+                    "feature": {
+                        "value": {
+                            "settings-title": "Settings.General.SectionName",
+                            "settings-title-punctuation": "!"
+                        },
+                        "enabled": true,
+                        "featureId": "nimbus-validation"
+                    }
+                }
+            ],
+            "outcomes": [],
+            "arguments": {},
+            "probeSets": [],
+            "startDate": null,
+            "targeting": "true",
+            "featureIds": [
+                "nimbus-validation"
+            ],
+            "application": "org.mozilla.ios.Fennec",
+            "bucketConfig": {
+                "count": 0,
+                "start": 0,
+                "total": 10000,
+                "namespace": "nimbus-validation-2",
+                "randomizationUnit": "nimbus_id"
+            },
+            "schemaVersion": "1.5.0",
+            "userFacingName": "Nimbus Text Variables Validation",
+            "referenceBranch": "control",
+            "proposedDuration": 14,
+            "isEnrollmentPaused": false,
+            "proposedEnrollment": 7,
+            "userFacingDescription": "Demonstration experiment to make trivial visible changes to text in Settings",
+            "last_modified": 1621443780172
+        },
+        {
+            "slug": "feature-icon-variables-validation-ios",
+            "appId": "org.mozilla.ios.Fennec",
+            "appName": "firefox_ios",
+            "channel": "nightly",
+            "branches": [{
+                    "slug": "control",
+                    "ratio": 100,
+                    "feature": {
+                        "value": {},
+                        "enabled": true,
+                        "featureId": "nimbus-validation"
+                    }
+                },
+                {
+                    "slug": "treatment",
+                    "ratio": 0,
+                    "feature": {
+                        "value": {
+                            "settings-title": "Fancy Settings",
+                            "settings-icon": "menu-ViewMobile"
+                        },
+                        "enabled": true,
+                        "featureId": "nimbus-validation"
+                    }
+                }
+            ],
+            "outcomes": [],
+            "arguments": {},
+            "probeSets": [],
+            "startDate": null,
+            "targeting": "true",
+            "featureIds": [
+                "nimbus-validation"
+            ],
+            "application": "org.mozilla.ios.Fennec",
+            "bucketConfig": {
+                "count": 0,
+                "start": 0,
+                "total": 10000,
+                "namespace": "nimbus-validation-2",
+                "randomizationUnit": "nimbus_id"
+            },
+            "schemaVersion": "1.5.0",
+            "userFacingName": "Nimbus Icon Variables Validation",
+            "referenceBranch": "control",
+            "proposedDuration": 14,
+            "isEnrollmentPaused": false,
+            "proposedEnrollment": 7,
+            "userFacingDescription": "Demonstration experiment to make trivial visible changes to icons in Settings",
+            "last_modified": 1621443780172
+        }
+    ]
+}

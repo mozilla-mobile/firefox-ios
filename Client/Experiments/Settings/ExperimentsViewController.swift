@@ -21,7 +21,9 @@ class ExperimentsViewController: UIViewController {
             self.showSettings()
         }
 
-        NotificationCenter.default.addObserver(self, selector: #selector(onExperimentsApplied), name: .nimbusExperimentsApplied, object: nil)
+        NotificationCenter.default.addObserver(forName: .nimbusExperimentsApplied, object: nil, queue: .main) { _ in
+            self.onExperimentsApplied()
+        }
     }
 
     required init?(coder: NSCoder) {
