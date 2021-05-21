@@ -81,7 +81,7 @@
 "Added page to Reading List" = "Сторінку додано до списку читання";
 
 /* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
-"AddPass.Error.Dismiss" = "OK";
+"AddPass.Error.Dismiss" = "Гаразд";
 
 /* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
 "AddPass.Error.Message" = "При додаванні картки до Wallet сталася помилка. Спробуйте знову пізніше.";
@@ -264,7 +264,7 @@
 "CoverSheet.v22.DarkMode.Title" = "Темний режим тепер має темну клавіатуру і екран привітання.";
 
 /* Description for the new ETP mode i.e. standard vs strict */
-"CoverSheet.v24.ETP.Description" = "Вбудований розширений захист від стеження допомагає зупинити рекламу від переслідування вас. Увімкніть надійний захист, щоб заблокувати ще більше реклами, стеження і виринаючих вікон.";
+"CoverSheet.v24.ETP.Description" = "Вбудований розширений захист від стеження допомагає зупинити рекламу від переслідування вас. Увімкніть надійний захист, щоб заблокувати ще більше реклами, стеження і спливних вікон. ";
 
 /* Text for the new ETP settings button */
 "CoverSheet.v24.ETP.Settings.Button" = "Перейти до параметрів";
@@ -908,10 +908,10 @@
 "No tabs" = "Немає вкладок";
 
 /* OK button */
-"OK" = "OK";
+"OK" = "Гаразд";
 
 /* Restore Tabs Affirmative Action */
-"Okay" = "Згода";
+"Okay" = "Гаразд";
 
 /* Title for prompt displayed to user after the app crashes */
 "Oops! Firefox crashed" = "Отакої! Стався збій Firefox";
@@ -1016,7 +1016,7 @@
 "Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Зберігайте статті до списку читання дотиком до піктограми книги з плюсом в керуванні режимом читання.";
 
 /* OK button to dismiss the error prompt. */
-"ScanQRCode.Error.OK.Button" = "OK";
+"ScanQRCode.Error.OK.Button" = "Гаразд";
 
 /* Text for the instructions label, displayed in the QR scanner view */
 "ScanQRCode.Instructions.Label" = "Розташуйте QR-код в межах рамки для сканування";
@@ -1072,7 +1072,7 @@
 "Search.ThirdPartyEngines.FormErrorTitle" = "Невдача";
 
 /* The confirmation button */
-"Search.ThirdPartyEngines.OK" = "OK";
+"Search.ThirdPartyEngines.OK" = "Гаразд";
 
 /* Accessibility hint describing the action performed when a search suggestion is clicked */
 "Searches for the suggestion" = "Пошук пропозиції";
@@ -1100,7 +1100,7 @@
 "SendTo.Error.Message" = "Можна ділитися лише посиланнями HTTP та HTTPS.";
 
 /* OK button to dismiss the error prompt. */
-"SendTo.Error.OK.Button" = "OK";
+"SendTo.Error.OK.Button" = "Гаразд";
 
 /* Title of error prompt displayed when an invalid URL is shared. */
 "SendTo.Error.Title" = "Неможливо поділитися цим посиланням.";
