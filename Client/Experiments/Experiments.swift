@@ -148,7 +148,9 @@ enum Experiments {
             let nimbus = try Nimbus.create(
                 serverSettings,
                 appSettings: appSettings,
-                dbPath: dbPath, errorReporter: errorReporter
+                dbPath: dbPath,
+                resourceBundles: [Strings.bundle, Bundle.main],
+                errorReporter: errorReporter
             )
             log.info("Nimbus is now available!")
             return nimbus
