@@ -565,6 +565,14 @@ class LeanplumStatus: HiddenSetting {
     }
 }
 
+class ExperimentsSettings: HiddenSetting {
+    override var title: NSAttributedString? { return NSAttributedString(string: "Experiments")}
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        navigationController?.pushViewController(ExperimentsViewController(), animated: true)
+    }
+}
+
 ///Note: We have disabed it until we find best way to test newTabToolbarButton
 //class ToggleNewTabToolbarButton: HiddenSetting {
 //    override var title: NSAttributedString? {

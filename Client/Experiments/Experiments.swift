@@ -10,6 +10,7 @@ import XCGLogger
 private let log = Logger.browserLogger
 private let nimbusAppName = "firefox_ios"
 private let NIMBUS_URL_KEY = "NimbusURL"
+private let NIMBUS_LOCAL_DATA_KEY = "nimbus_local_data"
 
 /// `Experiments` is the main entry point to use the `Nimbus` experimentation platform in Firefox for iOS.
 ///
@@ -43,6 +44,39 @@ private let NIMBUS_URL_KEY = "NimbusURL"
 ///
 /// Rust errors are not expected, but will be reported via Sentry.
 enum Experiments {
+
+    /// `InitializationOptions` controls how we initially initialize Nimbus.
+    ///
+    /// - **preload**: includes a file URL that stores the initial experiments document.
+    ///     This will preload Nimbus with experiment data and also fetch new data from the remote server
+    /// - **normal**: initialize Nimbus with no custom configuration.
+    /// - **testing**: initialize Nimbus with custom experiments data.
+    enum InitializationOptions {
+        case preload(fileUrl: URL)
+        case normal
+        case testing(localPayload: String)
+
+        var isTesting: Bool {
+            switch self {
+            case .testing: return true
+            default: return false
+            }
+        }
+    }
+
+    static func setLocalExperimentData(payload: String?, storage: UserDefaults = .standard) {
+        guard let payload = payload else {
+            storage.removeObject(forKey: NIMBUS_LOCAL_DATA_KEY)
+            return
+        }
+
+        storage.setValue(payload, forKey: NIMBUS_LOCAL_DATA_KEY)
+    }
+
+    static func getLocalExperimentData(storage: UserDefaults = .standard) -> String? {
+        return storage.string(forKey: NIMBUS_LOCAL_DATA_KEY)
+    }
+
     static var dbPath: String? {
         let profilePath: String?
         if AppConstants.IsRunningTest || AppConstants.IsRunningPerfTest {
@@ -135,21 +169,26 @@ enum Experiments {
     /// - Parameters:
     ///     - fireURL: an optional file URL that stores the initial experiments document.
     ///     - firstRun: a flag indicating that this is the first time that the app has been run.
-    public static func intialize(with fileURL: URL?, firstRun: Bool) {
+    public static func intialize(_ options: InitializationOptions) {
         let nimbus = Experiments.shared
 
         nimbus.initialize()
 
-        if let fileURL = fileURL, firstRun {
-            nimbus.setExperimentsLocally(fileURL)
+        switch options {
+        case .preload(let url): nimbus.setExperimentsLocally(url)
+        case .testing(let payload): nimbus.setExperimentsLocally(payload)
+        default: break /* noop */
         }
+
         // We should immediately calculate the experiment enrollments
         // that we've just acquired from the fileURL, or we fetched last run.
         nimbus.applyPendingExperiments()
 
-        // In the background, we should download the next version of the experiments
-        // document.
-        nimbus.fetchExperiments()
+        // if we're not testing, we should download the next version of the experiments
+        // document. This happens in the background
+        if !options.isTesting {
+            nimbus.fetchExperiments()
+        }
 
         log.info("Nimbus is initializing!")
     }

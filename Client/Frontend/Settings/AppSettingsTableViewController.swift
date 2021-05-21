@@ -140,7 +140,8 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 ChangeToChinaSetting(settings: self),
                 ShowEtpCoverSheet(settings: self),
                 LeanplumStatus(settings: self),
-                ToggleChronTabs(settings: self)
+                ToggleChronTabs(settings: self),
+                ExperimentsSettings(settings: self)
             ])]
 
         return settings

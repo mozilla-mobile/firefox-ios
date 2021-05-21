@@ -10,11 +10,9 @@ import Foundation
 
 extension AppDelegate {
     func initializeExperiments() {
-        let defaults = UserDefaults()
-        let nimbusFirstRun = "NimbusFirstRun"
-        let firstRun = defaults.object(forKey: nimbusFirstRun) != nil
-        defaults.set(false, forKey: nimbusFirstRun)
+        let options = Experiments.getLocalExperimentData()
+            .map(Experiments.InitializationOptions.testing(localPayload:)) ?? .normal
 
-        Experiments.intialize(with: nil, firstRun: firstRun)
+        Experiments.intialize(options)
     }
 }
