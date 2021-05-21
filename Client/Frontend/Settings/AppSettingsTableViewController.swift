@@ -13,7 +13,11 @@ class AppSettingsTableViewController: SettingsTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.title = .AppSettingsTitle
+        let variables = Experiments.shared.getVariables(featureId: "nimbus-validation", recordExposureEvent: true)
+        let title = variables.getText("settings-title") ?? .AppSettingsTitle
+        let suffix = variables.getString("settings-title-punctuation") ?? ""
+
+        navigationItem.title = "\(title)\(suffix)"
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             title: .AppSettingsDone,
             style: .done,
