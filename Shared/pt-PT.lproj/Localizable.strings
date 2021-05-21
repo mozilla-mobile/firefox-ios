@@ -25,6 +25,9 @@
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite2" = "Fixar";
 
+/* The title for removing a shortcut action */
+"ActivityStream.ContextMenu.RemoveFromShortcuts" = "Remover dos Atalhos";
+
 /* The title for removing a pinned topsite action */
 "ActivityStream.ContextMenu.RemovePinTopsite" = "Remover site afixado";
 

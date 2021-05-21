@@ -20,10 +20,9 @@
 "ActivityStream.ContextMenu.AddToShortcuts" = "Adder al accessos directe";
 
 /* The title for the pinning a topsite action */
-"ActivityStream.ContextMenu.PinTopsite" = "Fixar al sitos preferite";
+"ActivityStream.ContextMenu.PinTopsite" = "Fixar al sitos popular";
 
 /* The title for the pinning a topsite action */
-"ActivityStream.ContextMenu.PinTopsite" = "Fixar al sitos popular";
 "ActivityStream.ContextMenu.PinTopsite2" = "Fixar";
 
 /* The title for removing a shortcut action */

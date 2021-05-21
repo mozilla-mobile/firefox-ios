@@ -69,6 +69,7 @@
 
 /* Label for the button, displayed in the menu, used to translate the current page. */
 "Menu.TranslatePageAction.Title" = "Traducir la páxina";
+
 /* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
 "Menu.ViewDekstopSiteAction.Title" = "Pidir el sitiu d'escritoriu";
 

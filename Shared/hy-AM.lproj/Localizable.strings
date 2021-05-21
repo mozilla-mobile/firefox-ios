@@ -101,6 +101,12 @@
 /* Authentication prompt title */
 "Authentication required" = "Պահանջվում է իսկորոշում";
 
+/* Description for button to suggest searching with a search engine. First argument is the name of the search engine to select */
+"Awesomebar.SearchWithEngine.Description" = "Փնտրեք %@-ը անմիջապես հասցեի տողից";
+
+/* Title for button to suggest searching with a search engine. First argument is the name of the search engine to select */
+"Awesomebar.SearchWithEngine.Title" = "Որոնել %@-ով";
+
 /* Accessibility label for the Back button in the tab toolbar. */
 "Back" = "Հետ";
 
@@ -229,6 +235,12 @@
 
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "Բացել նոր ներդիրում";
+
+/* Context menu item for opening a link in a new private tab */
+"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "Բացեք հղումը նոր մասնավոր ներդիրում";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenLinkInNewTabButtonTitle" = "Բացել հղումը նոր ներդիրում";
 
 /* Context menu item for saving an image */
 "ContextMenu.SaveImageButtonTitle" = "Պահպանել պատկերը";
@@ -690,14 +702,26 @@
 /* Toast displayed to the user after adding the item to the Top Sites. */
 "Menu.AddPin.Confirm" = "Ամրացված է Լավագույն կայքերին";
 
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"Menu.AddPin.Confirm2" = "Ավելացված է դյուրանցումներին";
+
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "Ավելացվել է ընթերցման ցուցակում";
+
+/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
+"Menu.BackUpAndSync.Label" = "Կրկնօրինակեք և համաժամացրեք տվյալները";
+
+/* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
+"Menu.Bookmarks.Label" = "Էջանիշեր";
 
 /* The title for the button that lets you copy the url from the location bar. */
 "Menu.Copy.Title" = "Պատճենել հասցեն";
 
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "URL-ն պատճենվել է";
+
+/* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
+"Menu.Downloads.Label" = "Ներբեռնումներ";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtectionOff.Title" = "Ընդլայնված պաշտպանությունը հետապնդումից ԱՆՋԱՏՎԱԾ է այս կայքում";
@@ -711,23 +735,44 @@
 /* Description for having strict ETP protection with ITP offered in iOS14+ */
 "Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox-ը արգելափակում է հետագծիչները, սոցիալական հետագծիչները, գաղտնագրերը, մատնահետքերը և հետագծման բովանդակությունը:";
 
+/* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
+"Menu.History.Label" = "Պատմություն";
+
 /* Label for the button displayed in the menu used to stop the reload of the webpage */
 "Menu.Library.StopReload" = "Կանգնեցնել";
+
+/* Label for the button, displayed in the menu, takes you to screen to manage account when pressed. First argument is the display name for the current account */
+"Menu.ManageAccount.Label" = "Կառավարել %@ հաշիվը";
+
+/* Label for the button, displayed in the menu, turns off night mode. */
+"Menu.NightModeTurnOff.Label2" = "Անջատել Գիշերային ռեժիմը";
 
 /* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label" = "Միացնել գիշերային աշխատատեսակը";
 
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label2" = "Միացնել Գիշերային ռեժիմը";
+
 /* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
 "Menu.NoImageModeBlockImages.Label" = "Արգելափակել պատկերները";
 
+/* Label for the button, displayed in the menu, shows images on the webpage when pressed. */
+"Menu.NoImageModeShowImages.Label" = "Ցուցադրել պատկերները";
+
 /* Label for title in page action menu. */
 "Menu.PageActions.Title" = "Էջի գործողություններ";
+
+/* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
+"Menu.Passwords.Label" = "Գաղտնաբառեր";
 
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "Տեղադրել";
 
 /* The title for the button that lets you paste and go to a URL */
 "Menu.PasteAndGo.Title" = "Տեղադրել և Առաջ";
+
+/* Label for the button, displayed in the menu, takes you to to Reading List screen when pressed. */
+"Menu.ReadingList.Label" = "Ընթերցացուցակ";
 
 /* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
 "Menu.ReloadWithoutTrackingProtection.Title" = "Կրկին բեռնել առանց Հետագծման պաշտպանության";
@@ -740,6 +785,9 @@
 
 /* Toast displayed to the user after removing the item from the Top Sites. */
 "Menu.RemovePin.Confirm" = "Հեռացված է լավագույն կայքերից";
+
+/* Toast displayed to the user after removing the item to the Shortcuts. */
+"Menu.RemovePin.Confirm2" = "Հեռացվել է դյուրանցումներից";
 
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "Ներդիրն ուղարկված է";
@@ -989,6 +1037,9 @@
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "Որոնել կամ մուտքագրել հասցե";
+
+/* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
+"Search.Awesomebar.SwitchToTab" = "Անցնել ներդիրին";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "Նոր որոնիչը կհայտնվի արագ որոնման գոտիում:";
@@ -1277,6 +1328,9 @@
 /* The footer for the section to customize top sites in the new tab settings page. */
 "Settings.NewTab.Option.CustomizeFooter" = "Ամենաշատ այցելած կայքեր";
 
+/* The footer for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeFooter2" = "Կայքեր, որոնք դուք պահպանել կամ այցելել եք";
+
 /* The title for the section to customize top sites in the new tab settings page. */
 "Settings.NewTab.Option.CustomizeTitle" = "Հարմարեցնել Firefox-ի սկիզբը";
 
@@ -1303,6 +1357,12 @@
 
 /* Option in settings to show reading list when you open a new tab */
 "Settings.NewTab.Option.ReadingList" = "Ցուցադրել ընթերցման ցուցակը";
+
+/* Option in settings to turn on off pocket recommendations First argument is the pocket brand name */
+"Settings.NewTab.Option.RecommendedByPocket" = "Խորհուրդ է տալիս %@-ը";
+
+/* Descriptoin for the option in settings to turn on off pocket recommendations. First argument is the pocket brand name, second argument is the pocket product name. */
+"Settings.NewTab.Option.RecommendedByPocketDescription" = "Բացառիկ բովանդակություն, որը համադրել է %1$@-ի կողմից, որը %2$@ ընտանիքից է";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "Նոր Ներդիր";
@@ -1363,6 +1423,36 @@
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri֊ի դյուրանցումներ";
+
+/* Section title for all studies that are currently active */
+"Settings.Studies.Active.SectionName" = "Ակտիվ";
+
+/* Section title for all studies that are completed */
+"Settings.Studies.Completed.SectionName" = "Ավարտված";
+
+/* Button title displayed next to each study allowing the user to opt-out of the study */
+"Settings.Studies.Remove.Button" = "Հեռացնել";
+
+/* Title displayed in header of the Studies panel */
+"Settings.Studies.SectionName" = "Ուսումնասիրություններ";
+
+/* Label used as an item in Settings. Tapping on this item takes you to the Studies panel */
+"Settings.Studies.Title" = "Ուսումնասիրություններ";
+
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Toggle.Link" = "Իմանալ ավելին:";
+
+/* A short description that explains that Mozilla is running studies */
+"Settings.Studies.Toggle.Message" = "Firefox-ը կարող է ժամանակ առ ժամանակ տեղադրել և գործարկել ուսումնասիրություններ:";
+
+/* Toggled OFF to opt-out of studies */
+"Settings.Studies.Toggle.Off" = "Անջ.";
+
+/* Toggled ON to participate in studies */
+"Settings.Studies.Toggle.On" = "Միաց.";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Toggle.Title" = "Ուսումնասիրություններ";
 
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Լավ, հասկացա";
@@ -1596,6 +1686,9 @@
 /* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.CloseTab.KeyCodeTitle" = "Փակել ընտրված ներդիրը";
 
+/* Accessibility label for the currently selected tab. */
+"TabTray.CurrentSelectedTab.A11Y" = "Ներկայումս ընտրված ներդիրը:";
+
 /* The section header for tabs opened last week */
 "TabTray.LastWeek.Header" = "Վերջին շաբաթում";
 
@@ -1610,6 +1703,18 @@
 
 /* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenSelectedTab.KeyCodeTitle" = "Բացել ընտրված ներդիրը";
+
+/* The title for the tab tray in private mode */
+"TabTray.PrivateTitle" = "Մասնավոր ներդիրներ";
+
+/* The title on the button to look at private tabs. */
+"TabTray.SegmentedControlTitles.PrivateTabs" = "Մասնավոր";
+
+/* The title on the button to look at synced tabs. */
+"TabTray.SegmentedControlTitles.SyncedTabs" = "Համաժամեցված";
+
+/* The title on the button to look at regular tabs. */
+"TabTray.SegmentedControlTitles.Tabs" = "Ներդիրներ";
 
 /* The button title to see more options to perform on the tab. */
 "TabTray.SwipeMenu.More" = "Ավելին";

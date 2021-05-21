@@ -35,7 +35,7 @@
 "Menu.OpenBookmarksAction.AccessibilityLabel.v2" = "Záložky";
 
 /* Accessibility label for the button, displayed in the menu, used to open the Downloads home panel. Please keep as short as possible, <15 chars of space available. */
-"Menu.OpenDownloadsAction.AccessibilityLabel.v2" = "Prevzaté súbory";
+"Menu.OpenDownloadsAction.AccessibilityLabel.v2" = "Stiahnuté súbory";
 
 /* Accessibility label for the button, displayed in the menu, used to open the History home panel. Please keep as short as possible, <15 chars of space available. */
 "Menu.OpenHistoryAction.AccessibilityLabel.v2" = "História";

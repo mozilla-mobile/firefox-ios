@@ -25,8 +25,14 @@
 /* The link that shows more Pocket trending stories */
 "ActivityStream.Pocket.MoreLink" = "Más";
 
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle" = "Tendencia en Pocket";
+
 /* The description of a Pocket Story */
 "ActivityStream.Pocket.Trending" = "Tendencies";
+
+/* Section title label for recently visited websites */
+"ActivityStream.RecentHistory.Title" = "Visitóse apocayá";
 
 /* Section title label for Shortcuts */
 "ActivityStream.Shortcuts.SectionTitle" = "Atayos";
@@ -154,6 +160,9 @@
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "Nun pudo cargase la páxina.";
 
+/* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
+"CoverSheet.v22.DarkMode.Description" = "Pa usuarios d'iOS 13, Firefox cambia pal estilu escuru cuando'l teléfonu tea nel mou escuridá. Pa camudar esti comportamientu, vete p'Axustes > Estilu.";
+
 /* Title for the new dark mode change in the version 22 app release. */
 "CoverSheet.v22.DarkMode.Title" = "Agora'l tema escuru inclúi un tecláu y una pantalla de chisga escuros.";
 
@@ -222,6 +231,9 @@
 /* The description text in the Download progress toast for showing the downloaded file size (1$) out of the total expected file size (2$). */
 "Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
 
+/* Action button for deleting downloaded files in the Downloads panel. */
+"DownloadsPanel.Delete.Title" = "Desaniciar";
+
 /* Title for the Downloads Panel empty state. */
 "DownloadsPanel.EmptyState.Title" = "Equí amuésense los ficheros baxaos.";
 
@@ -268,7 +280,7 @@
 "FxA.AccountVerificationRequired" = "Ríquese la verificación de la cuenta";
 
 /* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "Precises verificar %@. Comprueba'l to corréu pa ver si t'aportó l'enllaz de Firefox.";
+"FxA.AccountVerificationRequiredSurface" = "Tienes de verificar %@. Comprueba'l to corréu pa ver si aportó l'enllaz de Firefox.";
 
 /* Button label to connect another device to Sync */
 "FxA.ConnectAnotherDevice" = "Coneutar otru preséu";
@@ -281,6 +293,9 @@
 
 /* Button label to open Sync preferences */
 "FxA.OpenSyncPreferences" = "Abrir preferencies de sincronización";
+
+/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
+"FxA.RemoveAccount" = "Quitar";
 
 /* Button label to resend email */
 "FxA.ResendEmail" = "Reunviar corréu";
@@ -415,7 +430,7 @@
 "HomePanel.ContextMenu.OpenInNewTab" = "Abrir nuna llingüeta nueva";
 
 /* The title for the Remove context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.Remove" = "Desaniciar";
+"HomePanel.ContextMenu.Remove" = "Quitar";
 
 /* The title for the Share context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Share" = "Compartir";
@@ -537,16 +552,18 @@
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "Copióse la URL al cartafueyu";
 
-/* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOff.Title" = "La proteición escontra'l rastrexu ta DESACTIVADA pa esti sitiu.";
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "Descargues";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "La proteición escontra'l rastrexu ta DESACTIVADA pa esti sitiu.";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "La proteición escontra'l rastrexu ta ACTIVADA pa esti sitiu.";
 
 /* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
 "Menu.History.Label" = "Historial";
 
-/* A switch to enable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOn.Title" = "La proteición escontra'l rastrexu ta ACTIVADA pa esti sitiu.";
 /* Label for the button displayed in the menu used to stop the reload of the webpage */
 "Menu.Library.StopReload" = "Parar";
 
@@ -569,7 +586,7 @@
 "Menu.PasteAndGo.Title" = "Apegar y dir";
 
 /* Toast displayed to the user after a bookmark has been removed. */
-"Menu.RemoveBookmark.Confirm" = "Desanicióse'l marcador";
+"Menu.RemoveBookmark.Confirm" = "Quitóse'l marcador";
 
 /* Toast displayed to the user after removing the item from the Top Sites. */
 "Menu.RemovePin.Confirm" = "Quitóse de Sitios Principales";
@@ -793,11 +810,14 @@
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "Aceutar";
 
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "Busca la suxerencia";
+
 /* Accessibility label for the lock icon, which is only present if the connection is secure */
 "Secure connection" = "Conexón segura";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "¿Unviar un informe de casque pa que Mozilla puea iguar el problema?";
+"Send a crash report so Mozilla can fix the problem?" = "¿Unviar un informe del casque pa que Mozilla puea iguar el problema?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Opinar";
@@ -826,6 +846,9 @@
 
 /* See http://mzl.la/1ISlXnU */
 "SendTo.NotSignedIn.Message" = "Abri Firefox, vete p'Axustes y anicia sesión pa siguir.";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Title" = "Nun aniciesti sesión na to cuenta de Firefox.";
 
 /* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
 "SentTab_TabArrivingNotification_NoDevice_body" = "Aportaron llingüetes nueves d'otru preséu.";
@@ -1053,6 +1076,9 @@
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Atayos de Siri";
 
+/* Button title displayed next to each study allowing the user to opt-out of the study */
+"Settings.Studies.Remove.Button" = "Quitar";
+
 /* Title displayed in header of the Studies panel */
 "Settings.Studies.SectionName" = "Estudios";
 
@@ -1065,8 +1091,6 @@
 /* A short description that explains that Mozilla is running studies */
 "Settings.Studies.Toggle.Message" = "Firefox pue instalar y executar estudios de xemes en cuando.";
 
-/* Title for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Title" = "¡Atención!";
 /* Toggled OFF to opt-out of studies */
 "Settings.Studies.Toggle.Off" = "Non";
 
@@ -1075,6 +1099,12 @@
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Estudios";
+
+/* Dismiss button for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Button" = "D'acuerdu, entendílo";
+
+/* Title for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Title" = "¡Atención!";
 
 /* Header description for tracking protection options section where Basic/Strict block list can be selected */
 "Settings.TrackingProtection.BlockListsHeader" = "Pues escoyer les llistes que va usar Firefox pa bloquiar elementos web que podríen rastrexar la to actividá de restolar.";

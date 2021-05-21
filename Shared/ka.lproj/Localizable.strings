@@ -1407,7 +1407,7 @@
 "Settings.SendUsage.Title" = "მონაცემების აღრიცხვა";
 
 /* Description displayed under the ”Show Link Previews” option */
-"Settings.ShowLinkPreviews.Status" = "ბმულზე დიდხნიანი დაჭერისას";
+"Settings.ShowLinkPreviews.Status" = "ბმულზე ხანგრძლივი დაჭერისას";
 
 /* Title of setting to enable link previews when long-pressing links. */
 "Settings.ShowLinkPreviews.Title" = "ბმულის შეთვალიერების ჩვენება";

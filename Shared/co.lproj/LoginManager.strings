@@ -29,7 +29,7 @@
 "Logins will be permanently removed." = "L’identificazioni di cunnessione seranu cacciate ab’eternu.";
 
 /* Prompt message warning the user that deleted logins will remove logins from all connected devices */
-"Logins will be removed from all connected devices." = "L’identificazioni di cunnessione seranu cacciate da tutti l’apparechji cunnetti.";
+"Logins will be removed from all connected devices." = "L’identificazioni di cunnessione seranu cacciate da tutti l’apparechji cunnessi.";
 
 /* Label describing when the current login was last modified with the timestamp as the parameter. */
 "Modified %@" = "Mudificatu %@";

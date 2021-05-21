@@ -231,7 +231,7 @@
 "ContextMenu.CopyLinkButtonTitle" = "Kopírovať odkaz";
 
 /* Context menu item for downloading a link URL */
-"ContextMenu.DownloadLinkButtonTitle" = "Prevziať odkaz";
+"ContextMenu.DownloadLinkButtonTitle" = "Stiahnuť odkaz";
 
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "Otvoriť na novej karte";
@@ -296,37 +296,37 @@
 "Done" = "Hotovo";
 
 /* Panel accessibility label */
-"Downloads" = "Prevzaté súbory";
+"Downloads" = "Stiahnuté súbory";
 
 /* The label of the button the user will press to start downloading a file */
-"Downloads.Alert.DownloadNow" = "Prevziať";
+"Downloads.Alert.DownloadNow" = "Stiahnuť";
 
 /* Button confirming the cancellation of the download. */
 "Downloads.CancelDialog.Cancel" = "Zrušiť";
 
 /* Alert dialog body when the user taps the cancel download icon. */
-"Downloads.CancelDialog.Message" = "Naozaj chcete zrušiť toto preberanie?";
+"Downloads.CancelDialog.Message" = "Naozaj chcete zrušiť toto sťahovanie?";
 
 /* Button declining the cancellation of the download. */
 "Downloads.CancelDialog.Resume" = "Pokračovať";
 
 /* Alert dialog title when the user taps the cancel download icon. */
-"Downloads.CancelDialog.Title" = "Zrušiť preberanie";
+"Downloads.CancelDialog.Title" = "Zrušiť sťahovanie";
 
 /* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
-"Downloads.Error.Message" = "Preberanie zatiaľ nie je vo Firefoxe podporované.";
+"Downloads.Error.Message" = "Sťahovanie zatiaľ nie je vo Firefoxe podporované.";
 
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
-"Downloads.Toast.Cancelled.LabelText" = "Preberanie bolo zrušené";
+"Downloads.Toast.Cancelled.LabelText" = "Sťahovanie bolo zrušené";
 
 /* The label text in the Download Failed toast for showing confirmation that the download has failed. */
-"Downloads.Toast.Failed.LabelText" = "Preberanie zlyhalo";
+"Downloads.Toast.Failed.LabelText" = "Sťahovanie zlyhalo";
 
 /* The button to retry a failed download from the Download Failed toast. */
 "Downloads.Toast.Failed.RetryButton" = "Znova";
 
 /* The button to open a new tab with the Downloads home panel */
-"Downloads.Toast.GoToDownloads.Button" = "Prevzaté súbory";
+"Downloads.Toast.GoToDownloads.Button" = "Stiahnuté súbory";
 
 /* The description text in the Download progress toast for showing the number of files when multiple files are downloading. */
 "Downloads.Toast.MultipleFiles.DescriptionText" = "1 súbor z %d";
@@ -341,7 +341,7 @@
 "DownloadsPanel.Delete.Title" = "Odstrániť";
 
 /* Title for the Downloads Panel empty state. */
-"DownloadsPanel.EmptyState.Title" = "Prevzaté súbory sa objavia tu.";
+"DownloadsPanel.EmptyState.Title" = "Stiahnuté súbory sa objavia tu.";
 
 /* Action button for sharing downloaded files in the Downloads panel. */
 "DownloadsPanel.Share.Title" = "Zdieľať";
@@ -721,7 +721,7 @@
 "Menu.CopyURL.Confirm" = "Skopírované do schránky";
 
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
-"Menu.Downloads.Label" = "Prevzaté súbory";
+"Menu.Downloads.Label" = "Stiahnuté súbory";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtectionOff.Title" = "Rozšírená ochrana pred sledovaním je na tejto stránke VYPNUTÁ.";

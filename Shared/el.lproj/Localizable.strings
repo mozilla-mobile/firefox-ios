@@ -950,7 +950,7 @@
 "PasswordAutoFill.SectionTitle" = "Διαπιστευτήρια Firefox";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Σάς επιτρέπει να αποθηκεύετε την εικόνα στο Άλμπουμ κάμερας.";
+"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Σας επιτρέπει να αποθηκεύετε την εικόνα στο Άλμπουμ κάμερας.";
 
 /* See http://mzl.la/1G7uHo7 */
 "PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Το Firefox θα ήθελε πρόσβαση στις φωτογραφίες σας";
@@ -1269,7 +1269,7 @@
 "Settings.DNT.OptionOnWithTP" = "Μόνο κατά τη χρήση προστασίας από παρακολούθηση";
 
 /* DNT Settings title */
-"Settings.DNT.Title" = "Αποστολή αιτήματος \"Χωρίς παρακολούθηση\" σε ιστοσελίδες που δεν θέλετε να σάς παρακολουθούν";
+"Settings.DNT.Title" = "Αποστολή αιτήματος \"Χωρίς παρακολούθηση\" σε ιστοσελίδες που δεν θέλετε να σας παρακολουθούν";
 
 /* Label used for the device name settings section. */
 "Settings.FxA.DeviceName" = "Όνομα συσκευής";

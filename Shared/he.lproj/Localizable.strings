@@ -25,6 +25,9 @@
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite2" = "נעיצה";
 
+/* The title for removing a shortcut action */
+"ActivityStream.ContextMenu.RemoveFromShortcuts" = "הסרה מקיצורי הדרך";
+
 /* The title for removing a pinned topsite action */
 "ActivityStream.ContextMenu.RemovePinTopsite" = "הסרת אתר מוצמד";
 
@@ -881,7 +884,7 @@
 "Oops! Firefox crashed" = "אבוי! Firefox קרס";
 
 /* See http://mzl.la/1LXbDOL */
-"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "ניתן לפתוח מאמרים בתצוגת קריאה על ידי נגיעה בסמל הספר כאשר הוא מופיע בשורת הכותרת.";
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "ניתן לפתוח מאמרים בתצוגת קריאה על־ידי נגיעה בסמל הספר כאשר הוא מופיע בשורת הכותרת.";
 
 /* See http://mzl.la/1G7uHo7 */
 "Open Settings" = "פתיחת הגדרות";
@@ -977,7 +980,7 @@
 "Sans-serif" = "סאן־סריף";
 
 /* See http://mzl.la/1LXbDOL */
-"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "ניתן לשמור דפים לרשימת הקריאה על ידי נגיעה בסמל הספר עם סימן החיבור בפקדי תצוגת הקריאה.";
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "ניתן לשמור דפים לרשימת הקריאה על־ידי נגיעה בסמל הספר עם סימן החיבור בפקדי תצוגת הקריאה.";
 
 /* OK button to dismiss the error prompt. */
 "ScanQRCode.Error.OK.Button" = "אישור";
@@ -1419,7 +1422,7 @@
 "Settings.TrackingProtection.Alert.Button" = "בסדר, הבנתי";
 
 /* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "אם אתר לא פועל כראוי, ניתן לגעת במגן בשורת הכתובת לכבות את הגנת המעקב המתקדמת עבור אותו דף.";
+"Settings.TrackingProtection.Alert.Description" = "אם אתר לא פועל כראוי, ניתן לגעת במגן בשורת הכתובת ולכבות את הגנת המעקב המתקדמת עבור אותו דף.";
 
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "לתשומת לבך!";
@@ -1446,7 +1449,7 @@
 "Settings.TrackingProtection.ProtectionCellFooter" = "ההגנה מפחיתה פרסומות ממוקדות ועוזרת למנוע מחברות פרסום לעקוב אחר הגלישה שלך.";
 
 /* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "אם אתר לא פועל כראוי, ניתן לגעת במגן בשורת הכתובת לכבות את הגנת המעקב המתקדמת עבור אותו דף.";
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "אם אתר לא פועל כראוי, ניתן לגעת במגן בשורת הכתובת ולכבות את הגנת המעקב המתקדמת עבור אותו דף.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "מאפשר את פעולתם של חלק מרכיבי המעקב כדי שהאתרים יפעלו כראוי.";

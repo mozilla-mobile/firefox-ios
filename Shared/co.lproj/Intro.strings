@@ -8,7 +8,7 @@
 "Intro.Slides.Button.Next" = "Seguente";
 
 /* Sign in to Firefox account button on second intro screen. */
-"Intro.Slides.Button.SignIn" = "Cunnettassi";
+"Intro.Slides.Button.SignIn" = "Cunnettesi";
 
 /* Sign up to Firefox account button on second intro screen. */
 "Intro.Slides.Button.SignUp" = "Creà un contu";
@@ -50,7 +50,7 @@
 "Intro.Slides.Search.Title" = "Ricercate à a vostra manera";
 
 /* Description for the 'Sync' panel in the First Run tour. */
-"Intro.Slides.TrailheadSync.Description" = "Cunnettatevi à u vostu contu per lancià a sincrunizazione è accede à d’altri funzioni.";
+"Intro.Slides.TrailheadSync.Description" = "Cunnittetevi à u vostu contu per lancià a sincrunizazione è accede à d’altri funzioni.";
 
 /* Title for the second panel 'Sync' in the First Run tour. */
 "Intro.Slides.TrailheadSync.Title.v2" = "Sincrunizate e vostre indette, a vostra crunulogia è e vostre parolle d’entrata cù u vostru telefonu.";

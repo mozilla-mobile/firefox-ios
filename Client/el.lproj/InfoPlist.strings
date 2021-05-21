@@ -13,7 +13,7 @@
 "NSMicrophoneUsageDescription" = "Επιτρέπει τη λήψη και μεταφόρτωση βίντεο.";
 
 /* Privacy - Photo Library Additions Usage Description */
-"NSPhotoLibraryAddUsageDescription" = "Αυτό σάς επιτρέπει να αποθηκεύετε φωτογραφίες.";
+"NSPhotoLibraryAddUsageDescription" = "Αυτό σας επιτρέπει να αποθηκεύετε φωτογραφίες.";
 
 /* (No Comment) */
 "ShortcutItemTitleNewPrivateTab" = "Νέα ιδιωτική καρτέλα";
