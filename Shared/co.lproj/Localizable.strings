@@ -168,7 +168,7 @@
 "BreachAlerts.BreachDate" = "Sta fughjita di dati hè accaduta u";
 
 /* Description of what a breach is */
-"BreachAlerts.Description" = "Parolle d’entrata sò state palisate o arrubate dapoi l’ultima mudificazione di a vostra parolla d’entrata. Per prutege stu contu, cunnettatevi à u situ è mudificate a vostra parolla d’entrata";
+"BreachAlerts.Description" = "Parolle d’entrata sò state palisate o arrubate dapoi l’ultima mudificazione di a vostra parolla d’entrata. Per prutege stu contu, cunnittetevi à u situ è mudificate a vostra parolla d’entrata";
 
 /* Link to monitor.firefox.com to learn more about breached passwords */
 "BreachAlerts.LearnMoreButton" = "Sapene di più";
@@ -347,7 +347,7 @@
 "DownloadsPanel.Share.Title" = "Sparte";
 
 /* Text message in the settings table view */
-"Enter your password to connect" = "Scrivite a vostra parolla d’entrata per cunnettassi";
+"Enter your password to connect" = "Scrivite a vostra parolla d’entrata per cunnettesi";
 
 /* Label for button to perform advanced actions on the error page */
 "ErrorPages.Advanced.Button" = "Espertu";
@@ -359,7 +359,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "Forse ghjè un sbagliu di cunfigurazione o un tentativu d’attaca. Cuntinuate essendu cusciente di u risicu incorsu.";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "U pruprietariu di %@ hà cunfiguratu u so situ d’una manera gattiva. Per impedisce chì i vostri dati sianu arrubati, Firefox ùn s’hè micca cunnettu à stu situ.";
+"ErrorPages.CertWarning.Description" = "U pruprietariu di %@ hà cunfiguratu u so situ d’una manera gattiva. Per impedisce chì i vostri dati sianu arrubati, Firefox ùn s’hè micca cunnessu à stu situ.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Sta cunnessione ùn hè micca accertata";
@@ -395,7 +395,7 @@
 "FxA.AccountVerificationRequiredSurface" = "Ci vole à verificà %@. Cuntrollate a vostra messaghjeria per accede à a leia di verificazione mandata da Firefox.";
 
 /* Button label to connect another device to Sync */
-"FxA.ConnectAnotherDevice" = "Cunnettà un altru apparechju";
+"FxA.ConnectAnotherDevice" = "Cunnette un altru apparechju";
 
 /* Settings section title for Firefox Account */
 "FxA.FirefoxAccount" = "Contu Firefox";
@@ -416,7 +416,7 @@
 "FxA.RemoveAccount" = "Caccià";
 
 /* Description string for alert view that gets presented when user tries to remove an account. */
-"FxA.RemoveAccountAlertMessage" = "Caccià u contu Firefox assuciatu à st’apparechju per cunnettassi cum’è un utilizatore sfarente.";
+"FxA.RemoveAccountAlertMessage" = "Caccià u contu Firefox assuciatu à st’apparechju per cunnettesi cum’è un utilizatore sfarente.";
 
 /* Remove account alert is the final confirmation before user removes their firefox account */
 "FxA.RemoveAccountAlertTitle" = "Caccià u contu";
@@ -425,7 +425,7 @@
 "FxA.ResendEmail" = "Mandà u messaghji torna";
 
 /* FxA sign in view subtitle */
-"fxa.signin.camera-signin" = "Cunnettatevi cù u vostru apparechju-fotò";
+"fxa.signin.camera-signin" = "Cunnittetevi cù u vostru apparechju-fotò";
 
 /* FxA sign in create account label. */
 "fxa.signin.create-account-pt-1" = "Sincrunizà Firefox trà i vostri apparechji cù un contu.";
@@ -446,7 +446,7 @@
 "fxa.signin.use-email-instead" = "Impiegà piuttostu un messaghju elettronicu";
 
 /* Button label to sign into Sync */
-"FxA.SignIntoSync" = "Cunnettassi à Sync";
+"FxA.SignIntoSync" = "Cunnettesi à Sync";
 
 /* Label explaining what sync does */
 "FxA.SyncExplain" = "Ritruvate e vostre unghjette, l’indette è e parolle d’entrata da i vostri altri apparechji.";
@@ -458,10 +458,10 @@
 "FxA.TakeYourWebWithYou" = "Purtateci dapertuttu u vostru Web";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Sync s'hè cunnettu à %@";
+"FxAPush_DeviceConnected_body" = "Firefox Sync s'hè cunnessu à %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
-"FxAPush_DeviceConnected_title" = "Sync cunnettu";
+"FxAPush_DeviceConnected_title" = "Sync cunnessu";
 
 /* Body of a notification displayed when named device has been disconnected from FxA. %@ refers to the name of the disconnected device. */
 "FxAPush_DeviceDisconnected_body" = "%@ hè statu disghjuntu bè.";
@@ -512,7 +512,7 @@
 "HistoryPanel.EmptySyncedTabsNullState.Description" = "E vostre unghjette da l’altri apparechji s’affissanu quì.";
 
 /* Description for the empty synced tabs 'not signed in' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Cunnettatevi per affissà a lista di l’unghjette di i vostri altri apparechji.";
+"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Cunnittetevi per affissà a lista di l’unghjette di i vostri altri apparechji.";
 
 /* Description for the empty synced tabs 'not yet verified' state in the History Panel */
 "HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "U vostru contu deve esse verificatu.";
@@ -533,7 +533,7 @@
 "HistoryPanel.RecentlyClosedTabsButton.Title" = "Chjosi pocu fà";
 
 /* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
-"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d apparechju(i) cunnettu(i)";
+"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d apparechju(i) cunnessu(i)";
 
 /* Title for the Synced Tabs Cell in the History Panel */
 "HistoryPanel.SyncedTabsCell.Title" = "Apparechji sincrunizati";
@@ -635,7 +635,7 @@
 "Loading content…" = "Caricamentu di u cuntenutu…";
 
 /* Authentication prompt log in button */
-"Log in" = "Cunnettassi";
+"Log in" = "Cunnettesi";
 
 /* Toggle logins syncing setting */
 "Logins" = "Identificazioni di cunnessione";
@@ -1109,19 +1109,19 @@
 "SendTo.NavBar.Title" = "Mandà l’unghjetta";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "Ùn avete alcunu altru apparechju prontu à esse sincrunizatu è cunnettu à stu contu Firefox.";
+"SendTo.NoDevicesFound.Message" = "Ùn avete alcunu altru apparechju prontu à esse sincrunizatu è cunnessu à stu contu Firefox.";
 
 /* See http://mzl.la/1ISlXnU */
 "SendTo.NotSignedIn.Message" = "Ci vole à apre Firefox, andà in Preferenze è identificassi per cuntinuà.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "Ùn site micca cunnettu à u vostru contu Firefox.";
+"SendTo.NotSignedIn.Title" = "Ùn site micca cunnessu à u vostru contu Firefox.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Mandà";
 
 /* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
-"SendTo.SignIn.Button" = "Cunnettassi à Firefox";
+"SendTo.SignIn.Button" = "Cunnettesi à Firefox";
 
 /* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
 "SentTab_TabArrivingNotification_NoDevice_body" = "Nova unghjetta ricevuta da un’altru apparechju.";
@@ -1792,7 +1792,7 @@
 "unread" = "Micca lettu";
 
 /* Text message in the settings table view */
-"Upgrade Firefox to connect" = "Ci vole à mudernizà Firefox per cunnettassi";
+"Upgrade Firefox to connect" = "Ci vole à mudernizà Firefox per cunnettesi";
 
 /* Debug option */
 "Use stage servers" = "Impiegà i servitori di simulazione";
