@@ -132,7 +132,10 @@ class LibraryViewController: UIViewController {
     }
 
     private func viewSetup() {
-        navigationController?.navigationBar.shadowImage = UIImage()
+        if let appWindow = (UIApplication.shared.delegate?.window),
+           let window = appWindow as UIWindow? {
+            window.backgroundColor = .black
+        }
 
         setToolbarItems(bottomToolbarItemsSingleButton, animated: false)
         navigationItem.rightBarButtonItem = topRightButton
@@ -160,9 +163,6 @@ class LibraryViewController: UIViewController {
             selectedPanel = .bookmarks
         }
     }
-    private func setupNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(applyTheme), name: .DisplayThemeChanged, object: nil)
-    }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
@@ -174,7 +174,11 @@ class LibraryViewController: UIViewController {
         return .lightContent
     }
 
-    func updateViewWithState() {
+    private func setupNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(applyTheme), name: .DisplayThemeChanged, object: nil)
+    }
+
+    fileprivate func updateViewWithState() {
         updatePanelState()
         shouldShowBottomToolbar()
         setupButtons()
@@ -186,7 +190,7 @@ class LibraryViewController: UIViewController {
         }
     }
 
-    private func shouldShowBottomToolbar() {
+    fileprivate func shouldShowBottomToolbar() {
         switch viewModel.currentPanelState {
         case .bookmarks(state: let subState):
             if subState == .mainView {
@@ -492,14 +496,20 @@ extension LibraryViewController: Themeable {
         if #available(iOS 13.0, *) {
             overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
         }
+        // There is an ANNOYING bar in the nav bar above the segment control. These are the
+        // UIBarBackgroundShadowViews. We must set them to be clear images in order to
+        // have a seamless nav bar, if enbedding the segmented control.
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
 
-        view.backgroundColor =  UIColor.theme.tabTray.toolbar
+        view.backgroundColor =  UIColor.theme.homePanel.panelBackground
         navigationController?.navigationBar.barTintColor = UIColor.theme.tabTray.toolbar
         navigationController?.navigationBar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
         navigationController?.toolbar.barTintColor = UIColor.theme.tabTray.toolbar
         navigationController?.toolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
         navigationToolbar.barTintColor = UIColor.theme.tabTray.toolbar
         navigationToolbar.tintColor = UIColor.theme.tabTray.toolbar
+        navigationToolbar.isTranslucent = false
         setNeedsStatusBarAppearanceUpdate()
     }
 }
