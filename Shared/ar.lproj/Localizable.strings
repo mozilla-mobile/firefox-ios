@@ -25,6 +25,9 @@
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite2" = "ثبّت";
 
+/* The title for removing a shortcut action */
+"ActivityStream.ContextMenu.RemoveFromShortcuts" = "أزِل من الاختصارات";
+
 /* The title for removing a pinned topsite action */
 "ActivityStream.ContextMenu.RemovePinTopsite" = "احذف الموقع المثبّت";
 
@@ -1357,6 +1360,9 @@
 
 /* Option in settings to turn on off pocket recommendations First argument is the pocket brand name */
 "Settings.NewTab.Option.RecommendedByPocket" = "ينصح به %@";
+
+/* Descriptoin for the option in settings to turn on off pocket recommendations. First argument is the pocket brand name, second argument is the pocket product name. */
+"Settings.NewTab.Option.RecommendedByPocketDescription" = "محتوى مميّز جمعه لك %1$@، وهو جزء من عائلة %2$@";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "اللسان الجديد";
