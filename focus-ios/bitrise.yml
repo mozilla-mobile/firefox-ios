@@ -2,6 +2,8 @@
 format_version: '5'
 default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 project_type: ios
+
+
 trigger_map:
 - push_branch: main
   workflow: runParallelTests
@@ -11,6 +13,8 @@ trigger_map:
   workflow: runParallelTests
 - tag: "*"
   workflow: release
+
+
 workflows:
   deploy:
     steps:
@@ -35,6 +39,8 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
+
+
   primary:
     steps:
     - activate-ssh-key@4:
@@ -72,6 +78,8 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
+
+
   primary-xcode-10:
     steps:
     - activate-ssh-key@3.1.1:
@@ -106,6 +114,8 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
+
+
   runTests:
     steps:
     - activate-ssh-key@4:
@@ -147,6 +157,8 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
+
+
   primary-nocache:
     steps:
     - activate-ssh-key@4:
@@ -178,6 +190,8 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
+
+
   clone and build dependencies:
     steps:
     - activate-ssh-key@4:
@@ -194,6 +208,8 @@ workflows:
       bitrise.io:
         stack: osx-xcode-12.5.x
     description: Clones the repo and builds dependencies
+
+
   Set project version:
     steps:
     - set-xcode-build-number@1:
@@ -224,6 +240,24 @@ workflows:
       bitrise.io:
         stack: osx-xcode-12.5.x
     before_run: []
+
+
+  Set Default Browser Entitlement:
+    steps:
+    - script@1:
+        title: Set Default Web Browser Entitlement
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Focus.entitlements
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Klar.entitlements
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.5.x
+    before_run: []
+
+
   release:
     steps:
     - certificate-and-profile-installer@1: {}
@@ -250,8 +284,11 @@ workflows:
       bitrise.io:
         stack: osx-xcode-12.5.x
     before_run:
-    - clone and build dependencies
-    - Set project version
+      - clone and build dependencies
+      - Set project version
+      - Set Default Browser Entitlement
+
+
   runParallelTests:
     steps:
     - activate-ssh-key@4:
@@ -279,6 +316,8 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
+
+
   runFocus:
     steps:
     - git-clone@4: {}
@@ -290,6 +329,14 @@ workflows:
             #!/usr/bin/env bash
             ./checkout.sh
         title: ContentBlockerGen
+    - script@1:
+        title: Set Default Web Browser Entitlement
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Focus.entitlements
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Klar.entitlements
     - xcode-build-for-simulator@0:
         inputs:
         - configuration: FocusDebug
@@ -309,6 +356,8 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
+
+
   runKlar:
     steps:
     - git-clone@4: {}
@@ -320,6 +369,14 @@ workflows:
             #!/usr/bin/env bash
             ./checkout.sh
         title: ContentBlockerGen
+    - script@1:
+        title: Set Default Web Browser Entitlement
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Focus.entitlements
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Klar.entitlements
     - xcode-build-for-simulator@0:
         inputs:
         - configuration: FocusDebug
@@ -339,6 +396,8 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
+
+
 app:
   envs:
   - opts:
