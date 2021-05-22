@@ -682,8 +682,12 @@ class Tab: NSObject {
         pageZoom = 1.0
     }
 
-    func addContentScript(_ helper: TabContentScript, name: String, in contentWorld: WKContentWorld = .defaultClient) {
-        contentScriptManager.addContentScript(helper, name: name, forTab: self, in: contentWorld)
+    func addContentScript(_ helper: TabContentScript, name: String) {
+        contentScriptManager.addContentScript(helper, name: name, forTab: self)
+    }
+
+    func addContentScriptToPage(_ helper: TabContentScript, name: String) {
+        contentScriptManager.addContentScriptToPage(helper, name: name, forTab: self)
     }
 
     func getContentScript(name: String) -> TabContentScript? {
@@ -874,7 +878,7 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
         }
     }
 
-    func addContentScript(_ helper: TabContentScript, name: String, forTab tab: Tab, in contentWorld: WKContentWorld) {
+    func addContentScript(_ helper: TabContentScript, name: String, forTab tab: Tab) {
         if let _ = helpers[name] {
             assertionFailure("Duplicate helper added: \(name)")
         }
@@ -884,7 +888,21 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
         // If this helper handles script messages, then get the handler name and register it. The Browser
         // receives all messages and then dispatches them to the right TabHelper.
         if let scriptMessageHandlerName = helper.scriptMessageHandlerName() {
-            tab.webView?.configuration.userContentController.add(self, contentWorld: contentWorld, name: scriptMessageHandlerName)
+            tab.webView?.configuration.userContentController.addInDefaultContentWorld(scriptMessageHandler: self, name: scriptMessageHandlerName)
+        }
+    }
+
+    func addContentScriptToPage(_ helper: TabContentScript, name: String, forTab tab: Tab) {
+        if let _ = helpers[name] {
+            assertionFailure("Duplicate helper added: \(name)")
+        }
+
+        helpers[name] = helper
+
+        // If this helper handles script messages, then get the handler name and register it. The Browser
+        // receives all messages and then dispatches them to the right TabHelper.
+        if let scriptMessageHandlerName = helper.scriptMessageHandlerName() {
+            tab.webView?.configuration.userContentController.addInPageContentWorld(scriptMessageHandler: self, name: scriptMessageHandlerName)
         }
     }
 
