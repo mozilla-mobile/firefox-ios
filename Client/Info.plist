@@ -87,7 +87,7 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Firefox uses your camera to scan QR codes and lets you take and upload photos.</string>
+	<string>This lets you scan QR codes and take/upload photos.</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Firefox requires Face ID to access your saved logins.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
