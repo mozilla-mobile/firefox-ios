@@ -104,8 +104,6 @@ class ChronologicalTabsViewController: UIViewController, NotificationThemeable, 
     }
 
     func applyTheme() {
-        overrideUserInterfaceStyle = LegacyThemeManager.instance.userInterfaceStyle
-        bottomSheetVC?.overrideUserInterfaceStyle = LegacyThemeManager.instance.userInterfaceStyle
         tableView.backgroundColor = UIColor.systemGroupedBackground
         emptyPrivateTabsView.titleLabel.textColor = UIColor.label
         emptyPrivateTabsView.descriptionLabel.textColor = UIColor.secondaryLabel
