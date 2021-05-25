@@ -1635,7 +1635,7 @@ class TestSQLiteHistoryTransactionUpdate: XCTestCase {
         let history = SQLiteHistory(db: db, prefs: prefs)
 
         history.clearHistory().succeeded()
-        let site = Site(url: "http://site/foo", title: "AA")
+        let site = Site(url: "http://site.example/foo", title: "AA")
         site.guid = "abcdefghiabc"
 
         history.insertOrUpdatePlace(site.asPlace(), modified: 1234567890).succeeded()
