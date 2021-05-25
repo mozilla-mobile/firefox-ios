@@ -1,0 +1,39 @@
+name: Build contributor PR
+on: [pull_request]
+jobs:
+  run-ui:
+    if: github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: macos-latest
+    timeout-minutes: 60
+    strategy:
+      matrix:
+        python-version: [3.9]
+        xcode: [12.4]
+        run-config: 
+        - { scheme: 'Fennec_Enterprise_XCUITests', destination: 'platform=iOS Simulator,OS=latest,name=iPhone 11', testplan: 'SmokeXCUITests' }
+    steps:
+        - name: Checkout repository
+          uses: actions/checkout@v2
+        - name: Set up Python ${{ matrix.python-version }}
+          uses: actions/setup-python@v2
+          with:
+            python-version: ${{ matrix.python-version }}
+        - name: Run Boostrap
+          run: sh ./bootstrap.sh
+        - name: Build and Test
+          run: xcodebuild clean test -scheme '${{ matrix.run-config['scheme'] }}' -destination '${{ matrix.run-config['destination'] }}' -testPlan '${{ matrix.run-config['testplan'] }}' -resultBundlePath TestResults -derivedDataPath results
+        - name: Archive Results
+          if: ${{ always() }}
+          run: zip -r results.zip TestResults.xcresult
+        - uses: actions/upload-artifact@v2
+          name: Upload XCResult
+          if: ${{ always() }}
+          with:
+           name: xcresult
+           path: results.zip
+        - name: Summarize XCResult
+          uses: tbartelmess/analyze-xcoderesults-action@0.1.1
+          if: ${{ always() }}
+          with:
+            results: TestResults.xcresult
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
