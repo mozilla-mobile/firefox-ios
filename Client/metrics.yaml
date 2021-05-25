@@ -386,10 +386,13 @@ legacy.ids:
       The client id from legacy telemetry.
     send_in_pings:
       - deletion-request
+      - metrics
     bugs:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1635427
+      - https://jira.mozilla.com/browse/FXIOS-1415
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1635427
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8522#issuecomment-846313960
     notification_emails:
       - firefox-ios@mozilla.com
     expires: never
