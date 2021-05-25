@@ -6,7 +6,6 @@ import Foundation
 import UIKit
 import SnapKit
 import Shared
-import Leanplum
 
 /* The layout for ETP Cover Sheet
     
@@ -178,19 +177,16 @@ class ETPCoverSheetViewController: UIViewController {
     // Button Actions
     @objc private func dismissAnimated() {
         self.dismiss(animated: true, completion: nil)
-        LeanPlumClient.shared.track(event: .dismissedETPCoverSheet)
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .dismissedETPCoverSheet)
     }
     
     @objc private func goToSettings() {
         viewModel.goToSettings?()
-        LeanPlumClient.shared.track(event: .dismissETPCoverSheetAndGoToSettings)
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .dismissETPCoverSheetAndGoToSettings)
     }
     
     @objc private func startBrowsing() {
         viewModel.startBrowsing?()
-        LeanPlumClient.shared.track(event: .dismissETPCoverSheetAndStartBrowsing)
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .dismissUpdateCoverSheetAndStartBrowsing)
     }
 }

@@ -194,7 +194,6 @@ class LoginsHelper: TabContentScript {
             self.tab?.removeSnackbar(bar)
             self.snackBar = nil
             _ = self.profile.logins.add(login: login)
-            LeanPlumClient.shared.track(event: .savedLoginAndPassword)
         }
         snackBar?.addButton(dontSave)
         snackBar?.addButton(save)

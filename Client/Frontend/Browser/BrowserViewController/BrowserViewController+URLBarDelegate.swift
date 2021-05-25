@@ -168,7 +168,6 @@ extension BrowserViewController: URLBarDelegate {
         if let tab = self.tabManager.selectedTab {
             let trackingProtectionMenu = self.getTrackingSubMenu(for: tab)
             let title = String.localizedStringWithFormat(Strings.TPPageMenuTitle, tab.url?.host ?? "")
-            LeanPlumClient.shared.track(event: .trackingProtectionMenu)
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
             let shouldSuppress = UIDevice.current.userInterfaceIdiom != .pad
             self.presentSheetWith(title: title, actions: trackingProtectionMenu, on: self, from: urlBar, suppressPopover: shouldSuppress)
@@ -193,7 +192,6 @@ extension BrowserViewController: URLBarDelegate {
         case .available:
             enableReaderMode()
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .readerModeOpenButton)
-            LeanPlumClient.shared.track(event: .useReaderView)
         case .active:
             disableReaderMode()
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .readerModeCloseButton)
@@ -369,8 +367,6 @@ extension BrowserViewController: URLBarDelegate {
 
             showFirefoxHome(inline: false)
         }
-
-        LeanPlumClient.shared.track(event: .interactWithURLBar)
     }
 
     func urlBarDidLeaveOverlayMode(_ urlBar: URLBarView) {

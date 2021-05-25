@@ -10,7 +10,6 @@ github "cezheng/Fuzi"                       ~> 3.0
 github "SwiftyJSON/SwiftyJSON"              ~> 5.0
 github "mozilla-mobile/telemetry-ios"      ~> 1.1
 github "mozilla-mobile/MappaMundi"          "master"
-github "Leanplum/Leanplum-iOS-SDK"          ~> 2.7.2
 github "mozilla-services/shavar-prod-lists" "86.0"
 
 # Use release version of application-services

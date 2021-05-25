@@ -3,20 +3,20 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import Leanplum
 import Shared
 
 class ChronTabsUserResearch {
-    // Variable
-    var lpVariable: LPVar?
+    
+    // MARK: - Properties
+    
     // Constants
     private let enrollmentKey = "chronTabsUserResearchEnrollmentKey"
     private let chronTabsUserResearchKey = "chronTabsUserResearchKey"
     private let abTestName = "Chronological Tabs AB Test Prod"
+    
     // Saving user defaults
     private let defaults = UserDefaults.standard
-    // LP fetched status variable
-    private var fetchedExperimentVariables = false
+    
     // New tab button state
     // True: Show new tab button
     // False: Hide new tab button
@@ -43,77 +43,5 @@ class ChronTabsUserResearch {
         get {
             defaults.bool(forKey: enrollmentKey)
         }
-    }
-    
-    // MARK: Initializer
-    init(lpVariable: LPVar? = LPVariables.chronTabsABTest) {
-        self.lpVariable = lpVariable
-    }
-    
-    // MARK: public
-    func lpVariableObserver() {
-        // Condition: Leanplum is disabled; Set default chron tabs state
-        guard LeanPlumClient.shared.getSettings() != nil else {
-            // default state is false
-            self.chronTabsState = false
-            return
-        }
-        // Condition: A/B test variables from leanplum server
-        LeanPlumClient.shared.finishedStartingLeanplum = {
-            LeanPlumClient.shared.finishedStartingLeanplum = nil
-            guard self.fetchedExperimentVariables == false else {
-                return
-            }
-            self.fetchedExperimentVariables = true
-            
-            let lpValue = LPVariables.chronTabsABTest?.boolValue() ?? false
-            if self.chronTabsState != lpValue {
-                self.chronTabsState = lpValue
-                self.updateTelemetry()
-            }
-        }
-        // Condition: Leanplum server too slow; Set default state
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            guard self.fetchedExperimentVariables == false && self.chronTabsState == nil else {
-                return
-            }
-            // Condition: Leanplum server too slow; Set default New tab state
-            self.chronTabsState = false
-            // Condition: LP has already started but we missed onStartLPVariable callback
-            if case .started(startedState: _) = LeanPlumClient.shared.lpState , let boolValue = LPVariables.chronTabsABTest?.boolValue() {
-                self.chronTabsState = boolValue
-                self.updateTelemetry()
-            }
-            self.fetchedExperimentVariables = true
-        }
-    }
-    
-    func updateTelemetry() {
-        guard !hasEnrolled else { return }
-        // Printing variant is good to know all details of A/B test fields
-        print("lp variant \(String(describing: Leanplum.variants()))")
-        var lpData: Dictionary<String, Any>?
-        guard let variants = Leanplum.variants() as? [Dictionary<String, Any>] else {
-            return
-        }
-        variants.forEach {
-            if $0["abTestName"] as? String == abTestName {
-                lpData = $0
-            }
-        }
-        guard lpData != nil else {
-            return
-        }
-        var abTestId = ""
-        if let value = lpData?["abTestId"] as? Int64 {
-                abTestId = "\(value)"
-        }
-        let abTestVariant = lpData?["name"] as? String ?? ""
-        let attributesExtras = [LPAttributeKey.experimentId: abTestId, LPAttributeKey.experimentName: abTestName, LPAttributeKey.experimentVariant: abTestVariant]
-        // Leanplum telemetry
-        LeanPlumClient.shared.set(attributes: attributesExtras)
-        // Legacy telemetry
-        TelemetryWrapper.recordEvent(category: .enrollment, method: .add, object: .experimentEnrollment, extras: attributesExtras)
-        hasEnrolled = true
     }
 }

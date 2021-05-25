@@ -6,7 +6,6 @@ import Foundation
 import UIKit
 import SnapKit
 import Shared
-import Leanplum
 
 class IntroViewController: UIViewController, OnViewDismissable {
     var onViewDismissed: (() -> Void)? = nil
