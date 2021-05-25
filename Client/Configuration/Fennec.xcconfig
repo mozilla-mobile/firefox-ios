@@ -10,7 +10,6 @@ MOZ_BUNDLE_DISPLAY_NAME = Fennec ($(USER))
 MOZ_BUNDLE_ID = org.mozilla.ios.Fennec
 // Flag to indicate if we want to include the debug settings bundle or not
 INCLUDE_SETTINGS_BUNDLE = YES
-LEANPLUM_ENVIRONMENT = development
 MOZ_TODAY_WIDGET_SEARCH_DISPLAY_NAME = Firefox - Search
 CODE_SIGN_ENTITLEMENTS = Client/Entitlements/FennecApplication.entitlements
 OTHER_SWIFT_FLAGS = $(OTHER_SWIFT_FLAGS_common) -DMOZ_CHANNEL_FENNEC

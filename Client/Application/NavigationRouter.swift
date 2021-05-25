@@ -108,7 +108,6 @@ enum NavigationPath {
             self = .glean(url: url)
         } else if urlString.starts(with: "http:") ||  urlString.starts(with: "https:") {
             TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)
-            LeanPlumClient.shared.track(event: .appOpenedAsDefaultBrowser)
             // Use the last browsing mode the user was in
             let isPrivate = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
             self = .url(webURL: url, isPrivate: isPrivate)
@@ -243,7 +242,6 @@ enum NavigationPath {
         } else {
             bvc.openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
         }
-        LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "External App or Extension"])
     }
     
     private static func handleWidgetURL(url: URL?, uuid: String, with bvc: BrowserViewController) {
@@ -252,7 +250,6 @@ enum NavigationPath {
         } else {
             bvc.openBlankNewTab(focusLocationField: true, isPrivate: false)
         }
-        LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "External App or Extension"])
     }
 
     private static func handleText(text: String, with bvc: BrowserViewController) {

@@ -223,11 +223,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         pushNotificationSetup()
 
-        // Leanplum user research variable setup for New tab user research
+        // user research variable setup for New tab user research
         _ = NewTabUserResearch()
-        // Leanplum user research variable setup for Chron tabs user research
+        // user research variable setup for Chron tabs user research
         _ = ChronTabsUserResearch()
-        // Leanplum setup
 
         if let profile = self.profile {
             let persistedCurrentVersion = InstallType.persistedCurrentVersion()
@@ -244,12 +243,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
                 // fresh install - Intro screen not yet shown
                 InstallType.set(type: .fresh)
                 InstallType.updateCurrentVersion(version: AppInfo.appVersion)
-                // Profile and leanplum setup
+                // Profile setup
                 profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
-                LeanPlumClient.shared.track(event: .firstRun)
+                
             } else if profile.prefs.boolForKey(PrefsKeys.KeySecondRun) == nil {
                 profile.prefs.setBool(true, forKey: PrefsKeys.KeySecondRun)
-                LeanPlumClient.shared.track(event: .secondRun)
             }
         }
 
