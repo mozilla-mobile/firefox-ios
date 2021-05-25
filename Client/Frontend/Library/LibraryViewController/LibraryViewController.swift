@@ -58,10 +58,7 @@ class LibraryViewController: UIViewController {
     }()
 
     fileprivate lazy var topRightButton: UIBarButtonItem =  {
-        let button = UIBarButtonItem(title: String.AppSettingsDone,
-                                     style: .done,
-                                     target: self,
-                                     action: #selector(topRightButtonAction))
+        let button = UIBarButtonItem(title: String.AppSettingsDone, style: .done, target: self, action: #selector(topRightButtonAction))
         button.accessibilityIdentifier = "libraryPanelTopRightButton"
         return button
     }()
