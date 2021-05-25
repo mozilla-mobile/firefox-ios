@@ -67,27 +67,19 @@ class LibraryViewController: UIViewController {
     }()
 
     fileprivate lazy var bottomLeftButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(image: UIImage.templateImageNamed("nav-add"),
-                                     style: .plain,
-                                     target: self,
-                                     action: #selector(bottomLeftButtonAction))
+        let button = UIBarButtonItem(image: UIImage.templateImageNamed("nav-add"), style: .plain, target: self,  action: #selector(bottomLeftButtonAction))
         button.accessibilityIdentifier = "libraryPanelBottomLeftButton"
         return button
     }()
 
     fileprivate lazy var bottomRightButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(title: Strings.BookmarksEdit,
-                                     style: .plain,
-                                     target: self,
-                                     action: #selector(bottomRightButtonAction))
+        let button = UIBarButtonItem(title: Strings.BookmarksEdit, style: .plain, target: self, action: #selector(bottomRightButtonAction))
         button.accessibilityIdentifier = "bookmarksPanelBottomRightButton"
         return button
     }()
 
     lazy var flexibleSpace: UIBarButtonItem = {
-        return UIBarButtonItem(barButtonSystemItem: .flexibleSpace,
-                               target: nil,
-                               action: nil)
+        return UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
     }()
 
     fileprivate lazy var bottomToolbarItemsBothButtons: [UIBarButtonItem] = {
