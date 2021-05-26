@@ -313,6 +313,11 @@ workflows:
             $BITRISE_CACHE_DIR
             ./Carthage -> ./Carthage/Cachefile
     - deploy-to-bitrise-io@1: {}
+    - slack@3:
+        run_if: ".IsBuildFailed"
+        inputs:
+        - channel: "#focus-ios-alerts"
+        - webhook_url: "$SLACK_WEBHOOK"
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
