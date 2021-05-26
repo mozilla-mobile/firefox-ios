@@ -47,12 +47,14 @@ extension PhotonActionSheetProtocol {
     }
 
     func getSettingsAction(vcDelegate: Self.PageOptionsVC) -> [PhotonActionSheetItem] {
-        let (title, icon) = Experiments.shared.withVariables(featureId: .nimbusValidation) { variables in
-            return (
-                variables.getText("settings-title") ?? Strings.AppMenuSettingsTitleString,
-                variables.getString("settings-icon") ?? "menu-Settings"
-            )
-        }
+        // This method is being called when we the user sees the menu, not just when it's constructed.
+        // In that case, we can let sendExposureEvent default to true.
+        let variables = Experiments.shared.getVariables(featureId: .nimbusValidation)
+        // Get the title and icon for this feature from nimbus.
+        // We need to provide defaults if Nimbus doesn't provide them.
+        let title = variables.getText("settings-title") ?? Strings.AppMenuSettingsTitleString
+        let icon = variables.getString("settings-icon") ?? "menu-Settings"
+
         let openSettings = PhotonActionSheetItem(title: title, iconString: icon) { _, _ in
             let settingsTableViewController = AppSettingsTableViewController()
             settingsTableViewController.profile = self.profile

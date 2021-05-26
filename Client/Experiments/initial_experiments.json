@@ -131,6 +131,18 @@
                     }
                 },
                 {
+                    "slug": "a0",
+                    "ratio": 0,
+                    "feature": {
+                        "value": {
+                            "settings-title": "Fancy Settings",
+                            "settings-title-punctuation": "…"
+                        },
+                        "enabled": true,
+                        "featureId": "nimbus-validation"
+                    }
+                },
+                {
                     "slug": "a1",
                     "ratio": 0,
                     "feature": {

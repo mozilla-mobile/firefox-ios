@@ -13,7 +13,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let variables = Experiments.shared.getVariables(featureId: "nimbus-validation", recordExposureEvent: true)
+        let variables = Experiments.shared.getVariables(featureId: .nimbusValidation, sendExposureEvent: true)
         let title = variables.getText("settings-title") ?? .AppSettingsTitle
         let suffix = variables.getString("settings-title-punctuation") ?? ""
 

@@ -230,7 +230,7 @@ extension NimbusApi {
     /// - Returns:
     ///      - a `Variables` object providing typed accessors to a remotely configured JSON object.
     func getVariables(featureId: FeatureId, sendExposureEvent: Bool = true) -> Variables {
-        return getVariables(featureId: featureId.rawValue, recordExposureEvent: sendExposureEvent)
+        return getVariables(featureId: featureId.rawValue, sendExposureEvent: sendExposureEvent)
     }
 
     /// A synonym for `getVariables(featureId, sendExposureEvent)`.
@@ -244,7 +244,7 @@ extension NimbusApi {
     /// - Returns:
     ///      - a `Variables` object providing typed accessors to a remotely configured JSON object.
     func withVariables(featureId: FeatureId, sendExposureEvent: Bool = true) -> Variables {
-        return getVariables(featureId: featureId.rawValue, recordExposureEvent: sendExposureEvent)
+        return getVariables(featureId: featureId, sendExposureEvent: sendExposureEvent)
     }
 
     /// Get a `Variables` object for this feature and use that to configure the feature itself or a more type safe configuration object.
@@ -260,7 +260,7 @@ extension NimbusApi {
     /// Records the `exposure` event in telemetry.
     ///
     /// This is a manual function to accomplish the same purpose as passing `true` as the
-    /// `recordExposureEvent` property of the `getVariables` function. It is intended to be used
+    /// `sendExposureEvent` property of the `getVariables` function. It is intended to be used
     /// when requesting feature variables must occur at a different time than the actual user's
     /// exposure to the feature within the app.
     ///
