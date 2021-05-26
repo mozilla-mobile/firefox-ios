@@ -39,14 +39,19 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
         displayWelcome()
         displayNotLoggedInMessage()
     }
-    
+    private func navigateToCredentialList() {
+        let storyboard = UIStoryboard(name: "CredentialList", bundle: nil)
+        let credentialListVC = storyboard.instantiateViewController(withIdentifier: "itemlist")
+        self.currentViewController = UINavigationController(rootViewController: credentialListVC)
+    }
+
     /*
      Prepare your UI to list available credentials for the user to choose from. The items in
      'serviceIdentifiers' describe the service the user is logging in to, so your extension can
      prioritize the most relevant credentials in the list.
      */
     override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-        
+        navigateToCredentialList()
     }
     
     //     Implement this method if your extension supports showing credentials in the QuickType bar.
