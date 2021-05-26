@@ -160,7 +160,7 @@ class LibraryViewController: UIViewController {
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
+        ThemeManager.instance.statusBarStyle
     }
 
     private func setupNotifications() {
@@ -487,17 +487,18 @@ extension LibraryViewController: Themeable {
         }
         // There is an ANNOYING bar in the nav bar above the segment control. These are the
         // UIBarBackgroundShadowViews. We must set them to be clear images in order to
-        // have a seamless nav bar, if enbedding the segmented control.
+        // have a seamless nav bar, if embedding the segmented control.
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
 
-        view.backgroundColor =  UIColor.theme.homePanel.panelBackground
+        view.backgroundColor = UIColor.theme.homePanel.panelBackground
         navigationController?.navigationBar.barTintColor = UIColor.theme.tabTray.toolbar
         navigationController?.navigationBar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
+        navigationController?.navigationBar.backgroundColor = UIColor.theme.tabTray.toolbar
         navigationController?.toolbar.barTintColor = UIColor.theme.tabTray.toolbar
         navigationController?.toolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
         navigationToolbar.barTintColor = UIColor.theme.tabTray.toolbar
-        navigationToolbar.tintColor = UIColor.theme.tabTray.toolbar
+        navigationToolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
         navigationToolbar.isTranslucent = false
         setNeedsStatusBarAppearanceUpdate()
     }
