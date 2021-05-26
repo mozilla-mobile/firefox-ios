@@ -569,7 +569,6 @@ class ToggleChronTabs: HiddenSetting {
     }
 
     override var title: NSAttributedString? {
-        // If we are running an A/B test this will also fetch the A/B test variables from leanplum. Re-open app to see the effect.
         let toNewStatus = currentChronStatus ? "OFF" : "ON"
         return NSAttributedString(string: "Debug: Toggle chronological tabs \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])

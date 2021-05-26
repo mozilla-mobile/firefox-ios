@@ -30,17 +30,6 @@ changedFiles.each do |changed_file|
   end
 end
 
-# Add a friendly reminder for LeanPlum
-changedFiles.each do |changed_file|
-  addedLines = git.diff_for_file(changed_file).patch.lines.select{ |line| line.start_with?("+") }
-  if addedLines.select{ |line| line.include?("LeanplumIntegration.sharedInstance.track") }.count != 0 
-    markdown("### LeanPlum checklist")
-    markdown("- [ ] I have updated the MMA.md doc")
-    markdown("- [ ] I have gone through the data privacy review")
-    break
-  end
-end
-
 # Fail if diff contains !try or as!
 changedFiles.each do |changed_file|
   # filter out only the lines that were added
