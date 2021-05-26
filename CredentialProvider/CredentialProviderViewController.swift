@@ -83,28 +83,6 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
                     }
                 }
             }
-            
-//            credentialIdentity
-//                .recordIdentifier
-//                .map(self.profile.logins.get(id:))?
-//                .map { deffered in
-//                    let passwordCredential = deffered
-//                        .successValue?
-//                        .flatMap { $0.passwordCredential }
-//                    if let passwordCredential = passwordCredential {
-//                        self.extensionContext.completeRequest(withSelectedCredential: passwordCredential, completionHandler: nil)
-//                    } else {
-//                        self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code:ASExtensionError.userInteractionRequired.rawValue))
-//                    }
-//
-//                }
-//                .upon { result in
-//
-//                }
-        }
-        
-        profile.logins.list().upon { result in
-            
         }
     }
     

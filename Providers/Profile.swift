@@ -1051,26 +1051,18 @@ open class BrowserProfile: Profile {
                     return deferMaybe(SyncStatus.notStarted(.unknown))
                 }
 
-                return self.profile.logins.sync(unlockInfo: syncUnlockInfo).bind({ result in
+                return self.profile.logins.sync(unlockInfo: syncUnlockInfo).bind({ [weak self] result in
                     guard result.isSuccess else {
                         return deferMaybe(SyncStatus.notStarted(.unknown))
                     }
 
                     let syncEngineStatsSession = SyncEngineStatsSession(collection: "logins")
-                    if #available(iOS 12, *) {
-                        self.clearCredentialStore().upon { result in
-                            self.updateCredentialIdentities().upon { result in
-                                switch result {
-                                
-                                case .success():
-                                    ()
-                                case .failure(_):
-                                    ()
-                                }
+                    if #available(iOS 12, *), let self = self {
+                        self.clearCredentialStore()
+                            .both(self.updateCredentialIdentities())
+                            .upon { clearResult, updateResult in
+                                print(clearResult, updateResult)
                             }
-                        }
-                    } else {
-                        // Fallback on earlier versions
                     }
                     return deferMaybe(SyncStatus.completed(syncEngineStatsSession))
                 })
