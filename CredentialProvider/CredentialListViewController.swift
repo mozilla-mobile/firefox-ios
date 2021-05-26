@@ -13,9 +13,11 @@ class CredentialListViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
-    //TODO: replace mocked datasource with database logins
-    //var dataSource = [(ASPasswordCredentialIdentity, ASPasswordCredential)]()
-    var dataSource = [(ASPasswordCredentialIdentity(serviceIdentifier: ASCredentialServiceIdentifier(identifier: "https://mobile.twitter.com/login", type: .URL), user: "j_appleseed", recordIdentifier: nil), ASPasswordCredential(user: "j_appleseed", password: "apple1234")), (ASPasswordCredentialIdentity(serviceIdentifier: ASCredentialServiceIdentifier(identifier: "https://mobile.facebook.com/login", type: .URL), user: "j_appleseed_FB", recordIdentifier: nil), ASPasswordCredential(user: "j_appleseed_FB", password: "apple1234")), (ASPasswordCredentialIdentity(serviceIdentifier: ASCredentialServiceIdentifier(identifier: "https://mobile.youtube.com/login", type: .URL), user: "j_appleseed_YTube", recordIdentifier: nil), ASPasswordCredential(user: "j_appleseed_YTube", password: "apple1234"))]
+    var dataSource = [(ASPasswordCredentialIdentity, ASPasswordCredential)]() {
+        didSet {
+            tableView?.reloadData()
+        }
+    }
     
     private var filteredCredentials = [(ASPasswordCredentialIdentity, ASPasswordCredential)]()
     private var searchController: UISearchController?

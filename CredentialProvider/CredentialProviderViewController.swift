@@ -39,9 +39,26 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
         displayWelcome()
         displayNotLoggedInMessage()
     }
-    private func navigateToCredentialList() {
+    private func navigateToCredentialList(serviceIdentifiers: [ASCredentialServiceIdentifier]) {
         let storyboard = UIStoryboard(name: "CredentialList", bundle: nil)
-        let credentialListVC = storyboard.instantiateViewController(withIdentifier: "itemlist")
+        let credentialListVC = storyboard.instantiateViewController(withIdentifier: "itemlist") as! CredentialListViewController
+        
+        let openError = self.profile.logins.reopenIfClosed()
+        if let error = openError {
+            
+        } else {
+            profile.logins.list().upon { result in
+                switch result {
+                case .failure(_):
+                    ()
+                case .success(let loginRecods):
+                    let dataSource = loginRecods.map { ($0.passwordCredentialIdentity, $0.passwordCredential) }
+                    credentialListVC.dataSource = dataSource
+                }
+            }
+        }
+        
+        
         self.currentViewController = UINavigationController(rootViewController: credentialListVC)
     }
 
@@ -51,7 +68,7 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
      prioritize the most relevant credentials in the list.
      */
     override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-        navigateToCredentialList()
+        navigateToCredentialList(serviceIdentifiers: serviceIdentifiers)
     }
     
     //     Implement this method if your extension supports showing credentials in the QuickType bar.
