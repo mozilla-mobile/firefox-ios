@@ -493,10 +493,10 @@ extension LibraryViewController: Themeable {
 
         view.backgroundColor = UIColor.theme.homePanel.panelBackground
         navigationController?.navigationBar.barTintColor = UIColor.theme.tabTray.toolbar
-        navigationController?.navigationBar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
+        navigationController?.navigationBar.tintColor = .systemBlue
         navigationController?.navigationBar.backgroundColor = UIColor.theme.tabTray.toolbar
         navigationController?.toolbar.barTintColor = UIColor.theme.tabTray.toolbar
-        navigationController?.toolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
+        navigationController?.toolbar.tintColor = .systemBlue
         navigationToolbar.barTintColor = UIColor.theme.tabTray.toolbar
         navigationToolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
         navigationToolbar.isTranslucent = false
