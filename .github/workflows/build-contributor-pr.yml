@@ -31,6 +31,7 @@ jobs:
           with:
            name: xcresult
            path: results.zip
+           retention-days: 90
         - name: Summarize XCResult
           uses: tbartelmess/analyze-xcoderesults-action@0.1.1
           if: ${{ always() }}
