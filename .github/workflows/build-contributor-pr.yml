@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         python-version: [3.9]
-        xcode: [12.4]
+        xcode: [12.5]
         run-config: 
         - { scheme: 'Fennec_Enterprise_XCUITests', destination: 'platform=iOS Simulator,OS=latest,name=iPhone 11', testplan: 'SmokeXCUITests' }
     steps:
