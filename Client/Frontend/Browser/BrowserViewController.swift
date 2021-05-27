@@ -853,8 +853,9 @@ class BrowserViewController: UIViewController {
             libraryViewController.selectedPanel = panel
         }
 
-        libraryViewController.modalPresentationStyle = .formSheet
-        self.present(libraryViewController, animated: true, completion: nil)
+        let controller: DismissableNavigationViewController
+        controller = DismissableNavigationViewController(rootViewController: libraryViewController)
+        self.present(controller, animated: true, completion: nil)
     }
 
     fileprivate func createSearchControllerIfNeeded() {
