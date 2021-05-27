@@ -500,6 +500,13 @@ extension LibraryViewController: Themeable {
         navigationToolbar.barTintColor = UIColor.theme.tabTray.toolbar
         navigationToolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
         navigationToolbar.isTranslucent = false
+
+        let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+        if theme == .dark {
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        } else {
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+        }
         setNeedsStatusBarAppearanceUpdate()
     }
 }
