@@ -1,5 +1,5 @@
 name: Build contributor PR
-on: [pull_request]
+on: [workflow_dispatch]
 jobs:
   run-ui:
     if: github.event.pull_request.head.repo.full_name != github.repository
