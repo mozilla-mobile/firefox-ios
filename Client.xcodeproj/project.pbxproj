@@ -425,9 +425,9 @@
 		C874FB3A2660E8B900EBE86E /* CredentialProviderPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C874FB392660E8B900EBE86E /* CredentialProviderPresenter.swift */; };
 		C874FBAE266109BE00EBE86E /* SpinnerAlert.xib in Resources */ = {isa = PBXBuildFile; fileRef = C874FBAD266109BE00EBE86E /* SpinnerAlert.xib */; };
 		C874FBC3266109C500EBE86E /* SpinnerAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = C874FBC2266109C500EBE86E /* SpinnerAlert.swift */; };
-		C874FC0026612A5D00EBE86E /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C874FBFF26612A5D00EBE86E /* MainInterface.storyboard */; };
 		C874FC2826612BFF00EBE86E /* AlertControllerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C874FC2726612BFF00EBE86E /* AlertControllerView.swift */; };
 		C874FC3D26612C2500EBE86E /* SpinnerAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C874FC3C26612C2500EBE86E /* SpinnerAlertView.swift */; };
+		C874FC652661367900EBE86E /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C874FC642661367900EBE86E /* MainInterface.storyboard */; };
 		C877037A25222F30006E38EB /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		C877039625222FDC006E38EB /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		C877039725222FE6006E38EB /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
@@ -3046,9 +3046,9 @@
 		C874FB392660E8B900EBE86E /* CredentialProviderPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialProviderPresenter.swift; sourceTree = "<group>"; };
 		C874FBAD266109BE00EBE86E /* SpinnerAlert.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SpinnerAlert.xib; sourceTree = "<group>"; };
 		C874FBC2266109C500EBE86E /* SpinnerAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpinnerAlert.swift; sourceTree = "<group>"; };
-		C874FBFF26612A5D00EBE86E /* MainInterface.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MainInterface.storyboard; path = ../../../../../.Trash/MainInterface.storyboard; sourceTree = "<group>"; };
 		C874FC2726612BFF00EBE86E /* AlertControllerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertControllerView.swift; sourceTree = "<group>"; };
 		C874FC3C26612C2500EBE86E /* SpinnerAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpinnerAlertView.swift; sourceTree = "<group>"; };
+		C874FC642661367900EBE86E /* MainInterface.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainInterface.storyboard; sourceTree = "<group>"; };
 		C87D418CB1BEBDCD40E59AA1 /* co */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = co; path = "co.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		C88847109E62D581C497BB8E /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/AuthenticationManager.strings"; sourceTree = "<group>"; };
 		C892DA0C22D39A980080F1F7 /* TrackingProtectionMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionMenu.swift; sourceTree = "<group>"; };
@@ -5957,10 +5957,10 @@
 				C89307272655011000A1DB2F /* Storyboard */,
 				C8CE38B0265E71FE0009B09E /* Cells */,
 				C8CE38B4265E71FE0009B09E /* Extensions */,
+				C874FC642661367900EBE86E /* MainInterface.storyboard */,
 				F8324A092649A188007E4BFA /* CredentialProviderViewController.swift */,
 				C874FB392660E8B900EBE86E /* CredentialProviderPresenter.swift */,
 				C8CE389A265E71E00009B09E /* CredentialListViewController.swift */,
-				C874FBFF26612A5D00EBE86E /* MainInterface.storyboard */,
 				F8324A0E2649A188007E4BFA /* Info.plist */,
 				F8324A0F2649A188007E4BFA /* CredentialProvider.entitlements */,
 				C893075C265501EE00A1DB2F /* CredentialAssets.xcassets */,
@@ -7179,7 +7179,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C874FC0026612A5D00EBE86E /* MainInterface.storyboard in Resources */,
+				C874FC652661367900EBE86E /* MainInterface.storyboard in Resources */,
 				C89307462655011000A1DB2F /* CredentialWelcome.strings in Resources */,
 				C8CE389B265E71E00009B09E /* CredentialList.storyboard in Resources */,
 				C893075D265501EE00A1DB2F /* CredentialAssets.xcassets in Resources */,
