@@ -4,8 +4,8 @@
 
 NSLocationWhenInUseUsageDescription = "Websites you visit may request your location.";
 NSPhotoLibraryAddUsageDescription = "This lets you save photos.";
-NSCameraUsageDescription = "This lets you scan QR codes and take/upload photos.";
-NSMicrophoneUsageDescription = "This lets you take and upload videos.";
+NSCameraUsageDescription = "Firefox uses your camera to scan QR codes and take photos and video.";
+NSMicrophoneUsageDescription = "Firefox uses your microphone to record and upload audio.";
 ShortcutItemTitleNewTab = "New Tab";
 ShortcutItemTitleNewPrivateTab = "New Private Tab";
 ShortcutItemTitleQRCode = "Scan QR Code";
