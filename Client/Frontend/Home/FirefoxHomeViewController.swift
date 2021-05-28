@@ -20,7 +20,7 @@ struct FirefoxHomeUX {
     static let numberOfItemsPerRowForSizeClassIpad = UXSizeClasses(compact: 3, regular: 4, other: 2)
     static let SectionInsetsForIpad: CGFloat = 101
     static let MinimumInsets: CGFloat = 20
-    static let LibraryShortcutsHeight: CGFloat = 80
+    static let LibraryShortcutsHeight: CGFloat = 90
     static let LibraryShortcutsMaxWidth: CGFloat = 375
 }
 /*
