@@ -1,5 +1,5 @@
 name: Build contributor PR
-on: [workflow_dispatch]
+on: [pull_request]
 jobs:
   run-ui:
     if: github.event.pull_request.head.repo.full_name != github.repository
@@ -31,9 +31,3 @@ jobs:
           with:
            name: xcresult
            path: results.zip
-        - name: Summarize XCResult
-          uses: tbartelmess/analyze-xcoderesults-action@0.1.1
-          if: ${{ always() }}
-          with:
-            results: TestResults.xcresult
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
