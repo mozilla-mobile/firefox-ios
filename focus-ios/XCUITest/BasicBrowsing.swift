@@ -40,4 +40,34 @@ class BasicBrowsing: BaseTestCase {
         let TrackingProtection = app.staticTexts["Ad blocking enabled!"]
         XCTAssertTrue(TrackingProtection.exists)
     }
+
+    // Smoketest
+    func testNavigationToolbar() {
+        loadWebPage("example.com")
+        waitForWebPageLoad()
+        loadWebPage("mozilla.org")
+        waitForWebPageLoad()
+
+        // Tap Reload button
+        app.buttons["BrowserToolset.stopReloadButton"].tap()
+        waitForWebPageLoad()
+        waitForValueContains(element: app.textFields["URLBar.urlText"], value: "mozilla")
+
+        // Tap Back button to load example.com
+        app.buttons["Back"].tap()
+        waitForWebPageLoad()
+        waitForValueContains(element: app.textFields["URLBar.urlText"], value: "example")
+
+        // Tap Forward button to load mozilla.org
+        app.buttons["Forward"].tap()
+        waitForWebPageLoad()
+        waitForValueContains(element: app.textFields["URLBar.urlText"], value: "mozilla")
+
+        // Tap Reload button and Stop button
+        app.buttons["BrowserToolset.stopReloadButton"].tap()
+        waitForWebPageLoad()
+        waitForValueContains(element: app.textFields["URLBar.urlText"], value: "mozilla")
+        app.buttons["BrowserToolset.stopReloadButton"].tap()
+        waitForValueContains(element: app.textFields["URLBar.urlText"], value: "mozilla")
+    }
 }

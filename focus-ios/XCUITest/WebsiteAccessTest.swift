@@ -10,12 +10,12 @@ class WebsiteAccessTests: BaseTestCase {
         checkForHomeScreen()
 
         // Enter 'mozilla' on the search field
-        let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
+        let searchOrEnterAddressTextField = app.textFields["URLBar.urlText"]
         XCTAssertTrue(searchOrEnterAddressTextField.exists)
         XCTAssertTrue(searchOrEnterAddressTextField.isEnabled)
 
         // Check the text autocompletes to mozilla.org/, and also look for 'Search for mozilla' button below
-        let label = app.textFields["Search or enter address"]
+        let label = app.textFields["URLBar.urlText"]
         searchOrEnterAddressTextField.tap()
         searchOrEnterAddressTextField.typeText("mozilla")
         waitForValueMatch(element: label, value: "mozilla.org/")
@@ -30,10 +30,6 @@ class WebsiteAccessTests: BaseTestCase {
         // Erase the history
         app.buttons["URLBar.deleteButton"].tap()
 
-        // Disabling this check since BB seem to intermittently miss this popup which disappears after 1~2 seconds
-        // The popup is also checked in PastenGOTest
-        //waitforExistence(element: app.staticTexts["Your browsing history has been erased."])
-
         // Check it is on the initial page
         checkForHomeScreen()
     }
@@ -42,13 +38,14 @@ class WebsiteAccessTests: BaseTestCase {
         // Disable Autocomplete
         app.buttons["Settings"].tap()
         app.tables.cells["SettingsViewController.autocompleteCell"].tap()
+        waitforExistence(element: app.tables.switches["toggleAutocompleteSwitch"])
         var toggle = app.tables.switches["toggleAutocompleteSwitch"]
         toggle.tap()
 
         app.navigationBars.buttons.element(boundBy: 0).tap()
         app.navigationBars.buttons.element(boundBy: 0).tap()
 
-        let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
+        let searchOrEnterAddressTextField = app.textFields["URLBar.urlText"]
 
         searchOrEnterAddressTextField.tap()
         searchOrEnterAddressTextField.typeText("mozilla")
@@ -90,7 +87,7 @@ class WebsiteAccessTests: BaseTestCase {
         app.navigationBars.buttons.element(boundBy: 0).tap()
 
         // Test auto completing the domain
-        let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
+        let searchOrEnterAddressTextField = app.textFields["URLBar.urlText"]
         searchOrEnterAddressTextField.tap()
         searchOrEnterAddressTextField.typeText("getfire")
         waitforExistence(element: app.buttons["Search for getfire"])
