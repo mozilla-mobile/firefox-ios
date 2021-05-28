@@ -160,7 +160,7 @@ class TabTrayViewController: UIViewController {
             navigationController?.isToolbarHidden = true
         } else {
             navigationController?.isToolbarHidden = false
-            updateToolbarItems()
+            updateToolbarItems(forSyncTabs: viewModel.profile.hasSyncableAccount())
         }
     }
 
@@ -229,7 +229,7 @@ class TabTrayViewController: UIViewController {
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .libraryPanel, value: .syncPanel, extras: nil)
             if children.first == viewModel.tabTrayView {
                 hideCurrentPanel()
-                updateToolbarItems(forSyncTabs: true)
+                updateToolbarItems(forSyncTabs: viewModel.profile.hasSyncableAccount())
                 showPanel(viewModel.syncedTabsController)
             }
         default:
@@ -242,7 +242,7 @@ class TabTrayViewController: UIViewController {
             hideCurrentPanel()
             showPanel(viewModel.tabTrayView)
         }
-        updateToolbarItems()
+        updateToolbarItems(forSyncTabs: viewModel.profile.hasSyncableAccount())
         viewModel.tabTrayView.didTogglePrivateMode(privateMode)
     }
 
@@ -273,16 +273,18 @@ class TabTrayViewController: UIViewController {
 
     fileprivate func updateToolbarItems(forSyncTabs showSyncItems: Bool = false) {
         if UIDevice.current.userInterfaceIdiom == .pad {
-            if showSyncItems || navigationMenu.selectedSegmentIndex == 2 {
-                navigationItem.rightBarButtonItem = nil
+            if navigationMenu.selectedSegmentIndex == 2 {
+                navigationItem.rightBarButtonItem = (showSyncItems ? syncTabButton : nil)
                 navigationItem.leftBarButtonItem = nil
             } else {
                 navigationItem.rightBarButtonItem = newTabButton
                 navigationItem.leftBarButtonItem = deleteButton
             }
-
         } else {
-            let newToolbarItems = showSyncItems ? bottomToolbarItemsForSync : bottomToolbarItems
+            var newToolbarItems: [UIBarButtonItem]? = bottomToolbarItems
+            if navigationMenu.selectedSegmentIndex == 2 {
+                newToolbarItems = showSyncItems ? bottomToolbarItemsForSync : nil
+            }
             setToolbarItems(newToolbarItems, animated: true)
         }
     }
