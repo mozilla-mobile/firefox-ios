@@ -20,6 +20,20 @@
                ReferencedContainer = "container:Blockzilla.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "NO"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "0BA39A821DD2B8E4005F970A"
+               BuildableName = "XCUITest.xctest"
+               BlueprintName = "XCUITest"
+               ReferencedContainer = "container:Blockzilla.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -50,46 +64,6 @@
             <SkippedTests>
                <Test
                   Identifier = "SearchEngineTests/testResponseConsistency()">
-               </Test>
-            </SkippedTests>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "0BA39A821DD2B8E4005F970A"
-               BuildableName = "XCUITest.xctest"
-               BlueprintName = "XCUITest"
-               ReferencedContainer = "container:Blockzilla.xcodeproj">
-            </BuildableReference>
-            <SkippedTests>
-               <Test
-                  Identifier = "CopyTest">
-               </Test>
-               <Test
-                  Identifier = "FindInPageTest/testActivityMenuFindInPageAction()">
-               </Test>
-               <Test
-                  Identifier = "FindInPageTest/testFindInPageURLBarElement()">
-               </Test>
-               <Test
-                  Identifier = "QuickAddAutocompleteURLTest/testURLContextMenu()">
-               </Test>
-               <Test
-                  Identifier = "SearchProviderTest/testAmazonSearchProvider()">
-               </Test>
-               <Test
-                  Identifier = "SearchProviderTest/testGoogleSearchProvider()">
-               </Test>
-               <Test
-                  Identifier = "SettingAppearanceTest/testOpenInSafari()">
-               </Test>
-               <Test
-                  Identifier = "UserAgentTest">
-               </Test>
-               <Test
-                  Identifier = "WebsiteAccessTests/testAutocompleteCustomDomain()">
                </Test>
             </SkippedTests>
          </TestableReference>
