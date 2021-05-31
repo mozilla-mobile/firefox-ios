@@ -72,6 +72,14 @@ class TabTrayViewController: UIViewController {
                                action: nil)
     }()
 
+    lazy var fixedSpace: UIBarButtonItem = {
+        let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace,
+                               target: nil,
+                               action: nil)
+        fixedSpace.width = 32
+        return fixedSpace
+    }()
+
     lazy var countLabel: UILabel = {
         let label = UILabel(frame: CGRect(width: 24, height: 24))
         label.font = TabsButtonUX.TitleFont
@@ -192,7 +200,7 @@ class TabTrayViewController: UIViewController {
     fileprivate func iPadViewSetup() {
         navigationItem.leftBarButtonItem = deleteButton
         navigationItem.titleView = navigationMenu
-        navigationItem.rightBarButtonItems = [doneButton, newTabButton]
+        navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButton]
 
         navigationItem.titleView?.snp.makeConstraints { make in
             make.width.equalTo(343)
@@ -280,10 +288,10 @@ class TabTrayViewController: UIViewController {
     fileprivate func updateToolbarItems(forSyncTabs showSyncItems: Bool = false) {
         if UIDevice.current.userInterfaceIdiom == .pad {
             if navigationMenu.selectedSegmentIndex == 2 {
-                navigationItem.rightBarButtonItems = (showSyncItems ? [doneButton, syncTabButton] : [doneButton])
+                navigationItem.rightBarButtonItems = (showSyncItems ? [doneButton, fixedSpace, syncTabButton] : [doneButton])
                 navigationItem.leftBarButtonItem = nil
             } else {
-                navigationItem.rightBarButtonItems = [doneButton, newTabButton]
+                navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButton]
                 navigationItem.leftBarButtonItem = deleteButton
             }
         } else {
