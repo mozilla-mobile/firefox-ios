@@ -14,7 +14,6 @@ private let log = Logger.browserLogger
 
 // MARK: -  Lifecycle
 struct FirefoxHomeUX {
-    static let rowSpacing: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 30 : 20
     static let highlightCellHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 200
     static let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 15)
     static let numberOfItemsPerRowForSizeClassIpad = UXSizeClasses(compact: 3, regular: 4, other: 2)
@@ -431,13 +430,9 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
         return 0
     }
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return FirefoxHomeUX.rowSpacing
-    }
-
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         let insets = Section(section).sectionInsets(self.traitCollection, frameWidth: self.view.frame.width)
-        let topInset: CGFloat = Section(section) == .topSites ? 20 : 0
+        let topInset: CGFloat = Section(section) == .topSites ? 24 : FirefoxHomeUX.MinimumInsets
         return UIEdgeInsets(top: topInset, left: insets, bottom: 0, right: insets)
     }
 

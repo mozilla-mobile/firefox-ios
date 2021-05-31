@@ -11,7 +11,7 @@ private struct TopSiteCellUX {
     static let TitleHeight: CGFloat = 20
     static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
     static let CellCornerRadius: CGFloat = 8
-    static let TitleOffset: CGFloat = 5
+    static let TitleOffset: CGFloat = 4
     static let OverlayColor = UIColor(white: 0.0, alpha: 0.25)
     static let IconSize = CGSize(width: 36, height: 36)
     static let IconCornerRadius: CGFloat = 4
@@ -86,7 +86,7 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
         titleWrapper.snp.makeConstraints { make in
             make.top.equalTo(faviconBG.snp.bottom).offset(8)
             make.bottom.centerX.equalTo(contentView)
-            make.width.lessThanOrEqualTo(TopSiteCellUX.BackgroundSize)
+            make.width.lessThanOrEqualTo(TopSiteCellUX.BackgroundSize.width + 20)
         }
 
         titleLabel.snp.makeConstraints { make in
@@ -144,11 +144,11 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
         if let _ = site as? PinnedSite {
             titleWrapper.addSubview(pinImageView)
             pinImageView.snp.makeConstraints { make in
-                make.trailing.equalTo(self.titleLabel.snp.leading).offset(-4)
+                make.trailing.equalTo(self.titleLabel.snp.leading).offset(-TopSiteCellUX.TitleOffset)
                 make.centerY.equalTo(self.titleLabel.snp.centerY)
             }
             titleLabel.snp.updateConstraints { make in
-                make.leading.equalTo(titleWrapper).offset(TopSiteCellUX.PinIconSize + 4)
+                make.leading.equalTo(titleWrapper).offset(TopSiteCellUX.PinIconSize + TopSiteCellUX.TitleOffset)
             }
         } else {
             titleLabel.snp.updateConstraints { make in
