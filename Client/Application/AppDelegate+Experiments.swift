@@ -13,7 +13,7 @@ extension AppDelegate {
 
         let defaults = UserDefaults.standard
         let nimbusFirstRun = "NimbusFirstRun"
-        let firstRun = defaults.object(forKey: nimbusFirstRun) != nil
+        let firstRun = defaults.bool(forKey: nimbusFirstRun) != false
         defaults.set(false, forKey: nimbusFirstRun)
 
         let initialExperiments = Bundle.main.url(forResource: "initial_experiments", withExtension: "json")
@@ -33,8 +33,11 @@ extension AppDelegate {
         case (_, _, let file, let url) where file != nil && url == nil:
             log.info("Nimbus: Loading from experiments from bundle, with no URL")
             options = Experiments.InitializationOptions.preload(fileUrl: file!)
-        default:
+        case (_, _, _, let url) where url != nil:
             log.info("Nimbus: server exists")
+            options = Experiments.InitializationOptions.normal
+        default:
+            log.info("Nimbus: server does not exist")
             options = Experiments.InitializationOptions.normal
         }
 

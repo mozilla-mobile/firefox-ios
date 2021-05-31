@@ -99,7 +99,8 @@ enum Experiments {
     }
 
     static let remoteSettingsURL: String? = {
-        guard let url = Bundle.main.object(forInfoDictionaryKey: NIMBUS_URL_KEY) as? String else {
+        guard let url = Bundle.main.object(forInfoDictionaryKey: NIMBUS_URL_KEY) as? String,
+              !url.isEmptyOrWhitespace() else {
             log.error("No Nimbus URL found in Info.plist")
             return nil
         }
