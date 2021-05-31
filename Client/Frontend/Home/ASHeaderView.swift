@@ -6,8 +6,6 @@ import SnapKit
 
 // MARK: - Section Header View
 public struct FirefoxHomeHeaderViewUX {
-    static var SeparatorColor: UIColor { return UIColor.theme.homePanel.separator }
-    static let SeparatorHeight = 0.5
     static let Insets: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? FirefoxHomeUX.SectionInsetsForIpad + FirefoxHomeUX.MinimumInsets : FirefoxHomeUX.MinimumInsets
     static let TitleTopInset: CGFloat = 5
 }
@@ -69,7 +67,6 @@ class ASHeaderView: UICollectionReusableView {
         addSubview(titleLabel)
         addSubview(moreButton)
         moreButton.snp.makeConstraints { make in
-            make.top.equalTo(self.snp.top).offset(16)
             make.bottom.equalToSuperview()
             self.rightConstraint = make.trailing.equalTo(self.safeArea.trailing).inset(-titleInsets).constraint
         }
@@ -77,8 +74,7 @@ class ASHeaderView: UICollectionReusableView {
         titleLabel.snp.makeConstraints { make in
             self.leftConstraint = make.leading.equalTo(self.safeArea.leading).inset(titleInsets).constraint
             make.trailing.equalTo(moreButton.snp.leading).inset(-FirefoxHomeHeaderViewUX.TitleTopInset)
-            make.top.equalTo(self.snp.top).offset(16)
-            make.bottom.equalToSuperview()
+            make.lastBaseline.equalTo(moreButton.snp.lastBaseline)
         }
     }
 

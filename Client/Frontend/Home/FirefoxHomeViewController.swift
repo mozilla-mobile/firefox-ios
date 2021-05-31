@@ -16,10 +16,10 @@ private let log = Logger.browserLogger
 struct FirefoxHomeUX {
     static let rowSpacing: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 30 : 20
     static let highlightCellHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 200
-    static let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 20)
+    static let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 15)
     static let numberOfItemsPerRowForSizeClassIpad = UXSizeClasses(compact: 3, regular: 4, other: 2)
     static let SectionInsetsForIpad: CGFloat = 101
-    static let MinimumInsets: CGFloat = 20
+    static let MinimumInsets: CGFloat = 15
     static let LibraryShortcutsHeight: CGFloat = 90
     static let LibraryShortcutsMaxWidth: CGFloat = 375
 }
@@ -156,7 +156,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
 
         collectionView?.addGestureRecognizer(longPressRecognizer)
 
-        let refreshEvents: [Notification.Name] = [.DynamicFontChanged, .HomePanelPrefsChanged]
+        let refreshEvents: [Notification.Name] = [.DynamicFontChanged, .HomePanelPrefsChanged, .DisplayThemeChanged]
         refreshEvents.forEach { NotificationCenter.default.addObserver(self, selector: #selector(reload), name: $0, object: nil) }
     }
 
@@ -263,13 +263,16 @@ extension FirefoxHomeViewController {
         var title: String? {
             switch self {
             case .pocket: return Strings.ASPocketTitle2
-            case .topSites: return Strings.ASShortcutsTitle
+            case .topSites: return nil
             case .libraryShortcuts: return Strings.AppMenuLibraryTitleString
             }
         }
 
         var headerHeight: CGSize {
-            return CGSize(width: 50, height: 56)
+            switch self {
+            case .pocket, .libraryShortcuts: return CGSize(width: 50, height: 56)
+            case .topSites: return .zero
+            }
         }
 
         func cellHeight(_ traits: UITraitCollection, width: CGFloat) -> CGFloat {
@@ -375,9 +378,6 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                 view.titleLabel.accessibilityIdentifier = "pocketTitle"
                 return view
             case .topSites:
-                view.title = title
-                view.titleLabel.accessibilityIdentifier = "topSitesTitle"
-                view.moreButton.isHidden = true
                 return view
             case .libraryShortcuts:
                 view.title = title
@@ -417,7 +417,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
         case .pocket:
             return pocketStories.isEmpty ? .zero : Section(section).headerHeight
         case .topSites:
-            return Section(section).headerHeight
+            return .zero
         case .libraryShortcuts:
             return UIDevice.current.userInterfaceIdiom == .pad ? CGSize.zero : Section(section).headerHeight
         }
@@ -437,7 +437,8 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         let insets = Section(section).sectionInsets(self.traitCollection, frameWidth: self.view.frame.width)
-        return UIEdgeInsets(top: 0, left: insets, bottom: 0, right: insets)
+        let topInset: CGFloat = Section(section) == .topSites ? 20 : 0
+        return UIEdgeInsets(top: topInset, left: insets, bottom: 0, right: insets)
     }
 
     fileprivate func showSiteWithURLHandler(_ url: URL, isGoogleTopSite: Bool = false) {
@@ -681,7 +682,6 @@ extension FirefoxHomeViewController: DataObserverDelegate {
         switch section {
         case .pocket:
             site = Site(url: pocketStories[index].url.absoluteString, title: pocketStories[index].title)
-            let params = ["Source": "Activity Stream", "StoryType": "Article"]
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .pocketStory)
         case .topSites:
             return
