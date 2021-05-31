@@ -5143,7 +5143,7 @@
 		};
 		F85F7A332656885C00395515 /* XCRemoteSwiftPackageReference "glean-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/badboy/glean-swift/";
+			repositoryURL = "https://github.com/mozilla/glean-swift/";
 			requirement = {
 				kind = exactVersion;
 				version = 38.0.2;
