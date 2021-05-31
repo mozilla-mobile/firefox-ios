@@ -7,6 +7,7 @@ import WebKit
 import Storage
 import Shared
 import XCGLogger
+import AVFoundation
 
 private let log = Logger.browserLogger
 
@@ -450,29 +451,39 @@ class TabManager: NSObject {
     fileprivate func removeTab(_ tab: Tab, flushToDisk: Bool, notify: Bool) {
         assert(Thread.isMainThread)
 
-        guard let removalIndex = tabs.firstIndex(where: { $0 === tab }) else {
-            Sentry.shared.sendWithStacktrace(message: "Could not find index of tab to remove", tag: .tabManager, severity: .fatal, description: "Tab count: \(count)")
-            return
-        }
+//        tab.checkMediaPlayBack { (val, err) in
+//            if let val = val as? Bool {
+//                //Do something with media playback value
+//                print("Video was playing when tab closed: \(val)")
+//            }
+            
+//        DispatchQueue.main.async {
+                
+                guard let removalIndex = self.tabs.firstIndex(where: { $0 === tab }) else {
+                    Sentry.shared.sendWithStacktrace(message: "Could not find index of tab to remove", tag: .tabManager, severity: .fatal, description: "Tab count: \(self.count)")
+                    return
+                }
 
-        let prevCount = count
-        tabs.remove(at: removalIndex)
-        assert(count == prevCount - 1, "Make sure the tab count was actually removed")
+                let prevCount = self.count
+                self.tabs.remove(at: removalIndex)
+                assert(self.count == prevCount - 1, "Make sure the tab count was actually removed")
 
-        if tab.isPrivate && privateTabs.count < 1 {
-            privateConfiguration = TabManager.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
-        }
+                if tab.isPrivate && self.privateTabs.count < 1 {
+                    self.privateConfiguration = TabManager.makeWebViewConfig(isPrivate: true, prefs: self.profile.prefs)
+                }
 
-        tab.close()
+                tab.close()
 
-        if notify {
-            delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: store.isRestoringTabs) }
-            TabEvent.post(.didClose, for: tab)
-        }
+                if notify {
+                    self.delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: self.store.isRestoringTabs) }
+                    TabEvent.post(.didClose, for: tab)
+                }
 
-        if flushToDisk {
-            storeChanges()
-        }
+                if flushToDisk {
+                    self.storeChanges()
+                }
+//            }
+//        }
     }
 
     // Select the most recently visited tab, IFF it is also the parent tab of the closed tab.
@@ -794,6 +805,12 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
             })
         }
         decisionHandler(res)
+        print("Check if another audio is playing -- \(AVAudioSession.sharedInstance().isOtherAudioPlaying)")
+        print("Check if another audio is currentRoute outputs -- \(AVAudioSession.sharedInstance().currentRoute.outputs)")
+        print("Check if another audio is currentRoute inputs -- \(AVAudioSession.sharedInstance().currentRoute.inputs)")
+        print("Check if another audio is category -- \(AVAudioSession.sharedInstance().category)")
+        print("Check if another audio is inputDataSource -- \(AVAudioSession.sharedInstance().inputDataSource)")
+        print("Check if another audio is outputDataSource -- \(AVAudioSession.sharedInstance().outputDataSource)")
     }
 
     func webView(_ webView: WKWebView,

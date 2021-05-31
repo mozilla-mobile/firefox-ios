@@ -486,6 +486,10 @@ extension BrowserViewController: WKNavigationDelegate {
         let response = navigationResponse.response
         let responseURL = response.url
 
+        webView.evaluateJavascriptInDefaultContentWorld("document.querySelector(\'video\').playing") { (a, err) in
+            print(a)
+        }
+        
         var request: URLRequest?
         if let url = responseURL {
             request = pendingRequests.removeValue(forKey: url.absoluteString)

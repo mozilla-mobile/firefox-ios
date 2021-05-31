@@ -334,6 +334,12 @@ class Tab: NSObject {
         }
     }
 
+    func checkMediaPlayBack(completion: @escaping ((Any?, Error?) -> Void)) {
+        webView?.evaluateJavaScript("document.querySelector('video').playing") { (val, err) in
+            completion(val,err)
+        }
+    }
+    
     deinit {
         debugTabCount -= 1
 
