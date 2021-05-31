@@ -45,8 +45,8 @@ class SettingsTest: BaseTestCase {
             // Tap on "Default Browser App" and set the browser as a default (Safari is listed first)
             waitForExistence(iOS_Settings.tables.cells.element(boundBy: 1), timeout: 5)
             iOS_Settings.tables.cells.element(boundBy: 2).tap()
-            iOS_Settings.tables.staticTexts.element(boundBy: 1).tap()
-
+            iOS_Settings.tables.staticTexts.element(boundBy: 0).tap()
+            
             // Return to the browser
             app.activate()
 
