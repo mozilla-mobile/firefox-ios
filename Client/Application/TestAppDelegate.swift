@@ -104,6 +104,11 @@ class TestAppDelegate: AppDelegate {
             profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
         }
 
+        // Change to 0 to deactivate chron tabs
+        if launchArguments.contains(LaunchArguments.ChronTabs) {
+                   profile.prefs.setInt(1, forKey: PrefsKeys.ChronTabsPrefKey)
+        }
+
         if launchArguments.contains(LaunchArguments.StageServer) {
             profile.prefs.setInt(1, forKey: PrefsKeys.UseStageServer)
         }

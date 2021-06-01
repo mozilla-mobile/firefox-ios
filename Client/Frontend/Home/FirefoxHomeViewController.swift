@@ -738,7 +738,6 @@ extension FirefoxHomeViewController: DataObserverDelegate {
             site = Site(url: pocketStories[index].url.absoluteString, title: pocketStories[index].title)
             let params = ["Source": "Activity Stream", "StoryType": "Article"]
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .pocketStory)
-            LeanPlumClient.shared.track(event: .openedPocketStory, withParameters: params)
         case .topSites:
             return
         case .libraryShortcuts:
@@ -753,18 +752,38 @@ extension FirefoxHomeViewController: DataObserverDelegate {
 extension FirefoxHomeViewController {
     @objc func openBookmarks() {
         homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .bookmarks)
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .firefoxHomepage,
+                                     value: .yourLibrarySection,
+                                     extras: [TelemetryWrapper.EventObject.libraryPanel.rawValue: TelemetryWrapper.EventValue.bookmarksPanel.rawValue])
     }
 
     @objc func openHistory() {
         homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .history)
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .firefoxHomepage,
+                                     value: .yourLibrarySection,
+                                     extras: [TelemetryWrapper.EventObject.libraryPanel.rawValue: TelemetryWrapper.EventValue.historyPanel.rawValue])
     }
 
     @objc func openReadingList() {
         homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .readingList)
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .firefoxHomepage,
+                                     value: .yourLibrarySection,
+                                     extras: [TelemetryWrapper.EventObject.libraryPanel.rawValue: TelemetryWrapper.EventValue.readingListPanel.rawValue])
     }
 
     @objc func openDownloads() {
         homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .downloads)
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .firefoxHomepage,
+                                     value: .yourLibrarySection,
+                                     extras: [TelemetryWrapper.EventObject.libraryPanel.rawValue: TelemetryWrapper.EventValue.downloadsPanel.rawValue])
     }
 }
 
@@ -804,11 +823,8 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
 
         let openInNewTabAction = PhotonActionSheetItem(title: Strings.OpenInNewTabContextMenuTitle, iconString: "quick_action_new_tab") { _, _ in
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
-            let source = ["Source": "Activity Stream Long Press Context Menu"]
-            LeanPlumClient.shared.track(event: .openedNewTab, withParameters: source)
             if Section(indexPath.section) == .pocket {
                 TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .pocketStory)
-                LeanPlumClient.shared.track(event: .openedPocketStory, withParameters: source)
             }
         }
 
@@ -840,7 +856,6 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
                                                                                     toApplication: .shared)
                 site.setBookmarked(true)
                 self.profile.panelDataObservers.activityStream.refreshIfNeeded(forceTopSites: true)
-                LeanPlumClient.shared.track(event: .savedBookmark)
                 TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .activityStream)
             })
         }

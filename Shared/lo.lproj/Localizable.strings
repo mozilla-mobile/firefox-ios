@@ -1412,6 +1412,9 @@
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "ທາງລັດ Siri";
 
+/* Section title for all studies that are currently active */
+"Settings.Studies.Active.SectionName" = "​ເປີດໃຊ້ງານ";
+
 /* Section title for all studies that are completed */
 "Settings.Studies.Completed.SectionName" = "ສຳເລັດແລ້ວ";
 
@@ -1432,6 +1435,9 @@
 
 /* Toggled ON to participate in studies */
 "Settings.Studies.Toggle.On" = "ເປີດ";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Toggle.Title" = "ການສຶກສາ";
 
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "ໂອເຄ, ເຂົ້າໃຈແລ້ວ";
@@ -1596,6 +1602,9 @@
 /* Message displayed when the user syncs for the first time */
 "Sync.FirstTimeMessage.Label" = "ການ sync ຄັ້ງທຳອິດຂອງທ່ານອາດຈະໃຊ້ເວລາດົນຫນ້ອຍຫນຶ່ງ";
 
+/* String displayed on Sign In to Sync page that allows the user to create a new account. */
+"Sync.NoAccount.Description" = "ຫຍັງບໍ່ທັນມີບັນຊີບໍ? ສ້າງຂື້ນມາໃຫມ່ເພື່ອ sync ຂໍ້ມູນ Firefox ລະຫວ່າງອຸປະກອນຕ່າງໆ.";
+
 /* Message displayed when the user's account is syncing with no ellipsis */
 "Sync.Syncing.Label" = "ກຳລັງ sync";
 
@@ -1662,13 +1671,17 @@
 /* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.CloseTab.KeyCodeTitle" = "ປິດແທັບທີ່ເລືອກໄວ້";
 
+/* Accessibility label for the currently selected tab. */
+"TabTray.CurrentSelectedTab.A11Y" = "ແທັບທີ່ຖືກເລືອກໃນປະຈຸບັນ.";
+
 /* The section header for tabs opened last week */
 "TabTray.LastWeek.Header" = "ອາ​ທິດ​ແລ້ວ";
 
 /* The title on the button to copy the tab address. */
+"TabTray.MoreMenu.Copy" = "ສຳເນົາ";
+
 /* The section header for tabs opened before last week */
 "TabTray.Older.Header" = "ເກົ່າກວ່າ";
-"TabTray.MoreMenu.Copy" = "ສຳເນົາ";
 
 /* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "ເປີດແທັບໃຫມ່";

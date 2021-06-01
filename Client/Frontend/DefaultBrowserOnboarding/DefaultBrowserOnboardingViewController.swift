@@ -6,7 +6,6 @@ import Foundation
 import UIKit
 import SnapKit
 import Shared
-import Leanplum
 
 /*
     
@@ -43,7 +42,8 @@ struct DBOnboardingUX {
     static let containerViewHeightXSmall = 250
 }
 
-class DefaultBrowserOnboardingViewController: UIViewController {
+class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissable {
+    var onViewDismissed: (() -> Void)? = nil
     // Public constants
     let viewModel = DefaultBrowserOnboardingViewModel()
     let theme = ThemeManager.instance
@@ -170,6 +170,12 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         // Portrait orientation: lock disable
         AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.all)
     }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        onViewDismissed?()
+        onViewDismissed = nil
+    }
     
     func initialViewSetup() {
         updateTheme()
@@ -288,14 +294,12 @@ class DefaultBrowserOnboardingViewController: UIViewController {
     @objc private func dismissAnimated() {
         self.dismiss(animated: true, completion: nil)
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .dismissDefaultBrowserOnboarding)
-        LeanPlumClient.shared.track(event: .dismissDefaultBrowserOnboarding)
     }
     
     @objc private func goToSettings() {
         viewModel.goToSettings?()
         UserDefaults.standard.set(true, forKey: "DidDismissDefaultBrowserCard") // Don't show default browser card if this button is clicked
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .goToSettingsDefaultBrowserOnboarding)
-        LeanPlumClient.shared.track(event: .goToSettingsDefaultBrowserOnboarding)
     }
   
     // Theme

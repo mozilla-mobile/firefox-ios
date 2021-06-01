@@ -108,7 +108,6 @@ class BrowserViewController: UIViewController {
     fileprivate var keyboardState: KeyboardState?
     var hasTriedToPresentETPAlready = false
     var hasTriedToPresentDBCardAlready = false
-    var hasPresentedDBCard = false
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
 
@@ -333,6 +332,9 @@ class BrowserViewController: UIViewController {
             self.updateDisplayedPopoverProperties = nil
             self.displayedPopoverController = nil
         }
+        if let _ = self.presentedViewController as? PhotonActionSheet {
+            self.presentedViewController?.dismiss(animated: true, completion: nil)
+        }
     }
 
     @objc func tappedTopArea() {
@@ -476,11 +478,9 @@ class BrowserViewController: UIViewController {
         
         // Setup New Tab user research for A/B testing
         newTabUserResearch = NewTabUserResearch()
-        newTabUserResearch?.lpVariableObserver()
         urlBar.newTabUserResearch = newTabUserResearch
         // Setup chron tabs A/B test
         chronTabsUserResearch = ChronTabsUserResearch()
-        chronTabsUserResearch?.lpVariableObserver()
         searchTelemetry = SearchTelemetry()
     }
 
@@ -813,16 +813,16 @@ class BrowserViewController: UIViewController {
             if isAboutHomeURL {
                 showFirefoxHome(inline: true)
 
-                if !hasPresentedDBCard && !shouldShowIntroScreen && focusUrlBar {
-                    if chronTabTrayController == nil && tabTrayViewController == nil {
-                        urlBar.enterOverlayMode(nil, pasted: false, search: false)
-                    } else {
-                        tabTrayViewController?.onViewDismissed = { [weak self] in
+                if focusUrlBar {
+                    if let viewcontroller = presentedViewController as? OnViewDismissable {
+                        viewcontroller.onViewDismissed = { [weak self] in
                             let shouldEnterOverlay = self?.tabManager.selectedTab?.url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
                             if shouldEnterOverlay {
                                 self?.urlBar.enterOverlayMode(nil, pasted: false, search: false)
                             }
                         }
+                    } else {
+                        self.urlBar.enterOverlayMode(nil, pasted: false, search: false)
                     }
                 }
 
@@ -853,8 +853,9 @@ class BrowserViewController: UIViewController {
             libraryViewController.selectedPanel = panel
         }
 
-        libraryViewController.modalPresentationStyle = .formSheet
-        self.present(libraryViewController, animated: true, completion: nil)
+        let controller: DismissableNavigationViewController
+        controller = DismissableNavigationViewController(rootViewController: libraryViewController)
+        self.present(controller, animated: true, completion: nil)
     }
 
     fileprivate func createSearchControllerIfNeeded() {
@@ -1181,7 +1182,6 @@ class BrowserViewController: UIViewController {
         }
 
         present(controller, animated: true, completion: nil)
-        LeanPlumClient.shared.track(event: .userSharedWebpage)
     }
 
     @objc fileprivate func openSettings() {
@@ -1849,7 +1849,7 @@ extension BrowserViewController {
                 UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
             }
         }
-        hasPresentedDBCard = true
+
         present(dBOnboardingViewController, animated: true, completion: nil)
     }
     
@@ -1952,7 +1952,6 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 
             let addTab = { (rURL: URL, isPrivate: Bool) in
                     let tab = self.tabManager.addTab(URLRequest(url: rURL as URL), afterTab: currentTab, isPrivate: isPrivate)
-                    LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "Long Press Context Menu"])
                     guard !self.topTabsVisible else {
                         return
                     }
@@ -2118,11 +2117,8 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 }
 
 extension BrowserViewController {
-    @objc func image(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) {
-        if error == nil {
-            LeanPlumClient.shared.track(event: .saveImage)
-        }
-    }
+    // no-op
+    @objc func image(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) { }
 }
 
 extension BrowserViewController: KeyboardHelperDelegate {
