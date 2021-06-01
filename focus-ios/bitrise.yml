@@ -350,7 +350,7 @@ workflows:
     - xcode-test@2:
         inputs:
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
-            CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2
+            CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan SmokeTest
         - scheme: Focus
     - cache-push@2:
         inputs:
@@ -390,7 +390,7 @@ workflows:
     - xcode-test@2:
         inputs:
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
-            CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2
+            CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan SmokeTest
         - scheme: Klar
     - cache-push@2:
         inputs:

@@ -5,6 +5,8 @@
 import XCTest
 
 class SettingAppearanceTest: BaseTestCase {
+
+    // Smoketest
     // Check for the basic appearance of the Settings Menu
     func testCheckSetting() {
         waitforHittable(element: app.buttons["Settings"])
@@ -96,6 +98,7 @@ class SettingAppearanceTest: BaseTestCase {
         app.activate()
     }
 
+    // Smoketest
     func testOpenInSafari() {
         let safariapp = XCUIApplication(privateWithPath: nil, bundleID: "com.apple.mobilesafari")!
         loadWebPage("https://www.google.com", waitForLoadToFinish: true)

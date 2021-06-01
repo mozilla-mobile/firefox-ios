@@ -129,6 +129,7 @@
 		D3E54FD51DEFB25B003E1AFF /* SearchPlugins in Resources */ = {isa = PBXBuildFile; fileRef = D3E54FD41DEFB25B003E1AFF /* SearchPlugins */; };
 		D3E54FDE1DF0E0D7003E1AFF /* UIImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E54FDD1DF0E0D6003E1AFF /* UIImageExtensions.swift */; };
 		D3E54FE01DF0E221003E1AFF /* SearchSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E54FDF1DF0E221003E1AFF /* SearchSettingsViewController.swift */; };
+		D47940DA2664E4F700C286BB /* PastenGoTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4868651F2250A3008C3C09 /* PastenGoTest.swift */; };
 		D50939A91FBF807A005D4316 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D50939A81FBF807A005D4316 /* Settings.bundle */; };
 		D597608C1F9FEFB300A2D212 /* TrackingProtection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D597608B1F9FEFB300A2D212 /* TrackingProtection.swift */; };
 		D5ABA3D91FCC846800D5C060 /* AddCustomDomainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5ABA3D71FCC846800D5C060 /* AddCustomDomainViewController.swift */; };
@@ -613,6 +614,7 @@
 		D3E54FD41DEFB25B003E1AFF /* SearchPlugins */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SearchPlugins; path = Search/SearchPlugins; sourceTree = SOURCE_ROOT; };
 		D3E54FDD1DF0E0D6003E1AFF /* UIImageExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageExtensions.swift; sourceTree = "<group>"; };
 		D3E54FDF1DF0E221003E1AFF /* SearchSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchSettingsViewController.swift; sourceTree = "<group>"; };
+		D47940D92664E15D00C286BB /* SmokeTest.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = SmokeTest.xctestplan; sourceTree = "<group>"; };
 		D50939A81FBF807A005D4316 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		D597608B1F9FEFB300A2D212 /* TrackingProtection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtection.swift; sourceTree = "<group>"; };
 		D5ABA3D71FCC846800D5C060 /* AddCustomDomainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddCustomDomainViewController.swift; sourceTree = "<group>"; };
@@ -1173,6 +1175,7 @@
 		E4BF2DCA1BACE8CA00DA9D68 = {
 			isa = PBXGroup;
 			children = (
+				D47940D92664E15D00C286BB /* SmokeTest.xctestplan */,
 				C817A35222CE73B4002529FF /* Deferred */,
 				D3E3CA801DA83FAF0079C94B /* Focus.entitlements */,
 				D3E3CA811DA83FAF0079C94B /* FocusEnterprise.entitlements */,
@@ -1773,6 +1776,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D47940DA2664E4F700C286BB /* PastenGoTest.swift in Sources */,
 				1DE903CE20C751D7002E53ED /* FindInPageTest.swift in Sources */,
 				0BBBED431DD3B78300F9C565 /* SettingAppearanceTest.swift in Sources */,
 				1D199EF220D813D300CDF976 /* DragAndDropTest.swift in Sources */,

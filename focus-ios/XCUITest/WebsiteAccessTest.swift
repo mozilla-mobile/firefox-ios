@@ -5,6 +5,7 @@
 import XCTest
 
 class WebsiteAccessTests: BaseTestCase {
+    // Smoketest
     func testVisitWebsite() {
         // Check initial page
         checkForHomeScreen()

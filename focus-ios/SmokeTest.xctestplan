@@ -1,0 +1,53 @@
+{
+  "configurations" : [
+    {
+      "id" : "5FECB575-C027-4993-A9D8-785E2A06CCB8",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "skippedTests" : [
+        "AsianLocaleTest",
+        "CollapsedURLTest",
+        "CopyTest",
+        "DragAndDropTest",
+        "FindInPageTest",
+        "OpenInFocusTest",
+        "PastenGoTest\/testClipboard()",
+        "QuickAddAutocompleteURLTest",
+        "RequestDesktopTest",
+        "SearchProviderTest",
+        "SearchSuggestionsPromptTest",
+        "SettingAppearanceTest\/testAddRemoveCustomDomain()",
+        "SettingAppearanceTest\/testDisableAutocomplete()",
+        "SettingAppearanceTest\/testOpenInSafari()",
+        "TrackingProtectionMenu\/testInactiveProtectionSidebar()",
+        "TrackingProtectionSettings",
+        "UserAgentTest",
+        "WebsiteAccessTests\/testAutocompleteCustomDomain()",
+        "WebsiteAccessTests\/testDisableAutocomplete()",
+        "WebsiteMemoryTest\/testGoogleTextField()"
+      ],
+      "target" : {
+        "containerPath" : "container:Blockzilla.xcodeproj",
+        "identifier" : "0BA39A821DD2B8E4005F970A",
+        "name" : "XCUITest"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Blockzilla.xcodeproj",
+        "identifier" : "D8E0155B1FCF409F00CA3B9F",
+        "name" : "ClientTests"
+      }
+    }
+  ],
+  "version" : 1
+}

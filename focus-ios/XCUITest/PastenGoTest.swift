@@ -50,18 +50,16 @@ class PastenGoTest: BaseTestCase {
         XCTAssertTrue(app.buttons[UIPasteboard.general.string!].isEnabled)
     }
 
-    //Test Paste & Go feature
+    // Smoketest
+    // Test Paste & Go feature
     func testPastenGo() {
-        let app = XCUIApplication()
-
         // Inject a string into clipboard
         var clipboard = "https://www.mozilla.org/en-US/"
         UIPasteboard.general.string = clipboard
 
         // Tap url bar to show context menu
         let searchOrEnterAddressTextField = app.textFields["URLBar.urlText"]
-        waitforExistence(element: app.buttons[clipboard])
-        searchOrEnterAddressTextField.press(forDuration: 1.5)
+        searchOrEnterAddressTextField.tap()
         waitforExistence(element: app.menuItems["Paste"])
         XCTAssertTrue(app.menuItems["Paste & Go"].isEnabled)
 
@@ -69,12 +67,14 @@ class PastenGoTest: BaseTestCase {
         app.menuItems["Paste & Go"].tap()
 
         // Check the correct site is reached
-        waitForValueContains(element: searchOrEnterAddressTextField, value: "https://www.mozilla.org/en-US/")
-        app.buttons["ERASE"].tap()
+        waitForValueContains(element: searchOrEnterAddressTextField, value: "www.mozilla.org")
+        app.buttons["URLBar.deleteButton"].tap()
         waitforExistence(element: app.staticTexts["Your browsing history has been erased."])
 
         clipboard = "1(*&)(*%@@$^%^12345)"
         UIPasteboard.general.string = clipboard
+        searchOrEnterAddressTextField.tap()
+        app.menuItems["Paste"].tap()
         waitforExistence(element: app.buttons["Search for " + clipboard])
     }
 }

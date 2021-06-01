@@ -30,6 +30,7 @@ class OnboardingTest: XCTestCase {
         }
     }
 
+    // Smoketest
     func testPressingDots() {
         let stackElement = app.otherElements["Intro.stackView"]
         let pageIndicatorButton1 = stackElement.children(matching: .button).matching(identifier: "page indicator").element(boundBy: 0)
