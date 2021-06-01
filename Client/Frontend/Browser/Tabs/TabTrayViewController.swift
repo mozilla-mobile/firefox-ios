@@ -37,6 +37,12 @@ class TabTrayViewController: UIViewController {
         return button
     }()
 
+    lazy var doneButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(didTapDone))
+        button.accessibilityIdentifier = "doneButtonTabTray"
+        return button
+    }()
+
     lazy var syncTabButton: UIBarButtonItem = {
         let button = UIBarButtonItem(title: Strings.FxASyncNow,
                                      style: .plain,
@@ -64,6 +70,14 @@ class TabTrayViewController: UIViewController {
         return UIBarButtonItem(barButtonSystemItem: .flexibleSpace,
                                target: nil,
                                action: nil)
+    }()
+
+    lazy var fixedSpace: UIBarButtonItem = {
+        let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace,
+                               target: nil,
+                               action: nil)
+        fixedSpace.width = 32
+        return fixedSpace
     }()
 
     lazy var countLabel: UILabel = {
@@ -186,7 +200,7 @@ class TabTrayViewController: UIViewController {
     fileprivate func iPadViewSetup() {
         navigationItem.leftBarButtonItem = deleteButton
         navigationItem.titleView = navigationMenu
-        navigationItem.rightBarButtonItem = newTabButton
+        navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButton]
 
         navigationItem.titleView?.snp.makeConstraints { make in
             make.width.equalTo(343)
@@ -274,10 +288,10 @@ class TabTrayViewController: UIViewController {
     fileprivate func updateToolbarItems(forSyncTabs showSyncItems: Bool = false) {
         if UIDevice.current.userInterfaceIdiom == .pad {
             if navigationMenu.selectedSegmentIndex == 2 {
-                navigationItem.rightBarButtonItem = (showSyncItems ? syncTabButton : nil)
+                navigationItem.rightBarButtonItems = (showSyncItems ? [doneButton, fixedSpace, syncTabButton] : [doneButton])
                 navigationItem.leftBarButtonItem = nil
             } else {
-                navigationItem.rightBarButtonItem = newTabButton
+                navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButton]
                 navigationItem.leftBarButtonItem = deleteButton
             }
         } else {
@@ -384,6 +398,10 @@ extension TabTrayViewController {
 
     @objc func didTapSyncTabs(_ sender: UIBarButtonItem) {
         viewModel.didTapSyncTabs(sender)
+    }
+
+    @objc func didTapDone() {
+        self.dismiss(animated: true, completion: nil)
     }
 }
 
