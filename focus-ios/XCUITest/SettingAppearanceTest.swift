@@ -6,6 +6,8 @@ import XCTest
 
 class SettingAppearanceTest: BaseTestCase {
 
+    let iOS_Settings = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
+
     // Smoketest
     // Check for the basic appearance of the Settings Menu
     func testCheckSetting() {
@@ -186,5 +188,29 @@ class SettingAppearanceTest: BaseTestCase {
 
         // Validate that the domain is gone
         XCTAssertFalse(app.tables.cells["mozilla.org"].exists)
+    }
+
+    // Smoktest
+    func testSafariIntegration() {
+        waitforExistence(element: app.buttons["Settings"])
+        app.buttons["Settings"].tap()
+
+        // Check that Safari toggle is off, swipe to get to Safarin Integration menu
+        waitforExistence(element: app.otherElements["SIRI SHORTCUTS"])
+        app.otherElements["SIRI SHORTCUTS"].swipeUp()
+        XCTAssertEqual(app.switches["BlockerToggle.Safari"].value! as! String, "0")
+
+        iOS_Settings.activate()
+        waitforExistence(element: iOS_Settings.cells["Safari"])
+        iOS_Settings.cells["Safari"].tap()
+        iOS_Settings.cells["AutoFill"].swipeUp()
+        iOS_Settings.cells.staticTexts["CONTENT_BLOCKERS"].tap()
+        XCTAssertEqual(iOS_Settings.tables.cells.element(boundBy: 0).switches.element(boundBy: 0).value! as! String, "0")
+        iOS_Settings.tables.cells.switches.element(boundBy: 0).tap()
+
+        // Go back to the app to verify that the toggle has changed its value
+        app.activate()
+        waitforExistence(element: app.otherElements["SAFARI INTEGRATION"])
+        XCTAssertEqual(app.switches["BlockerToggle.Safari"].value! as! String, "1")
     }
 }
