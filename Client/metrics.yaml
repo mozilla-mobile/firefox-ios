@@ -375,7 +375,7 @@ library:
       - https://github.com/mozilla-mobile/firefox-ios/pull/8152
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2021-06-16"
+    expires: "2021-12-01"
 
 # Legacy IDs for deletion-request purposes
 legacy.ids:
@@ -863,7 +863,7 @@ sync:
       - https://github.com/mozilla-mobile/firefox-ios/pull/8152
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2021-06-16"
+    expires: "2021-12-01"
   open_sync_home_shortcut:
     type: counter
     description: |
@@ -875,7 +875,7 @@ sync:
       - https://github.com/mozilla-mobile/firefox-ios/pull/8152
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2021-06-16"
+    expires: "2021-12-01"
   sign_in_sync_pressed:
     type: counter
     description: |
@@ -888,7 +888,7 @@ sync:
       - https://github.com/mozilla-mobile/firefox-ios/pull/8152
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2021-06-16"
+    expires: "2021-12-01"
   create_account_pressed:
     type: counter
     description: |
@@ -900,7 +900,7 @@ sync:
       - https://github.com/mozilla-mobile/firefox-ios/pull/8152
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2021-06-16"
+    expires: "2021-12-01"
 
 # Tab metrics
 tabs:
