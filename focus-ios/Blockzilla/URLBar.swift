@@ -471,8 +471,8 @@ class URLBar: UIView {
 
     @objc func paste(clipboardString: String) {
         isEditing = true
-        urlText.text = clipboardString
         activateTextField()
+        urlText.text = clipboardString
     }
 
     @objc func pasteAndGo(clipboardString: String) {
