@@ -63,13 +63,14 @@ class ASHeaderView: UICollectionReusableView {
         addSubview(moreButton)
         moreButton.snp.makeConstraints { make in
             make.bottom.equalToSuperview()
-            make.trailing.equalTo(self.safeArea.trailing).inset(-titleInsets)
+            make.trailing.equalTo(self.safeArea.trailing).inset(titleInsets)
         }
         moreButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         titleLabel.snp.makeConstraints { make in
             make.leading.equalTo(self.safeArea.leading).inset(titleInsets)
             make.trailing.equalTo(moreButton.snp.leading).inset(-FirefoxHomeHeaderViewUX.TitleTopInset)
-            make.lastBaseline.equalTo(moreButton.snp.lastBaseline)
+            
+            make.bottom.equalToSuperview().offset(-10)
         }
     }
 

@@ -262,16 +262,13 @@ extension FirefoxHomeViewController {
         var title: String? {
             switch self {
             case .pocket: return Strings.ASPocketTitle2
-            case .topSites: return nil
+            case .topSites: return Strings.ASShortcutsTitle
             case .libraryShortcuts: return Strings.AppMenuLibraryTitleString
             }
         }
 
         var headerHeight: CGSize {
-            switch self {
-            case .pocket, .libraryShortcuts: return CGSize(width: 50, height: 56)
-            case .topSites: return .zero
-            }
+            return CGSize(width: 50, height: 56)
         }
 
         func cellHeight(_ traits: UITraitCollection, width: CGFloat) -> CGFloat {
@@ -377,6 +374,9 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                 view.titleLabel.accessibilityIdentifier = "pocketTitle"
                 return view
             case .topSites:
+                view.title = title
+                view.titleLabel.accessibilityIdentifier = "topSitesTitle"
+                view.moreButton.isHidden = true
                 return view
             case .libraryShortcuts:
                 view.title = title
@@ -416,7 +416,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
         case .pocket:
             return pocketStories.isEmpty ? .zero : Section(section).headerHeight
         case .topSites:
-            return .zero
+            return Section(section).headerHeight
         case .libraryShortcuts:
             return UIDevice.current.userInterfaceIdiom == .pad ? CGSize.zero : Section(section).headerHeight
         }
@@ -432,8 +432,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         let insets = Section(section).sectionInsets(self.traitCollection, frameWidth: self.view.frame.width)
-        let topInset: CGFloat = Section(section) == .topSites ? 24 : FirefoxHomeUX.MinimumInsets
-        return UIEdgeInsets(top: topInset, left: insets, bottom: 0, right: insets)
+        return UIEdgeInsets(top: 0, left: insets, bottom: 0, right: insets)
     }
 
     fileprivate func showSiteWithURLHandler(_ url: URL, isGoogleTopSite: Bool = false) {
