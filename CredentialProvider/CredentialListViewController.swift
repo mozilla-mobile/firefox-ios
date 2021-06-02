@@ -9,17 +9,23 @@
 import UIKit
 import AuthenticationServices
 
-class CredentialListViewController: UIViewController {
+protocol CredentialListViewProtocol: AnyObject {
+    var credentialExtensionContext: ASCredentialProviderExtensionContext? { get }
+    var searchIsActive: Bool { get }
+}
+
+class CredentialListViewController: UIViewController, CredentialListViewProtocol {
     
     @IBOutlet weak var tableView: UITableView!
     
     var dataSource = [(ASPasswordCredentialIdentity, ASPasswordCredential)]() {
         didSet {
+            presenter?.loginsData = dataSource
             tableView?.reloadData()
         }
     }
     
-    private var filteredCredentials = [(ASPasswordCredentialIdentity, ASPasswordCredential)]()
+    private var presenter: CredentialListPresenter?
     private var searchController: UISearchController?
     
     private var cancelButton: UIButton {
@@ -40,15 +46,24 @@ class CredentialListViewController: UIViewController {
         return button
     }
     
-    private var searchIsActive: Bool {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return UIStatusBarStyle.lightContent
+    }
+    
+    var searchIsActive: Bool {
         guard let searchCtr = searchController, searchCtr.isActive && searchCtr.searchBar.text != ""  else {
             return false
         }
         return true
     }
     
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return UIStatusBarStyle.lightContent
+    var credentialExtensionContext: ASCredentialProviderExtensionContext? {
+        return (navigationController?.parent as? CredentialProviderViewController)?.extensionContext
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        self.presenter = CredentialListPresenter(view: self)
     }
     
     override func viewDidLoad() {
@@ -57,6 +72,11 @@ class CredentialListViewController: UIViewController {
         setNeedsStatusBarAppearanceUpdate()
         setupTableView()
         styleNavigationBar()
+    }
+    
+    
+    func reloadData() {
+        tableView.reloadData()
     }
     
     private func shouldHideNavigationBarDuringPresentation() -> Bool {
@@ -121,97 +141,59 @@ class CredentialListViewController: UIViewController {
         return searchController
     }
     
-    private func filterCredentials(for searchText: String) {
-        filteredCredentials = dataSource.filter { item in
-            item.0.serviceIdentifier.identifier.lowercased().contains(searchText.lowercased())
-        }
-        tableView.reloadData()
-    }
     
     @objc func cancelAction() {
-        (navigationController?.parent as? CredentialProviderViewController)?.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code: ASExtensionError.userCanceled.rawValue))
+        presenter?.cancelRequest()
     }
 }
 
 extension CredentialListViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        if dataSource.isEmpty || (searchIsActive && filteredCredentials.isEmpty)  {
-            return 1
-        } else {
-            return 2
-        }
+        guard let presenter = presenter else { return 1 }
+        return presenter.numberOfSections()
+        
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if dataSource.isEmpty || (searchIsActive && filteredCredentials.isEmpty) {
-            return 1
-        } else {
-            switch section {
-            case 0:
-                return 1
-            case 1:
-                if searchIsActive {
-                    return filteredCredentials.count
-                } else {
-                    return dataSource.count
-                }
-            default:
-                return 1
-            }
-        }
+        guard let presenter = presenter else { return 1 }
+        return presenter.numberOfRows(for: section)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if dataSource.isEmpty {
+        
+        switch presenter?.getItemsType(in: indexPath.section, for: indexPath.row) {
+        case .emptyCredentialList:
             let cell = tableView.dequeueReusableCell(withIdentifier: "emptylistplaceholder", for: indexPath) as? EmptyPlaceholderCell
             return cell ?? UITableViewCell()
-        } else if searchIsActive && filteredCredentials.isEmpty {
+        case .emptySearchResult:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "noresultsplaceholder") else {
                 return UITableViewCell()
             }
             return cell
-        } else {
-            switch indexPath.section {
-            case 0:
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: "selectapasswordhelptext") else {
-                    return UITableViewCell()
-                }
-                
-                let borderView = UIView()
-                borderView.frame = CGRect(x: 0, y: cell.frame.height-1, width: cell.frame.width, height: 1)
-                borderView.backgroundColor = UIColor.helpTextBorderColor
-                cell.addSubview(borderView)
-                return cell
-            case 1:
-                let cell = tableView.dequeueReusableCell(withIdentifier: "itemlistcell", for: indexPath) as? ItemListCell
-                var credential: ASPasswordCredentialIdentity
-                if let searchCtr = searchController, searchCtr.isActive && searchCtr.searchBar.text != "" {
-                    credential = filteredCredentials[indexPath.row].0
-                } else {
-                    credential = dataSource[indexPath.row].0
-                }
-                cell?.titleLabel.text = credential.serviceIdentifier.identifier
-                cell?.detailLabel.text = credential.user
-                return cell ?? UITableViewCell()
-            default:
+        case .selectPassword:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "selectapasswordhelptext") else {
                 return UITableViewCell()
             }
+            
+            let borderView = UIView()
+            borderView.frame = CGRect(x: 0, y: cell.frame.height-1, width: cell.frame.width, height: 1)
+            borderView.backgroundColor = UIColor.helpTextBorderColor
+            cell.addSubview(borderView)
+            return cell
+        case .displayItem(let credentialIdentity):
+            let cell = tableView.dequeueReusableCell(withIdentifier: "itemlistcell", for: indexPath) as? ItemListCell
+            cell?.titleLabel.text = credentialIdentity.serviceIdentifier.identifier
+            cell?.detailLabel.text = credentialIdentity.user
+            return cell ?? UITableViewCell()
+        case .none:
+            return UITableViewCell()
         }
     }
 }
 
 extension CredentialListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        switch indexPath.section {
-        case 1:
-            var passwordCredential: ASPasswordCredential
-            if searchIsActive {
-                passwordCredential = filteredCredentials[indexPath.row].1
-            } else {
-                passwordCredential = dataSource[indexPath.row].1
-            }
-            (navigationController?.parent as? CredentialProviderViewController)?.extensionContext.completeRequest(withSelectedCredential: passwordCredential, completionHandler: nil)
-        default:
-            break
+        if indexPath.section == 1 {
+            presenter?.selectItem(for: indexPath.row)
         }
     }
 }
@@ -227,7 +209,6 @@ extension CredentialListViewController: UISearchControllerDelegate {
     
     func willDismissSearchController(_ searchController: UISearchController) {
         if let searchField = searchController.searchBar.value(forKey: "searchField") as? UITextField {
-            
             if let backgroundview = searchField.subviews.first {
                 backgroundview.backgroundColor = UIColor.inactiveNavSearchBackgroundColor
             }
@@ -237,6 +218,7 @@ extension CredentialListViewController: UISearchControllerDelegate {
 
 extension CredentialListViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-        filterCredentials(for: searchController.searchBar.text ?? "")
+        presenter?.filterCredentials(for: searchController.searchBar.text ?? "")
+        tableView.reloadData()
     }
 }
