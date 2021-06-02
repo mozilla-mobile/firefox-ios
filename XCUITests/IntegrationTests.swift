@@ -14,6 +14,7 @@ private let tabOpenInDesktop = "http://example.com/"
 class IntegrationTests: BaseTestCase {
 
     let testWithDB = ["testFxASyncHistory", "testFxASyncBookmark"]
+    let testChinaServer = ["testFxASyncHistoryChina"]
 
     // This DB contains 1 entry example.com
     let historyDB = "exampleURLHistoryBookmark.db"
@@ -25,6 +26,8 @@ class IntegrationTests: BaseTestCase {
      if testWithDB.contains(key) {
      // for the current test name, add the db fixture used
      launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.StageServer, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + historyDB]
+     } else if testChinaServer.contains(key) {
+        launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.ChinaServer, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet]
      }
      super.setUp()
      }
@@ -59,6 +62,17 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncHistory () {
+        // History is generated using the DB so go directly to Sign in
+        // Sign into Firefox Accounts
+        app.buttons["urlBar-cancel"].tap()
+        navigator.goto(BrowserTabMenu)
+        signInFxAccounts()
+
+        // Wait for initial sync to complete
+        waitForInitialSyncComplete()
+    }
+
+    func testFxASyncHistoryChina () {
         // History is generated using the DB so go directly to Sign in
         // Sign into Firefox Accounts
         app.buttons["urlBar-cancel"].tap()
