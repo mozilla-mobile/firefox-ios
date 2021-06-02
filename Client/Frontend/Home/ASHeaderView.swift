@@ -21,8 +21,6 @@ class ASHeaderView: UICollectionReusableView {
         titleLabel.minimumScaleFactor = 0.6
         titleLabel.numberOfLines = 1
         titleLabel.adjustsFontSizeToFitWidth = true
-        let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
-        titleLabel.textColor = theme == .dark ? .white : .black
         return titleLabel
     }()
 
@@ -41,9 +39,6 @@ class ASHeaderView: UICollectionReusableView {
             titleLabel.text = newTitle
         }
     }
-
-    var leftConstraint: Constraint?
-    var rightConstraint: Constraint?
 
     var titleInsets: CGFloat {
         get {
@@ -68,21 +63,14 @@ class ASHeaderView: UICollectionReusableView {
         addSubview(moreButton)
         moreButton.snp.makeConstraints { make in
             make.bottom.equalToSuperview()
-            self.rightConstraint = make.trailing.equalTo(self.safeArea.trailing).inset(-titleInsets).constraint
+            make.trailing.equalTo(self.safeArea.trailing).inset(-titleInsets)
         }
         moreButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         titleLabel.snp.makeConstraints { make in
-            self.leftConstraint = make.leading.equalTo(self.safeArea.leading).inset(titleInsets).constraint
+            make.leading.equalTo(self.safeArea.leading).inset(titleInsets)
             make.trailing.equalTo(moreButton.snp.leading).inset(-FirefoxHomeHeaderViewUX.TitleTopInset)
             make.lastBaseline.equalTo(moreButton.snp.lastBaseline)
         }
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        leftConstraint?.update(offset: titleInsets)
-        rightConstraint?.update(offset: -titleInsets)
-        titleLabel.textColor = UIColor.theme.homePanel.topSiteHeaderTitle
     }
 
     required init?(coder aDecoder: NSCoder) {
