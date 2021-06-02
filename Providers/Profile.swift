@@ -149,6 +149,82 @@ protocol Profile: AnyObject {
     func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success
 
     var syncManager: SyncManager! { get }
+    
+    @available(iOS 12, *)
+    func syncCredentialIdentities() -> Deferred<Result<Void, Error>>
+    @available(iOS 12, *)
+    func updateCredentialIdentities() -> Deferred<Result<Void, Error>>
+    @available(iOS 12, *)
+    func clearCredentialStore() -> Deferred<Result<Void, Error>>
+}
+
+
+@available(iOS 12, *)
+extension Profile {
+    
+    func syncCredentialIdentities() -> Deferred<Result<Void, Error>> {
+        let deferred = Deferred<Result<Void, Error>>()
+        self.clearCredentialStore().upon { clearResult in
+            self.updateCredentialIdentities().upon { updateResult in
+                switch (clearResult, updateResult) {
+                case (.success, .success):
+                    deferred.fill(.success(()))
+                case (.failure(let error), _):
+                    deferred.fill(.failure(error))
+                case (_, .failure(let error)):
+                    deferred.fill(.failure(error))
+                }
+            }
+        }
+        return deferred
+    }
+    
+    
+    @available(iOS 12, *)
+    func updateCredentialIdentities() -> Deferred<Result<Void, Error>> {
+        let deferred = Deferred<Result<Void, Error>>()
+        self.logins.list().upon { loginResult in
+            switch loginResult {
+            case let .failure(error):
+                deferred.fill(.failure(error))
+            case let .success(logins):
+                
+                self.populateCredentialStore(
+                        identities: logins.map(\.passwordCredentialIdentity)
+                ).upon(deferred.fill)
+            }
+        }
+        return deferred
+    }
+    
+    @available(iOS 12, *)
+    func populateCredentialStore(identities: [ASPasswordCredentialIdentity]) -> Deferred<Result<Void, Error>>  {
+        let deferred = Deferred<Result<Void, Error>>()
+        ASCredentialIdentityStore.shared.saveCredentialIdentities(identities) { (success, error) in
+            if success {
+                deferred.fill(.success(()))
+            } else if let err = error {
+                deferred.fill(.failure(err))
+            }
+        }
+        return deferred
+        
+    }
+    
+    @available(iOS 12, *)
+    func clearCredentialStore() -> Deferred<Result<Void, Error>> {
+        let deferred = Deferred<Result<Void, Error>>()
+        
+        ASCredentialIdentityStore.shared.removeAllCredentialIdentities { (success, error) in
+            if success {
+                deferred.fill(.success(()))
+            } else if let err = error {
+                deferred.fill(.failure(err))
+            }
+        }
+        
+        return deferred
+    }
 }
 
 fileprivate let PrefKeyClientID = "PrefKeyClientID"
@@ -997,52 +1073,6 @@ open class BrowserProfile: Profile {
             }
             return d
         }
-
-        @available(iOS 12, *)
-        fileprivate func updateCredentialIdentities() -> Deferred<Result<Void, Error>> {
-            let deferred = Deferred<Result<Void, Error>>()
-            self.profile.logins.list().upon { loginResult in
-                switch loginResult {
-                case let .failure(error):
-                    deferred.fill(.failure(error))
-                case let .success(logins):
-                    
-                    self.populateCredentialStore(
-                            identities: logins.map(\.passwordCredentialIdentity)
-                    ).upon(deferred.fill)
-                }
-            }
-            return deferred
-        }
-        
-        @available(iOS 12, *)
-        private func populateCredentialStore(identities: [ASPasswordCredentialIdentity]) -> Deferred<Result<Void, Error>>  {
-            let deferred = Deferred<Result<Void, Error>>()
-            ASCredentialIdentityStore.shared.saveCredentialIdentities(identities) { (success, error) in
-                if success {
-                    deferred.fill(.success(()))
-                } else if let err = error {
-                    deferred.fill(.failure(err))
-                }
-            }
-            return deferred
-            
-        }
-        
-        @available(iOS 12, *)
-        private func clearCredentialStore() -> Deferred<Result<Void, Error>> {
-            let deferred = Deferred<Result<Void, Error>>()
-            
-            ASCredentialIdentityStore.shared.removeAllCredentialIdentities { (success, error) in
-                if success {
-                    deferred.fill(.success(()))
-                } else if let err = error {
-                    deferred.fill(.failure(err))
-                }
-            }
-            
-            return deferred
-        }
         
         fileprivate func syncLoginsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
             log.debug("Syncing logins to storage.")
@@ -1058,11 +1088,9 @@ open class BrowserProfile: Profile {
 
                     let syncEngineStatsSession = SyncEngineStatsSession(collection: "logins")
                     if #available(iOS 12, *), let self = self {
-                        self.clearCredentialStore()
-                            .both(self.updateCredentialIdentities())
-                            .upon { clearResult, updateResult in
-                                print(clearResult, updateResult)
-                            }
+                        self.profile.syncCredentialIdentities().upon { result in
+                            print(result)
+                        }
                     }
                     return deferMaybe(SyncStatus.completed(syncEngineStatsSession))
                 })
