@@ -403,6 +403,7 @@ extension TelemetryWrapper {
         case pinToTopSites = "pin-to-top-sites"
         case removePinnedSite = "remove-pinned-site"
         case firefoxHomepage = "firefox-homepage"
+        case recentlySavedItemImpressions = "recently-saved-item-impressions"
     }
 
     public enum EventValue: String {
@@ -436,6 +437,9 @@ extension TelemetryWrapper {
         case downloadsPanel = "downloads-panel"
         case syncPanel = "sync-panel"
         case yourLibrarySection = "your-library-section"
+        case recentlySavedSectionShowAll = "recently-saved-section-show-all"
+        case recentlySavedBookmarkCell = "recently-saved-bookmark-cell"
+        case recentlySavedBookmarkItemView = "recently-saved-bookmark-cell-view"
         case addBookmarkToast = "add-bookmark-toast"
         case openHomeFromAwesomebar = "open-home-from-awesomebar"
         case openHomeFromPhotonMenuButton = "open-home-from-photon-menu-button"
@@ -640,7 +644,15 @@ extension TelemetryWrapper {
             GleanMetrics.FirefoxHomePage.openFromAwesomebar.add()
         case (.action, .open, .firefoxHomepage, EventValue.openHomeFromPhotonMenuButton.rawValue, _):
             GleanMetrics.FirefoxHomePage.openFromMenuHomeButton.add()
-            
+        case (.action, .view, .firefoxHomepage, EventValue.recentlySavedBookmarkItemView.rawValue, let extras):
+            if let bookmarksCount = extras?[EventObject.recentlySavedItemImpressions.rawValue] as? String {
+                GleanMetrics.FirefoxHomePage.recentlySavedItemView.record(extra: [.bookmarkCount : bookmarksCount])
+            }
+        case (.action, .tap, .firefoxHomepage, EventValue.recentlySavedSectionShowAll.rawValue, _):
+            GleanMetrics.FirefoxHomePage.recentlySavedShowAll.add()
+        case (.action, .tap, .firefoxHomepage, EventValue.recentlySavedBookmarkCell.rawValue, _):
+            GleanMetrics.FirefoxHomePage.recentlySavedBookmarkItem.add()
+
         default:
             let msg = "Uninstrumented metric recorded: \(category), \(method), \(object), \(value), \(String(describing: extras))"
             Sentry.shared.send(message: msg, severity: .debug)

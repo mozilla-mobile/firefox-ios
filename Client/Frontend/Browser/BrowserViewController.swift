@@ -859,6 +859,12 @@ class BrowserViewController: UIViewController {
 
         let controller: DismissableNavigationViewController
         controller = DismissableNavigationViewController(rootViewController: libraryViewController)
+        controller.onViewWillDisappear = {
+            self.firefoxHomeViewController?.reloadAll()
+        }
+        controller.onViewDismissed = {
+            self.firefoxHomeViewController?.reloadAll()
+        }
         self.present(controller, animated: true, completion: nil)
     }
 
