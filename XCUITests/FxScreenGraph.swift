@@ -570,11 +570,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(LibraryPanel_Downloads) { screenState in
         screenState.dismissOnUse = true
         screenState.gesture(forAction: Action.CloseDownloadsPanel, transitionTo: HomePanelsScreen) { userState in
-            if isTablet {
-                app.buttons["TabToolbar.libraryButton"].tap()
-            } else {
-                app.buttons["Done"].tap()
-            }
+            app.buttons["Done"].tap()
         }
     }
 
