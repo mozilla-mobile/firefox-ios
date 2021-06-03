@@ -310,6 +310,29 @@ app:
       - fx-ios-data-stewards@mozilla.com
     expires: "2021-09-01"
 
+# Top Site
+top_site:
+  tile_pressed:
+    type: event
+    description: |
+      Records an event when user taps on top site tile.
+    extra_keys:
+      tile_type:
+        description: |
+          The type of tile pressed (Ex: Google,
+          suggested, user-added or history-based)
+      position:
+        description: |
+          Position number of top site tile that is pressed.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8501
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8501
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2021-12-02"
+
+
 # Experiments
 experiments:
   experiment_enrollment:

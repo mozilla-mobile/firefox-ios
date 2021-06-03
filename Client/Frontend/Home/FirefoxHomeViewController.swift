@@ -546,7 +546,7 @@ extension FirefoxHomeViewController: DataObserverDelegate {
             let maxItems = Int(numRows) * self.topSitesManager.numberOfHorizontalItems()
             
             var sites = Array(result.prefix(maxItems))
-            
+
             // Check if all result items are pinned site
             var pinnedSites = 0
             result.forEach {
@@ -569,9 +569,13 @@ extension FirefoxHomeViewController: DataObserverDelegate {
                 }
             }
             self.topSitesManager.content = sites
-            self.topSitesManager.urlPressedHandler = { [unowned self] url, indexPath in
+            self.topSitesManager.urlPressedHandler = { [unowned self] site, indexPath in
                 self.longPressRecognizer.isEnabled = false
+                guard let url = site.url.asURL else {
+                    return
+                }
                 let isGoogleTopSiteUrl = url.absoluteString == GoogleTopSiteConstants.usUrl || url.absoluteString == GoogleTopSiteConstants.rowUrl
+                topSiteTracking(site: site, position: indexPath.item)
                 self.showSiteWithURLHandler(url as URL, isGoogleTopSite: isGoogleTopSiteUrl)
             }
 
@@ -583,6 +587,16 @@ extension FirefoxHomeViewController: DataObserverDelegate {
             // Refresh the AS data in the background so we'll have fresh data next time we show.
             self.profile.panelDataObservers.activityStream.refreshIfNeeded(forceTopSites: false)
         }
+    }
+    
+    func topSiteTracking(site: Site, position: Int) {
+        let topSitePositionKey = TelemetryWrapper.EventExtraKey.topSitePosition.rawValue
+        let topSiteTileTypeKey = TelemetryWrapper.EventExtraKey.topSiteTileType.rawValue
+        let isPinnedAndGoogle = site is PinnedSite && site.guid == GoogleTopSiteConstants.googleGUID
+        let isPinnedOnly = site is PinnedSite
+        let isSuggestedSite = site is SuggestedSite
+        let type = isPinnedAndGoogle ? "google" : isPinnedOnly ? "user-added" : isSuggestedSite ? "suggested" : "history"
+        TelemetryWrapper.gleanRecordEvent(category: .action, method: .tap, object: .topSiteTile, value: nil, extras: [topSitePositionKey : "\(position)", topSiteTileTypeKey: type])
     }
 
     func getPocketSites() -> Success {
@@ -678,7 +692,7 @@ extension FirefoxHomeViewController: DataObserverDelegate {
         }
     }
 
-    fileprivate func fetchBookmarkStatus(for site: Site, with indexPath: IndexPath, forSection section: Section, completionHandler: @escaping () -> Void) {
+    fileprivate func fetchBookmarkStatus(for site: Site, completionHandler: @escaping () -> Void) {
         profile.places.isBookmarked(url: site.url).uponQueue(.main) { result in
             let isBookmarked = result.successValue ?? false
             site.setBookmarked(isBookmarked)
@@ -744,7 +758,7 @@ extension FirefoxHomeViewController {
 extension FirefoxHomeViewController: HomePanelContextMenu {
     func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?) {
 
-        fetchBookmarkStatus(for: site, with: indexPath, forSection: Section(indexPath.section)) {
+        fetchBookmarkStatus(for: site) {
             guard let contextMenu = completionHandler() else { return }
             self.present(contextMenu, animated: true, completion: nil)
         }
