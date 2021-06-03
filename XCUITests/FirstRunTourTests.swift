@@ -43,6 +43,9 @@ class FirstRunTourTests: BaseTestCase {
     func testShowTourFromSettings() {
         goToNextScreen()
         tapStartBrowsingButton()
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(ShowTourInSettings)
         waitForExistence(app.staticTexts["Welcome to Firefox"])
     }
