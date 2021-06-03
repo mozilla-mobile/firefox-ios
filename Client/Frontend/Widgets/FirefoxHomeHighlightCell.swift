@@ -15,38 +15,35 @@ private struct FirefoxHomeHighlightCellUX {
     static let StatusIconSize = 12
     static let FaviconSize = CGSize(width: 45, height: 45)
     static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
-    static let CornerRadius: CGFloat = 3
+    static let CornerRadius: CGFloat = 8
     static let BorderColor = UIColor.Photon.Grey30
 }
 
-class FirefoxHomeHighlightCell: UICollectionViewCell {
+class FirefoxHomeHighlightCell: UICollectionViewCell, Themeable {
 
     fileprivate lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.font = DynamicFontHelper.defaultHelper.MediumSizeHeavyWeightAS
-        titleLabel.textColor = UIColor.theme.homePanel.activityStreamCellTitle
+        titleLabel.font = UIFont.preferredFont(forTextStyle: .headline)
         titleLabel.textAlignment = .left
         titleLabel.numberOfLines = 3
         return titleLabel
     }()
 
-    fileprivate lazy var descriptionLabel: UILabel = {
-        let descriptionLabel = UILabel()
-        descriptionLabel.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
-        descriptionLabel.textColor = UIColor.theme.homePanel.activityStreamCellDescription
-        descriptionLabel.textAlignment = .left
-        descriptionLabel.numberOfLines = 1
-        return descriptionLabel
-    }()
-
     fileprivate lazy var domainLabel: UILabel = {
         let descriptionLabel = UILabel()
-        descriptionLabel.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
-        descriptionLabel.textColor = UIColor.theme.homePanel.activityStreamCellDescription
+        descriptionLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
         descriptionLabel.textAlignment = .left
         descriptionLabel.numberOfLines = 1
         descriptionLabel.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .vertical)
         return descriptionLabel
+    }()
+    
+    lazy var imageWrapperView: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = FirefoxHomeHighlightCellUX.CornerRadius
+        view.layer.shadowOffset = CGSize(width: 0, height: 2)
+        view.layer.shadowRadius = 6
+        return view
     }()
 
     lazy var siteImageView: UIImageView = {
@@ -61,35 +58,12 @@ class FirefoxHomeHighlightCell: UICollectionViewCell {
         return siteImageView
     }()
 
-    fileprivate lazy var statusIcon: UIImageView = {
-        let statusIcon = UIImageView()
-        statusIcon.contentMode = .scaleAspectFit
-        statusIcon.clipsToBounds = true
-        statusIcon.layer.cornerRadius = FirefoxHomeHighlightCellUX.CornerRadius
-        return statusIcon
-    }()
-
     fileprivate lazy var selectedOverlay: UIView = {
         let selectedOverlay = UIView()
         selectedOverlay.backgroundColor = FirefoxHomeHighlightCellUX.SelectedOverlayColor
         selectedOverlay.isHidden = true
         return selectedOverlay
     }()
-
-    fileprivate lazy var playLabel: UIImageView = {
-        let view = UIImageView()
-        view.image = UIImage.templateImageNamed("play")
-        view.tintColor = .white
-        view.alpha = 0.97
-        view.layer.shadowColor = UIColor.black.cgColor
-        view.layer.shadowOpacity = 0.3
-        view.layer.shadowRadius = 2
-        view.isHidden = true
-        return view
-    }()
-
-    fileprivate lazy var pocketTrendingIconNormal = UIImage(named: "context_pocket")?.tinted(withColor: UIColor.Photon.Grey90)
-    fileprivate lazy var pocketTrendingIconDark = UIImage(named: "context_pocket")?.tinted(withColor: UIColor.Photon.Grey10)
 
     override var isSelected: Bool {
         didSet {
@@ -105,15 +79,17 @@ class FirefoxHomeHighlightCell: UICollectionViewCell {
 
         isAccessibilityElement = true
 
-        contentView.addSubview(siteImageView)
-        contentView.addSubview(descriptionLabel)
+        imageWrapperView.addSubview(siteImageView)
+        contentView.addSubview(imageWrapperView)
         contentView.addSubview(selectedOverlay)
         contentView.addSubview(titleLabel)
-        contentView.addSubview(statusIcon)
         contentView.addSubview(domainLabel)
-        contentView.addSubview(playLabel)
 
         siteImageView.snp.makeConstraints { make in
+            make.edges.equalTo(imageWrapperView)
+        }
+
+        imageWrapperView.snp.makeConstraints { make in
             make.top.equalTo(contentView)
             make.leading.equalTo(contentView.safeArea.leading)
             make.trailing.equalTo(contentView.safeArea.trailing)
@@ -136,21 +112,6 @@ class FirefoxHomeHighlightCell: UICollectionViewCell {
             make.trailing.equalTo(contentView.safeArea.trailing)
             make.top.equalTo(domainLabel.snp.bottom).offset(5)
         }
-
-        descriptionLabel.snp.makeConstraints { make in
-            make.leading.equalTo(statusIcon.snp.trailing).offset(FirefoxHomeHighlightCellUX.TitleLabelOffset)
-            make.bottom.equalTo(contentView)
-        }
-
-        statusIcon.snp.makeConstraints { make in
-            make.size.equalTo(FirefoxHomeHighlightCellUX.StatusIconSize)
-            make.centerY.equalTo(descriptionLabel.snp.centerY)
-            make.leading.equalTo(siteImageView)
-        }
-
-        playLabel.snp.makeConstraints { make in
-            make.center.equalTo(siteImageView.snp.center)
-        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -159,51 +120,25 @@ class FirefoxHomeHighlightCell: UICollectionViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        self.siteImageView.image = nil
-        contentView.backgroundColor = UIColor.clear
+        siteImageView.image = nil
         siteImageView.backgroundColor = UIColor.clear
-        playLabel.isHidden = true
-        descriptionLabel.textColor = UIColor.theme.homePanel.activityStreamCellDescription
-    }
-
-    func configureWithSite(_ site: Site) {
-        if let mediaURLStr = site.metadata?.mediaURL,
-            let mediaURL = URL(string: mediaURLStr) {
-            self.siteImageView.sd_setImage(with: mediaURL)
-            self.siteImageView.contentMode = .scaleAspectFill
-        } else {
-            self.siteImageView.setFavicon(forSite: site) { [weak self]  in
-                self?.siteImageView.image = self?.siteImageView.image?.createScaled(FirefoxHomeHighlightCellUX.FaviconSize)
-            }
-            self.siteImageView.contentMode = .center
-        }
-
-        self.domainLabel.text = site.tileURL.shortDisplayString
-        self.titleLabel.text = site.title.isEmpty ? site.url : site.title
-
-        if let bookmarked = site.bookmarked, bookmarked {
-            self.descriptionLabel.text = Strings.HighlightBookmarkText
-            self.statusIcon.image = UIImage(named: "context_bookmark")
-        } else {
-            self.descriptionLabel.text = Strings.HighlightVistedText
-            self.statusIcon.image = UIImage(named: "context_viewed")
-        }
+        applyTheme()
     }
 
     func configureWithPocketStory(_ pocketStory: PocketStory) {
-        self.siteImageView.sd_setImage(with: pocketStory.imageURL)
-        self.siteImageView.contentMode = .scaleAspectFill
+        siteImageView.sd_setImage(with: pocketStory.imageURL)
+        siteImageView.contentMode = .scaleAspectFill
 
-        self.domainLabel.text = pocketStory.domain
-        self.titleLabel.text = pocketStory.title
+        domainLabel.text = pocketStory.domain
+        titleLabel.text = pocketStory.title
 
-        self.descriptionLabel.text = Strings.PocketTrendingText
-        self.statusIcon.image = ThemeManager.instance.currentName == .dark ? pocketTrendingIconDark : pocketTrendingIconNormal
+        applyTheme()
     }
 
-    func configureWithPocketVideoStory(_ pocketStory: PocketStory) {
-        playLabel.isHidden = false
-        self.configureWithPocketStory(pocketStory)
+    func applyTheme() {
+        titleLabel.textColor = UIColor.theme.homePanel.activityStreamHeaderText
+        domainLabel.textColor = UIColor.theme.homePanel.activityStreamCellDescription
+        imageWrapperView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
+        imageWrapperView.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
     }
-
 }
