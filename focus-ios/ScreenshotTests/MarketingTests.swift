@@ -16,10 +16,6 @@ class MarketingTests: XCTestCase {
     func testMarketingScreenshots() {
         let app = XCUIApplication()
 
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            XCUIDevice.shared().orientation = .landscapeLeft
-        }
-
         app.buttons["FirstRunViewController.button"].tap()
         snapshot("01Home")
         app.buttons["HomeView.settingsButton"].tap()

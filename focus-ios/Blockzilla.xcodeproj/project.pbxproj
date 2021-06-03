@@ -1472,7 +1472,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1000;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1250;
 				ORGANIZATIONNAME = Mozilla;
 				TargetAttributes = {
 					0BA39A821DD2B8E4005F970A = {
@@ -4521,7 +4521,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "KLAR DEBUG";
 				SWIFT_COMPILATION_MODE = singlefile;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 5.0;
 				TEST_TARGET_NAME = Blockzilla;
 			};
 			name = KlarDebug;
@@ -4574,7 +4574,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "FOCUS DEBUG";
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 5.0;
 				TEST_TARGET_NAME = Blockzilla;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -4627,7 +4627,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 5.0;
 				TEST_TARGET_NAME = Blockzilla;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -4680,7 +4680,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 5.0;
 				TEST_TARGET_NAME = Blockzilla;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -4733,7 +4733,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 5.0;
 				TEST_TARGET_NAME = Blockzilla;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -4786,7 +4786,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 5.0;
 				TEST_TARGET_NAME = Blockzilla;
 				VALIDATE_PRODUCT = YES;
 			};
