@@ -17,15 +17,14 @@ class ASLibraryCell: UICollectionViewCell, Themeable {
 
     var libraryButtons: [LibraryShortcutView] = []
 
-    let bookmarks = LibraryPanel(title: Strings.AppMenuBookmarksTitleString, image: UIImage.templateImageNamed("menu-Bookmark"), color: UIColor.Photon.Blue50)
-    let history = LibraryPanel(title: Strings.AppMenuHistoryTitleString, image: UIImage.templateImageNamed("menu-panel-History"), color: UIColor.Photon.Teal60)
-    let readingList = LibraryPanel(title: Strings.AppMenuReadingListTitleString, image: UIImage.templateImageNamed("menu-panel-ReadingList"), color: UIColor.Photon.GreenShamrock)
-    let downloads = LibraryPanel(title: Strings.AppMenuDownloadsTitleString, image: UIImage.templateImageNamed("menu-panel-Downloads"), color: UIColor.Photon.Magenta60)
+    let bookmarks = LibraryPanel(title: Strings.AppMenuBookmarksTitleString, image: UIImage.templateImageNamed("menu-Bookmark"), color: UIColor.Photon.Blue40)
+    let history = LibraryPanel(title: Strings.AppMenuHistoryTitleString, image: UIImage.templateImageNamed("menu-panel-History"), color: UIColor.Photon.Violet50)
+    let readingList = LibraryPanel(title: Strings.AppMenuReadingListTitleString, image: UIImage.templateImageNamed("menu-panel-ReadingList"), color: UIColor.Photon.Pink40)
+    let downloads = LibraryPanel(title: Strings.AppMenuDownloadsTitleString, image: UIImage.templateImageNamed("menu-panel-Downloads"), color: UIColor.Photon.Green60)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        mainView.distribution = .fillEqually
-        mainView.spacing = 10
+        mainView.distribution = .equalCentering
         addSubview(mainView)
         mainView.snp.makeConstraints { make in
             make.edges.equalTo(self)
@@ -34,11 +33,10 @@ class ASLibraryCell: UICollectionViewCell, Themeable {
         [bookmarks, history, downloads, readingList].forEach { item in
             let view = LibraryShortcutView()
             view.button.setImage(item.image, for: .normal)
-            view.title.text = item.title
-            let words = view.title.text?.components(separatedBy: NSCharacterSet.whitespacesAndNewlines).count
-            view.title.numberOfLines = words == 1 ? 1 :2
-            view.button.backgroundColor = item.color
-            view.button.setTitleColor(UIColor.theme.homePanel.topSiteDomain, for: .normal)
+            view.titleLabel.text = item.title
+            let words = view.titleLabel.text?.components(separatedBy: NSCharacterSet.whitespacesAndNewlines).count
+            view.titleLabel.numberOfLines = words == 1 ? 1 : 2
+            view.button.tintColor = item.color
             view.accessibilityLabel = item.title
             mainView.addArrangedSubview(view)
             libraryButtons.append(view)
@@ -51,7 +49,10 @@ class ASLibraryCell: UICollectionViewCell, Themeable {
 
     func applyTheme() {
         libraryButtons.forEach { button in
-            button.title.textColor = UIColor.theme.homePanel.activityStreamCellTitle
+            button.button.backgroundColor = UIColor.theme.homePanel.shortcutBackground
+            button.button.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
+            button.button.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
+            button.titleLabel.textColor = UIColor.theme.homePanel.activityStreamCellTitle
         }
     }
 
