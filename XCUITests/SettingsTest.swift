@@ -32,7 +32,7 @@ class SettingsTest: BaseTestCase {
         navigator.performAction(Action.OpenSiriFromSettings)
         waitForExistence(app.buttons["Add to Siri"], timeout: 5)
     }
-
+    /* Disable test since the option to set Firefox is not available in this build after issue #8513 landed, issue #8627
     func testDefaultBrowser() {
         // A default browser card should be available on the home screen
         if #available(iOS 14, *) {
@@ -65,5 +65,5 @@ class SettingsTest: BaseTestCase {
             waitForExistence(iOS_Settings.tables.cells.buttons["checkmark"])
             XCTAssertFalse(iOS_Settings.tables.cells.buttons["checkmark"].isEnabled)
         }
-    }
+    }*/
 }
