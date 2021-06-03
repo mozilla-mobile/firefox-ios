@@ -158,7 +158,9 @@ class HistoryTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
 
         // Go to settings and clear private data
-        navigator.performAction(Action.AcceptClearPrivateData)
+        navigator.goto(ClearPrivateDataSettings)
+        app.tables.cells["ClearPrivateData"].tap()
+        app.alerts.buttons["OK"].tap()
 
         // Back on History panel view check that there is not any item
         navigator.goto(HistoryRecentlyClosed)
