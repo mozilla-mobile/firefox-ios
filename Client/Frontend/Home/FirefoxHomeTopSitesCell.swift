@@ -402,7 +402,7 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
 
     var content: [Site] = []
 
-    var urlPressedHandler: ((URL, IndexPath) -> Void)?
+    var urlPressedHandler: ((Site, IndexPath) -> Void)?
     // The current traits that define the parent ViewController. Used to determine how many rows/columns should be created.
     var currentTraits: UITraitCollection?
 
@@ -454,9 +454,6 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let contentItem = content[indexPath.row]
-        guard let url = contentItem.url.asURL else {
-            return
-        }
-        urlPressedHandler?(url, indexPath)
+        urlPressedHandler?(contentItem, indexPath)
     }
 }
