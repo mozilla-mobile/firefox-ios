@@ -377,6 +377,7 @@ extension TelemetryWrapper {
         case mediumQuickActionCopiedLink = "medium-quick-action-copied-link"
         case mediumQuickActionClosePrivate = "medium-quick-action-close-private"
         case mediumTopSitesWidget = "medium-top-sites-widget"
+        case topSiteTile = "top-site-tile"
         case pocketStory = "pocket-story"
         case library = "library"
         case home = "home-page"
@@ -435,6 +436,11 @@ extension TelemetryWrapper {
         case syncPanel = "sync-panel"
         case yourLibrarySection = "your-library-section"
     }
+    
+    public enum EventExtraKey: String {
+        case topSitePosition = "tilePosition"
+        case topSiteTileType = "tileType"
+    }
 
     public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue? = nil, extras: [String: Any]? = nil) {
         Telemetry.default.recordEvent(category: category.rawValue, method: method.rawValue, object: object.rawValue, value: value?.rawValue ?? "", extras: extras)
@@ -470,6 +476,14 @@ extension TelemetryWrapper {
             GleanMetrics.ReadingList.markRead.add()
         case (.action, .tap, .readingListItem, EventValue.markAsUnread.rawValue, _):
             GleanMetrics.ReadingList.markUnread.add()
+        // Top Site
+        case (.action, .tap, .topSiteTile, _, let extras):
+            if let position = extras?[EventExtraKey.topSitePosition.rawValue] as? String, let tileType = extras?[EventExtraKey.topSiteTileType.rawValue] as? String {
+                GleanMetrics.TopSite.tilePressed.record(extra: [GleanMetrics.TopSite.TilePressedKeys.position : position, GleanMetrics.TopSite.TilePressedKeys.tileType : tileType])
+            } else {
+                let msg = "Uninstrumented pref metric: \(category), \(method), \(object), \(value), \(String(describing: extras))"
+                Sentry.shared.send(message: msg, severity: .debug)
+            }
         // Preferences
         case (.action, .change, .setting, _, let extras):
             if let preference = extras?["pref"] as? String, let to = (extras?["to"] ?? "undefined") as? String {
