@@ -1,10 +1,6 @@
-//
-//  CredentialProviderPresenter.swift
-//  CredentialProvider
-//
-//  Created by razvan.litianu on 28.05.2021.
-//  Copyright © 2021 Mozilla. All rights reserved.
-//
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
 import AuthenticationServices
@@ -32,18 +28,6 @@ class CredentialProviderPresenter {
                 self.cancelWith(.userCanceled)
             }
         }
-        
-        //        self.dataStore.locked
-        //                .bind { [weak self] locked in
-        //                    if locked {
-        //                        self?.dispatcher.dispatch(action: CredentialProviderAction.authenticationRequested)
-        //                    } else {
-        //                        self?.dispatcher.dispatch(action: CredentialProviderAction.refresh)
-        //                    }
-        //                }
-        //                .disposed(by: self.disposeBag)
-        //
-        //        self.view?.displayWelcome()
     }
     
     func credentialProvisionRequested(for credentialIdentity: ASPasswordCredentialIdentity) {
@@ -66,30 +50,6 @@ class CredentialProviderPresenter {
                 }
             }
         }
-        //        self.dataStore.locked
-        //                .take(1)
-        //                .bind { [weak self] locked in
-        //                    if locked {
-        //                        self?.dispatcher.dispatch(action: CredentialProviderAction.authenticationRequested)
-        //                        self?.dispatcher.dispatch(action: CredentialStatusAction.cancelled(error: .userInteractionRequired))
-        //                    } else {
-        //                        self?.provideCredential(for: credentialIdentity)
-        //                    }
-        //                }
-        //                .disposed(by: self.credentialProvisionBag)
-    }
-    
-    func prepareAuthentication(for credentialIdentity: ASPasswordCredentialIdentity) {
-        //        self.dataStore.locked
-        //                .asDriver(onErrorJustReturn: true)
-        //                .drive(onNext: { [weak self] locked in
-        //                    if locked {
-        //                        self?.view?.displayWelcome()
-        //                    } else {
-        //                        self?.provideCredential(for: credentialIdentity)
-        //                    }
-        //                })
-        //                .disposed(by: self.credentialProvisionBag)
     }
     
     func credentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
@@ -110,28 +70,6 @@ class CredentialProviderPresenter {
                 }
             }
         }
-        
-        
-        
-        //        self.dataStore.locked
-        //                .asDriver(onErrorJustReturn: true)
-        //                .drive(onNext: { [weak self] locked in
-        //                    if locked {
-        //                        self?.dispatcher.dispatch(action: CredentialProviderAction.authenticationRequested)
-        //                        self?.view?.displayWelcome()
-        //                    } else {
-        //                        self?.view?.displayItemList()
-        //                    }
-        //                })
-        //                .disposed(by: self.credentialProvisionBag)
-        //
-        //        self.dataStore.storageState
-        //                .filter { $0 == .Unprepared }
-        //                .asDriver(onErrorJustReturn: .Unprepared)
-        //                .drive(onNext: { [weak self] _ in
-        //                    self?.view?.displayWelcome()
-        //                })
-        //                .disposed(by: self.credentialProvisionBag)
     }
 }
 
@@ -158,28 +96,5 @@ private extension CredentialProviderPresenter {
                             userInfo: nil)
         
         self.view?.extensionContext.cancelRequest(withError: error)
-    }
-    
-    func provideCredential(for credentialIdentity: ASPasswordCredentialIdentity) {
-        //        self.credentialProvisionBag = DisposeBag()
-        //
-        //        guard let id = credentialIdentity.recordIdentifier else {
-        //            self.dispatcher.dispatch(action: CredentialStatusAction.cancelled(error: .credentialIdentityNotFound))
-        //            return
-        //        }
-        //
-        //        self.dataStore.locked
-        //                .filter { !$0 }
-        //                .take(1)
-        //                .flatMap { _ in self.dataStore.get(id) }
-        //                .map { login -> Action in
-        //                    guard let login = login else {
-        //                        return CredentialStatusAction.cancelled(error: .credentialIdentityNotFound)
-        //                    }
-        //
-        //                    return CredentialStatusAction.loginSelected(login: login)
-        //                }
-        //                .subscribe(onNext: { self.dispatcher.dispatch(action: $0) })
-        //                .disposed(by: self.disposeBag)
     }
 }
