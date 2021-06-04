@@ -268,7 +268,22 @@ extension FirefoxHomeViewController {
         }
 
         var headerHeight: CGSize {
-            return CGSize(width: 50, height: 56)
+            return CGSize(width: 50, height: 40)
+        }
+
+        var headerImage: UIImage? {
+            switch self {
+            case .pocket: return UIImage.templateImageNamed("menu-pocket")
+            case .topSites: return UIImage.templateImageNamed("menu-panel-TopSites")
+            case .libraryShortcuts: return UIImage.templateImageNamed("menu-library")
+            }
+        }
+
+        var footerHeight: CGSize {
+            switch self {
+            case .pocket: return .zero
+            case .topSites, .libraryShortcuts: return CGSize(width: 50, height: 5)
+            }
         }
 
         func cellHeight(_ traits: UITraitCollection, width: CGFloat) -> CGFloat {

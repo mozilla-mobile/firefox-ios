@@ -4,13 +4,14 @@
 
 import Foundation
 
-public struct Strings {}
+public struct Strings {
+    public static let bundle = Bundle(for: BundleClass.self)
+}
 
 class BundleClass {}
 
 func MZLocalizedString(_ key: String, tableName: String? = nil, value: String = "", comment: String) -> String {
-    let bundle = Bundle(for: BundleClass.self)
-    return NSLocalizedString(key, tableName: tableName, bundle: bundle, value: value, comment: comment)
+    return NSLocalizedString(key, tableName: tableName, bundle: Strings.bundle, value: value, comment: comment)
 }
 
 extension Strings {

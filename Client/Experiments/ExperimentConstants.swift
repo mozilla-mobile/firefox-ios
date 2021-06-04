@@ -7,7 +7,7 @@ import Foundation
 /// An application specific enum of app features that we are configuring with experiments.
 /// This is expected to grow and shrink across releases of the app.
 enum FeatureId: String {
-    case nimbusValidation
+    case nimbusValidation = "nimbus-validation"
 }
 
 /// A set of common branch ids used in experiments. Branch ids can be application/experiment specific, so
