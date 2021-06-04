@@ -638,7 +638,7 @@ extension FirefoxHomeViewController: DataObserverDelegate {
         let isPinnedAndGoogle = site is PinnedSite && site.guid == GoogleTopSiteConstants.googleGUID
         let isPinnedOnly = site is PinnedSite
         let isSuggestedSite = site is SuggestedSite
-        let type = isPinnedAndGoogle ? "google" : isPinnedOnly ? "user-added" : isSuggestedSite ? "suggested" : "history"
+        let type = isPinnedAndGoogle ? "google" : isPinnedOnly ? "user-added" : isSuggestedSite ? "suggested" : "history-based"
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .topSiteTile, value: nil, extras: [topSitePositionKey : "\(position)", topSiteTileTypeKey: type])
     }
 
