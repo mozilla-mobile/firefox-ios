@@ -616,9 +616,7 @@ extension FirefoxHomeViewController: DataObserverDelegate {
             self.topSitesManager.content = sites
             self.topSitesManager.urlPressedHandler = { [unowned self] site, indexPath in
                 self.longPressRecognizer.isEnabled = false
-                guard let url = site.url.asURL else {
-                    return
-                }
+                guard let url = site.url.asURL else { return }
                 let isGoogleTopSiteUrl = url.absoluteString == GoogleTopSiteConstants.usUrl || url.absoluteString == GoogleTopSiteConstants.rowUrl
                 topSiteTracking(site: site, position: indexPath.item)
                 self.showSiteWithURLHandler(url as URL, isGoogleTopSite: isGoogleTopSiteUrl)
@@ -641,7 +639,7 @@ extension FirefoxHomeViewController: DataObserverDelegate {
         let isPinnedOnly = site is PinnedSite
         let isSuggestedSite = site is SuggestedSite
         let type = isPinnedAndGoogle ? "google" : isPinnedOnly ? "user-added" : isSuggestedSite ? "suggested" : "history"
-        TelemetryWrapper.gleanRecordEvent(category: .action, method: .tap, object: .topSiteTile, value: nil, extras: [topSitePositionKey : "\(position)", topSiteTileTypeKey: type])
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .topSiteTile, value: nil, extras: [topSitePositionKey : "\(position)", topSiteTileTypeKey: type])
     }
 
     func getPocketSites() -> Success {
