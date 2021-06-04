@@ -319,15 +319,15 @@ top_site:
     extra_keys:
       tile_type:
         description: |
-          The type of tile pressed (Ex: Google,
+          Type of tile pressed (Ex: Google,
           suggested, user-added or history-based)
       position:
         description: |
-          Position number of top site tile that is pressed.
+          Position of top site.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/8501
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/8501
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8636/
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2021-12-02"
