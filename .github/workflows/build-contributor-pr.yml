@@ -1,4 +1,5 @@
 name: Build contributor PR
+permissions: read-all
 on: [pull_request]
 jobs:
   run-ui:
