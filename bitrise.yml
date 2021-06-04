@@ -134,7 +134,7 @@ workflows:
       in master
     meta:
       bitrise.io:
-        stack: osx-xcode-12.4.x
+        stack: osx-xcode-12.5.x
   L10nScreenshotsTests:
     steps:
     - activate-ssh-key@4:
@@ -210,7 +210,7 @@ workflows:
       in master
     meta:
       bitrise.io:
-        stack: osx-xcode-12.4.x
+        stack: osx-xcode-12.5.x
   ios13-xcode11.7-28.x-release:
     steps:
     - activate-ssh-key@4.0:
@@ -518,7 +518,7 @@ workflows:
       in master
     meta:
       bitrise.io:
-        stack: osx-xcode-12.4.x
+        stack: osx-xcode-12.5.x
     after_run:
     - RunSmokeXCUITests
   benchmark_test:
@@ -662,7 +662,7 @@ workflows:
       This Workflow is to run unit and smoketest in a testing environment
     meta:
       bitrise.io:
-        stack: osx-xcode-12.4.x
+        stack: osx-xcode-12.5.x
     after_run:
     - RunSmokeXCUITests
   RunUITests:
@@ -917,7 +917,7 @@ workflows:
       This step is to build, archive and upload Firefox Release and Beta
     meta:
       bitrise.io:
-        stack: osx-xcode-12.4.x
+        stack: osx-xcode-12.5.x
   RunAllXCUITests:
     steps:
     - activate-ssh-key@4.0:
@@ -1070,7 +1070,7 @@ workflows:
       in master
     meta:
       bitrise.io:
-        stack: osx-xcode-12.4.x
+        stack: osx-xcode-12.5.x
   CommonBuild-UItest-XCUISmoketest:
     steps:
     - activate-ssh-key@4.0:
@@ -1226,7 +1226,7 @@ workflows:
       in master
     meta:
       bitrise.io:
-        stack: osx-xcode-12.4.x
+        stack: osx-xcode-12.5.x
     after_run:
     - RunUITests
     - RunSmokeXCUITests
@@ -1381,7 +1381,7 @@ workflows:
       This Workflow is to run SmokeTest on iPad simulator device
     meta:
       bitrise.io:
-        stack: osx-xcode-12.4.x
+        stack: osx-xcode-12.5.x
   NewXcodeVersions:
     steps:
     - script@1:
@@ -1731,7 +1731,7 @@ workflows:
     description: This step is to build, archive and upload Firefox Release and Beta
     meta:
       bitrise.io:
-        stack: osx-xcode-12.4.x
+        stack: osx-xcode-12.5.x
 app:
   envs:
   - opts:
