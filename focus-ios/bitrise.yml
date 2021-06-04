@@ -214,26 +214,22 @@ workflows:
     steps:
     - set-xcode-build-number@1:
         inputs:
-        - build_short_version_string: "$BITRISE_GIT_TAG"
         - build_version_offset: '3250'
         - plist_path: Blockzilla/Info.plist
         title: Set Blockzilla version numbers
     - set-xcode-build-number@1:
         inputs:
-        - build_short_version_string: "$BITRISE_GIT_TAG"
         - build_version_offset: '3250'
         - plist_path: ContentBlocker/Info.plist
         title: Set ContentBlocker version numbers
     - set-xcode-build-number@1:
         inputs:
-        - build_short_version_string: "$BITRISE_GIT_TAG"
         - build_version_offset: '3250'
         - plist_path: FocusIntentExtension/Info.plist
         title: Set FocusIntentExtension version numbers
     - set-xcode-build-number@1:
         inputs:
         - build_version_offset: '3250'
-        - build_short_version_string: "$BITRISE_GIT_TAG"
         - plist_path: OpenInFocus/Info.plist
         title: Set OpenInFocus version numbers
     meta:
