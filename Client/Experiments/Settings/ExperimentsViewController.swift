@@ -21,7 +21,9 @@ class ExperimentsViewController: UIViewController {
             self.showSettings()
         }
 
-        NotificationCenter.default.addObserver(self, selector: #selector(onExperimentsApplied), name: .nimbusExperimentsApplied, object: nil)
+        NotificationCenter.default.addObserver(forName: .nimbusExperimentsApplied, object: nil, queue: .main) { _ in
+            self.onExperimentsApplied()
+        }
     }
 
     required init?(coder: NSCoder) {
@@ -65,7 +67,7 @@ extension ExperimentsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ExperimentsTableView.CellIdentifier, for: indexPath)
         let experiment = availableExperiments[indexPath.row]
-        let branch = (experiment.branches.first?.feature?.featureId).flatMap(experiments.getExperimentBranch(featureId:)) ?? "Not enrolled"
+        let branch = experiments.getExperimentBranch(experimentId: experiment.slug) ?? "Not enrolled"
 
         cell.textLabel?.text = experiment.userFacingName
         cell.detailTextLabel?.numberOfLines = 3
