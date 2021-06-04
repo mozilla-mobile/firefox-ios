@@ -49,8 +49,9 @@ class WebViewController: UIViewController, WebController {
         case focusTrackingProtection
         case focusTrackingProtectionPostLoad
         case findInPageHandler
+        case fullScreen
 
-        static var allValues: [ScriptHandlers] { return [.focusTrackingProtection, .focusTrackingProtectionPostLoad, .findInPageHandler] }
+        static var allValues: [ScriptHandlers] { return [.focusTrackingProtection, .focusTrackingProtectionPostLoad, .findInPageHandler, .fullScreen] }
     }
 
     private enum KVOConstants: String, CaseIterable {
@@ -158,6 +159,7 @@ class WebViewController: UIViewController, WebController {
         setupBlockLists()
         setupTrackingProtectionScripts()
         setupFindInPageScripts()
+        setupFullScreen()
 
         view.addSubview(browserView)
         browserView.snp.makeConstraints { make in
@@ -196,6 +198,11 @@ class WebViewController: UIViewController, WebController {
     private func setupFindInPageScripts() {
         browserView.configuration.userContentController.add(self, name: ScriptHandlers.findInPageHandler.rawValue)
         addScript(forResource: "FindInPage", injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+    }
+    
+    private func setupFullScreen() {
+        browserView.configuration.userContentController.add(self, name: ScriptHandlers.fullScreen.rawValue)
+        addScript(forResource: "FullScreen", injectionTime: .atDocumentEnd, forMainFrameOnly: true)
     }
 
     func disableTrackingProtection() {
