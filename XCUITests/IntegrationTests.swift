@@ -72,7 +72,7 @@ class IntegrationTests: BaseTestCase {
         waitForInitialSyncComplete()
     }
 
-    func testFxASyncHistoryChina () {
+    func testFxASyncPageUsingChina () {
         // History is generated using the DB so go directly to Sign in
         // Sign into Firefox Accounts
         app.buttons["urlBar-cancel"].tap()
