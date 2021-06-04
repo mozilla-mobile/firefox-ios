@@ -21,6 +21,8 @@ jobs:
             python-version: ${{ matrix.python-version }}
         - name: Run Boostrap
           run: sh ./bootstrap.sh
+          env:
+            GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         - name: Build and Test
           run: xcodebuild clean test -scheme '${{ matrix.run-config['scheme'] }}' -destination '${{ matrix.run-config['destination'] }}' -testPlan '${{ matrix.run-config['testplan'] }}' -resultBundlePath TestResults -derivedDataPath results
         - name: Archive Results
