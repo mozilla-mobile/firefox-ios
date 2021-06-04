@@ -487,11 +487,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         screenState.tap(app.cells.staticTexts["Mobile Bookmarks"], to: MobileBookmarks)
         screenState.gesture(forAction: Action.CloseBookmarkPanel, transitionTo: HomePanelsScreen) { userState in
-            if isTablet {
-                app.buttons["TabToolbar.libraryButton"].tap()
-            } else {
                 app.buttons["Done"].tap()
-            }
         }
 
         screenState.press(app.tables["Bookmarks List"].cells.element(boundBy: 4), to: BookmarksPanelContextMenu)
@@ -547,11 +543,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             app.tables["History List"].cells.matching(identifier: "HistoryPanel.clearHistory").element(boundBy: 0).tap()
         }
         screenState.gesture(forAction: Action.CloseHistoryListPanel, transitionTo: HomePanelsScreen) { userState in
-            if isTablet {
-                app.buttons["TabToolbar.libraryButton"].tap()
-            } else {
                 app.buttons["Done"].tap()
-            }
         }
     }
 
@@ -559,11 +551,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(LibraryPanel_ReadingList) { screenState in
         screenState.dismissOnUse = true
         screenState.gesture(forAction: Action.CloseReadingListPanel, transitionTo: HomePanelsScreen) { userState in
-            if isTablet {
-                app.buttons["TabToolbar.libraryButton"].tap()
-            } else {
                 app.buttons["Done"].tap()
-            }
         }
     }
 
@@ -919,7 +907,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
 
         screenState.onEnter { userState in
-            userState.numTabs = Int(app.tables.cells.count)
+            if isTablet {
+                userState.numTabs = Int(app.collectionViews["Top Tabs View"].cells.count)
+            } else {
+                userState.numTabs = Int(app.tables.cells.count)
+            }
         }
     }
 
