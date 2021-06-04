@@ -319,7 +319,7 @@ top_site:
     extra_keys:
       tile_type:
         description: |
-          Type of tile pressed (Ex: Google,
+          Type of tile pressed (Ex: google,
           suggested, user-added or history-based)
       position:
         description: |
@@ -331,7 +331,6 @@ top_site:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2021-12-02"
-
 
 # Experiments
 experiments:
