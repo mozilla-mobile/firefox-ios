@@ -77,10 +77,14 @@ class IntegrationTests: BaseTestCase {
         // Sign into Firefox Accounts
         app.buttons["urlBar-cancel"].tap()
         navigator.goto(BrowserTabMenu)
-        signInFxAccounts()
+        navigator.goto(Intro_FxASignin)
+        navigator.performAction(Action.OpenEmailToSignIn)
+        waitForExistence(app.navigationBars["Turn on Sync"], timeout: 20)
+        waitForExistence(app.webViews.textFields["Email"])
 
-        // Wait for initial sync to complete
-        waitForInitialSyncComplete()
+        // Wait for element not present on FxA sign in page China server
+        waitForNoExistence(app.webViews.otherElements.staticTexts["Firefox Monitor"])
+        XCTAssertFalse(app.webViews.otherElements.staticTexts["Firefox Monitor"].exists)
     }
 
     func testFxASyncBookmark () {
