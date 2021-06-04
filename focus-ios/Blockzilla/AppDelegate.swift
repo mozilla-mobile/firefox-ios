@@ -285,6 +285,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.openedFromExtension, object: TelemetryEventObject.app)
 
             browserViewController.ensureBrowsingMode()
+            browserViewController.deactivateUrlBarOnHomeView()
             browserViewController.submit(url: url)
             queuedUrl = nil
         } else if let text = queuedString {
