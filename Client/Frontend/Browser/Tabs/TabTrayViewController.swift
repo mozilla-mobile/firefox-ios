@@ -85,7 +85,7 @@ class TabTrayViewController: UIViewController {
         label.font = TabsButtonUX.TitleFont
         label.layer.cornerRadius = TabsButtonUX.CornerRadius
         label.textAlignment = .center
-        label.text = String(viewModel.tabManager.normalTabs.count)
+        label.text = (viewModel.tabManager.normalTabs.count < 100) ? viewModel.tabManager.normalTabs.count.description : "\u{221E}"
         return label
     }()
 
