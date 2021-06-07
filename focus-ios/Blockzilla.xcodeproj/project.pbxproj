@@ -1480,7 +1480,6 @@
 				TargetAttributes = {
 					0BA39A821DD2B8E4005F970A = {
 						CreatedOnToolsVersion = 8.1;
-						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 1000;
 						TestTargetID = E4BF2DD21BACE8CA00DA9D68;
 					};
@@ -1496,9 +1495,7 @@
 					};
 					745DC5D91F39221100661635 = {
 						CreatedOnToolsVersion = 8.3.3;
-						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0900;
-						ProvisioningStyle = Automatic;
 					};
 					D8E0155B1FCF409F00CA3B9F = {
 						CreatedOnToolsVersion = 9.1;
@@ -1509,15 +1506,11 @@
 					};
 					E44A34661E0A18C100BFD777 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = 43AQ936H96;
-						ProvisioningStyle = Automatic;
 						TestTargetID = E4BF2DD21BACE8CA00DA9D68;
 					};
 					E4BF2DD21BACE8CA00DA9D68 = {
 						CreatedOnToolsVersion = 7.0;
-						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 1000;
-						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
@@ -1529,9 +1522,7 @@
 					};
 					E4BF2DEB1BACE92400DA9D68 = {
 						CreatedOnToolsVersion = 7.0;
-						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0900;
-						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
@@ -2715,6 +2706,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = "";
@@ -2738,6 +2730,8 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = mozilla.XCUITest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/XCUITest/XCUITests-Bridging-Header.h";
@@ -3434,6 +3428,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 43AQ936H96;
@@ -4016,6 +4011,7 @@
 				CODE_SIGN_ENTITLEMENTS = Focus.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
@@ -4040,6 +4036,7 @@
 				CODE_SIGN_ENTITLEMENTS = Focus.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				INFOPLIST_FILE = ContentBlocker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
@@ -4659,6 +4656,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = "";
@@ -4682,6 +4680,8 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.blockzilla.ScreenshotTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_VERSION = 5.0;
