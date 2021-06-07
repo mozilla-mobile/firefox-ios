@@ -17,7 +17,6 @@ class CredentialProviderPresenter {
     
     func extensionConfigurationRequested() {
         view?.displayWelcome()
-        
         if let openError = self.profile.logins.reopenIfClosed() {
             displayNotLoggedInMessage()
         } else {
@@ -31,21 +30,19 @@ class CredentialProviderPresenter {
     }
     
     func credentialProvisionRequested(for credentialIdentity: ASPasswordCredentialIdentity) {
-        
-        let openError = self.profile.logins.reopenIfClosed()
-        if let error = openError {
+        if let openError = self.profile.logins.reopenIfClosed() {
             cancelWith(.failed)
         } else if let id = credentialIdentity.recordIdentifier {
             
-            profile.logins.get(id: id).upon { result in
+            profile.logins.get(id: id).upon { [weak self] result in
                 switch result {
-                case .failure(_):
-                    ()
+                case .failure:
+                    self?.cancelWith(.failed)
                 case .success(let record):
                     if let passwordCredential = record?.passwordCredential {
-                        self.view?.extensionContext.completeRequest(withSelectedCredential: passwordCredential, completionHandler: nil)
+                        self?.view?.extensionContext.completeRequest(withSelectedCredential: passwordCredential, completionHandler: nil)
                     } else {
-                        self.cancelWith(.userInteractionRequired)
+                        self?.cancelWith(.userInteractionRequired)
                     }
                 }
             }
@@ -53,15 +50,13 @@ class CredentialProviderPresenter {
     }
     
     func credentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-        
-        let openError = self.profile.logins.reopenIfClosed()
-        if let error = openError {
+        if let openError = self.profile.logins.reopenIfClosed() {
             cancelWith(.failed)
         } else {
             profile.logins.list().upon {[weak self] result in
                 switch result {
-                case .failure(_):
-                    ()
+                case .failure:
+                    self?.cancelWith(.failed)
                 case .success(let loginRecods):
                     let dataSource = loginRecods.map { ($0.passwordCredentialIdentity, $0.passwordCredential) }
                     DispatchQueue.main.async {
@@ -71,6 +66,8 @@ class CredentialProviderPresenter {
             }
         }
     }
+    
+    func prepareAuthentication(for credentialIdentity: ASPasswordCredentialIdentity) { }
 }
 
 @available(iOS 12, *)
