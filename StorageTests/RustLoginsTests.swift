@@ -26,7 +26,7 @@ class RustLoginsTests: XCTestCase {
     func addLogin() -> Deferred<Maybe<String>> {
         let login = LoginRecord(fromJSONDict: [
             "hostname": "https://example.com",
-            "formSubmitURL": "https://example.com",
+            "formSubmitUrl": "https://example.com",
             "username": "username",
             "password": "password"
         ])

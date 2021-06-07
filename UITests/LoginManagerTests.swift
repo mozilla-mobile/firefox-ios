@@ -65,7 +65,7 @@ class LoginManagerTests: KIFTestCase {
                 "username": usernames[index],
                 "password": passwords[index]
             ])
-            login.formSubmitURL = hostnames[index]
+            login.formSubmitUrl = hostnames[index]
             _ = profile.logins.add(login: login).value
         }
     }

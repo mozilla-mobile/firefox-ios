@@ -56,8 +56,8 @@ class Authenticator {
             }
 
             let logins = cursor.compactMap {
-                // HTTP Auth must have nil formSubmitURL and a non-nil httpRealm.
-                return $0?.formSubmitURL == nil && $0?.httpRealm != nil ? $0 : nil
+                // HTTP Auth must have nil formSubmitUrl and a non-nil httpRealm.
+                return $0?.formSubmitUrl == nil && $0?.httpRealm != nil ? $0 : nil
             }
             var credentials: URLCredential?
 
