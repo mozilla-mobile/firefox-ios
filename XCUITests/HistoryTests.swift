@@ -141,7 +141,6 @@ class HistoryTests: BaseTestCase {
     func testClearRecentlyClosedHistory() {
         // Open the default website
         userState.url = path(forTestPage: "test-mozilla-book.html")
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
         navigator.goto(BrowserTab)
         waitForTabsButton()
         navigator.goto(TabTray)
@@ -247,7 +246,11 @@ class HistoryTests: BaseTestCase {
         navigator.goto(TabTray)
         waitForExistence(app.cells.staticTexts[webpage["label"]!])
         // Close tab by tapping on its 'x' button
-        app.tables.cells.element(boundBy: 0).buttons["closeTabButtonTabTray"].tap()
+        if isTablet {
+            app.otherElements["Tabs Tray"].collectionViews.cells.element(boundBy: 0).buttons["tab close"].tap()
+        } else {
+            app.tables.cells.element(boundBy: 0).buttons["closeTabButtonTabTray"].tap()
+        }
 
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.goto(HomePanelsScreen)
