@@ -433,6 +433,17 @@
 		C877039625222FDC006E38EB /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		C877039725222FE6006E38EB /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		C87703D225223EA5006E38EB /* Shared.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
+		C87DF69D266F99E80097E707 /* BasePasscodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6108FF81C84E91C005D25E8 /* BasePasscodeViewController.swift */; };
+		C87DF6B1266F99F00097E707 /* ErrorToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6927EBF1C7B6FB800D03F75 /* ErrorToast.swift */; };
+		C87DF6D8266F9A590097E707 /* photon-colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C49854D206173C800893DAE /* photon-colors.swift */; };
+		C87DF6EC266F9A780097E707 /* PasscodeEntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E640E85D1C73A45A00C5F072 /* PasscodeEntryViewController.swift */; };
+		C87DF700266F9A840097E707 /* PasscodeViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = E640E8691C73A47C00C5F072 /* PasscodeViews.swift */; };
+		C87DF714266F9AB10097E707 /* GeometryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650754D1E37F6AE006961AC /* GeometryExtensions.swift */; };
+		C87DF728266F9BAD0097E707 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9A179A20E69A7E00B12184 /* Theme.swift */; };
+		C87DF73C266F9BC70097E707 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9A179820E69A7E00B12184 /* ThemeManager.swift */; };
+		C87DF750266F9BEC0097E707 /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2816EFFF1B33E05400522243 /* UIConstants.swift */; };
+		C87DF765266F9C500097E707 /* UIConstants+BottomInset.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87DF764266F9C500097E707 /* UIConstants+BottomInset.swift */; };
+		C87DF779266F9C790097E707 /* DarkTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9A179920E69A7E00B12184 /* DarkTheme.swift */; };
 		C892DA0D22D39A980080F1F7 /* TrackingProtectionMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = C892DA0C22D39A980080F1F7 /* TrackingProtectionMenu.swift */; };
 		C89307462655011000A1DB2F /* CredentialWelcome.strings in Resources */ = {isa = PBXBuildFile; fileRef = C89307282655011000A1DB2F /* CredentialWelcome.strings */; };
 		C89307472655011000A1DB2F /* CredentialWelcome.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C89307382655011000A1DB2F /* CredentialWelcome.storyboard */; };
@@ -448,7 +459,6 @@
 		C8CE38BE265E71FE0009B09E /* UINavigationControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CE38B7265E71FE0009B09E /* UINavigationControllerExtension.swift */; };
 		C8CE38BF265E71FE0009B09E /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CE38B8265E71FE0009B09E /* UIImageExtension.swift */; };
 		C8CFF4E422F9FDB6002CC6BD /* effective_tld_names.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CFF4E322F9FDB5002CC6BD /* effective_tld_names.swift */; };
-		C8D9B697266E3A3A00BA8175 /* AppAuthenticator+Password.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D9B696266E3A3A00BA8175 /* AppAuthenticator+Password.swift */; };
 		C8D9B6BE266E3A6E00BA8175 /* AppAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65D89171C8647420006EA35 /* AppAuthenticator.swift */; };
 		C8DFFE492294AAB600296DB1 /* NetworkUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DFFE482294AAB600296DB1 /* NetworkUtils.swift */; };
 		C8E18F1E222EDE4500E30E52 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8E18F1D222EDE4400E30E52 /* Accelerate.framework */; };
@@ -3054,6 +3064,7 @@
 		C874FC3C26612C2500EBE86E /* SpinnerAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpinnerAlertView.swift; sourceTree = "<group>"; };
 		C874FC642661367900EBE86E /* MainInterface.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainInterface.storyboard; sourceTree = "<group>"; };
 		C87D418CB1BEBDCD40E59AA1 /* co */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = co; path = "co.lproj/Default Browser.strings"; sourceTree = "<group>"; };
+		C87DF764266F9C500097E707 /* UIConstants+BottomInset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIConstants+BottomInset.swift"; sourceTree = "<group>"; };
 		C88847109E62D581C497BB8E /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/AuthenticationManager.strings"; sourceTree = "<group>"; };
 		C892DA0C22D39A980080F1F7 /* TrackingProtectionMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionMenu.swift; sourceTree = "<group>"; };
 		C89307292655011000A1DB2F /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/CredentialWelcome.strings; sourceTree = "<group>"; };
@@ -3097,7 +3108,6 @@
 		C8CFF4E322F9FDB5002CC6BD /* effective_tld_names.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = effective_tld_names.swift; sourceTree = "<group>"; };
 		C8D3475789EF0BC1B4457F1A /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/ClearHistoryConfirm.strings"; sourceTree = "<group>"; };
 		C8D9497CA0DF70586C706A76 /* ses */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ses; path = ses.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
-		C8D9B696266E3A3A00BA8175 /* AppAuthenticator+Password.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppAuthenticator+Password.swift"; sourceTree = "<group>"; };
 		C8DFFE482294AAB600296DB1 /* NetworkUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkUtils.swift; sourceTree = "<group>"; };
 		C8E18F1D222EDE4400E30E52 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		C8E18F1F222EDED000E30E52 /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
@@ -5784,7 +5794,6 @@
 			children = (
 				E68E7ADF1CAC209000FDCA76 /* PasscodeConfiguration */,
 				E65D89171C8647420006EA35 /* AppAuthenticator.swift */,
-				C8D9B696266E3A3A00BA8175 /* AppAuthenticator+Password.swift */,
 				E692E3281C46E62D009D1240 /* AuthenticationSettingsViewController.swift */,
 				E6CF28E61CB43B7900151AB3 /* SensitiveViewController.swift */,
 			);
@@ -6178,6 +6187,7 @@
 				23ED80FD25C899D700D0E9D5 /* DefaultBrowserOnboarding */,
 				43C5A0972555DF7300BA37AD /* BottomSheet */,
 				2816EFFF1B33E05400522243 /* UIConstants.swift */,
+				C87DF764266F9C500097E707 /* UIConstants+BottomInset.swift */,
 				2C49854D206173C800893DAE /* photon-colors.swift */,
 				4390F7FE246DAFBE00570811 /* FirefoxColors.swift */,
 				392ED7D51D0AEEEE009D9B62 /* Accessors */,
@@ -7851,14 +7861,24 @@
 				C8CE38BB265E71FE0009B09E /* ItemListCell.swift in Sources */,
 				C8CE38BA265E71FE0009B09E /* NoNetworkCell.swift in Sources */,
 				F8324A0A2649A188007E4BFA /* CredentialProviderViewController.swift in Sources */,
+				C87DF750266F9BEC0097E707 /* UIConstants.swift in Sources */,
+				C87DF6D8266F9A590097E707 /* photon-colors.swift in Sources */,
 				C8D9B6BE266E3A6E00BA8175 /* AppAuthenticator.swift in Sources */,
 				60CE80C12667780D004026C7 /* CredentialListPresenter.swift in Sources */,
+				C87DF700266F9A840097E707 /* PasscodeViews.swift in Sources */,
 				C874FC3D26612C2500EBE86E /* SpinnerAlertView.swift in Sources */,
 				F8324B122649B707007E4BFA /* Profile.swift in Sources */,
+				C87DF69D266F99E80097E707 /* BasePasscodeViewController.swift in Sources */,
+				C87DF714266F9AB10097E707 /* GeometryExtensions.swift in Sources */,
+				C87DF6B1266F99F00097E707 /* ErrorToast.swift in Sources */,
 				F8324B262649B76E007E4BFA /* SyncStatusResolver.swift in Sources */,
+				C87DF73C266F9BC70097E707 /* ThemeManager.swift in Sources */,
+				C87DF779266F9C790097E707 /* DarkTheme.swift in Sources */,
 				C8CE38BC265E71FE0009B09E /* UIColorExtension.swift in Sources */,
 				C874FBC3266109C500EBE86E /* SpinnerAlert.swift in Sources */,
 				C8CE38BD265E71FE0009B09E /* UIFontExtension.swift in Sources */,
+				C87DF728266F9BAD0097E707 /* Theme.swift in Sources */,
+				C87DF6EC266F9A780097E707 /* PasscodeEntryViewController.swift in Sources */,
 				C8CE38BE265E71FE0009B09E /* UINavigationControllerExtension.swift in Sources */,
 				F8324B3A2649B7CE007E4BFA /* ExtensionProfile.swift in Sources */,
 				C8CE389C265E71E00009B09E /* CredentialListViewController.swift in Sources */,
@@ -7902,6 +7922,7 @@
 				EB9A179D20E69A7F00B12184 /* Theme.swift in Sources */,
 				CA03B26A247F1D9E00382B62 /* BreachAlertsClient.swift in Sources */,
 				43DDB96C240995A70058A068 /* ETPModel.swift in Sources */,
+				C87DF765266F9C500097E707 /* UIConstants+BottomInset.swift in Sources */,
 				274A36C9239EB94000A21587 /* LibraryPanelButton.swift in Sources */,
 				435D660523D794B90046EFA2 /* UpdateViewModel.swift in Sources */,
 				D0152245229855A8009DE753 /* OneLineCellAndFooter.swift in Sources */,
@@ -7913,7 +7934,6 @@
 				EBA3B2CD2268F27500728BDB /* PhotonActionSheetWidgets.swift in Sources */,
 				D3C3696E1CC6B78800348A61 /* LocalRequestHelper.swift in Sources */,
 				E4B423DD1ABA0318007E66C8 /* ReaderModeHandlers.swift in Sources */,
-				C8D9B697266E3A3A00BA8175 /* AppAuthenticator+Password.swift in Sources */,
 				D308E4E41A5306F500842685 /* SearchEngines.swift in Sources */,
 				048B4C8924A53F81001B56E8 /* UIButtonExtensions.swift in Sources */,
 				23AE36632475A0EF00ACB7BA /* ChronologicalTabsViewController.swift in Sources */,

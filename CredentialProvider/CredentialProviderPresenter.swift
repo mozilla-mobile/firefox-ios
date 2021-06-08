@@ -17,7 +17,7 @@ class CredentialProviderPresenter {
     }
     
     func extensionConfigurationRequested() {
-        view?.displayWelcome()
+        view?.showWelcome()
         if let openError = self.profile.logins.reopenIfClosed() {
             displayNotLoggedInMessage()
         } else {
@@ -59,7 +59,7 @@ class CredentialProviderPresenter {
                 case .failure: self?.cancelWith(.failed)
                 case .success(let loginRecods):
                     DispatchQueue.main.async {
-                        self?.view?.display(itemList: loginRecods.map { ($0.passwordCredentialIdentity, $0.passwordCredential) })
+                        self?.view?.show(itemList: loginRecods.map { ($0.passwordCredentialIdentity, $0.passwordCredential) })
                     }
                 }
             }
@@ -67,7 +67,7 @@ class CredentialProviderPresenter {
     }
     
     func credentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-        view?.displayWelcome()
+        view?.showWelcome()
         
         guard let authInfo = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo(), authInfo.requiresValidation() else {
             showCredentialList(for: serviceIdentifiers)
@@ -79,7 +79,11 @@ class CredentialProviderPresenter {
             touchIDReason: .AuthenticationLoginsTouchReason,
             success: { self.showCredentialList(for: serviceIdentifiers)},
             cancel: { self.cancelWith(.userCanceled) },
-            fallback: nil)
+            fallback: { [weak self] in
+                self?.view?.showPassword { isOk in
+                    if isOk { self?.showCredentialList(for: serviceIdentifiers) }
+                }
+            })
     }
     
     func prepareAuthentication(for credentialIdentity: ASPasswordCredentialIdentity) { }
