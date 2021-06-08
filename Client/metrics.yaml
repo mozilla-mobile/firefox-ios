@@ -313,7 +313,7 @@ app:
 # Top Site
 top_site:
   tile_pressed:
-    type: event
+    type: counter
     description: |
       Records an event when user taps on top site tile.
     extra_keys:
