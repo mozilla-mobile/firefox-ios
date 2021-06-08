@@ -430,10 +430,8 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
         switch Section(section) {
         case .pocket:
             return pocketStories.isEmpty ? .zero : Section(section).headerHeight
-        case .topSites:
+        case .topSites, .libraryShortcuts:
             return Section(section).headerHeight
-        case .libraryShortcuts:
-            return UIDevice.current.userInterfaceIdiom == .pad ? CGSize.zero : Section(section).headerHeight
         }
     }
 
@@ -478,8 +476,7 @@ extension FirefoxHomeViewController {
             // There should always be a full row of pocket stories (numItems) otherwise don't show them
             return pocketStories.count
         case .libraryShortcuts:
-            // disable the libary shortcuts on the ipad
-            return UIDevice.current.userInterfaceIdiom == .pad ? 0 : 1
+            return 1
         }
     }
 
