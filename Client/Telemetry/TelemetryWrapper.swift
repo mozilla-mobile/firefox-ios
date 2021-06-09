@@ -434,6 +434,7 @@ extension TelemetryWrapper {
         case downloadsPanel = "downloads-panel"
         case syncPanel = "sync-panel"
         case yourLibrarySection = "your-library-section"
+        case addBookmarkToast = "add-bookmark-toast"
     }
 
     public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue? = nil, extras: [String: Any]? = nil) {
@@ -454,6 +455,8 @@ extension TelemetryWrapper {
             GleanMetrics.Bookmarks.delete[from].add()
         case (.action, .open, .bookmark, let from, _):
             GleanMetrics.Bookmarks.open[from].add()
+        case (.action, .change, .bookmark, let from, _):
+            GleanMetrics.Bookmarks.edit[from].add()
         // Reader Mode
         case (.action, .tap, .readerModeOpenButton, _, _):
             GleanMetrics.ReaderMode.open.add()

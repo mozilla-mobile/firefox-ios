@@ -951,6 +951,7 @@ class BrowserViewController: UIViewController {
     /// to fetch the last added bookmark in the mobile folder, which is the default
     /// location for all bookmarks added on mobile.
     private func openBookmarkEditPanel() {
+        TelemetryWrapper.recordEvent(category: .action, method: .change, object: .bookmark, value: .addBookmarkToast)
         if profile.isShutdown { return }
         profile.places.getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false).uponQueue(.main) { result in
 
