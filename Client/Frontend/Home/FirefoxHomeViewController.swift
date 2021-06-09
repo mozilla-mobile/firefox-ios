@@ -122,6 +122,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     fileprivate let profile: Profile
     fileprivate let pocketAPI = Pocket()
     fileprivate let flowLayout = UICollectionViewFlowLayout()
+    fileprivate var hasSentPocketSectionEvent = false
 
     fileprivate lazy var topSitesManager: ASHorizontalScrollCellManager = {
         let manager = ASHorizontalScrollCellManager()
@@ -163,6 +164,10 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -382,6 +387,11 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
             let title = Section(indexPath.section).title
             switch Section(indexPath.section) {
             case .pocket:
+                // tracking pocket section shown
+                if !hasSentPocketSectionEvent {
+                    TelemetryWrapper.recordEvent(category: .action, method: .view, object: .pocketSectionImpression, value: nil, extras: nil)
+                    hasSentPocketSectionEvent = true
+                }
                 view.title = title
                 view.moreButton.isHidden = false
                 view.moreButton.setTitle(Strings.PocketMoreStoriesText, for: .normal)
@@ -703,7 +713,8 @@ extension FirefoxHomeViewController: DataObserverDelegate {
         switch section {
         case .pocket:
             site = Site(url: pocketStories[index].url.absoluteString, title: pocketStories[index].title)
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .pocketStory)
+            let key = TelemetryWrapper.EventExtraKey.pocketTilePosition.rawValue
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .pocketStory, value: nil, extras: [key : "\(index)"])
         case .topSites:
             return
         case .libraryShortcuts:

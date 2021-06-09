@@ -376,6 +376,30 @@ firefox_home_page:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2021-12-18"
+  open_from_menu_home_button:
+    type: counter
+    description: |
+        Records when user gets to home screen
+        from hamburger menu.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8481
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8481
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2021-12-07"
+  open_from_awesomebar:
+    type: counter
+    description: |
+        Records when user gets to home screen
+        from awesomebar.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8481
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8481
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2021-12-07"
 
 # Library
 library:
@@ -560,18 +584,29 @@ page_action_menu:
 
 # Pocket
 pocket:
-  open_story:
-    type: counter
+  open_story_position:
+    type: labeled_counter
     description: |
         Counts the number of times a user opens
         Pocket article from Firefox home Pocket feed
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/6195
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8481
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8009
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8481
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2021-08-19"
+    expires: "2021-12-07"
+  section_impressions:
+    type: counter
+    description: |
+        Counts the number of times a user gets to pocket section
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8481
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8481
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2021-12-07"
 
 # Preference metrics
 preferences:
