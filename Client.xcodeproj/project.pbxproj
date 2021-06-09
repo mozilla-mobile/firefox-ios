@@ -322,6 +322,7 @@
 		59A68FD5260B8D520F890F4A /* ReaderPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */; };
 		5F130D2E2483508E00B0F7D0 /* FxAWebViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F130D2D2483508E00B0F7D0 /* FxAWebViewModel.swift */; };
 		60CE80C12667780D004026C7 /* CredentialListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CE80C02667780C004026C7 /* CredentialListPresenter.swift */; };
+		60CE814826710075004026C7 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CE814726710075004026C7 /* StringExtension.swift */; };
 		63306D3921103EAE00F25400 /* SavedTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63306D3821103EAE00F25400 /* SavedTab.swift */; };
 		63306D432110B3CD00F25400 /* TabManagerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63306D422110B3CD00F25400 /* TabManagerStore.swift */; };
 		63306D452110BAF000F25400 /* TabManagerStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63306D442110BAF000F25400 /* TabManagerStoreTests.swift */; };
@@ -2159,6 +2160,7 @@
 		60B541ED838D17F09560AC13 /* mr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = mr; path = mr.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		60BF40268A4375D6D3A80517 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
 		60CE80C02667780C004026C7 /* CredentialListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialListPresenter.swift; sourceTree = "<group>"; };
+		60CE814726710075004026C7 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		60E04CE89D47E52E0A886EAD /* hi-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hi-IN"; path = "hi-IN.lproj/Search.strings"; sourceTree = "<group>"; };
 		61AE456BAD6B0041485EFF1E /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Shared.strings; sourceTree = "<group>"; };
 		61B340508D4D86B6519A165C /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = "id.lproj/Default Browser.strings"; sourceTree = "<group>"; };
@@ -5232,6 +5234,7 @@
 				C8CE38B7265E71FE0009B09E /* UINavigationControllerExtension.swift */,
 				C8CE38B8265E71FE0009B09E /* UIImageExtension.swift */,
 				C874FC3C26612C2500EBE86E /* SpinnerAlertView.swift */,
+				60CE814726710075004026C7 /* StringExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -7858,6 +7861,7 @@
 				F8324B3A2649B7CE007E4BFA /* ExtensionProfile.swift in Sources */,
 				C8CE389C265E71E00009B09E /* CredentialListViewController.swift in Sources */,
 				C8CE38B9265E71FE0009B09E /* EmptyPlaceholderCell.swift in Sources */,
+				60CE814826710075004026C7 /* StringExtension.swift in Sources */,
 				C8CE38BF265E71FE0009B09E /* UIImageExtension.swift in Sources */,
 				C874FC2826612BFF00EBE86E /* AlertControllerView.swift in Sources */,
 				C874FB3A2660E8B900EBE86E /* CredentialProviderPresenter.swift in Sources */,
