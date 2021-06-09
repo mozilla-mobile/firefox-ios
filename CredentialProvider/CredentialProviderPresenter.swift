@@ -57,8 +57,17 @@ class CredentialProviderPresenter {
                 switch result {
                 case .failure:
                     self?.cancelWith(.failed)
-                case .success(let loginRecods):
-                    let dataSource = loginRecods.map { ($0.passwordCredentialIdentity, $0.passwordCredential) }
+                case .success(let loginRecords):
+                    var sortedLogins = loginRecords.sorted { $0.passwordCredentialIdentity.serviceIdentifier.identifier.titleFromHostname() < $1.passwordCredentialIdentity.serviceIdentifier.identifier.titleFromHostname()
+                    }
+                    for (index, element) in sortedLogins.enumerated() {
+                        if element.passwordCredentialIdentity.serviceIdentifier.identifier.asURL?.domainURL == serviceIdentifiers.first?.identifier.asURL?.domainURL {
+                            sortedLogins.remove(at: index)
+                            sortedLogins.insert(element, at: 0)
+                        }
+                    }
+                    
+                    let dataSource = sortedLogins.map { ($0.passwordCredentialIdentity, $0.passwordCredential) }
                     DispatchQueue.main.async {
                         self?.view?.display(itemList: dataSource)
                     }
