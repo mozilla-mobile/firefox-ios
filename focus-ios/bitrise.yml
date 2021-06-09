@@ -16,201 +16,26 @@ trigger_map:
 
 
 workflows:
-  deploy:
-    steps:
-    - activate-ssh-key@3.1.1:
-        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@4.0.11: {}
-    - cache-pull@2.0.1: {}
-    - script@1.1.5:
-        title: Do anything with Script step
-    - certificate-and-profile-installer@1.9.3: {}
-    - xcode-test@1.18.14:
-        inputs:
-        - project_path: "$BITRISE_PROJECT_PATH"
-        - scheme: "$BITRISE_SCHEME"
-    - xcode-archive@2.4.8:
-        inputs:
-        - project_path: "$BITRISE_PROJECT_PATH"
-        - scheme: "$BITRISE_SCHEME"
-        - export_method: "$BITRISE_EXPORT_METHOD"
-    - deploy-to-bitrise-io@1.3.12: {}
-    - cache-push@2.0.5: {}
-    meta:
-      bitrise.io:
-        stack: osx-xcode-12.5.x
 
-
-  primary:
-    steps:
-    - activate-ssh-key@4:
-        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@4: {}
-    - cache-pull@2: {}
-    - certificate-and-profile-installer@1: {}
-    - script@1:
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            ./checkout.sh
-        title: ContentBlockerGen
-    - cache-push@2:
-        inputs:
-        - cache_paths: |
-            $BITRISE_CACHE_DIR
-            ./Carthage -> ./Carthage/Cachefile
-    - set-xcode-build-number@1:
-        inputs:
-        - plist_path: Blockzilla/Info.plist
-    - set-xcode-build-number@1:
-        inputs:
-        - plist_path: ContentBlocker/Info.plist
-    - set-xcode-build-number@1:
-        inputs:
-        - plist_path: FocusIntentExtension/Info.plist
-    - set-xcode-build-number@1:
-        inputs:
-        - plist_path: OpenInFocus/Info.plist
-    - xcode-archive@2:
-        inputs:
-        - scheme: Focus
-        - export_method: app-store
-    meta:
-      bitrise.io:
-        stack: osx-xcode-12.5.x
-
-
-  primary-xcode-10:
-    steps:
-    - activate-ssh-key@3.1.1:
-        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@4.0.11: {}
-    - cache-pull@2.0.1: {}
-    - script@1.1.5:
-        title: Do anything with Script step
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            # write your script here
-            echo "Hello World!"
-
-            ./build-disconnect.py
-    - certificate-and-profile-installer@1.9.3: {}
-    - xcode-test@1.18.14:
-        inputs:
-        - project_path: "$BITRISE_PROJECT_PATH"
-        - scheme: "$BITRISE_SCHEME"
-    - deploy-to-bitrise-io@1.3.12: {}
-    - cache-push@2.0.5:
-        inputs:
-        - cache_paths: |
-            $BITRISE_CACHE_DIR
-            ./Carthage -> ./Carthage/Cachefile
-    meta:
-      bitrise.io:
-        stack: osx-xcode-12.5.x
-
-
-  runTests:
-    steps:
-    - activate-ssh-key@4:
-        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@4: {}
-    - cache-pull@2: {}
-    - certificate-and-profile-installer@1: {}
-    - script@1:
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            ./checkout.sh
-        title: ContentBlockerGen
-    - xcode-build-for-simulator@0:
-        inputs:
-        - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
-        - configuration: FocusDebug
-        - scheme: Focus
-    - xcode-test@2:
-        inputs:
-        - scheme: Focus
-        - simulator_device: iPhone 8
-    - xcode-build-for-simulator@0:
-        inputs:
-        - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
-        - scheme: Klar
-        - configuration: KlarDebug
-        is_always_run: true
-    - xcode-test@2:
-        inputs:
-        - scheme: Klar
-        is_always_run: true
-    - cache-push@2:
-        inputs:
-        - cache_paths: |
-            $BITRISE_CACHE_DIR
-            ./Carthage -> ./Carthage/Cachefile
-    - deploy-to-bitrise-io@1: {}
-    meta:
-      bitrise.io:
-        stack: osx-xcode-12.5.x
-
-
-  primary-nocache:
-    steps:
-    - activate-ssh-key@4:
-        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@4: {}
-    - certificate-and-profile-installer@1: {}
-    - script@1:
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            ./checkout.sh
-        title: ContentBlockerGen
-    - set-xcode-build-number@1:
-        inputs:
-        - plist_path: Blockzilla/Info.plist
-    - set-xcode-build-number@1:
-        inputs:
-        - plist_path: ContentBlocker/Info.plist
-    - set-xcode-build-number@1:
-        inputs:
-        - plist_path: FocusIntentExtension/Info.plist
-    - set-xcode-build-number@1:
-        inputs:
-        - plist_path: OpenInFocus/Info.plist
-    - xcode-archive@2:
-        inputs:
-        - scheme: Focus
-        - export_method: app-store
-    meta:
-      bitrise.io:
-        stack: osx-xcode-12.5.x
-
-
-  clone and build dependencies:
-    steps:
-    - activate-ssh-key@4:
-        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@4: {}
-    - certificate-and-profile-installer@1: {}
-    - script@1:
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            ./checkout.sh
-        title: ContentBlockerGen
-    meta:
-      bitrise.io:
-        stack: osx-xcode-12.5.x
+  clone-and-build-dependencies:
     description: Clones the repo and builds dependencies
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@4: {}
+    - certificate-and-profile-installer@1: {}
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            ./checkout.sh
+        title: ContentBlockerGen
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.5.x
 
 
-  Set project version:
+  set-project-version:
     steps:
     - set-xcode-build-number@1:
         inputs:
@@ -238,7 +63,7 @@ workflows:
     before_run: []
 
 
-  Set Default Browser Entitlement:
+  set-default-browser-entitlement:
     steps:
     - script@1:
         title: Set Default Web Browser Entitlement
@@ -280,9 +105,9 @@ workflows:
       bitrise.io:
         stack: osx-xcode-12.5.x
     before_run:
-      - clone and build dependencies
-      - Set project version
-      - Set Default Browser Entitlement
+      - clone-and-build-dependencies
+      - set-project-version
+      - set-default-browser-entitlement
 
 
   runParallelTests:
@@ -303,11 +128,6 @@ workflows:
     - build-router-wait@0:
         inputs:
         - access_token: "$FOCUS_PARALLEL"
-    - cache-push@2:
-        inputs:
-        - cache_paths: |
-            $BITRISE_CACHE_DIR
-            ./Carthage -> ./Carthage/Cachefile
     - deploy-to-bitrise-io@1: {}
     - slack@3:
         run_if: ".IsBuildFailed"
@@ -348,11 +168,6 @@ workflows:
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
             CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan SmokeTest
         - scheme: Focus
-    - cache-push@2:
-        inputs:
-        - cache_paths: |
-            $BITRISE_CACHE_DIR
-            ./Carthage -> ./Carthage/Cachefile
     - deploy-to-bitrise-io@1: {}
     meta:
       bitrise.io:
@@ -388,11 +203,6 @@ workflows:
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
             CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan SmokeTest
         - scheme: Klar
-    - cache-push@2:
-        inputs:
-        - cache_paths: |
-            $BITRISE_CACHE_DIR
-            ./Carthage -> ./Carthage/Cachefile
     - deploy-to-bitrise-io@1: {}
     meta:
       bitrise.io:
