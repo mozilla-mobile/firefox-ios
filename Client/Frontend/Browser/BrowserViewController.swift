@@ -934,24 +934,36 @@ class BrowserViewController: UIViewController {
         }
         QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark, withUserData: userData, toApplication: .shared)
 
-        showBookmarksToast(for: shareItem)
+        showBookmarksToast()
     }
 
-    private func showBookmarksToast(for shareItem: ShareItem) {
+    private func showBookmarksToast() {
         let toast = ButtonToast(labelText: Strings.AppMenuAddBookmarkConfirmMessage,
                                 buttonText: Strings.BookmarksEdit,
                                 textAlignment: .left) { isButtonTapped in
-            isButtonTapped ? self.openBookmarkEditPanel(for: shareItem) : nil
+            isButtonTapped ? self.openBookmarkEditPanel() : nil
         }
         self.show(toast: toast)
     }
 
-    private func openBookmarkEditPanel(for shareItem: ShareItem) {
+    /// This function will open a view separate from the bookmark edit panel found in the
+    /// Library Panel - Bookmarks section. In order to get the correct information, it needs
+    /// to fetch the last added bookmark in the mobile folder, which is the default
+    /// location for all bookmarks added on mobile.
+    private func openBookmarkEditPanel() {
+        if profile.isShutdown { return }
+        profile.places.getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false).uponQueue(.main) { result in
 
-//        let detailController = BookmarkDetailPanel(profile: profile,
-//                                                   bookmarkNode: bookmarkNode,
-//                                                   parentBookmarkFolder: bookmarkFolder)
-//        let controller = DismissableNavigationViewController(rootViewController: detailController)
+            guard let bookmarkFolder = result.successValue as? BookmarkFolder,
+                  let bookmarkNode = bookmarkFolder.children?.last else { return }
+            let detailController = BookmarkDetailPanel(profile: self.profile,
+                                                       bookmarkNode: bookmarkNode,
+                                                       parentBookmarkFolder: bookmarkFolder,
+                                                       presentedFromToast: true)
+            let controller: DismissableNavigationViewController
+            controller = DismissableNavigationViewController(rootViewController: detailController)
+            self.present(controller, animated: true, completion: nil)
+        }
     }
 
     override func accessibilityPerformEscape() -> Bool {
