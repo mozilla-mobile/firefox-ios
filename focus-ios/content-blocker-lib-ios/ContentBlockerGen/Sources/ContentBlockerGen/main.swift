@@ -12,7 +12,6 @@ let execIsFromCorrectDir = fm.fileExists(atPath: fm.currentDirectoryPath + "/Pac
 let rootdir = execIsFromCorrectDir ? fm.currentDirectoryPath : fallbackPath
 let blacklist = "\(rootdir)/../../shavar-prod-lists/disconnect-blacklist.json"
 let entityList = "\(rootdir)/../../shavar-prod-lists/disconnect-entitylist.json"
-let googleMappingList = "\(rootdir)/../../shavar-prod-lists/google_mapping.json"
 let fingerprintingList = "\(rootdir)/../../shavar-prod-lists/normalized-lists/base-fingerprinting-track.json"
 
 func jsonFrom(filename: String) -> [String: Any] {
@@ -21,7 +20,7 @@ func jsonFrom(filename: String) -> [String: Any] {
     return try! JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
 }
 
-let gen = ContentBlockerGenLib(entityListJson: jsonFrom(filename: entityList), googleMappingJson: jsonFrom(filename: googleMappingList))
+let gen = ContentBlockerGenLib(entityListJson: jsonFrom(filename: entityList))
 
 let outputDir = URL(fileURLWithPath: "\(rootdir)/../../Lists")
 
