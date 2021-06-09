@@ -327,10 +327,10 @@ top_site:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/8501
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8636/
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8662
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2021-12-02"
+    expires: "2021-12-07"
 
 # Experiments
 experiments:
@@ -379,24 +379,24 @@ firefox_home_page:
   open_from_menu_home_button:
     type: counter
     description: |
-        Records when user gets to home screen
-        from hamburger menu.
+        Counts when user opens Firefox Home from
+        bottom right hamburger menu Home button.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/8481
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/8481
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8662
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2021-12-07"
   open_from_awesomebar:
     type: counter
     description: |
-        Records when user gets to home screen
+        Counts when a user opens Firefox Home
         from awesomebar.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/8481
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/8481
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8662
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2021-12-07"
@@ -587,23 +587,25 @@ pocket:
   open_story_position:
     type: labeled_counter
     description: |
-        Counts the number of times a user opens
-        Pocket article from Firefox home Pocket feed
+        Counts when a user opens Pocket article from
+        Firefox Home Pocket feed.
+        The label is position of tile i.e. 0,1,2...
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/8481
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/8481
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8662
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2021-12-07"
   section_impressions:
     type: counter
     description: |
-        Counts the number of times a user gets to pocket section
+        Counts when a user gets to pocket section
+        on Firefox Home
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/8481
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/8481
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8662
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2021-12-07"
