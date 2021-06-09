@@ -111,11 +111,35 @@ extension UIAlertController {
         alert.addAction(noOption)
         return alert
     }
-
-    class func clearWebsiteDataAlert(okayCallback: @escaping (UIAlertAction) -> Void) -> UIAlertController {
+    
+    class func clearSelectedWebsiteDataAlert(numberOfItems: Int, okayCallback: @escaping (UIAlertAction) -> Void) -> UIAlertController {
         let alert = UIAlertController(
             title: "",
-            message: .ClearWebsiteDataAlertMessage,
+            message: String(format: .ClearSelectedWebsiteDataAlertMessage, "\(numberOfItems)"),
+            preferredStyle: .alert
+        )
+
+        let noOption = UIAlertAction(
+            title: .ClearWebsiteDataAlertCancel,
+            style: .cancel,
+            handler: nil
+        )
+
+        let okayOption = UIAlertAction(
+            title: .ClearWebsiteDataAlertOk,
+            style: .destructive,
+            handler: okayCallback
+        )
+
+        alert.addAction(okayOption)
+        alert.addAction(noOption)
+        return alert
+    }
+
+    class func clearAllWebsiteDataAlert(okayCallback: @escaping (UIAlertAction) -> Void) -> UIAlertController {
+        let alert = UIAlertController(
+            title: "",
+            message: .ClearAllWebsiteDataAlertMessage,
             preferredStyle: .alert
         )
 
