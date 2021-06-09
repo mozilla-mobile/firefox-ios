@@ -11,48 +11,35 @@ import SyncTelemetry
 import SnapKit
 
 class LibraryShortcutView: UIView {
-    lazy var button: UIButton = {
-        let button = UIButton()
-        button.imageView?.layer.masksToBounds = true
-        button.layer.cornerRadius = 8
-        button.layer.borderColor = UIColor(white: 0.0, alpha: 0.1).cgColor
-        button.layer.borderWidth = 0.5
-        button.layer.shadowOffset = CGSize(width: 0, height: 2)
-        button.layer.shadowRadius = 6
-        return button
-    }()
+    static let spacing: CGFloat = 15
 
-    lazy var titleLabel: UILabel = {
-        let titleLabel = UILabel()
-        titleLabel.textAlignment = .center
-        titleLabel.lineBreakMode = .byWordWrapping
-        titleLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
-        titleLabel.preferredMaxLayoutWidth = 70
-        return titleLabel
-    }()
+    var button = UIButton()
+    var title = UILabel()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-
         addSubview(button)
-        addSubview(titleLabel)
-
-        self.snp.makeConstraints { make in
-            make.width.greaterThanOrEqualTo(60)
-            make.height.equalTo(90)
-        }
-
+        addSubview(title)
         button.snp.makeConstraints { make in
-            make.size.equalTo(60)
-            make.centerX.equalToSuperview()
             make.top.equalToSuperview()
-            make.bottom.equalTo(titleLabel.snp.top)
+            make.centerX.equalToSuperview()
+            make.width.equalTo(self).offset(-LibraryShortcutView.spacing)
+            make.height.equalTo(self.snp.width).offset(-LibraryShortcutView.spacing)
         }
-
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(button.snp.bottom)
-            make.leading.trailing.centerX.bottom.equalToSuperview()
+        title.adjustsFontSizeToFitWidth = true
+        title.minimumScaleFactor = 0.7
+        title.lineBreakMode = .byTruncatingTail
+        title.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
+        title.textAlignment = .center
+        title.snp.makeConstraints { make in
+            make.top.equalTo(button.snp.bottom).offset(5)
+            make.leading.trailing.equalToSuperview()
         }
+        button.imageView?.contentMode = .scaleToFill
+        button.contentVerticalAlignment = .fill
+        button.contentHorizontalAlignment = .fill
+        button.imageEdgeInsets = UIEdgeInsets(equalInset: LibraryShortcutView.spacing)
+        button.tintColor = .white
     }
 
     required init(coder: NSCoder) {
@@ -60,11 +47,7 @@ class LibraryShortcutView: UIView {
     }
 
     override func layoutSubviews() {
-        button.imageView?.snp.remakeConstraints { make in
-            make.size.equalTo(22)
-            make.center.equalToSuperview()
-        }
-
+        button.layer.cornerRadius = (self.frame.width - LibraryShortcutView.spacing) / 2
         super.layoutSubviews()
     }
 }
