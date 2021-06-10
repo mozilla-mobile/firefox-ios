@@ -269,8 +269,8 @@ class TopTabsTest: BaseTestCase {
             waitForExistence(app.buttons["urlBar-cancel"], timeout: 10)
             // Long tap on Tab Counter should show the correct options
             navigator.performAction(Action.CloseURLBarOpen)
-            waitForTabsButton()
             navigator.nowAt(NewTabScreen)
+            waitForNoExistence(app.keyboards.buttons.element(boundBy: 0), timeoutValue: 10)
             waitForExistence(app.buttons["Show Tabs"], timeout: 10)
             app.buttons["Show Tabs"].press(forDuration: 1)
             waitForExistence(app.cells["quick_action_new_tab"])
@@ -282,6 +282,8 @@ class TopTabsTest: BaseTestCase {
             navigator.performAction(Action.CloseURLBarOpen)
 
             waitForTabsButton()
+            navigator.nowAt(NewTabScreen)
+            waitForNoExistence(app.keyboards.buttons.element(boundBy: 0), timeoutValue: 10)
             checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
             waitForExistence(app.cells.staticTexts["Home"])
             app.cells.staticTexts["Home"].firstMatch.tap()
@@ -290,6 +292,7 @@ class TopTabsTest: BaseTestCase {
             navigator.nowAt(HomePanelsScreen)
             navigator.performAction(Action.CloseURLBarOpen)
             waitForTabsButton()
+            waitForNoExistence(app.keyboards.buttons.element(boundBy: 0), timeoutValue: 10)
             navigator.nowAt(NewTabScreen)
 
             waitForExistence(app.buttons["Show Tabs"])
@@ -298,6 +301,7 @@ class TopTabsTest: BaseTestCase {
             app.cells["tab_close"].tap()
             navigator.performAction(Action.CloseURLBarOpen)
             waitForTabsButton()
+            waitForNoExistence(app.keyboards.buttons.element(boundBy: 0), timeoutValue: 10)
             navigator.nowAt(NewTabScreen)
             checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
 
@@ -314,6 +318,7 @@ class TopTabsTest: BaseTestCase {
             app.cells["nav-tabcounter"].tap()
             navigator.performAction(Action.CloseURLBarOpen)
             waitForTabsButton()
+            waitForNoExistence(app.keyboards.buttons.element(boundBy: 0), timeoutValue: 10)
             navigator.nowAt(NewTabScreen)
             checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
         }
@@ -343,10 +348,12 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
         if skipPlatform { return }
         navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
+        waitForNoExistence(app.keyboards.buttons.element(boundBy: 0), timeoutValue: 10)
         // This menu is available in HomeScreen or NewTabScreen, so no need to open new websites
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
+        waitForNoExistence(app.keyboards.buttons.element(boundBy: 0), timeoutValue: 10)
         navigator.nowAt(NewTabScreen)
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
         closeTabTrayView(goBackToBrowserTab: "Home")
@@ -363,6 +370,7 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
+        waitForNoExistence(app.keyboards.buttons.element(boundBy: 0), timeoutValue: 10)
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
         closeTabTrayView(goBackToBrowserTab: "Home")
     }
