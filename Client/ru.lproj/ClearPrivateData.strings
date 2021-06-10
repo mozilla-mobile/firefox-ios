@@ -1,0 +1,18 @@
+/* Settings item for clearing browsing history */
+"Browsing History" = "Журнал посещений";
+
+/* Settings item for clearing the cache */
+"Cache" = "Кэш";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Куки";
+
+/* Settings item for deleting downloaded files */
+"Downloaded Files" = "Загруженные файлы";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Данные автономных сайтов";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Сохранённые логины";
+

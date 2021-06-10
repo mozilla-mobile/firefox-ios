@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "Immed";
+
+/* Text selection menu item */
+"Find in Page" = "Nadi deg usebter";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "Agmuḍ d-iteddun deg usebter";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "Agmuḍ yezrin deg usebter";
+

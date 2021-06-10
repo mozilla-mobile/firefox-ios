@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "انجام شد";
+
+/* Text selection menu item */
+"Find in Page" = "یافتن در این صفحه";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "نتیجه بعدی در این صفحه";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "نتیجه قبلی در این صفحه";
+

@@ -1,0 +1,48 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Jeste li sigurni?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Otkaži";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Očisti pretragu";
+
+/* Copy password text selection menu item */
+"Copy" = "Kopiraj";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Izbriši";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Odznači sve";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Uključite režim pretraživanja";
+
+/* Hide password text selection menu item */
+"Hide" = "Sakrij";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Prijave će biti trajno uklonjene.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Prijave će biti uklonjene sa svih povezanih uređaja.";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Nema pronađenih prijava";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Otvorite i ispunite";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Otkrij";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Traži";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Polje za pretragu";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Označi sve";
+

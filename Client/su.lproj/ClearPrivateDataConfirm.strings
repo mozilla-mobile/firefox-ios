@@ -1,0 +1,9 @@
+/* The cancel button when confirming clear private data. */
+"Cancel" = "Bolay";
+
+/* The button that clears private data. */
+"OK" = "OKÉH";
+
+/* Description of the confirmation dialog shown when a user tries to clear their private data. */
+"This action will clear all of your private data. It cannot be undone." = "Ieu peta rék meresihan sakumna data pribadi anjeun. Ieu teu bisa dibedokeun.";
+

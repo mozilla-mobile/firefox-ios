@@ -1,0 +1,18 @@
+/* Settings item for clearing browsing history */
+"Browsing History" = "Historial de restolar";
+
+/* Settings item for clearing the cache */
+"Cache" = "Caché";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Cookies";
+
+/* Settings item for deleting downloaded files */
+"Downloaded Files" = "Ficheros baxaos";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Datos de sitios web fuera de llinia";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Anicios de sesión guardaos";
+

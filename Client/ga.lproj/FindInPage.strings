@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "Críochnaithe";
+
+/* Text selection menu item */
+"Find in Page" = "Aimsigh sa Leathanach";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "An chéad toradh eile sa leathanach";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "An toradh roimhe seo sa leathanach";
+

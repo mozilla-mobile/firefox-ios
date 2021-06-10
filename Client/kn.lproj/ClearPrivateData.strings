@@ -1,0 +1,18 @@
+/* Settings item for clearing browsing history */
+"Browsing History" = "ಜಾಲವೀಕ್ಷಣಾ ಇತಿಹಾಸ";
+
+/* Settings item for clearing the cache */
+"Cache" = "ಕ್ಯಾಶೆ";
+
+/* Settings item for clearing cookies */
+"Cookies" = "ಕುಕೀಗಳು";
+
+/* Settings item for deleting downloaded files */
+"Downloaded Files" = "ಡೌನ್‌ಲೋಡ್ ಮಾಡಿದ ಕಡತಗಳು";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "ಆಫ್‌ಲೈನ್‌ ಜಾಲತಾಣದ ದತ್ತಾಂಶ";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "ಉಳಿಸಿದ ಲಾಗಿನ್‌ಗಳು";
+

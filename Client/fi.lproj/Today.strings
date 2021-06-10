@@ -1,0 +1,30 @@
+/* Close Private Tabs button label */
+"TodayWidget.ClosePrivateTabsButton" = "Sulje yksityiset välilehdet";
+
+/* Close Private Tabs */
+"TodayWidget.ClosePrivateTabsLabelV2" = "Sulje yksityiset välilehdet";
+
+/* Close Private Tabs */
+"TodayWidget.ClosePrivateTabsLabelV3" = "Sulje yksityiset välilehdet";
+
+/* Copied Link from clipboard displayed */
+"TodayWidget.CopiedLinkLabelFromPasteBoardV1" = "Kopioitiin linkki leikepöydältä";
+
+/* Go to link pasted on the clipboard */
+"TodayWidget.GoToCopiedLinkLabelV1" = "Siirry kopioituun linkkiin";
+
+/* Open New Tab button label */
+"TodayWidget.NewTabButtonLabelV1" = "Uusi haku";
+
+/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.NoOpenTabsLabel" = "Ei avoimia välilehtiä.";
+
+/* Open New Private Tab button label */
+"TodayWidget.PrivateTabButtonLabelV1" = "Yksityinen haku";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitle" = "Ykkössivustot";
+
+/* Sub label for Top Sites widget */
+"TodayWidget.TopSitesSubLabel" = "Firefox - Ykkössivustot";
+

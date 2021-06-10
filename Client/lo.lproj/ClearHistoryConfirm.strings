@@ -1,0 +1,9 @@
+/* The cancel button when confirming clear history. */
+"Cancel" = "ຍົກເລີກ";
+
+/* The confirmation button that clears history even when Sync is connected. */
+"OK" = "ຕົກລົງ";
+
+/* Description of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"This action will clear all of your private data, including history from your synced devices." = "ການກະທຳນີ້ຈະລົບລ້າງຂູ້ມູນສ່ວນຕົວທັງຫມົດຂອງທ່ານ, ລວມທັງປະຫວັດກາານ sync ຈາກອຸປະກອນຂອງທ່ານ.";
+

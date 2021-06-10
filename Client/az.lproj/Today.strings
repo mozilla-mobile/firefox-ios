@@ -1,0 +1,45 @@
+/* Close Private Tabs button label */
+"TodayWidget.ClosePrivateTabsButton" = "Məxfi vərəqləri qapat";
+
+/* Close Private Tabs */
+"TodayWidget.ClosePrivateTabsLabelV2" = "Məxfi vərəqləri qapat";
+
+/* Close Private Tabs */
+"TodayWidget.ClosePrivateTabsLabelV3" = "Məxfi vərəqləri qapat";
+
+/* Quick Actions drop down menu item for lear Private Tabs when widget enters edit mode and drop down menu expands */
+"TodayWidget.DropDownMenuItemClearPrivateTabs" = "Məxfi vərəqləri təmizlə";
+
+/* Quick Actions drop down menu item for Go to Copied Link when widget enters edit mode and drop down menu expands */
+"TodayWidget.DropDownMenuItemGoToCopiedLink" = "Köçürülmüş keçidə get";
+
+/* Quick Actions drop down menu item for new private search when widget enters edit mode and drop down menu expands */
+"TodayWidget.DropDownMenuItemNewPrivateSearch" = "Yeni məxfi axtarış";
+
+/* Quick Actions drop down menu item for new search when widget enters edit mode and drop down menu expands */
+"TodayWidget.DropDownMenuItemNewSearch" = "Yeni axtarış";
+
+/* Go to link pasted on the clipboard */
+"TodayWidget.GoToCopiedLinkLabelV1" = "Köçürülmüş keçidə get";
+
+/* Go to copied link */
+"TodayWidget.GoToCopiedLinkLabelV2" = "Köçürülmüş keçidə get";
+
+/* Go To Copied Link text pasted on the clipboard but this string doesn't have new line character */
+"TodayWidget.GoToCopiedLinkLabelV3" = "Köçürülmüş keçidə get";
+
+/* Go to copied link */
+"TodayWidget.GoToCopiedLinkLabelV4" = "Köçürülmüş keçidə get";
+
+/* Title for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app. */
+"TodayWidget.PocketWidgetTitle" = "Pocket məsləhət görür";
+
+/* Open New Private Tab button label */
+"TodayWidget.PrivateTabButtonLabelV1" = "Məxfi Axtarış";
+
+/* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
+"TodayWidget.ViewMore" = "Daha çox gör";
+
+/* View More… for Firefox Pocket stories widget where we don't know how many articles are available. */
+"TodayWidget.ViewMoreDots" = "Daha çox gör…";
+

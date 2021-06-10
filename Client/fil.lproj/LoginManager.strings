@@ -1,0 +1,63 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Sigurado ka?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Kanselahin";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Burahin ang Search";
+
+/* Copy password text selection menu item */
+"Copy" = "Kopyahin";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "Created %@";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Burahin";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Tanggalin ang pagpili";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Pasukin ang Search Mode";
+
+/* Hide password text selection menu item */
+"Hide" = "Itago";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Permanenteng tatanggalin ang mga login.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Tatangalin ang mga login sa lahat ng mga device";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "Modified %@";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Walang nakitang login";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Buksan at Punuin";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Password";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Ipakita";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Hanapin";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Search Input Field";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Piliin Lahat";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Username";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "Website";
+
