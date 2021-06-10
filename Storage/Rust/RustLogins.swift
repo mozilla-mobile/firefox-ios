@@ -41,7 +41,7 @@ public extension Login {
         )
     }
 
-    public init(fromJSONDict dict: [String: Any]) {
+    init(fromJSONDict dict: [String: Any]) {
         self.init(
             id: dict["id"] as? String ?? "",
             hostname: dict["hostname"] as? String ?? "",
