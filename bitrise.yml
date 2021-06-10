@@ -780,37 +780,6 @@ workflows:
             set -x
 
 
-            # Import only the shipping locales (from shipping_locales.txt) on
-            Release
-
-            # builds. Import all locales on Beta and Fennec_Enterprise, except
-            for pull
-
-            # requests.
-
-            git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git ||
-            exit 1
-
-            pip install --user virtualenv
-
-            cd /usr/local/bin
-
-            ln -s /Users/vagrant/Library/Python/3.9/bin/virtualenv .
-
-            cd -
-
-            ./ios-l10n-scripts/import-locales-firefox.sh --release
-        title: Pull in L10N
-    - script@1:
-        inputs:
-        - content: >-
-            #!/usr/bin/env bash
-
-            set -e
-
-            set -x
-
-
             cd Client.xcodeproj
 
             sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone
