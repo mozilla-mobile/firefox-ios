@@ -37,8 +37,8 @@ class SaveLoginTest: BaseTestCase {
     
     func testLoginsListFromBrowserTabMenu() {
         navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
         waitForTabsButton()
+        navigator.nowAt(NewTabScreen)
         //Make sure you can access empty Login List from Browser Tab Menu
         navigator.goto(LoginsSettings)
         waitForExistence(app.tables["Login List"])
@@ -56,6 +56,7 @@ class SaveLoginTest: BaseTestCase {
     
     func testPasscodeLoginsListFromBrowserTabMenu() {
         navigator.performAction(Action.CloseURLBarOpen)
+        waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SetPasscode)
         navigator.nowAt(PasscodeSettings)

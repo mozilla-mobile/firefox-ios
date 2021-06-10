@@ -26,6 +26,7 @@ class ToolbarTests: BaseTestCase {
     func testLandscapeNavigationWithTabSwitch() {
         waitForExistence(app.textFields["url"], timeout: 5)
         navigator.performAction(Action.CloseURLBarOpen)
+        waitForTabsButton()
         let urlPlaceholder = "Search or enter address"
         XCTAssert(app.textFields["url"].exists)
         let defaultValuePlaceholder = app.textFields["url"].placeholderValue!

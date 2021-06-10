@@ -74,6 +74,7 @@ class NavigationTest: BaseTestCase {
 
     func testTapSignInShowsFxAFromTour() {
         navigator.performAction(Action.CloseURLBarOpen)
+        waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         // Open FxAccount from tour option in settings menu and go throughout all the screens there
         navigator.goto(Intro_FxASignin)
@@ -88,6 +89,7 @@ class NavigationTest: BaseTestCase {
     
     func testTapSigninShowsFxAFromSettings() {
         navigator.performAction(Action.CloseURLBarOpen)
+        waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
         // Open FxAccount from settings menu and check the Sign in to Firefox scren
@@ -118,6 +120,7 @@ class NavigationTest: BaseTestCase {
 
     func testTapSignInShowsFxAFromRemoteTabPanel() {
         navigator.performAction(Action.CloseURLBarOpen)
+        waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         // Open FxAccount from remote tab panel and check the Sign in to Firefox scren
         navigator.goto(TabTray)
@@ -394,6 +397,7 @@ class NavigationTest: BaseTestCase {
     // In this test, the parent window opens a child and in the child it creates a fake link 'link-created-by-parent'
     func testWriteToChildPopupTab() {
         navigator.performAction(Action.CloseURLBarOpen)
+        waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
         waitForExistence(app.tables["AppSettingsTableViewController.tableView"])

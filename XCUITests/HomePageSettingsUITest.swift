@@ -42,6 +42,7 @@ class HomePageSettingsUITests: BaseTestCase {
 
     func testTyping() {
         navigator.performAction(Action.CloseURLBarOpen)
+        waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
         // Enter a webpage
@@ -130,6 +131,7 @@ class HomePageSettingsUITests: BaseTestCase {
     func testSetFirefoxHomeAsHome() {
         // Start by setting to History since FF Home is default
         navigator.performAction(Action.CloseURLBarOpen)
+        waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
         enterWebPageAsHomepage(text: websiteUrl1)
@@ -146,6 +148,7 @@ class HomePageSettingsUITests: BaseTestCase {
 
     func testSetCustomURLAsHome() {
         navigator.performAction(Action.CloseURLBarOpen)
+        waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
         // Enter a webpage
@@ -166,6 +169,7 @@ class HomePageSettingsUITests: BaseTestCase {
     
     func testTopSitesCustomNumberOfRows() {
         navigator.performAction(Action.CloseURLBarOpen)
+        waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         var topSitesPerRow:Int
         //Ensure testing in portrait mode
