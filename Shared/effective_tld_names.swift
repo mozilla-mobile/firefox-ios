@@ -2,7 +2,17 @@
 * License, v. 2.0. If a copy of the MPL was not distributed with this
 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-let ETLD_NAMES_LIST = [
+let ETLD_NAMES_LIST: [String] = {
+    // The Swift compiler (as of Xcode 12.5) will crash during optimised builds if ETLD_NAMES_LIST is a single array.
+    // It is happy to build it this way though.
+    var combined = ETLD_NAMES_LIST_PART_1! + ETLD_NAMES_LIST_PART_2!
+    // Free up the parts now as we never need them again and they are just wasting memory
+    ETLD_NAMES_LIST_PART_1 = nil
+    ETLD_NAMES_LIST_PART_2 = nil
+    return combined
+}()
+
+fileprivate var ETLD_NAMES_LIST_PART_1: [String]? = [
    "ac",
    "com.ac",
    "edu.ac",
@@ -4996,7 +5006,10 @@ let ETLD_NAMES_LIST = [
    "school.nz",
    "om",
    "co.om",
-   "com.om",
+   "com.om"
+]
+
+fileprivate var ETLD_NAMES_LIST_PART_2: [String]? = [
    "edu.om",
    "gov.om",
    "med.om",
