@@ -56,7 +56,7 @@ class DomainAutocompleteTests: KIFTestCase {
         tester().waitForAnimationsToFinish()
 
         // Tap on Go to perform a search
-        tester().tapView(withAccessibilityLabel: "go")
+        tester().tapView(withAccessibilityLabel: "ir")
         tester().waitForAnimationsToFinish()
         tester().wait(forTimeInterval: 1)
 
