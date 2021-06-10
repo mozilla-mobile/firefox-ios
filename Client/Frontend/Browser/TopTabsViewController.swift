@@ -222,6 +222,9 @@ extension TopTabsViewController: TabDisplayer {
         tabCell.delegate = self
         let isSelected = (tab == tabManager.selectedTab)
         tabCell.configureWith(tab: tab, isSelected: isSelected)
+        // Not all cells are visible when the appearance changes. Let's make sure
+        // the cell has the proper theme when recycled.
+        tabCell.applyTheme()
         return tabCell
     }
 }
