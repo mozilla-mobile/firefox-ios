@@ -10,7 +10,7 @@ github "cezheng/Fuzi"                       ~> 3.0
 github "SwiftyJSON/SwiftyJSON"              ~> 5.0
 github "mozilla-mobile/telemetry-ios"      ~> 1.1
 github "mozilla-mobile/MappaMundi"          "master"
-github "mozilla-services/shavar-prod-lists" "86.0"
+github "mozilla-services/shavar-prod-lists" "89.0"
 
 # Use release version of application-services
 github "mozilla/application-services"      "v77.0.2"
