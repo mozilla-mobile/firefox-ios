@@ -6,6 +6,16 @@ import Foundation
 import UIKit
 
 public extension String {
+    
+    //Returns hostname from URL
+    var titleFromHostname: String {
+        guard let displayName = self.asURL?.host  else { return self }
+        return displayName
+            .replacingOccurrences(of: "^http://", with: "", options: .regularExpression)
+            .replacingOccurrences(of: "^https://", with: "", options: .regularExpression)
+            .replacingOccurrences(of: "^www\\d*\\.", with: "", options: .regularExpression)
+    }
+    
     func escape() -> String? {
         // We can't guaruntee that strings have a valid string encoding, as this is an entry point for tainted data,
         // we should be very careful about forcefully dereferencing optional types.

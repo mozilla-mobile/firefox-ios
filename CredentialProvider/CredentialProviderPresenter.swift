@@ -58,10 +58,10 @@ class CredentialProviderPresenter {
                 case .failure:
                     self?.cancelWith(.failed)
                 case .success(let loginRecords):
-                    var sortedLogins = loginRecords.sorted { $0.passwordCredentialIdentity.serviceIdentifier.identifier.titleFromHostname() < $1.passwordCredentialIdentity.serviceIdentifier.identifier.titleFromHostname()
-                    }
+                    
+                    var sortedLogins = loginRecords.sorted(by: <)
                     for (index, element) in sortedLogins.enumerated() {
-                        if element.passwordCredentialIdentity.serviceIdentifier.identifier.asURL?.domainURL == serviceIdentifiers.first?.identifier.asURL?.domainURL {
+                        if let identifier = serviceIdentifiers.first?.identifier.asURL?.domainURL.absoluteString.titleFromHostname, element.passwordCredentialIdentity.serviceIdentifier.identifier.contains(identifier) {
                             sortedLogins.remove(at: index)
                             sortedLogins.insert(element, at: 0)
                         }

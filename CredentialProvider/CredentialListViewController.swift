@@ -177,7 +177,7 @@ extension CredentialListViewController: UITableViewDataSource {
             return cell
         case .displayItem(let credentialIdentity):
             let cell = tableView.dequeueReusableCell(withIdentifier: "itemlistcell", for: indexPath) as? ItemListCell
-            cell?.titleLabel.text = credentialIdentity.serviceIdentifier.identifier.titleFromHostname()
+            cell?.titleLabel.text = credentialIdentity.serviceIdentifier.identifier.titleFromHostname
             cell?.detailLabel.text = credentialIdentity.user
             return cell ?? UITableViewCell()
         case .none:
