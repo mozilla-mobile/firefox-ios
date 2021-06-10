@@ -58,6 +58,7 @@ protocol HomePanelDelegate: AnyObject {
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
     func homePanel(didSelectURL url: URL, visitType: VisitType, isGoogleTopSite: Bool)
     func homePanelDidRequestToOpenLibrary(panel: LibraryPanelType)
+    func homePanelDidScroll()
 }
 
 protocol HomePanel: Themeable {
@@ -379,6 +380,9 @@ extension FirefoxHomeViewController {
 
 // MARK: -  Tableview Delegate
 extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        homePanelDelegate?.homePanelDidScroll()
+    }
 
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
