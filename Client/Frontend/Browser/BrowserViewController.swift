@@ -754,6 +754,10 @@ class BrowserViewController: UIViewController {
     func showFirefoxHome(inline: Bool) {
         homePanelIsInline = inline
         if self.firefoxHomeViewController == nil {
+            // Firefox home page tracking i.e. being shown from awesomebar vs bottom right hamburger menu
+            let trackingValue: TelemetryWrapper.EventValue = homePanelIsInline ? .openHomeFromPhotonMenuButton : .openHomeFromAwesomebar
+            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .firefoxHomepage, value: trackingValue, extras: nil)
+            
             let firefoxHomeViewController = FirefoxHomeViewController(profile: profile)
             firefoxHomeViewController.homePanelDelegate = self
             self.firefoxHomeViewController = firefoxHomeViewController

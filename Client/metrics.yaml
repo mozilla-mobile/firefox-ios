@@ -310,6 +310,28 @@ app:
       - fx-ios-data-stewards@mozilla.com
     expires: "2021-09-01"
 
+# Top Site
+top_site:
+  tile_pressed:
+    type: event
+    description: |
+      Records an event when user taps on top site tile.
+    extra_keys:
+      tile_type:
+        description: |
+          Type of tile pressed (Ex: google,
+          suggested, user-added or history-based)
+      position:
+        description: |
+          Position of top site.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8501
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8662
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2021-12-07"
+
 # Experiments
 experiments:
   experiment_enrollment:
@@ -354,6 +376,30 @@ firefox_home_page:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2021-12-18"
+  open_from_menu_home_button:
+    type: counter
+    description: |
+        Counts when user opens Firefox Home from
+        bottom right hamburger menu Home button.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8481
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8662
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2021-12-07"
+  open_from_awesomebar:
+    type: counter
+    description: |
+        Counts when a user opens Firefox Home
+        from awesomebar.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8481
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8662
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2021-12-07"
 
 # Library
 library:
@@ -538,18 +584,31 @@ page_action_menu:
 
 # Pocket
 pocket:
-  open_story:
-    type: counter
+  open_story_position:
+    type: labeled_counter
     description: |
-        Counts the number of times a user opens
-        Pocket article from Firefox home Pocket feed
+        Counts when a user opens Pocket article from
+        Firefox Home Pocket feed.
+        The label is position of tile i.e. 0,1,2...
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/6195
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8481
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8009
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8662
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2021-08-19"
+    expires: "2021-12-07"
+  section_impressions:
+    type: counter
+    description: |
+        Counts when a user gets to pocket section
+        on Firefox Home
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8481
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8662
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2021-12-07"
 
 # Preference metrics
 preferences:
