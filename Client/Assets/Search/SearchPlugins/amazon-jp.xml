@@ -14,7 +14,7 @@
   <Param name="mode" value="books-jp"/>
   <Param name="mode" value="books-us"/>
   -->
-  <Param name="tag" value="mozillajapan-fx-22"/>
+  <Param name="tag" value="moz-jp-mbl-22"/>
   <Param name="sourceid" value="Mozilla-search"/>
   <!-- 
   <Param name="sz" value="25"/>

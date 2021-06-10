@@ -213,7 +213,7 @@
     "es-ES": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-m", "bing", "ddg", "twitter", "wikipedia-es"
+          "google-b-m", "bing", "ddg", "twitter", "wikipedia-es", "amazon-es"
         ]
       }
     },
@@ -384,7 +384,7 @@
     "it": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-m", "bing", "ddg", "twitter", "wikipedia-it"
+          "google-b-m", "bing", "ddg", "twitter", "wikipedia-it", "amazon-it"
         ]
       }
     },
@@ -670,7 +670,7 @@
     "sv-SE": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-m", "prisjakt-sv-SE", "twitter", "wikipedia-sv-SE"
+          "google-b-m", "prisjakt-sv-SE", "twitter", "wikipedia-sv-SE", "amazon-se",
         ]
       }
     },
