@@ -149,7 +149,7 @@ class LoginsHelper: TabContentScript {
             if let data = res.successValue {
                 log.debug("Found \(data.count) logins.")
                 for saved in data {
-                    if let saved = saved {
+                    if var saved = saved {
                         if saved.password == login.password {
                             _ = self.profile.logins.use(login: saved)
                             return
