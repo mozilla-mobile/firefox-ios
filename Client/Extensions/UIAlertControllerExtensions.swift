@@ -112,10 +112,10 @@ extension UIAlertController {
         return alert
     }
     
-    class func clearSelectedWebsiteDataAlert(numberOfItems: Int, okayCallback: @escaping (UIAlertAction) -> Void) -> UIAlertController {
+    class func clearSelectedWebsiteDataAlert(okayCallback: @escaping (UIAlertAction) -> Void) -> UIAlertController {
         let alert = UIAlertController(
             title: "",
-            message: String(format: .ClearSelectedWebsiteDataAlertMessage, "\(numberOfItems)"),
+            message: .ClearSelectedWebsiteDataAlertMessage,
             preferredStyle: .alert
         )
 

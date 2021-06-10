@@ -19,10 +19,10 @@ class WebsiteDataManagementViewModel {
     var onViewModelChanged: () -> Void = {}
     
     var clearButtonTitle: String {
-        if selectedRecords.isEmpty {
-            return Strings.SettingsClearAllWebsiteDataButton
-        } else {
-            return  String(format: Strings.SettingsClearSelectedWebsiteDataButton, "\(selectedRecords.count)")
+        switch selectedRecords.count {
+        case 0: return Strings.SettingsClearAllWebsiteDataButton
+        case 1: return Strings.SettingsClearOneWebsiteDataButton
+        default: return String(format: Strings.SettingsClearSelectedWebsiteDataButton, "\(selectedRecords.count)")
         }
     }
     
@@ -53,7 +53,7 @@ class WebsiteDataManagementViewModel {
         if selectedRecords.isEmpty {
             return UIAlertController.clearAllWebsiteDataAlert { _ in self.removeAllRecords() }
         } else {
-            return UIAlertController.clearSelectedWebsiteDataAlert(numberOfItems: selectedRecords.count) { _ in self.removeSelectedRecords() }
+            return UIAlertController.clearSelectedWebsiteDataAlert { _ in self.removeSelectedRecords() }
         }
     }
     
