@@ -6,13 +6,11 @@ import UIKit
 
 class EmptyPlaceholderCell: UITableViewCell {
     
-    @IBOutlet weak var learnMoreButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        learnMoreButton.isHidden = true
         titleLabel.text = String.NoLoginsFoundTitle
         descriptionLabel.text = String.EmptyLoginsListMessage
     }
