@@ -17,6 +17,7 @@ var code: String!
 class SyncUITests: BaseTestCase {
     func testUIFromSettings () {
         navigator.performAction(Action.CloseURLBarOpen)
+        waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(FxASigninScreen)
         verifyFxASigninScreen()
@@ -25,6 +26,7 @@ class SyncUITests: BaseTestCase {
     func testSyncUIFromBrowserTabMenu() {
         // Check menu available from HomeScreenPanel
         navigator.performAction(Action.CloseURLBarOpen)
+        waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
         waitForExistence(app.tables["Context Menu"].cells["menu-sync"])
@@ -47,6 +49,7 @@ class SyncUITests: BaseTestCase {
 
     func testTypeOnGivenFields() {
         navigator.performAction(Action.CloseURLBarOpen)
+        waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(FxASigninScreen)
         waitForExistence(app.navigationBars["Turn on Sync"], timeout: 60)
@@ -87,6 +90,7 @@ class SyncUITests: BaseTestCase {
     func testShowPassword() {
         // The aim of this test is to check if the option to show password is shown when user starts typing and dissapears when no password is typed
         navigator.performAction(Action.CloseURLBarOpen)
+        waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(FxASigninScreen)
         waitForExistence(app.webViews.textFields["Email"], timeout: 20)
@@ -105,6 +109,7 @@ class SyncUITests: BaseTestCase {
     
     func testQRPairing() {
         navigator.performAction(Action.CloseURLBarOpen)
+        waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(Intro_FxASignin)
         // QR does not work on sim but checking that the button works, no crash

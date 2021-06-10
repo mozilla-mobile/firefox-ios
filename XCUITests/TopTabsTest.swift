@@ -266,9 +266,10 @@ class TopTabsTest: BaseTestCase {
     // Smoketest
     func testLongTapTabCounter() {
         if !iPad() {
-            waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: 10)
             // Long tap on Tab Counter should show the correct options
             navigator.performAction(Action.CloseURLBarOpen)
+            waitForTabsButton()
             navigator.nowAt(NewTabScreen)
             waitForExistence(app.buttons["Show Tabs"], timeout: 10)
             app.buttons["Show Tabs"].press(forDuration: 1)
@@ -288,6 +289,7 @@ class TopTabsTest: BaseTestCase {
             // Close tab
             navigator.nowAt(HomePanelsScreen)
             navigator.performAction(Action.CloseURLBarOpen)
+            waitForTabsButton()
             navigator.nowAt(NewTabScreen)
 
             waitForExistence(app.buttons["Show Tabs"])
@@ -295,6 +297,7 @@ class TopTabsTest: BaseTestCase {
             waitForExistence(app.cells["quick_action_new_tab"])
             app.cells["tab_close"].tap()
             navigator.performAction(Action.CloseURLBarOpen)
+            waitForTabsButton()
             navigator.nowAt(NewTabScreen)
             checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
 
@@ -303,12 +306,14 @@ class TopTabsTest: BaseTestCase {
             app.cells.staticTexts["Home"].firstMatch.tap()
             navigator.nowAt(HomePanelsScreen)
             navigator.performAction(Action.CloseURLBarOpen)
+            waitForTabsButton()
             navigator.nowAt(NewTabScreen)
             waitForExistence(app.buttons["Show Tabs"])
             app.buttons["Show Tabs"].press(forDuration: 1)
             waitForExistence(app.cells["nav-tabcounter"])
             app.cells["nav-tabcounter"].tap()
             navigator.performAction(Action.CloseURLBarOpen)
+            waitForTabsButton()
             navigator.nowAt(NewTabScreen)
             checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
         }
@@ -336,28 +341,26 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
 
     func testCloseTabFromLongPressTabsButton() {
         if skipPlatform { return }
-        navigator.goto(URLBarOpen)
-        navigator.back()
+        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         // This menu is available in HomeScreen or NewTabScreen, so no need to open new websites
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
         waitForTabsButton()
+        navigator.nowAt(NewTabScreen)
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
         closeTabTrayView(goBackToBrowserTab: "Home")
         navigator.performAction(Action.CloseURLBarOpen)
+        waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
         navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
         waitForTabsButton()
+        navigator.nowAt(NewTabScreen)
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
         closeTabTrayView(goBackToBrowserTab: "Home")
         navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
-        navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
-        navigator.performAction(Action.CloseURLBarOpen)
+        waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
