@@ -1379,3 +1379,14 @@ extension String {
     public static let AwesomeBarSearchWithEngineButtonTitle = MZLocalizedString("Awesomebar.SearchWithEngine.Title", value: "Search with %@", comment: "Title for button to suggest searching with a search engine. First argument is the name of the search engine to select")
     public static let AwesomeBarSearchWithEngineButtonDescription = MZLocalizedString("Awesomebar.SearchWithEngine.Description", value: "Search %@ directly from the address bar", comment: "Description for button to suggest searching with a search engine. First argument is the name of the search engine to select")
 }
+
+//Credential Provider
+extension String {
+    public static let CredentialProviderCancelButton = MZLocalizedString("Cancel.Title", tableName: "CredentialProvider", comment: "Cancel button title")
+    public static let SearchLogins = MZLocalizedString("Search.Placeholder", tableName: "CredentialProvider", comment: "Placeholder text for search field")
+    public static let SelectPasswordToFill = MZLocalizedString("SelectPassword.Title", tableName: "CredentialProvider", comment: "Select a password to fill instruction")
+    public static let NoMatchingResult = MZLocalizedString("NoMatchingResult", tableName: "CredentialProvider", comment: "Message is displayed when a user searches and no matches can be found against the search query")
+    public static let SeeMoreLogins = MZLocalizedString("SeeMoreLogins", tableName: "CredentialProvider", comment: "This message appears if there are no logins available to this account")
+    public static let EmptyLoginsListMessage = MZLocalizedString("LoginsList.Empty", tableName: "CredentialProvider", comment: "Title shown when there are no logins to list")
+    public static let NoLoginsFoundTitle = MZLocalizedString("NoLoginsFound", tableName: "CredentialProvider", comment: "This is the message informing the user the account has no logins available")
+}

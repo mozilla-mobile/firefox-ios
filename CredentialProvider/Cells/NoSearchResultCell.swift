@@ -1,20 +1,19 @@
+
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
 
-class EmptyPlaceholderCell: UITableViewCell {
+class NoSearchResultCell: UITableViewCell {
     
-    @IBOutlet weak var learnMoreButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        learnMoreButton.isHidden = true
-        titleLabel.text = String.NoLoginsFoundTitle
-        descriptionLabel.text = String.EmptyLoginsListMessage
+        titleLabel.text = String.NoMatchingResult
+        descriptionLabel.text = String.SeeMoreLogins
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

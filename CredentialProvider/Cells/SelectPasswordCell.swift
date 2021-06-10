@@ -4,17 +4,13 @@
 
 import UIKit
 
-class EmptyPlaceholderCell: UITableViewCell {
+class SelectPasswordCell: UITableViewCell {
     
-    @IBOutlet weak var learnMoreButton: UIButton!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var descriptionLabel: UILabel!
+    @IBOutlet weak var selectLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        learnMoreButton.isHidden = true
-        titleLabel.text = String.NoLoginsFoundTitle
-        descriptionLabel.text = String.EmptyLoginsListMessage
+        selectLabel.text = String.SelectPasswordToFill
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
