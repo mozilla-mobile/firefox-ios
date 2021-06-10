@@ -937,6 +937,38 @@ class BrowserViewController: UIViewController {
             userData[QuickActions.TabTitleKey] = title
         }
         QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark, withUserData: userData, toApplication: .shared)
+
+        showBookmarksToast()
+    }
+
+    private func showBookmarksToast() {
+        let toast = ButtonToast(labelText: Strings.AppMenuAddBookmarkConfirmMessage,
+                                buttonText: Strings.BookmarksEdit,
+                                textAlignment: .left) { isButtonTapped in
+            isButtonTapped ? self.openBookmarkEditPanel() : nil
+        }
+        self.show(toast: toast)
+    }
+
+    /// This function will open a view separate from the bookmark edit panel found in the
+    /// Library Panel - Bookmarks section. In order to get the correct information, it needs
+    /// to fetch the last added bookmark in the mobile folder, which is the default
+    /// location for all bookmarks added on mobile.
+    private func openBookmarkEditPanel() {
+        TelemetryWrapper.recordEvent(category: .action, method: .change, object: .bookmark, value: .addBookmarkToast)
+        if profile.isShutdown { return }
+        profile.places.getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false).uponQueue(.main) { result in
+
+            guard let bookmarkFolder = result.successValue as? BookmarkFolder,
+                  let bookmarkNode = bookmarkFolder.children?.last else { return }
+            let detailController = BookmarkDetailPanel(profile: self.profile,
+                                                       bookmarkNode: bookmarkNode,
+                                                       parentBookmarkFolder: bookmarkFolder,
+                                                       presentedFromToast: true)
+            let controller: DismissableNavigationViewController
+            controller = DismissableNavigationViewController(rootViewController: detailController)
+            self.present(controller, animated: true, completion: nil)
+        }
     }
 
     override func accessibilityPerformEscape() -> Bool {
@@ -1987,7 +2019,6 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 
             let bookmarkAction = UIAlertAction(title: Strings.ContextMenuBookmarkLink, style: .default) { _ in
                 self.addBookmark(url: url.absoluteString, title: elements.title)
-                SimpleToast().showAlertWithText(Strings.AppMenuAddBookmarkConfirmMessage, bottomContainer: self.webViewContainer)
                 TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .contextMenu)
             }
             actionSheetController.addAction(bookmarkAction, accessibilityIdentifier: "linkContextMenu.bookmarkLink")

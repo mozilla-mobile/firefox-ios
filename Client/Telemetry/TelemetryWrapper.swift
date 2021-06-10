@@ -436,6 +436,7 @@ extension TelemetryWrapper {
         case downloadsPanel = "downloads-panel"
         case syncPanel = "sync-panel"
         case yourLibrarySection = "your-library-section"
+        case addBookmarkToast = "add-bookmark-toast"
         case openHomeFromAwesomebar = "open-home-from-awesomebar"
         case openHomeFromPhotonMenuButton = "open-home-from-photon-menu-button"
     }
@@ -464,6 +465,8 @@ extension TelemetryWrapper {
             GleanMetrics.Bookmarks.delete[from].add()
         case (.action, .open, .bookmark, let from, _):
             GleanMetrics.Bookmarks.open[from].add()
+        case (.action, .change, .bookmark, let from, _):
+            GleanMetrics.Bookmarks.edit[from].add()
         // Reader Mode
         case (.action, .tap, .readerModeOpenButton, _, _):
             GleanMetrics.ReaderMode.open.add()
