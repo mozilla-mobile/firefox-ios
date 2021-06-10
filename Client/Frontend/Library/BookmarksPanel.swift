@@ -306,6 +306,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         }
 
         guard !tableView.isEditing else {
+            TelemetryWrapper.recordEvent(category: .action, method: .change, object: .bookmark, value: .bookmarksPanel)
             if let bookmarkFolder = self.bookmarkFolder, !(bookmarkNode is BookmarkSeparator) {
                 let detailController = BookmarkDetailPanel(profile: profile, bookmarkNode: bookmarkNode, parentBookmarkFolder: bookmarkFolder)
                 navigationController?.pushViewController(detailController, animated: true)

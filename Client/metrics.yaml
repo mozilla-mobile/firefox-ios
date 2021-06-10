@@ -223,6 +223,23 @@ bookmarks:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2021-07-01"
+  edit:
+    type: labeled_counter
+    description: |
+      Counts the number of times a bookmark is tapped to
+      be edited from:
+      * Add bookmark toast Edit button
+      * Bookmarks panel edit bookmarks view
+    labels:
+      - add-bookmark-toast
+      - bookmarks-panel
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7464
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8675
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2021-12-31"
   open:
     type: labeled_counter
     description: |
