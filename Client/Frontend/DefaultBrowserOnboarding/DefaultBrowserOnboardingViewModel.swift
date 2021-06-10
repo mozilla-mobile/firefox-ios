@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import MozillaAppServices
 
 enum InstallType: String, Codable {
     case fresh
@@ -46,8 +47,12 @@ class DefaultBrowserOnboardingViewModel {
     //  Internal vars
     var model: DefaultBrowserOnboardingModel?
     var goToSettings: (() -> Void)?
+    private let experiments: NimbusApi
     
-    init() {
+    private(set) lazy var displayTitleImage = !(experiments.withVariables(featureId: .onboardingDefaultBrowser).getBool("should-hide-title-image") ?? false)
+    
+    init(experiments: NimbusApi = Experiments.shared) {
+        self.experiments = experiments
         setupUpdateModel()
     }
 

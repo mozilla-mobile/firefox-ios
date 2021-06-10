@@ -8,6 +8,7 @@ import Foundation
 /// This is expected to grow and shrink across releases of the app.
 enum FeatureId: String {
     case nimbusValidation = "nimbus-validation"
+    case onboardingDefaultBrowser = "onboarding-default-browser"
 }
 
 /// A set of common branch ids used in experiments. Branch ids can be application/experiment specific, so
@@ -17,4 +18,5 @@ enum ExperimentBranch {
     static let a2 = "a2"
     static let control = "control"
     static let treatment = "treatment"
+    static let defaultBrowserTreatment = "defaultBrowserTreatment"
 }
