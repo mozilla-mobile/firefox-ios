@@ -31,6 +31,7 @@ class BasicBrowsing: BaseTestCase {
     }
     
     // Smoke test
+    /* Disabled due to issue 1894
     func testAdBlocking() {
         // Load URL
         loadWebPage("https://blockads.fivefilters.org/")
@@ -40,6 +41,7 @@ class BasicBrowsing: BaseTestCase {
         let TrackingProtection = app.staticTexts["Ad blocking enabled!"]
         XCTAssertTrue(TrackingProtection.exists)
     }
+    */
 
     // Smoketest
     func testNavigationToolbar() {
