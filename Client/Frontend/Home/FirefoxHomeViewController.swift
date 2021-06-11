@@ -441,14 +441,28 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        
+        let indexPath = IndexPath(row: 0, section: section)
+        let headerView = self.collectionView(
+            collectionView,
+            viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader,
+            at: indexPath
+        )
+
+        let recommendedSize: CGSize
         switch Section(section) {
         case .pocket:
-            return pocketStories.isEmpty ? .zero : Section(section).headerHeight
+            guard !pocketStories.isEmpty else { return .zero }
+            recommendedSize = Section(section).headerHeight
         case .topSites:
-            return Section(section).headerHeight
+            recommendedSize = Section(section).headerHeight
         case .libraryShortcuts:
-            return UIDevice.current.userInterfaceIdiom == .pad ? CGSize.zero : Section(section).headerHeight
+            guard UIDevice.current.userInterfaceIdiom != .pad else { return .zero }
+            recommendedSize =  Section(section).headerHeight
         }
+        
+        // Take constraints into account when sizing the header
+        return headerView.systemLayoutSizeFitting(recommendedSize)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
