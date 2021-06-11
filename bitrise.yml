@@ -1198,7 +1198,6 @@ workflows:
         stack: osx-xcode-12.5.x
     after_run:
     - RunUITests
-    - RunSmokeXCUITests
   RunSmokeXCUITestsiPad:
     steps:
     - activate-ssh-key@4.0:
@@ -1709,7 +1708,7 @@ trigger_map:
 - push_branch: v34.1
   workflow: xcode12-release-and-beta-nocache
 - pull_request_target_branch: main
-  workflow: RunUnitTests
+  workflow: CommonBuild-UItest-XCUISmoketest
 - pull_request_source_branch: '*'
   pull_request_target_branch: chronological-tabs
   workflow: RunUnitTests

@@ -17,7 +17,7 @@ class AuthenticationTests: KIFTestCase {
     override func tearDown() {
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         BrowserUtils.resetToAboutHomeKIF(tester())
-        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
+        tester().wait(forTimeInterval: 3)
         BrowserUtils.clearPrivateDataKIF(tester())
 		super.tearDown()
     }
