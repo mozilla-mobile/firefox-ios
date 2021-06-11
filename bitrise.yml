@@ -1531,7 +1531,7 @@ workflows:
       in master
     meta:
       bitrise.io:
-        stack: osx-xcode-12.5.x
+        stack: osx-xcode-13.x
     #after_run:
     #- RunSmokeXCUITests
   xcode12-beta:
@@ -1576,18 +1576,7 @@ workflows:
     - script@1:
         title: Move glean sdk_generator
         inputs:
-        - content: "#!/usr/bin/env bash # fail if any commands fails set -e # debug
-            log set -x\n# Move Glean script to source folder from # MozillaAppServices.framework
-            as we don't # want to ship our app with Glean shell # script inside A~S
-            framework\n\necho -e \"-------------------------\"\necho -e \"Printing
-            carthage A~S framework\"\nls Carthage/Build/iOS/MozillaAppServices.framework/\necho
-            -e \"-------------------------\"\necho -e \"Printing root ./\" \nls ./\necho
-            -e \"-------------------------\"\necho -e \"moving sdk generator\" \nmv
-            Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./\necho
-            -e \"-------------------------\"\necho -e \"AFTER MOVE Printing carthage
-            A~S framework\"\nls Carthage/Build/iOS/MozillaAppServices.framework/\necho
-            -e \"-------------------------\"\necho -e \"AFTER MOVE Printing root ./\"
-            \nls ./\necho -e \"-------------------------\""
+        - content: "#!/usr/bin/env bash # fail if any commands fails set -e # debug log set -x\n# Move Glean script to source folder from # MozillaAppServices.framework as we don't # want to ship our app with Glean shell # script inside A~S framework\n\necho -e \"-------------------------\"\necho -e \"Printing carthage A~S framework\"\nls Carthage/Build/iOS/MozillaAppServices.framework/\necho -e \"-------------------------\"\necho -e \"Printing root ./\" \nls ./\necho -e \"-------------------------\"\necho -e \"moving sdk generator\" \nmv Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./\necho -e \"-------------------------\"\necho -e \"AFTER MOVE Printing carthage A~S framework\"\nls Carthage/Build/iOS/MozillaAppServices.framework/\necho -e \"-------------------------\"\necho -e \"AFTER MOVE Printing root ./\" \nls ./\necho -e \"-------------------------\""
     - script@1:
         inputs:
         - content: |-
