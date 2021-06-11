@@ -916,7 +916,7 @@ class BrowserViewController: UIViewController {
 
     func finishEditingAndSubmit(_ url: URL, visitType: VisitType, forTab tab: Tab) {
         urlBar.currentURL = url
-        urlBar.leaveOverlayMode(didCancel: true)
+        urlBar.leaveOverlayMode()
 
         if let nav = tab.loadRequest(URLRequest(url: url)) {
             self.recordNavigationInTab(tab, navigation: nav, visitType: visitType)
@@ -1548,11 +1548,6 @@ extension BrowserViewController: LibraryPanelDelegate {
 }
 
 extension BrowserViewController: HomePanelDelegate {
-    func homePanelDidScroll() {
-        guard urlBar.inOverlayMode else { return }
-        urlBar.leaveOverlayMode()
-    }
-    
     func homePanelDidRequestToOpenLibrary(panel: LibraryPanelType) {
         showLibrary(panel: panel)
         view.endEditing(true)
@@ -2314,6 +2309,7 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
 // MARK: - reopen last closed tab
 
 extension BrowserViewController {
+
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         if AppConstants.MOZ_SHAKE_TO_RESTORE {
                 homePanelDidRequestToRestoreClosedTab(motion)
