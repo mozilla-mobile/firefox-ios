@@ -402,10 +402,11 @@ public class RustLogins {
     }
 
     public func use(login: Login) -> Success {
-        login.timesUsed += 1
-        login.timeLastUsed = Int64(Date.nowMicroseconds())
+        var updatedLogin = login
+        updatedLogin.timesUsed += 1
+        updatedLogin.timeLastUsed = Int64(Date.nowMicroseconds())
 
-        return update(login: login)
+        return update(login: updatedLogin)
     }
 
     public func update(login: Login) -> Success {
