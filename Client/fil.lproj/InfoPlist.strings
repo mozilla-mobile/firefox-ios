@@ -1,5 +1,5 @@
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Ang ito ay hinahayaan kang makuha at e-upload ang mga larawan.";
+"NSCameraUsageDescription" = "Firefox uses your camera to scan QR codes and take photos and video.";
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this

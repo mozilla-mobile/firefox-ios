@@ -16,8 +16,14 @@
 /* About settings section title */
 "About" = "Ngeunaan";
 
+/* The title for the pinning a shortcut action */
+"ActivityStream.ContextMenu.AddToShortcuts" = "Tambah ka Takulan";
+
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite" = "Gantélkeun ka Loka Pangluhurna";
+
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite2" = "Pin";
 
 /* The title for removing a pinned topsite action */
 "ActivityStream.ContextMenu.RemovePinTopsite" = "Piceun Loka Ngagantél";

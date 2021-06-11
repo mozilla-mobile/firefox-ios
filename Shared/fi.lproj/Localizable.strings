@@ -206,6 +206,12 @@
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "Avaa uuteen välilehteen";
 
+/* Context menu item for opening a link in a new private tab */
+"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "Avaa linkki uuteen yksityiseen välilehteen";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenLinkInNewTabButtonTitle" = "Avaa linkki uuteen välilehteen";
+
 /* Context menu item for saving an image */
 "ContextMenu.SaveImageButtonTitle" = "Tallenna kuva";
 
@@ -669,6 +675,9 @@
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "Lisätty lukulistaan";
 
+/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
+"Menu.BackUpAndSync.Label" = "Varmuuskopioi ja synkronoi tiedot";
+
 /* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "Kirjanmerkit";
 
@@ -693,11 +702,23 @@
 /* Label for the button displayed in the menu used to stop the reload of the webpage */
 "Menu.Library.StopReload" = "Pysäytä";
 
+/* Label for the button, displayed in the menu, takes you to screen to manage account when pressed. First argument is the display name for the current account */
+"Menu.ManageAccount.Label" = "Hallitse tiliä %@";
+
+/* Label for the button, displayed in the menu, turns off night mode. */
+"Menu.NightModeTurnOff.Label2" = "Poista yötila käytöstä";
+
 /* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label" = "Käytä yötilaa";
 
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label2" = "Ota yötila käyttöön";
+
 /* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
 "Menu.NoImageModeBlockImages.Label" = "Estä kuvat";
+
+/* Label for the button, displayed in the menu, shows images on the webpage when pressed. */
+"Menu.NoImageModeShowImages.Label" = "Näytä kuvat";
 
 /* Label for title in page action menu. */
 "Menu.PageActions.Title" = "Sivutoiminnot";
@@ -971,6 +992,9 @@
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "Hae tai kirjoita osoite";
+
+/* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
+"Search.Awesomebar.SwitchToTab" = "Vaihda välilehteen";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "Uusi hakukone ilmestyy pkahakupalkkiin.";
@@ -1346,6 +1370,12 @@
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri-oikotiet";
 
+/* Toggled OFF to opt-out of studies */
+"Settings.Studies.Toggle.Off" = "Pois";
+
+/* Toggled ON to participate in studies */
+"Settings.Studies.Toggle.On" = "Päällä";
+
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Selvä";
 
@@ -1592,6 +1622,18 @@
 
 /* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenSelectedTab.KeyCodeTitle" = "Avaa valittu välilehti";
+
+/* The title for the tab tray in private mode */
+"TabTray.PrivateTitle" = "Yksityiset välilehdet";
+
+/* The title on the button to look at private tabs. */
+"TabTray.SegmentedControlTitles.PrivateTabs" = "Yksityinen";
+
+/* The title on the button to look at synced tabs. */
+"TabTray.SegmentedControlTitles.SyncedTabs" = "Synkronoitu";
+
+/* The title on the button to look at regular tabs. */
+"TabTray.SegmentedControlTitles.Tabs" = "Välilehdet";
 
 /* The button title to see more options to perform on the tab. */
 "TabTray.SwipeMenu.More" = "Lisää";
