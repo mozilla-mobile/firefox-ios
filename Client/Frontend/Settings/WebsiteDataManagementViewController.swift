@@ -69,7 +69,6 @@ class WebsiteDataManagementViewModel {
             self?.selectedRecords = []
             self?.onViewModelChanged()
         }
-        
     }
     
     private func removeAllRecords() {
