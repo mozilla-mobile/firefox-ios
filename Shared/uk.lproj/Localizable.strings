@@ -111,7 +111,7 @@
 "Back" = "Назад";
 
 /* Block pop-up windows setting */
-"Block Pop-up Windows" = "Блокувати виринаючі вікна";
+"Block Pop-up Windows" = "Блокувати спливні вікна";
 
 /* The header title for the fields when editing a Bookmark */
 "Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "Закладка";
@@ -1491,7 +1491,7 @@
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Дозволяє деяке стеження для правильної роботи вебсайтів.";
 
 /* Description for strict level tracker protection */
-"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "Блокує більше стеження, реклами і виринаючих вікон. Сторінки завантажуються швидше, але деякі функції можуть не працювати.";
+"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "Блокує більше стеження, реклами і спливних вікон. Сторінки завантажуються швидше, але деякі функції можуть не працювати.";
 
 /* Title for tracking protection options section where level can be selected. */
 "Settings.TrackingProtection.ProtectionLevelTitle" = "Рівень захисту";

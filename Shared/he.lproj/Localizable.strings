@@ -164,11 +164,17 @@
 /* Status label for the empty Bookmarks state. */
 "BookmarksPanel.EmptyState.Title" = "סימניות שישמרו יופיעו ממש כאן.";
 
+/* Describes the date on which the breach occurred */
+"BreachAlerts.BreachDate" = "דליפה זו אירעה בתאריך";
+
 /* Description of what a breach is */
 "BreachAlerts.Description" = "ססמאות הודלפו או נגנבו מאז ששינית לאחרונה את הססמה שלך. כדי להגן על חשבון זה, יש להתחבר לאתר ולשנות את הססמה שלך.";
 
 /* Link to monitor.firefox.com to learn more about breached passwords */
 "BreachAlerts.LearnMoreButton" = "מידע נוסף";
+
+/* Leads to a link to the breached website */
+"BreachAlerts.Link" = "לעבור אל";
 
 /* Title for the Breached Login Detail View. */
 "BreachAlerts.Title" = "דליפת אתר";
