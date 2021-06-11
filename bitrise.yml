@@ -135,6 +135,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
+        machine_type_id: g2.4core
   L10nScreenshotsTests:
     steps:
     - activate-ssh-key@4:
@@ -211,6 +212,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
+        machine_type_id: g2.4core
   RunUnitTests:
     steps:
     - activate-ssh-key@4.0:
@@ -387,6 +389,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
+        machine_type_id: g2.4core
     after_run:
     - RunSmokeXCUITests
   benchmark_test:
@@ -531,6 +534,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
+        machine_type_id: g2.4core
     after_run:
     - RunSmokeXCUITests
   RunUITests:
@@ -755,6 +759,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
+        machine_type_id: g2.4core
   RunAllXCUITests:
     steps:
     - activate-ssh-key@4.0:
@@ -908,6 +913,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
+        machine_type_id: g2.4core
   CommonBuild-UItest-XCUISmoketest:
     steps:
     - activate-ssh-key@4.0:
@@ -1064,6 +1070,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
+        machine_type_id: g2.4core
     after_run:
     - RunUITests
     - RunSmokeXCUITests
@@ -1219,6 +1226,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
+        machine_type_id: g2.4core
   NewXcodeVersions:
     steps:
     - script@1:
@@ -1413,6 +1421,7 @@ app:
 meta:
   bitrise.io:
     machine_type: performance
+    machine_type_id: standard
 trigger_map:
 - push_branch: main
   workflow: RunUnitTests
