@@ -26,7 +26,7 @@ public extension Login {
         let password = credentials.password
 
         self.init(
-            id: id,
+            id: "",
             hostname: hostname,
             password: password ?? "",
             username: username ?? "",
