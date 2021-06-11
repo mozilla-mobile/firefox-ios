@@ -7,20 +7,28 @@ import SnapKit
 import Shared
 import WebKit
 
-protocol WebsiteDataSearchResultsViewControllerDelegate: class {
-    func websiteDataSearchResultsViewController(_ viewController: WebsiteDataSearchResultsViewController, didDeleteRecord record: WKWebsiteDataRecord)
-}
-
-private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
-
 class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-
-    weak var delegate: WebsiteDataSearchResultsViewControllerDelegate?
-
+    private enum Section: Int {
+        case sites = 0
+        case clearButton = 1
+        
+        static let count = 2
+    }
+    
+    private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
+    let viewModel: WebsiteDataManagementViewModel
     private var tableView: UITableView!
 
-    var siteRecords = [WKWebsiteDataRecord]()
     private var filteredSiteRecords = [WKWebsiteDataRecord]()
+    
+    init(viewModel: WebsiteDataManagementViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("Not Implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,6 +39,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         tableView.separatorColor = UIColor.theme.tableView.separator
         tableView.backgroundColor = UIColor.theme.tableView.headerBackground
         tableView.isEditing = true
+        tableView.allowsMultipleSelectionDuringEditing = true
         tableView.register(ThemedTableViewCell.self, forCellReuseIdentifier: "Cell")
         tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderFooterIdentifier)
         view.addSubview(tableView)
@@ -44,45 +53,113 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         }
     }
     
+    func reloadData() {
+        guard let tableView = tableView else { return }
+        tableView.reloadData()
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return Section.count
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filteredSiteRecords.count
+        let section = Section(rawValue: section)!
+        switch section {
+        case .sites: return filteredSiteRecords.count
+        case .clearButton: return 1
+        }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        if let record = filteredSiteRecords[safe: indexPath.row] {
-            cell.textLabel?.text = record.displayName
+        let cell = ThemedTableViewCell(style: .default, reuseIdentifier: nil)
+        let section = Section(rawValue: indexPath.section)!
+        switch section {
+        case .sites:
+            if let record = filteredSiteRecords[safe: indexPath.row] {
+                cell.textLabel?.text = record.displayName
+                if viewModel.selectedRecords.contains(record) {
+                    tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
+                } else {
+                    tableView.deselectRow(at: indexPath, animated: false)
+                }
+            }
+        case .clearButton:
+            cell.textLabel?.text = viewModel.clearButtonTitle
+            cell.textLabel?.textAlignment = .center
+            cell.textLabel?.textColor = UIColor.theme.general.destructiveRed
+            cell.accessibilityTraits = UIAccessibilityTraits.button
+            cell.accessibilityIdentifier = "ClearAllWebsiteData"
         }
         return cell
     }
-
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        guard editingStyle == UITableViewCell.EditingStyle.delete, let record = filteredSiteRecords[safe: indexPath.row] else {
-            return
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let section = Section(rawValue: indexPath.section)!
+        switch section {
+        case .sites:
+            guard let item = viewModel.siteRecords[safe: indexPath.row] else { return }
+            viewModel.selectItem(item)
+            break
+        case .clearButton:
+            let generator = UIImpactFeedbackGenerator(style: .heavy)
+            generator.impactOccurred()
+            let alert = viewModel.createAlertToRemove()
+            present(alert, animated: true, completion: nil)
         }
-
-        let types = WKWebsiteDataStore.allWebsiteDataTypes()
-        WKWebsiteDataStore.default().removeData(ofTypes: types, for: [record]) {
-            self.delegate?.websiteDataSearchResultsViewController(self, didDeleteRecord: record)
-            self.filteredSiteRecords.remove(at: indexPath.row)
-            self.tableView.reloadData()
+    }
+    
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        let section = Section(rawValue: indexPath.section)!
+        switch section {
+        case .sites:
+            guard let item = viewModel.siteRecords[safe: indexPath.row] else { return }
+            viewModel.deselectItem(item)
+            break
+        default: break;
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        let section = Section(rawValue: indexPath.section)!
+        switch section {
+        case .sites:
+            return true
+        case .clearButton:
+            return false
         }
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView
-        headerView?.titleLabel.text = Strings.SettingsWebsiteDataTitle
-        headerView?.showBorder(for: .top, section != 0)
+        headerView?.titleLabel.text = section == Section.sites.rawValue ? Strings.SettingsWebsiteDataTitle : nil
+
+        headerView?.showBorder(for: .top, true)
         headerView?.showBorder(for: .bottom, true)
+
+        // top section: no top border (this is a plain table)
+        guard let section = Section(rawValue: section) else { return headerView }
+        if section == .sites {
+            headerView?.showBorder(for: .top, false)
+
+            // no records: no bottom border (would make 2 with the one from the clear button)
+            let emptyRecords = viewModel.siteRecords.isEmpty
+            if emptyRecords {
+                headerView?.showBorder(for: .bottom, false)
+            }
+        }
         return headerView
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return SettingsUX.TableViewHeaderFooterHeight
+        let section = Section(rawValue: section)!
+        switch section {
+        case .clearButton: return 10 // Controls the space between the site list and the button
+        case .sites: return SettingsUX.TableViewHeaderFooterHeight
+        }
     }
 
     func filterContentForSearchText(_ searchText: String) {
-        filteredSiteRecords = siteRecords.filter({ siteRecord in
+        filteredSiteRecords = viewModel.siteRecords.filter({ siteRecord in
             return siteRecord.displayName.lowercased().contains(searchText.lowercased())
         })
 
