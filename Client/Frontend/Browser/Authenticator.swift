@@ -83,7 +83,7 @@ class Authenticator {
             else if logins.count == 1 && logins[0].protectionSpace.`protocol` != challenge.protectionSpace.`protocol` {
                 let login = logins[0]
                 credentials = login.credentials
-                let new = LoginRecord(credentials: login.credentials, protectionSpace: challenge.protectionSpace)
+                var new = LoginRecord(credentials: login.credentials, protectionSpace: challenge.protectionSpace)
                 new.id = login.id
                 return loginsProvider.update(login: new)
                     >>> { deferMaybe(credentials) }

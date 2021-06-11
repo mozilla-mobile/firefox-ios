@@ -204,7 +204,7 @@ class LoginsHelper: TabContentScript {
         guard new.isValid.isSuccess else {
             return
         }
-
+        var new = new
         new.id = old.id
 
         let formatted: String

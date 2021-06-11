@@ -24,7 +24,7 @@ class RustLoginsTests: XCTestCase {
     }
 
     func addLogin() -> Deferred<Maybe<String>> {
-        let login = LoginRecord(fromJSONDict: [
+        var login = LoginRecord(fromJSONDict: [
             "hostname": "https://example.com",
             "formSubmitUrl": "https://example.com",
             "username": "username",
@@ -65,7 +65,7 @@ class RustLoginsTests: XCTestCase {
         let getResult1 = logins.get(id: addResult.successValue!).value
         XCTAssertTrue(getResult1.isSuccess)
         XCTAssertNotNil(getResult1.successValue!)
-        let login = getResult1.successValue!
+        var login = getResult1.successValue!
         XCTAssertEqual(login!.id, addResult.successValue!)
         login!.password = "password2"
         let updateResult = logins.update(login: login!).value

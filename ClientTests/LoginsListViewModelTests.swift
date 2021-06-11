@@ -25,7 +25,7 @@ class LoginsListViewModelTests: XCTestCase {
         _ = self.viewModel.profile.logins.wipeLocal()
 
         for i in (0..<10) {
-            let login = LoginRecord(fromJSONDict: [
+            var login = LoginRecord(fromJSONDict: [
                 "hostname": "https://example\(i).com/",
                 "formSubmitUrl": "https://example.com",
                 "username": "username\(i)",
