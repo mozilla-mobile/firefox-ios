@@ -95,7 +95,7 @@ Softvision Mobile QA - Firefox for iOS testing tasks and process
    * Description
       * Set of tests that cover the interaction of users with URL bar, search engines & search codes (VPN).
 
-#### Bug Verification
+#### Bug Triage
 
 * Duration: based on issue complexity
 * Frequency: 
