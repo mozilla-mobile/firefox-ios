@@ -1,0 +1,43 @@
+{
+  "configurations" : [
+    {
+      "id" : "AC8BABD3-C583-43AE-B3C7-1B50286C6166",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "enabled" : false,
+      "target" : {
+        "containerPath" : "container:Blockzilla.xcodeproj",
+        "identifier" : "D8E0155B1FCF409F00CA3B9F",
+        "name" : "ClientTests"
+      }
+    },
+    {
+      "skippedTests" : [
+        "BasicBrowsing",
+        "BasicBrowsing\/testAdBlocking()",
+        "BasicBrowsing\/testLaunchExternalApp()",
+        "BasicBrowsing\/testNavigationToolbar()",
+        "OnboardingTest",
+        "PastenGoTest\/testPastenGo()",
+        "SettingAppearanceTest\/testCheckSetting()",
+        "TrackingProtectionMenu\/testActiveProtectionSidebar()",
+        "WebsiteAccessTests\/testVisitWebsite()"
+      ],
+      "target" : {
+        "containerPath" : "container:Blockzilla.xcodeproj",
+        "identifier" : "0BA39A821DD2B8E4005F970A",
+        "name" : "XCUITest"
+      }
+    }
+  ],
+  "version" : 1
+}

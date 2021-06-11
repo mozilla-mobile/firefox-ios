@@ -148,6 +148,26 @@ workflows:
         inputs:
         - content: |-
             #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            # Check if the build is a scheduled build
+
+            if [[ $BITRISE_GIT_MESSAGE == Schedule* ]]
+            then
+                echo "Scheduled build, running Full Functional Tests"
+                envman add --key TEST_PLAN_NAME --value FullFunctionalTests
+            else
+                echo "Regular build, running Smoke Test"
+                envman add --key TEST_PLAN_NAME --value SmokeTest
+            fi
+        - title: Check if build is scheduled or regular to set the test plan
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
             ./checkout.sh
         title: ContentBlockerGen
     - script@1:
@@ -166,13 +186,12 @@ workflows:
     - xcode-test@2:
         inputs:
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
-            CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan SmokeTest
+            CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan $TEST_PLAN_NAME
         - scheme: Focus
     - deploy-to-bitrise-io@1: {}
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
-
 
   runKlar:
     steps:
@@ -183,6 +202,26 @@ workflows:
         inputs:
         - content: |-
             #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            # Check if the build is a scheduled build
+
+            if [[ $BITRISE_GIT_MESSAGE == Schedule* ]]
+            then
+                echo "Scheduled build, running Full Functional Tests"
+                envman add --key TEST_PLAN_NAME --value FullFunctionalTests
+            else
+                echo "Regular build, running Smoke Test"
+                envman add --key TEST_PLAN_NAME --value SmokeTest
+            fi
+        - title: Check if build is scheduled or regular to set the test plan
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
             ./checkout.sh
         title: ContentBlockerGen
     - script@1:
@@ -201,13 +240,12 @@ workflows:
     - xcode-test@2:
         inputs:
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
-            CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan SmokeTest
+            CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan "$TEST_PLAN_NAME"
         - scheme: Klar
     - deploy-to-bitrise-io@1: {}
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
-
 
 app:
   envs:

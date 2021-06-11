@@ -55,6 +55,9 @@
             reference = "container:SmokeTest.xctestplan"
             default = "YES">
          </TestPlanReference>
+         <TestPlanReference
+            reference = "container:FullFunctionalTests.xctestplan">
+         </TestPlanReference>
       </TestPlans>
       <Testables>
          <TestableReference
