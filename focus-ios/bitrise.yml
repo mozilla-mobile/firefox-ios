@@ -104,6 +104,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
+        machine_type_id: g2.8core
     before_run:
       - clone-and-build-dependencies
       - set-project-version
@@ -137,6 +138,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
+        machine_type_id: standard
 
 
   runFocus:
@@ -192,6 +194,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
+        machine_type_id: g2.8core
 
   runKlar:
     steps:
@@ -246,6 +249,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
+        machine_type_id: g2.8core
 
 app:
   envs:
