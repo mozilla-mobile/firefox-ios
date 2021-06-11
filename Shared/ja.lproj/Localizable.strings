@@ -736,7 +736,7 @@
 "Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox はクロスサイトトラッカー、ソーシャルトラッカー、暗号通貨マイニング、フィンガープリント採取および追跡コンテンツをブロックします。";
 
 /* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
-"Menu.History.Label" = "歴史";
+"Menu.History.Label" = "履歴";
 
 /* Label for the button displayed in the menu used to stop the reload of the webpage */
 "Menu.Library.StopReload" = "中止";

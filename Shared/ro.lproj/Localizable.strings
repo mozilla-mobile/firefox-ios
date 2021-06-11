@@ -687,6 +687,9 @@
 /* Label for the button displayed in the menu used to stop the reload of the webpage */
 "Menu.Library.StopReload" = "Oprește";
 
+/* Label for the button, displayed in the menu, takes you to screen to manage account when pressed. First argument is the display name for the current account */
+"Menu.ManageAccount.Label" = "Gestionează contul %@";
+
 /* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label" = "Activează modul nocturn";
 

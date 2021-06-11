@@ -118,6 +118,9 @@
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitle" = "Hoff Wefannau";
 
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitleV2" = "Llwybrau Byr y Wefan";
+
 /* Sub label for Top Sites widget */
 "TodayWidget.TopSitesSubLabel" = "Firefox - Hoff Wefannau";
 

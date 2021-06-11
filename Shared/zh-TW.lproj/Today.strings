@@ -118,6 +118,9 @@
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitle" = "熱門網站";
 
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitleV2" = "網站捷徑";
+
 /* Sub label for Top Sites widget */
 "TodayWidget.TopSitesSubLabel" = "Firefox - 熱門網站";
 

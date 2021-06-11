@@ -1293,7 +1293,7 @@
 "Settings.HomePage.Title" = "Ρυθμίσεις αρχικής σελίδας";
 
 /* Placeholder text in the homepage setting when no homepage has been set. */
-"Settings.HomePage.URL.Placeholder" = "Εισάγετε μια ιστοσελίδα";
+"Settings.HomePage.URL.Placeholder" = "Εισαγάγετε μια ιστοσελίδα";
 
 /* Title of the setting section containing the URL of the current home page. */
 "Settings.HomePage.URL.Title" = "Τρέχουσα αρχική σελίδα";
