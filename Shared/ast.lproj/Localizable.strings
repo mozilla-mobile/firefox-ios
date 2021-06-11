@@ -556,10 +556,10 @@
 "Menu.Downloads.Label" = "Descargues";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOff.Title" = "La proteición escontra'l rastrexu ta DESACTIVADA pa esti sitiu.";
+"Menu.EnhancedTrackingProtectionOff.Title" = "La proteición antirrastrexu ta DESACTIVADA pa esti sitiu.";
 
 /* A switch to enable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOn.Title" = "La proteición escontra'l rastrexu ta ACTIVADA pa esti sitiu.";
+"Menu.EnhancedTrackingProtectionOn.Title" = "La proteición antirrastrexu ta ACTIVADA pa esti sitiu.";
 
 /* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
 "Menu.History.Label" = "Historial";
@@ -640,7 +640,7 @@
 "Menu.TrackingProtectionFingerprintersBlocked.Title" = "Buelgues";
 
 /* more info about what tracking protection is about */
-"Menu.TrackingProtectionMoreInfo.Description" = "Llei más tocante a cómo la proteición escontra'l rastrexu bloquia los rastrexadores en llinia que recueyen datos de restolar pente los sitios web.";
+"Menu.TrackingProtectionMoreInfo.Description" = "Llei más tocante a cómo la proteición antirrastrexu bloquia los rastrexadores en llinia que recueyen datos de restolar pente los sitios web.";
 
 /* label for the menu item to show when the website is whitelisted from blocking trackers. */
 "Menu.TrackingProtectionOption.WhiteListOnDescription" = "El sitiu inclúi elementos que quiciabes rastexen el to restolar. Tienes desactivada la proteición.";
@@ -687,6 +687,9 @@
 
 /* See http://mzl.la/1G7uHo7 */
 "Open Settings" = "Abrir Axustes";
+
+/* Toggle tabs syncing setting */
+"Open Tabs" = "Llingüetes abiertes";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
 "OpenURL.Error.Message" = "Firefox nun pue abrir la páxina porque tien una direición que nun ye válida.";
@@ -1268,6 +1271,9 @@
 
 /* The button title to see more options to perform on the tab. */
 "TabTray.SwipeMenu.More" = "Más";
+
+/* The title for the tab tray */
+"TabTray.Title" = "Llingüetes abiertes";
 
 /* The section header for tabs opened today */
 "TabTray.Today.Header" = "Güei";

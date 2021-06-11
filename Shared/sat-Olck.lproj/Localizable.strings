@@ -16,11 +16,23 @@
 /* About settings section title */
 "About" = "ᱵᱟᱵᱚᱛ";
 
+/* The title for the pinning a shortcut action */
+"ActivityStream.ContextMenu.AddToShortcuts" = "ᱠᱷᱟᱴᱚᱢᱟᱪᱷᱟ ᱥᱮᱞᱮᱫᱽ ᱢᱮ";
+
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite" = "ᱪᱮᱛᱟᱱ ᱨᱤᱱ ᱥᱟᱭᱤᱴ ᱠᱚ ᱯᱤᱱ ᱢᱮ";
 
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite2" = "ᱞᱟᱴᱷᱟ";
+
+/* The title for removing a shortcut action */
+"ActivityStream.ContextMenu.RemoveFromShortcuts" = "ᱠᱷᱟᱴᱚᱢᱟᱪᱷᱟ ᱠᱷᱚᱱ ᱚᱪᱚᱜᱽ ᱢᱮ";
+
 /* The title for removing a pinned topsite action */
 "ActivityStream.ContextMenu.RemovePinTopsite" = "ᱯᱤᱱ ᱟᱠᱟᱱ ᱥᱟᱭᱤᱴ ᱠᱚ ᱚᱰᱚᱠ ᱢᱮ";
+
+/* The title for the unpinning a topsite action */
+"ActivityStream.ContextMenu.UnpinTopsite" = "ᱚᱪᱚᱜᱽ";
 
 /* The description of a highlight if it is a site the user has bookmarked */
 "ActivityStream.Highlights.Bookmark" = "ᱵᱩᱩᱠᱢᱟᱨᱠ ᱦᱩᱭᱮᱱᱟ";
@@ -37,11 +49,17 @@
 /* Section title label for Recommended by Pocket section */
 "ActivityStream.Pocket.SectionTitle" = "ᱯᱚᱠᱮᱴ ᱨᱮ ᱴᱨᱮᱱᱰᱤᱝᱚ ᱠᱟᱱᱟ";
 
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle2" = "ᱯᱚᱠᱮᱴ ᱵᱟᱛᱟᱣ ᱟᱠᱟᱫ ᱡᱤᱱᱤᱥ";
+
 /* The description of a Pocket Story */
 "ActivityStream.Pocket.Trending" = "ᱴᱨᱮᱱᱰᱤᱝ";
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "ᱦᱟᱹᱞᱤ ᱨᱮ ᱦᱤᱨᱤᱭᱟᱠᱟᱱᱟ";
+
+/* Section title label for Shortcuts */
+"ActivityStream.Shortcuts.SectionTitle" = "ᱠᱷᱟᱴᱚᱢᱟᱪᱷᱟ";
 
 /* label showing how many rows of topsites are shown. %d represents a number */
 "ActivityStream.TopSites.RowCount" = "ᱛᱷᱟᱨ ᱠᱚ: %d";
@@ -82,6 +100,9 @@
 
 /* Authentication prompt title */
 "Authentication required" = "ᱯᱚᱨᱢᱟᱱ ᱞᱟᱹᱠᱛᱤ";
+
+/* Title for button to suggest searching with a search engine. First argument is the name of the search engine to select */
+"Awesomebar.SearchWithEngine.Title" = "%@ ᱥᱟᱞᱟᱜ ᱥᱮᱸᱫᱽᱨᱟᱭ ᱢᱮ";
 
 /* Accessibility label for the Back button in the tab toolbar. */
 "Back" = "ᱛᱟᱭᱚᱢ";
@@ -211,6 +232,12 @@
 
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "ᱱᱟᱶᱟ ᱴᱮᱵ ᱨᱮ ᱠᱷᱩᱞᱟᱹᱭ ᱢᱮ";
+
+/* Context menu item for opening a link in a new private tab */
+"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "ᱱᱟᱶᱟ ᱱᱤᱡᱮᱨᱟᱜ ᱴᱮᱵ ᱨᱮ ᱡᱷᱤᱡᱽ ᱢᱮ";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenLinkInNewTabButtonTitle" = "ᱱᱟᱶᱟ ᱴᱮᱵ ᱨᱮ ᱡᱷᱤᱡᱽ ᱢᱮ";
 
 /* Context menu item for saving an image */
 "ContextMenu.SaveImageButtonTitle" = "ᱪᱤᱛᱟᱹᱨ ᱥᱟᱸᱪᱟᱣ ᱢᱮ";
@@ -671,6 +698,9 @@
 
 /* Toast displayed to the user after adding the item to the Top Sites. */
 "Menu.AddPin.Confirm" = "ᱪᱮᱛᱟᱱ ᱨᱤᱱ ᱥᱟᱭᱤᱴ ᱛᱮ ᱯᱤᱱ ᱮᱱᱟ ᱠᱚ";
+
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"Menu.AddPin.Confirm2" = "ᱠᱷᱟᱴᱚᱢᱟᱪᱷᱟ ᱛᱮ ᱥᱮᱞᱮᱫᱽ ᱮᱱᱟ";
 
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "ᱯᱟᱰᱦᱟᱣ ᱞᱤᱥᱴᱤ ᱨᱮ ᱥᱮᱞᱮᱫᱮᱱᱟ";

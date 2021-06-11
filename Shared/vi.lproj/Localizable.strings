@@ -20,7 +20,7 @@
 "ActivityStream.ContextMenu.AddToShortcuts" = "Thêm vào lối tắt";
 
 /* The title for the pinning a topsite action */
-"ActivityStream.ContextMenu.PinTopsite" = "Ghim vào các trang phổ biến";
+"ActivityStream.ContextMenu.PinTopsite" = "Ghim vào các trang web hàng đầu";
 
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite2" = "Ghim";
@@ -446,7 +446,7 @@
 "fxa.signin.use-email-instead" = "Sử dụng email thay thế";
 
 /* Button label to sign into Sync */
-"FxA.SignIntoSync" = "Đăng nhập vào đồng bộ hóa";
+"FxA.SignIntoSync" = "Đăng nhập để đồng bộ hóa";
 
 /* Label explaining what sync does */
 "FxA.SyncExplain" = "Nhận các thẻ, dấu trang và mật khẩu từ các thiết bị khác của bạn.";

@@ -16,6 +16,12 @@
 /* Open New Tab button label */
 "TodayWidget.NewTabButtonLabelV1" = "Busca nueva";
 
+/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.NoOpenTabsLabel" = "Nun hai llingüetes abiertes.";
+
+/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.NoOpenTabsLabelV2" = "Nun hai llingüetes abiertes";
+
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Busca privada";
 

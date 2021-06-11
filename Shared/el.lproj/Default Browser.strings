@@ -5,7 +5,7 @@
 "DefaultBrowserCard.Button.v2" = "Μάθετε πώς";
 
 /* Description for small card shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Ρύθμιση συνδέσμων ιστοσελίδων, emails και μηνυμάτων ώστε να ανοίγουν στο Firefox.";
+"DefaultBrowserCard.Description" = "Ρύθμιση συνδέσμων ιστοσελίδων, email και μηνυμάτων ώστε να ανοίγουν στο Firefox.";
 
 /* Title for small card shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Αλλαγή προεπ. προγράμματος περιήγησης";

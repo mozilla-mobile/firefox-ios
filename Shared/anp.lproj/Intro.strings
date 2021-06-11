@@ -1,3 +1,6 @@
+/* Next button on the first intro screen. */
+"Intro.Slides.Button.Next" = "अगिला";
+
 /* Description for the 'Favorite Search Engine' panel in the First Run tour. */
 "Intro.Slides.Search.Description" = "कुछ अलग खोजि रहलो छी? सेटिंग्स में दोसर डिफ़ॉल्ट खोज इंजन चुनियै(आरु अपनो जोरियै).";
 

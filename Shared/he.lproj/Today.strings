@@ -7,6 +7,9 @@
 /* Close Private Tabs */
 "TodayWidget.ClosePrivateTabsLabelV3" = "סגירת לשוניות פרטיות";
 
+/* Copied Link from clipboard displayed */
+"TodayWidget.CopiedLinkLabelFromPasteBoardV1" = "הקישור הועתק מהלוח";
+
 /* Quick Actions drop down menu item for lear Private Tabs when widget enters edit mode and drop down menu expands */
 "TodayWidget.DropDownMenuItemClearPrivateTabs" = "ניקוי לשוניות פרטיות";
 
