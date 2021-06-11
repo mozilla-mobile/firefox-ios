@@ -100,7 +100,9 @@ extension Strings {
 extension Strings {
     public static let SettingsGeneralSectionTitle = MZLocalizedString("Settings.General.SectionName", value: "General", comment: "General settings section title")
     public static let SettingsClearPrivateDataClearButton = MZLocalizedString("Settings.ClearPrivateData.Clear.Button", value: "Clear Private Data", comment: "Button in settings that clears private data for the selected items.")
-    public static let SettingsClearAllWebsiteDataButton = MZLocalizedString("Settings.ClearAllWebsiteData.Clear.Button", value: "Clear All Website Data", comment: "Button in Data Management that clears private data for the selected items.")
+    public static let SettingsClearAllWebsiteDataButton = MZLocalizedString("Settings.ClearAllWebsiteData.Clear.Button", value: "Clear All Website Data", comment: "Button in Data Management that clears all items.")
+    public static let SettingsClearOneWebsiteDataButton = MZLocalizedString("Settings.ClearSelectedWebsiteData.ClearOneItem.Button", value: "Clear 1 Item", comment: "Button in Data Management that clears private data for one selected item.")
+    public static let SettingsClearSelectedWebsiteDataButton = MZLocalizedString("Settings.ClearSelectedWebsiteData.ClearSelected.Button", value: "Clear %1$@ Items", comment: "Button in Data Management that clears private data for the selected items. Parameter is the number of items to be cleared")
     public static let SettingsClearPrivateDataSectionName = MZLocalizedString("Settings.ClearPrivateData.SectionName", value: "Clear Private Data", comment: "Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data.")
     public static let SettingsDataManagementSectionName = MZLocalizedString("Settings.DataManagement.SectionName", value: "Data Management", comment: "Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data.")
     public static let SettingsFilterSitesSearchLabel = MZLocalizedString("Settings.DataManagement.SearchLabel", value: "Filter Sites", comment: "Default text in search bar for Data Management")
@@ -1009,7 +1011,8 @@ extension String {
 
 // ClearWebsiteDataAlert
 extension String {
-    public static let ClearWebsiteDataAlertMessage = MZLocalizedString("Settings.WebsiteData.ConfirmPrompt", value: "This action will clear all of your website data. It cannot be undone.", comment: "Description of the confirmation dialog shown when a user tries to clear their private data.")
+    public static let ClearAllWebsiteDataAlertMessage = MZLocalizedString("Settings.WebsiteData.ConfirmPrompt", value: "This action will clear all of your website data. It cannot be undone.", comment: "Description of the confirmation dialog shown when a user tries to clear their private data.")
+    public static let ClearSelectedWebsiteDataAlertMessage = MZLocalizedString("Settings.WebsiteData.SelectedConfirmPrompt", value: "This action will clear the selected items. It cannot be undone.", comment: "Description of the confirmation dialog shown when a user tries to clear some of their private data.")
     // TODO: these look like the same as in ClearPrivateDataAlert, I think we can remove them
     public static let ClearWebsiteDataAlertCancel = MZLocalizedString("Cancel", tableName: "ClearPrivateDataConfirm", comment: "The cancel button when confirming clear private data.")
     public static let ClearWebsiteDataAlertOk = MZLocalizedString("OK", tableName: "ClearPrivateDataConfirm", comment: "The button that clears private data.")
