@@ -37,6 +37,7 @@ class SecurityTests: KIFTestCase {
 
         // Also make sure the XSS alert doesn't appear.
         XCTAssertFalse(tester().viewExistsWithLabel("Local page loaded"))
+        tester().wait(forTimeInterval: 5)
     }
 
     /// Tap the Error exploit button, which tries to load the error page on localhost
@@ -101,6 +102,7 @@ class SecurityTests: KIFTestCase {
         tester().tapView(withAccessibilityIdentifier: "closeAllTabsButtonTabTray")
         tester().tapView(withAccessibilityIdentifier: "TabTrayController.deleteButton.closeAll")
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
+        tester().wait(forTimeInterval: 5)
     }
 
     // For blob URLs, just show "blob:" to the user (see bug 1446227)
@@ -138,7 +140,7 @@ class SecurityTests: KIFTestCase {
     override func tearDown() {
         tester().wait(forTimeInterval: 5)
         BrowserUtils.resetToAboutHomeKIF(tester())
-        tester().wait(forTimeInterval: 3)
+        tester().wait(forTimeInterval: 5)
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         super.tearDown()
     }
