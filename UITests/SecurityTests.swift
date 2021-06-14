@@ -67,8 +67,9 @@ class SecurityTests: KIFTestCase {
     /// to load the session restore exploit. A new tab will load showing an error page,
     /// but we shouldn't be able to load session restore.
     func testWindowExploit() {
+        tester().wait(forTimeInterval: 3)
         tester().tapWebViewElementWithAccessibilityLabel("New tab exploit")
-        tester().wait(forTimeInterval: 5)
+        tester().wait(forTimeInterval: 3)
         let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView
 
         // Make sure the URL doesn't change.
