@@ -88,6 +88,7 @@ class SecurityTests: KIFTestCase {
     /// Since the window has no origin before load, the page is able to modify the document,
     /// so make sure we don't show the URL.
     func testSpoofExploit() {
+        tester().wait(forTimeInterval: 3)
         tester().tapWebViewElementWithAccessibilityLabel("URL spoof")
 
         // Wait for the window to open.

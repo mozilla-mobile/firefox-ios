@@ -45,7 +45,7 @@ class NoImageModeTests: KIFTestCase {
         checkHiding(isOn: false)
         tester().wait(forTimeInterval: 3)
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
-        tester().wait(forTimeInterval: 1)
+        tester().wait(forTimeInterval: 3)
         if BrowserUtils.iPad() {
             tester().tapView(withAccessibilityIdentifier: "TabToolbar.menuButton")
         } else {
