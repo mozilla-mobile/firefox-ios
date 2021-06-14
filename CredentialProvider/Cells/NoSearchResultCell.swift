@@ -7,17 +7,14 @@ import UIKit
 
 class NoSearchResultCell: UITableViewCell {
     
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var descriptionLabel: UILabel!
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        titleLabel.text = String.NoMatchingResult
-        descriptionLabel.text = String.SeeMoreLogins
+    @IBOutlet weak var titleLabel: UILabel! {
+        didSet {
+            titleLabel.text = .LoginsListNoMatchingResultTitle
+        }
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
+    @IBOutlet weak var descriptionLabel: UILabel! {
+        didSet {
+            descriptionLabel.text = .LoginsListNoMatchingResultSubtitle
+        }
     }
-
 }

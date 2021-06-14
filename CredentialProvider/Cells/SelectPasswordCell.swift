@@ -6,15 +6,9 @@ import UIKit
 
 class SelectPasswordCell: UITableViewCell {
     
-    @IBOutlet weak var selectLabel: UILabel!
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        selectLabel.text = String.SelectPasswordToFill
+    @IBOutlet weak var selectLabel: UILabel! {
+        didSet {
+            selectLabel.text = .LoginsListSelectPasswordTitle
+        }
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-    }
-
 }

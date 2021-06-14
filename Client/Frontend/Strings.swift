@@ -1382,11 +1382,12 @@ extension String {
 
 //Credential Provider
 extension String {
-    public static let CredentialProviderCancelButton = MZLocalizedString("Cancel.Title", tableName: "CredentialProvider", comment: "Cancel button title")
-    public static let SearchLogins = MZLocalizedString("Search.Placeholder", tableName: "CredentialProvider", comment: "Placeholder text for search field")
-    public static let SelectPasswordToFill = MZLocalizedString("SelectPassword.Title", tableName: "CredentialProvider", comment: "Select a password to fill instruction")
-    public static let NoMatchingResult = MZLocalizedString("NoMatchingResult", tableName: "CredentialProvider", comment: "Message is displayed when a user searches and no matches can be found against the search query")
-    public static let SeeMoreLogins = MZLocalizedString("SeeMoreLogins", tableName: "CredentialProvider", comment: "This message appears if there are no logins available to this account")
-    public static let EmptyLoginsListMessage = MZLocalizedString("LoginsList.Empty", tableName: "CredentialProvider", comment: "Title shown when there are no logins to list")
-    public static let NoLoginsFoundTitle = MZLocalizedString("NoLoginsFound", tableName: "CredentialProvider", comment: "This is the message informing the user the account has no logins available")
+    public static let LoginsListSearchCancel = MZLocalizedString("LoginsList.Search.Cancel", tableName: "CredentialProvider", comment: "Cancel button title")
+    public static let LoginsListSearchPlaceholder = MZLocalizedString("LoginsList.Search.Placeholder", tableName: "CredentialProvider", comment: "Placeholder text for search field")
+    public static let LoginsListSelectPasswordTitle = MZLocalizedString("LoginsList.SelectPassword.Title", tableName: "CredentialProvider", comment: "Select a password to fill instruction")
+    public static let LoginsListNoMatchingResultTitle = MZLocalizedString("LoginsList.NoMatchingResult.Title", tableName: "CredentialProvider", comment: "Message is displayed when a user searches and no matches can be found against the search query")
+    public static let LoginsListNoMatchingResultSubtitle = MZLocalizedString("LoginsList.NoMatchingResult.Subtitle", tableName: "CredentialProvider", comment: "This message appears if there are no logins available to this account")
+    public static let LoginsListNoLoginsFoundTitle = MZLocalizedString("LoginsList.NoLoginsFound.Title", tableName: "CredentialProvider", comment: "This is the message informing the user the account has no logins available")
+    public static let LoginsListNoLoginsFoundSubtitle = MZLocalizedString("LoginsList.NoLoginsFound.Subtitle", tableName: "CredentialProvider", comment: "Title shown when there are no logins to list")
+    
 }

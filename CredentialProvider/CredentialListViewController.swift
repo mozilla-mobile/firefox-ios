@@ -26,7 +26,7 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
     
     private var cancelButton: UIButton {
         let button = UIButton()
-        button.setTitle(String.CredentialProviderCancelButton, for: .normal)
+        button.setTitle(.LoginsListSearchCancel, for: .normal)
         button.titleLabel?.font = .navigationButtonFont
         button.accessibilityIdentifier = "cancel.button"
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -133,7 +133,7 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
             }
         }
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).tintColor = UIColor.white // Set cursor color
-        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: String.SearchLogins, attributes: [NSAttributedString.Key.foregroundColor: UIColor.navSearchPlaceholderTextColor]) // Set the placeholder text and color
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: .LoginsListSearchPlaceholder, attributes: [NSAttributedString.Key.foregroundColor: UIColor.navSearchPlaceholderTextColor]) // Set the placeholder text and color
         return searchController
     }
     
