@@ -18,6 +18,7 @@ class SecurityTests: KIFTestCase {
     override func beforeEach() {
         let testURL = "\(webRoot!)/localhostLoad.html"
         tester().waitForAnimationsToFinish(withTimeout: 3)
+        tester().wait(forTimeInterval: 3)
         BrowserUtils.enterUrlAddressBar(tester(), typeUrl: testURL)
 
         tester().waitForView(withAccessibilityLabel: "Web content")
@@ -106,6 +107,7 @@ class SecurityTests: KIFTestCase {
     func testBlobUrlShownAsSchemeOnly() {
         let url = "\(webRoot!)/blobURL.html"
         // script that will load a blob url
+        tester().wait(forTimeInterval: 3)
         BrowserUtils.enterUrlAddressBar(tester(), typeUrl: url)
         tester().wait(forTimeInterval: 1)
         let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView
@@ -134,7 +136,9 @@ class SecurityTests: KIFTestCase {
       }
 
     override func tearDown() {
+        tester().wait(forTimeInterval: 5)
         BrowserUtils.resetToAboutHomeKIF(tester())
+        tester().wait(forTimeInterval: 3)
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         super.tearDown()
     }

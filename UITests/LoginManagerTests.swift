@@ -22,6 +22,7 @@ class LoginManagerTests: KIFTestCase {
         super.tearDown()
         clearLogins()
         PasscodeUtils.resetPasscode()
+        tester().wait(forTimeInterval: 3)
         BrowserUtils.resetToAboutHomeKIF(tester())
     }
 
