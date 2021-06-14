@@ -239,7 +239,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         let enteredTextSize = self.attributedText?.boundingRect(with: self.frame.size, options: NSStringDrawingOptions.usesLineFragmentOrigin, context: nil)
         frame.origin.x = (enteredTextSize?.width.rounded() ?? 0)
         frame.size.width = self.frame.size.width - frame.origin.x
-        frame.size.height = self.frame.size.height - 1
+        frame.size.height = self.frame.size.height
         label.frame = frame
         return label
     }
