@@ -701,8 +701,7 @@ class SendFeedbackSetting: Setting {
     }
 
     override var url: URL? {
-        let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
-        return URL(string: "https://input.mozilla.org/feedback/fxios/\(appVersion)")
+        return URL(string: "https://mozilla.crowdicity.com/")
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
