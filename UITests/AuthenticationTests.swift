@@ -15,7 +15,10 @@ class AuthenticationTests: KIFTestCase {
 	}
 
     override func tearDown() {
+        tester().wait(forTimeInterval: 3)
+        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         BrowserUtils.resetToAboutHomeKIF(tester())
+        tester().wait(forTimeInterval: 3)
         BrowserUtils.clearPrivateDataKIF(tester())
 		super.tearDown()
     }
@@ -24,6 +27,8 @@ class AuthenticationTests: KIFTestCase {
      * Tests HTTP authentication credentials and auto-fill.
      */
     func testAuthentication() {
+        tester().wait(forTimeInterval: 10)
+        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         loadAuthPage()
         tester().wait(forTimeInterval: 3)
         // Make sure that 3 invalid credentials result in authentication failure.
@@ -60,6 +65,8 @@ class AuthenticationTests: KIFTestCase {
         tester().tapView(withAccessibilityIdentifier: "newTabButtonTabTray")
         tester().waitForAnimationsToFinish()
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
+        tester().waitForAnimationsToFinish()
+        tester().wait(forTimeInterval: 10)
         loadAuthPage()
 
         // Make sure the auth prompt is shown.
@@ -70,7 +77,6 @@ class AuthenticationTests: KIFTestCase {
     }
 
     fileprivate func loadAuthPage() {
-        tester().wait(forTimeInterval: 5)
         BrowserUtils.enterUrlAddressBar(tester(), typeUrl: "\(webRoot!)/auth.html")
     }
 

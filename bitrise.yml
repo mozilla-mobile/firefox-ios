@@ -928,7 +928,6 @@ workflows:
         machine_type_id: g2.4core
     after_run:
     - RunUITests
-    - RunSmokeXCUITests
   RunSmokeXCUITestsiPad:
     steps:
     - activate-ssh-key@4.0:

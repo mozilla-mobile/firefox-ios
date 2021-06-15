@@ -19,13 +19,15 @@ class NavigationDelegateTests: KIFTestCase {
 
     override func tearDown() {
         BrowserUtils.resetToAboutHomeKIF(tester())
+        tester().wait(forTimeInterval: 3)
         BrowserUtils.clearPrivateDataKIF(tester())
         super.tearDown()
     }
 
     func testAppStoreLinkShowsConfirmation() {
-        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         let url = "\(webRoot!)/navigationDelegate.html"
+        tester().waitForAnimationsToFinish(withTimeout: 3)
+        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         tester().waitForAnimationsToFinish(withTimeout: 3)
         BrowserUtils.enterUrlAddressBar(tester(), typeUrl: url)
         tester().waitForAnimationsToFinish()
