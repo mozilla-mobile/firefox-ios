@@ -23,6 +23,7 @@ private struct PhotonActionSheetCellUX {
 class PhotonActionSheetCell: UITableViewCell {
     static let Padding: CGFloat = 16
     static let HorizontalPadding: CGFloat = 1
+    static let topBottomPadding: CGFloat = 10
     static let VerticalPadding: CGFloat = 2
     static let IconSize = 16
 
@@ -123,6 +124,8 @@ class PhotonActionSheetCell: UITableViewCell {
         }
     }
 
+    let bottomBorder = UIView()
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         self.statusIcon.image = nil
@@ -161,22 +164,35 @@ class PhotonActionSheetCell: UITableViewCell {
         }
 
         let padding = PhotonActionSheetCell.Padding
-        let topPadding = PhotonActionSheetCell.HorizontalPadding
+        let topPadding = PhotonActionSheetCell.topBottomPadding
         stackView.snp.makeConstraints { make in
             make.edges.equalTo(contentView).inset(UIEdgeInsets(top: topPadding, left: padding, bottom: topPadding, right: padding))
         }
+        addSubBorder()
+        // Hiding bottom border by default
+        bottomBorder.isHidden = true
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func addSubBorder() {
+        bottomBorder.backgroundColor = UIColor.theme.tableView.separator
+        self.contentView.addSubview(bottomBorder)
+        bottomBorder.snp.makeConstraints { make in
+            make.bottom.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(1)
+        }
+    }
+    
     func configure(with action: PhotonActionSheetItem) {
         titleLabel.text = action.title
         titleLabel.textColor = UIColor.theme.tableView.rowText
         titleLabel.textColor = action.accessory == .Text ? titleLabel.textColor.withAlphaComponent(0.6) : titleLabel.textColor
         titleLabel.adjustsFontSizeToFitWidth = false
-        titleLabel.numberOfLines = 2
+        titleLabel.numberOfLines = 0
         titleLabel.lineBreakMode = .byTruncatingTail
         titleLabel.minimumScaleFactor = 0.5
 
@@ -184,7 +200,7 @@ class PhotonActionSheetCell: UITableViewCell {
         subtitleLabel.textColor = UIColor.theme.tableView.rowText
         subtitleLabel.isHidden = action.text == nil
         subtitleLabel.numberOfLines = 0
-        titleLabel.font = action.bold ? DynamicFontHelper.defaultHelper.DeviceFontLargeBold : DynamicFontHelper.defaultHelper.LargeSizeRegularWeightAS
+        titleLabel.font = action.bold ? DynamicFontHelper.defaultHelper.DeviceFontLargeBold : DynamicFontHelper.defaultHelper.SemiMediumRegularWeightAS
         accessibilityIdentifier = action.iconString ?? action.accessibilityId
         accessibilityLabel = action.title
         selectionStyle = action.tapHandler != nil ? .default : .none
@@ -259,7 +275,6 @@ class PhotonActionSheetCell: UITableViewCell {
         default:
             break // Do nothing. The rest are not supported yet.
         }
-
         action.customRender?(titleLabel, contentView)
     }
 }

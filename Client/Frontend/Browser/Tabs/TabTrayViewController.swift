@@ -37,13 +37,33 @@ class TabTrayViewController: UIViewController {
         return button
     }()
 
+    lazy var doneButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(didTapDone))
+        button.accessibilityIdentifier = "doneButtonTabTray"
+        return button
+    }()
+
     lazy var syncTabButton: UIBarButtonItem = {
         let button = UIBarButtonItem(title: Strings.FxASyncNow,
                                      style: .plain,
                                      target: self,
                                      action: #selector(didTapSyncTabs))
+        
         button.accessibilityIdentifier = "syncTabsButtonTabTray"
         return button
+    }()
+    
+    lazy var syncLoadingView: UIStackView = {
+        let syncingLabel = UILabel()
+        syncingLabel.text = Strings.SyncingMessageWithEllipsis
+        
+        let activityIndicator = UIActivityIndicatorView(style: .gray)
+        activityIndicator.color = .systemGray
+        activityIndicator.startAnimating()
+        
+        let stackView = UIStackView(arrangedSubviews: [syncingLabel, activityIndicator])
+        stackView.spacing = 12
+        return stackView
     }()
 
     lazy var flexibleSpace: UIBarButtonItem = {
@@ -52,12 +72,20 @@ class TabTrayViewController: UIViewController {
                                action: nil)
     }()
 
+    lazy var fixedSpace: UIBarButtonItem = {
+        let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace,
+                               target: nil,
+                               action: nil)
+        fixedSpace.width = 32
+        return fixedSpace
+    }()
+
     lazy var countLabel: UILabel = {
         let label = UILabel(frame: CGRect(width: 24, height: 24))
         label.font = TabsButtonUX.TitleFont
         label.layer.cornerRadius = TabsButtonUX.CornerRadius
         label.textAlignment = .center
-        label.text = String(viewModel.tabManager.normalTabs.count)
+        label.text = (viewModel.tabManager.normalTabs.count < 100) ? viewModel.tabManager.normalTabs.count.description : "\u{221E}"
         return label
     }()
 
@@ -112,7 +140,6 @@ class TabTrayViewController: UIViewController {
 
     // Initializers
     init(tabTrayDelegate: TabTrayDelegate? = nil, profile: Profile, showChronTabs: Bool = false) {
-
         self.viewModel = TabTrayViewModel(tabTrayDelegate: tabTrayDelegate, profile: profile, showChronTabs: showChronTabs)
 
         super.init(nibName: nil, bundle: nil)
@@ -147,7 +174,7 @@ class TabTrayViewController: UIViewController {
             navigationController?.isToolbarHidden = true
         } else {
             navigationController?.isToolbarHidden = false
-            updateToolbarItems()
+            updateToolbarItems(forSyncTabs: viewModel.profile.hasSyncableAccount())
         }
     }
 
@@ -173,7 +200,7 @@ class TabTrayViewController: UIViewController {
     fileprivate func iPadViewSetup() {
         navigationItem.leftBarButtonItem = deleteButton
         navigationItem.titleView = navigationMenu
-        navigationItem.rightBarButtonItem = newTabButton
+        navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButton]
 
         navigationItem.titleView?.snp.makeConstraints { make in
             make.width.equalTo(343)
@@ -195,7 +222,9 @@ class TabTrayViewController: UIViewController {
     }
 
     private func setupNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(applyTheme), name: .DisplayThemeChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .DisplayThemeChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .ProfileDidStartSyncing, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .ProfileDidFinishSyncing, object: nil)
     }
 
     fileprivate func updateTitle() {
@@ -214,7 +243,7 @@ class TabTrayViewController: UIViewController {
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .libraryPanel, value: .syncPanel, extras: nil)
             if children.first == viewModel.tabTrayView {
                 hideCurrentPanel()
-                updateToolbarItems(forSyncTabs: true)
+                updateToolbarItems(forSyncTabs: viewModel.profile.hasSyncableAccount())
                 showPanel(viewModel.syncedTabsController)
             }
         default:
@@ -227,7 +256,7 @@ class TabTrayViewController: UIViewController {
             hideCurrentPanel()
             showPanel(viewModel.tabTrayView)
         }
-        updateToolbarItems()
+        updateToolbarItems(forSyncTabs: viewModel.profile.hasSyncableAccount())
         viewModel.tabTrayView.didTogglePrivateMode(privateMode)
     }
 
@@ -236,7 +265,8 @@ class TabTrayViewController: UIViewController {
         panel.beginAppearanceTransition(true, animated: true)
         view.addSubview(panel.view)
         view.bringSubviewToFront(navigationToolbar)
-        panel.additionalSafeAreaInsets = UIEdgeInsets(top: GridTabTrayControllerUX.NavigationToolbarHeight, left: 0, bottom: 0, right: 0)
+        let topEdgeInset = UIDevice.current.userInterfaceIdiom == .pad ? 0 : GridTabTrayControllerUX.NavigationToolbarHeight
+        panel.additionalSafeAreaInsets = UIEdgeInsets(top: topEdgeInset, left: 0, bottom: 0, right: 0)
         panel.endAppearanceTransition()
         panel.view.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -257,45 +287,81 @@ class TabTrayViewController: UIViewController {
 
     fileprivate func updateToolbarItems(forSyncTabs showSyncItems: Bool = false) {
         if UIDevice.current.userInterfaceIdiom == .pad {
-            if showSyncItems || navigationMenu.selectedSegmentIndex == 2 {
-                navigationItem.rightBarButtonItem = nil
+            if navigationMenu.selectedSegmentIndex == 2 {
+                navigationItem.rightBarButtonItems = (showSyncItems ? [doneButton, fixedSpace, syncTabButton] : [doneButton])
                 navigationItem.leftBarButtonItem = nil
             } else {
-                navigationItem.rightBarButtonItem = newTabButton
+                navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButton]
                 navigationItem.leftBarButtonItem = deleteButton
             }
-
         } else {
-            navigationController?.isToolbarHidden = showSyncItems || navigationMenu.selectedSegmentIndex == 2
-            let newToolbarItems = showSyncItems ? nil : bottomToolbarItems
+            var newToolbarItems: [UIBarButtonItem]? = bottomToolbarItems
+            if navigationMenu.selectedSegmentIndex == 2 {
+                newToolbarItems = showSyncItems ? bottomToolbarItemsForSync : nil
+            }
             setToolbarItems(newToolbarItems, animated: true)
+        }
+    }
+    
+    @objc private func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        case .ProfileDidStartSyncing, .ProfileDidFinishSyncing:
+            updateButtonTitle(notification)
+        default:
+            break
+        }
+    }
+    
+    private func updateButtonTitle(_ notification: Notification) {
+        switch notification.name {
+        case .ProfileDidStartSyncing:
+            // Update Sync Tab button
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                
+                self.syncTabButton.isEnabled = false
+                self.syncTabButton.customView = self.syncLoadingView
+            }
+        case .ProfileDidFinishSyncing:
+            // Update Sync Tab button
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                
+                self.syncTabButton.customView = nil
+                self.syncTabButton.title = Strings.FxASyncNow
+                self.syncTabButton.isEnabled = true
+            }
+        default:
+            break
         }
     }
 }
 
 extension TabTrayViewController: Themeable {
-    @objc func applyTheme() {
-        if #available(iOS 13.0, *) {
-            overrideUserInterfaceStyle =  ThemeManager.instance.userInterfaceStyle
-        }
-        view.backgroundColor = UIColor.theme.tabTray.background
-        navigationController?.navigationBar.barTintColor = UIColor.theme.tabTray.toolbar
-        navigationController?.navigationBar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
-        navigationController?.toolbar.barTintColor = UIColor.theme.tabTray.toolbar
-        navigationController?.toolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
-        navigationItem.rightBarButtonItem?.tintColor = UIColor.theme.tabTray.toolbarButtonTint
-        navigationToolbar.barTintColor = UIColor.theme.tabTray.toolbar
-        navigationToolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
-        let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
-        if theme == .dark {
-            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-        } else {
-            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
-        }
-        viewModel.syncedTabsController.applyTheme()
-        setNeedsStatusBarAppearanceUpdate()
-    }
-}
+     @objc func applyTheme() {
+         if #available(iOS 13.0, *) {
+             overrideUserInterfaceStyle =  ThemeManager.instance.userInterfaceStyle
+         }
+         view.backgroundColor = UIColor.theme.tabTray.background
+         navigationController?.navigationBar.barTintColor = UIColor.theme.tabTray.toolbar
+         navigationController?.navigationBar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
+         navigationController?.toolbar.barTintColor = UIColor.theme.tabTray.toolbar
+         navigationController?.toolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
+         navigationItem.rightBarButtonItem?.tintColor = UIColor.theme.tabTray.toolbarButtonTint
+         navigationToolbar.barTintColor = UIColor.theme.tabTray.toolbar
+         navigationToolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
+         let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+         if theme == .dark {
+             navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+         } else {
+             navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+         }
+         viewModel.syncedTabsController.applyTheme()
+         setNeedsStatusBarAppearanceUpdate()
+     }
+ }
 
 extension TabTrayViewController: UIToolbarDelegate {
     func position(for bar: UIBarPositioning) -> UIBarPosition {
@@ -332,6 +398,10 @@ extension TabTrayViewController {
 
     @objc func didTapSyncTabs(_ sender: UIBarButtonItem) {
         viewModel.didTapSyncTabs(sender)
+    }
+
+    @objc func didTapDone() {
+        self.dismiss(animated: true, completion: nil)
     }
 }
 

@@ -6,6 +6,20 @@ import Shared
 import Storage
 import Telemetry
 
+protocol OnViewDismissable: class {
+    var onViewDismissed: (() -> Void)? { get set }
+}
+
+class DismissableNavigationViewController: UINavigationController, OnViewDismissable {
+    var onViewDismissed: (() -> Void)? = nil
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        onViewDismissed?()
+        onViewDismissed = nil
+    }
+}
+
 extension BrowserViewController: URLBarDelegate {
     func showTabTray() {
         Sentry.shared.clearBreadcrumbs()
@@ -39,10 +53,10 @@ extension BrowserViewController: URLBarDelegate {
         
         guard self.tabTrayViewController != nil else { return }
         
-        let controller: UINavigationController
+        let controller: DismissableNavigationViewController
 
         if #available(iOS 13.0, *) {
-            controller = UINavigationController(rootViewController: tabTrayViewController!)
+            controller = DismissableNavigationViewController(rootViewController: tabTrayViewController!)
             controller.presentationController?.delegate = tabTrayViewController
             // If we're not using the system theme, override the view's style to match
             if !ThemeManager.instance.systemThemeIsOn {
@@ -154,7 +168,6 @@ extension BrowserViewController: URLBarDelegate {
         if let tab = self.tabManager.selectedTab {
             let trackingProtectionMenu = self.getTrackingSubMenu(for: tab)
             let title = String.localizedStringWithFormat(Strings.TPPageMenuTitle, tab.url?.host ?? "")
-            LeanPlumClient.shared.track(event: .trackingProtectionMenu)
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
             let shouldSuppress = UIDevice.current.userInterfaceIdiom != .pad
             self.presentSheetWith(title: title, actions: trackingProtectionMenu, on: self, from: urlBar, suppressPopover: shouldSuppress)
@@ -179,7 +192,6 @@ extension BrowserViewController: URLBarDelegate {
         case .available:
             enableReaderMode()
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .readerModeOpenButton)
-            LeanPlumClient.shared.track(event: .useReaderView)
         case .active:
             disableReaderMode()
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .readerModeCloseButton)
@@ -355,8 +367,6 @@ extension BrowserViewController: URLBarDelegate {
 
             showFirefoxHome(inline: false)
         }
-
-        LeanPlumClient.shared.track(event: .interactWithURLBar)
     }
 
     func urlBarDidLeaveOverlayMode(_ urlBar: URLBarView) {

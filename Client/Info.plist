@@ -65,17 +65,12 @@
 		<string>org-appextension-feature-password-management</string>
 		<string>googlegmail</string>
 		<string>fastmail</string>
+		<string>whatsapp</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
-	<key>LeanplumAppId</key>
-	<string></string>
-	<key>LeanplumDevelopmentKey</key>
-	<string></string>
-	<key>LeanplumProductionKey</key>
-	<string></string>
 	<key>MozDevelopmentTeam</key>
 	<string>$(DEVELOPMENT_TEAM)</string>
 	<key>MozWhatsNewTopic</key>
@@ -86,13 +81,13 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>This lets you take and upload photos.</string>
+	<string>Firefox uses your camera to scan QR codes and take photos and video.</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Firefox requires Face ID to access your saved logins.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Websites you visit may request your location.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>This lets you take and upload videos.</string>
+	<string>Firefox uses your microphone to record and upload audio.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>This lets you save photos.</string>
 	<key>NSUserActivityTypes</key>

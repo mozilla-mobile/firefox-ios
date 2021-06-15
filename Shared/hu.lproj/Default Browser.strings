@@ -23,7 +23,7 @@
 "DefaultBrowserOnboarding.Description3" = "3. Válassza a Firefoxot";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
-"DefaultBrowserOnboarding.Screenshot" = "Alapértelmezett böngészőalkalmazás";
+"DefaultBrowserOnboarding.Screenshot" = "Alapértelmezett böngésző";
 
 /* Menu option for setting Firefox as default browser. */
 "Settings.DefaultBrowserMenuItem" = "Beállítás alapértelmezett böngészőként";

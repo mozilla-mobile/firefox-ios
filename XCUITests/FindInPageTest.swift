@@ -140,7 +140,7 @@ class FindInPageTests: BaseTestCase {
         navigator.goto(TabTray)
 
         waitForExistence(app.cells.staticTexts["The Book of Mozilla"])
-        app.cells.staticTexts["The Book of Mozilla"].tap()
+        app.cells.staticTexts["The Book of Mozilla"].firstMatch.tap()
         XCTAssertFalse(app.textFields[""].exists)
         XCTAssertFalse(app.buttons["FindInPage.find_next"].exists)
         XCTAssertFalse(app.buttons["FindInPage.find_previous"].exists)

@@ -223,19 +223,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         pushNotificationSetup()
 
-        // Leanplum user research variable setup for New tab user research
+        // user research variable setup for New tab user research
         _ = NewTabUserResearch()
-        // Leanplum user research variable setup for Chron tabs user research
+        // user research variable setup for Chron tabs user research
         _ = ChronTabsUserResearch()
-        // Leanplum setup
 
         if let profile = self.profile {
-            // Leanplum setup
-            if LeanPlumClient.shouldEnable(profile: profile) {
-                LeanPlumClient.shared.setup(profile: profile)
-                LeanPlumClient.shared.set(enabled: true)
-            }
-            
             let persistedCurrentVersion = InstallType.persistedCurrentVersion()
             let introScreen = profile.prefs.intForKey(PrefsKeys.IntroSeen)
             // upgrade install - Intro screen shown & persisted current version does not match
@@ -243,19 +236,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
                 InstallType.set(type: .upgrade)
                 InstallType.updateCurrentVersion(version: AppInfo.appVersion)
             }
-            
+
             // We need to check if the app is a clean install to use for
             // preventing the What's New URL from appearing.
             if introScreen == nil {
                 // fresh install - Intro screen not yet shown
                 InstallType.set(type: .fresh)
                 InstallType.updateCurrentVersion(version: AppInfo.appVersion)
-                // Profile and leanplum setup
+                // Profile setup
                 profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
-                LeanPlumClient.shared.track(event: .firstRun)
+                
             } else if profile.prefs.boolForKey(PrefsKeys.KeySecondRun) == nil {
                 profile.prefs.setBool(true, forKey: PrefsKeys.KeySecondRun)
-                LeanPlumClient.shared.track(event: .secondRun)
             }
         }
 
@@ -299,7 +291,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
     func updateSessionCount() {
         var sessionCount: Int32 = 0
-        
+
         // Get the session count from preferences
         if let currentSessionCount = profile?.prefs.intForKey(PrefsKeys.SessionCount) {
             sessionCount = currentSessionCount
@@ -353,9 +345,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
             setUpWebServer(profile)
         }
-        
+
         BrowserViewController.foregroundBVC().firefoxHomeViewController?.reloadAll()
-        
+
         // Resume file downloads.
         // TODO: iOS 13 needs to iterate all the BVCs.
         BrowserViewController.foregroundBVC().downloadQueue.resumeAll()
@@ -384,13 +376,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         FaviconFetcher.createWebImageCacheDirectory()
         // update top sites widget
         updateTopSitesWidget()
-        
+
         // Cleanup can be a heavy operation, take it out of the startup path. Instead check after a few seconds.
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
             self.profile?.cleanupHistoryIfNeeded()
         }
     }
-    
+
     func applicationWillResignActive(_ application: UIApplication) {
         // update top sites widget
         updateTopSitesWidget()
@@ -427,10 +419,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         } else {
             syncOnDidEnterBackground(application: application)
         }
-        
+
         tabManager.preserveTabs()
     }
-    
+
     private func updateTopSitesWidget() {
         // Since we only need the topSites data in the archiver, let's write it
         // only if iOS 14 is available.
@@ -651,13 +643,13 @@ extension UIApplication {
     }
 }
 
-// Orientation lock for views that use new modal presenter 
+// Orientation lock for views that use new modal presenter
 extension AppDelegate {
     /// ref: https://stackoverflow.com/questions/28938660/
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
         return self.orientationLock
     }
-    
+
     struct AppUtility {
         static func lockOrientation(_ orientation: UIInterfaceOrientationMask) {
             if let delegate = UIApplication.shared.delegate as? AppDelegate {

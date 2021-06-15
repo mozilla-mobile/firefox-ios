@@ -313,7 +313,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         clearHistoryCell = cell
         cell.titleLabel.text = Strings.HistoryPanelClearHistoryButtonTitle
         cell.leftImageView.image = UIImage.templateImageNamed("forget")
-        cell.leftImageView.tintColor = HistoryPanelUX.actionIconColor
+        cell.leftImageView.tintColor = UIColor.theme.browser.tint
         cell.leftImageView.backgroundColor = UIColor.theme.homePanel.historyHeaderIconsBackground
         cell.accessibilityIdentifier = "HistoryPanel.clearHistory"
 
@@ -332,7 +332,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         cell.accessoryType = .disclosureIndicator
         cell.titleLabel.text = Strings.RecentlyClosedTabsButtonTitle
         cell.leftImageView.image = UIImage.templateImageNamed("recently_closed")
-        cell.leftImageView.tintColor = HistoryPanelUX.actionIconColor
+        cell.leftImageView.tintColor = UIColor.theme.browser.tint
         cell.leftImageView.backgroundColor = UIColor.theme.homePanel.historyHeaderIconsBackground
         AdditionalHistoryActionRow.setStyle(enabled: hasRecentlyClosed, forCell: cell)
         cell.accessibilityIdentifier = "HistoryPanel.recentlyClosedCell"

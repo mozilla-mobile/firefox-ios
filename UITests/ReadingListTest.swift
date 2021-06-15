@@ -118,6 +118,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
 
     override func tearDown() {
         BrowserUtils.resetToAboutHomeKIF(tester())
+        tester().wait(forTimeInterval: 3)
         BrowserUtils.clearPrivateDataKIF(tester())
         super.tearDown()
     }

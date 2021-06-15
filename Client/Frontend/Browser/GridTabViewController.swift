@@ -493,7 +493,6 @@ extension GridTabViewController: TabDisplayCompletionDelegate {
         switch type {
         case .addTab:
             dismissTabTray()
-            LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "Tab Tray"])
         case .removedLastTab:
             // when removing the last tab (only in normal mode) we will automatically open a new tab.
             // When that happens focus it by dismissing the tab tray
@@ -648,7 +647,7 @@ class TabCell: UICollectionViewCell {
         let view = UIView()
         view.layer.cornerRadius = GridTabTrayControllerUX.CornerRadius
         view.clipsToBounds = true
-        view.backgroundColor =  .blue// UIColor.theme.tabTray.cellBackground
+        view.backgroundColor = UIColor.theme.tabTray.cellBackground
         return view
     }()
 
@@ -659,7 +658,7 @@ class TabCell: UICollectionViewCell {
         view.isUserInteractionEnabled = false
         view.alignLeft = true
         view.alignTop = true
-        view.backgroundColor = UIColor.theme.browser.background
+        view.backgroundColor = UIColor.theme.tabTray.screenshotBackground
         return view
     }()
 

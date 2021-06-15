@@ -34,6 +34,14 @@ class UserScriptManager {
                 let userScript = WKUserScript.createInDefaultContentWorld(source: wrappedSource, injectionTime: injectionTime, forMainFrameOnly: mainFrameOnly)
                 compiledUserScripts[name] = userScript
             }
+            let webcompatName = "Webcompat\(name)"
+            if let webCompatPath = Bundle.main.path(forResource: webcompatName, ofType: "js"),
+                let source = try? NSString(contentsOfFile: webCompatPath, encoding: String.Encoding.utf8.rawValue) as String {
+                let wrappedSource = "(function() { const APP_ID_TOKEN = '\(UserScriptManager.appIdToken)'; \(source) })()"
+                let userScript = WKUserScript.createInPageContentWorld(source: wrappedSource, injectionTime: injectionTime, forMainFrameOnly: mainFrameOnly)
+                compiledUserScripts[webcompatName] = userScript
+            }
+            
         }
 
         self.compiledUserScripts = compiledUserScripts
@@ -53,6 +61,10 @@ class UserScriptManager {
             let name = (mainFrameOnly ? "MainFrame" : "AllFrames") + "AtDocument" + (injectionTime == .atDocumentStart ? "Start" : "End")
             if let userScript = compiledUserScripts[name] {
                 tab.webView?.configuration.userContentController.addUserScript(userScript)
+            }
+            let webcompatName = "Webcompat\(name)"
+            if let webcompatUserScript = compiledUserScripts[webcompatName] {
+                tab.webView?.configuration.userContentController.addUserScript(webcompatUserScript)
             }
         }
         // If Night Mode is enabled, inject a small user script to ensure

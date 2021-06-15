@@ -17,7 +17,7 @@
 "Hide" = "Anubrir";
 
 /* Prompt message warning the user that deleting non-synced logins will permanently remove them */
-"Logins will be permanently removed." = "Los anicios de sesión van desaniciase dafechu.";
+"Logins will be permanently removed." = "Los anicios de sesión van quitase dafechu.";
 
 /* Label displayed when no logins are found after searching. */
 "No logins found" = "Nun s'atoparon anicios de sesión";
