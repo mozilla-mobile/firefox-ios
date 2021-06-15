@@ -15,9 +15,7 @@ class DomainAutocompleteTests: KIFTestCase {
         tester().wait(forTimeInterval: 3)
         tester().waitForAnimationsToFinish()
         tester().wait(forTimeInterval: 3)
-        //tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         BrowserUtils.addHistoryEntry("Foo bar baz", url: URL(string: "https://foo.bar.baz.org/dingbat")!)
-        // See if this works
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         tester().wait(forTimeInterval: 1)
         tester().tapView(withAccessibilityIdentifier: "url")

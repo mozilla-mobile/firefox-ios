@@ -25,7 +25,6 @@ class NavigationDelegateTests: KIFTestCase {
     }
 
     func testAppStoreLinkShowsConfirmation() {
-        //tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         let url = "\(webRoot!)/navigationDelegate.html"
         tester().waitForAnimationsToFinish(withTimeout: 3)
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
