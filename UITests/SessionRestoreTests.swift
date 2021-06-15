@@ -35,13 +35,16 @@ class SessionRestoreTests: KIFTestCase {
         // After triggering the restore, the session should look like this:
         //   about:home, page1, *page2*, page3
         // where page2 is active.
-        tester().waitForAnimationsToFinish(withTimeout: 3)
+        tester().wait(forTimeInterval: 3)
         BrowserUtils.enterUrlAddressBar(tester(), typeUrl: restoreURL!.absoluteString)
         tester().waitForWebViewElementWithAccessibilityLabel("Page 2")
         tester().tapView(withAccessibilityLabel: "Back")
 
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
         tester().tapView(withAccessibilityLabel: "Back")
+
+        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
+        tester().waitForAnimationsToFinish(withTimeout: 5)
 
         let canGoBack: Bool
         do {
@@ -50,6 +53,7 @@ class SessionRestoreTests: KIFTestCase {
         } catch _ {
             canGoBack = false
         }
+
         XCTAssertFalse(canGoBack, "Reached the beginning of browser history")
 
         tester().tapView(withAccessibilityLabel: "Forward")
@@ -69,7 +73,9 @@ class SessionRestoreTests: KIFTestCase {
     }
 
     override func tearDown() {
+        tester().wait(forTimeInterval: 3)
         BrowserUtils.resetToAboutHomeKIF(tester())
+        tester().wait(forTimeInterval: 3)
         BrowserUtils.clearPrivateDataKIF(tester())
     }
 }

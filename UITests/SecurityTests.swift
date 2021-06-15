@@ -18,6 +18,7 @@ class SecurityTests: KIFTestCase {
     override func beforeEach() {
         let testURL = "\(webRoot!)/localhostLoad.html"
         tester().waitForAnimationsToFinish(withTimeout: 3)
+        tester().wait(forTimeInterval: 3)
         BrowserUtils.enterUrlAddressBar(tester(), typeUrl: testURL)
 
         tester().waitForView(withAccessibilityLabel: "Web content")
@@ -36,6 +37,7 @@ class SecurityTests: KIFTestCase {
 
         // Also make sure the XSS alert doesn't appear.
         XCTAssertFalse(tester().viewExistsWithLabel("Local page loaded"))
+        tester().wait(forTimeInterval: 5)
     }
 
     /// Tap the Error exploit button, which tries to load the error page on localhost
@@ -65,8 +67,9 @@ class SecurityTests: KIFTestCase {
     /// to load the session restore exploit. A new tab will load showing an error page,
     /// but we shouldn't be able to load session restore.
     func testWindowExploit() {
+        tester().wait(forTimeInterval: 3)
         tester().tapWebViewElementWithAccessibilityLabel("New tab exploit")
-        tester().wait(forTimeInterval: 5)
+        tester().wait(forTimeInterval: 3)
         let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView
 
         // Make sure the URL doesn't change.
@@ -86,6 +89,7 @@ class SecurityTests: KIFTestCase {
     /// Since the window has no origin before load, the page is able to modify the document,
     /// so make sure we don't show the URL.
     func testSpoofExploit() {
+        tester().wait(forTimeInterval: 3)
         tester().tapWebViewElementWithAccessibilityLabel("URL spoof")
 
         // Wait for the window to open.
@@ -100,12 +104,14 @@ class SecurityTests: KIFTestCase {
         tester().tapView(withAccessibilityIdentifier: "closeAllTabsButtonTabTray")
         tester().tapView(withAccessibilityIdentifier: "TabTrayController.deleteButton.closeAll")
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
+        tester().wait(forTimeInterval: 5)
     }
 
     // For blob URLs, just show "blob:" to the user (see bug 1446227)
     func testBlobUrlShownAsSchemeOnly() {
         let url = "\(webRoot!)/blobURL.html"
         // script that will load a blob url
+        tester().wait(forTimeInterval: 3)
         BrowserUtils.enterUrlAddressBar(tester(), typeUrl: url)
         tester().wait(forTimeInterval: 1)
         let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView
@@ -134,7 +140,9 @@ class SecurityTests: KIFTestCase {
       }
 
     override func tearDown() {
+        tester().wait(forTimeInterval: 5)
         BrowserUtils.resetToAboutHomeKIF(tester())
+        tester().wait(forTimeInterval: 5)
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         super.tearDown()
     }

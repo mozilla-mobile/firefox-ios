@@ -67,6 +67,7 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
             UIDevice.current.setValue(value, forKey: "orientation")
         }
         BrowserUtils.resetToAboutHomeKIF(tester())
+        tester().wait(forTimeInterval: 3)
         BrowserUtils.clearPrivateDataKIF(tester())
     }
 }
