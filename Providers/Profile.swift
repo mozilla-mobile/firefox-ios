@@ -241,18 +241,6 @@ extension Profile {
     }
 }
 
-@available(iOS 12, *)
-extension LoginRecord {
-    open var passwordCredentialIdentity: ASPasswordCredentialIdentity {
-        let serviceIdentifier = ASCredentialServiceIdentifier(identifier: self.hostname, type: .URL)
-        return ASPasswordCredentialIdentity(serviceIdentifier: serviceIdentifier, user: self.username, recordIdentifier: self.id)
-    }
-
-    open var passwordCredential: ASPasswordCredential {
-        return ASPasswordCredential(user: self.username, password: self.password)
-    }
-}
-
 open class BrowserProfile: Profile {
     fileprivate let name: String
     fileprivate let keychain: KeychainWrapper
