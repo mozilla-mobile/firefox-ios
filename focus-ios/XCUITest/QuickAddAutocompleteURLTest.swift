@@ -11,10 +11,10 @@ class QuickAddAutocompleteURLTest: BaseTestCase {
         loadWebPage("reddit.com")
 
         urlBarTextField.press(forDuration: 1.0)
-        waitforHittable(element: app.cells["Add Custom URL"])
+        waitForHittable(app.cells["Add Custom URL"])
         app.cells["Add Custom URL"].tap()
 
-        waitforHittable(element: app.textFields["URLBar.urlText"])
+        waitForHittable(app.textFields["URLBar.urlText"])
         urlBarTextField.tap()
         urlBarTextField.typeText("reddit.c\n")
 

@@ -9,10 +9,10 @@ class RequestDesktopTest: BaseTestCase {
         let urlBarTextField = app.textFields["URLBar.urlText"]
 
         loadWebPage("facebook.com")
-        waitforExistence(element: app.buttons["BrowserToolset.stopReloadButton"])
+        waitForExistence(app.buttons["BrowserToolset.stopReloadButton"])
         app.buttons["BrowserToolset.stopReloadButton"].press(forDuration: 1.0)
 
-        waitforHittable(element: app.sheets.buttons["Request Desktop Site"])
+        waitForHittable(app.sheets.buttons["Request Desktop Site"])
         app.sheets.buttons["Request Desktop Site"].tap()
 
         waitForWebPageLoad()
@@ -33,10 +33,10 @@ class RequestDesktopTest: BaseTestCase {
         // Wait for existence rather than hittable because the textfield is technically disabled
         loadWebPage("facebook.com")
 
-        waitforExistence(element: app.buttons["URLBar.pageActionsButton"])
+        waitForExistence(app.buttons["URLBar.pageActionsButton"])
         app.buttons["URLBar.pageActionsButton"].tap()
 
-        waitforHittable(element: app.cells["Request Desktop Site"])
+        waitForHittable(app.cells["Request Desktop Site"])
         app.cells["Request Desktop Site"].tap()
 
         waitForWebPageLoad()

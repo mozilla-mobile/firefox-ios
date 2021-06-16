@@ -8,11 +8,11 @@ class TrackingProtectionSettings: BaseTestCase {
     func testInactiveSettings() {
 
         // Go to in-app settings
-        waitforHittable(element: app.buttons["Settings"])
+        waitForHittable(app.buttons["Settings"])
         app.buttons["Settings"].tap()
-        waitforHittable(element: app.tables.cells["settingsViewController.trackingCell"])
+        waitForHittable(app.tables.cells["settingsViewController.trackingCell"])
         app.tables.cells["settingsViewController.trackingCell"].tap()
-        waitforExistence(element: app.tables.switches["BlockerToggle.BlockAnalytics"])
+        waitForExistence(app.tables.switches["BlockerToggle.BlockAnalytics"])
 
         // Disable 'block analytic trackers'
         app.tables.switches["BlockerToggle.BlockAnalytics"].tap()
@@ -29,42 +29,42 @@ class TrackingProtectionSettings: BaseTestCase {
         waitForWebPageLoad()
 
         // Open the tracking protection menu
-        waitforHittable(element: app.otherElements["URLBar.trackingProtectionIcon"])
+        waitForHittable(app.otherElements["URLBar.trackingProtectionIcon"])
         app.otherElements["URLBar.trackingProtectionIcon"].tap()
 
         // Wait for the menu to open
-        waitforExistence(element: app.staticTexts["Tracking Protection"])
+        waitForExistence(app.staticTexts["Tracking Protection"])
 
         // Check for the existence of one (1) analytical tracker on Mozilla
-        waitforExistence(element: app.staticTexts["Trackers blocked.Subtitle"])
+        waitForExistence(app.staticTexts["Trackers blocked.Subtitle"])
         XCTAssertEqual(app.staticTexts["Trackers blocked.Subtitle"].label, "0")
 
-        waitforExistence(element: app.staticTexts["Ad trackers.Subtitle"])
+        waitForExistence(app.staticTexts["Ad trackers.Subtitle"])
         XCTAssertEqual(app.staticTexts["Ad trackers.Subtitle"].label, "0")
 
-        waitforExistence(element: app.staticTexts["Analytic trackers.Subtitle"])
+        waitForExistence(app.staticTexts["Analytic trackers.Subtitle"])
         XCTAssertEqual(app.staticTexts["Analytic trackers.Subtitle"].label, "0")
 
-        waitforExistence(element: app.staticTexts["Social trackers.Subtitle"])
+        waitForExistence(app.staticTexts["Social trackers.Subtitle"])
         XCTAssertEqual(app.staticTexts["Social trackers.Subtitle"].label, "0")
 
-        waitforExistence(element: app.staticTexts["Content trackers.Subtitle"])
+        waitForExistence(app.staticTexts["Content trackers.Subtitle"])
         XCTAssertEqual(app.staticTexts["Content trackers.Subtitle"].label, "0")
 
         // Close the menu
-        waitforHittable(element: app.buttons["PhotonMenu.close"])
+        waitForHittable(app.buttons["PhotonMenu.close"])
         app.buttons["PhotonMenu.close"].tap()
 
         // Erase the history
-        waitforHittable(element: app.buttons["URLBar.deleteButton"])
+        waitForHittable(app.buttons["URLBar.deleteButton"])
         app.buttons["URLBar.deleteButton"].tap()
 
         // Reset in-app settings (work-around until issue: #731)
-        waitforHittable(element: app.buttons["Settings"])
+        waitForHittable(app.buttons["Settings"])
         app.buttons["Settings"].tap()
-        waitforHittable(element: app.tables.cells["settingsViewController.trackingCell"])
+        waitForHittable(app.tables.cells["settingsViewController.trackingCell"])
         app.tables.cells["settingsViewController.trackingCell"].tap()
-        waitforExistence(element: app.tables.switches["BlockerToggle.BlockAnalytics"])
+        waitForExistence(app.tables.switches["BlockerToggle.BlockAnalytics"])
 
         // Re-enable 'block analytic trackers'
         app.tables.switches["BlockerToggle.BlockAnalytics"].tap()

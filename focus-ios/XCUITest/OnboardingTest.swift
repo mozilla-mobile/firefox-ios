@@ -20,15 +20,19 @@ class OnboardingTest: XCTestCase {
     }
 
     // Copied from BaseTestCase
-    private func waitforExistence(element: XCUIElement, file: String = #file, line: UInt = #line) {
-        expectation(for: NSPredicate(format: "exists == true"), evaluatedWith: element, handler: nil)
-        waitForExpectations(timeout: 30) {(error) -> Void in
-            if (error != nil) {
-                let message = "Failed to find \(element) after 30 seconds."
-                self.recordFailure(withDescription: message, inFile: file, atLine: Int(line), expected: true)
-            }
-        }
+    private func waitForExistence(_ element: XCUIElement, timeout: TimeInterval = 5.0, file: String = #file, line: UInt = #line) {
+        waitFor(element, with: "exists == true", timeout: timeout, file: file, line: line)
     }
+
+    private func waitFor(_ element: XCUIElement, with predicateString: String, description: String? = nil, timeout: TimeInterval = 5.0, file: String, line: UInt) {
+           let predicate = NSPredicate(format: predicateString)
+           let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
+           let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
+           if result != .completed {
+               let message = description ?? "Expect predicate \(predicateString) for \(element.description)"
+               self.recordFailure(withDescription: message, inFile: file, atLine: Int(line), expected: false)
+           }
+       }
 
     // Smoketest
     func testPressingDots() {
@@ -37,29 +41,29 @@ class OnboardingTest: XCTestCase {
         let pageIndicatorButton2 = stackElement.children(matching: .button).matching(identifier: "page indicator").element(boundBy: 1)
         let pageIndicatorButton3 = stackElement.children(matching: .button).matching(identifier: "page indicator").element(boundBy: 2)
 
-        waitforExistence(element: app.staticTexts["Power up your privacy"])
+        waitForExistence(app.staticTexts["Power up your privacy"])
 
         pageIndicatorButton2.tap()
-        waitforExistence(element: app.staticTexts["Your search, your way"])
+        waitForExistence(app.staticTexts["Your search, your way"])
         XCTAssert(pageIndicatorButton2.isSelected)
 
         pageIndicatorButton3.tap()
-        waitforExistence(element: app.staticTexts["Your history is history"])
+        waitForExistence(app.staticTexts["Your history is history"])
         XCTAssert(pageIndicatorButton3.isSelected)
 
         pageIndicatorButton1.tap()
-        waitforExistence(element: app.staticTexts["Your search, your way"])
+        waitForExistence(app.staticTexts["Your search, your way"])
         XCTAssert(pageIndicatorButton2.isSelected)
 
         pageIndicatorButton1.tap()
-        waitforExistence(element: app.staticTexts["Power up your privacy"])
+        waitForExistence(app.staticTexts["Power up your privacy"])
         XCTAssert(pageIndicatorButton1.isSelected)
         XCTAssert(!pageIndicatorButton2.isSelected)
 
         // Make sure button alpha values update even when selecting "Next" button
         let nextButton = app.buttons["Next"]
         nextButton.tap()
-        waitforExistence(element: app.staticTexts["Your search, your way"])
+        waitForExistence(app.staticTexts["Your search, your way"])
         XCTAssert(pageIndicatorButton2.isSelected)
     }
 

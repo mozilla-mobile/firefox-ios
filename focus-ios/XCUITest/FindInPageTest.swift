@@ -16,44 +16,44 @@ class FindInPageTest: BaseTestCase {
         app.textFields["Search or enter address"].typeText("domain")
 
         // Try all functions of find in page bar
-        waitforHittable(element: app.buttons["FindInPageBar.button"])
+        waitForHittable(app.buttons["FindInPageBar.button"])
         app.buttons["FindInPageBar.button"].tap()
 
-        waitforHittable(element: app.buttons["FindInPage.find_previous"])
+        waitForHittable(app.buttons["FindInPage.find_previous"])
         app.buttons["FindInPage.find_previous"].tap()
 
-        waitforHittable(element: app.buttons["FindInPage.find_next"])
+        waitForHittable(app.buttons["FindInPage.find_next"])
         app.buttons["FindInPage.find_next"].tap()
 
-        waitforHittable(element: app.buttons["FindInPage.close"])
+        waitForHittable(app.buttons["FindInPage.close"])
         app.buttons["FindInPage.close"].tap()
 
         // Ensure find in page bar is dismissed
-        waitforNoExistence(element: app.buttons["FindInPage.close"])
+        waitForNoExistence(app.buttons["FindInPage.close"])
     }
 
     func testActivityMenuFindInPageAction() {
         // Navigate to website
         loadWebPage("https://www.example.com")
-        waitforExistence(element: app.buttons["URLBar.pageActionsButton"])
+        waitForExistence(app.buttons["URLBar.pageActionsButton"])
         app.buttons["URLBar.pageActionsButton"].tap()
 
         // Activate find in page activity item and search for a keyword
-        waitforHittable(element: app.cells["Find in Page"])
+        waitForHittable(app.cells["Find in Page"])
         app.cells["Find in Page"].tap()
         app.typeText("Domain")
 
         // Try all functions of find in page bar
-        waitforHittable(element: app.buttons["FindInPage.find_previous"])
+        waitForHittable(app.buttons["FindInPage.find_previous"])
         app.buttons["FindInPage.find_previous"].tap()
 
-        waitforHittable(element: app.buttons["FindInPage.find_next"])
+        waitForHittable(app.buttons["FindInPage.find_next"])
         app.buttons["FindInPage.find_next"].tap()
 
-        waitforHittable(element: app.buttons["FindInPage.close"])
+        waitForHittable(app.buttons["FindInPage.close"])
         app.buttons["FindInPage.close"].tap()
 
         // Ensure find in page bar is dismissed
-        waitforNoExistence(element: app.buttons["FindInPage.close"])
+        waitForNoExistence(app.buttons["FindInPage.close"])
     }
 }

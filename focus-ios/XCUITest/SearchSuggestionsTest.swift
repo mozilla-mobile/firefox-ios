@@ -13,10 +13,10 @@ class SearchSuggestionsPromptTest: BaseTestCase {
     func checkSuggestions() {
         // Check search cells are displayed correctly
         let firstSuggestion = app.buttons.matching(identifier: "OverlayView.searchButton").element(boundBy: 0)
-        waitforExistence(element: firstSuggestion)
-        waitforExistence(element: app.buttons.matching(identifier: "OverlayView.searchButton").element(boundBy: 1))
-        waitforExistence(element: app.buttons.matching(identifier: "OverlayView.searchButton").element(boundBy: 2))
-        waitforExistence(element: app.buttons.matching(identifier: "OverlayView.searchButton").element(boundBy: 3))
+        waitForExistence(firstSuggestion)
+        waitForExistence(app.buttons.matching(identifier: "OverlayView.searchButton").element(boundBy: 1))
+        waitForExistence(app.buttons.matching(identifier: "OverlayView.searchButton").element(boundBy: 2))
+        waitForExistence(app.buttons.matching(identifier: "OverlayView.searchButton").element(boundBy: 3))
 
         let predicate = NSPredicate(format: "label BEGINSWITH 'g'")
         let predicateQuery = app.buttons.matching(predicate)
@@ -26,7 +26,7 @@ class SearchSuggestionsPromptTest: BaseTestCase {
 
         // Check tapping on first suggestion leads to correct page
         firstSuggestion.tap()
-        waitForValueContains(element: app.textFields["URLBar.urlText"], value: "g")
+        waitForValueContains(app.textFields["URLBar.urlText"], value: "g")
     }
 
     func typeInURLBar(text: String) {
@@ -35,7 +35,7 @@ class SearchSuggestionsPromptTest: BaseTestCase {
     }
 
     func checkToggleStartsOff() {
-        waitforHittable(element: app.buttons["Settings"])
+        waitForHittable(app.buttons["Settings"])
         app.buttons["Settings"].tap()
         checkToggle(isOn: false)
     }
@@ -49,13 +49,13 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         typeInURLBar(text: "g")
 
         // Prompt should display
-        waitforExistence(element: app.otherElements["SearchSuggestionsPromptView"])
+        waitForExistence(app.otherElements["SearchSuggestionsPromptView"])
 
         // Press enable
         app.buttons["SearchSuggestionsPromptView.enableButton"].tap()
 
         // Ensure prompt disappears
-        waitforNoExistence(element: app.otherElements["SearchSuggestionsPromptView"])
+        waitForNoExistence(app.otherElements["SearchSuggestionsPromptView"])
         
         // Adding a delay in case of slow network
         sleep(4)
@@ -64,7 +64,7 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         checkSuggestions()
 
         // Check search suggestions toggle is ON
-        waitforHittable(element: app.buttons["HomeView.settingsButton"])
+        waitForHittable(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
         checkToggle(isOn: true)
     }
@@ -78,25 +78,25 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         typeInURLBar(text: "g")
 
         // Prompt should display
-        waitforExistence(element: app.otherElements["SearchSuggestionsPromptView"])
+        waitForExistence(app.otherElements["SearchSuggestionsPromptView"])
 
         // Press disable
         app.buttons["SearchSuggestionsPromptView.disableButton"].tap()
 
         // Ensure prompt disappears
-        waitforNoExistence(element: app.otherElements["SearchSuggestionsPromptView"])
+        waitForNoExistence(app.otherElements["SearchSuggestionsPromptView"])
 
         // Ensure only one search cell is shown
         let suggestion = app.buttons.matching(identifier: "OverlayView.searchButton").element(boundBy: 0)
-        waitforExistence(element: suggestion)
+        waitForExistence(suggestion)
         XCTAssert("Search for g" == suggestion.label || "g" == suggestion.label)
 
         // Check tapping on suggestion leads to correct page
         suggestion.tap()
-        waitForValueContains(element: app.textFields["URLBar.urlText"], value: "g")
+        waitForValueContains(app.textFields["URLBar.urlText"], value: "g")
 
         // Check search suggestions toggle is OFF
-        waitforHittable(element: app.buttons["HomeView.settingsButton"])
+        waitForHittable(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
         checkToggle(isOn: false)
     }
@@ -115,7 +115,7 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         // Adding a delay in case of slow network
         sleep(4)
 
-        waitforNoExistence(element: app.otherElements["SearchSuggestionsPromptView"])
+        waitForNoExistence(app.otherElements["SearchSuggestionsPromptView"])
         
         // Ensure search suggestions are shown
         checkSuggestions()
@@ -130,7 +130,7 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         typeInURLBar(text: "g")
 
         // Prompt should display
-        waitforExistence(element: app.otherElements["SearchSuggestionsPromptView"])
+        waitForExistence(app.otherElements["SearchSuggestionsPromptView"])
 
         // Press enable
         app.buttons["SearchSuggestionsPromptView.enableButton"].tap()
@@ -139,13 +139,13 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         sleep(4)
         
         // Ensure prompt disappears
-        waitforNoExistence(element: app.otherElements["SearchSuggestionsPromptView"])
+        waitForNoExistence(app.otherElements["SearchSuggestionsPromptView"])
 
         // Ensure search suggestions are shown
         checkSuggestions()
 
         // Disable through settings
-        waitforHittable(element: app.buttons["HomeView.settingsButton"])
+        waitForHittable(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
         app.tables.switches["BlockerToggle.enableSearchSuggestions"].tap()
         checkToggle(isOn: false)
@@ -156,7 +156,7 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         urlBarTextField.tap()
         urlBarTextField.typeText("g")
         let suggestion = app.buttons.matching(identifier: "OverlayView.searchButton").element(boundBy: 0)
-        waitforExistence(element: suggestion)
+        waitForExistence(suggestion)
         XCTAssert("Search for g" == suggestion.label || "g" == suggestion.label)
     }
 }

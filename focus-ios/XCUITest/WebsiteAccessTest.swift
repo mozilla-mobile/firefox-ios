@@ -19,14 +19,14 @@ class WebsiteAccessTests: BaseTestCase {
         let label = app.textFields["URLBar.urlText"]
         searchOrEnterAddressTextField.tap()
         searchOrEnterAddressTextField.typeText("mozilla")
-        waitForValueMatch(element: label, value: "mozilla.org/")
-        waitforExistence(element: app.buttons["Search for mozilla"])
+        waitForValueContains(label, value: "mozilla.org/")
+        waitForExistence(app.buttons["Search for mozilla"])
 
         // BB CI seems to hang intermittently where http to https redirection occurs.
         // Providing straight URL to avoid the error - and use internal website
         app.buttons["icon clear"].tap()
         loadWebPage("https://www.example.com")
-        waitForValueContains(element: label, value: "www.example.com")
+        waitForValueContains(label, value: "www.example.com")
 
         // Erase the history
         app.buttons["URLBar.deleteButton"].tap()
@@ -39,7 +39,7 @@ class WebsiteAccessTests: BaseTestCase {
         // Disable Autocomplete
         app.buttons["Settings"].tap()
         app.tables.cells["SettingsViewController.autocompleteCell"].tap()
-        waitforExistence(element: app.tables.switches["toggleAutocompleteSwitch"])
+        waitForExistence(app.tables.switches["toggleAutocompleteSwitch"])
         var toggle = app.tables.switches["toggleAutocompleteSwitch"]
         toggle.tap()
 
@@ -50,10 +50,10 @@ class WebsiteAccessTests: BaseTestCase {
 
         searchOrEnterAddressTextField.tap()
         searchOrEnterAddressTextField.typeText("mozilla")
-        waitforExistence(element: app.buttons["OverlayView.searchButton"])
+        waitForExistence(app.buttons["OverlayView.searchButton"])
         let searchForButton = app.buttons["OverlayView.searchButton"]
         XCTAssertNotEqual(searchForButton.label, "Search for mozilla.org/")
-        waitForValueMatch(element: searchOrEnterAddressTextField, value: "mozilla")
+        waitForValueContains(searchOrEnterAddressTextField, value: "mozilla")
         app.buttons["URLBar.cancelButton"].tap()
 
         // Enable autocomplete
@@ -68,7 +68,7 @@ class WebsiteAccessTests: BaseTestCase {
         searchOrEnterAddressTextField.tap()
         searchOrEnterAddressTextField.typeText("mozilla")
         XCTAssertNotEqual(searchForButton.label, "Search for mozilla.org/")
-        waitForValueMatch(element: searchOrEnterAddressTextField, value: "mozilla.org/")
+        waitForValueContains(searchOrEnterAddressTextField, value: "mozilla.org/")
         app.buttons["URLBar.cancelButton"].tap()
     }
 
@@ -91,8 +91,8 @@ class WebsiteAccessTests: BaseTestCase {
         let searchOrEnterAddressTextField = app.textFields["URLBar.urlText"]
         searchOrEnterAddressTextField.tap()
         searchOrEnterAddressTextField.typeText("getfire")
-        waitforExistence(element: app.buttons["Search for getfire"])
-        waitForValueMatch(element: searchOrEnterAddressTextField, value: "getfirefox.com/")
+        waitForExistence(app.buttons["Search for getfire"])
+        waitForValueContains(searchOrEnterAddressTextField, value: "getfirefox.com/")
 
         // Remove the custom domain
         app.buttons["URLBar.cancelButton"].tap()

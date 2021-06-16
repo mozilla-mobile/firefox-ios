@@ -34,85 +34,36 @@ class BaseTestCase: XCTestCase {
         }
     }
 
-    func waitforEnable(element: XCUIElement, file: String = #file, line: UInt = #line) {
-        let exists = NSPredicate(format: "isEnabled == true")
-
-        expectation(for: exists, evaluatedWith: element, handler: nil)
-        waitForExpectations(timeout: 20) {(error) -> Void in
-            if (error != nil) {
-                let message = "Failed to find \(element) after 20 seconds."
-                self.recordFailure(withDescription: message,
-                                   inFile: file, atLine: Int(line), expected: true)
-            }
-        }
+    func waitForEnable(_ element: XCUIElement, timeout: TimeInterval = 5.0, file: String = #file, line: UInt = #line) {
+        waitFor(element, with: "exists == enable", timeout: timeout, file: file, line: line)
     }
 
-    func waitforExistence(element: XCUIElement, file: String = #file, line: UInt = #line) {
-        let exists = NSPredicate(format: "exists == true")
-
-        expectation(for: exists, evaluatedWith: element, handler: nil)
-        waitForExpectations(timeout: 30) {(error) -> Void in
-            if (error != nil) {
-                let message = "Failed to find \(element) after 30 seconds."
-                self.recordFailure(withDescription: message,
-                                   inFile: file, atLine: Int(line), expected: true)
-            }
-        }
+    func waitForExistence(_ element: XCUIElement, timeout: TimeInterval = 5.0, file: String = #file, line: UInt = #line) {
+            waitFor(element, with: "exists == true", timeout: timeout, file: file, line: line)
     }
 
-    func waitforHittable(element: XCUIElement, file: String = #file, line: UInt = #line) {
-        let exists = NSPredicate(format: "isHittable == true")
-
-        expectation(for: exists, evaluatedWith: element, handler: nil)
-        waitForExpectations(timeout: 30) {(error) -> Void in
-            if (error != nil) {
-                let message = "Failed to find \(element) after 30 seconds."
-                self.recordFailure(withDescription: message,
-                                   inFile: file, atLine: Int(line), expected: true)
-            }
-        }
+    func waitForHittable(_ element: XCUIElement, timeout: TimeInterval = 5.0, file: String = #file, line: UInt = #line) {
+            waitFor(element, with: "isHittable == true", timeout: timeout, file: file, line: line)
     }
 
-    func waitforNoExistence(element: XCUIElement, file: String = #file, line: UInt = #line) {
-        let exists = NSPredicate(format: "exists != true")
-
-        expectation(for: exists, evaluatedWith: element, handler: nil)
-        waitForExpectations(timeout: 10) {(error) -> Void in
-            if (error != nil) {
-                let message = "\(element) still exists after 10 seconds."
-                self.recordFailure(withDescription: message,
-                                   inFile: file, atLine: Int(line), expected: true)
-            }
-        }
+    func waitForNoExistence(_ element: XCUIElement, timeoutValue: TimeInterval = 5.0, file: String = #file, line: UInt = #line) {
+           waitFor(element, with: "exists != true", timeout: timeoutValue, file: file, line: line)
     }
 
-    func waitForValueMatch(element: XCUIElement, value: String, file: String = #file, line: UInt = #line) {
-        let predicateText = "value MATCHES " + "'" + value + "'"
-        let valueCheck = NSPredicate(format: predicateText)
+    func waitForValueContains(_ element: XCUIElement, value: String, file: String = #file, line: UInt = #line) {
+            waitFor(element, with: "value CONTAINS '\(value)'", file: file, line: line)
+        }
 
-        expectation(for: valueCheck, evaluatedWith: element, handler: nil)
-        waitForExpectations(timeout: 20) {(error) -> Void in
-            if (error != nil) {
-                let message = "Failed to find \(element) after 20 seconds."
-                self.recordFailure(withDescription: message,
-                                   inFile: file, atLine: Int(line), expected: true)
+    private func waitFor(_ element: XCUIElement, with predicateString: String, description: String? = nil, timeout: TimeInterval = 5.0, file: String, line: UInt) {
+            let predicate = NSPredicate(format: predicateString)
+            let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
+            let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
+            if result != .completed {
+                let message = description ?? "Expect predicate \(predicateString) for \(element.description)"
+                self.recordFailure(withDescription: message, inFile: file, atLine: Int(line), expected: false)
             }
         }
-    }
 
-    func waitForValueContains(element: XCUIElement, value: String, file: String = #file, line: UInt = #line) {
-        let predicateText = "value CONTAINS " + "'" + value + "'"
-        let valueCheck = NSPredicate(format: predicateText)
-
-        expectation(for: valueCheck, evaluatedWith: element, handler: nil)
-        waitForExpectations(timeout: 30) {(error) -> Void in
-            if (error != nil) {
-                let message = "Failed to find \(element) after 30 seconds."
-                self.recordFailure(withDescription: message,
-                                   inFile: file, atLine: Int(line), expected: true)
-            }
-        }
-    }
 
     func iPad() -> Bool {
         if UIDevice.current.userInterfaceIdiom == .pad {
@@ -125,14 +76,14 @@ class BaseTestCase: XCTestCase {
         let app = XCUIApplication()
 
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
-        waitforHittable(element: searchOrEnterAddressTextField)
+        waitForHittable(searchOrEnterAddressTextField)
 
         UIPasteboard.general.string = searchWord
 
         // Must press this way in order to support iPhone 5s
         searchOrEnterAddressTextField.tap()
         searchOrEnterAddressTextField.coordinate(withNormalizedOffset: CGVector.zero).withOffset(CGVector(dx: 10, dy: 0)).press(forDuration: 1.5)
-        waitforExistence(element: app.menuItems["Paste & Go"])
+        waitForExistence(app.menuItems["Paste & Go"])
         app.menuItems["Paste & Go"].tap()
 
         if waitForLoadToFinish {
@@ -171,7 +122,7 @@ class BaseTestCase: XCTestCase {
     }
 
     func checkForHomeScreen() {
-        waitforExistence(element: app.buttons["Settings"])
+        waitForExistence(app.buttons["Settings"], timeout: 5)
     }
 
     func waitForWebPageLoad () {

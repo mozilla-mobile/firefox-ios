@@ -12,12 +12,12 @@ class CollapsedURLTest: BaseTestCase {
         loadWebPage("https://news.ycombinator.com") //
 
         // Wait for the website to load
-        waitforExistence(element: app.webViews.otherElements["Hacker News"])
+        waitForExistence(app.webViews.otherElements["Hacker News"])
         let webView = app.webViews.children(matching: .other).element
         app.swipeUp()
         app.swipeUp()
         let collapsedTruncatedurltextTextView = app.textViews["Collapsed.truncatedUrlText"]
-        waitforExistence(element: collapsedTruncatedurltextTextView)
+        waitForExistence(collapsedTruncatedurltextTextView)
 
         XCTAssertTrue(collapsedTruncatedurltextTextView.isHittable)
         XCTAssertEqual(collapsedTruncatedurltextTextView.value as? String, "news.ycombinator.com")
@@ -25,7 +25,7 @@ class CollapsedURLTest: BaseTestCase {
         // After swiping down, the collapsed URL should not be displayed
         app.swipeDown()
         app.swipeDown()
-        waitforNoExistence(element: collapsedTruncatedurltextTextView)
+        waitForNoExistence(collapsedTruncatedurltextTextView)
         XCTAssertFalse(collapsedTruncatedurltextTextView.exists)
     }
 }

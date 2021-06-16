@@ -13,14 +13,14 @@ class CopyTest: BaseTestCase {
 
         // Must offset textfield press to support 5S.
         urlBarTextField.coordinate(withNormalizedOffset: CGVector.zero).withOffset(CGVector(dx: 10, dy: 0)).press(forDuration: 1.5)
-        waitforHittable(element: app.menuItems["Copy"])
+        waitForHittable(app.menuItems["Copy"])
         app.menuItems["Copy"].tap()
-        waitforNoExistence(element: app.menuItems["Copy"])
+        waitForNoExistence(app.menuItems["Copy"])
 
         loadWebPage("bing.com")
         urlBarTextField.tap()
         urlBarTextField.coordinate(withNormalizedOffset: CGVector.zero).withOffset(CGVector(dx: 10, dy: 0)).press(forDuration: 1.5)
-        waitforHittable(element: app.menuItems["Paste & Go"])
+        waitForHittable(app.menuItems["Paste & Go"])
         app.menuItems["Paste & Go"].tap()
 
         waitForWebPageLoad()

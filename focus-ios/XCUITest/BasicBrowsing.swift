@@ -14,19 +14,19 @@ class BasicBrowsing: BaseTestCase {
         waitForWebPageLoad()
 
         // Tap on Page Action button
-        waitforExistence(element: app.buttons["URLBar.pageActionsButton"])
+        waitForExistence( app.buttons["URLBar.pageActionsButton"])
         app.buttons["URLBar.pageActionsButton"].tap()
 
         // Tap Share button
         let ShareButton = app.cells["Share Page With..."]
-        waitforExistence(element: ShareButton)
+        waitForExistence( ShareButton)
         ShareButton.tap()
 
         // Launch external app
         let RemindersApp = app.cells["Reminders"]
-        waitforExistence(element: RemindersApp)
+        waitForExistence( RemindersApp)
         RemindersApp.tap()
-        waitforExistence(element: app.buttons["Add"])
+        waitForExistence( app.buttons["Add"])
         XCTAssertTrue(app.buttons["Add"].exists)
     }
     
@@ -53,23 +53,23 @@ class BasicBrowsing: BaseTestCase {
         // Tap Reload button
         app.buttons["BrowserToolset.stopReloadButton"].tap()
         waitForWebPageLoad()
-        waitForValueContains(element: app.textFields["URLBar.urlText"], value: "mozilla")
+        waitForValueContains( app.textFields["URLBar.urlText"], value: "mozilla")
 
         // Tap Back button to load example.com
         app.buttons["Back"].tap()
         waitForWebPageLoad()
-        waitForValueContains(element: app.textFields["URLBar.urlText"], value: "example")
+        waitForValueContains(app.textFields["URLBar.urlText"], value: "example")
 
         // Tap Forward button to load mozilla.org
         app.buttons["Forward"].tap()
         waitForWebPageLoad()
-        waitForValueContains(element: app.textFields["URLBar.urlText"], value: "mozilla")
+        waitForValueContains(app.textFields["URLBar.urlText"], value: "mozilla")
 
         // Tap Reload button and Stop button
         app.buttons["BrowserToolset.stopReloadButton"].tap()
         waitForWebPageLoad()
-        waitForValueContains(element: app.textFields["URLBar.urlText"], value: "mozilla")
+        waitForValueContains(app.textFields["URLBar.urlText"], value: "mozilla")
         app.buttons["BrowserToolset.stopReloadButton"].tap()
-        waitForValueContains(element: app.textFields["URLBar.urlText"], value: "mozilla")
+        waitForValueContains(app.textFields["URLBar.urlText"], value: "mozilla")
     }
 }
