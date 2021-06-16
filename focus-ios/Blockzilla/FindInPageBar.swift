@@ -99,7 +99,7 @@ class FindInPageBar: UIView {
         addSubview(nextButton)
 
         let closeButton = UIButton()
-        closeButton.setImage(UIImage(named: "find_close"), for: [])
+        closeButton.setImage(UIImage(named: "icon_stop_menu"), for: [])
         closeButton.setTitleColor(FindInPageUX.ButtonColor, for: [])
         closeButton.accessibilityLabel = UIConstants.strings.findInPageDoneLabel
         closeButton.addTarget(self, action: #selector(didPressClose), for: .touchUpInside)
