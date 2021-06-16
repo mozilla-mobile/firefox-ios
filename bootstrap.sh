@@ -51,7 +51,7 @@ fi
 mv Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
 
 # Install Node.js dependencies and build user scripts
-npm install
-npm run build
+yarn install
+yarn run build
 
 (cd content-blocker-lib-ios/ContentBlockerGen && swift run)
