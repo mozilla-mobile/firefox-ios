@@ -20,10 +20,10 @@ class CredentialProviderPresenter {
         if let openError = self.profile.logins.reopenIfClosed() {
             displayNotLoggedInMessage()
         } else {
-            self.view?.displaySpinner(message: "Syncing your logins")
+            self.view?.displaySpinner(message: .WelcomeViewSpinnerSyncingLogins)
             profile.syncCredentialIdentities().upon { result in
                 sleep(2)
-                self.view?.hideSpinner(completionMessage: "Done Syncing your logins")
+                self.view?.hideSpinner(completionMessage: .WelcomeViewSpinnerDoneSyncingLogins)
                 self.cancelWith(.userCanceled)
             }
         }
