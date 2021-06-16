@@ -4,6 +4,7 @@
 
 import UIKit
 import AuthenticationServices
+import SwiftKeychainWrapper
 
 @available(iOS 12, *)
 class CredentialProviderPresenter {
@@ -16,7 +17,7 @@ class CredentialProviderPresenter {
     }
     
     func extensionConfigurationRequested() {
-        view?.displayWelcome()
+        view?.showWelcome()
         if let openError = self.profile.logins.reopenIfClosed() {
             displayNotLoggedInMessage()
         } else {
@@ -30,7 +31,7 @@ class CredentialProviderPresenter {
     }
     
     func credentialProvisionRequested(for credentialIdentity: ASPasswordCredentialIdentity) {
-        if let openError = self.profile.logins.reopenIfClosed() {
+        if self.profile.logins.reopenIfClosed() != nil {
             cancelWith(.failed)
         } else if let id = credentialIdentity.recordIdentifier {
             
@@ -49,22 +50,40 @@ class CredentialProviderPresenter {
         }
     }
     
-    func credentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
+    fileprivate func showCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
         if let openError = self.profile.logins.reopenIfClosed() {
-            cancelWith(.failed)
+            self.cancelWith(.failed)
         } else {
-            profile.logins.list().upon {[weak self] result in
+            self.profile.logins.list().upon { [weak self] result in
                 switch result {
-                case .failure:
-                    self?.cancelWith(.failed)
+                case .failure: self?.cancelWith(.failed)
                 case .success(let loginRecods):
-                    let dataSource = loginRecods.map { ($0.passwordCredentialIdentity, $0.passwordCredential) }
                     DispatchQueue.main.async {
-                        self?.view?.display(itemList: dataSource)
+                        self?.view?.show(itemList: loginRecods.map { ($0.passwordCredentialIdentity, $0.passwordCredential) })
                     }
                 }
             }
         }
+    }
+    
+    func credentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
+        view?.showWelcome()
+        
+        guard let authInfo = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo(), authInfo.requiresValidation() else {
+            showCredentialList(for: serviceIdentifiers)
+            return
+        }
+        
+        AppAuthenticator.presentAuthenticationUsingInfo(
+            authInfo,
+            touchIDReason: .AuthenticationLoginsTouchReason,
+            success: { self.showCredentialList(for: serviceIdentifiers)},
+            cancel: { self.cancelWith(.userCanceled) },
+            fallback: { [weak self] in
+                self?.view?.showPassword { isOk in
+                    if isOk { self?.showCredentialList(for: serviceIdentifiers) }
+                }
+            })
     }
     
     func prepareAuthentication(for credentialIdentity: ASPasswordCredentialIdentity) { }
