@@ -113,6 +113,10 @@ class TestAppDelegate: AppDelegate {
             profile.prefs.setInt(1, forKey: PrefsKeys.UseStageServer)
         }
 
+        if launchArguments.contains(LaunchArguments.FxAChinaServer) {
+            profile.prefs.setInt(1, forKey: PrefsKeys.KeyEnableChinaSyncService)
+        }
+
         self.profile = profile
         return profile
     }
