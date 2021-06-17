@@ -377,7 +377,9 @@ extension TelemetryWrapper {
         case mediumQuickActionCopiedLink = "medium-quick-action-copied-link"
         case mediumQuickActionClosePrivate = "medium-quick-action-close-private"
         case mediumTopSitesWidget = "medium-top-sites-widget"
+        case topSiteTile = "top-site-tile"
         case pocketStory = "pocket-story"
+        case pocketSectionImpression = "pocket-section-impression"
         case library = "library"
         case home = "home-page"
         case blockImagesEnabled = "block-images-enabled"
@@ -400,6 +402,7 @@ extension TelemetryWrapper {
         case requestMobileSite = "request-mobile-site"
         case pinToTopSites = "pin-to-top-sites"
         case removePinnedSite = "remove-pinned-site"
+        case firefoxHomepage = "firefox-homepage"
     }
 
     public enum EventValue: String {
@@ -432,6 +435,16 @@ extension TelemetryWrapper {
         case readingPanel = "reading-panel"
         case downloadsPanel = "downloads-panel"
         case syncPanel = "sync-panel"
+        case yourLibrarySection = "your-library-section"
+        case addBookmarkToast = "add-bookmark-toast"
+        case openHomeFromAwesomebar = "open-home-from-awesomebar"
+        case openHomeFromPhotonMenuButton = "open-home-from-photon-menu-button"
+    }
+    
+    public enum EventExtraKey: String {
+        case topSitePosition = "tilePosition"
+        case topSiteTileType = "tileType"
+        case pocketTilePosition = "pocketTilePosition"
     }
 
     public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue? = nil, extras: [String: Any]? = nil) {
@@ -452,6 +465,8 @@ extension TelemetryWrapper {
             GleanMetrics.Bookmarks.delete[from].add()
         case (.action, .open, .bookmark, let from, _):
             GleanMetrics.Bookmarks.open[from].add()
+        case (.action, .change, .bookmark, let from, _):
+            GleanMetrics.Bookmarks.edit[from].add()
         // Reader Mode
         case (.action, .tap, .readerModeOpenButton, _, _):
             GleanMetrics.ReaderMode.open.add()
@@ -468,6 +483,14 @@ extension TelemetryWrapper {
             GleanMetrics.ReadingList.markRead.add()
         case (.action, .tap, .readingListItem, EventValue.markAsUnread.rawValue, _):
             GleanMetrics.ReadingList.markUnread.add()
+        // Top Site
+        case (.action, .tap, .topSiteTile, _, let extras):
+            if let position = extras?[EventExtraKey.topSitePosition.rawValue] as? String, let tileType = extras?[EventExtraKey.topSiteTileType.rawValue] as? String {
+                GleanMetrics.TopSite.tilePressed.record(extra: [GleanMetrics.TopSite.TilePressedKeys.position : position, GleanMetrics.TopSite.TilePressedKeys.tileType : tileType])
+            } else {
+                let msg = "Uninstrumented pref metric: \(category), \(method), \(object), \(value), \(String(describing: extras))"
+                Sentry.shared.send(message: msg, severity: .debug)
+            }
         // Preferences
         case (.action, .change, .setting, _, let extras):
             if let preference = extras?["pref"] as? String, let to = (extras?["to"] ?? "undefined") as? String {
@@ -531,8 +554,18 @@ extension TelemetryWrapper {
             GleanMetrics.Widget.mQuickActionClosePrivate.add()
         case (.action, .open, .mediumTopSitesWidget, _, _):
             GleanMetrics.Widget.mTopSitesWidget.add()
-        case (.action, .tap, .pocketStory, _, _):
-            GleanMetrics.Pocket.openStory.add()
+
+        // Pocket
+        case (.action, .tap, .pocketStory, _, let extras):
+            if let position = extras?[EventExtraKey.pocketTilePosition.rawValue] as? String {
+                GleanMetrics.Pocket.openStoryPosition[position].add()
+            } else {
+                let msg = "Uninstrumented pref metric: \(category), \(method), \(object), \(value), \(String(describing: extras))"
+                Sentry.shared.send(message: msg, severity: .debug)
+            }
+        case (.action, .view, .pocketSectionImpression, _, _):
+            GleanMetrics.Pocket.sectionImpressions.add()
+
         // Library
         case (.action, .tap, .libraryPanel, let type, _):
             GleanMetrics.Library.panelPressed[type].add()
@@ -597,7 +630,17 @@ extension TelemetryWrapper {
             GleanMetrics.PageActionMenu.requestDesktopSite.add()
         case (.action, .tap, .requestMobileSite, _, _):
             GleanMetrics.PageActionMenu.requestMobileSite.add()
-
+            
+        // Firefox Homepage
+        case (.action, .tap, .firefoxHomepage, EventValue.yourLibrarySection.rawValue, let extras):
+            if let panel = extras?[EventObject.libraryPanel.rawValue] as? String {
+                GleanMetrics.FirefoxHomePage.yourLibrary[panel].add()
+            }
+        case (.action, .open, .firefoxHomepage, EventValue.openHomeFromAwesomebar.rawValue, _):
+            GleanMetrics.FirefoxHomePage.openFromAwesomebar.add()
+        case (.action, .open, .firefoxHomepage, EventValue.openHomeFromPhotonMenuButton.rawValue, _):
+            GleanMetrics.FirefoxHomePage.openFromMenuHomeButton.add()
+            
         default:
             let msg = "Uninstrumented metric recorded: \(category), \(method), \(object), \(value), \(String(describing: extras))"
             Sentry.shared.send(message: msg, severity: .debug)

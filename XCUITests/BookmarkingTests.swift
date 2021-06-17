@@ -76,7 +76,11 @@ class BookmarkingTests: BaseTestCase {
         // Go back, check it's still bookmarked, check it's on bookmarks home panel
         waitForTabsButton()
         navigator.goto(TabTray)
-        app.cells.staticTexts["Example Domain"].tap()
+        if iPad() {
+            app.collectionViews.cells["Example Domain"].children(matching: .other).element.children(matching: .other).element.tap()
+        } else {
+            app.cells.staticTexts["Example Domain"].tap()
+        }
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
         checkBookmarked()

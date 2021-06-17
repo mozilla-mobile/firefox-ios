@@ -7,7 +7,14 @@ import XCTest
 
 class L10nMktSuiteSnapshotTests: L10nBaseSnapshotTests {
 
+    override func setUp() {
+        args = [LaunchArguments.ClearProfile, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.SkipIntro, LaunchArguments.ChronTabs]
+
+        super.setUp()
+    }
     func test1SettingsETP() {
+        waitForExistence(app.buttons["urlBar-cancel"])
+        app.buttons["urlBar-cancel"].tap()
         navigator.goto(TrackingProtectionSettings)
         
        // Check the warning alert
@@ -18,33 +25,23 @@ class L10nMktSuiteSnapshotTests: L10nBaseSnapshotTests {
         waitForExistence(app.cells["Settings.TrackingProtectionOption.BlockListBasic"])
     }
     
-    func test2URLBar() {
-        navigator.openURL("https://www.kingarthurbaking.com/recipes/sourdough-starter-recipe")
+    func testAwesemoBarWithResults() {
+        navigator.openURL("firefox.com")
         sleep(2)
-        
-        navigator.openNewURL(urlString: "https://www.thekitchn.com/how-to-make-sourdough-bread-224367")
-        sleep(2)
-        
-        userState.url = "sourdough"
-        navigator.performAction(Action.SetURLByTyping)
-        sleep(1)
-        app.staticTexts["sourdough starter"].tap()
         waitUntilPageLoad()
-
+        
+        navigator.openNewURL(urlString: "mozilla.com")
         sleep(2)
+        
+        userState.url = "firefox"
         navigator.performAction(Action.SetURLByTyping)
-        // app.staticTexts["sourdough pizza"].tap()
-        app.staticTexts.element(boundBy: 2).tap()
-        sleep(1)
-
-        userState.url = "sourdough"
-        navigator.performAction(Action.SetURLByTyping)
-        sleep(2)
-        snapshot("URLBar-02")
+        snapshot("Awesomebar-results-firefox")
     }
-    
+
     // DarkMode for these tests
     func test3DefaultTopSites() {
+        waitForExistence(app.buttons["urlBar-cancel"])
+        app.buttons["urlBar-cancel"].tap()
         // Enable Dark Mode
         navigator.goto(SettingsScreen)
         navigator.goto(DisplaySettings)
@@ -61,12 +58,15 @@ class L10nMktSuiteSnapshotTests: L10nBaseSnapshotTests {
         profile.prefs.setInt(0, forKey: PrefsKeys.ChronTabsPrefKey)
     }*/
     func test4PrivateBrowsingTabsEmptyState() {
+        waitForExistence(app.buttons["urlBar-cancel"])
+        app.buttons["urlBar-cancel"].tap()
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        app.buttons["closeTabButtonTabTray"].tap()
         snapshot("PrivateBrowsingMode")
     }
     
     func test5DefaultSearchEngine() {
+        waitForExistence(app.buttons["urlBar-cancel"])
+        app.buttons["urlBar-cancel"].tap()
         navigator.goto(SearchSettings)
         XCTAssert(app.tables.staticTexts["Google"].exists)
         snapshot("SearchSuggestions")
@@ -93,8 +93,6 @@ class L10nMktSuiteSnapshotTests: L10nBaseSnapshotTests {
         setupSnapshot(springboard)
         // Open the app and set it to background
         app.activate()
-        sleep(1)
-        snapshot("DefaultBrowser-01")
         sleep(1)
         XCUIDevice.shared.press(.home)
         
@@ -134,8 +132,10 @@ class L10nMktSuiteSnapshotTests: L10nBaseSnapshotTests {
         springboard.collectionViews.cells["Fennec (synctesting)"].children(matching: .other).element.children(matching: .other).element(boundBy: 0).children(matching: .other).element.swipeLeft()
 
         // Scroll to she second screen to select the other widget
-        print(springboard.debugDescription)
+        sleep(1)
         springboard.scrollViews.staticTexts.firstMatch.swipeLeft()
+        springboard.scrollViews.staticTexts.firstMatch.swipeLeft()
+        sleep(1)
         // Tap on Add widget button
         springboard.buttons.staticTexts.firstMatch.tap()
 
@@ -163,6 +163,17 @@ class L10nMktSuiteSnapshotTests: L10nBaseSnapshotTests {
         element.tap()
         sleep(1)
         snapshot("Widget-03")
+    }
+
+    func testTabTrayOpen() {
+        navigator.openURL("firefox.com")
+        waitUntilPageLoad()
+        navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        app.buttons["urlBar-cancel"].tap()
+        navigator.goto(TabTray)
+        sleep(1)
+        snapshot("TabTray-with-tabs")
     }
 }
 */

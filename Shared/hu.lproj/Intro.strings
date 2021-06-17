@@ -23,10 +23,10 @@
 "Intro.Slides.Firefox.Account.Sync.Description" = "Adjon hozzá könyvjelzőket, előzményeket és jelszavakat a Firefoxhoz ezen az eszközön.";
 
 /* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "Szinkronizáa a Firefoxot az eszközök közt";
+"Intro.Slides.Firefox.Account.Sync.Title" = "Szinkronizálja a Firefoxot az eszközök közt";
 
 /* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "Használjon bármely e-mail appot – nem csak a Mailt – a Firefoxszal.";
+"Intro.Slides.Mail.Description" = "Használja bármelyik levelezőalkalmazást – nem csak a Mailt – a Firefoxszal.";
 
 /* Title for the fourth panel 'Mail' in the First Run tour. */
 "Intro.Slides.Mail.Title" = "Üzenetet kapott… beállítások";

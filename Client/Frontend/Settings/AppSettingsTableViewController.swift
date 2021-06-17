@@ -4,7 +4,6 @@
 
 import UIKit
 import Shared
-import Account
 
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
 class AppSettingsTableViewController: SettingsTableViewController {
@@ -13,7 +12,11 @@ class AppSettingsTableViewController: SettingsTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.title = .AppSettingsTitle
+        let variables = Experiments.shared.getVariables(featureId: .nimbusValidation)
+        let title = variables.getText("settings-title") ?? .AppSettingsTitle
+        let suffix = variables.getString("settings-title-punctuation") ?? ""
+
+        navigationItem.title = "\(title)\(suffix)"
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             title: .AppSettingsDone,
             style: .done,
@@ -139,8 +142,8 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 SentryIDSetting(settings: self),
                 ChangeToChinaSetting(settings: self),
                 ShowEtpCoverSheet(settings: self),
-                LeanplumStatus(settings: self),
-                ToggleChronTabs(settings: self)
+                ToggleChronTabs(settings: self),
+                ExperimentsSettings(settings: self)
             ])]
 
         return settings

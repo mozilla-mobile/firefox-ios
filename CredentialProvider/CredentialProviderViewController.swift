@@ -12,8 +12,9 @@ import Sync
 protocol CredentialProviderViewProtocol: AnyObject, AlertControllerView, SpinnerAlertView {
     var extensionContext: ASCredentialProviderExtensionContext { get }
 
-    func displayWelcome()
-    func display(itemList: [(ASPasswordCredentialIdentity, ASPasswordCredential)])
+    func showWelcome()
+    func showPassword(completion: @escaping (Bool) -> Void)
+    func show(itemList: [(ASPasswordCredentialIdentity, ASPasswordCredential)])
 }
 
 class CredentialProviderViewController: ASCredentialProviderViewController {
@@ -82,13 +83,18 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
 }
 
 extension CredentialProviderViewController: CredentialProviderViewProtocol {
-    func displayWelcome() {
+    func showPassword(completion: @escaping (Bool) -> Void) {
+        let passcodeVC = PasscodeEntryViewController(passcodeCompletion: completion)
+        self.currentViewController = passcodeVC
+    }
+    
+    func showWelcome() {
         let welcomeView = UIStoryboard(name: "CredentialWelcome", bundle: nil)
-            .instantiateViewController(withIdentifier: "welcome") as! CredentialWelcomeViewController
+            .instantiateViewController(withIdentifier: "welcome")
         self.currentViewController = welcomeView
     }
     
-    func display(itemList: [(ASPasswordCredentialIdentity, ASPasswordCredential)]) {
+    func show(itemList: [(ASPasswordCredentialIdentity, ASPasswordCredential)]) {
         let storyboard = UIStoryboard(name: "CredentialList", bundle: nil)
         let credentialListVC = storyboard.instantiateViewController(withIdentifier: "itemlist") as! CredentialListViewController
         credentialListVC.dataSource = itemList

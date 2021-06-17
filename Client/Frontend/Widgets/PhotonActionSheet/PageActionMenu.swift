@@ -88,7 +88,6 @@ extension PhotonActionSheetProtocol {
             }
             bvc.addBookmark(url: url.absoluteString, title: tab.title, favicon: tab.displayFavicon)
             TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .pageActionMenu)
-            success(Strings.AppMenuAddBookmarkConfirmMessage, .bookmarkPage)
         }
 
         let removeBookmark = PhotonActionSheetItem(title: Strings.AppMenuRemoveBookmarkTitleString, iconString: "menu-Bookmark-Remove") { _,_  in

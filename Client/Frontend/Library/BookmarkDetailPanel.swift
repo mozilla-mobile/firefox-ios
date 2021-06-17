@@ -14,7 +14,7 @@ private let BookmarkDetailFolderCellIdentifier = "BookmarkDetailFolderCellIdenti
 
 private struct BookmarkDetailPanelUX {
     static let FieldRowHeight: CGFloat = 58
-    static let FolderIconSize = CGSize(width: 20, height: 20)
+    static let FolderIconSize = CGSize(width: 24, height: 24)
     static let IndentationWidth: CGFloat = 20
     static let MinIndentedContentWidth: CGFloat = 100
 }
@@ -70,9 +70,24 @@ class BookmarkDetailPanel: SiteTableViewController {
         return Int(floor((view.frame.width - BookmarkDetailPanelUX.MinIndentedContentWidth) / BookmarkDetailPanelUX.IndentationWidth))
     }
 
-    convenience init(profile: Profile, bookmarkNode: BookmarkNode, parentBookmarkFolder: BookmarkFolder) {
+    // Additional UI elements only used if `BookmarkDetailPanel` is called from the toast button
+    var isPresentedFromToast = false
+
+    fileprivate lazy var topRightButton: UIBarButtonItem =  {
+        let button = UIBarButtonItem(title: Strings.SettingsAddCustomEngineSaveButtonText, style: .done, target: self, action: #selector(topRightButtonAction))
+        return button
+    }()
+
+    fileprivate lazy var topLeftButton: UIBarButtonItem =  {
+        let button = UIBarButtonItem(image: UIImage.templateImageNamed("nav-stop"), style: .done, target: self, action: #selector(topLeftButtonAction))
+        return button
+    }()
+
+    // MARK: - Initializers
+    convenience init(profile: Profile, bookmarkNode: BookmarkNode, parentBookmarkFolder: BookmarkFolder, presentedFromToast fromToast: Bool = false) {
         self.init(profile: profile, bookmarkNodeGUID: bookmarkNode.guid, bookmarkNodeType: bookmarkNode.type, parentBookmarkFolder: parentBookmarkFolder)
 
+        self.isPresentedFromToast = fromToast
         self.bookmarkItemPosition = bookmarkNode.position
 
         if let bookmarkItem = bookmarkNode as? BookmarkItem {
@@ -119,25 +134,17 @@ class BookmarkDetailPanel: SiteTableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel) { _ in
-            self.navigationController?.popViewController(animated: true)
-        }
-
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save) { _ in
-            self.save().uponQueue(.main) { _ in
-                self.navigationController?.popViewController(animated: true)
-
-                if self.isNew, let bookmarksPanel = self.navigationController?.visibleViewController as? BookmarksPanel {
-                    bookmarksPanel.didAddBookmarkNode()
-                }
-            }
-        }
-
         if isNew, bookmarkNodeType == .bookmark {
             bookmarkItemURL = "https://"
+        }
+
+        if isPresentedFromToast {
+            navigationItem.rightBarButtonItem = topRightButton
+            navigationItem.leftBarButtonItem = topLeftButton
         }
 
         updateSaveButton()
@@ -221,11 +228,23 @@ class BookmarkDetailPanel: SiteTableViewController {
         guard bookmarkNodeType == .bookmark else {
             return
         }
-        
+
         let url = URL(string: bookmarkItemURL ?? "")
         navigationItem.rightBarButtonItem?.isEnabled = url?.schemeIsValid == true && url?.host != nil
     }
 
+    // MARK: - Button Actions
+    @objc func topRightButtonAction() {
+        save().uponQueue(.main) { _ in
+            self.dismiss(animated: true)
+        }
+    }
+
+    @objc func topLeftButtonAction() {
+        self.dismiss(animated: true)
+    }
+
+    // MARK: - Save Functionality
     func save() -> Success {
         if isNew {
             if bookmarkNodeType == .bookmark {

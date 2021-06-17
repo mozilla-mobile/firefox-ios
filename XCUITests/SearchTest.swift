@@ -240,6 +240,7 @@ class SearchTests: BaseTestCase {
         app.buttons["TabToolbar.multiStateButton"].tap()
 
         app.buttons["TabToolbar.backButton"].tap()
+        app.buttons["urlBar-cancel"].tap()
 
         waitForExistence(app.buttons["TabToolbar.multiStateButton"])
         XCTAssertTrue(app.buttons["TabToolbar.multiStateButton"].exists)

@@ -9,7 +9,7 @@
 <Url type="text/html" method="GET" template="https://www.amazon.de/exec/obidos/external-search/">
   <Param name="field-keywords" value="{searchTerms}"/>
   <Param name="mode" value="blended"/>
-  <Param name="tag" value="mozilla-20"/>
+  <Param name="tag" value="moz-de-mbl-21"/>
   <Param name="sourceid" value="Mozilla-search"/>
 </Url>
 <SearchForm>https://www.amazon.de/</SearchForm>

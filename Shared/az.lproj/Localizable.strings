@@ -16,11 +16,23 @@
 /* About settings section title */
 "About" = "Haqqında";
 
+/* The title for the pinning a shortcut action */
+"ActivityStream.ContextMenu.AddToShortcuts" = "Qısayollara əlavə et";
+
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite" = "Qabaqcıl Saytlara bərkid";
 
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite2" = "Bərkid";
+
+/* The title for removing a shortcut action */
+"ActivityStream.ContextMenu.RemoveFromShortcuts" = "Qısayollardan çıxart";
+
 /* The title for removing a pinned topsite action */
 "ActivityStream.ContextMenu.RemovePinTopsite" = "Bərkidilmiş saytı sil";
+
+/* The title for the unpinning a topsite action */
+"ActivityStream.ContextMenu.UnpinTopsite" = "Çıxart";
 
 /* The description of a highlight if it is a site the user has bookmarked */
 "ActivityStream.Highlights.Bookmark" = "Əlfəcinlənib";
@@ -37,11 +49,17 @@
 /* Section title label for Recommended by Pocket section */
 "ActivityStream.Pocket.SectionTitle" = "Pocket-də Trenddə";
 
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle2" = "Pocket tərəfindən məsləhət görülüb";
+
 /* The description of a Pocket Story */
 "ActivityStream.Pocket.Trending" = "Populyar";
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Təzəlikcə ziyarət edilən";
+
+/* Section title label for Shortcuts */
+"ActivityStream.Shortcuts.SectionTitle" = "Qısayollar";
 
 /* label showing how many rows of topsites are shown. %d represents a number */
 "ActivityStream.TopSites.RowCount" = "Sətirlər: %d";
@@ -83,6 +101,9 @@
 /* Authentication prompt title */
 "Authentication required" = "Təsdiqləmə tələb edilir";
 
+/* Title for button to suggest searching with a search engine. First argument is the name of the search engine to select */
+"Awesomebar.SearchWithEngine.Title" = "%@ ilə axtar";
+
 /* Accessibility label for the Back button in the tab toolbar. */
 "Back" = "Geri";
 
@@ -103,6 +124,9 @@
 
 /* Toggle bookmarks syncing setting */
 "Bookmarks" = "Əlfəcinlər";
+
+/* The button on the snackbar to edit a bookmark after adding it. */
+"Bookmarks.Edit.Button" = "Düzəlt";
 
 /* The button to edit a bookmark */
 "Bookmarks.EditBookmark.Label" = "Əlfəcini düzəlt";
@@ -199,6 +223,9 @@
 
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "Yeni vərəqdə aç";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenLinkInNewTabButtonTitle" = "Keçidi Yeni Vərəqdə Aç";
 
 /* Context menu item for saving an image */
 "ContextMenu.SaveImageButtonTitle" = "Şəkli saxla";
@@ -630,17 +657,26 @@
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "Oxuma Siyahısına əlavə edildi";
 
+/* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
+"Menu.Bookmarks.Label" = "Əlfəcinlər";
+
 /* The title for the button that lets you copy the url from the location bar. */
 "Menu.Copy.Title" = "Ünvanı Köçür";
 
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "URL mübadilə buferinə köçürüldü";
 
+/* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
+"Menu.Downloads.Label" = "Endirmələr";
+
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtectionOff.Title" = "Artırılmış izlənmə qoruması bu sayt üçün söndürülüb.";
 
 /* A switch to enable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtectionOn.Title" = "Artırılmış izlənmə qoruması bu sayt üçün aktivdir.";
+
+/* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
+"Menu.History.Label" = "Tarixçə";
 
 /* Label for the button displayed in the menu used to stop the reload of the webpage */
 "Menu.Library.StopReload" = "Dayandır";
@@ -651,14 +687,23 @@
 /* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
 "Menu.NoImageModeBlockImages.Label" = "Şəkilləri Əngəllə";
 
+/* Label for the button, displayed in the menu, shows images on the webpage when pressed. */
+"Menu.NoImageModeShowImages.Label" = "Şəkilləri Göstər";
+
 /* Label for title in page action menu. */
 "Menu.PageActions.Title" = "Səhifə Əməliyyatları";
+
+/* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
+"Menu.Passwords.Label" = "Parollar";
 
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "Yapışdır";
 
 /* The title for the button that lets you paste and go to a URL */
 "Menu.PasteAndGo.Title" = "Yapışdır və aç";
+
+/* Label for the button, displayed in the menu, takes you to to Reading List screen when pressed. */
+"Menu.ReadingList.Label" = "Oxuma Siyahısı";
 
 /* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
 "Menu.ReloadWithoutTrackingProtection.Title" = "İzlənmə Qoruması olmadan yenilə";
@@ -1283,6 +1328,33 @@
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri Qısayolları";
 
+/* Section title for all studies that are currently active */
+"Settings.Studies.Active.SectionName" = "Aktiv";
+
+/* Section title for all studies that are completed */
+"Settings.Studies.Completed.SectionName" = "Tamamlanmış";
+
+/* Button title displayed next to each study allowing the user to opt-out of the study */
+"Settings.Studies.Remove.Button" = "Sil";
+
+/* Title displayed in header of the Studies panel */
+"Settings.Studies.SectionName" = "Tədqiqatlar";
+
+/* Label used as an item in Settings. Tapping on this item takes you to the Studies panel */
+"Settings.Studies.Title" = "Tədqiqatlar";
+
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Toggle.Link" = "Ətraflı öyrən.";
+
+/* Toggled OFF to opt-out of studies */
+"Settings.Studies.Toggle.Off" = "Sönülü";
+
+/* Toggled ON to participate in studies */
+"Settings.Studies.Toggle.On" = "Açıq";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Toggle.Title" = "Tədqiqatlar";
+
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Tamam, başa düşdüm";
 
@@ -1512,11 +1584,38 @@
 /* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.CloseTab.KeyCodeTitle" = "Seçilən Vərəqi Qapat";
 
+/* The title on the button to copy the tab address. */
+"TabTray.MoreMenu.Copy" = "Köçür";
+
 /* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "Yeni Vərəq Aç";
 
 /* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenSelectedTab.KeyCodeTitle" = "Seçilən Vərəqi Aç";
+
+/* The title for the tab tray in private mode */
+"TabTray.PrivateTitle" = "Məxfi Vərəqlər";
+
+/* The title on the button to look at private tabs. */
+"TabTray.SegmentedControlTitles.PrivateTabs" = "Məxfi";
+
+/* The title on the button to look at synced tabs. */
+"TabTray.SegmentedControlTitles.SyncedTabs" = "Sinxron";
+
+/* The title on the button to look at regular tabs. */
+"TabTray.SegmentedControlTitles.Tabs" = "Vərəqlər";
+
+/* The button title to see more options to perform on the tab. */
+"TabTray.SwipeMenu.More" = "Daha çox";
+
+/* The title for the tab tray */
+"TabTray.Title" = "Açıq Vərəqlər";
+
+/* The section header for tabs opened today */
+"TabTray.Today.Header" = "Bu gün";
+
+/* The section header for tabs opened yesterday */
+"TabTray.Yesterday.Header" = "Dünən";
 
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "Bu səhifə Oxuyucu Görünüşündə göstərilə bilməz.";

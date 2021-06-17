@@ -5,5 +5,5 @@
 "Search Settings" = "Preferenze di ricerca";
 
 /* Accessibility label for image of default search engine displayed left to the actual search suggestions from the engine. The parameter substituted for \"%@\" is the name of the search engine. E.g.: Search suggestions from Google */
-"Search suggestions from %@" = "Suggestioni di ricerca da %@";
+"Search suggestions from %@" = "Sugestioni di ricerca da %@";
 

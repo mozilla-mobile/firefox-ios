@@ -5,7 +5,7 @@
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "Apri in nuova scheda anonima";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox non conserverà alcuna cronologia o cookie per questa finestra. I segnalibri aggiunti verranno comunque conservati sul dispositivo.";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox non salverà alcuna cronologia o cookie per questa finestra. I segnalibri aggiunti verranno comunque conservati sul dispositivo.";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "Ulteriori informazioni";

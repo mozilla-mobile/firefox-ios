@@ -108,7 +108,6 @@ class BrowserViewController: UIViewController {
     fileprivate var keyboardState: KeyboardState?
     var hasTriedToPresentETPAlready = false
     var hasTriedToPresentDBCardAlready = false
-    var hasPresentedDBCard = false
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
 
@@ -333,6 +332,9 @@ class BrowserViewController: UIViewController {
             self.updateDisplayedPopoverProperties = nil
             self.displayedPopoverController = nil
         }
+        if let _ = self.presentedViewController as? PhotonActionSheet {
+            self.presentedViewController?.dismiss(animated: true, completion: nil)
+        }
     }
 
     @objc func tappedTopArea() {
@@ -476,11 +478,9 @@ class BrowserViewController: UIViewController {
         
         // Setup New Tab user research for A/B testing
         newTabUserResearch = NewTabUserResearch()
-        newTabUserResearch?.lpVariableObserver()
         urlBar.newTabUserResearch = newTabUserResearch
         // Setup chron tabs A/B test
         chronTabsUserResearch = ChronTabsUserResearch()
-        chronTabsUserResearch?.lpVariableObserver()
         searchTelemetry = SearchTelemetry()
     }
 
@@ -754,6 +754,10 @@ class BrowserViewController: UIViewController {
     func showFirefoxHome(inline: Bool) {
         homePanelIsInline = inline
         if self.firefoxHomeViewController == nil {
+            // Firefox home page tracking i.e. being shown from awesomebar vs bottom right hamburger menu
+            let trackingValue: TelemetryWrapper.EventValue = homePanelIsInline ? .openHomeFromPhotonMenuButton : .openHomeFromAwesomebar
+            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .firefoxHomepage, value: trackingValue, extras: nil)
+            
             let firefoxHomeViewController = FirefoxHomeViewController(profile: profile)
             firefoxHomeViewController.homePanelDelegate = self
             self.firefoxHomeViewController = firefoxHomeViewController
@@ -813,16 +817,16 @@ class BrowserViewController: UIViewController {
             if isAboutHomeURL {
                 showFirefoxHome(inline: true)
 
-                if !hasPresentedDBCard && !shouldShowIntroScreen && focusUrlBar {
-                    if chronTabTrayController == nil && tabTrayViewController == nil {
-                        urlBar.enterOverlayMode(nil, pasted: false, search: false)
-                    } else {
-                        tabTrayViewController?.onViewDismissed = { [weak self] in
+                if focusUrlBar {
+                    if let viewcontroller = presentedViewController as? OnViewDismissable {
+                        viewcontroller.onViewDismissed = { [weak self] in
                             let shouldEnterOverlay = self?.tabManager.selectedTab?.url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
                             if shouldEnterOverlay {
                                 self?.urlBar.enterOverlayMode(nil, pasted: false, search: false)
                             }
                         }
+                    } else {
+                        self.urlBar.enterOverlayMode(nil, pasted: false, search: false)
                     }
                 }
 
@@ -853,8 +857,9 @@ class BrowserViewController: UIViewController {
             libraryViewController.selectedPanel = panel
         }
 
-        libraryViewController.modalPresentationStyle = .formSheet
-        self.present(libraryViewController, animated: true, completion: nil)
+        let controller: DismissableNavigationViewController
+        controller = DismissableNavigationViewController(rootViewController: libraryViewController)
+        self.present(controller, animated: true, completion: nil)
     }
 
     fileprivate func createSearchControllerIfNeeded() {
@@ -932,6 +937,38 @@ class BrowserViewController: UIViewController {
             userData[QuickActions.TabTitleKey] = title
         }
         QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark, withUserData: userData, toApplication: .shared)
+
+        showBookmarksToast()
+    }
+
+    private func showBookmarksToast() {
+        let toast = ButtonToast(labelText: Strings.AppMenuAddBookmarkConfirmMessage,
+                                buttonText: Strings.BookmarksEdit,
+                                textAlignment: .left) { isButtonTapped in
+            isButtonTapped ? self.openBookmarkEditPanel() : nil
+        }
+        self.show(toast: toast)
+    }
+
+    /// This function will open a view separate from the bookmark edit panel found in the
+    /// Library Panel - Bookmarks section. In order to get the correct information, it needs
+    /// to fetch the last added bookmark in the mobile folder, which is the default
+    /// location for all bookmarks added on mobile.
+    private func openBookmarkEditPanel() {
+        TelemetryWrapper.recordEvent(category: .action, method: .change, object: .bookmark, value: .addBookmarkToast)
+        if profile.isShutdown { return }
+        profile.places.getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false).uponQueue(.main) { result in
+
+            guard let bookmarkFolder = result.successValue as? BookmarkFolder,
+                  let bookmarkNode = bookmarkFolder.children?.last else { return }
+            let detailController = BookmarkDetailPanel(profile: self.profile,
+                                                       bookmarkNode: bookmarkNode,
+                                                       parentBookmarkFolder: bookmarkFolder,
+                                                       presentedFromToast: true)
+            let controller: DismissableNavigationViewController
+            controller = DismissableNavigationViewController(rootViewController: detailController)
+            self.present(controller, animated: true, completion: nil)
+        }
     }
 
     override func accessibilityPerformEscape() -> Bool {
@@ -1181,7 +1218,6 @@ class BrowserViewController: UIViewController {
         }
 
         present(controller, animated: true, completion: nil)
-        LeanPlumClient.shared.track(event: .userSharedWebpage)
     }
 
     @objc fileprivate func openSettings() {
@@ -1849,7 +1885,7 @@ extension BrowserViewController {
                 UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
             }
         }
-        hasPresentedDBCard = true
+
         present(dBOnboardingViewController, animated: true, completion: nil)
     }
     
@@ -1952,7 +1988,6 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 
             let addTab = { (rURL: URL, isPrivate: Bool) in
                     let tab = self.tabManager.addTab(URLRequest(url: rURL as URL), afterTab: currentTab, isPrivate: isPrivate)
-                    LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "Long Press Context Menu"])
                     guard !self.topTabsVisible else {
                         return
                     }
@@ -1979,7 +2014,6 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 
             let bookmarkAction = UIAlertAction(title: Strings.ContextMenuBookmarkLink, style: .default) { _ in
                 self.addBookmark(url: url.absoluteString, title: elements.title)
-                SimpleToast().showAlertWithText(Strings.AppMenuAddBookmarkConfirmMessage, bottomContainer: self.webViewContainer)
                 TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .contextMenu)
             }
             actionSheetController.addAction(bookmarkAction, accessibilityIdentifier: "linkContextMenu.bookmarkLink")
@@ -2118,11 +2152,8 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 }
 
 extension BrowserViewController {
-    @objc func image(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) {
-        if error == nil {
-            LeanPlumClient.shared.track(event: .saveImage)
-        }
-    }
+    // no-op
+    @objc func image(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) { }
 }
 
 extension BrowserViewController: KeyboardHelperDelegate {

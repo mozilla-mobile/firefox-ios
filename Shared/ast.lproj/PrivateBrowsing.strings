@@ -1,3 +1,6 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Zarrar les llingüetes privaes";
+
 /* Description text displayed when there are no open tabs while in private mode */
 "Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox nun va recordar l'historial o les cookies, mas van guardase los marcadores nuevos.";
 

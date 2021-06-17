@@ -118,8 +118,14 @@
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitle" = "Lankomiausios svetainės";
 
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitleV2" = "Svetainių leistukai";
+
 /* Sub label for Top Sites widget */
 "TodayWidget.TopSitesSubLabel" = "„Firefox“ – lankomiausios svetainės";
+
+/* Sub label for Shortcuts widget */
+"TodayWidget.TopSitesSubLabel2" = "„Firefox“ - svetainių leistukai";
 
 /* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
 "TodayWidget.ViewMore" = "Rodyti daugiau";

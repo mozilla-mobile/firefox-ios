@@ -46,7 +46,7 @@ class AppAuthenticator {
             fallback?()
         }
     }
-
+    
     static func presentPasscodeAuthentication(_ presentingNavController: UINavigationController?) -> Deferred<Bool> {
         let deferred = Deferred<Bool>()
         let passcodeVC = PasscodeEntryViewController(passcodeCompletion: { isOk in
