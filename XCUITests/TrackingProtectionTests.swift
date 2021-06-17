@@ -99,6 +99,8 @@ class TrackingProtectionTests: BaseTestCase {
         // Enable Strict TP
         navigator.openURL(websiteWithBlockedElements)
         waitUntilPageLoad()
+        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
+        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"], timeout: 5)
         // Open ETP menu
         navigator.goto(TrackingProtectionContextMenuDetails)
         waitForExistence(app.tables["Context Menu"])
@@ -117,8 +119,10 @@ class TrackingProtectionTests: BaseTestCase {
         // Go to a different site and verify that ETP is ON
         navigator.openNewURL(urlString: differentWebsite)
         waitUntilPageLoad()
+        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
+        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"], timeout: 5)
         navigator.goto(TrackingProtectionContextMenuDetails)
-        waitForExistence(app.tables["Context Menu"])
+        waitForExistence(app.tables["Context Menu"], timeout: 5)
         XCTAssertTrue(app.cells.images["enabled"].exists)
         XCTAssertTrue(app.tables.cells[strictBlockedElementsString].exists, "ETP menu with elements blocked is not right")
         navigator.performAction(Action.CloseTPContextMenu)
@@ -127,8 +131,9 @@ class TrackingProtectionTests: BaseTestCase {
         // Go back to original site and verify that ETP is still OFF
         navigator.openURL(websiteWithBlockedElements)
         waitUntilPageLoad()
+        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
+        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"], timeout: 5)
         navigator.goto(TrackingProtectionContextMenuDetails)
-        print(app.debugDescription)
         XCTAssertFalse(app.cells.images["enabled"].exists)
         XCTAssertTrue(app.tables.cells.staticTexts[disabledStrictTPString].exists, "ETP menu with elements blocked is not right")
 
