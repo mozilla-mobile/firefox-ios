@@ -251,6 +251,48 @@ workflows:
         stack: osx-xcode-12.5.x
         machine_type_id: g2.8core
 
+  L10nBuild:
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@4: {}
+    - cache-pull@2: {}
+    - certificate-and-profile-installer@1: {}
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            ./checkout.sh
+        title: ContentBlockerGen
+    - script@1:
+        title: Set Default Web Browser Entitlement
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Focus.entitlements
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Klar.entitlements
+    - script@1:
+        title: Generate screenshots
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            ./screenshots.sh en-US
+
+    - deploy-to-bitrise-io@1.10:
+        inputs:
+        - deploy_path: screenshots-derived-data/
+        - is_compress: 'true'
+    - deploy-to-bitrise-io@1.10:
+        inputs:
+        - deploy_path: screenshots/Focus/iPhone11/en-US
+        - is_compress: 'true'
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.5.x
+        machine_type_id: standard
+
 app:
   envs:
   - opts:
