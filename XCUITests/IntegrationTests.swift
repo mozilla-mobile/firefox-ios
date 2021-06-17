@@ -14,7 +14,7 @@ private let tabOpenInDesktop = "http://example.com/"
 class IntegrationTests: BaseTestCase {
 
     let testWithDB = ["testFxASyncHistory", "testFxASyncBookmark"]
-    let testChinaServer = ["testFxASyncHistoryChina"]
+    let testFxAChinaServer = ["testFxASyncPageUsingChinaFxA"]
 
     // This DB contains 1 entry example.com
     let historyDB = "exampleURLHistoryBookmark.db"
@@ -26,8 +26,8 @@ class IntegrationTests: BaseTestCase {
      if testWithDB.contains(key) {
      // for the current test name, add the db fixture used
      launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.StageServer, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + historyDB]
-     } else if testChinaServer.contains(key) {
-        launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.ChinaServer, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet]
+     } else if testFxAChinaServer.contains(key) {
+        launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.FxAChinaServer, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet]
      }
      super.setUp()
      }
@@ -72,7 +72,7 @@ class IntegrationTests: BaseTestCase {
         waitForInitialSyncComplete()
     }
 
-    func testFxASyncPageUsingChina () {
+    func testFxASyncPageUsingChinaFxA () {
         // History is generated using the DB so go directly to Sign in
         // Sign into Firefox Accounts
         app.buttons["urlBar-cancel"].tap()
@@ -82,7 +82,7 @@ class IntegrationTests: BaseTestCase {
         waitForExistence(app.navigationBars["Turn on Sync"], timeout: 20)
         waitForExistence(app.webViews.textFields["Email"])
 
-        // Wait for element not present on FxA sign in page China server
+        // Wait for element not present on FxA sign in page China FxA server
         waitForNoExistence(app.webViews.otherElements.staticTexts["Firefox Monitor"])
         XCTAssertFalse(app.webViews.otherElements.staticTexts["Firefox Monitor"].exists)
     }
