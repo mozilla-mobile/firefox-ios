@@ -6,7 +6,8 @@ import XCTest
 
 class PhotonActionSheetTest: BaseTestCase {
     // Smoketest
-    func testPinToTop() {
+    func testPinToTop() throws {
+        throw XCTSkip("Skipping this test due to issue 8715")
         navigator.openURL("http://example.com")
         waitUntilPageLoad()
         // Open Page Action Menu Sheet and Pin the site
