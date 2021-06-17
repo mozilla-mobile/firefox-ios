@@ -84,7 +84,7 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
 extension CredentialProviderViewController: CredentialProviderViewProtocol {
     func displayWelcome() {
         let welcomeView = UIStoryboard(name: "CredentialWelcome", bundle: nil)
-            .instantiateViewController(withIdentifier: "welcome")
+            .instantiateViewController(withIdentifier: "welcome") as! CredentialWelcomeViewController
         self.currentViewController = welcomeView
     }
     
