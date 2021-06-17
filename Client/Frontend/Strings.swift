@@ -1384,3 +1384,18 @@ extension String {
     public static let AwesomeBarSearchWithEngineButtonTitle = MZLocalizedString("Awesomebar.SearchWithEngine.Title", value: "Search with %@", comment: "Title for button to suggest searching with a search engine. First argument is the name of the search engine to select")
     public static let AwesomeBarSearchWithEngineButtonDescription = MZLocalizedString("Awesomebar.SearchWithEngine.Description", value: "Search %@ directly from the address bar", comment: "Description for button to suggest searching with a search engine. First argument is the name of the search engine to select")
 }
+
+//Credential Provider
+extension String {
+    public static let WelcomeViewTitle = MZLocalizedString("WelcomeView.Title", tableName: "CredentialProvider", comment: "Label displaying welcome view title")
+    public static let WelcomeViewSpinnerSyncingLogins = MZLocalizedString("WelcomeView.Spinner.SyncingLogins", tableName: "CredentialProvider", comment: "Label for syncing your logins spinner")
+    public static let WelcomeViewSpinnerDoneSyncingLogins = MZLocalizedString("WelcomeView.Spinner.DoneSyncingLogins", tableName: "CredentialProvider", comment: "Label for finishing syncing your logins")
+    public static let LoginsListSearchCancel = MZLocalizedString("LoginsList.Search.Cancel", tableName: "CredentialProvider", comment: "Cancel button title")
+    public static let LoginsListSearchPlaceholder = MZLocalizedString("LoginsList.Search.Placeholder", tableName: "CredentialProvider", comment: "Placeholder text for search field")
+    public static let LoginsListSelectPasswordTitle = MZLocalizedString("LoginsList.SelectPassword.Title", tableName: "CredentialProvider", comment: "Label displaying select a password to fill instruction")
+    public static let LoginsListNoMatchingResultTitle = MZLocalizedString("LoginsList.NoMatchingResult.Title", tableName: "CredentialProvider", comment: "Label displayed when a user searches and no matches can be found against the search query")
+    public static let LoginsListNoMatchingResultSubtitle = MZLocalizedString("LoginsList.NoMatchingResult.Subtitle", tableName: "CredentialProvider", comment: "Label that appears after the search if there are no logins available to this account")
+    public static let LoginsListNoLoginsFoundTitle = MZLocalizedString("LoginsList.NoLoginsFound.Title", tableName: "CredentialProvider", comment: "Label informing the user the account has no logins available")
+    public static let LoginsListNoLoginsFoundSubtitle = MZLocalizedString("LoginsList.NoLoginsFound.Subtitle", tableName: "CredentialProvider", comment: "Label shown when there are no logins to list")
+    
+}

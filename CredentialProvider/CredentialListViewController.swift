@@ -26,7 +26,7 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
     
     private var cancelButton: UIButton {
         let button = UIButton()
-        button.setTitle("Cancel", for: .normal)
+        button.setTitle(.LoginsListSearchCancel, for: .normal)
         button.titleLabel?.font = .navigationButtonFont
         button.accessibilityIdentifier = "cancel.button"
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -90,7 +90,7 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
         navigationItem.title = "Firefox"
         navigationItem.largeTitleDisplayMode = .never
         navigationController?.navigationBar.tintColor = UIColor.white
-        navigationController?.navigationBar.accessibilityIdentifier = "firefoxLockwise.navigationBar"
+        navigationController?.navigationBar.accessibilityIdentifier = "firefox.navigationBar"
         navigationController?.navigationBar.titleTextAttributes = [
             .foregroundColor: UIColor.white,
             .font: UIFont.navigationTitleFont
@@ -133,7 +133,7 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
             }
         }
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).tintColor = UIColor.white // Set cursor color
-        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: "Search logins", attributes: [NSAttributedString.Key.foregroundColor: UIColor.navSearchPlaceholderTextColor]) // Set the placeholder text and color
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: .LoginsListSearchPlaceholder, attributes: [NSAttributedString.Key.foregroundColor: UIColor.navSearchPlaceholderTextColor]) // Set the placeholder text and color
         return searchController
     }
     
@@ -161,15 +161,12 @@ extension CredentialListViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "emptylistplaceholder", for: indexPath) as? EmptyPlaceholderCell
             return cell ?? UITableViewCell()
         case .emptySearchResult:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "noresultsplaceholder") else {
-                return UITableViewCell()
-            }
-            return cell
+           let cell = tableView.dequeueReusableCell(withIdentifier: "noresultsplaceholder", for: indexPath) as? NoSearchResultCell
+            return cell ?? UITableViewCell()
         case .selectPassword:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "selectapasswordhelptext") else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "selectapasswordhelptext", for: indexPath) as? SelectPasswordCell else {
                 return UITableViewCell()
             }
-            
             let borderView = UIView()
             borderView.frame = CGRect(x: 0, y: cell.frame.height-1, width: cell.frame.width, height: 1)
             borderView.backgroundColor = UIColor.helpTextBorderColor
@@ -177,7 +174,7 @@ extension CredentialListViewController: UITableViewDataSource {
             return cell
         case .displayItem(let credentialIdentity):
             let cell = tableView.dequeueReusableCell(withIdentifier: "itemlistcell", for: indexPath) as? ItemListCell
-            cell?.titleLabel.text = credentialIdentity.serviceIdentifier.identifier
+            cell?.titleLabel.text = credentialIdentity.serviceIdentifier.identifier.titleFromHostname
             cell?.detailLabel.text = credentialIdentity.user
             return cell ?? UITableViewCell()
         case .none:

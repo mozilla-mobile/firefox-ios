@@ -18,19 +18,20 @@ class CredentialProviderPresenter {
     
     func extensionConfigurationRequested() {
         view?.showWelcome()
-        if let openError = self.profile.logins.reopenIfClosed() {
+        if self.profile.logins.reopenIfClosed() != nil {
             displayNotLoggedInMessage()
         } else {
-            self.view?.displaySpinner(message: "Syncing your logins")
+            self.view?.displaySpinner(message: .WelcomeViewSpinnerSyncingLogins)
             profile.syncCredentialIdentities().upon { result in
                 sleep(2)
-                self.view?.hideSpinner(completionMessage: "Done Syncing your logins")
+                self.view?.hideSpinner(completionMessage: .WelcomeViewSpinnerDoneSyncingLogins)
                 self.cancelWith(.userCanceled)
             }
         }
     }
     
     func credentialProvisionRequested(for credentialIdentity: ASPasswordCredentialIdentity) {
+
         if self.profile.logins.reopenIfClosed() != nil {
             cancelWith(.failed)
         } else if let id = credentialIdentity.recordIdentifier {
@@ -50,22 +51,35 @@ class CredentialProviderPresenter {
         }
     }
     
-    fileprivate func showCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-        if let openError = self.profile.logins.reopenIfClosed() {
-            self.cancelWith(.failed)
+
+    func showCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
+    if self.profile.logins.reopenIfClosed() != nil {
+            cancelWith(.failed)
         } else {
-            self.profile.logins.list().upon { [weak self] result in
+            profile.logins.list().upon {[weak self] result in
                 switch result {
-                case .failure: self?.cancelWith(.failed)
-                case .success(let loginRecods):
+                case .failure:
+                    self?.cancelWith(.failed)
+                case .success(let loginRecords):
+                    
+                    var sortedLogins = loginRecords.sorted(by: <)
+                    for (index, element) in sortedLogins.enumerated() {
+                        if let identifier = serviceIdentifiers.first?.identifier.asURL?.domainURL.absoluteString.titleFromHostname, element.passwordCredentialIdentity.serviceIdentifier.identifier.contains(identifier) {
+                            sortedLogins.remove(at: index)
+                            sortedLogins.insert(element, at: 0)
+                        }
+                    }
+                    
+                    let dataSource = sortedLogins.map { ($0.passwordCredentialIdentity, $0.passwordCredential) }
                     DispatchQueue.main.async {
-                        self?.view?.show(itemList: loginRecods.map { ($0.passwordCredentialIdentity, $0.passwordCredential) })
+                        self?.view?.show(itemList: dataSource)
                     }
                 }
             }
         }
     }
     
+
     func credentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
         view?.showWelcome()
         
@@ -86,6 +100,7 @@ class CredentialProviderPresenter {
             })
     }
     
+
     func prepareAuthentication(for credentialIdentity: ASPasswordCredentialIdentity) { }
 }
 
