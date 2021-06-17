@@ -14,6 +14,7 @@ func MZLocalizedString(_ key: String, tableName: String? = nil, value: String = 
     return NSLocalizedString(key, tableName: tableName, bundle: Strings.bundle, value: value, comment: comment)
 }
 
+// MARK: - General
 extension Strings {
     public static let OKString = MZLocalizedString("OK", comment: "OK button")
     public static let CancelString = MZLocalizedString("Cancel", comment: "Label for Cancel button")
@@ -23,7 +24,7 @@ extension Strings {
     public static let OpenSettingsString = MZLocalizedString("Open Settings", comment: "See http://mzl.la/1G7uHo7")
 }
 
-// Table date section titles.
+// MARK: - Table date section titles
 extension Strings {
     public static let TableDateSectionTitleToday = MZLocalizedString("Today", comment: "History tableview section header")
     public static let TableDateSectionTitleYesterday = MZLocalizedString("Yesterday", comment: "History tableview section header")
@@ -31,14 +32,14 @@ extension Strings {
     public static let TableDateSectionTitleLastMonth = MZLocalizedString("Last month", comment: "History tableview section header")
 }
 
-// Top Sites.
+// MARK: - Top Sites
 extension Strings {
     public static let TopSitesEmptyStateDescription = MZLocalizedString("TopSites.EmptyState.Description", value: "Your most visited sites will show up here.", comment: "Description label for the empty Top Sites state.")
     public static let TopSitesEmptyStateTitle = MZLocalizedString("TopSites.EmptyState.Title", value: "Welcome to Top Sites", comment: "The title for the empty Top Sites state")
     public static let TopSitesRemoveButtonAccessibilityLabel = MZLocalizedString("TopSites.RemovePage.Button", value: "Remove page — %@", comment: "Button shown in editing mode to remove this site from the top sites panel.")
 }
 
-// Activity Stream.
+// MARK: - Activity Stream
 extension Strings {
     public static let ASPocketTitle = MZLocalizedString("ActivityStream.Pocket.SectionTitle", value: "Trending on Pocket", comment: "Section title label for Recommended by Pocket section")
     public static let ASPocketTitle2 = MZLocalizedString("ActivityStream.Pocket.SectionTitle2", value: "Recommended by Pocket", comment: "Section title label for Recommended by Pocket section")
@@ -56,7 +57,7 @@ extension Strings {
     public static let RecentlySavedShowAllText = MZLocalizedString("RecentlySaved.Actions.More", value: "Show All", comment: "More button text for Recently Saved items at the home page.")
 }
 
-// Home Panel Context Menu.
+// MARK: - Home Panel Context Menu
 extension Strings {
     public static let OpenInNewTabContextMenuTitle = MZLocalizedString("HomePanel.ContextMenu.OpenInNewTab", value: "Open in New Tab", comment: "The title for the Open in New Tab context menu action for sites in Home Panels")
     public static let OpenInNewPrivateTabContextMenuTitle = MZLocalizedString("HomePanel.ContextMenu.OpenInNewPrivateTab", value: "Open in New Private Tab", comment: "The title for the Open in New Private Tab context menu action for sites in Home Panels")
@@ -73,13 +74,12 @@ extension Strings {
     public static let RemovePinTopsiteActionTitle = MZLocalizedString("ActivityStream.ContextMenu.RemovePinTopsite", value: "Remove Pinned Site", comment: "The title for removing a pinned topsite action")
 }
 
-//  PhotonActionSheet Strings
+//  MARK: - PhotonActionSheet String
 extension Strings {
     public static let CloseButtonTitle = MZLocalizedString("PhotonMenu.close", value: "Close", comment: "Button for closing the menu action sheet")
-
 }
 
-// Home page.
+// MARK: - Home page
 extension Strings {
     public static let SettingsHomePageSectionName = MZLocalizedString("Settings.HomePage.SectionName", value: "Homepage", comment: "Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses.")
     public static let SettingsHomePageTitle = MZLocalizedString("Settings.HomePage.Title", value: "Homepage Settings", comment: "Title displayed in header of the setting panel.")
@@ -98,7 +98,7 @@ extension Strings {
     public static let ReopenLastTabCancelText = MZLocalizedString("ReopenAlert.Actions.Cancel", value: "Cancel", comment: "Cancel button text shown in reopen-alert at home page.")
 }
 
-// Settings.
+// MARK: - Settings
 extension Strings {
     public static let SettingsGeneralSectionTitle = MZLocalizedString("Settings.General.SectionName", value: "General", comment: "General settings section title")
     public static let SettingsClearPrivateDataClearButton = MZLocalizedString("Settings.ClearPrivateData.Clear.Button", value: "Clear Private Data", comment: "Button in settings that clears private data for the selected items.")
@@ -127,7 +127,7 @@ extension Strings {
     public static let SettingsCopyAppVersionAlertTitle = MZLocalizedString("Settings.CopyAppVersion.Title", value: "Copied to clipboard", comment: "Copy app version alert shown in settings.")
 }
 
-// Error pages.
+// MARK: - Error pages
 extension Strings {
     public static let ErrorPagesAdvancedButton = MZLocalizedString("ErrorPages.Advanced.Button", value: "Advanced", comment: "Label for button to perform advanced actions on the error page")
     public static let ErrorPagesAdvancedWarning1 = MZLocalizedString("ErrorPages.AdvancedWarning1.Text", value: "Warning: we can’t confirm your connection to this website is secure.", comment: "Warning text when clicking the Advanced button on error pages")
@@ -138,7 +138,7 @@ extension Strings {
     public static let ErrorPagesVisitOnceButton = MZLocalizedString("ErrorPages.VisitOnce.Button", value: "Visit site anyway", comment: "Button label to temporarily continue to the site from the certificate error page")
 }
 
-// Logins Helper.
+// MARK: - Logins Helper
 extension Strings {
     public static let LoginsHelperSaveLoginButtonTitle = MZLocalizedString("LoginsHelper.SaveLogin.Button", value: "Save Login", comment: "Button to save the user's password")
     public static let LoginsHelperDontSaveButtonTitle = MZLocalizedString("LoginsHelper.DontSave.Button", value: "Don’t Save", comment: "Button to not save the user's password")
@@ -146,14 +146,14 @@ extension Strings {
     public static let LoginsHelperDontUpdateButtonTitle = MZLocalizedString("LoginsHelper.DontUpdate.Button", value: "Don’t Update", comment: "Button to not update the user's password")
 }
 
-// Downloads Panel
+// MARK: - Downloads Panel
 extension Strings {
     public static let DownloadsPanelEmptyStateTitle = MZLocalizedString("DownloadsPanel.EmptyState.Title", value: "Downloaded files will show up here.", comment: "Title for the Downloads Panel empty state.")
     public static let DownloadsPanelDeleteTitle = MZLocalizedString("DownloadsPanel.Delete.Title", value: "Delete", comment: "Action button for deleting downloaded files in the Downloads panel.")
     public static let DownloadsPanelShareTitle = MZLocalizedString("DownloadsPanel.Share.Title", value: "Share", comment: "Action button for sharing downloaded files in the Downloads panel.")
 }
 
-// History Panel
+// MARK: - History Panel
 extension Strings {
     public static let SyncedTabsTableViewCellTitle = MZLocalizedString("HistoryPanel.SyncedTabsCell.Title", value: "Synced Devices", comment: "Title for the Synced Tabs Cell in the History Panel")
     public static let HistoryBackButtonTitle = MZLocalizedString("HistoryPanel.HistoryBackButton.Title", value: "History", comment: "Title for the Back to History button in the History Panel")
@@ -169,13 +169,10 @@ extension Strings {
     public static let RecentlyClosedTabsPanelTitle = MZLocalizedString("RecentlyClosedTabsPanel.Title", value: "Recently Closed", comment: "Title for the Recently Closed Tabs Panel")
     public static let HistoryPanelClearHistoryButtonTitle = MZLocalizedString("HistoryPanel.ClearHistoryButtonTitle", value: "Clear Recent History…", comment: "Title for button in the history panel to clear recent history")
     public static let FirefoxHomePage = MZLocalizedString("Firefox.HomePage.Title", value: "Firefox Home Page", comment: "Title for firefox about:home page in tab history list")
-}
-
-extension String {
     public static let HistoryPanelDelete = MZLocalizedString("Delete", tableName: "HistoryPanel", comment: "Action button for deleting history entries in the history panel.")
 }
 
-// Clear recent history action menu
+// MARK: - Clear recent history action menu
 extension Strings {
     public static let ClearHistoryMenuTitle = MZLocalizedString("HistoryPanel.ClearHistoryMenuTitle", value: "Clearing Recent History will remove history, cookies, and other browser data.", comment: "Title for popup action menu to clear recent history.")
     public static let ClearHistoryMenuOptionTheLastHour = MZLocalizedString("HistoryPanel.ClearHistoryMenuOptionTheLastHour", value: "The Last Hour", comment: "Button to perform action to clear history for the last hour")
@@ -184,7 +181,7 @@ extension Strings {
     public static let ClearHistoryMenuOptionEverything = MZLocalizedString("HistoryPanel.ClearHistoryMenuOptionEverything", value: "Everything", comment: "Option title to clear all browsing history.")
 }
 
-// Syncing
+// MARK: - Syncing
 extension Strings {
     public static let SyncingMessageWithEllipsis = MZLocalizedString("Sync.SyncingEllipsis.Label", value: "Syncing…", comment: "Message displayed when the user's account is syncing with ellipsis at the end")
     public static let SyncingMessageWithoutEllipsis = MZLocalizedString("Sync.Syncing.Label", value: "Syncing", comment: "Message displayed when the user's account is syncing with no ellipsis")
@@ -220,7 +217,7 @@ extension Strings {
     }
 }
 
-// Firefox Logins
+// MARK: - Firefox Logins
 extension Strings {
     public static let LoginsAndPasswordsTitle = MZLocalizedString("Settings.LoginsAndPasswordsTitle", value: "Logins & Passwords", comment: "Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long")
 
@@ -253,7 +250,7 @@ extension Strings {
     public static let BreachAlertsLink = MZLocalizedString("BreachAlerts.Link", value: "Go to", comment: "Leads to a link to the breached website")
 }
 
-// Firefox Account
+// MARK: - Firefox Account
 extension Strings {
     // Settings strings
     public static let FxAFirefoxAccount = MZLocalizedString("FxA.FirefoxAccount", value: "Firefox Account", comment: "Settings section title for Firefox Account")
@@ -282,7 +279,7 @@ extension Strings {
     public static let FxAAccountUpgradeFirefox = MZLocalizedString("Upgrade Firefox to connect", comment: "Text message in the settings table view")
 }
 
-//Hotkey Titles
+// MARK: - Hotkey Titles
 extension Strings {
     public static let ReloadPageTitle = MZLocalizedString("Hotkeys.Reload.DiscoveryTitle", value: "Reload Page", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
     public static let BackTitle = MZLocalizedString("Hotkeys.Back.DiscoveryTitle", value: "Back", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
@@ -299,7 +296,7 @@ extension Strings {
     public static let ShowPreviousTabTitle = MZLocalizedString("Hotkeys.ShowPreviousTab.DiscoveryTitle", value: "Show Previous Tab", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
 }
 
-// New tab choice settings
+// MARK: - New tab choice settings
 extension Strings {
     public static let CustomNewPageURL = MZLocalizedString("Settings.NewTab.CustomURL", value: "Custom URL", comment: "Label used to set a custom url as the new tab option (homepage).")
     public static let SettingsNewTabSectionName = MZLocalizedString("Settings.NewTab.SectionName", value: "New Tab", comment: "Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior.")
@@ -326,9 +323,9 @@ extension Strings {
     public static let SettingsTopSitesCustomizeTitle = MZLocalizedString("Settings.NewTab.Option.CustomizeTitle", value: "Customize Firefox Home", comment: "The title for the section to customize top sites in the new tab settings page.")
     public static let SettingsTopSitesCustomizeFooter = MZLocalizedString("Settings.NewTab.Option.CustomizeFooter", value: "The sites you visit most", comment: "The footer for the section to customize top sites in the new tab settings page.")
     public static let SettingsTopSitesCustomizeFooter2 = MZLocalizedString("Settings.NewTab.Option.CustomizeFooter2", value: "Sites you save or visit", comment: "The footer for the section to customize top sites in the new tab settings page.")
-
 }
 
+// MARK: - Advanced Sync Settings (Debug)
 // For 'Advanced Sync Settings' view, which is a debug setting. English only, there is little value in maintaining L10N strings for these.
 extension Strings {
     public static let SettingsAdvancedAccountTitle = "Advanced Sync Settings"
@@ -338,13 +335,13 @@ extension Strings {
     public static let SettingsAdvancedAccountUseCustomSyncTokenServerTitle = "Use Custom Sync Token Server"
 }
 
-// Open With Settings
+// MARK: - Open With Settings
 extension Strings {
     public static let SettingsOpenWithSectionName = MZLocalizedString("Settings.OpenWith.SectionName", value: "Mail App", comment: "Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior.")
     public static let SettingsOpenWithPageTitle = MZLocalizedString("Settings.OpenWith.PageTitle", value: "Open mail links with", comment: "Title for Open With Settings")
 }
 
-// Third Party Search Engines
+// MARK: - Third Party Search Engines
 extension Strings {
     public static let ThirdPartySearchEngineAdded = MZLocalizedString("Search.ThirdPartyEngines.AddSuccess", value: "Added Search engine!", comment: "The success message that appears after a user sucessfully adds a new search engine")
     public static let ThirdPartySearchAddTitle = MZLocalizedString("Search.ThirdPartyEngines.AddTitle", value: "Add Search Provider?", comment: "The title that asks the user to Add the search provider")
@@ -359,7 +356,7 @@ extension Strings {
     public static let CustomEngineDuplicateErrorMessage = MZLocalizedString("Search.ThirdPartyEngines.DuplicateErrorMessage", value: "A search engine with this title or URL has already been added.", comment: "A message explaining fault in custom search engine form.")
 }
 
-// Root Bookmarks folders
+// MARK: - Root Bookmarks folders
 extension Strings {
     public static let BookmarksFolderTitleMobile = MZLocalizedString("Mobile Bookmarks", tableName: "Storage", comment: "The title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android.")
     public static let BookmarksFolderTitleMenu = MZLocalizedString("Bookmarks Menu", tableName: "Storage", comment: "The name of the folder that contains desktop bookmarks in the menu. This should match bookmarks.folder.menu.label on Android.")
@@ -367,7 +364,7 @@ extension Strings {
     public static let BookmarksFolderTitleUnsorted = MZLocalizedString("Unsorted Bookmarks", tableName: "Storage", comment: "The name of the folder that contains unsorted desktop bookmarks. This should match bookmarks.folder.unfiled.label on Android.")
 }
 
-// Bookmark Management
+// MARK: - Bookmark Management
 extension Strings {
     public static let BookmarksTitle = MZLocalizedString("Bookmarks.Title.Label", value: "Title", comment: "The label for the title of a bookmark")
     public static let BookmarksURL = MZLocalizedString("Bookmarks.URL.Label", value: "URL", comment: "The label for the URL of a bookmark")
@@ -392,14 +389,14 @@ extension Strings {
     public static let BookmarkDetailFieldsHeaderFolderTitle = MZLocalizedString("Bookmark.BookmarkDetail.FieldsHeader.Folder.Title", value: "Folder", comment: "The header title for the fields when editing a Folder")
 }
 
-// Tabs Delete All Undo Toast
+// MARK: - Tabs Delete All Undo Toast
 extension Strings {
     public static let TabsDeleteAllUndoTitle = MZLocalizedString("Tabs.DeleteAllUndo.Title", value: "%d tab(s) closed", comment: "The label indicating that all the tabs were closed")
     public static let TabsDeleteAllUndoAction = MZLocalizedString("Tabs.DeleteAllUndo.Button", value: "Undo", comment: "The button to undo the delete all tabs")
     public static let TabSearchPlaceholderText = MZLocalizedString("Tabs.Search.PlaceholderText", value: "Search Tabs", comment: "The placeholder text for the tab search bar")
 }
 
-// Tab tray (chronological tabs)
+// MARK: - Tab tray (chronological tabs)
 extension Strings {
     public static let TabTrayV2Title = MZLocalizedString("TabTray.Title", value: "Open Tabs", comment: "The title for the tab tray")
     public static let TabTrayV2TodayHeader = MZLocalizedString("TabTray.Today.Header", value: "Today", comment: "The section header for tabs opened today")
@@ -416,7 +413,7 @@ extension Strings {
     public static let TabTraySegmentedControlTitlesSyncedTabs = MZLocalizedString("TabTray.SegmentedControlTitles.SyncedTabs", value: "Synced", comment: "The title on the button to look at synced tabs.")
 }
 
-//Clipboard Toast
+// MARK: - Clipboard Toast
 extension Strings {
     public static let GoToCopiedLink = MZLocalizedString("ClipboardToast.GoToCopiedLink.Title", value: "Go to copied link?", comment: "Message displayed when the user has a copied link on the clipboard")
     public static let GoButtonTittle = MZLocalizedString("ClipboardToast.GoToCopiedLink.Button", value: "Go", comment: "The button to open a new tab with the copied link")
@@ -425,13 +422,13 @@ extension Strings {
     public static let SettingsOfferClipboardBarStatus = MZLocalizedString("Settings.OfferClipboardBar.Status", value: "When Opening Firefox", comment: "Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349")
 }
 
-// Link Previews
+// MARK: - Link Previews
 extension Strings {
     public static let SettingsShowLinkPreviewsTitle = MZLocalizedString("Settings.ShowLinkPreviews.Title", value: "Show Link Previews", comment: "Title of setting to enable link previews when long-pressing links.")
     public static let SettingsShowLinkPreviewsStatus = MZLocalizedString("Settings.ShowLinkPreviews.Status", value: "When Long-pressing Links", comment: "Description displayed under the ”Show Link Previews” option")
 }
 
-// errors
+// MARK: - Errors
 extension Strings {
     public static let UnableToDownloadError = MZLocalizedString("Downloads.Error.Message", value: "Downloads aren’t supported in Firefox yet.", comment: "The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle.")
     public static let UnableToAddPassErrorTitle = MZLocalizedString("AddPass.Error.Title", value: "Failed to Add Pass", comment: "Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet.")
@@ -441,7 +438,7 @@ extension Strings {
     public static let UnableToOpenURLErrorTitle = MZLocalizedString("OpenURL.Error.Title", value: "Cannot Open Page", comment: "Title of the message shown when the user attempts to navigate to an invalid link.")
 }
 
-// Download Helper
+// MARK: - Download Helper
 extension Strings {
     public static let OpenInDownloadHelperAlertDownloadNow = MZLocalizedString("Downloads.Alert.DownloadNow", value: "Download Now", comment: "The label of the button the user will press to start downloading a file")
     public static let DownloadsButtonTitle = MZLocalizedString("Downloads.Toast.GoToDownloads.Button", value: "Downloads", comment: "The button to open a new tab with the Downloads home panel")
@@ -457,7 +454,7 @@ extension Strings {
     public static let DownloadMultipleFilesAndProgressToastDescriptionText = MZLocalizedString("Downloads.Toast.MultipleFilesAndProgress.DescriptionText", value: "%1$@ %2$@", comment: "The description text in the Download progress toast for showing the number of files (1$) and download progress (2$). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where 1$ is Downloads.Toast.MultipleFiles.DescriptionText and 2$ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and 1$ should come before 2$ everywhere except for right-to-left locales.")
 }
 
-// Add Custom Search Engine
+// MARK: - Add Custom Search Engine
 extension Strings {
     public static let SettingsAddCustomEngine = MZLocalizedString("Settings.AddCustomEngine", value: "Add Search Engine", comment: "The button text in Search Settings that opens the Custom Search Engine view.")
     public static let SettingsAddCustomEngineTitle = MZLocalizedString("Settings.AddCustomEngine.Title", value: "Add Search Engine", comment: "The title of the  Custom Search Engine view.")
@@ -468,7 +465,7 @@ extension Strings {
     public static let SettingsAddCustomEngineSaveButtonText = MZLocalizedString("Settings.AddCustomEngine.SaveButtonText", value: "Save", comment: "The text on the Save button when saving a custom search engine")
 }
 
-// Context menu ButtonToast instances.
+// MARK: - Context menu ButtonToast instances.
 extension Strings {
     public static let ContextMenuButtonToastNewTabOpenedLabelText = MZLocalizedString("ContextMenu.ButtonToast.NewTabOpened.LabelText", value: "New Tab opened", comment: "The label text in the Button Toast for switching to a fresh New Tab.")
     public static let ContextMenuButtonToastNewTabOpenedButtonText = MZLocalizedString("ContextMenu.ButtonToast.NewTabOpened.ButtonText", value: "Switch", comment: "The button text in the Button Toast for switching to a fresh New Tab.")
@@ -476,7 +473,7 @@ extension Strings {
     public static let ContextMenuButtonToastNewPrivateTabOpenedButtonText = MZLocalizedString("ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText", value: "Switch", comment: "The button text in the Button Toast for switching to a fresh New Private Tab.")
 }
 
-// Page context menu items (i.e. links and images).
+// MARK: - Page context menu items (i.e. links and images).
 extension Strings {
     public static let ContextMenuOpenInNewTab = MZLocalizedString("ContextMenu.OpenInNewTabButtonTitle", value: "Open in New Tab", comment: "Context menu item for opening a link in a new tab")
     public static let ContextMenuOpenInNewPrivateTab = MZLocalizedString("ContextMenu.OpenInNewPrivateTabButtonTitle", tableName: "PrivateBrowsing", value: "Open in New Private Tab", comment: "Context menu option for opening a link in a new private tab")
@@ -493,13 +490,14 @@ extension Strings {
     public static let ContextMenuCopyImageLink = MZLocalizedString("ContextMenu.CopyImageLinkButtonTitle", value: "Copy Image Link", comment: "Context menu item for copying an image URL to the clipboard")
 }
 
-// Photo Library access.
+// MARK: - Photo Library access
 extension Strings {
     public static let PhotoLibraryFirefoxWouldLikeAccessTitle = MZLocalizedString("PhotoLibrary.FirefoxWouldLikeAccessTitle", value: "Firefox would like to access your Photos", comment: "See http://mzl.la/1G7uHo7")
     public static let PhotoLibraryFirefoxWouldLikeAccessMessage = MZLocalizedString("PhotoLibrary.FirefoxWouldLikeAccessMessage", value: "This allows you to save the image to your Camera Roll.", comment: "See http://mzl.la/1G7uHo7")
 }
 
-// Sent tabs notifications. These are displayed when the app is backgrounded or the device is locked.
+// MARK: - Sent tabs notifications
+// These are displayed when the app is backgrounded or the device is locked.
 extension Strings {
     // zero tabs
     public static let SentTab_NoTabArrivingNotification_title = MZLocalizedString("SentTab.NoTabArrivingNotification.title", value: "Firefox Sync", comment: "Title of notification received after a spurious message from FxA has been received.")
@@ -518,7 +516,7 @@ extension Strings {
     public static let SentTabAddToReadingListActionTitle = MZLocalizedString("SentTab.AddToReadingListAction.Title", value: "Add to Reading List", comment: "Label for an action used to add one or more tabs recieved from a notification to the reading list.")
 }
 
-// Additional messages sent via Push from FxA
+// MARK: - Additional messages sent via Push from FxA
 extension Strings {
     public static let FxAPush_DeviceDisconnected_ThisDevice_title = MZLocalizedString("FxAPush_DeviceDisconnected_ThisDevice_title", value: "Sync Disconnected", comment: "Title of a notification displayed when this device has been disconnected by another device.")
     public static let FxAPush_DeviceDisconnected_ThisDevice_body = MZLocalizedString("FxAPush_DeviceDisconnected_ThisDevice_body", value: "This device has been successfully disconnected from Firefox Sync.", comment: "Body of a notification displayed when this device has been disconnected from FxA by another device.")
@@ -531,13 +529,13 @@ extension Strings {
     public static let FxAPush_DeviceConnected_body = MZLocalizedString("FxAPush_DeviceConnected_body", value: "Firefox Sync has connected to %@", comment: "Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device.")
 }
 
-// Reader Mode.
+// MARK: - Reader Mode
 extension Strings {
     public static let ReaderModeAvailableVoiceOverAnnouncement = MZLocalizedString("ReaderMode.Available.VoiceOverAnnouncement", value: "Reader Mode available", comment: "Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available.")
     public static let ReaderModeResetFontSizeAccessibilityLabel = MZLocalizedString("Reset text size", comment: "Accessibility label for button resetting font size in display settings of reader mode")
 }
 
-// QR Code scanner.
+// MARK: - QR Code scanner
 extension Strings {
     public static let ScanQRCodeViewTitle = MZLocalizedString("ScanQRCode.View.Title", value: "Scan QR Code", comment: "Title for the QR code scanner view.")
     public static let ScanQRCodeInstructionsLabel = MZLocalizedString("ScanQRCode.Instructions.Label", value: "Align QR code within frame to scan", comment: "Text for the instructions label, displayed in the QR scanner view")
@@ -546,7 +544,7 @@ extension Strings {
     public static let ScanQRCodeErrorOKButton = MZLocalizedString("ScanQRCode.Error.OK.Button", value: "OK", comment: "OK button to dismiss the error prompt.")
 }
 
-// App menu.
+// MARK: - App menu
 extension Strings {
     public static let AppMenuReportSiteIssueTitleString = NSLocalizedString("Menu.ReportSiteIssueAction.Title", tableName: "Menu", value: "Report Site Issue", comment: "Label for the button, displayed in the menu, used to report a compatibility issue with the current page.")
     public static let AppMenuLibraryReloadString = MZLocalizedString("Menu.Library.Reload", tableName: "Menu", value: "Reload", comment: "Label for the button, displayed in the menu, used to Reload the webpage")
@@ -609,13 +607,13 @@ extension Strings {
     public static let AppMenuShowPageSourceString = MZLocalizedString("Menu.PageSourceAction.Title", tableName: "Menu", value: "View Page Source", comment: "Label for the button, displayed in the menu, used to show the html page source")
 }
 
-// Snackbar shown when tapping app store link
+// MARK: - Snackbar shown when tapping app store link
 extension Strings {
     public static let ExternalLinkAppStoreConfirmationTitle = MZLocalizedString("ExternalLink.AppStore.ConfirmationTitle", value: "Open this link in the App Store?", comment: "Question shown to user when tapping a link that opens the App Store app")
     public static let ExternalLinkGenericConfirmation = MZLocalizedString("ExternalLink.AppStore.GenericConfirmationTitle", value: "Open this link in external app?", comment: "Question shown to user when tapping an SMS or MailTo link that opens the external app for those.")
 }
 
-// ContentBlocker/TrackingProtection strings
+// MARK: - ContentBlocker/TrackingProtection string
 extension Strings {
     public static let SettingsTrackingProtectionSectionName = MZLocalizedString("Settings.TrackingProtection.SectionName", value: "Tracking Protection", comment: "Row in top-level of settings that gets tapped to show the tracking protection settings detail view.")
 
@@ -640,7 +638,7 @@ extension Strings {
     public static let TrackerProtectionAlertButton =  MZLocalizedString("Settings.TrackingProtection.Alert.Button", value: "OK, Got It", comment: "Dismiss button for the tracker protection alert.")
 }
 
-// Tracking Protection menu
+// MARK: - Tracking Protection menu
 extension Strings {
     public static let TPBlockingDescription = MZLocalizedString("Menu.TrackingProtectionBlocking.Description", value: "Firefox is blocking parts of the page that may track your browsing.", comment: "Description of the Tracking protection menu when TP is blocking parts of the page")
     public static let TPNoBlockingDescription = MZLocalizedString("Menu.TrackingProtectionNoBlocking.Description", value: "No tracking elements detected on this page.", comment: "The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled.")
@@ -697,14 +695,14 @@ extension Strings {
     public static let TPMoreInfo = MZLocalizedString("Settings.TrackingProtection.MoreInfo", value: "More Info…", comment: "'More Info' link on the Tracking Protection settings screen.")
 }
 
-// Location bar long press menu
+// MARK: - Location bar long press menu
 extension Strings {
     public static let PasteAndGoTitle = MZLocalizedString("Menu.PasteAndGo.Title", value: "Paste & Go", comment: "The title for the button that lets you paste and go to a URL")
     public static let PasteTitle = MZLocalizedString("Menu.Paste.Title", value: "Paste", comment: "The title for the button that lets you paste into the location bar")
     public static let CopyAddressTitle = MZLocalizedString("Menu.Copy.Title", value: "Copy Address", comment: "The title for the button that lets you copy the url from the location bar.")
 }
 
-// Settings Home
+// MARK: - Settings Home
 extension Strings {
     public static let SendUsageSettingTitle = MZLocalizedString("Settings.SendUsage.Title", value: "Send Usage Data", comment: "The title for the setting to send usage data.")
     public static let SendUsageSettingLink = MZLocalizedString("Settings.SendUsage.Link", value: "Learn More.", comment: "title for a link that explains how mozilla collects telemetry")
@@ -714,7 +712,7 @@ extension Strings {
     public static let SettingsSiriOpenURL = MZLocalizedString("Settings.Siri.OpenTabShortcut", value: "Open New Tab", comment: "The description of the open new tab siri shortcut")
 }
 
-// Nimbus settings
+// MARK: - Nimbus settings
 extension Strings {
     public static let SettingsStudiesTitle = MZLocalizedString("Settings.Studies.Title", value: "Studies", comment: "Label used as an item in Settings. Tapping on this item takes you to the Studies panel")
     public static let SettingsStudiesSectionName = MZLocalizedString("Settings.Studies.SectionName", value: "Studies", comment: "Title displayed in header of the Studies panel")
@@ -730,14 +728,14 @@ extension Strings {
     public static let SettingsStudiesToggleValueOff = MZLocalizedString("Settings.Studies.Toggle.Off", value: "Off", comment: "Toggled OFF to opt-out of studies")
 }
 
-// Do not track
+// MARK: - Do not track
 extension Strings {
     public static let SettingsDoNotTrackTitle = MZLocalizedString("Settings.DNT.Title", value: "Send websites a Do Not Track signal that you don’t want to be tracked", comment: "DNT Settings title")
     public static let SettingsDoNotTrackOptionOnWithTP = MZLocalizedString("Settings.DNT.OptionOnWithTP", value: "Only when using Tracking Protection", comment: "DNT Settings option for only turning on when Tracking Protection is also on")
     public static let SettingsDoNotTrackOptionAlwaysOn = MZLocalizedString("Settings.DNT.OptionAlwaysOn", value: "Always", comment: "DNT Settings option for always on")
 }
 
-// Intro Onboarding slides
+// MARK: - Intro Onboarding slides
 extension Strings {
     // First Card
     public static let CardTitleWelcome = MZLocalizedString("Intro.Slides.Welcome.Title.v2", tableName: "Intro", value: "Welcome to Firefox", comment: "Title for the first panel 'Welcome' in the First Run tour.")
@@ -770,7 +768,7 @@ extension Strings {
     public static let IntroSignUpButtonTitle = MZLocalizedString("Intro.Slides.Button.SignUp", tableName: "Intro", value: "Sign Up", comment: "Sign up to Firefox account button on second intro screen.")
 }
 
-// Keyboard short cuts
+// MARK: - Keyboard short cuts
 extension Strings {
     public static let ShowTabTrayFromTabKeyCodeTitle = MZLocalizedString("Tab.ShowTabTray.KeyCodeTitle", value: "Show All Tabs", comment: "Hardware shortcut to open the tab tray from a tab. Shown in the Discoverability overlay when the hardware Command Key is held down.")
     public static let CloseTabFromTabTrayKeyCodeTitle = MZLocalizedString("TabTray.CloseTab.KeyCodeTitle", value: "Close Selected Tab", comment: "Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down.")
@@ -782,7 +780,7 @@ extension Strings {
     public static let SwitchToNonPBMKeyCodeTitle = MZLocalizedString("SwitchToNonPBM.KeyCodeTitle", value: "Normal Browsing Mode", comment: "Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down.")
 }
 
-// Share extension
+// MARK: - Share extension
 extension Strings {
     public static let SendToCancelButton = MZLocalizedString("SendTo.Cancel.Button", value: "Cancel", comment: "Button title for cancelling share screen")
     public static let SendToErrorOKButton = MZLocalizedString("SendTo.Error.OK.Button", value: "OK", comment: "OK button to dismiss the error prompt.")
@@ -814,14 +812,14 @@ extension Strings {
 
 }
 
-//passwordAutofill extension
+// MARK: - PasswordAutofill extension
 extension Strings {
     public static let PasswordAutofillTitle = MZLocalizedString("PasswordAutoFill.SectionTitle", value: "Firefox Credentials", comment: "Title of the extension that shows firefox passwords")
     public static let CredentialProviderNoCredentialError = MZLocalizedString("PasswordAutoFill.NoPasswordsFoundTitle", value: "You don’t have any credentials synced from your Firefox Account", comment: "Error message shown in the remote tabs panel")
     public static let AvailableCredentialsHeader = MZLocalizedString("PasswordAutoFill.PasswordsListTitle", value: "Available Credentials:", comment: "Header for the list of credentials table")
 }
 
-// translation bar
+// MARK: - Translation bar
 extension Strings {
     public static let TranslateSnackBarPrompt = MZLocalizedString("TranslationToastHandler.PromptTranslate.Title", value: "This page appears to be in %1$@. Translate to %2$@ with %3$@?", comment: "Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service.")
     public static let TranslateSnackBarYes = MZLocalizedString("TranslationToastHandler.PromptTranslate.OK", value: "Yes", comment: "Button to allow the page to be translated to the user locale language")
@@ -834,7 +832,7 @@ extension Strings {
     public static let SettingTranslateSnackBarSwitchSubtitle = MZLocalizedString("Settings.TranslateSnackBar.SwitchSubtitle", value: "Offer to translate any site written in a language that is different from your default language.", comment: "Switch to choose if the language of a page is detected and offer to translate.")
 }
 
-// Display Theme
+// MARK: - Display Theme
 extension Strings {
     public static let SettingsDisplayThemeTitle = MZLocalizedString("Settings.DisplayTheme.Title.v2", value: "Theme", comment: "Title in main app settings for Theme settings")
     public static let DisplayThemeBrightnessThresholdSectionHeader = MZLocalizedString("Settings.DisplayTheme.BrightnessThreshold.SectionHeader", value: "Threshold", comment: "Section header for brightness slider.")
@@ -857,7 +855,7 @@ extension Strings {
     public static let AddTabAccessibilityLabel = MZLocalizedString("TabTray.AddTab.Button", value: "Add Tab", comment: "Accessibility label for the Add Tab button in the Tab Tray.")
 }
 
-// Cover Sheet
+// MARK: - Cover Sheet
 extension Strings {
     // Dark Mode Cover Sheet
     public static let CoverSheetV22DarkModeTitle = MZLocalizedString("CoverSheet.v22.DarkMode.Title", value: "Dark theme now includes a dark keyboard and dark splash screen.", comment: "Title for the new dark mode change in the version 22 app release.")
@@ -869,7 +867,7 @@ extension Strings {
     public static let CoverSheetETPSettingsButton = MZLocalizedString("CoverSheet.v24.ETP.Settings.Button", value: "Go to Settings", comment: "Text for the new ETP settings button")
 }
 
-// FxA Signin screen
+// MARK: - FxA Signin screen
 extension Strings {
     public static let FxASignin_Title = MZLocalizedString("fxa.signin.turn-on-sync", value: "Turn on Sync", comment: "FxA sign in view title")
     public static let FxASignin_Subtitle = MZLocalizedString("fxa.signin.camera-signin", value: "Sign In with Your Camera", comment: "FxA sign in view subtitle")
@@ -880,12 +878,12 @@ extension Strings {
     public static let FxASignin_CreateAccountPt2 = MZLocalizedString("fxa.signin.create-account-pt-2", value: "Create Firefox account.", comment: "FxA sign in create account label. This will be linked to the site to create an account.")
 }
 
-// FxA QR code scanning screen
+// MARK: - FxA QR code scanning screen
 extension String {
     public static let FxAQRCode_Instructions = MZLocalizedString("fxa.qr-scanning-view.instructions", value: "Scan the QR code shown at firefox.com/pair", comment: "Instructions shown on qr code scanning view")
 }
 
-//Today Widget Strings - [New Search - Private Search]
+// MARK: - Today Widget Strings - [New Search - Private Search]
 extension String {
     public static let NewTabButtonLabel = MZLocalizedString("TodayWidget.NewTabButtonLabelV1", tableName: "Today", value: "New Search", comment: "Open New Tab button label")
     public static let CopiedLinkLabelFromPasteBoard = MZLocalizedString("TodayWidget.CopiedLinkLabelFromPasteBoardV1", tableName: "Today", value: "Copied Link from clipboard", comment: "Copied Link from clipboard displayed")
@@ -965,7 +963,7 @@ extension String {
     public static let PocketWidgetGalleryDescription = MZLocalizedString("TodayWidget.PocketWidgetGalleryDescription", tableName: "Today", value: "Discover fascinating and thought-provoking stories from across the web, curated by Pocket.", comment: "Description for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app.")
 }
 
-// Default Browser
+// MARK: - Default Browser
 extension String {
     public static let DefaultBrowserCardTitle = MZLocalizedString("DefaultBrowserCard.Title", tableName: "Default Browser", value: "Switch Your Default Browser", comment: "Title for small card shown that allows user to switch their default browser to Firefox.")
     public static let DefaultBrowserCardDescription = MZLocalizedString("DefaultBrowserCard.Description", tableName: "Default Browser", value: "Set links from websites, emails, and Messages to open automatically in Firefox.", comment: "Description for small card shown that allows user to switch their default browser to Firefox.")
@@ -978,17 +976,17 @@ extension String {
     public static let DefaultBrowserOnboardingButton = MZLocalizedString("DefaultBrowserOnboarding.Button", tableName: "Default Browser", value: "Go to Settings", comment: "Button string to open settings that allows user to switch their default browser to Firefox.")
 }
 
-// FxAWebViewController
+// MARK: - FxAWebViewController
 extension String {
     public static let FxAWebContentAccessibilityLabel = MZLocalizedString("Web content", comment: "Accessibility label for the main web content view")
 }
 
-// QuickActions
+// MARK: - QuickActions
 extension String {
     public static let QuickActionsLastBookmarkTitle = MZLocalizedString("Open Last Bookmark", tableName: "3DTouchActions", comment: "String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch")
 }
 
-// CrashOptInAlert
+// MARK: - CrashOptInAlert
 extension String {
     public static let CrashOptInAlertTitle = MZLocalizedString("Oops! Firefox crashed", comment: "Title for prompt displayed to user after the app crashes")
     public static let CrashOptInAlertMessage = MZLocalizedString("Send a crash report so Mozilla can fix the problem?", comment: "Message displayed in the crash dialog above the buttons used to select when sending reports")
@@ -997,7 +995,7 @@ extension String {
     public static let CrashOptInAlertDontSend = MZLocalizedString("Don’t Send", comment: "Used as a button label for crash dialog prompt")
 }
 
-// RestoreTabsAlert
+// MARK: - RestoreTabsAlert
 extension String {
     public static let RestoreTabsAlertTitle = MZLocalizedString("Well, this is embarrassing.", comment: "Restore Tabs Prompt Title")
     public static let RestoreTabsAlertMessage = MZLocalizedString("Looks like Firefox crashed previously. Would you like to restore your tabs?", comment: "Restore Tabs Prompt Description")
@@ -1005,14 +1003,14 @@ extension String {
     public static let RestoreTabsAlertOkay = MZLocalizedString("Okay", comment: "Restore Tabs Affirmative Action")
 }
 
-// ClearPrivateDataAlert
+// MARK: - ClearPrivateDataAlert
 extension String {
     public static let ClearPrivateDataAlertMessage = MZLocalizedString("This action will clear all of your private data. It cannot be undone.", tableName: "ClearPrivateDataConfirm", comment: "Description of the confirmation dialog shown when a user tries to clear their private data.")
     public static let ClearPrivateDataAlertCancel = MZLocalizedString("Cancel", tableName: "ClearPrivateDataConfirm", comment: "The cancel button when confirming clear private data.")
     public static let ClearPrivateDataAlertOk = MZLocalizedString("OK", tableName: "ClearPrivateDataConfirm", comment: "The button that clears private data.")
 }
 
-// ClearWebsiteDataAlert
+// MARK: - ClearWebsiteDataAlert
 extension String {
     public static let ClearAllWebsiteDataAlertMessage = MZLocalizedString("Settings.WebsiteData.ConfirmPrompt", value: "This action will clear all of your website data. It cannot be undone.", comment: "Description of the confirmation dialog shown when a user tries to clear their private data.")
     public static let ClearSelectedWebsiteDataAlertMessage = MZLocalizedString("Settings.WebsiteData.SelectedConfirmPrompt", value: "This action will clear the selected items. It cannot be undone.", comment: "Description of the confirmation dialog shown when a user tries to clear some of their private data.")
@@ -1021,7 +1019,7 @@ extension String {
     public static let ClearWebsiteDataAlertOk = MZLocalizedString("OK", tableName: "ClearPrivateDataConfirm", comment: "The button that clears private data.")
 }
 
-// ClearSyncedHistoryAlert
+// MARK: - ClearSyncedHistoryAlert
 extension String {
     public static let ClearSyncedHistoryAlertMessage = MZLocalizedString("This action will clear all of your private data, including history from your synced devices.", tableName: "ClearHistoryConfirm", comment: "Description of the confirmation dialog shown when a user tries to clear history that's synced to another device.")
     // TODO: these look like the same as in ClearPrivateDataAlert, I think we can remove them
@@ -1029,7 +1027,7 @@ extension String {
     public static let ClearSyncedHistoryAlertOk = MZLocalizedString("OK", tableName: "ClearHistoryConfirm", comment: "The confirmation button that clears history even when Sync is connected.")
 }
 
-// DeleteLoginAlert
+// MARK: - DeleteLoginAlert
 extension String {
     public static let DeleteLoginAlertTitle = MZLocalizedString("Are you sure?", tableName: "LoginManager", comment: "Prompt title when deleting logins")
     public static let DeleteLoginAlertSyncedMessage = MZLocalizedString("Logins will be removed from all connected devices.", tableName: "LoginManager", comment: "Prompt message warning the user that deleted logins will remove logins from all connected devices")
@@ -1038,7 +1036,7 @@ extension String {
     public static let DeleteLoginAlertDelete = MZLocalizedString("Delete", tableName: "LoginManager", comment: "Label for the button used to delete the current login.")
 }
 
-// Strings used in multiple areas within the Authentication Manager
+// MARK: - Strings used in multiple areas within the Authentication Manager
 extension String {
     public static let AuthenticationPasscode = MZLocalizedString("Passcode For Logins", tableName: "AuthenticationManager", comment: "Label for the Passcode item in Settings")
     public static let AuthenticationTouchIDPasscodeSetting = MZLocalizedString("Touch ID & Passcode", tableName: "AuthenticationManager", comment: "Label for the Touch ID/Passcode item in Settings")
@@ -1070,7 +1068,7 @@ extension String {
     public static let AuthenticationUseNewPasscodeError = MZLocalizedString("New passcode must be different than existing code.", tableName: "AuthenticationManager", comment: "Error message displayed when user tries to enter the same passcode as their existing code when changing it.")
 }
 
-// Authenticator strings
+// MARK: - Authenticator strings
 extension String {
     public static let AuthenticatorCancel = MZLocalizedString("Cancel", comment: "Label for Cancel button")
     public static let AuthenticatorLogin = MZLocalizedString("Log in", comment: "Authentication prompt log in button")
@@ -1081,7 +1079,7 @@ extension String {
     public static let AuthenticatorPasswordPlaceholder = MZLocalizedString("Password", comment: "Password textbox in Authentication prompt")
 }
 
-// BrowserViewController
+// MARK: - BrowserViewController
 extension String {
     public static let ReaderModeAddPageGeneralErrorAccessibilityLabel = MZLocalizedString("Could not add page to Reading list", comment: "Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed.")
     public static let ReaderModeAddPageSuccessAcessibilityLabel = MZLocalizedString("Added page to Reading List", comment: "Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action.")
@@ -1089,14 +1087,14 @@ extension String {
     public static let WebViewAccessibilityLabel = MZLocalizedString("Web content", comment: "Accessibility label for the main web content view")
 }
 
-// Find in page
+// MARK: - Find in page
 extension String {
     public static let FindInPagePreviousAccessibilityLabel = MZLocalizedString("Previous in-page result", tableName: "FindInPage", comment: "Accessibility label for previous result button in Find in Page Toolbar.")
     public static let FindInPageNextAccessibilityLabel = MZLocalizedString("Next in-page result", tableName: "FindInPage", comment: "Accessibility label for next result button in Find in Page Toolbar.")
     public static let FindInPageDoneAccessibilityLabel = MZLocalizedString("Done", tableName: "FindInPage", comment: "Done button in Find in Page Toolbar.")
 }
 
-// Reader Mode Bar
+// MARK: - Reader Mode Bar
 extension String {
     public static let ReaderModeBarMarkAsRead = MZLocalizedString("Mark as Read", comment: "Name for Mark as read button in reader mode")
     public static let ReaderModeBarMarkAsUnread = MZLocalizedString("Mark as Unread", comment: "Name for Mark as unread button in reader mode")
@@ -1105,7 +1103,7 @@ extension String {
     public static let ReaderModeBarRemoveFromReadingList = MZLocalizedString("Remove from Reading List", comment: "Name for button removing current article from reading list in reader mode")
 }
 
-// SearchViewController
+// MARK: - SearchViewController
 extension String {
     public static let SearchSettingsAccessibilityLabel = MZLocalizedString("Search Settings", tableName: "Search", comment: "Label for search settings button.")
     public static let SearchSearchEngineAccessibilityLabel = MZLocalizedString("%@ search", tableName: "Search", comment: "Label for search engine buttons. The argument corresponds to the name of the search engine.")
@@ -1114,7 +1112,7 @@ extension String {
     public static let SearchSuggestionCellSwitchToTabLabel = MZLocalizedString("Search.Awesomebar.SwitchToTab", value: "Switch to tab", comment: "Search suggestion cell label that allows user to switch to tab which they searched for in url bar")
 }
 
-// Tab Location View
+// MARK: - Tab Location View
 extension String {
     public static let TabLocationURLPlaceholder = MZLocalizedString("Search or enter address", comment: "The text shown in the URL bar on about:home")
     public static let TabLocationLockIconAccessibilityLabel = MZLocalizedString("Secure connection", comment: "Accessibility label for the lock icon, which is only present if the connection is secure")
@@ -1124,7 +1122,7 @@ extension String {
     public static let TabLocationPageOptionsAccessibilityLabel = MZLocalizedString("Page Options Menu", comment: "Accessibility label for the Page Options menu button")
 }
 
-// TabPeekViewController
+// MARK: - TabPeekViewController
 extension String {
     public static let TabPeekAddToBookmarks = MZLocalizedString("Add to Bookmarks", tableName: "3DTouchActions", comment: "Label for preview action on Tab Tray Tab to add current tab to Bookmarks")
     public static let TabPeekCopyUrl = MZLocalizedString("Copy URL", tableName: "3DTouchActions", comment: "Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard")
@@ -1132,8 +1130,7 @@ extension String {
     public static let TabPeekPreviewAccessibilityLabel = MZLocalizedString("Preview of %@", tableName: "3DTouchActions", comment: "Accessibility label, associated to the 3D Touch action on the current tab in the tab tray, used to display a larger preview of the tab.")
 }
 
-// Tab Toolbar
-
+// MARK: - Tab Toolbar
 extension String {
     public static let TabToolbarReloadAccessibilityLabel = MZLocalizedString("Reload", comment: "Accessibility Label for the tab toolbar Reload button")
     public static let TabToolbarStopAccessibilityLabel = MZLocalizedString("Stop", comment: "Accessibility Label for the tab toolbar Stop button")
@@ -1144,7 +1141,7 @@ extension String {
     public static let TabToolbarNavigationToolbarAccessibilityLabel = MZLocalizedString("Navigation Toolbar", comment: "Accessibility label for the navigation toolbar displayed at the bottom of the screen.")
 }
 
-// Tab Tray v1
+// MARK: - Tab Tray v1
 extension String {
     public static let TabTrayToggleAccessibilityLabel = MZLocalizedString("Private Mode", tableName: "PrivateBrowsing", comment: "Accessibility label for toggling on/off private mode")
     public static let TabTrayToggleAccessibilityHint = MZLocalizedString("Turns private mode on or off", tableName: "PrivateBrowsing", comment: "Accessiblity hint for toggling on/off private mode")
@@ -1165,18 +1162,18 @@ extension String {
     public static let TabTrayCurrentlySelectedTabAccessibilityLabel = MZLocalizedString("TabTray.CurrentSelectedTab.A11Y", value: "Currently selected tab.", comment: "Accessibility label for the currently selected tab.")
 }
 
-// URL Bar
+// MARK: - URL Bar
 extension String {
     public static let URLBarLocationAccessibilityLabel = MZLocalizedString("Address and Search", comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
 }
 
-// Error Pages
+// MARK: - Error Pages
 extension String {
     public static let ErrorPageTryAgain = MZLocalizedString("Try again", tableName: "ErrorPages", comment: "Shown in error pages on a button that will try to load the page again")
     public static let ErrorPageOpenInSafari = MZLocalizedString("Open in Safari", tableName: "ErrorPages", comment: "Shown in error pages for files that can't be shown and need to be downloaded.")
 }
 
-// LibraryPanel
+// MARK: - LibraryPanel
 extension String {
     public static let LibraryPanelBookmarksAccessibilityLabel = MZLocalizedString("Bookmarks", comment: "Panel accessibility label")
     public static let LibraryPanelHistoryAccessibilityLabel = MZLocalizedString("History", comment: "Panel accessibility label")
@@ -1185,12 +1182,12 @@ extension String {
     public static let LibraryPanelSyncedTabsAccessibilityLabel = MZLocalizedString("Synced Tabs", comment: "Panel accessibility label")
 }
 
-// LibraryViewController
+// MARK: - LibraryViewController
 extension String {
     public static let LibraryPanelChooserAccessibilityLabel = MZLocalizedString("Panel Chooser", comment: "Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list).")
 }
 
-// ReaderPanel
+// MARK: - ReaderPanel
 extension String {
     public static let ReaderPanelRemove = MZLocalizedString("Remove", comment: "Title for the button that removes a reading list item")
     public static let ReaderPanelMarkAsRead = MZLocalizedString("Mark as Read", comment: "Title for the button that marks a reading list item as read")
@@ -1202,7 +1199,7 @@ extension String {
     public static let ReaderPanelReadingListDescription = MZLocalizedString("Save pages to your Reading List by tapping the book plus icon in the Reader View controls.", comment: "See http://mzl.la/1LXbDOL")
 }
 
-// Remote Tabs Panel
+// MARK: - Remote Tabs Panel
 extension String {
     // Backup and active strings added in Bug 1205294.
     public static let RemoteTabEmptyStateInstructionsSyncTabsPasswordsBookmarksString = MZLocalizedString("Sync your tabs, bookmarks, passwords and more.", comment: "Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in.")
@@ -1217,14 +1214,14 @@ extension String {
     public static let RemoteTabCreateAccount = MZLocalizedString("Create an account", comment: "See http://mzl.la/1Qtkf0j")
 }
 
-// Login list
+// MARK: - Login list
 extension String {
     public static let LoginListDeselctAll = MZLocalizedString("Deselect All", tableName: "LoginManager", comment: "Label for the button used to deselect all logins.")
     public static let LoginListSelctAll = MZLocalizedString("Select All", tableName: "LoginManager", comment: "Label for the button used to select all logins.")
     public static let LoginListDelete = MZLocalizedString("Delete", tableName: "LoginManager", comment: "Label for the button used to delete the current login.")
 }
 
-// Login Detail
+// MARK: - Login Detail
 extension String {
     public static let LoginDetailUsername = MZLocalizedString("Username", tableName: "LoginManager", comment: "Label displayed above the username row in Login Detail View.")
     public static let LoginDetailPassword = MZLocalizedString("Password", tableName: "LoginManager", comment: "Label displayed above the password row in Login Detail View.")
@@ -1234,12 +1231,12 @@ extension String {
     public static let LoginDetailDelete = MZLocalizedString("Delete", tableName: "LoginManager", comment: "Label for the button used to delete the current login.")
 }
 
-// No Logins View
+// MARK: - No Logins View
 extension String {
     public static let NoLoginsFound = MZLocalizedString("No logins found", tableName: "LoginManager", comment: "Label displayed when no logins are found after searching.")
 }
 
-// Reader Mode Handler
+// MARK: - Reader Mode Handler
 extension String {
     public static let ReaderModeHandlerLoadingContent = MZLocalizedString("Loading content…", comment: "Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app.")
     public static let ReaderModeHandlerPageCantDisplay = MZLocalizedString("The page could not be displayed in Reader View.", comment: "Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app.")
@@ -1247,7 +1244,7 @@ extension String {
     public static let ReaderModeHandlerError = MZLocalizedString("There was an error converting the page", comment: "Error displayed when reader mode cannot be enabled")
 }
 
-// ReaderModeStyle
+// MARK: - ReaderModeStyle
 extension String {
     public static let ReaderModeStyleBrightnessAccessibilityLabel = MZLocalizedString("Brightness", comment: "Accessibility label for brightness adjustment slider in Reader Mode display settings")
     public static let ReaderModeStyleFontTypeAccessibilityLabel = MZLocalizedString("Changes font type.", comment: "Accessibility hint for the font type buttons in reader mode display settings")
@@ -1264,19 +1261,19 @@ extension String {
     public static let ReaderModeStyleSepiaLabel = MZLocalizedString("Sepia", comment: "Sepia theme setting in Reading View settings")
 }
 
-// Empty Private tab view
+// MARK: - Empty Private tab view
 extension String {
     public static let PrivateBrowsingLearnMore = MZLocalizedString("Learn More", tableName: "PrivateBrowsing", comment: "Text button displayed when there are no tabs open while in private mode")
     public static let PrivateBrowsingTitle = MZLocalizedString("Private Browsing", tableName: "PrivateBrowsing", comment: "Title displayed for when there are no open tabs while in private mode")
     public static let PrivateBrowsingDescription = MZLocalizedString("Firefox won’t remember any of your history or cookies, but new bookmarks will be saved.", tableName: "PrivateBrowsing", comment: "Description text displayed when there are no open tabs while in private mode")
 }
 
-// Advanced Account Setting
+// MARK: - Advanced Account Setting
 extension String {
     public static let AdvancedAccountUseStageServer = MZLocalizedString("Use stage servers", comment: "Debug option")
 }
 
-// App Settings
+// MARK: - App Settings
 extension String {
     public static let AppSettingsLicenses = MZLocalizedString("Licenses", comment: "Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG")
     public static let AppSettingsYourRights = MZLocalizedString("Your Rights", comment: "Your Rights settings section title")
@@ -1296,7 +1293,7 @@ extension String {
     public static let AppSettingsAbout = MZLocalizedString("About", comment: "About settings section title")
 }
 
-// Clearables
+// MARK: - Clearables
 extension String {
     // Removed Clearables as part of Bug 1226654, but keeping the string around.
     private static let removedSavedLoginsLabel = MZLocalizedString("Saved Logins", tableName: "ClearPrivateData", comment: "Settings item for clearing passwords and login data")
@@ -1308,13 +1305,13 @@ extension String {
     public static let ClearableDownloads = MZLocalizedString("Downloaded Files", tableName: "ClearPrivateData", comment: "Settings item for deleting downloaded files")
 }
 
-// SearchEngine Picker
+// MARK: - SearchEngine Picker
 extension String {
     public static let SearchEnginePickerTitle = MZLocalizedString("Default Search Engine", comment: "Title for default search engine picker.")
     public static let SearchEnginePickerCancel = MZLocalizedString("Cancel", comment: "Label for Cancel button")
 }
 
-// SearchSettings
+// MARK: - SearchSettings
 extension String {
     public static let SearchSettingsTitle = MZLocalizedString("Search", comment: "Navigation title for search settings.")
     public static let SearchSettingsDefaultSearchEngineAccessibilityLabel = MZLocalizedString("Default Search Engine", comment: "Accessibility label for default search engine setting.")
@@ -1323,12 +1320,12 @@ extension String {
     public static let SearchSettingsQuickSearchEnginesTitle = MZLocalizedString("Quick-Search Engines", comment: "Title for quick-search engines settings section.")
 }
 
-// SettingsContent
+// MARK: - SettingsContent
 extension String {
     public static let SettingsContentPageLoadError = MZLocalizedString("Could not load page.", comment: "Error message that is shown in settings when there was a problem loading")
 }
 
-// SearchInput
+// MARK: - SearchInput
 extension String {
     public static let SearchInputAccessibilityLabel = MZLocalizedString("Search Input Field", tableName: "LoginManager", comment: "Accessibility label for the search input field in the Logins list")
     public static let SearchInputTitle = MZLocalizedString("Search", tableName: "LoginManager", comment: "Title for the search field at the top of the Logins list screen")
@@ -1336,18 +1333,18 @@ extension String {
     public static let SearchInputEnterSearchMode = MZLocalizedString("Enter Search Mode", tableName: "LoginManager", comment: "Accessibility label for entering search mode for logins")
 }
 
-// TabsButton
+// MARK: - TabsButton
 extension String {
     public static let TabsButtonShowTabsAccessibilityLabel = MZLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) tab toolbar")
 }
 
-// TabTrayButtons
+// MARK: - TabTrayButtons
 extension String {
     public static let TabTrayButtonNewTabAccessibilityLabel = MZLocalizedString("New Tab", comment: "Accessibility label for the New Tab button in the tab toolbar.")
     public static let TabTrayButtonShowTabsAccessibilityLabel = MZLocalizedString("Show Tabs", comment: "Accessibility Label for the tabs button in the tab toolbar")
 }
 
-// MenuHelper
+// MARK: - MenuHelper
 extension String {
     public static let MenuHelperPasteAndGo = MZLocalizedString("UIMenuItem.PasteGo", value: "Paste & Go", comment: "The menu item that pastes the current contents of the clipboard into the URL bar and navigates to the page")
     public static let MenuHelperReveal = MZLocalizedString("Reveal", tableName: "LoginManager", comment: "Reveal password text selection menu item")
@@ -1358,12 +1355,12 @@ extension String {
     public static let MenuHelperSearchWithFirefox = MZLocalizedString("UIMenuItem.SearchWithFirefox", value: "Search with Firefox", comment: "Search in New Tab Text selection menu item")
 }
 
-// DeviceInfo
+// MARK: - DeviceInfo
 extension String {
     public static let DeviceInfoClientNameDescription = MZLocalizedString("%@ on %@", tableName: "Shared", comment: "A brief descriptive name for this app on this device, used for Send Tab and Synced Tabs. The first argument is the app name. The second argument is the device name.")
 }
 
-// TimeConstants
+// MARK: - TimeConstants
 extension String {
     public static let TimeConstantMoreThanAMonth = MZLocalizedString("more than a month ago", comment: "Relative date for dates older than a month and less than two months.")
     public static let TimeConstantMoreThanAWeek = MZLocalizedString("more than a week ago", comment: "Description for a date more than a week ago, but less than a month ago.")
@@ -1373,7 +1370,7 @@ extension String {
     public static let TimeConstantJustNow = MZLocalizedString("just now", comment: "Relative time for a tab that was visited within the last few moments.")
 }
 
-// Default Suggested Site
+// MARK: - Default Suggested Site
 extension String {
     public static let DefaultSuggestedFacebook = MZLocalizedString("Facebook", comment: "Tile title for Facebook")
     public static let DefaultSuggestedYouTube = MZLocalizedString("YouTube", comment: "Tile title for YouTube")
@@ -1382,8 +1379,18 @@ extension String {
     public static let DefaultSuggestedTwitter = MZLocalizedString("Twitter", comment: "Tile title for Twitter")
 }
 
-// MR1 Strings
+// MARK: - MR1 Strings
 extension String {
     public static let AwesomeBarSearchWithEngineButtonTitle = MZLocalizedString("Awesomebar.SearchWithEngine.Title", value: "Search with %@", comment: "Title for button to suggest searching with a search engine. First argument is the name of the search engine to select")
     public static let AwesomeBarSearchWithEngineButtonDescription = MZLocalizedString("Awesomebar.SearchWithEngine.Description", value: "Search %@ directly from the address bar", comment: "Description for button to suggest searching with a search engine. First argument is the name of the search engine to select")
+}
+
+// MARK: - v35 Strings
+extension String {
+    public static let FirefoxHomeJumpBackInSectionTitle = MZLocalizedString("Jump Back In", comment: "Section title for the Jump Back In section")
+    public static let FirefoxHomeRecentlySavedSectionTitle = MZLocalizedString("Recently Saved", comment: "Section title for the Recently Saved section")
+    public static let FirefoxHomeShowAll = MZLocalizedString("Show all", comment: "Button to show all tabs or recently saved items in their respective locations")
+    public static let TabsTrayInactiveTabsSectionTitle = MZLocalizedString("Inactive Tabs", comment: "Inactive tabs section title")
+    public static let TabsTrayRecentlyCloseTabsSectionTitle = MZLocalizedString("Recently closed", comment: "Recently closed section title")
+    public static let TabsTrayRecentlyClosedTabsDescritpion = MZLocalizedString("Tabs are available here for 30 days. After that time, tabs will be automatically closed.", comment: "Describes what the Recently Closed tabs behaviour is for users unfamilliar with it.")
 }
