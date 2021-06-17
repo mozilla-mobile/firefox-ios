@@ -8,6 +8,7 @@ import SnapKit
 public struct FirefoxHomeHeaderViewUX {
     static let Insets: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? FirefoxHomeUX.SectionInsetsForIpad + FirefoxHomeUX.MinimumInsets : FirefoxHomeUX.MinimumInsets
     static let TitleTopInset: CGFloat = 5
+    static let sectionHeaderSize: CGFloat = 20
 }
 
 class ASHeaderView: UICollectionReusableView {
@@ -17,7 +18,7 @@ class ASHeaderView: UICollectionReusableView {
         let titleLabel = UILabel()
         titleLabel.text = self.title
         titleLabel.textColor = UIColor.theme.homePanel.activityStreamHeaderText
-        titleLabel.font = UIFont.preferredFont(forTextStyle: .title3)
+        titleLabel.font = UIFont.systemFont(ofSize: FirefoxHomeHeaderViewUX.sectionHeaderSize, weight: .bold)
         titleLabel.minimumScaleFactor = 0.6
         titleLabel.numberOfLines = 1
         titleLabel.adjustsFontSizeToFitWidth = true
@@ -62,7 +63,7 @@ class ASHeaderView: UICollectionReusableView {
         addSubview(titleLabel)
         addSubview(moreButton)
         moreButton.snp.makeConstraints { make in
-            make.bottom.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-6)
             make.trailing.equalTo(self.safeArea.trailing).inset(titleInsets)
         }
         moreButton.setContentCompressionResistancePriority(.required, for: .horizontal)

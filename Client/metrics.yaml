@@ -417,6 +417,47 @@ firefox_home_page:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2021-12-07"
+  recently_saved_show_all:
+    type: counter
+    description: |
+      Counts the number of times a user taps the Show All
+      button of the Recently Saved Section
+    bugs:
+      - https://jira.mozilla.com/browse/FXIOS-1807
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8656
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2021-12-18"
+  recently_saved_bookmark_item:
+    type: counter
+    description: |
+      Counts the number of times a bookmarked item in
+      the Recently Saved section is tapped
+    bugs:
+      - https://jira.mozilla.com/browse/FXIOS-1807
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8656
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2021-12-18"
+  recently_saved_item_view:
+    type: event
+    description: |
+      Counts the number of bookmarked items appearing
+      in the Recently Saved section on the home page.
+    extra_keys:
+      bookmark_count:
+        description: |
+          The number of bookmarked items in the
+          Recently Saved section.
+    bugs:
+      - https://jira.mozilla.com/browse/FXIOS-1807
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8656
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2021-12-18"
 
 # Library
 library:

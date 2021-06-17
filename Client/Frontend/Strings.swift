@@ -52,6 +52,8 @@ extension Strings {
     public static let TopSitesRowCount = MZLocalizedString("ActivityStream.TopSites.RowCount", value: "Rows: %d", comment: "label showing how many rows of topsites are shown. %d represents a number")
     public static let RecentlyBookmarkedTitle = MZLocalizedString("ActivityStream.NewRecentBookmarks.Title", value: "Recent Bookmarks", comment: "Section title label for recently bookmarked websites")
     public static let RecentlyVisitedTitle = MZLocalizedString("ActivityStream.RecentHistory.Title", value: "Recently Visited", comment: "Section title label for recently visited websites")
+    public static let RecentlySavedSectionTitle = MZLocalizedString("ActivityStream.Library.Title", tableName: "Recently Saved", value: "Recently Saved", comment: "A string used to signify the start of the Recently Saved section in Home Screen.")
+    public static let RecentlySavedShowAllText = MZLocalizedString("RecentlySaved.Actions.More", value: "Show All", comment: "More button text for Recently Saved items at the home page.")
 }
 
 // Home Panel Context Menu.
@@ -550,6 +552,7 @@ extension Strings {
     public static let AppMenuLibraryReloadString = MZLocalizedString("Menu.Library.Reload", tableName: "Menu", value: "Reload", comment: "Label for the button, displayed in the menu, used to Reload the webpage")
     public static let StopReloadPageTitle = MZLocalizedString("Menu.Library.StopReload", value: "Stop", comment: "Label for the button displayed in the menu used to stop the reload of the webpage")
     public static let AppMenuLibraryTitleString = MZLocalizedString("Menu.Library.Title", tableName: "Menu", value: "Your Library", comment: "Label for the button, displayed in the menu, used to open the Library")
+    public static let AppMenuRecentlySavedTitle = MZLocalizedString("Menu.RecentlySaved.Title", tableName: "Menu", value: "Recently Saved", comment: "A string used to signify the start of the Recently Saved section in Home Screen.")
     public static let AppMenuAddToReadingListTitleString = MZLocalizedString("Menu.AddToReadingList.Title", tableName: "Menu", value: "Add to Reading List", comment: "Label for the button, displayed in the menu, used to add a page to the reading list.")
     public static let AppMenuShowTabsTitleString = MZLocalizedString("Menu.ShowTabs.Title", tableName: "Menu", value: "Show Tabs", comment: "Label for the button, displayed in the menu, used to open the tabs tray")
     public static let AppMenuSharePageTitleString = MZLocalizedString("Menu.SharePageAction.Title", tableName: "Menu", value: "Share Page With…", comment: "Label for the button, displayed in the menu, used to open the share dialog.")

@@ -12,7 +12,14 @@ protocol OnViewDismissable: class {
 
 class DismissableNavigationViewController: UINavigationController, OnViewDismissable {
     var onViewDismissed: (() -> Void)? = nil
-
+    var onViewWillDisappear: (() -> Void)? = nil
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        onViewWillDisappear?()
+        onViewWillDisappear = nil
+    }
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         onViewDismissed?()
