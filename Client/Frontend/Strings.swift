@@ -607,7 +607,7 @@ extension Strings {
     public static let AppMenuShowPageSourceString = MZLocalizedString("Menu.PageSourceAction.Title", tableName: "Menu", value: "View Page Source", comment: "Label for the button, displayed in the menu, used to show the html page source")
 }
 
-// MARK: - Snackbar shown when tapping app store lin
+// MARK: - Snackbar shown when tapping app store link
 extension Strings {
     public static let ExternalLinkAppStoreConfirmationTitle = MZLocalizedString("ExternalLink.AppStore.ConfirmationTitle", value: "Open this link in the App Store?", comment: "Question shown to user when tapping a link that opens the App Store app")
     public static let ExternalLinkGenericConfirmation = MZLocalizedString("ExternalLink.AppStore.GenericConfirmationTitle", value: "Open this link in external app?", comment: "Question shown to user when tapping an SMS or MailTo link that opens the external app for those.")
@@ -638,7 +638,7 @@ extension Strings {
     public static let TrackerProtectionAlertButton =  MZLocalizedString("Settings.TrackingProtection.Alert.Button", value: "OK, Got It", comment: "Dismiss button for the tracker protection alert.")
 }
 
-// MARK: - Tracking Protection men
+// MARK: - Tracking Protection menu
 extension Strings {
     public static let TPBlockingDescription = MZLocalizedString("Menu.TrackingProtectionBlocking.Description", value: "Firefox is blocking parts of the page that may track your browsing.", comment: "Description of the Tracking protection menu when TP is blocking parts of the page")
     public static let TPNoBlockingDescription = MZLocalizedString("Menu.TrackingProtectionNoBlocking.Description", value: "No tracking elements detected on this page.", comment: "The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled.")
@@ -695,7 +695,7 @@ extension Strings {
     public static let TPMoreInfo = MZLocalizedString("Settings.TrackingProtection.MoreInfo", value: "More Info…", comment: "'More Info' link on the Tracking Protection settings screen.")
 }
 
-// MARK: - Location bar long press men
+// MARK: - Location bar long press menu
 extension Strings {
     public static let PasteAndGoTitle = MZLocalizedString("Menu.PasteAndGo.Title", value: "Paste & Go", comment: "The title for the button that lets you paste and go to a URL")
     public static let PasteTitle = MZLocalizedString("Menu.Paste.Title", value: "Paste", comment: "The title for the button that lets you paste into the location bar")
