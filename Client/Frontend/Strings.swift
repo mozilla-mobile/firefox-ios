@@ -53,7 +53,7 @@ extension Strings {
     public static let TopSitesRowCount = MZLocalizedString("ActivityStream.TopSites.RowCount", value: "Rows: %d", comment: "label showing how many rows of topsites are shown. %d represents a number")
     public static let RecentlyBookmarkedTitle = MZLocalizedString("ActivityStream.NewRecentBookmarks.Title", value: "Recent Bookmarks", comment: "Section title label for recently bookmarked websites")
     public static let RecentlyVisitedTitle = MZLocalizedString("ActivityStream.RecentHistory.Title", value: "Recently Visited", comment: "Section title label for recently visited websites")
-    public static let RecentlySavedSectionTitle = MZLocalizedString("ActivityStream.Library.Title", tableName: "Recently Saved", value: "Recently Saved", comment: "A string used to signify the start of the Recently Saved section in Home Screen.")
+    public static let RecentlySavedSectionTitle = MZLocalizedString("ActivityStream.Library.Title", value: "Recently Saved", comment: "A string used to signify the start of the Recently Saved section in Home Screen.")
     public static let RecentlySavedShowAllText = MZLocalizedString("RecentlySaved.Actions.More", value: "Show All", comment: "More button text for Recently Saved items at the home page.")
 }
 
