@@ -21,7 +21,6 @@ class WebsiteDataManagementViewModel {
     var clearButtonTitle: String {
         switch selectedRecords.count {
         case 0: return Strings.SettingsClearAllWebsiteDataButton
-        case 1: return Strings.SettingsClearOneWebsiteDataButton
         default: return String(format: Strings.SettingsClearSelectedWebsiteDataButton, "\(selectedRecords.count)")
         }
     }
