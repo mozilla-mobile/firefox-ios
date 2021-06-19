@@ -44,6 +44,7 @@
 		2696EB04211F540600F0C73F /* SearchHistoryUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2696EB03211F540600F0C73F /* SearchHistoryUtils.swift */; };
 		30DFF98021810BF20055707C /* SearchSuggestClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DFF97F21810BF20055707C /* SearchSuggestClient.swift */; };
 		31421EB12176492A0015F48B /* TitleActivityItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31421EB02176492A0015F48B /* TitleActivityItemProvider.swift */; };
+		3AEC0B3E267DE30A007B7850 /* URIFixupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AEC0B3D267DE30A007B7850 /* URIFixupTests.swift */; };
 		4F1284861FC5E242001A775B /* TPSettingsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1284851FC5E242001A775B /* TPSettingsTest.swift */; };
 		4F582F7B1F44A10F006C744B /* OpenInFocusTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F582F7A1F44A10F006C744B /* OpenInFocusTest.swift */; };
 		4FE4E6F61FBB5E2C001BB779 /* TPSidebarBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE4E6F51FBB5E2C001BB779 /* TPSidebarBadge.swift */; };
@@ -369,6 +370,7 @@
 		29B90C056305836CB297FF79 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		30DFF97F21810BF20055707C /* SearchSuggestClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSuggestClient.swift; sourceTree = "<group>"; };
 		31421EB02176492A0015F48B /* TitleActivityItemProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleActivityItemProvider.swift; sourceTree = "<group>"; };
+		3AEC0B3D267DE30A007B7850 /* URIFixupTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URIFixupTests.swift; sourceTree = "<group>"; };
 		427B752EF11959F9C38B12D6 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		4F1284851FC5E242001A775B /* TPSettingsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TPSettingsTest.swift; sourceTree = "<group>"; };
 		4F582F7A1F44A10F006C744B /* OpenInFocusTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenInFocusTest.swift; sourceTree = "<group>"; };
@@ -1158,6 +1160,7 @@
 				D831FEE1205247A400EAE19A /* BrowserViewControllerTests.swift */,
 				D8E0156D1FD9E40F00CA3B9F /* DomainCompletionTests.swift */,
 				D803D37320EF1A49001F2819 /* UserAgentTests.swift */,
+				3AEC0B3D267DE30A007B7850 /* URIFixupTests.swift */,
 			);
 			path = ClientTests;
 			sourceTree = "<group>";
@@ -1825,6 +1828,7 @@
 				D8E0155F1FCF409F00CA3B9F /* SearchEngineManagerTests.swift in Sources */,
 				D8E0156E1FD9E40F00CA3B9F /* DomainCompletionTests.swift in Sources */,
 				D025F225218B64D600B262D8 /* SearchEngineTests.swift in Sources */,
+				3AEC0B3E267DE30A007B7850 /* URIFixupTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
