@@ -18,10 +18,6 @@ class LibraryTestsIpad: IpadOnlyTestCase {
         waitForExistence(app.tables["Bookmarks List"])
         // Go to a different panel, like History
         navigator.goto(LibraryPanel_History)
-        // Verify that next time Library opens in last visited panel
-        navigator.goto(HomePanelsScreen)
-        waitForExistence(app.buttons["TabToolbar.libraryButton"])
-        libraryShorcutButton.tap()
         waitForExistence(app.tables["History List"])
     }
 }
