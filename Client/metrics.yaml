@@ -144,30 +144,6 @@ application_services:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2021-07-01"
-  bookmark_highlights_visible:
-    type: boolean
-    description: |
-      Measures the state of the show bookmark highlights
-      preference.
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2021-07-01"
-  recent_highlights_visible:
-    type: boolean
-    description: |
-      Measures the state of the show recent highlights
-      preference.
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2021-07-01"
 
 # Bookmark metrics
 bookmarks:
@@ -348,31 +324,6 @@ top_site:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2021-12-07"
-
-# Experiments
-experiments:
-  experiment_enrollment:
-    type: event
-    description: |
-      Records the experiments the user is enrolled in.
-      Includes experiment ID, name, and variant.
-    extra_keys:
-      experiment_id:
-        description: |
-          The experiment ID.
-      experiment_name:
-        description: |
-          The experiment name.
-      experiment_variant:
-        description: |
-          The experiment variant name the user is in.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/7841
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8150
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2021-12-01"
 
 # HomePage
 firefox_home_page:
@@ -705,32 +656,6 @@ preferences:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2021-07-01"
-  mail_client:
-    type: string
-    description: |
-      The URL scheme of the mail client that the user wants to use
-      for `mailto:` links. It is used to measure usage of this
-      feature, to see how effective feature promotion campaigns are
-      and to report back to third-party mail clients what percentage
-      of users is using their client.
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2021-07-01"
-  block_popups:
-    type: boolean
-    description: |
-      Measures the state of the "Block Popups" preference.
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2021-07-01"
   save_logins:
     type: boolean
     description: |
@@ -822,30 +747,6 @@ reading_list:
     labels:
       - reader-mode-toolbar
       - reading-list-panel
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2021-07-01"
-  mark_read:
-    type: counter
-    description: |
-      Counts the number of times a reading list item is
-      marked as read.
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2021-07-01"
-  mark_unread:
-    type: counter
-    description: |
-      Counts the number of times a reading list item is
-      marked as unread.
     bugs:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
@@ -974,18 +875,6 @@ sync:
     description: |
         Counts the number of times a user opens
         synced tab
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/8035
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8152
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2021-12-01"
-  open_sync_home_shortcut:
-    type: counter
-    description: |
-        Counts the number of times a user opens
-        synced tab list from home view
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/8035
     data_reviews:
@@ -1141,43 +1030,6 @@ theme:
     description: |
       Measures the state of the "Use System Light/Dark Mode"
       theme preference.
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2021-07-01"
-  automatic_mode:
-    type: boolean
-    description: |
-      Measures the state of the "Manual/Automatic" theme
-      preference.
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2021-07-01"
-  automatic_slider_value:
-    type: string
-    description: |
-      Measures the string representation of the current slider
-      value of the automatic theme switching slider.
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2021-07-01"
-  name:
-    type: string
-    description: |
-      Measures the name of the current theme.  One of:
-      * normal
-      * dark
     bugs:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:

@@ -58,20 +58,15 @@ class TelemetryWrapper {
         telemetryConfig.isCollectionEnabled = sendUsageData
         telemetryConfig.isUploadEnabled = sendUsageData
 
-        telemetryConfig.measureUserDefaultsSetting(forKey: "profile.blockPopups", withDefaultValue: true)
         telemetryConfig.measureUserDefaultsSetting(forKey: "profile.saveLogins", withDefaultValue: true)
         telemetryConfig.measureUserDefaultsSetting(forKey: "profile.showClipboardBar", withDefaultValue: false)
         telemetryConfig.measureUserDefaultsSetting(forKey: "profile.settings.closePrivateTabs", withDefaultValue: false)
         telemetryConfig.measureUserDefaultsSetting(forKey: "profile.ASPocketStoriesVisible", withDefaultValue: true)
         telemetryConfig.measureUserDefaultsSetting(forKey: "profile.ASBookmarkHighlightsVisible", withDefaultValue: true)
-        telemetryConfig.measureUserDefaultsSetting(forKey: "profile.ASRecentHighlightsVisible", withDefaultValue: true)
         telemetryConfig.measureUserDefaultsSetting(forKey: "profile.prefkey.trackingprotection.normalbrowsing", withDefaultValue: true)
         telemetryConfig.measureUserDefaultsSetting(forKey: "profile.prefkey.trackingprotection.privatebrowsing", withDefaultValue: true)
         telemetryConfig.measureUserDefaultsSetting(forKey: "profile.prefkey.trackingprotection.strength", withDefaultValue: "basic")
         telemetryConfig.measureUserDefaultsSetting(forKey: ThemeManagerPrefs.systemThemeIsOn.rawValue, withDefaultValue: true)
-        telemetryConfig.measureUserDefaultsSetting(forKey: ThemeManagerPrefs.automaticSwitchIsOn.rawValue, withDefaultValue: false)
-        telemetryConfig.measureUserDefaultsSetting(forKey: ThemeManagerPrefs.automaticSliderValue.rawValue, withDefaultValue: 0)
-        telemetryConfig.measureUserDefaultsSetting(forKey: ThemeManagerPrefs.themeName.rawValue, withDefaultValue: "normal")
 
         let prefs = profile.prefs
         legacyTelemetry.beforeSerializePing(pingType: CorePingBuilder.PingType) { (inputDict) -> [String: Any?] in
@@ -81,9 +76,6 @@ class TelemetryWrapper {
 
             if let newTabChoice = prefs.stringForKey(NewTabAccessors.HomePrefKey) {
                 outputDict["defaultNewTabExperience"] = newTabChoice as AnyObject?
-            }
-            if let chosenEmailClient = prefs.stringForKey(PrefsKeys.KeyMailToOption) {
-                outputDict["defaultMailClient"] = chosenEmailClient as AnyObject?
             }
 
             // Report this flag as a `1` or `0` integer to allow it
@@ -207,16 +199,6 @@ class TelemetryWrapper {
         } else {
             GleanMetrics.Preferences.newTabExperience.set(NewTabAccessors.Default.rawValue)
         }
-        // Record chosen email client setting
-        if let chosenEmailClient = prefs.stringForKey(PrefsKeys.KeyMailToOption) {
-            GleanMetrics.Preferences.mailClient.set(chosenEmailClient)
-        }
-        // Block popups
-        if let blockPopups = prefs.boolForKey(PrefsKeys.KeyBlockPopups) {
-            GleanMetrics.Preferences.blockPopups.set(blockPopups)
-        } else {
-            GleanMetrics.Preferences.blockPopups.set(true)
-        }
         // Save logins
         if let saveLogins = prefs.boolForKey(PrefsKeys.LoginsSaveEnabled) {
             GleanMetrics.Preferences.saveLogins.set(saveLogins)
@@ -241,18 +223,6 @@ class TelemetryWrapper {
         } else {
             GleanMetrics.ApplicationServices.pocketStoriesVisible.set(true)
         }
-        // Bookmark highlights visible
-        if let bookmarkHighlightsVisible = prefs.boolForKey(PrefsKeys.ASBookmarkHighlightsVisible) {
-            GleanMetrics.ApplicationServices.bookmarkHighlightsVisible.set(bookmarkHighlightsVisible)
-        } else {
-            GleanMetrics.ApplicationServices.bookmarkHighlightsVisible.set(true)
-        }
-        // Recent highlights visible
-        if let recentHighlightsVisible = prefs.boolForKey(PrefsKeys.ASRecentHighlightsVisible) {
-            GleanMetrics.ApplicationServices.recentHighlightsVisible.set(recentHighlightsVisible)
-        } else {
-            GleanMetrics.ApplicationServices.recentHighlightsVisible.set(true)
-        }
         // Tracking protection - enabled
         if let tpEnabled = prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) {
             GleanMetrics.TrackingProtection.enabled.set(tpEnabled)
@@ -267,14 +237,6 @@ class TelemetryWrapper {
         }
         // System theme enabled
         GleanMetrics.Theme.useSystemTheme.set(ThemeManager.instance.systemThemeIsOn)
-        // Automatic brightness enabled
-        GleanMetrics.Theme.automaticMode.set(ThemeManager.instance.automaticBrightnessIsOn)
-        // Automatic brightness slider value
-        // Note: we are recording this as a string since there is not currently a pure Numeric
-        // Glean metric type.
-        GleanMetrics.Theme.automaticSliderValue.set("\(ThemeManager.instance.automaticBrightnessValue)")
-        // Theme name
-        GleanMetrics.Theme.name.set(ThemeManager.instance.currentName.rawValue)
     }
 
     @objc func uploadError(notification: NSNotification) {
@@ -356,7 +318,6 @@ extension TelemetryWrapper {
         case removeUnVerifiedAccountButton = "remove-unverified-account-button"
         case tabSearch = "tab-search"
         case tabToolbar = "tab-toolbar"
-        case experimentEnrollment = "experiment-enrollment"
         case chinaServerSwitch = "china-server-switch"
         case accountConnected = "connected"
         case accountDisconnected = "disconnected"
@@ -389,7 +350,6 @@ extension TelemetryWrapper {
         case logins = "logins-and-passwords"
         case signIntoSync = "sign-into-sync"
         case syncTab = "sync-tab"
-        case syncHomeShortcut = "sync-home-shortcut"
         case syncSignIn = "sync-sign-in"
         case syncCreateAccount = "sync-create-account"
         case libraryPanel = "library-panel"
@@ -483,10 +443,6 @@ extension TelemetryWrapper {
             GleanMetrics.ReadingList.delete[from].add()
         case (.action, .open, .readingListItem, _, _):
             GleanMetrics.ReadingList.open.add()
-        case (.action, .tap, .readingListItem, EventValue.markAsRead.rawValue, _):
-            GleanMetrics.ReadingList.markRead.add()
-        case (.action, .tap, .readingListItem, EventValue.markAsUnread.rawValue, _):
-            GleanMetrics.ReadingList.markUnread.add()
         // Top Site
         case (.action, .tap, .topSiteTile, _, let extras):
             if let position = extras?[EventExtraKey.topSitePosition.rawValue] as? String, let tileType = extras?[EventExtraKey.topSiteTileType.rawValue] as? String {
@@ -576,23 +532,10 @@ extension TelemetryWrapper {
         // Sync
         case (.action, .open, .syncTab, _, _):
             GleanMetrics.Sync.openTab.add()
-        case (.action, .tap, .syncHomeShortcut, _, _):
-            GleanMetrics.Sync.openSyncHomeShortcut.add()
         case (.action, .tap, .syncSignIn, _, _):
             GleanMetrics.Sync.signInSyncPressed.add()
         case (.action, .tap, .syncCreateAccount, _, _):
             GleanMetrics.Sync.createAccountPressed.add()
-        // Experiments
-        case (.enrollment, .add, .experimentEnrollment, _, let extras):
-            if let id = extras?["Experiment id"] as? String, let name = extras?["Experiment name"] as? String, let variant = extras?["Experiment variant"] as? String {
-                GleanMetrics.Experiments.experimentEnrollment.record(
-                extra: [GleanMetrics.Experiments.ExperimentEnrollmentKeys.experimentId: id,
-                        GleanMetrics.Experiments.ExperimentEnrollmentKeys.experimentName: name,
-                        GleanMetrics.Experiments.ExperimentEnrollmentKeys.experimentVariant: variant])
-            } else {
-                let msg = "Uninstrumented pref metric: \(category), \(method), \(object), \(value), \(String(describing: extras))"
-                Sentry.shared.send(message: msg, severity: .debug)
-            }
         // App menu
         case (.action, .tap, .logins, _, _):
             GleanMetrics.AppMenu.logins.add()
