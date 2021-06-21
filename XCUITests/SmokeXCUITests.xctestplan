@@ -73,6 +73,7 @@
         "FirstRunTourTests\/testShowTourFromSettings()",
         "FirstRunTourTests\/testStartBrowsingFromSecondScreen()",
         "FxScreenGraphTests",
+        "HistoryTests\/testAllOptionsArePresent()",
         "HistoryTests\/testClearHistoryFromSettings()",
         "HistoryTests\/testClearRecentHistory()",
         "HistoryTests\/testClearRecentlyClosedHistory()",
