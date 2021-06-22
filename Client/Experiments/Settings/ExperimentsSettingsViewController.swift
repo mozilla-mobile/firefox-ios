@@ -32,12 +32,14 @@ class ExperimentsSettingsViewController: UIViewController {
         experimentsView.customRemoteSettingsTextField.addTarget(self, action: #selector(updateState), for: .editingChanged)
         experimentsView.reloadButton.addTarget(self, action: #selector(loadRemoteExperiments), for: .touchUpInside)
         experimentsView.updateButton.addTarget(self, action: #selector(tappedUpdate), for: .touchUpInside)
+        experimentsView.usePreviewToggle.addTarget(self, action: #selector(usePreviewToggleTapped), for: .valueChanged)
         updateState()
     }
 
     @objc private func updateState() {
         experimentsView.reloadButton.isEnabled = !(experimentsView.customRemoteSettingsTextField.text?.isEmpty ?? true)
         experimentsView.customExperimentDataTextView.text = localExperimentsData
+        experimentsView.usePreviewToggle.setOn(Experiments.usePreviewCollection(), animated: false)
 
         let dataDidChange = experimentsView.customExperimentDataTextView.text != localExperimentsData
         experimentsView.updateButton.setTitle(dataDidChange ? "Update" : "Reset", for: .normal)
@@ -73,6 +75,10 @@ class ExperimentsSettingsViewController: UIViewController {
         experiments.setExperimentsLocally(data)
         applyPendingExperiments()
         updateState()
+    }
+
+    @objc private func usePreviewToggleTapped(sender: UISwitch) {
+        Experiments.setUsePreviewCollection(enabled: sender.isOn)
     }
 
     // Tiny hack to fix the race condition when setting new experiments and navigating back

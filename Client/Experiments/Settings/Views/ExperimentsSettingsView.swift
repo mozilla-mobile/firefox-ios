@@ -14,6 +14,12 @@ class ExperimentsSettingsView: UIView {
         button.setImage(UIImage(named: "nav-refresh"), for: .normal)
     }
 
+    let usePreviewPrompt: UITextView = .build { prompt in
+        prompt.text = "Use Preview Collection (requires restart)"
+    }
+
+    let usePreviewToggle: UISwitch = .build()
+
     let customExperimentDataTextView: UITextView = .build { textView in
         textView.layer.cornerRadius = 8
         textView.textContainer.lineFragmentPadding = 8.0
@@ -37,8 +43,8 @@ class ExperimentsSettingsView: UIView {
             backgroundColor = .systemBackground
         }
 
-        addSubviews(customRemoteSettingsTextField, reloadButton,
-                    customExperimentDataTextView, updateButton, gapView)
+        addSubviews(customRemoteSettingsTextField, reloadButton, usePreviewPrompt,
+                    usePreviewToggle, customExperimentDataTextView, updateButton, gapView)
         setupConstraints()
     }
 
@@ -52,7 +58,17 @@ class ExperimentsSettingsView: UIView {
             customRemoteSettingsTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8.0),
             customRemoteSettingsTextField.trailingAnchor.constraint(equalTo: reloadButton.leadingAnchor, constant: -8.0),
             customRemoteSettingsTextField.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 8.0),
-            customExperimentDataTextView.topAnchor.constraint(equalTo: customRemoteSettingsTextField.bottomAnchor, constant: 8.0),
+            usePreviewPrompt.topAnchor.constraint(equalTo: customRemoteSettingsTextField.bottomAnchor, constant: 8.0),
+            usePreviewPrompt.heightAnchor.constraint(equalToConstant: 44.0),
+            usePreviewPrompt.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8.0),
+            usePreviewPrompt.trailingAnchor.constraint(equalTo: usePreviewToggle.leadingAnchor, constant: -8.0),
+            usePreviewPrompt.bottomAnchor.constraint(equalTo: customExperimentDataTextView.topAnchor, constant: 8.0),
+            usePreviewToggle.topAnchor.constraint(equalTo: customRemoteSettingsTextField.bottomAnchor, constant: 8.0),
+            usePreviewToggle.heightAnchor.constraint(equalToConstant: 44.0),
+            usePreviewToggle.leadingAnchor.constraint(equalTo: usePreviewPrompt.trailingAnchor, constant: 8.0),
+            usePreviewToggle.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8.0),
+            usePreviewToggle.bottomAnchor.constraint(equalTo: customExperimentDataTextView.topAnchor, constant: 8.0),
+            customExperimentDataTextView.topAnchor.constraint(equalTo: usePreviewPrompt.bottomAnchor, constant: 8.0),
             customExperimentDataTextView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8.0),
             customExperimentDataTextView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8.0),
             customExperimentDataTextView.bottomAnchor.constraint(equalTo: updateButton.topAnchor, constant: -8.0),

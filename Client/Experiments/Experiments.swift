@@ -11,6 +11,7 @@ private let log = Logger.browserLogger
 private let nimbusAppName = "firefox_ios"
 private let NIMBUS_URL_KEY = "NimbusURL"
 private let NIMBUS_LOCAL_DATA_KEY = "nimbus_local_data"
+private let NIMBUS_USE_PREVIEW_COLLECTION_KEY = "nimbus_use_preview_collection"
 
 /// `Experiments` is the main entry point to use the `Nimbus` experimentation platform in Firefox for iOS.
 ///
@@ -108,6 +109,33 @@ enum Experiments {
         return url
     }()
 
+    static func setUsePreviewCollection(enabled: Bool, storage: UserDefaults = .standard) {
+        storage.setValue(enabled, forKey: NIMBUS_USE_PREVIEW_COLLECTION_KEY)
+    }
+
+    static func usePreviewCollection(storage: UserDefaults = .standard) -> Bool {
+        storage.bool(forKey: NIMBUS_USE_PREVIEW_COLLECTION_KEY)
+    }
+
+    static var serverSettings: NimbusServerSettings? = {
+        // If no URL is specified, or it's not valid continue with as if
+        // we're enabled. This to allow testing of the app, without standing
+        // up a `RemoteSettings` server.
+        guard let urlString = Experiments.remoteSettingsURL else {
+            return nil
+        }
+
+        guard let url = URL(string: urlString) else {
+            return nil
+        }
+
+        if usePreviewCollection() {
+            return NimbusServerSettings(url: url, collection: "nimbus-preview")
+        } else {
+            return NimbusServerSettings(url: url)
+        }
+    }()
+
     /// The `NimbusApi` object. This is the entry point to do anything with the Nimbus SDK on device.
     public static var shared: NimbusApi = {
         guard AppConstants.NIMBUS_ENABLED else {
@@ -117,15 +145,6 @@ enum Experiments {
         guard let dbPath = Experiments.dbPath else {
             log.error("Nimbus didn't get to create, because of a nil dbPath")
             return NimbusDisabled.shared
-        }
-
-        // If no URL is specified, or it's not valid continue with as if
-        // we're enabled. This to allow testing of the app, without standing
-        // up a `RemoteSettings` server.
-        let serverSettings = Experiments.remoteSettingsURL.flatMap {
-            URL(string: $0)
-        }.flatMap {
-            NimbusServerSettings(url: $0)
         }
 
         // App settings, to allow experiments to target the app name and the
