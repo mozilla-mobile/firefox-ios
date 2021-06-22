@@ -40,6 +40,7 @@ for lang in $LOCALES; do
     mkdir "l10n-screenshots/$lang"
     fastlane snapshot --project Client.xcodeproj --scheme L10nSnapshotTests \
         --skip_open_summary \
+        --xcargs "-maximum-parallel-testing-workers 2" \
         --derived_data_path l10n-screenshots-dd \
         --erase_simulator --localize_simulator \
         --devices "iPhone 8" --languages "$lang" \

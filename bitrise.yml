@@ -153,7 +153,7 @@ workflows:
             # builds. Import all locales on Beta and Fennec_Enterprise, except for pull
             # requests.
             git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git ||exit 1
-            pip install --user virtualenv
+            pip3 install --user virtualenv
             cd /usr/local/bin
             ln -s /Users/vagrant/Library/Python/3.9/bin/virtualenv .
             cd -
