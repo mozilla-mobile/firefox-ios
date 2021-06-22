@@ -44,8 +44,6 @@ public struct PrefsKeys {
     public static let KeyTopSitesCacheSize = "topSitesCacheSize"
     public static let KeyNewTab = "NewTabPrefKey"
     public static let ASPocketStoriesVisible = "ASPocketStoriesVisible"
-    public static let ASRecentHighlightsVisible = "ASRecentHighlightsVisible"
-    public static let ASBookmarkHighlightsVisible = "ASBookmarkHighlightsVisible"
     public static let ASLastInvalidation = "ASLastInvalidation"
     public static let KeyUseCustomSyncTokenServerOverride = "useCustomSyncTokenServerOverride"
     public static let KeyCustomSyncTokenServerOverride = "customSyncTokenServerOverride"
