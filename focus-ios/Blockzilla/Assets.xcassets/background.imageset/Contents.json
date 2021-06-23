@@ -1,0 +1,48 @@
+{
+  "images" : [
+    {
+      "filename" : "background_iphone_portrait.pdf",
+      "idiom" : "iphone"
+    },
+    {
+      "filename" : "background_iphone_landscape.pdf",
+      "height-class" : "compact",
+      "idiom" : "iphone"
+    },
+    {
+      "idiom" : "iphone",
+      "width-class" : "compact"
+    },
+    {
+      "filename" : "background_iphone_landscape-1.pdf",
+      "height-class" : "compact",
+      "idiom" : "iphone",
+      "width-class" : "compact"
+    },
+    {
+      "idiom" : "ipad"
+    },
+    {
+      "filename" : "background_ipad_landscape.pdf",
+      "height-class" : "compact",
+      "idiom" : "ipad"
+    },
+    {
+      "filename" : "background_ipad_portrait.pdf",
+      "idiom" : "ipad",
+      "width-class" : "compact"
+    },
+    {
+      "height-class" : "compact",
+      "idiom" : "ipad",
+      "width-class" : "compact"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  },
+  "properties" : {
+    "preserves-vector-representation" : true
+  }
+}
