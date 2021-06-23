@@ -6,7 +6,7 @@ import SnapKit
 
 // MARK: - Section Header View
 public struct FirefoxHomeHeaderViewUX {
-    static let Insets: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? FirefoxHomeUX.SectionInsetsForIpad + FirefoxHomeUX.MinimumInsets : FirefoxHomeUX.MinimumInsets
+    static let Insets: CGFloat = 16
     static let TitleTopInset: CGFloat = 5
     static let sectionHeaderSize: CGFloat = 20
 }

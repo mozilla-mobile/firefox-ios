@@ -20,7 +20,6 @@ struct FirefoxHomeUX {
     static let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 15)
     static let numberOfItemsPerRowForSizeClassIpad = UXSizeClasses(compact: 3, regular: 4, other: 2)
     static let spacingBetweenSections: CGFloat = 24
-    static let SectionInsetsForIpad: CGFloat = 101
     static let MinimumInsets: CGFloat = 15
     static let LibraryShortcutsHeight: CGFloat = 90
     static let LibraryShortcutsMaxWidth: CGFloat = 375
@@ -162,12 +161,12 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
         get {
             guard AppConstants.IS_RECENTLY_SAVED_SECTION_ENABLED else { return false }
             
-            return hasRecentBookmarks
-                || hasReadingListitems
+            return (hasRecentBookmarks || hasReadingListitems)
                 && profile.prefs.boolForKey(PrefsKeys.recentlySavedSectionEnabled) ?? false
-                && !(UIDevice.current.userInterfaceIdiom == .pad)
         }
     }
+    var recentBookmarks = [BookmarkItem]()
+    var readingListItems = [ReadingListItem]()
 
     init(profile: Profile) {
         self.profile = profile
@@ -276,30 +275,34 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
         collectionView?.setContentOffset(.zero, animated: animated)
     }
     
-    func configureItemsForRecentlySaved() {
+    func configureRecentlySavedItems() {
         profile.places.getRecentBookmarks(limit: 5).uponQueue(.main) { [weak self] result in
-            self?.hasRecentBookmarks = false
+            guard let self = self else { return }
+            
+            self.hasRecentBookmarks = false
             
             if let bookmarks = result.successValue,
                !bookmarks.isEmpty,
                !RecentItemsHelper.filterStaleItems(recentItems: bookmarks, since: 10).isEmpty {
-                self?.hasRecentBookmarks = true
+                self.hasRecentBookmarks = true
                 
                 TelemetryWrapper.recordEvent(category: .action,
                                              method: .view,
                                              object: .firefoxHomepage,
                                              value: .recentlySavedBookmarkItemView,
                                              extras: [TelemetryWrapper.EventObject.recentlySavedBookmarkImpressions.rawValue: bookmarks.count])
+                
+                self.recentBookmarks = bookmarks
             }
-            
-            self?.collectionView.reloadData()
+            self.collectionView.reloadData()
         }
         
         if let readingList = profile.readingList.getAvailableRecords().value.successValue?.prefix(RecentlySavedCollectionCellUX.readingListItemsLimit) {
             var readingListItems = Array(readingList)
             readingListItems = RecentItemsHelper.filterStaleItems(recentItems: readingListItems,
                                                                        since: RecentlySavedCollectionCellUX.readingListItemsCutoff) as! [ReadingListItem]
-            readingListItems.isEmpty ? (self.hasReadingListitems = false) : (self.hasReadingListitems = true)
+            self.hasReadingListitems = !readingListItems.isEmpty
+            self.readingListItems = readingListItems
             
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .view,
@@ -310,6 +313,16 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
             self.collectionView.reloadData()
         }
         
+        collectionView.reloadData()
+    }
+    
+    func loadItems() -> [RecentlySavedItem] {
+        var recentItems = [RecentlySavedItem]()
+        
+        recentItems.append(contentsOf: recentBookmarks)
+        recentItems.append(contentsOf: readingListItems)
+        
+        return recentItems
     }
     
 }
@@ -404,8 +417,13 @@ extension FirefoxHomeViewController {
             case .pocket:
                 let numItems = numberOfItemsForRow(traits)
                 return CGSize(width: floor(((frameWidth - inset) - (FirefoxHomeUX.MinimumInsets * (numItems - 1))) / numItems), height: height)
-            case .topSites, .libraryShortcuts, .recentlySaved:
+            case .recentlySaved:
+                if UIDevice.current.userInterfaceIdiom == .pad {
+                    return CGSize(width: RecentlySavedCellUX.cellWidth, height: height)
+                }
                 return CGSize(width: frameWidth - inset, height: height)
+            case .topSites, .libraryShortcuts:
+                return UIDevice.current.userInterfaceIdiom == .pad ? CGSize(width: frameWidth - 60, height: height) : CGSize(width: frameWidth - inset, height: height)
             }
         }
 
@@ -428,7 +446,8 @@ extension FirefoxHomeViewController {
             switch self {
             case .topSites: return ASHorizontalScrollCell.self
             case .pocket: return FirefoxHomeHighlightCell.self
-            case .recentlySaved: return FxHomeRecentlySavedCollectionCell.self
+            case .recentlySaved:
+                return UIDevice.current.userInterfaceIdiom == .pad ? RecentlySavedCell.self : FxHomeRecentlySavedCollectionCell.self
             case .libraryShortcuts: return ASLibraryCell.self
             }
         }
@@ -501,7 +520,12 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
             let layout = topSiteCell.collectionView.collectionViewLayout as! HorizontalFlowLayout
             let estimatedLayout = layout.calculateLayout(for: CGSize(width: cellSize.width, height: 0))
             return CGSize(width: cellSize.width, height: estimatedLayout.size.height)
-        case .pocket, .recentlySaved:
+        case .recentlySaved:
+            if isRecentlySavedSectionEnabled {
+                return cellSize
+            }
+            return .zero
+        case .pocket:
             return cellSize
         case .libraryShortcuts:
             let width = min(FirefoxHomeUX.LibraryShortcutsMaxWidth, cellSize.width)
@@ -518,7 +542,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
         case .libraryShortcuts:
             return UIDevice.current.userInterfaceIdiom == .pad ? CGSize.zero : Section(section).headerHeight
         case .recentlySaved:
-            let size = ((isRecentlySavedSectionEnabled ? Section(section).headerHeight : .zero))
+            let size = isRecentlySavedSectionEnabled ? Section(section).headerHeight : .zero
             return size
         }
     }
@@ -532,8 +556,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        let insets = Section(section).sectionInsets(self.traitCollection, frameWidth: self.view.frame.width)
-        return UIEdgeInsets(top: 0, left: insets, bottom: FirefoxHomeUX.spacingBetweenSections, right: insets)
+        return UIEdgeInsets(top: 0, left: 16, bottom: FirefoxHomeUX.spacingBetweenSections, right: 16)
     }
 
     fileprivate func showSiteWithURLHandler(_ url: URL, isGoogleTopSite: Bool = false) {
@@ -566,6 +589,9 @@ extension FirefoxHomeViewController {
             // There should always be a full row of pocket stories (numItems) otherwise don't show them
             return pocketStories.count
         case .recentlySaved:
+            if UIDevice.current.userInterfaceIdiom == .pad, isRecentlySavedSectionEnabled {
+                return loadItems().count
+            }
             let numberOfItems = (isRecentlySavedSectionEnabled ? 1 : 0)
             return numberOfItems
         case .libraryShortcuts:
@@ -620,6 +646,24 @@ extension FirefoxHomeViewController {
     }
     
     private func configureRecentlySavedCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
+        let dataSource = loadItems()
+        
+        if let cell = cell as? RecentlySavedCell, let currentItem = dataSource[safe: indexPath.row] {
+            let site = Site(url: currentItem.url, title: currentItem.title, bookmarked: true)
+            
+            profile.favicons.getFaviconImage(forSite: site).uponQueue(.main, block: { result in
+                guard let image = result.successValue else { return }
+                
+                cell.heroImage.image = image
+                cell.setNeedsLayout()
+            })
+            
+            cell.bookmarkTitle.text = site.title
+            cell.bookmarkDetails.text = site.tileURL.shortDisplayString
+            
+            return cell
+        }
+        
         let recentlySavedCell = cell as! FxHomeRecentlySavedCollectionCell
         recentlySavedCell.homePanelDelegate = homePanelDelegate
         recentlySavedCell.libraryPanelDelegate = libraryPanelDelegate
@@ -642,7 +686,7 @@ extension FirefoxHomeViewController: DataObserverDelegate {
         // If the pocket stories are not availible for the Locale the PocketAPI will return nil
         // So it is okay if the default here is true
 
-        self.configureItemsForRecentlySaved()
+        self.configureRecentlySavedItems()
         
         TopSitesHandler.getTopSites(profile: profile).uponQueue(.main) { [weak self] result in
             guard let self = self else { return }
@@ -810,18 +854,38 @@ extension FirefoxHomeViewController: DataObserverDelegate {
 
     func selectItemAtIndex(_ index: Int, inSection section: Section) {
         let site: Site?
+        
         switch section {
         case .pocket:
             site = Site(url: pocketStories[index].url.absoluteString, title: pocketStories[index].title)
             let key = TelemetryWrapper.EventExtraKey.pocketTilePosition.rawValue
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .pocketStory, value: nil, extras: [key : "\(index)"])
-        case .topSites, .libraryShortcuts, .recentlySaved:
+        case .recentlySaved:
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                let dataSource = loadItems()
+                
+                if let item = dataSource[safe: index] as? BookmarkItem {
+                    guard let url = URIFixup.getURL(item.url) else { return }
+                    
+                    homePanelDelegate?.homePanel(didSelectURL: url, visitType: .bookmark, isGoogleTopSite: false)
+                    TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .bookmark, value: .recentlySavedBookmarkItemAction)
+                } else if let item = dataSource[safe: index] as? ReadingListItem,
+                          let url = URL(string: item.url),
+                          let encodedUrl = url.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL()) {
+                    libraryPanelDelegate?.libraryPanel(didSelectURL: encodedUrl, visitType: VisitType.bookmark)
+                    TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .readingListItem, value: .recentlySavedReadingListAction)
+                }
+            }
+            return
+        case .topSites, .libraryShortcuts:
             return
         }
+        
         if let site = site {
             showSiteWithURLHandler(URL(string: site.url)!)
         }
     }
+    
 }
 
 // MARK: - Actions Handling

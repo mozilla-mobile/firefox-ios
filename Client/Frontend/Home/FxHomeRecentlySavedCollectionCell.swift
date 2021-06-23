@@ -170,7 +170,7 @@ extension FxHomeRecentlySavedCollectionCell: UICollectionViewDelegateFlowLayout 
     
 }
 
-private struct RecentlySavedCellUX {
+struct RecentlySavedCellUX {
     static let generalCornerRadius: CGFloat = 8
     static let bookmarkTitleFontSize: CGFloat = 17
     static let bookmarkDetailsFontSize: CGFloat = 12
@@ -178,6 +178,16 @@ private struct RecentlySavedCellUX {
     static let bookmarkStackViewSpacing: CGFloat = 8
     static let bookmarkStackViewShadowRadius: CGFloat = 4
     static let bookmarkStackViewShadowOffset: CGFloat = 2
+    static let cellHeight: CGFloat = 120
+    static let cellWidth: CGFloat = {
+        if UIDevice.current.userInterfaceIdiom == .pad, UIDevice.current.orientation.isLandscape {
+            return 220
+        } else if UIDevice.current.userInterfaceIdiom == .pad {
+            return 188 // TODO: CHECK WITH DESIGN
+        }
+        
+        return 133
+    }()
 }
 
 /// A cell used in FxHomeScreen's Recently Saved section. It holds bookmarks and reading list items.

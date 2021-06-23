@@ -7,7 +7,7 @@ import Storage
 
 class RecentItemsHelper {
     
-    /// Filter items that are a older than some number of days.
+    /// Filter items that are older than a given number of days.
     /// - Parameters:
     ///
     ///   - recentItems: Items to filter.

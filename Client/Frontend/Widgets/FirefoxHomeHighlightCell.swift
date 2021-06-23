@@ -8,9 +8,6 @@ import Storage
 
 private struct FirefoxHomeHighlightCellUX {
     static let BorderWidth: CGFloat = 0.5
-    static let CellSideOffset = 20
-    static let TitleLabelOffset = 2
-    static let CellTopBottomOffset = 12
     static let SiteImageViewSize = CGSize(width: 99, height: UIDevice.current.userInterfaceIdiom == .pad ? 120 : 90)
     static let StatusIconSize = 12
     static let FaviconSize = CGSize(width: 45, height: 45)
