@@ -1,0 +1,19 @@
+{
+  "images" : [
+    {
+      "filename" : "background_iphone_portrait.pdf",
+      "idiom" : "iphone"
+    },
+    {
+      "filename" : "background_ipad_portrait.pdf",
+      "idiom" : "ipad"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  },
+  "properties" : {
+    "preserves-vector-representation" : true
+  }
+}
