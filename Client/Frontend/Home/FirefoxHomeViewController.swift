@@ -126,6 +126,7 @@ extension HomePanelContextMenu {
 
 class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate?
+    weak var libraryPanelDelegate: LibraryPanelDelegate?
     fileprivate let profile: Profile
     fileprivate let pocketAPI = Pocket()
     fileprivate let flowLayout = UICollectionViewFlowLayout()
@@ -156,11 +157,13 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     var pocketStories: [PocketStory] = []
     
     var hasRecentBookmarks = false
+    var hasReadingListitems = false
     var isRecentlySavedSectionEnabled: Bool {
         get {
             guard AppConstants.IS_RECENTLY_SAVED_SECTION_ENABLED else { return false }
             
             return hasRecentBookmarks
+                || hasReadingListitems
                 && profile.prefs.boolForKey(PrefsKeys.recentlySavedSectionEnabled) ?? false
                 && !(UIDevice.current.userInterfaceIdiom == .pad)
         }
@@ -273,18 +276,40 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
         collectionView?.setContentOffset(.zero, animated: animated)
     }
     
-    func configureBookmarksForRecentlySaved() {
+    func configureItemsForRecentlySaved() {
         profile.places.getRecentBookmarks(limit: 5).uponQueue(.main) { [weak self] result in
             self?.hasRecentBookmarks = false
             
             if let bookmarks = result.successValue,
                !bookmarks.isEmpty,
-               !BookmarksHelper.filterOldBookmarks(bookmarks: bookmarks, since: 10).isEmpty {
+               !RecentItemsHelper.filterStaleItems(recentItems: bookmarks, since: 10).isEmpty {
                 self?.hasRecentBookmarks = true
+                
+                TelemetryWrapper.recordEvent(category: .action,
+                                             method: .view,
+                                             object: .firefoxHomepage,
+                                             value: .recentlySavedBookmarkItemView,
+                                             extras: [TelemetryWrapper.EventObject.recentlySavedBookmarkImpressions.rawValue: bookmarks.count])
             }
             
             self?.collectionView.reloadData()
         }
+        
+        if let readingList = profile.readingList.getAvailableRecords().value.successValue?.prefix(RecentlySavedCollectionCellUX.readingListItemsLimit) {
+            var readingListItems = Array(readingList)
+            readingListItems = RecentItemsHelper.filterStaleItems(recentItems: readingListItems,
+                                                                       since: RecentlySavedCollectionCellUX.readingListItemsCutoff) as! [ReadingListItem]
+            readingListItems.isEmpty ? (self.hasReadingListitems = false) : (self.hasReadingListitems = true)
+            
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .view,
+                                         object: .firefoxHomepage,
+                                         value: .recentlySavedBookmarkItemView,
+                                         extras: [TelemetryWrapper.EventObject.recentlySavedReadingItemImpressions.rawValue: readingListItems.count])
+            
+            self.collectionView.reloadData()
+        }
+        
     }
     
 }
@@ -597,6 +622,7 @@ extension FirefoxHomeViewController {
     private func configureRecentlySavedCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let recentlySavedCell = cell as! FxHomeRecentlySavedCollectionCell
         recentlySavedCell.homePanelDelegate = homePanelDelegate
+        recentlySavedCell.libraryPanelDelegate = libraryPanelDelegate
         recentlySavedCell.profile = profile
         recentlySavedCell.collectionView.reloadData()
         recentlySavedCell.setNeedsLayout()
@@ -616,15 +642,13 @@ extension FirefoxHomeViewController: DataObserverDelegate {
         // If the pocket stories are not availible for the Locale the PocketAPI will return nil
         // So it is okay if the default here is true
 
-        self.configureBookmarksForRecentlySaved()
+        self.configureItemsForRecentlySaved()
         
         TopSitesHandler.getTopSites(profile: profile).uponQueue(.main) { [weak self] result in
             guard let self = self else { return }
             
             // If there is no pending cache update and highlights are empty. Show the onboarding screen
             self.collectionView?.reloadData()
-            self.collectionViewLayout.invalidateLayout()
-            self.collectionView.layoutIfNeeded()
             
             self.topSitesManager.currentTraits = self.view.traitCollection
             

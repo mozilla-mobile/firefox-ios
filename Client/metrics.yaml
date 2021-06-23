@@ -392,7 +392,7 @@ firefox_home_page:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-01-01"
-  recently_saved_item_view:
+  recently_saved_bookmark_view:
     type: event
     description: |
       Counts the number of bookmarked items appearing
@@ -406,6 +406,36 @@ firefox_home_page:
       - https://jira.mozilla.com/browse/FXIOS-1807
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/8656
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-01-01"
+  reading_list_view:
+    type: event
+    description: |
+      Counts the number of reading list items
+      appearing in the Recently Saved section
+      on the Firefox home page.
+    extra_keys:
+      reading_list_count:
+        description: |
+          The number of reading list items in the
+          Recently Saved section.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-1808
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8753
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-01-01"
+  recently_saved_reading_item:
+    type: counter
+    description: |
+      Counts the number of times a reading list
+      item in the Recently Saved section is tapped.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-1808
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8753
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-01-01"
