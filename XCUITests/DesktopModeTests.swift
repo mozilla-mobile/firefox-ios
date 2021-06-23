@@ -93,13 +93,16 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+        waitForExistence(app.buttons["TabLocationView.pageOptionsButton"])
         navigator.goto(PageOptionsMenu)
+        waitForExistence(app.tables["Context Menu"].cells["menu-RequestDesktopSite"])
         navigator.goto(RequestDesktopSite)
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
         
         navigator.nowAt(BrowserTab)
         navigator.goto(PageOptionsMenu)
+        waitForExistence(app.tables["Context Menu"].cells["menu-ViewMobile"])
         // Select Mobile site here, the identifier is the same but the Text is not
         navigator.goto(RequestMobileSite)
         waitUntilPageLoad()
