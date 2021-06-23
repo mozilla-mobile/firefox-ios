@@ -213,3 +213,8 @@ public func millisecondsToDecimalSeconds(_ input: Timestamp) -> String {
     let val = Double(input) / 1000
     return String(format: "%.2F", val)
 }
+
+public func millisecondsToSeconds(_ input: Timestamp) -> UInt64 {
+    let val = input / 1000
+    return val
+}
