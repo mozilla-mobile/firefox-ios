@@ -75,7 +75,8 @@ class DomainAutocompleteTest: BaseTestCase {
     }
 
     // Ensure that the scheme is included in the autocompletion.
-    func test4EnsureSchemeIncludedAutocompletion() {
+    func test4EnsureSchemeIncludedAutocompletion() throws {
+        throw XCTSkip("Skipping this test due intermittent failures")
         navigator.openURL(websiteExample["url"]!)
         waitUntilPageLoad()
         navigator.goto(URLBarOpen)
