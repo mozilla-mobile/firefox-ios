@@ -5,22 +5,35 @@
 import UIKit
 import Storage
 
-private struct RecentlySavedCollectionCellUX {
+struct RecentlySavedCollectionCellUX {
     static let bookmarkItemsLimit: UInt = 5
+    static let bookmarkItemsCutoff: Int = 10
+    static let readingListItemsLimit: Int = 5
+    static let readingListItemsCutoff: Int = 7
     static let cellWidth: CGFloat = 134
     static let cellHeight: CGFloat = 120
     static let generalSpacing: CGFloat = 8
     static let sectionInsetSpacing: CGFloat = 4
 }
 
-/// A cell serving as a collectionView, to hold its associated bookmark cells.
+protocol RecentlySavedItem {
+    var title: String { get }
+    var url: String { get }
+}
+
+extension ReadingListItem: RecentlySavedItem { }
+extension BookmarkItem: RecentlySavedItem { }
+
+/// A cell serving as a collectionView to hold its associated recently saved cells.
 class FxHomeRecentlySavedCollectionCell: UICollectionViewCell {
     
     // MARK: - Properties
     
     weak var homePanelDelegate: HomePanelDelegate?
+    weak var libraryPanelDelegate: LibraryPanelDelegate?
     var profile: Profile?
-    var recentBookmarks = [BookmarkNode]()
+    var recentBookmarks = [BookmarkItem]()
+    var readingListItems = [ReadingListItem]()
     
     // UI
     lazy var collectionView: UICollectionView = {
@@ -33,7 +46,7 @@ class FxHomeRecentlySavedCollectionCell: UICollectionViewCell {
         collectionView.backgroundColor = UIColor.clear
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(RecentlySavedBookmarkCell.self, forCellWithReuseIdentifier: RecentlySavedBookmarkCell.cellIdentifier)
+        collectionView.register(RecentlySavedCell.self, forCellWithReuseIdentifier: RecentlySavedCell.cellIdentifier)
         
         return collectionView
     }()
@@ -63,39 +76,54 @@ class FxHomeRecentlySavedCollectionCell: UICollectionViewCell {
         ])
     }
     
+    private func loadItems() -> [RecentlySavedItem] {
+        var items = [RecentlySavedItem]()
+        
+        items.append(contentsOf: recentBookmarks)
+        items.append(contentsOf: readingListItems)
+        
+        return items
+    }
+    
+    private func configureDataSource() {
+        profile?.places.getRecentBookmarks(limit: RecentlySavedCollectionCellUX.bookmarkItemsLimit).uponQueue(.global(), block: { [weak self] result in
+            self?.recentBookmarks = result.successValue ?? []
+        })
+        recentBookmarks = RecentItemsHelper.filterStaleItems(recentItems: recentBookmarks,
+                                                             since: RecentlySavedCollectionCellUX.bookmarkItemsCutoff) as! [BookmarkItem]
+        
+        if let readingList = profile?.readingList.getAvailableRecords().value.successValue?.prefix(RecentlySavedCollectionCellUX.readingListItemsLimit) {
+            let readingListItems = Array(readingList)
+            self.readingListItems = RecentItemsHelper.filterStaleItems(recentItems: readingListItems,
+                                                                       since: RecentlySavedCollectionCellUX.readingListItemsCutoff) as! [ReadingListItem]
+        }
+    }
+    
 }
 
 extension FxHomeRecentlySavedCollectionCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        profile?.places.getRecentBookmarks(limit: RecentlySavedCollectionCellUX.bookmarkItemsLimit).uponQueue(.main, block: { [weak self] result in
-            self?.recentBookmarks = result.successValue ?? []
-        })
+        configureDataSource()
         
-        recentBookmarks = BookmarksHelper.filterOldBookmarks(bookmarks: recentBookmarks, since: 10)
-        
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .view,
-                                     object: .firefoxHomepage,
-                                     value: .recentlySavedBookmarkItemView,
-                                     extras: [TelemetryWrapper.EventObject.recentlySavedItemImpressions.rawValue: recentBookmarks.count])
-        
-        return recentBookmarks.count
+        return loadItems().count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecentlySavedBookmarkCell.cellIdentifier, for: indexPath) as! RecentlySavedBookmarkCell
-        let currentItem = recentBookmarks[indexPath.row] as! BookmarkItem
-        let site = Site(url: currentItem.url, title: currentItem.title, bookmarked: true, guid: currentItem.guid)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecentlySavedCell.cellIdentifier, for: indexPath) as! RecentlySavedCell
+        let dataSource = loadItems()
         
-        profile?.favicons.getFaviconImage(forSite: site).uponQueue(.main, block: { result in
-            guard let image = result.successValue else { return }
+        if let item = dataSource[safe: indexPath.row] {
+            let site = Site(url: item.url, title: item.title, bookmarked: true)
             
-            cell.heroImage.image = image
-            cell.setNeedsLayout()
-        })
-        
-        cell.bookmarkTitle.text = site.title
-        cell.bookmarkDetails.text = site.tileURL.shortDisplayString
+            profile?.favicons.getFaviconImage(forSite: site).uponQueue(.main, block: { result in
+                guard let image = result.successValue else { return }
+                cell.heroImage.image = image
+                cell.setNeedsLayout()
+            })
+            
+            cell.bookmarkTitle.text = site.title
+            cell.bookmarkDetails.text = site.tileURL.shortDisplayString
+        }
         
         return cell
     }
@@ -104,11 +132,22 @@ extension FxHomeRecentlySavedCollectionCell: UICollectionViewDataSource {
 
 extension FxHomeRecentlySavedCollectionCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let bookmark = recentBookmarks[indexPath.row] as! BookmarkItem
-        guard let url = URIFixup.getURL(bookmark.url) else { return }
+        let dataSource = loadItems()
         
-        homePanelDelegate?.homePanel(didSelectURL: url, visitType: .bookmark, isGoogleTopSite: false)
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .bookmark, value: .recentlySavedBookmarkCell)
+        if let item = dataSource[safe: indexPath.row] as? BookmarkItem {
+            guard let url = URIFixup.getURL(item.url) else { return }
+            
+            homePanelDelegate?.homePanel(didSelectURL: url, visitType: .bookmark, isGoogleTopSite: false)
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .bookmark, value: .recentlySavedBookmarkItemAction)
+        } else if let item = dataSource[safe: indexPath.row] as? ReadingListItem,
+                  let url = URL(string: item.url),
+                  let encodedUrl = url.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL()) {
+            
+            let visitType = VisitType.bookmark
+            libraryPanelDelegate?.libraryPanel(didSelectURL: encodedUrl, visitType: visitType)
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .readingListItem, value: .recentlySavedReadingListAction)
+        }
+        
     }
 }
 
@@ -131,7 +170,7 @@ extension FxHomeRecentlySavedCollectionCell: UICollectionViewDelegateFlowLayout 
     
 }
 
-private struct RecentlySavedBookmarkCellUX {
+private struct RecentlySavedCellUX {
     static let generalCornerRadius: CGFloat = 8
     static let bookmarkTitleFontSize: CGFloat = 17
     static let bookmarkDetailsFontSize: CGFloat = 12
@@ -141,30 +180,30 @@ private struct RecentlySavedBookmarkCellUX {
     static let bookmarkStackViewShadowOffset: CGFloat = 2
 }
 
-/// A cell used in FxHomeScreen's Recently Saved section.
-class RecentlySavedBookmarkCell: UICollectionViewCell {
+/// A cell used in FxHomeScreen's Recently Saved section. It holds bookmarks and reading list items.
+class RecentlySavedCell: UICollectionViewCell {
     
     // MARK: - Properties
     
-    static let cellIdentifier = "recentlySavedBookmarkCell"
+    static let cellIdentifier = "recentlySavedCell"
     
     // UI
     let heroImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
-        imageView.layer.cornerRadius = RecentlySavedBookmarkCellUX.generalCornerRadius
+        imageView.layer.cornerRadius = RecentlySavedCellUX.generalCornerRadius
     }
     let divider: UIView = .build { view in
         view.backgroundColor = UIColor.theme.homePanel.activityStreamCellDescription
     }
     let bookmarkTitle: UILabel = .build { label in
         label.adjustsFontSizeToFitWidth = false
-        label.font = UIFont.systemFont(ofSize: RecentlySavedBookmarkCellUX.bookmarkTitleFontSize)
+        label.font = UIFont.systemFont(ofSize: RecentlySavedCellUX.bookmarkTitleFontSize)
     }
     let bookmarkDetails: UILabel = .build { label in
         label.adjustsFontSizeToFitWidth = false
-        label.font = UIFont.systemFont(ofSize: RecentlySavedBookmarkCellUX.bookmarkDetailsFontSize)
+        label.font = UIFont.systemFont(ofSize: RecentlySavedCellUX.bookmarkDetailsFontSize)
     }
     
     // MARK: - Inits
@@ -188,9 +227,9 @@ class RecentlySavedBookmarkCell: UICollectionViewCell {
     }
     
     private func setupLayout() {
-        contentView.layer.cornerRadius = RecentlySavedBookmarkCellUX.generalCornerRadius
-        contentView.layer.shadowRadius = RecentlySavedBookmarkCellUX.bookmarkStackViewShadowRadius
-        contentView.layer.shadowOffset = CGSize(width: 0, height: RecentlySavedBookmarkCellUX.bookmarkStackViewShadowOffset)
+        contentView.layer.cornerRadius = RecentlySavedCellUX.generalCornerRadius
+        contentView.layer.shadowRadius = RecentlySavedCellUX.bookmarkStackViewShadowRadius
+        contentView.layer.shadowOffset = CGSize(width: 0, height: RecentlySavedCellUX.bookmarkStackViewShadowOffset)
         contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         contentView.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
         
@@ -229,7 +268,7 @@ class RecentlySavedBookmarkCell: UICollectionViewCell {
     
 }
 
-extension RecentlySavedBookmarkCell: Themeable {
+extension RecentlySavedCell: Themeable {
     func applyTheme() {
         contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
         bookmarkDetails.textColor = UIColor.theme.homePanel.activityStreamCellDescription
