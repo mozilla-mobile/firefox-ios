@@ -6,7 +6,7 @@ import Shared
 import Storage
 import Telemetry
 
-protocol OnViewDismissable: class {
+protocol OnViewDismissable: AnyObject {
     var onViewDismissed: (() -> Void)? { get set }
 }
 
