@@ -1261,7 +1261,7 @@ workflows:
       in master
     meta:
       bitrise.io:
-        stack: osx-xcode-13.x
+        stack: osx-xcode-12.5.x
     #after_run:
     #- RunSmokeXCUITests
 app:
