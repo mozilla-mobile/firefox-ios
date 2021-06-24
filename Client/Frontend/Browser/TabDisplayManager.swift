@@ -46,9 +46,32 @@ protocol TabDisplayer: AnyObject {
     func cellFactory(for cell: UICollectionViewCell, using tab: Tab) -> UICollectionViewCell
 }
 
+enum TabDisplaySection: Int, CaseIterable {
+    case regularTabs
+    case inactiveTabs
+
+    var title: String? {
+        switch self {
+        case .regularTabs: return Strings.ASPocketTitle2
+        case .inactiveTabs: return Strings.RecentlySavedSectionTitle
+        }
+    }
+    
+    var image: UIImage? {
+        switch self {
+        case .regularTabs: return UIImage.templateImageNamed("menu-pocket")
+        case .inactiveTabs: return UIImage.templateImageNamed("menu-pocket")
+        }
+    }
+
+    var headerHeight: CGSize {
+        return CGSize(width: 50, height: 40)
+    }
+}
+
 class TabDisplayManager: NSObject {
     var performingChainedOperations = false
-
+    var inactiveViewModel: InactiveViewModel?
     var dataStore = WeakList<Tab>()
     var operations = [(TabAnimationType, (() -> Void))]()
     weak var tabDisplayCompletionDelegate: TabDisplayCompletionDelegate?
@@ -58,17 +81,11 @@ class TabDisplayManager: NSObject {
     fileprivate weak var tabDisplayer: TabDisplayer?
     private let tabReuseIdentifer: String
 
-    var searchedTabs: [Tab]?
-    var searchActive: Bool {
-        return searchedTabs != nil
-    }
-
     private var tabsToDisplay: [Tab] {
-        if let searchedTabs = searchedTabs {
-            // tabs can be deleted while a search is active. Make sure the tab still exists in the tabmanager before displaying
-            return searchedTabs.filter({ tabManager.tabs.contains($0) })
-        }
-        return self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
+        let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
+        inactiveViewModel?.tabs = allTabs
+        _ = inactiveViewModel?.updateInactiveTabs()
+        return inactiveViewModel?.tabs ?? [Tab]()
     }
 
     private(set) var isPrivate = false
@@ -107,13 +124,14 @@ class TabDisplayManager: NSObject {
         self.isPrivate = tabManager.selectedTab?.isPrivate ?? false
         self.tabReuseIdentifer = reuseID
         super.init()
-
+        self.inactiveViewModel = InactiveViewModel(tabs: tabManager.tabs)
         tabManager.addDelegate(self)
         register(self, forTabEvents: .didLoadFavicon, .didChangeURL)
 
         tabsToDisplay.forEach {
             self.dataStore.insert($0)
         }
+        
         collectionView.reloadData()
     }
 
@@ -124,8 +142,7 @@ class TabDisplayManager: NSObject {
         UserDefaults.standard.set(isPrivate, forKey: "wasLastSessionPrivate")
 
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .privateBrowsingButton, extras: ["is-private": isOn.description] )
-
-        searchedTabs = nil
+        
         refreshStore()
 
         if createTabOnEmptyPrivateMode {
@@ -153,22 +170,6 @@ class TabDisplayManager: NSObject {
             }
         }
         return nil
-    }
-    
-    func searchTabsAnimated() {
-        let isUnchanged = (tabsToDisplay.count == dataStore.count) && tabsToDisplay.zip(dataStore).reduce(true) { $0 && $1.0 === $1.1 }
-        if !tabsToDisplay.isEmpty && isUnchanged {
-            return
-        }
-
-        operations.removeAll()
-        dataStore.removeAll()
-        tabsToDisplay.forEach {
-            self.dataStore.insert($0)
-        }
-
-        // animates the changes
-        collectionView.reloadSections(IndexSet(integer: 0))
     }
 
     func refreshStore(evenIfHidden: Bool = false) {
@@ -234,17 +235,58 @@ class TabDisplayManager: NSObject {
 
 extension TabDisplayManager: UICollectionViewDataSource {
     @objc func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataStore.count
+        switch TabDisplaySection(rawValue: section) {
+        case .regularTabs:
+            return dataStore.count
+        case .inactiveTabs:
+            return 1
+        case .none:
+            return 0
+        }
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let tab = dataStore.at(indexPath.row)!
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.tabReuseIdentifer, for: indexPath)
+        var cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.tabReuseIdentifer, for: indexPath)
+//        let inactiveCell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabCell.Identifier, for: indexPath) as? InactiveTabCell
         assert(tabDisplayer != nil)
-        if let tabCell = tabDisplayer?.cellFactory(for: cell, using: tab) {
-            return tabCell
-        } else {
+        switch TabDisplaySection(rawValue: indexPath.section) {
+        case .regularTabs:
+            cell = tabDisplayer?.cellFactory(for: cell, using: tab) ?? cell
+        case .inactiveTabs:
+            if let inactiveCell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabCell.Identifier, for: indexPath) as? InactiveTabCell {
+                inactiveCell.inactiveTabsViewModel = inactiveViewModel
+                inactiveCell.tableView.reloadData()
+                cell = inactiveCell
+            }
+//            cell = inactiveCell
+        case .none:
             return cell
+        }
+        return cell
+    }
+    
+    @objc func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return TabDisplaySection.allCases.count
+    }
+    
+    @objc func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "GridHeaderView", for: indexPath) as! ASHeaderView
+            view.title = "Placeholder"
+            view.moreButton.isHidden = false
+            view.moreButton.setTitle("{PLACEHOLDER}", for: .normal)
+            switch TabDisplaySection(rawValue: indexPath.section) {
+            case .regularTabs:
+                return view
+            case .inactiveTabs:
+                return view
+            case .none:
+                return UICollectionReusableView()
+            }
+        default:
+            return UICollectionReusableView()
         }
     }
 }
@@ -291,7 +333,8 @@ extension TabDisplayManager: UICollectionViewDragDelegate {
     // This is called when the user has long-pressed on a cell, please note that `collectionView.hasActiveDrag` is not true
     // until the user's finger moves. This problem is mitigated by checking the collectionView for activated long press gesture recognizers.
     func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-
+        
+        guard TabDisplaySection(rawValue: indexPath.section) != .inactiveTabs else { return [] }
         guard let tab = dataStore.at(indexPath.item) else { return [] }
 
         // Get the tab's current URL. If it is `nil`, check the `sessionData` since
@@ -358,6 +401,7 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
     }
 
     func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+        guard let indexPath = destinationIndexPath, TabDisplaySection(rawValue: indexPath.section) != .inactiveTabs else { return UICollectionViewDropProposal(operation: .forbidden) }
         guard let localDragSession = session.localDragSession, let item = localDragSession.items.first, let _ = item.localObject as? Tab else {
             return UICollectionViewDropProposal(operation: .forbidden)
         }
