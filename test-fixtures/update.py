@@ -60,7 +60,7 @@ def largest_version():
                 if count == 0 or semver.compare(largest, p) == -1:
                     largest = p
                 count += 1
-    return '{0}.x'.format(largest.split('.0')[0])
+    return '{0}.x'.format('.'.join(largest.split('.')[0:2]))
 
 if __name__ == '__main__':
     '''
