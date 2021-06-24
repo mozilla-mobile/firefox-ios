@@ -197,3 +197,70 @@ class OneLineFooterView: UITableViewHeaderFooterView, Themeable {
         applyTheme()
     }
 }
+
+class SingleLineButtonHeaderFooter: UITableViewHeaderFooterView, Themeable {
+    static let Identifier = "SingleLineButtonHeaderFooterIdentifier"
+    
+    var rightButton: UIButton = {
+        let rightBtn = UIButton()
+        rightBtn.titleLabel?.text = "Right"
+        rightBtn.clipsToBounds = true
+        return rightBtn
+    }()
+    
+    var titleLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .black
+        label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
+        label.textAlignment = .left
+        label.numberOfLines = 1
+        return label
+    }()
+    
+    
+    override init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
+        initialViewSetup()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    private func initialViewSetup() {
+        layoutMargins = .zero
+
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(rightButton)
+
+        rightButton.snp.makeConstraints { make in
+            make.height.width.equalTo(29)
+            make.trailing.equalToSuperview().inset(15)
+            make.centerY.equalToSuperview()
+        }
+
+        titleLabel.snp.makeConstraints { make in
+            make.height.equalTo(29)
+            make.leading.equalToSuperview().inset(15)
+            make.centerY.equalToSuperview()
+        }
+
+        applyTheme()
+    }
+    
+
+    func applyTheme() {
+        let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+        self.backgroundColor = UIColor.theme.tableView.selectedBackground
+        if theme == .dark {
+            self.titleLabel.textColor = .white
+        } else {
+            self.titleLabel.textColor = .black
+        }
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        applyTheme()
+    }
+}
