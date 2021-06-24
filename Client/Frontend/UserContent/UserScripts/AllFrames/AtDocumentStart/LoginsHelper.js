@@ -327,7 +327,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
         return;
       }
 
-      var formSubmitURL = LoginUtils._getActionOrigin(form);
+      var formSubmitUrl = LoginUtils._getActionOrigin(form);
 
       // Get the appropriate fields from the form.
       // [usernameField, newPasswordField, oldPasswordField]
@@ -373,7 +373,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
         usernameField: mockUsername.name,
         password: mockPassword.value,
         passwordField: mockPassword.name,
-        formSubmitURL: formSubmitURL
+        formSubmitUrl: formSubmitUrl
       });
     },
 
@@ -429,7 +429,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
       var createLogin = function(login) {
         return {
           hostname: login.hostname,
-          formSubmitURL: login.formSubmitURL,
+          formSubmitUrl: login.formSubmitUrl,
           httpRealm: login.httpRealm,
           username: login.username,
           password: login.password,

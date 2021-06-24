@@ -56,8 +56,8 @@ class Authenticator {
             }
 
             let logins = cursor.compactMap {
-                // HTTP Auth must have nil formSubmitURL and a non-nil httpRealm.
-                return $0?.formSubmitURL == nil && $0?.httpRealm != nil ? $0 : nil
+                // HTTP Auth must have nil formSubmitUrl and a non-nil httpRealm.
+                return $0?.formSubmitUrl == nil && $0?.httpRealm != nil ? $0 : nil
             }
             var credentials: URLCredential?
 
@@ -83,7 +83,7 @@ class Authenticator {
             else if logins.count == 1 && logins[0].protectionSpace.`protocol` != challenge.protectionSpace.`protocol` {
                 let login = logins[0]
                 credentials = login.credentials
-                let new = LoginRecord(credentials: login.credentials, protectionSpace: challenge.protectionSpace)
+                var new = LoginRecord(credentials: login.credentials, protectionSpace: challenge.protectionSpace)
                 new.id = login.id
                 return loginsProvider.update(login: new)
                     >>> { deferMaybe(credentials) }

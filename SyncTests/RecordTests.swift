@@ -311,7 +311,7 @@ class RecordTests: XCTestCase {
             "password": "bar",
             "usernameField": "field",
             "passwordField": "bar",
-            // No formSubmitURL.
+            // No formSubmitUrl.
             "httpRealm": "",
         ])
 

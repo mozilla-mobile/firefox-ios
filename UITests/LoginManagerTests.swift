@@ -59,13 +59,13 @@ class LoginManagerTests: KIFTestCase {
         let usernames = generateStringListWithFormat("%@%d@email.com", numRange: numRange, prefixes: prefixes)
 
         (0..<(numRange.count * prefixes.count)).forEach { index in
-            let login = LoginRecord(fromJSONDict: [
+            var login = LoginRecord(fromJSONDict: [
                 "id": "\(index)",
                 "hostname": hostnames[index],
                 "username": usernames[index],
                 "password": passwords[index]
             ])
-            login.formSubmitURL = hostnames[index]
+            login.formSubmitUrl = hostnames[index]
             _ = profile.logins.add(login: login).value
         }
     }

@@ -11,7 +11,7 @@ private let log = Logger.syncLogger
 
 open class LoginPayload: CleartextPayloadJSON {
     fileprivate static let OptionalStringFields = [
-        "formSubmitURL",
+        "formSubmitUrl",
         "httpRealm",
     ]
 
@@ -99,8 +99,8 @@ open class LoginPayload: CleartextPayloadJSON {
         return self["passwordField"].string!
     }
 
-    open var formSubmitURL: String? {
-        return self["formSubmitURL"].string
+    open var formSubmitUrl: String? {
+        return self["formSubmitUrl"].string
     }
 
     open var httpRealm: String? {
