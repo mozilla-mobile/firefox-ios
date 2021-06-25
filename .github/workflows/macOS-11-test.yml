@@ -1,0 +1,12 @@
+name: CI
+on:
+  pull_request:
+    branches: [ main ]
+jobs:
+  build:
+    runs-on: macos-11
+    steps:
+      - uses: actions/checkout@v2
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: echo Hello, world!
