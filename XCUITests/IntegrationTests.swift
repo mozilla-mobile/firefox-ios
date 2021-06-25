@@ -80,7 +80,7 @@ class IntegrationTests: BaseTestCase {
         navigator.goto(Intro_FxASignin)
         navigator.performAction(Action.OpenEmailToSignIn)
         waitForExistence(app.navigationBars["Turn on Sync"], timeout: 20)
-        waitForExistence(app.webViews.textFields["Email"])
+        waitForExistence(app.webViews.textFields["Email"], timeout: 20)
 
         // Wait for element not present on FxA sign in page China FxA server
         waitForNoExistence(app.webViews.otherElements.staticTexts["Firefox Monitor"])
