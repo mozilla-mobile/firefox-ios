@@ -32,13 +32,15 @@ class FxHomeRecentlySavedCollectionCell: UICollectionViewCell {
     weak var homePanelDelegate: HomePanelDelegate?
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     var profile: Profile?
+    static var recentlySavedItems = [RecentlySavedItem]()
     var recentBookmarks = [BookmarkItem]()
     var readingListItems = [ReadingListItem]()
     
     // UI
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
+        UIDevice.current.userInterfaceIdiom != .pad ? layout.scrollDirection = .horizontal : nil
+        
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.showsHorizontalScrollIndicator = false
@@ -47,6 +49,8 @@ class FxHomeRecentlySavedCollectionCell: UICollectionViewCell {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(RecentlySavedCell.self, forCellWithReuseIdentifier: RecentlySavedCell.cellIdentifier)
+        
+        UIDevice.current.userInterfaceIdiom == .pad ? collectionView.isScrollEnabled = false : nil
         
         return collectionView
     }()
@@ -76,11 +80,13 @@ class FxHomeRecentlySavedCollectionCell: UICollectionViewCell {
         ])
     }
     
-    private func loadItems() -> [RecentlySavedItem] {
+    public func loadItems() -> [RecentlySavedItem] {
         var items = [RecentlySavedItem]()
         
         items.append(contentsOf: recentBookmarks)
         items.append(contentsOf: readingListItems)
+        
+        Self.recentlySavedItems = items
         
         return items
     }
