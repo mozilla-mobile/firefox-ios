@@ -277,6 +277,10 @@ extension TabDisplayManager: UICollectionViewDataSource {
             view.title = "Placeholder"
             view.moreButton.isHidden = false
             view.moreButton.setTitle("{PLACEHOLDER}", for: .normal)
+            view.moreButton.addTarget(self, action: #selector(expand), for: .touchUpInside)
+            if let inactiveCell = collectionView.cellForItem(at: indexPath) as? InactiveTabCell {
+
+            }
             switch TabDisplaySection(rawValue: indexPath.section) {
             case .regularTabs:
                 return view
@@ -287,6 +291,22 @@ extension TabDisplayManager: UICollectionViewDataSource {
             }
         default:
             return UICollectionReusableView()
+        }
+    }
+    
+    @objc func expand() {
+        print("Expand")
+        let indexPath = IndexPath(row: 0, section: 1)
+        if let cell = collectionView.cellForItem(at: indexPath) as? InactiveTabCell {
+            let tabs = inactiveViewModel?.tabs
+            if cell.inactiveTabsViewModel?.inactiveTabs.isEmpty ?? false {
+                cell.inactiveTabsViewModel?.inactiveTabs.append(contentsOf: tabs ?? [])
+            } else {
+                cell.inactiveTabsViewModel?.inactiveTabs.removeAll()
+            }
+            cell.tableView.reloadData()
+            collectionView.reloadItems(at: [indexPath])
+            collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true  )
         }
     }
 }

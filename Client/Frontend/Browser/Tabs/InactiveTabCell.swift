@@ -145,7 +145,7 @@ class InactiveTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, U
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 45h
+        return 45
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
