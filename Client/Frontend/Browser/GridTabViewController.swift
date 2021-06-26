@@ -599,8 +599,18 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
         case .regularTabs, .none:
             return CGSize(width: cellWidth, height: self.cellHeightForCurrentDevice())
         case .inactiveTabs:
-            let width = collectionView.contentSize.width - 25
-            return CGSize(width: width >= 0 ? width : 0, height: 400)
+            let width: CGFloat = collectionView.contentSize.width - 25
+            var height = 0
+            if let inactiveCell = collectionView.cellForItem(at: indexPath) as? InactiveTabCell {
+                if let inactiveTabs = inactiveCell.inactiveTabsViewModel?.inactiveTabs {
+                    for _ in inactiveTabs {
+                        height += 45
+                    }
+                }
+//                return CGSize(width: width >= 0 ? Int(width) : 0, height: height)
+            }
+            
+            return CGSize(width: width >= 0 ? Int(width) : 0, height: height)
         }
     }
 
