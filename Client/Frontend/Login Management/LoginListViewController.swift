@@ -202,7 +202,10 @@ class LoginListViewController: SensitiveViewController {
     }
 
     fileprivate func setupDefaultNavButtons() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(beginEditing))
+         let editButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(beginEditing))
+         let addCredentialButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(presentAddCredential))
+         navigationItem.rightBarButtonItems = [editButton, addCredentialButton]
+        
         if shownFromAppMenu {
             navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissLogins))
         } else {
@@ -271,6 +274,12 @@ private extension LoginListViewController {
         self.view.layoutIfNeeded()
         tableView.setEditing(true, animated: true)
         tableView.reloadData()
+    }
+    
+    @objc func presentAddCredential() {
+        let controller = UINavigationController(rootViewController: AddCredentialViewController())
+        controller.modalPresentationStyle = .formSheet
+        present(controller, animated: true)
     }
 
     @objc func cancelSelection() {

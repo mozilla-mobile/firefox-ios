@@ -9,7 +9,7 @@ import Storage
 protocol LoginDetailTableViewCellDelegate: AnyObject {
     func didSelectOpenAndFillForCell(_ cell: LoginDetailTableViewCell)
     func shouldReturnAfterEditingDescription(_ cell: LoginDetailTableViewCell) -> Bool
-    func infoItemForCell(_ cell: LoginDetailTableViewCell) -> InfoItem?
+    func canPeform(action: Selector, for cell: LoginDetailTableViewCell) -> Bool
 }
 
 public struct LoginTableViewCellUX {
@@ -37,27 +37,7 @@ class LoginDetailTableViewCell: ThemedTableViewCell {
     }
 
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-        guard let item = delegate?.infoItemForCell(self) else {
-            return false
-        }
-
-        // Menu actions for password
-        if item == .passwordItem {
-            let showRevealOption = self.descriptionLabel.isSecureTextEntry ? (action == MenuHelper.SelectorReveal) : (action == MenuHelper.SelectorHide)
-            return action == MenuHelper.SelectorCopy || showRevealOption
-        }
-
-        // Menu actions for Website
-        if item == .websiteItem {
-            return action == MenuHelper.SelectorCopy || action == MenuHelper.SelectorOpenAndFill
-        }
-
-        // Menu actions for Username
-        if item == .usernameItem {
-            return action == MenuHelper.SelectorCopy
-        }
-
-        return false
+        return delegate?.canPeform(action: action, for: self) ?? false
     }
 
     lazy var descriptionLabel: UITextField = {
