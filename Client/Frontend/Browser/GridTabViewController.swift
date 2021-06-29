@@ -68,7 +68,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.register(TabCell.self, forCellWithReuseIdentifier: TabCell.Identifier)
         collectionView.register(InactiveTabCell.self, forCellWithReuseIdentifier: InactiveTabCell.Identifier)
-        self.collectionView?.register(ASHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "GridHeaderView")
+        self.collectionView?.register(TabsHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "GridHeaderView")
         tabDisplayManager = TabDisplayManager(collectionView: self.collectionView, tabManager: self.tabManager, tabDisplayer: self, reuseID: TabCell.Identifier)
         collectionView.dataSource = tabDisplayManager
         collectionView.delegate = tabLayoutDelegate
@@ -603,13 +603,14 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
             var height = 0
             if let inactiveCell = collectionView.cellForItem(at: indexPath) as? InactiveTabCell {
                 if let inactiveTabs = inactiveCell.inactiveTabsViewModel?.inactiveTabs {
-                    for _ in inactiveTabs {
-                        height += 45
-                    }
+                    let additionalHeight = 45*2 // Default height for footer and recently closed cell
+                    height = 45*inactiveTabs.count > 0 ? 45*inactiveTabs.count + additionalHeight : 0
+//                    for _ in inactiveTabs {
+//                        height += 45
+//                    }
                 }
 //                return CGSize(width: width >= 0 ? Int(width) : 0, height: height)
             }
-            
             return CGSize(width: width >= 0 ? Int(width) : 0, height: height)
         }
     }
@@ -860,5 +861,9 @@ extension GridTabViewController: Themeable {
     @objc func applyTheme() {
         webViewContainerBackdrop.backgroundColor = UIColor.Photon.Ink90
         collectionView.backgroundColor = UIColor.theme.tabTray.background
+        let indexPath = IndexPath(row: 0, section: 1)
+        if let cell = collectionView.cellForItem(at: indexPath) as? InactiveTabCell {
+            cell.applyTheme()
+        }
     }
 }

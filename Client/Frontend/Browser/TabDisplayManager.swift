@@ -72,6 +72,7 @@ enum TabDisplaySection: Int, CaseIterable {
 class TabDisplayManager: NSObject {
     var performingChainedOperations = false
     var inactiveViewModel: InactiveViewModel?
+    var isInactiveViewExpanded: Bool = false
     var dataStore = WeakList<Tab>()
     var operations = [(TabAnimationType, (() -> Void))]()
     weak var tabDisplayCompletionDelegate: TabDisplayCompletionDelegate?
@@ -273,14 +274,11 @@ extension TabDisplayManager: UICollectionViewDataSource {
     @objc func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-            let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "GridHeaderView", for: indexPath) as! ASHeaderView
-            view.title = "Placeholder"
+            let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "GridHeaderView", for: indexPath) as! TabsHeaderView
+            view.state = isInactiveViewExpanded ? .down : .right
+            view.title = String.TabsTrayInactiveTabsSectionTitle
             view.moreButton.isHidden = false
-            view.moreButton.setTitle("{PLACEHOLDER}", for: .normal)
             view.moreButton.addTarget(self, action: #selector(expand), for: .touchUpInside)
-            if let inactiveCell = collectionView.cellForItem(at: indexPath) as? InactiveTabCell {
-
-            }
             switch TabDisplaySection(rawValue: indexPath.section) {
             case .regularTabs:
                 return view
@@ -301,11 +299,14 @@ extension TabDisplayManager: UICollectionViewDataSource {
             let tabs = inactiveViewModel?.tabs
             if cell.inactiveTabsViewModel?.inactiveTabs.isEmpty ?? false {
                 cell.inactiveTabsViewModel?.inactiveTabs.append(contentsOf: tabs ?? [])
+                isInactiveViewExpanded = true
             } else {
                 cell.inactiveTabsViewModel?.inactiveTabs.removeAll()
+                isInactiveViewExpanded = false
             }
             cell.tableView.reloadData()
             collectionView.reloadItems(at: [indexPath])
+            collectionView.reloadSections(IndexSet(1...1))
             collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true  )
         }
     }
