@@ -118,7 +118,7 @@ class DownloadHelper: NSObject {
 
         let actions = [[filenameItem], [downloadFileItem]]
 
-        browserViewController.presentSheetWith(actions: actions, on: browserViewController, from: browserViewController.urlBar, closeButtonTitle: Strings.CancelString, suppressPopover: true)
+        browserViewController.presentSheetWith(title: download.filename, actions: actions, on: browserViewController, from: browserViewController.urlBar, closeButtonTitle: Strings.CancelString, suppressPopover: true)
     }
 }
 

@@ -118,8 +118,14 @@
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitle" = "Mest besøkte";
 
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitleV2" = "Snarvegar til nettstadar";
+
 /* Sub label for Top Sites widget */
 "TodayWidget.TopSitesSubLabel" = "Firefox - Mest besøkte";
+
+/* Sub label for Shortcuts widget */
+"TodayWidget.TopSitesSubLabel2" = "Firefox - snarvegar til nettstadar";
 
 /* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
 "TodayWidget.ViewMore" = "Vis meir";

@@ -14,10 +14,10 @@
 "DefaultBrowserOnboarding.Button" = "Ir al Parametros";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description1" = "1. Va al Parametros";
+"DefaultBrowserOnboarding.Description1" = "1. Aperi le Parametros";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description2" = "2. Tocca \"App navigator predefinite\"";
+"DefaultBrowserOnboarding.Description2" = "2. Tocca App navigator predefinite";
 
 /* Description for default browser onboarding card. */
 "DefaultBrowserOnboarding.Description3" = "3. Elige Firefox";

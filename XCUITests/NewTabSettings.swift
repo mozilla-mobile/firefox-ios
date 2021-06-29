@@ -39,6 +39,7 @@ class NewTabSettingsTest: BaseTestCase {
     func testChangeNewTabSettingsShowFirefoxHome() {
         // Set to history page first since FF Home is default
         navigator.performAction(Action.CloseURLBarOpen)
+        waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SelectNewTabAsBlankPage)
         navigator.performAction(Action.OpenNewTabFromTabTray)

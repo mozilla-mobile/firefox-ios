@@ -130,13 +130,11 @@ class DefaultBrowserCard: UIView {
         self.dismissClosure?()
         UserDefaults.standard.set(true, forKey: "DidDismissDefaultBrowserCard")
         TelemetryWrapper.gleanRecordEvent(category: .action, method: .tap, object: .dismissDefaultBrowserCard)
-        LeanPlumClient.shared.track(event: .dismissDefaultBrowserCard)
     }
     
     @objc private func showOnboarding() {
         BrowserViewController.foregroundBVC().presentDBOnboardingViewController(true)
         TelemetryWrapper.gleanRecordEvent(category: .action, method: .tap, object: .goToSettingsDefaultBrowserCard)
-        LeanPlumClient.shared.track(event: .goToSettingsDefaultBrowserCard)
         
         // Set default browser onboarding did show to true so it will not show again after user clicks this button
         UserDefaults.standard.set(true, forKey: PrefsKeys.KeyDidShowDefaultBrowserOnboarding)

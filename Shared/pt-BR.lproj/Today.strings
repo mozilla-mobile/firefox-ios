@@ -118,8 +118,14 @@
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitle" = "Sites preferidos";
 
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitleV2" = "Atalhos de sites";
+
 /* Sub label for Top Sites widget */
 "TodayWidget.TopSitesSubLabel" = "Firefox - Sites preferidos";
+
+/* Sub label for Shortcuts widget */
+"TodayWidget.TopSitesSubLabel2" = "Firefox - Atalhos de sites";
 
 /* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
 "TodayWidget.ViewMore" = "Ver mais";

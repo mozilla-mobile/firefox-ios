@@ -2,7 +2,7 @@
 "Browsing History" = "Ιστορικό περιήγησης";
 
 /* Settings item for clearing the cache */
-"Cache" = "Προσωρινή μνήμη";
+"Cache" = "Κρυφή μνήμη";
 
 /* Settings item for clearing cookies */
 "Cookies" = "Cοokies";

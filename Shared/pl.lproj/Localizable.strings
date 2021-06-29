@@ -16,11 +16,23 @@
 /* About settings section title */
 "About" = "O Firefoksie";
 
+/* The title for the pinning a shortcut action */
+"ActivityStream.ContextMenu.AddToShortcuts" = "Dodaj do skrótów";
+
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite" = "Przypnij do popularnych";
 
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite2" = "Przypnij";
+
+/* The title for removing a shortcut action */
+"ActivityStream.ContextMenu.RemoveFromShortcuts" = "Usuń ze skrótów";
+
 /* The title for removing a pinned topsite action */
 "ActivityStream.ContextMenu.RemovePinTopsite" = "Usuń przypiętą stronę";
+
+/* The title for the unpinning a topsite action */
+"ActivityStream.ContextMenu.UnpinTopsite" = "Odepnij";
 
 /* The description of a highlight if it is a site the user has bookmarked */
 "ActivityStream.Highlights.Bookmark" = "Zakładka";
@@ -37,11 +49,17 @@
 /* Section title label for Recommended by Pocket section */
 "ActivityStream.Pocket.SectionTitle" = "Pocket: na czasie";
 
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle2" = "Poleca Pocket";
+
 /* The description of a Pocket Story */
 "ActivityStream.Pocket.Trending" = "Na czasie";
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Ostatnio odwiedzone";
+
+/* Section title label for Shortcuts */
+"ActivityStream.Shortcuts.SectionTitle" = "Skróty";
 
 /* label showing how many rows of topsites are shown. %d represents a number */
 "ActivityStream.TopSites.RowCount" = "Rzędy: %d";
@@ -82,6 +100,12 @@
 
 /* Authentication prompt title */
 "Authentication required" = "Podaj nazwę użytkownika i hasło";
+
+/* Description for button to suggest searching with a search engine. First argument is the name of the search engine to select */
+"Awesomebar.SearchWithEngine.Description" = "Szukaj w %@ prosto z paska adresu";
+
+/* Title for button to suggest searching with a search engine. First argument is the name of the search engine to select */
+"Awesomebar.SearchWithEngine.Title" = "Wyszukaj w %@";
 
 /* Accessibility label for the Back button in the tab toolbar. */
 "Back" = "Przejdź do poprzedniej strony";
@@ -211,6 +235,12 @@
 
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "Otwórz w nowej karcie";
+
+/* Context menu item for opening a link in a new private tab */
+"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "Otwórz odnośnik w nowej karcie prywatnej";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenLinkInNewTabButtonTitle" = "Otwórz odnośnik w nowej karcie";
 
 /* Context menu item for saving an image */
 "ContextMenu.SaveImageButtonTitle" = "Zapisz obraz";
@@ -672,14 +702,26 @@
 /* Toast displayed to the user after adding the item to the Top Sites. */
 "Menu.AddPin.Confirm" = "Przypięto do popularnych";
 
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"Menu.AddPin.Confirm2" = "Dodano do skrótów";
+
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "Dodano do czytelni";
+
+/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
+"Menu.BackUpAndSync.Label" = "Zaloguj się do synchronizacji";
+
+/* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
+"Menu.Bookmarks.Label" = "Zakładki";
 
 /* The title for the button that lets you copy the url from the location bar. */
 "Menu.Copy.Title" = "Kopiuj adres";
 
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "Skopiowano adres do schowka";
+
+/* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
+"Menu.Downloads.Label" = "Pobrane pliki";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtectionOff.Title" = "Wzmocniona ochrona przed śledzeniem jest wyłączona na tej witrynie.";
@@ -693,23 +735,44 @@
 /* Description for having strict ETP protection with ITP offered in iOS14+ */
 "Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox blokuje elementy śledzące między witrynami, śledzące serwisów społecznościowych, używające urządzenia użytkownika do generowania kryptowalut, śledzące przez zbieranie informacji o konfiguracji i treści z elementami śledzącymi.";
 
+/* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
+"Menu.History.Label" = "Historia";
+
 /* Label for the button displayed in the menu used to stop the reload of the webpage */
 "Menu.Library.StopReload" = "Zatrzymaj";
+
+/* Label for the button, displayed in the menu, takes you to screen to manage account when pressed. First argument is the display name for the current account */
+"Menu.ManageAccount.Label" = "Zarządzaj kontem „%@”";
+
+/* Label for the button, displayed in the menu, turns off night mode. */
+"Menu.NightModeTurnOff.Label2" = "Wyłącz tryb nocny";
 
 /* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label" = "Tryb nocny";
 
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label2" = "Włącz tryb nocny";
+
 /* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
-"Menu.NoImageModeBlockImages.Label" = "Blokowanie obrazów";
+"Menu.NoImageModeBlockImages.Label" = "Zablokuj obrazy";
+
+/* Label for the button, displayed in the menu, shows images on the webpage when pressed. */
+"Menu.NoImageModeShowImages.Label" = "Pokazuj obrazy";
 
 /* Label for title in page action menu. */
 "Menu.PageActions.Title" = "Interakcje";
+
+/* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
+"Menu.Passwords.Label" = "Hasła";
 
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "Wklej";
 
 /* The title for the button that lets you paste and go to a URL */
 "Menu.PasteAndGo.Title" = "Wklej i przejdź";
+
+/* Label for the button, displayed in the menu, takes you to to Reading List screen when pressed. */
+"Menu.ReadingList.Label" = "Czytelnia";
 
 /* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
 "Menu.ReloadWithoutTrackingProtection.Title" = "Odśwież bez ochrony przed śledzeniem";
@@ -722,6 +785,9 @@
 
 /* Toast displayed to the user after removing the item from the Top Sites. */
 "Menu.RemovePin.Confirm" = "Usunięto z popularnych";
+
+/* Toast displayed to the user after removing the item to the Shortcuts. */
+"Menu.RemovePin.Confirm2" = "Usunięto ze skrótów";
 
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "Wysłano kartę";
@@ -971,6 +1037,9 @@
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "Wprowadź adres lub szukaj";
+
+/* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
+"Search.Awesomebar.SwitchToTab" = "Przełącz na kartę";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "Nowa wyszukiwarka pojawi się na pasku szybkiego wyszukiwania i będzie można nią zarządzać poprzez ustawienia.";
@@ -1259,6 +1328,9 @@
 /* The footer for the section to customize top sites in the new tab settings page. */
 "Settings.NewTab.Option.CustomizeFooter" = "Najczęściej odwiedzane strony";
 
+/* The footer for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeFooter2" = "Zachowane i odwiedzane strony";
+
 /* The title for the section to customize top sites in the new tab settings page. */
 "Settings.NewTab.Option.CustomizeTitle" = "Dostosuj stronę startową Firefoksa";
 
@@ -1285,6 +1357,12 @@
 
 /* Option in settings to show reading list when you open a new tab */
 "Settings.NewTab.Option.ReadingList" = "Czytelnia";
+
+/* Option in settings to turn on off pocket recommendations First argument is the pocket brand name */
+"Settings.NewTab.Option.RecommendedByPocket" = "Poleca %@";
+
+/* Descriptoin for the option in settings to turn on off pocket recommendations. First argument is the pocket brand name, second argument is the pocket product name. */
+"Settings.NewTab.Option.RecommendedByPocketDescription" = "Wyjątkowe rzeczy wybrane przez %1$@, część rodziny produktów %2$@";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "Nowa karta";
@@ -1345,6 +1423,36 @@
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Skróty Siri";
+
+/* Section title for all studies that are currently active */
+"Settings.Studies.Active.SectionName" = "Aktywne";
+
+/* Section title for all studies that are completed */
+"Settings.Studies.Completed.SectionName" = "Ukończone";
+
+/* Button title displayed next to each study allowing the user to opt-out of the study */
+"Settings.Studies.Remove.Button" = "Usuń";
+
+/* Title displayed in header of the Studies panel */
+"Settings.Studies.SectionName" = "Badania";
+
+/* Label used as an item in Settings. Tapping on this item takes you to the Studies panel */
+"Settings.Studies.Title" = "Badania";
+
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Toggle.Link" = "Więcej informacji.";
+
+/* A short description that explains that Mozilla is running studies */
+"Settings.Studies.Toggle.Message" = "Firefox może od czasu do czasu instalować i przeprowadzać badania.";
+
+/* Toggled OFF to opt-out of studies */
+"Settings.Studies.Toggle.Off" = "Wyłączone";
+
+/* Toggled ON to participate in studies */
+"Settings.Studies.Toggle.On" = "Włączone";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Toggle.Title" = "Badania";
 
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "OK";
@@ -1578,6 +1686,9 @@
 /* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.CloseTab.KeyCodeTitle" = "Zamknij zaznaczoną kartę";
 
+/* Accessibility label for the currently selected tab. */
+"TabTray.CurrentSelectedTab.A11Y" = "Obecnie zaznaczona karta.";
+
 /* The section header for tabs opened last week */
 "TabTray.LastWeek.Header" = "Ostatni tydzień";
 
@@ -1592,6 +1703,18 @@
 
 /* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenSelectedTab.KeyCodeTitle" = "Otwórz zaznaczoną kartę";
+
+/* The title for the tab tray in private mode */
+"TabTray.PrivateTitle" = "Prywatne karty";
+
+/* The title on the button to look at private tabs. */
+"TabTray.SegmentedControlTitles.PrivateTabs" = "Prywatne";
+
+/* The title on the button to look at synced tabs. */
+"TabTray.SegmentedControlTitles.SyncedTabs" = "Z innych urządzeń";
+
+/* The title on the button to look at regular tabs. */
+"TabTray.SegmentedControlTitles.Tabs" = "Karty";
 
 /* The button title to see more options to perform on the tab. */
 "TabTray.SwipeMenu.More" = "Więcej";

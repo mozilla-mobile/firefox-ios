@@ -1,6 +1,9 @@
 /* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
 "Menu.AddBookmarkAction.Title" = "Marcar esta página";
 
+/* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
+"Menu.AddBookmarkAction2.Title" = "Añadir marcador";
+
 /* Label for the button, displayed in the menu, used to add a page to the reading list. */
 "Menu.AddToReadingList.Title" = "Añadir a la Lista de lectura";
 
@@ -9,6 +12,9 @@
 
 /* Label for the button, displayed in the menu, used to copy the page url to the clipboard. */
 "Menu.CopyAddress.Title" = "Copiar dirección";
+
+/* Label for the button, displayed in the menu, used to copy the current page link to the clipboard. */
+"Menu.CopyLink.Title" = "Copiar enlace";
 
 /* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
 "Menu.FindInPageAction.Title" = "Buscar en la página";

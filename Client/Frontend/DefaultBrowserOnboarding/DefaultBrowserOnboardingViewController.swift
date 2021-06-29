@@ -6,7 +6,6 @@ import Foundation
 import UIKit
 import SnapKit
 import Shared
-import Leanplum
 
 /*
     
@@ -43,7 +42,8 @@ struct DBOnboardingUX {
     static let containerViewHeightXSmall = 250
 }
 
-class DefaultBrowserOnboardingViewController: UIViewController {
+class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissable {
+    var onViewDismissed: (() -> Void)? = nil
     // Public constants
     let viewModel = DefaultBrowserOnboardingViewModel()
     let theme = ThemeManager.instance
@@ -170,13 +170,21 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         // Portrait orientation: lock disable
         AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.all)
     }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        onViewDismissed?()
+        onViewDismissed = nil
+    }
     
     func initialViewSetup() {
         updateTheme()
         
         // Initialize
-        self.view.addSubview(topImageView)
-        self.view.addSubview(imageText)
+        if viewModel.displayTitleImage {
+            self.view.addSubview(topImageView)
+            self.view.addSubview(imageText)
+        }
         self.view.addSubview(closeButton)
         textView.addSubview(containerView)
         containerView.addSubview(titleLabel)
@@ -208,25 +216,29 @@ class DefaultBrowserOnboardingViewController: UIViewController {
             make.right.equalToSuperview().inset(UpdateViewControllerUX.DoneButton.paddingRight)
             make.height.equalTo(44)
         }
-        // The top imageview constraints setup
-        topImageView.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalTo(closeButton.snp.bottom).offset(10)
-            make.height.equalTo(200)
-            make.width.equalTo(340)
-        }
-        let layoutDirection = UIApplication.shared.userInterfaceLayoutDirection
-        imageText.snp.makeConstraints { make in
-            make.top.equalTo(topImageView.snp.top).offset(121)
-            if layoutDirection == .leftToRight {
-                make.left.equalTo(topImageView.snp.left).inset(20)
-            } else {
-                make.right.equalTo(topImageView.snp.right).inset(20)
+        
+        if viewModel.displayTitleImage {
+            // The top imageview constraints setup
+            topImageView.snp.makeConstraints { make in
+                make.centerX.equalToSuperview()
+                make.top.equalTo(closeButton.snp.bottom).offset(10)
+                make.height.equalTo(200)
+                make.width.equalTo(340)
+            }
+            let layoutDirection = UIApplication.shared.userInterfaceLayoutDirection
+            imageText.snp.makeConstraints { make in
+                make.top.equalTo(topImageView.snp.top).offset(121)
+                if layoutDirection == .leftToRight {
+                    make.left.equalTo(topImageView.snp.left).inset(20)
+                } else {
+                    make.right.equalTo(topImageView.snp.right).inset(20)
+                }
             }
         }
         let textOffset = screenSize.height > 668 ? DBOnboardingUX.textOffset : DBOnboardingUX.textOffsetSmall
         textView.snp.makeConstraints { make in
-            make.top.equalTo(topImageView.snp.bottom).offset(textOffset)
+            let offset = viewModel.displayTitleImage ? textOffset : 10
+            make.top.equalTo(viewModel.displayTitleImage ? topImageView.snp.bottom : closeButton.snp.bottom).offset(offset)
             make.left.right.equalToSuperview().inset(36)
             make.bottom.equalTo(goToSettingsButton.snp.top)
         }
@@ -236,7 +248,12 @@ class DefaultBrowserOnboardingViewController: UIViewController {
                                   screenSize.height > 640 ? DBOnboardingUX.containerViewHeightSmall : DBOnboardingUX.containerViewHeightXSmall
         let containerViewWidth = screenSize.height > 668 ? 350 : 300
         containerView.snp.makeConstraints { make in
-            make.centerY.centerX.equalToSuperview()
+            if containerViewHeight <= DBOnboardingUX.containerViewHeightSmall {
+                make.centerY.equalToSuperview()
+            } else {
+                make.top.equalToSuperview()
+            }
+            make.centerX.equalToSuperview()
             make.height.equalTo(containerViewHeight)
             make.width.equalTo(containerViewWidth)
         }
@@ -288,14 +305,12 @@ class DefaultBrowserOnboardingViewController: UIViewController {
     @objc private func dismissAnimated() {
         self.dismiss(animated: true, completion: nil)
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .dismissDefaultBrowserOnboarding)
-        LeanPlumClient.shared.track(event: .dismissDefaultBrowserOnboarding)
     }
     
     @objc private func goToSettings() {
         viewModel.goToSettings?()
         UserDefaults.standard.set(true, forKey: "DidDismissDefaultBrowserCard") // Don't show default browser card if this button is clicked
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .goToSettingsDefaultBrowserOnboarding)
-        LeanPlumClient.shared.track(event: .goToSettingsDefaultBrowserOnboarding)
     }
   
     // Theme

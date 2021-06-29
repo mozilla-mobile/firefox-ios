@@ -6,16 +6,14 @@ import UIKit
 
 class EmptyPlaceholderCell: UITableViewCell {
     
-    @IBOutlet weak var learnMoreButton: UIButton!
-    @IBOutlet weak var titleLabel: UILabel!
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        learnMoreButton.isHidden = true
+    @IBOutlet weak var titleLabel: UILabel! {
+        didSet {
+            titleLabel.text = .LoginsListNoLoginsFoundTitle
+        }
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
+    @IBOutlet weak var descriptionLabel: UILabel! {
+        didSet {
+            descriptionLabel.text = .LoginsListNoLoginsFoundSubtitle
+        }
     }
-
 }

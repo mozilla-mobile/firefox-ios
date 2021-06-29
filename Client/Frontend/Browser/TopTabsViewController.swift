@@ -178,7 +178,6 @@ class TopTabsViewController: UIViewController {
 
     @objc func newTabTapped() {
         self.delegate?.topTabsDidPressNewTab(self.tabDisplayManager.isPrivate)
-        LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "Add tab button in the URL Bar on iPad"])
     }
 
     @objc func togglePrivateModeTapped() {
@@ -223,6 +222,9 @@ extension TopTabsViewController: TabDisplayer {
         tabCell.delegate = self
         let isSelected = (tab == tabManager.selectedTab)
         tabCell.configureWith(tab: tab, isSelected: isSelected)
+        // Not all cells are visible when the appearance changes. Let's make sure
+        // the cell has the proper theme when recycled.
+        tabCell.applyTheme()
         return tabCell
     }
 }

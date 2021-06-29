@@ -70,7 +70,9 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
         let url1 = urls[0].url
         let url2 = urls[1].url
+        tester().wait(forTimeInterval: 5)
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
+        tester().wait(forTimeInterval: 10)
         BrowserUtils.openLibraryMenu(tester())
         // Open History Panel
         tester().tapView(withAccessibilityIdentifier: "menu-panel-History")
@@ -101,7 +103,10 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
         let url1 = urls[0].url
         let url2 = urls[1].url
+        tester().wait(forTimeInterval: 5)
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
+        tester().waitForAnimationsToFinish(withTimeout: 3)
+        tester().wait(forTimeInterval: 5)
         BrowserUtils.openClearPrivateDataDialogKIF(tester())
         BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtracting([BrowserUtils.Clearable.History]), tester())
         BrowserUtils.acceptClearPrivateData(tester())

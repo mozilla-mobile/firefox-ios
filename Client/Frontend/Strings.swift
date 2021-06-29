@@ -4,13 +4,14 @@
 
 import Foundation
 
-public struct Strings {}
+public struct Strings {
+    public static let bundle = Bundle(for: BundleClass.self)
+}
 
 class BundleClass {}
 
 func MZLocalizedString(_ key: String, tableName: String? = nil, value: String = "", comment: String) -> String {
-    let bundle = Bundle(for: BundleClass.self)
-    return NSLocalizedString(key, tableName: tableName, bundle: bundle, value: value, comment: comment)
+    return NSLocalizedString(key, tableName: tableName, bundle: Strings.bundle, value: value, comment: comment)
 }
 
 extension Strings {
@@ -99,7 +100,9 @@ extension Strings {
 extension Strings {
     public static let SettingsGeneralSectionTitle = MZLocalizedString("Settings.General.SectionName", value: "General", comment: "General settings section title")
     public static let SettingsClearPrivateDataClearButton = MZLocalizedString("Settings.ClearPrivateData.Clear.Button", value: "Clear Private Data", comment: "Button in settings that clears private data for the selected items.")
-    public static let SettingsClearAllWebsiteDataButton = MZLocalizedString("Settings.ClearAllWebsiteData.Clear.Button", value: "Clear All Website Data", comment: "Button in Data Management that clears private data for the selected items.")
+    public static let SettingsClearAllWebsiteDataButton = MZLocalizedString("Settings.ClearAllWebsiteData.Clear.Button", value: "Clear All Website Data", comment: "Button in Data Management that clears all items.")
+    public static let SettingsClearOneWebsiteDataButton = MZLocalizedString("Settings.ClearSelectedWebsiteData.ClearOneItem.Button", value: "Clear 1 Item", comment: "Button in Data Management that clears private data for one selected item.")
+    public static let SettingsClearSelectedWebsiteDataButton = MZLocalizedString("Settings.ClearSelectedWebsiteData.ClearSelected.Button", value: "Clear %1$@ Items", comment: "Button in Data Management that clears private data for the selected items. Parameter is the number of items to be cleared")
     public static let SettingsClearPrivateDataSectionName = MZLocalizedString("Settings.ClearPrivateData.SectionName", value: "Clear Private Data", comment: "Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data.")
     public static let SettingsDataManagementSectionName = MZLocalizedString("Settings.DataManagement.SectionName", value: "Data Management", comment: "Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data.")
     public static let SettingsFilterSitesSearchLabel = MZLocalizedString("Settings.DataManagement.SearchLabel", value: "Filter Sites", comment: "Default text in search bar for Data Management")
@@ -930,6 +933,7 @@ extension String {
     
     // Top Sites - Medium Size - Gallery View
     public static let TopSitesGalleryTitle = MZLocalizedString("TodayWidget.TopSitesGalleryTitle", tableName: "Today", value: "Top Sites", comment: "Title for top sites widget to add Firefox top sites shotcuts to home screen")
+    public static let TopSitesGalleryTitleV2 = MZLocalizedString("TodayWidget.TopSitesGalleryTitleV2", tableName: "Today", value: "Website Shortcuts", comment: "Title for top sites widget to add Firefox top sites shotcuts to home screen")
     public static let TopSitesGalleryDescription = MZLocalizedString("TodayWidget.TopSitesGalleryDescription", tableName: "Today", value: "Add shortcuts to frequently and recently visited sites.", comment: "Description for top sites widget to add Firefox top sites shotcuts to home screen")
 
     // Quick View Open Tabs - Medium Size Widget
@@ -1007,7 +1011,8 @@ extension String {
 
 // ClearWebsiteDataAlert
 extension String {
-    public static let ClearWebsiteDataAlertMessage = MZLocalizedString("Settings.WebsiteData.ConfirmPrompt", value: "This action will clear all of your website data. It cannot be undone.", comment: "Description of the confirmation dialog shown when a user tries to clear their private data.")
+    public static let ClearAllWebsiteDataAlertMessage = MZLocalizedString("Settings.WebsiteData.ConfirmPrompt", value: "This action will clear all of your website data. It cannot be undone.", comment: "Description of the confirmation dialog shown when a user tries to clear their private data.")
+    public static let ClearSelectedWebsiteDataAlertMessage = MZLocalizedString("Settings.WebsiteData.SelectedConfirmPrompt", value: "This action will clear the selected items. It cannot be undone.", comment: "Description of the confirmation dialog shown when a user tries to clear some of their private data.")
     // TODO: these look like the same as in ClearPrivateDataAlert, I think we can remove them
     public static let ClearWebsiteDataAlertCancel = MZLocalizedString("Cancel", tableName: "ClearPrivateDataConfirm", comment: "The cancel button when confirming clear private data.")
     public static let ClearWebsiteDataAlertOk = MZLocalizedString("OK", tableName: "ClearPrivateDataConfirm", comment: "The button that clears private data.")
@@ -1378,4 +1383,19 @@ extension String {
 extension String {
     public static let AwesomeBarSearchWithEngineButtonTitle = MZLocalizedString("Awesomebar.SearchWithEngine.Title", value: "Search with %@", comment: "Title for button to suggest searching with a search engine. First argument is the name of the search engine to select")
     public static let AwesomeBarSearchWithEngineButtonDescription = MZLocalizedString("Awesomebar.SearchWithEngine.Description", value: "Search %@ directly from the address bar", comment: "Description for button to suggest searching with a search engine. First argument is the name of the search engine to select")
+}
+
+//Credential Provider
+extension String {
+    public static let WelcomeViewTitle = MZLocalizedString("WelcomeView.Title", tableName: "CredentialProvider", comment: "Label displaying welcome view title")
+    public static let WelcomeViewSpinnerSyncingLogins = MZLocalizedString("WelcomeView.Spinner.SyncingLogins", tableName: "CredentialProvider", comment: "Label for syncing your logins spinner")
+    public static let WelcomeViewSpinnerDoneSyncingLogins = MZLocalizedString("WelcomeView.Spinner.DoneSyncingLogins", tableName: "CredentialProvider", comment: "Label for finishing syncing your logins")
+    public static let LoginsListSearchCancel = MZLocalizedString("LoginsList.Search.Cancel", tableName: "CredentialProvider", comment: "Cancel button title")
+    public static let LoginsListSearchPlaceholder = MZLocalizedString("LoginsList.Search.Placeholder", tableName: "CredentialProvider", comment: "Placeholder text for search field")
+    public static let LoginsListSelectPasswordTitle = MZLocalizedString("LoginsList.SelectPassword.Title", tableName: "CredentialProvider", comment: "Label displaying select a password to fill instruction")
+    public static let LoginsListNoMatchingResultTitle = MZLocalizedString("LoginsList.NoMatchingResult.Title", tableName: "CredentialProvider", comment: "Label displayed when a user searches and no matches can be found against the search query")
+    public static let LoginsListNoMatchingResultSubtitle = MZLocalizedString("LoginsList.NoMatchingResult.Subtitle", tableName: "CredentialProvider", comment: "Label that appears after the search if there are no logins available to this account")
+    public static let LoginsListNoLoginsFoundTitle = MZLocalizedString("LoginsList.NoLoginsFound.Title", tableName: "CredentialProvider", comment: "Label informing the user the account has no logins available")
+    public static let LoginsListNoLoginsFoundSubtitle = MZLocalizedString("LoginsList.NoLoginsFound.Subtitle", tableName: "CredentialProvider", comment: "Label shown when there are no logins to list")
+    
 }

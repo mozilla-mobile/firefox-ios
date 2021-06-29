@@ -118,8 +118,14 @@
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitle" = "상위 사이트";
 
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitleV2" = "웹 사이트 바로 가기";
+
 /* Sub label for Top Sites widget */
 "TodayWidget.TopSitesSubLabel" = "Firefox - 상위 사이트";
+
+/* Sub label for Shortcuts widget */
+"TodayWidget.TopSitesSubLabel2" = "Firefox - 웹 사이트 바로 가기";
 
 /* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
 "TodayWidget.ViewMore" = "더 보기";
