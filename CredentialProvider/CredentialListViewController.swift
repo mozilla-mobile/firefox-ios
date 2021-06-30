@@ -25,7 +25,7 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
     private var searchController: UISearchController?
     
     private var cancelButton: UIButton {
-        let button = UIButton()
+        let button = UIButton(type: UIButton.ButtonType.system)
         button.setTitle(.LoginsListSearchCancel, for: .normal)
         button.titleLabel?.font = .navigationButtonFont
         button.accessibilityIdentifier = "cancel.button"
@@ -37,7 +37,7 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
                                 toItem: nil,
                                 attribute: .notAnAttribute,
                                 multiplier: 1.0,
-                                constant: 90))
+                                constant: 60))
         button.addTarget(self, action: #selector(self.cancelAction), for: .touchUpInside)
         return button
     }
@@ -64,7 +64,7 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.viewBackground
+        //view.backgroundColor = UIColor.viewBackground
         setNeedsStatusBarAppearanceUpdate()
         setupTableView()
         styleNavigationBar()
@@ -81,7 +81,7 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
     
     private func setupTableView() {
         let backgroundView = UIView(frame: self.view.bounds)
-        backgroundView.backgroundColor = UIColor.viewBackground
+        //backgroundView.backgroundColor = UIColor.viewBackground
         tableView.backgroundView = backgroundView
         tableView.keyboardDismissMode = .onDrag
     }
@@ -89,10 +89,9 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
     private func styleNavigationBar() {
         navigationItem.title = "Firefox"
         navigationItem.largeTitleDisplayMode = .never
-        navigationController?.navigationBar.tintColor = UIColor.white
+       // navigationController?.navigationBar.tintColor = UIColor.white
         navigationController?.navigationBar.accessibilityIdentifier = "firefox.navigationBar"
         navigationController?.navigationBar.titleTextAttributes = [
-            .foregroundColor: UIColor.white,
             .font: UIFont.navigationTitleFont
         ]
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: cancelButton)
@@ -109,31 +108,32 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
         searchController.searchResultsUpdater = self
         searchController.delegate = self
         searchController.isActive = true
-        searchController.searchBar.backgroundColor = UIColor.navBackgroundColor
-        searchController.searchBar.tintColor = UIColor.white // Cancel button
-        searchController.searchBar.barStyle = .black // White text color
+        //searchController.searchBar.backgroundColor = UIColor.navBackgroundColor
+        //searchController.searchBar.tintColor = UIColor.white // Cancel button
+        //searchController.searchBar.barStyle = .black // White text color
         searchController.searchBar.sizeToFit()
         searchController.searchBar.searchBarStyle = UISearchBar.Style.minimal
-        searchController.searchBar.barTintColor = UIColor.clear
+        //searchController.searchBar.barTintColor = UIColor.clear
         self.navigationItem.searchController = searchController
         self.navigationItem.hidesSearchBarWhenScrolling = false
         self.definesPresentationContext = true
         
-        let searchIcon = UIImage(named: "search-icon")?.withRenderingMode(.alwaysTemplate).tinted(UIColor.navSearchPlaceholderTextColor)
+        let searchIcon = UIImage(named: "search-icon")?.withRenderingMode(.alwaysTemplate).tinted(UIColor.systemBlue)
+        let clearIcon = UIImage(named: "clear-icon")?.withRenderingMode(.alwaysTemplate).tinted(UIColor.systemBlue)
         searchController.searchBar.setImage(searchIcon, for: UISearchBar.Icon.search, state: .normal)
-        searchController.searchBar.setImage(UIImage(named: "clear-icon"), for: UISearchBar.Icon.clear, state: .normal)
+        searchController.searchBar.setImage(clearIcon, for: UISearchBar.Icon.clear, state: .normal)
         
-        searchController.searchBar.setSearchFieldBackgroundImage(UIImage.color(UIColor.clear, size:  CGSize(width: 50, height: 38)), for: .normal) // Clear the background image
+       // searchController.searchBar.setSearchFieldBackgroundImage(UIImage.color(UIColor.clear, size:  CGSize(width: 50, height: 38)), for: .normal) // Clear the background image
         searchController.searchBar.searchTextPositionAdjustment = UIOffset(horizontal: 5.0, vertical: 0) // calling setSearchFieldBackgroundImage removes the spacing between the search icon and text
         if let searchField = searchController.searchBar.value(forKey: "searchField") as? UITextField {
             if let backgroundview = searchField.subviews.first {
-                backgroundview.backgroundColor = UIColor.inactiveNavSearchBackgroundColor
+                //backgroundview.backgroundColor = UIColor.inactiveNavSearchBackgroundColor
                 backgroundview.layer.cornerRadius = 10
                 backgroundview.clipsToBounds = true
             }
         }
-        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).tintColor = UIColor.white // Set cursor color
-        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: .LoginsListSearchPlaceholder, attributes: [NSAttributedString.Key.foregroundColor: UIColor.navSearchPlaceholderTextColor]) // Set the placeholder text and color
+       // UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).tintColor = UIColor.white // Set cursor color
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: .LoginsListSearchPlaceholder, attributes: [:]) // Set the placeholder text and color
         return searchController
     }
     
@@ -167,10 +167,10 @@ extension CredentialListViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "selectapasswordhelptext", for: indexPath) as? SelectPasswordCell else {
                 return UITableViewCell()
             }
-            let borderView = UIView()
-            borderView.frame = CGRect(x: 0, y: cell.frame.height-1, width: cell.frame.width, height: 1)
-            borderView.backgroundColor = UIColor.helpTextBorderColor
-            cell.addSubview(borderView)
+//            let borderView = UIView()
+//            borderView.frame = CGRect(x: 0, y: cell.frame.height-1, width: cell.frame.width, height: 1)
+//            borderView.backgroundColor = UIColor.helpTextBorderColor
+//            cell.addSubview(borderView)
             return cell
         case .displayItem(let credentialIdentity):
             let cell = tableView.dequeueReusableCell(withIdentifier: "itemlistcell", for: indexPath) as? ItemListCell
@@ -195,7 +195,7 @@ extension CredentialListViewController: UISearchControllerDelegate {
     func willPresentSearchController(_ searchController: UISearchController) {
         if let searchField = searchController.searchBar.value(forKey: "searchField") as? UITextField {
             if let backgroundview = searchField.subviews.first {
-                backgroundview.backgroundColor = UIColor.activeNavSearchBackgroundColor
+                //backgroundview.backgroundColor = UIColor.activeNavSearchBackgroundColor
             }
         }
     }
@@ -203,7 +203,7 @@ extension CredentialListViewController: UISearchControllerDelegate {
     func willDismissSearchController(_ searchController: UISearchController) {
         if let searchField = searchController.searchBar.value(forKey: "searchField") as? UITextField {
             if let backgroundview = searchField.subviews.first {
-                backgroundview.backgroundColor = UIColor.inactiveNavSearchBackgroundColor
+               // backgroundview.backgroundColor = UIColor.inactiveNavSearchBackgroundColor
             }
         }
     }

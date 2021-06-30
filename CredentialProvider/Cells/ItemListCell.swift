@@ -9,10 +9,10 @@ class ItemListCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var detailLabel: UILabel!
 
-    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        super.setHighlighted(highlighted, animated: animated)
-        self.backgroundColor = highlighted ? UIColor.tableViewCellHighlighted : .white
-    }
+//    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+//        super.setHighlighted(highlighted, animated: animated)
+//        self.backgroundColor = highlighted ? UIColor.tableViewCellHighlighted : .white
+//    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
