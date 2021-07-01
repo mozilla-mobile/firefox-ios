@@ -10,7 +10,7 @@ protocol CredentialListViewProtocol: AnyObject {
     var searchIsActive: Bool { get }
 }
 
-class CredentialListViewController: UIViewController, CredentialListViewProtocol {
+class CredentialListViewController: UIViewController, CredentialListViewProtocol, UISearchControllerDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -64,7 +64,6 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //view.backgroundColor = UIColor.viewBackground
         setNeedsStatusBarAppearanceUpdate()
         setupTableView()
         styleNavigationBar()
@@ -81,7 +80,6 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
     
     private func setupTableView() {
         let backgroundView = UIView(frame: self.view.bounds)
-        //backgroundView.backgroundColor = UIColor.viewBackground
         tableView.backgroundView = backgroundView
         tableView.keyboardDismissMode = .onDrag
     }
@@ -89,7 +87,6 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
     private func styleNavigationBar() {
         navigationItem.title = "Firefox"
         navigationItem.largeTitleDisplayMode = .never
-       // navigationController?.navigationBar.tintColor = UIColor.white
         navigationController?.navigationBar.accessibilityIdentifier = "firefox.navigationBar"
         navigationController?.navigationBar.titleTextAttributes = [
             .font: UIFont.navigationTitleFont
@@ -108,12 +105,8 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
         searchController.searchResultsUpdater = self
         searchController.delegate = self
         searchController.isActive = true
-        //searchController.searchBar.backgroundColor = UIColor.navBackgroundColor
-        //searchController.searchBar.tintColor = UIColor.white // Cancel button
-        //searchController.searchBar.barStyle = .black // White text color
         searchController.searchBar.sizeToFit()
         searchController.searchBar.searchBarStyle = UISearchBar.Style.minimal
-        //searchController.searchBar.barTintColor = UIColor.clear
         self.navigationItem.searchController = searchController
         self.navigationItem.hidesSearchBarWhenScrolling = false
         self.definesPresentationContext = true
@@ -123,16 +116,13 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
         searchController.searchBar.setImage(searchIcon, for: UISearchBar.Icon.search, state: .normal)
         searchController.searchBar.setImage(clearIcon, for: UISearchBar.Icon.clear, state: .normal)
         
-       // searchController.searchBar.setSearchFieldBackgroundImage(UIImage.color(UIColor.clear, size:  CGSize(width: 50, height: 38)), for: .normal) // Clear the background image
         searchController.searchBar.searchTextPositionAdjustment = UIOffset(horizontal: 5.0, vertical: 0) // calling setSearchFieldBackgroundImage removes the spacing between the search icon and text
         if let searchField = searchController.searchBar.value(forKey: "searchField") as? UITextField {
             if let backgroundview = searchField.subviews.first {
-                //backgroundview.backgroundColor = UIColor.inactiveNavSearchBackgroundColor
                 backgroundview.layer.cornerRadius = 10
                 backgroundview.clipsToBounds = true
             }
         }
-       // UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).tintColor = UIColor.white // Set cursor color
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: .LoginsListSearchPlaceholder, attributes: [:]) // Set the placeholder text and color
         return searchController
     }
@@ -167,15 +157,14 @@ extension CredentialListViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "selectapasswordhelptext", for: indexPath) as? SelectPasswordCell else {
                 return UITableViewCell()
             }
-//            let borderView = UIView()
-//            borderView.frame = CGRect(x: 0, y: cell.frame.height-1, width: cell.frame.width, height: 1)
-//            borderView.backgroundColor = UIColor.helpTextBorderColor
-//            cell.addSubview(borderView)
             return cell
         case .displayItem(let credentialIdentity):
             let cell = tableView.dequeueReusableCell(withIdentifier: "itemlistcell", for: indexPath) as? ItemListCell
             cell?.titleLabel.text = credentialIdentity.serviceIdentifier.identifier.titleFromHostname
             cell?.detailLabel.text = credentialIdentity.user
+            let backgroundView = UIView()
+            backgroundView.backgroundColor = UIColor.lightGray
+            cell?.selectedBackgroundView = backgroundView
             return cell ?? UITableViewCell()
         case .none:
             return UITableViewCell()
@@ -191,23 +180,6 @@ extension CredentialListViewController: UITableViewDelegate {
     }
 }
 
-extension CredentialListViewController: UISearchControllerDelegate {
-    func willPresentSearchController(_ searchController: UISearchController) {
-        if let searchField = searchController.searchBar.value(forKey: "searchField") as? UITextField {
-            if let backgroundview = searchField.subviews.first {
-                //backgroundview.backgroundColor = UIColor.activeNavSearchBackgroundColor
-            }
-        }
-    }
-    
-    func willDismissSearchController(_ searchController: UISearchController) {
-        if let searchField = searchController.searchBar.value(forKey: "searchField") as? UITextField {
-            if let backgroundview = searchField.subviews.first {
-               // backgroundview.backgroundColor = UIColor.inactiveNavSearchBackgroundColor
-            }
-        }
-    }
-}
 
 extension CredentialListViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
