@@ -95,12 +95,16 @@ enum ExpandButtonState {
 }
 
 class TabsHeaderView: UICollectionReusableView {
-    static let verticalInsets: CGFloat = 4
     var state: ExpandButtonState? {
         willSet(state) {
             moreButton.setImage(state?.image, for: .normal)
         }
     }
+    
+    lazy var containerView: UIView = {
+        let containerView = UIView()
+        return titleLabel
+    }()
     
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
@@ -146,23 +150,70 @@ class TabsHeaderView: UICollectionReusableView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        self.backgroundColor = .cyan
         addSubview(titleLabel)
         addSubview(moreButton)
+        addSubview(containerView)
+        containerView.backgroundColor = .systemPink
+        containerView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(6)
+            make.bottom.equalToSuperview().offset(-6)
+            make.width.equalTo(230)
+            make.height.equalTo(40)
+            make.centerX.equalToSuperview()
+        }
         moreButton.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(6)
             make.bottom.equalToSuperview().offset(-6)
-            make.trailing.equalTo(self.safeArea.trailing).inset(titleInsets)
+            make.trailing.equalTo(self.safeArea.trailing) //.inset(titleInsets)
         }
         moreButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(self.safeArea.leading).inset(titleInsets)
-            make.trailing.equalTo(moreButton.snp.leading).inset(-FirefoxHomeHeaderViewUX.TitleTopInset)
-            
+            make.leading.equalTo(self.safeArea.leading) //.inset(titleInsets)
+            //make.trailing.equalTo(moreButton.snp.leading).inset(-FirefoxHomeHeaderViewUX.TitleTopInset)
             make.bottom.equalToSuperview().offset(-10)
         }
     }
 
     required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+
+class TabsHeaderView1: UICollectionReusableView {
+
+    static let reuseIdentifier = "supplementary-header-reusable-view"
+    let label: UILabel
+
+    enum Constants {
+        static let padding: CGFloat = 20.0
+    }
+
+    override init(frame: CGRect) {
+        label = UILabel()
+        super.init(frame: .zero)
+        backgroundColor = .cyan
+    }
+    
+    func setupView() {
+        label.numberOfLines = 0
+        addSubview(label)
+        label.text = "HELLO WORLD"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.padding),
+            label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.padding),
+            label.topAnchor.constraint(equalTo: topAnchor, constant: Constants.padding),
+            label.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -Constants.padding),
+            ])
+    }
+    
+    func removeSubviews() {
+        label.removeFromSuperview()
+    }
+
+    required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }

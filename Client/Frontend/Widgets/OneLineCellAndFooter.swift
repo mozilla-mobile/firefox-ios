@@ -10,6 +10,11 @@ struct OneLineCellUX {
     static let HorizontalMargin: CGFloat = 16
 }
 
+enum OneLineTableViewCustomization {
+    case regular
+    case inactiveCell
+}
+
 class OneLineTableViewCell: UITableViewCell, Themeable {
     // Tableview cell items
     var selectedView: UIView = {
@@ -54,8 +59,8 @@ class OneLineTableViewCell: UITableViewCell, Themeable {
     let containerView = UIView()
     let midView = UIView()
     var shouldLeftAlignTitle = false
-    
-    private func initialViewSetup() {
+    var customization: OneLineTableViewCustomization = .regular
+    func initialViewSetup() {
         separatorInset = UIEdgeInsets(top: 0, left: TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin, bottom: 0, right: 0)
         self.selectionStyle = .default
         midView.addSubview(titleLabel)
@@ -71,13 +76,13 @@ class OneLineTableViewCell: UITableViewCell, Themeable {
             make.leading.equalToSuperview()
             make.trailing.equalTo(accessoryView?.snp.leading ?? contentView.snp.trailing)
         }
-        
+
         leftImageView.snp.makeConstraints { make in
             make.height.width.equalTo(28)
-            make.leading.equalTo(containerView.snp.leading).offset(5)
+            make.leading.equalTo(containerView.snp.leading).offset(15)
             make.centerY.equalTo(containerView.snp.centerY)
         }
-        
+
         midView.snp.makeConstraints { make in
             make.height.equalTo(42)
             make.centerY.equalToSuperview()
@@ -88,7 +93,7 @@ class OneLineTableViewCell: UITableViewCell, Themeable {
             }
             make.trailing.equalTo(containerView.snp.trailing).offset(-7)
         }
-        
+
         titleLabel.snp.makeConstraints { make in
             make.height.equalTo(40)
             make.centerY.equalTo(midView.snp.centerY)
@@ -101,6 +106,11 @@ class OneLineTableViewCell: UITableViewCell, Themeable {
     }
     
     func updateMidConstraint() {
+        leftImageView.snp.updateConstraints { update in
+            let leadingLeft = customization == .regular ? 15 : customization == .inactiveCell ? 5 : 15
+            update.leading.equalTo(containerView.snp.leading).offset(leadingLeft)
+        }
+
         midView.snp.remakeConstraints { make in
             make.height.equalTo(42)
             make.centerY.equalToSuperview()

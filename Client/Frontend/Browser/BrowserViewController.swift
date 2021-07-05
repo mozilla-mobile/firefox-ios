@@ -2201,6 +2201,17 @@ extension BrowserViewController: SessionRestoreHelperDelegate {
 }
 
 extension BrowserViewController: TabTrayDelegate {
+    func tabTrayOpenRecentlyClosedTab(_ url: URL) {
+        print("URL: \(url)")
+        guard let tab = self.tabManager.selectedTab else { return }
+        self.finishEditingAndSubmit(url, visitType: .recentlyClosed, forTab: tab)
+        
+//        tabTrayViewController?.didSelectUrl = { url, visitType in
+
+//        }
+
+    }
+    
     // This function animates and resets the tab chrome transforms when
     // the tab tray dismisses.
     func tabTrayDidDismiss(_ tabTray: GridTabViewController) {
