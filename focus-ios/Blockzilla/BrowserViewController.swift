@@ -284,6 +284,12 @@ class BrowserViewController: UIViewController {
     public func deactivateUrlBarOnHomeView() {
         urlBar.dismissTextField()
     }
+    
+    public func dismissSettings() {
+        if self.presentedViewController?.children.first is SettingsViewController {
+            self.presentedViewController?.children.first?.dismiss(animated: true, completion: nil)
+        }
+    }
 
     private func containWebView() {
         addChild(webViewController)
