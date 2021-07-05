@@ -10,6 +10,8 @@ protocol LoginDetailTableViewCellDelegate: AnyObject {
     func didSelectOpenAndFillForCell(_ cell: LoginDetailTableViewCell)
     func shouldReturnAfterEditingDescription(_ cell: LoginDetailTableViewCell) -> Bool
     func canPeform(action: Selector, for cell: LoginDetailTableViewCell) -> Bool
+    func textFieldDidChange(_ cell: LoginDetailTableViewCell)
+    func textFieldDidEndEditing(_ cell: LoginDetailTableViewCell)
 }
 
 public struct LoginTableViewCellUX {
@@ -50,6 +52,7 @@ class LoginDetailTableViewCell: ThemedTableViewCell {
         label.adjustsFontSizeToFitWidth = false
         label.delegate = self
         label.isAccessibilityElement = true
+        label.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         return label
     }()
 
@@ -89,6 +92,11 @@ class LoginDetailTableViewCell: ThemedTableViewCell {
         ]
 
         return descriptionText.size(withAttributes: attributes)
+    }
+    
+    var placeholder: String? {
+        get { descriptionLabel.placeholder }
+        set { descriptionLabel.placeholder = newValue }
     }
 
     var displayDescriptionAsPassword: Bool = false {
@@ -211,5 +219,10 @@ extension LoginDetailTableViewCell: UITextFieldDelegate {
         if descriptionLabel.isSecureTextEntry {
             displayDescriptionAsPassword = true
         }
+        delegate?.textFieldDidEndEditing(self)
+    }
+    
+    @objc func textFieldDidChange(_ textField: UITextField) {
+        delegate?.textFieldDidChange(self)
     }
 }

@@ -4,6 +4,7 @@
 
 import UIKit
 import Shared
+import Storage
 
 enum AddCredentialItem: Int {
     case websiteItem
@@ -30,15 +31,33 @@ class AddCredentialViewController: UIViewController {
         tableView.tableFooterView = UIView()
         return tableView
     }()
-    fileprivate weak var websiteField: UITextField?
-    fileprivate weak var usernameField: UITextField?
-    fileprivate weak var passwordField: UITextField?
+    fileprivate weak var websiteField: UITextField!
+    fileprivate weak var usernameField: UITextField!
+    fileprivate weak var passwordField: UITextField!
+    
+    fileprivate let didSaveAction: (LoginRecord) -> Void
+    
+    fileprivate lazy var cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
+    fileprivate lazy var saveButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(title: Strings.SettingsAddCustomEngineSaveButtonText, style: .done, target: self, action: #selector(addCredential))
+        button.isEnabled = false
+        return button
+    }()
+    
+    init(didSaveAction: @escaping (LoginRecord) -> Void) {
+        self.didSaveAction = didSaveAction
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: Strings.SettingsAddCustomEngineSaveButtonText, style: .done, target: self, action: #selector(addCredential))
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
+        navigationItem.rightBarButtonItem = saveButton
+        navigationItem.leftBarButtonItem = cancelButton
 
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
@@ -55,11 +74,41 @@ class AddCredentialViewController: UIViewController {
     }
     
     @objc func addCredential() {
-        print("Add")
+        guard let hostname = websiteField.text,
+              let username = usernameField.text,
+              let password = passwordField.text else {
+            return
+        }
+        
+        didSaveAction(
+            Login(
+                id: "",
+                hostname: hostname,
+                password: password,
+                username: username,
+                httpRealm: nil,
+                formSubmitUrl: hostname,
+                usernameField: "",
+                passwordField: "",
+                timesUsed: 0,
+                timeCreated: Int64(Date().timeIntervalSince1970),
+                timeLastUsed: 0,
+                timePasswordChanged: 0
+            )
+        )
     }
     
     @objc func cancel() {
         self.dismiss(animated: true)
+    }
+    
+    private func normalize(website: String) -> String {
+        guard !website.isEmpty else { return website }
+        if website.hasPrefix("http://") || website.hasPrefix("https://") {
+            return website
+        } else {
+            return "https://" + website
+        }
     }
 }
 
@@ -93,6 +142,7 @@ extension AddCredentialViewController: UITableViewDataSource {
             let loginCell = cell(forIndexPath: indexPath)
             loginCell.highlightedLabelTitle = .LoginDetailWebsite
             websiteField = loginCell.descriptionLabel
+            loginCell.placeholder = "https://www.example.com"
             websiteField?.accessibilityIdentifier = "websiteField"
             loginCell.isEditingFieldData = true
             return loginCell
@@ -145,6 +195,21 @@ extension AddCredentialViewController: KeyboardHelperDelegate {
 
 // MARK: - Cell Delegate
 extension AddCredentialViewController: LoginDetailTableViewCellDelegate {
+    func textFieldDidEndEditing(_ cell: LoginDetailTableViewCell) {
+        guard cell.descriptionLabel == websiteField, let website = websiteField?.text else { return }
+        websiteField.text = normalize(website: website)
+    }
+    
+    func textFieldDidChange(_ cell: LoginDetailTableViewCell) {
+        // TODO: Add validation if necessary
+        let enableSave =
+            !(websiteField.text?.isEmpty ?? true) &&
+            !(usernameField.text?.isEmpty ?? true) &&
+            !(passwordField.text?.isEmpty ?? true)
+        
+        saveButton.isEnabled = enableSave
+    }
+    
     func canPeform(action: Selector, for cell: LoginDetailTableViewCell) -> Bool {
         guard let item = infoItemForCell(cell) else {
             return false
@@ -177,16 +242,12 @@ extension AddCredentialViewController: LoginDetailTableViewCellDelegate {
     func didSelectOpenAndFillForCell(_ cell: LoginDetailTableViewCell) { }
 
     func shouldReturnAfterEditingDescription(_ cell: LoginDetailTableViewCell) -> Bool {
-        let websiteCell = cellForItem(.websiteItem)
-        let usernameCell = cellForItem(.usernameItem)
-        let passwordCell = cellForItem(.passwordItem)
-
-        switch cell {
-        case websiteCell:
-            usernameCell?.descriptionLabel.becomeFirstResponder()
-        case usernameCell:
-            passwordCell?.descriptionLabel.becomeFirstResponder()
-        case passwordCell:
+        switch cell.descriptionLabel {
+        case websiteField:
+            usernameField.becomeFirstResponder()
+        case usernameField:
+            passwordField.becomeFirstResponder()
+        case passwordField:
             return false
         default:
             return false

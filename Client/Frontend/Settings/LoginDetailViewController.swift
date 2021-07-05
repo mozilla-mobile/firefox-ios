@@ -380,6 +380,9 @@ extension LoginDetailViewController {
 
 // MARK: - Cell Delegate
 extension LoginDetailViewController: LoginDetailTableViewCellDelegate {
+    func textFieldDidEndEditing(_ cell: LoginDetailTableViewCell) { }
+    func textFieldDidChange(_ cell: LoginDetailTableViewCell) { }
+    
     func canPeform(action: Selector, for cell: LoginDetailTableViewCell) -> Bool {
         guard let item = infoItemForCell(cell) else {
             return false
