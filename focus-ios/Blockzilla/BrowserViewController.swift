@@ -290,6 +290,13 @@ class BrowserViewController: UIViewController {
             self.presentedViewController?.children.first?.dismiss(animated: true, completion: nil)
         }
     }
+    
+    public func dismissActionSheet() {
+        if self.presentedViewController is PhotonActionSheet {
+            self.presentedViewController?.dismiss(animated: true, completion: nil)
+            photonActionSheetDidDismiss()
+        }
+    }
 
     private func containWebView() {
         addChild(webViewController)
