@@ -5,7 +5,7 @@
 import Foundation
 import Storage
 
-class InactiveViewModel {
+class InactiveTabViewModel {
     var inactiveTabs = [Tab]()
     var normalTabs = [Tab]()
     var recentlyClosedTabs = [Tab]()

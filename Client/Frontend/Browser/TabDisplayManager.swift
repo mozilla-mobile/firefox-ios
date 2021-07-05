@@ -26,6 +26,7 @@ enum TabAnimationType {
 
 protocol TabDisplayCompletionDelegate: AnyObject {
     func completedAnimation(for: TabAnimationType)
+    func displayRecentlyClosedTabs()
 }
 
 // MARK: -
@@ -69,14 +70,19 @@ enum TabDisplaySection: Int, CaseIterable {
     }
 }
 
+enum TabDisplayType {
+    case TabGrid
+    case TopTabTray
+}
+
 class TabDisplayManager: NSObject {
     var performingChainedOperations = false
-    var inactiveViewModel: InactiveViewModel?
+    var inactiveViewModel: InactiveTabViewModel?
     var isInactiveViewExpanded: Bool = false
     var dataStore = WeakList<Tab>()
     var operations = [(TabAnimationType, (() -> Void))]()
     weak var tabDisplayCompletionDelegate: TabDisplayCompletionDelegate?
-
+    var tabDisplayType: TabDisplayType = .TabGrid
     fileprivate let tabManager: TabManager
     fileprivate let collectionView: UICollectionView
     fileprivate weak var tabDisplayer: TabDisplayer?
@@ -118,14 +124,15 @@ class TabDisplayManager: NSObject {
         return isActive
     }
 
-    init(collectionView: UICollectionView, tabManager: TabManager, tabDisplayer: TabDisplayer, reuseID: String) {
+    init(collectionView: UICollectionView, tabManager: TabManager, tabDisplayer: TabDisplayer, reuseID: String, tabDisplayType: TabDisplayType) {
         self.collectionView = collectionView
         self.tabDisplayer = tabDisplayer
         self.tabManager = tabManager
         self.isPrivate = tabManager.selectedTab?.isPrivate ?? false
         self.tabReuseIdentifer = reuseID
+        self.tabDisplayType = tabDisplayType
         super.init()
-        self.inactiveViewModel = InactiveViewModel(tabs: tabManager.tabs)
+        self.inactiveViewModel = InactiveTabViewModel(tabs: tabManager.tabs)
         tabManager.addDelegate(self)
         register(self, forTabEvents: .didLoadFavicon, .didChangeURL)
 
@@ -180,7 +187,6 @@ class TabDisplayManager: NSObject {
             self.dataStore.insert($0)
         }
         collectionView.reloadData()
-
         if evenIfHidden {
             // reloadData() will reset the data for the collection view,
             // but if called when offscreen it will not render properly,
@@ -193,7 +199,6 @@ class TabDisplayManager: NSObject {
             }
             collectionView.reloadItems(at: indexPaths)
         }
-
         tabDisplayer?.focusSelectedTab()
     }
 
@@ -236,31 +241,44 @@ class TabDisplayManager: NSObject {
 
 extension TabDisplayManager: UICollectionViewDataSource {
     @objc func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if tabDisplayType == .TopTabTray {
+            return dataStore.count
+        }
         switch TabDisplaySection(rawValue: section) {
         case .regularTabs:
             return dataStore.count
         case .inactiveTabs:
-            return 1
+            return isPrivate ? 0 : 1
         case .none:
             return 0
         }
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let tab = dataStore.at(indexPath.row)!
         var cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.tabReuseIdentifer, for: indexPath)
-//        let inactiveCell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabCell.Identifier, for: indexPath) as? InactiveTabCell
+        guard let tab = dataStore.at(indexPath.row) else { return cell }
+//        let tab = dataStore.at(indexPath.row)
+        if tabDisplayType == .TopTabTray {
+            cell = tabDisplayer?.cellFactory(for: cell, using: tab) ?? cell
+            return cell
+        }
+//        let gridIdentifier = "GridHeaderView"
+//        var cell = collectionView.dequeueReusableCell(withReuseIdentifier: tabReuseIdentifer, for: indexPath)
         assert(tabDisplayer != nil)
         switch TabDisplaySection(rawValue: indexPath.section) {
         case .regularTabs:
             cell = tabDisplayer?.cellFactory(for: cell, using: tab) ?? cell
         case .inactiveTabs:
             if let inactiveCell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabCell.Identifier, for: indexPath) as? InactiveTabCell {
+                let tabs = inactiveViewModel?.tabs
                 inactiveCell.inactiveTabsViewModel = inactiveViewModel
+                inactiveCell.hasExpanded = isInactiveViewExpanded
+                inactiveCell.inactiveTabsViewModel?.inactiveTabs.removeAll()
+                inactiveCell.inactiveTabsViewModel?.inactiveTabs.append(contentsOf: tabs ?? [])
+                inactiveCell.delegate = self
                 inactiveCell.tableView.reloadData()
                 cell = inactiveCell
             }
-//            cell = inactiveCell
         case .none:
             return cell
         }
@@ -268,47 +286,85 @@ extension TabDisplayManager: UICollectionViewDataSource {
     }
     
     @objc func numberOfSections(in collectionView: UICollectionView) -> Int {
+        if tabDisplayType == .TopTabTray {
+            return 1
+        }
         return TabDisplaySection.allCases.count
     }
     
-    @objc func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        switch kind {
-        case UICollectionView.elementKindSectionHeader:
-            let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "GridHeaderView", for: indexPath) as! TabsHeaderView
-            view.state = isInactiveViewExpanded ? .down : .right
-            view.title = String.TabsTrayInactiveTabsSectionTitle
-            view.moreButton.isHidden = false
-            view.moreButton.addTarget(self, action: #selector(expand), for: .touchUpInside)
-            switch TabDisplaySection(rawValue: indexPath.section) {
-            case .regularTabs:
-                return view
-            case .inactiveTabs:
-                return view
-            case .none:
-                return UICollectionReusableView()
-            }
-        default:
-            return UICollectionReusableView()
+    
+//    @objc func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+//        if tabDisplayType == .TopTabTray {
+//            return UICollectionReusableView()
+//        }
+//        switch kind {
+//        case UICollectionView.elementKindSectionHeader:
+//            let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "GridHeaderView", for: indexPath) as! TabsHeaderView
+//            let frame = CGRect(x: view.frame.origin.x, y: view.frame.origin.y, width: 230, height: 40)
+//            let bounds = CGRect(x: view.frame.origin.x, y: view.bounds.origin.y, width: 230, height: 40)
+//            view.frame = frame
+//            view.bounds = bounds
+////            let height = Int(view.frame.height)
+////            let size = CGSize(width: Int(collectionView.contentSize.width)/2, height: height)
+////            let size = CGRect(x: view.bounds.origin.x, y: view.bounds.origin.y, width: 400, height: view.bounds.height)
+////            view.bounds = size
+//
+//            view.state = isInactiveViewExpanded ? .down : .right
+//            view.title = String.TabsTrayInactiveTabsSectionTitle
+//            view.moreButton.isHidden = false
+//            view.moreButton.addTarget(self, action: #selector(expand), for: .touchUpInside)
+//            switch TabDisplaySection(rawValue: indexPath.section) {
+//            case .regularTabs:
+//                return view
+//            case .inactiveTabs:
+//                return view
+//            case .none:
+//                return UICollectionReusableView()
+//            }
+//        default:
+//            return UICollectionReusableView()
+//        }
+//    }
+//
+//    @objc func expand() {
+//        print("Expand")
+//        let indexPath = IndexPath(row: 0, section: 1)
+//        if let cell = collectionView.cellForItem(at: indexPath) as? InactiveTabCell {
+//            let tabs = inactiveViewModel?.tabs
+//            if cell.inactiveTabsViewModel?.inactiveTabs.isEmpty ?? false {
+//                cell.inactiveTabsViewModel?.inactiveTabs.append(contentsOf: tabs ?? [])
+//                isInactiveViewExpanded = true
+//            } else {
+//                cell.inactiveTabsViewModel?.inactiveTabs.removeAll()
+//                isInactiveViewExpanded = false
+//            }
+//            cell.tableView.reloadData()
+//            collectionView.reloadItems(at: [indexPath])
+//            collectionView.reloadSections(IndexSet(1...1))
+//            collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true  )
+//        }
+//    }
+}
+
+extension TabDisplayManager: InactiveTabsDelegate {
+    func didTapRecentlyClosed() {
+        self.tabDisplayCompletionDelegate?.displayRecentlyClosedTabs()
+    }
+    
+    func didSelectInactiveTab(tab: Tab?) {
+        if let tabTray = tabDisplayer as? GridTabViewController {
+            print(tab)
+            tabManager.selectTab(tab)
+            tabTray.dismissTabTray()
         }
     }
     
-    @objc func expand() {
-        print("Expand")
+    func expand(hasExpanded: Bool) {
+        print("hasExpanded: \(hasExpanded)")
+        isInactiveViewExpanded = hasExpanded
         let indexPath = IndexPath(row: 0, section: 1)
-        if let cell = collectionView.cellForItem(at: indexPath) as? InactiveTabCell {
-            let tabs = inactiveViewModel?.tabs
-            if cell.inactiveTabsViewModel?.inactiveTabs.isEmpty ?? false {
-                cell.inactiveTabsViewModel?.inactiveTabs.append(contentsOf: tabs ?? [])
-                isInactiveViewExpanded = true
-            } else {
-                cell.inactiveTabsViewModel?.inactiveTabs.removeAll()
-                isInactiveViewExpanded = false
-            }
-            cell.tableView.reloadData()
-            collectionView.reloadItems(at: [indexPath])
-            collectionView.reloadSections(IndexSet(1...1))
-            collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true  )
-        }
+        collectionView.reloadItems(at: [indexPath])
+        collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true  )
     }
 }
 
@@ -443,7 +499,6 @@ extension TabDisplayManager: TabEventHandler {
 
             if selectedTabChanged {
                 self?.tabDisplayer?.focusSelectedTab()
-
                 // Check if the selected tab has changed. This method avoids relying on the state of the "previous" selected tab,
                 // instead it iterates the displayed tabs to see which appears selected.
                 // See also `didSelectedTabChange` for more info on why this is a good approach.
@@ -543,6 +598,7 @@ extension TabDisplayManager: TabManagerDelegate {
         collectionView.performBatchUpdates({ [weak self] in
             // Baseline animation speed is 1.0, which is too slow, this (odd) code sets it to 3x
             self?.collectionView.forFirstBaselineLayout.layer.speed = 3.0
+//            collectionView.collectionViewLayout.invalidateLayout()
             operation()
             }, completion: { [weak self] (done) in
                 self?.performingChainedOperations = false

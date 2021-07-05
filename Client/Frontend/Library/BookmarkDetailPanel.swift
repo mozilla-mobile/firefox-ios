@@ -329,7 +329,6 @@ class BookmarkDetailPanel: SiteTableViewController {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: BookmarkDetailFolderCellIdentifier, for: indexPath) as? OneLineTableViewCell else {
                 return super.tableView(tableView, cellForRowAt: indexPath)
             }
-
             // Disable folder selection when creating a new bookmark or folder.
             if isNew {
                 cell.titleLabel.alpha = 0.5
