@@ -10,13 +10,6 @@ import Shared
 enum InactiveTabSection: Int, CaseIterable {
     case inactive
     case recentlyClosed
-
-//    var footerText: String? {
-//        switch self {
-//        case .inactive: return nil
-//        case .recentlyClosed: return String.TabsTrayRecentlyClosedTabsDescritpion
-//        }
-//    }
 }
 
 protocol InactiveTabsDelegate {
@@ -44,8 +37,6 @@ class InactiveTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, U
         tableView.tableHeaderView = UIView(frame: CGRect(origin: .zero, size: CGSize(width: 0, height: CGFloat.leastNormalMagnitude)))
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 0)
         tableView.isScrollEnabled = false
-//        tableView.tableFooterView = UIView(frame: CGRect(origin: .zero, size: CGSize(width: 0, height: CGFloat.leastNormalMagnitude)))
-//        tableView.style = .grouped
         return tableView
     }()
 
@@ -62,28 +53,18 @@ class InactiveTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, U
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-//        super.init(frame: .zero)
-//        super.init(frame: CGRect(width: 150, height: 150))
-//        tableView.frame = CGRect(width: 150, height: 150)
         addSubviews(tableView)
         addSubviews(tableView)
         setupConstraints()
         applyTheme()
 
     }
-//    init() {
-//        super.init(frame: .zero)
-//        addSubviews(tableView)
-//        setupConstraints()
-//        applyTheme()
-//    }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
     private func setupConstraints() {
-//        tableView.frame = self.frame
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -95,7 +76,6 @@ class InactiveTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, U
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        guard let count = inactiveTabsViewModel?.inactiveTabs.count else { return 0 }
         if !hasExpanded { return 0 }
         switch InactiveTabSection(rawValue: section) {
         case .inactive:
@@ -160,7 +140,7 @@ class InactiveTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, U
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("\(indexPath)")
+        tableView.deselectRow(at: indexPath, animated: true)
         let section = indexPath.section
         switch InactiveTabSection(rawValue: section) {
         case .inactive:
@@ -170,13 +150,13 @@ class InactiveTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, U
         case .recentlyClosed, .none:
             delegate?.didTapRecentlyClosed()
         }
+        
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         switch InactiveTabSection(rawValue: section) {
         case .inactive, .none:
             guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: InactiveTabsHeaderIdentifier) as? InactiveTabHeader else { return nil }
-            headerView.titleLabel.text = "HELLO"
             headerView.state = hasExpanded ? .down : .right
             headerView.title = String.TabsTrayInactiveTabsSectionTitle
             headerView.moreButton.isHidden = false
@@ -189,13 +169,9 @@ class InactiveTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, U
     }
     
     @objc func expand() {
-        print("EXPAND")
-//        if hasExpanded {
         hasExpanded = !hasExpanded
-//        tableView.reloadSections(IndexSet(0...0), with: .none)
         tableView.reloadData()
         delegate?.expand(hasExpanded: hasExpanded)
-//        }
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -288,18 +264,15 @@ class InactiveTabHeader: UITableViewHeaderFooterView, Themeable {
         contentView.addSubview(moreButton)
         
         moreButton.snp.makeConstraints { make in
-//            make.top.equalToSuperview().offset(6)
-//            make.bottom.equalToSuperview().offset(-6)
             make.centerX.equalToSuperview()
             make.leading.equalTo(titleLabel.snp.trailing)
-            make.trailing.equalTo(self.safeArea.trailing).inset(titleInsets)
+            let insetValue = UIDevice.current.userInterfaceIdiom == .pad ? 8 : 12
+            make.trailing.equalTo(self.safeArea.trailing).inset(insetValue)
         }
         moreButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(self.safeArea.leading) //.inset(titleInsets)
-            //make.trailing.equalTo(moreButton.snp.leading).inset(-FirefoxHomeHeaderViewUX.TitleTopInset)
+            make.leading.equalTo(self.safeArea.leading).inset(5)
             make.centerX.equalToSuperview()
-//            make.bottom.equalToSuperview().offset(-10)
         }
         
         applyTheme()

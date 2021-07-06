@@ -86,7 +86,11 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
     var hasRecentlyClosed: Bool {
         return profile.recentlyClosedTabs.tabs.count > 0
     }
-
+    
+    var shouldEnableInactiveTabs: Bool {
+        return profile.prefs.boolForKey(PrefsKeys.KeyEnableInactiveTabs) ?? false
+    }
+    
     lazy var emptyStateOverlayView: UIView = createEmptyStateOverlayView()
 
     lazy var longPressRecognizer: UILongPressGestureRecognizer = {
@@ -409,7 +413,8 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // First section is for recently closed and always has 1 row.
         guard section > Section.additionalHistoryActions.rawValue else {
-            return 2
+            // Hide recently saved tab row in history section when inactive tabs are enabled
+            return shouldEnableInactiveTabs ? 1 : 2
         }
 
         return groupedSites.numberOfItemsForSection(section - 1)
@@ -442,6 +447,12 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
             }
 
             let oneLineCell = tableView.dequeueReusableCell(withIdentifier: OneLineCellIdentifier, for: indexPath) as! OneLineTableViewCell
+            
+            // Hide recently saved tab row in history section when inactive tabs are enabled
+            if shouldEnableInactiveTabs {
+                return configureClearHistory(oneLineCell, for: indexPath)
+            }
+            
             switch row {
             case .clearRecent:
                 return configureClearHistory(oneLineCell, for: indexPath)

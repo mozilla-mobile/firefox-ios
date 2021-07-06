@@ -87,12 +87,15 @@ class TabDisplayManager: NSObject {
     fileprivate let collectionView: UICollectionView
     fileprivate weak var tabDisplayer: TabDisplayer?
     private let tabReuseIdentifer: String
-
+    var profile: Profile
+    var shouldEnableInactiveTabs: Bool {
+        return profile.prefs.boolForKey(PrefsKeys.KeyEnableInactiveTabs) ?? false
+    }
+    
     private var tabsToDisplay: [Tab] {
+        if shouldEnableInactiveTabs { return getTabsToDisplay() }
         let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
-        inactiveViewModel?.tabs = allTabs
-        _ = inactiveViewModel?.updateInactiveTabs()
-        return inactiveViewModel?.tabs ?? [Tab]()
+        return allTabs
     }
 
     private(set) var isPrivate = false
@@ -124,13 +127,16 @@ class TabDisplayManager: NSObject {
         return isActive
     }
 
-    init(collectionView: UICollectionView, tabManager: TabManager, tabDisplayer: TabDisplayer, reuseID: String, tabDisplayType: TabDisplayType) {
+    
+    
+    init(collectionView: UICollectionView, tabManager: TabManager, tabDisplayer: TabDisplayer, reuseID: String, tabDisplayType: TabDisplayType, profile: Profile) {
         self.collectionView = collectionView
         self.tabDisplayer = tabDisplayer
         self.tabManager = tabManager
         self.isPrivate = tabManager.selectedTab?.isPrivate ?? false
         self.tabReuseIdentifer = reuseID
         self.tabDisplayType = tabDisplayType
+        self.profile = profile
         super.init()
         self.inactiveViewModel = InactiveTabViewModel(tabs: tabManager.tabs)
         tabManager.addDelegate(self)
@@ -143,6 +149,21 @@ class TabDisplayManager: NSObject {
         collectionView.reloadData()
     }
 
+    func getTabsToDisplay() -> [Tab] {
+        let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
+        guard allTabs.count > 0 else { return [Tab]() }
+        guard allTabs.count > 1 else { return allTabs }
+        let selectedTab = tabManager.selectedTab
+        inactiveViewModel?.selectedTab = selectedTab
+        inactiveViewModel?.tabs = allTabs
+        _ = inactiveViewModel?.updateInactiveTabs()
+        if let recentlyClosedTabs = inactiveViewModel?.recentlyClosedTabs, recentlyClosedTabs.count > 0 {
+            tabManager.removeTabs(recentlyClosedTabs, shouldNotify: true)
+            tabManager.selectTab(selectedTab)
+        }
+        return inactiveViewModel?.normalTabs ?? [Tab]()
+    }
+    
     func togglePrivateMode(isOn: Bool, createTabOnEmptyPrivateMode: Bool) {
         guard isPrivate != isOn else { return }
 
@@ -241,9 +262,8 @@ class TabDisplayManager: NSObject {
 
 extension TabDisplayManager: UICollectionViewDataSource {
     @objc func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if tabDisplayType == .TopTabTray {
-            return dataStore.count
-        }
+        if !shouldEnableInactiveTabs { return dataStore.count }
+        if tabDisplayType == .TopTabTray { return dataStore.count }
         switch TabDisplaySection(rawValue: section) {
         case .regularTabs:
             return dataStore.count
@@ -257,20 +277,17 @@ extension TabDisplayManager: UICollectionViewDataSource {
     @objc func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         var cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.tabReuseIdentifer, for: indexPath)
         guard let tab = dataStore.at(indexPath.row) else { return cell }
-//        let tab = dataStore.at(indexPath.row)
         if tabDisplayType == .TopTabTray {
             cell = tabDisplayer?.cellFactory(for: cell, using: tab) ?? cell
             return cell
         }
-//        let gridIdentifier = "GridHeaderView"
-//        var cell = collectionView.dequeueReusableCell(withReuseIdentifier: tabReuseIdentifer, for: indexPath)
         assert(tabDisplayer != nil)
         switch TabDisplaySection(rawValue: indexPath.section) {
         case .regularTabs:
             cell = tabDisplayer?.cellFactory(for: cell, using: tab) ?? cell
         case .inactiveTabs:
             if let inactiveCell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabCell.Identifier, for: indexPath) as? InactiveTabCell {
-                let tabs = inactiveViewModel?.tabs
+                let tabs = inactiveViewModel?.inactiveTabs
                 inactiveCell.inactiveTabsViewModel = inactiveViewModel
                 inactiveCell.hasExpanded = isInactiveViewExpanded
                 inactiveCell.inactiveTabsViewModel?.inactiveTabs.removeAll()
@@ -286,64 +303,10 @@ extension TabDisplayManager: UICollectionViewDataSource {
     }
     
     @objc func numberOfSections(in collectionView: UICollectionView) -> Int {
-        if tabDisplayType == .TopTabTray {
-            return 1
-        }
+        if !shouldEnableInactiveTabs { return 1 }
+        if tabDisplayType == .TopTabTray { return 1 }
         return TabDisplaySection.allCases.count
     }
-    
-    
-//    @objc func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-//        if tabDisplayType == .TopTabTray {
-//            return UICollectionReusableView()
-//        }
-//        switch kind {
-//        case UICollectionView.elementKindSectionHeader:
-//            let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "GridHeaderView", for: indexPath) as! TabsHeaderView
-//            let frame = CGRect(x: view.frame.origin.x, y: view.frame.origin.y, width: 230, height: 40)
-//            let bounds = CGRect(x: view.frame.origin.x, y: view.bounds.origin.y, width: 230, height: 40)
-//            view.frame = frame
-//            view.bounds = bounds
-////            let height = Int(view.frame.height)
-////            let size = CGSize(width: Int(collectionView.contentSize.width)/2, height: height)
-////            let size = CGRect(x: view.bounds.origin.x, y: view.bounds.origin.y, width: 400, height: view.bounds.height)
-////            view.bounds = size
-//
-//            view.state = isInactiveViewExpanded ? .down : .right
-//            view.title = String.TabsTrayInactiveTabsSectionTitle
-//            view.moreButton.isHidden = false
-//            view.moreButton.addTarget(self, action: #selector(expand), for: .touchUpInside)
-//            switch TabDisplaySection(rawValue: indexPath.section) {
-//            case .regularTabs:
-//                return view
-//            case .inactiveTabs:
-//                return view
-//            case .none:
-//                return UICollectionReusableView()
-//            }
-//        default:
-//            return UICollectionReusableView()
-//        }
-//    }
-//
-//    @objc func expand() {
-//        print("Expand")
-//        let indexPath = IndexPath(row: 0, section: 1)
-//        if let cell = collectionView.cellForItem(at: indexPath) as? InactiveTabCell {
-//            let tabs = inactiveViewModel?.tabs
-//            if cell.inactiveTabsViewModel?.inactiveTabs.isEmpty ?? false {
-//                cell.inactiveTabsViewModel?.inactiveTabs.append(contentsOf: tabs ?? [])
-//                isInactiveViewExpanded = true
-//            } else {
-//                cell.inactiveTabsViewModel?.inactiveTabs.removeAll()
-//                isInactiveViewExpanded = false
-//            }
-//            cell.tableView.reloadData()
-//            collectionView.reloadItems(at: [indexPath])
-//            collectionView.reloadSections(IndexSet(1...1))
-//            collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true  )
-//        }
-//    }
 }
 
 extension TabDisplayManager: InactiveTabsDelegate {
@@ -353,7 +316,6 @@ extension TabDisplayManager: InactiveTabsDelegate {
     
     func didSelectInactiveTab(tab: Tab?) {
         if let tabTray = tabDisplayer as? GridTabViewController {
-            print(tab)
             tabManager.selectTab(tab)
             tabTray.dismissTabTray()
         }

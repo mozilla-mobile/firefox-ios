@@ -268,7 +268,7 @@ class BrowserViewController: UIViewController {
 
         if showTopTabs {
             if topTabsViewController == nil {
-                let topTabsViewController = TopTabsViewController(tabManager: tabManager)
+                let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
                 topTabsViewController.delegate = self
                 addChild(topTabsViewController)
                 topTabsViewController.view.frame = topTabsContainer.frame

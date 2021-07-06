@@ -566,9 +566,9 @@ class TabManager: NSObject {
         recentlyClosedForUndo.removeAll()
     }
 
-    func removeTabs(_ tabs: [Tab]) {
+    func removeTabs(_ tabs: [Tab], shouldNotify: Bool = true) {
         for tab in tabs {
-            self.removeTab(tab, flushToDisk: false, notify: true)
+            self.removeTab(tab, flushToDisk: false, notify: shouldNotify)
         }
         storeChanges()
     }

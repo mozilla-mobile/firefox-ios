@@ -609,6 +609,31 @@ class ToggleRecentlySavedSection: HiddenSetting {
     }
 }
 
+class ToggleInactiveTabs: HiddenSetting {
+    var currentStatus: Bool {
+        return settings.profile.prefs.boolForKey(PrefsKeys.KeyEnableInactiveTabs) ?? false
+    }
+
+    override var title: NSAttributedString? {
+        let toNewStatus = currentStatus ? "OFF" : "ON"
+        return NSAttributedString(string: "Toggle inactive tabs: \(toNewStatus)",
+                                  attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        settings.profile.prefs.setBool(!currentStatus, forKey: PrefsKeys.KeyEnableInactiveTabs)
+        updateCell(navigationController)
+    }
+
+    func updateCell(_ navigationController: UINavigationController?) {
+        let controller = navigationController?.topViewController
+        let tableView = (controller as? AppSettingsTableViewController)?.tableView
+        tableView?.reloadData()
+    }
+}
+
+
+
 // Show the current version of Firefox
 class VersionSetting: Setting {
     unowned let settings: SettingsTableViewController
