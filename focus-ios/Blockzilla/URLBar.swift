@@ -150,18 +150,9 @@ class URLBar: UIView {
         addSubview(toolset.forwardButton)
         addSubview(toolset.stopReloadButton)
         addSubview(toolset.settingsButton)
-        addSubview(shieldIcon)
 
         urlText.isUserInteractionEnabled = false
         urlBarBackgroundView.addSubview(textAndLockContainer)
-
-        shieldIcon.isHidden = true
-        shieldIcon.tintColor = .white
-        shieldIcon.alpha = 0
-        shieldIcon.contentMode = .center
-        shieldIcon.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
-        shieldIcon.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
-        shieldIcon.accessibilityIdentifier = "URLBar.trackingProtectionIcon"
 
         let gestureRecognizer = UITapGestureRecognizer()
         gestureRecognizer.numberOfTapsRequired = 1
@@ -214,13 +205,13 @@ class URLBar: UIView {
         pageActionsButton.contentEdgeInsets = UIConstants.layout.urlBarPageActionsButtonInsets
         textAndLockContainer.addSubview(pageActionsButton)
 
-        urlBarBorderView.backgroundColor = UIConstants.Photon.Grey10.withAlphaComponent(0.1)
+        urlBarBorderView.backgroundColor = .secondayButton
         urlBarBorderView.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
         urlBarBorderView.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
         urlBarBorderView.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
         addSubview(urlBarBorderView)
 
-        urlBarBackgroundView.backgroundColor = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
+        urlBarBackgroundView.backgroundColor = .secondayButton
         urlBarBackgroundView.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
         urlBarBackgroundView.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
         urlBarBackgroundView.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
@@ -261,8 +252,8 @@ class URLBar: UIView {
         clearButton.addTarget(self, action: #selector(didPressClear), for: .touchUpInside)
 
         urlText.font = UIConstants.fonts.urlText
-        urlText.tintColor = UIConstants.colors.urlTextFont
-        urlText.textColor = UIConstants.colors.urlTextFont
+        urlText.tintColor = .primaryText
+        urlText.textColor = .primaryText
         urlText.highlightColor = UIConstants.colors.urlTextHighlight
         urlText.keyboardType = .webSearch
         urlText.autocapitalizationType = .none
@@ -275,6 +266,13 @@ class URLBar: UIView {
         urlText.accessibilityIdentifier = "URLBar.urlText"
         urlText.placeholder = UIConstants.strings.urlTextPlaceholder
         textAndLockContainer.addSubview(urlText)
+        
+        shieldIcon.tintColor = .primaryText
+        shieldIcon.contentMode = .center
+        shieldIcon.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
+        shieldIcon.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
+        shieldIcon.accessibilityIdentifier = "URLBar.trackingProtectionIcon"
+        textAndLockContainer.addSubview(shieldIcon)
 
         progressBar.isHidden = true
         progressBar.alpha = 0
@@ -332,10 +330,10 @@ class URLBar: UIView {
         }
 
         urlBarBorderView.snp.makeConstraints { make in
-            make.height.equalTo(42).priority(.medium)
+            make.height.equalTo(UIConstants.layout.urlBarBorderHeight).priority(.medium)
             make.top.bottom.equalToSuperview().inset(UIConstants.layout.urlBarMargin)
 
-            compressedBarConstraints.append(make.height.equalTo(48).constraint)
+            compressedBarConstraints.append(make.height.equalTo(UIConstants.layout.urlBarBorderHeight).constraint)
             compressedBarConstraints.append(make.trailing.equalTo(safeAreaLayoutGuide.snp.trailing).inset(UIConstants.layout.urlBarMargin).constraint)
 
             expandedBarConstraints.append(make.trailing.equalTo(rightBarViewLayoutGuide.snp.leading).constraint)
@@ -381,8 +379,8 @@ class URLBar: UIView {
 
         urlText.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
-
-            hideLockConstraints.append(make.leading.equalToSuperview().constraint)
+            
+            hideLockConstraints.append(make.leading.equalTo(shieldIcon).inset(UIConstants.layout.shieldIconInset).priority(999).constraint)
             // Account for the content inset of the URLTextField to balance
             // the spacing around the lock icon
             showLockConstraints.append(make.leading.equalTo(lockIcon.snp.trailing).inset(UIConstants.layout.lockIconInset - 4).constraint)
@@ -644,8 +642,8 @@ class URLBar: UIView {
 
             setTextToURL()
             deactivate()
-            borderColor = UIConstants.Photon.Grey10.withAlphaComponent(0.1)
-            backgroundColor = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
+            borderColor = .secondayButton
+            backgroundColor = .secondayButton
         case .browsing:
             showLeftBar = true
             compressBar = false
@@ -911,7 +909,7 @@ private class URLTextField: AutocompleteTextField {
 
     override var placeholder: String? {
         didSet {
-            attributedPlaceholder = NSAttributedString(string: placeholder ?? "", attributes: [.foregroundColor: UIConstants.colors.urlTextPlaceholder])
+            attributedPlaceholder = NSAttributedString(string: placeholder ?? "", attributes: [.foregroundColor: UIColor(named: "SecondaryText")!])
         }
     }
 
@@ -957,6 +955,8 @@ class TrackingProtectionBadge: UIView {
 
     func setupViews() {
         trackingProtectionOff.alpha = 0
+        trackingProtectionOn.contentMode = .scaleAspectFit
+        trackingProtectionOff.contentMode = .scaleAspectFit
 
         addSubview(trackingProtectionOff)
         addSubview(trackingProtectionOn)
