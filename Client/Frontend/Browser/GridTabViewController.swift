@@ -42,7 +42,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     // Backdrop used for displaying greyed background for private tabs
     var webViewContainerBackdrop: UIView!
     var collectionView: UICollectionView!
-    var recentlyClosedTabsPanel:RecentlyClosedTabsPanel?
+    var recentlyClosedTabsPanel: RecentlyClosedTabsPanel?
     
     fileprivate lazy var emptyPrivateTabsView: EmptyPrivateTabsView = {
         let emptyView = EmptyPrivateTabsView()
@@ -59,12 +59,10 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     var numberOfColumns: Int {
         return tabLayoutDelegate.numberOfColumns
     }
-    var flowLayout: GridTabFlowLayout
     init(tabManager: TabManager, profile: Profile, tabTrayDelegate: TabTrayDelegate? = nil) {
         self.tabManager = tabManager
         self.profile = profile
         self.delegate = tabTrayDelegate
-        self.flowLayout = GridTabFlowLayout()
         super.init(nibName: nil, bundle: nil)
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.register(TabCell.self, forCellWithReuseIdentifier: TabCell.Identifier)
@@ -90,12 +88,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         // When the app enters split screen mode we refresh the collection view layout to show the proper grid
         collectionView.collectionViewLayout.invalidateLayout()
     }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        print("SUBViEw")
-    }
-    
+
     deinit {
         tabManager.removeDelegate(self.tabDisplayManager)
         tabManager.removeDelegate(self)
@@ -104,11 +97,8 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-            
-        guard let columnLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else {
-            return
-        }
-        columnLayout.invalidateLayout()
+        guard let flowlayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
+        flowlayout.invalidateLayout()
     }
     
     func focusTab() {
@@ -582,42 +572,6 @@ extension GridTabViewController {
     }
 }
 
-class GridTabFlowLayout: UICollectionViewFlowLayout {
-    var decorationAttributeArr: [Int: UICollectionViewLayoutAttributes?] = [:]
-    let separatorYOffset = TopTabsUX.SeparatorYOffset
-    let separatorSize = TopTabsUX.SeparatorHeight
-    let SeparatorZIndex = -2 ///Prevent the header/footer from appearing above the Tabs
-
-    override func prepare() {
-        super.prepare()
-        self.minimumLineSpacing = TopTabsUX.SeparatorWidth
-        scrollDirection = .vertical
-    }
-
-    override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
-        decorationAttributeArr = [:]
-        return true
-    }
-    
-//    override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-//        <#code#>
-//    }
-
-    
-    override func layoutAttributesForSupplementaryView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
-//        let attributes = super.layoutAttributesForSupplementaryView(ofKind: elementKind, at: indexPath)
-//        attributes?.size = CGSize(width: 30, height: 45)
-        let layoutAttributes = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: elementKind, with: indexPath)
-        if elementKind == UICollectionView.elementKindSectionHeader {
-                layoutAttributes.frame = CGRect(x: 0.0, y: 0.0, width: 10, height: 45)
-                layoutAttributes.zIndex = Int.max - 3
-        }
-        return layoutAttributes
-        
-//        return attributes
-    }
-}
-
 class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate {
     weak var tabSelectionDelegate: TabSelectionDelegate?
     var searchHeightConstraint: Constraint?
@@ -676,23 +630,17 @@ class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIGesture
         case .inactiveTabs:
             if tabDisplayManager.isPrivate { return CGSize(width: 0, height: 0) }
             let minHeight = 45
-            var height = 1
-//            let width: CGFloat = collectionView.contentSize.width - 25
+            // Default height for footer and recently closed cell
+            let additionalHeight = minHeight*3
+            var height = 0
             let width = collectionView.frame.size.width - 30
-//            return CGSize(width: width >= 0 ? Int(width) : 0, height: 350)
-//            if let inactiveCell = collectionView.cellForItem(at: indexPath) as? InactiveTabCell {
-//                if let inactiveTabs = inactiveCell.inactiveTabsViewModel?.inactiveTabs {
-//                    let additionalHeight = minHeight*3 // Default height for footer and recently closed cell
-//                    height = 45*inactiveTabs.count > 0 ? 45*inactiveTabs.count + additionalHeight : 0
-//                }
-//            }
-            if let inactiveTabs = tabDisplayManager.inactiveViewModel?.tabs.count {
-                let additionalHeight = minHeight*3 // Default height for footer and recently closed cell
-                height = 45*inactiveTabs > 0 ? 45*inactiveTabs + additionalHeight : 0
+            
+            if tabDisplayManager.isInactiveViewExpanded { height = additionalHeight + minHeight }
+            if let inactiveTabs = tabDisplayManager.inactiveViewModel?.inactiveTabs {
+                height = minHeight*inactiveTabs.count > 0 ? minHeight*inactiveTabs.count + additionalHeight : additionalHeight + minHeight
             }
 
             height = tabDisplayManager.isInactiveViewExpanded ? height : minHeight
-//            return CGSize(width: Int(collectionView.frame.size.width - 480) <= 0 ? 250 : Int(collectionView.frame.size.width - 400), height: height)
             
             if UIDevice.current.userInterfaceIdiom == .pad {
                 return CGSize(width: Int(collectionView.frame.size.width/2), height: height)
@@ -703,7 +651,6 @@ class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIGesture
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-//        return UIEdgeInsets(top: 0,  left: GridTabTrayControllerUX.Margin,  bottom: GridTabTrayControllerUX.Margin,  right: GridTabTrayControllerUX.Margin)
         return UIEdgeInsets(equalInset: GridTabTrayControllerUX.Margin)
     }
 
@@ -714,27 +661,10 @@ class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIGesture
     @objc func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         tabSelectionDelegate?.didSelectTabAtIndex(indexPath.row)
     }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        if tabDisplayManager.isPrivate { return CGSize(width: 0, height: 0) }
-        return CGSize(width: 0, height: 0)
-//        let width = UIDevice.current.userInterfaceIdiom == .pad ? collectionView.contentSize.width/2 : collectionView.contentSize.width
-//        let size = CGSize(width: 30, height: 45)
-//        switch TabDisplaySection(rawValue: section) {
-//        case .regularTabs:
-//            return CGSize(width: 0, height: 0)
-//        case .inactiveTabs, .none:
-//            return size
-//        }
-    }
-    
-//    @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-//        return CGSize(width: 20, height: 40)
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+//        if tabDisplayManager.isPrivate { return CGSize(width: 0, height: 0) }
+//        return CGSize(width: 0, height: 0)
 //    }
-//
-////    @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-////        return CGSize(width: 20, height: 40)
-////    }
 }
 
 extension GridTabViewController: DevicePickerViewControllerDelegate {

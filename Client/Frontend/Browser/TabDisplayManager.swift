@@ -64,10 +64,6 @@ enum TabDisplaySection: Int, CaseIterable {
         case .inactiveTabs: return UIImage.templateImageNamed("menu-pocket")
         }
     }
-
-    var headerHeight: CGSize {
-        return CGSize(width: 50, height: 40)
-    }
 }
 
 enum TabDisplayType {
@@ -89,6 +85,7 @@ class TabDisplayManager: NSObject {
     private let tabReuseIdentifer: String
     var profile: Profile
     var shouldEnableInactiveTabs: Bool {
+        guard AppConstants.IS_RECENTLY_SAVED_SECTION_ENABLED else { return false }
         return profile.prefs.boolForKey(PrefsKeys.KeyEnableInactiveTabs) ?? false
     }
     
@@ -141,7 +138,7 @@ class TabDisplayManager: NSObject {
         self.inactiveViewModel = InactiveTabViewModel(tabs: tabManager.tabs)
         tabManager.addDelegate(self)
         register(self, forTabEvents: .didLoadFavicon, .didChangeURL)
-
+        self.dataStore.removeAll()
         tabsToDisplay.forEach {
             self.dataStore.insert($0)
         }
@@ -151,17 +148,19 @@ class TabDisplayManager: NSObject {
 
     func getTabsToDisplay() -> [Tab] {
         let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
-        guard allTabs.count > 0 else { return [Tab]() }
+        guard allTabs.count > 0, let inactiveViewModel = inactiveViewModel else { return [Tab]() }
         guard allTabs.count > 1 else { return allTabs }
         let selectedTab = tabManager.selectedTab
-        inactiveViewModel?.selectedTab = selectedTab
-        inactiveViewModel?.tabs = allTabs
-        _ = inactiveViewModel?.updateInactiveTabs()
-        if let recentlyClosedTabs = inactiveViewModel?.recentlyClosedTabs, recentlyClosedTabs.count > 0 {
+        inactiveViewModel.selectedTab = selectedTab
+        inactiveViewModel.tabs = allTabs
+        _ = inactiveViewModel.updateInactiveTabs()
+        isInactiveViewExpanded = inactiveViewModel.inactiveTabs.count > 0
+        let recentlyClosedTabs = inactiveViewModel.recentlyClosedTabs
+        if recentlyClosedTabs.count > 0 {
             tabManager.removeTabs(recentlyClosedTabs, shouldNotify: true)
             tabManager.selectTab(selectedTab)
         }
-        return inactiveViewModel?.normalTabs ?? [Tab]()
+        return inactiveViewModel.normalTabs
     }
     
     func togglePrivateMode(isOn: Bool, createTabOnEmptyPrivateMode: Bool) {
@@ -322,7 +321,6 @@ extension TabDisplayManager: InactiveTabsDelegate {
     }
     
     func expand(hasExpanded: Bool) {
-        print("hasExpanded: \(hasExpanded)")
         isInactiveViewExpanded = hasExpanded
         let indexPath = IndexPath(row: 0, section: 1)
         collectionView.reloadItems(at: [indexPath])
@@ -535,7 +533,13 @@ extension TabDisplayManager: TabManagerDelegate {
         }
 
         let type = tabManager.normalTabs.isEmpty ? TabAnimationType.removedLastTab : TabAnimationType.removedNonLastTab
-
+        self.collectionView.reloadData()
+//        updateWith(animationType: type) { [weak self] in
+//            if let tabToRemove = self?.dataStore.index(of: tab) {
+//                self?.collectionView.deleteItems(at: [IndexPath(row: tabToRemove, section: 0)])
+//                guard let removed = self?.dataStore.remove(tab) else { return }
+//            }
+//        }
         updateWith(animationType: type) { [weak self] in
             guard let removed = self?.dataStore.remove(tab) else { return }
             self?.collectionView.deleteItems(at: [IndexPath(row: removed, section: 0)])

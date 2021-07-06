@@ -178,6 +178,7 @@ class TopTabsViewController: UIViewController {
     }
 
     @objc func tabsTrayTapped() {
+        self.topTabDisplayManager.refreshStore(evenIfHidden: true)
         delegate?.topTabsDidPressTabs()
     }
 
