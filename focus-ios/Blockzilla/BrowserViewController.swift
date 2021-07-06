@@ -108,7 +108,8 @@ class BrowserViewController: UIViewController {
 
         webViewController.delegate = self
 
-        let background = GradientBackgroundView(alpha: 0.7, startPoint: CGPoint.zero, endPoint: CGPoint(x: 1, y: 1))
+        let background = UIImageView(image: #imageLiteral(resourceName: "background"))
+        background.contentMode = .scaleAspectFill
         mainContainerView.addSubview(background)
 
         mainContainerView.addSubview(homeViewContainer)

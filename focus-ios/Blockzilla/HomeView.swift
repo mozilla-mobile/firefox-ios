@@ -12,8 +12,6 @@ protocol HomeViewDelegate: class {
 
 class HomeView: UIView {
     weak var delegate: HomeViewDelegate?
-    private let privateBrowsingDescription = SmartLabel()
-    private let browseEraseRepeatTagline = SmartLabel()
     private let tipView = UIView()
     private let trackerStatsLabel = SmartLabel()
     private let tipTitleLabel = SmartLabel()
@@ -33,23 +31,9 @@ class HomeView: UIView {
         rotated()
         NotificationCenter.default.addObserver(self, selector: #selector(HomeView.rotated), name: UIDevice.orientationDidChangeNotification, object: nil)
 
-        let wordmark = AppInfo.config.wordmark
-        textLogo.image = wordmark
+        textLogo.image = UIImage(named: "logo")
+        textLogo.contentMode = .scaleAspectFit
         addSubview(textLogo)
-
-        privateBrowsingDescription.textColor = .white
-        privateBrowsingDescription.font = UIConstants.fonts.homeLabel
-        privateBrowsingDescription.textAlignment = .center
-        privateBrowsingDescription.text = UIConstants.strings.homeLabel1
-        privateBrowsingDescription.numberOfLines = 0
-        addSubview(privateBrowsingDescription)
-
-        browseEraseRepeatTagline.textColor = .white
-        browseEraseRepeatTagline.font = UIConstants.fonts.homeLabel
-        browseEraseRepeatTagline.textAlignment = .center
-        browseEraseRepeatTagline.text = UIConstants.strings.homeLabel2
-        browseEraseRepeatTagline.numberOfLines = 0
-        addSubview(browseEraseRepeatTagline)
 
         addSubview(toolbar)
 
@@ -92,16 +76,8 @@ class HomeView: UIView {
         textLogo.snp.makeConstraints { make in
             make.centerX.equalTo(self)
             make.top.equalTo(snp.centerY).offset(UIConstants.layout.textLogoOffset)
-        }
-
-        privateBrowsingDescription.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(self)
-            make.top.equalTo(textLogo.snp.bottom).offset(UIConstants.layout.homePrivateBrowsingDescriptionLabelTopOffset)
-        }
-
-        browseEraseRepeatTagline.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(self)
-            make.top.equalTo(privateBrowsingDescription.snp.bottom)
+            make.left.equalTo(self.snp.left).offset(UIConstants.layout.textLogoMargin)
+            make.right.equalTo(self.snp.left).offset(-UIConstants.layout.textLogoMargin)
         }
 
         tipView.snp.makeConstraints { make in
@@ -168,8 +144,6 @@ class HomeView: UIView {
     }
 
     func showTipView() {
-        privateBrowsingDescription.isHidden = true
-        browseEraseRepeatTagline.isHidden = true
         tipView.isHidden = false
     }
 
