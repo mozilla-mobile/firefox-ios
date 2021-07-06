@@ -53,7 +53,7 @@ extension Strings {
     public static let TopSitesRowCount = MZLocalizedString("ActivityStream.TopSites.RowCount", value: "Rows: %d", comment: "label showing how many rows of topsites are shown. %d represents a number")
     public static let RecentlyBookmarkedTitle = MZLocalizedString("ActivityStream.NewRecentBookmarks.Title", value: "Recent Bookmarks", comment: "Section title label for recently bookmarked websites")
     public static let RecentlyVisitedTitle = MZLocalizedString("ActivityStream.RecentHistory.Title", value: "Recently Visited", comment: "Section title label for recently visited websites")
-    public static let RecentlySavedSectionTitle = MZLocalizedString("ActivityStream.Library.Title", tableName: "Recently Saved", value: "Recently Saved", comment: "A string used to signify the start of the Recently Saved section in Home Screen.")
+    public static let RecentlySavedSectionTitle = MZLocalizedString("ActivityStream.Library.Title", value: "Recently Saved", comment: "A string used to signify the start of the Recently Saved section in Home Screen.")
     public static let RecentlySavedShowAllText = MZLocalizedString("RecentlySaved.Actions.More", value: "Show All", comment: "More button text for Recently Saved items at the home page.")
 }
 
@@ -103,8 +103,7 @@ extension Strings {
     public static let SettingsGeneralSectionTitle = MZLocalizedString("Settings.General.SectionName", value: "General", comment: "General settings section title")
     public static let SettingsClearPrivateDataClearButton = MZLocalizedString("Settings.ClearPrivateData.Clear.Button", value: "Clear Private Data", comment: "Button in settings that clears private data for the selected items.")
     public static let SettingsClearAllWebsiteDataButton = MZLocalizedString("Settings.ClearAllWebsiteData.Clear.Button", value: "Clear All Website Data", comment: "Button in Data Management that clears all items.")
-    public static let SettingsClearOneWebsiteDataButton = MZLocalizedString("Settings.ClearSelectedWebsiteData.ClearOneItem.Button", value: "Clear 1 Item", comment: "Button in Data Management that clears private data for one selected item.")
-    public static let SettingsClearSelectedWebsiteDataButton = MZLocalizedString("Settings.ClearSelectedWebsiteData.ClearSelected.Button", value: "Clear %1$@ Items", comment: "Button in Data Management that clears private data for the selected items. Parameter is the number of items to be cleared")
+    public static let SettingsClearSelectedWebsiteDataButton = MZLocalizedString("Settings.ClearSelectedWebsiteData.ClearSelected.Button", value: "Clear Items: %1$@", comment: "Button in Data Management that clears private data for the selected items. Parameter is the number of items to be cleared")
     public static let SettingsClearPrivateDataSectionName = MZLocalizedString("Settings.ClearPrivateData.SectionName", value: "Clear Private Data", comment: "Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data.")
     public static let SettingsDataManagementSectionName = MZLocalizedString("Settings.DataManagement.SectionName", value: "Data Management", comment: "Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data.")
     public static let SettingsFilterSitesSearchLabel = MZLocalizedString("Settings.DataManagement.SearchLabel", value: "Filter Sites", comment: "Default text in search bar for Data Management")
@@ -1387,10 +1386,10 @@ extension String {
 
 // MARK: - v35 Strings
 extension String {
-    public static let FirefoxHomeJumpBackInSectionTitle = MZLocalizedString("Jump Back In", comment: "Section title for the Jump Back In section")
-    public static let FirefoxHomeRecentlySavedSectionTitle = MZLocalizedString("Recently Saved", comment: "Section title for the Recently Saved section")
-    public static let FirefoxHomeShowAll = MZLocalizedString("Show all", comment: "Button to show all tabs or recently saved items in their respective locations")
-    public static let TabsTrayInactiveTabsSectionTitle = MZLocalizedString("Inactive Tabs", comment: "Inactive tabs section title")
-    public static let TabsTrayRecentlyCloseTabsSectionTitle = MZLocalizedString("Recently closed", comment: "Recently closed section title")
-    public static let TabsTrayRecentlyClosedTabsDescritpion = MZLocalizedString("Tabs are available here for 30 days. After that time, tabs will be automatically closed.", comment: "Describes what the Recently Closed tabs behaviour is for users unfamilliar with it.")
+    public static let FirefoxHomeJumpBackInSectionTitle = MZLocalizedString("ActivityStream.JumpBackIn.SectionTitle", value: Jump Back In", comment: "Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab")
+    public static let FirefoxHomeRecentlySavedSectionTitle = MZLocalizedString("ActivityStream.RecentlySaved.SectionTitle", value: "Recently Saved", comment: "Section title for the Recently Saved section. This shows websites that have had a save action. Right now it is just bookmarks but it could be used for other things like the reading list in the future.")
+    public static let FirefoxHomeShowAll = MZLocalizedString("ActivityStream.RecentlySaved.ShowAll", value: "Show all", comment: "This button will open the library showing all the users bookmarks")
+    public static let TabsTrayInactiveTabsSectionTitle = MZLocalizedString("TabTray.InactiveTabs.SectionTitle", value: "Inactive Tabs", comment: "Title for the inactive tabs section. This section groups all tabs that haven't been used in a while.")
+    public static let TabsTrayRecentlyCloseTabsSectionTitle = MZLocalizedString("TabTray.RecentlyClosed.SectionTitle", value: Recently closed", comment: "Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed.")
+    public static let TabsTrayRecentlyClosedTabsDescritpion = MZLocalizedString("TabTray.RecentlyClosed.Description", value: "Tabs are available here for 30 days. After that time, tabs will be automatically closed.", comment: "Describes what the Recently Closed tabs behavior is for users unfamiliar with it.")
 }
