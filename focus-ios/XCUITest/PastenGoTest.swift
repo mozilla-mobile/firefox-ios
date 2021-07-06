@@ -68,7 +68,7 @@ class PastenGoTest: BaseTestCase {
 
         // Check the correct site is reached
         waitForValueContains(searchOrEnterAddressTextField, value: "www.mozilla.org")
-        app.buttons["URLBar.deleteButton"].tap()
+        app.buttons["URLBar.deleteButton"].firstMatch.tap()
         waitForExistence(app.staticTexts["Your browsing history has been erased."])
 
         clipboard = "1(*&)(*%@@$^%^12345)"

@@ -47,7 +47,6 @@ struct UIConstants {
         static let toastText = UIColor.white
         static let toggleOff = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
         static let toggleOn = UIConstants.Photon.Magenta40
-        static let toolbarButtonNormal = UIColor.darkGray
         static let urlTextFont = UIConstants.Photon.Grey10
         static let urlTextHighlight = UIConstants.Photon.Magenta40
         static let urlTextPlaceholder = UIConstants.Photon.Grey10.withAlphaComponent(0.4)
@@ -162,7 +161,7 @@ struct UIConstants {
     }
 
     struct layout {
-        static let browserToolbarDisabledOpacity: CGFloat = 0.3
+        static let browserToolbarDisabledOpacity: CGFloat = 0.4
         static let browserToolbarHeight: CGFloat = 44
         static let deleteAnimationDuration: TimeInterval = 0.25
         static let alphaToZeroDeleteAnimationDuration: TimeInterval = deleteAnimationDuration * (2 / 3)

@@ -469,6 +469,7 @@ class BrowserViewController: UIViewController {
         browserToolbar.isHidden = true
         browserToolbar.canGoBack = false
         browserToolbar.canGoForward = false
+        browserToolbar.canDelete = false
         urlBar.removeFromSuperview()
         urlBarContainer.alpha = 0
         createHomeView()
@@ -1055,6 +1056,11 @@ extension BrowserViewController: BrowserToolsetDelegate {
     func browserToolsetDidPressStop(_ browserToolset: BrowserToolset) {
         webViewController.stop()
     }
+    
+    func browserToolsetDidPressDelete(_ browserToolbar: BrowserToolset) {
+        updateFindInPageVisibility(visible: false)
+        self.resetBrowser()
+    }
 
     func browserToolsetDidPressSettings(_ browserToolbar: BrowserToolset) {
         updateFindInPageVisibility(visible: false)
@@ -1205,6 +1211,7 @@ extension BrowserViewController: WebControllerDelegate {
         SearchHistoryUtils.isNavigating = false
         SearchHistoryUtils.isFromURLBar = false
         urlBar.isLoading = true
+        browserToolbar.canDelete = true
         browserToolbar.color = .loading
         toggleURLBarBackground(isBright: false)
         updateURLBar()

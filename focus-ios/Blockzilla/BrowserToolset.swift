@@ -11,6 +11,7 @@ protocol BrowserToolsetDelegate: class {
     func browserToolsetDidPressReload(_ browserToolbar: BrowserToolset)
     func browserToolsetDidLongPressReload(_ browserToolbar: BrowserToolset)
     func browserToolsetDidPressStop(_ browserToolbar: BrowserToolset)
+    func browserToolsetDidPressDelete(_ browserToolbar: BrowserToolset)
     func browserToolsetDidPressSettings(_ browserToolbar: BrowserToolset)
 }
 
@@ -20,10 +21,11 @@ class BrowserToolset {
     let backButton = InsetButton()
     let forwardButton = InsetButton()
     let stopReloadButton = InsetButton()
+    let deleteButton = InsetButton()
     let settingsButton = InsetButton()
 
     init() {
-        backButton.tintColor = UIConstants.colors.toolbarButtonNormal
+        backButton.tintColor = .primaryText
         backButton.setImage(#imageLiteral(resourceName: "icon_back_active"), for: .normal)
         backButton.setImage(#imageLiteral(resourceName: "icon_back_active").alpha(0.4), for: .disabled)
         backButton.addTarget(self, action: #selector(didPressBack), for: .touchUpInside)
@@ -31,24 +33,32 @@ class BrowserToolset {
         backButton.accessibilityLabel = UIConstants.strings.browserBack
         backButton.isEnabled = false
 
-        forwardButton.tintColor = UIConstants.colors.toolbarButtonNormal
+        forwardButton.tintColor = .primaryText
         forwardButton.setImage(#imageLiteral(resourceName: "icon_forward_active"), for: .normal)
-        forwardButton.setImage(#imageLiteral(resourceName: "icon_forward_active").alpha(0.4), for: .disabled)
+        forwardButton.setImage(#imageLiteral(resourceName: "icon_forward_active").alpha(UIConstants.layout.browserToolbarDisabledOpacity), for: .disabled)
         forwardButton.addTarget(self, action: #selector(didPressForward), for: .touchUpInside)
         forwardButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         forwardButton.accessibilityLabel = UIConstants.strings.browserForward
         forwardButton.isEnabled = false
 
-        stopReloadButton.tintColor = UIConstants.colors.toolbarButtonNormal
+        stopReloadButton.tintColor = .primaryText
         stopReloadButton.setImage(#imageLiteral(resourceName: "icon_refresh_menu"), for: .normal)
-        stopReloadButton.setImage(#imageLiteral(resourceName: "icon_refresh_menu").alpha(0.4), for: .disabled)
+        stopReloadButton.setImage(#imageLiteral(resourceName: "icon_refresh_menu").alpha(UIConstants.layout.browserToolbarDisabledOpacity), for: .disabled)
         stopReloadButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         let longPressGestureStopReloadButton = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressReload))
         stopReloadButton.addGestureRecognizer(longPressGestureStopReloadButton)
         stopReloadButton.addTarget(self, action: #selector(didPressStopReload), for: .touchUpInside)
         stopReloadButton.accessibilityIdentifier = "BrowserToolset.stopReloadButton"
+        
+        deleteButton.tintColor = .primaryText
+        deleteButton.setImage(#imageLiteral(resourceName: "icon_delete"), for: .normal)
+        deleteButton.setImage(#imageLiteral(resourceName: "icon_delete").alpha(UIConstants.layout.browserToolbarDisabledOpacity), for: .disabled)
+        deleteButton.addTarget(self, action: #selector(didPressDelete), for: .touchUpInside)
+        deleteButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
+        deleteButton.accessibilityIdentifier = "URLBar.deleteButton"
+        deleteButton.isEnabled = false
 
-        settingsButton.tintColor = UIConstants.colors.toolbarButtonNormal
+        settingsButton.tintColor = .primaryText
         settingsButton.addTarget(self, action: #selector(didPressSettings), for: .touchUpInside)
         settingsButton.accessibilityLabel = UIConstants.strings.browserSettings
         settingsButton.accessibilityIdentifier = "HomeView.settingsButton"
@@ -81,6 +91,13 @@ class BrowserToolset {
             }
         }
     }
+    
+    var canDelete: Bool = false {
+        didSet {
+            deleteButton.isEnabled = canDelete
+            deleteButton.alpha = canDelete ? 1 : UIConstants.layout.browserToolbarDisabledOpacity
+        }
+    }
 
     @objc private func didPressBack() {
         delegate?.browserToolsetDidPressBack(self)
@@ -95,6 +112,12 @@ class BrowserToolset {
             delegate?.browserToolsetDidPressStop(self)
         } else {
             delegate?.browserToolsetDidPressReload(self)
+        }
+    }
+    
+    @objc func didPressDelete() {
+        if canDelete {
+            delegate?.browserToolsetDidPressDelete(self)
         }
     }
 
@@ -127,15 +150,5 @@ extension BrowserToolset: WhatsNewDelegate {
     func didShowWhatsNew() {
         UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
         UserDefaults.standard.removeObject(forKey: AppDelegate.prefWhatsNewCounter)
-    }
-}
-
-extension UIImage {
-
-    func alpha(_ value: CGFloat) -> UIImage {
-        let imageRenderer = UIGraphicsImageRenderer(size: size)
-        return imageRenderer.image(actions: { (context) in
-            draw(at: .zero, blendMode: .normal, alpha: value)
-        })
     }
 }

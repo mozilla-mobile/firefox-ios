@@ -16,6 +16,7 @@ class HomeViewToolbar: UIView {
         stackView.addArrangedSubview(toolset.forwardButton)
         toolset.stopReloadButton.isEnabled = false
         stackView.addArrangedSubview(toolset.stopReloadButton)
+        stackView.addArrangedSubview(toolset.deleteButton)
         stackView.addArrangedSubview(toolset.settingsButton)
         addSubview(stackView)
 

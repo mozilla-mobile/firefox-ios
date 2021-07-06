@@ -11,4 +11,11 @@ extension UIImage {
             draw(in: CGRect(origin: .zero, size: size))
         })
     }
+    
+    func alpha(_ value: CGFloat) -> UIImage {
+        let imageRenderer = UIGraphicsImageRenderer(size: size)
+        return imageRenderer.image(actions: { (context) in
+            draw(at: .zero, blendMode: .normal, alpha: value)
+        })
+    }
 }

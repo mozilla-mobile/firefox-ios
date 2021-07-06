@@ -38,6 +38,7 @@ class BrowserToolbar: UIView {
         stackView.addArrangedSubview(toolset.backButton)
         stackView.addArrangedSubview(toolset.forwardButton)
         stackView.addArrangedSubview(toolset.stopReloadButton)
+        stackView.addArrangedSubview(toolset.deleteButton)
         stackView.addArrangedSubview(toolset.settingsButton)
         addSubview(stackView)
 
@@ -89,6 +90,12 @@ class BrowserToolbar: UIView {
     var canGoForward: Bool = false {
         didSet {
             toolset.canGoForward = canGoForward
+        }
+    }
+    
+    var canDelete: Bool = false {
+        didSet {
+            toolset.canDelete = canDelete
         }
     }
 

@@ -55,8 +55,8 @@ class TrackingProtectionMenu: BaseTestCase {
         app.buttons["PhotonMenu.close"].tap()
 
         // Erase the history
-        waitForHittable(app.buttons["URLBar.deleteButton"])
-        app.buttons["URLBar.deleteButton"].tap()
+        waitForExistence(app.buttons["URLBar.deleteButton"])
+        app.buttons["URLBar.deleteButton"].firstMatch.tap()
         waitForExistence(app.staticTexts["Your browsing history has been erased."])
 
         // Load another website known for zero (0) trackers
@@ -77,8 +77,8 @@ class TrackingProtectionMenu: BaseTestCase {
         app.buttons["PhotonMenu.close"].tap()
 
         // Erase the history
-        waitForHittable(app.buttons["URLBar.deleteButton"])
-        app.buttons["URLBar.deleteButton"].tap()
+        waitForExistence(app.buttons["URLBar.deleteButton"])
+        app.buttons["URLBar.deleteButton"].firstMatch.tap()
         waitForExistence(app.staticTexts["Your browsing history has been erased."])
     }
 

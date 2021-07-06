@@ -29,7 +29,7 @@ class WebsiteAccessTests: BaseTestCase {
         waitForValueContains(label, value: "www.example.com")
 
         // Erase the history
-        app.buttons["URLBar.deleteButton"].tap()
+        app.buttons["URLBar.deleteButton"].firstMatch.tap()
 
         // Check it is on the initial page
         checkForHomeScreen()

@@ -149,6 +149,7 @@ class URLBar: UIView {
         addSubview(toolset.backButton)
         addSubview(toolset.forwardButton)
         addSubview(toolset.stopReloadButton)
+        addSubview(toolset.deleteButton)
         addSubview(toolset.settingsButton)
 
         urlText.isUserInteractionEnabled = false
@@ -521,6 +522,12 @@ class URLBar: UIView {
     var canGoForward: Bool = false {
         didSet {
             toolset.canGoForward = canGoForward
+        }
+    }
+    
+    var canDelete: Bool = false {
+        didSet {
+            toolset.canDelete = canDelete
         }
     }
 
