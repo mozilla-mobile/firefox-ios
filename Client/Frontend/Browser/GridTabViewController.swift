@@ -259,7 +259,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         if tabDisplayManager.isDragging {
             return
         }
-        
+
         tabManager.selectTab(tabManager.addTab(request, isPrivate: isPrivate))
     }
 }
@@ -572,7 +572,7 @@ extension GridTabViewController {
     }
 }
 
-class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate {
+fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate {
     weak var tabSelectionDelegate: TabSelectionDelegate?
     var searchHeightConstraint: Constraint?
     let scrollView: UIScrollView
@@ -629,23 +629,23 @@ class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIGesture
             return CGSize(width: cellWidth, height: self.cellHeightForCurrentDevice())
         case .inactiveTabs:
             if tabDisplayManager.isPrivate { return CGSize(width: 0, height: 0) }
-            let minHeight = 45
+            let minInactiveCellHeight = Int(InactiveTabCellUX.headerAndRowHeight)
             // Default height for footer and recently closed cell
-            let additionalHeight = minHeight*3
-            var height = 0
+            let headerFooterCellCombinedHeight = minInactiveCellHeight*3
+            var totalHeight = headerFooterCellCombinedHeight + minInactiveCellHeight
             let width = collectionView.frame.size.width - 30
-            
-            if tabDisplayManager.isInactiveViewExpanded { height = additionalHeight + minHeight }
-            if let inactiveTabs = tabDisplayManager.inactiveViewModel?.inactiveTabs {
-                height = minHeight*inactiveTabs.count > 0 ? minHeight*inactiveTabs.count + additionalHeight : additionalHeight + minHeight
+
+            if let inactiveTabs = tabDisplayManager.inactiveViewModel?.inactiveTabs, inactiveTabs.count > 0 {
+                // Calculate height based on number of tabs in the inactive tab section section
+                totalHeight = minInactiveCellHeight*inactiveTabs.count + headerFooterCellCombinedHeight
             }
 
-            height = tabDisplayManager.isInactiveViewExpanded ? height : minHeight
+            totalHeight = tabDisplayManager.isInactiveViewExpanded ? totalHeight : minInactiveCellHeight
             
             if UIDevice.current.userInterfaceIdiom == .pad {
-                return CGSize(width: Int(collectionView.frame.size.width/2), height: height)
+                return CGSize(width: Int(collectionView.frame.size.width/2), height: totalHeight)
             } else {
-                return CGSize(width: width >= 0 ? Int(width) : 0, height: height)
+                return CGSize(width: width >= 0 ? Int(width) : 0, height: totalHeight)
             }
         }
     }

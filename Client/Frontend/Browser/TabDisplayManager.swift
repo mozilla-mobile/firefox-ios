@@ -533,13 +533,7 @@ extension TabDisplayManager: TabManagerDelegate {
         }
 
         let type = tabManager.normalTabs.isEmpty ? TabAnimationType.removedLastTab : TabAnimationType.removedNonLastTab
-        self.collectionView.reloadData()
-//        updateWith(animationType: type) { [weak self] in
-//            if let tabToRemove = self?.dataStore.index(of: tab) {
-//                self?.collectionView.deleteItems(at: [IndexPath(row: tabToRemove, section: 0)])
-//                guard let removed = self?.dataStore.remove(tab) else { return }
-//            }
-//        }
+        
         updateWith(animationType: type) { [weak self] in
             guard let removed = self?.dataStore.remove(tab) else { return }
             self?.collectionView.deleteItems(at: [IndexPath(row: removed, section: 0)])
@@ -564,7 +558,6 @@ extension TabDisplayManager: TabManagerDelegate {
         collectionView.performBatchUpdates({ [weak self] in
             // Baseline animation speed is 1.0, which is too slow, this (odd) code sets it to 3x
             self?.collectionView.forFirstBaselineLayout.layer.speed = 3.0
-//            collectionView.collectionViewLayout.invalidateLayout()
             operation()
             }, completion: { [weak self] (done) in
                 self?.performingChainedOperations = false
@@ -574,6 +567,7 @@ extension TabDisplayManager: TabManagerDelegate {
     }
 
     private func updateWith(animationType: TabAnimationType, operation: (() -> Void)?) {
+        self.collectionView.reloadData()
         if let op = operation {
             operations.insert((animationType, op), at: 0)
         }

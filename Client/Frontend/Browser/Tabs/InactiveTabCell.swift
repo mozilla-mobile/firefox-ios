@@ -18,6 +18,10 @@ protocol InactiveTabsDelegate {
     func didTapRecentlyClosed()
 }
 
+struct InactiveTabCellUX {
+    static let headerAndRowHeight: CGFloat = 45
+}
+
 class InactiveTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UITableViewDelegate {
     var inactiveTabsViewModel: InactiveTabViewModel?
     static let Identifier = "InactiveTabCellIdentifier"
@@ -88,7 +92,7 @@ class InactiveTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, U
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 45
+        return InactiveTabCellUX.headerAndRowHeight
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -135,7 +139,7 @@ class InactiveTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, U
         case .inactive, .none:
             return CGFloat.leastNormalMagnitude
         case .recentlyClosed:
-            return 45
+            return InactiveTabCellUX.headerAndRowHeight
         }
     }
     
@@ -177,7 +181,7 @@ class InactiveTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, U
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         switch InactiveTabSection(rawValue: section) {
         case .inactive, .none:
-            return 45
+            return InactiveTabCellUX.headerAndRowHeight
         case .recentlyClosed:
             return CGFloat.leastNormalMagnitude
         }
@@ -186,7 +190,7 @@ class InactiveTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, U
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
         switch InactiveTabSection(rawValue: section) {
         case .inactive, .none:
-            return 45
+            return InactiveTabCellUX.headerAndRowHeight
         case .recentlyClosed:
             return CGFloat.leastNormalMagnitude
         }
