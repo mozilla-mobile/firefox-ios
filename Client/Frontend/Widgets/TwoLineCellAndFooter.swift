@@ -347,4 +347,3 @@ class TwoLineHeaderFooterView: UITableViewHeaderFooterView, Themeable {
         applyTheme()
     }
 }
-

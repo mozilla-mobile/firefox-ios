@@ -25,7 +25,7 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel {
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     var recentlyClosedTabsDelegate: RecentlyClosedPanelDelegate?
     let profile: Profile
-    
+
     fileprivate lazy var tableViewController = RecentlyClosedTabsPanelSiteTableViewController(profile: profile)
 
     init(profile: Profile) {

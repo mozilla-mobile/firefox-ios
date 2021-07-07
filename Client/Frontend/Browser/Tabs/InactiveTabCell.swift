@@ -61,7 +61,6 @@ class InactiveTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, U
         addSubviews(tableView)
         setupConstraints()
         applyTheme()
-
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -98,11 +97,11 @@ class InactiveTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, U
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: InactiveTabsTableIdentifier, for: indexPath) as! OneLineTableViewCell
         cell.customization = .inactiveCell
+        cell.backgroundColor = .clear
+        cell.accessoryView = nil
         switch InactiveTabSection(rawValue: indexPath.section) {
         case .inactive:
             guard let tab = inactiveTabsViewModel?.inactiveTabs[indexPath.item] else { return cell }
-            cell.backgroundColor = .clear
-            cell.accessoryView = nil
             cell.titleLabel.text = tab.displayTitle
             cell.leftImageView.setImageAndBackground(forIcon: tab.displayFavicon, website: getTabDomainUrl(tab: tab)) {}
             cell.shouldLeftAlignTitle = false
@@ -110,8 +109,6 @@ class InactiveTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, U
             cell.accessoryType = .none
             return cell
         case .recentlyClosed:
-            cell.backgroundColor = .clear
-            cell.accessoryView = nil
             cell.titleLabel.text = String.TabsTrayRecentlyCloseTabsSectionTitle
             cell.leftImageView.image = nil
             cell.shouldLeftAlignTitle = true
@@ -207,6 +204,20 @@ class InactiveTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, U
         self.backgroundColor = .clear
         self.tableView.backgroundColor = .clear
         tableView.reloadData()
+    }
+}
+
+enum ExpandButtonState {
+    case right
+    case down
+    
+    var image: UIImage {
+        switch self {
+        case .right:
+            return UIImage(named: "menu-Disclosure")!
+        case .down:
+            return UIImage(named: "find_next")!
+        }
     }
 }
 

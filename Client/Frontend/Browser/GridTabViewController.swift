@@ -661,10 +661,6 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
     @objc func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         tabSelectionDelegate?.didSelectTabAtIndex(indexPath.row)
     }
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-//        if tabDisplayManager.isPrivate { return CGSize(width: 0, height: 0) }
-//        return CGSize(width: 0, height: 0)
-//    }
 }
 
 extension GridTabViewController: DevicePickerViewControllerDelegate {
