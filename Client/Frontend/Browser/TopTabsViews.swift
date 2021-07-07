@@ -17,7 +17,6 @@ class TopTabCell: UICollectionViewCell, Themeable {
             closeButton.tintColor = UIColor.theme.topTabs.closeButtonSelectedTab
             closeButton.backgroundColor = backgroundColor
             closeButton.layer.shadowColor = backgroundColor?.cgColor
-            closeButton.isHidden = !selectedTab
             selectedBackground.isHidden = !selectedTab
         }
     }
@@ -120,6 +119,10 @@ class TopTabCell: UICollectionViewCell, Themeable {
         }
 
         self.selectedTab = isSelected
+
+        let hideCloseButton = frame.width < 148 && !isSelected
+        closeButton.isHidden = hideCloseButton
+
         if let siteURL = tab.url?.displayURL {
             self.favicon.contentMode = .center
             self.favicon.setImageAndBackground(forIcon: tab.displayFavicon, website: siteURL) { [weak self] in
