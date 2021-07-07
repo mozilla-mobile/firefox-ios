@@ -1386,10 +1386,10 @@ extension String {
 
 // MARK: - v35 Strings
 extension String {
-    public static let FirefoxHomeJumpBackInSectionTitle = MZLocalizedString("ActivityStream.JumpBackIn.SectionTitle", value: Jump Back In", comment: "Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab")
+    public static let FirefoxHomeJumpBackInSectionTitle = MZLocalizedString("ActivityStream.JumpBackIn.SectionTitle", value: "Jump Back In", comment: "Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab")
     public static let FirefoxHomeRecentlySavedSectionTitle = MZLocalizedString("ActivityStream.RecentlySaved.SectionTitle", value: "Recently Saved", comment: "Section title for the Recently Saved section. This shows websites that have had a save action. Right now it is just bookmarks but it could be used for other things like the reading list in the future.")
     public static let FirefoxHomeShowAll = MZLocalizedString("ActivityStream.RecentlySaved.ShowAll", value: "Show all", comment: "This button will open the library showing all the users bookmarks")
     public static let TabsTrayInactiveTabsSectionTitle = MZLocalizedString("TabTray.InactiveTabs.SectionTitle", value: "Inactive Tabs", comment: "Title for the inactive tabs section. This section groups all tabs that haven't been used in a while.")
-    public static let TabsTrayRecentlyCloseTabsSectionTitle = MZLocalizedString("TabTray.RecentlyClosed.SectionTitle", value: Recently closed", comment: "Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed.")
+    public static let TabsTrayRecentlyCloseTabsSectionTitle = MZLocalizedString("TabTray.RecentlyClosed.SectionTitle", value: "Recently closed", comment: "Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed.")
     public static let TabsTrayRecentlyClosedTabsDescritpion = MZLocalizedString("TabTray.RecentlyClosed.Description", value: "Tabs are available here for 30 days. After that time, tabs will be automatically closed.", comment: "Describes what the Recently Closed tabs behavior is for users unfamiliar with it.")
 }
