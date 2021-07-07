@@ -6,7 +6,7 @@ import UIKit
 import Shared
 import Storage
 
-enum AddCredentialItem: Int {
+enum AddCredentialField: Int {
     case websiteItem
     case usernameItem
     case passwordItem
@@ -91,7 +91,7 @@ class AddCredentialViewController: UIViewController {
                 usernameField: "",
                 passwordField: "",
                 timesUsed: 0,
-                timeCreated: Int64(Date().timeIntervalSince1970),
+                timeCreated: 0,
                 timeLastUsed: 0,
                 timePasswordChanged: 0
             )
@@ -102,6 +102,9 @@ class AddCredentialViewController: UIViewController {
         self.dismiss(animated: true)
     }
     
+    /// Normalize the website entered by adding `https://` URL scheme. This format is necessary in ordered to be saved on local passwords storage.
+    /// - Parameter website: Website address provided by the user in a String format
+    /// - Returns: Normalized website containing `https://` URL scheme if necessary
     private func normalize(website: String) -> String {
         guard !website.isEmpty else { return website }
         if website.hasPrefix("http://") || website.hasPrefix("https://") {
@@ -116,7 +119,7 @@ class AddCredentialViewController: UIViewController {
 extension AddCredentialViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch AddCredentialItem(rawValue: indexPath.row)! {
+        switch AddCredentialField(rawValue: indexPath.row)! {
 
         case .usernameItem:
             let loginCell = cell(forIndexPath: indexPath)
@@ -234,8 +237,7 @@ extension AddCredentialViewController: LoginDetailTableViewCellDelegate {
         return false
     }
     
-
-    fileprivate func cellForItem(_ item: AddCredentialItem) -> LoginDetailTableViewCell? {
+    fileprivate func cellForItem(_ item: AddCredentialField) -> LoginDetailTableViewCell? {
         return tableView.cellForRow(at: item.indexPath) as? LoginDetailTableViewCell
     }
 
@@ -255,9 +257,9 @@ extension AddCredentialViewController: LoginDetailTableViewCellDelegate {
         return false
     }
 
-    func infoItemForCell(_ cell: LoginDetailTableViewCell) -> AddCredentialItem? {
+    func infoItemForCell(_ cell: LoginDetailTableViewCell) -> AddCredentialField? {
         if let index = tableView.indexPath(for: cell),
-            let item = AddCredentialItem(rawValue: index.row) {
+            let item = AddCredentialField(rawValue: index.row) {
             return item
         }
         return nil
