@@ -84,9 +84,11 @@ class TabDisplayManager: NSObject {
     fileprivate weak var tabDisplayer: TabDisplayer?
     private let tabReuseIdentifer: String
     var profile: Profile
+    private var inactiveNimbusExperimentStatus: Bool = false
     var shouldEnableInactiveTabs: Bool {
-        guard AppConstants.IS_RECENTLY_SAVED_SECTION_ENABLED else { return false }
-        return profile.prefs.boolForKey(PrefsKeys.KeyEnableInactiveTabs) ?? false
+        guard AppConstants.IS_INACTIVE_TAB_ENABLED else { return false }
+        
+        return inactiveNimbusExperimentStatus ? inactiveNimbusExperimentStatus : profile.prefs.boolForKey(PrefsKeys.KeyEnableInactiveTabs) ?? false
     }
     
     private var tabsToDisplay: [Tab] {
@@ -135,15 +137,25 @@ class TabDisplayManager: NSObject {
         self.tabDisplayType = tabDisplayType
         self.profile = profile
         super.init()
-        self.inactiveViewModel = InactiveTabViewModel(tabs: tabManager.tabs)
+        self.setupExperiment()
+        self.inactiveViewModel = InactiveTabViewModel()
         tabManager.addDelegate(self)
         register(self, forTabEvents: .didLoadFavicon, .didChangeURL)
         self.dataStore.removeAll()
         tabsToDisplay.forEach {
             self.dataStore.insert($0)
         }
-        
         collectionView.reloadData()
+    }
+    
+    func setupExperiment() {
+        inactiveNimbusExperimentStatus = Experiments.shared.withExperiment(featureId: .inactiveTabs) { branch -> Bool in
+                switch branch {
+                case .some(ExperimentBranch.inactiveTabControl): return false
+                case .some(ExperimentBranch.inactiveTabTreatment): return true
+                default: return false
+            }
+        }
     }
 
     func getTabsToDisplay() -> [Tab] {
@@ -151,9 +163,7 @@ class TabDisplayManager: NSObject {
         guard allTabs.count > 0, let inactiveViewModel = inactiveViewModel else { return [Tab]() }
         guard allTabs.count > 1 else { return allTabs }
         let selectedTab = tabManager.selectedTab
-        inactiveViewModel.selectedTab = selectedTab
-        inactiveViewModel.tabs = allTabs
-        _ = inactiveViewModel.updateInactiveTabs()
+        _ = inactiveViewModel.updateInactiveTabs(with: tabManager.selectedTab, tabs: allTabs)
         isInactiveViewExpanded = inactiveViewModel.inactiveTabs.count > 0
         let recentlyClosedTabs = inactiveViewModel.recentlyClosedTabs
         if recentlyClosedTabs.count > 0 {

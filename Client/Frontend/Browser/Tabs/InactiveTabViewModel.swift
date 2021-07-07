@@ -9,15 +9,12 @@ class InactiveTabViewModel {
     var inactiveTabs = [Tab]()
     var normalTabs = [Tab]()
     var recentlyClosedTabs = [Tab]()
-    var tabs = [Tab]()
-    var selectedTab: Tab?
-        
-    convenience init(tabs: [Tab]) {
-        self.init()
+    private var tabs = [Tab]()
+    private var selectedTab: Tab?
+
+    func updateInactiveTabs(with selectedTab: Tab?, tabs: [Tab]) -> (inactiveTabs: [Tab], normalTabs: [Tab], recentlyClosedTabs: [Tab]) {
         self.tabs = tabs
-    }
-    
-    func updateInactiveTabs() -> (inactiveTabs: [Tab], normalTabs: [Tab], recentlyClosedTabs: [Tab])  {
+        self.selectedTab = selectedTab
         let currentDate = Date()
         let noon = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: currentDate) ?? Date()
         let day4_Old = Calendar.current.date(byAdding: .day, value: -4, to: noon) ?? Date()
