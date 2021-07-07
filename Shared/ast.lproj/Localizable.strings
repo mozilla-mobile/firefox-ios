@@ -247,7 +247,7 @@
 "ErrorPages.AdvancedWarning1.Text" = "Alvertencia: nun podemos confirmar que la conexón al sitiu seya segura.";
 
 /* Additional warning text when clicking the Advanced button on error pages */
-"ErrorPages.AdvancedWarning2.Text" = "Quiciabes seya una mala configuración o manipulación por un atacante. Sigui si aceutes el riesgu potencial.";
+"ErrorPages.AdvancedWarning2.Text" = "Quiciabes seya una mala configuración o manipulación por un atacador. Sigui si aceutes el riesgu potencial.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Esta conexón nun ye d'enfotu";

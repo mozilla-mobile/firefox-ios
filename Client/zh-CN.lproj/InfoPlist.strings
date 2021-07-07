@@ -1,5 +1,5 @@
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "这让您拍摄和上传照片。";
+"NSCameraUsageDescription" = "Firefox 需要使用您的相机来扫码、拍摄照片或视频。";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox 需进行面容 ID 验证才能访问您保存的登录信息。";
@@ -10,10 +10,10 @@
 "NSLocationWhenInUseUsageDescription" = "您访问的网站可能会请求您的地理位置。";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "这让您可以拍摄和上传视频。";
+"NSMicrophoneUsageDescription" = "Firefox 需要使用您的麦克风来录制并上传音频。";
 
 /* Privacy - Photo Library Additions Usage Description */
-"NSPhotoLibraryAddUsageDescription" = "这使您可以保存照片。";
+"NSPhotoLibraryAddUsageDescription" = "让您可以保存照片。";
 
 /* (No Comment) */
 "ShortcutItemTitleNewPrivateTab" = "新建隐私标签页";

@@ -1020,6 +1020,9 @@
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "Término de búsqueda o dirección";
 
+/* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
+"Search.Awesomebar.SwitchToTab" = "Cambiar a pestaña";
+
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "El nuevo buscador aparecerá en la barra de búsqueda rápida.";
 
@@ -1394,6 +1397,9 @@
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Atajos de Siri";
 
+/* Section title for all studies that are currently active */
+"Settings.Studies.Active.SectionName" = "Activos";
+
 /* Section title for all studies that are completed */
 "Settings.Studies.Completed.SectionName" = "Finalizado";
 
@@ -1411,6 +1417,12 @@
 
 /* A short description that explains that Mozilla is running studies */
 "Settings.Studies.Toggle.Message" = "Firefox podría instalar y ejecutar estudios de vez en cuando.";
+
+/* Toggled OFF to opt-out of studies */
+"Settings.Studies.Toggle.Off" = "Desactivado";
+
+/* Toggled ON to participate in studies */
+"Settings.Studies.Toggle.On" = "Activado";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Estudios";

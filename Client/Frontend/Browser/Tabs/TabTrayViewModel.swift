@@ -26,8 +26,8 @@ class TabTrayViewModel {
         self.syncedTabsController = RemoteTabsPanel(profile: self.profile)
     }
 
-    func navTitle(for segmentIndex: Int) -> String? {
-        if UIDevice.current.userInterfaceIdiom == .phone {
+    func navTitle(for segmentIndex: Int, foriPhone: Bool) -> String? {
+        if foriPhone {
             switch segmentIndex {
             case 0, 1:
                 return Strings.TabTrayV2Title

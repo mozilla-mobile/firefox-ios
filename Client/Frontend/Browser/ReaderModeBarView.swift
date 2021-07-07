@@ -114,7 +114,6 @@ class ReaderModeBarView: UIView {
     }
 
     @objc func tappedReadStatusButton(_ sender: UIButton!) {
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .readingListItem, value: unread ? .markAsRead : .markAsUnread, extras: [ "from": "reader-mode-toolbar" ])
         delegate?.readerModeBar(self, didSelectButton: unread ? .markAsRead : .markAsUnread)
     }
 
