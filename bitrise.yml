@@ -113,6 +113,8 @@ workflows:
             set -e
             # debug log
             set -x
+            # workaround until 2.187 version is installed. Error with 2.186
+            fastlane update_fastlane
 
             ./l10n-screenshots.sh en-US
         title: Generate screenshots
