@@ -1285,7 +1285,7 @@ trigger_map:
 - push_branch: v34.1
   workflow: xcode12-release-and-beta-nocache
 - pull_request_target_branch: main
-  workflow: RunUnitTests
+  workflow: L10nBuild
 - pull_request_source_branch: '*'
   pull_request_target_branch: chronological-tabs
   workflow: RunUnitTests
