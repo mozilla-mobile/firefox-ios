@@ -113,7 +113,6 @@ workflows:
             set -e
             # debug log
             set -x
-            fastlane update_fastlane
 
             ./l10n-screenshots.sh en-US
         title: Generate screenshots
