@@ -996,7 +996,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             }
         }
 
-        screenState.tap(app.buttons["smallPrivateMask"], forAction: Action.TogglePrivateModeFromTabBarBrowserTab) { userState in
+        screenState.tap(app.buttons["TopTabsViewController.privateModeButton"], forAction: Action.TogglePrivateModeFromTabBarBrowserTab) { userState in
             userState.isPrivate = !userState.isPrivate
         }
     }

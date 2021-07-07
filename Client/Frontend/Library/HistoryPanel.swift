@@ -522,7 +522,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         if indexPath.section == Section.additionalHistoryActions.rawValue {
             return []
         }
-        let title: String = .HistoryPanelDelete
+        let title: String = Strings.HistoryPanelDelete
 
         let delete = UITableViewRowAction(style: .default, title: title, handler: { (action, indexPath) in
             self.removeHistoryForURLAtIndexPath(indexPath: indexPath)

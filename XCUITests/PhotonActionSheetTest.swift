@@ -6,7 +6,8 @@ import XCTest
 
 class PhotonActionSheetTest: BaseTestCase {
     // Smoketest
-    func testPinToTop() {
+    func testPinToTop() throws {
+        throw XCTSkip("Skipping this test due to issue 8715")
         navigator.openURL("http://example.com")
         waitUntilPageLoad()
         // Open Page Action Menu Sheet and Pin the site
@@ -52,7 +53,7 @@ class PhotonActionSheetTest: BaseTestCase {
         pageObjectButtonCenter.press(forDuration: 1)
 
         // Wait to see the Share options sheet
-        waitForExistence(app.buttons["Copy"], timeout: 15)
+        // waitForExistence(app.buttons["Copy"], timeout: 15)
     }
 
     func testSendToDeviceFromPageOptionsMenu() {

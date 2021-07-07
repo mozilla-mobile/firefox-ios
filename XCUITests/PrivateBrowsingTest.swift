@@ -65,10 +65,14 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         navigator.goto(TabTray)
-        print(app.debugDescription)
         waitForExistence(app.cells.staticTexts[url1And3Label])
         let numPrivTabs = userState.numTabs
-        XCTAssertEqual(numPrivTabs, 2, "The number of private tabs is not correct")
+        if !iPad() {
+            // On iPhone the number of tabs is 2 because there is one default tab opened when switching to PB
+            XCTAssertEqual(numPrivTabs, 2, "The number of private tabs is not correct")
+        } else {
+            XCTAssertEqual(numPrivTabs, 1, "The number of private tabs is not correct")
+        }
 
         // Go back to regular mode and check the total number of tabs
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
@@ -108,8 +112,11 @@ class PrivateBrowsingTest: BaseTestCase {
         checkOpenTabsBeforeClosingPrivateMode()
 
         // Now the enable the Close Private Tabs when closing the Private Browsing Button
-        app.cells.staticTexts[url2Label].tap()
-
+        if !iPad(){
+            app.cells.staticTexts[url2Label].tap()
+        } else {
+            app.otherElements["Tabs Tray"].collectionViews.cells.staticTexts[url2Label].tap()
+        }
         waitForTabsButton()
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
         navigator.nowAt(BrowserTab)
@@ -178,14 +185,24 @@ class PrivateBrowsingTest: BaseTestCase {
         XCTAssertFalse(app.staticTexts["Private Browsing"].exists, "Private Browsing screen is shown")
         navigator.nowAt(TabTray)
         let numPrivTabsOpen = userState.numTabs
-        XCTAssertEqual(numPrivTabsOpen, 2, "The number of tabs is not correct, there should be two private tab")
+        if !iPad() {
+            // On iPhone the number of tabs is 2 because there is one default tab opened when switching to PB
+            XCTAssertEqual(numPrivTabsOpen, 2, "The number of private tabs is not correct")
+        } else {
+            XCTAssertEqual(numPrivTabsOpen, 1, "The number of private tabs is not correct")
+        }
     }
 }
 
 fileprivate extension BaseTestCase {
     func checkOpenTabsBeforeClosingPrivateMode() {
-        let numPrivTabs = app.tables.cells.count
-        XCTAssertEqual(numPrivTabs, 2, "The number of tabs is not correct, the private tab should not have been closed")
+        if !iPad() {
+            let numPrivTabs = app.tables.cells.count
+            XCTAssertEqual(numPrivTabs, 2, "The number of tabs is not correct, the private tab should not have been closed")
+        } else {
+            let numPrivTabs = app.collectionViews["Top Tabs View"].cells.count
+            XCTAssertEqual(numPrivTabs, 1, "The number of tabs is not correct, the private tab should not have been closed")
+        }
     }
 
     func checkOpenTabsAfterClosingPrivateMode() {
@@ -261,7 +278,7 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
         // History without counting Clear Recent History, Recently Closed
         let history = app.tables["History List"].cells.count - 2
         XCTAssertEqual(history, 1, "There should be one entry in History")
-        let savedToHistory = app.tables["History List"].cells.staticTexts[url1And3Label]
+        let savedToHistory = app.tables["History List"].cells.staticTexts[url2Label]
         waitForExistence(savedToHistory)
         XCTAssertTrue(savedToHistory.exists)
     }

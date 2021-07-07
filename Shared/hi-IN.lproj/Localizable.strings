@@ -203,6 +203,12 @@
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "नए टैब में खोलें";
 
+/* Context menu item for opening a link in a new private tab */
+"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "नए निजी टैब में लिंक खोलें";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenLinkInNewTabButtonTitle" = "नए टैब में लिंक खोलें";
+
 /* Context menu item for saving an image */
 "ContextMenu.SaveImageButtonTitle" = "चित्र सहेजें";
 
@@ -663,6 +669,9 @@
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "पठन सूची में जोड़ा गया";
 
+/* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
+"Menu.Bookmarks.Label" = "बुकमार्क";
+
 /* The title for the button that lets you copy the url from the location bar. */
 "Menu.Copy.Title" = "पता नक़ल करें";
 
@@ -675,6 +684,9 @@
 /* A switch to enable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtectionOn.Title" = "इस साइट के लिए उन्नत ट्रैकिंग सुरक्षा चालू है।";
 
+/* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
+"Menu.History.Label" = "इतिहास";
+
 /* Label for the button displayed in the menu used to stop the reload of the webpage */
 "Menu.Library.StopReload" = "रूकें";
 
@@ -686,6 +698,9 @@
 
 /* Label for title in page action menu. */
 "Menu.PageActions.Title" = "पृष्ठ क्रियाएं";
+
+/* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
+"Menu.Passwords.Label" = "पासवर्ड";
 
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "पेस्ट करें";
@@ -1325,6 +1340,9 @@
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri शॉर्टकट";
 
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Toggle.Link" = "अधिक जानें।";
+
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "ठीक है, समझ गया";
 
@@ -1562,6 +1580,9 @@
 
 /* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenSelectedTab.KeyCodeTitle" = "चयनित टैब खोलें";
+
+/* The title for the tab tray in private mode */
+"TabTray.PrivateTitle" = "निजी टैब";
 
 /* The button title to see more options to perform on the tab. */
 "TabTray.SwipeMenu.More" = "अधिक";
