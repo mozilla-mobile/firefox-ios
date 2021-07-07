@@ -1585,6 +1585,10 @@ extension BrowserViewController: HomePanelDelegate {
         })
         self.show(toast: toast)
     }
+
+    func homePanelDidRequestToOpenTabTray() {
+        showTabTray()
+    }
 }
 
 extension BrowserViewController: SearchViewControllerDelegate {
