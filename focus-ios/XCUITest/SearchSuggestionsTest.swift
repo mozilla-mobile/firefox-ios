@@ -35,7 +35,7 @@ class SearchSuggestionsPromptTest: BaseTestCase {
     }
 
     func checkToggleStartsOff() {
-        waitForHittable(app.buttons["Settings"])
+        waitForExistence(app.buttons["Settings"], timeout: 10)
         app.buttons["Settings"].tap()
         checkToggle(isOn: false)
     }

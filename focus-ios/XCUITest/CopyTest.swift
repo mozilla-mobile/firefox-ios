@@ -7,13 +7,14 @@ import XCTest
 // Note: this test is tested as part of the base test case, and thus is disabled here.
 
 class CopyTest: BaseTestCase {
-    func testCopyMenuItem() {
+    func testCopyMenuItem() throws {
+        throw XCTSkip("This test needs to be updated or removed")
         let urlBarTextField = app.textFields["URLBar.urlText"]
         loadWebPage("https://www.example.com")
 
         // Must offset textfield press to support 5S.
-        urlBarTextField.coordinate(withNormalizedOffset: CGVector.zero).withOffset(CGVector(dx: 10, dy: 0)).press(forDuration: 1.5)
-        waitForHittable(app.menuItems["Copy"])
+        urlBarTextField.coordinate(withNormalizedOffset: CGVector.zero).withOffset(CGVector(dx: 10, dy: 0)).press(forDuration: 0.5)
+        waitForExistence(app.menuItems["Copy"])
         app.menuItems["Copy"].tap()
         waitForNoExistence(app.menuItems["Copy"])
 

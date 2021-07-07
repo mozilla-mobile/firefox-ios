@@ -76,7 +76,6 @@ class BaseTestCase: XCTestCase {
         let app = XCUIApplication()
 
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
-        waitForHittable(searchOrEnterAddressTextField)
 
         UIPasteboard.general.string = searchWord
 

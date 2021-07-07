@@ -74,12 +74,13 @@ class WebsiteAccessTests: BaseTestCase {
 
     func testAutocompleteCustomDomain() {
         // Add Custom Domain
-        app.buttons["Settings"].tap()
+        app.buttons["HomeView.settingsButton"].tap()
         app.tables.cells["SettingsViewController.autocompleteCell"].tap()
         app.tables.cells["customURLS"].tap()
         app.tables.cells["addCustomDomainCell"].tap()
 
         let urlInput = app.textFields["urlInput"]
+        urlInput.tap()
         urlInput.typeText("getfirefox.com")
         app.navigationBars.buttons["saveButton"].tap()
 

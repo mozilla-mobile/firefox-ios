@@ -5,7 +5,8 @@
 import XCTest
 
 class WebsiteMemoryTest: BaseTestCase {
-    func testGoogleTextField() {
+    func testGoogleTextField() throws {
+        throw XCTSkip("This test needs to be updated or removed")
         let app = XCUIApplication()
         var googleSearchField: XCUIElement = app.webViews.otherElements["Search"]
 
