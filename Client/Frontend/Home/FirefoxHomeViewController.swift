@@ -16,6 +16,7 @@ private let log = Logger.browserLogger
 
 struct FirefoxHomeUX {
     static let highlightCellHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 200
+    static let jumpBackInCellHeight: CGFloat = 58
     static let recentlySavedCellHeight: CGFloat = 136
     static let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 15)
     static let numberOfItemsPerRowForSizeClassIpad = UXSizeClasses(compact: 3, regular: 4, other: 2)
@@ -175,6 +176,17 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
             guard featureFlags.isFeatureActive(.recentlySaved) else { return false }
             
             return (hasRecentBookmarks || hasReadingListitems) && !nimbusExperimentShowLibrarySetting
+        }
+    }
+
+    var isJumpBackInSectionEnabled: Bool {
+        get {
+            guard AppConstants.IS_JUMP_BACK_IN_SECTION_ENABLED else { return false }
+
+            return hasRecentBookmarks
+                || hasReadingListitems
+                && profile.prefs.boolForKey(PrefsKeys.jumpBackInSectionEnabled) ?? false
+                && !(UIDevice.current.userInterfaceIdiom == .pad)
         }
     }
 
@@ -379,7 +391,7 @@ extension FirefoxHomeViewController {
         func cellHeight(_ traits: UITraitCollection, width: CGFloat) -> CGFloat {
             switch self {
             case .pocket: return FirefoxHomeUX.highlightCellHeight
-            case .jumpBackIn: return FirefoxHomeUX.recentlySavedCellHeight
+            case .jumpBackIn: return FirefoxHomeUX.recentlySavedCellHeight // ROUX: update cell height
             case .recentlySaved: return FirefoxHomeUX.recentlySavedCellHeight
             case .topSites: return 0 //calculated dynamically
             case .libraryShortcuts: return FirefoxHomeUX.LibraryShortcutsHeight
@@ -443,7 +455,7 @@ extension FirefoxHomeViewController {
             switch self {
             case .topSites: return "TopSiteCell"
             case .pocket: return "PocketCell"
-            case .jumpBackIn: return "RecentlySavedCell"
+            case .jumpBackIn: return "JumpBackInCell"
             case .recentlySaved: return "RecentlySavedCell"
             case .libraryShortcuts: return  "LibraryShortcutsCell"
             }
@@ -453,7 +465,7 @@ extension FirefoxHomeViewController {
             switch self {
             case .topSites: return ASHorizontalScrollCell.self
             case .pocket: return FirefoxHomeHighlightCell.self
-            case .jumpBackIn: return FxHomeRecentlySavedCollectionCell.self
+            case .jumpBackIn: return FxHomeJumpBackInCollectionCell.self
             case .recentlySaved: return FxHomeRecentlySavedCollectionCell.self
             case .libraryShortcuts: return ASLibraryCell.self
             }
@@ -631,7 +643,7 @@ extension FirefoxHomeViewController {
         case .pocket:
             return configurePocketItemCell(cell, forIndexPath: indexPath)
         case .jumpBackIn:
-            return configureRecentlySavedCell(cell, forIndexPath: indexPath)
+            return configureJumpBackInCell(cell, forIndexPath: indexPath)
         case .recentlySaved:
             return configureRecentlySavedCell(cell, forIndexPath: indexPath)
         case .libraryShortcuts:
@@ -680,6 +692,16 @@ extension FirefoxHomeViewController {
         return recentlySavedCell
     }
 
+    private func configureJumpBackInCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
+        let jumpBackInCell = cell as! FxHomeJumpBackInCollectionCell
+        jumpBackInCell.homePanelDelegate = homePanelDelegate
+        jumpBackInCell.libraryPanelDelegate = libraryPanelDelegate
+        jumpBackInCell.profile = profile
+        jumpBackInCell.collectionView.reloadData()
+        jumpBackInCell.setNeedsLayout()
+
+        return jumpBackInCell
+    }
 }
 
 // MARK: - Data Management
