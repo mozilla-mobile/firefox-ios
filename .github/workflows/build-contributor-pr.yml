@@ -9,13 +9,15 @@ jobs:
     strategy:
       matrix:
         python-version: [3.9]
-        xcode: [12.5]
+        xcode: [12.5.1]
         run-config: 
         - { scheme: 'Fennec_Enterprise_XCUITests', destination: 'platform=iOS Simulator,OS=latest,name=iPhone 11', testplan: 'SmokeXCUITests' }
     name: Run UI Smoketests
     steps:
         - name: Checkout repository
           uses: actions/checkout@v2
+        - name: Select Xcode ${{ matrix.xcode }}
+          run: sudo xcode-select -s /Applications/Xcode_${{ matrix.xcode }}.app
         - name: Set up Python ${{ matrix.python-version }}
           uses: actions/setup-python@v2
           with:
