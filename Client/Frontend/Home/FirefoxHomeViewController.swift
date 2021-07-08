@@ -16,7 +16,7 @@ private let log = Logger.browserLogger
 
 struct FirefoxHomeUX {
     static let highlightCellHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 200
-    static let jumpBackInCellHeight: CGFloat = 58
+    static let jumpBackInCellHeight: CGFloat = 70
     static let recentlySavedCellHeight: CGFloat = 136
     static let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 15)
     static let numberOfItemsPerRowForSizeClassIpad = UXSizeClasses(compact: 3, regular: 4, other: 2)
@@ -181,12 +181,11 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
 
     var isJumpBackInSectionEnabled: Bool {
         get {
-            guard AppConstants.IS_JUMP_BACK_IN_SECTION_ENABLED else { return false }
+            guard featureFlags.isFeatureActive(.jumpBackIn) else { return false }
+            let tabManager = BrowserViewController.foregroundBVC().tabManager
 
-            return hasRecentBookmarks
-                || hasReadingListitems
-                && profile.prefs.boolForKey(PrefsKeys.jumpBackInSectionEnabled) ?? false
-                && !(UIDevice.current.userInterfaceIdiom == .pad)
+            return !(tabManager.selectedTab?.isPrivate ?? false)
+                && !tabManager.recentlyAccessedNormalTabs.isEmpty
         }
     }
 
@@ -391,7 +390,7 @@ extension FirefoxHomeViewController {
         func cellHeight(_ traits: UITraitCollection, width: CGFloat) -> CGFloat {
             switch self {
             case .pocket: return FirefoxHomeUX.highlightCellHeight
-            case .jumpBackIn: return FirefoxHomeUX.recentlySavedCellHeight // ROUX: update cell height
+            case .jumpBackIn: return FirefoxHomeUX.jumpBackInCellHeight
             case .recentlySaved: return FirefoxHomeUX.recentlySavedCellHeight
             case .topSites: return 0 //calculated dynamically
             case .libraryShortcuts: return FirefoxHomeUX.LibraryShortcutsHeight
@@ -508,8 +507,8 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                 view.moreButton.isHidden = false
                 view.moreButton.setTitle(Strings.RecentlySavedShowAllText, for: .normal)
                 view.moreButton.addTarget(self, action: #selector(openTabTray), for: .touchUpInside)
-                view.moreButton.accessibilityIdentifier = "recentlySavedSectionMoreButton"
-                view.titleLabel.accessibilityIdentifier = "recentlySavedTitle"
+                view.moreButton.accessibilityIdentifier = "jumpBackInSectionMoreButton"
+                view.titleLabel.accessibilityIdentifier = "jumpBackInTitle"
                 return view
             case .recentlySaved:
                 view.moreButton.isHidden = false
@@ -555,6 +554,10 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                 return cellSize
             }
             return cellSize
+        case .jumpBackIn:
+            // ROUX - TODO: calculate cell size
+            cellSize.height *= 2.2
+            return cellSize
         case .pocket:
             return cellSize
         case .libraryShortcuts:
@@ -572,11 +575,9 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
         case .libraryShortcuts:
             return isYourLibrarySectionEnabled ? Section(section).headerHeight : .zero
         case .jumpBackIn:
-            let size = ((isRecentlySavedSectionEnabled ? Section(section).headerHeight : .zero))
-            return size
+            return isJumpBackInSectionEnabled ? Section(section).headerHeight : .zero
         case .recentlySaved:
-            let size = isRecentlySavedSectionEnabled ? Section(section).headerHeight : .zero
-            return size
+            return isRecentlySavedSectionEnabled ? Section(section).headerHeight : .zero
         }
     }
 
@@ -623,11 +624,9 @@ extension FirefoxHomeViewController {
             // There should always be a full row of pocket stories (numItems) otherwise don't show them
             return pocketStories.count
         case .jumpBackIn:
-            let numberOfItems = (isRecentlySavedSectionEnabled ? 1 : 0)
-            return numberOfItems
+            return isJumpBackInSectionEnabled ? 1 : 0
         case .recentlySaved:
-            let numberOfItems = (isRecentlySavedSectionEnabled ? 1 : 0)
-            return numberOfItems
+            return isRecentlySavedSectionEnabled ? 1 : 0
         case .libraryShortcuts:
             return isYourLibrarySectionEnabled ? 1 : 0
         }
@@ -694,8 +693,6 @@ extension FirefoxHomeViewController {
 
     private func configureJumpBackInCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let jumpBackInCell = cell as! FxHomeJumpBackInCollectionCell
-        jumpBackInCell.homePanelDelegate = homePanelDelegate
-        jumpBackInCell.libraryPanelDelegate = libraryPanelDelegate
         jumpBackInCell.profile = profile
         jumpBackInCell.collectionView.reloadData()
         jumpBackInCell.setNeedsLayout()

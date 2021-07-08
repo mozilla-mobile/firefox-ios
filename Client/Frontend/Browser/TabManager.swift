@@ -110,6 +110,28 @@ class TabManager: NSObject {
         return tabs.filter { $0.isPrivate }
     }
 
+    var recentlyAccessedNormalTabs: [Tab] {
+        assert(Thread.isMainThread)
+        var tabArray: [Tab] = []
+        tabArray = normalTabs.filter { tab in
+            if let lastKnownUrl = tab.lastKnownUrl {
+                if lastKnownUrl.absoluteString.hasPrefix("internal://") {
+                    return false
+                }
+                return true
+            }
+            return tab.isURLStartingPage
+        }
+
+        tabArray = tabArray.sorted {
+            let firstTab = $0.lastExecutedTime ?? $0.sessionData?.lastUsedTime ?? 0
+            let secondTab = $1.lastExecutedTime ?? $1.sessionData?.lastUsedTime ?? 0
+            return firstTab > secondTab
+        }
+
+        return tabArray
+    }
+
     init(profile: Profile, imageStore: DiskImageStore?) {
         assert(Thread.isMainThread)
 

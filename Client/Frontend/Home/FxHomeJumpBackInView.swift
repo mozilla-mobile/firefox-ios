@@ -5,44 +5,60 @@
 import UIKit
 import Storage
 
-struct JumBackInCollectionCellUX {
-    static let bookmarkItemsLimit: UInt = 5
-    static let bookmarkItemsCutoff: Int = 10
-    static let readingListItemsLimit: Int = 5
-    static let readingListItemsCutoff: Int = 7
-    static let cellWidth: CGFloat = 134
-    static let cellHeight: CGFloat = 120
+struct JumpBackInCollectionCellUX {
+    static let cellWidth: CGFloat = 343
+    static let cellHeight: CGFloat = 58
     static let generalSpacing: CGFloat = 8
     static let sectionInsetSpacing: CGFloat = 4
+
+    static var thing: Int {
+        return 4*4
+    }
 }
 
-//protocol RecentlySavedItem {
-//    var title: String { get }
-//    var url: String { get }
-//}
-
-//extension ReadingListItem: RecentlySavedItem { }
-//extension BookmarkItem: RecentlySavedItem { }
-
-/// A cell serving as a collectionView to hold its associated recently saved cells.
 class FxHomeJumpBackInCollectionCell: UICollectionViewCell {
 
     // MARK: - Properties
-
-    weak var homePanelDelegate: HomePanelDelegate?
-    weak var libraryPanelDelegate: LibraryPanelDelegate?
     var profile: Profile?
-    var recentBookmarks = [BookmarkItem]()
-    var readingListItems = [ReadingListItem]()
+    var tabManager: TabManager?
+
+    var eligibleTabs = [Tab]()
+
+    var layoutVariables: (columns: CGFloat, scrollDirection: UICollectionView.ScrollDirection) {
+        var columns: CGFloat
+        var direction: UICollectionView.ScrollDirection
+        let deviceIsiPad = UIDevice.current.userInterfaceIdiom == .pad
+        let deviceIsInLandscapeMode = UIApplication.shared.statusBarOrientation.isLandscape
+        let horizontalSizeClassIsCompact = traitCollection.horizontalSizeClass == .compact
+
+        if deviceIsiPad {
+            if horizontalSizeClassIsCompact {
+                columns = 1
+                direction = .vertical
+            } else {
+                columns = 2
+                direction = .horizontal
+            }
+
+        } else {
+            if deviceIsInLandscapeMode {
+                columns = 2
+                direction = .horizontal
+            } else {
+                columns = 1
+                direction = .vertical
+            }
+        }
+        return (columns, direction)
+    }
 
     // UI
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
+        layout.scrollDirection = layoutVariables.scrollDirection
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.alwaysBounceHorizontal = true
+        collectionView.isScrollEnabled = false
         collectionView.backgroundColor = UIColor.clear
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -55,7 +71,7 @@ class FxHomeJumpBackInCollectionCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-
+        self.tabManager = BrowserViewController.foregroundBVC().tabManager
         setupLayout()
     }
 
@@ -76,44 +92,57 @@ class FxHomeJumpBackInCollectionCell: UICollectionViewCell {
         ])
     }
 
-    private func loadItems() -> [RecentlySavedItem] {
-        var items = [RecentlySavedItem]()
+    private func configureData() {
+        if let tabArray = tabManager?.recentlyAccessedNormalTabs {
+            eligibleTabs.removeAll()
+            eligibleTabs = tabArray
+        }
+    }
 
-        items.append(contentsOf: recentBookmarks)
-        items.append(contentsOf: readingListItems)
+    // In the future, we may have more than one type of data source. This function
+    // will create a single array out of all data sources.
+    private func loadItems() -> [Tab] {
+        var items = [Tab]()
+
+        items.append(contentsOf: eligibleTabs)
 
         return items
     }
 
-    private func configureDataSource() {
-        profile?.places.getRecentBookmarks(limit: RecentlySavedCollectionCellUX.bookmarkItemsLimit).uponQueue(.global(), block: { [weak self] result in
-            self?.recentBookmarks = result.successValue ?? []
-        })
-        recentBookmarks = RecentItemsHelper.filterStaleItems(recentItems: recentBookmarks,
-                                                             since: RecentlySavedCollectionCellUX.bookmarkItemsCutoff) as! [BookmarkItem]
+    private func sortData() -> [[Tab]] {
+        var tabSection: [Tab] = []
+        var tabsArray: [[Tab]] = []
+        let maxItemsPerSection = Int(layoutVariables.columns)
 
-        if let readingList = profile?.readingList.getAvailableRecords().value.successValue?.prefix(RecentlySavedCollectionCellUX.readingListItemsLimit) {
-            let readingListItems = Array(readingList)
-            self.readingListItems = RecentItemsHelper.filterStaleItems(recentItems: readingListItems,
-                                                                       since: RecentlySavedCollectionCellUX.readingListItemsCutoff) as! [ReadingListItem]
+        for tab in loadItems() {
+            if tabSection.count >= maxItemsPerSection {
+                tabsArray.append(tabSection)
+                tabSection.removeAll()
+            }
+            tabSection.append(tab)
         }
+        return tabsArray
     }
-
 }
 
 extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        configureDataSource()
-
-        return loadItems().count
+        configureData()
+        let _ = sortData()
+        return loadItems().count //sortData()[section].count
     }
+
+//    func numberOfSections(in collectionView: UICollectionView) -> Int {
+//        return sortData().count
+//    }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: JumpBackInCell.cellIdentifier, for: indexPath) as! JumpBackInCell
         let dataSource = loadItems()
 
         if let item = dataSource[safe: indexPath.row] {
-            let site = Site(url: item.url, title: item.title, bookmarked: true)
+            let itemURL = item.url?.absoluteString ?? ""
+            let site = Site(url: itemURL, title: item.displayTitle, bookmarked: true)
 
             profile?.favicons.getFaviconImage(forSite: site).uponQueue(.main, block: { result in
                 guard let image = result.successValue else { return }
@@ -121,8 +150,11 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
                 cell.setNeedsLayout()
             })
 
-            cell.bookmarkTitle.text = site.title
-            cell.bookmarkDetails.text = site.tileURL.shortDisplayString
+            cell.itemTitle.text = site.title
+            // TODO: Determine source string here, if any
+//            if site.titleURL.shortDisplayString.isEmpty {
+                cell.itemDetails.text = site.tileURL.shortDisplayString
+//            }
         }
 
         return cell
@@ -134,58 +166,54 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let dataSource = loadItems()
 
-        if let item = dataSource[safe: indexPath.row] as? BookmarkItem {
-            guard let url = URIFixup.getURL(item.url) else { return }
-
-            homePanelDelegate?.homePanel(didSelectURL: url, visitType: .bookmark, isGoogleTopSite: false)
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .bookmark, value: .recentlySavedBookmarkItemAction)
-        } else if let item = dataSource[safe: indexPath.row] as? ReadingListItem,
-                  let url = URL(string: item.url),
-                  let encodedUrl = url.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL()) {
-
-            let visitType = VisitType.bookmark
-            libraryPanelDelegate?.libraryPanel(didSelectURL: encodedUrl, visitType: visitType)
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .readingListItem, value: .recentlySavedReadingListAction)
-        }
+        if let item = dataSource[safe: indexPath.row] as? Tab {
+            tabManager?.selectTab(item)
+//            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .bookmark, value: .recentlySavedBookmarkItemAction)
+        } 
 
     }
 }
 
 extension FxHomeJumpBackInCollectionCell: UICollectionViewDelegateFlowLayout {
-
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: RecentlySavedCollectionCellUX.cellWidth, height: RecentlySavedCollectionCellUX.cellHeight)
+
+        let totalHorizontalSpacing = collectionView.bounds.width - (JumpBackInCollectionCellUX.generalSpacing * 2)
+        let itemWidth = totalHorizontalSpacing / layoutVariables.columns
+        let itemSize = CGSize(width: itemWidth, height: JumpBackInCollectionCellUX.cellHeight)
+
+        return itemSize
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: RecentlySavedCollectionCellUX.generalSpacing,
-                            left: RecentlySavedCollectionCellUX.sectionInsetSpacing,
-                            bottom: RecentlySavedCollectionCellUX.generalSpacing,
-                            right: RecentlySavedCollectionCellUX.sectionInsetSpacing)
+        return UIEdgeInsets(top: JumpBackInCollectionCellUX.generalSpacing,
+                            left: JumpBackInCollectionCellUX.sectionInsetSpacing,
+                            bottom: JumpBackInCollectionCellUX.generalSpacing,
+                            right: JumpBackInCollectionCellUX.sectionInsetSpacing)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return RecentlySavedCollectionCellUX.generalSpacing
+        return JumpBackInCollectionCellUX.generalSpacing
     }
 
 }
 
 private struct JumpBackInCellUX {
     static let generalCornerRadius: CGFloat = 8
-    static let bookmarkTitleFontSize: CGFloat = 17
-    static let bookmarkDetailsFontSize: CGFloat = 12
+    static let titleFontSize: CGFloat = 17
+    static let detailsFontSize: CGFloat = 12
     static let labelsWrapperSpacing: CGFloat = 4
     static let bookmarkStackViewSpacing: CGFloat = 8
     static let bookmarkStackViewShadowRadius: CGFloat = 4
     static let bookmarkStackViewShadowOffset: CGFloat = 2
+    static let heroImageDimension: CGFloat = 24
 }
 
-/// A cell used in FxHomeScreen's Recently Saved section. It holds bookmarks and reading list items.
+/// A cell used in FxHomeScreen's Jump Back In section.
 class JumpBackInCell: UICollectionViewCell {
 
     // MARK: - Properties
 
-    static let cellIdentifier = "recentlySavedCell"
+    static let cellIdentifier = "jumpBackInCell"
 
     // UI
     let heroImage: UIImageView = .build { imageView in
@@ -194,16 +222,23 @@ class JumpBackInCell: UICollectionViewCell {
         imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = JumpBackInCellUX.generalCornerRadius
     }
-    let divider: UIView = .build { view in
-        view.backgroundColor = UIColor.theme.homePanel.activityStreamCellDescription
-    }
-    let bookmarkTitle: UILabel = .build { label in
+
+    let itemTitle: UILabel = .build { label in
         label.adjustsFontSizeToFitWidth = false
-        label.font = UIFont.systemFont(ofSize: JumpBackInCellUX.bookmarkTitleFontSize)
+        label.font = UIFont.systemFont(ofSize: JumpBackInCellUX.titleFontSize)
     }
-    let bookmarkDetails: UILabel = .build { label in
+
+    let itemDetails: UILabel = .build { label in
         label.adjustsFontSizeToFitWidth = false
-        label.font = UIFont.systemFont(ofSize: JumpBackInCellUX.bookmarkDetailsFontSize)
+        label.font = UIFont.systemFont(ofSize: JumpBackInCellUX.detailsFontSize)
+    }
+
+    let stackView: UIStackView = .build { stackView in
+        stackView.axis = .vertical
+        stackView.alignment = .leading
+        stackView.distribution = .fillProportionally
+        stackView.spacing = 2
+        stackView.translatesAutoresizingMaskIntoConstraints = false
     }
 
     // MARK: - Inits
@@ -231,30 +266,26 @@ class JumpBackInCell: UICollectionViewCell {
         contentView.layer.shadowRadius = JumpBackInCellUX.bookmarkStackViewShadowRadius
         contentView.layer.shadowOffset = CGSize(width: 0, height: JumpBackInCellUX.bookmarkStackViewShadowOffset)
         contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-        contentView.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
+        contentView.layer.shadowOpacity = 0.12
 
+        stackView.addArrangedSubview(itemTitle)
+        stackView.addArrangedSubview(itemDetails)
         contentView.addSubview(heroImage)
-        contentView.addSubview(divider)
-        contentView.addSubview(bookmarkTitle)
-        contentView.addSubview(bookmarkDetails)
+        contentView.addSubview(stackView)
 
         NSLayoutConstraint.activate([
-            heroImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
-            heroImage.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            heroImage.heightAnchor.constraint(equalToConstant: 24),
-            heroImage.widthAnchor.constraint(equalToConstant: 24),
+            heroImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            heroImage.heightAnchor.constraint(equalToConstant: JumpBackInCellUX.heroImageDimension),
+            heroImage.widthAnchor.constraint(equalToConstant: JumpBackInCellUX.heroImageDimension),
+            heroImage.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
 
-            divider.topAnchor.constraint(equalTo: heroImage.bottomAnchor, constant: 24),
-            divider.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            divider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            divider.heightAnchor.constraint(equalToConstant: 1),
+            itemTitle.heightAnchor.constraint(equalToConstant: 22),
+            itemDetails.heightAnchor.constraint(lessThanOrEqualToConstant: 16),
 
-            bookmarkTitle.topAnchor.constraint(equalTo: divider.topAnchor, constant: 7),
-            bookmarkTitle.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            bookmarkTitle.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
-
-            bookmarkDetails.topAnchor.constraint(equalTo: bookmarkTitle.bottomAnchor, constant: 2),
-            bookmarkDetails.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16)
+            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            stackView.leadingAnchor.constraint(equalTo: heroImage.trailingAnchor, constant: 12),
+            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
+            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
         ])
     }
 
@@ -271,7 +302,6 @@ class JumpBackInCell: UICollectionViewCell {
 extension JumpBackInCell: Themeable {
     func applyTheme() {
         contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
-        bookmarkDetails.textColor = UIColor.theme.homePanel.activityStreamCellDescription
-        divider.backgroundColor = UIColor.theme.tabTray.background
+        itemDetails.textColor = UIColor.theme.homePanel.activityStreamCellDescription
     }
 }
