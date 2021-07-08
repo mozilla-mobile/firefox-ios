@@ -40,6 +40,12 @@
 /* The description of a highlight if it is a site the user has visited */
 "ActivityStream.Highlights.Visited" = "訪問済み";
 
+/* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
+"ActivityStream.JumpBackIn.SectionTitle" = "以前表示したタブ";
+
+/* A string used to signify the start of the Recently Saved section in Home Screen. */
+"ActivityStream.Library.Title" = "最近保存";
+
 /* Section title label for recently bookmarked websites */
 "ActivityStream.NewRecentBookmarks.Title" = "最近追加したブックマーク";
 
@@ -57,6 +63,12 @@
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "最近訪れたサイト";
+
+/* Section title for the Recently Saved section. This shows websites that have had a save action. Right now it is just bookmarks but it could be used for other things like the reading list in the future. */
+"ActivityStream.RecentlySaved.SectionTitle" = "最近保存";
+
+/* This button will open the library showing all the users bookmarks */
+"ActivityStream.RecentlySaved.ShowAll" = "すべて表示";
 
 /* Section title label for Shortcuts */
 "ActivityStream.Shortcuts.SectionTitle" = "ショートカット";
@@ -982,6 +994,9 @@
 /* Title for the Recently Closed Tabs Panel */
 "RecentlyClosedTabsPanel.Title" = "最近閉じたタブ";
 
+/* More button text for Recently Saved items at the home page. */
+"RecentlySaved.Actions.More" = "すべて表示";
+
 /* Accessibility Label for the tab toolbar Reload button */
 "Reload" = "再読み込み";
 
@@ -1191,6 +1206,9 @@
 
 /* Title displayed in header of the setting panel. */
 "Settings.ClearPrivateData.Title" = "プライベートデータ消去";
+
+/* Button in Data Management that clears private data for the selected items. Parameter is the number of items to be cleared */
+"Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "アイテムを消去: %1$@";
 
 /* Copy app version alert shown in settings. */
 "Settings.CopyAppVersion.Title" = "クリップボードにコピーしました";
@@ -1553,6 +1571,9 @@
 /* Description of the confirmation dialog shown when a user tries to clear their private data. */
 "Settings.WebsiteData.ConfirmPrompt" = "この操作はユーザーのウェブサイトデータをすべて消去します。操作を取り消すことはできません。";
 
+/* Description of the confirmation dialog shown when a user tries to clear some of their private data. */
+"Settings.WebsiteData.SelectedConfirmPrompt" = "この操作は選択したアイテムを消去します。操作を取り消すことはできません。";
+
 /* Title displayed in header of the Data Management panel. */
 "Settings.WebsiteData.Title" = "ウェブサイトデータ";
 
@@ -1689,6 +1710,9 @@
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "現在選択されているタブ。";
 
+/* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
+"TabTray.InactiveTabs.SectionTitle" = "休止中のタブ";
+
 /* The section header for tabs opened last week */
 "TabTray.LastWeek.Header" = "先週";
 
@@ -1706,6 +1730,9 @@
 
 /* The title for the tab tray in private mode */
 "TabTray.PrivateTitle" = "プライベートタブ";
+
+/* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
+"TabTray.RecentlyClosed.Description" = "これらのタブは 30 日を過ぎると自動的に閉じられます。";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "プライベート";

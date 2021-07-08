@@ -58,6 +58,9 @@
 /* Label for the button, displayed in the menu, used to show the html page source */
 "Menu.PageSourceAction.Title" = "檢視原始碼";
 
+/* A string used to signify the start of the Recently Saved section in Home Screen. */
+"Menu.RecentlySaved.Title" = "最近儲存";
+
 /* Label for the button, displayed in the menu, used to delete an existing bookmark for the current website. */
 "Menu.RemoveBookmarkAction.Title" = "移除書籤";
 

@@ -40,6 +40,12 @@
 /* The description of a highlight if it is a site the user has visited */
 "ActivityStream.Highlights.Visited" = "Látogatott";
 
+/* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
+"ActivityStream.JumpBackIn.SectionTitle" = "Ugrás vissza";
+
+/* A string used to signify the start of the Recently Saved section in Home Screen. */
+"ActivityStream.Library.Title" = "Nemrég mentett";
+
 /* Section title label for recently bookmarked websites */
 "ActivityStream.NewRecentBookmarks.Title" = "Friss könyvjelzők";
 
@@ -57,6 +63,12 @@
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Nemrég felkeresett";
+
+/* Section title for the Recently Saved section. This shows websites that have had a save action. Right now it is just bookmarks but it could be used for other things like the reading list in the future. */
+"ActivityStream.RecentlySaved.SectionTitle" = "Nemrég mentett";
+
+/* This button will open the library showing all the users bookmarks */
+"ActivityStream.RecentlySaved.ShowAll" = "Összes megjelenítése";
 
 /* Section title label for Shortcuts */
 "ActivityStream.Shortcuts.SectionTitle" = "Parancsok";
@@ -982,6 +994,9 @@
 /* Title for the Recently Closed Tabs Panel */
 "RecentlyClosedTabsPanel.Title" = "Nemrég bezárt";
 
+/* More button text for Recently Saved items at the home page. */
+"RecentlySaved.Actions.More" = "Összes megjelenítése";
+
 /* Accessibility Label for the tab toolbar Reload button */
 "Reload" = "Újratöltés";
 
@@ -1191,6 +1206,9 @@
 
 /* Title displayed in header of the setting panel. */
 "Settings.ClearPrivateData.Title" = "Személyes adatok törlése";
+
+/* Button in Data Management that clears private data for the selected items. Parameter is the number of items to be cleared */
+"Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "Elemek törlése: %1$@";
 
 /* Copy app version alert shown in settings. */
 "Settings.CopyAppVersion.Title" = "Vágólapra másolva";
@@ -1553,6 +1571,9 @@
 /* Description of the confirmation dialog shown when a user tries to clear their private data. */
 "Settings.WebsiteData.ConfirmPrompt" = "Ez a művelet törli az összes webhelyadatot. Vissza nem vonható.";
 
+/* Description of the confirmation dialog shown when a user tries to clear some of their private data. */
+"Settings.WebsiteData.SelectedConfirmPrompt" = "Ez a művelet törli a kiválasztott elemeket. Vissza nem vonható.";
+
 /* Title displayed in header of the Data Management panel. */
 "Settings.WebsiteData.Title" = "Webhelyadatok";
 
@@ -1689,6 +1710,9 @@
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "Jelenleg kiválasztott lap.";
 
+/* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
+"TabTray.InactiveTabs.SectionTitle" = "Inaktív lapok";
+
 /* The section header for tabs opened last week */
 "TabTray.LastWeek.Header" = "Múlt hét";
 
@@ -1706,6 +1730,9 @@
 
 /* The title for the tab tray in private mode */
 "TabTray.PrivateTitle" = "Privát lapok";
+
+/* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
+"TabTray.RecentlyClosed.Description" = "A lapok 30 napig állnak itt rendelkezésre. Ezután a lapok automatikusan bezárásra kerülnek.";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "Privát";

@@ -5,7 +5,7 @@
 "DefaultBrowserCard.Button.v2" = "Pelajari Caranya";
 
 /* Description for small card shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Setel tautan dari situs web, surel, dan Pesan untuk secara otomatis dibuka di Firefox.";
+"DefaultBrowserCard.Description" = "Setel agar tautan dari situs web, surel, dan Pesan dibuka di Firefox secara otomatis.";
 
 /* Title for small card shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Alihkan Peramban Baku Anda";
@@ -17,13 +17,13 @@
 "DefaultBrowserOnboarding.Description1" = "1. Buka Pengaturan";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description2" = "2. Ketuk Aplikasi Peramban Baku";
+"DefaultBrowserOnboarding.Description2" = "2. Ketuk App Browser Default";
 
 /* Description for default browser onboarding card. */
 "DefaultBrowserOnboarding.Description3" = "3. Pilih Firefox";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
-"DefaultBrowserOnboarding.Screenshot" = "Aplikasi Peramban Baku";
+"DefaultBrowserOnboarding.Screenshot" = "App Browser Default";
 
 /* Menu option for setting Firefox as default browser. */
 "Settings.DefaultBrowserMenuItem" = "Setel sebagai Peramban Baku";

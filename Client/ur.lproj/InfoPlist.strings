@@ -1,5 +1,5 @@
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "۔یہ آُپ کو تصاویر لینے اور اپلوڈ کرنے دیتا ہے۔";
+"NSCameraUsageDescription" = "Firefox QR کوڈز کو اسکین کرنے اور تصاویر اور ویڈیو لینے کیلئے آپ کے کیمرہ کا استعمال کرتا ہے۔";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox کو آپ کے محفوظ کردہ لاگ ان تک رسائی حاصل کرنے کے لئے Face ID کی ضرورت ہوتی ہے۔";

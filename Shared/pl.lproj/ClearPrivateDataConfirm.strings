@@ -5,5 +5,5 @@
 "OK" = "OK";
 
 /* Description of the confirmation dialog shown when a user tries to clear their private data. */
-"This action will clear all of your private data. It cannot be undone." = "Wszystkie dane prywatne zostaną usunięte. Tej operacji nie można cofnąć.";
+"This action will clear all of your private data. It cannot be undone." = "Wszystkie dane prywatne zostaną usunięte. Tego działania nie można cofnąć.";
 

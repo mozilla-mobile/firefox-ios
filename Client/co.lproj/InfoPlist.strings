@@ -1,5 +1,5 @@
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Quessu vi permette di piglià fotò è di mandalle.";
+"NSCameraUsageDescription" = "Firefox impiega u vostru apparechju-fotò per analizà codici QR è piglià fotò è video.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox richiede Face ID per accede à e vostre identificazioni di cunnessione arregistrate.";
@@ -10,7 +10,7 @@
 "NSLocationWhenInUseUsageDescription" = "I siti web chì vò visitate ponu richiede à cunnosce a vostra lucalizazione.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Quessu vi permette di piglià filmetti è di mandalli.";
+"NSMicrophoneUsageDescription" = "Firefox impiega u vostru microfonu per arregistrà è incaricà l’audio.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Quessu vi permette d’arregistrà fotò.";

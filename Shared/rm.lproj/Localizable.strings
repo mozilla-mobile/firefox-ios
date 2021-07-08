@@ -40,6 +40,12 @@
 /* The description of a highlight if it is a site the user has visited */
 "ActivityStream.Highlights.Visited" = "Visità";
 
+/* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
+"ActivityStream.JumpBackIn.SectionTitle" = "Returnar tar";
+
+/* A string used to signify the start of the Recently Saved section in Home Screen. */
+"ActivityStream.Library.Title" = "Memorisà dacurt";
+
 /* Section title label for recently bookmarked websites */
 "ActivityStream.NewRecentBookmarks.Title" = "Segnapaginas novs";
 
@@ -57,6 +63,12 @@
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Visità dacurt";
+
+/* Section title for the Recently Saved section. This shows websites that have had a save action. Right now it is just bookmarks but it could be used for other things like the reading list in the future. */
+"ActivityStream.RecentlySaved.SectionTitle" = "Memorisà dacurt";
+
+/* This button will open the library showing all the users bookmarks */
+"ActivityStream.RecentlySaved.ShowAll" = "Mussar tut";
 
 /* Section title label for Shortcuts */
 "ActivityStream.Shortcuts.SectionTitle" = "Scursanidas";
@@ -982,6 +994,9 @@
 /* Title for the Recently Closed Tabs Panel */
 "RecentlyClosedTabsPanel.Title" = "Serrà dacurt";
 
+/* More button text for Recently Saved items at the home page. */
+"RecentlySaved.Actions.More" = "Mussar tut";
+
 /* Accessibility Label for the tab toolbar Reload button */
 "Reload" = "Rechargiar";
 
@@ -1191,6 +1206,9 @@
 
 /* Title displayed in header of the setting panel. */
 "Settings.ClearPrivateData.Title" = "Stizzar las datas privatas";
+
+/* Button in Data Management that clears private data for the selected items. Parameter is the number of items to be cleared */
+"Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "Stizzar elements: %1$@";
 
 /* Copy app version alert shown in settings. */
 "Settings.CopyAppVersion.Title" = "Copià en l'archiv provisoric";
@@ -1553,6 +1571,9 @@
 /* Description of the confirmation dialog shown when a user tries to clear their private data. */
 "Settings.WebsiteData.ConfirmPrompt" = "Questa acziun stizza tut tias datas da websites. Quest pass na po betg vegnir revocà.";
 
+/* Description of the confirmation dialog shown when a user tries to clear some of their private data. */
+"Settings.WebsiteData.SelectedConfirmPrompt" = "Questa acziun stizza ils elements tschernids. Quest pass na po betg vegnir revocà.";
+
 /* Title displayed in header of the Data Management panel. */
 "Settings.WebsiteData.Title" = "Datas da websites";
 
@@ -1689,6 +1710,9 @@
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "Il tab actualmain tschernì.";
 
+/* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
+"TabTray.InactiveTabs.SectionTitle" = "Tabs inactivs";
+
 /* The section header for tabs opened last week */
 "TabTray.LastWeek.Header" = "Ultima emna";
 
@@ -1706,6 +1730,9 @@
 
 /* The title for the tab tray in private mode */
 "TabTray.PrivateTitle" = "Tabs privats";
+
+/* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
+"TabTray.RecentlyClosed.Description" = "Tabs stattan a disposiziun qua per 30 dis. Suenter quest temp vegnan els serrads automaticamain.";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "Privat";

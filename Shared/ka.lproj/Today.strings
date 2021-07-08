@@ -1,11 +1,11 @@
 /* Close Private Tabs button label */
-"TodayWidget.ClosePrivateTabsButton" = "დახურვა პირადი ჩანართების";
+"TodayWidget.ClosePrivateTabsButton" = "პირადი ჩანართების დახურვა";
 
 /* Close Private Tabs */
-"TodayWidget.ClosePrivateTabsLabelV2" = "დახურვა პირადი ჩანართების";
+"TodayWidget.ClosePrivateTabsLabelV2" = "პირადი ჩანართების\nდახურვა";
 
 /* Close Private Tabs */
-"TodayWidget.ClosePrivateTabsLabelV3" = "დახურვა პირადი ჩანართების";
+"TodayWidget.ClosePrivateTabsLabelV3" = "პირადი\nჩანართების\nდახურვა";
 
 /* Copied Link from clipboard displayed */
 "TodayWidget.CopiedLinkLabelFromPasteBoardV1" = "ბმულის ასლის აღებულია";
@@ -41,7 +41,7 @@
 "TodayWidget.MoreTabsLabel" = "+%d კიდევ…";
 
 /* Open New Private Tab button label for medium size action */
-"TodayWidget.NewPrivateTabButtonLabelV2" = "ძიება პირად ჩანართში";
+"TodayWidget.NewPrivateTabButtonLabelV2" = "პირად ჩანართში მოძიება";
 
 /* Open New Tab button label */
 "TodayWidget.NewSearchButtonLabelV1" = "Firefox-ში მოძიება";
@@ -110,10 +110,10 @@
 "TodayWidget.SearchInFirefoxV2" = "Firefox-ში მოძიება";
 
 /* Search in private tab */
-"TodayWidget.SearchInPrivateTabLabelV2" = "ძიება პირად ჩანართში";
+"TodayWidget.SearchInPrivateTabLabelV2" = "პირად ჩანართში\nმოძიება";
 
 /* Description for top sites widget to add Firefox top sites shotcuts to home screen */
-"TodayWidget.TopSitesGalleryDescription" = "დაამატეთ მალსახმობები ხშირად და ბოლოს მონახულებული საიტების.";
+"TodayWidget.TopSitesGalleryDescription" = "დაამატეთ მალსახმობები ხშირად და ბოლოს მონახულებული საიტებისთვის.";
 
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitle" = "რჩეული საიტები";

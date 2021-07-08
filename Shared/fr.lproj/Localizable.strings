@@ -40,6 +40,12 @@
 /* The description of a highlight if it is a site the user has visited */
 "ActivityStream.Highlights.Visited" = "Visité";
 
+/* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
+"ActivityStream.JumpBackIn.SectionTitle" = "Revenir dans cet onglet";
+
+/* A string used to signify the start of the Recently Saved section in Home Screen. */
+"ActivityStream.Library.Title" = "Récemment enregistrés";
+
 /* Section title label for recently bookmarked websites */
 "ActivityStream.NewRecentBookmarks.Title" = "Marque-pages récents";
 
@@ -57,6 +63,12 @@
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Visités récemment";
+
+/* Section title for the Recently Saved section. This shows websites that have had a save action. Right now it is just bookmarks but it could be used for other things like the reading list in the future. */
+"ActivityStream.RecentlySaved.SectionTitle" = "Récemment enregistrés";
+
+/* This button will open the library showing all the users bookmarks */
+"ActivityStream.RecentlySaved.ShowAll" = "Tout afficher";
 
 /* Section title label for Shortcuts */
 "ActivityStream.Shortcuts.SectionTitle" = "Raccourcis";
@@ -982,6 +994,9 @@
 /* Title for the Recently Closed Tabs Panel */
 "RecentlyClosedTabsPanel.Title" = "Récemment fermés";
 
+/* More button text for Recently Saved items at the home page. */
+"RecentlySaved.Actions.More" = "Tout afficher";
+
 /* Accessibility Label for the tab toolbar Reload button */
 "Reload" = "Actualiser";
 
@@ -1191,6 +1206,9 @@
 
 /* Title displayed in header of the setting panel. */
 "Settings.ClearPrivateData.Title" = "Effacer mes traces";
+
+/* Button in Data Management that clears private data for the selected items. Parameter is the number of items to be cleared */
+"Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "Supprimer les éléments : %1$@";
 
 /* Copy app version alert shown in settings. */
 "Settings.CopyAppVersion.Title" = "Copiée dans le presse-papiers";
@@ -1425,7 +1443,7 @@
 "Settings.Siri.SectionName" = "Raccourcis Siri";
 
 /* Section title for all studies that are currently active */
-"Settings.Studies.Active.SectionName" = "Active";
+"Settings.Studies.Active.SectionName" = "Études actives";
 
 /* Section title for all studies that are completed */
 "Settings.Studies.Completed.SectionName" = "Terminée";
@@ -1552,6 +1570,9 @@
 
 /* Description of the confirmation dialog shown when a user tries to clear their private data. */
 "Settings.WebsiteData.ConfirmPrompt" = "Cette action effacera l’ensemble des données de sites et est irréversible.";
+
+/* Description of the confirmation dialog shown when a user tries to clear some of their private data. */
+"Settings.WebsiteData.SelectedConfirmPrompt" = "Cette action effacera l’ensemble des éléments sélectionnés et est irréversible.";
 
 /* Title displayed in header of the Data Management panel. */
 "Settings.WebsiteData.Title" = "Données des sites";
@@ -1689,6 +1710,9 @@
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "Onglet actuellement sélectionné.";
 
+/* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
+"TabTray.InactiveTabs.SectionTitle" = "Onglets inactifs";
+
 /* The section header for tabs opened last week */
 "TabTray.LastWeek.Header" = "La semaine dernière";
 
@@ -1706,6 +1730,9 @@
 
 /* The title for the tab tray in private mode */
 "TabTray.PrivateTitle" = "Onglets privés";
+
+/* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
+"TabTray.RecentlyClosed.Description" = "Les onglets sont disponibles ici pendant 30 jours. Après ce délai, les onglets seront automatiquement fermés.";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "Privés";

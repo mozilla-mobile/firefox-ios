@@ -14,13 +14,13 @@
 "DefaultBrowserOnboarding.Button" = "Ir a ajustes";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description1" = "1. Abre la Configuración";
+"DefaultBrowserOnboarding.Description1" = "1. Ir a ajustes";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description2" = "2. Toca la aplicación de navegador predeterminado";
+"DefaultBrowserOnboarding.Description2" = "2. Tocar aplicación de navegador predeterminada";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Selecciona Firefox";
+"DefaultBrowserOnboarding.Description3" = "3. Seleccionar Firefox";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Aplicación de navegador predeterminado";
