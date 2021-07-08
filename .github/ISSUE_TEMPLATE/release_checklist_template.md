@@ -17,7 +17,9 @@ Hard freeze:
 - [ ] Add Bitrise trigger for release branch
 
 ### Soft Freeze Optional
-These items should be completed as soon as possible, preferrably on soft code freeze day. Due to timing issues, they may not be available until hard code freeze, and must
+These items should be completed as soon as possible, preferrably on soft code
+freeze day. Due to timing issues, they may not be available until hard code
+freeze, and must be completed on hard freeze.
 
 - [ ] Ensure string export was completed for L10N (if needed)
 - [ ] Check for [security advisories](https://github.com/mozilla-mobile/firefox-ios/wiki/Release-Build-Checklist/#security-advisories)
@@ -29,8 +31,8 @@ These items should be completed as soon as possible, preferrably on soft code fr
     - [ ] Link to commit diff between versions
     - [ ] Add volunteer contributions
 - [ ] Release Notes updated
-- [ ] Submit build to Apple
 - [ ] Get App Store screenshots and all locales if necessary
+- [ ] Submit build to Apple
 - [ ] Release with 7-day rollout
 
 See [Release build checklist wiki](https://github.com/mozilla-mobile/firefox-ios/wiki/Release-Build-Checklist-Details) for more detailed instructions.
