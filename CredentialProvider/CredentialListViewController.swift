@@ -74,10 +74,6 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
         tableView.reloadData()
     }
     
-    private func shouldHideNavigationBarDuringPresentation() -> Bool {
-        return UIDevice.current.userInterfaceIdiom != UIUserInterfaceIdiom.pad
-    }
-    
     private func setupTableView() {
         let backgroundView = UIView(frame: self.view.bounds)
         tableView.backgroundView = backgroundView
@@ -101,7 +97,7 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
     private func getStyledSearchController() -> UISearchController {
         let searchController = UISearchController(searchResultsController: nil)
         searchController.obscuresBackgroundDuringPresentation = false
-        searchController.hidesNavigationBarDuringPresentation = self.shouldHideNavigationBarDuringPresentation()
+        searchController.hidesNavigationBarDuringPresentation = true
         searchController.searchResultsUpdater = self
         searchController.delegate = self
         searchController.isActive = true
