@@ -10,7 +10,6 @@ Soft freeze:
 Hard freeze:
 
 ## Soft Freeze Items
-### Branch setup, steps typically done when creating new version branch:
 - [ ] Update Version Number in code (Eng task, use `update_version.sh`)
 - [ ] Update `Client/Info.plist` MozWhatsNewTopic (Eng task)
 - [ ] Create version specific Sentry project
@@ -24,7 +23,7 @@ These items should be completed as soon as possible, preferrably on soft code fr
 - [ ] Check for [security advisories](https://github.com/mozilla-mobile/firefox-ios/wiki/Release-Build-Checklist/#security-advisories)
 - [ ] File P.I. request
 
-## Hard Code Freeze
+## Hard Freeze Items
 
 - [ ] Tag release in GitHub (Eng task)
     - [ ] Link to commit diff between versions
