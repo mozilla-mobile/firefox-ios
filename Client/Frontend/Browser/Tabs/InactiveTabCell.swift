@@ -13,7 +13,7 @@ enum InactiveTabSection: Int, CaseIterable {
 }
 
 protocol InactiveTabsDelegate {
-    func expand(hasExpanded: Bool)
+    func toggleInactiveTabSection(hasExpanded: Bool)
     func didSelectInactiveTab(tab: Tab?)
     func didTapRecentlyClosed()
 }
@@ -161,7 +161,7 @@ class InactiveTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, U
             headerView.state = hasExpanded ? .down : .right
             headerView.title = String.TabsTrayInactiveTabsSectionTitle
             headerView.moreButton.isHidden = false
-            headerView.moreButton.addTarget(self, action: #selector(expand), for: .touchUpInside)
+            headerView.moreButton.addTarget(self, action: #selector(toggleInactiveTabSection), for: .touchUpInside)
             headerView.contentView.backgroundColor = .clear
             return headerView
         case .recentlyClosed:
@@ -169,10 +169,10 @@ class InactiveTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, U
         }
     }
     
-    @objc func expand() {
+    @objc func toggleInactiveTabSection() {
         hasExpanded = !hasExpanded
         tableView.reloadData()
-        delegate?.expand(hasExpanded: hasExpanded)
+        delegate?.toggleInactiveTabSection(hasExpanded: hasExpanded)
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

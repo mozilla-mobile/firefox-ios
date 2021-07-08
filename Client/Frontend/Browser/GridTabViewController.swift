@@ -79,10 +79,6 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         self.view.layoutIfNeeded()
         focusTab()
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-    }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         // When the app enters split screen mode we refresh the collection view layout to show the proper grid
@@ -499,11 +495,13 @@ extension GridTabViewController: UIViewControllerPreviewingDelegate {
 extension GridTabViewController: TabDisplayCompletionDelegate, RecentlyClosedPanelDelegate {
     // RecentlyClosedPanelDelegate
     func openRecentlyClosedSiteInSameTab(_ url: URL) {
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .openRecentlyClosedTab, extras: nil)
         delegate?.tabTrayOpenRecentlyClosedTab(url)
         dismissTabTray()
     }
     
     func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .openRecentlyClosedTab, extras: nil)
         openNewTab(URLRequest(url: url), isPrivate: isPrivate)
         dismissTabTray()
     }

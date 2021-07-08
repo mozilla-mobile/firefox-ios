@@ -322,17 +322,21 @@ extension TabDisplayManager: UICollectionViewDataSource {
 
 extension TabDisplayManager: InactiveTabsDelegate {
     func didTapRecentlyClosed() {
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .openRecentlyClosedList, extras: nil)
         self.tabDisplayCompletionDelegate?.displayRecentlyClosedTabs()
     }
     
     func didSelectInactiveTab(tab: Tab?) {
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .openInactiveTab, extras: nil)
         if let tabTray = tabDisplayer as? GridTabViewController {
             tabManager.selectTab(tab)
             tabTray.dismissTabTray()
         }
     }
     
-    func expand(hasExpanded: Bool) {
+    func toggleInactiveTabSection(hasExpanded: Bool) {
+        let hasExpandedEvent: TelemetryWrapper.EventValue = hasExpanded ? .inactiveTabExpand : .inactiveTabCollapse
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: hasExpandedEvent, extras: nil)
         isInactiveViewExpanded = hasExpanded
         let indexPath = IndexPath(row: 0, section: 1)
         collectionView.reloadItems(at: [indexPath])
