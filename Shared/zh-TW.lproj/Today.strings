@@ -23,7 +23,7 @@
 "TodayWidget.DropDownMenuItemNewSearch" = "新搜尋";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "在主畫面加入 Firefox 捷徑。";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "將 Firefox 捷徑加入主畫面。";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "開啟複製的鏈結";
@@ -41,7 +41,7 @@
 "TodayWidget.MoreTabsLabel" = "還有 %d 個…";
 
 /* Open New Private Tab button label for medium size action */
-"TodayWidget.NewPrivateTabButtonLabelV2" = "用新隱私分頁搜尋";
+"TodayWidget.NewPrivateTabButtonLabelV2" = "用隱私分頁搜尋";
 
 /* Open New Tab button label */
 "TodayWidget.NewSearchButtonLabelV1" = "用 Firefox 搜尋";
@@ -50,7 +50,7 @@
 "TodayWidget.NewTabButtonLabelV1" = "新搜尋結果";
 
 /* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.NoOpenTabsLabel" = "無已開啟的分頁。";
+"TodayWidget.NoOpenTabsLabel" = "沒有開啟的分頁。";
 
 /* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
 "TodayWidget.NoOpenTabsLabelV2" = "未開啟分頁";
@@ -110,10 +110,10 @@
 "TodayWidget.SearchInFirefoxV2" = "用 Firefox 搜尋";
 
 /* Search in private tab */
-"TodayWidget.SearchInPrivateTabLabelV2" = "用新隱私分頁搜尋";
+"TodayWidget.SearchInPrivateTabLabelV2" = "用隱私分頁搜尋";
 
 /* Description for top sites widget to add Firefox top sites shotcuts to home screen */
-"TodayWidget.TopSitesGalleryDescription" = "新增常用網站的捷徑。";
+"TodayWidget.TopSitesGalleryDescription" = "加入常用與近期造訪過網站的捷徑。";
 
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitle" = "熱門網站";

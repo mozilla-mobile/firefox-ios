@@ -77,7 +77,7 @@
 "TodayWidget.QuickActionDropDownMenu" = "Rychlá akce";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Přidejte si zkratku Firefoxu na domovskou obrazovku. Pro úpravu nebo výběr jiné zkratky na widget podržte prst.";
+"TodayWidget.QuickActionGalleryDescription" = "Přidejte si zkratku Firefoxu na domovskou obrazovku. Pro úpravu nebo výběr jiné zkratky na widgetu podržte prst.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Rychlé akce";
