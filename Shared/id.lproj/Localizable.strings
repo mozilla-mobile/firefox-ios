@@ -40,6 +40,12 @@
 /* The description of a highlight if it is a site the user has visited */
 "ActivityStream.Highlights.Visited" = "Dikunjungi";
 
+/* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
+"ActivityStream.JumpBackIn.SectionTitle" = "Lompat Kembali";
+
+/* A string used to signify the start of the Recently Saved section in Home Screen. */
+"ActivityStream.Library.Title" = "Baru Saja Disimpan";
+
 /* Section title label for recently bookmarked websites */
 "ActivityStream.NewRecentBookmarks.Title" = "Markah Terbaru";
 
@@ -57,6 +63,12 @@
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Kunjungan Terbaru";
+
+/* Section title for the Recently Saved section. This shows websites that have had a save action. Right now it is just bookmarks but it could be used for other things like the reading list in the future. */
+"ActivityStream.RecentlySaved.SectionTitle" = "Baru Saja Disimpan";
+
+/* This button will open the library showing all the users bookmarks */
+"ActivityStream.RecentlySaved.ShowAll" = "Tampilkan semua";
 
 /* Section title label for Shortcuts */
 "ActivityStream.Shortcuts.SectionTitle" = "Pintasan";
@@ -982,6 +994,9 @@
 /* Title for the Recently Closed Tabs Panel */
 "RecentlyClosedTabsPanel.Title" = "Baru Saja Ditutup";
 
+/* More button text for Recently Saved items at the home page. */
+"RecentlySaved.Actions.More" = "Tampilkan Semua";
+
 /* Accessibility Label for the tab toolbar Reload button */
 "Reload" = "Muat Ulang";
 
@@ -1191,6 +1206,9 @@
 
 /* Title displayed in header of the setting panel. */
 "Settings.ClearPrivateData.Title" = "Bersihkan Data Pribadi";
+
+/* Button in Data Management that clears private data for the selected items. Parameter is the number of items to be cleared */
+"Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "Hapus Item: %1$@";
 
 /* Copy app version alert shown in settings. */
 "Settings.CopyAppVersion.Title" = "Tersalin ke papan klip";
@@ -1455,7 +1473,7 @@
 "Settings.Studies.Toggle.Title" = "Kajian";
 
 /* Dismiss button for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Button" = "Oke, Paham!";
+"Settings.TrackingProtection.Alert.Button" = "Oke, paham!";
 
 /* Decription for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Description" = "Jika situs tidak berfungsi seperti yang diharapkan, ketuk perisai di bilah alamat dan nonaktifkan Perlindungan Pelacakan yang Ditingkatkan untuk halaman tersebut.";
@@ -1553,6 +1571,9 @@
 /* Description of the confirmation dialog shown when a user tries to clear their private data. */
 "Settings.WebsiteData.ConfirmPrompt" = "Aksi ini akan menghapus semua data situs web Anda. Ini tidak bisa diurungkan.";
 
+/* Description of the confirmation dialog shown when a user tries to clear some of their private data. */
+"Settings.WebsiteData.SelectedConfirmPrompt" = "Aksi ini akan menghapus item terpilih. Ini tidak bisa dibatalkan.";
+
 /* Title displayed in header of the Data Management panel. */
 "Settings.WebsiteData.Title" = "Data Situs Web";
 
@@ -1618,7 +1639,7 @@
 "Sync.FirstTimeMessage.Label" = "Sinkronisasi pertama Anda mungkin memerlukan waktu agak lama";
 
 /* String displayed on Sign In to Sync page that allows the user to create a new account. */
-"Sync.NoAccount.Description" = "Tidak ada akun? <u>Buat akun</u> untuk menyinkronkan Firefox antar perangkat.";
+"Sync.NoAccount.Description" = "Tidak ada akun? <u>Buat akun</u> untuk menyinkronkan Firefox antar-perangkat.";
 
 /* Message displayed when the user's account is syncing with no ellipsis */
 "Sync.Syncing.Label" = "Menyinkronkan";
@@ -1689,6 +1710,9 @@
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "Tab yang dipilih saat ini.";
 
+/* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
+"TabTray.InactiveTabs.SectionTitle" = "Tab Non Aktif";
+
 /* The section header for tabs opened last week */
 "TabTray.LastWeek.Header" = "Minggu Lalu";
 
@@ -1706,6 +1730,9 @@
 
 /* The title for the tab tray in private mode */
 "TabTray.PrivateTitle" = "Tab pribadi";
+
+/* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
+"TabTray.RecentlyClosed.Description" = "Tab tersedia di sini selama 30 hari. Setelah itu, tab akan ditutup secara otomatis.";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "Pribadi";

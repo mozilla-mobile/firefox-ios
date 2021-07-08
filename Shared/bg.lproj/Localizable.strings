@@ -17,7 +17,7 @@
 "About" = "Относно";
 
 /* The title for the pinning a topsite action */
-"ActivityStream.ContextMenu.PinTopsite" = "Добавяне в посещаваните";
+"ActivityStream.ContextMenu.PinTopsite" = "Закачане в предпочитаните";
 
 /* The title for removing a pinned topsite action */
 "ActivityStream.ContextMenu.RemovePinTopsite" = "Премахване";
@@ -43,11 +43,17 @@
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Наскоро посетени";
 
+/* This button will open the library showing all the users bookmarks */
+"ActivityStream.RecentlySaved.ShowAll" = "Всички";
+
 /* label showing how many rows of topsites are shown. %d represents a number */
 "ActivityStream.TopSites.RowCount" = "Редове: %d";
 
+/* The title for the setting page which lets you select the number of top site rows */
+"ActivityStream.TopSites.RowSettingFooter" = "Избиране на брой редове";
+
 /* Section title label for Top Sites */
-"ActivityStream.TopSites.SectionTitle" = "Популярни";
+"ActivityStream.TopSites.SectionTitle" = "Предпочитани";
 
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "Add Tab" = "Добавяне на раздел";
@@ -600,6 +606,9 @@
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "Отметката е добавена";
 
+/* Toast displayed to the user after adding the item to the Top Sites. */
+"Menu.AddPin.Confirm" = "Закачена в предпочитаните страници";
+
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "Добавено към списъка за четене";
 
@@ -629,6 +638,9 @@
 
 /* Toast displayed to the user after a bookmark has been removed. */
 "Menu.RemoveBookmark.Confirm" = "Отметката е премахната";
+
+/* Toast displayed to the user after removing the item from the Top Sites. */
+"Menu.RemovePin.Confirm" = "Премахната от предпочитаните страници";
 
 /* Title on tracking protection menu for blocked items. */
 "Menu.TrackingProtection.BlockedTitle" = "Спрени";
@@ -850,7 +862,7 @@
 "Searches for the suggestion" = "Резултати от подсказката";
 
 /* Accessibility label for the lock icon, which is only present if the connection is secure */
-"Secure connection" = "Защитена връзка";
+"Secure connection" = "Шифрована връзка";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Ше изпратете ли доклад за срива, така че Mozilla да реши проблема?";
@@ -1047,7 +1059,7 @@
 "Settings.NewTab.Description" = "При отваряне на раздел:";
 
 /* The title of the section in newtab that lets you modify the topsites panel */
-"Settings.NewTab.Option.ASTitle" = "Промяна на най-посещаваните";
+"Settings.NewTab.Option.ASTitle" = "Настройки на предпочитаните страници";
 
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "Празна страница";
@@ -1056,7 +1068,10 @@
 "Settings.NewTab.Option.Bookmarks" = "Отметки";
 
 /* The footer for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeFooter" = "Най-посещаваните от вас страници";
+"Settings.NewTab.Option.CustomizeFooter" = "Предпочитани от вас страници";
+
+/* The footer for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeFooter2" = "За преглед по-късно";
 
 /* Option in the settings to turn off recent bookmarks in the Highlights section */
 "Settings.NewTab.Option.HighlightsBookmarks" = "Последни отметки";
@@ -1078,6 +1093,9 @@
 
 /* Option in settings to show reading list when you open a new tab */
 "Settings.NewTab.Option.ReadingList" = "Показване на списъка за четене";
+
+/* Descriptoin for the option in settings to turn on off pocket recommendations. First argument is the pocket brand name, second argument is the pocket product name. */
+"Settings.NewTab.Option.RecommendedByPocketDescription" = "Изключително съдържание, подбрано от %1$@ част от семейството на %2$@";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "Нов раздел";
@@ -1339,10 +1357,10 @@
 "Toolbar.Menu.CloseAllTabs" = "Затваряне на всички раздели";
 
 /* Description label for the empty Top Sites state. */
-"TopSites.EmptyState.Description" = "Вашите най-посещавани страници се показват тук.";
+"TopSites.EmptyState.Description" = "Вашите предпочитани страници се показват тук.";
 
 /* The title for the empty Top Sites state */
-"TopSites.EmptyState.Title" = "Добре дошли в най-посещавани";
+"TopSites.EmptyState.Title" = "Добре дошли в предпочитаните страници";
 
 /* Button shown in editing mode to remove this site from the top sites panel. */
 "TopSites.RemovePage.Button" = "Премахване на страница - %@";

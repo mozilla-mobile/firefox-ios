@@ -104,6 +104,9 @@
 /* Toggle bookmarks syncing setting */
 "Bookmarks" = "Marcaje";
 
+/* The button on the snackbar to edit a bookmark after adding it. */
+"Bookmarks.Edit.Button" = "Editează";
+
 /* The button to edit a bookmark */
 "Bookmarks.EditBookmark.Label" = "Editează marcajul";
 
@@ -208,6 +211,12 @@
 
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "Deschide într-o filă nouă";
+
+/* Context menu item for opening a link in a new private tab */
+"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "Deschide linkul într-o filă privată nouă";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenLinkInNewTabButtonTitle" = "Deschide linkul într-o filă nouă";
 
 /* Context menu item for saving an image */
 "ContextMenu.SaveImageButtonTitle" = "Salvează imaginea";
@@ -679,10 +688,10 @@
 "Menu.EnhancedTrackingProtectionOn.Title" = "Protecția îmbunătățită împotriva urmăririi este activată pentru acest site.";
 
 /* Description for having standard ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox blochează elementele de urmărire inter-site-uri, elementele de urmărire de pe rețelele sociale, criptominerii și generatoarele de amprente digitale.";
+"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox blochează elementele de urmărire inter-site-uri, elementele de urmărire ale rețelelor sociale, criptominerii și detectoarele de amprente digitale.";
 
 /* Description for having strict ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox blochează elementele de urmărire inter-site-uri, elementele de urmărire de pe rețelele sociale, criptominerii, generatoarele de amprente digitale și conținuturile de urmărire.";
+"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox blochează elementele de urmărire inter-site-uri, elementele de urmărire ale rețelelor sociale, criptominerii, detectoarele de amprente digitale și conținuturile de urmărire.";
 
 /* Label for the button displayed in the menu used to stop the reload of the webpage */
 "Menu.Library.StopReload" = "Oprește";
@@ -745,10 +754,10 @@
 "Menu.TrackingProtectionBlockingDisabled.Description" = "Blochează elementele de urmărire online";
 
 /* The title that shows the number of cross-site cookies blocked */
-"Menu.TrackingProtectionCrossSiteCookies.Title" = "Cookie-uri de urmărire între site-uri";
+"Menu.TrackingProtectionCrossSiteCookies.Title" = "Cookie-uri de urmărire inter-site-uri";
 
 /* The title that shows the number of cross-site URLs blocked */
-"Menu.TrackingProtectionCrossSiteTrackers.Title" = "Elemente de urmărire între site-uri";
+"Menu.TrackingProtectionCrossSiteTrackers.Title" = "Elemente de urmărire inter-site-uri";
 
 /* The title that shows the number of cryptomining scripts blocked */
 "Menu.TrackingProtectionCryptominersBlocked.Title" = "Criptomineri";
@@ -763,7 +772,7 @@
 "Menu.TrackingProtectionDescription.CryptominersNew" = "Criptomomerii folosesc pe ascuns puterea de calcul a sistemului tău pentru a mina bani digitali. Scripturile de criptominare îți scurg bateria, încetinesc calculatorul și îți pot crește factura la energie.";
 
 /* Description of fingerprinters. */
-"Menu.TrackingProtectionDescription.Fingerprinters" = "Setările tale din browser și de pe calculator sunt unice. Generatoarele de amprente digitale colectează multe dintre aceste setări unice și creează un profil despre tine, care poate fi utilizat ca să te urmărească în timp ce navighezi.";
+"Menu.TrackingProtectionDescription.Fingerprinters" = "Setările tale din browser și de pe calculator sunt unice. Detectoarele de amprente digitale colectează multe dintre aceste setări unice și creează un profil despre tine, care poate fi folosit ca să te urmărească în timp ce navighezi.";
 
 /* Description of social network trackers. */
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "Rețelele sociale plasează elemente de urmărire pe alte site-uri web pentru a-ți construi un profil mai complet și mai direcționat. Blocarea acestor elemente de urmărire reduce cât de multe companii de social media pot vedea ce faci online.";
@@ -787,16 +796,16 @@
 "Menu.TrackingProtectionFingerprintersBlocked.Title" = "Generatoare de amprente digitale";
 
 /* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "Cookie-uri de urmărire între site-uri blocate";
+"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "Cookie-uri de urmărire inter-site-uri, blocate";
 
 /* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Cryptominers" = "Criptominere blocate";
+"Menu.TrackingProtectionListTitle.Cryptominers" = "Criptominerii blocați";
 
 /* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Fingerprinters" = "Generatoare de amprente digitale blocate";
+"Menu.TrackingProtectionListTitle.Fingerprinters" = "Detectoare de amprente digitale, blocate";
 
 /* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.Social" = "Elemente de urmărire de pe rețele de socializare blocate";
+"Menu.TrackingProtectionListTitle.Social" = "Elemente de urmărire ale rețelelor sociale, blocate";
 
 /* more info about what tracking protection is about */
 "Menu.TrackingProtectionMoreInfo.Description" = "Află mai multe despre modul în care protecția împotriva urmăririi blochează elementele de urmărire online care îți colectează datele de navigare pe mai multe site-uri web.";

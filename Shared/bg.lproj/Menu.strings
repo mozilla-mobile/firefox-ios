@@ -23,7 +23,7 @@
 "Menu.OpenSettingsAction.Title" = "Настройки";
 
 /* Accessibility label for the button, displayed in the menu, used to open the Top Sites home panel. */
-"Menu.OpenTopSitesAction.AccessibilityLabel" = "Най-посещавани";
+"Menu.OpenTopSitesAction.AccessibilityLabel" = "Предпочитани страници";
 
 /* Label for the button, displayed in the menu, used to delete an existing bookmark for the current website. */
 "Menu.RemoveBookmarkAction.Title" = "Премахване на отметка";
