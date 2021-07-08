@@ -357,16 +357,23 @@ extension LoginDetailViewController {
         guard let username = usernameField?.text, let password = passwordField?.text else { return }
         guard username != login.username || password != login.password else { return }
 
-        // Keep a copy of the old data in case we fail and need to revert back
-        let oldInfo = (pass: login.password, user: login.username)
-        login.password = password
-        login.username = username
+        let updatedLogin = Login(
+            id: login.id,
+            hostname: login.hostname,
+            password: password,
+            username: username,
+            httpRealm: login.httpRealm,
+            formSubmitUrl: login.formSubmitUrl,
+            usernameField: login.usernameField,
+            passwordField: login.passwordField,
+            timesUsed: login.timesUsed,
+            timeCreated: login.timeCreated,
+            timeLastUsed: login.timeLastUsed,
+            timePasswordChanged: login.timePasswordChanged
+        )
 
         if login.isValid.isSuccess {
-            _ = profile.logins.update(login: login)
-        } else {
-            login.password = oldInfo.pass
-            login.username = oldInfo.user
+            _ = profile.logins.update(login: updatedLogin)
         }
     }
 }
@@ -379,7 +386,7 @@ extension LoginDetailViewController: LoginDetailTableViewCellDelegate {
     }
 
     func didSelectOpenAndFillForCell(_ cell: LoginDetailTableViewCell) {
-        guard let url = (self.login.formSubmitURL?.asURL ?? self.login.hostname.asURL) else {
+        guard let url = (self.login.formSubmitUrl?.asURL ?? self.login.hostname.asURL) else {
             return
         }
 

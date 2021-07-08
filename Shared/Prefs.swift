@@ -44,8 +44,6 @@ public struct PrefsKeys {
     public static let KeyTopSitesCacheSize = "topSitesCacheSize"
     public static let KeyNewTab = "NewTabPrefKey"
     public static let ASPocketStoriesVisible = "ASPocketStoriesVisible"
-    public static let ASRecentHighlightsVisible = "ASRecentHighlightsVisible"
-    public static let ASBookmarkHighlightsVisible = "ASBookmarkHighlightsVisible"
     public static let ASLastInvalidation = "ASLastInvalidation"
     public static let KeyUseCustomSyncTokenServerOverride = "useCustomSyncTokenServerOverride"
     public static let KeyCustomSyncTokenServerOverride = "customSyncTokenServerOverride"
@@ -57,6 +55,7 @@ public struct PrefsKeys {
     public static let AppExtensionTelemetryOpenUrl = "AppExtensionTelemetryOpenUrl"
     public static let AppExtensionTelemetryEventArray = "AppExtensionTelemetryEvents"
     public static let KeyBlockPopups = "blockPopups"
+    public static let recentlySavedSectionEnabled = "recentlySavedSectionEnabled"
     
     // Widgetkit Key
     public static let WidgetKitSimpleTabKey = "WidgetKitSimpleTabKey"

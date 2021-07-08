@@ -57,9 +57,10 @@ class AuthenticationTest: BaseTestCase {
         waitForExistence(springboard.icons["XCUITests-Runner"], timeout: 10)
         app.activate()
 
+        // Disable this part do to Issue 8333
         // Need to be sure the app is ready
-        navigator.nowAt(LockedLoginsSettings)
-        waitForExistence(app.navigationBars["Enter Passcode"], timeout: 10)
+        // navigator.nowAt(LockedLoginsSettings)
+        // waitForExistence(app.navigationBars["Enter Passcode"], timeout: 10)
     }
 
     func testPromptPassCodeUponReentryWithDelay() {

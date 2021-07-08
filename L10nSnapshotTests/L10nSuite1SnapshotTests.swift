@@ -81,9 +81,12 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     func testTopSitesMenu() {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         app.buttons["urlBar-cancel"].tap()
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
         navigator.nowAt(NewTabScreen)
+        // Workaround since in some locales Top Sites are not shown right away
+        navigator.goto(SettingsScreen)
         navigator.goto(HomePanel_TopSites)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         navigator.goto(TopSitesPanelContextMenu)
         snapshot("TopSitesMenu-01")
     }

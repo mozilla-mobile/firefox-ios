@@ -9,10 +9,13 @@ import Shared
 
 private let log = Logger.syncLogger
 
-public extension LoginRecord {
-    convenience init(credentials: URLCredential, protectionSpace: URLProtectionSpace) {
+typealias LoginsStoreError = LoginsStorageError
+public typealias LoginRecord = Login
+
+public extension Login {
+    init(credentials: URLCredential, protectionSpace: URLProtectionSpace) {
         let hostname: String
-        if let _ = protectionSpace.`protocol` {
+        if let _ = protectionSpace.protocol {
             hostname = protectionSpace.urlString()
         } else {
             hostname = protectionSpace.host
@@ -22,12 +25,41 @@ public extension LoginRecord {
         let username = credentials.user
         let password = credentials.password
 
-        self.init(fromJSONDict: [
-            "hostname": hostname,
-            "httpRealm": httpRealm as Any,
-            "username": username ?? "",
-            "password": password ?? ""
-        ])
+        self.init(
+            id: "",
+            hostname: hostname,
+            password: password ?? "",
+            username: username ?? "",
+            httpRealm: httpRealm,
+            formSubmitUrl: "",
+            usernameField: "",
+            passwordField: "",
+            timesUsed: 0,
+            timeCreated: 0,
+            timeLastUsed: 0,
+            timePasswordChanged: 0
+        )
+    }
+
+    init(fromJSONDict dict: [String: Any]) {
+        self.init(
+            id: dict["id"] as? String ?? "",
+            hostname: dict["hostname"] as? String ?? "",
+            password: dict["password"] as? String ?? "",
+
+            username: dict["username"] as? String ?? "",
+            
+            httpRealm: dict["httpRealm"] as? String,
+            formSubmitUrl: dict["formSubmitUrl"] as? String,
+            
+            usernameField: dict["usernameField"] as? String ?? "",
+            passwordField: dict["passwordField"] as? String ?? "",
+
+            timesUsed: (dict["timesUsed"] as? Int64) ?? 0,
+            timeCreated: (dict["timeCreated"] as? Int64) ?? 0,
+            timeLastUsed: (dict["timeLastUsed"] as? Int64) ?? 0,
+            timePasswordChanged: (dict["timePasswordChanged"] as? Int64) ?? 0
+        )
     }
 
     var credentials: URLCredential {
@@ -47,7 +79,7 @@ public extension LoginRecord {
         return false
     }
 
-    var isValid: Maybe<()> {
+    var isValid: Maybe<Void> {
         // Referenced from https://mxr.mozilla.org/mozilla-central/source/toolkit/components/passwordmgr/nsLoginManager.js?rev=f76692f0fcf8&mark=280-281#271
 
         // Logins with empty hostnames are not valid.
@@ -60,18 +92,45 @@ public extension LoginRecord {
             return Maybe(failure: LoginRecordError(description: "Can't add a login with an empty password."))
         }
 
-        // Logins with both a formSubmitURL and httpRealm are not valid.
-        if let _ = formSubmitURL, let _ = httpRealm {
-            return Maybe(failure: LoginRecordError(description: "Can't add a login with both a httpRealm and formSubmitURL."))
+        // Logins with both a formSubmitUrl and httpRealm are not valid.
+        if let _ = formSubmitUrl, let _ = httpRealm {
+            return Maybe(failure: LoginRecordError(description: "Can't add a login with both a httpRealm and formSubmitUrl."))
         }
 
-        // Login must have at least a formSubmitURL or httpRealm.
-        if (formSubmitURL == nil) && (httpRealm == nil) {
-            return Maybe(failure: LoginRecordError(description: "Can't add a login without a httpRealm or formSubmitURL."))
+        // Login must have at least a formSubmitUrl or httpRealm.
+        if formSubmitUrl == nil, httpRealm == nil {
+            return Maybe(failure: LoginRecordError(description: "Can't add a login without a httpRealm or formSubmitUrl."))
         }
 
         // All good.
         return Maybe(success: ())
+    }
+
+    func toJSONDict() -> [String: Any] {
+        var dict: [String: Any] = [
+            "id": id,
+            "password": password,
+            "hostname": hostname,
+
+            "timesUsed": timesUsed,
+            "timeCreated": timeCreated,
+            "timeLastUsed": timeLastUsed,
+            "timePasswordChanged": timePasswordChanged,
+
+            "username": username,
+            "passwordField": passwordField,
+            "usernameField": usernameField,
+        ]
+
+        if let httpRealm = self.httpRealm {
+            dict["httpRealm"] = httpRealm
+        }
+
+        if let formSubmitUrl = self.formSubmitUrl {
+            dict["formSubmitUrl"] = formSubmitUrl
+        }
+
+        return dict
     }
 }
 
@@ -90,7 +149,7 @@ public class RustLogins {
     let queue: DispatchQueue
     let storage: LoginsStorage
 
-    fileprivate(set) var isOpen: Bool = false
+    private(set) var isOpen = false
 
     private var didAttemptToMoveToBackup = false
 
@@ -99,8 +158,8 @@ public class RustLogins {
         self.encryptionKey = encryptionKey
         self.salt = salt
 
-        self.queue = DispatchQueue(label: "RustLogins queue: \(databasePath)", attributes: [])
-        self.storage = LoginsStorage(databasePath: databasePath)
+        queue = DispatchQueue(label: "RustLogins queue: \(databasePath)", attributes: [])
+        storage = LoginsStorage(databasePath: databasePath)
     }
 
     // Migrate and return the salt, or create a new salt
@@ -134,9 +193,9 @@ public class RustLogins {
                 // specified is not a valid database. This is an unrecoverable
                 // state unless we can move the existing file to a backup
                 // location and start over.
-                case .invalidKey(let message):
+                case let .InvalidKey(message):
                     log.error(message)
-                case .panic(let message):
+                case let .MismatchedLock(message):
                     Sentry.shared.sendWithStacktrace(message: "Panicked when opening Rust Logins database", tag: SentryTag.rustLogins, severity: .error, description: message)
                 default:
                     Sentry.shared.sendWithStacktrace(message: "Unspecified or other error when opening Rust Logins database", tag: SentryTag.rustLogins, severity: .error, description: loginsStoreError.localizedDescription)
@@ -178,18 +237,8 @@ public class RustLogins {
         return error
     }
 
-    public func interrupt() {
-        do {
-            try storage.interrupt()
-        } catch let err as NSError {
-            Sentry.shared.sendWithStacktrace(message: "Error interrupting Logins database", tag: SentryTag.rustLogins, severity: .error, description: err.localizedDescription)
-        }
-    }
-
     public func forceClose() -> NSError? {
         var error: NSError?
-
-        interrupt()
 
         queue.sync {
             guard isOpen else { return }
@@ -205,7 +254,7 @@ public class RustLogins {
 
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.unspecified(message: "Database is closed")
+                let error = LoginsStoreError.MismatchedLock(message: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
@@ -216,7 +265,7 @@ public class RustLogins {
             } catch let err as NSError {
                 if let loginsStoreError = err as? LoginsStoreError {
                     switch loginsStoreError {
-                    case .panic(let message):
+                    case let .SyncAuthInvalid(message):
                         Sentry.shared.sendWithStacktrace(message: "Panicked when syncing Logins database", tag: SentryTag.rustLogins, severity: .error, description: message)
                     default:
                         Sentry.shared.sendWithStacktrace(message: "Unspecified or other error when syncing Logins database", tag: SentryTag.rustLogins, severity: .error, description: loginsStoreError.localizedDescription)
@@ -230,12 +279,12 @@ public class RustLogins {
         return deferred
     }
 
-    public func get(id: String) -> Deferred<Maybe<LoginRecord?>> {
-        let deferred = Deferred<Maybe<LoginRecord?>>()
+    public func get(id: String) -> Deferred<Maybe<Login?>> {
+        let deferred = Deferred<Maybe<Login?>>()
 
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.unspecified(message: "Database is closed")
+                let error = LoginsStoreError.MismatchedLock(message: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
@@ -251,8 +300,8 @@ public class RustLogins {
         return deferred
     }
 
-    public func searchLoginsWithQuery(_ query: String?) -> Deferred<Maybe<Cursor<LoginRecord>>> {
-        return list().bind({ result in
+    public func searchLoginsWithQuery(_ query: String?) -> Deferred<Maybe<Cursor<Login>>> {
+        return list().bind { result in
             if let error = result.failureValue {
                 return deferMaybe(error)
             }
@@ -265,15 +314,15 @@ public class RustLogins {
                 return deferMaybe(ArrayCursor(data: records))
             }
 
-            let filteredRecords = records.filter({
+            let filteredRecords = records.filter {
                 $0.hostname.lowercased().contains(query) || $0.username.lowercased().contains(query)
-            })
+            }
             return deferMaybe(ArrayCursor(data: filteredRecords))
-        })
+        }
     }
 
-    public func getLoginsForProtectionSpace(_ protectionSpace: URLProtectionSpace, withUsername username: String? = nil) -> Deferred<Maybe<Cursor<LoginRecord>>> {
-        return list().bind({ result in
+    public func getLoginsForProtectionSpace(_ protectionSpace: URLProtectionSpace, withUsername username: String? = nil) -> Deferred<Maybe<Cursor<Login>>> {
+        return list().bind { result in
             if let error = result.failureValue {
                 return deferMaybe(error)
             }
@@ -282,40 +331,40 @@ public class RustLogins {
                 return deferMaybe(ArrayCursor(data: []))
             }
 
-            let filteredRecords: [LoginRecord]
+            let filteredRecords: [Login]
             if let username = username {
-                filteredRecords = records.filter({
+                filteredRecords = records.filter {
                     $0.username == username && (
                         $0.hostname == protectionSpace.urlString() ||
-                        $0.hostname == protectionSpace.host
+                            $0.hostname == protectionSpace.host
                     )
-                })
+                }
             } else {
-                filteredRecords = records.filter({
+                filteredRecords = records.filter {
                     $0.hostname == protectionSpace.urlString() ||
-                    $0.hostname == protectionSpace.host
-                })
+                        $0.hostname == protectionSpace.host
+                }
             }
             return deferMaybe(ArrayCursor(data: filteredRecords))
-        })
+        }
     }
 
     public func hasSyncedLogins() -> Deferred<Maybe<Bool>> {
-        return list().bind({ result in
+        return list().bind { result in
             if let error = result.failureValue {
                 return deferMaybe(error)
             }
 
             return deferMaybe((result.successValue?.count ?? 0) > 0)
-        })
+        }
     }
 
-    public func list() -> Deferred<Maybe<[LoginRecord]>> {
-        let deferred = Deferred<Maybe<[LoginRecord]>>()
+    public func list() -> Deferred<Maybe<[Login]>> {
+        let deferred = Deferred<Maybe<[Login]>>()
 
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.unspecified(message: "Database is closed")
+                let error = LoginsStoreError.MismatchedLock(message: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
@@ -331,12 +380,12 @@ public class RustLogins {
         return deferred
     }
 
-    public func add(login: LoginRecord) -> Deferred<Maybe<String>> {
+    public func add(login: Login) -> Deferred<Maybe<String>> {
         let deferred = Deferred<Maybe<String>>()
 
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.unspecified(message: "Database is closed")
+                let error = LoginsStoreError.MismatchedLock(message: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
@@ -352,19 +401,20 @@ public class RustLogins {
         return deferred
     }
 
-    public func use(login: LoginRecord) -> Success {
-        login.timesUsed += 1
-        login.timeLastUsed = Int64(Date.nowMicroseconds())
+    public func use(login: Login) -> Success {
+        var updatedLogin = login
+        updatedLogin.timesUsed += 1
+        updatedLogin.timeLastUsed = Int64(Date.nowMicroseconds())
 
-        return update(login: login)
+        return update(login: updatedLogin)
     }
 
-    public func update(login: LoginRecord) -> Success {
+    public func update(login: Login) -> Success {
         let deferred = Success()
 
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.unspecified(message: "Database is closed")
+                let error = LoginsStoreError.MismatchedLock(message: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
@@ -381,7 +431,7 @@ public class RustLogins {
     }
 
     public func delete(ids: [String]) -> Deferred<[Maybe<Bool>]> {
-        return all(ids.map({ delete(id: $0) }))
+        return all(ids.map { delete(id: $0) })
     }
 
     public func delete(id: String) -> Deferred<Maybe<Bool>> {
@@ -389,7 +439,7 @@ public class RustLogins {
 
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.unspecified(message: "Database is closed")
+                let error = LoginsStoreError.MismatchedLock(message: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
@@ -410,7 +460,7 @@ public class RustLogins {
 
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.unspecified(message: "Database is closed")
+                let error = LoginsStoreError.MismatchedLock(message: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
@@ -431,7 +481,7 @@ public class RustLogins {
 
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.unspecified(message: "Database is closed")
+                let error = LoginsStoreError.MismatchedLock(message: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }

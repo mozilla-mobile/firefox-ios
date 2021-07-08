@@ -12,6 +12,7 @@ public struct LaunchArguments {
     public static let SkipETPCoverSheet = "FIREFOX_SKIP_ETP_COVER_SHEET"
     public static let ClearProfile = "FIREFOX_CLEAR_PROFILE"
     public static let StageServer = "FIREFOX_USE_STAGE_SERVER"
+    public static let FxAChinaServer = "FIREFOX_USE_FXA_CHINA_SERVER"
     public static let DeviceName = "DEVICE_NAME"
     public static let ServerPort = "GCDWEBSERVER_PORT:"
     public static let SkipAddingGoogleTopSite = "SKIP_ADDING_GOOGLE_TOP_SITE"

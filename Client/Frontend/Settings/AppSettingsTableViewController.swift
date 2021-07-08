@@ -143,6 +143,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 ChangeToChinaSetting(settings: self),
                 ShowEtpCoverSheet(settings: self),
                 ToggleChronTabs(settings: self),
+                ToggleRecentlySavedSection(settings: self),
                 ExperimentsSettings(settings: self)
             ])]
 

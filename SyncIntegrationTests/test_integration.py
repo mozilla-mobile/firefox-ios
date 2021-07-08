@@ -34,4 +34,6 @@ def test_sync_tabs_from_desktop(tps, xcodebuild):
 def test_sync_disconnect_connect_fxa(tps, xcodebuild):
     tps.run('test_bookmark_login.js')
     xcodebuild.test('XCUITests/IntegrationTests/testFxADisconnectConnect')
- 
+
+def test_sync_china_fxa_server(xcodebuild):
+    xcodebuild.test('XCUITests/IntegrationTests/testFxASyncPageUsingChinaFxA')
