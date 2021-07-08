@@ -163,6 +163,8 @@ class TabDisplayManager: NSObject {
         guard allTabs.count > 0, let inactiveViewModel = inactiveViewModel else { return [Tab]() }
         guard allTabs.count > 1 else { return allTabs }
         let selectedTab = tabManager.selectedTab
+        // Make sure selected tab has latest time 
+        selectedTab?.lastExecutedTime = Date.now()
         _ = inactiveViewModel.updateInactiveTabs(with: tabManager.selectedTab, tabs: allTabs)
         isInactiveViewExpanded = inactiveViewModel.inactiveTabs.count > 0
         let recentlyClosedTabs = inactiveViewModel.recentlyClosedTabs
