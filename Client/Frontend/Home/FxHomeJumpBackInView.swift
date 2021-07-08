@@ -87,6 +87,10 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
         return viewModel.jumpableTabs.count
     }
 
+//    func numberOfSections(in collectionView: UICollectionView) -> Int {
+//        return sortData().count
+//    }
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: JumpBackInCell.cellIdentifier, for: indexPath) as! JumpBackInCell
 
