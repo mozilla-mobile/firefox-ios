@@ -28,6 +28,9 @@
 /* The description of a highlight if it is a site the user has visited */
 "ActivityStream.Highlights.Visited" = "Vieraillut";
 
+/* A string used to signify the start of the Recently Saved section in Home Screen. */
+"ActivityStream.Library.Title" = "Äskettäin tallennettu";
+
 /* Section title label for recently bookmarked websites */
 "ActivityStream.NewRecentBookmarks.Title" = "Viimeisimmät kirjanmerkit";
 
@@ -42,6 +45,12 @@
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Viimeksi käydyt";
+
+/* Section title for the Recently Saved section. This shows websites that have had a save action. Right now it is just bookmarks but it could be used for other things like the reading list in the future. */
+"ActivityStream.RecentlySaved.SectionTitle" = "Äskettäin tallennettu";
+
+/* This button will open the library showing all the users bookmarks */
+"ActivityStream.RecentlySaved.ShowAll" = "Näytä kaikki";
 
 /* label showing how many rows of topsites are shown. %d represents a number */
 "ActivityStream.TopSites.RowCount" = "Rivejä: %d";
@@ -937,6 +946,9 @@
 /* Title for the Recently Closed Tabs Panel */
 "RecentlyClosedTabsPanel.Title" = "Äskettäin suljetut";
 
+/* More button text for Recently Saved items at the home page. */
+"RecentlySaved.Actions.More" = "Näytä kaikki";
+
 /* Accessibility Label for the tab toolbar Reload button */
 "Reload" = "Päivitä";
 
@@ -1282,6 +1294,9 @@
 
 /* The footer for the section to customize top sites in the new tab settings page. */
 "Settings.NewTab.Option.CustomizeFooter" = "Useimmin vierailemasi sivustot";
+
+/* The footer for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeFooter2" = "Tallentamasi tai vierailemasi sivustot";
 
 /* The title for the section to customize top sites in the new tab settings page. */
 "Settings.NewTab.Option.CustomizeTitle" = "Mukauta Firefoxin aloitussivua";
