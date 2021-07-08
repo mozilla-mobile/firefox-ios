@@ -137,6 +137,14 @@ class Tab: NSObject {
             }
         }
     }
+    var lastKnownUrl: URL? {
+        // Tab url can be nil when user cold starts the app
+        // thus we check session data for last known url
+        guard self.url != nil else {
+            return self.sessionData?.urls.last
+        }
+        return self.url
+    }
     var mimeType: String?
     var isEditing: Bool = false
     var currentFaviconUrl: URL?
