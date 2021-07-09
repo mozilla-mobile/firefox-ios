@@ -112,6 +112,9 @@
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitle" = "אתרים מובילים";
 
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitleV2" = "קיצורי דרך לאתרים";
+
 /* Sub label for Top Sites widget */
 "TodayWidget.TopSitesSubLabel" = "‏Firefox - אתרים מובילים";
 

@@ -40,6 +40,12 @@
 /* The description of a highlight if it is a site the user has visited */
 "ActivityStream.Highlights.Visited" = "ເຂົ້າໄປເບິງມາແລ້ວ";
 
+/* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
+"ActivityStream.JumpBackIn.SectionTitle" = "ກັບໄປໃນ";
+
+/* A string used to signify the start of the Recently Saved section in Home Screen. */
+"ActivityStream.Library.Title" = "ຫາກໍບັນທຶກ";
+
 /* Section title label for recently bookmarked websites */
 "ActivityStream.NewRecentBookmarks.Title" = "ບຸກມາກຫລ້າສຸດ";
 
@@ -57,6 +63,12 @@
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "ເຂົ້າໄປເບິງມາແລ້ວ";
+
+/* Section title for the Recently Saved section. This shows websites that have had a save action. Right now it is just bookmarks but it could be used for other things like the reading list in the future. */
+"ActivityStream.RecentlySaved.SectionTitle" = "ຫາກໍບັນທຶກ";
+
+/* This button will open the library showing all the users bookmarks */
+"ActivityStream.RecentlySaved.ShowAll" = "ສະແດງທັງໝົດ";
 
 /* Section title label for Shortcuts */
 "ActivityStream.Shortcuts.SectionTitle" = "ທາງລັດ";
@@ -166,6 +178,9 @@
 
 /* Describes the date on which the breach occurred */
 "BreachAlerts.BreachDate" = "ການຮົ່ວໄຫລນີ້ໄດ້ເກີດຂື້ນເມື່ອ";
+
+/* Description of what a breach is */
+"BreachAlerts.Description" = "ລະຫັດຜ່ານໄດ້ຖືກເປີດເຜີຍ ຫລື ລັກນັບແຕ່ທ່ານໄດ້ປ່ຽນລະຫັດຜ່ານຄັ້ງຫລ້າສຸດ. ເພື່ອຮັກສາບັນຊີນີ້ ໃຫ້ລັອກອິນເຂົ້າສູ່ເວັບໄຊທແລ້ວປ່ຽນລະຫັດຜ່ານໃຫມ່.";
 
 /* Link to monitor.firefox.com to learn more about breached passwords */
 "BreachAlerts.LearnMoreButton" = "ຮຽນຮູ້ເພີ່ມເຕີມ";
@@ -726,6 +741,9 @@
 /* A switch to enable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtectionOn.Title" = "ການປັບປຸງການປ້ອງກັນການຕິດຕາມແມ່ນເປີດສຳລັບເວບໄຊທ໌ນີ້.";
 
+/* Description for having standard ETP protection with ITP offered in iOS14+ */
+"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox ບັອກຕົວຕິດຕາມເວັບໄຊທ, ສື່ສັງຄົມອອນລາຍ, ນັກຄຸດຫລຽນ ແລະ ລາຍນີ້ວມື.";
+
 /* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
 "Menu.History.Label" = "ປະຫວັດການໃຊ້ງານ";
 
@@ -972,6 +990,9 @@
 
 /* Title for the Recently Closed Tabs Panel */
 "RecentlyClosedTabsPanel.Title" = "ຫາກໍ່ປິດມື້ກີ້ນີ້";
+
+/* More button text for Recently Saved items at the home page. */
+"RecentlySaved.Actions.More" = "ສະແດງທັງໝົດ";
 
 /* Accessibility Label for the tab toolbar Reload button */
 "Reload" = "ໂຫລດຄືນໃຫມ່";

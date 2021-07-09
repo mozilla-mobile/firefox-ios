@@ -348,7 +348,8 @@ firefox_home_page:
     type: counter
     description: |
         Counts when user opens Firefox Home from
-        bottom right hamburger menu Home button.
+        bottom right hamburger menu Home button
+        and New Tab button.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/8481
     data_reviews:
