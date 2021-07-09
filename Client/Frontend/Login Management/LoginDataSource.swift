@@ -66,7 +66,6 @@ class LoginDataSource: NSObject, UITableViewDataSource {
             let cell = LoginListTableViewCell(style: .subtitle, reuseIdentifier: CellReuseIdentifier, inset: tableView.separatorInset)
             guard let login = viewModel.loginAtIndexPath(indexPath) else { return cell }
             cell.hostnameLabel.text = login.hostname
-            cell.usernameLabel.textColor = UIColor.theme.tableView.rowDetailText
             cell.usernameLabel.text = login.username.isEmpty ? "(no username)" : login.username
             if NightModeHelper.hasEnabledDarkTheme(viewModel.profile.prefs) {
                 cell.breachAlertImageView.tintColor = BreachAlertsManager.darkMode
