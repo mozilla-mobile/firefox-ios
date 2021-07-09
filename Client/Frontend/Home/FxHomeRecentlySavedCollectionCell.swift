@@ -32,9 +32,9 @@ class FxHomeRecentlySavedCollectionCell: UICollectionViewCell {
     weak var homePanelDelegate: HomePanelDelegate?
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     var profile: Profile?
-    static var recentlySavedItems = [RecentlySavedItem]()
     var recentBookmarks = [BookmarkItem]()
     var readingListItems = [ReadingListItem]()
+    var viewModel: FirefoxHomeRecentlySavedViewModel!
     
     // UI
     lazy var collectionView: UICollectionView = {
@@ -86,7 +86,7 @@ class FxHomeRecentlySavedCollectionCell: UICollectionViewCell {
         items.append(contentsOf: recentBookmarks)
         items.append(contentsOf: readingListItems)
         
-        Self.recentlySavedItems = items
+        viewModel.recentItems = items
         
         return items
     }

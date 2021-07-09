@@ -131,6 +131,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     fileprivate let pocketAPI = Pocket()
     fileprivate let flowLayout = UICollectionViewFlowLayout()
     fileprivate var hasSentPocketSectionEvent = false
+    var recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel()
 
     fileprivate lazy var topSitesManager: ASHorizontalScrollCellManager = {
         let manager = ASHorizontalScrollCellManager()
@@ -500,10 +501,10 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
             let estimatedLayout = layout.calculateLayout(for: CGSize(width: cellSize.width, height: 0))
             return CGSize(width: cellSize.width, height: estimatedLayout.size.height)
         case .recentlySaved:
-            if FxHomeRecentlySavedCollectionCell.recentlySavedItems.count > 8, UIDevice.current.userInterfaceIdiom == .pad {
+            if recentlySavedViewModel.recentItems.count > 8, UIDevice.current.userInterfaceIdiom == .pad {
                 cellSize.height *= 3
                 return cellSize
-            } else if FxHomeRecentlySavedCollectionCell.recentlySavedItems.count > 4, UIDevice.current.userInterfaceIdiom == .pad {
+            } else if recentlySavedViewModel.recentItems.count > 4, UIDevice.current.userInterfaceIdiom == .pad {
                 cellSize.height *= 2
                 return cellSize
             }
@@ -633,6 +634,7 @@ extension FirefoxHomeViewController {
         recentlySavedCell.profile = profile
         recentlySavedCell.collectionView.reloadData()
         recentlySavedCell.setNeedsLayout()
+        recentlySavedCell.viewModel = recentlySavedViewModel
         
         return recentlySavedCell
     }
