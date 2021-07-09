@@ -260,10 +260,10 @@ struct UIConstants {
 		static let introViewImageHeight: CGFloat = 212
 		static let introViewTitleLabelOffset: CGFloat = 24
 		static let introViewTitleLabelInset: CGFloat = 24
-
 		static let introViewTextLabelOffset: CGFloat = 16
 		static let introViewTextLabelPadding: CGFloat = 24
 		static let introViewTextLabelInset: CGFloat = 24
+        static let pageControlSpacing: CGFloat = 2
     }
 
     struct strings {

@@ -75,14 +75,12 @@ class TipManager {
 
     lazy var siriEraseTip = Tip(title: UIConstants.strings.siriEraseTipTitle, description: UIConstants.strings.siriEraseTipDescription, identifier: TipKey.siriEraseTip, showVc: true)
 
-    lazy var shareTrackersTip = Tip(title: UIConstants.strings.shareTrackersTipTitle, identifier: TipKey.shareTrackersTip)
+    let numberOfTrackersBlocked = UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
+    lazy var shareTrackersTip = Tip(title: String(format: UIConstants.strings.shareTrackersTipTitle, String(numberOfTrackersBlocked)), identifier: TipKey.shareTrackersTip)
 
     func fetchTip() -> Tip? {
         guard Settings.getToggle(.showHomeScreenTips) else { return shareTrackersTip }
-        guard let tip = possibleTips.randomElement(), let indexToRemove = possibleTips.index(of: tip) else { return nil }
-        if tip.identifier != TipKey.shareTrackersTip {
-            possibleTips.remove(at: indexToRemove)
-        }
+        guard let tip = possibleTips.first else { return nil }
         if canShowTip(with: tip.identifier) {
             return tip
         } else if possibleTips.count == 1 {
@@ -107,5 +105,42 @@ class TipManager {
 
     func shouldShowTips() -> Bool {
         return NSLocale.current.identifier == "en_US" && !AppInfo.isKlar
+    }
+    
+    func getNextTip() -> Tip? {
+        if let id = currentTip?.identifier {
+            if let index = possibleTips.firstIndex(where: {$0.identifier == id}) {
+                currentTip = index == possibleTips.count - 1 ? possibleTips[0] : possibleTips[index + 1]
+                if let currentTip = currentTip {
+                    return currentTip
+                }
+            }
+        }
+        return nil
+    }
+    
+    func getPreviousTip() -> Tip? {
+        if let id = currentTip?.identifier {
+            if let index = possibleTips.firstIndex(where: {$0.identifier == id}) {
+                currentTip = index == 0 ? possibleTips.last : possibleTips[index - 1]
+                if let currentTip = currentTip {
+                    return currentTip
+                }
+            }
+        }
+        return nil
+    }
+    
+    func numberOfTips() -> Int {
+        possibleTips.count
+    }
+    
+    func currentTipIndex() -> Int {
+        if let id = currentTip?.identifier {
+            if let index = possibleTips.firstIndex(where: {$0.identifier == id}) {
+                return index
+            }
+        }
+        return 0
     }
 }

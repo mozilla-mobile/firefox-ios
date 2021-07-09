@@ -6,9 +6,8 @@ import XCTest
 
 class TrackingProtectionSettings: BaseTestCase {
     func testInactiveSettings() {
-
         // Go to in-app settings
-        waitForHittable(app.buttons["Settings"])
+        waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
         app.buttons["Settings"].tap()
         waitForHittable(app.tables.cells["settingsViewController.trackingCell"])
         app.tables.cells["settingsViewController.trackingCell"].tap()

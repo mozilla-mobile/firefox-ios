@@ -286,6 +286,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
 
             browserViewController.ensureBrowsingMode()
             browserViewController.deactivateUrlBarOnHomeView()
+            browserViewController.dismissSettings()
+            browserViewController.dismissActionSheet()
             browserViewController.submit(url: url)
             queuedUrl = nil
         } else if let text = queuedString {

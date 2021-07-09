@@ -6,12 +6,13 @@ import XCTest
 
 class AsianLocaleTest: BaseTestCase {
 	func testSearchinLocale() {
+        waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
         // Set search engine to Google
-		app.buttons["Settings"].tap()
+		app.buttons["HomeView.settingsButton"].tap()
 		app.tables.cells["SettingsViewController.searchCell"].tap()
 
 		app.tables.staticTexts["Google"].tap()
-		app.navigationBars["Settings"].children(matching: .button).matching(identifier: "Done").element(boundBy: 0).tap()
+        app.buttons["SettingsViewController.doneButton"].tap()
 
 		// Enter 'mozilla' on the search field
 		search(searchWord: "모질라")

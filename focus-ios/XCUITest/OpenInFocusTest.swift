@@ -5,7 +5,8 @@
 import XCTest
 
 class OpenInFocusTest: BaseTestCase {
-    func xtestOpenViaSafari() {
+    func testOpenViaSafari() throws {
+        throw XCTSkip("This test needs to be updated or removed: google site is not loaded as it is now")
         waitForHittable(app.textFields["URLBar.urlText"]) // wait for app.label
         let sharedExtName = app.label.contains("Klar") ? "Firefox Klar" : "Firefox Focus" as String
 

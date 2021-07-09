@@ -24,7 +24,8 @@ class SearchProviderTest: BaseTestCase {
     func searchProviderTestHelper(provider:String) {
         changeSearchProvider(provider: provider)
         doSearch(searchWord: "mozilla", provider: provider)
-        waitForEnable(app.buttons["URLBar.deleteButton"])
+        waitForWebPageLoad()
+
         app.buttons["URLBar.deleteButton"].tap()
         checkForHomeScreen()
 	}
@@ -74,10 +75,10 @@ class SearchProviderTest: BaseTestCase {
     }
 
 	private func changeSearchProvider(provider: String) {
-
 		app.buttons["Settings"].tap()
+        waitForExistence(app.tables.cells["SettingsViewController.searchCell"], timeout: 5)
 		app.tables.cells["SettingsViewController.searchCell"].tap()
-
+        waitForExistence(app.tables.staticTexts[provider], timeout: 5)
 		app.tables.staticTexts[provider].tap()
 		app.navigationBars.buttons.element(boundBy: 0).tap()
 
@@ -110,7 +111,7 @@ class SearchProviderTest: BaseTestCase {
 				waitForValueContains(urlbarUrltextTextField, value: "wikipedia.org")
             case "Amazon.com":
 				waitForValueContains(urlbarUrltextTextField, value: "amazon.com")
-                waitForValueContains(app.webViews.textFields["Type search keywords"],
+                waitForValueContains(app.webViews.textFields["Search Amazon"],
                     value: searchWord)
 
 			default:

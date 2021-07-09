@@ -16,6 +16,7 @@ class HomeView: UIView {
     private let trackerStatsLabel = SmartLabel()
     private let tipTitleLabel = SmartLabel()
     private let tipDescriptionLabel = SmartLabel()
+    private let pageControl = TipsPageControl()
     private let shieldLogo = UIImageView()
     private let textLogo = UIImageView()
 
@@ -24,12 +25,21 @@ class HomeView: UIView {
 
     deinit {
         NotificationCenter.default.removeObserver(self)
+        tipView.gestureRecognizers?.removeAll()
     }
 
     init(tipManager: TipManager? = nil) {
         super.init(frame: CGRect.zero)
         rotated()
         NotificationCenter.default.addObserver(self, selector: #selector(HomeView.rotated), name: UIDevice.orientationDidChangeNotification, object: nil)
+        
+        let swipeNext = UISwipeGestureRecognizer(target: self, action: #selector(HomeView.swipeNextTip))
+        swipeNext.direction = .left
+        tipView.addGestureRecognizer(swipeNext)
+        
+        let swipePrevious = UISwipeGestureRecognizer(target: self, action: #selector(HomeView.swipePreviousTip))
+        swipePrevious.direction = .right
+        tipView.addGestureRecognizer(swipePrevious)
 
         textLogo.image = UIImage(named: "logo")
         textLogo.contentMode = .scaleAspectFit
@@ -46,11 +56,15 @@ class HomeView: UIView {
         tipTitleLabel.minimumScaleFactor = UIConstants.layout.homeViewLabelMinimumScale
         tipView.addSubview(tipTitleLabel)
 
-        tipDescriptionLabel.textColor = UIConstants.colors.defaultFont
+        tipDescriptionLabel.textColor = .accent
         tipDescriptionLabel.font = UIConstants.fonts.shareTrackerStatsLabel
         tipDescriptionLabel.numberOfLines = 0
         tipDescriptionLabel.minimumScaleFactor = UIConstants.layout.homeViewLabelMinimumScale
         tipView.addSubview(tipDescriptionLabel)
+        
+        pageControl.numberOfPages = tipManager?.numberOfTips() ?? 0
+        addSubview(pageControl)
+        
 
         shieldLogo.image = #imageLiteral(resourceName: "tracking_protection")
         shieldLogo.tintColor = UIColor.white
@@ -87,7 +101,12 @@ class HomeView: UIView {
             make.width.greaterThanOrEqualTo(280)
             make.width.lessThanOrEqualToSuperview().offset(-32)
         }
-
+        
+        pageControl.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.bottom.equalTo(toolbar.snp.top).offset(-6)
+        }
+        
         tipDescriptionLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.bottom.equalToSuperview()
@@ -95,7 +114,7 @@ class HomeView: UIView {
 
         tipTitleLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.bottom.equalTo(tipDescriptionLabel.snp.top).offset(UIConstants.layout.homeTipTitleLableOffset)
+            make.bottom.equalTo(tipDescriptionLabel.snp.top)
         }
 
         toolbar.snp.makeConstraints { make in
@@ -182,8 +201,7 @@ class HomeView: UIView {
         tipTitleLabel.sizeToFit()
         tipTitleLabel.isHidden = false
         if let description = tip.description, tip.showVc {
-            tipDescriptionLabel.attributedText = NSAttributedString(string: description, attributes:
-                [.underlineStyle: NSUnderlineStyle.single.rawValue])
+            tipDescriptionLabel.text = description
             tipDescriptionLabel.isUserInteractionEnabled = true
             let tap = UITapGestureRecognizer(target: self, action: #selector(HomeView.tapTip))
             tipDescriptionLabel.addGestureRecognizer(tap)
@@ -223,5 +241,21 @@ class HomeView: UIView {
 
     @objc private func tapTip() {
         delegate?.tipTapped()
+    }
+    
+    @objc private func swipeNextTip() {
+        let tipManager = TipManager.shared
+        if let nextTip = tipManager.getNextTip() {
+            showTextTip(nextTip)
+            pageControl.currentPage = tipManager.currentTipIndex()
+        }
+    }
+
+    @objc private func swipePreviousTip() {
+        let tipManager = TipManager.shared
+        if let previousTip = tipManager.getPreviousTip() {
+            showTextTip(previousTip)
+            pageControl.currentPage = tipManager.currentTipIndex()
+        }
     }
 }
