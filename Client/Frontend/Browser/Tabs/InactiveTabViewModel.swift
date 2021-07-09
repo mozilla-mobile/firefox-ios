@@ -22,7 +22,7 @@ class InactiveTabViewModel {
         clearAll()
         for tab in self.tabs {
             //Append selected tab to normal tab as we don't want to remove that
-            let tabTimeStamp = tab.lastExecutedTime ?? tab.sessionData?.lastUsedTime ?? 0
+            let tabTimeStamp = tab.lastExecutedTime ?? tab.sessionData?.lastUsedTime ?? tab.firstCreatedTime ?? 0
             let tabDate = Date.fromTimestamp(tabTimeStamp)
             if tab == selectedTab || tabDate > day4_Old || tabTimeStamp == 0{
                 normalTabs.append(tab)

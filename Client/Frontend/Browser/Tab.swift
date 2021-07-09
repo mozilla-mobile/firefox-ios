@@ -126,6 +126,7 @@ class Tab: NSObject {
         }
     }
     var lastExecutedTime: Timestamp?
+    var firstCreatedTime: Timestamp?
     var sessionData: SessionData?
     fileprivate var lastRequest: URLRequest?
     var restoring: Bool = false
