@@ -9,17 +9,9 @@ class ItemListCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var detailLabel: UILabel!
 
-    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        super.setHighlighted(highlighted, animated: animated)
-        self.backgroundColor = highlighted ? UIColor.tableViewCellHighlighted : .white
-    }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
+        contentView.backgroundColor = selected ? .lightGray : UIColor(named: "credentialCellColor")
     }
 
 }
