@@ -2,7 +2,6 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-from __future__ import absolute_import, print_function, unicode_literals
 
 import os
 import re
@@ -24,4 +23,4 @@ def register(graph_config):
 
 def _import_modules(modules):
     for module in modules:
-        import_module(".{}".format(module), package=__name__)
+        import_module(f".{module}", package=__name__)
