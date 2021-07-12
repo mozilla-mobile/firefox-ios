@@ -329,6 +329,7 @@
 		6025B10E267B6C7F00F59F6B /* LoginRecordExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6025B10B267B6BEA00F59F6B /* LoginRecordExtension.swift */; };
 		6025B10F267B6C7F00F59F6B /* LoginRecordExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6025B10B267B6BEA00F59F6B /* LoginRecordExtension.swift */; };
 		6025B111267B6EE100F59F6B /* CredentialWelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6025B110267B6EE100F59F6B /* CredentialWelcomeViewController.swift */; };
+		60AD9155269C6A5B006B4F12 /* CredentialWelcome.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60AD9154269C6A5B006B4F12 /* CredentialWelcome.storyboard */; };
 		60CE80C12667780D004026C7 /* CredentialListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CE80C02667780C004026C7 /* CredentialListPresenter.swift */; };
 		63306D3921103EAE00F25400 /* SavedTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63306D3821103EAE00F25400 /* SavedTab.swift */; };
 		63306D432110B3CD00F25400 /* TabManagerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63306D422110B3CD00F25400 /* TabManagerStore.swift */; };
@@ -459,7 +460,6 @@
 		C87DF9C6267246BB0097E707 /* GeometryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650754D1E37F6AE006961AC /* GeometryExtensions.swift */; };
 		C87DF9DB267247190097E707 /* UIConstants+BottomInset.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87DF9DA267247190097E707 /* UIConstants+BottomInset.swift */; };
 		C892DA0D22D39A980080F1F7 /* TrackingProtectionMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = C892DA0C22D39A980080F1F7 /* TrackingProtectionMenu.swift */; };
-		C89307472655011000A1DB2F /* CredentialWelcome.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C89307382655011000A1DB2F /* CredentialWelcome.storyboard */; };
 		C893075D265501EE00A1DB2F /* CredentialAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C893075C265501EE00A1DB2F /* CredentialAssets.xcassets */; };
 		C8CC4F8725253E79003FDE1F /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD46F3324A1606C001B3967 /* WidgetKit.framework */; };
 		C8CE389B265E71E00009B09E /* CredentialList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C8CE3899265E71DF0009B09E /* CredentialList.storyboard */; };
@@ -2192,6 +2192,7 @@
 		60774C6D87554915BD2B29B6 /* br */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = br; path = br.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		608E4B36A61360957C77DF31 /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		609E45149CAE5B417DBF7BA5 /* lo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lo; path = lo.lproj/Search.strings; sourceTree = "<group>"; };
+		60AD9154269C6A5B006B4F12 /* CredentialWelcome.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = CredentialWelcome.storyboard; sourceTree = "<group>"; };
 		60B541ED838D17F09560AC13 /* mr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = mr; path = mr.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		60BF40268A4375D6D3A80517 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
 		60CE80C02667780C004026C7 /* CredentialListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialListPresenter.swift; sourceTree = "<group>"; };
@@ -3096,7 +3097,6 @@
 		C87DF9DA267247190097E707 /* UIConstants+BottomInset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIConstants+BottomInset.swift"; sourceTree = "<group>"; };
 		C88847109E62D581C497BB8E /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/AuthenticationManager.strings"; sourceTree = "<group>"; };
 		C892DA0C22D39A980080F1F7 /* TrackingProtectionMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionMenu.swift; sourceTree = "<group>"; };
-		C89307392655011000A1DB2F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CredentialWelcome.storyboard; sourceTree = "<group>"; };
 		C893075C265501EE00A1DB2F /* CredentialAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = CredentialAssets.xcassets; sourceTree = "<group>"; };
 		C8A74FF69C3971EDBE73157F /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C8B34CBE911A7211E314D870 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
@@ -5243,8 +5243,8 @@
 		C89307272655011000A1DB2F /* Storyboard */ = {
 			isa = PBXGroup;
 			children = (
+				60AD9154269C6A5B006B4F12 /* CredentialWelcome.storyboard */,
 				C8CE3899265E71DF0009B09E /* CredentialList.storyboard */,
-				C89307382655011000A1DB2F /* CredentialWelcome.storyboard */,
 			);
 			path = Storyboard;
 			sourceTree = "<group>";
@@ -7250,8 +7250,8 @@
 				C874FC652661367900EBE86E /* MainInterface.storyboard in Resources */,
 				C8CE389B265E71E00009B09E /* CredentialList.storyboard in Resources */,
 				C893075D265501EE00A1DB2F /* CredentialAssets.xcassets in Resources */,
+				60AD9155269C6A5B006B4F12 /* CredentialWelcome.storyboard in Resources */,
 				C874FBAE266109BE00EBE86E /* SpinnerAlert.xib in Resources */,
-				C89307472655011000A1DB2F /* CredentialWelcome.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10249,14 +10249,6 @@
 				31654B22BF8241FC6F4B2B78 /* gd */,
 			);
 			name = FindInPage.strings;
-			sourceTree = "<group>";
-		};
-		C89307382655011000A1DB2F /* CredentialWelcome.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				C89307392655011000A1DB2F /* Base */,
-			);
-			name = CredentialWelcome.storyboard;
 			sourceTree = "<group>";
 		};
 		D58A202725C9D96400105D25 /* BookmarkPanel.strings */ = {
