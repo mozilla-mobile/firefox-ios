@@ -202,7 +202,7 @@ class TabDisplayManager: NSObject {
     func indexOfCellDrawnAsPreviouslySelectedTab(currentlySelected: Tab) -> IndexPath? {
         for i in 0..<collectionView.numberOfItems(inSection: 0) {
             if let cell = collectionView.cellForItem(at: IndexPath(row: i, section: 0)) as? TopTabCell, cell.selectedTab {
-                if let tab = dataStore.at(i) , tab != currentlySelected {
+                if let tab = dataStore.at(i), tab != currentlySelected {
                     return IndexPath(row: i, section: 0)
                 } else {
                     return nil
