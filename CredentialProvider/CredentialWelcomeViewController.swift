@@ -12,7 +12,7 @@ class CredentialWelcomeViewController: UIViewController {
 
     @IBOutlet weak var taglineLabel: UILabel! {
         didSet {
-            taglineLabel.text = .WelcomeViewTitle
+            taglineLabel.text = .LoginsWelcomeViewTitle
         }
     }
     

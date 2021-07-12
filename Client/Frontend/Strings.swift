@@ -1386,7 +1386,7 @@ extension String {
 
 // MARK: - Credential Provider
 extension String {
-    public static let WelcomeViewTitle = MZLocalizedString("WelcomeView.Title", value: "Take your passwords everywhere", comment: "Label displaying welcome view title")
+    public static let LoginsWelcomeViewTitle = MZLocalizedString("Logins.WelcomeView.Title", value: "Take your passwords everywhere", comment: "Label displaying welcome view title")
     public static let LoginsListSearchCancel = MZLocalizedString("LoginsList.Search.Cancel", value: "Cancel", comment: "Cancel button title")
     public static let LoginsListSearchPlaceholder = MZLocalizedString("LoginsList.Search.Placeholder", value: "Search logins", comment: "Placeholder text for search field")
     public static let LoginsListSelectPasswordTitle = MZLocalizedString("LoginsList.SelectPassword.Title", value: "Select a password to fill", comment: "Label displaying select a password to fill instruction")
