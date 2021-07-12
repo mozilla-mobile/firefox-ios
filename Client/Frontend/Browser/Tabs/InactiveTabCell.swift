@@ -41,18 +41,14 @@ class InactiveTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, U
         tableView.tableHeaderView = UIView(frame: CGRect(origin: .zero, size: CGSize(width: 0, height: CGFloat.leastNormalMagnitude)))
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 0)
         tableView.isScrollEnabled = false
+        tableView.dataSource = self
+        tableView.delegate = self
         return tableView
     }()
 
     convenience init(viewModel: InactiveTabViewModel) {
         self.init()
         inactiveTabsViewModel = viewModel
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        tableView.dataSource = self
-        tableView.delegate = self
     }
 
     override init(frame: CGRect) {
