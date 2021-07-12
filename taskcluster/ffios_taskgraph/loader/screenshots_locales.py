@@ -3,8 +3,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 
-import os
-from copy import deepcopy
 from math import log, ceil
 
 from taskgraph.loader.transform import loader as base_loader

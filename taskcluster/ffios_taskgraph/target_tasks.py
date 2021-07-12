@@ -3,7 +3,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 
-from taskgraph.target_tasks import _target_task, filter_for_tasks_for
+from taskgraph.target_tasks import _target_task
 
 
 @_target_task('l10n_screenshots')

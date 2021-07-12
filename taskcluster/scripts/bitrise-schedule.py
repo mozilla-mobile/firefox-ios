@@ -184,7 +184,6 @@ async def download_log(client, build_slug, artifacts_directory):
         log.error("Bitrise has no log to offer for job {0}. Please check https://app.bitrise.io/build/{0}".format(build_slug))
 
 
-
 CHUNK_SIZE = 128
 
 

@@ -4,10 +4,8 @@
 
 
 from taskgraph.transforms.job import run_job_using, configure_taskdesc_for_run
-from taskgraph.util import path
 from taskgraph.util.schema import Schema, taskref_or_string
 from voluptuous import Required, Optional
-from six import text_type
 
 from pipes import quote as shell_quote
 
