@@ -14,4 +14,4 @@ def target_tasks_default(full_task_graph, parameters, graph_config):
     def filter(task, parameters):
         return task.kind == "generate-screenshots"
 
-    return [l for l, t in full_task_graph.tasks.iteritems() if filter(t, parameters)]
+    return [l for l, t in full_task_graph.tasks.items() if filter(t, parameters)]

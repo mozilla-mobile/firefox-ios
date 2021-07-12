@@ -252,11 +252,11 @@ tasks:
                                     in:
                                         $if: 'tasks_for == "action"'
                                         then: >
-                                            PIP_IGNORE_INSTALLED=0 pip install --user /builds/worker/checkouts/taskgraph &&
+                                            PIP_IGNORE_INSTALLED=0 pip3 install --user /builds/worker/checkouts/taskgraph &&
                                             ln -s /builds/worker/artifacts artifacts &&
                                             ~/.local/bin/taskgraph action-callback
                                         else: >
-                                            PIP_IGNORE_INSTALLED=0 pip install --user /builds/worker/checkouts/taskgraph &&
+                                            PIP_IGNORE_INSTALLED=0 pip3 install --user /builds/worker/checkouts/taskgraph &&
                                             ln -s /builds/worker/artifacts artifacts &&
                                             ~/.local/bin/taskgraph decision
                                             --pushlog-id='0'
