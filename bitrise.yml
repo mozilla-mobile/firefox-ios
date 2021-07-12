@@ -392,7 +392,7 @@ workflows:
       in master
     meta:
       bitrise.io:
-        stack: osx-xcode-12.5.x
+        stack: osx-xcode-12.5.1
         machine_type_id: g2.4core
     after_run:
     - RunSmokeXCUITests
