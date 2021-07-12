@@ -9,7 +9,7 @@ import Storage
 import Sync
 
 @available(iOS 12, *)
-protocol CredentialProviderViewProtocol: AnyObject, AlertControllerView, SpinnerAlertView {
+protocol CredentialProviderViewProtocol: AnyObject, AlertControllerView {
     var extensionContext: ASCredentialProviderExtensionContext { get }
 
     func showWelcome()

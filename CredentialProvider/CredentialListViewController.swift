@@ -91,7 +91,6 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
         searchController = self.getStyledSearchController()
         searchController?.delegate = self
         extendedLayoutIncludesOpaqueBars = true // Fixes tapping the status bar from showing partial pull-to-refresh
-        navigationController?.iosThirteenNavBarAppearance()
     }
     
     private func getStyledSearchController() -> UISearchController {
