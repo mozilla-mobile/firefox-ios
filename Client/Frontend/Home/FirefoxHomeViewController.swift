@@ -131,6 +131,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     fileprivate let pocketAPI = Pocket()
     fileprivate let flowLayout = UICollectionViewFlowLayout()
     fileprivate var hasSentPocketSectionEvent = false
+    var recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel()
 
     fileprivate lazy var topSitesManager: ASHorizontalScrollCellManager = {
         let manager = ASHorizontalScrollCellManager()
@@ -162,10 +163,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
         get {
             guard AppConstants.IS_RECENTLY_SAVED_SECTION_ENABLED else { return false }
             
-            return hasRecentBookmarks
-                || hasReadingListitems
+            return (hasRecentBookmarks || hasReadingListitems)
                 && profile.prefs.boolForKey(PrefsKeys.recentlySavedSectionEnabled) ?? false
-                && !(UIDevice.current.userInterfaceIdiom == .pad)
         }
     }
 
@@ -299,7 +298,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
             var readingListItems = Array(readingList)
             readingListItems = RecentItemsHelper.filterStaleItems(recentItems: readingListItems,
                                                                        since: RecentlySavedCollectionCellUX.readingListItemsCutoff) as! [ReadingListItem]
-            readingListItems.isEmpty ? (self.hasReadingListitems = false) : (self.hasReadingListitems = true)
+            self.hasReadingListitems = !readingListItems.isEmpty
             
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .view,
@@ -493,7 +492,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cellSize = Section(indexPath.section).cellSize(for: self.traitCollection, frameWidth: self.view.frame.width)
+        var cellSize = Section(indexPath.section).cellSize(for: self.traitCollection, frameWidth: self.view.frame.width)
 
         switch Section(indexPath.section) {
         case .topSites:
@@ -501,7 +500,16 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
             let layout = topSiteCell.collectionView.collectionViewLayout as! HorizontalFlowLayout
             let estimatedLayout = layout.calculateLayout(for: CGSize(width: cellSize.width, height: 0))
             return CGSize(width: cellSize.width, height: estimatedLayout.size.height)
-        case .pocket, .recentlySaved:
+        case .recentlySaved:
+            if recentlySavedViewModel.recentItems.count > 8, UIDevice.current.userInterfaceIdiom == .pad {
+                cellSize.height *= 3
+                return cellSize
+            } else if recentlySavedViewModel.recentItems.count > 4, UIDevice.current.userInterfaceIdiom == .pad {
+                cellSize.height *= 2
+                return cellSize
+            }
+            return cellSize
+        case .pocket:
             return cellSize
         case .libraryShortcuts:
             let width = min(FirefoxHomeUX.LibraryShortcutsMaxWidth, cellSize.width)
@@ -626,6 +634,7 @@ extension FirefoxHomeViewController {
         recentlySavedCell.profile = profile
         recentlySavedCell.collectionView.reloadData()
         recentlySavedCell.setNeedsLayout()
+        recentlySavedCell.viewModel = recentlySavedViewModel
         
         return recentlySavedCell
     }
