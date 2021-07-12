@@ -34,11 +34,13 @@ class FxHomeRecentlySavedCollectionCell: UICollectionViewCell {
     var profile: Profile?
     var recentBookmarks = [BookmarkItem]()
     var readingListItems = [ReadingListItem]()
+    var viewModel: FirefoxHomeRecentlySavedViewModel!
     
     // UI
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
+        UIDevice.current.userInterfaceIdiom != .pad ? layout.scrollDirection = .horizontal : nil
+        
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.showsHorizontalScrollIndicator = false
@@ -47,6 +49,8 @@ class FxHomeRecentlySavedCollectionCell: UICollectionViewCell {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(RecentlySavedCell.self, forCellWithReuseIdentifier: RecentlySavedCell.cellIdentifier)
+        
+        UIDevice.current.userInterfaceIdiom == .pad ? collectionView.isScrollEnabled = false : nil
         
         return collectionView
     }()
@@ -76,11 +80,13 @@ class FxHomeRecentlySavedCollectionCell: UICollectionViewCell {
         ])
     }
     
-    private func loadItems() -> [RecentlySavedItem] {
+    public func loadItems() -> [RecentlySavedItem] {
         var items = [RecentlySavedItem]()
         
         items.append(contentsOf: recentBookmarks)
         items.append(contentsOf: readingListItems)
+        
+        viewModel.recentItems = items
         
         return items
     }
