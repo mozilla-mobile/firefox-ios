@@ -4,7 +4,7 @@ import XCTest
 class FirstRunTourTests: BaseTestCase {
 
     override func setUp() {
-        launchArguments = [LaunchArguments.ClearProfile]
+        launchArguments = [LaunchArguments.ClearProfile, "--Reset"]
         super.setUp()
     }
 

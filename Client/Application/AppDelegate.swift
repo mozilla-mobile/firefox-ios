@@ -302,7 +302,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
                 UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
 
                 // To speed up your tests
-                UIApplication.shared.keyWindow?.layer.speed = 300
+                UIApplication.shared.keyWindow?.layer.speed = 200
                 UIView.setAnimationsEnabled(false)
             }
         }
