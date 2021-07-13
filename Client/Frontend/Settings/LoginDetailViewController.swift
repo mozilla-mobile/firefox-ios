@@ -20,7 +20,7 @@ enum InfoItem: Int {
     }
 }
 
-private struct LoginDetailUX {
+struct LoginDetailUX {
     static let InfoRowHeight: CGFloat = 58
     static let DeleteRowHeight: CGFloat = 44
     static let SeparatorHeight: CGFloat = 84
@@ -380,7 +380,28 @@ extension LoginDetailViewController {
 
 // MARK: - Cell Delegate
 extension LoginDetailViewController: LoginDetailTableViewCellDelegate {
-
+    func textFieldDidEndEditing(_ cell: LoginDetailTableViewCell) { }
+    func textFieldDidChange(_ cell: LoginDetailTableViewCell) { }
+    
+    func canPeform(action: Selector, for cell: LoginDetailTableViewCell) -> Bool {
+        guard let item = infoItemForCell(cell) else { return false }
+        
+        switch item {
+        case .websiteItem:
+            // Menu actions for Website
+            return action == MenuHelper.SelectorCopy || action == MenuHelper.SelectorOpenAndFill
+        case .usernameItem:
+            // Menu actions for Username
+            return action == MenuHelper.SelectorCopy
+        case .passwordItem:
+            // Menu actions for password
+            let showRevealOption = cell.descriptionLabel.isSecureTextEntry ? (action == MenuHelper.SelectorReveal) : (action == MenuHelper.SelectorHide)
+            return action == MenuHelper.SelectorCopy || showRevealOption
+        default:
+            return false
+        }
+    }
+    
     fileprivate func cellForItem(_ item: InfoItem) -> LoginDetailTableViewCell? {
         return tableView.cellForRow(at: item.indexPath) as? LoginDetailTableViewCell
     }

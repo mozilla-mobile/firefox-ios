@@ -140,6 +140,10 @@ final class LoginListViewModel {
             }
         }
     }
+    
+    public func save(loginRecord: LoginRecord) -> Deferred<Maybe<String>> {
+        return profile.logins.add(login: loginRecord)
+    }
 
     func setBreachIndexPath(indexPath: IndexPath) {
         self.breachIndexPath = [indexPath]

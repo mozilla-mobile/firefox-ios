@@ -200,9 +200,18 @@ class LoginListViewController: SensitiveViewController {
     @objc func dismissLogins() {
         dismiss(animated: true)
     }
+    lazy var editButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(beginEditing))
+    lazy var addCredentialButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(presentAddCredential))
+    lazy var deleteButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(title: .LoginListDelete, style: .plain, target: self, action: #selector(tappedDelete))
+        button.tintColor = UIColor.Photon.Red50
+        return button
+    }()
+    lazy var cancelSelectionButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelSelection))
 
     fileprivate func setupDefaultNavButtons() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(beginEditing))
+         navigationItem.rightBarButtonItems = [editButton, addCredentialButton]
+        
         if shownFromAppMenu {
             navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissLogins))
         } else {
@@ -213,12 +222,11 @@ class LoginListViewController: SensitiveViewController {
     fileprivate func toggleDeleteBarButton() {
         // Show delete bar button item if we have selected any items
         if loginSelectionController.selectedCount > 0 {
-            if navigationItem.rightBarButtonItem == nil {
-                navigationItem.rightBarButtonItem = UIBarButtonItem(title: .LoginListDelete, style: .plain, target: self, action: #selector(tappedDelete))
-                navigationItem.rightBarButtonItem?.tintColor = UIColor.Photon.Red50
+            if navigationItem.rightBarButtonItems == nil {
+                navigationItem.rightBarButtonItems = [deleteButton]
             }
         } else {
-            navigationItem.rightBarButtonItem = nil
+            navigationItem.rightBarButtonItems = nil
         }
     }
 
@@ -264,13 +272,33 @@ private extension LoginListViewController {
     }
 
     @objc func beginEditing() {
-        navigationItem.rightBarButtonItem = nil
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelSelection))
+        navigationItem.rightBarButtonItems = nil
+        navigationItem.leftBarButtonItems = [cancelSelectionButton]
         selectionButtonHeightConstraint?.update(offset: UIConstants.ToolbarHeight)
         selectionButton.setTitle(.LoginListSelctAll, for: [])
         self.view.layoutIfNeeded()
         tableView.setEditing(true, animated: true)
         tableView.reloadData()
+    }
+    
+    @objc func presentAddCredential() {
+        let addController = AddCredentialViewController() { [weak self] record in
+            let result = self?.viewModel.save(loginRecord: record)
+            self?.presentedViewController?.dismiss(animated: true) {
+                result?.upon { id in
+                    DispatchQueue.main.async {
+                        self?.loadLogins()
+                        self?.tableView.reloadData()
+                    }
+                }
+            }
+        }
+        
+        let controller = UINavigationController(
+            rootViewController: addController
+        )
+        controller.modalPresentationStyle = .formSheet
+        present(controller, animated: true)
     }
 
     @objc func cancelSelection() {
