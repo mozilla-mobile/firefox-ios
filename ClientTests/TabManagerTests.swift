@@ -89,7 +89,7 @@ open class MockTabManagerDelegate: TabManagerDelegate {
 class TabManagerTests: XCTestCase {
 
     let didRemove = MethodSpy(functionName: "tabManager(_:didRemoveTab:isRestoring:)")
-    let didAdd = MethodSpy(functionName: "tabManager(_:didAddTab:isRestoring:)")
+    let didAdd = MethodSpy(functionName: "tabManager(_:didAddTab:placeNextToParentTab:isRestoring:)")
 
     var profile: TabManagerMockProfile!
     var manager: TabManager!
