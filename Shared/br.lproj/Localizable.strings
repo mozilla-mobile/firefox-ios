@@ -58,6 +58,9 @@
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Gweladennet da ziwezhañ";
 
+/* This button will open the library showing all the users bookmarks */
+"ActivityStream.RecentlySaved.ShowAll" = "Diskouez pep tra";
+
 /* Section title label for Shortcuts */
 "ActivityStream.Shortcuts.SectionTitle" = "Berradennoù";
 
@@ -981,6 +984,9 @@
 
 /* Title for the Recently Closed Tabs Panel */
 "RecentlyClosedTabsPanel.Title" = "Serret nevez zo";
+
+/* More button text for Recently Saved items at the home page. */
+"RecentlySaved.Actions.More" = "Diskouez pep tra";
 
 /* Accessibility Label for the tab toolbar Reload button */
 "Reload" = "Adkargañ";

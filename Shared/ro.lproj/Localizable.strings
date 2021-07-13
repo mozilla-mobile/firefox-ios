@@ -745,7 +745,7 @@
 "Menu.TrackingProtectionBlockedContent.Title" = "Conținut de urmărire";
 
 /* The title that shows the number of social URLs blocked */
-"Menu.TrackingProtectionBlockedSocial.Title" = "Elemente de urmărire de pe rețele de socializare";
+"Menu.TrackingProtectionBlockedSocial.Title" = "Elemente de urmărire ale rețelelor sociale";
 
 /* Description of the Tracking protection menu when TP is blocking parts of the page */
 "Menu.TrackingProtectionBlocking.Description" = "Firefox blochează părți ale paginii care ți-ar putea urmări navigarea.";
@@ -974,6 +974,9 @@
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "Caută sau introdu adresa";
+
+/* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
+"Search.Awesomebar.SwitchToTab" = "Comută la filă";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "Noul motor de căutare va apărea în bara de căutare rapidă.";
@@ -1259,6 +1262,9 @@
 /* The footer for the section to customize top sites in the new tab settings page. */
 "Settings.NewTab.Option.CustomizeFooter" = "Site-urile pe care le vizitezi cel mai des";
 
+/* The footer for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeFooter2" = "Site-uri pe care le salvezi sau le vizitezi";
+
 /* The title for the section to customize top sites in the new tab settings page. */
 "Settings.NewTab.Option.CustomizeTitle" = "Personalizează pagina de start Firefox";
 
@@ -1345,6 +1351,9 @@
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Scurtături Siri";
+
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Toggle.Link" = "Află mai multe.";
 
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "OK, am înțeles!";

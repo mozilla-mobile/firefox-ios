@@ -744,6 +744,9 @@
 /* Description for having standard ETP protection with ITP offered in iOS14+ */
 "Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox ບັອກຕົວຕິດຕາມເວັບໄຊທ, ສື່ສັງຄົມອອນລາຍ, ນັກຄຸດຫລຽນ ແລະ ລາຍນີ້ວມື.";
 
+/* Description for having strict ETP protection with ITP offered in iOS14+ */
+"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox ໄດ້ບັອກຕົວຕີດຕາມ cross-site, ສື່ສັງຄົມ, ຕົວຂຸດລຽນ, ລາຍນີ້ວມື ແລະ ເນື້ອຫາໃນເວັບ.";
+
 /* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
 "Menu.History.Label" = "ປະຫວັດການໃຊ້ງານ";
 
@@ -1204,6 +1207,9 @@
 /* Title displayed in header of the setting panel. */
 "Settings.ClearPrivateData.Title" = "ລົບລ້າງຂໍ້ມູນສ່ວນຕົວ";
 
+/* Button in Data Management that clears private data for the selected items. Parameter is the number of items to be cleared */
+"Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "ລົບລ້າງລາຍການ: %1$@";
+
 /* Copy app version alert shown in settings. */
 "Settings.CopyAppVersion.Title" = "ສຳເນົາໄປໄວ້ໃນຄຣິບບອດແລ້ວ";
 
@@ -1373,6 +1379,9 @@
 /* Option in settings to turn on off pocket recommendations First argument is the pocket brand name */
 "Settings.NewTab.Option.RecommendedByPocket" = "ໄດ້ຮັບການແນະນຳໂດຍ %@";
 
+/* Descriptoin for the option in settings to turn on off pocket recommendations. First argument is the pocket brand name, second argument is the pocket product name. */
+"Settings.NewTab.Option.RecommendedByPocketDescription" = "ການຍົກເວັ້ນເນື້ອຫາທີ່ຖືກຈັດການໂດຍ %1$@ ທີ່ເປັນສ່ວນຫນຶ່ງຂອງຕະກຸນ %2$@";
+
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "ແທັບໃຫມ່";
 
@@ -1450,6 +1459,9 @@
 
 /* Title for a link that explains what Mozilla means by Studies */
 "Settings.Studies.Toggle.Link" = "ຮຽນຮູ້ເພີ່ມເຕີມ.";
+
+/* A short description that explains that Mozilla is running studies */
+"Settings.Studies.Toggle.Message" = "Firefox ອາດຈະຕິດຕັ້ງ ແລະ ເອີ້ນນຳໃຊ້ການສຶກສາເປັນບາງຄັ້ງ.";
 
 /* Toggled OFF to opt-out of studies */
 "Settings.Studies.Toggle.Off" = "ປິດ";
@@ -1558,6 +1570,9 @@
 
 /* Description of the confirmation dialog shown when a user tries to clear their private data. */
 "Settings.WebsiteData.ConfirmPrompt" = "ການກະທຳຕໍ່ໄປນີ້ຈະລົບລ້າງຂໍ້ມູນເວັບໄຊທັງໝົດຂອງທ່ານ. ສິ່ງນີ້ບໍ່ສາມາດຍົກເລີກໄດ້.";
+
+/* Description of the confirmation dialog shown when a user tries to clear some of their private data. */
+"Settings.WebsiteData.SelectedConfirmPrompt" = "ການກະທຳນີ້ຈະລົບລ້າງລາຍການທີ່ໄດ້ເລືອກໄວ້. ຊຶງມັນບໍ່ສາມາດຍົກເລີກໄດ້.";
 
 /* Title displayed in header of the Data Management panel. */
 "Settings.WebsiteData.Title" = "ຂໍ້ມູນເວັບໄຊ";
@@ -1695,6 +1710,9 @@
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "ແທັບທີ່ຖືກເລືອກໃນປະຈຸບັນ.";
 
+/* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
+"TabTray.InactiveTabs.SectionTitle" = "ແທັບທີ່ບໍ່ໄດ້ນຳໃຊ້";
+
 /* The section header for tabs opened last week */
 "TabTray.LastWeek.Header" = "ອາ​ທິດ​ແລ້ວ";
 
@@ -1712,6 +1730,9 @@
 
 /* The title for the tab tray in private mode */
 "TabTray.PrivateTitle" = "ແທັບສ່ວນຕົວ";
+
+/* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
+"TabTray.RecentlyClosed.Description" = "ແທັບຈະປະກົດຢູ່ນີ້ເປັນເວລາ 30 ວັນ. ຫລັງຈາກນັ້ນແທັບຈະໄດ້ຮັບການປິດອັດຕະໂນມັດ.";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "ສ່ວນຕົວ";

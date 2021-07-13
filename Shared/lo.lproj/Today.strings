@@ -112,11 +112,20 @@
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "ຄົ້ນຫາໃນ\nແທັບສ່ວນຕົວ";
 
+/* Description for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryDescription" = "ເພີ່ມທາງລັດທີ່ເຂົ້າໄປຫາເວັບໄຊທທີ່ມັກເຂົ້າໄປເບິງ ແລະ ຫາກໍເຂົ້າໄປເບິງມາ.";
+
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitle" = "ເວັບໄຊທຍອດນິຍົມ";
 
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitleV2" = "ທາງລັດເຂົ້າເວັບໄຊທ";
+
 /* Sub label for Top Sites widget */
 "TodayWidget.TopSitesSubLabel" = "Firefox - ເວັບໄຊທຍອດນິຍົມ";
+
+/* Sub label for Shortcuts widget */
+"TodayWidget.TopSitesSubLabel2" = "Firefox - ທາງລັດເຂົ້າເວັບໄຊທ";
 
 /* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
 "TodayWidget.ViewMore" = "ເບິງເພີ່ມເຕີມ";
