@@ -14,7 +14,7 @@ class SavedTab: NSObject, NSCoding {
     var sessionData: SessionData?
     var screenshotUUID: UUID?
     var faviconURL: String?
-    var UUID:String?
+    var UUID: String?
     var createdAt: Timestamp?
     
     var jsonDictionary: [String: AnyObject] {

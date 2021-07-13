@@ -48,22 +48,27 @@ class TabManagerStore {
         var savedUUIDs = Set<String>()
         for tab in tabs {
             tab.tabUUID = tab.tabUUID.isEmpty ? UUID().uuidString : tab.tabUUID
+            tab.screenshotUUID = tab.screenshotUUID ?? UUID()
             tab.firstCreatedTime = tab.firstCreatedTime ?? tab.sessionData?.lastUsedTime ?? Date.now()
             if let savedTab = SavedTab(tab: tab, isSelected: tab == selectedTab) {
                 savedTabs.append(savedTab)
-                if let screenshot = tab.screenshot,
-                   let screenshotUUID = tab.screenshotUUID {
-                    savedUUIDs.insert(screenshotUUID.uuidString)
-                    
-                    imageStore?.put(screenshotUUID.uuidString, image: screenshot)
+                if let uuidString = tab.screenshotUUID?.uuidString {
+                    savedUUIDs.insert(uuidString)
                 }
             }
         }
+        
         // Clean up any screenshots that are no longer associated with a tab.
         _ = imageStore?.clearExcluding(savedUUIDs)
         return savedTabs.isEmpty ? nil : savedTabs
     }
 
+    func preserveScreenshot(forTab tab: Tab?) {
+        if let tab = tab, let screenshot = tab.screenshot, let uuidString = tab.screenshotUUID?.uuidString {
+            imageStore?.put(uuidString, image: screenshot)
+        }
+    }
+    
     // Async write of the tab state. In most cases, code doesn't care about performing an operation
     // after this completes. Deferred completion is called always, regardless of Data.write return value.
     // Write failures (i.e. due to read locks) are considered inconsequential, as preserveTabs will be called frequently.

@@ -1145,6 +1145,7 @@ class BrowserViewController: UIViewController {
     func openURLInNewTab(_ url: URL?, isPrivate: Bool = false) {
         if let selectedTab = tabManager.selectedTab {
             screenshotHelper.takeScreenshot(selectedTab)
+            tabManager.storeScreenshot(tab: selectedTab)
         }
         let request: URLRequest?
         if let url = url {
@@ -1298,6 +1299,7 @@ class BrowserViewController: UIViewController {
                 // Issue created: https://github.com/mozilla-mobile/firefox-ios/issues/7003
                 DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1000)) {
                     self.screenshotHelper.takeScreenshot(tab)
+                    self.tabManager.storeScreenshot(tab: tab)
                     if webView.superview == self.view {
                         webView.removeFromSuperview()
                     }
