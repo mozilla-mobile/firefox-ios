@@ -14,31 +14,31 @@
 "After 15 minutes" = "15 წუთის შემდეგ";
 
 /* Label used as a setting item and title of the following screen to change the current passcode */
-"Change Passcode" = "პაროლის შეცვლა";
+"Change Passcode" = "შიფრის შეცვლა";
 
 /* Text displayed above the input field when changing the existing passcode */
-"Enter a new passcode" = "შეიყვანეთ ახალი პაროლი";
+"Enter a new passcode" = "შეიყვანეთ ახალი შიფრი";
 
 /* Text displayed above the input field when entering a new passcode */
-"Enter a passcode" = "შეიყვანეთ პაროლი";
+"Enter a passcode" = "შეიყვანეთ შიფრი";
 
 /* Text displayed above the input field when changing the existing passcode */
-"Enter passcode" = "შეიყვანეთ პაროლი";
+"Enter passcode" = "შეიყვანეთ შიფრი";
 
 /* Title of the dialog used to request the passcode */
-"Enter Passcode" = "შეიყვანეთ პაროლი";
+"Enter Passcode" = "შეიყვანეთ შიფრი";
 
 /* Label for the Face ID/Passcode item in Settings */
-"Face ID & Passcode" = "სახის ამოცნობა და პაროლი";
+"Face ID & Passcode" = "სახის ამოცნობა და შიფრი";
 
 /* 'Immediately' interval item for selecting when to require passcode */
 "Immediately" = "დაუყოვნებლივ";
 
 /* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
-"Incorrect passcode. Try again (Attempts remaining: %d)." = "არასწორი პაროლი. სცადეთ ხელახლა (დარჩენილია %d მცდელობა).";
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "არასწორი შიფრი. სცადეთ ხელახლა (დარჩენილია %d მცდელობა).";
 
 /* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
-"Incorrect passcode. Try again." = "პაროლი არასწორია. სცადეთ ხელახლა.";
+"Incorrect passcode. Try again." = "შიფრი არასწორია. სცადეთ ხელახლა.";
 
 /* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
 "Maximum attempts reached. Please try again in an hour." = "მცდელობის რაოდენობა ამოიწურა. გთხოვთ, სცადოთ ხელახლა, ერთი საათის შემდეგ.";
@@ -47,37 +47,37 @@
 "Maximum attempts reached. Please try again later." = "მცდელობის რაოდენობა ამოიწურა. გთხოვთ, სცადოთ მოგვიანებით.";
 
 /* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
-"New passcode must be different than existing code." = "ახალი პაროლი უნდა განსხვავდებოდეს არსებულისგან.";
+"New passcode must be different than existing code." = "ახალი შიფრი უნდა განსხვავდებოდეს არსებულისგან.";
 
 /* Label for the Passcode item in Settings */
-"Passcode For Logins" = "პაროლი ანგარიშებისთვის";
+"Passcode For Logins" = "შიფრი ანგარიშებისთვის";
 
 /* Error message displayed to user when their confirming passcode doesn't match the first code. */
-"Passcodes didn’t match. Try again." = "პაროლები არ დაემთხვა. სცადეთ ხელახლა.";
+"Passcodes didn’t match. Try again." = "შიფრები არ დაემთხვა. სცადეთ ხელახლა.";
 
 /* Text displayed above the input field when confirming a passcode */
-"Re-enter passcode" = "პაროლის ხელმეორედ მითითება";
+"Re-enter passcode" = "შიფრის ხელმეორედ მითითება";
 
 /* Text displayed in the 'Interval' section, followed by the current interval setting, e.g. 'Immediately' */
-"Require Passcode" = "პაროლის მოთხოვნა";
+"Require Passcode" = "შიფრის მოთხოვნა";
 
 /* Title of the dialog used to set a passcode */
-"Set Passcode" = "პაროლის დაყენება";
+"Set Passcode" = "შიფრის მითითება";
 
 /* Label for the Touch ID/Passcode item in Settings */
-"Touch ID & Passcode" = "თითის ანაბეჭდი და პაროლი";
+"Touch ID & Passcode" = "თითის ანაბეჭდი და შიფრი";
 
 /* Touch ID prompt subtitle when disabling Touch ID */
 "touchid.disable.reason.label" = "ისარგებლეთ სახის ამოცნობით, თითის ანაბეჭდის გასათიშად.";
 
 /* Touch ID prompt subtitle when accessing the require passcode setting */
-"touchid.require.passcode.reason.label" = "ისარგებლეთ თითის ანაბეჭდით, პაროლის მოთხოვნის დროის შუალედის მისათითებლად.";
+"touchid.require.passcode.reason.label" = "ისარგებლეთ თითის ანაბეჭდით, შიფრის მოთხოვნის დროის შუალედის მისათითებლად.";
 
 /* Label used as a setting item to turn off passcode */
-"Turn Passcode Off" = "პაროლის გათიშვა";
+"Turn Passcode Off" = "შიფრის გათიშვა";
 
 /* Label used as a setting item to turn on passcode */
-"Turn Passcode On" = "პაროლის ჩართვა";
+"Turn Passcode On" = "შიფრის ჩართვა";
 
 /* List section title for when to use Face ID */
 "Use Face ID" = "სახის ამომცნობის გამოყენება";
