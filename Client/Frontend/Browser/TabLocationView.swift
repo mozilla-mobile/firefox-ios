@@ -346,7 +346,7 @@ class TabLocationView: UIView, FeatureFlagsProtocol {
     }
 
     fileprivate func updateTextWithURL() {
-        if let host = url?.host, featureFlags.isFeatureActive(.punyCode) {
+        if let host = url?.host, AppConstants.MOZ_PUNYCODE {
             urlTextField.text = url?.absoluteString.replacingOccurrences(of: host, with: host.asciiHostToUTF8())
         } else {
             urlTextField.text = url?.absoluteString

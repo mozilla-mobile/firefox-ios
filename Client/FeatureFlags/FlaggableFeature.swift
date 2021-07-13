@@ -4,44 +4,43 @@
 
 import Shared
 
-/// A handy struct to set
-struct PipelineBuildChannel {
-    private var enabledChannels: [AppBuildChannel]
-
-    init(isEnabledFor channels: [AppBuildChannel]) {
-        self.enabledChannels = channels
-    }
-
-    func isChannelEnabled(_ channel: AppBuildChannel) -> Bool {
-        return enabledChannels.contains(channel)
-    }
-}
-
-struct FlaggableFeature: FFlaggableFeature {
+struct FlaggableFeature {
     // MARK: - Variables
     private let profile: Profile
-    private let buildChannels: PipelineBuildChannel
+    private let buildChannels: [AppBuildChannel]
 
     var featureID: FeatureFlagID
 
+    /// Returns whether or not the feature is active.
+    ///
+    /// This variable returns a `Bool` based on a priority queue.
+    ///
+    /// 1. It will check whether or not there exists a value for
+    /// the feature written on disk. Users generally set these states
+    /// from the debug menu and, if they have set something manually,
+    /// we will respect that and return the respective value.
+    ///
+    /// 2. If there is no setting written to the disk, then every feature
+    /// has an underlying default state for each build channel (Release,
+    /// Beta, Developer) and that value will be returned.
     var isActive: Bool {
         if let key = featureKey(), let existingPref = profile.prefs.boolForKey(key) {
             return existingPref
 
         } else {
             #if MOZ_CHANNEL_RELEASE
-            return buildChannels.isChannelEnabled(.release)
+            return buildChannels.contains(.release)
             #elseif MOZ_CHANNEL_BETA
-            return buildChannels.isChannelEnabled(.beta)
+            return buildChannels.contains(.beta)
             #elseif MOZ_CHANNEL_FENNEC
-            return buildChannels.isChannelEnabled(.developer)
+            return buildChannels.contains(.developer)
             #else
-            return buildChannels.isChannelEnabled(.other)
+            return buildChannels.contains(.other)
             #endif
         }
     }
 
-    init(withID featureID: FeatureFlagID, and profile: Profile, for channels: PipelineBuildChannel) {
+    init(withID featureID: FeatureFlagID, and profile: Profile, enabledFor channels: [AppBuildChannel]) {
         self.featureID = featureID
         self.profile = profile
         self.buildChannels = channels
@@ -49,9 +48,10 @@ struct FlaggableFeature: FFlaggableFeature {
 
     /// Toggles a feature On or Off, and saves the status to UserDefaults.
     ///
-    /// Not all features are togglable. If there exists no feature key with which
-    /// to write to UserDefaults, then the feature cannot be turned on or off and
-    /// its state can only be set when initialized, based on build channel.
+    /// Not all features are user togglable. If there exists no feature key - as defined
+    /// in the `featureKey()` function - with which to write to UserDefaults, then the
+    /// feature cannot be turned on/off and its state can only be set when initialized,
+    /// based on build channel.
     public func toggle() {
         guard let key = featureKey() else { return }
         profile.prefs.setBool(!isActive, forKey: key)

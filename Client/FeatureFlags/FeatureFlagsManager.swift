@@ -52,25 +52,21 @@ class FeatureFlagsManager {
     public func setupFeatures(with profile: Profile) {
         features.removeAll()
 
-        let chronTabs = FlaggableFeature(withID: .chronologicalTabs, and: profile, for: PipelineBuildChannel(isEnabledFor: [.developer]))
+        let chronTabs = FlaggableFeature(withID: .chronologicalTabs, and: profile, enabledFor: [.developer])
         features.append(chronTabs)
 
-        let inactiveTabs = FlaggableFeature(withID: .inactiveTabs, and: profile, for: PipelineBuildChannel(isEnabledFor: [.beta, .developer]))
+        let inactiveTabs = FlaggableFeature(withID: .inactiveTabs, and: profile, enabledFor: [.beta, .developer])
+        features.append(inactiveTabs)
 
         /// Use the Nimbus experimentation platform. If this is `true` then
         /// `Experiments.shared` provides access to Nimbus. If false, it is a dummy object.
-        let nimbus = FlaggableFeature(withID: .nimbus, and: profile, for: PipelineBuildChannel(isEnabledFor: [.release, .beta, .developer]))
+        let nimbus = FlaggableFeature(withID: .nimbus, and: profile, enabledFor: [.release, .beta, .developer])
         features.append(nimbus)
 
-        /// Enables support for International Domain Names (IDN)
-        /// Disabled because of https://bugzilla.mozilla.org/show_bug.cgi?id=1312294
-        let punyCode = FlaggableFeature(withID: .punyCode, and: profile, for: PipelineBuildChannel(isEnabledFor: [.developer, .other]))
-        features.append(punyCode)
-
-        let recentlySaved = FlaggableFeature(withID: .recentlySaved, and: profile, for: PipelineBuildChannel(isEnabledFor: [.beta, .developer]))
+        let recentlySaved = FlaggableFeature(withID: .recentlySaved, and: profile, enabledFor: [.beta, .developer])
         features.append(recentlySaved)
 
-        let shakeToRestore = FlaggableFeature(withID: .shakeToRestore, and: profile, for: PipelineBuildChannel(isEnabledFor: [.beta, .developer, .other]))
+        let shakeToRestore = FlaggableFeature(withID: .shakeToRestore, and: profile, enabledFor: [.beta, .developer, .other])
         features.append(shakeToRestore)
     }
 }

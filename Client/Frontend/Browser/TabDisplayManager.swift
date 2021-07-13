@@ -151,8 +151,8 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     func setupExperiment() {
         inactiveNimbusExperimentStatus = Experiments.shared.withExperiment(featureId: .inactiveTabs) { branch -> Bool in
                 switch branch {
-                case .some(ExperimentBranch.inactiveTabControl): return false
-                case .some(ExperimentBranch.inactiveTabTreatment): return true
+                case .some(NimbusExperimentBranch.InactiveTab.control): return false
+                case .some(NimbusExperimentBranch.InactiveTab.treatment): return true
                 default: return false
             }
         }

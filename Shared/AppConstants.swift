@@ -17,6 +17,8 @@ public enum AppBuildChannel: String {
     case release = "release"
     case beta = "beta"
     case developer = "developer"
+
+    // Used for unknown cases
     case other = "other"
 }
 
