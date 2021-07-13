@@ -783,6 +783,7 @@ class SendAnonymousUsageDataSetting: BoolSetting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         setUpAndPushSettingsContentViewController(navigationController, self.url)
+        
     }
 }
 
