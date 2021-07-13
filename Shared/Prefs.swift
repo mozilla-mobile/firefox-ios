@@ -39,7 +39,7 @@ public struct PrefsKeys {
     public static let KeyCurrentInstallVersion = "KeyCurrentInstallVersion"
     public static let KeySecondRun = "SecondRun"
     
-    //Activity Stream
+    // Activity Stream
     public static let KeyTopSitesCacheIsValid = "topSitesCacheIsValid"
     public static let KeyTopSitesCacheSize = "topSitesCacheSize"
     public static let KeyNewTab = "NewTabPrefKey"
@@ -56,6 +56,9 @@ public struct PrefsKeys {
     public static let AppExtensionTelemetryEventArray = "AppExtensionTelemetryEvents"
     public static let KeyBlockPopups = "blockPopups"
     public static let recentlySavedSectionEnabled = "recentlySavedSectionEnabled"
+    
+    // Tabs Tray
+    public static let KeyEnableInactiveTabs = "KeyInactiveTabs"
     
     // Widgetkit Key
     public static let WidgetKitSimpleTabKey = "WidgetKitSimpleTabKey"

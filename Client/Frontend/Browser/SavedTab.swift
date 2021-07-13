@@ -15,6 +15,7 @@ class SavedTab: NSObject, NSCoding {
     var screenshotUUID: UUID?
     var faviconURL: String?
     var UUID:String?
+    var createdAt: Timestamp?
     
     var jsonDictionary: [String: AnyObject] {
         let title: String = self.title ?? "null"
@@ -28,7 +29,8 @@ class SavedTab: NSObject, NSCoding {
             "faviconURL": faviconURL as AnyObject,
             "screenshotUUID": uuid as AnyObject,
             "url": url as AnyObject,
-            "UUID": self.UUID as AnyObject
+            "UUID": self.UUID as AnyObject,
+            "createdAt": self.createdAt as AnyObject
         ]
         
         if let sessionDataInfo = self.sessionData?.jsonDictionary {
@@ -38,7 +40,7 @@ class SavedTab: NSObject, NSCoding {
         return json
     }
     
-    init?(screenshotUUID: UUID?, isSelected: Bool, title: String?, isPrivate: Bool, faviconURL: String?, url: URL?, sessionData: SessionData?, uuid: String) {
+    init?(screenshotUUID: UUID?, isSelected: Bool, title: String?, isPrivate: Bool, faviconURL: String?, url: URL?, sessionData: SessionData?, uuid: String, createdAt: Timestamp?) {
 
         self.screenshotUUID = screenshotUUID
         self.isSelected = isSelected
@@ -48,6 +50,7 @@ class SavedTab: NSObject, NSCoding {
         self.url = url
         self.sessionData = sessionData
         self.UUID = uuid
+        self.createdAt = createdAt
         
         super.init()
     }
@@ -61,6 +64,7 @@ class SavedTab: NSObject, NSCoding {
         self.faviconURL = coder.decodeObject(forKey: "faviconURL") as? String
         self.url = coder.decodeObject(forKey: "url") as? URL
         self.UUID = coder.decodeObject(forKey: "UUID") as? String
+        self.createdAt = coder.decodeObject(forKey: "createdAt") as? Timestamp
     }
     
     func encode(with coder: NSCoder) {
@@ -72,5 +76,6 @@ class SavedTab: NSObject, NSCoding {
         coder.encode(faviconURL, forKey: "faviconURL")
         coder.encode(url, forKey: "url")
         coder.encode(UUID, forKey: "UUID")
+        coder.encode(createdAt, forKey: "createdAt")
     }
 }

@@ -46,7 +46,7 @@ extension GridTabViewController {
 
     @objc func didOpenNewTabKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "new-tab"])
-        openNewTab()
+        openNewTab(isPrivate: tabDisplayManager.isPrivate)
     }
 
     @objc func didChangeSelectedTabKeyCommand(sender: UIKeyCommand) {

@@ -60,6 +60,10 @@ open class WeakList<T: AnyObject>: Sequence {
         return items.firstIndex { $0.value === item }
     }
 
+    open func firstIndexDel(where predicate: (WeakRef<T>) -> Bool) -> Int? {
+        return items.firstIndex(where: predicate)
+    }
+    
     open func makeIterator() -> AnyIterator<T> {
         var index = 0
 

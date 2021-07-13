@@ -16,8 +16,14 @@ private struct RecentlyClosedPanelUX {
     static let IconBorderWidth: CGFloat = 0.5
 }
 
+protocol RecentlyClosedPanelDelegate: AnyObject {
+    func openRecentlyClosedSiteInSameTab(_ url: URL)
+    func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool)
+}
+
 class RecentlyClosedTabsPanel: UIViewController, LibraryPanel {
     weak var libraryPanelDelegate: LibraryPanelDelegate?
+    var recentlyClosedTabsDelegate: RecentlyClosedPanelDelegate?
     let profile: Profile
 
     fileprivate lazy var tableViewController = RecentlyClosedTabsPanelSiteTableViewController(profile: profile)
@@ -37,6 +43,7 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel {
         view.backgroundColor = UIColor.theme.tableView.headerBackground
 
         tableViewController.libraryPanelDelegate = libraryPanelDelegate
+        tableViewController.recentlyClosedTabsDelegate = recentlyClosedTabsDelegate
         tableViewController.recentlyClosedTabsPanel = self
 
         self.addChild(tableViewController)
@@ -51,6 +58,7 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel {
 
 class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
     weak var libraryPanelDelegate: LibraryPanelDelegate?
+    var recentlyClosedTabsDelegate: RecentlyClosedPanelDelegate?
     var recentlyClosedTabs: [ClosedTab] = []
     weak var recentlyClosedTabsPanel: RecentlyClosedTabsPanel?
 
@@ -95,12 +103,9 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        guard let libraryPanelDelegate = libraryPanelDelegate else {
-            log.warning("No site or no URL when selecting row.")
-            return
-        }
+        recentlyClosedTabsDelegate?.openRecentlyClosedSiteInSameTab(recentlyClosedTabs[indexPath.row].url)
         let visitType = VisitType.typed    // Means History, too.
-        libraryPanelDelegate.libraryPanel(didSelectURL: recentlyClosedTabs[indexPath.row].url, visitType: visitType)
+        libraryPanelDelegate?.libraryPanel(didSelectURL: recentlyClosedTabs[indexPath.row].url, visitType: visitType)
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -136,6 +141,9 @@ extension RecentlyClosedTabsPanelSiteTableViewController: LibraryPanelContextMen
     }
 
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {
+        guard let libraryPanelDelegate = libraryPanelDelegate else {
+            return getRecentlyClosedTabContexMenuActions(for: site, recentlyClosedPanelDelegate: recentlyClosedTabsDelegate)
+        }
         return getDefaultContextMenuActions(for: site, libraryPanelDelegate: libraryPanelDelegate)
     }
 }

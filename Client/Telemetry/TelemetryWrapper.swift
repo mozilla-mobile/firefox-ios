@@ -365,6 +365,7 @@ extension TelemetryWrapper {
         case firefoxHomepage = "firefox-homepage"
         case recentlySavedBookmarkImpressions = "recently-saved-bookmark-impressions"
         case recentlySavedReadingItemImpressions = "recently-saved-reading-items-impressions"
+        case inactiveTabTray = "inactiveTabTray"
     }
 
     public enum EventValue: String {
@@ -406,6 +407,11 @@ extension TelemetryWrapper {
         case addBookmarkToast = "add-bookmark-toast"
         case openHomeFromAwesomebar = "open-home-from-awesomebar"
         case openHomeFromPhotonMenuButton = "open-home-from-photon-menu-button"
+        case openInactiveTab = "openInactiveTab"
+        case inactiveTabExpand = "inactivetab-expand"
+        case inactiveTabCollapse = "inactivetab-collapse"
+        case openRecentlyClosedList = "openRecentlyClosedList"
+        case openRecentlyClosedTab = "openRecentlyClosedTab"
     }
     
     public enum EventExtraKey: String {
@@ -580,6 +586,18 @@ extension TelemetryWrapper {
             GleanMetrics.PageActionMenu.requestDesktopSite.add()
         case (.action, .tap, .requestMobileSite, _, _):
             GleanMetrics.PageActionMenu.requestMobileSite.add()
+
+        // Inactive Tab Tray
+        case (.action, .tap, .inactiveTabTray, EventValue.openInactiveTab.rawValue, _):
+            GleanMetrics.InactiveTabsTray.openInactiveTab.add()
+        case (.action, .tap, .inactiveTabTray, EventValue.inactiveTabExpand.rawValue, _):
+            GleanMetrics.InactiveTabsTray.toggleInactiveTabTray[EventValue.inactiveTabExpand.rawValue].add()
+        case (.action, .tap, .inactiveTabTray, EventValue.inactiveTabCollapse.rawValue, _):
+            GleanMetrics.InactiveTabsTray.toggleInactiveTabTray[EventValue.inactiveTabCollapse.rawValue].add()
+        case (.action, .tap, .inactiveTabTray, EventValue.openRecentlyClosedList.rawValue, _):
+            GleanMetrics.InactiveTabsTray.openRecentlyClosedList.add()
+        case (.action, .tap, .inactiveTabTray, EventValue.openRecentlyClosedTab.rawValue, _):
+            GleanMetrics.InactiveTabsTray.openRecentlyClosedTab.add()
             
         // Firefox Homepage
         case (.action, .tap, .firefoxHomepage, EventValue.yourLibrarySection.rawValue, let extras):

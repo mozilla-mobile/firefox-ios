@@ -126,6 +126,7 @@ class Tab: NSObject {
         }
     }
     var lastExecutedTime: Timestamp?
+    var firstCreatedTime: Timestamp?
     var sessionData: SessionData?
     fileprivate var lastRequest: URLRequest?
     var restoring: Bool = false
@@ -136,6 +137,14 @@ class Tab: NSObject {
                 url = URL(string: internalUrl.stripAuthorization)
             }
         }
+    }
+    var lastKnownUrl: URL? {
+        // Tab url can be nil when user cold starts the app
+        // thus we check session data for last known url
+        guard self.url != nil else {
+            return self.sessionData?.urls.last
+        }
+        return self.url
     }
     var mimeType: String?
     var isEditing: Bool = false

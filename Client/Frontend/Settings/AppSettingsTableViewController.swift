@@ -144,6 +144,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 ShowEtpCoverSheet(settings: self),
                 ToggleChronTabs(settings: self),
                 ToggleRecentlySavedSection(settings: self),
+                ToggleInactiveTabs(settings: self),
                 ExperimentsSettings(settings: self)
             ])]
 

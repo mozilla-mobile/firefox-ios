@@ -8,14 +8,14 @@ import SwiftyJSON
 
 // These are taken from the Places docs
 // http://mxr.mozilla.org/mozilla-central/source/toolkit/components/places/nsINavHistoryService.idl#1187
-@objc public enum VisitType: Int {
-    case unknown = 0
+@objc public enum VisitType: Int, CaseIterable {
+    case unknown
 
     /**
      * This transition type means the user followed a link and got a new toplevel
      * window.
      */
-    case link = 1
+    case link
 
     /**
      * This transition type means that the user typed the page's URL in the
@@ -23,14 +23,15 @@ import SwiftyJSON
      * it from a history query (from the History sidebar, History menu,
      * or history query in the personal toolbar or Places organizer).
      */
-    case typed = 2
+    case typed
 
-    case bookmark = 3
-    case embed = 4
-    case permanentRedirect = 5
-    case temporaryRedirect = 6
-    case download = 7
-    case framedLink = 8
+    case bookmark
+    case embed
+    case permanentRedirect
+    case temporaryRedirect
+    case download
+    case framedLink
+    case recentlyClosed
 }
 
 // WKWebView has these:

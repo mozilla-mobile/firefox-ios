@@ -31,11 +31,11 @@ class TopTabsLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout {
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: HeaderFooterWidth, height: 0)
+        return CGSize(width: 0, height: 0)
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        return CGSize(width: HeaderFooterWidth, height: 0)
+        return CGSize(width: 0, height: 0)
     }
 
 }
@@ -56,7 +56,6 @@ class TopTabsViewLayout: UICollectionViewFlowLayout {
         decorationAttributeArr = [:]
         return true
     }
-
 
     override func layoutAttributesForSupplementaryView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         let attributes = super.layoutAttributesForSupplementaryView(ofKind: elementKind, at: indexPath)
