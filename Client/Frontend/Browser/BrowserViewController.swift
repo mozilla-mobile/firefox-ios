@@ -268,7 +268,7 @@ class BrowserViewController: UIViewController {
 
         if showTopTabs {
             if topTabsViewController == nil {
-                let topTabsViewController = TopTabsViewController(tabManager: tabManager)
+                let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
                 topTabsViewController.delegate = self
                 addChild(topTabsViewController)
                 topTabsViewController.view.frame = topTabsContainer.frame
@@ -1746,7 +1746,7 @@ extension BrowserViewController: TabManagerDelegate {
         }
     }
 
-    func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, isRestoring: Bool) {
+    func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {
         // If we are restoring tabs then we update the count once at the end
         if !isRestoring {
             updateTabCountUsingTabManager(tabManager)
@@ -1755,7 +1755,7 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
-        if let url = tab.url, !(InternalURL(url)?.isAboutURL ?? false), !tab.isPrivate {
+        if let url = tab.lastKnownUrl, !(InternalURL(url)?.isAboutURL ?? false), !tab.isPrivate {
             profile.recentlyClosedTabs.addTab(url as URL, title: tab.lastTitle, faviconURL: tab.displayFavicon?.url)
         }
         updateTabCountUsingTabManager(tabManager)
@@ -2202,6 +2202,11 @@ extension BrowserViewController: SessionRestoreHelperDelegate {
 }
 
 extension BrowserViewController: TabTrayDelegate {
+    func tabTrayOpenRecentlyClosedTab(_ url: URL) {
+        guard let tab = self.tabManager.selectedTab else { return }
+        self.finishEditingAndSubmit(url, visitType: .recentlyClosed, forTab: tab)
+    }
+    
     // This function animates and resets the tab chrome transforms when
     // the tab tray dismisses.
     func tabTrayDidDismiss(_ tabTray: GridTabViewController) {

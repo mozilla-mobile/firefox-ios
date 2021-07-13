@@ -442,7 +442,6 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
             }
 
             let oneLineCell = tableView.dequeueReusableCell(withIdentifier: OneLineCellIdentifier, for: indexPath) as! OneLineTableViewCell
-
             switch row {
             case .clearRecent:
                 return configureClearHistory(oneLineCell, for: indexPath)
