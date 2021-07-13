@@ -19,12 +19,15 @@ class CredentialProviderPresenter {
     func extensionConfigurationRequested() {
         view?.showWelcome()
         if self.profile.logins.reopenIfClosed() != nil {
-            displayNotLoggedInMessage()
-        } else {
-            profile.syncCredentialIdentities().upon { result in
-                sleep(2)
-                self.cancelWith(.userCanceled)
-            }
+            // At this point there is nothing useful we can do if we cannot open the logins database. Worst case
+            // we skip the synchronization and not all logins will be available to the user if they have changed
+            // since the last time.
+            return
+        }
+        
+        profile.syncCredentialIdentities().upon { result in
+            sleep(2)
+            self.cancelWith(.userCanceled)
         }
     }
     
@@ -104,21 +107,7 @@ class CredentialProviderPresenter {
 
 @available(iOS 12, *)
 private extension CredentialProviderPresenter {
-    
-    func displayNotLoggedInMessage() {
-        view?.displayAlertController(
-            buttons: [
-                AlertActionButtonConfiguration(
-                    title: "OK",
-                    tapAction: { [weak self] in self?.cancelWith(.userCanceled) },
-                    style: .default)
-            ],
-            title: "NOt signed in",
-            message: String(format: "needs sign in", "prodname", "maess"),
-            style: .alert,
-            barButtonItem: nil)
-    }
-    
+        
     func cancelWith(_ errorCode: ASExtensionError.Code) {
         let error = NSError(domain: ASExtensionErrorDomain,
                             code: errorCode.rawValue,
