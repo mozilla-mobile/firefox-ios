@@ -1404,3 +1404,9 @@ extension String {
     public static let TabsTrayRecentlyCloseTabsSectionTitle = MZLocalizedString("TabTray.RecentlyClosed.SectionTitle", value: "Recently closed", comment: "Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed.")
     public static let TabsTrayRecentlyClosedTabsDescritpion = MZLocalizedString("TabTray.RecentlyClosed.Description", value: "Tabs are available here for 30 days. After that time, tabs will be automatically closed.", comment: "Describes what the Recently Closed tabs behavior is for users unfamiliar with it.")
 }
+
+// MARK: - v36 Strings
+extension String {
+    public static let ProtectionStatusSheetConnectionSecure = MZLocalizedString("ProtectionStatusSheet.SecureConnection", value: "Secure Connection", comment: "value for label to indicate user is on a secure ssl connection")
+    public static let ProtectionStatusSheetConnectionInsecure = MZLocalizedString("ProtectionStatusSheet.InsecureConnection", value: "Insecure Connection", comment: "value for label to indicate user is on an unencrypted website")
+}
