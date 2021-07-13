@@ -12,8 +12,19 @@ class CredentialWelcomeViewController: UIViewController {
 
     @IBOutlet weak var taglineLabel: UILabel! {
         didSet {
-            taglineLabel.text = .WelcomeViewTitle
+            taglineLabel.text = .LoginsWelcomeViewTitle
         }
     }
     
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        activityIndicator.startAnimating()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        activityIndicator.stopAnimating()
+    }
 }

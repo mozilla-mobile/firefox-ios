@@ -8,7 +8,7 @@ class SelectPasswordCell: UITableViewCell {
     
     @IBOutlet weak var selectLabel: UILabel! {
         didSet {
-            selectLabel.text = .LoginsListSelectPasswordTitle
+            selectLabel.text = .LoginsListSelectPasswordTitle.uppercased()
         }
     }
 }

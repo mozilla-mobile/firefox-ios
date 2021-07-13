@@ -6,14 +6,9 @@ import UIKit
 
 class EmptyPlaceholderCell: UITableViewCell {
     
-    @IBOutlet weak var titleLabel: UILabel! {
-        didSet {
-            titleLabel.text = .LoginsListNoLoginsFoundTitle
-        }
-    }
     @IBOutlet weak var descriptionLabel: UILabel! {
         didSet {
-            descriptionLabel.text = .LoginsListNoLoginsFoundSubtitle
+            descriptionLabel.text = .LoginsListNoLoginsFoundDescription
         }
     }
 }

@@ -21,10 +21,8 @@ class CredentialProviderPresenter {
         if self.profile.logins.reopenIfClosed() != nil {
             displayNotLoggedInMessage()
         } else {
-            self.view?.displaySpinner(message: .WelcomeViewSpinnerSyncingLogins)
             profile.syncCredentialIdentities().upon { result in
                 sleep(2)
-                self.view?.hideSpinner(completionMessage: .WelcomeViewSpinnerDoneSyncingLogins)
                 self.cancelWith(.userCanceled)
             }
         }

@@ -22,12 +22,3 @@ extension LoginRecord: Comparable {
         lhs.hostname.titleFromHostname < rhs.hostname.titleFromHostname
     }
 }
-
-extension LoginRecord: Equatable, Hashable {
-    public static func == (lhs: LoginRecord, rhs: LoginRecord) -> Bool {
-        return lhs.id == rhs.id && lhs.hostname == rhs.hostname && lhs.credentials == rhs.credentials
-    }
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(self.id)
-    }
-}
