@@ -138,7 +138,7 @@ enum Experiments {
 
     /// The `NimbusApi` object. This is the entry point to do anything with the Nimbus SDK on device.
     public static var shared: NimbusApi = {
-        guard AppConstants.NIMBUS_ENABLED else {
+        guard FeatureFlagsManager.shared.isFeatureActive(.nimbus) else {
             return NimbusDisabled.shared
         }
 
@@ -313,6 +313,7 @@ private extension AppBuildChannel {
         case .release: return "release"
         case .beta: return "beta"
         case .developer: return "nightly"
+        case .other: return "other"
         }
     }
 }

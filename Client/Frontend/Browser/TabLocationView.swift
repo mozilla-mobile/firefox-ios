@@ -36,7 +36,7 @@ private struct TabLocationViewUX {
     static let URLBarPadding = 4
 }
 
-class TabLocationView: UIView {
+class TabLocationView: UIView, FeatureFlagsProtocol {
     var delegate: TabLocationViewDelegate?
     var longPressRecognizer: UILongPressGestureRecognizer!
     var tapRecognizer: UITapGestureRecognizer!
@@ -346,7 +346,7 @@ class TabLocationView: UIView {
     }
 
     fileprivate func updateTextWithURL() {
-        if let host = url?.host, AppConstants.MOZ_PUNYCODE {
+        if let host = url?.host, featureFlags.isFeatureActive(.punyCode) {
             urlTextField.text = url?.absoluteString.replacingOccurrences(of: host, with: host.asciiHostToUTF8())
         } else {
             urlTextField.text = url?.absoluteString

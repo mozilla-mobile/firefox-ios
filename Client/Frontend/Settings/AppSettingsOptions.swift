@@ -563,19 +563,15 @@ class ExperimentsSettings: HiddenSetting {
 //    }
 //}
 
-class ToggleChronTabs: HiddenSetting {
-    var currentChronStatus: Bool {
-        return settings.profile.prefs.boolForKey(PrefsKeys.ChronTabsPrefKey) ?? false
-    }
-
+class ToggleChronTabs: HiddenSetting, FeatureFlagsProtocol {
     override var title: NSAttributedString? {
-        let toNewStatus = currentChronStatus ? "OFF" : "ON"
+        let toNewStatus = featureFlags.isFeatureActive(.chronologicalTabs) ? "OFF" : "ON"
         return NSAttributedString(string: "Debug: Toggle chronological tabs \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        settings.profile.prefs.setBool(!currentChronStatus, forKey: PrefsKeys.ChronTabsPrefKey)
+        featureFlags.toggle(.chronologicalTabs)
         updateCell(navigationController)
     }
 
@@ -586,19 +582,15 @@ class ToggleChronTabs: HiddenSetting {
     }
 }
 
-class ToggleRecentlySavedSection: HiddenSetting {
-    var currentStatus: Bool {
-        return settings.profile.prefs.boolForKey(PrefsKeys.recentlySavedSectionEnabled) ?? false
-    }
-
+class ToggleRecentlySavedSection: HiddenSetting, FeatureFlagsProtocol {
     override var title: NSAttributedString? {
-        let toNewStatus = currentStatus ? "OFF" : "ON"
+        let toNewStatus = featureFlags.isFeatureActive(.recentlySaved) ? "OFF" : "ON"
         return NSAttributedString(string: "Debug: Toggle Recently Saved Section \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        settings.profile.prefs.setBool(!currentStatus, forKey: PrefsKeys.recentlySavedSectionEnabled)
+        featureFlags.toggle(.recentlySaved)
         updateCell(navigationController)
     }
 
@@ -609,19 +601,15 @@ class ToggleRecentlySavedSection: HiddenSetting {
     }
 }
 
-class ToggleInactiveTabs: HiddenSetting {
-    var currentStatus: Bool {
-        return settings.profile.prefs.boolForKey(PrefsKeys.KeyEnableInactiveTabs) ?? false
-    }
-
+class ToggleInactiveTabs: HiddenSetting, FeatureFlagsProtocol {
     override var title: NSAttributedString? {
-        let toNewStatus = currentStatus ? "OFF" : "ON"
+        let toNewStatus = featureFlags.isFeatureActive(.inactiveTabs) ? "OFF" : "ON"
         return NSAttributedString(string: "Toggle inactive tabs: \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        settings.profile.prefs.setBool(!currentStatus, forKey: PrefsKeys.KeyEnableInactiveTabs)
+        featureFlags.toggle(.inactiveTabs)
         updateCell(navigationController)
     }
 

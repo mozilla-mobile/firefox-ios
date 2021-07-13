@@ -17,6 +17,7 @@ public enum AppBuildChannel: String {
     case release = "release"
     case beta = "beta"
     case developer = "developer"
+    case other = "other"
 }
 
 public enum KVOConstants: String {
@@ -49,6 +50,8 @@ public struct AppConstants {
             return AppBuildChannel.beta
         #elseif MOZ_CHANNEL_FENNEC
             return AppBuildChannel.developer
+        #else
+            return AppBuildChannel.other
         #endif
     }()
 
@@ -89,67 +92,4 @@ public struct AppConstants {
 
     /// The maximum length of a bookmark description stored by Firefox. Shared with Places on desktop.
     public static let DB_DESCRIPTION_LENGTH_MAX = 1024
-    
-    /// Put it behind a feature flag as the strings didn't land in time
-    public static let MOZ_SHAKE_TO_RESTORE: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-        return false
-        #elseif MOZ_CHANNEL_BETA
-        return true
-        #elseif MOZ_CHANNEL_FENNEC
-        return true
-        #else
-        return true
-        #endif
-    }()
-    
-    public static let CHRONOLOGICAL_TABS: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-        return false
-        #elseif MOZ_CHANNEL_BETA
-        return false
-        #elseif MOZ_CHANNEL_FENNEC
-        return true
-        #else
-        return false
-        #endif
-    }()
-    
-    public static let IS_RECENTLY_SAVED_SECTION_ENABLED: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-        return false
-        #elseif MOZ_CHANNEL_BETA
-        return true
-        #elseif MOZ_CHANNEL_FENNEC
-        return true
-        #else
-        return false
-        #endif
-    }()
-    
-    public static let IS_INACTIVE_TAB_ENABLED: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-        return false
-        #elseif MOZ_CHANNEL_BETA
-        return true
-        #elseif MOZ_CHANNEL_FENNEC
-        return true
-        #else
-        return false
-        #endif
-    }()
-
-    /// Use the Nimbus experimentation platform. If this is `true` then
-    /// `Experiments.shared` provides access to Nimbus. If false, it is a dummy object.
-    public static let NIMBUS_ENABLED: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-        return true
-        #elseif MOZ_CHANNEL_BETA
-        return true
-        #elseif MOZ_CHANNEL_FENNEC
-        return true
-        #else
-        return false
-        #endif
-    }()
 }
