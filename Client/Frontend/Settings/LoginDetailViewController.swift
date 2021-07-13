@@ -384,27 +384,22 @@ extension LoginDetailViewController: LoginDetailTableViewCellDelegate {
     func textFieldDidChange(_ cell: LoginDetailTableViewCell) { }
     
     func canPeform(action: Selector, for cell: LoginDetailTableViewCell) -> Bool {
-        guard let item = infoItemForCell(cell) else {
-            return false
-        }
-
-        // Menu actions for password
-        if item == .passwordItem {
+        guard let item = infoItemForCell(cell) else { return false }
+        
+        switch item {
+        case .websiteItem:
+            // Menu actions for Website
+            return action == MenuHelper.SelectorCopy || action == MenuHelper.SelectorOpenAndFill
+        case .usernameItem:
+            // Menu actions for Username
+            return action == MenuHelper.SelectorCopy
+        case .passwordItem:
+            // Menu actions for password
             let showRevealOption = cell.descriptionLabel.isSecureTextEntry ? (action == MenuHelper.SelectorReveal) : (action == MenuHelper.SelectorHide)
             return action == MenuHelper.SelectorCopy || showRevealOption
+        default:
+            return false
         }
-
-        // Menu actions for Website
-        if item == .websiteItem {
-            return action == MenuHelper.SelectorCopy || action == MenuHelper.SelectorOpenAndFill
-        }
-
-        // Menu actions for Username
-        if item == .usernameItem {
-            return action == MenuHelper.SelectorCopy
-        }
-
-        return false
     }
     
     fileprivate func cellForItem(_ item: InfoItem) -> LoginDetailTableViewCell? {
