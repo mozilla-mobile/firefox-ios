@@ -12,19 +12,21 @@ extension FeatureFlagsProtocol {
     }
 }
 
+/// An enum describing the featureID of all features, historical, avalable, or in development.
 enum FeatureFlagID: String, CaseIterable {
     case chronologicalTabs
     case inactiveTabs
     case nimbus
-    case punyCode
     case recentlySaved
     case shakeToRestore
 }
 
 class FeatureFlagsManager {
 
-    /// This singleton should only be accessed directly in places where the
-    /// `FeatureFlagsProtocol` is not available.
+    /// This Singleton should only be accessed directly in places where the
+    /// `FeatureFlagsProtocol` is not available. Otherwise, access to the feature
+    /// flags system should be done through the protocol, giving access to the
+    /// `featureFlags` variable.
     static let shared = FeatureFlagsManager()
 
     private var profile: Profile!
@@ -41,6 +43,8 @@ class FeatureFlagsManager {
         return false
     }
 
+    /// Toggles the feature on/off, depending on its current status AND whether or not it is
+    /// a feature that can be saved to disk. For more information, see `FlaggableFeature`
     public func toggle(_ featureID: FeatureFlagID) {
         for feature in features {
             if feature.featureID == featureID {
@@ -49,6 +53,8 @@ class FeatureFlagsManager {
         }
     }
 
+    /// Sets up features with default channel availablility. For ease of use, please add
+    /// new features alphabetically.
     public func setupFeatures(with profile: Profile) {
         features.removeAll()
 
