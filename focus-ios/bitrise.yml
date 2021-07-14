@@ -13,6 +13,8 @@ trigger_map:
   workflow: runParallelTests
 - tag: "*"
   workflow: release
+- push_branch: refresh
+  workflow: refresh_release
 
 
 workflows:
@@ -80,6 +82,38 @@ workflows:
 
 
   release:
+    steps:
+    - certificate-and-profile-installer@1: {}
+    - xcode-archive@2:
+        inputs:
+        - scheme: Focus
+        - team_id: 43AQ936H96
+        - export_method: app-store
+        title: Build Focus
+    - deploy-to-itunesconnect-application-loader@0:
+        inputs:
+        - app_password: "$APPLE_ACCOUNT_PW"
+        - itunescon_user: "$APPLE_ACCOUNT_ID"
+    - xcode-archive@2:
+        inputs:
+        - scheme: Klar
+        - export_method: app-store
+        title: Build Klar
+    - deploy-to-itunesconnect-application-loader@0:
+        inputs:
+        - app_password: "$APPLE_ACCOUNT_PW"
+        - itunescon_user: "$APPLE_ACCOUNT_ID"
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.5.x
+        machine_type_id: g2.8core
+    before_run:
+      - clone-and-build-dependencies
+      - set-project-version
+      - set-default-browser-entitlement
+
+
+  refresh_release:
     steps:
     - certificate-and-profile-installer@1: {}
     - xcode-archive@2:
