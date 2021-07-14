@@ -12,6 +12,15 @@ class GradientBackgroundView: UIView {
 
         configureGradientLayerWithPoints(start: startPoint, end: endPoint, alpha: alpha)
     }
+    
+    init(colors: [CGColor]) {
+        super.init(frame: .zero)
+        
+        guard let gradient = self.layer as? CAGradientLayer else { return }
+        gradient.startPoint = CGPoint(x: 1.0, y: 0.0)
+        gradient.endPoint = CGPoint(x: 0.0, y: 1.0)
+        gradient.colors = colors
+    }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

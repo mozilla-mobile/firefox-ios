@@ -71,7 +71,7 @@ class PastenGoTest: BaseTestCase {
         // Check the correct site is reached
         waitForValueContains(searchOrEnterAddressTextField, value: "www.mozilla.org")
         app.buttons["URLBar.deleteButton"].firstMatch.tap()
-        waitForExistence(app.staticTexts["Your browsing history has been erased."])
+        waitForExistence(app.staticTexts["Browsing history cleared"])
 
         clipboard = "1(*&)(*%@@$^%^12345)"
         UIPasteboard.general.string = clipboard

@@ -470,7 +470,7 @@
 "URL.eraseButtonLabel" = "ERASE";
 
 /* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "Your browsing history has been erased.";
+"URL.eraseMessageLabel" = "Browsing history cleared";
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Find in page: %@";

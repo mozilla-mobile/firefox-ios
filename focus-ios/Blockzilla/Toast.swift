@@ -16,16 +16,16 @@ class Toast {
             return
         }
 
-        let toast = UIView()
+        let toast = GradientBackgroundView(colors: [UIColor.cfrFirst.cgColor, UIColor.cfrSecond.cgColor])
         toast.alpha = 0
-        toast.backgroundColor = UIConstants.colors.toastBackground
-        toast.layer.cornerRadius = 18
+        toast.layer.cornerRadius = UIConstants.layout.toastMessageHeight / 2
         window.addSubview(toast)
 
         let label = SmartLabel()
         label.text = text
-        label.textColor = UIConstants.colors.toastText
+        label.textColor = .primaryText
         label.font = UIConstants.fonts.toast
+        
         label.numberOfLines = 0
         label.accessibilityIdentifier = "Toast.label"
         toast.addSubview(label)
@@ -36,11 +36,12 @@ class Toast {
             make.centerX.equalTo(window)
             make.leading.greaterThanOrEqualTo(window)
             make.trailing.lessThanOrEqualTo(window)
+            make.height.equalTo(UIConstants.layout.toastMessageHeight)
         }
 
         label.snp.makeConstraints { make in
             make.leading.trailing.equalTo(toast).inset(20)
-            make.top.bottom.equalTo(toast).inset(10)
+            make.centerY.equalTo(toast)
         }
 
         toast.animateHidden(false, duration: UIConstants.layout.toastAnimationDuration) {
