@@ -15,7 +15,6 @@ protocol URLBarDelegate: class {
     func urlBarDidFocus(_ urlBar: URLBar)
     func urlBarDidPressScrollTop(_: URLBar, tap: UITapGestureRecognizer)
     func urlBarDidDismiss(_ urlBar: URLBar)
-    func urlBarDidPressDelete(_ urlBar: URLBar)
     func urlBarDidTapShield(_ urlBar: URLBar)
     func urlBarDidLongPress(_ urlBar: URLBar)
     func urlBarDidPressPageActions(_ urlBar: URLBar)
@@ -62,7 +61,6 @@ class URLBar: UIView {
     private let rightBarViewLayoutGuide = UILayoutGuide()
 
     private let cancelButton = InsetButton()
-    private let deleteButton = InsetButton()
     private let domainCompletion = DomainCompletion(completionSources: [TopDomainsCompletionSource(), CustomCompletionSource()])
 
     private let toolset = BrowserToolset()
@@ -164,8 +162,7 @@ class URLBar: UIView {
 
         cancelButton.isHidden = true
         cancelButton.alpha = 0
-        let myImage = UIImage(named: "icon_cancel")
-        cancelButton.setImage(myImage, for: .normal)
+        cancelButton.setImage(#imageLiteral(resourceName: "icon_cancel"), for: .normal)
 
         cancelButton.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
         cancelButton.addTarget(self, action: #selector(cancelPressed), for: .touchUpInside)
@@ -175,19 +172,6 @@ class URLBar: UIView {
                                                       bottom: UIConstants.layout.urlBarMargin,
                                                       right: UIConstants.layout.urlBarMargin)
         addSubview(cancelButton)
-
-        deleteButton.isHidden = true
-        deleteButton.alpha = 0
-        deleteButton.setImage(#imageLiteral(resourceName: "icon_delete"), for: .normal)
-        deleteButton.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
-        deleteButton.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
-        deleteButton.addTarget(self, action: #selector(didPressDelete), for: .touchUpInside)
-        deleteButton.contentEdgeInsets = UIEdgeInsets(top: UIConstants.layout.urlBarMargin,
-                                                      left: UIConstants.layout.urlBarMargin,
-                                                      bottom: UIConstants.layout.urlBarMargin,
-                                                      right: UIConstants.layout.urlBarMargin)
-        deleteButton.accessibilityIdentifier = "URLBar.deleteButton"
-        addSubview(deleteButton)
 
         lockIcon.isHidden = true
         lockIcon.alpha = 0
@@ -255,7 +239,7 @@ class URLBar: UIView {
         urlText.font = UIConstants.fonts.urlText
         urlText.tintColor = .primaryText
         urlText.textColor = .primaryText
-        urlText.highlightColor = UIConstants.colors.urlTextHighlight
+        urlText.highlightColor = .accent.withAlphaComponent(0.4)
         urlText.keyboardType = .webSearch
         urlText.autocapitalizationType = .none
         urlText.autocorrectionType = .no
@@ -273,7 +257,7 @@ class URLBar: UIView {
         shieldIcon.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
         shieldIcon.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
         shieldIcon.accessibilityIdentifier = "URLBar.trackingProtectionIcon"
-        textAndLockContainer.addSubview(shieldIcon)
+        urlBarBackgroundView.addSubview(shieldIcon)
 
         progressBar.isHidden = true
         progressBar.alpha = 0
@@ -337,7 +321,7 @@ class URLBar: UIView {
             compressedBarConstraints.append(make.height.equalTo(UIConstants.layout.urlBarBorderHeight).constraint)
             compressedBarConstraints.append(make.trailing.equalTo(safeAreaLayoutGuide.snp.trailing).inset(UIConstants.layout.urlBarMargin).constraint)
 
-            expandedBarConstraints.append(make.trailing.equalTo(rightBarViewLayoutGuide.snp.leading).constraint)
+            expandedBarConstraints.append(make.trailing.equalTo(safeAreaLayoutGuide.snp.trailing).inset(UIConstants.layout.urlBarMargin).constraint)
 
             showLeftBarViewConstraints.append(make.leading.equalTo(leftBarViewLayoutGuide.snp.trailing).offset(UIConstants.layout.urlBarIconInset).constraint)
             hideLeftBarViewConstraints.append(make.leading.equalTo(safeAreaLayoutGuide.snp.leading).offset(UIConstants.layout.urlBarMargin).constraint)
@@ -355,13 +339,11 @@ class URLBar: UIView {
             make.top.bottom.leading.trailing.equalTo(leftBarViewLayoutGuide)
         }
 
-        deleteButton.snp.makeConstraints { make in
-            make.top.bottom.leading.trailing.equalTo(rightBarViewLayoutGuide)
-        }
-
         textAndLockContainer.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
             make.leading.equalToSuperview().priority(999)
+            
+            hideLeftBarViewConstraints.append(make.leading.equalToSuperview().offset(UIConstants.layout.urlBarTextInset).constraint)
 
             centeredURLConstraints.append(make.centerX.equalToSuperview().constraint)
             fullWidthURLConstraints.append(make.trailing.equalToSuperview().constraint)
@@ -381,10 +363,11 @@ class URLBar: UIView {
         urlText.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
             
-            hideLockConstraints.append(make.leading.equalTo(shieldIcon).inset(UIConstants.layout.shieldIconInset).priority(999).constraint)
+            hideLockConstraints.append(make.leading.equalToSuperview().constraint)
             // Account for the content inset of the URLTextField to balance
             // the spacing around the lock icon
             showLockConstraints.append(make.leading.equalTo(lockIcon.snp.trailing).inset(UIConstants.layout.lockIconInset - 4).constraint)
+
             hidePageActionsConstraints.append(make.trailing.equalToSuperview().constraint)
             showPageActionsConstraints.append(make.trailing.equalTo(pageActionsButton.snp.leading).constraint)
         }
@@ -414,7 +397,7 @@ class URLBar: UIView {
         }
 
         truncatedUrlText.snp.makeConstraints { make in
-            make.leading.equalTo(smallLockIcon.snp.trailing)
+            make.leading.equalToSuperview()
             make.trailing.equalTo(collapsedUrlAndLockWrapper)
             make.bottom.equalTo(smallLockIcon).offset(UIConstants.layout.truncatedUrlTextOffset)
         }
@@ -571,9 +554,8 @@ class URLBar: UIView {
     }
 
     private func updateLockIcon() {
-        let visible = !isEditing && (url?.scheme == "https")
+        let visible = false
         let duration = UIConstants.layout.urlBarTransitionAnimationDuration / 2
-
         lockIcon.animateHidden(!visible, duration: duration)
 
         self.layoutIfNeeded()
@@ -587,7 +569,6 @@ class URLBar: UIView {
                 self.hideLockConstraints.forEach { $0.activate() }
                 self.hideSmallLockConstraints.forEach { $0.activate() }
             }
-
             self.layoutIfNeeded()
         }
     }
@@ -643,26 +624,24 @@ class URLBar: UIView {
             compressBar = true
             showBackgroundView = true
 
-            shieldIcon.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
+            shieldIcon.animateHidden(false, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
             cancelButton.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
-            deleteButton.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
 
             setTextToURL()
             deactivate()
-            borderColor = .secondayButton
-            backgroundColor = .secondayButton
+            borderColor = .foundation
+            backgroundColor = .foundation
         case .browsing:
-            showLeftBar = true
+            showLeftBar = false
             compressBar = false
             showBackgroundView = false
 
             shieldIcon.animateHidden(false, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
             cancelButton.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
-            deleteButton.animateHidden(false, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
 
             setTextToURL()
-            borderColor = UIConstants.Photon.Grey90.withAlphaComponent(0.2)
-            backgroundColor = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
+            borderColor = .foundation
+            backgroundColor = .foundation
         case .editing:
             showLeftBar = true
             compressBar = true
@@ -670,11 +649,10 @@ class URLBar: UIView {
 
             shieldIcon.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
             cancelButton.animateHidden(false, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
-            deleteButton.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
 
             toolset.settingsButton.isEnabled = true
-            borderColor = UIConstants.Photon.Grey10.withAlphaComponent(0.1)
-            backgroundColor = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
+            borderColor = .foundation
+            backgroundColor = .foundation
         }
 
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {
@@ -740,15 +718,6 @@ class URLBar: UIView {
 
     }
 
-    @objc private func didPressDelete() {
-        // Prevent layout issues where the user taps Erase and the URL at the same time.
-        guard !isEditing else { return }
-
-        isUserInteractionEnabled = false
-
-        delegate?.urlBarDidPressDelete(self)
-    }
-
     @objc private func didPressClear() {
         urlText.text = nil
         userInputText = nil
@@ -812,15 +781,12 @@ class URLBar: UIView {
 
         collapsedTrackingProtectionBadge.alpha = collapseAlpha
         if isEditing {
-            deleteButton.alpha = collapseAlpha
             shieldIcon.alpha = collapseAlpha
         } else {
-            deleteButton.alpha = expandAlpha
             shieldIcon.alpha = expandAlpha
         }
         // updating the small lock icon status here in order to prevent the icon from flashing on start up
-        let visible = !isEditing && (url?.scheme == "https")
-        smallLockIcon.alpha = visible ? collapseAlpha : 0
+        smallLockIcon.alpha = 0
         self.layoutIfNeeded()
     }
 
@@ -930,7 +896,7 @@ private class URLTextField: AutocompleteTextField {
 
     private func getInsetRect(forBounds bounds: CGRect) -> CGRect {
         // Add internal padding.
-        let inset = bounds.insetBy(dx: UIConstants.layout.urlBarWidthInset, dy: UIConstants.layout.urlBarHeightInset)
+        let inset = bounds.insetBy(dx: UIConstants.layout.urlBarWidthInset, dy: UIConstants.layout.urlBarContainerHeightInset)
 
         // Add a right margin so we don't overlap with the clear button.
         var clearButtonWidth: CGFloat = 0

@@ -897,11 +897,6 @@ extension BrowserViewController: URLBarDelegate {
         toggleURLBarBackground(isBright: !webViewController.isLoading)
     }
 
-    func urlBarDidPressDelete(_ urlBar: URLBar) {
-        updateFindInPageVisibility(visible: false)
-        self.resetBrowser()
-    }
-
     func urlBarDidFocus(_ urlBar: URLBar) {
         let isOnHomeView = homeView != nil
         overlayView.present(isOnHomeView: isOnHomeView)

@@ -189,6 +189,8 @@ struct UIConstants {
         static let urlBarTransitionAnimationDuration: TimeInterval = 0.2
         static let urlBarMargin: CGFloat = 10
         static let urlBarHeightInset: CGFloat = 0
+        static let urlBarContainerHeightInset: CGFloat = 10
+        static let urlBarTextInset: CGFloat = 30
         static let urlBarShadowOpacity: Float = 0.3
         static let urlBarShadowRadius: CGFloat = 2
         static let urlBarShadowOffset = CGSize(width: 0, height: 2)
