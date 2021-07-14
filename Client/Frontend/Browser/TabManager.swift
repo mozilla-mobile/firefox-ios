@@ -109,6 +109,18 @@ class TabManager: NSObject {
         assert(Thread.isMainThread)
         return tabs.filter { $0.isPrivate }
     }
+    
+    var shouldSelectHome: Bool {
+        let lastActiveTimestamp = UserDefaults.standard.object(forKey: "LastActiveTimestamp") as? Date ?? Date()
+        let dateComponents = Calendar.current.dateComponents([.hour], from: lastActiveTimestamp, to: Date())
+        let hours = dateComponents.hour ?? 0
+        
+//        return hours > 4
+        
+        return true
+    }
+    
+
 
     init(profile: Profile, imageStore: DiskImageStore?) {
         assert(Thread.isMainThread)
@@ -638,6 +650,16 @@ extension TabManager {
                 let tab = addTab()
                 if selectedTab == nil {
                     selectTab(tab)
+                }
+            }
+            
+            if shouldSelectHome {
+                let userHomePage = NewTabHomePageAccessors.getDefaultHomePageString(profile.prefs)
+                if let userHomepage = userHomePage {
+                    addTabsForURLs([URL(string: userHomepage)!], zombie: false)
+                } else {
+                    let firefoxHome = normalTabs.filter({ $0.isFirefoxHome })
+                    firefoxHome.isEmpty ? selectTab(addTab()) : nil
                 }
             }
         }

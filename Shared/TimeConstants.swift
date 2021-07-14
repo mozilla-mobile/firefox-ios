@@ -114,6 +114,11 @@ extension Date {
 extension Date {
     public static var yesterday: Date { return Date().dayBefore }
     public static var tomorrow: Date { return Date().dayAfter }
+    
+    public static var second: Double = 1
+    public static var minute = second * 60
+    public static var hour = minute * 60
+    
     public var lastWeek: Date {
         return Calendar.current.date(byAdding: .day, value: -8, to: noon) ?? Date()
     }

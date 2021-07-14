@@ -146,6 +146,10 @@ class Tab: NSObject {
         }
         return self.url
     }
+    
+    var isFirefoxHome: Bool {
+        return favicons.isEmpty
+    }
     var mimeType: String?
     var isEditing: Bool = false
     var currentFaviconUrl: URL?
