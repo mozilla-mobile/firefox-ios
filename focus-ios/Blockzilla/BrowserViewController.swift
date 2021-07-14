@@ -43,6 +43,7 @@ class BrowserViewController: UIViewController {
     private var lastScrollTranslation = CGPoint.zero
     private var scrollBarOffsetAlpha: CGFloat = 0
     private var scrollBarState: URLBarScrollState = .expanded
+    private var background = UIImageView()
 
     private enum URLBarScrollState {
         case collapsed
@@ -87,11 +88,16 @@ class BrowserViewController: UIViewController {
     required init?(coder aDecoder: NSCoder) {
         fatalError("BrowserViewController hasn't implemented init?(coder:)")
     }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: UIDevice.orientationDidChangeNotification, object: nil)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setupBiometrics()
+        NotificationCenter.default.addObserver(self, selector: #selector(orientationChanged), name: UIDevice.orientationDidChangeNotification, object: nil)
         view.addSubview(mainContainerView)
 
         darkView.isHidden = true
@@ -108,7 +114,7 @@ class BrowserViewController: UIViewController {
 
         webViewController.delegate = self
 
-        let background = UIImageView(image: #imageLiteral(resourceName: "background"))
+        setupBackgroundImage()
         background.contentMode = .scaleAspectFill
         mainContainerView.addSubview(background)
 
@@ -271,6 +277,22 @@ class BrowserViewController: UIViewController {
                 self.resetBrowser()
                 self.appSplashController.toggleSplashView(hide: true)
             }
+        }
+    }
+    
+    @objc func orientationChanged() {
+        setupBackgroundImage()
+    }
+    
+    func setupBackgroundImage() {
+        switch UIDevice.current.userInterfaceIdiom {
+        case .phone:
+            background.image = UIDevice.current.orientation.isLandscape ? #imageLiteral(resourceName: "background_iphone_landscape") : #imageLiteral(resourceName: "background_iphone_portrait")
+        case .pad:
+            background.image = UIDevice.current.orientation.isLandscape ? #imageLiteral(resourceName: "background_ipad_landscape") : #imageLiteral(resourceName: "background_ipad_portrait")
+        default:
+            background.image = #imageLiteral(resourceName: "background_iphone_portrait")
+            
         }
     }
 

@@ -22,7 +22,7 @@ struct FocusAppConfig: AppConfig {
     let rightsFile = "rights-focus.html"
     let supportPath = "kb/focus"
     let appId = "1055677337"
-    let wordmark = #imageLiteral(resourceName: "img_focus_wordmark")
+    let wordmark = #imageLiteral(resourceName: "logo")
 }
 
 struct KlarAppConfig: AppConfig {
@@ -32,5 +32,5 @@ struct KlarAppConfig: AppConfig {
     let rightsFile = "rights-klar.html"
     let supportPath = "products/klar"
     let appId = "1073435754"
-    let wordmark = #imageLiteral(resourceName: "img_klar_wordmark")
+    let wordmark = #imageLiteral(resourceName: "logo_klar")
 }

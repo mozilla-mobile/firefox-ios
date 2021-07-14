@@ -41,7 +41,7 @@ class HomeView: UIView {
         swipePrevious.direction = .right
         tipView.addGestureRecognizer(swipePrevious)
 
-        textLogo.image = UIImage(named: "logo")
+        textLogo.image = AppInfo.isKlar ? #imageLiteral(resourceName: "logo_klar") : #imageLiteral(resourceName: "logo")
         textLogo.contentMode = .scaleAspectFit
         addSubview(textLogo)
 
