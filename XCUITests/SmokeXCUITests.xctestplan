@@ -13,6 +13,7 @@
   },
   "testTargets" : [
     {
+      "parallelizable" : true,
       "skippedTests" : [
         "ActivityStreamTest\/testContextMenuInLandscape()",
         "ActivityStreamTest\/testTopSites1ShareDefaultTopSite()",

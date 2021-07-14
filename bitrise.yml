@@ -421,7 +421,7 @@ workflows:
     - xcode-test@2:
         inputs:
         - scheme: Fennec_Enterprise_XCUITests
-        - xcodebuild_test_options: '-testPlan SmokeXCUITests'
+        - xcodebuild_test_options: '-maximum-parallel-testing-workers 2 -testPlan SmokeXCUITests'
         - simulator_device: iPhone 11
         is_always_run: true
     - deploy-to-bitrise-io@1.9: {}
