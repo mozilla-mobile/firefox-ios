@@ -12,8 +12,13 @@ class RequestDesktopTest: BaseTestCase {
         waitForExistence(app.buttons["BrowserToolset.stopReloadButton"])
         app.buttons["BrowserToolset.stopReloadButton"].press(forDuration: 1.0)
 
-        waitForHittable(app.sheets.buttons["Request Desktop Site"])
-        app.sheets.buttons["Request Desktop Site"].tap()
+        if iPad() {
+            waitForExistence(app.sheets.buttons["Request Mobile Site"])
+            app.sheets.buttons["Request Mobile Site"].tap()
+        } else {
+            waitForExistence(app.sheets.buttons["Request Desktop Site"])
+            app.sheets.buttons["Request Desktop Site"].tap()
+        }
 
         waitForWebPageLoad()
 
@@ -22,8 +27,10 @@ class RequestDesktopTest: BaseTestCase {
             return
         }
 
-        if text.contains("m.facebook") {
-            XCTFail()
+        if !iPad() {
+            if text.contains("m.facebook") {
+                XCTFail()
+            }
         }
     }
 
@@ -36,18 +43,23 @@ class RequestDesktopTest: BaseTestCase {
         waitForExistence(app.buttons["URLBar.pageActionsButton"])
         app.buttons["URLBar.pageActionsButton"].tap()
 
-        waitForHittable(app.cells["Request Desktop Site"])
-        app.cells["Request Desktop Site"].tap()
-
+        if iPad() {
+            waitForExistence(app.cells["Request Mobile Site"])
+            app.cells["Request Mobile Site"].tap()
+        } else {
+            waitForExistence(app.cells["Request Desktop Site"])
+            app.cells["Request Desktop Site"].tap()
+        }
         waitForWebPageLoad()
 
         guard let text = urlBarTextField.value as? String else {
             XCTFail()
             return
         }
-
-        if text.contains("m.facebook") {
-            XCTFail()
+        if !iPad() {
+            if text.contains("m.facebook") {
+                XCTFail()
+            }
         }
     }
 }

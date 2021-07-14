@@ -48,11 +48,16 @@ class TrackingProtectionMenu: BaseTestCase {
         XCTAssertEqual(app.staticTexts["Content trackers.Subtitle"].label, "0")
 
         // Close the menu
-        waitForHittable(app.buttons["PhotonMenu.close"])
-        app.buttons["PhotonMenu.close"].tap()
+        if iPad() {
+            app.otherElements["PopoverDismissRegion"].tap()
+        }
+        else {
+            waitForExistence(app.buttons["PhotonMenu.close"])
+            app.buttons["PhotonMenu.close"].tap()
+        }
 
         // Erase the history
-        waitForHittable(app.buttons["URLBar.deleteButton"])
+        waitForExistence(app.buttons["URLBar.deleteButton"])
         app.buttons["URLBar.deleteButton"].tap()
         waitForExistence(app.staticTexts["Your browsing history has been erased."])
 
@@ -70,11 +75,16 @@ class TrackingProtectionMenu: BaseTestCase {
         waitForZeroTrackers()
 
         // Close the menu
-        waitForHittable(app.buttons["PhotonMenu.close"])
-        app.buttons["PhotonMenu.close"].tap()
+        if iPad() {
+            app.otherElements["PopoverDismissRegion"].tap()
+        }
+        else {
+            waitForExistence(app.buttons["PhotonMenu.close"])
+            app.buttons["PhotonMenu.close"].tap()
+        }
 
         // Erase the history
-        waitForHittable(app.buttons["URLBar.deleteButton"])
+        waitForExistence(app.buttons["URLBar.deleteButton"])
         app.buttons["URLBar.deleteButton"].tap()
         waitForExistence(app.staticTexts["Your browsing history has been erased."])
     }
@@ -107,8 +117,13 @@ class TrackingProtectionMenu: BaseTestCase {
         waitForZeroTrackers()
 
         // Close the menu
-        waitForHittable(app.buttons["PhotonMenu.close"])
-        app.buttons["PhotonMenu.close"].tap()
+        if iPad() {
+            app.otherElements["PopoverDismissRegion"].tap()
+        }
+        else {
+            waitForExistence(app.buttons["PhotonMenu.close"])
+            app.buttons["PhotonMenu.close"].tap()
+        }
 
         // Erase the history
         waitForHittable(app.buttons["URLBar.deleteButton"])

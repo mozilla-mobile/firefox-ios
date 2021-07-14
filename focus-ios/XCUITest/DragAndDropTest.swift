@@ -9,9 +9,10 @@
 import XCTest
 
 class DragAndDropTest: BaseTestCase {
-    let websiteWithSearchField = ["url": "https://developer.mozilla.org/en-US/search", "urlSearchField": "Search the docs"]
+    let websiteWithSearchField = ["url": "https://developer.mozilla.org/en-US/search", "urlSearchField": "Search MDN"]
 
-    func testDragElement() {
+    func testDragElement() throws {
+        throw XCTSkip("Skipping - drag and dropping is opening the split view instead of dropping to the textField element")
         if UIDevice.current.userInterfaceIdiom == .pad {
             let urlBarTextField = app.textFields["URLBar.urlText"]
             loadWebPage("developer.mozilla.org/en-US/search")
@@ -19,7 +20,7 @@ class DragAndDropTest: BaseTestCase {
             // Check the text in the search field before dragging and dropping the url text field
             XCTAssertEqual(app.webViews.searchFields[websiteWithSearchField["urlSearchField"]!].placeholderValue, "Search the docs")
             // DragAndDrop the url for only one second so that the TP menu is not shown and the search box is not covered
-            urlBarTextField.press(forDuration: 1, thenDragTo: app.webViews.searchFields[websiteWithSearchField["urlSearchField"]!])
+            urlBarTextField.press(forDuration: 1, thenDragTo:app.webViews.searchFields[websiteWithSearchField["urlSearchField"]!])
             // Verify that the text in the search field is the same as the text in the url text field
             XCTAssertEqual(app.webViews.searchFields[websiteWithSearchField["urlSearchField"]!].value as? String, websiteWithSearchField["url"]!)
         }

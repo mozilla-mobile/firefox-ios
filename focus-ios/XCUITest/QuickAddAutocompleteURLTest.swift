@@ -23,6 +23,6 @@ class QuickAddAutocompleteURLTest: BaseTestCase {
             return
         }
 
-        XCTAssert(text == "www.reddit.com")
+        waitForValueContains(app.textFields["URLBar.urlText"], value: "reddit.com")
     }
 }

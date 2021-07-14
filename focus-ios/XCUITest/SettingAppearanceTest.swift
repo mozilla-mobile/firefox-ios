@@ -201,7 +201,7 @@ class SettingAppearanceTest: BaseTestCase {
 
     // Smoktest
     func testSafariIntegration() {
-        waitForExistence(app.buttons["Settings"], timeout: 10)
+        waitForExistence(app.buttons["Settings"], timeout: 15)
         app.buttons["Settings"].tap()
 
         // Check that Safari toggle is off, swipe to get to Safarin Integration menu
