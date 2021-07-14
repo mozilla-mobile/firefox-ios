@@ -32,7 +32,6 @@ class FeatureFlagsManager {
     private var profile: Profile!
     private var features: [FlaggableFeature] = []
 
-    init() { }
 
     public func isFeatureActive(_ featureID: FeatureFlagID) -> Bool {
         for feature in features {
