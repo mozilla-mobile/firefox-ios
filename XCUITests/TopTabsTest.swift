@@ -386,16 +386,20 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
     // This test only runs for iPhone see bug 1409750
     func testAddPrivateTabByLongPressTabsButton() {
         if skipPlatform { return }
-        navigator.goto(URLBarOpen)
-        navigator.back()
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 10)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         waitForTabsButton()
-        navigator.performAction(Action.OpenPrivateTabLongPressTabsButton)
-        navigator.goto(URLBarOpen)
-        navigator.back()
+        // navigator.performAction(Action.OpenPrivateTabLongPressTabsButton)
+        app.buttons["TabToolbar.tabsButton"].press(forDuration: 2)
+        waitForExistence(app.cells["nav-tabcounter"])
+        app.cells["nav-tabcounter"].tap()
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
         waitForExistence(app.buttons["smallPrivateMask"])
         XCTAssertTrue(app.buttons["smallPrivateMask"].isEnabled)
-        XCTAssertTrue(userState.isPrivate)
     }
 
     // This test is disabled for iPad because the toast menu is not shown there
