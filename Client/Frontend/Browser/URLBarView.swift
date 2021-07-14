@@ -690,7 +690,7 @@ extension URLBarView: TabToolbarProtocol {
     }
 }
 
-extension URLBarView: TabLocationViewDelegate, FeatureFlagsProtocol {
+extension URLBarView: TabLocationViewDelegate {
     func tabLocationViewDidLongPressReaderMode(_ tabLocationView: TabLocationView) -> Bool {
         return delegate?.urlBarDidLongPressReaderMode(self) ?? false
     }

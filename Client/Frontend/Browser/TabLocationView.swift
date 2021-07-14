@@ -36,7 +36,7 @@ private struct TabLocationViewUX {
     static let URLBarPadding = 4
 }
 
-class TabLocationView: UIView, FeatureFlagsProtocol {
+class TabLocationView: UIView {
     var delegate: TabLocationViewDelegate?
     var longPressRecognizer: UILongPressGestureRecognizer!
     var tapRecognizer: UITapGestureRecognizer!
