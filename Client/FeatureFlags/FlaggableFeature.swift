@@ -9,7 +9,7 @@ struct FlaggableFeature {
     private let profile: Profile
     private let buildChannels: [AppBuildChannel]
 
-    var featureID: FeatureFlagID
+    var featureID: FeatureFlagName
 
     /// Returns whether or not the feature is active.
     ///
@@ -40,7 +40,7 @@ struct FlaggableFeature {
         }
     }
 
-    init(withID featureID: FeatureFlagID, and profile: Profile, enabledFor channels: [AppBuildChannel]) {
+    init(withID featureID: FeatureFlagName, and profile: Profile, enabledFor channels: [AppBuildChannel]) {
         self.featureID = featureID
         self.profile = profile
         self.buildChannels = channels
