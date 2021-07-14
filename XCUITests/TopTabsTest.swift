@@ -369,11 +369,14 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
     // This test only runs for iPhone see bug 1409750
     func testAddTabByLongPressTabsButton() {
         if skipPlatform { return }
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 10)
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
-        navigator.performAction(Action.OpenNewTabLongPressTabsButton)
+        // navigator.performAction(Action.OpenNewTabLongPressTabsButton)
+        app.buttons["TabToolbar.tabsButton"].press(forDuration: 2)
+        waitForExistence(app.cells["quick_action_new_tab"])
+        app.cells["quick_action_new_tab"].tap()
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
