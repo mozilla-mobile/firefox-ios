@@ -107,6 +107,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         let profile = getProfile(application)
 
         telemetry = TelemetryWrapper(profile: profile)
+        FeatureFlagsManager.shared.setupFeatures(with: profile)
 
         // Start intialzing the Nimbus SDK. This should be done after Glean
         // has been started.

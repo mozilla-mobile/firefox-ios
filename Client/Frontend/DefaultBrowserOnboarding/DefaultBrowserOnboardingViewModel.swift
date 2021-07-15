@@ -50,7 +50,7 @@ class DefaultBrowserOnboardingViewModel {
     private let experiments: NimbusApi
     
     private(set) lazy var displayTitleImage = !(experiments.withVariables(featureId: .onboardingDefaultBrowser).getBool("should-hide-title-image") ?? false)
-    
+
     init(experiments: NimbusApi = Experiments.shared) {
         self.experiments = experiments
         setupUpdateModel()
