@@ -21,6 +21,18 @@ enum FeatureFlagName: String, CaseIterable {
     case shakeToRestore
 }
 
+/// Manages feature flags for the application.
+///
+/// To add a new feature flag, you must do four things:
+///
+/// 1. Add a name in the `FeatureFlagName` enum
+/// 2. Add a new `FlaggableFeature` in the `FeatureFlagManager.setupFeatures` and add it
+/// to the `features` dictionary using its key.
+/// 3. Optional: If the feature is meant to be togglable, add a key for the feature
+/// in the `PrefsKeys` struct, and then also add it to the `FlaggableFeature.featureKey`
+/// function to allow the flag status to be changed.
+/// 4. Add the `FeatureFlagsProtocol` protocol to the class you wish to use the feature
+/// flag in, and access the required flag using `featureFlags.isFeatureActive`.
 class FeatureFlagsManager {
 
     /// This Singleton should only be accessed directly in places where the
