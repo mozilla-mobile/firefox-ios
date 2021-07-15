@@ -401,6 +401,8 @@
 		C82043AF2523DC9600740B71 /* Sync.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2827315E1ABC9BE600AA1954 /* Sync.framework */; };
 		C82043C32523DD6A00740B71 /* Sync.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 2827315E1ABC9BE600AA1954 /* Sync.framework */; };
 		C820443825241D3100740B71 /* libSyncTelemetry.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E69DB0751E97DEA9008A67E6 /* libSyncTelemetry.a */; };
+		C82A94F2269F68ED00624AA7 /* FeatureFlagsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82A94E6269CB77F00624AA7 /* FeatureFlagsManager.swift */; };
+		C82A94F3269F68F300624AA7 /* FlaggableFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82A94E4269CB77500624AA7 /* FlaggableFeature.swift */; };
 		C82CDD47233E8996002E2743 /* Tab+ChangeUserAgent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82CDD45233E8996002E2743 /* Tab+ChangeUserAgent.swift */; };
 		C8340BE824EC69EE00FE91A6 /* ASNUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C8340B7424EC69EE00FE91A6 /* ASNUtils.m */; };
 		C8340BEA24EC69EE00FE91A6 /* CHMutableNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = C8340B7624EC69EE00FE91A6 /* CHMutableNumber.m */; };
@@ -2879,6 +2881,8 @@
 		C8163850268A0899004C7160 /* AddCredentialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCredentialViewController.swift; sourceTree = "<group>"; };
 		C817B34C1FC609500086018E /* UIScrollViewSwizzled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScrollViewSwizzled.swift; sourceTree = "<group>"; };
 		C81AC6B526160091007800C5 /* TabTrayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayViewModel.swift; sourceTree = "<group>"; };
+		C82A94E4269CB77500624AA7 /* FlaggableFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlaggableFeature.swift; sourceTree = "<group>"; };
+		C82A94E6269CB77F00624AA7 /* FeatureFlagsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagsManager.swift; sourceTree = "<group>"; };
 		C82CDD45233E8996002E2743 /* Tab+ChangeUserAgent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Tab+ChangeUserAgent.swift"; sourceTree = "<group>"; };
 		C8340B7324EC69EE00FE91A6 /* CHNumber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHNumber.h; sourceTree = "<group>"; };
 		C8340B7424EC69EE00FE91A6 /* ASNUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASNUtils.m; sourceTree = "<group>"; };
@@ -4966,6 +4970,15 @@
 			path = Menu;
 			sourceTree = "<group>";
 		};
+		C82A94E3269CB74500624AA7 /* FeatureFlags */ = {
+			isa = PBXGroup;
+			children = (
+				C82A94E6269CB77F00624AA7 /* FeatureFlagsManager.swift */,
+				C82A94E4269CB77500624AA7 /* FlaggableFeature.swift */,
+			);
+			path = FeatureFlags;
+			sourceTree = "<group>";
+		};
 		C8340B7224EC69EE00FE91A6 /* FxA */ = {
 			isa = PBXGroup;
 			children = (
@@ -5510,64 +5523,64 @@
 		E4E0BB141AFBC9E4008D6260 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				064741F8AE308A64808E6265 /* Shared.strings */,
-				67AF4B8392ADBAA41F1B3AD0 /* HistoryPanel.strings */,
-				9403451493EE3ADAAEFA2EB1 /* Storage.strings */,
-				AA3047F884B6BA22989FD627 /* Search.strings */,
-				21374EEAA2C69079F77A0AC3 /* Today.strings */,
-				05014FF0A3822CA5C103E9C9 /* Menu.strings */,
-				32484895B328A342AED539C8 /* AuthenticationManager.strings */,
-				968645798276FD71A15F01E5 /* Default Browser.strings */,
-				8DFA42FBB7C25AC38ACEEA0D /* PrivateBrowsing.strings */,
-				7401461DBA6DB88F82931350 /* Localizable.strings */,
-				4822451299E114F04F3EFAB0 /* ClearHistoryConfirm.strings */,
-				99C54F4F8354A39A0F06511F /* Intro.strings */,
 				514A4C83AE17612AF3025498 /* 3DTouchActions.strings */,
-				F0D8481DAC1E6378ABF1565A /* ClearPrivateDataConfirm.strings */,
-				99C94644BBAAC6B90043899F /* LoginManager.strings */,
-				58E14A8F991610DB13A9F1E1 /* ClearPrivateData.strings */,
-				AC44428AA48BA072E576E062 /* FindInPage.strings */,
-				904F48CABE595981535FCCEB /* ErrorPages.strings */,
-				43B137F123A181A200CB7FA0 /* NSUserDefaultsPrefs.swift */,
-				C8CFF4E322F9FDB5002CC6BD /* effective_tld_names.swift */,
-				D35210E01CB2F16600FC5DCB /* Strings.swift */,
-				E650756F1E37F7AB006961AC /* Extensions */,
-				E4E0BB161AFBC9E4008D6260 /* Supporting Files */,
 				E65075621E37F7AB006961AC /* Accessibility.swift */,
 				EB7FFFBF20A9D38C003E1E34 /* AlertController.swift */,
 				E65075631E37F7AB006961AC /* AppConstants.swift */,
 				E65075641E37F7AB006961AC /* AppInfo.swift */,
-				E65075651E37F7AB006961AC /* GeneralUtils.swift */,
 				E65075661E37F7AB006961AC /* AsyncReducer.swift */,
 				E65075671E37F7AB006961AC /* AuthenticationKeychainInfo.swift */,
+				32484895B328A342AED539C8 /* AuthenticationManager.strings */,
 				E65075681E37F7AB006961AC /* Bytes.swift */,
 				E65075691E37F7AB006961AC /* Cancellable.swift */,
+				4822451299E114F04F3EFAB0 /* ClearHistoryConfirm.strings */,
+				58E14A8F991610DB13A9F1E1 /* ClearPrivateData.strings */,
+				F0D8481DAC1E6378ABF1565A /* ClearPrivateDataConfirm.strings */,
 				E650756A1E37F7AB006961AC /* CrashSimulator.h */,
 				E650756B1E37F7AB006961AC /* CrashSimulator.m */,
 				D03DCD94211B63D000151ACA /* DateGroupedTableData.swift */,
+				968645798276FD71A15F01E5 /* Default Browser.strings */,
 				E650756C1E37F7AB006961AC /* DeferredUtils.swift */,
 				E650756D1E37F7AB006961AC /* DeviceInfo.swift */,
+				C8CFF4E322F9FDB5002CC6BD /* effective_tld_names.swift */,
+				904F48CABE595981535FCCEB /* ErrorPages.strings */,
+				E650756F1E37F7AB006961AC /* Extensions */,
 				3964B0991EA8F06F00F2EEF4 /* FeatureSwitch.swift */,
+				AC44428AA48BA072E576E062 /* FindInPage.strings */,
 				E65075811E37F7AB006961AC /* FSUtils.h */,
 				E65075821E37F7AB006961AC /* FSUtils.m */,
 				E65075831E37F7AB006961AC /* Functions.swift */,
+				E65075651E37F7AB006961AC /* GeneralUtils.swift */,
+				67AF4B8392ADBAA41F1B3AD0 /* HistoryPanel.strings */,
+				99C54F4F8354A39A0F06511F /* Intro.strings */,
 				E65075841E37F7AB006961AC /* KeyboardHelper.swift */,
 				E65075851E37F7AB006961AC /* KeychainCache.swift */,
 				D053D6732211CD53006C6B64 /* KeychainStore.swift */,
 				E65075861E37F7AB006961AC /* LaunchArguments.swift */,
 				E65075871E37F7AB006961AC /* Loader.swift */,
+				7401461DBA6DB88F82931350 /* Localizable.strings */,
 				E65075881E37F7AB006961AC /* Logger.swift */,
+				99C94644BBAAC6B90043899F /* LoginManager.strings */,
+				05014FF0A3822CA5C103E9C9 /* Menu.strings */,
+				C8DFFE482294AAB600296DB1 /* NetworkUtils.swift */,
 				E65075891E37F7AB006961AC /* NotificationConstants.swift */,
+				43B137F123A181A200CB7FA0 /* NSUserDefaultsPrefs.swift */,
 				E650758B1E37F7AB006961AC /* Prefs.swift */,
+				8DFA42FBB7C25AC38ACEEA0D /* PrivateBrowsing.strings */,
 				CE7F115E1F3CCEF900ABFC0B /* RemoteDevices.swift */,
 				E650758C1E37F7AB006961AC /* RollingFileLogger.swift */,
+				AA3047F884B6BA22989FD627 /* Search.strings */,
 				D02818601EF056C800240CAA /* SentryIntegration.swift */,
+				064741F8AE308A64808E6265 /* Shared.strings */,
+				9403451493EE3ADAAEFA2EB1 /* Storage.strings */,
+				D35210E01CB2F16600FC5DCB /* Strings.swift */,
+				E4E0BB161AFBC9E4008D6260 /* Supporting Files */,
 				E650758D1E37F7AB006961AC /* SupportUtils.swift */,
 				E650758E1E37F7AB006961AC /* SystemUtils.swift */,
 				E650758F1E37F7AB006961AC /* TimeConstants.swift */,
+				21374EEAA2C69079F77A0AC3 /* Today.strings */,
 				E65075901E37F7AB006961AC /* UserAgent.swift */,
 				E65075911E37F7AB006961AC /* WeakList.swift */,
-				C8DFFE482294AAB600296DB1 /* NetworkUtils.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -5950,6 +5963,7 @@
 				E689C6FF1E0C716F008BAADB /* Entitlements */,
 				39EF434C260A736D0011E22E /* Experiments */,
 				28EADE5C1AFC3A6D007FB2FB /* Extensions */,
+				C82A94E3269CB74500624AA7 /* FeatureFlags */,
 				F84B21F11A0910F600AAB793 /* Frontend */,
 				39A359BD1BFCCE7B006B9E87 /* Helpers */,
 				434F97F124196B4200812FDF /* UserResearch */,
@@ -7777,6 +7791,7 @@
 				EBB89509219398E500EB91A0 /* TabContentBlocker+ContentScript.swift in Sources */,
 				D3BE7B461B054F8600641031 /* TestAppDelegate.swift in Sources */,
 				23D57E6E25ED6F2700883FAD /* SearchViewController.swift in Sources */,
+				C82A94F2269F68ED00624AA7 /* FeatureFlagsManager.swift in Sources */,
 				3BB50E111D6274CD004B33DF /* FirefoxHomeTopSitesCell.swift in Sources */,
 				048B4C8624A53F3E001B56E8 /* TodayUX.swift in Sources */,
 				43AB6FA525DC53D30016B015 /* ASLibraryCell.swift in Sources */,
@@ -7902,6 +7917,7 @@
 				C8FB0C75232151BA00031088 /* AppMenu.swift in Sources */,
 				C8E2E80E23D20FD2005AACE6 /* FxAWebViewController.swift in Sources */,
 				3BB50E201D627539004B33DF /* FirefoxHomeViewController.swift in Sources */,
+				C82A94F3269F68F300624AA7 /* FlaggableFeature.swift in Sources */,
 				F84B22241A09122500AAB793 /* LibraryViewController.swift in Sources */,
 				39455F771FC83F430088A22C /* TabEventHandler.swift in Sources */,
 				E47616C71AB74CA600E7DD25 /* ReaderModeBarView.swift in Sources */,

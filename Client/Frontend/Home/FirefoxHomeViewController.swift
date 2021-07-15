@@ -124,7 +124,7 @@ extension HomePanelContextMenu {
 
 // MARK: - HomeVC
 
-class FirefoxHomeViewController: UICollectionViewController, HomePanel {
+class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureFlagsProtocol {
     weak var homePanelDelegate: HomePanelDelegate?
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     fileprivate let profile: Profile
@@ -161,7 +161,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     var hasReadingListitems = false
     var isRecentlySavedSectionEnabled: Bool {
         get {
-            guard AppConstants.IS_RECENTLY_SAVED_SECTION_ENABLED else { return false }
+            guard featureFlags.isFeatureActive(.recentlySaved) else { return false }
             
             return (hasRecentBookmarks || hasReadingListitems)
                 && profile.prefs.boolForKey(PrefsKeys.recentlySavedSectionEnabled) ?? false

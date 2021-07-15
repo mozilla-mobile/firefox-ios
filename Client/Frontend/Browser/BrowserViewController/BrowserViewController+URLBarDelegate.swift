@@ -27,7 +27,7 @@ class DismissableNavigationViewController: UINavigationController, OnViewDismiss
     }
 }
 
-extension BrowserViewController: URLBarDelegate {
+extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
     func showTabTray() {
         Sentry.shared.clearBreadcrumbs()
 
@@ -94,7 +94,7 @@ extension BrowserViewController: URLBarDelegate {
                 shouldShowChronTabs = chronDebugValue!
             // Respect build channel based settings
             } else if chronDebugValue == nil {
-                if AppConstants.CHRONOLOGICAL_TABS {
+                if featureFlags.isFeatureActive(.chronologicalTabs) {
                     shouldShowChronTabs = true
                 } else {
                     // Respect LP value
