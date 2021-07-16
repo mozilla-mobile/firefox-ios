@@ -150,7 +150,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         self.navDelegate = TabManagerNavDelegate()
         self.tabEventHandlers = TabEventHandlers.create(with: profile.prefs)
 
-        self.store = TabManagerStore(imageStore: imageStore)
+        self.store = TabManagerStore(imageStore: imageStore, prefs: profile.prefs)
         super.init()
 
         register(self, forTabEvents: .didLoadFavicon)
