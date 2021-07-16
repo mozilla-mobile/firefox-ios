@@ -179,7 +179,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
 
     init(profile: Profile, experiments: NimbusApi = Experiments.shared) {
         self.profile = profile
-        self.experiments = experiments
         super.init(collectionViewLayout: flowLayout)
         self.collectionView?.delegate = self
         self.collectionView?.dataSource = self
