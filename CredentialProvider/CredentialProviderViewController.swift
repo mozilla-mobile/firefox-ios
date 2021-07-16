@@ -65,7 +65,6 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
      by completing the extension request with the associated ASPasswordCredential.
      */
     override func prepareInterfaceToProvideCredential(for credentialIdentity: ASPasswordCredentialIdentity) {
-        self.presenter?.prepareAuthentication(for: credentialIdentity)
     }
     
     /*

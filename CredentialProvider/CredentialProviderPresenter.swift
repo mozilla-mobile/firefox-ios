@@ -100,9 +100,6 @@ class CredentialProviderPresenter {
                 }
             })
     }
-    
-
-    func prepareAuthentication(for credentialIdentity: ASPasswordCredentialIdentity) { }
 }
 
 @available(iOS 12, *)
