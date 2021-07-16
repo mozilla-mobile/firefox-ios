@@ -18,7 +18,6 @@ protocol CredentialProviderViewProtocol: AnyObject, AlertControllerView {
 }
 
 class CredentialProviderViewController: ASCredentialProviderViewController {
-    
     private var presenter: CredentialProviderPresenter?
     
     required init?(coder aDecoder: NSCoder) {
