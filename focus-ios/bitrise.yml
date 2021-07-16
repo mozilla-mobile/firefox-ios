@@ -329,6 +329,60 @@ workflows:
         stack: osx-xcode-12.5.x
         machine_type_id: g2.8core
 
+  L10nScreenshotsTests:
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@4: {}
+    - cache-pull@2: {}
+    - certificate-and-profile-installer@1: {}
+    - script@1:
+        title: Set Default Web Browser Entitlement
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Focus.entitlements
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Klar.entitlements
+    - script@1:
+        inputs:
+        - content: >-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+            curl --location --retry 5 --output l10n-screenshots-dd.zip
+            "$MOZ_DERIVED_DATA_PATH"
+            mkdir l10n-screenshots-dd
+            unzip l10n-screenshots-dd.zip -d l10n-screenshots-dd
+            rm l10n-screenshots-dd.zip
+        title: Download derived data path
+    - script@1:
+        title: Generate screenshots
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+            ./screenshots.sh --test-without-building $MOZ_LOCALES
+            mkdir -p artifacts
+            for locale in $(echo $MOZ_LOCALES); do
+              for product in Focus Klar; do
+                zip -9 -j "$locale-$product.zip" "l10n-screenshots/$product/$locale/"*
+                mv "$locale-$product.zip" artifacts/
+              done
+            done
+    - deploy-to-bitrise-io@1.10:
+        inputs:
+        - deploy_path: artifacts/
+        - is_compress: 'true'
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.5.x
+        machine_type_id: standard
   L10nBuild:
     steps:
     - activate-ssh-key@4:
@@ -357,7 +411,6 @@ workflows:
             #!/usr/bin/env bash
             set -x
             ./screenshots.sh en-US
-
     - deploy-to-bitrise-io@1.10:
         inputs:
         - deploy_path: screenshots-derived-data/
@@ -369,7 +422,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
-        machine_type_id: standard
+        machine_type_id: g2.4core
 
 app:
   envs:
