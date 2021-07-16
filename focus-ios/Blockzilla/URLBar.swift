@@ -862,6 +862,10 @@ extension URLBar: AutocompleteTextFieldDelegate {
 
     func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didTextChange text: String) {
         userInputText = text
+        
+        if !text.isEmpty {
+            displayClearButton(shouldDisplay: true, animated: true)
+        }
 
         autocompleteTextField.rightView?.isHidden = text.isEmpty
 
