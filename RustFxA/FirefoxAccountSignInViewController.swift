@@ -27,7 +27,7 @@ class FirefoxAccountSignInViewController: UIViewController {
         label.textAlignment = .center
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.text = Strings.FxASignin_Subtitle
+        label.text = .FxASignin_Subtitle
         label.font = DynamicFontHelper().LargeSizeHeavyFontAS
         return label
     }()
@@ -51,7 +51,7 @@ class FirefoxAccountSignInViewController: UIViewController {
             manager.getPairingAuthorityURL { result in
                 guard let url = try? result.get(), let host = url.host else { return }
                 let shortUrl = host + url.path // "firefox.com" + "/pair"
-                let msg = Strings.FxASignin_QRInstructions.replaceFirstOccurrence(of: placeholder, with: shortUrl)
+                let msg = String.FxASignin_QRInstructions.replaceFirstOccurrence(of: placeholder, with: shortUrl)
                 label.attributedText = msg.attributedText(boldString: shortUrl, font: DynamicFontHelper().MediumSizeRegularWeightAS)
             }
         }
@@ -66,7 +66,7 @@ class FirefoxAccountSignInViewController: UIViewController {
         button.setImage(UIImage(named: "qr-code-icon-white")?.tinted(withColor: .white), for: .normal)
         button.setImage(UIImage(named: "qr-code-icon-white")?.tinted(withColor: .white), for: .highlighted)
         let imageWidth = button.imageView?.frame.width ?? 0.0
-        button.setTitle(Strings.FxASignin_QRScanSignin, for: .normal)
+        button.setTitle(.FxASignin_QRScanSignin, for: .normal)
         button.accessibilityIdentifier = "QRCodeSignIn.button"
         button.titleLabel?.font = DynamicFontHelper().MediumSizeBoldFontAS
         button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
@@ -81,7 +81,7 @@ class FirefoxAccountSignInViewController: UIViewController {
         button.layer.borderColor = UIColor.Photon.Grey30.cgColor
         button.layer.borderWidth = 1
         button.layer.cornerRadius = 8
-        button.setTitle(Strings.FxASignin_EmailSignin, for: .normal)
+        button.setTitle(.FxASignin_EmailSignin, for: .normal)
         button.accessibilityIdentifier = "EmailSignIn.button"
         button.addTarget(self, action: #selector(emailLoginTapped), for: .touchUpInside)
         button.titleLabel?.font = DynamicFontHelper().MediumSizeBoldFontAS
@@ -134,7 +134,7 @@ class FirefoxAccountSignInViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        title = Strings.FxASignin_Title
+        title = .FxASignin_Title
         accessibilityLabel = "FxASingin.navBar"
         addSubviews()
         addViewConstraints()

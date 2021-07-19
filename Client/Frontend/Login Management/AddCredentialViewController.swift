@@ -39,7 +39,7 @@ class AddCredentialViewController: UIViewController {
     
     fileprivate lazy var cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
     fileprivate lazy var saveButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(title: Strings.SettingsAddCustomEngineSaveButtonText, style: .done, target: self, action: #selector(addCredential))
+        let button = UIBarButtonItem(title: .SettingsAddCustomEngineSaveButtonText, style: .done, target: self, action: #selector(addCredential))
         button.isEnabled = false
         return button
     }()

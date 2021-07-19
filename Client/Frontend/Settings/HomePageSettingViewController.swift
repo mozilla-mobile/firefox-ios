@@ -15,7 +15,7 @@ class HomePageSettingViewController: SettingsTableViewController {
         self.prefs = prefs
         super.init(style: .grouped)
 
-        self.title = Strings.AppMenuOpenHomePageTitleString
+        self.title = .AppMenuOpenHomePageTitleString
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -32,24 +32,24 @@ class HomePageSettingViewController: SettingsTableViewController {
             self.tableView.reloadData()
         }
 
-        let showTopSites = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabTopSites), subtitle: nil, accessibilityIdentifier: "HomeAsFirefoxHome", isChecked: {return self.currentChoice == NewTabPage.topSites}, onChecked: {
+        let showTopSites = CheckmarkSetting(title: NSAttributedString(string: .SettingsNewTabTopSites), subtitle: nil, accessibilityIdentifier: "HomeAsFirefoxHome", isChecked: {return self.currentChoice == NewTabPage.topSites}, onChecked: {
             self.currentChoice = NewTabPage.topSites
             onFinished()
         })
-        let showWebPage = WebPageSetting(prefs: prefs, prefKey: PrefsKeys.HomeButtonHomePageURL, defaultValue: nil, placeholder: Strings.CustomNewPageURL, accessibilityIdentifier: "HomeAsCustomURL", isChecked: {return !showTopSites.isChecked()}, settingDidChange: { (string) in
+        let showWebPage = WebPageSetting(prefs: prefs, prefKey: PrefsKeys.HomeButtonHomePageURL, defaultValue: nil, placeholder: .CustomNewPageURL, accessibilityIdentifier: "HomeAsCustomURL", isChecked: {return !showTopSites.isChecked()}, settingDidChange: { (string) in
             self.currentChoice = NewTabPage.homePage
             self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
             self.tableView.reloadData()
         })
         showWebPage.textField.textAlignment = .natural
 
-        let section = SettingSection(title: NSAttributedString(string: Strings.NewTabSectionName), footerTitle: NSAttributedString(string: Strings.NewTabSectionNameFooter), children: [showTopSites, showWebPage])
+        let section = SettingSection(title: NSAttributedString(string: .NewTabSectionName), footerTitle: NSAttributedString(string: .NewTabSectionNameFooter), children: [showTopSites, showWebPage])
 
-        let topsitesSection = SettingSection(title: NSAttributedString(string: Strings.SettingsTopSitesCustomizeTitle), footerTitle: NSAttributedString(string: Strings.SettingsTopSitesCustomizeFooter), children: [TopSitesSettings(settings: self)])
+        let topsitesSection = SettingSection(title: NSAttributedString(string: .SettingsTopSitesCustomizeTitle), footerTitle: NSAttributedString(string: .SettingsTopSitesCustomizeFooter), children: [TopSitesSettings(settings: self)])
 
         let isPocketEnabledDefault = Pocket.IslocaleSupported(Locale.current.identifier)
-        let pocketSetting = BoolSetting(prefs: profile.prefs, prefKey: PrefsKeys.ASPocketStoriesVisible, defaultValue: isPocketEnabledDefault, attributedTitleText: NSAttributedString(string: Strings.SettingsNewTabPocket))
-        let pocketSection = SettingSection(title: NSAttributedString(string: Strings.SettingsNewTabASTitle), footerTitle: NSAttributedString(string: Strings.SettingsNewTabPocketFooter), children: [pocketSetting])
+        let pocketSetting = BoolSetting(prefs: profile.prefs, prefKey: PrefsKeys.ASPocketStoriesVisible, defaultValue: isPocketEnabledDefault, attributedTitleText: NSAttributedString(string: .SettingsNewTabPocket))
+        let pocketSection = SettingSection(title: NSAttributedString(string: .SettingsNewTabASTitle), footerTitle: NSAttributedString(string: .SettingsNewTabPocketFooter), children: [pocketSetting])
         return [section, topsitesSection, pocketSection]
     }
 
@@ -69,7 +69,7 @@ class HomePageSettingViewController: SettingsTableViewController {
         override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
         override var status: NSAttributedString {
             let num = self.profile.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? TopSitesRowCountSettingsController.defaultNumberOfRows
-            return NSAttributedString(string: String(format: Strings.TopSitesRowCount, num))
+            return NSAttributedString(string: String(format: .TopSitesRowCount, num))
         }
 
         override var accessibilityIdentifier: String? { return "TopSitesRows" }
@@ -77,7 +77,7 @@ class HomePageSettingViewController: SettingsTableViewController {
 
         init(settings: SettingsTableViewController) {
             self.profile = settings.profile
-            super.init(title: NSAttributedString(string: Strings.ASTopSitesTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
+            super.init(title: NSAttributedString(string: .ASTopSitesTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
         }
 
         override func onClick(_ navigationController: UINavigationController?) {
@@ -97,7 +97,7 @@ class TopSitesRowCountSettingsController: SettingsTableViewController {
         self.prefs = prefs
         numberOfRows = self.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? TopSitesRowCountSettingsController.defaultNumberOfRows
         super.init(style: .grouped)
-        self.title = Strings.AppMenuTopSitesTitleString
+        self.title = .AppMenuTopSitesTitleString
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -115,7 +115,7 @@ class TopSitesRowCountSettingsController: SettingsTableViewController {
         }
 
         let rows = [1, 2, 3, 4].map(createSetting)
-        let section = SettingSection(title: NSAttributedString(string: Strings.TopSitesRowSettingFooter), footerTitle: nil, children: rows)
+        let section = SettingSection(title: NSAttributedString(string: .TopSitesRowSettingFooter), footerTitle: nil, children: rows)
         return [section]
     }
 }

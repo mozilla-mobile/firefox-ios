@@ -53,8 +53,8 @@ enum TabDisplaySection: Int, CaseIterable {
 
     var title: String? {
         switch self {
-        case .regularTabs: return Strings.ASPocketTitle2
-        case .inactiveTabs: return Strings.RecentlySavedSectionTitle
+        case .regularTabs: return .ASPocketTitle2
+        case .inactiveTabs: return .RecentlySavedSectionTitle
         }
     }
     

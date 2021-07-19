@@ -54,7 +54,7 @@ class ThemeSettingsController: ThemedTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = Strings.SettingsDisplayThemeTitle
+        title = .SettingsDisplayThemeTitle
         tableView.accessibilityIdentifier = "DisplayTheme.Setting.Options"
         tableView.backgroundColor = UIColor.theme.tableView.headerBackground
 
@@ -75,11 +75,11 @@ class ThemeSettingsController: ThemedTableViewController {
         headerView.titleLabel.text = {
             switch section {
             case .systemTheme:
-                return Strings.SystemThemeSectionHeader
+                return .SystemThemeSectionHeader
             case .automaticBrightness:
-                return Strings.ThemeSwitchModeSectionHeader
+                return .ThemeSwitchModeSectionHeader
             case .lightDarkPicker:
-                return isAutoBrightnessOn ? Strings.DisplayThemeBrightnessThresholdSectionHeader : Strings.ThemePickerSectionHeader
+                return isAutoBrightnessOn ? .DisplayThemeBrightnessThresholdSectionHeader : .ThemePickerSectionHeader
             }
         }()
         headerView.titleLabel.text = headerView.titleLabel.text?.uppercased()
@@ -93,7 +93,7 @@ class ThemeSettingsController: ThemedTableViewController {
         let footer = UIView()
         let label = UILabel()
         footer.addSubview(label)
-        label.text = Strings.DisplayThemeSectionFooter
+        label.text = .DisplayThemeSectionFooter
         label.numberOfLines = 0
         label.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(4)
@@ -173,7 +173,7 @@ class ThemeSettingsController: ThemedTableViewController {
         let section = Section(rawValue: indexPath.section) ?? .automaticBrightness
         switch section {
         case .systemTheme:
-            cell.textLabel?.text = Strings.SystemThemeSectionSwitchTitle
+            cell.textLabel?.text = .SystemThemeSectionSwitchTitle
             cell.textLabel?.numberOfLines = 0
             cell.textLabel?.lineBreakMode = .byWordWrapping
 
@@ -186,11 +186,11 @@ class ThemeSettingsController: ThemedTableViewController {
             cell.accessoryView = control
         case .automaticBrightness:
             if indexPath.row == 0 {
-                cell.textLabel?.text = Strings.DisplayThemeManualSwitchTitle
-                cell.detailTextLabel?.text = Strings.DisplayThemeManualSwitchSubtitle
+                cell.textLabel?.text = .DisplayThemeManualSwitchTitle
+                cell.detailTextLabel?.text = .DisplayThemeManualSwitchSubtitle
             } else {
-                cell.textLabel?.text = Strings.DisplayThemeAutomaticSwitchTitle
-                cell.detailTextLabel?.text = Strings.DisplayThemeAutomaticSwitchSubtitle
+                cell.textLabel?.text = .DisplayThemeAutomaticSwitchTitle
+                cell.detailTextLabel?.text = .DisplayThemeAutomaticSwitchSubtitle
             }
             cell.detailTextLabel?.numberOfLines = 2
             cell.detailTextLabel?.minimumScaleFactor = 0.5
@@ -217,9 +217,9 @@ class ThemeSettingsController: ThemedTableViewController {
                 self.slider = (slider, deviceBrightnessIndicator)
             } else {
                 if indexPath.row == 0 {
-                    cell.textLabel?.text = Strings.DisplayThemeOptionLight
+                    cell.textLabel?.text = .DisplayThemeOptionLight
                 } else {
-                    cell.textLabel?.text = Strings.DisplayThemeOptionDark
+                    cell.textLabel?.text = .DisplayThemeOptionDark
                 }
 
                 let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal

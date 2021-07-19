@@ -260,7 +260,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
 
         let welcomeLabel = UILabel()
         overlayView.addSubview(welcomeLabel)
-        welcomeLabel.text = Strings.DownloadsPanelEmptyStateTitle
+        welcomeLabel.text = .DownloadsPanelEmptyStateTitle
         welcomeLabel.textAlignment = .center
         welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontLight
         welcomeLabel.textColor = UIColor.theme.homePanel.welcomeScreenText
@@ -307,13 +307,13 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
 
         switch section {
         case 0:
-            header?.textLabel?.text = Strings.TableDateSectionTitleToday
+            header?.textLabel?.text = .TableDateSectionTitleToday
         case 1:
-            header?.textLabel?.text = Strings.TableDateSectionTitleYesterday
+            header?.textLabel?.text = .TableDateSectionTitleYesterday
         case 2:
-            header?.textLabel?.text = Strings.TableDateSectionTitleLastWeek
+            header?.textLabel?.text = .TableDateSectionTitleLastWeek
         case 3:
-            header?.textLabel?.text = Strings.TableDateSectionTitleLastMonth
+            header?.textLabel?.text = .TableDateSectionTitleLastMonth
         default:
             assertionFailure("Invalid Downloads section \(section)")
         }
@@ -375,8 +375,8 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let deleteTitle = Strings.DownloadsPanelDeleteTitle
-        let shareTitle = Strings.DownloadsPanelShareTitle
+        let deleteTitle = String.DownloadsPanelDeleteTitle
+        let shareTitle = String.DownloadsPanelShareTitle
         let delete = UITableViewRowAction(style: .destructive, title: deleteTitle, handler: { (action, indexPath) in
             if let downloadedFile = self.downloadedFileForIndexPath(indexPath) {
                 if self.deleteDownloadedFile(downloadedFile) {

@@ -104,14 +104,14 @@ class UpdateViewController: UIViewController {
     }()
     private var doneButton: UIButton = {
         let button = UIButton()
-        button.setTitle(Strings.SettingsSearchDoneButton, for: .normal)
+        button.setTitle(.SettingsSearchDoneButton, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .regular)
         button.setTitleColor(UIColor.systemBlue, for: .normal)
         return button
     }()
     private lazy var startBrowsingButton: UIButton = {
         let button = UIButton()
-        button.setTitle(Strings.StartBrowsingButtonTitle, for: .normal)
+        button.setTitle(.StartBrowsingButtonTitle, for: .normal)
         button.titleLabel?.font = UpdateViewControllerUX.StartBrowsingButton.font
         button.layer.cornerRadius = UpdateViewControllerUX.StartBrowsingButton.cornerRadius
         button.setTitleColor(.white, for: .normal)

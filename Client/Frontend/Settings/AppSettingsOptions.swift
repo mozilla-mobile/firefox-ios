@@ -41,7 +41,7 @@ class ConnectSetting: WithoutAccountSetting {
     override var accessoryView: UIImageView? { return disclosureIndicator }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: Strings.FxASignInToSync, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: .FxASignInToSync, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override var accessibilityIdentifier: String? { return "SignInToSync" }
@@ -87,7 +87,7 @@ class SyncNowSetting: WithAccountSetting {
     fileprivate var syncNowTitle: NSAttributedString {
         if !DeviceInfo.hasConnectivity() {
             return NSAttributedString(
-                string: Strings.FxANoInternetConnection,
+                string: .FxANoInternetConnection,
                 attributes: [
                     NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.errorText,
                     NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultMediumFont
@@ -96,7 +96,7 @@ class SyncNowSetting: WithAccountSetting {
         }
 
         return NSAttributedString(
-            string: Strings.FxASyncNow,
+            string: .FxASyncNow,
             attributes: [
                 NSAttributedString.Key.foregroundColor: self.enabled ? UIColor.theme.tableView.syncText : UIColor.theme.tableView.headerTextLight,
                 NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFont
@@ -104,7 +104,7 @@ class SyncNowSetting: WithAccountSetting {
         )
     }
 
-    fileprivate let syncingTitle = NSAttributedString(string: Strings.SyncingMessageWithEllipsis, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.syncText, NSAttributedString.Key.font: UIFont.systemFont(ofSize: DynamicFontHelper.defaultHelper.DefaultStandardFontSize, weight: UIFont.Weight.regular)])
+    fileprivate let syncingTitle = NSAttributedString(string: .SyncingMessageWithEllipsis, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.syncText, NSAttributedString.Key.font: UIFont.systemFont(ofSize: DynamicFontHelper.defaultHelper.DefaultStandardFontSize, weight: UIFont.Weight.regular)])
 
     func startRotateSyncIcon() {
         DispatchQueue.main.async {
@@ -180,7 +180,7 @@ class SyncNowSetting: WithAccountSetting {
 
     fileprivate lazy var troubleshootButton: UIButton = {
         let troubleshootButton = UIButton(type: .roundedRect)
-        troubleshootButton.setTitle(Strings.FirefoxSyncTroubleshootTitle, for: .normal)
+        troubleshootButton.setTitle(.FirefoxSyncTroubleshootTitle, for: .normal)
         troubleshootButton.addTarget(self, action: #selector(self.troubleshoot), for: .touchUpInside)
         troubleshootButton.tintColor = UIColor.theme.tableView.rowActionAccessory
         troubleshootButton.titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultSmallFont
@@ -325,7 +325,7 @@ class AccountStatusSetting: WithAccountSetting {
 
     override var status: NSAttributedString? {
         if RustFirefoxAccounts.shared.isActionNeeded {
-            let string = Strings.FxAAccountVerifyPassword
+            let string = String.FxAAccountVerifyPassword
             let orange = UIColor.theme.tableView.warningText
             let range = NSRange(location: 0, length: string.count)
             let attrs = [NSAttributedString.Key.foregroundColor: orange]
@@ -503,7 +503,7 @@ class SentryIDSetting: HiddenSetting {
     }
 
     func copyAppDeviceIDAndPresentAlert(by navigationController: UINavigationController?) {
-        let alertTitle = Strings.SettingsCopyAppVersionAlertTitle
+        let alertTitle = String.SettingsCopyAppVersionAlertTitle
         let alert = AlertController(title: alertTitle, message: nil, preferredStyle: .alert)
         getSelectedCell(by: navigationController)?.setSelected(false, animated: true)
         UIPasteboard.general.string = deviceAppHash
@@ -683,7 +683,7 @@ class VersionSetting: Setting {
     }
 
     func copyAppVersionAndPresentAlert(by navigationController: UINavigationController?) {
-        let alertTitle = Strings.SettingsCopyAppVersionAlertTitle
+        let alertTitle = String.SettingsCopyAppVersionAlertTitle
         let alert = AlertController(title: alertTitle, message: nil, preferredStyle: .alert)
         getSelectedCell(by: navigationController)?.setSelected(false, animated: true)
         UIPasteboard.general.string = self.title?.string
@@ -768,13 +768,13 @@ class SendFeedbackSetting: Setting {
 class SendAnonymousUsageDataSetting: BoolSetting {
     init(prefs: Prefs, delegate: SettingsDelegate?) {
         let statusText = NSMutableAttributedString()
-        statusText.append(NSAttributedString(string: Strings.SendUsageSettingMessage, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.headerTextLight]))
+        statusText.append(NSAttributedString(string: .SendUsageSettingMessage, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.headerTextLight]))
         statusText.append(NSAttributedString(string: " "))
-        statusText.append(NSAttributedString(string: Strings.SendUsageSettingLink, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.general.highlightBlue]))
+        statusText.append(NSAttributedString(string: .SendUsageSettingLink, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.general.highlightBlue]))
 
         super.init(
             prefs: prefs, prefKey: AppConstants.PrefSendUsageData, defaultValue: true,
-            attributedTitleText: NSAttributedString(string: Strings.SendUsageSettingTitle),
+            attributedTitleText: NSAttributedString(string: .SendUsageSettingTitle),
             attributedStatusText: statusText,
             settingDidChange: {
                 Glean.shared.setUploadEnabled($0)
@@ -797,16 +797,16 @@ class SendAnonymousUsageDataSetting: BoolSetting {
 class StudiesToggleSetting: BoolSetting {
     init(prefs: Prefs, delegate: SettingsDelegate?) {
         let statusText = NSMutableAttributedString()
-        statusText.append(NSAttributedString(string: Strings.SettingsStudiesToggleMessage, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.headerTextLight]))
+        statusText.append(NSAttributedString(string: .SettingsStudiesToggleMessage, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.headerTextLight]))
         // Temporarily removing this until we get a SUMO article up for this setting.
         // https://github.com/mozilla-mobile/firefox-ios/issues/8241
         //
         // statusText.append(NSAttributedString(string: " "))
-        // statusText.append(NSAttributedString(string: Strings.SettingsStudiesToggleLink, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.general.highlightBlue]))
+        // statusText.append(NSAttributedString(string: .SettingsStudiesToggleLink, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.general.highlightBlue]))
 
         super.init(
             prefs: prefs, prefKey: AppConstants.PrefStudiesToggle, defaultValue: true,
-            attributedTitleText: NSAttributedString(string: Strings.SettingsStudiesToggleTitle),
+            attributedTitleText: NSAttributedString(string: .SettingsStudiesToggleTitle),
             attributedStatusText: statusText,
             settingDidChange: { enabled in
                 Experiments.shared.globalUserParticipation = enabled
@@ -885,7 +885,7 @@ class LoginsSetting: Setting {
         self.navigationController = settings.navigationController
         self.settings = settings as? AppSettingsTableViewController
         
-        super.init(title: NSAttributedString(string: Strings.LoginsAndPasswordsTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]),
+        super.init(title: NSAttributedString(string: .LoginsAndPasswordsTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]),
                    delegate: delegate)
     }
 
@@ -954,7 +954,7 @@ class ContentBlockerSetting: Setting {
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
         self.tabManager = settings.tabManager
-        super.init(title: NSAttributedString(string: Strings.SettingsTrackingProtectionSectionName, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
+        super.init(title: NSAttributedString(string: .SettingsTrackingProtectionSectionName, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -977,7 +977,7 @@ class ClearPrivateDataSetting: Setting {
         self.profile = settings.profile
         self.tabManager = settings.tabManager
 
-        let clearTitle = Strings.SettingsDataManagementSectionName
+        let clearTitle = String.SettingsDataManagementSectionName
         super.init(title: NSAttributedString(string: clearTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
     }
 
@@ -1047,12 +1047,12 @@ class ChinaSyncServiceSetting: Setting {
 
         let msg = "更改此设置后，再次登录您的帐户" // "Sign-in again to your account after changing this setting"
         let alert = UIAlertController(title: "", message: msg, preferredStyle: .alert)
-        let ok = UIAlertAction(title: Strings.OKString, style: .default) { _ in
+        let ok = UIAlertAction(title: .OKString, style: .default) { _ in
             self.prefs.setObject(toggle.isOn, forKey: self.prefKey)
             self.profile.removeAccount()
             RustFirefoxAccounts.reconfig(prefs: self.profile.prefs)
         }
-        let cancel = UIAlertAction(title: Strings.CancelString, style: .default) { _ in
+        let cancel = UIAlertAction(title: .CancelString, style: .default) { _ in
             toggle.setOn(!toggle.isOn, animated: true)
         }
         alert.addAction(ok)
@@ -1076,7 +1076,7 @@ class NewTabPageSetting: Setting {
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
-        super.init(title: NSAttributedString(string: Strings.SettingsNewTabSectionName, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
+        super.init(title: NSAttributedString(string: .SettingsNewTabSectionName, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -1112,7 +1112,7 @@ class HomeSetting: Setting {
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
 
-        super.init(title: NSAttributedString(string: Strings.AppMenuOpenHomePageTitleString, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
+        super.init(title: NSAttributedString(string: .AppMenuOpenHomePageTitleString, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -1133,7 +1133,7 @@ class SiriPageSetting: Setting {
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
 
-        super.init(title: NSAttributedString(string: Strings.SettingsSiriSectionName, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
+        super.init(title: NSAttributedString(string: .SettingsSiriSectionName, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -1182,7 +1182,7 @@ class OpenWithSetting: Setting {
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
 
-        super.init(title: NSAttributedString(string: Strings.SettingsOpenWithSectionName, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
+        super.init(title: NSAttributedString(string: .SettingsOpenWithSectionName, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -1199,7 +1199,7 @@ class AdvancedAccountSetting: HiddenSetting {
     override var accessibilityIdentifier: String? { return "AdvancedAccount.Setting" }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: Strings.SettingsAdvancedAccountTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: .SettingsAdvancedAccountTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override init(settings: SettingsTableViewController) {
@@ -1226,18 +1226,18 @@ class ThemeSetting: Setting {
 
     override var status: NSAttributedString {
         if ThemeManager.instance.systemThemeIsOn {
-            return NSAttributedString(string: Strings.SystemThemeSectionHeader)
+            return NSAttributedString(string: .SystemThemeSectionHeader)
         } else if !ThemeManager.instance.automaticBrightnessIsOn {
-            return NSAttributedString(string: Strings.DisplayThemeManualStatusLabel)
+            return NSAttributedString(string: .DisplayThemeManualStatusLabel)
         } else if ThemeManager.instance.automaticBrightnessIsOn {
-            return NSAttributedString(string: Strings.DisplayThemeAutomaticStatusLabel)
+            return NSAttributedString(string: .DisplayThemeAutomaticStatusLabel)
         }
         return NSAttributedString(string: "")
     }
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
-        super.init(title: NSAttributedString(string: Strings.SettingsDisplayThemeTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
+        super.init(title: NSAttributedString(string: .SettingsDisplayThemeTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {

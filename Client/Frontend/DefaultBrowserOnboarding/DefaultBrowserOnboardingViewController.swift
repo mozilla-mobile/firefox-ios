@@ -134,7 +134,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     }()
     private lazy var goToSettingsButton: UIButton = {
         let button = UIButton()
-        button.setTitle(Strings.CoverSheetETPSettingsButton, for: .normal)
+        button.setTitle(.CoverSheetETPSettingsButton, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: descriptionFontSize)
         button.layer.cornerRadius = UpdateViewControllerUX.StartBrowsingButton.cornerRadius
         button.setTitleColor(.white, for: .normal)

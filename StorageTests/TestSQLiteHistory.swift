@@ -93,10 +93,10 @@ class BrowserSchemaV6: BaseHistoricalBrowserSchema {
         let type = 2 // "folder"
         let root = 0
 
-        let titleMobile = Strings.BookmarksFolderTitleMobile
-        let titleMenu = Strings.BookmarksFolderTitleMenu
-        let titleToolbar = Strings.BookmarksFolderTitleToolbar
-        let titleUnsorted = Strings.BookmarksFolderTitleUnsorted
+        let titleMobile = .BookmarksFolderTitleMobile
+        let titleMenu = .BookmarksFolderTitleMenu
+        let titleToolbar = .BookmarksFolderTitleToolbar
+        let titleUnsorted = .BookmarksFolderTitleUnsorted
 
         let args: Args = [
             root, BookmarkRoots.RootGUID, type, "Root", root,
@@ -272,10 +272,10 @@ class BrowserSchemaV7: BaseHistoricalBrowserSchema {
         let type = 2 // "folder"
         let root = 0
 
-        let titleMobile = Strings.BookmarksFolderTitleMobile
-        let titleMenu = Strings.BookmarksFolderTitleMenu
-        let titleToolbar = Strings.BookmarksFolderTitleToolbar
-        let titleUnsorted = Strings.BookmarksFolderTitleUnsorted
+        let titleMobile = .BookmarksFolderTitleMobile
+        let titleMenu = .BookmarksFolderTitleMenu
+        let titleToolbar = .BookmarksFolderTitleToolbar
+        let titleUnsorted = .BookmarksFolderTitleUnsorted
 
         let args: Args = [
             root, BookmarkRoots.RootGUID, type, "Root", root,
@@ -456,10 +456,10 @@ class BrowserSchemaV8: BaseHistoricalBrowserSchema {
         let type = 2 // "folder"
         let root = 0
 
-        let titleMobile = Strings.BookmarksFolderTitleMobile
-        let titleMenu = Strings.BookmarksFolderTitleMenu
-        let titleToolbar = Strings.BookmarksFolderTitleToolbar
-        let titleUnsorted = Strings.BookmarksFolderTitleUnsorted
+        let titleMobile = .BookmarksFolderTitleMobile
+        let titleMenu = .BookmarksFolderTitleMenu
+        let titleToolbar = .BookmarksFolderTitleToolbar
+        let titleUnsorted = .BookmarksFolderTitleUnsorted
 
         let args: Args = [
             root, BookmarkRoots.RootGUID, type, "Root", root,
@@ -655,10 +655,10 @@ class BrowserSchemaV10: BaseHistoricalBrowserSchema {
         let type = 2 // "folder"
         let root = 0
 
-        let titleMobile = Strings.BookmarksFolderTitleMobile
-        let titleMenu = Strings.BookmarksFolderTitleMenu
-        let titleToolbar = Strings.BookmarksFolderTitleToolbar
-        let titleUnsorted = Strings.BookmarksFolderTitleUnsorted
+        let titleMobile = .BookmarksFolderTitleMobile
+        let titleMenu = .BookmarksFolderTitleMenu
+        let titleToolbar = .BookmarksFolderTitleToolbar
+        let titleUnsorted = .BookmarksFolderTitleUnsorted
 
         let args: Args = [
             root, BookmarkRoots.RootGUID, type, "Root", root,

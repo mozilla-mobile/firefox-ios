@@ -270,9 +270,9 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
         if localAuthContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
             let title: String
             if localAuthContext.biometryType == .faceID {
-                title = Strings.UseFaceID
+                title = .UseFaceID
             } else {
-                title = Strings.UseTouchID
+                title = .UseTouchID
             }
             requirePasscodeSectionChildren.append(
                 TouchIDSetting(

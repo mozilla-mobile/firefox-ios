@@ -72,11 +72,11 @@ class AppSettingsTableViewController: SettingsTableViewController {
 
         generalSettings += [
             BoolSetting(prefs: prefs, prefKey: "showClipboardBar", defaultValue: false,
-                        titleText: Strings.SettingsOfferClipboardBarTitle,
-                        statusText: Strings.SettingsOfferClipboardBarStatus),
+                        titleText: .SettingsOfferClipboardBarTitle,
+                        statusText: .SettingsOfferClipboardBarStatus),
             BoolSetting(prefs: prefs, prefKey: PrefsKeys.ContextMenuShowLinkPreviews, defaultValue: true,
-                        titleText: Strings.SettingsShowLinkPreviewsTitle,
-                        statusText: Strings.SettingsShowLinkPreviewsStatus)
+                        titleText: .SettingsShowLinkPreviewsTitle,
+                        statusText: .SettingsShowLinkPreviewsStatus)
         ]
         
         if #available(iOS 14.0, *) {
@@ -85,9 +85,9 @@ class AppSettingsTableViewController: SettingsTableViewController {
             ]
         }
         
-        let accountSectionTitle = NSAttributedString(string: Strings.FxAFirefoxAccount)
+        let accountSectionTitle = NSAttributedString(string: .FxAFirefoxAccount)
 
-        let footerText = !profile.hasAccount() ? NSAttributedString(string: Strings.FxASyncUsageDetails) : nil
+        let footerText = !profile.hasAccount() ? NSAttributedString(string: .FxASyncUsageDetails) : nil
         settings += [
             SettingSection(title: accountSectionTitle, footerTitle: footerText, children: [
                 // Without a Firefox Account:
@@ -98,7 +98,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 SyncNowSetting(settings: self)
             ] + accountChinaSyncSetting )]
 
-        settings += [ SettingSection(title: NSAttributedString(string: Strings.SettingsGeneralSectionTitle), children: generalSettings)]
+        settings += [ SettingSection(title: NSAttributedString(string: .SettingsGeneralSectionTitle), children: generalSettings)]
 
         var privacySettings = [Setting]()
         privacySettings.append(LoginsSetting(settings: self, delegate: settingsDelegate))

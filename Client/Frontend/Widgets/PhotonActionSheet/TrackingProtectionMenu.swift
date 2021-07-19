@@ -41,7 +41,7 @@ fileprivate var nestedTableViewDomainList: NestedTableViewDelegate?
 extension PhotonActionSheetProtocol {
     @available(iOS 11.0, *)
     private func menuActionsForNotBlocking() -> [PhotonActionSheetItem] {
-        return [PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TPNoBlockingDescription, iconString: "menu-TrackingProtection")]
+        return [PhotonActionSheetItem(title: .SettingsTrackingProtectionSectionName, text: .TPNoBlockingDescription, iconString: "menu-TrackingProtection")]
     }
 
     @available(iOS 11.0, *)
@@ -63,12 +63,12 @@ extension PhotonActionSheetProtocol {
 
     @available(iOS 11.0, *)
     private func menuActionsForTrackingProtectionDisabled(for tab: Tab) -> [[PhotonActionSheetItem]] {
-        let enableTP = PhotonActionSheetItem(title: Strings.EnableTPBlockingGlobally, iconString: "menu-TrackingProtection") { _, _ in
+        let enableTP = PhotonActionSheetItem(title: .EnableTPBlockingGlobally, iconString: "menu-TrackingProtection") { _, _ in
             FirefoxTabContentBlocker.toggleTrackingProtectionEnabled(prefs: self.profile.prefs)
             tab.reload()
         }
 
-        var moreInfo = PhotonActionSheetItem(title: "", text: Strings.TPBlockingMoreInfo, iconString: "menu-Info") { _, _ in
+        var moreInfo = PhotonActionSheetItem(title: "", text: .TPBlockingMoreInfo, iconString: "menu-Info") { _, _ in
             let url = SupportUtils.URLForTopic("tracking-protection-ios")!
             tab.loadRequest(URLRequest(url: url))
         }
@@ -114,7 +114,7 @@ extension PhotonActionSheetProtocol {
             return PhotonActionSheetUX.RowHeight * 5
         }
 
-        let back = PhotonActionSheetItem(title: Strings.BackTitle, iconString: "goBack") { _, _ in
+        let back = PhotonActionSheetItem(title: .BackTitle, iconString: "goBack") { _, _ in
             guard let urlbar = (self as? BrowserViewController)?.urlBar else { return }
             (self as? BrowserViewController)?.urlBarDidTapShield(urlbar)
         }
@@ -138,7 +138,7 @@ extension PhotonActionSheetProtocol {
             return []
         }
 
-        var blockedtitle = PhotonActionSheetItem(title: Strings.TPPageMenuBlockedTitle, accessory: .Text, bold: true)
+        var blockedtitle = PhotonActionSheetItem(title: .TPPageMenuBlockedTitle, accessory: .Text, bold: true)
         blockedtitle.customRender = { label, _ in
             label.font = DynamicFontHelper.defaultHelper.DeviceFontSmallBold
         }
@@ -146,7 +146,7 @@ extension PhotonActionSheetProtocol {
             return PhotonActionSheetUX.RowHeight - 10
         }
 
-        var addToSafelistSwitch = PhotonActionSheetItem(title: Strings.ETPOn, isEnabled: !isSafelisted, accessory: .Switch) { _, cell in
+        var addToSafelistSwitch = PhotonActionSheetItem(title: .ETPOn, isEnabled: !isSafelisted, accessory: .Switch) { _, cell in
             TelemetryWrapper.recordEvent(category: .action, method: .add, object: .trackingProtectionSafelist)
             ContentBlocker.shared.safelist(enable: tab.contentBlocker?.status != .safelisted, url: currentURL) {
                 tab.reload()
@@ -156,9 +156,9 @@ extension PhotonActionSheetProtocol {
         }
         addToSafelistSwitch.customRender = { title, _ in
             if tab.contentBlocker?.status == .safelisted {
-                title.text = Strings.ETPOff
+                title.text = .ETPOff
             } else {
-                title.text = Strings.ETPOn
+                title.text = .ETPOn
             }
         }
         addToSafelistSwitch.accessibilityId = "tp.add-to-safelist"
@@ -166,7 +166,7 @@ extension PhotonActionSheetProtocol {
             return PhotonActionSheetUX.RowHeight + 20
         }
         
-        var addToSafelistNoSwitch = PhotonActionSheetItem(title: Strings.ETPOn, accessory: .Text)
+        var addToSafelistNoSwitch = PhotonActionSheetItem(title: .ETPOn, accessory: .Text)
         addToSafelistNoSwitch.customHeight = { _ in
             return PhotonActionSheetUX.RowHeight + 20
         }
@@ -176,11 +176,11 @@ extension PhotonActionSheetProtocol {
 
         let blockersDescriptionString: String = {
             if blocker.blockingStrengthPref == .strict {
-                return Strings.StrictETPWithITP
+                return .StrictETPWithITP
             } else if blocker.blockingStrengthPref == .basic {
-                return Strings.StandardETPWithITP
+                return .StandardETPWithITP
             } else {
-                return Strings.TPPageMenuNoTrackersBlocked
+                return .TPPageMenuNoTrackersBlocked
             }
         }()
         
@@ -192,7 +192,7 @@ extension PhotonActionSheetProtocol {
             return PhotonActionSheetUX.RowHeight + 70
         }
 
-        let settings = PhotonActionSheetItem(title: Strings.TPProtectionSettings, iconString: "settings") { _, _ in
+        let settings = PhotonActionSheetItem(title: .TPProtectionSettings, iconString: "settings") { _, _ in
             let settingsTableViewController = AppSettingsTableViewController()
             settingsTableViewController.profile = self.profile
             settingsTableViewController.tabManager = self.tabManager
@@ -216,7 +216,7 @@ extension PhotonActionSheetProtocol {
             label.numberOfLines = 0
             label.textAlignment = .center
             label.textColor = UIColor.theme.tableView.headerTextLight
-            label.text = Strings.TPPageMenuNoTrackersBlocked
+            label.text = .TPPageMenuNoTrackersBlocked
             label.accessibilityIdentifier = "tp.no-trackers-blocked"
             contentView.addSubview(label)
             label.snp.makeConstraints { make in
@@ -254,7 +254,7 @@ extension PhotonActionSheetProtocol {
             return []
         }
 
-        let removeFromSafelist = PhotonActionSheetItem(title: Strings.TPSafeListRemove, iconString: "menu-TrackingProtection") { _, _ in
+        let removeFromSafelist = PhotonActionSheetItem(title: .TPSafeListRemove, iconString: "menu-TrackingProtection") { _, _ in
             ContentBlocker.shared.safelist(enable: false, url: currentURL) {
                 tab.reload()
             }

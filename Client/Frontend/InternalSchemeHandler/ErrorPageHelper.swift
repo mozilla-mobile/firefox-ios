@@ -192,16 +192,16 @@ class ErrorPageHandler: InternalSchemeResponse {
             }
 
             asset = Bundle.main.path(forResource: "CertError", ofType: "html")
-            actions = "<button onclick='history.back()'>\(Strings.ErrorPagesGoBackButton)</button>"
-            variables["error_title"] = Strings.ErrorPagesCertWarningTitle
+            actions = "<button onclick='history.back()'>\(String.ErrorPagesGoBackButton)</button>"
+            variables["error_title"] = .ErrorPagesCertWarningTitle
             variables["cert_error"] = certError
-            variables["long_description"] = String(format: Strings.ErrorPagesCertWarningDescription, "<b>\(errURLDomain)</b>")
-            variables["advanced_button"] = Strings.ErrorPagesAdvancedButton
-            variables["warning_description"] = Strings.ErrorPagesCertWarningDescription
-            variables["warning_advanced1"] = Strings.ErrorPagesAdvancedWarning1
-            variables["warning_advanced2"] = Strings.ErrorPagesAdvancedWarning2
+            variables["long_description"] = String(format: .ErrorPagesCertWarningDescription, "<b>\(errURLDomain)</b>")
+            variables["advanced_button"] = .ErrorPagesAdvancedButton
+            variables["warning_description"] = .ErrorPagesCertWarningDescription
+            variables["warning_advanced1"] = .ErrorPagesAdvancedWarning1
+            variables["warning_advanced2"] = .ErrorPagesAdvancedWarning2
             variables["warning_actions"] =
-                "<p><a id='\(UserScriptManager.appIdToken)__firefox__visitOnce' href='#'>\(Strings.ErrorPagesVisitOnceButton)</button></p>"
+                "<p><a id='\(UserScriptManager.appIdToken)__firefox__visitOnce' href='#'>\(String.ErrorPagesVisitOnceButton)</button></p>"
         }
 
         variables["actions"] = actions

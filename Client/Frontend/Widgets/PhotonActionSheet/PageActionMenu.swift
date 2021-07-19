@@ -41,7 +41,7 @@ extension PhotonActionSheetProtocol {
                        shouldShowNewTabButton: Bool,
                        success: @escaping (String, ButtonToastAction) -> Void) -> Array<[PhotonActionSheetItem]> {
         if tab.url?.isFileURL ?? false {
-            let shareFile = PhotonActionSheetItem(title: Strings.AppMenuSharePageTitleString, iconString: "action_share") {  _,_ in
+            let shareFile = PhotonActionSheetItem(title: .AppMenuSharePageTitleString, iconString: "action_share") {  _,_ in
                 guard let url = tab.url else { return }
 
                 self.share(fileURL: url, buttonView: buttonView, presentableVC: presentableVC)
@@ -55,12 +55,12 @@ extension PhotonActionSheetProtocol {
         let toggleActionIcon: String
         let siteTypeTelemetryObject: TelemetryWrapper.EventObject
         if defaultUAisDesktop {
-            toggleActionTitle = tab.changedUserAgent ? Strings.AppMenuViewDesktopSiteTitleString : Strings.AppMenuViewMobileSiteTitleString
+            toggleActionTitle = tab.changedUserAgent ? .AppMenuViewDesktopSiteTitleString : .AppMenuViewMobileSiteTitleString
             toggleActionIcon = tab.changedUserAgent ?
                 "menu-RequestDesktopSite" : "menu-ViewMobile"
             siteTypeTelemetryObject = .requestDesktopSite
         } else {
-            toggleActionTitle = tab.changedUserAgent ? Strings.AppMenuViewMobileSiteTitleString : Strings.AppMenuViewDesktopSiteTitleString
+            toggleActionTitle = tab.changedUserAgent ? .AppMenuViewMobileSiteTitleString : .AppMenuViewDesktopSiteTitleString
             toggleActionIcon = tab.changedUserAgent ?
                 "menu-ViewMobile" : "menu-RequestDesktopSite"
             siteTypeTelemetryObject = .requestMobileSite
@@ -73,15 +73,15 @@ extension PhotonActionSheetProtocol {
             }
         }
 
-        let addReadingList = PhotonActionSheetItem(title: Strings.AppMenuAddToReadingListTitleString, iconString: "addToReadingList") { _,_  in
+        let addReadingList = PhotonActionSheetItem(title: .AppMenuAddToReadingListTitleString, iconString: "addToReadingList") { _,_  in
             guard let url = tab.url?.displayURL else { return }
 
             self.profile.readingList.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.current.name)
             TelemetryWrapper.recordEvent(category: .action, method: .add, object: .readingListItem, value: .pageActionMenu)
-            success(Strings.AppMenuAddToReadingListConfirmMessage, .addToReadingList)
+            success(.AppMenuAddToReadingListConfirmMessage, .addToReadingList)
         }
 
-        let bookmarkPage = PhotonActionSheetItem(title: Strings.AppMenuAddBookmarkTitleString2, iconString: "menu-Bookmark") { _,_  in
+        let bookmarkPage = PhotonActionSheetItem(title: .AppMenuAddBookmarkTitleString2, iconString: "menu-Bookmark") { _,_  in
             guard let url = tab.canonicalURL?.displayURL,
                 let bvc = presentableVC as? BrowserViewController else {
                     return
@@ -90,19 +90,19 @@ extension PhotonActionSheetProtocol {
             TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .pageActionMenu)
         }
 
-        let removeBookmark = PhotonActionSheetItem(title: Strings.AppMenuRemoveBookmarkTitleString, iconString: "menu-Bookmark-Remove") { _,_  in
+        let removeBookmark = PhotonActionSheetItem(title: .AppMenuRemoveBookmarkTitleString, iconString: "menu-Bookmark-Remove") { _,_  in
             guard let url = tab.url?.displayURL else { return }
 
             self.profile.places.deleteBookmarksWithURL(url: url.absoluteString).uponQueue(.main) { result in
                 if result.isSuccess {
-                    success(Strings.AppMenuRemoveBookmarkConfirmMessage, .removeBookmark)
+                    success(.AppMenuRemoveBookmarkConfirmMessage, .removeBookmark)
                 }
             }
 
             TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .bookmark, value: .pageActionMenu)
         }
 
-        let addToShortcuts = PhotonActionSheetItem(title: Strings.AddToShortcutsActionTitle, iconString: "action_pin") { _,_  in
+        let addToShortcuts = PhotonActionSheetItem(title: .AddToShortcutsActionTitle, iconString: "action_pin") { _,_  in
             guard let url = tab.url?.displayURL, let sql = self.profile.history as? SQLiteHistory else { return }
 
             sql.getSites(forURLs: [url.absoluteString]).bind { val -> Success in
@@ -112,13 +112,13 @@ extension PhotonActionSheetProtocol {
                 return self.profile.history.addPinnedTopSite(site)
             }.uponQueue(.main) { result in
                 if result.isSuccess {
-                    success(Strings.AppMenuAddPinToShortcutsConfirmMessage, .pinPage)
+                    success(.AppMenuAddPinToShortcutsConfirmMessage, .pinPage)
                 }
             }
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .pinToTopSites)
         }
 
-        let removeFromShortcuts = PhotonActionSheetItem(title: Strings.RemoveFromShortcutsActionTitle, iconString: "action_unpin") { _,_  in
+        let removeFromShortcuts = PhotonActionSheetItem(title: .RemoveFromShortcutsActionTitle, iconString: "action_unpin") { _,_  in
             guard let url = tab.url?.displayURL, let sql = self.profile.history as? SQLiteHistory else { return }
 
             sql.getSites(forURLs: [url.absoluteString]).bind { val -> Success in
@@ -129,13 +129,13 @@ extension PhotonActionSheetProtocol {
                 return self.profile.history.removeFromPinnedTopSites(site)
             }.uponQueue(.main) { result in
                 if result.isSuccess {
-                    success(Strings.AppMenuRemovePinFromShortcutsConfirmMessage, .removePinPage)
+                    success(.AppMenuRemovePinFromShortcutsConfirmMessage, .removePinPage)
                 }
             }
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .removePinnedSite)
         }
 
-        let sendToDevice = PhotonActionSheetItem(title: Strings.SendLinkToDeviceTitle, iconString: "menu-Send-to-Device") { _,_  in
+        let sendToDevice = PhotonActionSheetItem(title: .SendLinkToDeviceTitle, iconString: "menu-Send-to-Device") { _,_  in
             guard let bvc = presentableVC as? PresentableVC & InstructionsViewControllerDelegate & DevicePickerViewControllerDelegate else { return }
             if !self.profile.hasAccount() {
                 let instructionsViewController = InstructionsViewController()
@@ -156,7 +156,7 @@ extension PhotonActionSheetProtocol {
             bvc.present(navigationController, animated: true, completion: nil)
         }
 
-        let sharePage = PhotonActionSheetItem(title: Strings.ShareContextMenuTitle, iconString: "action_share") { _,_  in
+        let sharePage = PhotonActionSheetItem(title: .ShareContextMenuTitle, iconString: "action_share") { _,_  in
             guard let url = tab.canonicalURL?.displayURL else { return }
 
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
@@ -175,19 +175,19 @@ extension PhotonActionSheetProtocol {
             }
         }
 
-        let copyURL = PhotonActionSheetItem(title: Strings.AppMenuCopyLinkTitleString, iconString: "menu-Copy-Link") { _,_ in
+        let copyURL = PhotonActionSheetItem(title: .AppMenuCopyLinkTitleString, iconString: "menu-Copy-Link") { _,_ in
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .copyAddress)
             if let url = tab.canonicalURL?.displayURL {
                 UIPasteboard.general.url = url
-                success(Strings.AppMenuCopyURLConfirmMessage, .copyUrl)
+                success(.AppMenuCopyURLConfirmMessage, .copyUrl)
             }
         }
         
-        let refreshPage = PhotonActionSheetItem(title: Strings.ReloadPageTitle, iconString: "nav-refresh") { _,_ in
+        let refreshPage = PhotonActionSheetItem(title: .ReloadPageTitle, iconString: "nav-refresh") { _,_ in
             self.tabManager.selectedTab?.reload()
         }
         
-        let stopRefreshPage = PhotonActionSheetItem(title: Strings.StopReloadPageTitle, iconString: "nav-stop") { _,_ in
+        let stopRefreshPage = PhotonActionSheetItem(title: .StopReloadPageTitle, iconString: "nav-stop") { _,_ in
             self.tabManager.selectedTab?.stop()
         }
         
@@ -197,7 +197,7 @@ extension PhotonActionSheetProtocol {
         if let url = tab.webView?.url, let helper = tab.contentBlocker, helper.isEnabled, helper.blockingStrengthPref == .strict {
             let isSafelisted = helper.status == .safelisted
             
-            let title = !isSafelisted ? Strings.TrackingProtectionReloadWithout : Strings.TrackingProtectionReloadWith
+            let title = !isSafelisted ? String.TrackingProtectionReloadWithout : String.TrackingProtectionReloadWith
             let imageName = helper.isEnabled ? "menu-TrackingProtection-Off" : "menu-TrackingProtection"
             let toggleTP = PhotonActionSheetItem(title: title, iconString: imageName) { _,_ in
                 ContentBlocker.shared.safelist(enable: !isSafelisted, url: url) {
@@ -224,12 +224,12 @@ extension PhotonActionSheetProtocol {
 
         // Disable find in page and report site issue if document is pdf.
         if tab.mimeType != MIMEType.PDF {
-            let findInPageAction = PhotonActionSheetItem(title: Strings.AppMenuFindInPageTitleString, iconString: "menu-FindInPage") { _,_ in
+            let findInPageAction = PhotonActionSheetItem(title: .AppMenuFindInPageTitleString, iconString: "menu-FindInPage") { _,_ in
                 findInPage()
             }
             section2.insert(findInPageAction, at: 0)
             
-            let reportSiteIssueAction = PhotonActionSheetItem(title: Strings.AppMenuReportSiteIssueTitleString, iconString: "menu-reportSiteIssue") { _,_ in
+            let reportSiteIssueAction = PhotonActionSheetItem(title: .AppMenuReportSiteIssueTitleString, iconString: "menu-reportSiteIssue") { _,_ in
                 reportSiteIssue()
             }
             section2.append(reportSiteIssueAction)
