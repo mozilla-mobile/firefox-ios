@@ -527,7 +527,7 @@ extension TelemetryWrapper {
         // Pocket
         case (.action, .tap, .pocketStory, _, let extras):
             if let position = extras?[EventExtraKey.pocketTilePosition.rawValue] as? String {
-                GleanMetrics.Pocket.openStoryPosition[position].add()
+                GleanMetrics.Pocket.openStoryPosition["Position-"+position].add()
             } else {
                 let msg = "Uninstrumented pref metric: \(category), \(method), \(object), \(value), \(String(describing: extras))"
                 Sentry.shared.send(message: msg, severity: .debug)
