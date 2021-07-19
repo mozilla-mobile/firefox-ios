@@ -225,7 +225,7 @@ struct UIConstants {
         static let homePrivateBrowsingDescriptionLabelTopOffset: CGFloat = 5
 		static let findInPageSearchTextInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 0)
 		static let findInPagePreviousButtonOffset: CGFloat = 16
-		static let progressBarHeight: CGFloat = 3
+        static let progressBarHeight: CGFloat = 1.5
 		static let progressBarOffset: CGFloat = 1
 		static let trackingProtectionHeight: CGFloat = 18
 		static let collapsedProtectionBadgeOffset: CGFloat = 10

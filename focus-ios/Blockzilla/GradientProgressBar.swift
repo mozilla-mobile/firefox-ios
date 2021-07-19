@@ -20,13 +20,9 @@ open class GradientProgressBar: UIProgressView {
         static let backgroundColor = UIColor.clear
 
         static let gradientColors = [
-            UIConstants.Photon.Magenta50.cgColor,
-            UIConstants.Photon.Purple50.cgColor,
-            UIConstants.Photon.Magenta50.cgColor,
-            UIConstants.Photon.Purple50.cgColor,
-            UIConstants.Photon.Magenta50.cgColor,
-            UIConstants.Photon.Purple50.cgColor,
-            UIConstants.Photon.Magenta50.cgColor
+            UIColor.gradientFirst.cgColor,
+            UIColor.gradientSecond.cgColor,
+            UIColor.gradientThird.cgColor
         ]
 
         static let animationDuration = 0.2 // CALayer default animation duration
@@ -92,7 +88,7 @@ open class GradientProgressBar: UIProgressView {
 
     private func setupAlphaMaskLayer() {
         alphaMaskLayer.frame = bounds
-        alphaMaskLayer.cornerRadius = 3
+        alphaMaskLayer.cornerRadius = UIConstants.layout.progressBarHeight
 
         alphaMaskLayer.anchorPoint = CGPoint(x: 0, y: 0)
         alphaMaskLayer.position = CGPoint(x: 0, y: 0)
@@ -109,7 +105,7 @@ open class GradientProgressBar: UIProgressView {
         gradientLayer.locations = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.0]
         gradientLayer.startPoint = CGPoint(x: 0, y: 0)
         gradientLayer.endPoint = CGPoint(x: 1, y: 0)
-        gradientLayer.drawsAsynchronously = true
+        gradientLayer.drawsAsynchronously = false
     }
 
     func hideProgressBar() {
