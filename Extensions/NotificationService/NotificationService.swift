@@ -116,45 +116,45 @@ class SyncDataDisplay {
 
 extension SyncDataDisplay {
     func displayDeviceConnectedNotification(_ deviceName: String) {
-        presentNotification(title: .FxAPush_DeviceConnected_title,
-                            body: .FxAPush_DeviceConnected_body,
+        presentNotification(title: .FirefoxAccount.Push.DeviceConnected.Title,
+                            body: .FirefoxAccount.Push.DeviceConnected.Body,
                             bodyArg: deviceName)
     }
 
     func displayDeviceDisconnectedNotification(_ deviceName: String?) {
         if let deviceName = deviceName {
-            presentNotification(title: .FxAPush_DeviceDisconnected_title,
-                                body: .FxAPush_DeviceDisconnected_body,
+            presentNotification(title: .FirefoxAccount.Push.DeviceDisconnected.NamedDeviceTitle,
+                                body: .FirefoxAccount.Push.DeviceDisconnected.NamedDeviceBody,
                                 bodyArg: deviceName)
         } else {
             // We should never see this branch
-            presentNotification(title: .FxAPush_DeviceDisconnected_title,
-                                body: .FxAPush_DeviceDisconnected_UnknownDevice_body)
+            presentNotification(title: .FirefoxAccount.Push.DeviceDisconnected.NamedDeviceTitle,
+                                body: .FirefoxAccount.Push.DeviceDisconnected.UnknownDeviceBody)
         }
     }
 
     func displayThisDeviceDisconnectedNotification() {
-        presentNotification(title: .FxAPush_DeviceDisconnected_ThisDevice_title,
-                            body: .FxAPush_DeviceDisconnected_ThisDevice_body)
+        presentNotification(title: .FirefoxAccount.Push.DeviceDisconnected.ThisDeviceTitle,
+                            body: .FirefoxAccount.Push.DeviceDisconnected.ThisDeviceBody)
     }
 
     func displayAccountVerifiedNotification() {
         Sentry.shared.send(message: "SentTab error: account not verified")
         #if MOZ_CHANNEL_BETA || DEBUG
-            presentNotification(title: .SentTab_NoTabArrivingNotification_title, body: "DEBUG: Account Verified")
+        presentNotification(title: .Notifications.SentTab.NoTabArrivingTitle, body: "DEBUG: Account Verified")
             return
         #endif
-        presentNotification(title: .SentTab_NoTabArrivingNotification_title, body: .SentTab_NoTabArrivingNotification_body)
+        presentNotification(title: .Notifications.SentTab.NoTabArrivingTitle, body: .Notifications.SentTab.NoTabArrivingBody)
     }
 
     func displayUnknownMessageNotification(debugInfo: String) {
         Sentry.shared.send(message: "SentTab error: \(debugInfo)")
         #if MOZ_CHANNEL_BETA || DEBUG
-            presentNotification(title: .SentTab_NoTabArrivingNotification_title, body: "DEBUG: " + debugInfo)
+        presentNotification(title: .Notifications.SentTab.NoTabArrivingTitle, body: "DEBUG: " + debugInfo)
             return
         #endif
 
-        presentNotification(title: .SentTab_NoTabArrivingNotification_title, body: .SentTab_NoTabArrivingNotification_body)
+        presentNotification(title: .Notifications.SentTab.NoTabArrivingTitle, body: .Notifications.SentTab.NoTabArrivingBody)
     }
 }
 
@@ -174,7 +174,7 @@ extension SyncDataDisplay {
             let item = ShareItem(url: urlString, title: title, favicon: nil)
             _ = tabQueue?.addToQueue(item).value // Force synchronous.
 
-            presentNotification(title: .SentTab_TabArrivingNotification_NoDevice_title, body: url.absoluteDisplayExternalString)
+            presentNotification(title: .Notifications.SentTab.TabArrivingNoDeviceTitle, body: url.absoluteDisplayExternalString)
         }
     }
 }
@@ -185,7 +185,7 @@ extension SyncDataDisplay {
         let body: String
 
         if tabs.count == 0 {
-            title = .SentTab_NoTabArrivingNotification_title
+            title = .Notifications.SentTab.NoTabArrivingTitle
             #if MOZ_CHANNEL_BETA || DEBUG
                 body = "DEBUG: Sent Tabs with no tab"
             #else
@@ -195,9 +195,9 @@ extension SyncDataDisplay {
         } else {
             let deviceNames = Set(tabs.compactMap { $0["deviceName"] as? String })
             if let deviceName = deviceNames.first, deviceNames.count == 1 {
-                title = String(format: .SentTab_TabArrivingNotification_WithDevice_title, deviceName)
+                title = String(format: .Notifications.SentTab.TabArrivingWithDeviceTitle, deviceName)
             } else {
-                title = .SentTab_TabArrivingNotification_NoDevice_title
+                title = .Notifications.SentTab.TabArrivingNoDeviceTitle
             }
 
             if tabs.count == 1 {
@@ -206,9 +206,9 @@ extension SyncDataDisplay {
                 body = (tabs[0]["displayURL"] as? String) ??
                     (tabs[0]["url"] as! String)
             } else if deviceNames.count == 0 {
-                body = .SentTab_TabArrivingNotification_NoDevice_body
+                body = .Notifications.SentTab.TabArrivingNoDeviceBody
             } else {
-                body = String(format: .SentTab_TabArrivingNotification_WithDevice_body, AppInfo.displayName)
+                body = String(format: .Notifications.SentTab.TabArrivingWithDeviceBody, AppInfo.displayName)
             }
         }
 

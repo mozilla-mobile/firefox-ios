@@ -19,12 +19,12 @@ public enum PasscodeInterval: Int {
     
     public var settingTitle: String {
         switch self {
-        case .immediately:      return .AuthenticationImmediately
-        case .oneMinute:        return .AuthenticationOneMinute
-        case .fiveMinutes:      return .AuthenticationFiveMinutes
-        case .tenMinutes:       return .AuthenticationTenMinutes
-        case .fifteenMinutes:   return .AuthenticationFifteenMinutes
-        case .oneHour:          return .AuthenticationOneHour
+        case .immediately:      return .AuthenticationManager.Immediately
+        case .oneMinute:        return .AuthenticationManager.OneMinute
+        case .fiveMinutes:      return .AuthenticationManager.FiveMinutes
+        case .tenMinutes:       return .AuthenticationManager.TenMinutes
+        case .fifteenMinutes:   return .AuthenticationManager.FifteenMinutes
+        case .oneHour:          return .AuthenticationManager.OneHour
         }
     }
 }

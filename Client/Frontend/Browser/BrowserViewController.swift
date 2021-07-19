@@ -950,8 +950,8 @@ class BrowserViewController: UIViewController {
     }
 
     private func showBookmarksToast() {
-        let toast = ButtonToast(labelText: .AppMenuAddBookmarkConfirmMessage,
-                                buttonText: .BookmarksEdit,
+        let toast = ButtonToast(labelText: .AppMenu.AddBookmarkConfirmMessage,
+                                buttonText: .Bookmarks.Management.Edit,
                                 textAlignment: .left) { isButtonTapped in
             isButtonTapped ? self.openBookmarkEditPanel() : nil
         }
@@ -1699,7 +1699,7 @@ extension BrowserViewController: TabManagerDelegate {
                 }
             }
 
-            webView.accessibilityLabel = .WebViewAccessibilityLabel
+            webView.accessibilityLabel = .BrowserViewController.WebViewAccessibilityLabel
             webView.accessibilityIdentifier = "contentView"
             webView.accessibilityElementsHidden = false
 
@@ -2128,7 +2128,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             }
         }
 
-        let cancelAction = UIAlertAction(title: .CancelString, style: UIAlertAction.Style.cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: .General.CancelString, style: UIAlertAction.Style.cancel, handler: nil)
         actionSheetController.addAction(cancelAction)
         self.present(actionSheetController, animated: true, completion: nil)
     }
@@ -2311,15 +2311,15 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
         guard let tab = tabManager.selectedTab, let url = tab.canonicalURL?.displayURL?.absoluteString else { return }
         let shareItem = ShareItem(url: url, title: tab.title, favicon: tab.displayFavicon)
         guard shareItem.isShareable else {
-            let alert = UIAlertController(title: .SendToErrorTitle, message: .SendToErrorMessage, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: .SendToErrorOKButton, style: .default) { _ in self.popToBVC()})
+            let alert = UIAlertController(title: .ShareExtension.SendTo.ErrorTitle, message: .ShareExtension.SendTo.ErrorMessage, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: .ShareExtension.SendTo.ErrorOKButton, style: .default) { _ in self.popToBVC()})
             present(alert, animated: true, completion: nil)
             return
         }
         profile.sendItem(shareItem, toDevices: devices).uponQueue(.main) { _ in
             self.popToBVC()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                SimpleToast().showAlertWithText(.AppMenuTabSentConfirmMessage, bottomContainer: self.webViewContainer)
+                SimpleToast().showAlertWithText(.AppMenu.TabSentConfirmMessage, bottomContainer: self.webViewContainer)
             }
         }
     }
@@ -2340,9 +2340,9 @@ extension BrowserViewController {
             let lastClosedURL = profile.recentlyClosedTabs.tabs.first?.url,
             let selectedTab = tabManager.selectedTab else { return }
 
-        let alertTitleText = String.ReopenLastTabAlertTitle
-        let reopenButtonText = String.ReopenLastTabButtonText
-        let cancelButtonText = String.ReopenLastTabCancelText
+        let alertTitleText = String.Alerts.ShakeToRestore.AlertTitle
+        let reopenButtonText = String.Alerts.ShakeToRestore.ButtonText
+        let cancelButtonText = String.Alerts.ShakeToRestore.CancelText
 
         func reopenLastTab(_ action: UIAlertAction) {
             let request = URLRequest(url: lastClosedURL)

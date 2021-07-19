@@ -150,7 +150,7 @@ class ReadingListTableViewCell: UITableViewCell, Themeable {
     fileprivate func updateAccessibilityLabel() {
         if let hostname = hostnameLabel.text,
                   let title = titleLabel.text {
-            let unreadStatus: String = unread ? .ReaderPanelUnreadAccessibilityLabel : .ReaderPanelReadAccessibilityLabel
+            let unreadStatus: String = unread ? .ReaderPanel.UnreadAccessibilityLabel : .ReaderPanel.ReadAccessibilityLabel
             let string = "\(title), \(unreadStatus), \(hostname)"
             var label: AnyObject
             if !unread {
@@ -256,7 +256,7 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
 
         let welcomeLabel = UILabel()
         overlayView.addSubview(welcomeLabel)
-        welcomeLabel.text = .ReaderPanelWelcome
+        welcomeLabel.text = .ReaderPanel.Welcome
         welcomeLabel.textAlignment = .center
         welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallBold
         welcomeLabel.adjustsFontSizeToFitWidth = true
@@ -268,7 +268,7 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
 
         let readerModeLabel = UILabel()
         overlayView.addSubview(readerModeLabel)
-        readerModeLabel.text = .ReaderPanelReadingModeDescription
+        readerModeLabel.text = .ReaderPanel.ReadingModeDescription
         readerModeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
         readerModeLabel.numberOfLines = 0
         readerModeLabel.snp.makeConstraints { make in
@@ -286,7 +286,7 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
 
         let readingListLabel = UILabel()
         overlayView.addSubview(readingListLabel)
-        readingListLabel.text = .ReaderPanelReadingListDescription
+        readingListLabel.text = .ReaderPanel.ReadingListDescription
         readingListLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
         readingListLabel.numberOfLines = 0
         readingListLabel.snp.makeConstraints { make in
@@ -340,11 +340,11 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
             return []
         }
 
-        let delete = UITableViewRowAction(style: .default, title: .ReaderPanelRemove) { [weak self] action, index in
+        let delete = UITableViewRowAction(style: .default, title: .ReaderPanel.Remove) { [weak self] action, index in
             self?.deleteItem(atIndex: index)
         }
 
-        let toggleText: String = record.unread ? .ReaderPanelMarkAsRead : .ReaderModeBarMarkAsUnread
+        let toggleText: String = record.unread ? .ReaderPanel.MarkAsRead : .ReaderMode.Bar.MarkAsUnread
         let unreadToggle = UITableViewRowAction(style: .normal, title: toggleText.stringSplitWithNewline()) { [weak self] (action, index) in
             self?.toggleItem(atIndex: index)
         }

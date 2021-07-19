@@ -29,10 +29,10 @@ open class DeviceInfo {
     /// Return the client name, which can be either "Fennec on Stefan's iPod" or simply "Stefan's iPod" if the application display name cannot be obtained.
     open class func defaultClientName() -> String {
         if ProcessInfo.processInfo.arguments.contains(LaunchArguments.DeviceName) {
-            return String(format: .DeviceInfoClientNameDescription, AppInfo.displayName, "iOS")
+            return String(format: .DeviceInfo.ClientNameDescription, AppInfo.displayName, "iOS")
         }
 
-        return String(format: .DeviceInfoClientNameDescription, AppInfo.displayName, UIDevice.current.name)
+        return String(format: .DeviceInfo.ClientNameDescription, AppInfo.displayName, UIDevice.current.name)
     }
 
     open class func clientIdentifier(_ prefs: Prefs) -> String {

@@ -19,7 +19,7 @@ class NoLoginsView: UIView {
         let label = UILabel()
         label.font = LoginListViewModel.LoginListUX.NoResultsFont
         label.textColor = LoginListViewModel.LoginListUX.NoResultsTextColor
-        label.text = .NoLoginsFound
+        label.text = .Login.NoLoginsFound
         return label
     }()
 

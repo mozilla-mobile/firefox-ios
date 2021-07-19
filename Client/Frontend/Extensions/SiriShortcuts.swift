@@ -22,9 +22,9 @@ class SiriShortcuts {
 
     private var openUrlActivity: NSUserActivity? = {
         let activity = NSUserActivity(activityType: activityType.openURL.rawValue)
-        activity.title = .SettingsSiriOpenURL
+        activity.title = .Settings.SiriShortcuts.SiriOpenURL
         activity.isEligibleForPrediction = true
-        activity.suggestedInvocationPhrase = .SettingsSiriOpenURL
+        activity.suggestedInvocationPhrase = .Settings.SiriShortcuts.SiriOpenURL
         activity.persistentIdentifier = NSUserActivityPersistentIdentifier(activityType.openURL.rawValue)
         return activity
     }()

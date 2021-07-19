@@ -31,13 +31,13 @@ open class MenuHelper: NSObject {
     }
 
     open func setItems() {
-        let pasteAndGoItem = UIMenuItem(title: .MenuHelperPasteAndGo, action: MenuHelper.SelectorPasteAndGo)
-        let revealPasswordItem = UIMenuItem(title: .MenuHelperReveal, action: MenuHelper.SelectorReveal)
-        let hidePasswordItem = UIMenuItem(title: .MenuHelperHide, action: MenuHelper.SelectorHide)
-        let copyItem = UIMenuItem(title: .MenuHelperCopy, action: MenuHelper.SelectorCopy)
-        let openAndFillItem = UIMenuItem(title: .MenuHelperOpenAndFill, action: MenuHelper.SelectorOpenAndFill)
-        let findInPageItem = UIMenuItem(title: .MenuHelperFindInPage, action: MenuHelper.SelectorFindInPage)
-        let searchItem = UIMenuItem(title: .MenuHelperSearchWithFirefox, action: MenuHelper.SelectorSearchWithFirefox)
+        let pasteAndGoItem = UIMenuItem(title: .MenuHelper.PasteAndGo, action: MenuHelper.SelectorPasteAndGo)
+        let revealPasswordItem = UIMenuItem(title: .MenuHelper.Reveal, action: MenuHelper.SelectorReveal)
+        let hidePasswordItem = UIMenuItem(title: .MenuHelper.Hide, action: MenuHelper.SelectorHide)
+        let copyItem = UIMenuItem(title: .MenuHelper.Copy, action: MenuHelper.SelectorCopy)
+        let openAndFillItem = UIMenuItem(title: .MenuHelper.OpenAndFill, action: MenuHelper.SelectorOpenAndFill)
+        let findInPageItem = UIMenuItem(title: .MenuHelper.FindInPage, action: MenuHelper.SelectorFindInPage)
+        let searchItem = UIMenuItem(title: .MenuHelper.SearchWithFirefox, action: MenuHelper.SelectorSearchWithFirefox)
       
         UIMenuController.shared.menuItems = [pasteAndGoItem, copyItem, revealPasswordItem, hidePasswordItem, openAndFillItem, findInPageItem, searchItem]
     }

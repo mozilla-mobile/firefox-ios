@@ -50,9 +50,9 @@ class AppSyncDelegate: SyncDelegate {
                 let notificationContent = UNMutableNotificationContent()
                 let title: String
                 if let deviceName = deviceName {
-                    title = String(format: .SentTab_TabArrivingNotification_WithDevice_title, deviceName)
+                    title = String(format: .Notifications.SentTab.TabArrivingWithDeviceTitle, deviceName)
                 } else {
-                    title = .SentTab_TabArrivingNotification_NoDevice_title
+                    title = .Notifications.SentTab.TabArrivingNoDeviceTitle
                 }
                 notificationContent.title = title
                 notificationContent.body = url.absoluteDisplayExternalString

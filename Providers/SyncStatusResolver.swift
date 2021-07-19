@@ -68,9 +68,9 @@ public struct SyncStatusResolver {
             case .notStarted(let reason):
                 switch reason {
                 case .offline:
-                    return .bad(message: .FirefoxSyncOfflineTitle)
+                    return .bad(message: .Syncing.FirefoxSync.OfflineTitle)
                 case .noAccount:
-                    return .warning(message: .FirefoxSyncOfflineTitle)
+                    return .warning(message: .Syncing.FirefoxSync.OfflineTitle)
                 case .backoff(_):
                     return .good
                 case .engineRemotelyNotEnabled(_):

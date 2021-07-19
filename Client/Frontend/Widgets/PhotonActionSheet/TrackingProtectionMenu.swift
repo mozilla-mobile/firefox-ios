@@ -41,7 +41,7 @@ fileprivate var nestedTableViewDomainList: NestedTableViewDelegate?
 extension PhotonActionSheetProtocol {
     @available(iOS 11.0, *)
     private func menuActionsForNotBlocking() -> [PhotonActionSheetItem] {
-        return [PhotonActionSheetItem(title: .SettingsTrackingProtectionSectionName, text: .TPNoBlockingDescription, iconString: "menu-TrackingProtection")]
+        return [PhotonActionSheetItem(title: .SettingsTrackingProtectionSectionName, text: .TrackingProtection.NoBlockingDescription, iconString: "menu-TrackingProtection")]
     }
 
     @available(iOS 11.0, *)
@@ -63,12 +63,12 @@ extension PhotonActionSheetProtocol {
 
     @available(iOS 11.0, *)
     private func menuActionsForTrackingProtectionDisabled(for tab: Tab) -> [[PhotonActionSheetItem]] {
-        let enableTP = PhotonActionSheetItem(title: .EnableTPBlockingGlobally, iconString: "menu-TrackingProtection") { _, _ in
+        let enableTP = PhotonActionSheetItem(title: .TrackingProtection.EnableTPBlockingGlobally, iconString: "menu-TrackingProtection") { _, _ in
             FirefoxTabContentBlocker.toggleTrackingProtectionEnabled(prefs: self.profile.prefs)
             tab.reload()
         }
 
-        var moreInfo = PhotonActionSheetItem(title: "", text: .TPBlockingMoreInfo, iconString: "menu-Info") { _, _ in
+        var moreInfo = PhotonActionSheetItem(title: "", text: .TrackingProtection.BlockingMoreInfo, iconString: "menu-Info") { _, _ in
             let url = SupportUtils.URLForTopic("tracking-protection-ios")!
             tab.loadRequest(URLRequest(url: url))
         }
@@ -138,7 +138,7 @@ extension PhotonActionSheetProtocol {
             return []
         }
 
-        var blockedtitle = PhotonActionSheetItem(title: .TPPageMenuBlockedTitle, accessory: .Text, bold: true)
+        var blockedtitle = PhotonActionSheetItem(title: .TrackingProtection.PageMenuTitles.BlockedTitle, accessory: .Text, bold: true)
         blockedtitle.customRender = { label, _ in
             label.font = DynamicFontHelper.defaultHelper.DeviceFontSmallBold
         }
@@ -146,7 +146,7 @@ extension PhotonActionSheetProtocol {
             return PhotonActionSheetUX.RowHeight - 10
         }
 
-        var addToSafelistSwitch = PhotonActionSheetItem(title: .ETPOn, isEnabled: !isSafelisted, accessory: .Switch) { _, cell in
+        var addToSafelistSwitch = PhotonActionSheetItem(title: .TrackingProtection.ETPOn, isEnabled: !isSafelisted, accessory: .Switch) { _, cell in
             TelemetryWrapper.recordEvent(category: .action, method: .add, object: .trackingProtectionSafelist)
             ContentBlocker.shared.safelist(enable: tab.contentBlocker?.status != .safelisted, url: currentURL) {
                 tab.reload()
@@ -156,9 +156,9 @@ extension PhotonActionSheetProtocol {
         }
         addToSafelistSwitch.customRender = { title, _ in
             if tab.contentBlocker?.status == .safelisted {
-                title.text = .ETPOff
+                title.text = .TrackingProtection.ETPOff
             } else {
-                title.text = .ETPOn
+                title.text = .TrackingProtection.ETPOn
             }
         }
         addToSafelistSwitch.accessibilityId = "tp.add-to-safelist"
@@ -166,7 +166,7 @@ extension PhotonActionSheetProtocol {
             return PhotonActionSheetUX.RowHeight + 20
         }
         
-        var addToSafelistNoSwitch = PhotonActionSheetItem(title: .ETPOn, accessory: .Text)
+        var addToSafelistNoSwitch = PhotonActionSheetItem(title: .TrackingProtection.ETPOn, accessory: .Text)
         addToSafelistNoSwitch.customHeight = { _ in
             return PhotonActionSheetUX.RowHeight + 20
         }
@@ -176,11 +176,11 @@ extension PhotonActionSheetProtocol {
 
         let blockersDescriptionString: String = {
             if blocker.blockingStrengthPref == .strict {
-                return .StrictETPWithITP
+                return .TrackingProtection.StrictETPWithITP
             } else if blocker.blockingStrengthPref == .basic {
-                return .StandardETPWithITP
+                return .TrackingProtection.StandardETPWithITP
             } else {
-                return .TPPageMenuNoTrackersBlocked
+                return .TrackingProtection.PageMenuTitles.NoTrackersBlocked
             }
         }()
         
@@ -192,7 +192,7 @@ extension PhotonActionSheetProtocol {
             return PhotonActionSheetUX.RowHeight + 70
         }
 
-        let settings = PhotonActionSheetItem(title: .TPProtectionSettings, iconString: "settings") { _, _ in
+        let settings = PhotonActionSheetItem(title: .TrackingProtection.ProtectionSettings, iconString: "settings") { _, _ in
             let settingsTableViewController = AppSettingsTableViewController()
             settingsTableViewController.profile = self.profile
             settingsTableViewController.tabManager = self.tabManager
@@ -216,7 +216,7 @@ extension PhotonActionSheetProtocol {
             label.numberOfLines = 0
             label.textAlignment = .center
             label.textColor = UIColor.theme.tableView.headerTextLight
-            label.text = .TPPageMenuNoTrackersBlocked
+            label.text = .TrackingProtection.PageMenuTitles.NoTrackersBlocked
             label.accessibilityIdentifier = "tp.no-trackers-blocked"
             contentView.addSubview(label)
             label.snp.makeConstraints { make in
@@ -254,7 +254,7 @@ extension PhotonActionSheetProtocol {
             return []
         }
 
-        let removeFromSafelist = PhotonActionSheetItem(title: .TPSafeListRemove, iconString: "menu-TrackingProtection") { _, _ in
+        let removeFromSafelist = PhotonActionSheetItem(title: .TrackingProtection.SafeListRemove, iconString: "menu-TrackingProtection") { _, _ in
             ContentBlocker.shared.safelist(enable: false, url: currentURL) {
                 tab.reload()
             }

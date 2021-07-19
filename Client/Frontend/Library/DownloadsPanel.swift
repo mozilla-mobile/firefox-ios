@@ -307,13 +307,13 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
 
         switch section {
         case 0:
-            header?.textLabel?.text = .TableDateSectionTitleToday
+            header?.textLabel?.text = .TableDateSectionTitles.Today
         case 1:
-            header?.textLabel?.text = .TableDateSectionTitleYesterday
+            header?.textLabel?.text = .TableDateSectionTitles.Yesterday
         case 2:
-            header?.textLabel?.text = .TableDateSectionTitleLastWeek
+            header?.textLabel?.text = .TableDateSectionTitles.LastWeek
         case 3:
-            header?.textLabel?.text = .TableDateSectionTitleLastMonth
+            header?.textLabel?.text = .TableDateSectionTitles.LastMonth
         default:
             assertionFailure("Invalid Downloads section \(section)")
         }

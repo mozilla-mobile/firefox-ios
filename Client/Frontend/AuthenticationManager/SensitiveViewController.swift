@@ -43,7 +43,7 @@ class SensitiveViewController: UIViewController {
 
         promptingForTouchID = true
         AppAuthenticator.presentAuthenticationUsingInfo(authInfo,
-            touchIDReason: .AuthenticationLoginsTouchReason,
+                                                        touchIDReason: .AuthenticationManager.LoginsTouchReason,
             success: {
                 self.promptingForTouchID = false
                 self.authState = .notAuthenticating

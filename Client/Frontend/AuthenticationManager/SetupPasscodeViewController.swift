@@ -12,10 +12,10 @@ class SetupPasscodeViewController: PagingPasscodeViewController, PasscodeInputVi
 
     override init() {
         super.init()
-        self.title = .AuthenticationSetPasscode
+        self.title = .AuthenticationManager.SetPasscode
         self.panes = [
-            PasscodePane(title: .AuthenticationEnterAPasscode, passcodeSize: 6),
-            PasscodePane(title: .AuthenticationReenterPasscode, passcodeSize: 6),
+            PasscodePane(title: .AuthenticationManager.EnterAPasscode, passcodeSize: 6),
+            PasscodePane(title: .AuthenticationManager.ReenterPasscode, passcodeSize: 6),
         ]
     }
 

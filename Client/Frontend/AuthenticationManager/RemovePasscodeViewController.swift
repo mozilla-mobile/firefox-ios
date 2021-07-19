@@ -10,9 +10,9 @@ import Shared
 class RemovePasscodeViewController: PagingPasscodeViewController, PasscodeInputViewDelegate {
     override init() {
         super.init()
-        self.title = .AuthenticationTurnOffPasscode
+        self.title = .AuthenticationManager.TurnOffPasscode
         self.panes = [
-            PasscodePane(title: .AuthenticationEnterPasscode, passcodeSize: authenticationInfo?.passcode?.count ?? 6),
+            PasscodePane(title: .AuthenticationManager.EnterPasscode, passcodeSize: authenticationInfo?.passcode?.count ?? 6),
         ]
     }
 

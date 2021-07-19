@@ -38,11 +38,11 @@ class BreachAlertsDetailView: UIView {
         let label = UILabel()
         label.font = DynamicFontHelper.defaultHelper.DeviceFontLargeBold
         label.textColor = textColor
-        label.text = .BreachAlertsTitle
+        label.text = .Alerts.Breach.Title
         label.sizeToFit()
         label.isAccessibilityElement = true
         label.accessibilityTraits = .staticText
-        label.accessibilityLabel = .BreachAlertsTitle
+        label.accessibilityLabel = .Alerts.Breach.Title
         return label
     }()
 
@@ -52,14 +52,14 @@ class BreachAlertsDetailView: UIView {
             .foregroundColor: UIColor.white,
             .underlineStyle: NSUnderlineStyle.single.rawValue
         ]
-        let attributedText = NSMutableAttributedString(string: .BreachAlertsLearnMore, attributes: attributes)
+        let attributedText = NSMutableAttributedString(string: .Alerts.Breach.LearnMore, attributes: attributes)
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontSmallBold
         button.setAttributedTitle(attributedText, for: .normal)
         button.setTitleColor(textColor, for: .normal)
         button.tintColor = .white
         button.isAccessibilityElement = true
         button.accessibilityTraits = .button
-        button.accessibilityLabel = .BreachAlertsLearnMore
+        button.accessibilityLabel = .Alerts.Breach.LearnMore
         return button
     }()
 
@@ -71,19 +71,19 @@ class BreachAlertsDetailView: UIView {
 
     lazy var breachDateLabel: UILabel = {
         let label = UILabel()
-        label.text = .BreachAlertsBreachDate
+        label.text = .Alerts.Breach.BreachDate
         label.textColor = textColor
         label.numberOfLines = 0
         label.font = DynamicFontHelper.defaultHelper.DeviceFontSmallBold
         label.isAccessibilityElement = true
         label.accessibilityTraits = .staticText
-        label.accessibilityLabel = .BreachAlertsBreachDate
+        label.accessibilityLabel = .Alerts.Breach.BreachDate
         return label
     }()
 
     lazy var descriptionLabel: UILabel = {
         let label = UILabel()
-        label.text = .BreachAlertsDescription
+        label.text = .Alerts.Breach.Description
         label.numberOfLines = 0
         label.textColor = textColor
         label.font = DynamicFontHelper.defaultHelper.DeviceFontSmall
@@ -98,10 +98,10 @@ class BreachAlertsDetailView: UIView {
         button.textColor = textColor
         button.numberOfLines = 0
         button.isUserInteractionEnabled = true
-        button.text = .BreachAlertsLink
+        button.text = .Alerts.Breach.Link
         button.isAccessibilityElement = true
         button.accessibilityTraits = .button
-        button.accessibilityLabel = .BreachAlertsLink
+        button.accessibilityLabel = .Alerts.Breach.Link
         return button
     }()
 
@@ -159,7 +159,7 @@ class BreachAlertsDetailView: UIView {
         guard let date = dateFormatter.date(from: breach.breachDate) else { return }
         dateFormatter.dateStyle = .medium
         self.breachDateLabel.text! += " \(dateFormatter.string(from: date))."
-        let goToText = .BreachAlertsLink + " \(breach.domain)"
+        let goToText = .Alerts.Breach.Link + " \(breach.domain)"
         let attributes: [NSAttributedString.Key: Any] = [
             .foregroundColor: UIColor.white,
             .underlineStyle: NSUnderlineStyle.single.rawValue

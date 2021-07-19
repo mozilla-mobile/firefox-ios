@@ -106,19 +106,19 @@ class Authenticator {
 
         let deferred = Deferred<Maybe<LoginRecord>>()
         let alert: AlertController
-        let title: String = .AuthenticatorPromptTitle
+        let title: String = .Authenticator.PromptTitle
         if !(protectionSpace.realm?.isEmpty ?? true) {
-            let msg: String = .AuthenticatorPromptRealmMessage
+            let msg: String = .Authenticator.PromptRealmMessage
             let formatted = NSString(format: msg as NSString, protectionSpace.host, protectionSpace.realm ?? "") as String
             alert = AlertController(title: title, message: formatted, preferredStyle: .alert)
         } else {
-            let msg: String = .AuthenticatorPromptEmptyRealmMessage
+            let msg: String = .Authenticator.PromptEmptyRealmMessage
             let formatted = NSString(format: msg as NSString, protectionSpace.host) as String
             alert = AlertController(title: title, message: formatted, preferredStyle: .alert)
         }
 
         // Add a button to log in.
-        let action = UIAlertAction(title: .AuthenticatorLogin,
+        let action = UIAlertAction(title: .Authenticator.Login,
             style: .default) { (action) -> Void in
                 guard let user = alert.textFields?[0].text, let pass = alert.textFields?[1].text else { deferred.fill(Maybe(failure: LoginRecordError(description: "Username and Password required"))); return }
 
@@ -129,20 +129,20 @@ class Authenticator {
         alert.addAction(action, accessibilityIdentifier: "authenticationAlert.loginRequired")
 
         // Add a cancel button.
-        let cancel = UIAlertAction(title: .AuthenticatorCancel, style: .cancel) { (action) -> Void in
+        let cancel = UIAlertAction(title: .Authenticator.Cancel, style: .cancel) { (action) -> Void in
             deferred.fill(Maybe(failure: LoginRecordError(description: "Save password cancelled")))
         }
         alert.addAction(cancel, accessibilityIdentifier: "authenticationAlert.cancel")
 
         // Add a username textfield.
         alert.addTextField { (textfield) -> Void in
-            textfield.placeholder = .AuthenticatorUsernamePlaceholder
+            textfield.placeholder = .Authenticator.UsernamePlaceholder
             textfield.text = credentials?.user
         }
 
         // Add a password textfield.
         alert.addTextField { (textfield) -> Void in
-            textfield.placeholder = .AuthenticatorPasswordPlaceholder
+            textfield.placeholder = .Authenticator.PasswordPlaceholder
             textfield.isSecureTextEntry = true
             textfield.text = credentials?.password
         }

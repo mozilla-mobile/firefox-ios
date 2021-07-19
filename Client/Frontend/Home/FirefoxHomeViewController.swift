@@ -379,11 +379,11 @@ extension FirefoxHomeViewController {
 
         var title: String? {
             switch self {
-            case .pocket: return .ASPocketTitle2
+            case .pocket: return .ActivityStream.PocketTitle2
             case .jumpBackIn: return .FirefoxHomeJumpBackInSectionTitle
-            case .recentlySaved: return .RecentlySavedSectionTitle
-            case .topSites: return .ASShortcutsTitle
-            case .libraryShortcuts: return .AppMenuLibraryTitleString
+            case .recentlySaved: return .ActivityStream.RecentlySavedSectionTitle
+            case .topSites: return .ActivityStream.ShortcutsTitle
+            case .libraryShortcuts: return .AppMenu.LibraryTitleString
             }
         }
 
@@ -519,7 +519,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                     hasSentPocketSectionEvent = true
                 }
                 view.moreButton.isHidden = false
-                view.moreButton.setTitle(.PocketMoreStoriesText, for: .normal)
+                view.moreButton.setTitle(.ActivityStream.PocketMoreStoriesText, for: .normal)
                 view.moreButton.addTarget(self, action: #selector(showMorePocketStories), for: .touchUpInside)
                 view.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.pocket
                 return view
@@ -536,7 +536,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                 return view
             case .recentlySaved:
                 view.moreButton.isHidden = false
-                view.moreButton.setTitle(.RecentlySavedShowAllText, for: .normal)
+                view.moreButton.setTitle(.ActivityStream.RecentlySavedShowAllText, for: .normal)
                 view.moreButton.addTarget(self, action: #selector(openBookmarks), for: .touchUpInside)
                 view.moreButton.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.MoreButtons.recentlySaved
                 view.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.recentlySaved

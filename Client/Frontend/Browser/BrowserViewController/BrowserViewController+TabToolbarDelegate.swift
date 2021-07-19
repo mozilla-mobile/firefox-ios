@@ -73,7 +73,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             // Redraw the toolbar so the badge hides from the appMenu button.
             updateToolbarStateForTraitCollection(view.traitCollection)
         }
-        whatsNewAction = PhotonActionSheetItem(title: .WhatsNewString, iconString: "whatsnew", isEnabled: showBadgeForWhatsNew) { _, _ in
+        whatsNewAction = PhotonActionSheetItem(title: .AppMenu.WhatsNewString, iconString: "whatsnew", isEnabled: showBadgeForWhatsNew) { _, _ in
             if let whatsNewTopic = AppInfo.whatsNewTopic, let whatsNewURL = SupportUtils.URLForTopic(whatsNewTopic) {
                 TelemetryWrapper.recordEvent(category: .action, method: .open, object: .whatsNew)
                 self.openURLInNewTab(whatsNewURL)
@@ -88,7 +88,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         let syncAction = syncMenuButton(showFxA: presentSignInViewController)
         let isLoginsButtonShowing = LoginListViewController.shouldShowAppMenuShortcut(forPrefs: profile.prefs)
         let viewLogins: PhotonActionSheetItem? = !isLoginsButtonShowing ? nil :
-            PhotonActionSheetItem(title: .AppMenuPasswords, iconString: "key", iconType: .Image, iconAlignment: .left, isEnabled: true) { _, _ in
+            PhotonActionSheetItem(title: .AppMenu.Passwords, iconString: "key", iconType: .Image, iconAlignment: .left, isEnabled: true) { _, _ in
             guard let navController = self.navigationController else { return }
             let navigationHandler: ((_ url: URL?) -> Void) = { url in
                 UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)

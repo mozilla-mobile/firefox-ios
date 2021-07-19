@@ -141,9 +141,9 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
 
             self.clipboardToast =
                 ButtonToast(
-                    labelText: .GoToCopiedLink,
+                    labelText: .Clipboard.Toast.GoToCopiedLink,
                     descriptionText: url.absoluteDisplayString,
-                    buttonText: .GoButtonTittle,
+                    buttonText: .Clipboard.Toast.GoButtonTittle,
                     completion: { buttonPressed in
                         if buttonPressed {
                             self.delegate?.settingsOpenURLInNewTab(url)

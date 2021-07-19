@@ -163,8 +163,8 @@ extension ChronologicalTabsViewController {
 
     func didTapToolbarDelete(_ sender: UIBarButtonItem) {
         let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        controller.addAction(UIAlertAction(title: .AppMenuCloseAllTabsTitleString, style: .default, handler: { _ in self.viewModel.closeTabsForCurrentTray() }), accessibilityIdentifier: "TabTrayController.deleteButton.closeAll")
-        controller.addAction(UIAlertAction(title: .CancelString, style: .cancel, handler: nil), accessibilityIdentifier: "TabTrayController.deleteButton.cancel")
+        controller.addAction(UIAlertAction(title: .AppMenu.CloseAllTabsTitleString, style: .default, handler: { _ in self.viewModel.closeTabsForCurrentTray() }), accessibilityIdentifier: "TabTrayController.deleteButton.closeAll")
+        controller.addAction(UIAlertAction(title: .General.CancelString, style: .cancel, handler: nil), accessibilityIdentifier: "TabTrayController.deleteButton.cancel")
         controller.view.tintColor = UIColor.white
         controller.popoverPresentationController?.barButtonItem = sender
         present(controller, animated: true, completion: nil)
@@ -265,7 +265,7 @@ extension ChronologicalTabsViewController: UITableViewDelegate {
             guard let tab = self.viewModel.getTab(forIndex: indexPath), let url = tab.url else { return }
             self.presentActivityViewController(url, tab: tab)
         })
-        let more = UIContextualAction(style: .normal, title: .PocketMoreStoriesText, handler: { (action, view, completionHandler) in
+        let more = UIContextualAction(style: .normal, title: .ActivityStream.PocketMoreStoriesText, handler: { (action, view, completionHandler) in
             // Bottom toolbar
             self.navigationController?.isToolbarHidden = true
 

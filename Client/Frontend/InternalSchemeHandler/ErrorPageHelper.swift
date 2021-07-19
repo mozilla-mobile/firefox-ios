@@ -169,7 +169,7 @@ class ErrorPageHandler: InternalSchemeResponse {
             "short_description": errDomain,
             ]
 
-        let tryAgain: String = .ErrorPageTryAgain
+        let tryAgain: String = .ErrorPages.TryAgain
         var actions = "<script>function reloader() { location.replace((new URL(location.href)).searchParams.get(\"url\")); }" +
                     "</script><button onclick='reloader()'>\(tryAgain)</button>"
 
@@ -179,7 +179,7 @@ class ErrorPageHandler: InternalSchemeResponse {
             }
         } else if errDomain == MozDomain {
             if errCode == MozErrorDownloadsNotEnabled {
-                let downloadInSafari: String = .ErrorPageOpenInSafari
+                let downloadInSafari: String = .ErrorPages.OpenInSafari
 
                 // Overwrite the normal try-again action.
                 actions = "<button onclick='webkit.messageHandlers.errorPageHelperMessageManager.postMessage({type: \"\(MessageOpenInSafari)\"})'>\(downloadInSafari)</button>"
@@ -192,16 +192,16 @@ class ErrorPageHandler: InternalSchemeResponse {
             }
 
             asset = Bundle.main.path(forResource: "CertError", ofType: "html")
-            actions = "<button onclick='history.back()'>\(String.ErrorPagesGoBackButton)</button>"
-            variables["error_title"] = .ErrorPagesCertWarningTitle
+            actions = "<button onclick='history.back()'>\(String.ErrorPages.GoBackButton)</button>"
+            variables["error_title"] = .ErrorPages.CertWarningTitle
             variables["cert_error"] = certError
-            variables["long_description"] = String(format: .ErrorPagesCertWarningDescription, "<b>\(errURLDomain)</b>")
-            variables["advanced_button"] = .ErrorPagesAdvancedButton
-            variables["warning_description"] = .ErrorPagesCertWarningDescription
-            variables["warning_advanced1"] = .ErrorPagesAdvancedWarning1
-            variables["warning_advanced2"] = .ErrorPagesAdvancedWarning2
+            variables["long_description"] = String(format: .ErrorPages.CertWarningDescription, "<b>\(errURLDomain)</b>")
+            variables["advanced_button"] = .ErrorPages.AdvancedButton
+            variables["warning_description"] = .ErrorPages.CertWarningDescription
+            variables["warning_advanced1"] = .ErrorPages.AdvancedWarning1
+            variables["warning_advanced2"] = .ErrorPages.AdvancedWarning2
             variables["warning_actions"] =
-                "<p><a id='\(UserScriptManager.appIdToken)__firefox__visitOnce' href='#'>\(String.ErrorPagesVisitOnceButton)</button></p>"
+                "<p><a id='\(UserScriptManager.appIdToken)__firefox__visitOnce' href='#'>\(String.ErrorPages.VisitOnceButton)</button></p>"
         }
 
         variables["actions"] = actions

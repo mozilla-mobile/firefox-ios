@@ -74,7 +74,7 @@ class BookmarkDetailPanel: SiteTableViewController {
     var isPresentedFromToast = false
 
     fileprivate lazy var topRightButton: UIBarButtonItem =  {
-        let button = UIBarButtonItem(title: .SettingsAddCustomEngineSaveButtonText, style: .done, target: self, action: #selector(topRightButtonAction))
+        let button = UIBarButtonItem(title: .Settings.Search.AddCustomEngine.SaveButtonText, style: .done, target: self, action: #selector(topRightButtonAction))
         return button
     }()
 
@@ -94,11 +94,11 @@ class BookmarkDetailPanel: SiteTableViewController {
             self.bookmarkItemOrFolderTitle = bookmarkItem.title
             self.bookmarkItemURL = bookmarkItem.url
 
-            self.title = .BookmarksEditBookmark
+            self.title = .Bookmarks.Management.EditBookmark
         } else if let bookmarkFolder = bookmarkNode as? BookmarkFolder {
             self.bookmarkItemOrFolderTitle = bookmarkFolder.title
 
-            self.title = .BookmarksEditFolder
+            self.title = .Bookmarks.Management.EditFolder
         }
     }
 
@@ -109,11 +109,11 @@ class BookmarkDetailPanel: SiteTableViewController {
             self.bookmarkItemOrFolderTitle = ""
             self.bookmarkItemURL = ""
 
-            self.title = .BookmarksNewBookmark
+            self.title = .Bookmarks.Management.NewBookmark
         } else if bookmarkNodeType == .folder {
             self.bookmarkItemOrFolderTitle = ""
 
-            self.title = .BookmarksNewFolder
+            self.title = .Bookmarks.Management.NewFolder
         }
     }
 
@@ -386,13 +386,13 @@ class BookmarkDetailPanel: SiteTableViewController {
 
         switch indexPath.row {
         case BookmarkDetailFieldsRow.title.rawValue:
-            cell.titleLabel.text = .BookmarkDetailFieldTitle
+            cell.titleLabel.text = .Bookmarks.Management.DetailFieldTitle
             cell.textField.text = bookmarkItemOrFolderTitle
             cell.textField.autocapitalizationType = .sentences
             cell.textField.keyboardType = .default
             return cell
         case BookmarkDetailFieldsRow.url.rawValue:
-            cell.titleLabel.text = .BookmarkDetailFieldURL
+            cell.titleLabel.text = .Bookmarks.Management.DetailFieldURL
             cell.textField.text = bookmarkItemURL
             cell.textField.autocapitalizationType = .none
             cell.textField.keyboardType = .URL

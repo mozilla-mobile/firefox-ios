@@ -32,7 +32,7 @@ class TabTrayViewModel {
             case 0, 1:
                 return .TabTrayV2Title
             case 2:
-                return .AppMenuSyncedTabsTitleString
+                return .AppMenu.SyncedTabsTitleString
             default:
                 return nil
             }

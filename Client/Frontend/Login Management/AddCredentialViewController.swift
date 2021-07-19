@@ -39,7 +39,7 @@ class AddCredentialViewController: UIViewController {
     
     fileprivate lazy var cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
     fileprivate lazy var saveButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(title: .SettingsAddCustomEngineSaveButtonText, style: .done, target: self, action: #selector(addCredential))
+        let button = UIBarButtonItem(title: .Settings.Search.AddCustomEngine.SaveButtonText, style: .done, target: self, action: #selector(addCredential))
         button.isEnabled = false
         return button
     }()
@@ -123,7 +123,7 @@ extension AddCredentialViewController: UITableViewDataSource {
 
         case .usernameItem:
             let loginCell = cell(forIndexPath: indexPath)
-            loginCell.highlightedLabelTitle = .LoginDetailUsername
+            loginCell.highlightedLabelTitle = .Login.Detail.Username
             loginCell.descriptionLabel.keyboardType = .emailAddress
             loginCell.descriptionLabel.returnKeyType = .next
             loginCell.isEditingFieldData = true
@@ -133,7 +133,7 @@ extension AddCredentialViewController: UITableViewDataSource {
 
         case .passwordItem:
             let loginCell = cell(forIndexPath: indexPath)
-            loginCell.highlightedLabelTitle = .LoginDetailPassword
+            loginCell.highlightedLabelTitle = .Login.Detail.Password
             loginCell.descriptionLabel.returnKeyType = .default
             loginCell.displayDescriptionAsPassword = true
             loginCell.isEditingFieldData = true
@@ -143,7 +143,7 @@ extension AddCredentialViewController: UITableViewDataSource {
 
         case .websiteItem:
             let loginCell = cell(forIndexPath: indexPath)
-            loginCell.highlightedLabelTitle = .LoginDetailWebsite
+            loginCell.highlightedLabelTitle = .Login.Detail.Website
             websiteField = loginCell.descriptionLabel
             loginCell.placeholder = "https://www.example.com"
             websiteField?.accessibilityIdentifier = "websiteField"

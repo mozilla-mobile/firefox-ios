@@ -81,7 +81,7 @@ class TabLocationView: UIView {
                     if !readerModeButton.isHidden {
                         // Delay the Reader Mode accessibility announcement briefly to prevent interruptions.
                         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-                            UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.ReaderModeAvailableVoiceOverAnnouncement)
+                            UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.ReaderMode.AvailableVoiceOverAnnouncement)
                         }
                     }
                 }

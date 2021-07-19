@@ -37,13 +37,13 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         var title: String? {
             switch self {
             case .today:
-                return .TableDateSectionTitleToday
+                return .TableDateSectionTitles.Today
             case .yesterday:
-                return .TableDateSectionTitleYesterday
+                return .TableDateSectionTitles.Yesterday
             case .lastWeek:
-                return .TableDateSectionTitleLastWeek
+                return .TableDateSectionTitles.LastWeek
             case .lastMonth:
-                return .TableDateSectionTitleLastMonth
+                return .TableDateSectionTitles.LastMonth
             default:
                 return nil
             }
@@ -237,7 +237,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
     func pinToTopSites(_ site: Site) {
         profile.history.addPinnedTopSite(site).uponQueue(.main) { result in
             if result.isSuccess {
-                SimpleToast().showAlertWithText(.AppMenuAddPinToShortcutsConfirmMessage, bottomContainer: self.view)
+                SimpleToast().showAlertWithText(.AppMenu.AddPinToShortcutsConfirmMessage, bottomContainer: self.view)
             }
         }
     }
@@ -266,7 +266,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
             }
         }
 
-        let alert = UIAlertController(title: .ClearHistoryMenuTitle, message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: .ClearHistoryMenu.Title, message: nil, preferredStyle: .actionSheet)
 
         // This will run on the iPad-only, and sets the alert to be centered with no arrow.
         if let popoverController = alert.popoverPresentationController {
@@ -275,16 +275,16 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
             popoverController.permittedArrowDirections = []
         }
 
-        [(String.ClearHistoryMenuOptionTheLastHour, 1),
-         (String.ClearHistoryMenuOptionToday, 24),
-         (String.ClearHistoryMenuOptionTodayAndYesterday, 48)].forEach {
+        [(String.ClearHistoryMenu.OptionTheLastHour, 1),
+         (String.ClearHistoryMenu.OptionToday, 24),
+         (String.ClearHistoryMenu.OptionTodayAndYesterday, 48)].forEach {
             (name, time) in
             let action = UIAlertAction(title: name, style: .destructive) { _ in
                 remove(hoursAgo: time)
             }
             alert.addAction(action)
         }
-        alert.addAction(UIAlertAction(title: .ClearHistoryMenuOptionEverything, style: .destructive, handler: { _ in
+        alert.addAction(UIAlertAction(title: .ClearHistoryMenu.OptionEverything, style: .destructive, handler: { _ in
             let types = WKWebsiteDataStore.allWebsiteDataTypes()
             WKWebsiteDataStore.default().removeData(ofTypes: types, modifiedSince: .distantPast, completionHandler: {})
             self.profile.history.clearHistory().uponQueue(.main) { _ in
@@ -292,7 +292,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
             }
             self.profile.recentlyClosedTabs.clearTabs()
         }))
-        let cancelAction = UIAlertAction(title: .CancelString, style: .cancel)
+        let cancelAction = UIAlertAction(title: .General.CancelString, style: .cancel)
         alert.addAction(cancelAction)
         present(alert, animated: true)
     }

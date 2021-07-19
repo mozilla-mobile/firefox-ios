@@ -39,7 +39,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.title = .SearchSettingsTitle
+        navigationItem.title = .Settings.Search.Title
 
         // To allow re-ordering the list of search engines at all times.
         tableView.isEditing = true
@@ -50,10 +50,10 @@ class SearchSettingsTableViewController: ThemedTableViewController {
 
         // Insert Done button if being presented outside of the Settings Nav stack
         if !(self.navigationController is ThemedNavigationController) {
-            self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: .SettingsSearchDoneButton, style: .done, target: self, action: #selector(self.dismissAnimated))
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: .Settings.SearchDoneButton, style: .done, target: self, action: #selector(self.dismissAnimated))
         }
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: .SettingsSearchEditButton, style: .plain, target: self,
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: .Settings.SearchEditButton, style: .plain, target: self,
                                                                  action: #selector(beginEditing))
     }
 
@@ -79,14 +79,14 @@ class SearchSettingsTableViewController: ThemedTableViewController {
             case ItemDefaultEngine:
                 engine = model.defaultEngine
                 cell.editingAccessoryType = .disclosureIndicator
-                cell.accessibilityLabel = .SearchSettingsDefaultSearchEngineAccessibilityLabel
+                cell.accessibilityLabel = .Settings.Search.DefaultSearchEngineAccessibilityLabel
                 cell.accessibilityValue = engine.shortName
                 cell.textLabel?.text = engine.shortName
                 cell.imageView?.image = engine.image.createScaled(IconSize)
                 cell.imageView?.layer.cornerRadius = 4
                 cell.imageView?.layer.masksToBounds = true
             case ItemDefaultSuggestions:
-                cell.textLabel?.text = .SearchSettingsShowSearchSuggestions
+                cell.textLabel?.text = .Settings.Search.ShowSearchSuggestions
                 let toggle = UISwitchThemed()
                 toggle.onTintColor = UIColor.theme.tableView.controlTint
                 toggle.addTarget(self, action: #selector(didToggleSearchSuggestions), for: .valueChanged)
@@ -121,9 +121,9 @@ class SearchSettingsTableViewController: ThemedTableViewController {
                 cell.selectionStyle = .none
             } else {
                 cell.editingAccessoryType = .disclosureIndicator
-                cell.accessibilityLabel = .SettingsAddCustomEngineTitle
+                cell.accessibilityLabel = .Settings.Search.AddCustomEngine.Title
                 cell.accessibilityIdentifier = "customEngineViewButton"
-                cell.textLabel?.text = .SettingsAddCustomEngine
+                cell.textLabel?.text = .Settings.Search.AddCustomEngine.AddCustomEngine
             }
         }
 
@@ -161,7 +161,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
             customSearchEngineForm.profile = self.profile
             customSearchEngineForm.successCallback = {
                 guard let window = self.view.window else { return }
-                SimpleToast().showAlertWithText(.ThirdPartySearchEngineAdded, bottomContainer: window)
+                SimpleToast().showAlertWithText(.Settings.Search.ThirdPartyEngine.EngineAdded, bottomContainer: window)
             }
             navigationController?.pushViewController(customSearchEngineForm, animated: true)
         }
@@ -215,9 +215,9 @@ class SearchSettingsTableViewController: ThemedTableViewController {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as! ThemedTableSectionHeaderFooterView
         var sectionTitle: String
         if section == SectionDefault {
-            sectionTitle = .SearchSettingsDefaultSearchEngineTitle
+            sectionTitle = .Settings.Search.DefaultSearchEngineTitle
         } else {
-            sectionTitle = .SearchSettingsQuickSearchEnginesTitle
+            sectionTitle = .Settings.Search.QuickSearchEnginesTitle
         }
         headerView.titleLabel.text = sectionTitle
 
@@ -291,7 +291,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
         tableView.isEditing = true
         showDeletion = editing
         UIView.performWithoutAnimation {
-            self.navigationItem.rightBarButtonItem?.title = editing ? .SettingsSearchDoneButton : .SettingsSearchEditButton
+            self.navigationItem.rightBarButtonItem?.title = editing ? .Settings.SearchDoneButton : .Settings.SearchEditButton
         }
         navigationItem.rightBarButtonItem?.isEnabled = isEditable
         navigationItem.rightBarButtonItem?.action = editing ?

@@ -27,7 +27,7 @@ class TurnPasscodeOnSetting: Setting {
 
     init(settings: SettingsTableViewController, delegate: SettingsDelegate? = nil) {
         self.settings = settings as? AuthenticationSettingsViewController
-        super.init(title: NSAttributedString.tableRowTitle(.AuthenticationTurnOnPasscode, enabled: true),
+        super.init(title: NSAttributedString.tableRowTitle(.AuthenticationManager.TurnOnPasscode, enabled: true),
                    delegate: delegate)
     }
 
@@ -47,7 +47,7 @@ class TurnPasscodeOffSetting: Setting {
 
     init(settings: SettingsTableViewController, delegate: SettingsDelegate? = nil) {
         self.settings = settings as? AuthenticationSettingsViewController
-        super.init(title: NSAttributedString.tableRowTitle(.AuthenticationTurnOffPasscode, enabled: true),
+        super.init(title: NSAttributedString.tableRowTitle(.AuthenticationManager.TurnOffPasscode, enabled: true),
                    delegate: delegate)
     }
 
@@ -68,7 +68,7 @@ class ChangePasscodeSetting: Setting {
     init(settings: SettingsTableViewController, delegate: SettingsDelegate? = nil, enabled: Bool) {
         self.settings = settings as? AuthenticationSettingsViewController
 
-        let attributedTitle = NSAttributedString.tableRowTitle(.AuthenticationChangePasscode, enabled: enabled)
+        let attributedTitle = NSAttributedString.tableRowTitle(.AuthenticationManager.ChangePasscode, enabled: enabled)
 
         super.init(title: attributedTitle,
                    delegate: delegate,
@@ -108,7 +108,7 @@ class RequirePasscodeSetting: Setting {
         self.navigationController = settings.navigationController
         self.settings = settings as? AuthenticationSettingsViewController
 
-        let title: String = .AuthenticationRequirePasscode
+        let title: String = .AuthenticationManager.RequirePasscode
         let attributedTitle = NSAttributedString.tableRowTitle(title, enabled: enabled ?? true)
         super.init(title: attributedTitle,
                    delegate: delegate,
@@ -129,7 +129,7 @@ class RequirePasscodeSetting: Setting {
         }
 
         if authInfo.requiresValidation() {
-            AppAuthenticator.presentAuthenticationUsingInfo(authInfo, touchIDReason: .AuthenticationRequirePasscodeTouchReason, success: {
+            AppAuthenticator.presentAuthenticationUsingInfo(authInfo, touchIDReason: .AuthenticationManager.RequirePasscodeTouchReason, success: {
                 self.navigateToRequireInterval()
             }, cancel: nil, fallback: {
                 AppAuthenticator.presentPasscodeAuthentication(self.navigationController).uponQueue(.main) { isOk in
@@ -203,7 +203,7 @@ class TouchIDSetting: Setting {
         if authInfo.useTouchID {
             AppAuthenticator.presentAuthenticationUsingInfo(
                 authInfo,
-                touchIDReason: .AuthenticationDisableTouchReason,
+                touchIDReason: .AuthenticationManager.DisableTouchReason,
                 success: self.touchIDSuccess,
                 cancel: nil,
                 fallback: self.touchIDFallback
@@ -246,20 +246,20 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
         if localAuthContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
             let title: String
             if localAuthContext.biometryType == .faceID {
-                title = .AuthenticationFaceIDPasscodeSetting
+                title = .AuthenticationManager.FaceIDPasscodeSetting
             } else {
-                title = .AuthenticationTouchIDPasscodeSetting
+                title = .AuthenticationManager.TouchIDPasscodeSetting
             }
             navigationItem.title = title
         } else {
-            navigationItem.title = .AuthenticationPasscode
+            navigationItem.title = .AuthenticationManager.Passcode
         }
     }
 
     fileprivate func passcodeEnabledSettings() -> [SettingSection] {
         var settings = [SettingSection]()
 
-        let passcodeSectionTitle = NSAttributedString(string: .AuthenticationPasscode)
+        let passcodeSectionTitle = NSAttributedString(string: .AuthenticationManager.Passcode)
         let passcodeSection = SettingSection(title: passcodeSectionTitle, children: [
             TurnPasscodeOffSetting(settings: self),
             ChangePasscodeSetting(settings: self, delegate: nil, enabled: true)
@@ -270,9 +270,9 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
         if localAuthContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
             let title: String
             if localAuthContext.biometryType == .faceID {
-                title = .UseFaceID
+                title = .Settings.UseFaceID
             } else {
-                title = .UseTouchID
+                title = .Settings.UseTouchID
             }
             requirePasscodeSectionChildren.append(
                 TouchIDSetting(
@@ -302,7 +302,7 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
     fileprivate func passcodeDisabledSettings() -> [SettingSection] {
         var settings = [SettingSection]()
 
-        let passcodeSectionTitle = NSAttributedString(string: .AuthenticationPasscode)
+        let passcodeSectionTitle = NSAttributedString(string: .AuthenticationManager.Passcode)
         let passcodeSection = SettingSection(title: passcodeSectionTitle, children: [
             TurnPasscodeOnSetting(settings: self),
             ChangePasscodeSetting(settings: self, delegate: nil, enabled: false)

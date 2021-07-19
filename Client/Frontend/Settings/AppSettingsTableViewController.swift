@@ -13,12 +13,12 @@ class AppSettingsTableViewController: SettingsTableViewController {
         super.viewDidLoad()
 
         let variables = Experiments.shared.getVariables(featureId: .nimbusValidation)
-        let title = variables.getText("settings-title") ?? .AppSettingsTitle
+        let title = variables.getText("settings-title") ?? .Settings.Title
         let suffix = variables.getString("settings-title-punctuation") ?? ""
 
         navigationItem.title = "\(title)\(suffix)"
         navigationItem.rightBarButtonItem = UIBarButtonItem(
-            title: .AppSettingsDone,
+            title: .Settings.Done,
             style: .done,
             target: navigationController, action: #selector((navigationController as! ThemedNavigationController).done))
         navigationItem.rightBarButtonItem?.accessibilityIdentifier = "AppSettingsTableViewController.navigationItem.leftBarButtonItem"
@@ -50,7 +50,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
             OpenWithSetting(settings: self),
             ThemeSetting(settings: self),
             BoolSetting(prefs: prefs, prefKey: PrefsKeys.KeyBlockPopups, defaultValue: true,
-                        titleText: .AppSettingsBlockPopups),
+                        titleText: .Settings.GeneralSection.BlockPopups),
            ]
 
         if #available(iOS 12.0, *) {
@@ -72,11 +72,11 @@ class AppSettingsTableViewController: SettingsTableViewController {
 
         generalSettings += [
             BoolSetting(prefs: prefs, prefKey: "showClipboardBar", defaultValue: false,
-                        titleText: .SettingsOfferClipboardBarTitle,
-                        statusText: .SettingsOfferClipboardBarStatus),
+                        titleText: .Settings.GeneralSection.OfferClipboardBarTitle,
+                        statusText: .Settings.GeneralSection.OfferClipboardBarStatus),
             BoolSetting(prefs: prefs, prefKey: PrefsKeys.ContextMenuShowLinkPreviews, defaultValue: true,
-                        titleText: .SettingsShowLinkPreviewsTitle,
-                        statusText: .SettingsShowLinkPreviewsStatus)
+                        titleText: .Settings.GeneralSection.ShowLinkPreviewsTitle,
+                        statusText: .Settings.GeneralSection.ShowLinkPreviewsStatus)
         ]
         
         if #available(iOS 14.0, *) {
@@ -98,7 +98,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 SyncNowSetting(settings: self)
             ] + accountChinaSyncSetting )]
 
-        settings += [ SettingSection(title: NSAttributedString(string: .SettingsGeneralSectionTitle), children: generalSettings)]
+        settings += [ SettingSection(title: NSAttributedString(string: .Settings.SectionTitle.General), children: generalSettings)]
 
         var privacySettings = [Setting]()
         privacySettings.append(LoginsSetting(settings: self, delegate: settingsDelegate))
@@ -110,8 +110,8 @@ class AppSettingsTableViewController: SettingsTableViewController {
             BoolSetting(prefs: prefs,
                 prefKey: "settings.closePrivateTabs",
                 defaultValue: false,
-                titleText: .AppSettingsClosePrivateTabsTitle,
-                statusText: .AppSettingsClosePrivateTabsDescription)
+                titleText: .Settings.PrivacySection.ClosePrivateTabsTitle,
+                statusText: .Settings.PrivacySection.ClosePrivateTabsDescription)
         ]
 
         privacySettings.append(ContentBlockerSetting(settings: self))
@@ -121,15 +121,15 @@ class AppSettingsTableViewController: SettingsTableViewController {
         ]
 
         settings += [
-            SettingSection(title: NSAttributedString(string: .AppSettingsPrivacyTitle), children: privacySettings),
-            SettingSection(title: NSAttributedString(string: .AppSettingsSupport), children: [
+            SettingSection(title: NSAttributedString(string: .Settings.SectionTitle.Privacy), children: privacySettings),
+            SettingSection(title: NSAttributedString(string: .Settings.SectionTitle.Support), children: [
                 ShowIntroductionSetting(settings: self),
                 SendFeedbackSetting(),
                 SendAnonymousUsageDataSetting(prefs: prefs, delegate: settingsDelegate),
                 StudiesToggleSetting(prefs: prefs, delegate: settingsDelegate),
                 OpenSupportPageSetting(delegate: settingsDelegate),
             ]),
-            SettingSection(title: NSAttributedString(string: .AppSettingsAbout), children: [
+            SettingSection(title: NSAttributedString(string: .Settings.SectionTitle.About), children: [
                 VersionSetting(settings: self),
                 LicenseAndAcknowledgementsSetting(),
                 YourRightsSetting(),

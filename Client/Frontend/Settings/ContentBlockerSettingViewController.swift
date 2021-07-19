@@ -56,7 +56,7 @@ class TPAccessoryInfo: ThemedTableViewController {
         stack.axis = .vertical
 
         let header = UILabel()
-        header.text = .TPAccessoryInfoBlocksTitle
+        header.text = .TrackingProtection.AccessoryInfoBlocksTitle
         header.font = DynamicFontHelper.defaultHelper.DefaultMediumBoldFont
         header.textColor = UIColor.theme.tableView.headerTextLight
 
@@ -96,33 +96,33 @@ class TPAccessoryInfo: ThemedTableViewController {
         let cell = ThemedTableViewCell(style: .subtitle, reuseIdentifier: nil)
         if indexPath.section == 0 {
             if indexPath.row == 0 {
-                cell.textLabel?.text = .TPSocialBlocked
+                cell.textLabel?.text = .TrackingProtection.Category.Titles.SocialBlocked
             } else {
-                cell.textLabel?.text = .TPCategoryDescriptionSocial
+                cell.textLabel?.text = .TrackingProtection.Category.Descriptions.Social
             }
         } else if indexPath.section == 1 {
             if indexPath.row == 0 {
-                cell.textLabel?.text = .TPCrossSiteBlocked
+                cell.textLabel?.text = .TrackingProtection.Category.Titles.CrossSiteBlocked
             } else {
-                cell.textLabel?.text = .TPCategoryDescriptionCrossSite
+                cell.textLabel?.text = .TrackingProtection.Category.Descriptions.CrossSite
             }
         } else if indexPath.section == 2 {
             if indexPath.row == 0 {
-                cell.textLabel?.text = .TPCryptominersBlocked
+                cell.textLabel?.text = .TrackingProtection.Category.Titles.CryptominersBlocked
             } else {
-                cell.textLabel?.text = .TPCategoryDescriptionCryptominers
+                cell.textLabel?.text = .TrackingProtection.Category.Descriptions.Cryptominers
             }
         } else if indexPath.section == 3 {
             if indexPath.row == 0 {
-                cell.textLabel?.text = .TPFingerprintersBlocked
+                cell.textLabel?.text = .TrackingProtection.Category.Titles.FingerprintersBlocked
             } else {
-                cell.textLabel?.text = .TPCategoryDescriptionFingerprinters
+                cell.textLabel?.text = .TrackingProtection.Category.Descriptions.Fingerprinters
             }
         } else if indexPath.section == 4 {
             if indexPath.row == 0 {
-                cell.textLabel?.text = .TPContentBlocked
+                cell.textLabel?.text = .TrackingProtection.Category.Titles.ContentBlocked
             } else {
-                cell.textLabel?.text = .TPCategoryDescriptionContentTrackers
+                cell.textLabel?.text = .TrackingProtection.Category.Descriptions.ContentTrackers
             }
         }
         cell.imageView?.tintColor = UIColor.theme.tableView.rowText

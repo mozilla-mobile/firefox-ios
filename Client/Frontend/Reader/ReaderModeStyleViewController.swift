@@ -348,7 +348,7 @@ class FontSizeButton: UIButton {
             setTitle(.ReaderModeStyleLargerLabel, for: [])
             accessibilityLabel = .ReaderModeStyleLargerAccessibilityLabel
         case .reset:
-            accessibilityLabel = .ReaderModeResetFontSizeAccessibilityLabel
+            accessibilityLabel = .ReaderMode.ResetFontSizeAccessibilityLabel
         }
 
         // TODO Does this need to change with the selected font type? Not sure if makes sense for just +/-

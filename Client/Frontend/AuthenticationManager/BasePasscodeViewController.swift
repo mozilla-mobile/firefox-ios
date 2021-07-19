@@ -52,15 +52,15 @@ extension BasePasscodeViewController {
     }
 
     func displayLockoutError() {
-        displayError(.AuthenticationMaximumAttemptsReachedNoTime)
+        displayError(.AuthenticationManager.MaximumAttemptsReachedNoTime)
     }
 
     func failMismatchPasscode() {
-        displayError(.AuthenticationMismatchPasscodeError)
+        displayError(.AuthenticationManager.MismatchPasscodeError)
     }
 
     func failMustBeDifferent() {
-        displayError(.AuthenticationUseNewPasscodeError)
+        displayError(.AuthenticationManager.UseNewPasscodeError)
     }
 
     func failIncorrectPasscode(_ inputView: PasscodeInputView) {
@@ -68,11 +68,11 @@ extension BasePasscodeViewController {
         let numberOfAttempts = authenticationInfo?.failedAttempts ?? 0
         if numberOfAttempts == AllowedPasscodeFailedAttempts {
             authenticationInfo?.lockOutUser()
-            displayError(.AuthenticationMaximumAttemptsReachedNoTime)
+            displayError(.AuthenticationManager.MaximumAttemptsReachedNoTime)
             inputView.isUserInteractionEnabled = false
             resignFirstResponder()
         } else {
-            displayError(String(format: .AuthenticationIncorrectAttemptsRemaining, (AllowedPasscodeFailedAttempts - numberOfAttempts)))
+            displayError(String(format: .AuthenticationManager.IncorrectAttemptsRemaining, (AllowedPasscodeFailedAttempts - numberOfAttempts)))
         }
 
         inputView.resetCode()

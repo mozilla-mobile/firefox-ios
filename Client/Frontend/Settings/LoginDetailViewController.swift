@@ -161,7 +161,7 @@ extension LoginDetailViewController: UITableViewDataSource {
 
         case .usernameItem:
             let loginCell = cell(forIndexPath: indexPath)
-            loginCell.highlightedLabelTitle = .LoginDetailUsername
+            loginCell.highlightedLabelTitle = .Login.Detail.Username
             loginCell.descriptionLabel.text = login.username
             loginCell.descriptionLabel.keyboardType = .emailAddress
             loginCell.descriptionLabel.returnKeyType = .next
@@ -172,7 +172,7 @@ extension LoginDetailViewController: UITableViewDataSource {
 
         case .passwordItem:
             let loginCell = cell(forIndexPath: indexPath)
-            loginCell.highlightedLabelTitle = .LoginDetailPassword
+            loginCell.highlightedLabelTitle = .Login.Detail.Password
             loginCell.descriptionLabel.text = login.password
             loginCell.descriptionLabel.returnKeyType = .default
             loginCell.displayDescriptionAsPassword = true
@@ -183,7 +183,7 @@ extension LoginDetailViewController: UITableViewDataSource {
 
         case .websiteItem:
             let loginCell = cell(forIndexPath: indexPath)
-            loginCell.highlightedLabelTitle = .LoginDetailWebsite
+            loginCell.highlightedLabelTitle = .Login.Detail.Website
             loginCell.descriptionLabel.text = login.hostname
             websiteField = loginCell.descriptionLabel
             websiteField?.accessibilityIdentifier = "websiteField"
@@ -195,8 +195,8 @@ extension LoginDetailViewController: UITableViewDataSource {
 
         case .lastModifiedSeparator:
             let cell = CenteredDetailCell(style: .subtitle, reuseIdentifier: nil)
-            let created: String = .LoginDetailCreatedAt
-            let lastModified: String = .LoginDetailModifiedAt
+            let created: String = .Login.Detail.CreatedAt
+            let lastModified: String = .Login.Detail.ModifiedAt
 
             let lastModifiedFormatted = String(format: lastModified, Date.fromTimestamp(UInt64(login.timePasswordChanged)).toRelativeTimeString(dateStyle: .medium))
             let createdFormatted = String(format: created, Date.fromTimestamp(UInt64(login.timeCreated)).toRelativeTimeString(dateStyle: .medium, timeStyle: .none))
@@ -209,7 +209,7 @@ extension LoginDetailViewController: UITableViewDataSource {
 
         case .deleteItem:
             let deleteCell = cell(forIndexPath: indexPath)
-            deleteCell.textLabel?.text = .LoginDetailDelete
+            deleteCell.textLabel?.text = .Login.Detail.Delete
             deleteCell.textLabel?.textAlignment = .center
             deleteCell.textLabel?.textColor = UIColor.theme.general.destructiveRed
             deleteCell.accessibilityTraits = UIAccessibilityTraits.button

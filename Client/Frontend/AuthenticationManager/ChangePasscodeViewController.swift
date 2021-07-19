@@ -13,11 +13,11 @@ class ChangePasscodeViewController: PagingPasscodeViewController, PasscodeInputV
 
     override init() {
         super.init()
-        self.title = .AuthenticationChangePasscode
+        self.title = .AuthenticationManager.ChangePasscode
         self.panes = [
-            PasscodePane(title: .AuthenticationEnterPasscode, passcodeSize: authenticationInfo?.passcode?.count ?? 6),
-            PasscodePane(title: .AuthenticationEnterNewPasscode, passcodeSize: 6),
-            PasscodePane(title: .AuthenticationReenterPasscode, passcodeSize: 6),
+            PasscodePane(title: .AuthenticationManager.EnterPasscode, passcodeSize: authenticationInfo?.passcode?.count ?? 6),
+            PasscodePane(title: .AuthenticationManager.EnterNewPasscode, passcodeSize: 6),
+            PasscodePane(title: .AuthenticationManager.ReenterPasscode, passcodeSize: 6),
         ]
     }
 

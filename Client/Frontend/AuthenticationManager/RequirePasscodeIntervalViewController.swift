@@ -30,7 +30,7 @@ class RequirePasscodeIntervalViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = .AuthenticationRequirePasscode
+        title = .AuthenticationManager.RequirePasscode
 
         tableView.accessibilityIdentifier = "AuthenticationManager.passcodeIntervalTableView"
 

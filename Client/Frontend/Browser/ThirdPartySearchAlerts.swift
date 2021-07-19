@@ -24,19 +24,19 @@ class ThirdPartySearchAlerts: UIAlertController {
 
     static func addThirdPartySearchEngine(_ okayCallback: @escaping (UIAlertAction) -> Void) -> UIAlertController {
         let alert = ThirdPartySearchAlerts(
-            title: .ThirdPartySearchAddTitle,
-            message: .ThirdPartySearchAddMessage,
+            title: .Settings.Search.ThirdPartyEngine.AddTitle,
+            message: .Settings.Search.ThirdPartyEngine.AddMessage,
             preferredStyle: .alert
         )
 
         let noOption = UIAlertAction(
-            title: .ThirdPartySearchCancelButton,
+            title: .Settings.Search.ThirdPartyEngine.CancelButton,
             style: .cancel,
             handler: nil
         )
 
         let okayOption = UIAlertAction(
-            title: .ThirdPartySearchOkayButton,
+            title: .Settings.Search.ThirdPartyEngine.OkayButton,
             style: .default,
             handler: okayCallback
         )
@@ -54,18 +54,18 @@ class ThirdPartySearchAlerts: UIAlertController {
      **/
 
     static func failedToAddThirdPartySearch() -> UIAlertController {
-        return searchAlertWithOK(title: .ThirdPartySearchFailedTitle,
-                                 message: .ThirdPartySearchFailedMessage)
+        return searchAlertWithOK(title: .Settings.Search.ThirdPartyEngine.FailedTitle,
+                                 message: .Settings.Search.ThirdPartyEngine.FailedMessage)
     }
 
     static func incorrectCustomEngineForm() -> UIAlertController {
-        return searchAlertWithOK(title: .CustomEngineFormErrorTitle,
-                                      message: .CustomEngineFormErrorMessage)
+        return searchAlertWithOK(title: .Settings.Search.ThirdPartyEngine.FormErrorTitle,
+                                 message: .Settings.Search.ThirdPartyEngine.FormErrorMessage)
     }
 
     static func duplicateCustomEngine() -> UIAlertController {
-        return searchAlertWithOK(title: .CustomEngineDuplicateErrorTitle,
-                                 message: .CustomEngineDuplicateErrorMessage)
+        return searchAlertWithOK(title: .Settings.Search.ThirdPartyEngine.DuplicateErrorTitle,
+                                 message: .Settings.Search.ThirdPartyEngine.DuplicateErrorMessage)
     }
 
     private static func searchAlertWithOK(title: String, message: String) -> UIAlertController {
@@ -76,7 +76,7 @@ class ThirdPartySearchAlerts: UIAlertController {
         )
 
         let okayOption = UIAlertAction(
-            title: .ThirdPartySearchOkayButton,
+            title: .Settings.Search.ThirdPartyEngine.OkayButton,
             style: .default,
             handler: nil
         )

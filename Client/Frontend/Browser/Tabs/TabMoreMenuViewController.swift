@@ -16,13 +16,13 @@ class TabMoreMenuViewController: UIViewController, Themeable {
     let profile: Profile
     let tabIndex: IndexPath
 
-    let titles: [Int: [String]] = [ 1: [.ShareAddToReadingList,
+    let titles: [Int: [String]] = [ 1: [.ShareExtension.AddToReadingList,
                                         .BookmarkContextMenuTitle,
                                         .AddToShortcutsActionTitle],
                                     2: [.CloseTabTitle],
                                     0: [.CopyAddressTitle,
                                         .ShareContextMenuTitle,
-                                        .SendToDeviceTitle]
+                                        .AppMenu.SendToDeviceTitle]
     ]
     let imageViews: [Int: [UIImageView]] = [ 1: [UIImageView(image: UIImage.templateImageNamed("library-readinglist")),
                                                  UIImageView(image: UIImage.templateImageNamed("bookmark")),
@@ -204,7 +204,7 @@ extension TabMoreMenuViewController: UITableViewDelegate {
             switch indexPath.row {
             case 0:
                 UIPasteboard.general.url = url
-                SimpleToast().showAlertWithText(.AppMenuCopyURLConfirmMessage, bottomContainer: self.view)
+                SimpleToast().showAlertWithText(.AppMenu.CopyURLConfirmMessage, bottomContainer: self.view)
                 dismissMenu()
             case 1:
                 dismissMenu()

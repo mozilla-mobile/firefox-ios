@@ -230,7 +230,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         searchButton.imageView?.contentMode = .center
         searchButton.layer.backgroundColor = SearchViewControllerUX.EngineButtonBackgroundColor
         searchButton.addTarget(self, action: #selector(didClickSearchButton), for: .touchUpInside)
-        searchButton.accessibilityLabel = String(format: .SearchSettingsAccessibilityLabel)
+        searchButton.accessibilityLabel = String(format: .SearchView.SettingsAccessibilityLabel)
 
         searchEngineScrollViewContent.addSubview(searchButton)
         searchButton.snp.makeConstraints { make in
@@ -250,7 +250,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             engineButton.imageView?.layer.cornerRadius = 4
             engineButton.layer.backgroundColor = SearchViewControllerUX.EngineButtonBackgroundColor
             engineButton.addTarget(self, action: #selector(didSelectEngine), for: .touchUpInside)
-            engineButton.accessibilityLabel = String(format: .SearchSearchEngineAccessibilityLabel, engine.shortName)
+            engineButton.accessibilityLabel = String(format: .SearchView.SearchEngineAccessibilityLabel, engine.shortName)
 
             engineButton.imageView?.snp.makeConstraints { make in
                 make.width.height.equalTo(SearchViewControllerUX.FaviconSize)
@@ -574,7 +574,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 let openedTab = self.filteredOpenedTabs[indexPath.row]
                 twoLineCell.descriptionLabel.isHidden = false
                 twoLineCell.titleLabel.text = openedTab.title ?? openedTab.lastTitle
-                twoLineCell.descriptionLabel.text = String.SearchSuggestionCellSwitchToTabLabel
+                twoLineCell.descriptionLabel.text = .SearchView.SuggestionCellSwitchToTabLabel
                 twoLineCell.leftOverlayImageView.image = openAndSyncTabBadge
                 twoLineCell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
                 twoLineCell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth

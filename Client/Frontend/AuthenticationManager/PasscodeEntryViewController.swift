@@ -26,7 +26,7 @@ class PasscodeEntryViewController: BasePasscodeViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = .AuthenticationEnterPasscodeTitle
+        title = .AuthenticationManager.EnterPasscodeTitle
         view.addSubview(passcodePane)
         passcodePane.snp.makeConstraints { make in
             make.bottom.left.right.equalTo(self.view)

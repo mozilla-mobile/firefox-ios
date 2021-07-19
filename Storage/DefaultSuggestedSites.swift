@@ -41,7 +41,7 @@ open class DefaultSuggestedSites {
                 imageUrl: "asset://suggestedsites_facebook",
                 faviconUrl: "asset://defaultFavicon",
                 trackingId: 632,
-                title: .DefaultSuggestedFacebook
+                title: .DefaultSuggestedSites.Facebook
             ),
             SuggestedSiteData(
                 url: "https://m.youtube.com/",
@@ -49,7 +49,7 @@ open class DefaultSuggestedSites {
                 imageUrl: "asset://suggestedsites_youtube",
                 faviconUrl: "asset://defaultFavicon",
                 trackingId: 631,
-                title: .DefaultSuggestedYouTube
+                title: .DefaultSuggestedSites.YouTube
             ),
             SuggestedSiteData(
                 url: "https://www.amazon.com/",
@@ -57,7 +57,7 @@ open class DefaultSuggestedSites {
                 imageUrl: "asset://suggestedsites_amazon",
                 faviconUrl: "asset://defaultFavicon",
                 trackingId: 630,
-                title: .DefaultSuggestedAmazon
+                title: .DefaultSuggestedSites.Amazon
             ),
             SuggestedSiteData(
                 url: "https://www.wikipedia.org/",
@@ -65,7 +65,7 @@ open class DefaultSuggestedSites {
                 imageUrl: "asset://suggestedsites_wikipedia",
                 faviconUrl: "asset://defaultFavicon",
                 trackingId: 629,
-                title: .DefaultSuggestedWikipedia
+                title: .DefaultSuggestedSites.Wikipedia
             ),
             SuggestedSiteData(
                 url: "https://mobile.twitter.com/",
@@ -73,7 +73,7 @@ open class DefaultSuggestedSites {
                 imageUrl: "asset://suggestedsites_twitter",
                 faviconUrl: "asset://defaultFavicon",
                 trackingId: 628,
-                title: .DefaultSuggestedTwitter
+                title: .DefaultSuggestedSites.Twitter
             )
         ],
         "zh_CN": [

@@ -53,8 +53,8 @@ enum TabDisplaySection: Int, CaseIterable {
 
     var title: String? {
         switch self {
-        case .regularTabs: return .ASPocketTitle2
-        case .inactiveTabs: return .RecentlySavedSectionTitle
+        case .regularTabs: return .ActivityStream.PocketTitle2
+        case .inactiveTabs: return .ActivityStream.RecentlySavedSectionTitle
         }
     }
     

@@ -137,7 +137,7 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
         let successCallback: (String, ButtonToastAction) -> Void = { (successMessage, toastAction) in
             switch toastAction {
             case .removeBookmark:
-                let toast = ButtonToast(labelText: successMessage, buttonText: .UndoString, textAlignment: .left) { isButtonTapped in
+                let toast = ButtonToast(labelText: successMessage, buttonText: .General.UndoString, textAlignment: .left) { isButtonTapped in
                     isButtonTapped ? self.addBookmark(url: urlString) : nil
                 }
                 self.show(toast: toast)
@@ -175,7 +175,7 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
     func urlBarDidTapShield(_ urlBar: URLBarView) {
         if let tab = self.tabManager.selectedTab {
             let trackingProtectionMenu = self.getTrackingSubMenu(for: tab)
-            let title = String.localizedStringWithFormat(.TPPageMenuTitle, tab.url?.host ?? "")
+            let title = String.localizedStringWithFormat(.TrackingProtection.PageMenuTitles.Title, tab.url?.host ?? "")
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
             let shouldSuppress = UIDevice.current.userInterfaceIdiom != .pad
             self.presentSheetWith(title: title, actions: trackingProtectionMenu, on: self, from: urlBar, suppressPopover: shouldSuppress)
@@ -212,7 +212,7 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
         guard let tab = tabManager.selectedTab,
                let url = tab.url?.displayURL
             else {
-            UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.ReaderModeAddPageGeneralErrorAccessibilityLabel)
+            UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.BrowserViewController.ReaderMode.AddPageGeneralErrorAccessibilityLabel)
                 return false
         }
 
@@ -220,10 +220,10 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
 
         switch result.value {
         case .success:
-            UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.ReaderModeAddPageSuccessAcessibilityLabel)
-            SimpleToast().showAlertWithText(.ShareAddToReadingListDone, bottomContainer: self.webViewContainer)
+            UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.BrowserViewController.ReaderMode.AddPageSuccessAcessibilityLabel)
+            SimpleToast().showAlertWithText(.ShareExtension.AddToReadingListDone, bottomContainer: self.webViewContainer)
         case .failure(let error):
-            UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.ReaderModeAddPageMaybeExistsErrorAccessibilityLabel)
+            UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.BrowserViewController.ReaderMode.AddPageMaybeExistsErrorAccessibilityLabel)
             print("readingList.createRecordWithURL(url: \"\(url.absoluteString)\", ...) failed with error: \(error)")
         }
         return true

@@ -14,11 +14,11 @@ enum ReaderModeBarButtonType {
 
     fileprivate var localizedDescription: String {
         switch self {
-        case .markAsRead: return .ReaderModeBarMarkAsRead
-        case .markAsUnread: return .ReaderModeBarMarkAsUnread
-        case .settings: return .ReaderModeBarSettings
-        case .addToReadingList: return .ReaderModeBarAddToReadingList
-        case .removeFromReadingList: return .ReaderModeBarRemoveFromReadingList
+        case .markAsRead: return .ReaderMode.Bar.MarkAsRead
+        case .markAsUnread: return .ReaderMode.Bar.MarkAsUnread
+        case .settings: return .ReaderMode.Bar.Settings
+        case .addToReadingList: return .ReaderMode.Bar.AddToReadingList
+        case .removeFromReadingList: return .ReaderMode.Bar.RemoveFromReadingList
         }
     }
 

@@ -15,7 +15,7 @@ class HomePageSettingViewController: SettingsTableViewController {
         self.prefs = prefs
         super.init(style: .grouped)
 
-        self.title = .AppMenuOpenHomePageTitleString
+        self.title = .AppMenu.OpenHomePageTitleString
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -69,7 +69,7 @@ class HomePageSettingViewController: SettingsTableViewController {
         override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
         override var status: NSAttributedString {
             let num = self.profile.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? TopSitesRowCountSettingsController.defaultNumberOfRows
-            return NSAttributedString(string: String(format: .TopSitesRowCount, num))
+            return NSAttributedString(string: String(format: .ActivityStream.TopSitesRowCount, num))
         }
 
         override var accessibilityIdentifier: String? { return "TopSitesRows" }
@@ -77,7 +77,7 @@ class HomePageSettingViewController: SettingsTableViewController {
 
         init(settings: SettingsTableViewController) {
             self.profile = settings.profile
-            super.init(title: NSAttributedString(string: .ASTopSitesTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
+            super.init(title: NSAttributedString(string: .ActivityStream.TopSitesTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
         }
 
         override func onClick(_ navigationController: UINavigationController?) {
@@ -97,7 +97,7 @@ class TopSitesRowCountSettingsController: SettingsTableViewController {
         self.prefs = prefs
         numberOfRows = self.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? TopSitesRowCountSettingsController.defaultNumberOfRows
         super.init(style: .grouped)
-        self.title = .AppMenuTopSitesTitleString
+        self.title = .AppMenu.TopSitesTitleString
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -115,7 +115,7 @@ class TopSitesRowCountSettingsController: SettingsTableViewController {
         }
 
         let rows = [1, 2, 3, 4].map(createSetting)
-        let section = SettingSection(title: NSAttributedString(string: .TopSitesRowSettingFooter), footerTitle: nil, children: rows)
+        let section = SettingSection(title: NSAttributedString(string: .ActivityStream.TopSitesRowSettingFooter), footerTitle: nil, children: rows)
         return [section]
     }
 }

@@ -16,7 +16,7 @@ enum NavigationItemText {
     func localizedString() -> String {
         switch self {
         case .Done:
-            return .SettingsSearchDoneButton
+            return .Settings.SearchDoneButton
         case .Close:
             return .CloseButtonTitle
         }

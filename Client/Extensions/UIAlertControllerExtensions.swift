@@ -26,25 +26,25 @@ extension UIAlertController {
         dontSendCallback: @escaping UIAlertActionCallback) -> UIAlertController {
 
         let alert = UIAlertController(
-            title: .CrashOptInAlertTitle,
-            message: .CrashOptInAlertMessage,
+            title: .Alerts.CrashOptIn.Title,
+            message: .Alerts.CrashOptIn.Message,
             preferredStyle: .alert
         )
 
         let sendReport = UIAlertAction(
-            title: .CrashOptInAlertSend,
+            title: .Alerts.CrashOptIn.Send,
             style: .default,
             handler: sendReportCallback
         )
 
         let alwaysSend = UIAlertAction(
-            title: .CrashOptInAlertAlwaysSend,
+            title: .Alerts.CrashOptIn.AlwaysSend,
             style: .default,
             handler: alwaysSendCallback
         )
 
         let dontSend = UIAlertAction(
-            title: .CrashOptInAlertDontSend,
+            title: .Alerts.CrashOptIn.DontSend,
             style: .default,
             handler: dontSendCallback
         )
@@ -66,19 +66,19 @@ extension UIAlertController {
     */
     class func restoreTabsAlert(okayCallback: @escaping UIAlertActionCallback, noCallback: @escaping UIAlertActionCallback) -> UIAlertController {
         let alert = UIAlertController(
-            title: .RestoreTabsAlertTitle,
-            message: .RestoreTabsAlertMessage,
+            title: .Alerts.RestoreTabs.Title,
+            message: .Alerts.RestoreTabs.Message,
             preferredStyle: .alert
         )
 
         let noOption = UIAlertAction(
-            title: .RestoreTabsAlertNo,
+            title: .Alerts.RestoreTabs.No,
             style: .cancel,
             handler: noCallback
         )
 
         let okayOption = UIAlertAction(
-            title: .RestoreTabsAlertOkay,
+            title: .Alerts.RestoreTabs.Okay,
             style: .default,
             handler: okayCallback
         )
@@ -91,18 +91,18 @@ extension UIAlertController {
     class func clearPrivateDataAlert(okayCallback: @escaping (UIAlertAction) -> Void) -> UIAlertController {
         let alert = UIAlertController(
             title: "",
-            message: .ClearPrivateDataAlertMessage,
+            message: .Alerts.ClearPrivateData.Message,
             preferredStyle: .alert
         )
 
         let noOption = UIAlertAction(
-            title: .ClearPrivateDataAlertCancel,
+            title: .Alerts.ClearPrivateData.Cancel,
             style: .cancel,
             handler: nil
         )
 
         let okayOption = UIAlertAction(
-            title: .ClearPrivateDataAlertOk,
+            title: .Alerts.ClearPrivateData.Ok,
             style: .destructive,
             handler: okayCallback
         )
@@ -115,18 +115,18 @@ extension UIAlertController {
     class func clearSelectedWebsiteDataAlert(okayCallback: @escaping (UIAlertAction) -> Void) -> UIAlertController {
         let alert = UIAlertController(
             title: "",
-            message: .ClearSelectedWebsiteDataAlertMessage,
+            message: .Alerts.ClearWebsiteData.SelectedWebsiteDataMessage,
             preferredStyle: .alert
         )
 
         let noOption = UIAlertAction(
-            title: .ClearWebsiteDataAlertCancel,
+            title: .Alerts.ClearWebsiteData.Cancel,
             style: .cancel,
             handler: nil
         )
 
         let okayOption = UIAlertAction(
-            title: .ClearWebsiteDataAlertOk,
+            title: .Alerts.ClearWebsiteData.Ok,
             style: .destructive,
             handler: okayCallback
         )
@@ -139,18 +139,18 @@ extension UIAlertController {
     class func clearAllWebsiteDataAlert(okayCallback: @escaping (UIAlertAction) -> Void) -> UIAlertController {
         let alert = UIAlertController(
             title: "",
-            message: .ClearAllWebsiteDataAlertMessage,
+            message: .Alerts.ClearWebsiteData.AllWebsiteDataMessage,
             preferredStyle: .alert
         )
 
         let noOption = UIAlertAction(
-            title: .ClearWebsiteDataAlertCancel,
+            title: .Alerts.ClearWebsiteData.Cancel,
             style: .cancel,
             handler: nil
         )
 
         let okayOption = UIAlertAction(
-            title: .ClearWebsiteDataAlertOk,
+            title: .Alerts.ClearWebsiteData.Ok,
             style: .destructive,
             handler: okayCallback
         )
@@ -171,18 +171,18 @@ extension UIAlertController {
     class func clearSyncedHistoryAlert(okayCallback: @escaping (UIAlertAction) -> Void) -> UIAlertController {
         let alert = UIAlertController(
             title: "",
-            message: .ClearSyncedHistoryAlertMessage,
+            message: .Alerts.ClearSyncedHistoryData.Message,
             preferredStyle: .alert
         )
 
         let noOption = UIAlertAction(
-            title: .ClearSyncedHistoryAlertCancel,
+            title: .Alerts.ClearSyncedHistoryData.Cancel,
             style: .cancel,
             handler: nil
         )
 
         let okayOption = UIAlertAction(
-            title: .ClearSyncedHistoryAlertOk,
+            title: .Alerts.ClearSyncedHistoryData.Ok,
             style: .destructive,
             handler: okayCallback
         )
@@ -207,13 +207,13 @@ extension UIAlertController {
 
         let deleteAlert: UIAlertController
         if hasSyncedLogins {
-            deleteAlert = UIAlertController(title: .DeleteLoginAlertTitle, message: .DeleteLoginAlertSyncedMessage, preferredStyle: .alert)
+            deleteAlert = UIAlertController(title: .Alerts.DeleteLogin.Title, message: .Alerts.DeleteLogin.SyncedMessage, preferredStyle: .alert)
         } else {
-            deleteAlert = UIAlertController(title: .DeleteLoginAlertTitle, message: .DeleteLoginAlertLocalMessage, preferredStyle: .alert)
+            deleteAlert = UIAlertController(title: .Alerts.DeleteLogin.Title, message: .Alerts.DeleteLogin.LocalMessage, preferredStyle: .alert)
         }
 
-        let cancelAction = UIAlertAction(title: .DeleteLoginAlertCancel, style: .cancel, handler: nil)
-        let deleteAction = UIAlertAction(title: .DeleteLoginAlertDelete, style: .destructive, handler: deleteCallback)
+        let cancelAction = UIAlertAction(title: .Alerts.DeleteLogin.Cancel, style: .cancel, handler: nil)
+        let deleteAction = UIAlertAction(title: .Alerts.DeleteLogin.Delete, style: .destructive, handler: deleteCallback)
 
         deleteAlert.addAction(cancelAction)
         deleteAlert.addAction(deleteAction)

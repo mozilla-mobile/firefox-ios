@@ -17,10 +17,10 @@ class ASLibraryCell: UICollectionViewCell, Themeable {
 
     var libraryButtons: [LibraryShortcutView] = []
 
-    let bookmarks = LibraryPanel(title: .AppMenuBookmarksTitleString, image: UIImage.templateImageNamed("menu-Bookmark"), color: UIColor.Photon.Blue40)
-    let history = LibraryPanel(title: .AppMenuHistoryTitleString, image: UIImage.templateImageNamed("menu-panel-History"), color: UIColor.Photon.Violet50)
-    let readingList = LibraryPanel(title: .AppMenuReadingListTitleString, image: UIImage.templateImageNamed("menu-panel-ReadingList"), color: UIColor.Photon.Pink40)
-    let downloads = LibraryPanel(title: .AppMenuDownloadsTitleString, image: UIImage.templateImageNamed("menu-panel-Downloads"), color: UIColor.Photon.Green60)
+    let bookmarks = LibraryPanel(title: .AppMenu.BookmarksTitleString, image: UIImage.templateImageNamed("menu-Bookmark"), color: UIColor.Photon.Blue40)
+    let history = LibraryPanel(title: .AppMenu.HistoryTitleString, image: UIImage.templateImageNamed("menu-panel-History"), color: UIColor.Photon.Violet50)
+    let readingList = LibraryPanel(title: .AppMenu.ReadingListTitleString, image: UIImage.templateImageNamed("menu-panel-ReadingList"), color: UIColor.Photon.Pink40)
+    let downloads = LibraryPanel(title: .AppMenu.DownloadsTitleString, image: UIImage.templateImageNamed("menu-panel-Downloads"), color: UIColor.Photon.Green60)
 
     override init(frame: CGRect) {
         super.init(frame: frame)

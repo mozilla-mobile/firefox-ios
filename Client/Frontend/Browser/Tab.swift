@@ -293,7 +293,7 @@ class Tab: NSObject {
             let webView = TabWebView(frame: .zero, configuration: configuration)
             webView.delegate = self
 
-            webView.accessibilityLabel = .WebViewAccessibilityLabel
+            webView.accessibilityLabel = .BrowserViewController.WebViewAccessibilityLabel
             webView.allowsBackForwardNavigationGestures = true
 
             if #available(iOS 13, *) {
@@ -425,12 +425,12 @@ class Tab: NSObject {
         // When picking a display title. Tabs with sessionData are pending a restore so show their old title.
         // To prevent flickering of the display title. If a tab is restoring make sure to use its lastTitle.
         if let url = self.url, InternalURL(url)?.isAboutHomeURL ?? false, sessionData == nil, !restoring {
-            return .AppMenuOpenHomePageTitleString
+            return .AppMenu.OpenHomePageTitleString
         }
 
         //lets double check the sessionData in case this is a non-restored new tab
         if let firstURL = sessionData?.urls.first, sessionData?.urls.count == 1, InternalURL(firstURL)?.isAboutHomeURL ?? false {
-            return .AppMenuOpenHomePageTitleString
+            return .AppMenu.OpenHomePageTitleString
         }
 
         if let url = self.url, !InternalURL.isValid(url: url), let shownUrl = url.displayURL?.absoluteString {

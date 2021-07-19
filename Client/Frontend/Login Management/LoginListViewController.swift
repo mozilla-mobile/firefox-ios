@@ -72,7 +72,7 @@ class LoginListViewController: SensitiveViewController {
             return deferred
         }
 
-        AppAuthenticator.presentAuthenticationUsingInfo(authInfo, touchIDReason: .AuthenticationLoginsTouchReason, success: {
+        AppAuthenticator.presentAuthenticationUsingInfo(authInfo, touchIDReason: .AuthenticationManager.LoginsTouchReason, success: {
             fillDeferred(ok: true)
         }, cancel: {
             fillDeferred(ok: false)
@@ -203,7 +203,7 @@ class LoginListViewController: SensitiveViewController {
     lazy var editButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(beginEditing))
     lazy var addCredentialButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(presentAddCredential))
     lazy var deleteButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(title: .LoginListDelete, style: .plain, target: self, action: #selector(tappedDelete))
+        let button = UIBarButtonItem(title: .Login.List.Delete, style: .plain, target: self, action: #selector(tappedDelete))
         button.tintColor = UIColor.Photon.Red50
         return button
     }()
@@ -232,7 +232,7 @@ class LoginListViewController: SensitiveViewController {
 
     fileprivate func toggleSelectionTitle() {
         let areAllSelected = loginSelectionController.selectedCount == viewModel.count
-        selectionButton.setTitle(areAllSelected ? .LoginListDeselctAll : .LoginListSelctAll, for: [])
+        selectionButton.setTitle(areAllSelected ? .Login.List.DeselctAll : .Login.List.SelctAll, for: [])
     }
 }
 
@@ -275,7 +275,7 @@ private extension LoginListViewController {
         navigationItem.rightBarButtonItems = nil
         navigationItem.leftBarButtonItems = [cancelSelectionButton]
         selectionButtonHeightConstraint?.update(offset: UIConstants.ToolbarHeight)
-        selectionButton.setTitle(.LoginListSelctAll, for: [])
+        selectionButton.setTitle(.Login.List.SelctAll, for: [])
         self.view.layoutIfNeeded()
         tableView.setEditing(true, animated: true)
         tableView.reloadData()

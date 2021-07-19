@@ -58,7 +58,7 @@ class LibraryViewController: UIViewController {
     }()
 
     fileprivate lazy var topRightButton: UIBarButtonItem =  {
-        let button = UIBarButtonItem(title: String.AppSettingsDone, style: .done, target: self, action: #selector(topRightButtonAction))
+        let button = UIBarButtonItem(title: .Settings.Done, style: .done, target: self, action: #selector(topRightButtonAction))
         button.accessibilityIdentifier = "libraryPanelTopRightButton"
         return button
     }()
@@ -70,7 +70,7 @@ class LibraryViewController: UIViewController {
     }()
 
     fileprivate lazy var bottomRightButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(title: .BookmarksEdit, style: .plain, target: self, action: #selector(bottomRightButtonAction))
+        let button = UIBarButtonItem(title: .Bookmarks.Management.Edit, style: .plain, target: self, action: #selector(bottomRightButtonAction))
         button.accessibilityIdentifier = "bookmarksPanelBottomRightButton"
         return button
     }()
@@ -350,10 +350,10 @@ class LibraryViewController: UIViewController {
         case .bookmarks(state: .inFolderEditMode):
             navigationItem.rightBarButtonItem = nil
         case .bookmarks(state: .itemEditMode):
-            topRightButton.title = .SettingsAddCustomEngineSaveButtonText
+            topRightButton.title = .Settings.Search.AddCustomEngine.SaveButtonText
             navigationItem.rightBarButtonItem = topRightButton
         default:
-            topRightButton.title = String.AppSettingsDone
+            topRightButton.title = .Settings.Done
             navigationItem.rightBarButtonItem = topRightButton
         }
     }
@@ -371,9 +371,9 @@ class LibraryViewController: UIViewController {
         switch viewModel.currentPanelState {
         case .bookmarks(state: let subState):
             if subState == .inFolder {
-                bottomRightButton.title = .BookmarksEdit
+                bottomRightButton.title = .Bookmarks.Management.Edit
             } else if subState == .inFolderEditMode {
-                bottomRightButton.title = String.AppSettingsDone
+                bottomRightButton.title = .Settings.Done
             }
         default:
             return

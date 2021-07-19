@@ -42,7 +42,7 @@ class ETPCoverSheetViewController: UIViewController {
     }
     private var doneButton: UIButton = {
         let button = UIButton()
-        button.setTitle(.SettingsSearchDoneButton, for: .normal)
+        button.setTitle(.Settings.SearchDoneButton, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .regular)
         button.setTitleColor(UIColor.systemBlue, for: .normal)
         return button

@@ -31,13 +31,13 @@ enum LibraryPanelType: Int, CaseIterable {
     var title: String {
         switch self {
         case .bookmarks:
-            return .AppMenuBookmarksTitleString
+            return .AppMenu.BookmarksTitleString
         case .history:
-            return .AppMenuHistoryTitleString
+            return .AppMenu.HistoryTitleString
         case .downloads:
-            return .AppMenuDownloadsTitleString
+            return .AppMenu.DownloadsTitleString
         case .readingList:
-            return .AppMenuReadingListTitleString
+            return .AppMenu.ReadingListTitleString
         }
     }
 }
@@ -88,7 +88,7 @@ class LibraryPanels {
             },
             profile: profile,
             imageName: "Bookmarks",
-            accessibilityLabel: .LibraryPanelBookmarksAccessibilityLabel,
+            accessibilityLabel: .LibraryPanel.AccessibilityLabels.Bookmarks,
             accessibilityIdentifier: "LibraryPanels.Bookmarks"),
 
         LibraryPanelDescriptor(
@@ -97,7 +97,7 @@ class LibraryPanels {
             },
             profile: profile,
             imageName: "History",
-            accessibilityLabel: .LibraryPanelHistoryAccessibilityLabel,
+            accessibilityLabel: .LibraryPanel.AccessibilityLabels.History,
             accessibilityIdentifier: "LibraryPanels.History"),
 
         LibraryPanelDescriptor(
@@ -106,7 +106,7 @@ class LibraryPanels {
             },
             profile: profile,
             imageName: "Downloads",
-            accessibilityLabel: .LibraryPanelDownloadsAccessibilityLabel,
+            accessibilityLabel: .LibraryPanel.AccessibilityLabels.Downloads,
             accessibilityIdentifier: "LibraryPanels.Downloads"),
 
         LibraryPanelDescriptor(
@@ -115,7 +115,7 @@ class LibraryPanels {
             },
             profile: profile,
             imageName: "ReadingList",
-            accessibilityLabel: .LibraryPanelReadingListAccessibilityLabel,
+            accessibilityLabel: .LibraryPanel.AccessibilityLabels.ReadingList,
             accessibilityIdentifier: "LibraryPanels.ReadingList")
     ]
 }

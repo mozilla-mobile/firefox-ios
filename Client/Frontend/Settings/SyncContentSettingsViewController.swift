@@ -34,7 +34,7 @@ class DisconnectSetting: Setting {
     override var textAlignment: NSTextAlignment { return .center }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: .SettingsDisconnectSyncButton, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.general.destructiveRed])
+        return NSAttributedString(string: .Settings.DisconnectSyncButton, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.general.destructiveRed])
     }
     
     init(settings: SettingsTableViewController) {
@@ -46,15 +46,15 @@ class DisconnectSetting: Setting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         let alertController = UIAlertController(
-            title: .SettingsDisconnectSyncAlertTitle,
-            message: .SettingsDisconnectSyncAlertBody,
+            title: .Settings.DisconnectSyncAlertTitle,
+            message: .Settings.DisconnectSyncAlertBody,
             preferredStyle: UIAlertController.Style.alert)
         alertController.addAction(
-            UIAlertAction(title: .SettingsDisconnectCancelAction, style: .cancel) { (action) in
+            UIAlertAction(title: .Settings.DisconnectCancelAction, style: .cancel) { (action) in
                 // Do nothing.
         })
         alertController.addAction(
-            UIAlertAction(title: .SettingsDisconnectDestructiveAction, style: .destructive) { (action) in
+            UIAlertAction(title: .Settings.DisconnectDestructiveAction, style: .destructive) { (action) in
                 self.profile.removeAccount()
                 TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .settings, object: .accountDisconnected)
 
@@ -159,10 +159,10 @@ class SyncContentSettingsViewController: SettingsTableViewController {
         let manage = ManageFxAccountSetting(settings: self)
         let manageSection = SettingSection(title: nil, footerTitle: nil, children: [manage])
 
-        let bookmarks = BoolSetting(prefs: profile.prefs, prefKey: "sync.engine.bookmarks.enabled", defaultValue: true, attributedTitleText: NSAttributedString(string: .FirefoxSyncBookmarksEngine), attributedStatusText: nil, settingDidChange: engineSettingChanged("bookmarks"))
-        let history = BoolSetting(prefs: profile.prefs, prefKey: "sync.engine.history.enabled", defaultValue: true, attributedTitleText: NSAttributedString(string: .FirefoxSyncHistoryEngine), attributedStatusText: nil, settingDidChange: engineSettingChanged("history"))
-        let tabs = BoolSetting(prefs: profile.prefs, prefKey: "sync.engine.tabs.enabled", defaultValue: true, attributedTitleText: NSAttributedString(string: .FirefoxSyncTabsEngine), attributedStatusText: nil, settingDidChange: engineSettingChanged("tabs"))
-        let passwords = BoolSetting(prefs: profile.prefs, prefKey: "sync.engine.passwords.enabled", defaultValue: true, attributedTitleText: NSAttributedString(string: .FirefoxSyncLoginsEngine), attributedStatusText: nil, settingDidChange: engineSettingChanged("passwords"))
+        let bookmarks = BoolSetting(prefs: profile.prefs, prefKey: "sync.engine.bookmarks.enabled", defaultValue: true, attributedTitleText: NSAttributedString(string: .Syncing.FirefoxSync.BookmarksEngine), attributedStatusText: nil, settingDidChange: engineSettingChanged("bookmarks"))
+        let history = BoolSetting(prefs: profile.prefs, prefKey: "sync.engine.history.enabled", defaultValue: true, attributedTitleText: NSAttributedString(string: .Syncing.FirefoxSync.HistoryEngine), attributedStatusText: nil, settingDidChange: engineSettingChanged("history"))
+        let tabs = BoolSetting(prefs: profile.prefs, prefKey: "sync.engine.tabs.enabled", defaultValue: true, attributedTitleText: NSAttributedString(string: .Syncing.FirefoxSync.TabsEngine), attributedStatusText: nil, settingDidChange: engineSettingChanged("tabs"))
+        let passwords = BoolSetting(prefs: profile.prefs, prefKey: "sync.engine.passwords.enabled", defaultValue: true, attributedTitleText: NSAttributedString(string: .Syncing.FirefoxSync.LoginsEngine), attributedStatusText: nil, settingDidChange: engineSettingChanged("passwords"))
 
         let enginesSection = SettingSection(title: NSAttributedString(string: .FxASettingsSyncSettings), footerTitle: nil, children: [bookmarks, history, tabs, passwords])
 

@@ -55,7 +55,7 @@ class TabTrayViewController: UIViewController {
     
     lazy var syncLoadingView: UIStackView = {
         let syncingLabel = UILabel()
-        syncingLabel.text = .SyncingMessageWithEllipsis
+        syncingLabel.text = .Syncing.SyncingMessageWithEllipsis
         
         let activityIndicator = UIActivityIndicatorView(style: .gray)
         activityIndicator.color = .systemGray
