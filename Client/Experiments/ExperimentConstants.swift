@@ -12,6 +12,7 @@ enum NimbusFeatureId: String {
     case nimbusValidation = "nimbus-validation"
     case onboardingDefaultBrowser = "onboarding-default-browser"
     case inactiveTabs = "inactiveTabs"
+    case librarySectionExperiment = "library-section-experiment"
 }
 
 /// A set of common branch ids used in experiments. Branch ids can be application/experiment specific, so
@@ -26,5 +27,10 @@ enum NimbusExperimentBranch {
     enum InactiveTab {
         static let control = "inactiveTabControl"
         static let treatment = "inactiveTabTreatment"
+    }
+
+    enum LibrarySectionABTest {
+        static let control = "librarySectionABTestShowLibrary"
+        static let variation = "librarySectionABTestShowRecentlySaved"
     }
 }
