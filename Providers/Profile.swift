@@ -1051,7 +1051,7 @@ open class BrowserProfile: Profile {
             }
             return d
         }
-        
+
         fileprivate func syncLoginsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
             log.debug("Syncing logins to storage.")
             return syncUnlockInfo().bind({ result in
@@ -1067,7 +1067,7 @@ open class BrowserProfile: Profile {
                     let syncEngineStatsSession = SyncEngineStatsSession(collection: "logins")
                     if #available(iOS 12, *), let self = self {
                         self.profile.syncCredentialIdentities().upon { result in
-                            print(result)
+                            log.debug(result)
                         }
                     }
                     return deferMaybe(SyncStatus.completed(syncEngineStatsSession))
