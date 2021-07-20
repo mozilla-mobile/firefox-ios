@@ -124,7 +124,7 @@ extension HomePanelContextMenu {
 
 // MARK: - HomeVC
 
-class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureFlagsProtocol {
+class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureFlagsProtocol, UserResearch {
     weak var homePanelDelegate: HomePanelDelegate?
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     fileprivate let profile: Profile
@@ -156,6 +156,16 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     }()
 
     var pocketStories: [PocketStory] = []
+
+    // Temporary variables to track the nimbus setting.
+    var nimbusExperimentShowLibrarySetting: Bool = true
+
+    var isYourLibrarySectionEnabled: Bool {
+        get {
+            // Library shortcuts should be disabled on the iPad
+            return UIDevice.current.userInterfaceIdiom != .pad && nimbusExperimentShowLibrarySetting
+        }
+    }
     
     var hasRecentBookmarks = false
     var hasReadingListitems = false
@@ -163,12 +173,11 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         get {
             guard featureFlags.isFeatureActive(.recentlySaved) else { return false }
             
-            return (hasRecentBookmarks || hasReadingListitems)
-                && profile.prefs.boolForKey(PrefsKeys.recentlySavedSectionEnabled) ?? false
+            return (hasRecentBookmarks || hasReadingListitems) && !nimbusExperimentShowLibrarySetting
         }
     }
 
-    init(profile: Profile) {
+    init(profile: Profile, experiments: NimbusApi = Experiments.shared) {
         self.profile = profile
         super.init(collectionViewLayout: flowLayout)
         self.collectionView?.delegate = self
@@ -186,6 +195,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        setupExperiment()
 
         Section.allCases.forEach { collectionView.register($0.cellType, forCellWithReuseIdentifier: $0.cellIdentifier) }
         self.collectionView?.register(ASHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header")
@@ -243,6 +254,16 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     }
     
     // MARK: - Helpers
+
+    func setupExperiment() {
+        nimbusExperimentShowLibrarySetting = experiments.withExperiment(featureId: .librarySectionExperiment) { branch -> Bool in
+                switch branch {
+                case .some(NimbusExperimentBranch.LibrarySectionABTest.control): return true
+                case .some(NimbusExperimentBranch.LibrarySectionABTest.variation): return false
+                default: return true
+            }
+        }
+    }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
@@ -524,9 +545,9 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
         case .topSites:
             return Section(section).headerHeight
         case .libraryShortcuts:
-            return UIDevice.current.userInterfaceIdiom == .pad ? CGSize.zero : Section(section).headerHeight
+            return isYourLibrarySectionEnabled ? Section(section).headerHeight : .zero
         case .recentlySaved:
-            let size = ((isRecentlySavedSectionEnabled ? Section(section).headerHeight : .zero))
+            let size = isRecentlySavedSectionEnabled ? Section(section).headerHeight : .zero
             return size
         }
     }
@@ -577,8 +598,7 @@ extension FirefoxHomeViewController {
             let numberOfItems = (isRecentlySavedSectionEnabled ? 1 : 0)
             return numberOfItems
         case .libraryShortcuts:
-            // disable the libary shortcuts on the ipad
-            return UIDevice.current.userInterfaceIdiom == .pad ? 0 : 1
+            return isYourLibrarySectionEnabled ? 1 : 0
         }
     }
 

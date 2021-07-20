@@ -392,6 +392,7 @@
 		C4E398601D22C409004E89BA /* TopTabsLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E3985F1D22C409004E89BA /* TopTabsLayout.swift */; };
 		C4EFEECF1CEBB6F2009762A4 /* BackForwardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EFEECE1CEBB6F2009762A4 /* BackForwardTableViewCell.swift */; };
 		C4F3B29A1CFCF93A00966259 /* ButtonToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4F3B2991CFCF93A00966259 /* ButtonToast.swift */; };
+		C80685D126A0C93900DCD895 /* UserResearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80685D026A0C93900DCD895 /* UserResearch.swift */; };
 		C8163851268A0899004C7160 /* AddCredentialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8163850268A0899004C7160 /* AddCredentialViewController.swift */; };
 		C817B34D1FC609500086018E /* UIScrollViewSwizzled.swift in Sources */ = {isa = PBXBuildFile; fileRef = C817B34C1FC609500086018E /* UIScrollViewSwizzled.swift */; };
 		C81AC6B626160091007800C5 /* TabTrayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C81AC6B526160091007800C5 /* TabTrayViewModel.swift */; };
@@ -2877,6 +2878,7 @@
 		C7C54345A164D550CF2BC575 /* kn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kn; path = kn.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		C7D341F8BA6A9E44518C11C8 /* oc */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = oc; path = oc.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		C7DB49358A6A84AA7391EEE6 /* ta */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ta; path = ta.lproj/Intro.strings; sourceTree = "<group>"; };
+		C80685D026A0C93900DCD895 /* UserResearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResearch.swift; sourceTree = "<group>"; };
 		C8154C5887169941126C530A /* lt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lt; path = lt.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		C8163850268A0899004C7160 /* AddCredentialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCredentialViewController.swift; sourceTree = "<group>"; };
 		C817B34C1FC609500086018E /* UIScrollViewSwizzled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScrollViewSwizzled.swift; sourceTree = "<group>"; };
@@ -4715,6 +4717,7 @@
 				39EF434D260A73950011E22E /* Experiments.swift */,
 				39EF4362260CEE5E0011E22E /* ExperimentConstants.swift */,
 				3964F5FB2656D2B500065278 /* initial_experiments.json */,
+				C80685D026A0C93900DCD895 /* UserResearch.swift */,
 			);
 			path = Experiments;
 			sourceTree = "<group>";
@@ -7874,6 +7877,7 @@
 				D88FDAAF1F4E2BA000FD9709 /* PhotonActionSheetAnimator.swift in Sources */,
 				E698FFDA1B4AADF40001F623 /* TabScrollController.swift in Sources */,
 				D34510881ACF415700EC27F0 /* SearchLoader.swift in Sources */,
+				C80685D126A0C93900DCD895 /* UserResearch.swift in Sources */,
 				DA9FD88924E213E500168D1E /* QuickLinkSelection.intentdefinition in Sources */,
 				CA7FC7D324A6A9B70012F347 /* LoginListDataSourceHelper.swift in Sources */,
 				43AB6FA425DC53D30016B015 /* ASHeaderView.swift in Sources */,
