@@ -329,7 +329,6 @@
 		6025B10E267B6C7F00F59F6B /* LoginRecordExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6025B10B267B6BEA00F59F6B /* LoginRecordExtension.swift */; };
 		6025B10F267B6C7F00F59F6B /* LoginRecordExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6025B10B267B6BEA00F59F6B /* LoginRecordExtension.swift */; };
 		6025B111267B6EE100F59F6B /* CredentialWelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6025B110267B6EE100F59F6B /* CredentialWelcomeViewController.swift */; };
-		60AD9155269C6A5B006B4F12 /* CredentialWelcome.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60AD9154269C6A5B006B4F12 /* CredentialWelcome.storyboard */; };
 		60CE80C12667780D004026C7 /* CredentialListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CE80C02667780C004026C7 /* CredentialListPresenter.swift */; };
 		63306D3921103EAE00F25400 /* SavedTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63306D3821103EAE00F25400 /* SavedTab.swift */; };
 		63306D432110B3CD00F25400 /* TabManagerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63306D422110B3CD00F25400 /* TabManagerStore.swift */; };
@@ -2188,7 +2187,6 @@
 		60774C6D87554915BD2B29B6 /* br */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = br; path = br.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		608E4B36A61360957C77DF31 /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		609E45149CAE5B417DBF7BA5 /* lo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lo; path = lo.lproj/Search.strings; sourceTree = "<group>"; };
-		60AD9154269C6A5B006B4F12 /* CredentialWelcome.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = CredentialWelcome.storyboard; sourceTree = "<group>"; };
 		60B541ED838D17F09560AC13 /* mr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = mr; path = mr.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		60BF40268A4375D6D3A80517 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
 		60CE80C02667780C004026C7 /* CredentialListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialListPresenter.swift; sourceTree = "<group>"; };
@@ -5235,7 +5233,6 @@
 		C89307272655011000A1DB2F /* Storyboard */ = {
 			isa = PBXGroup;
 			children = (
-				60AD9154269C6A5B006B4F12 /* CredentialWelcome.storyboard */,
 				C8CE3899265E71DF0009B09E /* CredentialList.storyboard */,
 			);
 			path = Storyboard;
@@ -7238,7 +7235,6 @@
 				C874FC652661367900EBE86E /* MainInterface.storyboard in Resources */,
 				C8CE389B265E71E00009B09E /* CredentialList.storyboard in Resources */,
 				C893075D265501EE00A1DB2F /* CredentialAssets.xcassets in Resources */,
-				60AD9155269C6A5B006B4F12 /* CredentialWelcome.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
