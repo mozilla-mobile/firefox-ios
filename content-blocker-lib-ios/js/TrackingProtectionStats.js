@@ -154,7 +154,9 @@ function install() {
       set: function(value) {
         sendMessage(this.src);
         originalImageSrc.set.call(this, value);
-      }
+      },
+      enumerable: true,
+      configurable: true,
     });
 
     // -------------------------------------------------
