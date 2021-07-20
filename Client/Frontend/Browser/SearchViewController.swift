@@ -350,6 +350,11 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             if title?.lowercased().range(of: searchString.lowercased()) != nil {
                 return true
             }
+            if searchString.count >= 3 {
+                if tab.readabilityResult?.content.lowercased().range(of: searchString.lowercased()) != nil {
+                    return true
+                }
+            }
             let tabUrl = tab.url ?? tab.sessionData?.urls.last
             if let url = tabUrl, InternalURL.isValid(url: url) {
                 return false

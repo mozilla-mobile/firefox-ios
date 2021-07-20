@@ -201,6 +201,7 @@ struct ReadabilityResult {
     var content = ""
     var title = ""
     var credits = ""
+    var excerpt = ""
 
     init?(object: AnyObject?) {
         if let dict = object as? NSDictionary {
@@ -214,6 +215,9 @@ struct ReadabilityResult {
             }
             if let content = dict["content"] as? String {
                 self.content = content
+            }
+            if let excerpt = dict["excerpt"] as? String {
+                self.excerpt = excerpt
             }
             if let title = dict["title"] as? String {
                 self.title = title
