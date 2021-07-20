@@ -6,9 +6,32 @@ import UIKit
 
 class SelectPasswordCell: UITableViewCell {
     
-    @IBOutlet weak var selectLabel: UILabel! {
-        didSet {
-            selectLabel.text = .LoginsListSelectPasswordTitle.uppercased()
+    static let identifier = "selectPasswordCell"
+    
+    lazy private var selectLabel: UILabel = {
+        let label = UILabel()
+        label.text = .LoginsListSelectPasswordTitle.uppercased()
+        label.font = UIFont.systemFont(ofSize: 13)
+        label.textColor = .systemGray
+        return label
+    }()
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        selectionStyle = .none
+        if #available(iOSApplicationExtension 13.0, *) {
+            contentView.backgroundColor = .systemGroupedBackground
+        } else {
+            contentView.backgroundColor = UIColor.theme.tableView.headerBackground
         }
+        contentView.addSubview(selectLabel)
+        selectLabel.snp.makeConstraints { make in
+            make.centerY.equalToSuperview().multipliedBy(1.4)
+            make.leading.equalToSuperview().offset(14)
+        }
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

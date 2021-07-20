@@ -7,14 +7,49 @@ import UIKit
 
 class NoSearchResultCell: UITableViewCell {
     
-    @IBOutlet weak var titleLabel: UILabel! {
-        didSet {
-            titleLabel.text = .LoginsListNoMatchingResultTitle
+    static let identifier = "noSearchResultCell"
+
+    lazy private var titleLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor(named: "labelColor")
+        label.text = .LoginsListNoMatchingResultTitle
+        label.font = UIFont.systemFont(ofSize: 15)
+        return label
+    }()
+    
+    lazy private var descriptionLabel: UILabel = {
+        let label = UILabel()
+        label.text = .LoginsListNoMatchingResultSubtitle
+        label.textColor = .systemGray
+        label.font = UIFont.systemFont(ofSize: 13)
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        selectionStyle = .none
+        if #available(iOSApplicationExtension 13.0, *) {
+            contentView.backgroundColor = .systemGroupedBackground
+        } else {
+            contentView.backgroundColor = UIColor.theme.tableView.headerBackground
         }
+        contentView.addSubview(titleLabel)
+        titleLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview().offset(55)
+        }
+        contentView.addSubview(descriptionLabel)
+        descriptionLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(titleLabel.snp_bottomMargin).offset(15)
+        }
+       
     }
-    @IBOutlet weak var descriptionLabel: UILabel! {
-        didSet {
-            descriptionLabel.text = .LoginsListNoMatchingResultSubtitle
-        }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
