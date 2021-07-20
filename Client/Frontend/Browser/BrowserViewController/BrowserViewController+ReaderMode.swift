@@ -19,7 +19,6 @@ extension BrowserViewController: ReaderModeDelegate {
     }
 
     func readerMode(_ readerMode: ReaderMode, didParseReadabilityResult readabilityResult: ReadabilityResult, forTab tab: Tab) {
-        tab.readabilityResult = readabilityResult
     }
 }
 

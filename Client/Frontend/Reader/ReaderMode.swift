@@ -7,6 +7,7 @@ import Shared
 import WebKit
 import SwiftyJSON
 
+private let log = Logger.browserLogger
 let ReaderModeProfileKeyStyle = "readermode.style"
 
 enum ReaderModeMessageType: String {
@@ -311,6 +312,8 @@ class ReaderMode: TabContentScript {
         guard let tab = tab else {
             return
         }
+        log.info("ReaderMode: Readability result available!")
+        tab.readabilityResult = readabilityResult
         delegate?.readerMode(self, didParseReadabilityResult: readabilityResult, forTab: tab)
     }
 
