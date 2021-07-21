@@ -3,7 +3,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Shared
+import CoreSpotlight
+import MobileCoreServices
 
+private let log = Logger.browserLogger
 extension BrowserViewController: ReaderModeDelegate {
     func readerMode(_ readerMode: ReaderMode, didChangeReaderModeState state: ReaderModeState, forTab tab: Tab) {
         // If this reader mode availability state change is for the tab that we currently show, then update
@@ -19,6 +22,7 @@ extension BrowserViewController: ReaderModeDelegate {
     }
 
     func readerMode(_ readerMode: ReaderMode, didParseReadabilityResult readabilityResult: ReadabilityResult, forTab tab: Tab) {
+        TabEvent.post(.didLoadReadability(readabilityResult), for: tab)
     }
 }
 

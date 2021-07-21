@@ -11,11 +11,11 @@ import WebKit
 
 private let browsingActivityType: String = "org.mozilla.ios.firefox.browsing"
 
-private let searchableIndex = CSSearchableIndex(name: "firefox")
+private let searchableIndex = CSSearchableIndex.default()
 
 class UserActivityHandler {
     init() {
-        register(self, forTabEvents: .didClose, .didLoseFocus, .didGainFocus, .didChangeURL, .didLoadPageMetadata) // .didLoadFavicon, // TODO: Bug 1390294
+        register(self, forTabEvents: .didClose, .didLoseFocus, .didGainFocus, .didChangeURL, .didLoadPageMetadata, .didLoadReadability) // .didLoadFavicon, // TODO: Bug 1390294
     }
 
     class func clearSearchIndex(completionHandler: ((Error?) -> Void)? = nil) {
@@ -60,11 +60,62 @@ extension UserActivityHandler: TabEventHandler {
         setUserActivityForTab(tab, url: url)
     }
 
+    func tab(_ tab: Tab, didLoadReadability page: ReadabilityResult) {
+        spotlightIndex(page, for: tab)
+    }
+
     func tabDidClose(_ tab: Tab) {
         guard let userActivity = tab.userActivity else {
             return
         }
         tab.userActivity = nil
         userActivity.invalidate()
+    }
+}
+
+private let log = Logger.browserLogger
+
+extension UserActivityHandler {
+    func spotlightIndex(_ page: ReadabilityResult, for tab: Tab) {
+        guard let url = tab.url, !tab.isPrivate, url.isWebPage(includeDataURIs: false), !InternalURL.isValid(url: url) else {
+            return
+        }
+        log.info("Spotlight Indexing\n\(page.excerpt)")
+        let attributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeText as String)
+        attributeSet.title = page.title
+        attributeSet.contentDescription = page.excerpt
+
+        if let image = tab.screenshot {
+            attributeSet.thumbnailData = image.pngData()
+        } else {
+            attributeSet.thumbnailURL = tab.currentFaviconUrl
+        }
+
+        let name = page.credits
+        if !name.isEmptyOrWhitespace() {
+            let author = CSPerson(displayName: name, handles: [], handleIdentifier: name)
+            attributeSet.authors = [author]
+        }
+
+        let identifier = !page.url.isEmptyOrWhitespace() ? page.url : tab.currentURL()?.absoluteString
+
+        let item = CSSearchableItem(uniqueIdentifier: identifier, domainIdentifier: "org.mozilla.ios.firefox", attributeSet: attributeSet)
+        searchableIndex.indexSearchableItems([item]) { error in
+            if let error = error {
+                log.info("Spotlight: Indexing error: \(error.localizedDescription)")
+            } else {
+                log.info("Spotlight: Search item successfully indexed!")
+            }
+        }
+    }
+
+    func spotlightDeindex(_ page: ReadabilityResult) {
+        searchableIndex.deleteSearchableItems(withIdentifiers: [page.url]) { error in
+            if let error = error {
+                log.info("Spotlight: Deindexing error: \(error.localizedDescription)")
+            } else {
+                log.info("Spotlight: sSearch item successfully removed!")
+            }
+        }
     }
 }
