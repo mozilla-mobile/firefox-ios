@@ -345,24 +345,37 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     
     func searchTabs(for searchString: String) {
         let currentTabs = self.isPrivate ? self.tabManager.privateTabs : self.tabManager.normalTabs
-        filteredOpenedTabs = currentTabs.filter { tab in
-            let title = tab.title ?? tab.lastTitle
-            if title?.lowercased().range(of: searchString.lowercased()) != nil {
-                return true
-            }
-            if searchString.count >= 3 {
-                if tab.readabilityResult?.content.lowercased().range(of: searchString.lowercased()) != nil {
-                    return true
-                }
-            }
-            let tabUrl = tab.url ?? tab.sessionData?.urls.last
-            if let url = tabUrl, InternalURL.isValid(url: url) {
+
+        // Small helper function to do case insensitive searching.
+        // We split the search query by spaces so we can simulate full text search.
+        let searchTerms = searchString.split(separator: " ")
+        func find(in content: String?) -> Bool {
+            guard let content = content else {
                 return false
             }
-            if tabUrl?.absoluteString.lowercased().range(of: searchString.lowercased()) != nil {
-                return true
+            return searchTerms.reduce(true) {
+                $0 && content.range(of: $1, options: .caseInsensitive) != nil
             }
-            return false
+        }
+        // Searching within the content will get annoying, so only start searching
+        // in content when there are at least one word with more than 3 letters in.
+        let searchInContent = searchTerms.find { $0.count >= 3 } != nil
+
+        filteredOpenedTabs = currentTabs.filter { tab in
+            guard let url = tab.url ?? tab.sessionData?.urls.last,
+                  !InternalURL.isValid(url: url) else {
+                return false
+            }
+            let lines = [
+                    tab.title ?? tab.lastTitle,
+                    searchInContent ? tab.readabilityResult?.textContent : nil,
+                    url.absoluteString
+                ]
+                .filter { $0 != nil }
+                .map { $0! }
+
+            let text = lines.joined(separator: "\n")
+            return find(in: text)
         }
     }
     
