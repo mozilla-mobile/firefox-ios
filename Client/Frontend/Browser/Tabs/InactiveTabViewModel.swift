@@ -20,7 +20,7 @@ enum TabUpdateState {
 }
 
 struct InactiveTabModel: Codable {
-    var tabWithStatus: [String: InactiveTabStatus] = [:]
+    var tabWithStatus: [String: [InactiveTabStatus]] = [String: [InactiveTabStatus]]()
     
     static let userDefaults = UserDefaults()
     
@@ -64,21 +64,34 @@ class InactiveTabViewModel {
     var filteredRecentlyClosedTabs = [Tab]()
     
     func updateFilteredTabs() {
-        inactiveTabModel.tabWithStatus = InactiveTabModel.get()?.tabWithStatus ?? [:]
+        inactiveTabModel.tabWithStatus = InactiveTabModel.get()?.tabWithStatus ?? [String: [InactiveTabStatus]]()
         
         filteredNormalTabs.removeAll()
         filteredInactiveTabs.removeAll()
         filteredRecentlyClosedTabs.removeAll()
         
         for tab in self.tabs {
-            if inactiveTabModel.tabWithStatus[tab.tabUUID] == .normal ||
-               inactiveTabModel.tabWithStatus[tab.tabUUID] == .shouldBecomeInactive ||
-               inactiveTabModel.tabWithStatus[tab.tabUUID] == .shouldBecomeRecentlyClosed {
+            let status = inactiveTabModel.tabWithStatus[tab.tabUUID]
+            if status == nil {
                 filteredNormalTabs.append(tab)
-            } else if inactiveTabModel.tabWithStatus[tab.tabUUID] == .inactive {
-                filteredInactiveTabs.append(tab)
-            } else if inactiveTabModel.tabWithStatus[tab.tabUUID] == .recentlyClosed {
-                filteredRecentlyClosedTabs.append(tab)
+            } else if let status = status, status.count == 1 {
+                if status.last == .inactive {
+                    filteredInactiveTabs.append(tab)
+                } else if status.last == .normal {
+                    filteredNormalTabs.append(tab)
+                } else if status.last == .recentlyClosed {
+                    filteredRecentlyClosedTabs.append(tab)
+                }
+            } else if let status = status, status.count > 1 {
+                let count = status.count
+                let previousStatus = status[count - 2]
+                if previousStatus == .inactive {
+                    filteredInactiveTabs.append(tab)
+                } else if previousStatus == .normal {
+                    filteredNormalTabs.append(tab)
+                } else if previousStatus == .recentlyClosed {
+                    filteredRecentlyClosedTabs.append(tab)
+                }
             }
         }
     }
@@ -92,22 +105,27 @@ class InactiveTabViewModel {
         let day30_Old = Calendar.current.date(byAdding: .day, value: -30, to: noon) ?? Date()
         clearAll()
         
-        inactiveTabModel.tabWithStatus = InactiveTabModel.get()?.tabWithStatus ?? [:]
+        inactiveTabModel.tabWithStatus = InactiveTabModel.get()?.tabWithStatus ?? [String: [InactiveTabStatus]]()
         let bvc = BrowserViewController.foregroundBVC()
         if bvc.updateState == .coldStart {
             // We update all tabs
             bvc.updateState = .sameSession
-            
+            inactiveTabModel.tabWithStatus = [String: [InactiveTabStatus]]()
             for tab in self.tabs {
                 //Append selected tab to normal tab as we don't want to remove that
                 let tabTimeStamp = tab.lastExecutedTime ?? tab.sessionData?.lastUsedTime ?? tab.firstCreatedTime ?? 0
                 let tabDate = Date.fromTimestamp(tabTimeStamp)
+                
+                if inactiveTabModel.tabWithStatus[tab.tabUUID] == nil {
+                    inactiveTabModel.tabWithStatus[tab.tabUUID] = [InactiveTabStatus]()
+                }
+                
                 if tab == selectedTab || tabDate > day4_Old || tabTimeStamp == 0 {
-                    inactiveTabModel.tabWithStatus[tab.tabUUID] = .normal
+                    inactiveTabModel.tabWithStatus[tab.tabUUID]?.append(.normal)
                 } else if tabDate <= day4_Old && tabDate >= day30_Old {
-                    inactiveTabModel.tabWithStatus[tab.tabUUID] = .inactive
+                    inactiveTabModel.tabWithStatus[tab.tabUUID]?.append(.inactive)
                 } else if tabDate < day30_Old {
-                    inactiveTabModel.tabWithStatus[tab.tabUUID] = .recentlyClosed
+                    inactiveTabModel.tabWithStatus[tab.tabUUID]?.append(.recentlyClosed)
                 }
             }
             
@@ -121,20 +139,27 @@ class InactiveTabViewModel {
                 //Append selected tab to normal tab as we don't want to remove that
                 let tabTimeStamp = tab.lastExecutedTime ?? tab.sessionData?.lastUsedTime ?? tab.firstCreatedTime ?? 0
                 let tabDate = Date.fromTimestamp(tabTimeStamp)
+                
+                if inactiveTabModel.tabWithStatus[tab.tabUUID] == nil {
+                    inactiveTabModel.tabWithStatus[tab.tabUUID] = [InactiveTabStatus]()
+                }
+                
                 let tabType = inactiveTabModel.tabWithStatus[tab.tabUUID]
-                if tabType == .shouldBecomeInactive || tabType == .shouldBecomeRecentlyClosed {
+                if tabType?.last == .shouldBecomeInactive || tabType?.last == .shouldBecomeRecentlyClosed {
                     continue
                 } else if tab == selectedTab || tabDate > day4_Old || tabTimeStamp == 0 {
-                    inactiveTabModel.tabWithStatus[tab.tabUUID] = .normal
+                    if inactiveTabModel.tabWithStatus[tab.tabUUID]?.last != .normal {
+                        inactiveTabModel.tabWithStatus[tab.tabUUID] = [.normal]
+                    }
                 } else if tabDate <= day4_Old && tabDate >= day30_Old {
                     // check if tab is not already inactive
-                    if inactiveTabModel.tabWithStatus[tab.tabUUID] != .inactive {
-                        inactiveTabModel.tabWithStatus[tab.tabUUID] = .shouldBecomeInactive
+                    if inactiveTabModel.tabWithStatus[tab.tabUUID]?.last != .inactive {
+                        inactiveTabModel.tabWithStatus[tab.tabUUID]?.append(.shouldBecomeInactive)
                     }
                 } else if tabDate < day30_Old {
                     // check if tab is not already marked for recently closed
-                    if inactiveTabModel.tabWithStatus[tab.tabUUID] != .recentlyClosed {
-                        inactiveTabModel.tabWithStatus[tab.tabUUID] = .shouldBecomeRecentlyClosed
+                    if inactiveTabModel.tabWithStatus[tab.tabUUID]?.last != .recentlyClosed {
+                        inactiveTabModel.tabWithStatus[tab.tabUUID]?.append(.shouldBecomeRecentlyClosed)
                     }
                 }
             }
