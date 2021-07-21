@@ -200,6 +200,7 @@ struct ReadabilityResult {
     var domain = ""
     var url = ""
     var content = ""
+    var textContent = ""
     var title = ""
     var credits = ""
     var excerpt = ""
@@ -216,6 +217,9 @@ struct ReadabilityResult {
             }
             if let content = dict["content"] as? String {
                 self.content = content
+            }
+            if let textContent = dict["textContent"] as? String {
+                self.textContent = textContent
             }
             if let excerpt = dict["excerpt"] as? String {
                 self.excerpt = excerpt
@@ -237,6 +241,8 @@ struct ReadabilityResult {
         let domain = object["domain"].string
         let url = object["url"].string
         let content = object["content"].string
+        let textContent = object["textContent"].string
+        let excerpt = object["excerpt"].string
         let title = object["title"].string
         let credits = object["credits"].string
 
@@ -249,11 +255,13 @@ struct ReadabilityResult {
         self.content = content!
         self.title = title!
         self.credits = credits!
+        self.textContent = textContent ?? ""
+        self.excerpt = excerpt ?? ""
     }
 
     /// Encode to a dictionary, which can then for example be json encoded
     func encode() -> [String: Any] {
-        return ["domain": domain, "url": url, "content": content, "title": title, "credits": credits]
+        return ["domain": domain, "url": url, "content": content, "title": title, "credits": credits, "textContent": textContent, "excerpt": excerpt]
     }
 
     /// Encode to a JSON encoded string

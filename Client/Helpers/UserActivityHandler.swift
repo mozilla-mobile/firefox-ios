@@ -80,10 +80,10 @@ extension UserActivityHandler {
         guard let url = tab.url, !tab.isPrivate, url.isWebPage(includeDataURIs: false), !InternalURL.isValid(url: url) else {
             return
         }
-        log.info("Spotlight Indexing\n\(page.excerpt)")
         let attributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeText as String)
         attributeSet.title = page.title
         attributeSet.contentDescription = page.excerpt
+        attributeSet.htmlContentData = page.content.utf8EncodedData
 
         if let image = tab.screenshot {
             attributeSet.thumbnailData = image.pngData()
