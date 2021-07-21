@@ -13,6 +13,7 @@ enum NimbusFeatureId: String {
     case onboardingDefaultBrowser = "onboarding-default-browser"
     case inactiveTabs = "inactiveTabs"
     case librarySectionExperiment = "library-section-experiment"
+    case search = "search"
 }
 
 /// A set of common branch ids used in experiments. Branch ids can be application/experiment specific, so

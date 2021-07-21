@@ -73,7 +73,7 @@
             "last_modified": 1621443780172
         },
         {
-            "slug": "feature-icon-variables-validation-ios",
+            "slug": "ios-search-full-text",
             "appId": "org.mozilla.ios.Fennec",
             "appName": "firefox_ios",
             "channel": "nightly",
@@ -83,19 +83,88 @@
                     "feature": {
                         "value": {},
                         "enabled": true,
-                        "featureId": "nimbus-validation"
+                        "featureId": "search"
                     }
                 },
                 {
-                    "slug": "treatment",
+                    "slug": "open-tabs-only",
                     "ratio": 0,
                     "feature": {
                         "value": {
-                            "settings-title": "Settings.General.SectionName",
-                            "settings-icon": "menu-ViewMobile"
+                            "awesome-bar": {
+                                "use-page-content": true
+                            },
+                            "spotlight": {
+                                "enabled": false
+                            }
                         },
                         "enabled": true,
-                        "featureId": "nimbus-validation"
+                        "featureId": "search"
+                    }
+                },
+                {
+                    "slug": "spotlight-only",
+                    "ratio": 0,
+                    "feature": {
+                        "value": {
+                            "spotlight": {
+                                "description": "excerpt",
+                                "use-html-content": true,
+                                "icon": "screenshot",
+                                "keep-for-days": 28
+                            }
+                        },
+                        "enabled": true,
+                        "featureId": "search"
+                    }
+                },
+
+                {
+                    "slug": "spotlight-letter",
+                    "ratio": 0,
+                    "feature": {
+                        "value": {
+                            "spotlight": {
+                                "enabled": true,
+                                "icon": "letter"
+                            }
+                        },
+                        "enabled": true,
+                        "featureId": "search"
+                    }
+                },
+                {
+                    "slug": "spotlight-favicon",
+                    "ratio": 0,
+                    "feature": {
+                        "value": {
+                            "spotlight": {
+                                "enabled": true,
+                                "icon": "favicon"
+                            }
+                        },
+                        "enabled": true,
+                        "featureId": "search"
+                    }
+                },
+                {
+                    "slug": "spotlight-and-open-tabs",
+                    "ratio": 0,
+                    "feature": {
+                        "value": {
+                            "spotlight": {
+                                "enabled": true,
+                                "description": "excerpt",
+                                "icon": "screenshot",
+                                "use-html-content": true,
+                                "keep-for-days": 28
+                            },
+                            "awesome-bar": {
+                                "use-page-content": true
+                            }
+                        },
+                        "enabled": true,
+                        "featureId": "search"
                     }
                 }
             ],
@@ -116,12 +185,12 @@
                 "randomizationUnit": "nimbus_id"
             },
             "schemaVersion": "1.5.0",
-            "userFacingName": "Nimbus Icon Variables Validation",
+            "userFacingName": "Full text searching with Readbility and Spotlight",
             "referenceBranch": "control",
             "proposedDuration": 14,
             "isEnrollmentPaused": false,
             "proposedEnrollment": 7,
-            "userFacingDescription": "Demonstration experiment to make trivial visible changes to icons in Settings",
+            "userFacingDescription": "Does making full-text available to spotlight or open tabs drive CDOU?",
             "last_modified": 1621443780172
         }
     ]

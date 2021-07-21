@@ -79,12 +79,14 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
     var suggestions: [String]? = []
     var savedQuery: String = ""
+    var experimental: Variables?
     static var userAgent: String?
 
     
     init(profile: Profile, isPrivate: Bool, tabManager: TabManager) {
         self.isPrivate = isPrivate
         self.tabManager = tabManager
+        self.experimental = Experiments.shared.getVariables(featureId: .search).getVariables("awesome-bar")
         super.init(profile: profile)
     }
 
@@ -359,7 +361,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         }
         // Searching within the content will get annoying, so only start searching
         // in content when there are at least one word with more than 3 letters in.
-        let searchInContent = searchTerms.find { $0.count >= 3 } != nil
+        let searchInContent = (experimental?.getBool("use-page-content") ?? false)
+            && searchTerms.find { $0.count >= 3 } != nil
 
         filteredOpenedTabs = currentTabs.filter { tab in
             guard let url = tab.url ?? tab.sessionData?.urls.last,

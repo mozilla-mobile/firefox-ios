@@ -80,16 +80,46 @@ extension UserActivityHandler {
         guard let url = tab.url, !tab.isPrivate, url.isWebPage(includeDataURIs: false), !InternalURL.isValid(url: url) else {
             return
         }
+        guard let experimental = Experiments.shared.getVariables(featureId: .search).getVariables("spotlight"),
+              experimental.getBool("enabled") == true else { // i.e. defaults to false
+            return
+        }
+
         let attributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeText as String)
         attributeSet.title = page.title
-        attributeSet.contentDescription = page.excerpt
-        attributeSet.htmlContentData = page.content.utf8EncodedData
 
-        if let image = tab.screenshot {
-            attributeSet.thumbnailData = image.pngData()
-        } else {
-            attributeSet.thumbnailURL = tab.currentFaviconUrl
+        switch experimental.getString("description") ?? "excerpt" {
+        case "excerpt":
+            attributeSet.contentDescription = page.excerpt
+        case "content":
+            attributeSet.contentDescription = page.textContent
+        default:
+            attributeSet.contentDescription = nil
         }
+
+        switch experimental.getBool("use-html-content") ?? true {
+        case true:
+            attributeSet.htmlContentData = page.content.utf8EncodedData
+        default:
+            attributeSet.htmlContentData = nil
+        }
+
+        switch experimental.getString("icon") ?? "letter" {
+        case "screenshot":
+            attributeSet.thumbnailData = tab.screenshot?.pngData()
+        case "favicon":
+            if let baseDomain = tab.url?.baseDomain {
+                attributeSet.thumbnailData = FaviconFetcher.getFaviconFromDiskCache(imageKey: baseDomain)?.pngData()
+            }
+        case "letter":
+            if let url = tab.url {
+                attributeSet.thumbnailData = FaviconFetcher.letter(forUrl: url).pngData()
+            }
+        default:
+            attributeSet.thumbnailData = nil
+        }
+
+        attributeSet.lastUsedDate = Date()
 
         let name = page.credits
         if !name.isEmptyOrWhitespace() {
@@ -100,6 +130,11 @@ extension UserActivityHandler {
         let identifier = !page.url.isEmptyOrWhitespace() ? page.url : tab.currentURL()?.absoluteString
 
         let item = CSSearchableItem(uniqueIdentifier: identifier, domainIdentifier: "org.mozilla.ios.firefox", attributeSet: attributeSet)
+
+        if let numDays = experimental.getInt("keep-for-days") {
+            let day: TimeInterval = 60 * 60 * 24
+            item.expirationDate = Date.init(timeIntervalSinceNow: Double(numDays) * day)
+        }
         searchableIndex.indexSearchableItems([item]) { error in
             if let error = error {
                 log.info("Spotlight: Indexing error: \(error.localizedDescription)")

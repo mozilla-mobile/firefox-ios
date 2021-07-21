@@ -3,8 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Shared
-import CoreSpotlight
-import MobileCoreServices
 
 private let log = Logger.browserLogger
 extension BrowserViewController: ReaderModeDelegate {

@@ -36,8 +36,13 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
             (SiteDataClearable(tabManager: self.tabManager), true),
             (TrackingProtectionClearable(), true),
             (DownloadedFilesClearable(), false), // Don't clear downloaded files by default
-            (SpotlightClearable(), false), // On device only, so don't clear by default.
         ]
+
+        if let experimental = Experiments.shared.getVariables(featureId: .search).getVariables("spotlight"),
+           experimental.getBool("enabled") == true { // i.e. defaults to false
+            items.append((SpotlightClearable(), false)) // On device only, so don't clear by default.)
+        }
+
         return items
     }()
 
