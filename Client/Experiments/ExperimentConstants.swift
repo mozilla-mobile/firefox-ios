@@ -5,9 +5,11 @@
 import Foundation
 
 /// An application specific enum of app features that we are configuring
-/// with experiments. Despite being named `NimbusFeatureID`, what we are
-/// considering features here, are considered experiments in Nimbus.
-/// This is expected to grow and shrink across releases of the app.
+/// with experiments. These identify parts of the app that can be configured by Nimbus.
+///
+/// Configuration comes from calling `nimbus.getVariables(featureId)`. The available variables for
+/// each feature is documented in `Docs/features.md`.
+///
 enum NimbusFeatureId: String {
     case nimbusValidation = "nimbus-validation"
     case onboardingDefaultBrowser = "onboarding-default-browser"
