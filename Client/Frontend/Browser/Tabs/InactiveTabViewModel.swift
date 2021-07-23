@@ -71,7 +71,7 @@ class InactiveTabViewModel {
     var normalTabs = [Tab]()
     var recentlyClosedTabs = [Tab]()
 
-    func updateInactiveTabs(with selectedTab: Tab?, tabs: [Tab], forceUpdate: Bool) {
+    func updateInactiveTabs(with selectedTab: Tab?, tabs: [Tab]) {
         self.tabs = tabs
         self.selectedTab = selectedTab
         clearAll()

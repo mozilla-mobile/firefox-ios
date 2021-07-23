@@ -165,7 +165,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         let selectedTab = tabManager.selectedTab
         // Make sure selected tab has latest time
         selectedTab?.lastExecutedTime = Date.now()
-        inactiveViewModel.updateInactiveTabs(with: tabManager.selectedTab, tabs: allTabs, forceUpdate: true)
+        inactiveViewModel.updateInactiveTabs(with: tabManager.selectedTab, tabs: allTabs)
         isInactiveViewExpanded = inactiveViewModel.inactiveTabs.count > 0
         let recentlyClosedTabs = inactiveViewModel.recentlyClosedTabs
         if recentlyClosedTabs.count > 0 {
