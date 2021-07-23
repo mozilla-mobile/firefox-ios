@@ -85,6 +85,18 @@ class CacheClearable: Clearable {
     }
 }
 
+class SpotlightClearable: Clearable {
+    var label: String { .ClearableSpotlight }
+
+    func clear() -> Success {
+        let deferred = Success()
+        UserActivityHandler.clearSearchIndex() { _ in
+            deferred.fill(Maybe(success: ()))
+        }
+        return deferred
+    }
+}
+
 private func deleteLibraryFolderContents(_ folder: String) throws {
     let manager = FileManager.default
     let library = manager.urls(for: .libraryDirectory, in: .userDomainMask)[0]
