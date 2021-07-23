@@ -305,11 +305,8 @@ extension TabDisplayManager: UICollectionViewDataSource {
             cell = tabDisplayer?.cellFactory(for: cell, using: tab) ?? cell
         case .inactiveTabs:
             if let inactiveCell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabCell.Identifier, for: indexPath) as? InactiveTabCell {
-//                let tabs = inactiveViewModel?.filteredInactiveTabs
                 inactiveCell.inactiveTabsViewModel = inactiveViewModel
                 inactiveCell.hasExpanded = isInactiveViewExpanded
-//                inactiveCell.inactiveTabsViewModel?.inactiveTabs.removeAll()
-//                inactiveCell.inactiveTabsViewModel?.inactiveTabs.append(contentsOf: tabs ?? [])
                 inactiveCell.delegate = self
                 inactiveCell.tableView.reloadData()
                 cell = inactiveCell
