@@ -6,53 +6,42 @@ import UIKit
 import Storage
 
 struct JumpBackInCollectionCellUX {
-    static let cellWidth: CGFloat = 343
     static let cellHeight: CGFloat = 58
-    static let generalSpacing: CGFloat = 8
-    static let sectionInsetSpacing: CGFloat = 4
+    static let topAndBottomSpacing: CGFloat = 8
+    static let leadingAndTrailingSpacing: CGFloat = 4
+    static let sectionInsetSpacing: CGFloat = 16
+}
 
-    static var thing: Int {
-        return 4*4
-    }
+struct JumpBackInLayoutVariables {
+    let columns: CGFloat
+    let scrollDirection: UICollectionView.ScrollDirection
+    let maxItemsToDisplay: Int
 }
 
 class FxHomeJumpBackInCollectionCell: UICollectionViewCell {
 
     // MARK: - Properties
     var profile: Profile?
-    var tabManager: TabManager?
+    var viewModel: FirefoxHomeJumpBackInViewModel!
 
-    var eligibleTabs = [Tab]()
+    var layoutVariables: JumpBackInLayoutVariables {
+        let horizontalVariables = JumpBackInLayoutVariables(columns: 2, scrollDirection: .horizontal, maxItemsToDisplay: 4)
+        let verticalVariables = JumpBackInLayoutVariables(columns: 1, scrollDirection: .vertical, maxItemsToDisplay: 2)
 
-    var layoutVariables: (columns: CGFloat, scrollDirection: UICollectionView.ScrollDirection) {
-        var columns: CGFloat
-        var direction: UICollectionView.ScrollDirection
         let deviceIsiPad = UIDevice.current.userInterfaceIdiom == .pad
         let deviceIsInLandscapeMode = UIApplication.shared.statusBarOrientation.isLandscape
         let horizontalSizeClassIsCompact = traitCollection.horizontalSizeClass == .compact
 
         if deviceIsiPad {
-            if horizontalSizeClassIsCompact {
-                columns = 1
-                direction = .vertical
-            } else {
-                columns = 2
-                direction = .horizontal
-            }
+            if horizontalSizeClassIsCompact { return verticalVariables }
+            return horizontalVariables
 
         } else {
-            if deviceIsInLandscapeMode {
-                columns = 2
-                direction = .horizontal
-            } else {
-                columns = 1
-                direction = .vertical
-            }
+            if deviceIsInLandscapeMode { return horizontalVariables }
+            return verticalVariables
         }
-        return (columns, direction)
     }
 
-    // UI
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = layoutVariables.scrollDirection
@@ -60,6 +49,7 @@ class FxHomeJumpBackInCollectionCell: UICollectionViewCell {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.isScrollEnabled = false
         collectionView.backgroundColor = UIColor.clear
+        collectionView.clipsToBounds = false
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(JumpBackInCell.self, forCellWithReuseIdentifier: JumpBackInCell.cellIdentifier)
@@ -71,7 +61,6 @@ class FxHomeJumpBackInCollectionCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.tabManager = BrowserViewController.foregroundBVC().tabManager
         setupLayout()
     }
 
@@ -80,7 +69,6 @@ class FxHomeJumpBackInCollectionCell: UICollectionViewCell {
     }
 
     // MARK: - Helpers
-
     private func setupLayout() {
         contentView.addSubview(collectionView)
 
@@ -91,56 +79,18 @@ class FxHomeJumpBackInCollectionCell: UICollectionViewCell {
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])
     }
-
-    private func configureData() {
-        if let tabArray = tabManager?.recentlyAccessedNormalTabs {
-            eligibleTabs.removeAll()
-            eligibleTabs = tabArray
-        }
-    }
-
-    // In the future, we may have more than one type of data source. This function
-    // will create a single array out of all data sources.
-    private func loadItems() -> [Tab] {
-        var items = [Tab]()
-
-        items.append(contentsOf: eligibleTabs)
-
-        return items
-    }
-
-    private func sortData() -> [[Tab]] {
-        var tabSection: [Tab] = []
-        var tabsArray: [[Tab]] = []
-        let maxItemsPerSection = Int(layoutVariables.columns)
-
-        for tab in loadItems() {
-            if tabSection.count >= maxItemsPerSection {
-                tabsArray.append(tabSection)
-                tabSection.removeAll()
-            }
-            tabSection.append(tab)
-        }
-        return tabsArray
-    }
 }
 
 extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        configureData()
-        let _ = sortData()
-        return loadItems().count //sortData()[section].count
+        viewModel.updateDataAnd(layoutVariables)
+        return viewModel.jumpableTabs.count
     }
-
-//    func numberOfSections(in collectionView: UICollectionView) -> Int {
-//        return sortData().count
-//    }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: JumpBackInCell.cellIdentifier, for: indexPath) as! JumpBackInCell
-        let dataSource = loadItems()
 
-        if let item = dataSource[safe: indexPath.row] {
+        if let item = viewModel.jumpableTabs[safe: indexPath.row] {
             let itemURL = item.url?.absoluteString ?? ""
             let site = Site(url: itemURL, title: item.displayTitle, bookmarked: true)
 
@@ -151,50 +101,49 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
             })
 
             cell.itemTitle.text = site.title
-            // TODO: Determine source string here, if any
-//            if site.titleURL.shortDisplayString.isEmpty {
-                cell.itemDetails.text = site.tileURL.shortDisplayString
-//            }
+            // TODO: Determine source string here, if from synced tabs. Simply update `cell.itemDetails.text`
         }
 
         return cell
     }
-
 }
 
 extension FxHomeJumpBackInCollectionCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let dataSource = loadItems()
-
-        if let item = dataSource[safe: indexPath.row] as? Tab {
-            tabManager?.selectTab(item)
-//            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .bookmark, value: .recentlySavedBookmarkItemAction)
-        } 
-
+        if let tab = viewModel.jumpableTabs[safe: indexPath.row] {
+            viewModel.switchTo(tab)
+        }
     }
 }
 
 extension FxHomeJumpBackInCollectionCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 
-        let totalHorizontalSpacing = collectionView.bounds.width - (JumpBackInCollectionCellUX.generalSpacing * 2)
-        let itemWidth = totalHorizontalSpacing / layoutVariables.columns
+        var itemWidth: CGFloat
+        let totalHorizontalSpacing = collectionView.bounds.width
+        let columns = layoutVariables.columns
+        if columns == 2 {
+            itemWidth = (totalHorizontalSpacing - JumpBackInCollectionCellUX.sectionInsetSpacing) / columns
+        } else {
+            itemWidth = totalHorizontalSpacing / columns
+        }
         let itemSize = CGSize(width: itemWidth, height: JumpBackInCollectionCellUX.cellHeight)
 
         return itemSize
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: JumpBackInCollectionCellUX.generalSpacing,
-                            left: JumpBackInCollectionCellUX.sectionInsetSpacing,
-                            bottom: JumpBackInCollectionCellUX.generalSpacing,
-                            right: JumpBackInCollectionCellUX.sectionInsetSpacing)
+
+        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return JumpBackInCollectionCellUX.topAndBottomSpacing
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return JumpBackInCollectionCellUX.generalSpacing
+        return JumpBackInCollectionCellUX.sectionInsetSpacing
     }
-
 }
 
 private struct JumpBackInCellUX {
@@ -202,9 +151,9 @@ private struct JumpBackInCellUX {
     static let titleFontSize: CGFloat = 17
     static let detailsFontSize: CGFloat = 12
     static let labelsWrapperSpacing: CGFloat = 4
-    static let bookmarkStackViewSpacing: CGFloat = 8
-    static let bookmarkStackViewShadowRadius: CGFloat = 4
-    static let bookmarkStackViewShadowOffset: CGFloat = 2
+    static let stackViewSpacing: CGFloat = 8
+    static let stackViewShadowRadius: CGFloat = 4
+    static let stackViewShadowOffset: CGFloat = 2
     static let heroImageDimension: CGFloat = 24
 }
 
@@ -212,7 +161,6 @@ private struct JumpBackInCellUX {
 class JumpBackInCell: UICollectionViewCell {
 
     // MARK: - Properties
-
     static let cellIdentifier = "jumpBackInCell"
 
     // UI
@@ -256,15 +204,14 @@ class JumpBackInCell: UICollectionViewCell {
     }
 
     // MARK: - Helpers
-
     private func setupObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .DisplayThemeChanged, object: nil)
     }
 
     private func setupLayout() {
         contentView.layer.cornerRadius = JumpBackInCellUX.generalCornerRadius
-        contentView.layer.shadowRadius = JumpBackInCellUX.bookmarkStackViewShadowRadius
-        contentView.layer.shadowOffset = CGSize(width: 0, height: JumpBackInCellUX.bookmarkStackViewShadowOffset)
+        contentView.layer.shadowRadius = JumpBackInCellUX.stackViewShadowRadius
+        contentView.layer.shadowOffset = CGSize(width: 0, height: JumpBackInCellUX.stackViewShadowOffset)
         contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         contentView.layer.shadowOpacity = 0.12
 
@@ -296,7 +243,6 @@ class JumpBackInCell: UICollectionViewCell {
         default: break
         }
     }
-
 }
 
 extension JumpBackInCell: Themeable {
