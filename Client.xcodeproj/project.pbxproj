@@ -405,7 +405,6 @@
 		C826BD4A26973895006BBE24 /* FxHomeJumpBackInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C826BD4926973895006BBE24 /* FxHomeJumpBackInView.swift */; };
 		C82A94F2269F68ED00624AA7 /* FeatureFlagsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82A94E6269CB77F00624AA7 /* FeatureFlagsManager.swift */; };
 		C82A94F3269F68F300624AA7 /* FlaggableFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82A94E4269CB77500624AA7 /* FlaggableFeature.swift */; };
-		C826BD4A26973895006BBE24 /* FxHomeJumpBackInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C826BD4926973895006BBE24 /* FxHomeJumpBackInView.swift */; };
 		C82CDD47233E8996002E2743 /* Tab+ChangeUserAgent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82CDD45233E8996002E2743 /* Tab+ChangeUserAgent.swift */; };
 		C8340BE824EC69EE00FE91A6 /* ASNUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C8340B7424EC69EE00FE91A6 /* ASNUtils.m */; };
 		C8340BEA24EC69EE00FE91A6 /* CHMutableNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = C8340B7624EC69EE00FE91A6 /* CHMutableNumber.m */; };
@@ -2888,7 +2887,6 @@
 		C81AC6B526160091007800C5 /* TabTrayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayViewModel.swift; sourceTree = "<group>"; };
 		C826BD4926973895006BBE24 /* FxHomeJumpBackInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxHomeJumpBackInView.swift; sourceTree = "<group>"; };
 		C82A94E4269CB77500624AA7 /* FlaggableFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlaggableFeature.swift; sourceTree = "<group>"; };
-		C826BD4926973895006BBE24 /* FxHomeJumpBackInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxHomeJumpBackInView.swift; sourceTree = "<group>"; };
 		C82A94E6269CB77F00624AA7 /* FeatureFlagsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagsManager.swift; sourceTree = "<group>"; };
 		C82CDD45233E8996002E2743 /* Tab+ChangeUserAgent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Tab+ChangeUserAgent.swift"; sourceTree = "<group>"; };
 		C8340B7324EC69EE00FE91A6 /* CHNumber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHNumber.h; sourceTree = "<group>"; };
