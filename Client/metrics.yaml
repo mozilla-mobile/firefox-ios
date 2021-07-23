@@ -303,6 +303,29 @@ app:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-01-01"
 
+# Onboarding metrics
+onboarding:
+  finish:
+    type: event
+    description:
+      The user taps starts browsing and ends the onboarding experience.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/SDK-321
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8904
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - tlong@mozilla.com
+    expires: "2022-01-01"
+    extra_keys:
+      slide_num:
+        description:
+          The current onboarding slide number being viewed when
+          onboarding is dismissed.
+        type: quantity
+
 # Top Site
 top_site:
   tile_pressed:

@@ -506,6 +506,9 @@ extension TelemetryWrapper {
             GleanMetrics.DefaultBrowserOnboarding.dismissPressed.add()
         case (.action, .tap, .goToSettingsDefaultBrowserOnboarding, _, _):
             GleanMetrics.DefaultBrowserOnboarding.goToSettingsPressed.add()
+        // Onboarding
+        case (.action, .press, .dismissedOnboarding, let slideNum, _):
+            GleanMetrics.Onboarding.finish.record(extra: [.slideNum : slideNum])
         // Widget
         case (.action, .open, .mediumTabsOpenUrl, _, _):
             GleanMetrics.Widget.mTabsOpenUrl.add()
