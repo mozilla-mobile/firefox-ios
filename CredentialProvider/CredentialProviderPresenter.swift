@@ -82,23 +82,24 @@ class CredentialProviderPresenter {
     
 
     func credentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-        view?.showWelcome()
-        
-        guard let authInfo = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo(), authInfo.requiresValidation() else {
-            showCredentialList(for: serviceIdentifiers)
-            return
-        }
-        
-        AppAuthenticator.presentAuthenticationUsingInfo(
-            authInfo,
-            touchIDReason: .AuthenticationLoginsTouchReason,
-            success: { self.showCredentialList(for: serviceIdentifiers)},
-            cancel: { self.cancelWith(.userCanceled) },
-            fallback: { [weak self] in
-                self?.view?.showPassword { isOk in
-                    if isOk { self?.showCredentialList(for: serviceIdentifiers) }
+        AppAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
+            switch result {
+            case .success:
+                // Move to the main thread because a state update triggers UI changes.
+                DispatchQueue.main.async { [unowned self] in
+                    self.showCredentialList(for: serviceIdentifiers)
                 }
-            })
+            case .failure(let error):
+                switch error {
+                case .failedEvaluation(let message):
+                    print(message)
+                    self.cancelWith(.userCanceled)
+                case .failedAutentication(let message):
+                    print(message)
+                    self.cancelWith(.userCanceled)
+                }
+            }
+        }
     }
 }
 
