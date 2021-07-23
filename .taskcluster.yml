@@ -7,7 +7,7 @@ tasks:
     - $let:
           taskgraph:
               branch: taskgraph
-              revision: cab4565345d0d0effa66f18fe91335dd6d744031
+              revision: 81f2a1a09e9b0fc1b6c66fd452e065440793c175
           trustDomain: mobile
       in:
           $let:
@@ -235,7 +235,7 @@ tasks:
                               # Note: This task is built server side without the context or tooling that
                               # exist in tree so we must hard code the hash
                               image:
-                                  mozillareleases/taskgraph:decision-mobile-6607973bc60e32323a541861cc5856cd6a0f51ea9fd664ef7d43bca8df53db47@sha256:8c471aacc469ea8e7bb4846c16efe086f7350a5cc1df570cc6c86b22895a2456
+                                  mozillareleases/taskgraph:decision-mobile-44b6b7b4c370220eff56efa8b508aa5157ef9c6e74847c7ecc19d640946ba49e@sha256:4107cbc5e154502529e4d38efa4dc89c05ee54e2cbc6e2e66023e68407502894
 
                               maxRunTime: 1800
 
@@ -252,12 +252,11 @@ tasks:
                                     in:
                                         $if: 'tasks_for == "action"'
                                         then: >
-                                            PIP_IGNORE_INSTALLED=0 pip install --user /builds/worker/checkouts/taskgraph &&
+                                            PIP_IGNORE_INSTALLED=0 pip3 install --user /builds/worker/checkouts/taskgraph &&
                                             ln -s /builds/worker/artifacts artifacts &&
                                             ~/.local/bin/taskgraph action-callback
                                         else: >
-                                            PIP_IGNORE_INSTALLED=0 pip install --user /builds/worker/checkouts/taskgraph &&
-                                            PIP_IGNORE_INSTALLED=0 pip install --user chunkify &&
+                                            PIP_IGNORE_INSTALLED=0 pip3 install --user /builds/worker/checkouts/taskgraph &&
                                             ln -s /builds/worker/artifacts artifacts &&
                                             ~/.local/bin/taskgraph decision
                                             --pushlog-id='0'
@@ -280,6 +279,14 @@ tasks:
                                       type: 'directory'
                                       path: '/builds/worker/artifacts'
                                       expires: {$fromNow: '1 year'}
+                                  'public/docker-contexts':
+                                      type: 'directory'
+                                      path: '/builds/worker/checkouts/src/docker-contexts'
+                                      # This needs to be at least the deadline of the
+                                      # decision task + the docker-image task deadlines.
+                                      # It is set to a week to allow for some time for
+                                      # debugging, but they are not useful long-term.
+                                      expires: {$fromNow: '7 day'}
 
                           extra:
                               $merge:

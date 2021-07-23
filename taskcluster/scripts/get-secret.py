@@ -4,7 +4,6 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-from __future__ import absolute_import, print_function, unicode_literals
 
 import argparse
 import base64
@@ -21,7 +20,7 @@ def write_secret_to_file(path, data, key, base64decode=False, json_secret=False,
     except OSError as error:
         if error.errno != errno.EEXIST:
             raise
-    print("Outputting secret to: {}".format(path))
+    print(f"Outputting secret to: {path}")
 
     with open(path, 'a' if append else 'w') as f:
         value = data['secret'][key]

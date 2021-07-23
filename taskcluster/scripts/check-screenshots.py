@@ -7,7 +7,6 @@
 import argparse
 import glob
 import logging
-import os
 import sys
 import yaml
 
@@ -60,10 +59,10 @@ _FAILURE_EXIT_CODE = 47
 def _check_files(artifacts_directory, locales, number_of_screenshots_per_locale):
     errors = []
 
-    archives = set(glob.glob("{}/*.zip".format(artifacts_directory)))
+    archives = set(glob.glob(f"{artifacts_directory}/*.zip"))
     archives = _filter_out_derived_data_archive(archives)
     expected_number_of_screenshots_per_archive = {
-        "{}/{}.zip".format(artifacts_directory, locale): number_of_screenshots_per_locale[locale]
+        f"{artifacts_directory}/{locale}.zip": number_of_screenshots_per_locale[locale]
         for locale in locales
     }
 
@@ -75,15 +74,15 @@ def _check_files(artifacts_directory, locales, number_of_screenshots_per_locale)
             )
         )
 
-    log.info("Processing {} archives...".format(len(expected_archives)))
-    log.debug("Archives are expected to have these numbers of screenshots: {}".format(expected_number_of_screenshots_per_archive))
+    log.info(f"Processing {len(expected_archives)} archives...")
+    log.debug(f"Archives are expected to have these numbers of screenshots: {expected_number_of_screenshots_per_archive}")
 
     for archive, expected_number_of_screenshots in expected_number_of_screenshots_per_archive.items():
         errors.extend(_check_single_archive(archive, expected_number_of_screenshots))
 
     if errors:
         error_list = "\n * ".join(errors)
-        log.critical("Got {} error(s) while verifying screenshots: \n * {}".format(len(errors), error_list))
+        log.critical(f"Got {len(errors)} error(s) while verifying screenshots: \n * {error_list}")
         sys.exit(_FAILURE_EXIT_CODE)
 
     log.info("No archive is missing and all of them contain the right number of screenshots!")
@@ -95,7 +94,7 @@ def _filter_out_derived_data_archive(archives):
         with ZipFile(archive) as zip_file:
             # So far, only the derived data archive contains info.plist
             if "info.plist" in zip_file.namelist():
-                log.warn('Archive "{}" seems to be the derived data archive. Ignoring...'.format(archive))
+                log.warn(f'Archive "{archive}" seems to be the derived data archive. Ignoring...')
                 continue
 
             filtered_out_archives.add(archive)
@@ -107,10 +106,10 @@ def _check_single_archive(archive, expected_number_of_screenshots):
 
     with ZipFile(archive) as zip_file:
         all_files = set(zip_file.namelist())
-        png_files = set(file for file in all_files if file.endswith(".png"))
+        png_files = {file for file in all_files if file.endswith(".png")}
         non_png_files = all_files - png_files
         if non_png_files:
-            errors.append('Archive "{}" contains non-png files: {}'.format(archive, non_png_files))
+            errors.append(f'Archive "{archive}" contains non-png files: {non_png_files}')
 
         actual_number_of_screenshots = len(png_files)
         if actual_number_of_screenshots != expected_number_of_screenshots:
