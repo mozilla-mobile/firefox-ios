@@ -21,6 +21,7 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
         } else {
             tableView.backgroundColor = UIColor.theme.tableView.headerBackground
         }
+        tableView.showsVerticalScrollIndicator = false
         tableView.dataSource = self
         tableView.delegate = self
         tableView.tableFooterView = UIView()
@@ -46,7 +47,7 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
     
     private var presenter: CredentialListPresenter?
     private var searchController: UISearchController?
-   
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
     }
@@ -79,11 +80,6 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
         registerCells()
     }
     
-    func reloadData() {
-        tableView.reloadData()
-    }
-
-    
     private func styleNavigationBar() {
         navigationItem.title = "Firefox"
         navigationItem.largeTitleDisplayMode = .never
@@ -103,7 +99,7 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
             navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
         }
     }
-
+    
     
     private func getStyledSearchController() -> UISearchController {
         let searchController = UISearchController(searchResultsController: nil)
@@ -132,10 +128,10 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
         }
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: .LoginsListSearchPlaceholder, attributes: [:]) // Set the placeholder text and color
         return searchController
-       
+        
     }
     
-   private func addViewConstraints() {
+    private func addViewConstraints() {
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
             make.edges.equalTo(self.view)
@@ -144,7 +140,7 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
         cancelButton.snp.makeConstraints { make in
             make.width.equalTo(60)
         }
-       
+        
     }
     
     private func registerCells() {
@@ -160,7 +156,7 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
 }
 
 extension CredentialListViewController: UITableViewDataSource {
-
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         guard let presenter = presenter else { return 1 }
         return presenter.numberOfSections()

@@ -32,7 +32,7 @@ class ItemListCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        contentView.backgroundColor = UIColor(named: "credentialCellColor")
+        backgroundColor = UIColor(named: "credentialCellColor")
         contentView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(14)
@@ -50,7 +50,6 @@ class ItemListCell: UITableViewCell {
             make.width.equalToSuperview()
             make.height.equalTo(0.8)
         }
-       
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -59,7 +58,7 @@ class ItemListCell: UITableViewCell {
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        contentView.backgroundColor = selected ? .lightGray : UIColor(named: "credentialCellColor")
+        backgroundColor = selected ? .lightGray : UIColor(named: "credentialCellColor")
     }
 
 }

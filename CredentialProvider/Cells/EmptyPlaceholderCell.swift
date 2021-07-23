@@ -31,9 +31,9 @@ class EmptyPlaceholderCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
         if #available(iOSApplicationExtension 13.0, *) {
-            contentView.backgroundColor = .systemGroupedBackground
+            backgroundColor = .systemGroupedBackground
         } else {
-            contentView.backgroundColor = UIColor.theme.tableView.headerBackground
+            backgroundColor = UIColor.theme.tableView.headerBackground
         }
         contentView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in

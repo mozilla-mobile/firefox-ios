@@ -8,7 +8,7 @@ import UIKit
 class NoSearchResultCell: UITableViewCell {
     
     static let identifier = "noSearchResultCell"
-
+    
     lazy private var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor(named: "labelColor")
@@ -32,9 +32,9 @@ class NoSearchResultCell: UITableViewCell {
         
         selectionStyle = .none
         if #available(iOSApplicationExtension 13.0, *) {
-            contentView.backgroundColor = .systemGroupedBackground
+            backgroundColor = .systemGroupedBackground
         } else {
-            contentView.backgroundColor = UIColor.theme.tableView.headerBackground
+            backgroundColor = UIColor.theme.tableView.headerBackground
         }
         contentView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
@@ -46,9 +46,8 @@ class NoSearchResultCell: UITableViewCell {
             make.centerX.equalToSuperview()
             make.top.equalTo(titleLabel.snp_bottomMargin).offset(15)
         }
-       
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
