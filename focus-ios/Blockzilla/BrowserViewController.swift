@@ -1242,6 +1242,7 @@ extension BrowserViewController: WebControllerDelegate {
         SearchHistoryUtils.isNavigating = false
         SearchHistoryUtils.isFromURLBar = false
         urlBar.isLoading = true
+        urlBar.canDelete = true
         browserToolbar.canDelete = true
         browserToolbar.color = .loading
         toggleURLBarBackground(isBright: false)

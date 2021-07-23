@@ -168,6 +168,7 @@ struct UIConstants {
         static let displayKeyboardDeleteAnimationDuration: TimeInterval = deleteAnimationDuration * (1 / 3)
         static let lockIconInset: Float = 4
         static let shieldIconInset: Float = 9
+        static let shieldIconSize: Float = 19
         static let navigationDoneOffset: Float = -10
         static let overlayAnimationDuration: TimeInterval = 0.25
 		static let autocompleteAnimationDuration: TimeInterval = 0.2

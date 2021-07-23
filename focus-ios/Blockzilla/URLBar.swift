@@ -67,8 +67,6 @@ class URLBar: UIView {
     private let urlText = URLTextField()
     var draggableUrlTextView: UIView { return urlText }
     private let truncatedUrlText = UITextView()
-    private let lockIcon = UIImageView(image: #imageLiteral(resourceName: "icon_https"))
-    private let smallLockIcon = UIImageView(image: #imageLiteral(resourceName: "icon_https_small"))
     private let urlBarBorderView = UIView()
     private let urlBarBackgroundView = UIView()
     private let textAndLockContainer = UIView()
@@ -123,10 +121,6 @@ class URLBar: UIView {
     private var showLeftBarViewConstraints = [Constraint]()
     private var hideLeftBarViewConstraints = [Constraint]()
 
-    private var hideLockConstraints = [Constraint]()
-    private var showLockConstraints = [Constraint]()
-    private var hideSmallLockConstraints = [Constraint]()
-
     override var canBecomeFirstResponder: Bool {
         return true
     }
@@ -159,6 +153,8 @@ class URLBar: UIView {
         gestureRecognizer.addTarget(self, action: #selector(didTapShieldIcon))
         shieldIcon.isUserInteractionEnabled = true
         shieldIcon.addGestureRecognizer(gestureRecognizer)
+        shieldIcon.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
+        shieldIcon.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
 
         cancelButton.isHidden = true
         cancelButton.alpha = 0
@@ -172,13 +168,6 @@ class URLBar: UIView {
                                                       bottom: UIConstants.layout.urlBarMargin,
                                                       right: UIConstants.layout.urlBarMargin)
         addSubview(cancelButton)
-
-        lockIcon.isHidden = true
-        lockIcon.alpha = 0
-        lockIcon.contentMode = .center
-        lockIcon.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
-        lockIcon.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
-        textAndLockContainer.addSubview(lockIcon)
 
         pageActionsButton.isHidden = true
         pageActionsButton.alpha = 0
@@ -202,12 +191,6 @@ class URLBar: UIView {
         urlBarBackgroundView.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
         urlBarBorderView.addSubview(urlBarBackgroundView)
 
-        smallLockIcon.alpha = 0
-        smallLockIcon.contentMode = .center
-        smallLockIcon.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
-        smallLockIcon.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
-        smallLockIcon.accessibilityIdentifier = "Collapsed.smallLockIcon"
-
         truncatedUrlText.alpha = 0
         truncatedUrlText.isUserInteractionEnabled = false
         truncatedUrlText.font = UIConstants.fonts.truncatedUrlText
@@ -224,7 +207,6 @@ class URLBar: UIView {
         collapsedTrackingProtectionBadge.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
         collapsedTrackingProtectionBadge.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
 
-        collapsedUrlAndLockWrapper.addSubview(smallLockIcon)
         collapsedUrlAndLockWrapper.addSubview(truncatedUrlText)
         collapsedUrlAndLockWrapper.addSubview(collapsedTrackingProtectionBadge)
         addSubview(collapsedUrlAndLockWrapper)
@@ -254,10 +236,8 @@ class URLBar: UIView {
         
         shieldIcon.tintColor = .primaryText
         shieldIcon.contentMode = .center
-        shieldIcon.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
-        shieldIcon.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
         shieldIcon.accessibilityIdentifier = "URLBar.trackingProtectionIcon"
-        urlBarBackgroundView.addSubview(shieldIcon)
+        addSubview(shieldIcon)
 
         progressBar.isHidden = true
         progressBar.alpha = 0
@@ -307,6 +287,12 @@ class URLBar: UIView {
             make.centerY.equalTo(self)
             make.size.equalTo(toolset.backButton)
         }
+        
+        toolset.deleteButton.snp.makeConstraints { make in
+            make.trailing.equalTo(toolset.settingsButton.snp.leading)
+            make.centerY.equalTo(self)
+            make.size.equalTo(toolset.backButton)
+        }
 
         toolset.stopReloadButton.snp.makeConstraints { make in
             make.leading.equalTo(toolset.forwardButton.snp.trailing)
@@ -321,10 +307,12 @@ class URLBar: UIView {
             compressedBarConstraints.append(make.height.equalTo(UIConstants.layout.urlBarBorderHeight).constraint)
             compressedBarConstraints.append(make.trailing.equalTo(safeAreaLayoutGuide.snp.trailing).inset(UIConstants.layout.urlBarMargin).constraint)
 
-            expandedBarConstraints.append(make.trailing.equalTo(safeAreaLayoutGuide.snp.trailing).inset(UIConstants.layout.urlBarMargin).constraint)
+            expandedBarConstraints.append(make.trailing.equalTo(rightBarViewLayoutGuide.snp.trailing).constraint)
 
             showLeftBarViewConstraints.append(make.leading.equalTo(leftBarViewLayoutGuide.snp.trailing).offset(UIConstants.layout.urlBarIconInset).constraint)
-            hideLeftBarViewConstraints.append(make.leading.equalTo(safeAreaLayoutGuide.snp.leading).offset(UIConstants.layout.urlBarMargin).constraint)
+            hideLeftBarViewConstraints.append(make.leading.equalTo(safeAreaLayoutGuide.snp.leading).inset(UIConstants.layout.urlBarMargin).constraint)
+            
+            showToolsetConstraints.append(make.leading.equalTo(leftBarViewLayoutGuide.snp.leading).offset(UIConstants.layout.urlBarIconInset).constraint)
         }
 
         urlBarBackgroundView.snp.makeConstraints { make in
@@ -332,7 +320,10 @@ class URLBar: UIView {
         }
 
         shieldIcon.snp.makeConstraints { (make) in
-            make.top.bottom.leading.trailing.equalTo(leftBarViewLayoutGuide)
+            make.top.bottom.equalToSuperview()
+            make.leading.equalTo(leftBarViewLayoutGuide).inset(UIConstants.layout.shieldIconInset)
+            make.width.equalTo(UIConstants.layout.shieldIconSize)
+            
         }
 
         cancelButton.snp.makeConstraints { make in
@@ -343,8 +334,10 @@ class URLBar: UIView {
             make.top.bottom.equalToSuperview()
             make.leading.equalToSuperview().priority(999)
             
-            hideLeftBarViewConstraints.append(make.leading.equalToSuperview().offset(UIConstants.layout.urlBarTextInset).constraint)
+            showLeftBarViewConstraints.append(make.leading.equalTo(leftBarViewLayoutGuide.snp.trailing).offset(UIConstants.layout.urlBarIconInset).constraint)
 
+            hideLeftBarViewConstraints.append(make.leading.equalToSuperview().offset(UIConstants.layout.urlBarTextInset).constraint)
+            
             centeredURLConstraints.append(make.centerX.equalToSuperview().constraint)
             fullWidthURLConstraints.append(make.trailing.equalToSuperview().constraint)
         }
@@ -355,19 +348,12 @@ class URLBar: UIView {
             make.width.equalTo(UIConstants.layout.urlBarButtonTargetSize).priority(900)
         }
 
-        lockIcon.snp.makeConstraints { make in
-            make.top.bottom.equalTo(textAndLockContainer)
-            make.leading.equalTo(textAndLockContainer).inset(UIConstants.layout.lockIconInset).priority(999)
-        }
-
         urlText.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
-            
-            hideLockConstraints.append(make.leading.equalToSuperview().constraint)
-            // Account for the content inset of the URLTextField to balance
-            // the spacing around the lock icon
-            showLockConstraints.append(make.leading.equalTo(lockIcon.snp.trailing).inset(UIConstants.layout.lockIconInset - 4).constraint)
+            make.leading.equalTo(shieldIcon.snp.trailing).offset(5)
 
+            showLeftBarViewConstraints.append(make.left.equalToSuperview().constraint)
+            
             hidePageActionsConstraints.append(make.trailing.equalToSuperview().constraint)
             showPageActionsConstraints.append(make.trailing.equalTo(pageActionsButton.snp.leading).constraint)
         }
@@ -384,29 +370,23 @@ class URLBar: UIView {
             make.height.equalTo(UIConstants.layout.progressBarHeight)
         }
 
-        smallLockIcon.snp.makeConstraints { make in
-            make.leading.equalTo(collapsedUrlAndLockWrapper)
-            make.trailing.equalTo(truncatedUrlText.snp.leading)
-            make.bottom.equalTo(self)
-        }
-
         collapsedTrackingProtectionBadge.snp.makeConstraints { make in
             make.leading.equalTo(safeAreaLayoutGuide).offset(UIConstants.layout.collapsedProtectionBadgeOffset)
-            make.width.height.equalTo(smallLockIcon)
-            make.bottom.top.equalTo(smallLockIcon)
+            make.width.height.equalTo(10)
+            make.bottom.equalToSuperview()
         }
 
         truncatedUrlText.snp.makeConstraints { make in
-            make.leading.equalToSuperview()
-            make.trailing.equalTo(collapsedUrlAndLockWrapper)
-            make.bottom.equalTo(smallLockIcon).offset(UIConstants.layout.truncatedUrlTextOffset)
+            make.centerY.equalTo(self).offset(4)
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalToSuperview().offset(UIConstants.layout.truncatedUrlTextOffset)
         }
 
         collapsedUrlAndLockWrapper.snp.makeConstraints { make in
             make.centerX.equalTo(self)
-            make.top.bottom.equalTo(smallLockIcon)
+            make.top.bottom.equalTo(truncatedUrlText)
             make.height.equalTo(UIConstants.layout.collapsedUrlBarHeight)
-            make.leading.equalTo(smallLockIcon)
+            make.leading.equalTo(truncatedUrlText)
             make.trailing.equalTo(truncatedUrlText)
         }
 
@@ -485,7 +465,6 @@ class URLBar: UIView {
         didSet {
             if !urlText.isEditing {
                 setTextToURL()
-                updateLockIcon()
                 updateUrlIcons()
             }
         }
@@ -522,6 +501,7 @@ class URLBar: UIView {
 
     var shouldShowToolset: Bool = false {
         didSet {
+            updateViews()
             updateToolsetConstraints()
         }
     }
@@ -551,26 +531,6 @@ class URLBar: UIView {
 
     func fillUrlBar(text: String) {
         urlText.text = text
-    }
-
-    private func updateLockIcon() {
-        let visible = false
-        let duration = UIConstants.layout.urlBarTransitionAnimationDuration / 2
-        lockIcon.animateHidden(!visible, duration: duration)
-
-        self.layoutIfNeeded()
-        UIView.animate(withDuration: duration) {
-            if visible {
-                self.hideLockConstraints.forEach { $0.deactivate() }
-                self.showLockConstraints.forEach { $0.activate() }
-                self.hideSmallLockConstraints.forEach { $0.deactivate() }
-            } else {
-                self.showLockConstraints.forEach { $0.deactivate() }
-                self.hideLockConstraints.forEach { $0.activate() }
-                self.hideSmallLockConstraints.forEach { $0.activate() }
-            }
-            self.layoutIfNeeded()
-        }
     }
 
     private func updateUrlIcons() {
@@ -609,7 +569,6 @@ class URLBar: UIView {
             self.layoutIfNeeded()
         })
 
-        updateLockIcon()
         updateUrlIcons()
         displayClearButton(shouldDisplay: false)
         self.layoutIfNeeded()
@@ -621,7 +580,7 @@ class URLBar: UIView {
         switch state {
         case .default:
             showLeftBar = false
-            compressBar = true
+            compressBar = false
             showBackgroundView = true
 
             shieldIcon.animateHidden(false, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
@@ -632,7 +591,7 @@ class URLBar: UIView {
             borderColor = .foundation
             backgroundColor = .foundation
         case .browsing:
-            showLeftBar = false
+            showLeftBar = shouldShowToolset ? true : false
             compressBar = false
             showBackgroundView = false
 
@@ -714,6 +673,7 @@ class URLBar: UIView {
         toolset.backButton.animateHidden(isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
         toolset.forwardButton.animateHidden(isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
         toolset.stopReloadButton.animateHidden(isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
+        toolset.deleteButton.animateHidden(isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
         toolset.settingsButton.animateHidden(isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
 
     }
@@ -777,6 +737,7 @@ class URLBar: UIView {
         toolset.backButton.alpha = shouldShowToolset ? expandAlpha : 0
         toolset.forwardButton.alpha = shouldShowToolset ? expandAlpha : 0
         toolset.stopReloadButton.alpha = shouldShowToolset ? expandAlpha : 0
+        toolset.deleteButton.alpha = shouldShowToolset ? expandAlpha : 0
         toolset.settingsButton.alpha = shouldShowToolset ? expandAlpha : 0
 
         collapsedTrackingProtectionBadge.alpha = collapseAlpha
@@ -785,8 +746,7 @@ class URLBar: UIView {
         } else {
             shieldIcon.alpha = expandAlpha
         }
-        // updating the small lock icon status here in order to prevent the icon from flashing on start up
-        smallLockIcon.alpha = 0
+
         self.layoutIfNeeded()
     }
 
@@ -833,6 +793,10 @@ extension URLBar: AutocompleteTextFieldDelegate {
 
     func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didTextChange text: String) {
         userInputText = text
+        
+        if !text.isEmpty {
+            displayClearButton(shouldDisplay: true, animated: true)
+        }
 
         autocompleteTextField.rightView?.isHidden = text.isEmpty
 
