@@ -157,31 +157,6 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
             }
         }
     }
-
-    func updateTabs() {
-        let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
-        guard allTabs.count > 0, let inactiveViewModel = inactiveViewModel else { return }
-        guard allTabs.count > 1 else { return }
-        let selectedTab = tabManager.selectedTab
-        // Make sure selected tab has latest time
-        selectedTab?.lastExecutedTime = Date.now()
-        inactiveViewModel.updateInactiveTabs(with: tabManager.selectedTab, tabs: allTabs, forceUpdate: true)
-        inactiveViewModel.updateFilteredTabs()
-        isInactiveViewExpanded = inactiveViewModel.filteredInactiveTabs.count > 0
-        let recentlyClosedTabs = inactiveViewModel.filteredRecentlyClosedTabs
-        if recentlyClosedTabs.count > 0 {
-            tabManager.removeTabs(recentlyClosedTabs, shouldNotify: true)
-            tabManager.selectTab(selectedTab)
-        }
-    }
-    
-    func getTabsToDisplay2() -> [Tab] {
-        let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
-        guard allTabs.count > 0, let inactiveViewModel = inactiveViewModel else { return [Tab]() }
-        guard allTabs.count > 1 else { return allTabs }
-        inactiveViewModel.updateFilteredTabs()
-        return inactiveViewModel.filteredNormalTabs
-    }
     
     func getTabsToDisplay() -> [Tab] {
         let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
@@ -191,14 +166,13 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         // Make sure selected tab has latest time
         selectedTab?.lastExecutedTime = Date.now()
         inactiveViewModel.updateInactiveTabs(with: tabManager.selectedTab, tabs: allTabs, forceUpdate: true)
-        inactiveViewModel.updateFilteredTabs()
-        isInactiveViewExpanded = inactiveViewModel.filteredInactiveTabs.count > 0
-        let recentlyClosedTabs = inactiveViewModel.filteredRecentlyClosedTabs
+        isInactiveViewExpanded = inactiveViewModel.inactiveTabs.count > 0
+        let recentlyClosedTabs = inactiveViewModel.recentlyClosedTabs
         if recentlyClosedTabs.count > 0 {
             tabManager.removeTabs(recentlyClosedTabs, shouldNotify: true)
             tabManager.selectTab(selectedTab)
         }
-        return inactiveViewModel.filteredNormalTabs
+        return inactiveViewModel.normalTabs
     }
     
     func togglePrivateMode(isOn: Bool, createTabOnEmptyPrivateMode: Bool) {

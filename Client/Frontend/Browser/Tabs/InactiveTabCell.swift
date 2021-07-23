@@ -78,7 +78,7 @@ class InactiveTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, U
         if !hasExpanded { return 0 }
         switch InactiveTabSection(rawValue: section) {
         case .inactive:
-            return inactiveTabsViewModel?.filteredInactiveTabs.count ?? 0
+            return inactiveTabsViewModel?.inactiveTabs.count ?? 0
         case .recentlyClosed:
             return 1
         case .none:
@@ -97,7 +97,7 @@ class InactiveTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, U
         cell.accessoryView = nil
         switch InactiveTabSection(rawValue: indexPath.section) {
         case .inactive:
-            guard let tab = inactiveTabsViewModel?.filteredInactiveTabs[indexPath.item] else { return cell }
+            guard let tab = inactiveTabsViewModel?.inactiveTabs[indexPath.item] else { return cell }
             cell.titleLabel.text = tab.displayTitle
             cell.leftImageView.setImageAndBackground(forIcon: tab.displayFavicon, website: getTabDomainUrl(tab: tab)) {}
             cell.shouldLeftAlignTitle = false
@@ -141,7 +141,7 @@ class InactiveTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, U
         let section = indexPath.section
         switch InactiveTabSection(rawValue: section) {
         case .inactive:
-            if let tab = inactiveTabsViewModel?.filteredInactiveTabs[indexPath.item] {
+            if let tab = inactiveTabsViewModel?.inactiveTabs[indexPath.item] {
                 delegate?.didSelectInactiveTab(tab: tab)
             }
         case .recentlyClosed, .none:
