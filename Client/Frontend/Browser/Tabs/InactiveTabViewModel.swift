@@ -16,7 +16,7 @@ enum InactiveTabStatus: String, Codable {
 
 struct InactiveTabStates: Codable {
     var currentState: InactiveTabStatus?
-    var shouldGoToState: InactiveTabStatus?
+    var nextState: InactiveTabStatus?
 }
 
 enum TabUpdateState {
@@ -26,8 +26,15 @@ enum TabUpdateState {
 
 struct InactiveTabModel: Codable {
     var tabWithStatus: [String: InactiveTabStates] = [String: InactiveTabStates]()
-    
+
     static let userDefaults = UserDefaults()
+    
+    /// Check to see if we ever ran this feature before, this is mainly
+    /// to avoid tabs automatically going to their state on their first ever run
+    static var hasRunInactiveTabFeatureBefore: Bool {
+        get { return userDefaults.bool(forKey: PrefsKeys.KeyInactiveTabsFirstTimeRun) }
+        set(value) { userDefaults.setValue(value, forKey: PrefsKeys.KeyInactiveTabsFirstTimeRun) }
+    }
     
     static func save(tabModel: InactiveTabModel) {
         userDefaults.removeObject(forKey: PrefsKeys.KeyInactiveTabsModel)
@@ -86,7 +93,8 @@ class InactiveTabViewModel {
         let day4_Old = Calendar.current.date(byAdding: .day, value: -4, to: noon) ?? Date()
         let day30_Old = Calendar.current.date(byAdding: .day, value: -30, to: noon) ?? Date()
         
-        inactiveTabModel.tabWithStatus = InactiveTabModel.get()?.tabWithStatus ?? [String: InactiveTabStates]()
+        let hasRunInactiveTabFeatureBefore = InactiveTabModel.hasRunInactiveTabFeatureBefore
+        if hasRunInactiveTabFeatureBefore == false { InactiveTabModel.hasRunInactiveTabFeatureBefore = true }
         
         for tab in self.tabs {
             //Append selected tab to normal tab as we don't want to remove that
@@ -104,31 +112,32 @@ class InactiveTabViewModel {
             
             if tab == selectedTab && state == .sameSession {
                 inactiveTabModel.tabWithStatus[tab.tabUUID]?.currentState = .normal
-            } else if (tabType?.shouldGoToState == .shouldBecomeInactive || tabType?.shouldGoToState == .shouldBecomeRecentlyClosed) && state == .sameSession {
+            } else if (tabType?.nextState == .shouldBecomeInactive || tabType?.nextState == .shouldBecomeRecentlyClosed) && state == .sameSession {
                 continue
             } else if tab == selectedTab || tabDate > day4_Old || tabTimeStamp == 0 {
+                
                 inactiveTabModel.tabWithStatus[tab.tabUUID]?.currentState = .normal
+                
             } else if tabDate <= day4_Old && tabDate >= day30_Old {
                 
-                if state == .coldStart, tabType?.shouldGoToState != nil {
-                    inactiveTabModel.tabWithStatus[tab.tabUUID]?.currentState = .inactive
-                    inactiveTabModel.tabWithStatus[tab.tabUUID]?.shouldGoToState = nil
+                if hasRunInactiveTabFeatureBefore == false {
+                    inactiveTabModel.tabWithStatus[tab.tabUUID]?.nextState = .shouldBecomeInactive
                 } else if state == .coldStart {
-                    inactiveTabModel.tabWithStatus[tab.tabUUID]?.shouldGoToState = .shouldBecomeInactive
+                    inactiveTabModel.tabWithStatus[tab.tabUUID]?.currentState = .inactive
+                    inactiveTabModel.tabWithStatus[tab.tabUUID]?.nextState = nil
                 } else if state == .sameSession && tabType?.currentState != .inactive {
-                    inactiveTabModel.tabWithStatus[tab.tabUUID]?.shouldGoToState = .shouldBecomeInactive
+                    inactiveTabModel.tabWithStatus[tab.tabUUID]?.nextState = .shouldBecomeInactive
                 }
-                
                 
             } else if tabDate < day30_Old {
 
-                if state == .coldStart, tabType?.shouldGoToState != nil {
-                    inactiveTabModel.tabWithStatus[tab.tabUUID]?.currentState = .recentlyClosed
-                    inactiveTabModel.tabWithStatus[tab.tabUUID]?.shouldGoToState = nil
+                if hasRunInactiveTabFeatureBefore == false {
+                    inactiveTabModel.tabWithStatus[tab.tabUUID]?.nextState = .shouldBecomeRecentlyClosed
                 } else if state == .coldStart {
-                    inactiveTabModel.tabWithStatus[tab.tabUUID]?.shouldGoToState = .shouldBecomeRecentlyClosed
+                    inactiveTabModel.tabWithStatus[tab.tabUUID]?.currentState = .recentlyClosed
+                    inactiveTabModel.tabWithStatus[tab.tabUUID]?.nextState = nil
                 } else if state == .sameSession && tabType?.currentState != .recentlyClosed {
-                    inactiveTabModel.tabWithStatus[tab.tabUUID]?.shouldGoToState = .shouldBecomeRecentlyClosed
+                    inactiveTabModel.tabWithStatus[tab.tabUUID]?.nextState = .shouldBecomeRecentlyClosed
                 }
 
             }
