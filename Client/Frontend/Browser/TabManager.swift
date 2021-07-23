@@ -115,9 +115,7 @@ class TabManager: NSObject {
         var tabArray: [Tab] = []
         tabArray = normalTabs.filter { tab in
             if let lastKnownUrl = tab.lastKnownUrl {
-                if lastKnownUrl.absoluteString.hasPrefix("internal://") {
-                    return false
-                }
+                if lastKnownUrl.absoluteString.hasPrefix("internal://") { return false }
                 return true
             }
             return tab.isURLStartingPage
