@@ -1274,7 +1274,7 @@ class BrowserViewController: UIViewController {
 
             if (!InternalURL.isValid(url: url) || url.isReaderModeURL), !url.isFileURL {
                 postLocationChangeNotificationForTab(tab, navigation: navigation)
-
+                tab.readabilityResult = nil
                 webView.evaluateJavascriptInDefaultContentWorld("\(ReaderModeNamespace).checkReadability()")
             }
 

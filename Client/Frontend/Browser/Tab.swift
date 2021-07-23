@@ -79,6 +79,8 @@ class Tab: NSObject {
     // rest of the tab.
     var pageMetadata: PageMetadata?
 
+    var readabilityResult: ReadabilityResult?
+
     var consecutiveCrashes: UInt = 0
     
     // Setting defualt page as topsites

@@ -7,6 +7,7 @@ import Shared
 import WebKit
 import SwiftyJSON
 
+private let log = Logger.browserLogger
 let ReaderModeProfileKeyStyle = "readermode.style"
 
 enum ReaderModeMessageType: String {
@@ -199,8 +200,10 @@ struct ReadabilityResult {
     var domain = ""
     var url = ""
     var content = ""
+    var textContent = ""
     var title = ""
     var credits = ""
+    var excerpt = ""
 
     init?(object: AnyObject?) {
         if let dict = object as? NSDictionary {
@@ -214,6 +217,12 @@ struct ReadabilityResult {
             }
             if let content = dict["content"] as? String {
                 self.content = content
+            }
+            if let textContent = dict["textContent"] as? String {
+                self.textContent = textContent
+            }
+            if let excerpt = dict["excerpt"] as? String {
+                self.excerpt = excerpt
             }
             if let title = dict["title"] as? String {
                 self.title = title
@@ -232,6 +241,8 @@ struct ReadabilityResult {
         let domain = object["domain"].string
         let url = object["url"].string
         let content = object["content"].string
+        let textContent = object["textContent"].string
+        let excerpt = object["excerpt"].string
         let title = object["title"].string
         let credits = object["credits"].string
 
@@ -244,11 +255,13 @@ struct ReadabilityResult {
         self.content = content!
         self.title = title!
         self.credits = credits!
+        self.textContent = textContent ?? ""
+        self.excerpt = excerpt ?? ""
     }
 
     /// Encode to a dictionary, which can then for example be json encoded
     func encode() -> [String: Any] {
-        return ["domain": domain, "url": url, "content": content, "title": title, "credits": credits]
+        return ["domain": domain, "url": url, "content": content, "title": title, "credits": credits, "textContent": textContent, "excerpt": excerpt]
     }
 
     /// Encode to a JSON encoded string
@@ -307,6 +320,8 @@ class ReaderMode: TabContentScript {
         guard let tab = tab else {
             return
         }
+        log.info("ReaderMode: Readability result available!")
+        tab.readabilityResult = readabilityResult
         delegate?.readerMode(self, didParseReadabilityResult: readabilityResult, forTab: tab)
     }
 
