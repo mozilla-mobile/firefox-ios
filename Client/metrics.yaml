@@ -471,7 +471,7 @@ firefox_home_page:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-1806
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8753
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8905
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-01-01"
@@ -483,7 +483,7 @@ firefox_home_page:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-1806
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8753
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8905
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-01-01"
@@ -495,7 +495,7 @@ firefox_home_page:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-1806
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8753
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8905
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-01-01"
