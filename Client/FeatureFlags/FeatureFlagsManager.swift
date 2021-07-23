@@ -67,8 +67,8 @@ class FeatureFlagsManager {
         let inactiveTabs = FlaggableFeature(withID: .inactiveTabs, and: profile, enabledFor: [.beta, .developer])
         features[.inactiveTabs] = inactiveTabs
 
-        let jumbBackIn = FlaggableFeature(withID: .jumpBackIn, and: profile, enabledFor: [.beta, .developer])
-        features[.jumpBackIn] = jumbBackIn
+        let jumpBackIn = FlaggableFeature(withID: .jumpBackIn, and: profile, enabledFor: [.beta, .developer])
+        features[.jumpBackIn] = jumpBackIn
 
         /// Use the Nimbus experimentation platform. If this is `true` then
         /// `Experiments.shared` provides access to Nimbus. If false, it is a dummy object.
