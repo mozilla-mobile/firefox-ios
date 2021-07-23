@@ -19,11 +19,8 @@ class SelectPasswordCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
-        if #available(iOSApplicationExtension 13.0, *) {
-            backgroundColor = .systemGroupedBackground
-        } else {
-            backgroundColor = UIColor.theme.tableView.headerBackground
-        }
+        backgroundColor = UIColor.CredentialProvider.tableViewBackgroundColor
+    
         contentView.addSubview(selectLabel)
         selectLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview().multipliedBy(1.4)

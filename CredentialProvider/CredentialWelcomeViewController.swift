@@ -36,7 +36,7 @@ class CredentialWelcomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
+        view.backgroundColor = UIColor.CredentialProvider.welcomeScreenBackgroundColor
         addSubviews()
         addViewConstraints()
     }
@@ -58,7 +58,6 @@ class CredentialWelcomeViewController: UIViewController {
     }
     
     func addViewConstraints() {
-        view.addSubview(logoImageView)
         logoImageView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview().multipliedBy(0.9)

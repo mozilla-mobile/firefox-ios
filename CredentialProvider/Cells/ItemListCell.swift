@@ -10,7 +10,7 @@ class ItemListCell: UITableViewCell {
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.textColor = UIColor(named: "labelColor")
+        label.textColor = UIColor.CredentialProvider.titleColor
         label.font = .systemFont(ofSize: 16)
         return label
     }()
@@ -32,7 +32,7 @@ class ItemListCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        backgroundColor = UIColor(named: "credentialCellColor")
+        backgroundColor = UIColor.CredentialProvider.cellBackgroundColor
         contentView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(14)
@@ -58,7 +58,7 @@ class ItemListCell: UITableViewCell {
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        backgroundColor = selected ? .lightGray : UIColor(named: "credentialCellColor")
+        backgroundColor = selected ? .lightGray : UIColor.CredentialProvider.cellBackgroundColor
     }
 
 }

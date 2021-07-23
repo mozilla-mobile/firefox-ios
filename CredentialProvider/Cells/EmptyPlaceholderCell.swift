@@ -10,7 +10,7 @@ class EmptyPlaceholderCell: UITableViewCell {
     
     lazy private var titleLabel: UILabel = {
         let label = UILabel()
-        label.textColor = UIColor(named: "labelColor")
+        label.textColor = UIColor.CredentialProvider.titleColor
         label.text = .LoginsListNoLoginsFoundTitle
         label.font = UIFont.systemFont(ofSize: 15)
         return label
@@ -30,11 +30,8 @@ class EmptyPlaceholderCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
-        if #available(iOSApplicationExtension 13.0, *) {
-            backgroundColor = .systemGroupedBackground
-        } else {
-            backgroundColor = UIColor.theme.tableView.headerBackground
-        }
+        backgroundColor = UIColor.CredentialProvider.tableViewBackgroundColor
+        
         contentView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()

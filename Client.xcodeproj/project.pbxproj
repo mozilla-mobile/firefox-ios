@@ -330,6 +330,7 @@
 		6025B10F267B6C7F00F59F6B /* LoginRecordExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6025B10B267B6BEA00F59F6B /* LoginRecordExtension.swift */; };
 		6025B111267B6EE100F59F6B /* CredentialWelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6025B110267B6EE100F59F6B /* CredentialWelcomeViewController.swift */; };
 		60CE80C12667780D004026C7 /* CredentialListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CE80C02667780C004026C7 /* CredentialListPresenter.swift */; };
+		60D71AEC26AAF45E00355588 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D71AEB26AAF45E00355588 /* UIColorExtension.swift */; };
 		63306D3921103EAE00F25400 /* SavedTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63306D3821103EAE00F25400 /* SavedTab.swift */; };
 		63306D432110B3CD00F25400 /* TabManagerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63306D422110B3CD00F25400 /* TabManagerStore.swift */; };
 		63306D452110BAF000F25400 /* TabManagerStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63306D442110BAF000F25400 /* TabManagerStoreTests.swift */; };
@@ -2187,6 +2188,7 @@
 		60B541ED838D17F09560AC13 /* mr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = mr; path = mr.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		60BF40268A4375D6D3A80517 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
 		60CE80C02667780C004026C7 /* CredentialListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialListPresenter.swift; sourceTree = "<group>"; };
+		60D71AEB26AAF45E00355588 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		60E04CE89D47E52E0A886EAD /* hi-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hi-IN"; path = "hi-IN.lproj/Search.strings"; sourceTree = "<group>"; };
 		61AE456BAD6B0041485EFF1E /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Shared.strings; sourceTree = "<group>"; };
 		61B340508D4D86B6519A165C /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = "id.lproj/Default Browser.strings"; sourceTree = "<group>"; };
@@ -5239,6 +5241,7 @@
 			isa = PBXGroup;
 			children = (
 				C874FC2726612BFF00EBE86E /* AlertControllerView.swift */,
+				60D71AEB26AAF45E00355588 /* UIColorExtension.swift */,
 				C8CE38B6265E71FE0009B09E /* UIFontExtension.swift */,
 				C8CE38B8265E71FE0009B09E /* UIImageExtension.swift */,
 			);
@@ -7890,6 +7893,7 @@
 				C87DF976267246830097E707 /* ThemeManager.swift in Sources */,
 				C8CE38BD265E71FE0009B09E /* UIFontExtension.swift in Sources */,
 				F8324B3A2649B7CE007E4BFA /* ExtensionProfile.swift in Sources */,
+				60D71AEC26AAF45E00355588 /* UIColorExtension.swift in Sources */,
 				C87DF98A2672468F0097E707 /* DarkTheme.swift in Sources */,
 				C8CE389C265E71E00009B09E /* CredentialListViewController.swift in Sources */,
 				C8CE38B9265E71FE0009B09E /* EmptyPlaceholderCell.swift in Sources */,

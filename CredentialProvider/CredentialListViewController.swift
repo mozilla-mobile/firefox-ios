@@ -16,11 +16,7 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
     lazy private var tableView: UITableView = {
         let tableView = UITableView()
         tableView.separatorStyle = .none
-        if #available(iOSApplicationExtension 13.0, *) {
-            tableView.backgroundColor = .systemGroupedBackground
-        } else {
-            tableView.backgroundColor = UIColor.theme.tableView.headerBackground
-        }
+        tableView.backgroundColor = UIColor.CredentialProvider.tableViewBackgroundColor
         tableView.showsVerticalScrollIndicator = false
         tableView.dataSource = self
         tableView.delegate = self
