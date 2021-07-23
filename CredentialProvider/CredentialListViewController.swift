@@ -12,35 +12,37 @@ protocol CredentialListViewProtocol: AnyObject {
 
 class CredentialListViewController: UIViewController, CredentialListViewProtocol, UISearchControllerDelegate {
     
-    @IBOutlet weak var tableView: UITableView!
+    fileprivate let cellIdentifier = "cellidentifier"
+    lazy private var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.separatorStyle = .none
+        tableView.backgroundColor = UIColor.CredentialProvider.tableViewBackgroundColor
+        tableView.showsVerticalScrollIndicator = false
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.tableFooterView = UIView()
+        return tableView
+    }()
     
-    var dataSource = [(ASPasswordCredentialIdentity, ASPasswordCredential)]() {
-        didSet {
-            presenter?.loginsData = dataSource
-            tableView?.reloadData()
-        }
-    }
-    
-    private var presenter: CredentialListPresenter?
-    private var searchController: UISearchController?
-    
-    private var cancelButton: UIButton {
+    lazy private var cancelButton: UIButton = {
         let button = UIButton(type: UIButton.ButtonType.system)
         button.setTitle(.LoginsListSearchCancel, for: .normal)
         button.titleLabel?.font = .navigationButtonFont
         button.accessibilityIdentifier = "cancel.button"
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addConstraint(NSLayoutConstraint(
-                                item: button,
-                                attribute: .width,
-                                relatedBy: .equal,
-                                toItem: nil,
-                                attribute: .notAnAttribute,
-                                multiplier: 1.0,
-                                constant: 60))
         button.addTarget(self, action: #selector(self.cancelAction), for: .touchUpInside)
         return button
+    }()
+    
+    var dataSource = [(ASPasswordCredentialIdentity, ASPasswordCredential)]() {
+        didSet {
+            presenter?.loginsData = dataSource
+            tableView.reloadData()
+        }
     }
+    
+    private var presenter: CredentialListPresenter?
+    private var searchController: UISearchController?
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
@@ -57,27 +59,21 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
         return (navigationController?.parent as? CredentialProviderViewController)?.extensionContext
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    init() {
+        super.init(nibName: nil, bundle: nil)
         self.presenter = CredentialListPresenter(view: self)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setNeedsStatusBarAppearanceUpdate()
-        setupTableView()
         styleNavigationBar()
-    }
-    
-    
-    func reloadData() {
-        tableView.reloadData()
-    }
-    
-    private func setupTableView() {
-        let backgroundView = UIView(frame: self.view.bounds)
-        tableView.backgroundView = backgroundView
-        tableView.keyboardDismissMode = .onDrag
+        addViewConstraints()
+        registerCells()
     }
     
     private func styleNavigationBar() {
@@ -91,7 +87,15 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
         searchController = self.getStyledSearchController()
         searchController?.delegate = self
         extendedLayoutIncludesOpaqueBars = true // Fixes tapping the status bar from showing partial pull-to-refresh
+        
+        if #available(iOSApplicationExtension 13.0, *) {
+            let navBarAppearance = UINavigationBarAppearance()
+            navBarAppearance.configureWithOpaqueBackground()
+            navigationController?.navigationBar.standardAppearance = navBarAppearance
+            navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
+        }
     }
+    
     
     private func getStyledSearchController() -> UISearchController {
         let searchController = UISearchController(searchResultsController: nil)
@@ -120,8 +124,27 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
         }
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: .LoginsListSearchPlaceholder, attributes: [:]) // Set the placeholder text and color
         return searchController
+        
     }
     
+    private func addViewConstraints() {
+        view.addSubview(tableView)
+        tableView.snp.makeConstraints { make in
+            make.edges.equalTo(self.view)
+        }
+        
+        cancelButton.snp.makeConstraints { make in
+            make.width.equalTo(60)
+        }
+        
+    }
+    
+    private func registerCells() {
+        tableView.register(ItemListCell.self, forCellReuseIdentifier: ItemListCell.identifier)
+        tableView.register(SelectPasswordCell.self, forCellReuseIdentifier: SelectPasswordCell.identifier)
+        tableView.register(NoSearchResultCell.self, forCellReuseIdentifier: NoSearchResultCell.identifier)
+        tableView.register(EmptyPlaceholderCell.self, forCellReuseIdentifier: EmptyPlaceholderCell.identifier)
+    }
     
     @objc func cancelAction() {
         presenter?.cancelRequest()
@@ -129,6 +152,7 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
 }
 
 extension CredentialListViewController: UITableViewDataSource {
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         guard let presenter = presenter else { return 1 }
         return presenter.numberOfSections()
@@ -143,18 +167,18 @@ extension CredentialListViewController: UITableViewDataSource {
         
         switch presenter?.getItemsType(in: indexPath.section, for: indexPath.row) {
         case .emptyCredentialList:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "emptylistplaceholder", for: indexPath) as? EmptyPlaceholderCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: EmptyPlaceholderCell.identifier, for: indexPath) as? EmptyPlaceholderCell
             return cell ?? UITableViewCell()
         case .emptySearchResult:
-           let cell = tableView.dequeueReusableCell(withIdentifier: "noresultsplaceholder", for: indexPath) as? NoSearchResultCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: NoSearchResultCell.identifier, for: indexPath) as? NoSearchResultCell
             return cell ?? UITableViewCell()
         case .selectPassword:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "selectapasswordhelptext", for: indexPath) as? SelectPasswordCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: SelectPasswordCell.identifier, for: indexPath) as? SelectPasswordCell else {
                 return UITableViewCell()
             }
             return cell
         case .displayItem(let credentialIdentity):
-            let cell = tableView.dequeueReusableCell(withIdentifier: "itemlistcell", for: indexPath) as? ItemListCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: ItemListCell.identifier, for: indexPath) as? ItemListCell
             cell?.titleLabel.text = credentialIdentity.serviceIdentifier.identifier.titleFromHostname
             cell?.detailLabel.text = credentialIdentity.user
             let backgroundView = UIView()
@@ -173,6 +197,18 @@ extension CredentialListViewController: UITableViewDelegate {
             presenter?.selectItem(for: indexPath.row)
         }
     }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch presenter?.getItemsType(in: indexPath.section, for: indexPath.row) {
+        case .emptyCredentialList:
+            return 200
+        case .emptySearchResult:
+            return 300
+        case .selectPassword, .displayItem:
+            return 55
+        case .none:
+            return 44
+        }
+    }    
 }
 
 

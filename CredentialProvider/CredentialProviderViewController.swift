@@ -87,14 +87,12 @@ extension CredentialProviderViewController: CredentialProviderViewProtocol {
     }
     
     func showWelcome() {
-        let welcomeView = UIStoryboard(name: "CredentialWelcome", bundle: nil)
-            .instantiateViewController(withIdentifier: "welcome")
-        self.currentViewController = welcomeView
+        let welcomeVC = CredentialWelcomeViewController()
+        self.currentViewController = welcomeVC
     }
     
     func show(itemList: [(ASPasswordCredentialIdentity, ASPasswordCredential)]) {
-        let storyboard = UIStoryboard(name: "CredentialList", bundle: nil)
-        let credentialListVC = storyboard.instantiateViewController(withIdentifier: "itemlist") as! CredentialListViewController
+        let credentialListVC = CredentialListViewController()
         credentialListVC.dataSource = itemList
         self.currentViewController = UINavigationController(rootViewController: credentialListVC)
     }

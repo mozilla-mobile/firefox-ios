@@ -329,8 +329,8 @@
 		6025B10E267B6C7F00F59F6B /* LoginRecordExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6025B10B267B6BEA00F59F6B /* LoginRecordExtension.swift */; };
 		6025B10F267B6C7F00F59F6B /* LoginRecordExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6025B10B267B6BEA00F59F6B /* LoginRecordExtension.swift */; };
 		6025B111267B6EE100F59F6B /* CredentialWelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6025B110267B6EE100F59F6B /* CredentialWelcomeViewController.swift */; };
-		60AD9155269C6A5B006B4F12 /* CredentialWelcome.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60AD9154269C6A5B006B4F12 /* CredentialWelcome.storyboard */; };
 		60CE80C12667780D004026C7 /* CredentialListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CE80C02667780C004026C7 /* CredentialListPresenter.swift */; };
+		60D71AEC26AAF45E00355588 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D71AEB26AAF45E00355588 /* UIColorExtension.swift */; };
 		63306D3921103EAE00F25400 /* SavedTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63306D3821103EAE00F25400 /* SavedTab.swift */; };
 		63306D432110B3CD00F25400 /* TabManagerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63306D422110B3CD00F25400 /* TabManagerStore.swift */; };
 		63306D452110BAF000F25400 /* TabManagerStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63306D442110BAF000F25400 /* TabManagerStoreTests.swift */; };
@@ -459,12 +459,9 @@
 		C892DA0D22D39A980080F1F7 /* TrackingProtectionMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = C892DA0C22D39A980080F1F7 /* TrackingProtectionMenu.swift */; };
 		C893075D265501EE00A1DB2F /* CredentialAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C893075C265501EE00A1DB2F /* CredentialAssets.xcassets */; };
 		C8CC4F8725253E79003FDE1F /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD46F3324A1606C001B3967 /* WidgetKit.framework */; };
-		C8CE389B265E71E00009B09E /* CredentialList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C8CE3899265E71DF0009B09E /* CredentialList.storyboard */; };
 		C8CE389C265E71E00009B09E /* CredentialListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CE389A265E71E00009B09E /* CredentialListViewController.swift */; };
 		C8CE38B9265E71FE0009B09E /* EmptyPlaceholderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CE38B1265E71FE0009B09E /* EmptyPlaceholderCell.swift */; };
-		C8CE38BA265E71FE0009B09E /* NoNetworkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CE38B2265E71FE0009B09E /* NoNetworkCell.swift */; };
 		C8CE38BB265E71FE0009B09E /* ItemListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CE38B3265E71FE0009B09E /* ItemListCell.swift */; };
-		C8CE38BC265E71FE0009B09E /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CE38B5265E71FE0009B09E /* UIColorExtension.swift */; };
 		C8CE38BD265E71FE0009B09E /* UIFontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CE38B6265E71FE0009B09E /* UIFontExtension.swift */; };
 		C8CE38BF265E71FE0009B09E /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CE38B8265E71FE0009B09E /* UIImageExtension.swift */; };
 		C8CFF4E422F9FDB6002CC6BD /* effective_tld_names.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CFF4E322F9FDB5002CC6BD /* effective_tld_names.swift */; };
@@ -2188,10 +2185,10 @@
 		60774C6D87554915BD2B29B6 /* br */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = br; path = br.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		608E4B36A61360957C77DF31 /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		609E45149CAE5B417DBF7BA5 /* lo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lo; path = lo.lproj/Search.strings; sourceTree = "<group>"; };
-		60AD9154269C6A5B006B4F12 /* CredentialWelcome.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = CredentialWelcome.storyboard; sourceTree = "<group>"; };
 		60B541ED838D17F09560AC13 /* mr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = mr; path = mr.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		60BF40268A4375D6D3A80517 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
 		60CE80C02667780C004026C7 /* CredentialListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialListPresenter.swift; sourceTree = "<group>"; };
+		60D71AEB26AAF45E00355588 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		60E04CE89D47E52E0A886EAD /* hi-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hi-IN"; path = "hi-IN.lproj/Search.strings"; sourceTree = "<group>"; };
 		61AE456BAD6B0041485EFF1E /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Shared.strings; sourceTree = "<group>"; };
 		61B340508D4D86B6519A165C /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = "id.lproj/Default Browser.strings"; sourceTree = "<group>"; };
@@ -3093,12 +3090,9 @@
 		C893075C265501EE00A1DB2F /* CredentialAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = CredentialAssets.xcassets; sourceTree = "<group>"; };
 		C8A74FF69C3971EDBE73157F /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C8B34CBE911A7211E314D870 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
-		C8CE3899265E71DF0009B09E /* CredentialList.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = CredentialList.storyboard; sourceTree = "<group>"; };
 		C8CE389A265E71E00009B09E /* CredentialListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CredentialListViewController.swift; sourceTree = "<group>"; };
 		C8CE38B1265E71FE0009B09E /* EmptyPlaceholderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyPlaceholderCell.swift; sourceTree = "<group>"; };
-		C8CE38B2265E71FE0009B09E /* NoNetworkCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoNetworkCell.swift; sourceTree = "<group>"; };
 		C8CE38B3265E71FE0009B09E /* ItemListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemListCell.swift; sourceTree = "<group>"; };
-		C8CE38B5265E71FE0009B09E /* UIColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		C8CE38B6265E71FE0009B09E /* UIFontExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIFontExtension.swift; sourceTree = "<group>"; };
 		C8CE38B8265E71FE0009B09E /* UIImageExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
 		C8CFF4E322F9FDB5002CC6BD /* effective_tld_names.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = effective_tld_names.swift; sourceTree = "<group>"; };
@@ -5232,22 +5226,12 @@
 			path = Generated;
 			sourceTree = "<group>";
 		};
-		C89307272655011000A1DB2F /* Storyboard */ = {
-			isa = PBXGroup;
-			children = (
-				60AD9154269C6A5B006B4F12 /* CredentialWelcome.storyboard */,
-				C8CE3899265E71DF0009B09E /* CredentialList.storyboard */,
-			);
-			path = Storyboard;
-			sourceTree = "<group>";
-		};
 		C8CE38B0265E71FE0009B09E /* Cells */ = {
 			isa = PBXGroup;
 			children = (
 				6025B107267B6BB300F59F6B /* NoSearchResultCell.swift */,
 				6025B108267B6BB300F59F6B /* SelectPasswordCell.swift */,
 				C8CE38B1265E71FE0009B09E /* EmptyPlaceholderCell.swift */,
-				C8CE38B2265E71FE0009B09E /* NoNetworkCell.swift */,
 				C8CE38B3265E71FE0009B09E /* ItemListCell.swift */,
 			);
 			path = Cells;
@@ -5257,7 +5241,7 @@
 			isa = PBXGroup;
 			children = (
 				C874FC2726612BFF00EBE86E /* AlertControllerView.swift */,
-				C8CE38B5265E71FE0009B09E /* UIColorExtension.swift */,
+				60D71AEB26AAF45E00355588 /* UIColorExtension.swift */,
 				C8CE38B6265E71FE0009B09E /* UIFontExtension.swift */,
 				C8CE38B8265E71FE0009B09E /* UIImageExtension.swift */,
 			);
@@ -6004,7 +5988,6 @@
 		F8324A082649A188007E4BFA /* CredentialProvider */ = {
 			isa = PBXGroup;
 			children = (
-				C89307272655011000A1DB2F /* Storyboard */,
 				C8CE38B0265E71FE0009B09E /* Cells */,
 				C8CE38B4265E71FE0009B09E /* Extensions */,
 				C874FC642661367900EBE86E /* MainInterface.storyboard */,
@@ -7236,9 +7219,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C874FC652661367900EBE86E /* MainInterface.storyboard in Resources */,
-				C8CE389B265E71E00009B09E /* CredentialList.storyboard in Resources */,
 				C893075D265501EE00A1DB2F /* CredentialAssets.xcassets in Resources */,
-				60AD9155269C6A5B006B4F12 /* CredentialWelcome.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7899,7 +7880,6 @@
 			files = (
 				6025B10C267B6BEA00F59F6B /* LoginRecordExtension.swift in Sources */,
 				C8CE38BB265E71FE0009B09E /* ItemListCell.swift in Sources */,
-				C8CE38BA265E71FE0009B09E /* NoNetworkCell.swift in Sources */,
 				F8324A0A2649A188007E4BFA /* CredentialProviderViewController.swift in Sources */,
 				C87DF9B2267246AA0097E707 /* AppAuthenticator.swift in Sources */,
 				60CE80C12667780D004026C7 /* CredentialListPresenter.swift in Sources */,
@@ -7909,11 +7889,11 @@
 				F8324B122649B707007E4BFA /* Profile.swift in Sources */,
 				F8324B262649B76E007E4BFA /* SyncStatusResolver.swift in Sources */,
 				C87DF8FE267246340097E707 /* PasscodeEntryViewController.swift in Sources */,
-				C8CE38BC265E71FE0009B09E /* UIColorExtension.swift in Sources */,
 				C87DF9C6267246BB0097E707 /* GeometryExtensions.swift in Sources */,
 				C87DF976267246830097E707 /* ThemeManager.swift in Sources */,
 				C8CE38BD265E71FE0009B09E /* UIFontExtension.swift in Sources */,
 				F8324B3A2649B7CE007E4BFA /* ExtensionProfile.swift in Sources */,
+				60D71AEC26AAF45E00355588 /* UIColorExtension.swift in Sources */,
 				C87DF98A2672468F0097E707 /* DarkTheme.swift in Sources */,
 				C8CE389C265E71E00009B09E /* CredentialListViewController.swift in Sources */,
 				C8CE38B9265E71FE0009B09E /* EmptyPlaceholderCell.swift in Sources */,
