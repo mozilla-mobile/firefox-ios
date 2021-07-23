@@ -200,7 +200,7 @@ class TabDisplayManager: NSObject {
     func indexOfCellDrawnAsPreviouslySelectedTab(currentlySelected: Tab) -> IndexPath? {
         for i in 0..<collectionView.numberOfItems(inSection: 0) {
             if let cell = collectionView.cellForItem(at: IndexPath(row: i, section: 0)) as? TopTabCell, cell.selectedTab {
-                if let tab = dataStore.at(i), tab != currentlySelected {
+                if let tab = dataStore.at(i) , tab != currentlySelected {
                     return IndexPath(row: i, section: 0)
                 } else {
                     return nil
@@ -514,7 +514,7 @@ extension TabDisplayManager: TabManagerDelegate {
         // any assumption of previous state of the view. Passing a previous tab (and relying on that to redraw the previous tab as unselected) would be making this assumption about the state of the view.
     }
 
-    func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, isRestoring: Bool) {
+    func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {
         if isRestoring {
             return
         }
@@ -528,11 +528,25 @@ extension TabDisplayManager: TabManagerDelegate {
             return
         }
 
-        updateWith(animationType: .addTab) { [weak self] in
-            if let me = self, let index = me.tabsToDisplay.firstIndex(of: tab) {
-                me.dataStore.insert(tab, at: index)
-                me.collectionView.insertItems(at: [IndexPath(row: index, section: 0)])
+        updateWith(animationType: .addTab) { [unowned self] in
+            // place new tab at the end by default unless it has been opened from parent tab
+            var indexToPlaceTab = dataStore.count - 1 > 0 ? dataStore.count - 1 : 0
+            // perform check to place tab next to selected tab for opening new tab from parent tab
+            if placeNextToParentTab, let selectedTabUUID = tabManager.selectedTab?.tabUUID {
+                let selectedTabIndex = self.dataStore.firstIndexDel() { t in
+                    if let uuid = t.value?.tabUUID {
+                        return uuid == selectedTabUUID
+                    }
+                    return false
+                }
+                
+                if let selectedTabIndex = selectedTabIndex {
+                    indexToPlaceTab = selectedTabIndex + 1
+                }
             }
+            self.dataStore.insert(tab)
+            self.collectionView.insertItems(at: [IndexPath(row: indexToPlaceTab, section: 0)])
+            
         }
     }
 
