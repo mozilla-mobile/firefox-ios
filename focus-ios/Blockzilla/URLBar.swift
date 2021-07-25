@@ -565,6 +565,11 @@ class URLBar: UIView {
         urlText.text = text
     }
 
+    func fillUrlBarWithString(text: String) {
+        urlText.text = text
+        delegate?.urlBar(self, didEnterText: text)
+    }
+
     private func updateLockIcon() {
         let visible = !isEditing && (url?.scheme == "https")
         let duration = UIConstants.layout.urlBarTransitionAnimationDuration / 2
