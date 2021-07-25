@@ -135,7 +135,7 @@ class BrowserViewController: UIViewController {
         overlayView.isHidden = true
         overlayView.alpha = 0
         overlayView.delegate = self
-        overlayView.backgroundColor = UIConstants.colors.overlayBackground
+        overlayView.backgroundColor = .scrim.withAlphaComponent(0.48)
         overlayView.setSearchSuggestionsPromptViewDelegate(delegate: self)
         mainContainerView.addSubview(overlayView)
 
@@ -828,6 +828,7 @@ extension BrowserViewController: URLBarDelegate {
                     if userInputText == trimmedText {
                         let suggestions = suggestions ?? [trimmedText]
                         DispatchQueue.main.async {
+                            self.overlayView.setGradientToSearchButtons()
                             self.overlayView.setSearchQuery(suggestions: suggestions, hideFindInPage: isOnHomeView || text.isEmpty, hideAddToComplete: true)
                         }
                     }

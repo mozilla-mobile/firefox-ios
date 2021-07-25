@@ -37,6 +37,7 @@ class OverlayView: UIView {
     private let findInPageButton = InsetButton()
     private let searchSuggestionsPrompt = SearchSuggestionsPromptView()
     private let topBorder = UIView()
+    private var separatorGroup = [UIView]()
     private let maxNumOfSuggestions = UIDevice.current.isSmallDevice() ? UIConstants.layout.smallDeviceMaxNumSuggestions : UIConstants.layout.largeDeviceMaxNumSuggestions
     public var currentURL = ""
 
@@ -72,9 +73,15 @@ class OverlayView: UIView {
         }
         for i in 1..<maxNumOfSuggestions {
             self.searchButtonGroup[i].snp.makeConstraints { make in
-                make.top.equalTo(searchButtonGroup[i - 1].snp.bottom)
+                make.top.equalTo(searchButtonGroup[i-1].snp.bottom)
                 make.leading.trailing.equalTo(safeAreaLayoutGuide)
                 make.height.equalTo(UIConstants.layout.overlayButtonHeight)
+            }
+            self.separatorGroup[i - 1].snp.makeConstraints { make in
+                make.height.equalTo(0.5)
+                make.top.equalTo(searchButtonGroup[i - 1].snp.bottom)
+                make.leading.equalTo(searchButtonGroup[i].snp.leading).inset(52)
+                make.trailing.equalTo(searchButtonGroup[i].snp.trailing)
             }
         }
 
@@ -130,18 +137,30 @@ class OverlayView: UIView {
         searchButton.accessibilityIdentifier = "OverlayView.searchButton"
         searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .normal)
         searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .highlighted)
-        searchButton.backgroundColor = UIConstants.colors.background
         searchButton.titleLabel?.font = UIConstants.fonts.searchButton
-        searchButton.backgroundColor = UIConstants.colors.background
+
         searchButton.setIndex(i)
         setUpOverlayButton(button: searchButton)
         searchButton.addTarget(self, action: #selector(didPressSearch(sender:)), for: .touchUpInside)
         self.searchButtonGroup.append(searchButton)
         addSubview(searchButton)
+        
+        if i != 0 {
+            let separator = UIView()
+            separator.backgroundColor = .searchSeparator.withAlphaComponent(0.65)
+            self.separatorGroup.append(separator)
+            searchButton.addSubview(separator)
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setGradientToSearchButtons() {
+        for button in searchButtonGroup {
+            button.applyGradient(colors: [.searchGradientFirst, .searchGradientSecond, .searchGradientThird, .searchGradientFourth])
+        }
     }
 
     func setUpOverlayButton (button: InsetButton) {
@@ -174,16 +193,16 @@ class OverlayView: UIView {
 	func getAttributedButtonTitle(phrase: String, localizedStringFormat: String) -> NSAttributedString {
 		let attributedString = NSMutableAttributedString(string: localizedStringFormat, attributes: [.foregroundColor: UIConstants.Photon.Grey10])
 		let phraseString = NSAttributedString(string: phrase, attributes: [.font: UIConstants.fonts.copyButtonQuery,
-																		   .foregroundColor: UIConstants.Photon.Grey10])
+                                                                           .foregroundColor: UIColor.primaryText])
 		if phrase != searchQuery {
 			let searchString = NSAttributedString(string: searchQuery, attributes: [.font: UIConstants.fonts.copyButtonQuery,
-																					.foregroundColor: UIConstants.Photon.Grey10])
+                                                                                    .foregroundColor: UIColor.primaryText])
 			// split suggestion into searchQuery and suggested part
 			let suggestion = phrase.components(separatedBy: searchQuery)
 			// suggestion was split
 			if suggestion.count > 1 {
-				let restOfSuggestion = NSAttributedString(string: suggestion[1], attributes: [
-					.foregroundColor: UIConstants.colors.searchSuggestion])
+                let restOfSuggestion = NSAttributedString(string: suggestion[1], attributes: [.font: UIConstants.fonts.copyButtonRest,
+                                                                                              .foregroundColor: UIColor.primaryText])
 				attributedString.append(searchString)
 				attributedString.append(restOfSuggestion)
 				return attributedString
