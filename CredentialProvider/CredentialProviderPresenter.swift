@@ -27,25 +27,25 @@ class CredentialProviderPresenter {
         
         profile.syncCredentialIdentities().upon { result in
             sleep(2)
-            self.cancelWith(.userCanceled)
+            self.cancel(with: .userCanceled)
         }
     }
     
     func credentialProvisionRequested(for credentialIdentity: ASPasswordCredentialIdentity) {
 
         if self.profile.logins.reopenIfClosed() != nil {
-            cancelWith(.failed)
+            cancel(with: .failed)
         } else if let id = credentialIdentity.recordIdentifier {
             
             profile.logins.get(id: id).upon { [weak self] result in
                 switch result {
                 case .failure:
-                    self?.cancelWith(.failed)
+                    self?.cancel(with: .failed)
                 case .success(let record):
                     if let passwordCredential = record?.passwordCredential {
                         self?.view?.extensionContext.completeRequest(withSelectedCredential: passwordCredential, completionHandler: nil)
                     } else {
-                        self?.cancelWith(.userInteractionRequired)
+                        self?.cancel(with: .userInteractionRequired)
                     }
                 }
             }
@@ -55,12 +55,12 @@ class CredentialProviderPresenter {
 
     func showCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
     if self.profile.logins.reopenIfClosed() != nil {
-            cancelWith(.failed)
+            cancel(with: .failed)
         } else {
             profile.logins.list().upon {[weak self] result in
                 switch result {
                 case .failure:
-                    self?.cancelWith(.failed)
+                    self?.cancel(with: .failed)
                 case .success(let loginRecords):
                     
                     var sortedLogins = loginRecords.sorted(by: <)
@@ -89,15 +89,8 @@ class CredentialProviderPresenter {
                 DispatchQueue.main.async { [unowned self] in
                     self.showCredentialList(for: serviceIdentifiers)
                 }
-            case .failure(let error):
-                switch error {
-                case .failedEvaluation(let message):
-                    print(message)
-                    self.cancelWith(.userCanceled)
-                case .failedAutentication(let message):
-                    print(message)
-                    self.cancelWith(.userCanceled)
-                }
+            case .failure:
+                self.cancel(with: .userCanceled)
             }
         }
     }
@@ -105,8 +98,7 @@ class CredentialProviderPresenter {
 
 @available(iOS 12, *)
 private extension CredentialProviderPresenter {
-        
-    func cancelWith(_ errorCode: ASExtensionError.Code) {
+    func cancel(with errorCode: ASExtensionError.Code) {
         let error = NSError(domain: ASExtensionErrorDomain,
                             code: errorCode.rawValue,
                             userInfo: nil)
