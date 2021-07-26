@@ -610,6 +610,7 @@ class ToggleInactiveTabs: HiddenSetting, FeatureFlagsProtocol {
 
     override func onClick(_ navigationController: UINavigationController?) {
         featureFlags.toggle(.inactiveTabs)
+        InactiveTabModel.hasRunInactiveTabFeatureBefore = false
         updateCell(navigationController)
     }
 
