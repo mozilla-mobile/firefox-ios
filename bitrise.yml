@@ -2,6 +2,350 @@ format_version: '6'
 default_step_lib_source: 'https://github.com/bitrise-io/bitrise-steplib.git'
 project_type: ios
 workflows:
+  1_git_clone_and_post_clone:
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@4: {}
+    - script@1.1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+            BRANCH=$BITRISE_GIT_BRANCH
+
+            if [[ $BRANCH == update-cartfile-new-as-tag-* ]]
+            then
+                echo "Building with new A-S version"
+                envman add --key NEW_AS_VERSION --value New_AS_Version
+            fi
+        title: Save Branch Name
+    - script@1.1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            echo "PostClone step"
+            carthage checkout
+
+            cd content-blocker-lib-ios/ContentBlockerGen && swift run
+        title: Post clone step for TP updates
+    - script@1:
+        title: Add default web browser entitlement for Fennec
+        inputs:
+        - content: |-
+            #/usr/bin/env bash
+            set -x
+
+            echo "Adding com.apple.developer.web-browser to entitlements"
+
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Client/Entitlements/FennecApplication.entitlements
+    - cache-pull@2.1: {}
+  2_certificate_and_profile:
+    steps:
+    - certificate-and-profile-installer@1.10: {}
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            echo 'EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_simulator__NATIVE_ARCH_64_BIT_x86_64=arm64 arm64e armv7 armv7s armv6 armv8' > /tmp/tmp.xcconfig
+            echo 'EXCLUDED_ARCHS=$(inherited) $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(EFFECTIVE_PLATFORM_SUFFIX)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT))' >> /tmp/tmp.xcconfig
+            echo 'IPHONEOS_DEPLOYMENT_TARGET=11.4' >> /tmp/tmp.xcconfig
+            echo 'SWIFT_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig
+            echo 'GCC_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig
+            export XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig
+            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
+        title: Workaround carthage lipo
+    - carthage@3.2:
+        inputs:
+        - carthage_options: "--platform ios"
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+
+            rm /tmp/tmp.xcconfig
+            envman add --key XCODE_XCCONFIG_FILE --value ''
+        title: Remove carthage lipo workaround
+    - script@1:
+        title: Copy glean sdk_generator
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash # fail if any commands fails set -e # debug log set -x
+            # Copy Glean script to source folder from # MozillaAppServices.framework as we need # this script to build iOS App
+            cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
+  3_provisioning_and_npm_installation:
+    steps:
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+
+            cd Client.xcodeproj
+            sed -i '' 's/"Fennec Development"/"Bitrise Firefox iOS Dev"/' project.pbxproj
+            sed -i '' 's/Fennec Today Development/Bitrise Firefox iOS Dev - Fennec Today/' project.pbxproj
+            sed -i '' 's/Fennec ShareTo Development/Bitrise Firefox iOS Dev - Share To/' project.pbxproj
+            sed -i '' 's/Fennec WidgetKit Development/Bitrise Firefox iOS Dev - WidgetKit/' project.pbxproj
+            sed -i '' 's/"XCUITests"/"Bitrise Firefox iOS Dev - XCUI Tests"/' project.pbxproj
+            sed -i '' 's/Fennec NotificationService Development/Bitrise Firefox iOS Dev - Notification Service/' project.pbxproj
+            sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = "iPhone Distribution"/' project.pbxproj
+            cd -
+        title: Set provisioning to Bitrise in xcodeproj
+    - script@1.1:
+        title: NPM install and build
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            npm install
+            npm run build
+  4_A_xcode_build_and_test_Fennec:
+    steps:
+    - git::https://github.com/bitrise-steplib/steps-xcode-build-for-test.git@export-fix:
+        inputs:
+        - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+        - scheme: Fennec
+    - xcode-test@2:
+        inputs:
+        - scheme: Fennec
+        - simulator_device: iPhone 8
+  5_deploy_and_slack:
+    steps:
+    - deploy-to-bitrise-io@1.9: {}
+    - cache-push@2.2:
+        is_always_run: true
+    - slack@3.1:
+        inputs:
+        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
+  4_B_xcode_build_and_test_Fennec_Enterprise_XCUITests:
+    steps:
+    - git::https://github.com/bitrise-steplib/steps-xcode-build-for-test.git@export-fix:
+        inputs:
+        - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+        - scheme: Fennec_Enterprise_XCUITests
+    - xcode-test@2:
+        inputs:
+        - scheme: Fennec_Enterprise_XCUITests
+        - simulator_device: "$IOS_DEVICE"
+  NewXcodeVersion:
+    steps:
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            YESTERDAY=`date -v -1d '+%Y-%m-%d'`
+
+            brew install jq
+
+            resp=$(curl -X GET -s -H 'Accept: application/vnd.github.v3+json' -H "authorization: Bearer ${GITHUB_ACCESS_TOKEN}" https://api.github.com/repos/mozilla-mobile/firefox-ios/commits\?sha\=main\&since\=$YESTERDAY | jq -r '.[].commit.message | select(contains("Auto Update Bitrise.YML"))')
+            echo $resp
+            if [ -z "$resp" ]
+            then
+                echo "There is not any new commit, stop building"
+            else
+                echo "There is a new commit, continue building"
+                envman add --key NEW_XCODE_VERSION --value New_Version_Found
+            fi
+        title: Check main branch for recent activity before continuing
+    - activate-ssh-key@4.0:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@4.0: {}
+    - script@1.1:
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            echo "PostClone step"
+            carthage checkout
+
+            cd content-blocker-lib-ios/ContentBlockerGen && swift run
+        title: Post clone step for TP updates
+    - cache-pull@2.4: {}
+    - certificate-and-profile-installer@1.10: {}
+    - script@1:
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+
+            echo 'EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_simulator__NATIVE_ARCH_64_BIT_x86_64=arm64 arm64e armv7 armv7s armv6 armv8' > /tmp/tmp.xcconfig
+            echo 'EXCLUDED_ARCHS=$(inherited) $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(EFFECTIVE_PLATFORM_SUFFIX)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT))' >> /tmp/tmp.xcconfig
+            echo 'IPHONEOS_DEPLOYMENT_TARGET=11.4' >> /tmp/tmp.xcconfig
+            echo 'SWIFT_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig
+            echo 'GCC_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig
+            export XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig
+            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
+        title: Workaround carthage lipo bug
+    - carthage@3.2:
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
+        inputs:
+        - carthage_options: "--platform ios"
+    - script@1:
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+
+            rm /tmp/tmp.xcconfig
+            envman add --key XCODE_XCCONFIG_FILE --value ''
+        title: Remove carthage lipo workaround
+    - script@1:
+        title: Copy glean sdk_generator
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash # fail if any commands fails set -e # debug log set -x
+            # Copy Glean script to source folder from # MozillaAppServices.framework as we need # this script to build iOS App
+            cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
+    - script@1:
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+
+            cd Client.xcodeproj
+            sed -i '' 's/"Fennec Development"/"Bitrise Firefox iOS Dev"/' project.pbxproj
+            sed -i '' 's/Fennec Today Development/Bitrise Firefox iOS Dev - Fennec Today/' project.pbxproj
+            sed -i '' 's/Fennec ShareTo Development/Bitrise Firefox iOS Dev - Share To/' project.pbxproj
+            sed -i '' 's/Fennec WidgetKit Development/Bitrise Firefox iOS Dev - WidgetKit/' project.pbxproj
+            sed -i '' 's/"XCUITests"/"Bitrise Firefox iOS Dev - XCUI Tests"/' project.pbxproj
+            sed -i '' 's/Fennec NotificationService Development/Bitrise Firefox iOS Dev - Notification Service/' project.pbxproj
+            sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = "iPhone Distribution"/' project.pbxproj
+            cd -
+        title: Set provisioning to Bitrise in xcodeproj
+    - script@1.1:
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
+        title: NPM install and build
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            npm install
+            npm run build
+    - git::https://github.com/bitrise-steplib/steps-xcode-build-for-test.git@export-fix:
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
+        inputs:
+        - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+        - scheme: Fennec
+    - xcode-test@2:
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
+        inputs:
+        - scheme: Fennec
+        - simulator_device: iPhone 8
+    - deploy-to-bitrise-io@1.9: {}
+    - cache-push@2.4: {}
+    - slack@3.1:
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
+        inputs:
+        - channel: "#firefox-ios"
+        - text: Build status using latest Xcode detected
+        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
+    description: This Workflow is to run tests (currently SmokeTest) when there is
+      a merge in master
+    meta:
+      bitrise.io:
+        stack: osx-xcode-13.0.x
+        machine_type_id: g2.4core
+    description: This Workflow is to run tests (currently SmokeTest) when there is
+      a merge in master
+    meta:
+      bitrise.io:
+        stack: osx-xcode-13.0.x
+        machine_type_id: g2.4core
+  RunAllXCUITests:
+    steps: []
+    after_run:
+        - 1_git_clone_and_post_clone
+        - 2_certificate_and_profile
+        - 3_provisioning_and_npm_installation
+        - 4_B_xcode_build_and_test_Fennec_Enterprise_XCUITests
+        - 5_deploy_and_slack
+  RunSmokeXCUITestsiPad:
+    steps:
+    - git::https://github.com/bitrise-steplib/steps-xcode-build-for-test.git@export-fix:
+        inputs:
+        - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+            -testPlan SmokeXCUITests
+        - scheme: Fennec_Enterprise_XCUITests
+    - xcode-test@2.4:
+        inputs:
+        - scheme: Fennec_Enterprise_XCUITests
+        - xcodebuild_test_options: "-testPlan SmokeXCUITests"
+        - simulator_os_version: latest
+        - simulator_device: iPad Pro (12.9-inch) (4th generation)
+    description: This Workflow is to run SmokeTest on iPad simulator device
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.5.x
+        machine_type_id: g2.4core
+    before_run:
+        - 1_git_clone_and_post_clone
+        - 2_certificate_and_profile
+        - 3_provisioning_and_npm_installation
+    after_run:
+        - 5_deploy_and_slack
+  RunUITests:
+    steps:
+    - git::https://github.com/bitrise-steplib/steps-xcode-build-for-test.git@export-fix:
+        inputs:
+        - configuration: Release
+        - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+            -testPlan SmokeXCUITests
+        - scheme: Fennec_Enterprise_XCUITests
+        - xcodebuild_test_options: "-testPlan SmokeXCUITests"
+    - xcode-test@2:
+        inputs:
+        - scheme: Fennec_Enterprise_UITests
+        - simulator_device: iPhone 8
+        is_always_run: true
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.5.x
+        machine_type_id: g2.4core
+    before_run:
+    - 1_git_clone_and_post_clone
+    - 2_certificate_and_profile
+    - 3_provisioning_and_npm_installation
+    after_run:
+    - 5_deploy_and_slack
   L10nBuild:
     steps:
     - activate-ssh-key@4:
@@ -138,6 +482,7 @@ workflows:
       bitrise.io:
         stack: osx-xcode-12.5.x
         machine_type_id: g2.4core
+
   L10nScreenshotsTests:
     steps:
     - activate-ssh-key@4:
@@ -217,170 +562,9 @@ workflows:
       bitrise.io:
         stack: osx-xcode-12.5.x
         machine_type_id: g2.4core
+
   RunUnitTests:
     steps:
-    - activate-ssh-key@4.0:
-        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@4.0: {}
-    - script@1.1:
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            set -e
-            set -x
-            BRANCH=$BITRISE_GIT_BRANCH
-
-            if [[ $BRANCH == update-cartfile-new-as-tag-* ]]
-            then
-                echo "Building with new A-S version"
-                envman add --key NEW_AS_VERSION --value New_AS_Version
-            fi
-        title: Save Branch Name
-    - script@1.1:
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            echo "PostClone step"
-            carthage checkout
-
-            cd content-blocker-lib-ios/ContentBlockerGen && swift run
-        title: Post clone step for TP updates
-    - script@1:
-        title: Add default web browser entitlement for Fennec
-        inputs:
-        - content: |-
-            #/usr/bin/env bash
-            set -x
-
-            echo "Adding com.apple.developer.web-browser to entitlements"
-
-            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Client/Entitlements/FennecApplication.entitlements
-    - cache-pull@2.4: {}
-    - certificate-and-profile-installer@1.10: {}
-    - script@1:
-        inputs:
-        - content: >-
-            #!/usr/bin/env bash
-
-            set -e
-
-            set -x
-
-
-            echo
-            'EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_simulator__NATIVE_ARCH_64_BIT_x86_64=arm64
-            arm64e armv7 armv7s armv6 armv8' > /tmp/tmp.xcconfig
-
-            echo 'EXCLUDED_ARCHS=$(inherited)
-            $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(EFFECTIVE_PLATFORM_SUFFIX)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT))'
-            >> /tmp/tmp.xcconfig
-
-            echo 'IPHONEOS_DEPLOYMENT_TARGET=11.4' >> /tmp/tmp.xcconfig
-
-            echo 'SWIFT_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig
-
-            echo 'GCC_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig
-
-            export XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig
-
-            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
-        title: Workaround carthage lipo bug
-    - carthage@3.2:
-        inputs:
-        - carthage_options: '--platform ios'
-    - script@1:
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            set -e
-            set -x
-
-            rm /tmp/tmp.xcconfig
-            envman add --key XCODE_XCCONFIG_FILE --value ''
-        title: Remove carthage lipo workaround
-    - script@1:
-        title: Copy glean sdk_generator
-        inputs:
-        - content: >-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            # Copy Glean script to source folder from
-            # MozillaAppServices.framework as we need
-            # this script to build iOS App
-
-            cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
-    - script@1:
-        inputs:
-        - content: >-
-            #!/usr/bin/env bash
-
-            set -e
-
-            set -x
-
-
-            cd Client.xcodeproj
-
-            sed -i '' 's/"Fennec Development"/"Bitrise Firefox iOS Dev"/'
-            project.pbxproj
-
-            sed -i '' 's/Fennec Today Development/Bitrise Firefox iOS Dev -
-            Fennec Today/' project.pbxproj
-
-            sed -i '' 's/Fennec ShareTo Development/Bitrise Firefox iOS Dev -
-            Share To/' project.pbxproj
-
-            sed -i '' 's/Fennec WidgetKit Development/Bitrise Firefox iOS Dev -
-            WidgetKit/' project.pbxproj
-
-            sed -i '' 's/"XCUITests"/"Bitrise Firefox iOS Dev - XCUI Tests"/'
-            project.pbxproj
-
-            sed -i '' 's/Fennec NotificationService Development/Bitrise Firefox
-            iOS Dev - Notification Service/' project.pbxproj
-
-            sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone
-            Developer"/CODE_SIGN_IDENTITY = "iPhone Distribution"/'
-            project.pbxproj
-
-            cd -
-        title: Set provisioning to Bitrise in xcodeproj
-    - script@1.1:
-        title: NPM install and build
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            npm install
-            npm run build
-    - 'git::https://github.com/bitrise-steplib/steps-xcode-build-for-test.git@export-fix':
-        inputs:
-        - xcodebuild_options: >-
-            CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
-            CODE_SIGNING_ALLOWED=NO
-        - scheme: Fennec
-    - xcode-test@2:
-        inputs:
-        - scheme: Fennec
-        - simulator_device: iPhone 8
-    - deploy-to-bitrise-io@1.9: {}
-    - cache-push@2.4: {}
-    - slack@3.1:
-        inputs:
-        - webhook_url: $WEBHOOK_SLACK_TOKEN
     - slack@3.1:
         run_if: '{{getenv "NEW_AS_VERSION" | eq "New_AS_Version"}}'
         inputs:
@@ -394,26 +578,15 @@ workflows:
       bitrise.io:
         stack: osx-xcode-12.5.x
         machine_type_id: g2.4core
+    before_run:
+    - 1_git_clone_and_post_clone
+    - 2_certificate_and_profile
+    - 3_provisioning_and_npm_installation
+    - 4_A_xcode_build_and_test_Fennec
+    - 5_deploy_and_slack
     after_run:
     - RunSmokeXCUITests
-  RunUITests:
-    steps:
-    - cache-pull@2.1: {}
-    - xcode-test@2:
-        inputs:
-        - scheme: Fennec_Enterprise_UITests
-        - simulator_device: iPhone 8
-        is_always_run: true
-    - deploy-to-bitrise-io@1.9: {}
-    - cache-push@2.2:
-        is_always_run: true
-    - slack@3.1:
-        inputs:
-        - webhook_url: $WEBHOOK_SLACK_TOKEN
-    description: This Workflow is to run tests UI TESTS
-    meta:
-      bitrise.io:
-        stack: osx-xcode-12.3.x
+  
   RunSmokeXCUITests:
     steps:
     - cache-pull@2.1:
@@ -421,7 +594,7 @@ workflows:
     - xcode-test@2:
         inputs:
         - scheme: Fennec_Enterprise_XCUITests
-        - xcodebuild_test_options: '-testPlan SmokeXCUITests'
+        - xcodebuild_test_options: "-testPlan SmokeXCUITests"
         - simulator_device: iPhone 11
         is_always_run: true
     - deploy-to-bitrise-io@1.9: {}
@@ -431,7 +604,7 @@ workflows:
       bitrise.io:
         stack: osx-xcode-12.5.x
         machine_type_id: g2.4core
-    before_run: []
+
   xcode12-release-and-beta-nocache:
     steps:
     - activate-ssh-key@4.0:
@@ -620,656 +793,7 @@ workflows:
       bitrise.io:
         stack: osx-xcode-12.5.x
         machine_type_id: g2.4core
-  RunAllXCUITests:
-    steps:
-    - activate-ssh-key@4.0:
-        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@4.0: {}
-    - script@1.1:
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
 
-            echo "PostClone step"
-            carthage checkout
-
-            cd content-blocker-lib-ios/ContentBlockerGen && swift run
-        title: Post clone step for TP updates
-    - cache-pull@2: {}
-    - certificate-and-profile-installer@1.10: {}
-    - script@1:
-        inputs:
-        - content: >-
-            #!/usr/bin/env bash
-
-            # fail if any commands fails
-
-            set -e
-
-            # debug log
-
-            set -x
-
-
-            echo
-            'EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_simulator__NATIVE_ARCH_64_BIT_x86_64=arm64
-            arm64e armv7 armv7s armv6 armv8' > /tmp/tmp.xcconfig
-
-            echo 'EXCLUDED_ARCHS=$(inherited)
-            $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(EFFECTIVE_PLATFORM_SUFFIX)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT))'
-            >> /tmp/tmp.xcconfig
-
-            echo 'IPHONEOS_DEPLOYMENT_TARGET=11.4' >> /tmp/tmp.xcconfig
-
-            echo 'SWIFT_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig
-
-            echo 'GCC_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig
-
-            export XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig
-
-            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
-        title: 'Workaround carthage lipo bug #3019'
-    - carthage@3.2:
-        inputs:
-        - carthage_options: ' --platform ios'
-    - script@1:
-        title: Remove carthage lipo workaround
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            rm /tmp/tmp.xcconfig
-            envman add --key XCODE_XCCONFIG_FILE --value ''
-    - script@1:
-        title: Copy glean sdk_generator
-        inputs:
-        - content: >-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            # Copy Glean script to source folder from
-            # MozillaAppServices.framework as we need
-            # this script to build iOS App
-
-            cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
-    - script@1:
-        inputs:
-        - content: >-
-            #!/usr/bin/env bash
-
-            set -e
-
-            set -x
-
-
-            cd Client.xcodeproj
-
-            sed -i '' 's/"Fennec Development"/"Bitrise Firefox iOS Dev"/'
-            project.pbxproj
-
-            sed -i '' 's/Fennec Today Development/Bitrise Firefox iOS Dev -
-            Fennec Today/' project.pbxproj
-
-            sed -i '' 's/Fennec ShareTo Development/Bitrise Firefox iOS Dev -
-            Share To/' project.pbxproj
-
-            sed -i '' 's/Fennec WidgetKit Development/Bitrise Firefox iOS Dev -
-            WidgetKit/' project.pbxproj
-
-            sed -i '' 's/"XCUITests"/"Bitrise Firefox iOS Dev - XCUI Tests"/'
-            project.pbxproj
-
-            sed -i '' 's/Fennec NotificationService Development/Bitrise Firefox
-            iOS Dev - Notification Service/' project.pbxproj
-
-            sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone
-            Developer"/CODE_SIGN_IDENTITY = "iPhone Distribution"/'
-            project.pbxproj
-
-            cd -
-        title: Set provisioning to Bitrise in xcodeproj
-    - script@1.1:
-        title: NPM install and build
-        inputs:
-        - content: |
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            set -x
-
-            npm install
-            npm run build
-    - 'git::https://github.com/bitrise-steplib/steps-xcode-build-for-test.git@export-fix':
-        inputs:
-        - xcodebuild_options: >-
-            CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
-            CODE_SIGNING_ALLOWED=NO -testPlan Fennec_Enterprise_XCUITests
-        - scheme: Fennec_Enterprise_XCUITests
-    - xcode-test@2.4:
-        inputs:
-        - export_uitest_artifacts: 'true'
-        - scheme: Fennec_Enterprise_XCUITests
-        - simulator_os_version: latest
-        - simulator_device: "$IOS_DEVICE"
-    - deploy-to-bitrise-io@1.10: {}
-    - cache-push@2.2: {}
-    - slack@3.1:
-        inputs:
-        - webhook_url: $WEBHOOK_SLACK_TOKEN
-    description: >-
-      This Workflow is to run tests (currently SmokeTest) when there is a merge
-      in master
-    meta:
-      bitrise.io:
-        stack: osx-xcode-12.5.x
-        machine_type_id: g2.4core
-  CommonBuild-UItest-XCUISmoketest:
-    steps:
-    - activate-ssh-key@4.0:
-        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@4.0: {}
-    - script@1.1:
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            echo "PostClone step"
-            carthage checkout
-
-            cd content-blocker-lib-ios/ContentBlockerGen && swift run
-        title: Post clone step for TP updates
-    - cache-pull@2.1: {}
-    - certificate-and-profile-installer@1.10: {}
-    - script@1:
-        inputs:
-        - content: >-
-            #!/usr/bin/env bash
-
-            # fail if any commands fails
-
-            set -e
-
-            # debug log
-
-            set -x
-
-
-            echo
-            'EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_simulator__NATIVE_ARCH_64_BIT_x86_64=arm64
-            arm64e armv7 armv7s armv6 armv8' > /tmp/tmp.xcconfig
-
-            echo 'EXCLUDED_ARCHS=$(inherited)
-            $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(EFFECTIVE_PLATFORM_SUFFIX)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT))'
-            >> /tmp/tmp.xcconfig
-
-            echo 'IPHONEOS_DEPLOYMENT_TARGET=11.4' >> /tmp/tmp.xcconfig
-
-            echo 'SWIFT_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig
-
-            echo 'GCC_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig
-
-            export XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig
-
-            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
-        title: 'Workaround carthage lipo bug #3019'
-    - carthage@3.2:
-        inputs:
-        - carthage_options: ' --platform ios'
-    - script@1:
-        title: Remove carthage lipo workaround
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            rm /tmp/tmp.xcconfig
-            envman add --key XCODE_XCCONFIG_FILE --value ''
-    - script@1:
-        title: Copy glean sdk_generator
-        inputs:
-        - content: >-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            # Copy Glean script to source folder from
-            # MozillaAppServices.framework as we need
-            # this script to build iOS App
-
-            cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
-    - script@1:
-        inputs:
-        - content: >-
-            #!/usr/bin/env bash
-
-            # fail if any commands fails
-
-            set -e
-
-            # debug log
-
-            set -x
-
-
-            cd Client.xcodeproj
-
-            sed -i '' 's/"Fennec Development"/"Bitrise Firefox iOS Dev"/'
-            project.pbxproj
-
-            sed -i '' 's/Fennec Today Development/Bitrise Firefox iOS Dev -
-            Fennec Today/' project.pbxproj
-
-            sed -i '' 's/Fennec ShareTo Development/Bitrise Firefox iOS Dev -
-            Share To/' project.pbxproj
-
-            sed -i '' 's/Fennec WidgetKit Development/Bitrise Firefox iOS Dev -
-            WidgetKit/' project.pbxproj
-
-            sed -i '' 's/"XCUITests"/"Bitrise Firefox iOS Dev - XCUI Tests"/'
-            project.pbxproj
-
-            sed -i '' 's/Fennec NotificationService Development/Bitrise Firefox
-            iOS Dev - Notification Service/' project.pbxproj
-
-            sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone
-            Developer"/CODE_SIGN_IDENTITY = "iPhone Distribution"/'
-            project.pbxproj
-
-            # sed -i '' 's/DEVELOPMENT_TEAM = ""/DEVELOPMENT_TEAM = 43AQ936H96/'
-            project.pbxproj
-
-            cd -
-        title: Set provisioning to Bitrise in xcodeproj
-    - script@1.1:
-        title: NPM install and build
-        inputs:
-        - content: |
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            set -x
-
-            npm install
-            npm run build
-    - 'git::https://github.com/bitrise-steplib/steps-xcode-build-for-test.git@export-fix':
-        inputs:
-        - configuration: Release
-        - xcodebuild_options: >-
-            CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
-            CODE_SIGNING_ALLOWED=NO -testPlan SmokeXCUITests
-        - scheme: Fennec_Enterprise_XCUITests
-        - xcodebuild_test_options: '-testPlan SmokeXCUITests'
-    - deploy-to-bitrise-io@1.9: {}
-    - cache-push@2.2: {}
-    - slack@3.1:
-        inputs:
-        - webhook_url: $WEBHOOK_SLACK_TOKEN
-    description: >-
-      This Workflow is to run tests (currently SmokeTest) when there is a merge
-      in master
-    meta:
-      bitrise.io:
-        stack: osx-xcode-12.5.x
-        machine_type_id: g2.4core
-    after_run:
-    - RunUITests
-  RunSmokeXCUITestsiPad:
-    steps:
-    - activate-ssh-key@4.0:
-        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@4.0: {}
-    - script@1.1:
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            echo "PostClone step"
-            carthage checkout
-
-            cd content-blocker-lib-ios/ContentBlockerGen && swift run
-        title: Post clone step for TP updates
-    - cache-pull@2: {}
-    - certificate-and-profile-installer@1.10: {}
-    - script@1:
-        inputs:
-        - content: >-
-            #!/usr/bin/env bash
-
-            # fail if any commands fails
-
-            set -e
-
-            # debug log
-
-            set -x
-
-
-            echo
-            'EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_simulator__NATIVE_ARCH_64_BIT_x86_64=arm64
-            arm64e armv7 armv7s armv6 armv8' > /tmp/tmp.xcconfig
-
-            echo 'EXCLUDED_ARCHS=$(inherited)
-            $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(EFFECTIVE_PLATFORM_SUFFIX)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT))'
-            >> /tmp/tmp.xcconfig
-
-            echo 'IPHONEOS_DEPLOYMENT_TARGET=11.4' >> /tmp/tmp.xcconfig
-
-            echo 'SWIFT_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig
-
-            echo 'GCC_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig
-
-            export XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig
-
-            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
-        title: 'Workaround carthage lipo bug #3019'
-    - carthage@3.2:
-        inputs:
-        - carthage_options: ' --platform ios'
-    - script@1:
-        title: Remove carthage lipo workaround
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            rm /tmp/tmp.xcconfig
-            envman add --key XCODE_XCCONFIG_FILE --value ''
-    - script@1:
-        title: Copy glean sdk_generator
-        inputs:
-        - content: >-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            # Copy Glean script to source folder from
-            # MozillaAppServices.framework as we need
-            # this script to build iOS App
-
-            cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
-    - script@1:
-        inputs:
-        - content: >-
-            #!/usr/bin/env bash
-
-            set -e
-
-            set -x
-
-
-            cd Client.xcodeproj
-
-            sed -i '' 's/"Fennec Development"/"Bitrise Firefox iOS Dev"/'
-            project.pbxproj
-
-            sed -i '' 's/Fennec Today Development/Bitrise Firefox iOS Dev -
-            Fennec Today/' project.pbxproj
-
-            sed -i '' 's/Fennec ShareTo Development/Bitrise Firefox iOS Dev -
-            Share To/' project.pbxproj
-
-            sed -i '' 's/Fennec WidgetKit Development/Bitrise Firefox iOS Dev -
-            WidgetKit/' project.pbxproj
-
-            sed -i '' 's/"XCUITests"/"Bitrise Firefox iOS Dev - XCUI Tests"/'
-            project.pbxproj
-
-            sed -i '' 's/Fennec NotificationService Development/Bitrise Firefox
-            iOS Dev - Notification Service/' project.pbxproj
-
-            sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone
-            Developer"/CODE_SIGN_IDENTITY = "iPhone Distribution"/'
-            project.pbxproj
-
-            cd -
-        title: Set provisioning to Bitrise in xcodeproj
-    - script@1.1:
-        title: NPM install and build
-        inputs:
-        - content: |
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            set -x
-
-            npm install
-            npm run build
-    - 'git::https://github.com/bitrise-steplib/steps-xcode-build-for-test.git@export-fix':
-        inputs:
-        - xcodebuild_options: >-
-            CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
-            CODE_SIGNING_ALLOWED=NO -testPlan SmokeXCUITests
-        - scheme: Fennec_Enterprise_XCUITests
-    - xcode-test@2.4:
-        inputs:
-        - scheme: Fennec_Enterprise_XCUITests
-        - xcodebuild_test_options: '-testPlan SmokeXCUITests'
-        - simulator_os_version: latest
-        - simulator_device: iPad Pro (12.9-inch) (4th generation)
-    - deploy-to-bitrise-io@1.10: {}
-    - cache-push@2.2: {}
-    - slack@3.1:
-        inputs:
-        - webhook_url: $WEBHOOK_SLACK_TOKEN
-    description: >-
-      This Workflow is to run SmokeTest on iPad simulator device
-    meta:
-      bitrise.io:
-        stack: osx-xcode-12.5.x
-        machine_type_id: g2.4core
-  NewXcodeVersions:
-    steps:
-    - script@1:
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            YESTERDAY=`date -v -1d '+%Y-%m-%d'`
-
-            brew install jq
-
-            resp=$(curl -X GET -s -H 'Accept: application/vnd.github.v3+json' -H "authorization: Bearer ${GITHUB_ACCESS_TOKEN}" https://api.github.com/repos/mozilla-mobile/firefox-ios/commits\?sha\=main\&since\=$YESTERDAY | jq -r '.[].commit.message | select(contains("Auto Update Bitrise.YML"))')
-            echo $resp
-            if [ -z "$resp" ]
-            then
-                echo "There is not any new commit, stop building"
-            else
-                echo "There is a new commit, continue building"
-                envman add --key NEW_XCODE_VERSION --value New_Version_Found
-            fi
-        title: "Check main branch for recent activity before continuing"
-    - activate-ssh-key@4.0:
-        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@4.0: {}
-    - script@1.1:
-        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            echo "PostClone step"
-            carthage checkout
-
-            cd content-blocker-lib-ios/ContentBlockerGen && swift run
-        title: Post clone step for TP updates
-    - cache-pull@2.4: {}
-    - certificate-and-profile-installer@1.10: {}
-    - script@1:
-        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
-        inputs:
-        - content: >-
-            #!/usr/bin/env bash
-
-            set -e
-
-            set -x
-
-
-            echo
-            'EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_simulator__NATIVE_ARCH_64_BIT_x86_64=arm64
-            arm64e armv7 armv7s armv6 armv8' > /tmp/tmp.xcconfig
-
-            echo 'EXCLUDED_ARCHS=$(inherited)
-            $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(EFFECTIVE_PLATFORM_SUFFIX)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT))'
-            >> /tmp/tmp.xcconfig
-
-            echo 'IPHONEOS_DEPLOYMENT_TARGET=11.4' >> /tmp/tmp.xcconfig
-
-            echo 'SWIFT_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig
-
-            echo 'GCC_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig
-
-            export XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig
-
-            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
-        title: Workaround carthage lipo bug
-    - carthage@3.2:
-        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
-        inputs:
-        - carthage_options: '--platform ios'
-    - script@1:
-        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            set -e
-            set -x
-
-            rm /tmp/tmp.xcconfig
-            envman add --key XCODE_XCCONFIG_FILE --value ''
-        title: Remove carthage lipo workaround
-    - script@1:
-        title: Copy glean sdk_generator
-        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
-        inputs:
-        - content: >-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            # Copy Glean script to source folder from
-            # MozillaAppServices.framework as we need
-            # this script to build iOS App
-
-            cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
-    - script@1:
-        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
-        inputs:
-        - content: >-
-            #!/usr/bin/env bash
-
-            set -e
-
-            set -x
-
-
-            cd Client.xcodeproj
-
-            sed -i '' 's/"Fennec Development"/"Bitrise Firefox iOS Dev"/'
-            project.pbxproj
-
-            sed -i '' 's/Fennec Today Development/Bitrise Firefox iOS Dev -
-            Fennec Today/' project.pbxproj
-
-            sed -i '' 's/Fennec ShareTo Development/Bitrise Firefox iOS Dev -
-            Share To/' project.pbxproj
-
-            sed -i '' 's/Fennec WidgetKit Development/Bitrise Firefox iOS Dev -
-            WidgetKit/' project.pbxproj
-
-            sed -i '' 's/"XCUITests"/"Bitrise Firefox iOS Dev - XCUI Tests"/'
-            project.pbxproj
-
-            sed -i '' 's/Fennec NotificationService Development/Bitrise Firefox
-            iOS Dev - Notification Service/' project.pbxproj
-
-            sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone
-            Developer"/CODE_SIGN_IDENTITY = "iPhone Distribution"/'
-            project.pbxproj
-
-            cd -
-        title: Set provisioning to Bitrise in xcodeproj
-    - script@1.1:
-        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
-        title: NPM install and build
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            npm install
-            npm run build
-    - 'git::https://github.com/bitrise-steplib/steps-xcode-build-for-test.git@export-fix':
-        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
-        inputs:
-        - xcodebuild_options: >-
-            CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
-            CODE_SIGNING_ALLOWED=NO
-        - scheme: Fennec
-    - xcode-test@2:
-        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
-        inputs:
-        - scheme: Fennec
-        - simulator_device: iPhone 8
-    - deploy-to-bitrise-io@1.9: {}
-    - cache-push@2.4: {}
-    - slack@3.1:
-        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
-        inputs:
-        - channel: "#firefox-ios"
-        - text: Build status using latest Xcode detected
-        - webhook_url: $WEBHOOK_SLACK_TOKEN
-    description: >-
-      This Workflow is to run tests (currently SmokeTest) when there is a merge
-      in master
-    meta:
-      bitrise.io:
-        stack: osx-xcode-13.0.x
-        machine_type_id: g2.4core
-    #after_run:
-    #- RunSmokeXCUITests
 app:
   envs:
   - opts:
@@ -1278,19 +802,10 @@ app:
   - opts:
       is_expand: false
     BITRISE_EXPORT_METHOD: development
-meta:
-  bitrise.io:
-    machine_type: performance
-    machine_type_id: standard
 trigger_map:
 - push_branch: main
-  workflow: RunUnitTests
-- push_branch: chronological-tabs
   workflow: RunUnitTests
 - push_branch: v35.0
   workflow: xcode12-release-and-beta-nocache
 - pull_request_target_branch: main
-  workflow: RunUnitTests
-- pull_request_source_branch: '*'
-  pull_request_target_branch: chronological-tabs
   workflow: RunUnitTests
