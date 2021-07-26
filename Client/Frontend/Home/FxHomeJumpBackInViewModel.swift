@@ -25,6 +25,10 @@ class FirefoxHomeJumpBackInViewModel {
 
     public func switchTo(_ tab: Tab) {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .firefoxHomepage, value: .jumpBackInSectionTabOpened)
+        if BrowserViewController.foregroundBVC().urlBar.inOverlayMode {
+            BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode()
+        }
+        
         tabManager?.selectTab(tab)
     }
 
