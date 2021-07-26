@@ -7,9 +7,8 @@ import Storage
 
 struct JumpBackInCollectionCellUX {
     static let cellHeight: CGFloat = 58
-    static let topAndBottomSpacing: CGFloat = 8
-    static let leadingAndTrailingSpacing: CGFloat = 4
-    static let sectionInsetSpacing: CGFloat = 16
+    static let verticalCellSpacing: CGFloat = 8
+    static let iPadHorizontalSpacing: CGFloat = 16
 }
 
 struct JumpBackInLayoutVariables {
@@ -123,7 +122,7 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDelegateFlowLayout {
         let totalHorizontalSpacing = collectionView.bounds.width
         let columns = layoutVariables.columns
         if columns == 2 {
-            itemWidth = (totalHorizontalSpacing - JumpBackInCollectionCellUX.sectionInsetSpacing) / columns
+            itemWidth = (totalHorizontalSpacing - JumpBackInCollectionCellUX.iPadHorizontalSpacing) / columns
         } else {
             itemWidth = totalHorizontalSpacing / columns
         }
@@ -132,22 +131,21 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDelegateFlowLayout {
         return itemSize
     }
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-
-        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            return JumpBackInCollectionCellUX.verticalCellSpacing
+        }
+        return JumpBackInCollectionCellUX.iPadHorizontalSpacing
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return JumpBackInCollectionCellUX.topAndBottomSpacing
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return JumpBackInCollectionCellUX.sectionInsetSpacing
+        if UIDevice.current.userInterfaceIdiom == .phone { return 0 }
+        return JumpBackInCollectionCellUX.verticalCellSpacing
     }
 }
 
 private struct JumpBackInCellUX {
-    static let generalCornerRadius: CGFloat = 8
+    static let generalCornerRadius: CGFloat = 4
     static let titleFontSize: CGFloat = 17
     static let detailsFontSize: CGFloat = 12
     static let labelsWrapperSpacing: CGFloat = 4
