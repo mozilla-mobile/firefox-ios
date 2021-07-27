@@ -11,7 +11,7 @@ class FirefoxHomeJumpBackInViewModel {
     private var recentTabs = [Tab]()
 
     var layoutVariables: JumpBackInLayoutVariables
-    var tabManager: TabManager?
+    var tabManager: TabManager
 
     init() {
         self.tabManager = BrowserViewController.foregroundBVC().tabManager
@@ -24,12 +24,11 @@ class FirefoxHomeJumpBackInViewModel {
     }
 
     public func switchTo(_ tab: Tab) {
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .firefoxHomepage, value: .jumpBackInSectionTabOpened)
         if BrowserViewController.foregroundBVC().urlBar.inOverlayMode {
             BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode()
         }
-        
-        tabManager?.selectTab(tab)
+        tabManager.selectTab(tab)
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .firefoxHomepage, value: .jumpBackInSectionTabOpened)
     }
 
     // In the future, we may add `currentlyPlayingMedia` tabs to the Jump Back In section.
@@ -50,9 +49,7 @@ class FirefoxHomeJumpBackInViewModel {
     }
 
     private func configureData() {
-        if let tabArray = tabManager?.recentlyAccessedNormalTabs {
-            recentTabs.removeAll()
-            recentTabs = tabArray
-        }
+        recentTabs.removeAll()
+        recentTabs = tabManager.recentlyAccessedNormalTabs
     }
 }

@@ -40,7 +40,7 @@ extension TabManager: TabEventHandler {
 }
 
 // TabManager must extend NSObjectProtocol in order to implement WKNavigationDelegate
-class TabManager: NSObject {
+class TabManager: NSObject, FeatureFlagsProtocol {
     fileprivate var delegates = [WeakTabManagerDelegate]()
     fileprivate let tabEventHandlers: [TabEventHandler]
     fileprivate let store: TabManagerStore
@@ -110,10 +110,19 @@ class TabManager: NSObject {
         return tabs.filter { $0.isPrivate }
     }
 
+    /// This variable returns all normal tabs, sorted chronologically, excluding any
+    /// home page tabs.
     var recentlyAccessedNormalTabs: [Tab] {
         assert(Thread.isMainThread)
-        var tabArray: [Tab] = []
-        tabArray = normalTabs.filter { tab in
+        var eligibleTabs: [Tab]
+
+        if featureFlags.isFeatureActive(.inactiveTabs) {
+            eligibleTabs = InactiveTabViewModel.getActiveEligibleTabsFrom(normalTabs)
+        } else {
+            eligibleTabs = normalTabs
+        }
+
+        eligibleTabs = eligibleTabs.filter { tab in
             if let lastKnownUrl = tab.lastKnownUrl {
                 if lastKnownUrl.absoluteString.hasPrefix("internal://") { return false }
                 return true
@@ -121,13 +130,14 @@ class TabManager: NSObject {
             return tab.isURLStartingPage
         }
 
-        tabArray = tabArray.sorted {
-            let firstTab = $0.lastExecutedTime ?? $0.sessionData?.lastUsedTime ?? 0
-            let secondTab = $1.lastExecutedTime ?? $1.sessionData?.lastUsedTime ?? 0
+        // sort the tabs chronologically
+        eligibleTabs = eligibleTabs.sorted {
+            let firstTab = $0.lastExecutedTime ?? $0.sessionData?.lastUsedTime ?? $0.firstCreatedTime ?? 0
+            let secondTab = $1.lastExecutedTime ?? $1.sessionData?.lastUsedTime ?? $0.firstCreatedTime ?? 0
             return firstTab > secondTab
         }
 
-        return tabArray
+        return eligibleTabs
     }
 
     init(profile: Profile, imageStore: DiskImageStore?) {
