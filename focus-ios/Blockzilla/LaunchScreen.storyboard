@@ -19,22 +19,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background" translatesAutoresizingMaskIntoConstraints="NO" id="i5P-Hq-rVA">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                            </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="fxV-Ed-5Tp">
-                                <rect key="frame" x="44" y="408" width="326" height="80"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchScreen.png" translatesAutoresizingMaskIntoConstraints="NO" id="fxV-Ed-5Tp">
+                                <rect key="frame" x="44" y="415.5" width="326" height="65.5"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.05971643328666687" green="0.064653433859348297" blue="0.14510625600814819" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="i5P-Hq-rVA" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="0MG-J5-kPB"/>
                             <constraint firstAttribute="trailing" secondItem="fxV-Ed-5Tp" secondAttribute="trailing" constant="44" id="AaX-BF-44t"/>
-                            <constraint firstAttribute="trailing" secondItem="i5P-Hq-rVA" secondAttribute="trailing" id="Gf9-ce-7su"/>
-                            <constraint firstItem="i5P-Hq-rVA" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="Ino-vR-Nw1"/>
                             <constraint firstItem="fxV-Ed-5Tp" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" constant="44" id="NEP-cX-cX1"/>
                             <constraint firstItem="fxV-Ed-5Tp" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="NS0-js-HOl"/>
-                            <constraint firstAttribute="bottom" secondItem="i5P-Hq-rVA" secondAttribute="bottom" id="T67-LM-FIN"/>
                             <constraint firstItem="fxV-Ed-5Tp" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="ggU-zt-9MK"/>
                         </constraints>
                     </view>
@@ -45,7 +38,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="background" width="375" height="812"/>
-        <image name="logo" width="384" height="80"/>
+        <image name="LaunchScreen.png" width="292.5" height="65.5"/>
     </resources>
 </document>
