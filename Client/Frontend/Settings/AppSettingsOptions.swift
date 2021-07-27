@@ -582,6 +582,25 @@ class ToggleChronTabs: HiddenSetting, FeatureFlagsProtocol {
     }
 }
 
+class ToggleJumpBackInSection: HiddenSetting, FeatureFlagsProtocol {
+    override var title: NSAttributedString? {
+        let toNewStatus = featureFlags.isFeatureActive(.jumpBackIn) ? "OFF" : "ON"
+        return NSAttributedString(string: "Debug: Toggle Jump Back In section \(toNewStatus)",
+                                  attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        featureFlags.toggle(.jumpBackIn)
+        updateCell(navigationController)
+    }
+
+    func updateCell(_ navigationController: UINavigationController?) {
+        let controller = navigationController?.topViewController
+        let tableView = (controller as? AppSettingsTableViewController)?.tableView
+        tableView?.reloadData()
+    }
+}
+
 class ToggleRecentlySavedSection: HiddenSetting, FeatureFlagsProtocol {
     override var title: NSAttributedString? {
         let toNewStatus = featureFlags.isFeatureActive(.recentlySaved) ? "OFF" : "ON"

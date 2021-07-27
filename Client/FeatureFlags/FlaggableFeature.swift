@@ -62,7 +62,9 @@ struct FlaggableFeature {
         case .chronologicalTabs:
             return PrefsKeys.ChronTabsPrefKey
         case .inactiveTabs:
-            return PrefsKeys.KeyEnableInactiveTabs 
+            return PrefsKeys.KeyEnableInactiveTabs
+        case .jumpBackIn:
+            return PrefsKeys.jumpBackInSectionEnabled
         case .recentlySaved:
             return PrefsKeys.recentlySavedSectionEnabled
         default:

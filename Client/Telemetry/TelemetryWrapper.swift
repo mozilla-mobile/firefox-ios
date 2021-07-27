@@ -363,6 +363,7 @@ extension TelemetryWrapper {
         case pinToTopSites = "pin-to-top-sites"
         case removePinnedSite = "remove-pinned-site"
         case firefoxHomepage = "firefox-homepage"
+        case jumpBackInImpressions = "jump-back-in-impressions"
         case recentlySavedBookmarkImpressions = "recently-saved-bookmark-impressions"
         case recentlySavedReadingItemImpressions = "recently-saved-reading-items-impressions"
         case inactiveTabTray = "inactiveTabTray"
@@ -399,6 +400,8 @@ extension TelemetryWrapper {
         case downloadsPanel = "downloads-panel"
         case syncPanel = "sync-panel"
         case yourLibrarySection = "your-library-section"
+        case jumpBackInSectionShowAll = "jump-back-in-section-show-all"
+        case jumpBackInSectionTabOpened = "jump-back-in-section-tab-opened"
         case recentlySavedSectionShowAll = "recently-saved-section-show-all"
         case recentlySavedBookmarkItemAction = "recently-saved-bookmark-item-action"
         case recentlySavedBookmarkItemView = "recently-saved-bookmark-item-view"
@@ -611,6 +614,7 @@ extension TelemetryWrapper {
             GleanMetrics.FirefoxHomePage.openFromAwesomebar.add()
         case (.action, .open, .firefoxHomepage, EventValue.openHomeFromPhotonMenuButton.rawValue, _):
             GleanMetrics.FirefoxHomePage.openFromMenuHomeButton.add()
+
         case (.action, .view, .firefoxHomepage, EventValue.recentlySavedBookmarkItemView.rawValue, let extras):
             if let bookmarksCount = extras?[EventObject.recentlySavedBookmarkImpressions.rawValue] as? String {
                 GleanMetrics.FirefoxHomePage.recentlySavedBookmarkView.record(extra: [.bookmarkCount : bookmarksCount])
@@ -625,6 +629,14 @@ extension TelemetryWrapper {
             GleanMetrics.FirefoxHomePage.recentlySavedBookmarkItem.add()
         case (.action, .tap, .firefoxHomepage, EventValue.recentlySavedReadingListAction.rawValue, _):
             GleanMetrics.FirefoxHomePage.recentlySavedReadingItem.add()
+
+        case (.action, .tap, .firefoxHomepage, EventValue.jumpBackInSectionShowAll.rawValue, _):
+            GleanMetrics.FirefoxHomePage.jumpBackInShowAll.add()
+        case (.action, .view, .jumpBackInImpressions, _, _):
+            GleanMetrics.FirefoxHomePage.jumpBackInSectionView.add()
+        case (.action, .tap, .firefoxHomepage, EventValue.jumpBackInSectionTabOpened.rawValue, _):
+            GleanMetrics.FirefoxHomePage.jumpBackInTabOpened.add()
+
         default:
             let msg = "Uninstrumented metric recorded: \(category), \(method), \(object), \(value), \(String(describing: extras))"
             Sentry.shared.send(message: msg, severity: .debug)

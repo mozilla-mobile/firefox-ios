@@ -16,6 +16,7 @@ private let log = Logger.browserLogger
 
 struct FirefoxHomeUX {
     static let highlightCellHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 200
+    static let jumpBackInCellHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 64 : 62
     static let recentlySavedCellHeight: CGFloat = 136
     static let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 15)
     static let numberOfItemsPerRowForSizeClassIpad = UXSizeClasses(compact: 3, regular: 4, other: 2)
@@ -25,6 +26,23 @@ struct FirefoxHomeUX {
     static let LibraryShortcutsHeight: CGFloat = 90
     static let LibraryShortcutsMaxWidth: CGFloat = 375
 }
+
+struct FxHomeAccessibilityIdentifiers {
+    struct MoreButtons {
+        static let recentlySaved = "recentlySavedSectionMoreButton"
+        static let jumpBackIn = "jumpBackInSectionMoreButton"
+    }
+
+    struct SectionTitles {
+        static let jumpBackIn = "jumpBackInTitle"
+        static let recentlySaved = "jumpBackInTitle"
+        static let pocket = "pocketTitle"
+        static let library = "libraryTitle"
+        static let topSites = "topSitesTitle"
+    }
+}
+
+
 /*
  Size classes are the way Apple requires us to specify our UI.
  Split view on iPad can make a landscape app appear with the demensions of an iPhone app
@@ -63,6 +81,7 @@ protocol HomePanelDelegate: AnyObject {
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
     func homePanel(didSelectURL url: URL, visitType: VisitType, isGoogleTopSite: Bool)
     func homePanelDidRequestToOpenLibrary(panel: LibraryPanelType)
+    func homePanelDidRequestToOpenTabTray()
 }
 
 protocol HomePanel: Themeable {
@@ -131,7 +150,9 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     fileprivate let pocketAPI = Pocket()
     fileprivate let flowLayout = UICollectionViewFlowLayout()
     fileprivate var hasSentPocketSectionEvent = false
+    fileprivate var hasSentJumpBackInSectionEvent = false
     var recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel()
+    var jumpBackInViewModel = FirefoxHomeJumpBackInViewModel()
 
     fileprivate lazy var topSitesManager: ASHorizontalScrollCellManager = {
         let manager = ASHorizontalScrollCellManager()
@@ -172,8 +193,18 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     var isRecentlySavedSectionEnabled: Bool {
         get {
             guard featureFlags.isFeatureActive(.recentlySaved) else { return false }
-            
+
             return (hasRecentBookmarks || hasReadingListitems) && !nimbusExperimentShowLibrarySetting
+        }
+    }
+
+    var isJumpBackInSectionEnabled: Bool {
+        get {
+            guard featureFlags.isFeatureActive(.jumpBackIn) else { return false }
+            let tabManager = BrowserViewController.foregroundBVC().tabManager
+
+            return !(tabManager.selectedTab?.isPrivate ?? false)
+                && !tabManager.recentlyAccessedNormalTabs.isEmpty
         }
     }
 
@@ -228,6 +259,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reloadAll()
+        setupExperiment()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -341,12 +373,14 @@ extension FirefoxHomeViewController {
     enum Section: Int, CaseIterable {
         case topSites
         case libraryShortcuts
+        case jumpBackIn
         case recentlySaved
         case pocket
 
         var title: String? {
             switch self {
             case .pocket: return Strings.ASPocketTitle2
+            case .jumpBackIn: return String.FirefoxHomeJumpBackInSectionTitle
             case .recentlySaved: return Strings.RecentlySavedSectionTitle
             case .topSites: return Strings.ASShortcutsTitle
             case .libraryShortcuts: return Strings.AppMenuLibraryTitleString
@@ -368,7 +402,7 @@ extension FirefoxHomeViewController {
 
         var footerHeight: CGSize {
             switch self {
-            case .pocket, .recentlySaved: return .zero
+            case .pocket, .jumpBackIn, .recentlySaved: return .zero
             case .topSites, .libraryShortcuts: return CGSize(width: 50, height: 5)
             }
         }
@@ -376,6 +410,7 @@ extension FirefoxHomeViewController {
         func cellHeight(_ traits: UITraitCollection, width: CGFloat) -> CGFloat {
             switch self {
             case .pocket: return FirefoxHomeUX.highlightCellHeight
+            case .jumpBackIn: return FirefoxHomeUX.jumpBackInCellHeight
             case .recentlySaved: return FirefoxHomeUX.recentlySavedCellHeight
             case .topSites: return 0 //calculated dynamically
             case .libraryShortcuts: return FirefoxHomeUX.LibraryShortcutsHeight
@@ -411,7 +446,7 @@ extension FirefoxHomeViewController {
                 }
                 
                 return numItems
-            case .topSites, .libraryShortcuts, .recentlySaved:
+            case .topSites, .libraryShortcuts, .jumpBackIn, .recentlySaved:
                 return 1
             }
         }
@@ -424,7 +459,7 @@ extension FirefoxHomeViewController {
             case .pocket:
                 let numItems = numberOfItemsForRow(traits)
                 return CGSize(width: floor(((frameWidth - inset) - (FirefoxHomeUX.MinimumInsets * (numItems - 1))) / numItems), height: height)
-            case .topSites, .libraryShortcuts, .recentlySaved:
+            case .topSites, .libraryShortcuts, .jumpBackIn, .recentlySaved:
                 return CGSize(width: frameWidth - inset, height: height)
             }
         }
@@ -439,6 +474,7 @@ extension FirefoxHomeViewController {
             switch self {
             case .topSites: return "TopSiteCell"
             case .pocket: return "PocketCell"
+            case .jumpBackIn: return "JumpBackInCell"
             case .recentlySaved: return "RecentlySavedCell"
             case .libraryShortcuts: return  "LibraryShortcutsCell"
             }
@@ -448,6 +484,7 @@ extension FirefoxHomeViewController {
             switch self {
             case .topSites: return ASHorizontalScrollCell.self
             case .pocket: return FirefoxHomeHighlightCell.self
+            case .jumpBackIn: return FxHomeJumpBackInCollectionCell.self
             case .recentlySaved: return FxHomeRecentlySavedCollectionCell.self
             case .libraryShortcuts: return ASLibraryCell.self
             }
@@ -484,22 +521,33 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                 view.moreButton.isHidden = false
                 view.moreButton.setTitle(Strings.PocketMoreStoriesText, for: .normal)
                 view.moreButton.addTarget(self, action: #selector(showMorePocketStories), for: .touchUpInside)
-                view.titleLabel.accessibilityIdentifier = "pocketTitle"
+                view.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.pocket
+                return view
+            case .jumpBackIn:
+                if !hasSentJumpBackInSectionEvent && isJumpBackInSectionEnabled && !jumpBackInViewModel.jumpableTabs.isEmpty {
+                    TelemetryWrapper.recordEvent(category: .action, method: .view, object: .jumpBackInImpressions, value: nil, extras: nil)
+                    hasSentJumpBackInSectionEvent = true
+                }
+                view.moreButton.isHidden = false
+                view.moreButton.setTitle(Strings.RecentlySavedShowAllText, for: .normal)
+                view.moreButton.addTarget(self, action: #selector(openTabTray), for: .touchUpInside)
+                view.moreButton.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.MoreButtons.jumpBackIn
+                view.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.jumpBackIn
                 return view
             case .recentlySaved:
                 view.moreButton.isHidden = false
                 view.moreButton.setTitle(Strings.RecentlySavedShowAllText, for: .normal)
                 view.moreButton.addTarget(self, action: #selector(openBookmarks), for: .touchUpInside)
-                view.moreButton.accessibilityIdentifier = "recentlySavedSectionMoreButton"
-                view.titleLabel.accessibilityIdentifier = "recentlySavedTitle"
+                view.moreButton.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.MoreButtons.recentlySaved
+                view.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.recentlySaved
                 return view
             case .topSites:
-                view.titleLabel.accessibilityIdentifier = "topSitesTitle"
+                view.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.topSites
                 view.moreButton.isHidden = true
                 return view
             case .libraryShortcuts:
                 view.moreButton.isHidden = true
-                view.titleLabel.accessibilityIdentifier = "libraryTitle"
+                view.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.library
                 return view
         }
         default:
@@ -530,6 +578,15 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                 return cellSize
             }
             return cellSize
+        case .jumpBackIn:
+            if jumpBackInViewModel.layoutVariables.scrollDirection == .horizontal {
+                if jumpBackInViewModel.jumpableTabs.count > 2 {
+                    cellSize.height *= 2
+                }
+            } else if jumpBackInViewModel.layoutVariables.scrollDirection == .vertical {
+                cellSize.height *= CGFloat(jumpBackInViewModel.jumpableTabs.count)
+            }
+            return cellSize
         case .pocket:
             return cellSize
         case .libraryShortcuts:
@@ -546,9 +603,10 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
             return Section(section).headerHeight
         case .libraryShortcuts:
             return isYourLibrarySectionEnabled ? Section(section).headerHeight : .zero
+        case .jumpBackIn:
+            return isJumpBackInSectionEnabled ? Section(section).headerHeight : .zero
         case .recentlySaved:
-            let size = isRecentlySavedSectionEnabled ? Section(section).headerHeight : .zero
-            return size
+            return isRecentlySavedSectionEnabled ? Section(section).headerHeight : .zero
         }
     }
 
@@ -594,9 +652,10 @@ extension FirefoxHomeViewController {
         case .pocket:
             // There should always be a full row of pocket stories (numItems) otherwise don't show them
             return pocketStories.count
+        case .jumpBackIn:
+            return isJumpBackInSectionEnabled ? 1 : 0
         case .recentlySaved:
-            let numberOfItems = (isRecentlySavedSectionEnabled ? 1 : 0)
-            return numberOfItems
+            return isRecentlySavedSectionEnabled ? 1 : 0
         case .libraryShortcuts:
             return isYourLibrarySectionEnabled ? 1 : 0
         }
@@ -611,6 +670,8 @@ extension FirefoxHomeViewController {
             return configureTopSitesCell(cell, forIndexPath: indexPath)
         case .pocket:
             return configurePocketItemCell(cell, forIndexPath: indexPath)
+        case .jumpBackIn:
+            return configureJumpBackInCell(cell, forIndexPath: indexPath)
         case .recentlySaved:
             return configureRecentlySavedCell(cell, forIndexPath: indexPath)
         case .libraryShortcuts:
@@ -659,6 +720,15 @@ extension FirefoxHomeViewController {
         return recentlySavedCell
     }
 
+    private func configureJumpBackInCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
+        let jumpBackInCell = cell as! FxHomeJumpBackInCollectionCell
+        jumpBackInCell.profile = profile
+        jumpBackInCell.viewModel = jumpBackInViewModel
+        jumpBackInCell.collectionView.reloadData()
+        jumpBackInCell.setNeedsLayout()
+
+        return jumpBackInCell
+    }
 }
 
 // MARK: - Data Management
@@ -824,7 +894,7 @@ extension FirefoxHomeViewController: DataObserverDelegate {
             let pointInTopSite = longPressGestureRecognizer.location(in: topSiteCell.collectionView)
             guard let topSiteIndexPath = topSiteCell.collectionView.indexPathForItem(at: pointInTopSite) else { return }
             presentContextMenu(for: topSiteIndexPath)
-        case .libraryShortcuts, .recentlySaved:
+        case .libraryShortcuts, .jumpBackIn, .recentlySaved:
             return
         }
     }
@@ -844,7 +914,7 @@ extension FirefoxHomeViewController: DataObserverDelegate {
             site = Site(url: pocketStories[index].url.absoluteString, title: pocketStories[index].title)
             let key = TelemetryWrapper.EventExtraKey.pocketTilePosition.rawValue
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .pocketStory, value: nil, extras: [key : "\(index)"])
-        case .topSites, .libraryShortcuts, .recentlySaved:
+        case .topSites, .libraryShortcuts, .jumpBackIn, .recentlySaved:
             return
         }
         if let site = site {
@@ -856,10 +926,20 @@ extension FirefoxHomeViewController: DataObserverDelegate {
 // MARK: - Actions Handling
 
 extension FirefoxHomeViewController {
+    @objc func openTabTray(_ sender: UIButton) {
+        if sender.accessibilityIdentifier == FxHomeAccessibilityIdentifiers.MoreButtons.jumpBackIn {
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .tap,
+                                         object: .firefoxHomepage,
+                                         value: .jumpBackInSectionShowAll)
+        }
+        homePanelDelegate?.homePanelDidRequestToOpenTabTray()
+    }
+
     @objc func openBookmarks(_ sender: UIButton) {
         homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .bookmarks)
         
-        if sender.accessibilityIdentifier == "recentlySavedSectionMoreButton" {
+        if sender.accessibilityIdentifier == FxHomeAccessibilityIdentifiers.MoreButtons.recentlySaved {
             TelemetryWrapper.recordEvent(category: .action,
                                               method: .tap,
                                               object: .firefoxHomepage,
@@ -918,7 +998,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
             return Site(url: pocketStories[indexPath.row].url.absoluteString, title: pocketStories[indexPath.row].title)
         case .topSites:
             return topSitesManager.content[indexPath.item]
-        case .libraryShortcuts, .recentlySaved:
+        case .libraryShortcuts, .jumpBackIn, .recentlySaved:
             return nil
         }
     }
@@ -934,7 +1014,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
             }
         case .pocket:
             sourceView = self.collectionView?.cellForItem(at: indexPath)
-        case .libraryShortcuts, .recentlySaved:
+        case .libraryShortcuts, .jumpBackIn, .recentlySaved:
             return nil
         }
 
@@ -1014,7 +1094,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
         var actions = [openInNewTabAction, openInNewPrivateTabAction, bookmarkAction, shareAction]
 
         switch Section(indexPath.section) {
-        case .pocket, .libraryShortcuts, .recentlySaved: break
+        case .pocket, .libraryShortcuts, .jumpBackIn, .recentlySaved: break
         case .topSites: actions.append(contentsOf: topSiteActions)
         }
         

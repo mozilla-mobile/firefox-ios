@@ -172,7 +172,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
             tabManager.removeTabs(recentlyClosedTabs, shouldNotify: true)
             tabManager.selectTab(selectedTab)
         }
-        return inactiveViewModel.normalTabs
+        return inactiveViewModel.activeTabs
     }
     
     func togglePrivateMode(isOn: Bool, createTabOnEmptyPrivateMode: Bool) {
