@@ -139,7 +139,7 @@ workflows:
     steps:
     - git::https://github.com/bitrise-steplib/steps-xcode-build-for-test.git@export-fix:
         inputs:
-        - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+        - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO -testPlan Fennec_Enterprise_XCUITests
         - scheme: Fennec_Enterprise_XCUITests
     - xcode-test@2:
         inputs:
