@@ -56,6 +56,7 @@ public struct PrefsKeys {
     public static let AppExtensionTelemetryEventArray = "AppExtensionTelemetryEvents"
     public static let KeyBlockPopups = "blockPopups"
     public static let recentlySavedSectionEnabled = "recentlySavedSectionEnabled"
+    public static let jumpBackInSectionEnabled = "jumpBackInSectionEnabled"
     
     // Tabs Tray
     public static let KeyEnableInactiveTabs = "KeyInactiveTabs"

@@ -68,7 +68,7 @@ class InactiveTabViewModel {
     private var tabs = [Tab]()
     private var selectedTab: Tab?
     var inactiveTabs = [Tab]()
-    var normalTabs = [Tab]()
+    var activeTabs = [Tab]()
     var recentlyClosedTabs = [Tab]()
 
     func updateInactiveTabs(with selectedTab: Tab?, tabs: [Tab]) {
@@ -86,7 +86,32 @@ class InactiveTabViewModel {
         }
         updateFilteredTabs()
     }
-    
+
+    /// This function returns any tabs that are less than four days old.
+    ///
+    /// Because the "Jump Back In" and "Inactive Tabs" features are separate features,
+    /// it is not a given that a tab has an active/inactive state. Thus, we must
+    /// assume that if we want to use active/inactive state, we can do so without
+    /// that particular feature being active but still respecting that logic.
+    static func getActiveEligibleTabsFrom(_ tabs: [Tab]) -> [Tab] {
+        var activeTabs = [Tab]()
+
+        let currentDate = Date()
+        let noon = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: currentDate) ?? Date()
+        let day4_Old = Calendar.current.date(byAdding: .day, value: -4, to: noon) ?? Date()
+
+        for tab in tabs {
+            let tabTimeStamp = tab.lastExecutedTime ?? tab.sessionData?.lastUsedTime ?? tab.firstCreatedTime ?? 0
+            let tabDate = Date.fromTimestamp(tabTimeStamp)
+
+            if tabDate > day4_Old || tabTimeStamp == 0 {
+                activeTabs.append(tab)
+            }
+        }
+
+        return activeTabs
+    }
+
     private func updateModelState(state: TabUpdateState) {
         let currentDate = Date()
         let noon = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: currentDate) ?? Date()
@@ -152,7 +177,7 @@ class InactiveTabViewModel {
         for tab in self.tabs {
             let status = inactiveTabModel.tabWithStatus[tab.tabUUID]
             if status == nil {
-                normalTabs.append(tab)
+                activeTabs.append(tab)
             } else if let status = status, let currentState = status.currentState {
                 addTab(state: currentState, tab: tab)
             }
@@ -164,7 +189,7 @@ class InactiveTabViewModel {
         case .inactive:
             inactiveTabs.append(tab)
         case .normal:
-            normalTabs.append(tab)
+            activeTabs.append(tab)
         case .recentlyClosed:
             recentlyClosedTabs.append(tab)
         case .none, .shouldBecomeInactive, .shouldBecomeRecentlyClosed: break
@@ -172,7 +197,7 @@ class InactiveTabViewModel {
     }
     
     private func clearAll() {
-        normalTabs.removeAll()
+        activeTabs.removeAll()
         inactiveTabs.removeAll()
         recentlyClosedTabs.removeAll()
     }

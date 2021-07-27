@@ -463,6 +463,42 @@ firefox_home_page:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-01-01"
+  jump_back_in_show_all:
+    type: counter
+    description: |
+      Counts the number of times a user taps the
+      Show All button in the Jump Back In section.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-1806
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8905
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-01-01"
+  jump_back_in_section_view:
+    type: counter
+    description: |
+      Counts the number of times a user sees the
+      Jump Back In section on the homepage
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-1806
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8905
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-01-01"
+  jump_back_in_tab_opened:
+    type: counter
+    description: |
+      Counts the number of times a user taps to open an
+      existing tab from the Jump Back In section
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-1806
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8905
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-01-01"
 
 # Library
 library:
