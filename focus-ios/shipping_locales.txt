@@ -17,7 +17,7 @@ el
 en-US
 eo
 es-AR
-es_CL
+es-CL
 es-ES
 es-MX
 eu
@@ -47,7 +47,7 @@ mr
 ms
 my
 nb-NO
-nb-NP
+ne-NP
 nl
 nn-NO
 pl
