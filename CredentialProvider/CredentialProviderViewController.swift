@@ -13,7 +13,6 @@ protocol CredentialProviderViewProtocol: AnyObject, AlertControllerView {
     var extensionContext: ASCredentialProviderExtensionContext { get }
 
     func showWelcome()
-    func showPassword(completion: @escaping (Bool) -> Void)
     func show(itemList: [(ASPasswordCredentialIdentity, ASPasswordCredential)])
 }
 
@@ -58,15 +57,6 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
     }
     
     /*
-     Implement this method if provideCredentialWithoutUserInteraction(for:) can fail with
-     ASExtensionError.userInteractionRequired. In this case, the system may present your extension's
-     UI and call this method. Show appropriate UI for authenticating the user then provide the password
-     by completing the extension request with the associated ASPasswordCredential.
-     */
-    override func prepareInterfaceToProvideCredential(for credentialIdentity: ASPasswordCredentialIdentity) {
-    }
-    
-    /*
      Implement this method if your extension supports showing credentials in the QuickType bar.
      When the user selects a credential from your app, this method will be called with the
      ASPasswordCredentialIdentity your app has previously saved to the ASCredentialIdentityStore.
@@ -81,11 +71,6 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
 }
 
 extension CredentialProviderViewController: CredentialProviderViewProtocol {
-    func showPassword(completion: @escaping (Bool) -> Void) {
-        let passcodeVC = PasscodeEntryViewController(passcodeCompletion: completion)
-        self.currentViewController = passcodeVC
-    }
-    
     func showWelcome() {
         let welcomeVC = CredentialWelcomeViewController()
         self.currentViewController = welcomeVC
