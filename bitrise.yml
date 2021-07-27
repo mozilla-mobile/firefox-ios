@@ -141,6 +141,7 @@ workflows:
         inputs:
         - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
         - scheme: Fennec_Enterprise_XCUITests
+        - xcodebuild_test_options: "-testPlan Fennec_Enterprise_XCUITests"
     - xcode-test@2:
         inputs:
         - scheme: Fennec_Enterprise_XCUITests
