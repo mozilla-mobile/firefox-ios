@@ -28,7 +28,7 @@ private let NIMBUS_USE_PREVIEW_COLLECTION_KEY = "nimbus_use_preview_collection"
 /// ```
 /// button.text = Exeriments.shared.withExperiment(featureId: .submitButton) { branchId in
 ///    switch branchId {
-///      ExperimentBranch.treatment -> return "Ok then"
+///      NimbusExperimentBranch.treatment -> return "Ok then"
 ///      else -> return "OK"
 ///    }
 /// }
@@ -138,7 +138,7 @@ enum Experiments {
 
     /// The `NimbusApi` object. This is the entry point to do anything with the Nimbus SDK on device.
     public static var shared: NimbusApi = {
-        guard AppConstants.NIMBUS_ENABLED else {
+        guard FeatureFlagsManager.shared.isFeatureActive(.nimbus) else {
             return NimbusDisabled.shared
         }
 
@@ -229,7 +229,7 @@ extension NimbusApi {
     ///      - featureId: the id of the feature, as it is known by `Experimenter`.
     ///      - transform: the mapping between the experiment branch the user is in and something
     ///      useful for the feature. If the user is not enrolled in the experiment, the branch is `nil`.
-    func withExperiment<T>(featureId: FeatureId, transform: (String?) -> T) -> T {
+    func withExperiment<T>(featureId: NimbusFeatureId, transform: (String?) -> T) -> T {
         // While nimbus allows us to look up a branch by featureId, its
         // actual use is to resolve the experiment branch via experiment slug.
         let branch = getExperimentBranch(experimentId: featureId.rawValue)
@@ -249,7 +249,7 @@ extension NimbusApi {
     ///      involving this feature.
     /// - Returns:
     ///      - a `Variables` object providing typed accessors to a remotely configured JSON object.
-    func getVariables(featureId: FeatureId, sendExposureEvent: Bool = true) -> Variables {
+    func getVariables(featureId: NimbusFeatureId, sendExposureEvent: Bool = true) -> Variables {
         return getVariables(featureId: featureId.rawValue, sendExposureEvent: sendExposureEvent)
     }
 
@@ -263,7 +263,7 @@ extension NimbusApi {
     ///      involving this feature.
     /// - Returns:
     ///      - a `Variables` object providing typed accessors to a remotely configured JSON object.
-    func withVariables(featureId: FeatureId, sendExposureEvent: Bool = true) -> Variables {
+    func withVariables(featureId: NimbusFeatureId, sendExposureEvent: Bool = true) -> Variables {
         return getVariables(featureId: featureId, sendExposureEvent: sendExposureEvent)
     }
 
@@ -272,7 +272,7 @@ extension NimbusApi {
     ///      - featureId: the id of the feature as it appears in `Experimenter`
     ///      - sendExposureEvent: by default `true`. This logs an event that the user was exposed to an experiment
     ///      involving this feature.
-    func withVariables<T>(featureId: FeatureId, sendExposureEvent: Bool = true, transform: (Variables) -> T) -> T {
+    func withVariables<T>(featureId: NimbusFeatureId, sendExposureEvent: Bool = true, transform: (Variables) -> T) -> T {
         let variables = getVariables(featureId: featureId, sendExposureEvent: sendExposureEvent)
         return transform(variables)
     }
@@ -302,7 +302,7 @@ extension NimbusApi {
     /// - Parameter featureId string representing the id of the feature for which to record the exposure
     ///     event.
     ///
-    func recordExposureEvent(featureId: FeatureId) {
+    func recordExposureEvent(featureId: NimbusFeatureId) {
         recordExposureEvent(featureId: featureId.rawValue)
     }
 }
@@ -313,6 +313,7 @@ private extension AppBuildChannel {
         case .release: return "release"
         case .beta: return "beta"
         case .developer: return "nightly"
+        case .other: return "other"
         }
     }
 }

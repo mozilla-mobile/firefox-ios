@@ -3,8 +3,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Shared
 import WebKit
 
+private let log = Logger.browserLogger
 private let ReadabilityServiceSharedInstance = ReadabilityService()
 
 private let ReadabilityTaskDefaultTimeout = 15
@@ -66,6 +68,7 @@ class ReadabilityOperation: Operation {
                 break
             case .success(let readabilityResult):
                 do {
+                    log.info("ReadabilityService: Readability result available!")
                     try readerModeCache.put(url, readabilityResult)
                 } catch let error as NSError {
                     print("Failed to store readability results in the cache: \(error.localizedDescription)")
@@ -103,6 +106,7 @@ extension ReadabilityOperation: ReaderModeDelegate {
     }
 
     func readerMode(_ readerMode: ReaderMode, didParseReadabilityResult readabilityResult: ReadabilityResult, forTab tab: Tab) {
+        log.info("ReadbilityService: Readability result available!")
         guard tab == self.tab else {
             return
         }

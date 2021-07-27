@@ -506,6 +506,9 @@ extension TelemetryWrapper {
             GleanMetrics.DefaultBrowserOnboarding.dismissPressed.add()
         case (.action, .tap, .goToSettingsDefaultBrowserOnboarding, _, _):
             GleanMetrics.DefaultBrowserOnboarding.goToSettingsPressed.add()
+        // Onboarding
+        case (.action, .press, .dismissedOnboarding, let slideNum, _):
+            GleanMetrics.Onboarding.finish.record(extra: [.slideNum : slideNum])
         // Widget
         case (.action, .open, .mediumTabsOpenUrl, _, _):
             GleanMetrics.Widget.mTabsOpenUrl.add()
@@ -527,7 +530,7 @@ extension TelemetryWrapper {
         // Pocket
         case (.action, .tap, .pocketStory, _, let extras):
             if let position = extras?[EventExtraKey.pocketTilePosition.rawValue] as? String {
-                GleanMetrics.Pocket.openStoryPosition[position].add()
+                GleanMetrics.Pocket.openStoryPosition["Position-"+position].add()
             } else {
                 let msg = "Uninstrumented pref metric: \(category), \(method), \(object), \(value), \(String(describing: extras))"
                 Sentry.shared.send(message: msg, severity: .debug)

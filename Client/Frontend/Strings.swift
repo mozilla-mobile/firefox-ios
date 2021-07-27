@@ -1302,6 +1302,7 @@ extension String {
     public static let ClearableOfflineData = MZLocalizedString("Offline Website Data", tableName: "ClearPrivateData", comment: "Settings item for clearing website data")
     public static let ClearableCookies = MZLocalizedString("Cookies", tableName: "ClearPrivateData", comment: "Settings item for clearing cookies")
     public static let ClearableDownloads = MZLocalizedString("Downloaded Files", tableName: "ClearPrivateData", comment: "Settings item for deleting downloaded files")
+    public static let ClearableSpotlight = MZLocalizedString("Spotlight Index", tableName: "ClearPrivateData", comment: "Settings item for deleting the iOS search index of browsed webpages")
 }
 
 // MARK: - SearchEngine Picker
@@ -1384,6 +1385,17 @@ extension String {
     public static let AwesomeBarSearchWithEngineButtonDescription = MZLocalizedString("Awesomebar.SearchWithEngine.Description", value: "Search %@ directly from the address bar", comment: "Description for button to suggest searching with a search engine. First argument is the name of the search engine to select")
 }
 
+// MARK: - Credential Provider
+extension String {
+    public static let LoginsWelcomeViewTitle = MZLocalizedString("Logins.WelcomeView.Title", value: "Take your passwords everywhere", comment: "Label displaying welcome view title")
+    public static let LoginsListSearchCancel = MZLocalizedString("LoginsList.Search.Cancel", value: "Cancel", comment: "title for cancel button for user to stop searching for a particular login")
+    public static let LoginsListSearchPlaceholder = MZLocalizedString("LoginsList.Search.Placeholder", value: "Search logins", comment: "Placeholder text for search field")
+    public static let LoginsListSelectPasswordTitle = MZLocalizedString("LoginsList.SelectPassword.Title", value: "Select a password to fill", comment: "Label displaying select a password to fill instruction")
+    public static let LoginsListNoMatchingResultTitle = MZLocalizedString("LoginsList.NoMatchingResult.Title", value: "No matching logins", comment: "Label displayed when a user searches and no matches can be found against the search query")
+    public static let LoginsListNoMatchingResultSubtitle = MZLocalizedString("LoginsList.NoMatchingResult.Subtitle", value: "There are no results matching your search.", comment: "Label that appears after the search if there are no logins matching the search")
+    public static let LoginsListNoLoginsFoundDescription = MZLocalizedString("LoginsList.NoLoginsFound.Description", value: "Saved logins will show up here. If you saved your logins to Firefox on a different device, sign in to your Firefox Account.", comment: "Label shown when there are no logins to list")
+}
+
 // MARK: - v35 Strings
 extension String {
     public static let FirefoxHomeJumpBackInSectionTitle = MZLocalizedString("ActivityStream.JumpBackIn.SectionTitle", value: "Jump Back In", comment: "Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab")
@@ -1392,4 +1404,10 @@ extension String {
     public static let TabsTrayInactiveTabsSectionTitle = MZLocalizedString("TabTray.InactiveTabs.SectionTitle", value: "Inactive Tabs", comment: "Title for the inactive tabs section. This section groups all tabs that haven't been used in a while.")
     public static let TabsTrayRecentlyCloseTabsSectionTitle = MZLocalizedString("TabTray.RecentlyClosed.SectionTitle", value: "Recently closed", comment: "Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed.")
     public static let TabsTrayRecentlyClosedTabsDescritpion = MZLocalizedString("TabTray.RecentlyClosed.Description", value: "Tabs are available here for 30 days. After that time, tabs will be automatically closed.", comment: "Describes what the Recently Closed tabs behavior is for users unfamiliar with it.")
+}
+
+// MARK: - v36 Strings
+extension String {
+    public static let ProtectionStatusSheetConnectionSecure = MZLocalizedString("ProtectionStatusSheet.SecureConnection", value: "Secure Connection", comment: "value for label to indicate user is on a secure ssl connection")
+    public static let ProtectionStatusSheetConnectionInsecure = MZLocalizedString("ProtectionStatusSheet.InsecureConnection", value: "Insecure Connection", comment: "value for label to indicate user is on an unencrypted website")
 }

@@ -71,7 +71,7 @@ enum TabDisplayType {
     case TopTabTray
 }
 
-class TabDisplayManager: NSObject {
+class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     var performingChainedOperations = false
     var inactiveViewModel: InactiveTabViewModel?
     var isInactiveViewExpanded: Bool = false
@@ -86,7 +86,7 @@ class TabDisplayManager: NSObject {
     var profile: Profile
     private var inactiveNimbusExperimentStatus: Bool = false
     var shouldEnableInactiveTabs: Bool {
-        guard AppConstants.IS_INACTIVE_TAB_ENABLED else { return false }
+        guard featureFlags.isFeatureActive(.inactiveTabs) else { return false }
         
         return inactiveNimbusExperimentStatus ? inactiveNimbusExperimentStatus : profile.prefs.boolForKey(PrefsKeys.KeyEnableInactiveTabs) ?? false
     }
@@ -151,21 +151,21 @@ class TabDisplayManager: NSObject {
     func setupExperiment() {
         inactiveNimbusExperimentStatus = Experiments.shared.withExperiment(featureId: .inactiveTabs) { branch -> Bool in
                 switch branch {
-                case .some(ExperimentBranch.inactiveTabControl): return false
-                case .some(ExperimentBranch.inactiveTabTreatment): return true
+                case .some(NimbusExperimentBranch.InactiveTab.control): return false
+                case .some(NimbusExperimentBranch.InactiveTab.treatment): return true
                 default: return false
             }
         }
     }
-
+    
     func getTabsToDisplay() -> [Tab] {
         let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         guard allTabs.count > 0, let inactiveViewModel = inactiveViewModel else { return [Tab]() }
         guard allTabs.count > 1 else { return allTabs }
         let selectedTab = tabManager.selectedTab
-        // Make sure selected tab has latest time 
+        // Make sure selected tab has latest time
         selectedTab?.lastExecutedTime = Date.now()
-        _ = inactiveViewModel.updateInactiveTabs(with: tabManager.selectedTab, tabs: allTabs)
+        inactiveViewModel.updateInactiveTabs(with: tabManager.selectedTab, tabs: allTabs)
         isInactiveViewExpanded = inactiveViewModel.inactiveTabs.count > 0
         let recentlyClosedTabs = inactiveViewModel.recentlyClosedTabs
         if recentlyClosedTabs.count > 0 {
@@ -243,6 +243,13 @@ class TabDisplayManager: NSObject {
         guard let index = collectionView.indexPath(for: cell)?.item, let tab = dataStore.at(index) else {
             return
         }
+        
+        if getTabsToDisplay().count == 1 {
+            tabManager.removeTabs([tab])
+            tabManager.selectTab(tabManager.addTab())
+            return
+        }
+        
         tabManager.removeTabAndUpdateSelectedIndex(tab)
     }
 
@@ -298,11 +305,8 @@ extension TabDisplayManager: UICollectionViewDataSource {
             cell = tabDisplayer?.cellFactory(for: cell, using: tab) ?? cell
         case .inactiveTabs:
             if let inactiveCell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabCell.Identifier, for: indexPath) as? InactiveTabCell {
-                let tabs = inactiveViewModel?.inactiveTabs
                 inactiveCell.inactiveTabsViewModel = inactiveViewModel
                 inactiveCell.hasExpanded = isInactiveViewExpanded
-                inactiveCell.inactiveTabsViewModel?.inactiveTabs.removeAll()
-                inactiveCell.inactiveTabsViewModel?.inactiveTabs.append(contentsOf: tabs ?? [])
                 inactiveCell.delegate = self
                 inactiveCell.tableView.reloadData()
                 cell = inactiveCell
