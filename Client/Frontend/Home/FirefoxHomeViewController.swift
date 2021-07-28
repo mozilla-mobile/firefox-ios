@@ -529,7 +529,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                     hasSentJumpBackInSectionEvent = true
                 }
                 view.moreButton.isHidden = false
-                view.moreButton.setTitle(Strings.RecentlySavedShowAllText, for: .normal)
+                view.moreButton.setTitle(.ActivityStream.RecentlySavedShowAllText, for: .normal)
                 view.moreButton.addTarget(self, action: #selector(openTabTray), for: .touchUpInside)
                 view.moreButton.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.MoreButtons.jumpBackIn
                 view.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.jumpBackIn
