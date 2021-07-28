@@ -46,12 +46,11 @@ class LibraryShortcutView: UIView {
             make.size.equalTo(60)
             make.centerX.equalToSuperview()
             make.top.equalToSuperview()
-            make.bottom.equalTo(titleLabel.snp.top)
         }
 
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(button.snp.bottom)
-            make.leading.trailing.centerX.bottom.equalToSuperview()
+            make.top.equalTo(button.snp.bottom).offset(8)
+            make.leading.trailing.centerX.equalToSuperview()
         }
     }
 
