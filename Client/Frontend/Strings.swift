@@ -327,6 +327,7 @@ extension String {
     public static let ClearableOfflineData = MZLocalizedString("Offline Website Data", tableName: "ClearPrivateData", comment: "Settings item for clearing website data", lastEditedIn: .unknown)
     public static let ClearableCookies = MZLocalizedString("Cookies", tableName: "ClearPrivateData", comment: "Settings item for clearing cookies", lastEditedIn: .unknown)
     public static let ClearableDownloads = MZLocalizedString("Downloaded Files", tableName: "ClearPrivateData", comment: "Settings item for deleting downloaded files", lastEditedIn: .unknown)
+    public static let ClearableSpotlight = MZLocalizedString("Spotlight Index", tableName: "ClearPrivateData", comment: "Settings item for deleting the iOS search index of browsed webpages", lastEditedIn: .unknown)
 }
 
 // MARK: - D
