@@ -32,9 +32,6 @@ class DiskImageStoreTests: XCTestCase {
             success = putImage(key, image: image)
             XCTAssert(success, "\(key) image added to store")
             XCTAssertEqual(getImage(key)!.size.width, image.size.width, "Images are equal")
-
-            success = putImage(key, image: image)
-            XCTAssertFalse(success, "\(key) image not added again")
         }
 
         _ = store.clearExcluding(Set(["red"])).value

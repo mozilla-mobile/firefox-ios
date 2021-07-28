@@ -86,6 +86,16 @@ class Tab: NSObject {
     // Setting defualt page as topsites
     var newTabPageType: NewTabPage = .topSites
     var tabUUID: String = UUID().uuidString
+    private var screenshotUUIDString: String? //UUID().uuidString
+    
+    var screenshotUUID: UUID? {
+        get {
+            guard let uuidString = screenshotUUIDString else { return nil }
+            return UUID(uuidString: uuidString)
+        } set(value) {
+            screenshotUUIDString = value?.uuidString ?? ""
+        }
+    }
 
     // To check if current URL is the starting page i.e. either blank page or internal page like topsites
     var isURLStartingPage: Bool {
@@ -214,7 +224,6 @@ class Tab: NSObject {
     }
 
     fileprivate(set) var screenshot: UIImage?
-    var screenshotUUID: UUID?
 
     // If this tab has been opened from another, its parent will point to the tab from which it was opened
     weak var parent: Tab?
@@ -236,7 +245,6 @@ class Tab: NSObject {
         self.browserViewController = bvc
         super.init()
         self.isPrivate = isPrivate
-
         debugTabCount += 1
 
         TelemetryWrapper.recordEvent(category: .action, method: .add, object: .tab, value: isPrivate ? .privateTab : .normalTab)
@@ -557,11 +565,8 @@ class Tab: NSObject {
         bars.reversed().filter({ $0.snackbarClassIdentifier == snackbarClass }).forEach({ removeSnackbar($0) })
     }
 
-    func setScreenshot(_ screenshot: UIImage?, revUUID: Bool = true) {
+    func setScreenshot(_ screenshot: UIImage?) {
         self.screenshot = screenshot
-        if revUUID {
-            self.screenshotUUID = UUID()
-        }
     }
 
     func toggleChangeUserAgent() {

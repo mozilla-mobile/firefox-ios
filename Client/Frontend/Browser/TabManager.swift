@@ -216,6 +216,10 @@ class TabManager: NSObject, FeatureFlagsProtocol {
 
         return nil
     }
+    
+    func storeScreenshot(tab: Tab) {
+        store.preserveScreenshot(forTab: tab)
+    }
 
     // This function updates the _selectedIndex.
     // Note: it is safe to call this with `tab` and `previous` as the same tab, for use in the case where the index of the tab has changed (such as after deletion).

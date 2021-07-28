@@ -41,12 +41,13 @@ extension SavedTab {
             tab.favicons.append(icon)
         }
 
-        if let screenshotUUID = screenshotUUID,
-            let imageStore = imageStore {
+        if let screenshotUUID = screenshotUUID, let imageStore = imageStore {
             tab.screenshotUUID = screenshotUUID
-            imageStore.get(screenshotUUID.uuidString) >>== { screenshot in
-                if tab.screenshotUUID == screenshotUUID {
-                    tab.setScreenshot(screenshot, revUUID: false)
+            if let uuidString = tab.screenshotUUID?.uuidString {
+                imageStore.get(uuidString) >>== { screenshot in
+                    if tab.screenshotUUID == screenshotUUID {
+                        tab.setScreenshot(screenshot)
+                    }
                 }
             }
         }
@@ -54,6 +55,7 @@ extension SavedTab {
         tab.sessionData = sessionData
         tab.lastTitle = title
         tab.tabUUID = UUID ?? ""
+        tab.screenshotUUID = screenshotUUID
         tab.firstCreatedTime = createdAt ?? sessionData?.lastUsedTime ?? Date.now()
         return tab
     }
