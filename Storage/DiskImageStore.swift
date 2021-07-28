@@ -62,10 +62,6 @@ open class DiskImageStore {
     /// Does nothing if this key already exists in the store.
     @discardableResult open func put(_ key: String, image: UIImage) -> Success {
         return deferDispatchAsync(queue) { () -> Success in
-            if self.keys.contains(key) {
-                return deferMaybe(DiskImageStoreErrorType(description: "Key already in store"))
-            }
-
             let imageURL = URL(fileURLWithPath: self.filesDir).appendingPathComponent(key)
             if let data = image.jpegData(compressionQuality: self.quality) {
                 do {
