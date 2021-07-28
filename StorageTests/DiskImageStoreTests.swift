@@ -27,8 +27,6 @@ class DiskImageStoreTests: XCTestCase {
         let redImage = makeImageWithColor(UIColor.red, size: CGSize(width: 100, height: 100))
         let blueImage = makeImageWithColor(UIColor.blue, size: CGSize(width: 17, height: 17))
 
-        
-        
         [(key: "blue", image: blueImage), (key: "red", image: redImage)].forEach() { (key, image) in
             XCTAssertNil(getImage(key), "\(key) key is nil")
             success = putImage(key, image: image)
