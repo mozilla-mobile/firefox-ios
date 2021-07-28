@@ -169,12 +169,19 @@ workflows:
                 echo "There is a new commit, continue building"
                 envman add --key NEW_XCODE_VERSION --value New_Version_Found
             fi
+
+            if [[ $BITRISE_GIT_MESSAGE == BuildAndRun* ]]
+            then
+                echo "Scheduled build to run the rest of steps once xcode version has been updated"
+                envman add --key RUN_ALL_STEPS --value Run_All_Steps
+            fi
+
         title: Check main branch for recent activity before continuing
     - activate-ssh-key@4.0:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@4.0: {}
     - script@1.1:
-        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
         inputs:
         - content: |-
             #!/usr/bin/env bash
@@ -191,7 +198,7 @@ workflows:
     - cache-pull@2.4: {}
     - certificate-and-profile-installer@1.10: {}
     - script@1:
-        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
         inputs:
         - content: |-
             #!/usr/bin/env bash
@@ -207,11 +214,11 @@ workflows:
             envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
         title: Workaround carthage lipo bug
     - carthage@3.2:
-        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
         inputs:
         - carthage_options: "--platform ios"
     - script@1:
-        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
         inputs:
         - content: |-
             #!/usr/bin/env bash
@@ -223,14 +230,14 @@ workflows:
         title: Remove carthage lipo workaround
     - script@1:
         title: Copy glean sdk_generator
-        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
         inputs:
         - content: |-
             #!/usr/bin/env bash # fail if any commands fails set -e # debug log set -x
             # Copy Glean script to source folder from # MozillaAppServices.framework as we need # this script to build iOS App
             cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
     - script@1:
-        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
         inputs:
         - content: |-
             #!/usr/bin/env bash
@@ -248,7 +255,7 @@ workflows:
             cd -
         title: Set provisioning to Bitrise in xcodeproj
     - script@1.1:
-        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
         title: NPM install and build
         inputs:
         - content: |-
@@ -261,22 +268,23 @@ workflows:
             npm install
             npm run build
     - git::https://github.com/bitrise-steplib/steps-xcode-build-for-test.git@export-fix:
-        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
         inputs:
         - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
         - scheme: Fennec
     - xcode-test@2:
-        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
         inputs:
         - scheme: Fennec
         - simulator_device: iPhone 8
     - deploy-to-bitrise-io@1.9: {}
     - cache-push@2.4: {}
     - slack@3.1:
-        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found"}}'
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
         inputs:
         - channel: "#firefox-ios"
         - text: Build status using latest Xcode detected
+        - message: "The build run info: $BITRISE_GIT_MESSAGE"
         - webhook_url: "$WEBHOOK_SLACK_TOKEN"
     description: This Workflow is to build the app using latest xcode available in Bitrise
     meta:
@@ -469,8 +477,7 @@ workflows:
         is_expand: false
       BITRISE_SCHEME: L10nSnapshotTest
     description: >-
-      This Workflow is to run tests (currently SmokeTest) when there is a merge
-      in master
+      This Workflow is to run L10n tests in one locale and then share the bundle with the rest of the builds
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
@@ -549,8 +556,7 @@ workflows:
         is_expand: false
       BITRISE_SCHEME: L10nSnapshotTest
     description: >-
-      This Workflow is to run tests (currently SmokeTest) when there is a merge
-      in master
+      This Workflow is to run L10n tests for all locales
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
@@ -801,4 +807,4 @@ trigger_map:
 - push_branch: v35.0
   workflow: xcode12-release-and-beta-nocache
 - pull_request_target_branch: main
-  workflow: RunUnitTests
+  workflow: NewXcodeVersions
