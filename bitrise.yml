@@ -170,7 +170,7 @@ workflows:
                 envman add --key NEW_XCODE_VERSION --value New_Version_Found
             fi
 
-            if [[ $BITRISE_GIT_MESSAGE == RunUsingLatestXcode* ]]
+            if [[ $BITRISE_GIT_MESSAGE == Run* ]]
             then
                 echo "Scheduled build to run the rest of steps once xcode version has been updated"
                 envman add --key RUN_ALL_STEPS --value Run_All_Steps
