@@ -284,6 +284,7 @@ workflows:
         inputs:
         - channel: "#firefox-ios"
         - text: Build status using latest Xcode detected
+        - message: "The build run info: $BITRISE_GIT_MESSAGE"
         - webhook_url: "$WEBHOOK_SLACK_TOKEN"
     description: This Workflow is to build the app using latest xcode available in Bitrise
     meta:
