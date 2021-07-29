@@ -99,9 +99,7 @@ class Tab: NSObject {
 
     // To check if current URL is the starting page i.e. either blank page or internal page like topsites
     var isURLStartingPage: Bool {
-        guard url != nil else {
-            return true
-        }
+        guard url != nil else { return true }
         if url!.absoluteString.hasPrefix("internal://") {
             return true
         }
