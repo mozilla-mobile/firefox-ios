@@ -123,7 +123,10 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         }
 
         eligibleTabs = eligibleTabs.filter { tab in
-            if let lastKnownUrl = tab.lastKnownUrl {
+            if tab.lastKnownUrl == nil {
+                return false
+                
+            } else if let lastKnownUrl = tab.lastKnownUrl {
                 if lastKnownUrl.absoluteString.hasPrefix("internal://") { return false }
                 return true
             }
