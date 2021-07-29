@@ -13,6 +13,7 @@ protocol OverlayViewDelegate: class {
     func overlayView(_ overlayView: OverlayView, didSubmitText text: String)
     func overlayView(_ overlayView: OverlayView, didSearchOnPage query: String)
     func overlayView(_ overlayView: OverlayView, didAddToAutocomplete query: String)
+    func overlayView(_ overlayView: OverlayView, didTapArrowText text: String)
 }
 
 class IndexedInsetButton: InsetButton {
@@ -38,6 +39,7 @@ class OverlayView: UIView {
     private let searchSuggestionsPrompt = SearchSuggestionsPromptView()
     private let topBorder = UIView()
     private var separatorGroup = [UIView]()
+    private var arrowButtons = [UIButton]()
     private let maxNumOfSuggestions = UIDevice.current.isSmallDevice() ? UIConstants.layout.smallDeviceMaxNumSuggestions : UIConstants.layout.largeDeviceMaxNumSuggestions
     public var currentURL = ""
 
@@ -82,6 +84,11 @@ class OverlayView: UIView {
                 make.top.equalTo(searchButtonGroup[i - 1].snp.bottom)
                 make.leading.equalTo(searchButtonGroup[i].snp.leading).inset(52)
                 make.trailing.equalTo(searchButtonGroup[i].snp.trailing)
+            }
+            self.arrowButtons[i - 1].snp.makeConstraints { make in
+                make.height.width.equalTo(30)
+                make.trailing.equalTo(searchButtonGroup[i].snp.trailing).inset(12)
+                make.centerY.equalTo(searchButtonGroup[i])
             }
         }
 
@@ -137,6 +144,7 @@ class OverlayView: UIView {
         searchButton.accessibilityIdentifier = "OverlayView.searchButton"
         searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .normal)
         searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .highlighted)
+        searchButton.backgroundColor = .above
         searchButton.titleLabel?.font = UIConstants.fonts.searchButton
 
         searchButton.setIndex(i)
@@ -150,6 +158,12 @@ class OverlayView: UIView {
             separator.backgroundColor = .searchSeparator.withAlphaComponent(0.65)
             self.separatorGroup.append(separator)
             searchButton.addSubview(separator)
+            
+            let arrowButton = UIButton()
+            arrowButton.setImage(#imageLiteral(resourceName: "icon_go_to_suggestion"), for: .normal)
+            arrowButton.addTarget(self, action: #selector(didPressArrowButton(sender:)), for: .touchUpInside)
+            self.arrowButtons.append(arrowButton)
+            searchButton.addSubview(arrowButton)
         }
     }
 
@@ -304,6 +318,12 @@ class OverlayView: UIView {
 
             make.leading.trailing.equalTo(safeAreaLayoutGuide)
             make.height.equalTo(UIConstants.layout.overlayButtonHeight)
+        }
+    }
+    
+    @objc private func didPressArrowButton(sender: UIButton) {
+        if let index = arrowButtons.index(of: sender) {
+            delegate?.overlayView(self, didTapArrowText: searchSuggestions[index + 1])
         }
     }
 
