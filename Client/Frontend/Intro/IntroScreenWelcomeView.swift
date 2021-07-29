@@ -100,7 +100,7 @@ class IntroScreenWelcomeView: UIView, CardTheme {
     var signUpClosure: (() -> Void)?
     var signInClosure: (() -> Void)?
     // Basic variables
-    private var currentPage = 0
+    private var currentPage: Int32 = 0
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
