@@ -367,13 +367,12 @@ workflows:
             set -e
             # debug log
             set -x
-            ./screenshots.sh --test-without-building $MOZ_LOCALES
+            ./l10n-screenshots.sh --test-without-building $MOZ_LOCALES
             mkdir -p artifacts
             for locale in $(echo $MOZ_LOCALES); do
-              for product in Focus Klar; do
-                zip -9 -j "$locale-$product.zip" "l10n-screenshots/$product/$locale/"*
-                mv "$locale-$product.zip" artifacts/
-              done
+              # Only Focus for now
+              zip -9 -j "$locale.zip" "l10n-screenshots/$locale/$locale/"*
+              mv "$locale.zip" artifacts/
             done
     - deploy-to-bitrise-io@1.10:
         inputs:

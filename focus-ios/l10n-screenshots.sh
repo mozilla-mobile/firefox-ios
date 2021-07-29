@@ -33,18 +33,17 @@ fi
 DEVICE="iPhone 11"
 
 for lang in $LOCALES; do
-    for PRODUCT in Focus Klar; do
-        echo "Snapshotting $PRODUCT on $DEVICE"
-            DEVICEDIR="${DEVICE// /}"
-            mkdir -p "l10n-screenshots/$PRODUCT/$lang"
-            fastlane snapshot --project Blockzilla.xcodeproj --scheme "${PRODUCT}SnapshotTests" \
-              --derived_data_path l10n-screenshots-dd \
-              --skip_open_summary \
-              --erase_simulator --localize_simulator \
-              --devices "$DEVICE" \
-              --languages "$lang" \
-              --output_directory "l10n-screenshots/$PRODUCT/$lang" \
-              $EXTRA_FAST_LANE_ARGS
-        echo "Fastlane exited with code: $?"
-    done
+    # start simple with Focus only
+    echo "Snapshotting on $DEVICE"
+    mkdir -p "l10n-screenshots/$lang"
+    fastlane snapshot --project Blockzilla.xcodeproj --scheme "FocusSnapshotTests" \
+      --derived_data_path l10n-screenshots-dd \
+      --skip_open_summary \
+      --xcargs "-maximum-parallel-testing-workers 2" \
+      --erase_simulator --localize_simulator \
+      --devices "$DEVICE" \
+      --languages "$lang" \
+      --output_directory "l10n-screenshots/$lang" \
+      $EXTRA_FAST_LANE_ARGS
+    echo "Fastlane exited with code: $?"
 done
