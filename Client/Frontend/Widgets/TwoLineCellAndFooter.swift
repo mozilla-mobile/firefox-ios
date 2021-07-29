@@ -76,6 +76,7 @@ class TwoLineImageOverlayCell: UITableViewCell, Themeable {
 
         containerView.addSubview(leftOverlayImageView)
         addSubview(containerView)
+        contentView.addSubview(containerView)
         bringSubviewToFront(containerView)
 
         containerView.snp.makeConstraints { make in
