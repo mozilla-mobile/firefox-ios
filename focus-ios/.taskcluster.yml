@@ -142,7 +142,7 @@ tasks:
                                             description: '${action.description}'
                                         else:
                                             name: "Decision Task for cron job ${cron.job_name}"
-                                            description: 'Created by a [cron task](https://focus-ci-tc.services.mozilla.com/tasks/${cron.task_id})'
+                                            description: 'Created by a [cron task](https://firefox-ci-tc.services.mozilla.com/tasks/${cron.task_id})'
                           provisionerId: "mobile-${level}"
                           workerType: "decision"
                           tags:
