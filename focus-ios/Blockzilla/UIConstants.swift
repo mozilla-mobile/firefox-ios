@@ -377,7 +377,6 @@ struct UIConstants {
         static let shareOpenInFirefox = NSLocalizedString("ShareMenu.ShareOpenFirefox", value: "Open in Firefox", comment: "Text for the share menu option when a user wants to open the current website in the Firefox app.")
         static let shareOpenInChrome = NSLocalizedString("ShareMenu.ShareOpenChrome", value: "Open in Chrome", comment: "Text for the share menu option when a user wants to open the current website in the Chrome app.")
         static let shareOpenInSafari = NSLocalizedString("ShareMenu.ShareOpenSafari", value: "Open in Safari", comment: "Text for the share menu option when a user wants to open the current website in the Safari app.")
-        static let shareMenuOpenInFocus = NSLocalizedString("ShareMenu.OpenInFocus", value: "Open in %@", comment: "Text for the share menu option when a user wants to open a page in Focus.")
         static let shareMenuRequestDesktop = NSLocalizedString("ShareMenu.RequestDesktop", value: "Request Desktop Site", comment: "Text for the share menu option when a user wants to reload the site as a desktop")
         static let shareMenuRequestMobile = NSLocalizedString("ShareMenu.RequestMobile", value: "Request Mobile Site", comment: "Text for the share menu option when a user wants to reload the site as a mobile device")
         static let shareMenuFindInPage = NSLocalizedString("ShareMenu.FindInPage", value: "Find in Page", comment: "Text for the share menu option when a user wants to open the find in page menu")
