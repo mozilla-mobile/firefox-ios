@@ -37,7 +37,8 @@ if [[ "${ACTION}" == "enable" ]]; then
   popd
   echo ""
   msg "Copying local Application Services (${APP_SERVICES_DIR}) into Carthage build directory"
-  rsync -ad "${APP_SERVICES_DIR}/Carthage/Build/iOS/MozillaAppServices.framework/" "${FRAMEWORK_LOCATION}/"
+  rsync -a --delete "${APP_SERVICES_DIR}/Carthage/Build/iOS/MozillaAppServices.framework/" "${FRAMEWORK_LOCATION}/"
+  mv "${FRAMEWORK_LOCATION}/sdk_generator.sh" "${PWD}/sdk_generator.sh"
   msg "Done! You are now using application-services from ${APP_SERVICES_DIR}"
   msg "Note that any changes to application-services won't be reflected until you re-build the framework!"
   msg "To do so you can re-run this script with the same arguments."

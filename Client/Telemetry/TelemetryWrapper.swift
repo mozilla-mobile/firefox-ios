@@ -510,8 +510,13 @@ extension TelemetryWrapper {
         case (.action, .tap, .goToSettingsDefaultBrowserOnboarding, _, _):
             GleanMetrics.DefaultBrowserOnboarding.goToSettingsPressed.add()
         // Onboarding
-        case (.action, .press, .dismissedOnboarding, let slideNum, _):
-            GleanMetrics.Onboarding.finish.record(extra: [.slideNum : slideNum])
+        case (.action, .press, .dismissedOnboarding, _, let extras):
+            if let slideNum = extras?["slide-num"] as? Int32 {
+                GleanMetrics.Onboarding.finish.record(GleanMetrics.Onboarding.FinishExtra(slideNum: slideNum))
+            } else {
+                let msg = "Missing slide-num in onboarding metric: \(category), \(method), \(object), \(value), \(String(describing: extras))"
+                Sentry.shared.send(message: msg, severity: .debug)
+            }
         // Widget
         case (.action, .open, .mediumTabsOpenUrl, _, _):
             GleanMetrics.Widget.mTabsOpenUrl.add()
