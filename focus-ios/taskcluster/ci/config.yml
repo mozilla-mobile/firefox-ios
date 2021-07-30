@@ -14,13 +14,11 @@ taskgraph:
 
 workers:
     aliases:
-        # b-linux to be changed to bitrise
-        b-linux:
+        bitrise:
             provisioner: 'mobile-{level}'
             implementation: docker-worker
             os: linux
-            # Same in this line, b-linux to be changed to bitrise
-            worker-type: 'b-linux'
+            worker-type: 'bitrise'
         images:
             provisioner: 'mobile-{level}'
             implementation: docker-worker
