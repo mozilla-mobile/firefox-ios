@@ -76,7 +76,7 @@
 			<key>UIApplicationShortcutItemIconFile</key>
 			<string>erase_quick_action</string>
 			<key>UIApplicationShortcutItemTitle</key>
-			<string>Erase and Open</string>
+			<string>UIApplicationShortcutItemTitle.EraseAndOpen</string>
 			<key>UIApplicationShortcutItemType</key>
 			<string>$(PRODUCT_BUNDLE_IDENTIFIER).EraseAndOpen</string>
 		</dict>
