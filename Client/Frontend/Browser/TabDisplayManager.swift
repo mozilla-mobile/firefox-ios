@@ -544,7 +544,7 @@ extension TabDisplayManager: TabManagerDelegate {
                     indexToPlaceTab = selectedTabIndex + 1
                 }
             }
-            self.dataStore.insert(tab)
+            self.dataStore.insert(tab, at: indexToPlaceTab)
             self.collectionView.insertItems(at: [IndexPath(row: indexToPlaceTab, section: 0)])
             
         }
