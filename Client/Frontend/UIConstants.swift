@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
+import UIKit
 import Shared
 
 extension UIColor {
@@ -23,15 +23,6 @@ public struct UIConstants {
     static let TopToolbarHeight: CGFloat = 56
     static let TopToolbarHeightMax: CGFloat = 75
     static var ToolbarHeight: CGFloat = 46
-    static var BottomToolbarHeight: CGFloat {
-        get {
-            var bottomInset: CGFloat = 0.0
-            if let window = UIApplication.shared.keyWindow {
-                bottomInset = window.safeAreaInsets.bottom
-            }
-            return ToolbarHeight + bottomInset
-        }
-    }
 
     static let SystemBlueColor = UIColor.Photon.Blue40
 

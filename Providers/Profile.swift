@@ -14,6 +14,7 @@ import Sync
 import XCGLogger
 import SwiftKeychainWrapper
 import SyncTelemetry
+import AuthenticationServices
 
 // Import these dependencies ONLY for the main `Client` application target.
 #if MOZ_TARGET_CLIENT
@@ -148,6 +149,82 @@ protocol Profile: AnyObject {
     func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success
 
     var syncManager: SyncManager! { get }
+    
+    @available(iOS 12, *)
+    func syncCredentialIdentities() -> Deferred<Result<Void, Error>>
+    @available(iOS 12, *)
+    func updateCredentialIdentities() -> Deferred<Result<Void, Error>>
+    @available(iOS 12, *)
+    func clearCredentialStore() -> Deferred<Result<Void, Error>>
+}
+
+
+@available(iOS 12, *)
+extension Profile {
+    
+    func syncCredentialIdentities() -> Deferred<Result<Void, Error>> {
+        let deferred = Deferred<Result<Void, Error>>()
+        self.clearCredentialStore().upon { clearResult in
+            self.updateCredentialIdentities().upon { updateResult in
+                switch (clearResult, updateResult) {
+                case (.success, .success):
+                    deferred.fill(.success(()))
+                case (.failure(let error), _):
+                    deferred.fill(.failure(error))
+                case (_, .failure(let error)):
+                    deferred.fill(.failure(error))
+                }
+            }
+        }
+        return deferred
+    }
+    
+    
+    @available(iOS 12, *)
+    func updateCredentialIdentities() -> Deferred<Result<Void, Error>> {
+        let deferred = Deferred<Result<Void, Error>>()
+        self.logins.list().upon { loginResult in
+            switch loginResult {
+            case let .failure(error):
+                deferred.fill(.failure(error))
+            case let .success(logins):
+                
+                self.populateCredentialStore(
+                        identities: logins.map(\.passwordCredentialIdentity)
+                ).upon(deferred.fill)
+            }
+        }
+        return deferred
+    }
+    
+    @available(iOS 12, *)
+    func populateCredentialStore(identities: [ASPasswordCredentialIdentity]) -> Deferred<Result<Void, Error>>  {
+        let deferred = Deferred<Result<Void, Error>>()
+        ASCredentialIdentityStore.shared.saveCredentialIdentities(identities) { (success, error) in
+            if success {
+                deferred.fill(.success(()))
+            } else if let err = error {
+                deferred.fill(.failure(err))
+            }
+        }
+        return deferred
+        
+    }
+    
+    @available(iOS 12, *)
+    func clearCredentialStore() -> Deferred<Result<Void, Error>> {
+        let deferred = Deferred<Result<Void, Error>>()
+        
+        ASCredentialIdentityStore.shared.removeAllCredentialIdentities { (success, error) in
+            if success {
+                deferred.fill(.success(()))
+            } else if let err = error {
+                deferred.fill(.failure(err))
+            }
+        }
+        
+        return deferred
+    }
 }
 
 fileprivate let PrefKeyClientID = "PrefKeyClientID"
@@ -982,12 +1059,17 @@ open class BrowserProfile: Profile {
                     return deferMaybe(SyncStatus.notStarted(.unknown))
                 }
 
-                return self.profile.logins.sync(unlockInfo: syncUnlockInfo).bind({ result in
+                return self.profile.logins.sync(unlockInfo: syncUnlockInfo).bind({ [weak self] result in
                     guard result.isSuccess else {
                         return deferMaybe(SyncStatus.notStarted(.unknown))
                     }
 
                     let syncEngineStatsSession = SyncEngineStatsSession(collection: "logins")
+                    if #available(iOS 12, *), let self = self {
+                        self.profile.syncCredentialIdentities().upon { result in
+                            log.debug(result)
+                        }
+                    }
                     return deferMaybe(SyncStatus.completed(syncEngineStatsSession))
                 })
             })
