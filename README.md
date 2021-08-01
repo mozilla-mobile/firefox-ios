@@ -6,7 +6,7 @@ Download on the [App Store](https://itunes.apple.com/app/firefox-web-browser/id9
 This branch (main)
 -----------
 
-This branch works with [Xcode 12.5](https://developer.apple.com/services-account/download?path=/Developer_Tools/Xcode_12.5/Xcode_12.5.xip), Swift 5.4 and supports iOS 12.4 and above.
+This branch works with [Xcode 12.5.1](https://developer.apple.com/services-account/download?path=/Developer_Tools/Xcode_12.5.1/Xcode_12.5.1.xip), Swift 5.4.2 and supports iOS 11.4 and above.
 
 *Please note:* due to dependency issues, development of Firefox-iOS is currently only supported on Intel based Macs, and not Apple Silicon based Macs.
 

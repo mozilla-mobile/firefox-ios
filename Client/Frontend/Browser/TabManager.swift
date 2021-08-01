@@ -12,7 +12,7 @@ private let log = Logger.browserLogger
 
 protocol TabManagerDelegate: AnyObject {
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool)
-    func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, isRestoring: Bool)
+    func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool)
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool)
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager)
@@ -40,7 +40,7 @@ extension TabManager: TabEventHandler {
 }
 
 // TabManager must extend NSObjectProtocol in order to implement WKNavigationDelegate
-class TabManager: NSObject {
+class TabManager: NSObject, FeatureFlagsProtocol {
     fileprivate var delegates = [WeakTabManagerDelegate]()
     fileprivate let tabEventHandlers: [TabEventHandler]
     fileprivate let store: TabManagerStore
@@ -108,6 +108,39 @@ class TabManager: NSObject {
     var privateTabs: [Tab] {
         assert(Thread.isMainThread)
         return tabs.filter { $0.isPrivate }
+    }
+
+    /// This variable returns all normal tabs, sorted chronologically, excluding any
+    /// home page tabs.
+    var recentlyAccessedNormalTabs: [Tab] {
+        assert(Thread.isMainThread)
+        var eligibleTabs: [Tab]
+
+        if featureFlags.isFeatureActive(.inactiveTabs) {
+            eligibleTabs = InactiveTabViewModel.getActiveEligibleTabsFrom(normalTabs)
+        } else {
+            eligibleTabs = normalTabs
+        }
+
+        eligibleTabs = eligibleTabs.filter { tab in
+            if tab.lastKnownUrl == nil {
+                return false
+                
+            } else if let lastKnownUrl = tab.lastKnownUrl {
+                if lastKnownUrl.absoluteString.hasPrefix("internal://") { return false }
+                return true
+            }
+            return tab.isURLStartingPage
+        }
+
+        // sort the tabs chronologically
+        eligibleTabs = eligibleTabs.sorted {
+            let firstTab = $0.lastExecutedTime ?? $0.sessionData?.lastUsedTime ?? $0.firstCreatedTime ?? 0
+            let secondTab = $1.lastExecutedTime ?? $1.sessionData?.lastUsedTime ?? $0.firstCreatedTime ?? 0
+            return firstTab > secondTab
+        }
+
+        return eligibleTabs
     }
 
     init(profile: Profile, imageStore: DiskImageStore?) {
@@ -185,6 +218,10 @@ class TabManager: NSObject {
         }
 
         return nil
+    }
+    
+    func storeScreenshot(tab: Tab) {
+        store.preserveScreenshot(forTab: tab)
     }
 
     // This function updates the _selectedIndex.
@@ -331,10 +368,11 @@ class TabManager: NSObject {
         // If network is not available webView(_:didCommit:) is not going to be called
         // We should set request url in order to show url in url bar even no network
         tab.url = request?.url
-        
+        var placeNextToParentTab = false
         if parent == nil || parent?.isPrivate != tab.isPrivate {
             tabs.append(tab)
         } else if let parent = parent, var insertIndex = tabs.firstIndex(of: parent) {
+            placeNextToParentTab = true
             insertIndex += 1
             while insertIndex < tabs.count && tabs[insertIndex].isDescendentOf(parent) {
                 insertIndex += 1
@@ -343,7 +381,7 @@ class TabManager: NSObject {
             tabs.insert(tab, at: insertIndex)
         }
 
-        delegates.forEach { $0.get()?.tabManager(self, didAddTab: tab, isRestoring: store.isRestoringTabs) }
+        delegates.forEach { $0.get()?.tabManager(self, didAddTab: tab, placeNextToParentTab: placeNextToParentTab, isRestoring: store.isRestoringTabs) }
 
         if !zombie {
             tab.createWebview()
@@ -566,9 +604,9 @@ class TabManager: NSObject {
         recentlyClosedForUndo.removeAll()
     }
 
-    func removeTabs(_ tabs: [Tab]) {
+    func removeTabs(_ tabs: [Tab], shouldNotify: Bool = true) {
         for tab in tabs {
-            self.removeTab(tab, flushToDisk: false, notify: true)
+            self.removeTab(tab, flushToDisk: false, notify: shouldNotify)
         }
         storeChanges()
     }

@@ -563,19 +563,15 @@ class ExperimentsSettings: HiddenSetting {
 //    }
 //}
 
-class ToggleChronTabs: HiddenSetting {
-    var currentChronStatus: Bool {
-        return settings.profile.prefs.boolForKey(PrefsKeys.ChronTabsPrefKey) ?? false
-    }
-
+class ToggleChronTabs: HiddenSetting, FeatureFlagsProtocol {
     override var title: NSAttributedString? {
-        let toNewStatus = currentChronStatus ? "OFF" : "ON"
+        let toNewStatus = featureFlags.isFeatureActive(.chronologicalTabs) ? "OFF" : "ON"
         return NSAttributedString(string: "Debug: Toggle chronological tabs \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        settings.profile.prefs.setBool(!currentChronStatus, forKey: PrefsKeys.ChronTabsPrefKey)
+        featureFlags.toggle(.chronologicalTabs)
         updateCell(navigationController)
     }
 
@@ -586,19 +582,34 @@ class ToggleChronTabs: HiddenSetting {
     }
 }
 
-class ToggleRecentlySavedSection: HiddenSetting {
-    var currentStatus: Bool {
-        return settings.profile.prefs.boolForKey(PrefsKeys.recentlySavedSectionEnabled) ?? false
+class ToggleJumpBackInSection: HiddenSetting, FeatureFlagsProtocol {
+    override var title: NSAttributedString? {
+        let toNewStatus = featureFlags.isFeatureActive(.jumpBackIn) ? "OFF" : "ON"
+        return NSAttributedString(string: "Debug: Toggle Jump Back In section \(toNewStatus)",
+                                  attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
+    override func onClick(_ navigationController: UINavigationController?) {
+        featureFlags.toggle(.jumpBackIn)
+        updateCell(navigationController)
+    }
+
+    func updateCell(_ navigationController: UINavigationController?) {
+        let controller = navigationController?.topViewController
+        let tableView = (controller as? AppSettingsTableViewController)?.tableView
+        tableView?.reloadData()
+    }
+}
+
+class ToggleRecentlySavedSection: HiddenSetting, FeatureFlagsProtocol {
     override var title: NSAttributedString? {
-        let toNewStatus = currentStatus ? "OFF" : "ON"
+        let toNewStatus = featureFlags.isFeatureActive(.recentlySaved) ? "OFF" : "ON"
         return NSAttributedString(string: "Debug: Toggle Recently Saved Section \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        settings.profile.prefs.setBool(!currentStatus, forKey: PrefsKeys.recentlySavedSectionEnabled)
+        featureFlags.toggle(.recentlySaved)
         updateCell(navigationController)
     }
 
@@ -608,6 +619,28 @@ class ToggleRecentlySavedSection: HiddenSetting {
         tableView?.reloadData()
     }
 }
+
+class ToggleInactiveTabs: HiddenSetting, FeatureFlagsProtocol {
+    override var title: NSAttributedString? {
+        let toNewStatus = featureFlags.isFeatureActive(.inactiveTabs) ? "OFF" : "ON"
+        return NSAttributedString(string: "Toggle inactive tabs: \(toNewStatus)",
+                                  attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        featureFlags.toggle(.inactiveTabs)
+        InactiveTabModel.hasRunInactiveTabFeatureBefore = false
+        updateCell(navigationController)
+    }
+
+    func updateCell(_ navigationController: UINavigationController?) {
+        let controller = navigationController?.topViewController
+        let tableView = (controller as? AppSettingsTableViewController)?.tableView
+        tableView?.reloadData()
+    }
+}
+
+
 
 // Show the current version of Firefox
 class VersionSetting: Setting {
@@ -765,8 +798,11 @@ class StudiesToggleSetting: BoolSetting {
     init(prefs: Prefs, delegate: SettingsDelegate?) {
         let statusText = NSMutableAttributedString()
         statusText.append(NSAttributedString(string: Strings.SettingsStudiesToggleMessage, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.headerTextLight]))
-        statusText.append(NSAttributedString(string: " "))
-        statusText.append(NSAttributedString(string: Strings.SettingsStudiesToggleLink, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.general.highlightBlue]))
+        // Temporarily removing this until we get a SUMO article up for this setting.
+        // https://github.com/mozilla-mobile/firefox-ios/issues/8241
+        //
+        // statusText.append(NSAttributedString(string: " "))
+        // statusText.append(NSAttributedString(string: Strings.SettingsStudiesToggleLink, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.general.highlightBlue]))
 
         super.init(
             prefs: prefs, prefKey: AppConstants.PrefStudiesToggle, defaultValue: true,
@@ -780,13 +816,16 @@ class StudiesToggleSetting: BoolSetting {
 
     override var accessibilityIdentifier: String? { return "StudiesToggle" }
 
-    override var url: URL? {
-        return SupportUtils.URLForTopic("studies")
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        setUpAndPushSettingsContentViewController(navigationController, self.url)
-    }
+    // Temporarily removing this until we get a SUMO article up for this setting.
+    // https://github.com/mozilla-mobile/firefox-ios/issues/8241
+    //
+    //    override var url: URL? {
+    //        return SupportUtils.URLForTopic("studies")
+    //    }
+    //
+    //    override func onClick(_ navigationController: UINavigationController?) {
+    //        setUpAndPushSettingsContentViewController(navigationController, self.url)
+    //    }
 }
 
 // Opens the SUMO page in a new tab

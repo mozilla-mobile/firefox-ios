@@ -363,8 +363,10 @@ extension TelemetryWrapper {
         case pinToTopSites = "pin-to-top-sites"
         case removePinnedSite = "remove-pinned-site"
         case firefoxHomepage = "firefox-homepage"
+        case jumpBackInImpressions = "jump-back-in-impressions"
         case recentlySavedBookmarkImpressions = "recently-saved-bookmark-impressions"
         case recentlySavedReadingItemImpressions = "recently-saved-reading-items-impressions"
+        case inactiveTabTray = "inactiveTabTray"
     }
 
     public enum EventValue: String {
@@ -398,6 +400,8 @@ extension TelemetryWrapper {
         case downloadsPanel = "downloads-panel"
         case syncPanel = "sync-panel"
         case yourLibrarySection = "your-library-section"
+        case jumpBackInSectionShowAll = "jump-back-in-section-show-all"
+        case jumpBackInSectionTabOpened = "jump-back-in-section-tab-opened"
         case recentlySavedSectionShowAll = "recently-saved-section-show-all"
         case recentlySavedBookmarkItemAction = "recently-saved-bookmark-item-action"
         case recentlySavedBookmarkItemView = "recently-saved-bookmark-item-view"
@@ -406,6 +410,11 @@ extension TelemetryWrapper {
         case addBookmarkToast = "add-bookmark-toast"
         case openHomeFromAwesomebar = "open-home-from-awesomebar"
         case openHomeFromPhotonMenuButton = "open-home-from-photon-menu-button"
+        case openInactiveTab = "openInactiveTab"
+        case inactiveTabExpand = "inactivetab-expand"
+        case inactiveTabCollapse = "inactivetab-collapse"
+        case openRecentlyClosedList = "openRecentlyClosedList"
+        case openRecentlyClosedTab = "openRecentlyClosedTab"
     }
     
     public enum EventExtraKey: String {
@@ -500,6 +509,14 @@ extension TelemetryWrapper {
             GleanMetrics.DefaultBrowserOnboarding.dismissPressed.add()
         case (.action, .tap, .goToSettingsDefaultBrowserOnboarding, _, _):
             GleanMetrics.DefaultBrowserOnboarding.goToSettingsPressed.add()
+        // Onboarding
+        case (.action, .press, .dismissedOnboarding, _, let extras):
+            if let slideNum = extras?["slide-num"] as? Int32 {
+                GleanMetrics.Onboarding.finish.record(GleanMetrics.Onboarding.FinishExtra(slideNum: slideNum))
+            } else {
+                let msg = "Missing slide-num in onboarding metric: \(category), \(method), \(object), \(value), \(String(describing: extras))"
+                Sentry.shared.send(message: msg, severity: .debug)
+            }
         // Widget
         case (.action, .open, .mediumTabsOpenUrl, _, _):
             GleanMetrics.Widget.mTabsOpenUrl.add()
@@ -521,7 +538,7 @@ extension TelemetryWrapper {
         // Pocket
         case (.action, .tap, .pocketStory, _, let extras):
             if let position = extras?[EventExtraKey.pocketTilePosition.rawValue] as? String {
-                GleanMetrics.Pocket.openStoryPosition[position].add()
+                GleanMetrics.Pocket.openStoryPosition["Position-"+position].add()
             } else {
                 let msg = "Uninstrumented pref metric: \(category), \(method), \(object), \(value), \(String(describing: extras))"
                 Sentry.shared.send(message: msg, severity: .debug)
@@ -580,6 +597,18 @@ extension TelemetryWrapper {
             GleanMetrics.PageActionMenu.requestDesktopSite.add()
         case (.action, .tap, .requestMobileSite, _, _):
             GleanMetrics.PageActionMenu.requestMobileSite.add()
+
+        // Inactive Tab Tray
+        case (.action, .tap, .inactiveTabTray, EventValue.openInactiveTab.rawValue, _):
+            GleanMetrics.InactiveTabsTray.openInactiveTab.add()
+        case (.action, .tap, .inactiveTabTray, EventValue.inactiveTabExpand.rawValue, _):
+            GleanMetrics.InactiveTabsTray.toggleInactiveTabTray[EventValue.inactiveTabExpand.rawValue].add()
+        case (.action, .tap, .inactiveTabTray, EventValue.inactiveTabCollapse.rawValue, _):
+            GleanMetrics.InactiveTabsTray.toggleInactiveTabTray[EventValue.inactiveTabCollapse.rawValue].add()
+        case (.action, .tap, .inactiveTabTray, EventValue.openRecentlyClosedList.rawValue, _):
+            GleanMetrics.InactiveTabsTray.openRecentlyClosedList.add()
+        case (.action, .tap, .inactiveTabTray, EventValue.openRecentlyClosedTab.rawValue, _):
+            GleanMetrics.InactiveTabsTray.openRecentlyClosedTab.add()
             
         // Firefox Homepage
         case (.action, .tap, .firefoxHomepage, EventValue.yourLibrarySection.rawValue, let extras):
@@ -590,6 +619,7 @@ extension TelemetryWrapper {
             GleanMetrics.FirefoxHomePage.openFromAwesomebar.add()
         case (.action, .open, .firefoxHomepage, EventValue.openHomeFromPhotonMenuButton.rawValue, _):
             GleanMetrics.FirefoxHomePage.openFromMenuHomeButton.add()
+
         case (.action, .view, .firefoxHomepage, EventValue.recentlySavedBookmarkItemView.rawValue, let extras):
             if let bookmarksCount = extras?[EventObject.recentlySavedBookmarkImpressions.rawValue] as? String {
                 GleanMetrics.FirefoxHomePage.recentlySavedBookmarkView.record(extra: [.bookmarkCount : bookmarksCount])
@@ -604,6 +634,14 @@ extension TelemetryWrapper {
             GleanMetrics.FirefoxHomePage.recentlySavedBookmarkItem.add()
         case (.action, .tap, .firefoxHomepage, EventValue.recentlySavedReadingListAction.rawValue, _):
             GleanMetrics.FirefoxHomePage.recentlySavedReadingItem.add()
+
+        case (.action, .tap, .firefoxHomepage, EventValue.jumpBackInSectionShowAll.rawValue, _):
+            GleanMetrics.FirefoxHomePage.jumpBackInShowAll.add()
+        case (.action, .view, .jumpBackInImpressions, _, _):
+            GleanMetrics.FirefoxHomePage.jumpBackInSectionView.add()
+        case (.action, .tap, .firefoxHomepage, EventValue.jumpBackInSectionTabOpened.rawValue, _):
+            GleanMetrics.FirefoxHomePage.jumpBackInTabOpened.add()
+
         default:
             let msg = "Uninstrumented metric recorded: \(category), \(method), \(object), \(value), \(String(describing: extras))"
             Sentry.shared.send(message: msg, severity: .debug)

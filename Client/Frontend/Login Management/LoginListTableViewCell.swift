@@ -30,41 +30,49 @@ class LoginListTableViewCell: ThemedTableViewCell {
     lazy var breachMargin: CGFloat = {
         return breachAlertSize+LoginTableViewCellUX.HorizontalMargin*2
     }()
-
-    let hostnameLabel = UILabel()
-    let usernameLabel = UILabel()
-    private lazy var hostnameContainer: UIView = {
-        let view = UIView()
-        view.addSubview(hostnameLabel)
-        return view
+    
+    lazy var hostnameLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor.theme.tableView.rowText
+        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        label.textAlignment = .left
+        label.numberOfLines = 1
+        return label
     }()
-    private lazy var usernameContainer: UIView = {
-        let view = UIView()
-        view.addSubview(usernameLabel)
-        return view
+    
+    lazy var usernameLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor.theme.tableView.rowDetailText
+        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        label.textAlignment = .left
+        label.numberOfLines = 1
+        return label
     }()
+    
     private lazy var textStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [hostnameContainer, usernameContainer])
+        let stack = UIStackView(arrangedSubviews: [hostnameLabel, usernameLabel])
         stack.axis = .vertical
+        stack.spacing = 8
+        stack.isLayoutMarginsRelativeArrangement = true
+        stack.layoutMargins = .init(top: 8, left: 0, bottom: 8, right: 0)
         return stack
     }()
+    
     private lazy var contentStack: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [textStack, breachAlertContainer])
         stack.axis = .horizontal
         return stack
     }()
 
-    var inset: UIEdgeInsets!
+    private let inset: UIEdgeInsets
 
     init(style: UITableViewCell.CellStyle, reuseIdentifier: String?, inset: UIEdgeInsets) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.inset = inset
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         accessoryType = .disclosureIndicator
         contentView.addSubview(contentStack)
         // Need to override the default background multi-select color to support theming
         self.multipleSelectionBackgroundView = UIView()
-        self.hostnameLabel.textColor = UIColor.theme.tableView.rowText
-        self.usernameLabel.textColor = self.detailTextColor
         self.applyTheme()
         setConstraints()
     }

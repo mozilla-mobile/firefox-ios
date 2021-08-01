@@ -16,8 +16,14 @@ private struct RecentlyClosedPanelUX {
     static let IconBorderWidth: CGFloat = 0.5
 }
 
+protocol RecentlyClosedPanelDelegate: AnyObject {
+    func openRecentlyClosedSiteInSameTab(_ url: URL)
+    func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool)
+}
+
 class RecentlyClosedTabsPanel: UIViewController, LibraryPanel {
     weak var libraryPanelDelegate: LibraryPanelDelegate?
+    var recentlyClosedTabsDelegate: RecentlyClosedPanelDelegate?
     let profile: Profile
 
     fileprivate lazy var tableViewController = RecentlyClosedTabsPanelSiteTableViewController(profile: profile)
@@ -37,6 +43,7 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel {
         view.backgroundColor = UIColor.theme.tableView.headerBackground
 
         tableViewController.libraryPanelDelegate = libraryPanelDelegate
+        tableViewController.recentlyClosedTabsDelegate = recentlyClosedTabsDelegate
         tableViewController.recentlyClosedTabsPanel = self
 
         self.addChild(tableViewController)
@@ -51,6 +58,7 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel {
 
 class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
     weak var libraryPanelDelegate: LibraryPanelDelegate?
+    var recentlyClosedTabsDelegate: RecentlyClosedPanelDelegate?
     var recentlyClosedTabs: [ClosedTab] = []
     weak var recentlyClosedTabsPanel: RecentlyClosedTabsPanel?
 
@@ -79,28 +87,26 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
         }
         let tab = recentlyClosedTabs[indexPath.row]
         let displayURL = tab.url.displayURL ?? tab.url
+        let site: Favicon? = (tab.faviconURL != nil) ? Favicon(url: tab.faviconURL!) : nil
         twoLineCell.descriptionLabel.isHidden = false
         twoLineCell.titleLabel.text = tab.title
         twoLineCell.titleLabel.isHidden = tab.title?.isEmpty ?? true ? true : false
-        twoLineCell.descriptionLabel.text = displayURL.absoluteDisplayString
-        let site: Favicon? = (tab.faviconURL != nil) ? Favicon(url: tab.faviconURL!) : nil
-        cell.imageView?.layer.borderColor = RecentlyClosedPanelUX.IconBorderColor.cgColor
-        cell.imageView?.layer.borderWidth = RecentlyClosedPanelUX.IconBorderWidth
-        cell.imageView?.contentMode = .center
-        cell.imageView?.setImageAndBackground(forIcon: site, website: displayURL) { [weak cell] in
-            cell?.imageView?.image = cell?.imageView?.image?.createScaled(RecentlyClosedPanelUX.IconSize)
+        twoLineCell.descriptionLabel.text = displayURL.absoluteDisplayString        
+        twoLineCell.leftImageView.layer.borderColor = RecentlyClosedPanelUX.IconBorderColor.cgColor
+        twoLineCell.leftImageView.layer.borderWidth = RecentlyClosedPanelUX.IconBorderWidth
+        twoLineCell.leftImageView.contentMode = .center
+        twoLineCell.leftImageView.setImageAndBackground(forIcon: site, website: displayURL) { [weak twoLineCell] in
+            twoLineCell?.leftImageView.image = twoLineCell?.leftImageView.image?.createScaled(RecentlyClosedPanelUX.IconSize)
         }
-        return cell
+        
+        return twoLineCell
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        guard let libraryPanelDelegate = libraryPanelDelegate else {
-            log.warning("No site or no URL when selecting row.")
-            return
-        }
+        recentlyClosedTabsDelegate?.openRecentlyClosedSiteInSameTab(recentlyClosedTabs[indexPath.row].url)
         let visitType = VisitType.typed    // Means History, too.
-        libraryPanelDelegate.libraryPanel(didSelectURL: recentlyClosedTabs[indexPath.row].url, visitType: visitType)
+        libraryPanelDelegate?.libraryPanel(didSelectURL: recentlyClosedTabs[indexPath.row].url, visitType: visitType)
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -136,6 +142,9 @@ extension RecentlyClosedTabsPanelSiteTableViewController: LibraryPanelContextMen
     }
 
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {
+        guard let libraryPanelDelegate = libraryPanelDelegate else {
+            return getRecentlyClosedTabContexMenuActions(for: site, recentlyClosedPanelDelegate: recentlyClosedTabsDelegate)
+        }
         return getDefaultContextMenuActions(for: site, libraryPanelDelegate: libraryPanelDelegate)
     }
 }

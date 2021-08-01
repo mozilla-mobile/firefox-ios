@@ -27,7 +27,7 @@ class DismissableNavigationViewController: UINavigationController, OnViewDismiss
     }
 }
 
-extension BrowserViewController: URLBarDelegate {
+extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
     func showTabTray() {
         Sentry.shared.clearBreadcrumbs()
 
@@ -78,6 +78,7 @@ extension BrowserViewController: URLBarDelegate {
 
         if let tab = tabManager.selectedTab {
             screenshotHelper.takeScreenshot(tab)
+            tabManager.storeScreenshot(tab: tab)
         }
         TelemetryWrapper.recordEvent(category: .action, method: .open, object: .tabTray)
     }
@@ -94,7 +95,7 @@ extension BrowserViewController: URLBarDelegate {
                 shouldShowChronTabs = chronDebugValue!
             // Respect build channel based settings
             } else if chronDebugValue == nil {
-                if AppConstants.CHRONOLOGICAL_TABS {
+                if featureFlags.isFeatureActive(.chronologicalTabs) {
                     shouldShowChronTabs = true
                 } else {
                     // Respect LP value

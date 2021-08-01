@@ -75,7 +75,8 @@ class BrowserViewController: UIViewController {
     var isCrashAlertShowing: Bool = false
     var currentMiddleButtonState: MiddleButtonState?
     fileprivate var customSearchBarButton: UIBarButtonItem?
-
+    var updateState: TabUpdateState = .coldStart
+    
     // popover rotation handling
     var displayedPopoverController: UIViewController?
     var updateDisplayedPopoverProperties: (() -> Void)?
@@ -268,7 +269,7 @@ class BrowserViewController: UIViewController {
 
         if showTopTabs {
             if topTabsViewController == nil {
-                let topTabsViewController = TopTabsViewController(tabManager: tabManager)
+                let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
                 topTabsViewController.delegate = self
                 addChild(topTabsViewController)
                 topTabsViewController.view.frame = topTabsContainer.frame
@@ -1145,6 +1146,7 @@ class BrowserViewController: UIViewController {
     func openURLInNewTab(_ url: URL?, isPrivate: Bool = false) {
         if let selectedTab = tabManager.selectedTab {
             screenshotHelper.takeScreenshot(selectedTab)
+            tabManager.storeScreenshot(tab: selectedTab)
         }
         let request: URLRequest?
         if let url = url {
@@ -1274,7 +1276,7 @@ class BrowserViewController: UIViewController {
 
             if (!InternalURL.isValid(url: url) || url.isReaderModeURL), !url.isFileURL {
                 postLocationChangeNotificationForTab(tab, navigation: navigation)
-
+                tab.readabilityResult = nil
                 webView.evaluateJavascriptInDefaultContentWorld("\(ReaderModeNamespace).checkReadability()")
             }
 
@@ -1298,6 +1300,7 @@ class BrowserViewController: UIViewController {
                 // Issue created: https://github.com/mozilla-mobile/firefox-ios/issues/7003
                 DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1000)) {
                     self.screenshotHelper.takeScreenshot(tab)
+                    self.tabManager.storeScreenshot(tab: tab)
                     if webView.superview == self.view {
                         webView.removeFromSuperview()
                     }
@@ -1584,6 +1587,10 @@ extension BrowserViewController: HomePanelDelegate {
         })
         self.show(toast: toast)
     }
+
+    func homePanelDidRequestToOpenTabTray() {
+        showTabTray()
+    }
 }
 
 extension BrowserViewController: SearchViewControllerDelegate {
@@ -1746,7 +1753,7 @@ extension BrowserViewController: TabManagerDelegate {
         }
     }
 
-    func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, isRestoring: Bool) {
+    func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {
         // If we are restoring tabs then we update the count once at the end
         if !isRestoring {
             updateTabCountUsingTabManager(tabManager)
@@ -1755,7 +1762,7 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
-        if let url = tab.url, !(InternalURL(url)?.isAboutURL ?? false), !tab.isPrivate {
+        if let url = tab.lastKnownUrl, !(InternalURL(url)?.isAboutURL ?? false), !tab.isPrivate {
             profile.recentlyClosedTabs.addTab(url as URL, title: tab.lastTitle, faviconURL: tab.displayFavicon?.url)
         }
         updateTabCountUsingTabManager(tabManager)
@@ -2202,6 +2209,11 @@ extension BrowserViewController: SessionRestoreHelperDelegate {
 }
 
 extension BrowserViewController: TabTrayDelegate {
+    func tabTrayOpenRecentlyClosedTab(_ url: URL) {
+        guard let tab = self.tabManager.selectedTab else { return }
+        self.finishEditingAndSubmit(url, visitType: .recentlyClosed, forTab: tab)
+    }
+    
     // This function animates and resets the tab chrome transforms when
     // the tab tray dismisses.
     func tabTrayDidDismiss(_ tabTray: GridTabViewController) {
@@ -2318,7 +2330,7 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
 extension BrowserViewController {
 
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
-        if AppConstants.MOZ_SHAKE_TO_RESTORE {
+        if featureFlags.isFeatureActive(.shakeToRestore) {
                 homePanelDidRequestToRestoreClosedTab(motion)
         }
     }
@@ -2348,14 +2360,6 @@ extension BrowserViewController {
 
 extension BrowserViewController {
     public static func foregroundBVC() -> BrowserViewController {
-//        if #available(iOS 13.0, *) {
-//            for scene in UIApplication.shared.connectedScenes {
-//                if scene.activationState == .foregroundActive, let sceneDelegate = ((scene as? UIWindowScene)?.delegate as? UIWindowSceneDelegate) {
-//                    return sceneDelegate.window!!.rootViewController as! BrowserViewController
-//                }
-//            }
-//        }
-        
         return (UIApplication.shared.delegate as! AppDelegate).browserViewController
     }
 }
