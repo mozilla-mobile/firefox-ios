@@ -16,8 +16,8 @@
   },
   "devDependencies": {
     "@babel/core": "^7.8.7",
-    "babel-loader": "^8.0.6",
     "@babel/preset-env": "7.1.0",
+    "babel-loader": "^8.0.6",
     "babel-preset-es2015": "^6.24.1",
     "glob": "^7.1.6",
     "lodash": "^4.17.21",

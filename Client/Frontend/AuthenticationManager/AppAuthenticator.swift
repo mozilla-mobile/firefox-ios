@@ -8,6 +8,39 @@ import SwiftKeychainWrapper
 import LocalAuthentication
 
 class AppAuthenticator {
+    
+    enum AuthenticationError: Error {
+        case failedEvaluation(message: String)
+        case failedAutentication(message: String)
+    }
+    
+    static func authenticateWithDeviceOwnerAuthentication(_ completion: @escaping (Result<Void, AuthenticationError>)->()) {
+        // Get a fresh context for each login. If you use the same context on multiple attempts
+        //  (by commenting out the next line), then a previously successful authentication
+        //  causes the next policy evaluation to succeed without testing biometry again.
+        //  That's usually not what you want.
+        let context = LAContext()
+        
+        context.localizedFallbackTitle = .AuthenticationEnterPasscode
+        
+        // First check if we have the needed hardware support.
+        var error: NSError?
+        if context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) {
+            
+            let reason: String = .AuthenticationLoginsTouchReason
+            context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: reason ) { success, error in
+                
+                if success {
+                    completion(.success(()))
+                } else {
+                    completion(.failure(.failedAutentication(message: error?.localizedDescription ?? "Failed to authenticate")))
+                }
+            }
+        } else {
+            completion(.failure(.failedEvaluation(message: error?.localizedDescription ?? "Can't evaluate policy")))
+        }
+    }
+    
     static func presentAuthenticationUsingInfo(_ authenticationInfo: AuthenticationKeychainInfo, touchIDReason: String, success: (() -> Void)?, cancel: (() -> Void)?, fallback: (() -> Void)?) {
         if authenticationInfo.useTouchID {
             let localAuthContext = LAContext()
@@ -46,7 +79,7 @@ class AppAuthenticator {
             fallback?()
         }
     }
-
+    
     static func presentPasscodeAuthentication(_ presentingNavController: UINavigationController?) -> Deferred<Bool> {
         let deferred = Deferred<Bool>()
         let passcodeVC = PasscodeEntryViewController(passcodeCompletion: { isOk in
