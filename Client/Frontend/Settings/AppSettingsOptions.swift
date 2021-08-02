@@ -798,11 +798,8 @@ class StudiesToggleSetting: BoolSetting {
     init(prefs: Prefs, delegate: SettingsDelegate?) {
         let statusText = NSMutableAttributedString()
         statusText.append(NSAttributedString(string: Strings.SettingsStudiesToggleMessage, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.headerTextLight]))
-        // Temporarily removing this until we get a SUMO article up for this setting.
-        // https://github.com/mozilla-mobile/firefox-ios/issues/8241
-        //
-        // statusText.append(NSAttributedString(string: " "))
-        // statusText.append(NSAttributedString(string: Strings.SettingsStudiesToggleLink, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.general.highlightBlue]))
+        statusText.append(NSAttributedString(string: " "))
+        statusText.append(NSAttributedString(string: Strings.SettingsStudiesToggleLink, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.general.highlightBlue]))
 
         super.init(
             prefs: prefs, prefKey: AppConstants.PrefStudiesToggle, defaultValue: true,
@@ -816,16 +813,13 @@ class StudiesToggleSetting: BoolSetting {
 
     override var accessibilityIdentifier: String? { return "StudiesToggle" }
 
-    // Temporarily removing this until we get a SUMO article up for this setting.
-    // https://github.com/mozilla-mobile/firefox-ios/issues/8241
-    //
-    //    override var url: URL? {
-    //        return SupportUtils.URLForTopic("studies")
-    //    }
-    //
-    //    override func onClick(_ navigationController: UINavigationController?) {
-    //        setUpAndPushSettingsContentViewController(navigationController, self.url)
-    //    }
+        override var url: URL? {
+            return SupportUtils.URLForTopic("ios-studies")
+        }
+    
+        override func onClick(_ navigationController: UINavigationController?) {
+            setUpAndPushSettingsContentViewController(navigationController, self.url)
+        }
 }
 
 // Opens the SUMO page in a new tab
