@@ -652,6 +652,9 @@
 /* Toggle logins syncing setting */
 "Logins" = "Prihlasovacie údaje";
 
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title" = "Vezmite si svoje heslá so sebou";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Upravené";
 
@@ -693,6 +696,24 @@
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Filtrovať";
+
+/* Label shown when there are no logins to list */
+"LoginsList.NoLoginsFound.Description" = "Tu sa zobrazia uložené prihlasovacie údaje. Ak ste prihlasovacie údaje do prehliadača Firefox uložili na inom zariadení, prihláste sa do svojho účtu Firefox.";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "Vášmu vyhľadávaniu nezodpovedajú žiadne výsledky.";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "Žiadne zodpovedajúce prihlasovacie údaje";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "Zrušiť";
+
+/* Placeholder text for search field */
+"LoginsList.Search.Placeholder" = "Hľadať v prihlasovacích údajoch";
+
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "Vyberte heslo, ktoré chcete doplniť";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "ULOŽENÉ PRIHLASOVACIE ÚDAJE";
@@ -850,7 +871,7 @@
 "Menu.TrackingProtectionDescription.Fingerprinters" = "Každý používateľ môže mať odlišné nastavenie prehliadača a počítača. Zberom údajov o nastaveniach možno vytvoriť unikátny odtlačok, ktorý potom môže slúžiť na vaše sledovanie.";
 
 /* Description of social network trackers. */
-"Menu.TrackingProtectionDescription.SocialNetworksNew" = "Sociálne siete umiestňujú na iné webové stránky prvky, pomocou ktorých o vás môžu získavať údaje. Blokovanie týchto prvkov obmedzuje množstvo informácií, ktoré o vás sociálne siete na internetu získavajú.";
+"Menu.TrackingProtectionDescription.SocialNetworksNew" = "Sociálne siete umiestňujú na iné webové stránky prvky, pomocou ktorých o vás môžu získavať údaje. Blokovanie týchto prvkov obmedzuje množstvo informácií, ktoré o vás sociálne siete na internete získavajú.";
 
 /* The button that disabled TP for a site. */
 "Menu.TrackingProtectionDisable1.Title" = "Vypnutá na tejto stránke";
@@ -975,6 +996,12 @@
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Zásady ochrany súkromia";
+
+/* value for label to indicate user is on an unencrypted website */
+"ProtectionStatusSheet.InsecureConnection" = "Nezabezpečené pripojenie";
+
+/* value for label to indicate user is on a secure ssl connection */
+"ProtectionStatusSheet.SecureConnection" = "Zabezpečené pripojenie";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Moduly pre rýchle vyhľadávanie";
@@ -1733,6 +1760,9 @@
 
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Karty sú tu k dispozícii 30 dní. Po uplynutí tejto doby sa karty automaticky zatvoria.";
+
+/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
+"TabTray.RecentlyClosed.SectionTitle" = "Nedávno zatvorené";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "Súkromné";

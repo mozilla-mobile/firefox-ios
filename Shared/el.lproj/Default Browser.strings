@@ -8,7 +8,7 @@
 "DefaultBrowserCard.Description" = "Ρύθμιση συνδέσμων ιστοσελίδων, email και μηνυμάτων ώστε να ανοίγουν στο Firefox.";
 
 /* Title for small card shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Title" = "Αλλαγή προεπ. προγράμματος περιήγησης";
+"DefaultBrowserCard.Title" = "Αλλαγή κύριου φυλλομετρητή";
 
 /* Button string to open settings that allows user to switch their default browser to Firefox. */
 "DefaultBrowserOnboarding.Button" = "Μετάβαση στις ρυθμίσεις";
@@ -26,5 +26,5 @@
 "DefaultBrowserOnboarding.Screenshot" = "Προεπιλεγμένο πρόγραμμα περιήγησης εφαρμογών";
 
 /* Menu option for setting Firefox as default browser. */
-"Settings.DefaultBrowserMenuItem" = "Ορισμός ως προεπ. πρόγραμμα περιήγησης";
+"Settings.DefaultBrowserMenuItem" = "Ορισμός ως κύριος φυλλομετρητής";
 

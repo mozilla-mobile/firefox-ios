@@ -694,6 +694,9 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Filtrà";
 
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "Abbandunà";
+
 /* Title for the list of logins */
 "LoginsList.Title" = "IDENTIFICAZIONI DI CUNNESSIONE ARREGISTRATE";
 
@@ -1733,6 +1736,9 @@
 
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "L’unghjette sò dispunibule quì durante 30 ghjorni. Dopu à stu periudu, l’unghjette seranu chjose autumaticamente.";
+
+/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
+"TabTray.RecentlyClosed.SectionTitle" = "Chjose pocu fà";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "Private";

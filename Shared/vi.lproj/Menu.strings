@@ -62,7 +62,7 @@
 "Menu.RecentlySaved.Title" = "Đã lưu gần đây";
 
 /* Label for the button, displayed in the menu, used to delete an existing bookmark for the current website. */
-"Menu.RemoveBookmarkAction.Title" = "Xóa trang đánh dấu";
+"Menu.RemoveBookmarkAction.Title" = "Xóa dấu trang";
 
 /* Label for the button, displayed in the menu, used to report a compatibility issue with the current page. */
 "Menu.ReportSiteIssueAction.Title" = "Báo cáo sự cố về trang";

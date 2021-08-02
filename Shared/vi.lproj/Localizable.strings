@@ -47,7 +47,7 @@
 "ActivityStream.Library.Title" = "Đã lưu gần đây";
 
 /* Section title label for recently bookmarked websites */
-"ActivityStream.NewRecentBookmarks.Title" = "Trang đánh dấu gần đây";
+"ActivityStream.NewRecentBookmarks.Title" = "Dấu trang gần đây";
 
 /* The link that shows more Pocket trending stories */
 "ActivityStream.Pocket.MoreLink" = "Thêm";
@@ -126,7 +126,7 @@
 "Block Pop-up Windows" = "Chặn cửa sổ pop-up";
 
 /* The header title for the fields when editing a Bookmark */
-"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "Trang đánh dấu";
+"Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "Dấu trang";
 
 /* The header title for the fields when editing a Folder */
 "Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "Thư mục";
@@ -138,13 +138,13 @@
 "Bookmark.DetailFieldURL.Label" = "URL";
 
 /* Toggle bookmarks syncing setting */
-"Bookmarks" = "Trang đánh dấu";
+"Bookmarks" = "Dấu trang";
 
 /* The button on the snackbar to edit a bookmark after adding it. */
 "Bookmarks.Edit.Button" = "Chỉnh sửa";
 
 /* The button to edit a bookmark */
-"Bookmarks.EditBookmark.Label" = "Chỉnh sửa trang đánh dấu";
+"Bookmarks.EditBookmark.Label" = "Chỉnh sửa dấu trang";
 
 /* The button to edit a folder */
 "Bookmarks.EditFolder.Label" = "Chỉnh sửa thư mục";
@@ -174,7 +174,7 @@
 "Bookmarks.URL.Label" = "URL";
 
 /* Status label for the empty Bookmarks state. */
-"BookmarksPanel.EmptyState.Title" = "Trang đánh dấu bạn lưu sẽ hiển thị ở đây.";
+"BookmarksPanel.EmptyState.Title" = "Dấu trang bạn đã lưu sẽ hiển thị ở đây.";
 
 /* Describes the date on which the breach occurred */
 "BreachAlerts.BreachDate" = "Vụ rò rỉ này xảy ra vào";
@@ -563,7 +563,7 @@
 "HomePage.Set.Dialog.Title" = "Bạn có muốn sử dụng trang web này làm trang chủ của bạn?";
 
 /* The title for the Bookmark context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.Bookmark" = "Trang đánh dấu";
+"HomePanel.ContextMenu.Bookmark" = "Dấu trang";
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.DeleteFromHistory" = "Xóa khỏi lịch sử";
@@ -578,7 +578,7 @@
 "HomePanel.ContextMenu.Remove" = "Xóa";
 
 /* The title for the Remove Bookmark context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.RemoveBookmark" = "Xóa trang đánh dấu";
+"HomePanel.ContextMenu.RemoveBookmark" = "Xóa dấu trang";
 
 /* The title for the Share context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Share" = "Chia sẻ";
@@ -652,6 +652,9 @@
 /* Toggle logins syncing setting */
 "Logins" = "Thông tin đăng nhập";
 
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title" = "Mang mật khẩu của bạn đi khắp mọi nơi";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Đã sửa đổi";
 
@@ -693,6 +696,24 @@
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Bộ lọc";
+
+/* Label shown when there are no logins to list */
+"LoginsList.NoLoginsFound.Description" = "Thông tin đăng nhập đã lưu sẽ hiển thị ở đây. Nếu bạn đã lưu thông tin đăng nhập của mình vào Firefox trên một thiết bị khác, hãy đăng nhập vào tài khoản Firefox của bạn.";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "Không có kết quả phù hợp với tìm kiếm của bạn.";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "Không có thông tin đăng nhập phù hợp";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "Huỷ bỏ";
+
+/* Placeholder text for search field */
+"LoginsList.Search.Placeholder" = "Tìm kiếm thông tin đăng nhập";
+
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "Chọn mật khẩu để điền";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "THÔNG TIN ĐĂNG NHẬP ĐÃ LƯU";
@@ -976,6 +997,12 @@
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Chính sách riêng tư";
 
+/* value for label to indicate user is on an unencrypted website */
+"ProtectionStatusSheet.InsecureConnection" = "Kết nối không an toàn";
+
+/* value for label to indicate user is on a secure ssl connection */
+"ProtectionStatusSheet.SecureConnection" = "Kết nối an toàn";
+
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Công cụ tìm kiếm nhanh";
 
@@ -1154,7 +1181,7 @@
 "SentTab.AddToReadingListAction.Title" = "Thêm vào danh sách đọc";
 
 /* Label for an action used to bookmark one or more tabs from a notification. */
-"SentTab.BookmarkAction.title" = "Trang đánh dấu";
+"SentTab.BookmarkAction.title" = "Dấu trang";
 
 /* Body of notification received after a spurious message from FxA has been received. */
 "SentTab.NoTabArrivingNotification.body" = "Chạm để bắt đầu";
@@ -1341,7 +1368,7 @@
 "Settings.NewTab.Option.BlankPage" = "Trang trống";
 
 /* Option in settings to show bookmarks when you open a new tab */
-"Settings.NewTab.Option.Bookmarks" = "Trang đánh dấu";
+"Settings.NewTab.Option.Bookmarks" = "Dấu trang";
 
 /* The footer for the section to customize top sites in the new tab settings page. */
 "Settings.NewTab.Option.CustomizeFooter" = "Những trang bạn truy cập nhiều nhất";
@@ -1356,7 +1383,7 @@
 "Settings.NewTab.Option.FirefoxHome" = "Trang chủ Firefox";
 
 /* Option in the settings to turn off recent bookmarks in the Highlights section */
-"Settings.NewTab.Option.HighlightsBookmarks" = "Trang đánh dấu gần đây";
+"Settings.NewTab.Option.HighlightsBookmarks" = "Dấu trang gần đây";
 
 /* Option in settings to turn off history in the highlights section */
 "Settings.NewTab.Option.HighlightsHistory" = "Đã truy cập";
@@ -1651,7 +1678,7 @@
 "Synced Tabs" = "Các thẻ đã đồng bộ";
 
 /* The Bookmark sync component, used in SyncState.Partial.Title */
-"SyncState.Bookmark.Title" = "Trang đánh dấu";
+"SyncState.Bookmark.Title" = "Dấu trang";
 
 /* The Remote Clients sync component, used in SyncState.Partial.Title */
 "SyncState.Clients.Title" = "Máy khách từ xa";
@@ -1733,6 +1760,9 @@
 
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Các thẻ có sẵn ở đây trong 30 ngày. Sau thời gian đó, các thẻ sẽ tự động bị đóng.";
+
+/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
+"TabTray.RecentlyClosed.SectionTitle" = "Đã đóng gần đây";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "Riêng tư";
