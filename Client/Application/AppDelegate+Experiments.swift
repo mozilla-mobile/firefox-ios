@@ -10,17 +10,16 @@ import Foundation
 
 extension AppDelegate {
     func initializeExperiments() {
-
         let defaults = UserDefaults.standard
         let nimbusFirstRun = "NimbusFirstRun"
-        let firstRun = defaults.bool(forKey: nimbusFirstRun) != false
+        let isFirstRun = defaults.object(forKey: nimbusFirstRun) == nil
         defaults.set(false, forKey: nimbusFirstRun)
-
+        Experiments.customTargetingAttributes =  ["isFirstRun": "\(isFirstRun)"]
         let initialExperiments = Bundle.main.url(forResource: "initial_experiments", withExtension: "json")
         let serverURL = Experiments.remoteSettingsURL
         let savedOptions = Experiments.getLocalExperimentData()
         let options: Experiments.InitializationOptions
-        switch (savedOptions, firstRun, initialExperiments, serverURL) {
+        switch (savedOptions, isFirstRun, initialExperiments, serverURL) {
         // QA testing case: experiments come from the Experiments setting screen.
         case (let payload, _, _, _) where payload != nil:
             log.info("Nimbus: Loading from experiments provided by settings screen")
