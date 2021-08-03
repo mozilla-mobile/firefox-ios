@@ -5,7 +5,7 @@
 "Bookmarks Toolbar" = "Barra de favoritos";
 
 /* The title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android. */
-"Mobile Bookmarks" = "Favoritos móvel";
+"Mobile Bookmarks" = "Favoritos em dispositivo móvel";
 
 /* The name of the folder that contains unsorted desktop bookmarks. This should match bookmarks.folder.unfiled.label on Android. */
 "Unsorted Bookmarks" = "Favoritos não organizados";

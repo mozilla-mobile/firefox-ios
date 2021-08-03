@@ -26,7 +26,7 @@
 "Intro.Slides.Firefox.Account.Sync.Title" = "Συγχρονισμός του Firefox μεταξύ συσκευών";
 
 /* Description for the 'Mail' panel in the First Run tour. */
-"Intro.Slides.Mail.Description" = "Χρησιμοποιήστε οποιαδήποτε εφαρμογή e-mail - όχι μόνο το Mail - με το Firefox.";
+"Intro.Slides.Mail.Description" = "Χρησιμοποιήστε οποιαδήποτε εφαρμογή email - όχι μόνο το Mail - με το Firefox.";
 
 /* Title for the fourth panel 'Mail' in the First Run tour. */
 "Intro.Slides.Mail.Title" = "Έχετε επιλογές… αλληλογραφίας";

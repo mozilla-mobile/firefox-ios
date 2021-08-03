@@ -5,7 +5,7 @@
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "Mở trong thẻ riêng tư mới";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox sẽ không nhớ bất kỳ lịch sử hoặc cookie của bạn, nhưng trang đánh dấu mới sẽ được lưu.";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox sẽ không nhớ bất kỳ lịch sử hoặc cookie của bạn, nhưng dấu trang mới sẽ được lưu.";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "Tìm hiểu thêm";

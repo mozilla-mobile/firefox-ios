@@ -652,6 +652,9 @@
 /* Toggle logins syncing setting */
 "Logins" = "ການເຂົ້າສູ່ລະບົບ";
 
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title" = "ເອົາລະຫັດຜ່ານຂອງທ່ານໄປນຳທຸກບ່ອນ";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "ດັດແກ້ແລ້ວ";
 
@@ -693,6 +696,24 @@
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "ຕົວກັ່ນຕອງ";
+
+/* Label shown when there are no logins to list */
+"LoginsList.NoLoginsFound.Description" = "ການລັອກອິນທີ່ໄດ້ບັນທຶກໄວ້ຈະສະແດງຂື້ນຢູ່ທີ່ນີ້. ເຂົ້າສູ່ລະບົບບັນຊີ Firefox ຂອງທ່ານ ຖ້າຫາກວ່າທ່ານໄດ້ບັນທຶກການລັອກອິນຂອງທ່ານໄວ້ໃນ Firefox ໃນອຸປະກອນອື່ນໆ.";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "ບໍ່ມີຜົນໄດ້ຮັບທີ່ກົງກັບການຄົ້ນຫາຂອງທ່ານ.";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "ບໍ່ມີການລັອກອິນທີ່ກົງກັນ";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "ຍົກເລີກ";
+
+/* Placeholder text for search field */
+"LoginsList.Search.Placeholder" = "ຄົ້ນຫາຂໍ້ມູນການລັອກອິນ";
+
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "ເລືອກລະຫັດຜ່ານເພື່ອຕື່ມຂໍ້ມູນໃສ່";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "ບັກທຶກການເຂົ້າສູ່ລະບົບໄວ້";
@@ -975,6 +996,12 @@
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ";
+
+/* value for label to indicate user is on an unencrypted website */
+"ProtectionStatusSheet.InsecureConnection" = "ການເຊື່ອມຕໍ່ທີ່ບໍ່ປອດໄພ";
+
+/* value for label to indicate user is on a secure ssl connection */
+"ProtectionStatusSheet.SecureConnection" = "ການເຊື່ອມຕໍ່ທີ່ປອດໄພ";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Quick-search Engines";
@@ -1733,6 +1760,9 @@
 
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "ແທັບຈະປະກົດຢູ່ນີ້ເປັນເວລາ 30 ວັນ. ຫລັງຈາກນັ້ນແທັບຈະໄດ້ຮັບການປິດອັດຕະໂນມັດ.";
+
+/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
+"TabTray.RecentlyClosed.SectionTitle" = "ຫາກໍ່ປິດໄປມື້ກີ້ນີ້";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "ສ່ວນຕົວ";

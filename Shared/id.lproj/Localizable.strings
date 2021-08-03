@@ -652,6 +652,9 @@
 /* Toggle logins syncing setting */
 "Logins" = "Info Masuk";
 
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title" = "Bawa kata sandi Anda ke mana saja";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Diubah";
 
@@ -693,6 +696,24 @@
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Filter";
+
+/* Label shown when there are no logins to list */
+"LoginsList.NoLoginsFound.Description" = "Info masuk tersimpan akan muncul di sini. Jika Anda menyimpan info masuk ke Firefox pada perangkat yang berbeda, masuk ke Firefox Account Anda.";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "Tidak ada hasil pencarian yang cocok";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "Tidak ada info masuk yang cocok";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "Batal";
+
+/* Placeholder text for search field */
+"LoginsList.Search.Placeholder" = "Cari info masuk";
+
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "Pilih sandi untuk diisi";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "INFO MASUK TERSIMPAN";
@@ -975,6 +996,12 @@
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Kebijakan Privasi";
+
+/* value for label to indicate user is on an unencrypted website */
+"ProtectionStatusSheet.InsecureConnection" = "Sambungan Tidak Aman";
+
+/* value for label to indicate user is on a secure ssl connection */
+"ProtectionStatusSheet.SecureConnection" = "Sambungan Aman";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Mesin Cari Cepat";
@@ -1733,6 +1760,9 @@
 
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Tab tersedia di sini selama 30 hari. Setelah itu, tab akan ditutup secara otomatis.";
+
+/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
+"TabTray.RecentlyClosed.SectionTitle" = "Baru saja ditutup";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "Pribadi";

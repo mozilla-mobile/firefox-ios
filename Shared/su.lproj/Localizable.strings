@@ -652,6 +652,9 @@
 /* Toggle logins syncing setting */
 "Logins" = "Asup log";
 
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title" = "Bawa kecap sandi anjeun kamanana";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Dirobah";
 
@@ -693,6 +696,24 @@
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Ayak";
+
+/* Label shown when there are no logins to list */
+"LoginsList.NoLoginsFound.Description" = "Login anu diteundeun bakal némbongan di dieu. Lamun anjeun neundeun login ka Firefox di séjén paranti, asup ka Firefox Account.";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "Taya hasil anu cocog jeung pamaluruhan anjeun.";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "Taya login anu cocog";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "Bolay";
+
+/* Placeholder text for search field */
+"LoginsList.Search.Placeholder" = "Paluruh login";
+
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "Pilih kecap konci pikeun ngeusian";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "ASUP LOG DITEUNDEUN";
@@ -975,6 +996,12 @@
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Kawijakan Salindungan";
+
+/* value for label to indicate user is on an unencrypted website */
+"ProtectionStatusSheet.InsecureConnection" = "Sambungan Teu Aman";
+
+/* value for label to indicate user is on a secure ssl connection */
+"ProtectionStatusSheet.SecureConnection" = "Sambungan Aman";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Mesin Pamaluruh Gancang";
@@ -1733,6 +1760,9 @@
 
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Tab sayaga di dieu salila 30 poé. Sanggeusna, tab bakal otomatis ditutup.";
+
+/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
+"TabTray.RecentlyClosed.SectionTitle" = "Anyar ditutup";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "Nyamuni";
