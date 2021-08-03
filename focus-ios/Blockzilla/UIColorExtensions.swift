@@ -23,6 +23,7 @@ extension UIColor {
     static let gradientFirst = UIColor(named: "GradientFirst")!
     static let gradientSecond = UIColor(named: "GradientSecond")!
     static let gradientThird = UIColor(named: "GradientThird")!
+    static let primaryDark = UIColor(named: "PrimaryDark")!
     static let primaryText = UIColor(named: "PrimaryText")!
     static let scrim = UIColor(named: "Scrim")!
     static let searchGradientFirst = UIColor(named: "SearchGradientFirst")!

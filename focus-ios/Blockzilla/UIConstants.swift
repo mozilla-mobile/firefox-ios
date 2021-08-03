@@ -155,10 +155,9 @@ struct UIConstants {
         static let actionMenuItemSubtitle = UIFont.systemFont(ofSize: 12)
 		static let addSearchEngineInput = UIFont.systemFont(ofSize: 15)
 		static let addSearchEngineExampleLabel = UIFont.systemFont(ofSize: 12)
-		static let promptTitle = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.bold)
-		static let promptMessage = UIFont.systemFont(ofSize: 14)
-		static let enableButton = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.bold)
-		static let disableButton = UIFont.systemFont(ofSize: 18)
+		static let promptTitle = UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.bold)
+		static let promptMessage = UIFont.systemFont(ofSize: 15)
+        static let promptButton = UIFont.systemFont(ofSize: 17, weight: .medium)
     }
 
     struct layout {
@@ -179,8 +178,6 @@ struct UIConstants {
         static let largeDeviceMaxNumSuggestions: Int = 5
         static let progressVisibilityAnimationDuration: TimeInterval = 0.25
         static let searchButtonInset: CGFloat = 15
-        static let searchSuggestionsPromptCornerRadius: CGFloat = 12
-        static let searchSuggestionsPromptButtonRadius: CGFloat = 8
         static let toastAnimationDuration: TimeInterval = 0.3
         static let toastDuration: TimeInterval = 1.5
         static let toolbarFadeAnimationDuration = 0.25
@@ -241,16 +238,15 @@ struct UIConstants {
 		static let addSearchEngineTemplateInputPadding: CGFloat = 5
 		static let addSearchEnginePlaceholderPadding: CGFloat = 9
 		static let addSearchEngineExampleLabelOffset: CGFloat = 2
-		static let promptContainerPadding: CGFloat = 6
-		static let promptContainerOffset: CGFloat = 8
-		static let promptTitleOffset: CGFloat = 20
+		static let promptTitleOffset: CGFloat = 16
 		static let promptTitlePadding: CGFloat = 10
-		static let promptMessageOffset: CGFloat = 5
-		static let promptMessagePadding: CGFloat = 10
-		static let buttonBorderTopOffset: CGFloat = 20
-		static let buttonBorderTopHeight: CGFloat = 0.5
-		static let buttonBorderMiddleHeight: CGFloat = 40
-		static let buttonBorderMiddleWidth: CGFloat = 0.5
+		static let promptMessageOffset: CGFloat = 18
+		static let promptMessagePadding: CGFloat = 32
+        static let promptButtonWidth: CGFloat = 66
+        static let promptButtonHeight: CGFloat = 34
+        static let promptButtonTopOffset: CGFloat = 38
+        static let promptButtonBottomInset: CGFloat = 32
+        static let promptButtonCenterOffset: CGFloat = 8
 		static let AutocompleteCustomURLLabelOffset: CGFloat = 50
 		static let introViewOffset: CGFloat = 24
 		static let introViewCardButtonOffset: CGFloat = 5

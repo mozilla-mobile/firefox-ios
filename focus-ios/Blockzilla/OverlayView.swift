@@ -271,7 +271,8 @@ class OverlayView: UIView {
     private func updateSearchButtons() {
         for index in 0..<self.searchButtonGroup.count {
             let hasSuggestionInIndex = index < self.searchSuggestions.count
-            self.searchButtonGroup[index].isHidden = !hasSuggestionInIndex
+            let show = searchSuggestionsPrompt.isHidden && Settings.getToggle(.enableSearchSuggestions) && hasSuggestionInIndex
+            self.searchButtonGroup[index].isHidden = !show
 
             if hasSuggestionInIndex {
                 self.setAttributedButtonTitle(
@@ -381,7 +382,7 @@ class OverlayView: UIView {
 
     func updateSearchSuggestionsPrompt(hidden: Bool) {
         searchSuggestionsPrompt.isHidden = hidden
-
+        updateSearchButtons()
         searchSuggestionsPrompt.snp.remakeConstraints { make in
             make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
 
