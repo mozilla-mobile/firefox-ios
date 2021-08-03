@@ -260,7 +260,8 @@ class RecentlySavedCell: UICollectionViewCell {
             bookmarkTitle.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
             
             bookmarkDetails.topAnchor.constraint(equalTo: bookmarkTitle.bottomAnchor, constant: 2),
-            bookmarkDetails.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16)
+            bookmarkDetails.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            bookmarkDetails.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8)
         ])
     }
     
