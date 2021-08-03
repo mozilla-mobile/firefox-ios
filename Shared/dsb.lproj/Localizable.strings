@@ -652,6 +652,9 @@
 /* Toggle logins syncing setting */
 "Logins" = "Pśizjawjenja";
 
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title" = "Wzejśo swóje gronidła wšuźi sobu";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Změnjony";
 
@@ -693,6 +696,24 @@
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Filter";
+
+/* Label shown when there are no logins to list */
+"LoginsList.NoLoginsFound.Description" = "Skłaźone pśizjawjenja se how pokaže. Jolic sćo składł swóje pśizjawjenja Firefox na drugem rěźe, pśizjawśo se pla swójogo konta Firefox.";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "Njejsu žedne wuslědki, kótarež wašomu pytanjeju wótpowěduju.";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "Žedne pśigódne pśizjawjenja";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "Pśetergnuś";
+
+/* Placeholder text for search field */
+"LoginsList.Search.Placeholder" = "Pśizjawjenja pśepytaś";
+
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "Wubjeŕśo gronidło za wupołnjenje";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "SKŁAŹONE PŚIZJAWJENJA";
@@ -975,6 +996,12 @@
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Pšawidła priwatnosći";
+
+/* value for label to indicate user is on an unencrypted website */
+"ProtectionStatusSheet.InsecureConnection" = "Njewěsty zwisk";
+
+/* value for label to indicate user is on a secure ssl connection */
+"ProtectionStatusSheet.SecureConnection" = "Wěsty zwisk";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Pytnice za malsne pytanje";
@@ -1733,6 +1760,9 @@
 
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Rajtarki su how za 30 dnjow k dispoziciji. Pó toś tom casu se rejtariki awtomatiski zacyniju.";
+
+/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
+"TabTray.RecentlyClosed.SectionTitle" = "Njedawno zacynjone";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "Priwatny";

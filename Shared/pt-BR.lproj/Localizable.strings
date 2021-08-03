@@ -353,7 +353,7 @@
 "DownloadsPanel.Delete.Title" = "Excluir";
 
 /* Title for the Downloads Panel empty state. */
-"DownloadsPanel.EmptyState.Title" = "Os arquivos baixados aparecem aqui.";
+"DownloadsPanel.EmptyState.Title" = "Arquivos baixados aparecem aqui.";
 
 /* Action button for sharing downloaded files in the Downloads panel. */
 "DownloadsPanel.Share.Title" = "Compartilhar";
@@ -437,7 +437,7 @@
 "FxA.ResendEmail" = "Reenviar email";
 
 /* FxA sign in view subtitle */
-"fxa.signin.camera-signin" = "Entre com sua câmera";
+"fxa.signin.camera-signin" = "Conecte usando sua câmera";
 
 /* FxA sign in create account label. */
 "fxa.signin.create-account-pt-1" = "Sincronize o Firefox entre dispositivos com uma conta.";
@@ -542,7 +542,7 @@
 "HistoryPanel.HistoryBackButton.Title" = "Histórico";
 
 /* Title for the Recently Closed button in the History Panel */
-"HistoryPanel.RecentlyClosedTabsButton.Title" = "Fechadas recentemente";
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "Fechado recentemente";
 
 /* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
 "HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d dispositivo(s) conectado(s)";
@@ -572,7 +572,7 @@
 "HomePanel.ContextMenu.OpenInNewPrivateTab" = "Abrir em nova aba privativa";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.OpenInNewTab" = "Abrir em uma nova aba";
+"HomePanel.ContextMenu.OpenInNewTab" = "Abrir em nova aba";
 
 /* The title for the Remove context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Remove" = "Remover";
@@ -652,6 +652,9 @@
 /* Toggle logins syncing setting */
 "Logins" = "Contas de acesso";
 
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title" = "Tenha suas senhas em qualquer lugar";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Modificado";
 
@@ -693,6 +696,24 @@
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Filtrar";
+
+/* Label shown when there are no logins to list */
+"LoginsList.NoLoginsFound.Description" = "Contas salvas aparecem aqui. Se você salvou suas contas no Firefox em outro dispositivo, entre na sua Conta Firefox.";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "Nenhum resultado corresponde à sua busca.";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "Nenhuma conta corresponde";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "Cancelar";
+
+/* Placeholder text for search field */
+"LoginsList.Search.Placeholder" = "Pesquisar contas";
+
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "Selecione uma senha para preencher";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "LOGINS SALVOS";
@@ -736,16 +757,16 @@
 "Menu.Downloads.Label" = "Downloads";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOff.Title" = "A proteção aprimorada contra rastreamento está DESATIVADA neste site.";
+"Menu.EnhancedTrackingProtectionOff.Title" = "Proteção aprimorada contra rastreamento: DESATIVADA neste site.";
 
 /* A switch to enable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOn.Title" = "A proteção aprimorada contra rastreamento está ATIVADA neste site";
+"Menu.EnhancedTrackingProtectionOn.Title" = "Proteção aprimorada contra rastreamento: ATIVADA neste site.";
 
 /* Description for having standard ETP protection with ITP offered in iOS14+ */
 "Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "O Firefox bloqueia rastreadores entre sites, rastreadores de mídias sociais, criptomineradores e fingerprinters.";
 
 /* Description for having strict ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "O Firefox bloqueia rastreadores entre sites, rastreadores de mídias sociais, criptomineradores, fingerprinters e conteúdo de rastreamento.";
+"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "O Firefox bloqueia rastreadores entre sites, de mídias sociais, criptomineradores, fingerprinters e conteúdo de rastreamento.";
 
 /* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
 "Menu.History.Label" = "Histórico";
@@ -805,7 +826,7 @@
 "Menu.TabSent.Confirm" = "Aba enviada";
 
 /* Title on tracking protection menu for blocked items. */
-"Menu.TrackingProtection.BlockedTitle" = "Bloqueado";
+"Menu.TrackingProtection.BlockedTitle" = "Bloqueado:";
 
 /* Message in menu when no trackers blocked. */
 "Menu.TrackingProtection.NoTrackersBlockedTitle" = "Nenhum rastreador conhecido pelo Firefox foi detectado nesta página.";
@@ -814,7 +835,7 @@
 "Menu.TrackingProtection.ProtectionSettings.Title" = "Configurações de proteção";
 
 /* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
-"Menu.TrackingProtection.TitlePrefix" = "Proteções para %@";
+"Menu.TrackingProtection.TitlePrefix" = "Proteções em %@";
 
 /* The title that shows the number of content cookies blocked */
 "Menu.TrackingProtectionBlockedContent.Title" = "Conteúdo de rastreamento";
@@ -841,7 +862,7 @@
 "Menu.TrackingProtectionDescription.ContentTrackers" = "Sites podem carregar anúncios, vídeos e outros conteúdos externos que contêm rastreadores ocultos. Bloquear isso pode agilizar o carregamento de páginas, mas alguns botões, formulários e campos de acesso a contas podem não funcionar.";
 
 /* Description of cross-site trackers. */
-"Menu.TrackingProtectionDescription.CrossSiteNew" = "Esses cookies seguem você de um site para outro para coletar dados sobre o que você faz online. Eles são criados por terceiros, como anunciantes e empresas de análises.";
+"Menu.TrackingProtectionDescription.CrossSiteNew" = "Esses cookies tentam te seguir de um site para outro para coletar dados sobre o que você faz online. Eles são criados por terceiros, como anunciantes e empresas de análises.";
 
 /* Description of cryptominers. */
 "Menu.TrackingProtectionDescription.CryptominersNew" = "Criptomineradores usam secretamente o poder computacional do seu sistema para minerar moedas digitais. Scripts de criptomineração drenam a bateria, fazem o computador ficar mais lento e podem aumentar sua conta de energia elétrica.";
@@ -976,6 +997,12 @@
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Política de privacidade";
 
+/* value for label to indicate user is on an unencrypted website */
+"ProtectionStatusSheet.InsecureConnection" = "Conexão não segura";
+
+/* value for label to indicate user is on a secure ssl connection */
+"ProtectionStatusSheet.SecureConnection" = "Conexão segura";
+
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Mecanismos de pesquisa rápida";
 
@@ -992,7 +1019,7 @@
 "Reading list" = "Lista de leitura";
 
 /* Title for the Recently Closed Tabs Panel */
-"RecentlyClosedTabsPanel.Title" = "Fechadas recentemente";
+"RecentlyClosedTabsPanel.Title" = "Fechado recentemente";
 
 /* More button text for Recently Saved items at the home page. */
 "RecentlySaved.Actions.More" = "Mostrar tudo";
@@ -1048,7 +1075,7 @@
 /* Accessibility Label for the tab toolbar Search button
    Navigation title for search settings.
    Open search section of settings */
-"Search" = "Pesquisar";
+"Search" = "Pesquisa";
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "Pesquise ou digite um endereço";
@@ -1069,7 +1096,7 @@
 "Search.ThirdPartyEngines.Cancel" = "Cancelar";
 
 /* A message explaining fault in custom search engine form. */
-"Search.ThirdPartyEngines.DuplicateErrorMessage" = "Um mecanismo de pesquisa com este título ou URL já foi adicionado.";
+"Search.ThirdPartyEngines.DuplicateErrorMessage" = "Já foi adicionado um mecanismo de pesquisa com este título ou URL.";
 
 /* A title stating that we failed to add custom search engine. */
 "Search.ThirdPartyEngines.DuplicateErrorTitle" = "Falhou";
@@ -1193,7 +1220,7 @@
 "Settings.AddCustomEngine.URLLabel" = "URL";
 
 /* The placeholder for URL Field when saving a custom search engine */
-"Settings.AddCustomEngine.URLPlaceholder" = "URL (substituir a pesquisa com %s)";
+"Settings.AddCustomEngine.URLPlaceholder" = "URL (substituir a consulta por %s)";
 
 /* Button in Data Management that clears private data for the selected items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Limpar todos os dados do site";
@@ -1404,10 +1431,10 @@
 "Settings.OpenWith.PageTitle" = "Abrir links de email com";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
-"Settings.OpenWith.SectionName" = "App Mail";
+"Settings.OpenWith.SectionName" = "App de email";
 
 /* Setting to enable the built-in password manager */
-"Settings.SaveLogins.Title" = "Salvar logins";
+"Settings.SaveLogins.Title" = "Salvar contas de acesso";
 
 /* Button displayed at the top of the search settings. */
 "Settings.Search.Done.Button" = "Concluído";
@@ -1431,7 +1458,7 @@
 "Settings.ShowLinkPreviews.Title" = "Mostrar exibição prévia do link";
 
 /* Setting to show Logins & Passwords quick access in the application menu */
-"Settings.ShowLoginsInAppMenu.Title" = "Exibir no menu de aplicações";
+"Settings.ShowLoginsInAppMenu.Title" = "Exibir no menu de aplicativos";
 
 /* The description of the open new tab siri shortcut */
 "Settings.Siri.OpenTabShortcut" = "Abrir nova aba";
@@ -1476,7 +1503,7 @@
 "Settings.TrackingProtection.Alert.Button" = "OK, entendi";
 
 /* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Se um site não funcionar conforme esperado, toque no escudo na barra de endereços e desative a proteção aprimorada contra rastreamento nessa página.";
+"Settings.TrackingProtection.Alert.Description" = "Se um site não funcionar conforme esperado, toque no escudo na barra de endereços e desative a proteção aprimorada contra rastreamento na página.";
 
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Atenção!";
@@ -1503,7 +1530,7 @@
 "Settings.TrackingProtection.ProtectionCellFooter" = "Reduz anúncios direcionados e ajuda a impedir que anunciantes rastreiem sua navegação.";
 
 /* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Se um site não funcionar conforme esperado, toque no escudo na barra de endereços e desative a proteção aprimorada contra rastreamento nessa página.";
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "Se um site não funcionar conforme esperado, toque no escudo na barra de endereços e desative a proteção aprimorada contra rastreamento na página.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Permite algum rastreamento de anúncios para que sites funcionem corretamente.";
@@ -1521,7 +1548,7 @@
 "Settings.TrackingProtection.StrictLevelInfoFooter" = "Bloquear rastreadores pode afetar a funcionalidade de alguns sites.";
 
 /* Tracking protection settings option for using the basic blocklist. */
-"Settings.TrackingProtectionOption.BasicBlockList" = "Padrão (predefinido)";
+"Settings.TrackingProtectionOption.BasicBlockList" = "Normal (padrão)";
 
 /* Tracking protection settings option description for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BlockListBasicDescription" = "Permite alguns rastreadores para que os sites funcionem corretamente.";
@@ -1696,7 +1723,7 @@
 "Tabs.DeleteAllUndo.Title" = "%d aba(s) fechada(s)";
 
 /* The placeholder text for the tab search bar */
-"Tabs.Search.PlaceholderText" = "Pesquisar abas";
+"Tabs.Search.PlaceholderText" = "Pesquisar nas abas";
 
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "Adicionar aba";
@@ -1733,6 +1760,9 @@
 
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "As abas ficam disponíveis aqui por 30 dias. Após esse período, são fechadas automaticamente.";
+
+/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
+"TabTray.RecentlyClosed.SectionTitle" = "Fechado recentemente";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "Privativas";

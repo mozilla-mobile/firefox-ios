@@ -40,6 +40,12 @@
 /* The description of a highlight if it is a site the user has visited */
 "ActivityStream.Highlights.Visited" = "Bisitatua";
 
+/* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
+"ActivityStream.JumpBackIn.SectionTitle" = "Itzuli zeudenera";
+
+/* A string used to signify the start of the Recently Saved section in Home Screen. */
+"ActivityStream.Library.Title" = "Gordetako azkenak";
+
 /* Section title label for recently bookmarked websites */
 "ActivityStream.NewRecentBookmarks.Title" = "Azken laster-markak";
 
@@ -57,6 +63,12 @@
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Bisitatutako azkenak";
+
+/* Section title for the Recently Saved section. This shows websites that have had a save action. Right now it is just bookmarks but it could be used for other things like the reading list in the future. */
+"ActivityStream.RecentlySaved.SectionTitle" = "Gordetako azkenak";
+
+/* This button will open the library showing all the users bookmarks */
+"ActivityStream.RecentlySaved.ShowAll" = "Erakutsi denak";
 
 /* Section title label for Shortcuts */
 "ActivityStream.Shortcuts.SectionTitle" = "Lasterbideak";
@@ -640,6 +652,9 @@
 /* Toggle logins syncing setting */
 "Logins" = "Saio-hasierak";
 
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title" = "Eraman pasahitzak alboan";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Aldatuta";
 
@@ -681,6 +696,24 @@
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Iragazkia";
+
+/* Label shown when there are no logins to list */
+"LoginsList.NoLoginsFound.Description" = "Gordetako saio-hasierak hemen agertuko dira. Beste gailu bateko Firefoxen saio-hasierak gorde badituzu, hasi saioa zure Firefox kontuan.";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "Ez dago zure bilaketarekin bat datorren emaitzarik.";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "Bat datorren saio-hasierarik ez";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "Utzi";
+
+/* Placeholder text for search field */
+"LoginsList.Search.Placeholder" = "Bilatu saio-hasierak";
+
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "Hautatu betetzeko pasahitza";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "GORDETAKO SAIO-HASIERAK";
@@ -964,6 +997,12 @@
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Pribatutasun-politika";
 
+/* value for label to indicate user is on an unencrypted website */
+"ProtectionStatusSheet.InsecureConnection" = "Konexio ez-segurua";
+
+/* value for label to indicate user is on a secure ssl connection */
+"ProtectionStatusSheet.SecureConnection" = "Konexio segurua";
+
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Bilaketa bizkorreko motorrak";
 
@@ -981,6 +1020,9 @@
 
 /* Title for the Recently Closed Tabs Panel */
 "RecentlyClosedTabsPanel.Title" = "Itxitako azkenak";
+
+/* More button text for Recently Saved items at the home page. */
+"RecentlySaved.Actions.More" = "Erakutsi denak";
 
 /* Accessibility Label for the tab toolbar Reload button */
 "Reload" = "Berritu";
@@ -1191,6 +1233,9 @@
 
 /* Title displayed in header of the setting panel. */
 "Settings.ClearPrivateData.Title" = "Garbitu datu pribatuak";
+
+/* Button in Data Management that clears private data for the selected items. Parameter is the number of items to be cleared */
+"Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "Garbitu elementuak: %1$@";
 
 /* Copy app version alert shown in settings. */
 "Settings.CopyAppVersion.Title" = "Arbelean kopiatuta";
@@ -1553,6 +1598,9 @@
 /* Description of the confirmation dialog shown when a user tries to clear their private data. */
 "Settings.WebsiteData.ConfirmPrompt" = "Ekintza honek webguneetako zure datu guztiak garbituko ditu. Ezin da desegin.";
 
+/* Description of the confirmation dialog shown when a user tries to clear some of their private data. */
+"Settings.WebsiteData.SelectedConfirmPrompt" = "Ekintza honek hautatutako elementuak garbituko ditu. Ezin da desegin.";
+
 /* Title displayed in header of the Data Management panel. */
 "Settings.WebsiteData.Title" = "Webguneetako datuak";
 
@@ -1689,6 +1737,9 @@
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "Unean hautatutako fitxa.";
 
+/* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
+"TabTray.InactiveTabs.SectionTitle" = "Fitxa inaktiboak";
+
 /* The section header for tabs opened last week */
 "TabTray.LastWeek.Header" = "Azken astea";
 
@@ -1706,6 +1757,12 @@
 
 /* The title for the tab tray in private mode */
 "TabTray.PrivateTitle" = "Fitxa pribatuak";
+
+/* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
+"TabTray.RecentlyClosed.Description" = "Fitxak 30 egunez egongo dira erabilgarri. Denbora horren ondoren, automatikoki itxiko dira.";
+
+/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
+"TabTray.RecentlyClosed.SectionTitle" = "Itxitako azkenak";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "Pribatua";

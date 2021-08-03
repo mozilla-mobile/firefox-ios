@@ -652,6 +652,9 @@
 /* Toggle logins syncing setting */
 "Logins" = "ანგარიშები";
 
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title" = "თან წაიყოლეთ თქვენი პაროლები ყველგან";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "შეცვლილი";
 
@@ -693,6 +696,24 @@
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "ფილტრი";
+
+/* Label shown when there are no logins to list */
+"LoginsList.NoLoginsFound.Description" = "შენახული ანგარიშები აქ გამოჩნდება. თუ სხვა მოწყობილობის Firefox-ზე ინახავთ, შედით თქვენი Firefox-ანგარიშით.";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "ძიების შესაბამისი შედეგები ვერ მოიძებნა.";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "შესაბამისი ანგარიშები არაა";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "გაუქმება";
+
+/* Placeholder text for search field */
+"LoginsList.Search.Placeholder" = "ანგარიშების ძიება";
+
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "შეარჩიეთ პაროლი შესავსებად";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "შენახული ანგარიშები";
@@ -975,6 +996,12 @@
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "პირადულობის დებულება";
+
+/* value for label to indicate user is on an unencrypted website */
+"ProtectionStatusSheet.InsecureConnection" = "დაუცველი კავშირი";
+
+/* value for label to indicate user is on a secure ssl connection */
+"ProtectionStatusSheet.SecureConnection" = "დაცული კავშირი";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "სწრაფი ძიების სისტემები";
@@ -1733,6 +1760,9 @@
 
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "ჩანართები აქ დარჩება 30 დღით. შემდეგ კი თავადვე დაიხურება.";
+
+/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
+"TabTray.RecentlyClosed.SectionTitle" = "ბოლოს დახურული";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "პირადი";

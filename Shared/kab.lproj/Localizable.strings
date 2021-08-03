@@ -652,6 +652,9 @@
 /* Toggle logins syncing setting */
 "Logins" = "Inekcam";
 
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title" = "Awi awalen uffiren anda teddiḍ";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Ittusnifel";
 
@@ -693,6 +696,24 @@
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Zizdeg";
+
+/* Label shown when there are no logins to list */
+"LoginsList.NoLoginsFound.Description" = "Inekcamen ittwaskelsen ad ttwaseknen da. Ma yella teskelseḍ inekcam-inek·inem Firefox deg ibenk-nniḍen, qqen ɣer umiḍan Firefox.";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "Ula d yiwen n ugmuḍ ur yemmenṭaḍ d unadi-ik.";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "Ulac asulay immenṭaḍen";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "Sefsex";
+
+/* Placeholder text for search field */
+"LoginsList.Search.Placeholder" = "Nadi inekcam";
+
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "Fren awal uffir ara teččareḍ";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "SAVED LOGINS";
@@ -975,6 +996,12 @@
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Tasertit n tbaḍnit";
+
+/* value for label to indicate user is on an unencrypted website */
+"ProtectionStatusSheet.InsecureConnection" = "Tuqqna taraɣelsant";
+
+/* value for label to indicate user is on a secure ssl connection */
+"ProtectionStatusSheet.SecureConnection" = "Tuqqna taɣelsant";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Imseddayen n unadi arurad";
@@ -1733,6 +1760,9 @@
 
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Accaren llan da i 30 wussan. Seld aya, accaren ad uɣalen ad medlen s wudem awurman.";
+
+/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
+"TabTray.RecentlyClosed.SectionTitle" = "Ttwamedlen melmi kan";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "Uslig";

@@ -53,7 +53,7 @@
 "Intro.Slides.TrailheadSync.Description" = "Đăng nhập vào tài khoản của bạn để đồng bộ hóa và truy cập nhiều tính năng hơn.";
 
 /* Title for the second panel 'Sync' in the First Run tour. */
-"Intro.Slides.TrailheadSync.Title.v2" = "Đồng bộ trang đánh dấu, lịch sử, và mật khẩu lên điện thoại của bạn.";
+"Intro.Slides.TrailheadSync.Title.v2" = "Đồng bộ hóa dấu trang, lịch sử, và mật khẩu với điện thoại của bạn.";
 
 /* Description for the 'Welcome' panel in the First Run tour. */
 "Intro.Slides.Welcome.Description.v2" = "Nhanh chóng, riêng tư, và về phía bạn.";

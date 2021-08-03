@@ -563,7 +563,7 @@
 "HomePanel.ContextMenu.OpenInNewPrivateTab" = "Digeriñ en un ivinell prevez nevez";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.OpenInNewTab" = "Open in New Tab";
+"HomePanel.ContextMenu.OpenInNewTab" = "Digeriñ e-barzh un ivinell nevez";
 
 /* The title for the Remove context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Remove" = "Lemel kuit";

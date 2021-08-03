@@ -652,6 +652,9 @@
 /* Toggle logins syncing setting */
 "Logins" = "Prisijungimai";
 
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title" = "Turėkite savo slaptažodžius visur";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Atnaujinta";
 
@@ -693,6 +696,24 @@
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Filtras";
+
+/* Label shown when there are no logins to list */
+"LoginsList.NoLoginsFound.Description" = "Įrašyti prisijungimai atsiras čia. Jei įrašėte prisijungimus su „Firefox“ kitame įrenginyje, prisijunkite prie savo „Firefox“ paskyros.";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "Nėra jūsų paiešką atitinkančių rezultatų.";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "Nėra atitinkančių prisijungimų";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "Atsisakyti";
+
+/* Placeholder text for search field */
+"LoginsList.Search.Placeholder" = "Ieškoti prisijungimų";
+
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "Pasirinkite slaptažodį užpildymui";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "ĮRAŠYTI PRISIJUNGIMAI";
@@ -975,6 +996,12 @@
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Privatumo nuostatai";
+
+/* value for label to indicate user is on an unencrypted website */
+"ProtectionStatusSheet.InsecureConnection" = "Nesaugus ryšys";
+
+/* value for label to indicate user is on a secure ssl connection */
+"ProtectionStatusSheet.SecureConnection" = "Saugus ryšys";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Sparčiosios ieškyklės";
@@ -1733,6 +1760,9 @@
 
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Kortelės čia bus laikomos 30 dienų. Po šio laiko jos bus automatiškai užvertos.";
+
+/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
+"TabTray.RecentlyClosed.SectionTitle" = "Paskiausiai užverta";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "Privačios";

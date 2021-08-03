@@ -652,6 +652,9 @@
 /* Toggle logins syncing setting */
 "Logins" = "Authenticationes";
 
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title" = "Porta tu contrasignos sempre con te";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Modificate";
 
@@ -693,6 +696,24 @@
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Filtro";
+
+/* Label shown when there are no logins to list */
+"LoginsList.NoLoginsFound.Description" = "Le credentiales salvate apparera hic. Si tu ha salvate tu credentiales in Firefox sur un altere apparato, authentica te in tu Firefox Account.";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "Le recerca non ha producite resultatos.";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "Nulle credentiales concordante";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "Cancellar";
+
+/* Placeholder text for search field */
+"LoginsList.Search.Placeholder" = "Cercar credentiales";
+
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "Eliger un contrasigno a plenar";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "ACCESSOS SALVATE";
@@ -975,6 +996,12 @@
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Politica de confidentialitate";
+
+/* value for label to indicate user is on an unencrypted website */
+"ProtectionStatusSheet.InsecureConnection" = "Connexion non secur";
+
+/* value for label to indicate user is on a secure ssl connection */
+"ProtectionStatusSheet.SecureConnection" = "Connexion secur";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Motores de recerca rapide";
@@ -1733,6 +1760,9 @@
 
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Le schedas es disponibile hic durante 30 dies. Post ille tempore, le schedas se claudera automaticamente.";
+
+/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
+"TabTray.RecentlyClosed.SectionTitle" = "Recentemente claudite";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "Anonyme";

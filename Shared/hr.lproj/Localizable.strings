@@ -652,6 +652,9 @@
 /* Toggle logins syncing setting */
 "Logins" = "Prijave";
 
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title" = "Ponesi svoje lozinke sa sobom";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Promijenjeno";
 
@@ -693,6 +696,24 @@
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Filtar";
+
+/* Label shown when there are no logins to list */
+"LoginsList.NoLoginsFound.Description" = "Ovdje će se prikazati spremljene prijave. Ako su tvoje prijave na Firefox spremljene na jednom drugom uređaju, prijavi se na tvoj Firefox račun.";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "Nema rezultata koji odgovaraju tvojoj pretrazi.";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "Nema odgovarajućih prijava";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "Odustani";
+
+/* Placeholder text for search field */
+"LoginsList.Search.Placeholder" = "Pretraži prijave";
+
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "Odaberi lozinku za ispunjavanje";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "SPREMLJENE PRIJAVE";
@@ -975,6 +996,12 @@
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Politika privatnosti";
+
+/* value for label to indicate user is on an unencrypted website */
+"ProtectionStatusSheet.InsecureConnection" = "Nesigurna veza";
+
+/* value for label to indicate user is on a secure ssl connection */
+"ProtectionStatusSheet.SecureConnection" = "Sigurna veza";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Tražilice za brzo pretraživanje";
@@ -1733,6 +1760,9 @@
 
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Kartice su ovdje dostupne 30 dana. Nakon toga automatski će biti zatvorene.";
+
+/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
+"TabTray.RecentlyClosed.SectionTitle" = "Nedavno zatvorene kartice";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "Privatno";

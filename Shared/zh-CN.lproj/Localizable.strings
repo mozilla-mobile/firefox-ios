@@ -652,6 +652,9 @@
 /* Toggle logins syncing setting */
 "Logins" = "登录信息";
 
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title" = "随身携带密码";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "修改时间";
 
@@ -693,6 +696,24 @@
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "筛选";
+
+/* Label shown when there are no logins to list */
+"LoginsList.NoLoginsFound.Description" = "保存的登录信息将显示于此处。若您在其他设备保存过登录信息，请登录您的 Firefox 账户。";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "没有符合您搜索条件的结果。";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "没有匹配的登录信息";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "取消";
+
+/* Placeholder text for search field */
+"LoginsList.Search.Placeholder" = "搜索登录信息";
+
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "选择要填写的密码";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "已保存的登录信息";
@@ -975,6 +996,12 @@
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "隐私政策";
+
+/* value for label to indicate user is on an unencrypted website */
+"ProtectionStatusSheet.InsecureConnection" = "不安全连接";
+
+/* value for label to indicate user is on a secure ssl connection */
+"ProtectionStatusSheet.SecureConnection" = "安全连接";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "快速搜索引擎";
@@ -1733,6 +1760,9 @@
 
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "标签页将在此处保留 30 天，之后将自动关闭。";
+
+/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
+"TabTray.RecentlyClosed.SectionTitle" = "最近关闭";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "隐私";

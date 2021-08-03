@@ -652,6 +652,9 @@
 /* Toggle logins syncing setting */
 "Logins" = "Mewngofnodion";
 
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title" = "Ewch â'ch cyfrineiriau i bob man";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Newidiwyd";
 
@@ -693,6 +696,24 @@
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Hidl";
+
+/* Label shown when there are no logins to list */
+"LoginsList.NoLoginsFound.Description" = "Bydd mewngofnodi wedi'u cadw yn ymddangos yma. Os ydych wedi cadw eich mewngofnodion i Firefox ar ddyfais wahanol, mewngofnodwch i'ch Cyfrif Firefox.";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "Does dim canlyniadau sy'n cyfateb i'ch chwiliad.";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "Dim mewngofnodion sy'n cyfateb.";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "Diddymu";
+
+/* Placeholder text for search field */
+"LoginsList.Search.Placeholder" = "Chwilio mewngofnodion";
+
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "Dewiswch gyfrinair i'w lenwi";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "MEWNGOFNODION WEDI'U CADW";
@@ -975,6 +996,12 @@
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Polisi Preifatrwydd";
+
+/* value for label to indicate user is on an unencrypted website */
+"ProtectionStatusSheet.InsecureConnection" = "Cysylltiad Anniogel";
+
+/* value for label to indicate user is on a secure ssl connection */
+"ProtectionStatusSheet.SecureConnection" = "Cysylltiad Diogel";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Peiriannau Chwilio Cyflym";
@@ -1733,6 +1760,9 @@
 
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Mae tabiau ar gael yma am 30 diwrnod. Wedi hynny, bydd y tabiau'n cael eu cau'n awtomatig.";
+
+/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
+"TabTray.RecentlyClosed.SectionTitle" = "Caewyd yn ddiweddar";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "Preifat";

@@ -661,6 +661,12 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Suodata";
 
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "Hakuasi vastaavia tuloksia ei löytynyt.";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "Ei hakua vastaavia kirjautumistietoja";
+
 /* Title for the list of logins */
 "LoginsList.Title" = "TALLENNETUT KIRJAUTUMISTIEDOT";
 

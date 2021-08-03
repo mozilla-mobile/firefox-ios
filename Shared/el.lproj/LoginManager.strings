@@ -41,7 +41,7 @@
 "Open & Fill" = "Άνοιγμα & Συμπλήρωση";
 
 /* Label displayed above the password row in Login Detail View. */
-"Password" = "Συνθηματικό";
+"Password" = "Κωδικός πρόσβασης";
 
 /* Reveal password text selection menu item */
 "Reveal" = "Αποκάλυψη";

@@ -652,6 +652,9 @@
 /* Toggle logins syncing setting */
 "Logins" = "ログイン情報";
 
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title" = "どこでもパスワードが使える";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "変更日時";
 
@@ -693,6 +696,24 @@
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "フィルター";
+
+/* Label shown when there are no logins to list */
+"LoginsList.NoLoginsFound.Description" = "保存されたログイン情報がここに表示されます。別の端末の Firefox で保存したログイン情報を表示するには、Firefox アカウントにログインしてください。";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "検索条件に一致するログイン情報はありません。";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "一致するログイン情報はありません";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "キャンセル";
+
+/* Placeholder text for search field */
+"LoginsList.Search.Placeholder" = "ログイン情報を検索";
+
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "入力するパスワードを選択してください";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "保存されたログイン情報";
@@ -975,6 +996,12 @@
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "プライバシーポリシー";
+
+/* value for label to indicate user is on an unencrypted website */
+"ProtectionStatusSheet.InsecureConnection" = "安全でない接続";
+
+/* value for label to indicate user is on a secure ssl connection */
+"ProtectionStatusSheet.SecureConnection" = "安全な接続";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "クイック検索エンジン";
@@ -1521,7 +1548,7 @@
 "Settings.TrackingProtection.StrictLevelInfoFooter" = "トラッカーをブロックすると、一部のウェブサイトの機能に影響を与える可能性があります。";
 
 /* Tracking protection settings option for using the basic blocklist. */
-"Settings.TrackingProtectionOption.BasicBlockList" = "標準 (既定)";
+"Settings.TrackingProtectionOption.BasicBlockList" = "標準 (デフォルト)";
 
 /* Tracking protection settings option description for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BlockListBasicDescription" = "サイトが正常に機能するよう、一部のトラッカーを許可します。";
@@ -1733,6 +1760,9 @@
 
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "これらのタブは 30 日を過ぎると自動的に閉じられます。";
+
+/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
+"TabTray.RecentlyClosed.SectionTitle" = "最近閉じたタブ";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "プライベート";

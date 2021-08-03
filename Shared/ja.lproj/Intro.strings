@@ -44,7 +44,7 @@
 "Intro.Slides.Safe.Sync.Title" = "安全な同期";
 
 /* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "何か違ったものを探していますか？ 設定で別の検索エンジンを既定として選んでみましょう (任意のエンジンも追加できます)。";
+"Intro.Slides.Search.Description" = "何か違ったものを探していますか？ 設定でデフォルト検索エンジンを選んでみましょう (任意のエンジンも追加できます)。";
 
 /* Title for the second  panel 'Search' in the First Run tour. */
 "Intro.Slides.Search.Title" = "好きな方法で検索";

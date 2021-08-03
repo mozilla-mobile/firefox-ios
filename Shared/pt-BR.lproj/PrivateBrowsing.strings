@@ -5,7 +5,7 @@
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "Abrir em nova aba privativa";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "O Firefox não salvará seu histórico ou cookies, mas novos favoritos serão salvos.";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "O Firefox não irá salvar seu histórico nem cookies, mas novos favoritos são salvos.";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "Saiba mais";

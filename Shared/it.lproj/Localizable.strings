@@ -652,6 +652,9 @@
 /* Toggle logins syncing setting */
 "Logins" = "Accessi";
 
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title" = "Porta le tue password sempre con te";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Ultima modifica";
 
@@ -693,6 +696,24 @@
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Filtra";
+
+/* Label shown when there are no logins to list */
+"LoginsList.NoLoginsFound.Description" = "Le credenziali salvate verranno visualizzate qui. Se hai salvato le tue credenziali in Firefox su un dispositivo diverso, accedi al tuo account Firefox.";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "Non ci sono risultati corrispondenti ai criteri di ricerca inseriti.";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "Nessuna corrispondenza nelle credenziali";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "Annulla";
+
+/* Placeholder text for search field */
+"LoginsList.Search.Placeholder" = "Cerca nelle credenziali";
+
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "Seleziona la password da compilare";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "ACCESSI SALVATI";
@@ -975,6 +996,12 @@
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Informativa sulla privacy";
+
+/* value for label to indicate user is on an unencrypted website */
+"ProtectionStatusSheet.InsecureConnection" = "Connessione non sicura";
+
+/* value for label to indicate user is on a secure ssl connection */
+"ProtectionStatusSheet.SecureConnection" = "Connessione sicura";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Motori di ricerca rapidi";
@@ -1733,6 +1760,9 @@
 
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Le schede saranno disponibili qui per 30 giorni. Trascorso questo tempo, verranno chiuse automaticamente.";
+
+/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
+"TabTray.RecentlyClosed.SectionTitle" = "Chiuse di recente";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "Anonime";

@@ -652,6 +652,9 @@
 /* Toggle logins syncing setting */
 "Logins" = "Innloggingar";
 
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title" = "Ta med deg passorda overalt";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Endra";
 
@@ -693,6 +696,24 @@
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Filter";
+
+/* Label shown when there are no logins to list */
+"LoginsList.NoLoginsFound.Description" = "Lagra innloggingar vil visast her. Om du har lagra inloggningane dine i Firefox på ei anna eining, loggar du inn på Firefox-kontoen din.";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "Ingen resultat passar med søket ditt.";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "Ingen samsvarande innloggingar.";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "Avbryt";
+
+/* Placeholder text for search field */
+"LoginsList.Search.Placeholder" = "Søk etter innloggingar";
+
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "Vel eit passord som skal fyllast inn";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "LAGRA INNLOGGINGAR";
@@ -975,6 +996,12 @@
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Personvernpraksis";
+
+/* value for label to indicate user is on an unencrypted website */
+"ProtectionStatusSheet.InsecureConnection" = "Usikker tilkopling";
+
+/* value for label to indicate user is on a secure ssl connection */
+"ProtectionStatusSheet.SecureConnection" = "Sikker tilkopling";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Hurtigsøkjemotorar";
@@ -1733,6 +1760,9 @@
 
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Faner er tilgjengelege her i 30 dagar. Etter den tida vert fanene automatisk attlatne.";
+
+/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
+"TabTray.RecentlyClosed.SectionTitle" = "Nyleg attlatne";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "Privat";
