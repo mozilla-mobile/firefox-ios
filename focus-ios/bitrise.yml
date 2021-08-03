@@ -420,6 +420,7 @@ workflows:
         inputs:
         - deploy_path: l10n-screenshots/en-US/en-US
         - is_compress: 'true'
+    - cache-push@2.3: {}
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
