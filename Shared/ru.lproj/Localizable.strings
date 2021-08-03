@@ -652,6 +652,9 @@
 /* Toggle logins syncing setting */
 "Logins" = "Логины";
 
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title" = "Возьмите свои пароли с собой";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Изменено";
 
@@ -693,6 +696,24 @@
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Фильтр";
+
+/* Label shown when there are no logins to list */
+"LoginsList.NoLoginsFound.Description" = "Здесь будут отображаться сохранённые логины. Если вы сохранили свои логины в Firefox на другом устройстве, войдите в свой Аккаунт Firefox.";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "Результатов, подходящих под ваш запрос, не найдено";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "Нет подходящих логинов";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "Отмена";
+
+/* Placeholder text for search field */
+"LoginsList.Search.Placeholder" = "Поиск логинов";
+
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "Выберите пароль для заполнения";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "СОХРАНЁННЫЕ ЛОГИНЫ";
@@ -975,6 +996,12 @@
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Политика приватности";
+
+/* value for label to indicate user is on an unencrypted website */
+"ProtectionStatusSheet.InsecureConnection" = "Незащищённое соединение";
+
+/* value for label to indicate user is on a secure ssl connection */
+"ProtectionStatusSheet.SecureConnection" = "Защищённое соединение";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Системы быстрого поиска";
@@ -1733,6 +1760,9 @@
 
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Вкладки доступны здесь в течение 30 дней. По истечении этого времени вкладки будут автоматически закрыты.";
+
+/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
+"TabTray.RecentlyClosed.SectionTitle" = "Недавно закрытые";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "Приватные";

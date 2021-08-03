@@ -8,7 +8,7 @@
 "Copy URL" = "Копіювати URL";
 
 /* Label for preview action on Tab Tray Tab to send the current link to another device */
-"Menu.SendLinkToDevice" = "Надіслати посилання на пристрій";
+"Menu.SendLinkToDevice" = "Надіслати на пристрій";
 
 /* String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch */
 "Open Last Bookmark" = "Відкрити останню закладку";

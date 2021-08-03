@@ -691,6 +691,18 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Filter";
 
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "Ni rezultatov, ki bi ustrezali vašemu iskanju.";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "Ni ujemajočih se prijav";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "Prekliči";
+
+/* Placeholder text for search field */
+"LoginsList.Search.Placeholder" = "Iskanje prijav";
+
 /* Title for the list of logins */
 "LoginsList.Title" = "SHRANJENE PRIJAVE";
 
@@ -972,6 +984,12 @@
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Politika zasebnosti";
+
+/* value for label to indicate user is on an unencrypted website */
+"ProtectionStatusSheet.InsecureConnection" = "Povezava ni varna";
+
+/* value for label to indicate user is on a secure ssl connection */
+"ProtectionStatusSheet.SecureConnection" = "Varna povezava";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Hitri iskalniki";
@@ -1727,6 +1745,9 @@
 
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Zavihki so tukaj na voljo 30 dni. Po tem času se samodejno zaprejo.";
+
+/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
+"TabTray.RecentlyClosed.SectionTitle" = "Nedavno zaprto";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "Zasebno";

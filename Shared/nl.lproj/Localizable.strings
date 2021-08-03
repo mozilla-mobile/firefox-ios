@@ -419,7 +419,7 @@
 "FxA.NoInternetConnection" = "Geen internetverbinding";
 
 /* Button label to open Sync preferences */
-"FxA.OpenSyncPreferences" = "Sync-voorkeuren openen";
+"FxA.OpenSyncPreferences" = "Synchronisatievoorkeuren openen";
 
 /* Instructions shown on qr code scanning view */
 "fxa.qr-scanning-view.instructions" = "Scan de QR-code op firefox.com/pair";
@@ -452,13 +452,13 @@
 "fxa.signin.ready-to-scan" = "Klaar om te scannen";
 
 /* FxA sign in view title */
-"fxa.signin.turn-on-sync" = "Sync inschakelen";
+"fxa.signin.turn-on-sync" = "Synchronisatie inschakelen";
 
 /* FxA sign in view email login button */
 "fxa.signin.use-email-instead" = "E-mail gebruiken";
 
 /* Button label to sign into Sync */
-"FxA.SignIntoSync" = "Aanmelden bij Sync";
+"FxA.SignIntoSync" = "Aanmelden voor synchronisatie";
 
 /* Label explaining what sync does */
 "FxA.SyncExplain" = "Haal uw tabbladen, bladwijzers en wachtwoorden van uw andere apparaten op.";
@@ -470,25 +470,25 @@
 "FxA.TakeYourWebWithYou" = "Neem uw web mee";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Sync is verbonden met %@";
+"FxAPush_DeviceConnected_body" = "Firefox-synchronisatie is verbonden met %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
-"FxAPush_DeviceConnected_title" = "Sync verbonden";
+"FxAPush_DeviceConnected_title" = "Synchronisatie verbonden";
 
 /* Body of a notification displayed when named device has been disconnected from FxA. %@ refers to the name of the disconnected device. */
 "FxAPush_DeviceDisconnected_body" = "De verbinding van %@ is met succes verbroken.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "De verbinding van dit apparaat met Firefox Sync is met succes verbroken.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "De verbinding van dit apparaat met Firefox-synchronisatie is met succes verbroken.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync verbroken";
+"FxAPush_DeviceDisconnected_ThisDevice_title" = "Synchronisatie verbroken";
 
 /* Title of a notification displayed when named device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_title" = "Sync verbroken";
+"FxAPush_DeviceDisconnected_title" = "Synchronisatie verbroken";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Een apparaat heeft de verbinding met Firefox Sync verbroken";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Een apparaat heeft de verbinding met Firefox-synchronisatie verbroken";
 
 /* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
 "Get your open tabs, bookmarks, and passwords from your other devices." = "Haal uw open tabbladen, bladwijzers en wachtwoorden van uw andere apparaten op.";
@@ -536,7 +536,7 @@
 "HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Zet tabbladsynchronisatie aan om een lijst van tabbladen van uw andere apparaten weer te geven.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox-synchronisatie";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Geschiedenis";
@@ -652,6 +652,9 @@
 /* Toggle logins syncing setting */
 "Logins" = "Aanmeldingen";
 
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title" = "Neem uw wachtwoorden overal mee naartoe";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Gewijzigd";
 
@@ -693,6 +696,24 @@
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Filter";
+
+/* Label shown when there are no logins to list */
+"LoginsList.NoLoginsFound.Description" = "Opgeslagen aanmeldingen worden hier getoond. Als u uw aanmeldingen bij Firefox op een ander apparaat hebt opgeslagen, meld u dan aan bij uw Firefox-account.";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "Uw zoekopdracht heeft geen resultaten opgeleverd.";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "Geen overeenkomende aanmeldingen";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "Annuleren";
+
+/* Placeholder text for search field */
+"LoginsList.Search.Placeholder" = "Aanmeldingen zoeken";
+
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "Selecteer een wachtwoord om in te vullen";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "OPGESLAGEN AANMELDINGEN";
@@ -976,6 +997,12 @@
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Privacybeleid";
 
+/* value for label to indicate user is on an unencrypted website */
+"ProtectionStatusSheet.InsecureConnection" = "Niet-beveiligde verbinding";
+
+/* value for label to indicate user is on a secure ssl connection */
+"ProtectionStatusSheet.SecureConnection" = "Beveiligde verbinding";
+
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Snelzoekmachines";
 
@@ -1160,7 +1187,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Tik om te beginnen";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Firefox-synchronisatie";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Weergeven";
@@ -1226,7 +1253,7 @@
 "Settings.Disconnect.Body" = "Firefox stopt de synchronisatie met uw account, maar zal geen surfgegevens op dit apparaat verwijderen.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
-"Settings.Disconnect.Button" = "Verbinding met Sync verbreken";
+"Settings.Disconnect.Button" = "Verbinding met synchronisatie verbreken";
 
 /* Cancel action button in alert when user is prompted for disconnect */
 "Settings.Disconnect.CancelButton" = "Annuleren";
@@ -1235,7 +1262,7 @@
 "Settings.Disconnect.DestructiveButton" = "Verbreken";
 
 /* Title of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Title" = "Verbinding met Sync verbreken?";
+"Settings.Disconnect.Title" = "Verbinding met synchronisatie verbreken?";
 
 /* Section header for brightness slider. */
 "Settings.DisplayTheme.BrightnessThreshold.SectionHeader" = "Drempelwaarde";
@@ -1293,7 +1320,7 @@
 "Settings.FxA.DeviceName" = "Apparaatnaam";
 
 /* Label used as a section title in the Firefox Accounts Settings screen. */
-"Settings.FxA.Sync.SectionName" = "Sync-instellingen";
+"Settings.FxA.Sync.SectionName" = "Synchronisatie-instellingen";
 
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title" = "Firefox-account";
@@ -1666,13 +1693,13 @@
 "SyncState.Logins.Title" = "Aanmeldingen";
 
 /* Title for Sync status message when Sync failed to start. */
-"SyncState.NotStarted.Title" = "Sync is niet beschikbaar";
+"SyncState.NotStarted.Title" = "Synchronisatie is niet beschikbaar";
 
 /* Title for Sync status message when Sync failed due to being offline */
-"SyncState.Offline.Title" = "Sync is offline";
+"SyncState.Offline.Title" = "Synchronisatie is offline";
 
 /* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
-"SyncState.Partial.Title" = "Sync ondervindt problemen met synchroniseren van %@";
+"SyncState.Partial.Title" = "Synchronisatie ondervindt problemen met synchroniseren van %@";
 
 /* The Tabs sync component, used in SyncState.Partial.Title */
 "SyncState.Tabs.Title" = "Tabbladen";
@@ -1733,6 +1760,9 @@
 
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Tabbladen zijn hier 30 dagen beschikbaar. Daarna worden tabbladen automatisch gesloten.";
+
+/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
+"TabTray.RecentlyClosed.SectionTitle" = "Onlangs gesloten";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "Privé";

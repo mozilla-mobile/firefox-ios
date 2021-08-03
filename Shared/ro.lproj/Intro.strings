@@ -11,7 +11,7 @@
 "Intro.Slides.Button.SignIn" = "Autentifică-te";
 
 /* Sign up to Firefox account button on second intro screen. */
-"Intro.Slides.Button.SignUp" = "Înregistrare";
+"Intro.Slides.Button.SignUp" = "Înscrie-te";
 
 /* Description for the second item in the table related to fast searching via address bar */
 "Intro.Slides.Fast.Search.Description" = "Sugestiile de căutare te duc mai repede pe site-urile web.";

@@ -5,10 +5,10 @@
 "+" = "+";
 
 /* Authentication prompt message with no realm. Parameter is the hostname of the site */
-"A username and password are being requested by %@." = "Ο ιστότοπος %@ απαιτεί όνομα χρήστη και συνθηματικό.";
+"A username and password are being requested by %@." = "Το %@ απαιτεί όνομα χρήστη και κωδικό πρόσβασης.";
 
 /* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
-"A username and password are being requested by %@. The site says: %@" = "Απαιτείται ένα όνομα χρήστη και ένας κωδικός πρόσβασης από το %1$@. Η ιστοσελίδα λέει: %2$@";
+"A username and password are being requested by %@. The site says: %@" = "Το %1$@ απαιτεί όνομα χρήστη και κωδικό πρόσβασης. Η ιστοσελίδα λέει: %2$@";
 
 /* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
 "Aa" = "Αα";
@@ -111,7 +111,7 @@
 "Amazon" = "Amazon";
 
 /* Authentication prompt title */
-"Authentication required" = "Απαιτείται πιστοποίηση";
+"Authentication required" = "Απαιτείται ταυτοποίηση";
 
 /* Description for button to suggest searching with a search engine. First argument is the name of the search engine to select */
 "Awesomebar.SearchWithEngine.Description" = "Αναζήτηση %@ απευθείας από τη γραμμή διευθύνσεων";
@@ -359,7 +359,7 @@
 "DownloadsPanel.Share.Title" = "Κοινή χρήση";
 
 /* Text message in the settings table view */
-"Enter your password to connect" = "Εισάγετε τον κωδικό πρόσβασής σας για σύνδεση";
+"Enter your password to connect" = "Εισαγάγετε τον κωδικό πρόσβασής σας για σύνδεση";
 
 /* Label for button to perform advanced actions on the error page */
 "ErrorPages.Advanced.Button" = "Για προχωρημένους";
@@ -398,13 +398,13 @@
 "Forward" = "Εμπρός";
 
 /* Label stating how to disconnect account */
-"FxA.AccountVerificationDetails" = "Λάθος e-mail; Αποσυνδεθείτε παρακάτω για να ξεκινήσετε από την αρχή.";
+"FxA.AccountVerificationDetails" = "Λάθος email; Αποσυνδεθείτε παρακάτω για να ξεκινήσετε από την αρχή.";
 
 /* Label stating your account is not verified */
 "FxA.AccountVerificationRequired" = "Απαιτείται επαλήθευση λογαριασμού";
 
 /* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "Πρέπει να επαληθεύσετε το %@. Ελέγξτε το e-mail σας για το σύνδεσμο επαλήθευσης από το Firefox.";
+"FxA.AccountVerificationRequiredSurface" = "Πρέπει να επαληθεύσετε το %@. Ελέγξτε το email σας για τον σύνδεσμο επαλήθευσης από το Firefox.";
 
 /* Button label to connect another device to Sync */
 "FxA.ConnectAnotherDevice" = "Σύνδεση άλλης συσκευής";
@@ -434,7 +434,7 @@
 "FxA.RemoveAccountAlertTitle" = "Αφαίρεση λογαριασμού";
 
 /* Button label to resend email */
-"FxA.ResendEmail" = "Εκ νέου αποστολή e-mail";
+"FxA.ResendEmail" = "Νέα αποστολή email";
 
 /* FxA sign in view subtitle */
 "fxa.signin.camera-signin" = "Σύνδεση με την κάμερά σας";
@@ -515,7 +515,7 @@
 "HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "Σήμερα και χθες";
 
 /* Title for popup action menu to clear recent history. */
-"HistoryPanel.ClearHistoryMenuTitle" = "Η εκκαθάριση πρόσφατου ιστορικού θα διαγράψει το ιστορικό, τα cookies και άλλα δεδομένα περιήγησης.";
+"HistoryPanel.ClearHistoryMenuTitle" = "Η εκκαθάριση πρόσφατου ιστορικού θα διαγράψει το ιστορικό, τα cookie και άλλα δεδομένα περιήγησης.";
 
 /* Title for the History Panel empty state. */
 "HistoryPanel.EmptyState.Title" = "Οι πρόσφατες ιστοσελίδες σας θα εμφανίζονται εδώ.";
@@ -542,7 +542,7 @@
 "HistoryPanel.HistoryBackButton.Title" = "Ιστορικό";
 
 /* Title for the Recently Closed button in the History Panel */
-"HistoryPanel.RecentlyClosedTabsButton.Title" = "Έκλεισαν πρόσφατα";
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "Πρόσφατα κλεισμένα";
 
 /* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
 "HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d συνδεδεμένη(ες) συσκευή(ές)";
@@ -652,6 +652,9 @@
 /* Toggle logins syncing setting */
 "Logins" = "Συνδέσεις";
 
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title" = "Πάρτε τους κωδικούς πρόσβασής σας παντού";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Τροποποίηση";
 
@@ -668,7 +671,7 @@
 "LoginsHelper.PromptSaveLogin.Title" = "Αποθήκευση σύνδεσης %1$@ για %2$@;";
 
 /* Prompt for saving a password with no username. The parameter is the hostname of the site. */
-"LoginsHelper.PromptSavePassword.Title" = "Αποθήκευση συνθηματικού για %@;";
+"LoginsHelper.PromptSavePassword.Title" = "Αποθήκευση κωδικού πρόσβασης για %@;";
 
 /* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
 "LoginsHelper.PromptUpdateLogin.Title.OneArg" = "Ενημέρωση σύνδεσης για %@;";
@@ -693,6 +696,24 @@
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Φίλτρο";
+
+/* Label shown when there are no logins to list */
+"LoginsList.NoLoginsFound.Description" = "Οι αποθηκευμένες συνδέσεις θα εμφανίζονται εδώ. Εάν αποθηκεύσατε τις συνδέσεις σας στο Firefox διαφορετικής συσκευής, συνδεθείτε στον λογαριασμό Firefox σας.";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "Δεν βρέθηκαν αποτελέσματα για την αναζήτησή σας.";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "Καμία αντιστοιχία σύνδεσης";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "Ακύρωση";
+
+/* Placeholder text for search field */
+"LoginsList.Search.Placeholder" = "Αναζήτηση συνδέσεων";
+
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "Επιλέξτε έναν κωδικό πρόσβασης για συμπλήρωση";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "ΑΠΟΘΗΚΕΥΜΕΝΕΣ ΣΥΝΔΕΣΕΙΣ";
@@ -847,7 +868,7 @@
 "Menu.TrackingProtectionDescription.CryptominersNew" = "Τα cryptominers χρησιμοποιούν κρυφά την υπολογιστική ισχύ του συστήματός σας για να εξορύξουν κρυπτονομίσματα. Τα σενάρια εξόρυξης κρυπτονομισμάτων εξαντλούν την μπαταρία σας, επιβραδύνουν τον υπολογιστή σας, ενώ ενδέχεται να δείτε αυξημένες χρεώσεις στο λογαριασμό τους ρεύματος.";
 
 /* Description of fingerprinters. */
-"Menu.TrackingProtectionDescription.Fingerprinters" = "Οι ρυθμίσεις στο πρόγραμμα περιήγησης και στον υπολογιστή σας είναι μοναδικές. Τα fingerprinters συλλέγουν πολλές από αυτές τις μοναδικές ρυθμίσεις για να δημιουργήσουν ένα προφίλ για εσάς, το οποίο μπορεί να χρησιμοποιηθεί για να την καταγραφη της περιήγησής σας.";
+"Menu.TrackingProtectionDescription.Fingerprinters" = "Οι ρυθμίσεις στο πρόγραμμα περιήγησης και στον υπολογιστή σας είναι μοναδικές. Τα fingerprinters συλλέγουν πολλές από αυτές τις μοναδικές ρυθμίσεις για να δημιουργήσουν ένα προφίλ για εσάς, το οποίο μπορεί να χρησιμοποιηθεί για να την καταγραφή της περιήγησής σας.";
 
 /* Description of social network trackers. */
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "Τα κοινωνικά δίκτυα τοποθετούν ιχνηλάτες σε άλλες ιστοσελίδες για να δημιουργήσουν ένα πιο ολοκληρωμένο και στοχευμένο προφίλ για εσάς. Η φραγή ιχνηλατών μειώνει αυτά που βλέπουν οι εταιρείες κοινωνικών μέσων.";
@@ -950,7 +971,7 @@
 "Panel Chooser" = "Επιλογή πίνακα";
 
 /* Password textbox in Authentication prompt */
-"Password" = "Κωδικός";
+"Password" = "Κωδικός πρόσβασης";
 
 /* Error message shown in the remote tabs panel */
 "PasswordAutoFill.NoPasswordsFoundTitle" = "Δεν έχετε συγχρονίσει διαπιστευτήρια από το λογαριασμό Firefox σας";
@@ -975,6 +996,12 @@
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Πολιτική απορρήτου";
+
+/* value for label to indicate user is on an unencrypted website */
+"ProtectionStatusSheet.InsecureConnection" = "Μη ασφαλής σύνδεση";
+
+/* value for label to indicate user is on a secure ssl connection */
+"ProtectionStatusSheet.SecureConnection" = "Ασφαλής σύνδεση";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Μηχανές γρήγορης αναζήτησης";
@@ -1284,10 +1311,10 @@
 "Settings.DNT.OptionAlwaysOn" = "Πάντα";
 
 /* DNT Settings option for only turning on when Tracking Protection is also on */
-"Settings.DNT.OptionOnWithTP" = "Μόνο κατά τη χρήση προστασίας από παρακολούθηση";
+"Settings.DNT.OptionOnWithTP" = "Μόνο κατά τη χρήση προστασίας από καταγραφή";
 
 /* DNT Settings title */
-"Settings.DNT.Title" = "Αποστολή αιτήματος \"Χωρίς παρακολούθηση\" σε ιστοσελίδες που δεν θέλετε να σας παρακολουθούν";
+"Settings.DNT.Title" = "Αποστολή αιτήματος \"Αποτροπή καταγραφής\" σε ιστοσελίδες που δεν θέλετε να σας καταγράφουν";
 
 /* Label used for the device name settings section. */
 "Settings.FxA.DeviceName" = "Όνομα συσκευής";
@@ -1401,7 +1428,7 @@
 "Settings.OfferClipboardBar.Title" = "Επιλογή για άνοιγμα αντιγραμμένων συνδέσμων";
 
 /* Title for Open With Settings */
-"Settings.OpenWith.PageTitle" = "Άνοιγμα συνδέσμων e-mail με";
+"Settings.OpenWith.PageTitle" = "Άνοιγμα συνδέσμων email με";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
 "Settings.OpenWith.SectionName" = "Εφαρμογή Mail";
@@ -1515,7 +1542,7 @@
 "Settings.TrackingProtection.ProtectionLevelTitle" = "Επίπεδο προστασίας";
 
 /* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
-"Settings.TrackingProtection.SectionName" = "Προστασία από παρακολούθηση";
+"Settings.TrackingProtection.SectionName" = "Προστασία από καταγραφή";
 
 /* Additional information about the strict level setting */
 "Settings.TrackingProtection.StrictLevelInfoFooter" = "Η φραγή ιχνηλατών θα μπορούσε να επηρεάσει τη λειτουργικότητα ορισμένων ιστοσελίδων.";
@@ -1533,7 +1560,7 @@
 "Settings.TrackingProtectionOption.BlockListStrictDescription" = "Αποκλείει γνωστούς ιχνηλάτες. Ορισμένες ιστοσελίδες ενδέχεται να μην λειτουργούν σωστά.";
 
 /* Description label shown on tracking protection options screen. */
-"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "Παρακολούθηση είναι η συλλογή δεδομένων περιήγησης από πολλαπλές ιστοσελίδες.";
+"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "Η καταγραφή είναι η συλλογή δεδομένων περιήγησης από πολλαπλές ιστοσελίδες.";
 
 /* Settings option to specify that Tracking Protection is on */
 "Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "Ενισχυμένη προστασία από καταγραφή";
@@ -1630,7 +1657,7 @@
 "SwitchToPBM.KeyCodeTitle" = "Λειτουργία ιδιωτικής περιήγησης";
 
 /* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, bookmarks, passwords and more." = "Συγχρονίστε τις καρτέλες, τους σελιδοδείκτες, τα συνθηματικά σας και πολλά άλλα.";
+"Sync your tabs, bookmarks, passwords and more." = "Συγχρονίστε τις καρτέλες, τους σελιδοδείκτες, τους κωδικούς πρόσβασής σας και πολλά άλλα.";
 
 /* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
 "Sync your tabs, passwords and more." = "Συγχρονίστε τις καρτέλες, τα συνθηματικά σας και πολλά άλλα.";
@@ -1734,6 +1761,9 @@
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Οι καρτέλες θα είναι διαθέσιμες εδώ για 30 ημέρες. Μετά από αυτό το χρονικό διάστημα, οι καρτέλες θα κλείσουν αυτόματα.";
 
+/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
+"TabTray.RecentlyClosed.SectionTitle" = "Πρόσφατα κλεισμένες";
+
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "Ιδιωτικές";
 
@@ -1825,10 +1855,10 @@
 "Use stage servers" = "Χρήση διακομιστών δοκιμής";
 
 /* Username textbox in Authentication prompt */
-"Username" = "Όνομα Χρήστη";
+"Username" = "Όνομα χρήστη";
 
 /* Text message in the settings table view */
-"Verify your email address" = "Επιβεβαιώστε το e-mail σας";
+"Verify your email address" = "Επιβεβαιώστε τη διεύθυνση email σας";
 
 /* Version number of Firefox shown in settings */
 "Version %@ (%@)" = "Έκδοση %1$@ (%2$@)";
@@ -1837,7 +1867,7 @@
 "Web content" = "Περιεχόμενο ιστού";
 
 /* See http://mzl.la/1LXbDOL */
-"Welcome to your Reading List" = "Καλώς ορίσατε στην Λίστα Ανάγνωσης";
+"Welcome to your Reading List" = "Καλώς ορίσατε στη Λίστα ανάγνωσης";
 
 /* Restore Tabs Prompt Title */
 "Well, this is embarrassing." = "Αυτό είναι κάπως ντροπιαστικό.";

@@ -17,13 +17,13 @@
 "Change Passcode" = "Αλλαγή συνθηματικού";
 
 /* Text displayed above the input field when changing the existing passcode */
-"Enter a new passcode" = "Εισάγετε νέο συνθηματικό";
+"Enter a new passcode" = "Εισαγάγετε νέο συνθηματικό";
 
 /* Text displayed above the input field when entering a new passcode */
-"Enter a passcode" = "Εισάγετε συνθηματικό";
+"Enter a passcode" = "Εισαγάγετε συνθηματικό";
 
 /* Text displayed above the input field when changing the existing passcode */
-"Enter passcode" = "Εισάγετε συνθηματικό";
+"Enter passcode" = "Εισαγάγετε συνθηματικό";
 
 /* Title of the dialog used to request the passcode */
 "Enter Passcode" = "Εισαγωγή συνθηματικού";
@@ -56,7 +56,7 @@
 "Passcodes didn’t match. Try again." = "Τα συνθηματικά δεν ταιριάζουν. Δοκιμάστε ξανά.";
 
 /* Text displayed above the input field when confirming a passcode */
-"Re-enter passcode" = "Εισάγετε ξανά το συνθηματικό";
+"Re-enter passcode" = "Εισαγάγετε ξανά το συνθηματικό";
 
 /* Text displayed in the 'Interval' section, followed by the current interval setting, e.g. 'Immediately' */
 "Require Passcode" = "Απαίτηση συνθηματικού";
