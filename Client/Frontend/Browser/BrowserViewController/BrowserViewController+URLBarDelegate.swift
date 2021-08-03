@@ -166,11 +166,17 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
 
     func urlBarDidTapShield(_ urlBar: URLBarView) {
         if let tab = self.tabManager.selectedTab {
-            let trackingProtectionMenu = self.getTrackingSubMenu(for: tab)
-            let title = String.localizedStringWithFormat(Strings.TPPageMenuTitle, tab.url?.host ?? "")
+            // ROUX
+            let etpViewModel = EnhancedTrackingProtectionMenuVM(tab: tab, profile: profile)
+            let etpVC = EnhancedTrackingProtectionMenuVC()
+            etpVC.modalPresentationStyle = .custom
+            etpVC.transitioningDelegate = self
+            etpVC.viewModel = etpViewModel
+
+            self.present(etpVC, animated: true, completion: nil)
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
-            let shouldSuppress = UIDevice.current.userInterfaceIdiom != .pad
-            self.presentSheetWith(title: title, actions: trackingProtectionMenu, on: self, from: urlBar, suppressPopover: shouldSuppress)
+//            let shouldSuppress = UIDevice.current.userInterfaceIdiom != .pad
+//            self.presentSheetWith(title: title, actions: trackingProtectionMenu, on: self, from: urlBar, suppressPopover: shouldSuppress)
         }
     }
 
@@ -376,5 +382,11 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
 
     func urlBarDidBeginDragInteraction(_ urlBar: URLBarView) {
         dismissVisibleMenus()
+    }
+}
+
+extension BrowserViewController: UIViewControllerTransitioningDelegate {
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        SlideOverPresentationController(presentedViewController: presented, presenting: presenting)
     }
 }
