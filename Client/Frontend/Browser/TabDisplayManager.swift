@@ -244,12 +244,12 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
             return
         }
         
-        if getTabsToDisplay().count == 1 {
+        if self.isPrivate == false, tabsToDisplay.count == 1 {
             tabManager.removeTabs([tab])
             tabManager.selectTab(tabManager.addTab())
             return
         }
-        
+
         tabManager.removeTabAndUpdateSelectedIndex(tab)
     }
 
