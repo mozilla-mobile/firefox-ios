@@ -183,7 +183,7 @@ struct ExportTask {
         }
         
         // Drop the xml:space="preserve" that is being added. Nobody cares about that.
-        let s = xml.xmlString.replacingOccurrences(of: " xml:space=\"preserve\">", with: ">")
+        let s = xml.xmlString.replacingOccurrences(of: " xml:space=\"preserve\">", with: ">") + "\n\n"
         try! s.write(to: url, atomically: true, encoding: .utf8)
     }
     
