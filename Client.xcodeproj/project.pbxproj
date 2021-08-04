@@ -383,6 +383,7 @@
 		884CA7492344A301002E4711 /* TextContentDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884CA7482344A301002E4711 /* TextContentDetector.swift */; };
 		8D8251811F4DE67F00780643 /* AdvancedAccountSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8251721F4DE67E00780643 /* AdvancedAccountSettingViewController.swift */; };
 		8DCD3BCD1ED5B7FA00446D38 /* FxADeepLinkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCD3BCC1ED5B7FA00446D38 /* FxADeepLinkingTests.swift */; };
+		9609F4CA26B57CE800F81493 /* CalendarExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9609F4C926B57CE800F81493 /* CalendarExtensions.swift */; };
 		962F394A2672D57A006BDA2A /* RecentItemsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962F39492672D57A006BDA2A /* RecentItemsHelper.swift */; };
 		966206CD2698DE1E005C0A55 /* FirefoxHomeRecentlySavedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966206CC2698DE1E005C0A55 /* FirefoxHomeRecentlySavedViewModel.swift */; };
 		96F627002669B0D100C82340 /* FxHomeRecentlySavedCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F626FF2669B0D100C82340 /* FxHomeRecentlySavedCollectionCell.swift */; };
@@ -2613,6 +2614,7 @@
 		95C54B71ADF2BC5347298AA7 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		95E1479BB09F1395795E7A42 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/Storage.strings; sourceTree = "<group>"; };
 		95FD4D8DB09F3540CC7651A1 /* fil */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fil; path = fil.lproj/Intro.strings; sourceTree = "<group>"; };
+		9609F4C926B57CE800F81493 /* CalendarExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarExtensions.swift; sourceTree = "<group>"; };
 		962A450E9186BF349E535413 /* sat-Olck */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sat-Olck"; path = "sat-Olck.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		962F39492672D57A006BDA2A /* RecentItemsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentItemsHelper.swift; sourceTree = "<group>"; };
 		966206CC2698DE1E005C0A55 /* FirefoxHomeRecentlySavedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxHomeRecentlySavedViewModel.swift; sourceTree = "<group>"; };
@@ -4599,6 +4601,7 @@
 				E65075501E37F6D1006961AC /* UIViewExtensions.swift */,
 				C817B34C1FC609500086018E /* UIScrollViewSwizzled.swift */,
 				43446CE92412066500F5C643 /* UIViewControllerExtension.swift */,
+				9609F4C926B57CE800F81493 /* CalendarExtensions.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -8241,6 +8244,7 @@
 				43A5643823CD1E1C00B6857D /* UpdateViewController.swift in Sources */,
 				437A9B682681256800FB41C1 /* InactiveTabCell.swift in Sources */,
 				E4C358551AF144BA00299F7E /* FSReadingList.m in Sources */,
+				9609F4CA26B57CE800F81493 /* CalendarExtensions.swift in Sources */,
 				E692E3291C46E62D009D1240 /* AuthenticationSettingsViewController.swift in Sources */,
 				E663D5781BB341C4001EF30E /* ToggleButton.swift in Sources */,
 				EBA3B2D22268F57E00728BDB /* BadgeIcon.swift in Sources */,
