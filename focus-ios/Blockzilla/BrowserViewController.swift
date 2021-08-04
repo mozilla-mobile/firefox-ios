@@ -1443,3 +1443,12 @@ protocol WhatsNewDelegate {
     func shouldShowWhatsNew() -> Bool
     func didShowWhatsNew()
 }
+
+extension WhatsNewDelegate {
+    //Temporarily disable what's new button
+    
+    var shouldEnableWhatsNewButton: Bool {
+        return false
+    }
+}
+

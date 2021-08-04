@@ -378,6 +378,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         if whatsNew.shouldShowWhatsNew() {
             highlightsButton?.tintColor = UIConstants.colors.whatsNew
         }
+        
+        highlightsButton?.isEnabled  = whatsNew.shouldEnableWhatsNewButton
 
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
