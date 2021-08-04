@@ -92,7 +92,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     }
     
     private var tabsToDisplay: [Tab] {
-        if shouldEnableInactiveTabs { return getTabsToDisplay() }
+        if shouldEnableInactiveTabs { return getTabsAndUpdateInactiveState() }
         let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         return allTabs
     }
@@ -158,7 +158,10 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         }
     }
     
-    func getTabsToDisplay() -> [Tab] {
+    /// This is a helper method to update inactive tab state and should not be called directly
+    /// Even when we have inactive tabs enabled try to call `tabsToDisplay`
+    /// `tabsToDisplay` will make sure to get the correct set ot tabs and also check if feature is enabled
+    private func getTabsAndUpdateInactiveState() -> [Tab] {
         let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         guard allTabs.count > 0, let inactiveViewModel = inactiveViewModel else { return [Tab]() }
         guard allTabs.count > 1 else { return allTabs }
@@ -244,12 +247,12 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
             return
         }
         
-        if getTabsToDisplay().count == 1 {
+        if self.isPrivate == false, tabsToDisplay.count == 1 {
             tabManager.removeTabs([tab])
             tabManager.selectTab(tabManager.addTab())
             return
         }
-        
+
         tabManager.removeTabAndUpdateSelectedIndex(tab)
     }
 
