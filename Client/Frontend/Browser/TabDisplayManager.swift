@@ -159,8 +159,8 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     }
     
     /// This is a helper method to update inactive tab state and should not be called directly
-    /// Even when we have inactive tabs enabled try always to call `tabsToDisplay`
-    /// `tabsToDisplay` will make sure to get the correct set ot tabs
+    /// Even when we have inactive tabs enabled try to call `tabsToDisplay`
+    /// `tabsToDisplay` will make sure to get the correct set ot tabs and also check if feature is enabled
     private func retriveTabsAndupdateInactiveState() -> [Tab] {
         let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         guard allTabs.count > 0, let inactiveViewModel = inactiveViewModel else { return [Tab]() }
