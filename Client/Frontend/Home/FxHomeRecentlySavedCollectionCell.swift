@@ -32,7 +32,11 @@ class FxHomeRecentlySavedCollectionCell: UICollectionViewCell {
     weak var homePanelDelegate: HomePanelDelegate?
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     var profile: Profile?
-    var recentBookmarks = [BookmarkItem]()
+    var recentBookmarks = [BookmarkItem]() {
+        didSet {
+            recentBookmarks = RecentItemsHelper.filterStaleItems(recentItems: recentBookmarks, since: Date()) as! [BookmarkItem]
+        }
+    }
     var readingListItems = [ReadingListItem]()
     var viewModel: FirefoxHomeRecentlySavedViewModel!
     
@@ -80,7 +84,7 @@ class FxHomeRecentlySavedCollectionCell: UICollectionViewCell {
         ])
     }
     
-    public func loadItems() -> [RecentlySavedItem] {
+    private func loadItems() -> [RecentlySavedItem] {
         var items = [RecentlySavedItem]()
         
         items.append(contentsOf: recentBookmarks)
@@ -95,13 +99,11 @@ class FxHomeRecentlySavedCollectionCell: UICollectionViewCell {
         profile?.places.getRecentBookmarks(limit: RecentlySavedCollectionCellUX.bookmarkItemsLimit).uponQueue(.global(), block: { [weak self] result in
             self?.recentBookmarks = result.successValue ?? []
         })
-        recentBookmarks = RecentItemsHelper.filterStaleItems(recentItems: recentBookmarks,
-                                                             since: RecentlySavedCollectionCellUX.bookmarkItemsCutoff) as! [BookmarkItem]
         
         if let readingList = profile?.readingList.getAvailableRecords().value.successValue?.prefix(RecentlySavedCollectionCellUX.readingListItemsLimit) {
             let readingListItems = Array(readingList)
             self.readingListItems = RecentItemsHelper.filterStaleItems(recentItems: readingListItems,
-                                                                       since: RecentlySavedCollectionCellUX.readingListItemsCutoff) as! [ReadingListItem]
+                                                                       since: Date()) as! [ReadingListItem]
         }
     }
     

@@ -334,7 +334,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
             
             if let bookmarks = result.successValue,
                !bookmarks.isEmpty,
-               !RecentItemsHelper.filterStaleItems(recentItems: bookmarks, since: 10).isEmpty {
+               !RecentItemsHelper.filterStaleItems(recentItems: bookmarks, since: Date()).isEmpty {
                 self?.hasRecentBookmarks = true
                 
                 TelemetryWrapper.recordEvent(category: .action,
@@ -350,7 +350,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         if let readingList = profile.readingList.getAvailableRecords().value.successValue?.prefix(RecentlySavedCollectionCellUX.readingListItemsLimit) {
             var readingListItems = Array(readingList)
             readingListItems = RecentItemsHelper.filterStaleItems(recentItems: readingListItems,
-                                                                       since: RecentlySavedCollectionCellUX.readingListItemsCutoff) as! [ReadingListItem]
+                                                                       since: Date()) as! [ReadingListItem]
             self.hasReadingListitems = !readingListItems.isEmpty
             
             TelemetryWrapper.recordEvent(category: .action,
