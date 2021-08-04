@@ -154,6 +154,7 @@ extension UIColor {
         static let Grey70 = UIColor(rgb: 0x38383d)
         static let Grey75 = UIColor(rgb: 0x3C3C43)
         static let Grey75A60 = UIColor(rgba: 0x3C3C4399)
+        static let Grey75A39 = UIColor(rgba: 0x3C3C4363)
         static let Grey80 = UIColor(rgb: 0x2a2a2e)
         static let Grey85 = UIColor(rgb: 0x1C1C1e) // system background / dark / secondary
         static let Grey90 = UIColor(rgb: 0x0c0c0d)

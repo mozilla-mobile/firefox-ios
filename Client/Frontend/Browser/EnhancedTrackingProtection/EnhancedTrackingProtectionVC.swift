@@ -4,45 +4,102 @@
 
 import UIKit
 
+struct ETPMenuUX {
+    struct Fonts {
+        static let websiteTitle: UIFont = .systemFont(ofSize: 16, weight: .bold)
+        static let viewTitleLabels: UIFont = .systemFont(ofSize: 17, weight: .regular)
+        static let detailsLabel: UIFont = .systemFont(ofSize: 12, weight: .regular)
+    }
+
+    struct UX {
+        static let gutterDistance: CGFloat = 16
+        static let websiteLabelToHeroImageSpacing: CGFloat = 8
+        static let heroImageSize: CGFloat = 40
+        static let closeButtonSize: CGFloat = 30
+
+        struct Line {
+            static let distanceFromTopAnchor: CGFloat = 75
+            static let height: CGFloat = 1
+        }
+    }
+}
+
 class EnhancedTrackingProtectionMenuVC: UIViewController {
 
     // MARK: UI components
-    // Hero image
-    lazy var heroImage: UIImageView = {
-        let heroImage = UIImageView()
-        heroImage.translatesAutoresizingMaskIntoConstraints = false
+
+    // Header View
+    let heroImage: UIImageView = .build { heroImage in
         heroImage.contentMode = .scaleAspectFit
         heroImage.clipsToBounds = true
         heroImage.layer.masksToBounds = true
         heroImage.layer.cornerRadius = 5
         heroImage.image = UIImage(named: "defaultFavicon")
         heroImage.tintColor = UIColor.Photon.Grey50
-        return heroImage
-    }()
+    }
 
-    lazy var siteDomainLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = viewModel?.websiteTitle
-        label.textColor = .black
-        return label
-    }()
-    // close button
-    // horizontal line
+    let siteDomainLabel: UILabel = .build { label in
+        label.font = ETPMenuUX.Fonts.websiteTitle
+    }
 
-    // connectionSecure view
-    // image
-    // string
-    // detail
-    // button
+    var closeButton: UIButton = .build { button in
+        button.backgroundColor = .Photon.LightGrey50
+        button.layer.cornerRadius = 0.5 * ETPMenuUX.UX.closeButtonSize
+        button.clipsToBounds = true
+        button.setImage(UIImage(named: "close-medium"), for: .normal)
+        button.imageView?.contentMode = .scaleAspectFit
+        button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
+    }
 
-    // tracking protection view
-    // label
-    // uitoggle
-    // detail label
+    let horizontalLine: UIView = .build { line in
+        line.backgroundColor = UIColor.theme.etpMenu.horizontalLine
+    }
 
-    // protection setting view
-    // button
+    // Connection Info view
+    let connectionView: UIView = .build { line in
+        line.backgroundColor = .green
+    }
+    let connectionImage: UIImageView = .build { image in
+        image.backgroundColor = .green
+    }
+
+    let connectionLabel: UILabel = .build { label in
+        label.backgroundColor = .green
+    }
+
+    let connectionDetailArrow: UIImageView = .build { image in
+        image.backgroundColor = .green
+    }
+
+    let connectionButton: UIButton = .build { button in
+        button.backgroundColor = .green
+    }
+
+    // TrackingProtection toggle View
+    let toggleView: UIView = .build { line in
+        line.backgroundColor = .green
+    }
+
+    let toggleLabel: UIView = .build { line in
+        line.backgroundColor = .green
+    }
+
+    let toggleSwitch: UIView = .build { line in
+        line.backgroundColor = .green
+    }
+
+    let toggleStatusLabel: UIView = .build { line in
+        line.backgroundColor = .green
+    }
+
+    // Protection setting view
+    let protectionView: UIView = .build { line in
+        line.backgroundColor = .green
+    }
+
+    let protectionButton: UIView = .build { line in
+        line.backgroundColor = .green
+    }
 
     // MARK: - Variables
 
@@ -54,6 +111,8 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
         super.viewDidLoad()
         addGestureRecognizer()
         setupView()
+        applyTheme()
+        updateViewDetails()
     }
 
     override func viewDidLayoutSubviews() {
@@ -64,23 +123,56 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
     }
 
     private func setupView() {
-        view.backgroundColor = .white
         view.addSubview(heroImage)
         view.addSubview(siteDomainLabel)
+        view.addSubview(closeButton)
+        view.addSubview(horizontalLine)
 
         setupConstranints()
     }
 
     private func setupConstranints() {
         NSLayoutConstraint.activate([
-            heroImage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            heroImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 18),
-            heroImage.widthAnchor.constraint(equalToConstant: 40),
-            heroImage.heightAnchor.constraint(equalToConstant: 40),
+            heroImage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: ETPMenuUX.UX.gutterDistance),
+            heroImage.topAnchor.constraint(equalTo: view.topAnchor, constant: ETPMenuUX.UX.gutterDistance),
+            heroImage.widthAnchor.constraint(equalToConstant: ETPMenuUX.UX.heroImageSize),
+            heroImage.heightAnchor.constraint(equalToConstant: ETPMenuUX.UX.heroImageSize),
 
             siteDomainLabel.centerYAnchor.constraint(equalTo: heroImage.centerYAnchor),
-            siteDomainLabel.leadingAnchor.constraint(equalTo: heroImage.trailingAnchor, constant: 8)
+            siteDomainLabel.leadingAnchor.constraint(equalTo: heroImage.trailingAnchor, constant: 8),
+
+            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: ETPMenuUX.UX.gutterDistance),
+            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: ETPMenuUX.UX.gutterDistance),
+            closeButton.heightAnchor.constraint(equalToConstant: ETPMenuUX.UX.closeButtonSize),
+            closeButton.widthAnchor.constraint(equalToConstant: ETPMenuUX.UX.closeButtonSize),
+
+            horizontalLine.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            horizontalLine.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            horizontalLine.topAnchor.constraint(equalTo: view.topAnchor, constant: ETPMenuUX.UX.Line.distanceFromTopAnchor),
+            horizontalLine.heightAnchor.constraint(equalToConstant: ETPMenuUX.UX.Line.height)
         ])
+    }
+
+    private func updateViewDetails() {
+        siteDomainLabel.text = viewModel?.websiteTitle
+    }
+
+    // MARK: - Button actions
+
+    @objc func closeButtonTapped() {
+        self.dismiss(animated: true, completion: nil)
+    }
+
+    @objc func connectionDetailsTapped() {
+
+    }
+
+    @objc func trackingProtectionToggleTapped() {
+
+    }
+
+    @objc func protectionSettingsTapped() {
+
     }
 
     // MARK: - Gesture Recognizer
@@ -113,3 +205,13 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
         }
     }
 }
+
+extension EnhancedTrackingProtectionMenuVC: Themeable {
+     @objc func applyTheme() {
+         if #available(iOS 13.0, *) {
+             overrideUserInterfaceStyle =  ThemeManager.instance.userInterfaceStyle
+         }
+         view.backgroundColor = UIColor.theme.etpMenu.background
+         setNeedsStatusBarAppearanceUpdate()
+     }
+ }

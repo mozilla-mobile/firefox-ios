@@ -31,4 +31,8 @@ class EnhancedTrackingProtectionMenuVM {
             self.favIcon = image
         })
     }
+
+    func updateDetails() {
+        
+    }
 }
