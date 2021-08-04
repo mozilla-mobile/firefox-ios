@@ -158,7 +158,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         }
     }
     
-    func getTabsToDisplay() -> [Tab] {
+    private func getTabsToDisplay() -> [Tab] {
         let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         guard allTabs.count > 0, let inactiveViewModel = inactiveViewModel else { return [Tab]() }
         guard allTabs.count > 1 else { return allTabs }
