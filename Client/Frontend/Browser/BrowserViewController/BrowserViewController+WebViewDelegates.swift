@@ -128,6 +128,13 @@ extension BrowserViewController: WKUIDelegate {
                 let elements = contextHelper.elements else { return nil }
             let isPrivate = currentTab.isPrivate
             let addTab = { (rURL: URL, isPrivate: Bool) in
+                if currentTab == self.tabManager.selectedTab, currentTab.adsTelemetryUrlList.count > 0 {
+                    let adUrl = rURL.absoluteString
+                    if currentTab.adsTelemetryUrlList.contains(adUrl) {
+                        print("TRACK ADS CLICKED ON PROVIDER PAGE - OPEN IN NEW TAB")
+                        currentTab.adsTelemetryUrlList.removeAll()
+                    }
+                }
                 let tab = self.tabManager.addTab(URLRequest(url: rURL as URL), afterTab: currentTab, isPrivate: isPrivate)
                 guard !self.topTabsVisible else {
                     return
@@ -342,7 +349,15 @@ extension BrowserViewController: WKNavigationDelegate {
             decisionHandler(.cancel)
             return
         }
-
+        
+        if tab == tabManager.selectedTab, navigationAction.navigationType == .linkActivated, tab.adsTelemetryUrlList.count > 0 {
+            let adUrl = url.absoluteString
+            if tab.adsTelemetryUrlList.contains(adUrl) {
+                print("TRACK ADS CLICKED ON PROVIDER PAGE")
+                tab.adsTelemetryUrlList.removeAll()
+            }
+        }
+        
         if InternalURL.isValid(url: url) {
             if navigationAction.navigationType != .backForward, navigationAction.isInternalUnprivileged {
                 log.warning("Denying unprivileged request: \(navigationAction.request)")

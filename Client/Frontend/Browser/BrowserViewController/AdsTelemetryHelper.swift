@@ -44,8 +44,8 @@ struct SearchProviderCookie {
     let codePrefixes: [String]
 }
 
-class AdsHelper: TabContentScript {
-    let providerList = [
+class AdsTelemetryHelper: TabContentScript {
+    let searchProviderList = [
         SearchProviderModel(
             name: "google",
             regexp: #"^https:\/\/www\.google\.(?:.+)\/search"#,
@@ -130,13 +130,16 @@ class AdsHelper: TabContentScript {
             let provider = getProviderForMessage(message: message),
             let body = message.body as? [String : Any],
             let urls = body["urls"] as? [String] else { return }
-        
-        print("CONSOLELOG", provider.containsAds(urls: urls))
+        let webpageHasAds = provider.containsAds(urls: urls)
+        print("TRACK ADS Found on a provider page ",webpageHasAds)
+        if webpageHasAds {
+            tab?.adsTelemetryUrlList = urls
+        }
     }
     
     private func getProviderForMessage(message: WKScriptMessage) -> SearchProviderModel? {
         guard let body = message.body as? [String : Any], let url = body["url"] as? String else { return nil }
-        for provider in providerList {
+        for provider in searchProviderList {
             guard url.range(of: provider.regexp, options: .regularExpression) != nil else { continue }
             return provider
         }
