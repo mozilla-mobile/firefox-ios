@@ -123,8 +123,11 @@ class TabTrayColor {
 }
 
 class EnhancedTrackingProtectionMenuColor {
+    var defaultImageTints: UIColor { return defaultTextAndTint }
     var background: UIColor { return UIColor.Photon.Grey10 }
     var horizontalLine: UIColor { return UIColor.Photon.Grey75A39 }
+    var sectionColor: UIColor { return .white }
+    var subtextColor: UIColor { return UIColor.Photon.Grey75A60}
 }
 
 class TopTabsColor {

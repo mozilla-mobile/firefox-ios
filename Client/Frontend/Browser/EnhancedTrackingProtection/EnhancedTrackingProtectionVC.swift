@@ -7,9 +7,10 @@ import UIKit
 
 struct ETPMenuUX {
     struct Fonts {
-        static let websiteTitle: UIFont = .systemFont(ofSize: 16, weight: .bold)
+        static let websiteTitle: UIFont = .systemFont(ofSize: 17, weight: .semibold)
         static let viewTitleLabels: UIFont = .systemFont(ofSize: 17, weight: .regular)
         static let detailsLabel: UIFont = .systemFont(ofSize: 12, weight: .regular)
+        static let minorInfoLabel: UIFont = .systemFont(ofSize: 15, weight: .regular)
     }
 
     struct UX {
@@ -27,18 +28,32 @@ struct ETPMenuUX {
     }
 }
 
+class ETPSectionView: UIView {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupView()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    private func setupView() {
+        translatesAutoresizingMaskIntoConstraints = false
+        layer.cornerRadius = ETPMenuUX.UX.viewCornerRadius
+    }
+}
+
 class EnhancedTrackingProtectionMenuVC: UIViewController {
 
     // MARK: UI components
 
     // Header View
-    let heroImage: UIImageView = .build { heroImage in
+    var heroImage: UIImageView = .build { heroImage in
         heroImage.contentMode = .scaleAspectFit
         heroImage.clipsToBounds = true
         heroImage.layer.masksToBounds = true
         heroImage.layer.cornerRadius = 5
-        heroImage.image = UIImage(named: "defaultFavicon")
-        heroImage.tintColor = UIColor.Photon.Grey50
     }
 
     let siteDomainLabel: UILabel = .build { label in
@@ -51,7 +66,6 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
         button.clipsToBounds = true
         button.setImage(UIImage(named: "close-medium"), for: .normal)
         button.imageView?.contentMode = .scaleAspectFit
-        button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
     }
 
     let horizontalLine: UIView = .build { line in
@@ -59,18 +73,13 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
     }
 
     // Connection Info view
-    let connectionView: UIView = .build { view in
-        view.backgroundColor = .white
-        view.layer.cornerRadius = ETPMenuUX.UX.viewCornerRadius
-    }
+    let connectionView = ETPSectionView(frame: .zero)
 
     let connectionImage: UIImageView = .build { image in
         image.contentMode = .scaleAspectFit
         image.clipsToBounds = true
         image.layer.masksToBounds = true
         image.layer.cornerRadius = 5
-        image.image = UIImage(named: "lock_verified")
-        image.tintColor = UIColor.Photon.Grey50
     }
 
     let connectionLabel: UILabel = .build { label in
@@ -78,58 +87,66 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
     }
 
     let connectionDetailArrow: UIImageView = .build { image in
-        image.backgroundColor = .green
+        image.image = UIImage(imageLiteralResourceName: "goBack").withRenderingMode(.alwaysTemplate)
+        image.transform = CGAffineTransform(rotationAngle: .pi)
     }
 
-    let connectionButton: UIButton = .build { button in
-        button.addTarget(self, action: #selector(connectionDetailsTapped), for: .touchUpInside)
-    }
+    let connectionButton: UIButton = .build { button in }
 
     // TrackingProtection toggle View
     let toggleContainer: UIView = .build { view in
         view.backgroundColor = .clear
     }
 
-    let toggleView: UIView = .build { view in
-        view.backgroundColor = .white
-        view.layer.cornerRadius = ETPMenuUX.UX.viewCornerRadius
-    }
+    let toggleView: UIView = ETPSectionView(frame: .zero)
 
     let toggleLabel: UILabel = .build { label in
         label.font = ETPMenuUX.Fonts.viewTitleLabels
     }
 
-    let toggleSwitch: UIView = .build { toggleSwitch in
+    let toggleSwitch: UISwitch = .build { toggleSwitch in
+        toggleSwitch.isOn = true
+        toggleSwitch.isEnabled = true
+        toggleSwitch.onTintColor = .systemBlue
     }
 
     let toggleStatusLabel: UILabel = .build { label in
-        label.backgroundColor = .green
         label.font = ETPMenuUX.Fonts.detailsLabel
     }
 
     // Protection setting view
-    let protectionView: UIView = .build { view in
-        view.backgroundColor = .white
-        view.layer.cornerRadius = ETPMenuUX.UX.viewCornerRadius
-    }
+    let protectionView: UIView = ETPSectionView(frame: .zero)
 
-    let protectionButton: UIButton = .build { button in
-        button.setTitle("Test button title", for: .normal)
+    var protectionButton: UIButton = .build { button in
+        button.setTitle(Strings.TPProtectionSettings, for: .normal)
         button.titleLabel?.font = ETPMenuUX.Fonts.viewTitleLabels
         button.setTitleColor(.systemBlue, for: .normal)
         button.contentHorizontalAlignment = .left
-        button.addTarget(self, action: #selector(protectionSettingsTapped), for: .touchUpInside)
     }
 
     var constraints = [NSLayoutConstraint]()
 
     // MARK: - Variables
 
-    var viewModel: EnhancedTrackingProtectionMenuVM?
+    var viewModel: EnhancedTrackingProtectionMenuVM
     var hasSetPointOrigin = false
     var pointOrigin: CGPoint?
 
     // MARK: - View lifecycle
+
+    init(viewModel: EnhancedTrackingProtectionMenuVM) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        print("ROUX - VC out!")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -157,6 +174,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
         setupConnectionStatusView()
         setupToggleView()
         setupProtectionSettingsView()
+        setupViewActions()
 
         NSLayoutConstraint.activate(constraints)
     }
@@ -175,6 +193,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
 
             siteDomainLabel.centerYAnchor.constraint(equalTo: heroImage.centerYAnchor),
             siteDomainLabel.leadingAnchor.constraint(equalTo: heroImage.trailingAnchor, constant: 8),
+            siteDomainLabel.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: -15),
 
             closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -ETPMenuUX.UX.gutterDistance),
             closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: ETPMenuUX.UX.gutterDistance),
@@ -194,6 +213,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
         // Connection View
         connectionView.addSubview(connectionImage)
         connectionView.addSubview(connectionLabel)
+        connectionView.addSubview(connectionDetailArrow)
         connectionView.addSubview(connectionButton)
         view.addSubview(connectionView)
 
@@ -210,6 +230,12 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
 
             connectionLabel.leadingAnchor.constraint(equalTo: connectionImage.trailingAnchor, constant: ETPMenuUX.UX.gutterDistance),
             connectionLabel.centerYAnchor.constraint(equalTo: connectionView.centerYAnchor),
+            connectionLabel.trailingAnchor.constraint(equalTo: connectionDetailArrow.leadingAnchor, constant: -10),
+
+            connectionDetailArrow.trailingAnchor.constraint(equalTo: connectionView.trailingAnchor, constant: -ETPMenuUX.UX.gutterDistance),
+            connectionDetailArrow.centerYAnchor.constraint(equalTo: connectionView.centerYAnchor),
+            connectionDetailArrow.heightAnchor.constraint(equalToConstant: 12),
+            connectionDetailArrow.widthAnchor.constraint(equalToConstant: 7),
 
             connectionButton.leadingAnchor.constraint(equalTo: connectionView.leadingAnchor),
             connectionButton.topAnchor.constraint(equalTo: connectionView.topAnchor),
@@ -224,6 +250,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
         toggleView.addSubview(toggleLabel)
         toggleContainer.addSubview(toggleView)
         toggleContainer.addSubview(toggleStatusLabel)
+        toggleContainer.addSubview(toggleSwitch)
         view.addSubview(toggleContainer)
 
         let toggleConstraints = [
@@ -239,6 +266,9 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
 
             toggleLabel.leadingAnchor.constraint(equalTo: toggleView.leadingAnchor, constant: ETPMenuUX.UX.gutterDistance),
             toggleLabel.centerYAnchor.constraint(equalTo: toggleView.centerYAnchor),
+
+            toggleSwitch.centerYAnchor.constraint(equalTo: toggleView.centerYAnchor),
+            toggleSwitch.trailingAnchor.constraint(equalTo: toggleView.trailingAnchor, constant: -ETPMenuUX.UX.gutterDistance),
 
             toggleStatusLabel.leadingAnchor.constraint(equalTo: toggleLabel.leadingAnchor),
             toggleStatusLabel.topAnchor.constraint(equalTo: toggleView.bottomAnchor, constant: 6)
@@ -267,12 +297,28 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
     }
 
     private func updateViewDetails() {
-        heroImage.image = viewModel?.favIcon
-        siteDomainLabel.text = viewModel?.websiteTitle
-        let statusString: String = (1 == 1) ? .ProtectionStatusSheetConnectionSecure : .ProtectionStatusSheetConnectionInsecure
-        connectionLabel.text = statusString
+        if let favIconURL = viewModel.favIcon {
+            heroImage.sd_setImage(with: favIconURL, placeholderImage: UIImage(named: "defaultFavicon"), options: [], completed: nil)
+        } else {
+            heroImage.image = UIImage(named: "defaultFavicon")!
+            heroImage.tintColor = UIColor.theme.etpMenu.defaultImageTints
+        }
+
+        siteDomainLabel.text = viewModel.websiteTitle
+
+        connectionLabel.text = viewModel.connectionStatusString
+        connectionImage.image = viewModel.connectionStatusImage
+
+        toggleSwitch.isOn = viewModel.isETPEnabled
         toggleLabel.text = Strings.TrackingProtectionEnableTitle
-        toggleStatusLabel.text = "another soooooo"
+        toggleStatusLabel.text = toggleSwitch.isOn ? Strings.ETPOn : Strings.ETPOff
+    }
+
+    private func setupViewActions() {
+        closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
+        connectionButton.addTarget(self, action: #selector(connectionDetailsTapped), for: .touchUpInside)
+        toggleSwitch.addTarget(self, action: #selector(trackingProtectionToggleTapped), for: .valueChanged)
+        protectionButton.addTarget(self, action: #selector(protectionSettingsTapped), for: .touchUpInside)
     }
 
     // MARK: - Button actions
@@ -282,14 +328,21 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
     }
 
     @objc func connectionDetailsTapped() {
-        let detailsVC = EnhancedTrackingProtectionDetailsVC()
-        detailsVC.modalPresentationStyle = .fullScreen
-        detailsVC.modalTransitionStyle = .coverVertical
+        let detailsVC = EnhancedTrackingProtectionDetailsVC(viewModel: viewModel.getDetailsViewModel(withCachedImage: heroImage.image))
+        detailsVC.modalPresentationStyle = .pageSheet
         self.present(detailsVC, animated: true)
     }
 
     @objc func trackingProtectionToggleTapped() {
-
+        let toggleStatus = toggleSwitch.isOn
+        switch toggleStatus {
+        case true:
+            viewModel.setTracking(to: toggleStatus)
+            toggleStatusLabel.text = Strings.ETPOn
+        case false:
+            viewModel.setTracking(to: toggleStatus)
+            toggleStatusLabel.text = Strings.ETPOff
+        }
     }
 
     @objc func protectionSettingsTapped() {
@@ -350,11 +403,20 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
 }
 
 extension EnhancedTrackingProtectionMenuVC: Themeable {
-     @objc func applyTheme() {
-         if #available(iOS 13.0, *) {
-             overrideUserInterfaceStyle =  ThemeManager.instance.userInterfaceStyle
-         }
-         view.backgroundColor = UIColor.theme.etpMenu.background
-         setNeedsStatusBarAppearanceUpdate()
+    @objc func applyTheme() {
+        if #available(iOS 13.0, *) {
+            overrideUserInterfaceStyle =  ThemeManager.instance.userInterfaceStyle
+        }
+        view.backgroundColor = UIColor.theme.etpMenu.background
+        connectionView.backgroundColor = UIColor.theme.etpMenu.sectionColor
+        connectionImage.image = viewModel.connectionStatusImage
+        connectionDetailArrow.tintColor = UIColor.theme.etpMenu.defaultImageTints
+        if viewModel.connectionSecure {
+            connectionImage.tintColor = UIColor.theme.etpMenu.defaultImageTints
+        }
+        toggleView.backgroundColor = UIColor.theme.etpMenu.sectionColor
+        toggleStatusLabel.textColor = UIColor.theme.etpMenu.subtextColor
+        protectionView.backgroundColor = UIColor.theme.etpMenu.sectionColor
+        setNeedsStatusBarAppearanceUpdate()
      }
  }

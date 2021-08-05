@@ -7,3 +7,15 @@
 //
 
 import Foundation
+
+struct EnhancedTrackingProtectionDetailsVM {
+    let topLevelDomain: String
+    let title: String
+    let image: UIImage
+    let URL: String
+
+    let lockIcon: UIImage
+    let connectionStatusMessage: String
+    let connectionVerifier: String
+    let connectionSecure: Bool
+}

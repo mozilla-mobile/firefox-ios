@@ -168,10 +168,9 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
         if let tab = self.tabManager.selectedTab {
             // ROUX
             let etpViewModel = EnhancedTrackingProtectionMenuVM(tab: tab, profile: profile)
-            let etpVC = EnhancedTrackingProtectionMenuVC()
-            etpVC.modalPresentationStyle = .overCurrentContext
-//            etpVC.transitioningDelegate = self
-            etpVC.viewModel = etpViewModel
+            let etpVC = EnhancedTrackingProtectionMenuVC(viewModel: etpViewModel)
+            etpVC.modalPresentationStyle = .custom
+            etpVC.transitioningDelegate = self
 
             self.present(etpVC, animated: true, completion: nil)
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)

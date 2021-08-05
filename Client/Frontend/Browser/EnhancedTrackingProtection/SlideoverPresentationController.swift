@@ -24,6 +24,10 @@ class SlideOverPresentationController: UIPresentationController {
         self.blurEffectView.addGestureRecognizer(tapGestureRecognizer)
     }
 
+    deinit {
+        print("ROUX - transition out!")
+    }
+
     override var frameOfPresentedViewInContainerView: CGRect {
         let yPosition = self.containerView!.frame.height - SlideOverUXConstants.ETPMenuHeight
         var xPosition: CGFloat = 0
