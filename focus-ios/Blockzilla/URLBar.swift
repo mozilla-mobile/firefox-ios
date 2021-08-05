@@ -163,10 +163,6 @@ class URLBar: UIView {
         cancelButton.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
         cancelButton.addTarget(self, action: #selector(cancelPressed), for: .touchUpInside)
         cancelButton.accessibilityIdentifier = "URLBar.cancelButton"
-        cancelButton.contentEdgeInsets = UIEdgeInsets(top: UIConstants.layout.urlBarMargin,
-                                                      left: UIConstants.layout.urlBarMargin,
-                                                      bottom: UIConstants.layout.urlBarMargin,
-                                                      right: UIConstants.layout.urlBarMargin)
         addSubview(cancelButton)
 
         pageActionsButton.isHidden = true
