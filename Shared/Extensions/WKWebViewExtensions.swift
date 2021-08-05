@@ -7,7 +7,7 @@ import WebKit
 
 // Temporary flag to test the new sandboxed javascript environment
 // in iOS 14
-private let USE_NEW_SANDBOX_APIS = false
+private let USE_NEW_SANDBOX_APIS = true
 
 extension WKWebView {
     
