@@ -26,15 +26,23 @@ class SlideOverPresentationController: UIPresentationController {
 
     override var frameOfPresentedViewInContainerView: CGRect {
         let yPosition = self.containerView!.frame.height - SlideOverUXConstants.ETPMenuHeight
-        return CGRect(origin: CGPoint(x: 0, y: yPosition),
-                      size: CGSize(width: self.containerView!.frame.width, height: SlideOverUXConstants.ETPMenuHeight))
+        var xPosition: CGFloat = 0
+        var width: CGFloat = 0
+        if UIApplication.shared.statusBarOrientation.isLandscape {
+            width = 600
+            xPosition = self.containerView!.frame.width/2 - (width/2)
+        } else {
+            width = self.containerView!.frame.width
+        }
+        return CGRect(origin: CGPoint(x: xPosition, y: yPosition),
+                      size: CGSize(width: width, height: SlideOverUXConstants.ETPMenuHeight))
     }
 
     override func presentationTransitionWillBegin() {
         self.blurEffectView.alpha = 0
         self.containerView?.addSubview(blurEffectView)
         self.presentedViewController.transitionCoordinator?.animate(alongsideTransition: { (UIViewControllerTransitionCoordinatorContext) in
-            self.blurEffectView.alpha = 0.7
+            self.blurEffectView.alpha = 0.5
         }, completion: { (UIViewControllerTransitionCoordinatorContext) in })
     }
 

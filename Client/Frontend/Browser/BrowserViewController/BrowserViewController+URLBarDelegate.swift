@@ -169,8 +169,8 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
             // ROUX
             let etpViewModel = EnhancedTrackingProtectionMenuVM(tab: tab, profile: profile)
             let etpVC = EnhancedTrackingProtectionMenuVC()
-            etpVC.modalPresentationStyle = .custom
-            etpVC.transitioningDelegate = self
+            etpVC.modalPresentationStyle = .overCurrentContext
+//            etpVC.transitioningDelegate = self
             etpVC.viewModel = etpViewModel
 
             self.present(etpVC, animated: true, completion: nil)
