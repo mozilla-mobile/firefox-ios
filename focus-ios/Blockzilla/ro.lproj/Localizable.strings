@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ îți oferă controlul.";
 
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "Deschide în %@";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "Autentifică-te pentru a reveni la %@";
 
@@ -121,6 +124,9 @@
 /* Copy URL button in URL long press menu */
 "Browser.copyAddressLabel" = "Copiază adresa";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL copiat în clipboard";
+
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Copiază";
 
@@ -142,8 +148,29 @@
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Oprește";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Selectează bara adresei";
+
 /* Label on button to cancel edits */
 "Cancel" = "Renunță";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "Linkul pe care l-ai copiat: %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "Copiază imaginea";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "Copiază linkul";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "Linkul copiat:";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "Salvează imaginea";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "Partajează linkul";
 
 /* Label on button to complete edits */
 "Done" = "Terminat";
@@ -162,6 +189,9 @@
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "Deschide";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ vrea să deschidă %2$@";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "Apelează";
@@ -226,6 +256,15 @@
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
 
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "Acest lucru îți permite să salvezi imaginea în Rolă film";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "Deschide Configurări";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "„%@” dorește să îți acceseze fotografiile";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "Cere versiune de desktop";
 
@@ -259,36 +298,6 @@
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "Afișezi sugestiile de căutare?";
 
-/* Text for button to add another search engine in settings */
-"Settings.Search.AddSearchEngineButton" = "Adaugă alt motor de căutare";
-
-/* Text for button to add another search engine in settings with the + prefix */
-"Settings.Search.AddSearchEngineButtonWithPlus" = "+ adaugă alt motor de căutare";
-
-/* Title on add search engine settings screen */
-"Settings.Search.AddSearchEngineTitle" = "Adaugă un motor de căutare";
-
-/* Header for rows of installed search engines */
-"Settings.Search.InstalledSearchEngines" = "MOTOARE DE CĂUTARE INSTALATE";
-
-/* Label for input field for the name of the search engine to be added */
-"Settings.Search.NameToDisplay" = "Nume de afișat";
-
-/* Toast displayed after adding a search engine */
-"Settings.Search.NewSearchEngineAdded" = "Motor nou de căutare adăugat.";
-
-/* Label for button to bring deleted default engines back */
-"Settings.Search.RestoreEngine" = "Restaurează motoarele de căutare implicite";
-
-/* Placeholder text for input of new search engine name */
-"Settings.Search.SearchEngineName" = "Numele motorului de căutare";
-
-/* Label for input of search engine template */
-"Settings.Search.SearchTemplate" = "Text de căutare spre utilizare";
-
-/* Placeholder text for input of new search engine template */
-"Settings.Search.SearchTemplatePlaceholder" = "Lipește sau introdu formatul de căutare. Dacă este necesar, înlocuiește termenul de căutare cu: %s.";
-
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Completare automată de URL-uri";
 
@@ -318,6 +327,39 @@
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Setări";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Adaugă alt motor de căutare";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ adaugă alt motor de căutare";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Adaugă un motor de căutare";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "MOTOARE DE CĂUTARE INSTALATE";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Nume de afișat";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Motor nou de căutare adăugat.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Restaurează motoarele de căutare implicite";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Numele motorului de căutare";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Text de căutare spre utilizare";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Exemplu: exempludemotordecăutare.com/search/?q=%s";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Lipește sau introdu formatul de căutare. Dacă este necesar, înlocuiește termenul de căutare cu: %s.";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Motor de căutare";
@@ -403,6 +445,12 @@
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "SCURTĂTURI SIRI";
 
+/* Text for a share button */
+"share" = "Împărtășește";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Copiază adresa";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Caută în pagină";
 
@@ -454,84 +502,6 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "Adresa de deschis";
 
-/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
-"URL.addToAutocompleteLabel" = "Adaugă un link pentru completare automată";
-
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "Renunță";
-
-/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
-"URL.contextMenu" = "Lipește și accesează";
-
-/* Erase button in the URL bar */
-"URL.eraseButtonLabel" = "ȘTERGE";
-
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "Istoricul de navigare a fost șters.";
-
-/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
-"URL.findOnPageLabel" = "Caută în pagină: %@";
-
-/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
-"URL.paste" = "Lipește";
-
-/* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "Caută sau introdu adresa";
-
-/* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "Caută &@";
-
-/* Text for the URL bar showing the number of trackers blocked on a webpage. */
-"URL.trackersBlockedLabel" = "Elemente de urmărire blocate";
-
-/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
-"actionSheet.openIn" = "Deschide în %@";
-
-/* Toast displayed after a URL has been copied to the clipboard */
-"browser.copyAddressToast" = "URL copiat în clipboard";
-
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
-"browserShortcutDescription.selectLocationBar" = "Selectează bara adresei";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "Linkul pe care l-ai copiat: %@";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "Copiază imaginea";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "Copiază linkul";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "Linkul copiat:";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "Salvează imaginea";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "Partajează linkul";
-
-/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
-"externalAppLinkWithAppName.messageTitle" = "%1$@ vrea să deschidă %2$@";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "Acest lucru îți permite să salvezi imaginea în Rolă film";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "Deschide Configurări";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "„%@” dorește să îți acceseze fotografiile";
-
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Exemplu: exempludemotordecăutare.com/search/?q=%s";
-
-/* Text for a share button */
-"share" = "Împărtășește";
-
-/* Text for the share menu when a user wants to copy a URL. */
-"shareMenu.copyAddress" = "Copiază adresa";
-
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Folosește Touch ID pentru a reveni la %@";
 
@@ -564,4 +534,35 @@
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.trackerDescriptionLabel" = "Alege dacă %@ blochează elementele de urmărire publicitare, analitice, ale rețelelor sociale și altele.";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "Adaugă un link pentru completare automată";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "Renunță";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Lipește și accesează";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "ȘTERGE";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "Istoricul de navigare a fost șters.";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Caută în pagină: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Lipește";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Caută sau introdu adresa";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Caută &@";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "Elemente de urmărire blocate";
+
 

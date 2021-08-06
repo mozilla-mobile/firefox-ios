@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ kontrolü size verir.";
 
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "%@ ile aç";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "%@’a dönmek için kimliğinizi doğrulayın";
 
@@ -121,6 +124,9 @@
 /* Copy URL button in URL long press menu */
 "Browser.copyAddressLabel" = "Adresi kopyala";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "Adres panoya kopyalandı";
+
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Kopyala";
 
@@ -142,8 +148,29 @@
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Durdur";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Konum çubuğunu seç";
+
 /* Label on button to cancel edits */
 "Cancel" = "Vazgeç";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "Kopyaladığınız bağlantı: %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "Resmi kopyala";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "Bağlantıyı kopyala";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "Kopyaladığınız bağlantı:";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "Resmi kaydet";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "Bağlantıyı paylaş";
 
 /* Label on button to complete edits */
 "Done" = "Tamam";
@@ -162,6 +189,9 @@
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "Aç";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@, %2$@ uygulamasını açmak istiyor";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "Ara";
@@ -226,6 +256,15 @@
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
 
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "Resimleri Film Rulonuza kaydetmenizi sağlar";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "Ayarları aç";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "“%@” fotoğraflarınıza erişmek istiyor";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "Masaüstü sitesini iste";
 
@@ -259,36 +298,6 @@
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "Arama önerileri gösterilsin mi?";
 
-/* Text for button to add another search engine in settings */
-"Settings.Search.AddSearchEngineButton" = "Başka bir arama motoru ekle";
-
-/* Text for button to add another search engine in settings with the + prefix */
-"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Başka bir arama motoru ekle";
-
-/* Title on add search engine settings screen */
-"Settings.Search.AddSearchEngineTitle" = "Arama Motoru Ekle";
-
-/* Header for rows of installed search engines */
-"Settings.Search.InstalledSearchEngines" = "KAYITLI ARAMA MOTORLARI";
-
-/* Label for input field for the name of the search engine to be added */
-"Settings.Search.NameToDisplay" = "Görünecek ad";
-
-/* Toast displayed after adding a search engine */
-"Settings.Search.NewSearchEngineAdded" = "Yeni arama motoru eklendi.";
-
-/* Label for button to bring deleted default engines back */
-"Settings.Search.RestoreEngine" = "Varsayılan arama motorlarını geri yükle";
-
-/* Placeholder text for input of new search engine name */
-"Settings.Search.SearchEngineName" = "Arama motoru adı";
-
-/* Label for input of search engine template */
-"Settings.Search.SearchTemplate" = "Kullanılacak arama dizgisi";
-
-/* Placeholder text for input of new search engine template */
-"Settings.Search.SearchTemplatePlaceholder" = "Arama dizgisini yapıştırın veya yazın. Gerekirse aranan terimin yerine %s yazın.";
-
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Otomatik adres tamamlama";
 
@@ -318,6 +327,39 @@
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Ayarlar";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Başka bir arama motoru ekle";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Başka bir arama motoru ekle";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Arama Motoru Ekle";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "KAYITLI ARAMA MOTORLARI";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Görünecek ad";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Yeni arama motoru eklendi.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Varsayılan arama motorlarını geri yükle";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Arama motoru adı";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Kullanılacak arama dizgisi";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Örnek: ornekarama.com/search/?q=%s";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Arama dizgisini yapıştırın veya yazın. Gerekirse aranan terimin yerine %s yazın.";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Arama motoru";
@@ -403,6 +445,12 @@
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "SIRI KESTİRMELERİ";
 
+/* Text for a share button */
+"share" = "Paylaş";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Adresi kopyala";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Sayfada Bul";
 
@@ -457,84 +505,6 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "Açılacak adres";
 
-/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
-"URL.addToAutocompleteLabel" = "Bağlantıyı otomatik tamamlamaya ekle";
-
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "İptal";
-
-/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
-"URL.contextMenu" = "Yapıştır ve git";
-
-/* Erase button in the URL bar */
-"URL.eraseButtonLabel" = "SİL";
-
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "Gezinti geçmişiniz silinmiştir.";
-
-/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
-"URL.findOnPageLabel" = "Sayfada bul: %@";
-
-/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
-"URL.paste" = "Yapıştır";
-
-/* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "Arama yapın veya adres yazın";
-
-/* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "%@ terimini ara";
-
-/* Text for the URL bar showing the number of trackers blocked on a webpage. */
-"URL.trackersBlockedLabel" = "Engellenen takipçi";
-
-/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
-"actionSheet.openIn" = "%@ ile aç";
-
-/* Toast displayed after a URL has been copied to the clipboard */
-"browser.copyAddressToast" = "Adres panoya kopyalandı";
-
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
-"browserShortcutDescription.selectLocationBar" = "Konum çubuğunu seç";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "Kopyaladığınız bağlantı: %@";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "Resmi kopyala";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "Bağlantıyı kopyala";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "Kopyaladığınız bağlantı:";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "Resmi kaydet";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "Bağlantıyı paylaş";
-
-/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
-"externalAppLinkWithAppName.messageTitle" = "%1$@, %2$@ uygulamasını açmak istiyor";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "Resimleri Film Rulonuza kaydetmenizi sağlar";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "Ayarları aç";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "“%@” fotoğraflarınıza erişmek istiyor";
-
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Örnek: ornekarama.com/search/?q=%s";
-
-/* Text for a share button */
-"share" = "Paylaş";
-
-/* Text for the share menu when a user wants to copy a URL. */
-"shareMenu.copyAddress" = "Adresi kopyala";
-
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "%@’a dönmek için Touch ID’yi kullanın";
 
@@ -570,4 +540,35 @@
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.trackerDescriptionLabel" = "%@’un reklam ve analitik takipçileri ile sosyal ve diğer takipçileri engelleyip engellemeyeceğini seçin.";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "Bağlantıyı otomatik tamamlamaya ekle";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "İptal";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Yapıştır ve git";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "SİL";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "Gezinti geçmişiniz silinmiştir.";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Sayfada bul: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Yapıştır";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Arama yapın veya adres yazın";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "%@ terimini ara";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "Engellenen takipçi";
+
 

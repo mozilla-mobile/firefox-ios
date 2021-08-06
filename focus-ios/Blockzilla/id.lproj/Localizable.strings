@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ menempatkan Anda dalam kontrol.";
 
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "Buka di %@";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "Otentikasi untuk kembali ke %@";
 
@@ -121,6 +124,9 @@
 /* Copy URL button in URL long press menu */
 "Browser.copyAddressLabel" = "Salin Alamat";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL Disalin ke Papan Klip";
+
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Salin";
 
@@ -142,8 +148,29 @@
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Hentikan";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Pilih Bilah Lokasi";
+
 /* Label on button to cancel edits */
 "Cancel" = "Batal";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "Tautan Anda salin: %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "Salin Gambar";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "Salin Tautan";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "Tautan yang Anda salin:";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "Simpan Gambar";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "Bagikan Tautan";
 
 /* Label on button to complete edits */
 "Done" = "Selesai";
@@ -162,6 +189,9 @@
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "Buka";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ ingin membuka %2$@";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "Panggil";
@@ -226,6 +256,15 @@
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
 
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "Ini memungkinkan Anda menyimpan gambar di Camera Roll";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "Buka Setelan";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "“%@” Meminta Akses ke Foto Anda";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "Minta Situs Desktop";
 
@@ -259,36 +298,6 @@
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "Tampilkan Saran Pencarian?";
 
-/* Text for button to add another search engine in settings */
-"Settings.Search.AddSearchEngineButton" = "Tambahkan Mesin Pencari Lainnya";
-
-/* Text for button to add another search engine in settings with the + prefix */
-"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Tambahkan Mesin Pencari Lainnya";
-
-/* Title on add search engine settings screen */
-"Settings.Search.AddSearchEngineTitle" = "Tambah Mesin Pencari";
-
-/* Header for rows of installed search engines */
-"Settings.Search.InstalledSearchEngines" = "MESIN PENCARI TERPASANG";
-
-/* Label for input field for the name of the search engine to be added */
-"Settings.Search.NameToDisplay" = "Nama untuk ditampilkan";
-
-/* Toast displayed after adding a search engine */
-"Settings.Search.NewSearchEngineAdded" = "Mesin Pencari Baru Ditambahkan.";
-
-/* Label for button to bring deleted default engines back */
-"Settings.Search.RestoreEngine" = "Pulihkan Mesin Pencari Bawaan";
-
-/* Placeholder text for input of new search engine name */
-"Settings.Search.SearchEngineName" = "Nama mesin pencari";
-
-/* Label for input of search engine template */
-"Settings.Search.SearchTemplate" = "String pencarian untuk digunakan";
-
-/* Placeholder text for input of new search engine template */
-"Settings.Search.SearchTemplatePlaceholder" = "Tempel atau masukkan string pencarian. Jika diperlukan, ganti istilah pencarian dengan: %s.";
-
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Lengkapi-otomatis URL";
 
@@ -318,6 +327,39 @@
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Pengaturan";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Tambahkan Mesin Pencari Lainnya";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Tambahkan Mesin Pencari Lainnya";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Tambah Mesin Pencari";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "MESIN PENCARI TERPASANG";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Nama untuk ditampilkan";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Mesin Pencari Baru Ditambahkan.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Pulihkan Mesin Pencari Bawaan";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Nama mesin pencari";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "String pencarian untuk digunakan";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Contoh: contohmesinpencari.id/search/?q=%s";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Tempel atau masukkan string pencarian. Jika diperlukan, ganti istilah pencarian dengan: %s.";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Mesin Pencari";
@@ -403,6 +445,12 @@
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "PINTASAN SIRI";
 
+/* Text for a share button */
+"share" = "Bagikan";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Salin Alamat";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Temukan di Laman";
 
@@ -457,84 +505,6 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "URL untuk dibuka";
 
-/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
-"URL.addToAutocompleteLabel" = "Tambahkan tautan untuk dilengkapi secara otomatis";
-
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "Batal";
-
-/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
-"URL.contextMenu" = "Rekat & Kunjungi";
-
-/* Erase button in the URL bar */
-"URL.eraseButtonLabel" = "HAPUS";
-
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "Riwayat penjelajahan Anda sudah dihapus.";
-
-/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
-"URL.findOnPageLabel" = "Temukan di laman: %@";
-
-/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
-"URL.paste" = "Tempel";
-
-/* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "Cari atau masukkan alamat";
-
-/* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "Cari %@";
-
-/* Text for the URL bar showing the number of trackers blocked on a webpage. */
-"URL.trackersBlockedLabel" = "Pelacak terblokir";
-
-/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
-"actionSheet.openIn" = "Buka di %@";
-
-/* Toast displayed after a URL has been copied to the clipboard */
-"browser.copyAddressToast" = "URL Disalin ke Papan Klip";
-
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
-"browserShortcutDescription.selectLocationBar" = "Pilih Bilah Lokasi";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "Tautan Anda salin: %@";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "Salin Gambar";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "Salin Tautan";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "Tautan yang Anda salin:";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "Simpan Gambar";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "Bagikan Tautan";
-
-/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
-"externalAppLinkWithAppName.messageTitle" = "%1$@ ingin membuka %2$@";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "Ini memungkinkan Anda menyimpan gambar di Camera Roll";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "Buka Setelan";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "“%@” Meminta Akses ke Foto Anda";
-
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Contoh: contohmesinpencari.id/search/?q=%s";
-
-/* Text for a share button */
-"share" = "Bagikan";
-
-/* Text for the share menu when a user wants to copy a URL. */
-"shareMenu.copyAddress" = "Salin Alamat";
-
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Gunakan Touch ID untuk kembali ke %@";
 
@@ -570,4 +540,35 @@
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.trackerDescriptionLabel" = "Pilih apakah %@ memblokir iklan, pelacak analitis, sosial, dan lainnya.";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "Tambahkan tautan untuk dilengkapi secara otomatis";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "Batal";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Rekat & Kunjungi";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "HAPUS";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "Riwayat penjelajahan Anda sudah dihapus.";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Temukan di laman: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Tempel";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Cari atau masukkan alamat";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Cari %@";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "Pelacak terblokir";
+
 

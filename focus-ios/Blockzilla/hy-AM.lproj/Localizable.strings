@@ -40,6 +40,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@-ը տալիս է ձեզ կառավարում:";
 
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "Բացել %@-ում";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "Հավելել հարմարեցված URL";
 
@@ -106,8 +109,26 @@
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Կանգնեցնել";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Ընտրել տեղադրության գոտին";
+
 /* Label on button to cancel edits */
 "Cancel" = "Չեղարկել";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "Ձեր պատճենած հղումը՝ %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "Կրկնօրինակել Նկարը";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "Պատճենել հղումը";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "Պահպանել պատկերը";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "Համօգտագործել հղումը";
 
 /* Label on button to complete edits */
 "Done" = "Պատրաստ է";
@@ -126,6 +147,9 @@
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "Բացել";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1%@-ը ցանկանում է բացել %2%@-ը";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "Զանգ";
@@ -178,6 +202,15 @@
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari­";
 
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "Հնարավորություն է տալիս պահպանել Camera Roll-ը";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "Բացել կարգավորումները";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "“%@”-ը ցանկանում է մատչել ձեր լուսանկարները";
+
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Հպեք Safari, ընտրեք բովանդակության արգելափակիչներ";
 
@@ -192,6 +225,27 @@
 
 /* Save button label */
 "Save" = "Պահպանել";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "URL ինքնալրացում";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Բովանդակության այլ հետագծումների արգելափակումը կարող է ընդհատել որոշ տեսանյութեր և վեբ էջեր:";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "Ոչ, շնորհակալ եմ";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "Ես հասկանում եմ";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla-ն ձգտում է հավաքել միայն այն, ինչ պետք է՝ %1$s-ը լավարկելու համար:";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "Իմանալ ավելին";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Կարգավորումներ";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Ավելացնել որոնողական հանգույց";
@@ -220,29 +274,11 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Որոնել տողը՝ օգտագործելու համար";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Օրինակ՝ example.com/search/?q=%s";
+
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Տեղադրեք կամ մուտքագրեք որոնիչի տողը: Եթե անհրաժեշտ է՝ փոխարինեք որոնվող բառը հետևյալով՝ %s:";
-
-/* Title for the URL Autocomplete row */
-"Settings.autocompleteSection" = "URL ինքնալրացում";
-
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Բովանդակության այլ հետագծումների արգելափակումը կարող է ընդհատել որոշ տեսանյութեր և վեբ էջեր:";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Ոչ, շնորհակալ եմ";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Ես հասկանում եմ";
-
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSendUsageData" = "Mozilla-ն ձգտում է հավաքել միայն այն, ինչ պետք է՝ %1$s-ը լավարկելու համար:";
-
-/* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.learnMore" = "Իմանալ ավելին";
-
-/* Title for settings screen */
-"Settings.screenTitle" = "Կարգավորումներ";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Որոնիչներ";
@@ -307,63 +343,6 @@
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "Բացել %@-ում";
 
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "Չեղարկել";
-
-/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
-"URL.contextMenu" = "Տեղադրել և Առաջ";
-
-/* Erase button in the URL bar */
-"URL.eraseButtonLabel" = "ՋՆՋԵԼ";
-
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "Դիտարկումների պատմությունը ջնջվել է:";
-
-/* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "Մուտքագրեք կայքի հասցե կամ որոնում";
-
-/* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "Որոնել %@-ը ";
-
-/* Text for the URL bar showing the number of trackers blocked on a webpage. */
-"URL.trackersBlockedLabel" = "Արգելել հետագծումները";
-
-/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
-"actionSheet.openIn" = "Բացել %@-ում";
-
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
-"browserShortcutDescription.selectLocationBar" = "Ընտրել տեղադրության գոտին";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "Ձեր պատճենած հղումը՝ %@";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "Կրկնօրինակել Նկարը";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "Պատճենել հղումը";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "Պահպանել պատկերը";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "Համօգտագործել հղումը";
-
-/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
-"externalAppLinkWithAppName.messageTitle" = "%1%@-ը ցանկանում է բացել %2%@-ը";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "Հնարավորություն է տալիս պահպանել Camera Roll-ը";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "Բացել կարգավորումները";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "“%@”-ը ցանկանում է մատչել ձեր լուսանկարները";
-
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Օրինակ՝ example.com/search/?q=%s";
-
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Գովազդի արգելափակում";
 
@@ -390,4 +369,26 @@
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.trackerDescriptionLabel" = "Ընտրեք՝ %@-ը արգելափակի գովազդը, վերլուծական, սոցիալական, թե այլ հետագծումները:";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "Չեղարկել";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Տեղադրել և Առաջ";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "ՋՆՋԵԼ";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "Դիտարկումների պատմությունը ջնջվել է:";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Մուտքագրեք կայքի հասցե կամ որոնում";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Որոնել %@-ը ";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "Արգելել հետագծումները";
+
 

@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ ให้คุณได้ควบคุม";
 
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "เปิดใน %@";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "รับรองความถูกต้องเพื่อกลับสู่ %@";
 
@@ -121,6 +124,9 @@
 /* Copy URL button in URL long press menu */
 "Browser.copyAddressLabel" = "คัดลอกที่อยู่";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "คัดลอก URL ไปยังคลิปบอร์ดแล้ว";
+
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "คัดลอก";
 
@@ -142,8 +148,29 @@
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "หยุด";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "เลือกแถบตำแหน่งที่ตั้ง";
+
 /* Label on button to cancel edits */
 "Cancel" = "ยกเลิก";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "ลิงก์ที่คุณคัดลอก: %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "คัดลอกภาพ";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "คัดลอกลิงก์";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "ลิงก์ที่คุณคัดลอก:";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "บันทึกภาพ";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "แบ่งปันลิงก์";
 
 /* Label on button to complete edits */
 "Done" = "เสร็จสิ้น";
@@ -162,6 +189,9 @@
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "เปิด";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ ต้องการเปิด %2$@";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "โทร";
@@ -226,6 +256,15 @@
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
 
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "สิ่งนี้ช่วยให้คุณบันทึกภาพไปยังม้วนฟิล์มของคุณ";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "เปิดการตั้งค่า";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "“%@” ต้องการเข้าถึงรูปภาพของคุณ";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "ขอไซต์สำหรับเดสก์ท็อป";
 
@@ -259,36 +298,6 @@
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "แสดงข้อเสนอแนะการค้นหา?";
 
-/* Text for button to add another search engine in settings */
-"Settings.Search.AddSearchEngineButton" = "เพิ่มเครื่องมือค้นหาอื่น";
-
-/* Text for button to add another search engine in settings with the + prefix */
-"Settings.Search.AddSearchEngineButtonWithPlus" = "+ เพิ่มเครื่องมือค้นหาอื่น";
-
-/* Title on add search engine settings screen */
-"Settings.Search.AddSearchEngineTitle" = "เพิ่มเครื่องมือค้นหา";
-
-/* Header for rows of installed search engines */
-"Settings.Search.InstalledSearchEngines" = "เครื่องมือค้นหาที่ติดตั้งไว้";
-
-/* Label for input field for the name of the search engine to be added */
-"Settings.Search.NameToDisplay" = "ชื่อที่จะแสดงผล";
-
-/* Toast displayed after adding a search engine */
-"Settings.Search.NewSearchEngineAdded" = "เพิ่มเครื่องมือค้นหาใหม่แล้ว";
-
-/* Label for button to bring deleted default engines back */
-"Settings.Search.RestoreEngine" = "เรียกคืนเครื่องมือค้นหาเริ่มต้น";
-
-/* Placeholder text for input of new search engine name */
-"Settings.Search.SearchEngineName" = "ชื่อเครื่องมือค้นหา";
-
-/* Label for input of search engine template */
-"Settings.Search.SearchTemplate" = "สตริงการค้นหาที่จะใช้";
-
-/* Placeholder text for input of new search engine template */
-"Settings.Search.SearchTemplatePlaceholder" = "วางหรือป้อนสตริงการค้นหา หากจำเป็นให้แทนที่คำค้นหาด้วย: %s";
-
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "การเติม URL อัตโนมัติ";
 
@@ -318,6 +327,39 @@
 
 /* Title for settings screen */
 "Settings.screenTitle" = "การตั้งค่า";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "เพิ่มเครื่องมือค้นหาอื่น";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ เพิ่มเครื่องมือค้นหาอื่น";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "เพิ่มเครื่องมือค้นหา";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "เครื่องมือค้นหาที่ติดตั้งไว้";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "ชื่อที่จะแสดงผล";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "เพิ่มเครื่องมือค้นหาใหม่แล้ว";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "เรียกคืนเครื่องมือค้นหาเริ่มต้น";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "ชื่อเครื่องมือค้นหา";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "สตริงการค้นหาที่จะใช้";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "ตัวอย่าง: searchengineexample.com/search/?q=%s";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "วางหรือป้อนสตริงการค้นหา หากจำเป็นให้แทนที่คำค้นหาด้วย: %s";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "เครื่องมือค้นหา";
@@ -403,6 +445,12 @@
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "คำสั่งลัด SIRI";
 
+/* Text for a share button */
+"share" = "แบ่งปัน";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "คัดลอกที่อยู่";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "ค้นหาในหน้า";
 
@@ -457,84 +505,6 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "URL ที่จะเปิด";
 
-/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
-"URL.addToAutocompleteLabel" = "เพิ่มลิงก์ไปยังการเติมอัตโนมัติ";
-
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "ยกเลิก";
-
-/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
-"URL.contextMenu" = "วางแล้วไป";
-
-/* Erase button in the URL bar */
-"URL.eraseButtonLabel" = "ล้าง";
-
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "ล้างประวัติการท่องเว็บของคุณแล้ว";
-
-/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
-"URL.findOnPageLabel" = "ค้นหาในหน้า: %@";
-
-/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
-"URL.paste" = "วาง";
-
-/* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "ค้นหาหรือป้อนที่อยู่";
-
-/* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "ค้นหา %@";
-
-/* Text for the URL bar showing the number of trackers blocked on a webpage. */
-"URL.trackersBlockedLabel" = "ตัวติดตามที่ถูกปิดกั้น";
-
-/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
-"actionSheet.openIn" = "เปิดใน %@";
-
-/* Toast displayed after a URL has been copied to the clipboard */
-"browser.copyAddressToast" = "คัดลอก URL ไปยังคลิปบอร์ดแล้ว";
-
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
-"browserShortcutDescription.selectLocationBar" = "เลือกแถบตำแหน่งที่ตั้ง";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "ลิงก์ที่คุณคัดลอก: %@";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "คัดลอกภาพ";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "คัดลอกลิงก์";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "ลิงก์ที่คุณคัดลอก:";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "บันทึกภาพ";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "แบ่งปันลิงก์";
-
-/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
-"externalAppLinkWithAppName.messageTitle" = "%1$@ ต้องการเปิด %2$@";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "สิ่งนี้ช่วยให้คุณบันทึกภาพไปยังม้วนฟิล์มของคุณ";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "เปิดการตั้งค่า";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "“%@” ต้องการเข้าถึงรูปภาพของคุณ";
-
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "ตัวอย่าง: searchengineexample.com/search/?q=%s";
-
-/* Text for a share button */
-"share" = "แบ่งปัน";
-
-/* Text for the share menu when a user wants to copy a URL. */
-"shareMenu.copyAddress" = "คัดลอกที่อยู่";
-
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "ใช้ Touch ID เพื่อกลับสู่ %@";
 
@@ -570,4 +540,35 @@
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.trackerDescriptionLabel" = "เลือกว่าจะให้ %@ ปิดกั้นตัวติดตามของโฆษณา, การวิเคราะห์, สังคม และอื่น ๆ หรือไม่";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "เพิ่มลิงก์ไปยังการเติมอัตโนมัติ";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "ยกเลิก";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "วางแล้วไป";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "ล้าง";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "ล้างประวัติการท่องเว็บของคุณแล้ว";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "ค้นหาในหน้า: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "วาง";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "ค้นหาหรือป้อนที่อยู่";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "ค้นหา %@";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "ตัวติดตามที่ถูกปิดกั้น";
+
 

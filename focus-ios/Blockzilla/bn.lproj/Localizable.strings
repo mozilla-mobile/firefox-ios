@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ আপনাকে নিয়ন্ত্রণ দেয়।";
 
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "%@ অ্যাপে খুলুন";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "কাস্টম URL যোগ করুন";
 
@@ -124,8 +127,26 @@
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "থামুন";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "লোকেশান বার নির্বাচন করুন";
+
 /* Label on button to cancel edits */
 "Cancel" = "বাতিল";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "আপনি যে লিংক কপি করেছিলেন: %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "ছবি কপি করুন";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "লিংক কপি করুন";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "ছবি সংরক্ষণ করুন";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "লিঙ্ক শেয়ার করুন";
 
 /* Label on button to complete edits */
 "Done" = "সম্পন্ন";
@@ -144,6 +165,9 @@
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "খুলুন";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ %2$@কে খুলতে চাচ্ছে";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "কল";
@@ -208,6 +232,15 @@
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
 
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "এটি ছবিটিকে আপনার ক্যামেরা রোলের মধ্যে সেভ করতে অনুমতি দেয়";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "সেটিংস্‌ খুলুন";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "“%@” আপনার ছবিতে প্রবেশাধিকার চায়";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "ডেস্কটপ সাইটের জন্য অনুরোধ করুন";
 
@@ -231,6 +264,27 @@
 
 /* Label for enable option on search suggestions prompt */
 "SearchSuggestions.promptEnable" = "হ্যাঁ";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "URL স্বয়ংসম্পূর্ণ";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "অন্যান্য কন্টেন্ট ট্রাকারদেরকে অবরুদ্ধ করা হলে কিছু ভিডিও এবং ওয়েব পেজে সমস্যা হতে পারে।";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "না, ধন্যবাদ";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "আমি বুঝেছি";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla এর প্রচেষ্টা হচ্ছে অত্যাবশ্যকীয় এবং প্রয়োজনীয় তথ্য ও উপাত্ত সংগ্রহ করে, সকলের জন্যে %@ এর আরও উন্নত সংস্করণ তৈরী করা।";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "আরও জানুন।";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "সেটিংস";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "অন্য আরেকটি সার্চ ইঞ্জিন যোগ করুন";
@@ -259,26 +313,8 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "অনুসন্ধানের জন্যে স্ট্রিং";
 
-/* Title for the URL Autocomplete row */
-"Settings.autocompleteSection" = "URL স্বয়ংসম্পূর্ণ";
-
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "অন্যান্য কন্টেন্ট ট্রাকারদেরকে অবরুদ্ধ করা হলে কিছু ভিডিও এবং ওয়েব পেজে সমস্যা হতে পারে।";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "না, ধন্যবাদ";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "আমি বুঝেছি";
-
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSendUsageData" = "Mozilla এর প্রচেষ্টা হচ্ছে অত্যাবশ্যকীয় এবং প্রয়োজনীয় তথ্য ও উপাত্ত সংগ্রহ করে, সকলের জন্যে %@ এর আরও উন্নত সংস্করণ তৈরী করা।";
-
-/* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.learnMore" = "আরও জানুন।";
-
-/* Title for settings screen */
-"Settings.screenTitle" = "সেটিংস";
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "উদাহরণ: searchengineexample.com/search/?q=%s";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "সার্চ ইঞ্জিন";
@@ -343,63 +379,6 @@
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "%@ অ্যাপে খুলুন";
 
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "বাতিল";
-
-/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
-"URL.contextMenu" = "পেস্ট করুন এবং যান";
-
-/* Erase button in the URL bar */
-"URL.eraseButtonLabel" = "মুছুন";
-
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "আপনার ব্রাউজিংয়ের পূর্ববর্তী তথ্য মুছে ফেলা হয়েছে।";
-
-/* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "অনুসন্ধান করুন বা ঠিকানা লিখুন";
-
-/* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "%@ এর জন্যে অনুসন্ধান করুন";
-
-/* Text for the URL bar showing the number of trackers blocked on a webpage. */
-"URL.trackersBlockedLabel" = "ট্র্যাকার ব্লক করা হয়েছে";
-
-/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
-"actionSheet.openIn" = "%@ অ্যাপে খুলুন";
-
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
-"browserShortcutDescription.selectLocationBar" = "লোকেশান বার নির্বাচন করুন";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "আপনি যে লিংক কপি করেছিলেন: %@";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "ছবি কপি করুন";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "লিংক কপি করুন";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "ছবি সংরক্ষণ করুন";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "লিঙ্ক শেয়ার করুন";
-
-/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
-"externalAppLinkWithAppName.messageTitle" = "%1$@ %2$@কে খুলতে চাচ্ছে";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "এটি ছবিটিকে আপনার ক্যামেরা রোলের মধ্যে সেভ করতে অনুমতি দেয়";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "সেটিংস্‌ খুলুন";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "“%@” আপনার ছবিতে প্রবেশাধিকার চায়";
-
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "উদাহরণ: searchengineexample.com/search/?q=%s";
-
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "ট্র্যাকার যোগ করুন";
 
@@ -426,4 +405,26 @@
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.trackerDescriptionLabel" = "%@ বিজ্ঞাপন ব্লক করবে নাকি এনালিটিক, স্যোশাল বা অন্য ট্র্যাকার ব্লক করবে তা নির্বাচন করুন।";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "বাতিল";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "পেস্ট করুন এবং যান";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "মুছুন";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "আপনার ব্রাউজিংয়ের পূর্ববর্তী তথ্য মুছে ফেলা হয়েছে।";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "অনুসন্ধান করুন বা ঠিকানা লিখুন";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "%@ এর জন্যে অনুসন্ধান করুন";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "ট্র্যাকার ব্লক করা হয়েছে";
+
 

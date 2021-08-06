@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ te da el control.";
 
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "Abrir en %@";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "Autenticar para regresar a %@";
 
@@ -121,6 +124,9 @@
 /* Copy URL button in URL long press menu */
 "Browser.copyAddressLabel" = "Copiar dirección";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL copiada al portapapeles";
+
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Copiar";
 
@@ -142,8 +148,29 @@
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Detener";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Seleccionar ubicación de la barra";
+
 /* Label on button to cancel edits */
 "Cancel" = "Cancelar";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "Enlace copiado: %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "Copiar imagen";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "Copiar enlace";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "Enlaces que copiaste:";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "Guardar imagen";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "Compartir enlace";
 
 /* Label on button to complete edits */
 "Done" = "Hecho";
@@ -162,6 +189,9 @@
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "Abrir";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ quiere abrir %2$@";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "Llamar";
@@ -226,6 +256,15 @@
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
 
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "Esto te permite guardar imágenes en tu carrete de fotos";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "Abrir ajustes";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "“%@” le gustaría acceder a tus fotos";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "Solicitar sitio de escritorio";
 
@@ -259,36 +298,6 @@
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "¿Mostrar sugerencias de búsqueda?";
 
-/* Text for button to add another search engine in settings */
-"Settings.Search.AddSearchEngineButton" = "Agregar otro motor de búsqueda";
-
-/* Text for button to add another search engine in settings with the + prefix */
-"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Agregar otro motor de búsqueda";
-
-/* Title on add search engine settings screen */
-"Settings.Search.AddSearchEngineTitle" = "Agregar motor de búsqueda";
-
-/* Header for rows of installed search engines */
-"Settings.Search.InstalledSearchEngines" = "INSTALLED SEARCH ENGINES";
-
-/* Label for input field for the name of the search engine to be added */
-"Settings.Search.NameToDisplay" = "Nombre para mostrar";
-
-/* Toast displayed after adding a search engine */
-"Settings.Search.NewSearchEngineAdded" = "Nuevo motor de búsqueda agregado.";
-
-/* Label for button to bring deleted default engines back */
-"Settings.Search.RestoreEngine" = "Restaurar motores de búsqueda predeterminados";
-
-/* Placeholder text for input of new search engine name */
-"Settings.Search.SearchEngineName" = "Nombre del motor de búsqueda";
-
-/* Label for input of search engine template */
-"Settings.Search.SearchTemplate" = "Cadena de búsqueda para usar";
-
-/* Placeholder text for input of new search engine template */
-"Settings.Search.SearchTemplatePlaceholder" = "Pega o ingresa la cadena de búsqueda. Si es necesario, sustituye el término de búsqueda con: %s.";
-
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Autocompletar URL";
 
@@ -318,6 +327,39 @@
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Configuraciones";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Agregar otro motor de búsqueda";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Agregar otro motor de búsqueda";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Agregar motor de búsqueda";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "INSTALLED SEARCH ENGINES";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Nombre para mostrar";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Nuevo motor de búsqueda agregado.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Restaurar motores de búsqueda predeterminados";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Nombre del motor de búsqueda";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Cadena de búsqueda para usar";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Ejemplo: searchengineexample.com/search/?q=%s";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Pega o ingresa la cadena de búsqueda. Si es necesario, sustituye el término de búsqueda con: %s.";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Motor de búsqueda";
@@ -403,6 +445,12 @@
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "ACCESOS DIRECTOS DE SIRI";
 
+/* Text for a share button */
+"share" = "Compartir";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Copiar dirección";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Buscar en la página";
 
@@ -457,84 +505,6 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "URL para abrir";
 
-/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
-"URL.addToAutocompleteLabel" = "Agregar enlace para autocompletar";
-
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "Cancelar";
-
-/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
-"URL.contextMenu" = "Pegar e Ir";
-
-/* Erase button in the URL bar */
-"URL.eraseButtonLabel" = "ERASE";
-
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "Tu historial de navegación ha sido borrado.";
-
-/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
-"URL.findOnPageLabel" = "Buscar en la página: %@";
-
-/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
-"URL.paste" = "Pegar";
-
-/* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "Buscar o ingresar dirección";
-
-/* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "Buscar %@";
-
-/* Text for the URL bar showing the number of trackers blocked on a webpage. */
-"URL.trackersBlockedLabel" = "Rastreadores bloqueados";
-
-/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
-"actionSheet.openIn" = "Abrir en %@";
-
-/* Toast displayed after a URL has been copied to the clipboard */
-"browser.copyAddressToast" = "URL copiada al portapapeles";
-
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
-"browserShortcutDescription.selectLocationBar" = "Seleccionar ubicación de la barra";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "Enlace copiado: %@";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "Copiar imagen";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "Copiar enlace";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "Enlaces que copiaste:";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "Guardar imagen";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "Compartir enlace";
-
-/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
-"externalAppLinkWithAppName.messageTitle" = "%1$@ quiere abrir %2$@";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "Esto te permite guardar imágenes en tu carrete de fotos";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "Abrir ajustes";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "“%@” le gustaría acceder a tus fotos";
-
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Ejemplo: searchengineexample.com/search/?q=%s";
-
-/* Text for a share button */
-"share" = "Compartir";
-
-/* Text for the share menu when a user wants to copy a URL. */
-"shareMenu.copyAddress" = "Copiar dirección";
-
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Usar Touch ID para regresar a %@";
 
@@ -567,4 +537,35 @@
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.trackerDescriptionLabel" = "Elige si %@ puede bloquear rastreadores de publicidad, analíticos, sociales y otros.";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "Agregar enlace para autocompletar";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "Cancelar";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Pegar e Ir";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "ERASE";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "Tu historial de navegación ha sido borrado.";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Buscar en la página: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Pegar";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Buscar o ingresar dirección";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Buscar %@";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "Rastreadores bloqueados";
+
 

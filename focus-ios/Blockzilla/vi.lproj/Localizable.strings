@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ giúp bạn kiểm soát.";
 
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "Mở trong %@";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "Xác thực để quay lại %@";
 
@@ -121,6 +124,9 @@
 /* Copy URL button in URL long press menu */
 "Browser.copyAddressLabel" = "Sao chép địa chỉ liên kết";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL đã được sao chép vào Clipboard";
+
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Sao chép";
 
@@ -142,8 +148,29 @@
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Dừng";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Chọn thanh địa chỉ";
+
 /* Label on button to cancel edits */
 "Cancel" = "Hủy bỏ";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "Liên kết bạn sao chép: %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "Sao chép ảnh";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "Sao chép liên kết";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "Liên kết bạn đã sao chép:";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "Lưu ảnh";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "Chia sẻ liên kết";
 
 /* Label on button to complete edits */
 "Done" = "Xong";
@@ -162,6 +189,9 @@
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "Mở";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ muốn mở %2$@";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "Gọi";
@@ -226,6 +256,15 @@
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
 
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "Điều này cho phép bạn lưu ảnh đến Camera Roll của bạn";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "Mở Cài đặt";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "“%@” muốn truy cập vào ảnh của bạn";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "Yêu cầu trang web trên máy tính";
 
@@ -259,36 +298,6 @@
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "Hiển thị đề xuất tìm kiếm?";
 
-/* Text for button to add another search engine in settings */
-"Settings.Search.AddSearchEngineButton" = "Thêm công cụ tìm kiếm khác";
-
-/* Text for button to add another search engine in settings with the + prefix */
-"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Thêm công cụ tìm kiếm khác";
-
-/* Title on add search engine settings screen */
-"Settings.Search.AddSearchEngineTitle" = "Thêm công cụ tìm kiếm";
-
-/* Header for rows of installed search engines */
-"Settings.Search.InstalledSearchEngines" = "CÔNG CỤ TÌM KIẾM ĐÃ CÀI ĐẶT";
-
-/* Label for input field for the name of the search engine to be added */
-"Settings.Search.NameToDisplay" = "Tên hiển thị";
-
-/* Toast displayed after adding a search engine */
-"Settings.Search.NewSearchEngineAdded" = "Đã thêm công cụ tìm kiếm mới.";
-
-/* Label for button to bring deleted default engines back */
-"Settings.Search.RestoreEngine" = "Phục hồi các công cụ tìm kiếm mặc định";
-
-/* Placeholder text for input of new search engine name */
-"Settings.Search.SearchEngineName" = "Tên công cụ tìm kiếm";
-
-/* Label for input of search engine template */
-"Settings.Search.SearchTemplate" = "Chuỗi tìm kiếm sử dụng";
-
-/* Placeholder text for input of new search engine template */
-"Settings.Search.SearchTemplatePlaceholder" = "Dán hoặc nhập chuỗi tìm kiếm. Nếu cần, hãy thay thế cụm từ tìm kiếm bằng: %s.";
-
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Tự động điền URL";
 
@@ -318,6 +327,39 @@
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Cài đặt";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Thêm công cụ tìm kiếm khác";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Thêm công cụ tìm kiếm khác";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Thêm công cụ tìm kiếm";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "CÔNG CỤ TÌM KIẾM ĐÃ CÀI ĐẶT";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Tên hiển thị";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Đã thêm công cụ tìm kiếm mới.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Phục hồi các công cụ tìm kiếm mặc định";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Tên công cụ tìm kiếm";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Chuỗi tìm kiếm sử dụng";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Ví dụ: searchengineexample.com/search/?q=%s";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Dán hoặc nhập chuỗi tìm kiếm. Nếu cần, hãy thay thế cụm từ tìm kiếm bằng: %s.";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Công cụ tìm kiếm";
@@ -403,6 +445,12 @@
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "SIRI SHORTCUTS";
 
+/* Text for a share button */
+"share" = "Chia sẻ";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Sao chép địa chỉ liên kết";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Tìm trong trang";
 
@@ -457,84 +505,6 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "URL để mở";
 
-/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
-"URL.addToAutocompleteLabel" = "Thêm liên kết vào tự động điền";
-
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "Hủy bỏ";
-
-/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
-"URL.contextMenu" = "Dán & Mở đường dẫn";
-
-/* Erase button in the URL bar */
-"URL.eraseButtonLabel" = "XÓA";
-
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "Lịch sử duyệt web của bạn đã bị xóa.";
-
-/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
-"URL.findOnPageLabel" = "Tìm trong trang: %@";
-
-/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
-"URL.paste" = "Dán";
-
-/* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "Tìm kiếm hoặc nhập địa chỉ";
-
-/* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "Tìm kiếm cho %@";
-
-/* Text for the URL bar showing the number of trackers blocked on a webpage. */
-"URL.trackersBlockedLabel" = "Theo dõi bị chặn";
-
-/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
-"actionSheet.openIn" = "Mở trong %@";
-
-/* Toast displayed after a URL has been copied to the clipboard */
-"browser.copyAddressToast" = "URL đã được sao chép vào Clipboard";
-
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
-"browserShortcutDescription.selectLocationBar" = "Chọn thanh địa chỉ";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "Liên kết bạn sao chép: %@";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "Sao chép ảnh";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "Sao chép liên kết";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "Liên kết bạn đã sao chép:";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "Lưu ảnh";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "Chia sẻ liên kết";
-
-/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
-"externalAppLinkWithAppName.messageTitle" = "%1$@ muốn mở %2$@";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "Điều này cho phép bạn lưu ảnh đến Camera Roll của bạn";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "Mở Cài đặt";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "“%@” muốn truy cập vào ảnh của bạn";
-
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Ví dụ: searchengineexample.com/search/?q=%s";
-
-/* Text for a share button */
-"share" = "Chia sẻ";
-
-/* Text for the share menu when a user wants to copy a URL. */
-"shareMenu.copyAddress" = "Sao chép địa chỉ liên kết";
-
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Sử dụng Touch ID để quay lại %@";
 
@@ -570,4 +540,35 @@
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.trackerDescriptionLabel" = "Chọn xem %@ ngăn chặn các trình theo dõi quảng cáo, phân tích, xã hội và các trình theo dõi khác.";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "Thêm liên kết vào tự động điền";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "Hủy bỏ";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Dán & Mở đường dẫn";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "XÓA";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "Lịch sử duyệt web của bạn đã bị xóa.";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Tìm trong trang: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Dán";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Tìm kiếm hoặc nhập địa chỉ";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Tìm kiếm cho %@";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "Theo dõi bị chặn";
+
 

@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ binibigyan ka ng kontrol.";
 
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "Buksan sa %@";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "Patunayan na bumalik sa %@";
 
@@ -106,6 +109,9 @@
 /* Copy URL button in URL long press menu */
 "Browser.copyAddressLabel" = "Kopyahin ang Address";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL Kinopya Sa Clipboard";
+
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Kopyahin";
 
@@ -127,8 +133,29 @@
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Huminto";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Piliin ang Lokasyon Bar";
+
 /* Label on button to cancel edits */
 "Cancel" = "Kanselahin";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "I-link ang iyong kinopya: %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "Kopyahin ang Larawan";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "Kopyahin ang Link";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "I-link mo ang kinopya:";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "I-save ang Larawan";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "Ibahagi ang Link";
 
 /* Label on button to complete edits */
 "Done" = "Tapos na";
@@ -147,6 +174,9 @@
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "Bukas";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ gustong buksan ang %2$@";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "Tumawag";
@@ -211,6 +241,15 @@
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
 
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "Hinahayaan ka nitong i-save ang mga larawan sa iyong Camera Roll";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "Buksan ang Mga Setting";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "“%@” Gusto I-access ang Iyong Mga Larawan";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "Humiling ng Desktop Site";
 
@@ -231,6 +270,33 @@
 
 /* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
 "SearchEngine.addEngineError" = "Hindi iyon gumana. Subukang palitan ang termino sa paghahanap na may ganitong: %s.";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "URL Autocomplete";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Ang pag-block ng iba pang nilalaman ng trackers ay maaaring masira ang ilang mga video at mga pahina ng Web pages.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "Salamat nalang";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "Naiintindihan ko";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla ay nag susumikap na kolektahin lamang kung ano ang kailangan naming ibigay at pagbutihin ang %@ para sa lahat.";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "Matuto ng higit pa.";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "Rate %@";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "SAFARI INTEGRATION";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Mga Setting";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Magdagdag ng Panibagong Search Engine";
@@ -259,35 +325,11 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Maghanap ng string na gagamitin";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Halimbawa: searchengineexample.com/search/?q=%s";
+
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "I-paste o ilagay ang string ng paghahanap. Kung kinakailangan, palitan ang termino ng paghahanap gamit ang: %s.";
-
-/* Title for the URL Autocomplete row */
-"Settings.autocompleteSection" = "URL Autocomplete";
-
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Ang pag-block ng iba pang nilalaman ng trackers ay maaaring masira ang ilang mga video at mga pahina ng Web pages.";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Salamat nalang";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Naiintindihan ko";
-
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSendUsageData" = "Mozilla ay nag susumikap na kolektahin lamang kung ano ang kailangan naming ibigay at pagbutihin ang %@ para sa lahat.";
-
-/* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.learnMore" = "Matuto ng higit pa.";
-
-/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
-"Settings.rate" = "Rate %@";
-
-/* Label for Safari integration section */
-"Settings.safariTitle" = "SAFARI INTEGRATION";
-
-/* Title for settings screen */
-"Settings.screenTitle" = "Mga Setting";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Search Engine";
@@ -364,6 +406,12 @@
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "SIRI SHORTCUTS";
 
+/* Text for a share button */
+"share" = "Ibahagi";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Kopyahin ang Address";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Hanapin sa Pahina";
 
@@ -415,81 +463,6 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "URL na buksan";
 
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "I-cancel";
-
-/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
-"URL.contextMenu" = "Idikit at Pumunta";
-
-/* Erase button in the URL bar */
-"URL.eraseButtonLabel" = "BURAHIN";
-
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "Ang iyong kasaysayan sa pag-browse ay nabura na.";
-
-/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
-"URL.findOnPageLabel" = "Hanapin sa pahina: %@";
-
-/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
-"URL.paste" = "I-paste";
-
-/* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "Maghanap o ipasok ang address";
-
-/* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "Maghanap para sa %@";
-
-/* Text for the URL bar showing the number of trackers blocked on a webpage. */
-"URL.trackersBlockedLabel" = "Hinarangan ang mga tracker";
-
-/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
-"actionSheet.openIn" = "Buksan sa %@";
-
-/* Toast displayed after a URL has been copied to the clipboard */
-"browser.copyAddressToast" = "URL Kinopya Sa Clipboard";
-
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
-"browserShortcutDescription.selectLocationBar" = "Piliin ang Lokasyon Bar";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "I-link ang iyong kinopya: %@";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "Kopyahin ang Larawan";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "Kopyahin ang Link";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "I-link mo ang kinopya:";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "I-save ang Larawan";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "Ibahagi ang Link";
-
-/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
-"externalAppLinkWithAppName.messageTitle" = "%1$@ gustong buksan ang %2$@";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "Hinahayaan ka nitong i-save ang mga larawan sa iyong Camera Roll";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "Buksan ang Mga Setting";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "“%@” Gusto I-access ang Iyong Mga Larawan";
-
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Halimbawa: searchengineexample.com/search/?q=%s";
-
-/* Text for a share button */
-"share" = "Ibahagi";
-
-/* Text for the share menu when a user wants to copy a URL. */
-"shareMenu.copyAddress" = "Kopyahin ang Address";
-
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Gamitin ang Touch ID upang bumalik sa %@";
 
@@ -522,4 +495,32 @@
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.trackerDescriptionLabel" = "Piliin kung %@ block ads, analytic, social, at iba pang mga tagasubaybay.";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "I-cancel";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Idikit at Pumunta";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "BURAHIN";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "Ang iyong kasaysayan sa pag-browse ay nabura na.";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Hanapin sa pahina: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "I-paste";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Maghanap o ipasok ang address";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Maghanap para sa %@";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "Hinarangan ang mga tracker";
+
 

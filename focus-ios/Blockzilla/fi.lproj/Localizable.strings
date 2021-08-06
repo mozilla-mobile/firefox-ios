@@ -34,6 +34,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ asettaa sinut hallintaan.";
 
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "Avaa sovelluksella %@";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "Lisää mukautettu osoite";
 
@@ -88,6 +91,9 @@
 /* Copy URL button in URL long press menu */
 "Browser.copyAddressLabel" = "Kopioi osoite";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "Osoite kopioitu leikepöydälle";
+
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Kopioi";
 
@@ -109,8 +115,29 @@
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Pysäytä";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Valitse sijaintipalkki";
+
 /* Label on button to cancel edits */
 "Cancel" = "Kumoa";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "Kopioitu linkki: %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "Kopioi kuva";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "Kopioi linkki";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "Kopioimasi linkki:";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "Tallenna kuva";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "Jaa linkki";
 
 /* Label on button to complete edits */
 "Done" = "Valmis";
@@ -175,6 +202,9 @@
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
 
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "Avaa asetukset";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "Pyydä työpöytäversio";
 
@@ -205,6 +235,30 @@
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "Näytetäänkö hakuehdotukset?";
 
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "Ei kiitos";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "Ymmärrän";
+
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "%@ lähettää osoiteriville kirjoittamasi tiedot hakukoneelle.";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla pyrkii keräämään vain tietoja, jotka ovat tarpeellisia %@en jakelun ja kehittämisen kannalta.";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "Lue lisää.";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "Arvostele %@";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "SAFARI-INTEGROINTI";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Asetukset";
+
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Lisää toinen hakukone";
 
@@ -232,29 +286,8 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Käytettävä hakulause";
 
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Ei kiitos";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Ymmärrän";
-
-/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSearchSuggestion" = "%@ lähettää osoiteriville kirjoittamasi tiedot hakukoneelle.";
-
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSendUsageData" = "Mozilla pyrkii keräämään vain tietoja, jotka ovat tarpeellisia %@en jakelun ja kehittämisen kannalta.";
-
-/* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.learnMore" = "Lue lisää.";
-
-/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
-"Settings.rate" = "Arvostele %@";
-
-/* Label for Safari integration section */
-"Settings.safariTitle" = "SAFARI-INTEGROINTI";
-
-/* Title for settings screen */
-"Settings.screenTitle" = "Asetukset";
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Esimerkki: esimerkkihakukone.com/search/?q=%s";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Hakukone";
@@ -313,6 +346,12 @@
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "SIRI-OIKOTIET";
 
+/* Text for a share button */
+"share" = "Jaa";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Kopioi osoite";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Etsi sivulta";
 
@@ -355,6 +394,30 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "Avattava URL-osoite";
 
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "Mainosseuraimet";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "Analytiikkaseuraimet";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "Sisältöseuraimet";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "Seurannan suojaus pois päältä";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "Seurannan suojaus";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "Lue lisää";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "Sosiaaliset seuraimet";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "Seurannan suojaus";
+
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Kumoa";
 
@@ -382,66 +445,4 @@
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "Seuraimia estetty";
 
-/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
-"actionSheet.openIn" = "Avaa sovelluksella %@";
-
-/* Toast displayed after a URL has been copied to the clipboard */
-"browser.copyAddressToast" = "Osoite kopioitu leikepöydälle";
-
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
-"browserShortcutDescription.selectLocationBar" = "Valitse sijaintipalkki";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "Kopioitu linkki: %@";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "Kopioi kuva";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "Kopioi linkki";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "Kopioimasi linkki:";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "Tallenna kuva";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "Jaa linkki";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "Avaa asetukset";
-
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Esimerkki: esimerkkihakukone.com/search/?q=%s";
-
-/* Text for a share button */
-"share" = "Jaa";
-
-/* Text for the share menu when a user wants to copy a URL. */
-"shareMenu.copyAddress" = "Kopioi osoite";
-
-/* Label for ad trackers. */
-"trackingProtection.adTrackersLabel" = "Mainosseuraimet";
-
-/* label for analytic trackers. */
-"trackingProtection.analyticTrackerLabel" = "Analytiikkaseuraimet";
-
-/* label for content trackers. */
-"trackingProtection.contentTrackerLabel" = "Sisältöseuraimet";
-
-/* text showing the tracking protection is disabled. */
-"trackingProtection.disabledLabel" = "Seurannan suojaus pois päältä";
-
-/* Title for the tracking settings page to change what trackers are blocked. */
-"trackingProtection.label" = "Seurannan suojaus";
-
-/* Text for the button to learn more about Tracking Protection. */
-"trackingProtection.learnMore" = "Lue lisää";
-
-/* label for social trackers. */
-"trackingProtection.socialTrackerLabel" = "Sosiaaliset seuraimet";
-
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Seurannan suojaus";
 

@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ ನಿಮ್ಮನ್ನು ನಿಯಂತ್ರಣದಲ್ಲಿರಿಸುತ್ತದೆ.";
 
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "ಇದರಲ್ಲಿ ತೆರೆ %@";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "%@ ಗೆ ಮರಳಲು ದೃಢೀಕರಿಸಿ";
 
@@ -94,6 +97,9 @@
 /* Copy URL button in URL long press menu */
 "Browser.copyAddressLabel" = "ವಿಳಾಸವನ್ನು ನಕಲಿಸು";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL ಕ್ಲಿಪ್‌ಬೋರ್ಡಿಗೆ ಪ್ರತಿ ಮಾಡಲಾಗಿದೆ";
+
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "ನಕಲಿಸು";
 
@@ -112,8 +118,29 @@
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "ನಿಲ್ಲಿಸು";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "ಸ್ಥಳ ಪಟ್ಟಿ ಆಯ್ಕೆಮಾಡು";
+
 /* Label on button to cancel edits */
 "Cancel" = "ರದ್ದು ಮಾಡು";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "ನೀವು ನಕಲಿಸಿದ ಕೊಂಡಿ: %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "ಚಿತ್ರವನ್ನು ನಕಲಿಸು";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "ಕೊಂಡಿ ನಕಲಿಸು‍";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "ನೀವು ನಕಲಿಸಿದ ಕೊಂಡಿ:";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "ಚಿತ್ರವನ್ನು ಉಳಿಸು";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "ಕೊಂಡಿ ಹಂಚು";
 
 /* Label on button to complete edits */
 "Done" = "ಆಯಿತು";
@@ -132,6 +159,9 @@
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "ತೆರೆ";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ %2$@ ಅನ್ನು ತೆರೆಯಲಿಚ್ಛಿಸುತ್ತಿದೆ";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "ಕರೆ";
@@ -196,6 +226,15 @@
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "ಸಫಾರಿ‍";
 
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "ಇದು ನಿಮಗೆ ಚಿತ್ರಗಳನ್ನು ಕ್ಯಾಮೆರಾ ಸುರಳಿಯಲ್ಲಿ ಉಳಿಸಲು ಬಿಡುತ್ತದೆ";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "ಸಿದ್ಧತೆಗಳನ್ನು ತೆರೆ";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "“%@” ನಿಮ್ಮ ಚಿತ್ರಗಳನ್ನು ಪ್ರವೇಶಿಸಲು ಬಯಸುತ್ತಿದೆ";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "ಡೆಸ್ಕ್ಟಾಪ್ ತಾಣವನ್ನು ಕೇಳಿ";
 
@@ -216,33 +255,6 @@
 
 /* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
 "SearchEngine.addEngineError" = "ಅದು ಕೆಲಸ ಮಾಡಲಿಲ್ಲ. ಹುಡುಕಾಟ ಪದವನ್ನು ಇದರೊಂದಿಗೆ ಬದಲಿಸಿ ಪ್ರಯತ್ನಿಸಿ: %s.";
-
-/* Text for button to add another search engine in settings */
-"Settings.Search.AddSearchEngineButton" = "ಮತ್ತೊಂದು ಹುಡುಕಾಟ ಇಂಜಿನ್ ಅನ್ನು ಸೇರಿಸಿ";
-
-/* Text for button to add another search engine in settings with the + prefix */
-"Settings.Search.AddSearchEngineButtonWithPlus" = "+ ಮತ್ತೊಂದು ಹುಡುಕಾಟ ಎಂಜಿನ್ ಸೇರಿಸಿ";
-
-/* Title on add search engine settings screen */
-"Settings.Search.AddSearchEngineTitle" = "ಹುಡುಕು ಸಾಧನವನ್ನು ಸೇರಿಸಿ";
-
-/* Header for rows of installed search engines */
-"Settings.Search.InstalledSearchEngines" = "INSTALLED SEARCH ENGINES";
-
-/* Label for input field for the name of the search engine to be added */
-"Settings.Search.NameToDisplay" = "ಪ್ರದರ್ಶಿಸಲು ಹೆಸರು";
-
-/* Toast displayed after adding a search engine */
-"Settings.Search.NewSearchEngineAdded" = "ಹೊಸ ಹುಡುಕಾಟ ಎಂಜಿನ್ ಸೇರಿಸಲಾಗಿದೆ.";
-
-/* Label for button to bring deleted default engines back */
-"Settings.Search.RestoreEngine" = "ಪೂರ್ವನಿಯೋಜಿತ ಹುಡುಕು ಎಂಜಿನ್‌ ಮರುಹೊಂದಿಸು";
-
-/* Placeholder text for input of new search engine name */
-"Settings.Search.SearchEngineName" = "ಹುಡುಕಾಟ ಎಂಜಿನ್ ಹೆಸರು";
-
-/* Placeholder text for input of new search engine template */
-"Settings.Search.SearchTemplatePlaceholder" = "ಅಂಟಿಸಿ ಅಥವಾ ಹುಡುಕಾಟ ಸಾಲನ್ನು ನಮೂದಿಸಿ. ಅಗತ್ಯವಿದ್ದರೆ, ಹುಡುಕಾಟ ಪದವನ್ನು ಇದರೊಂದಿಗೆ ಬದಲಾಯಿಸಿ: %s.";
 
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "URL ಸ್ವಯಂಪೂರ್ಣಗೊಳಿಸು";
@@ -270,6 +282,36 @@
 
 /* Title for settings screen */
 "Settings.screenTitle" = "ಸಿದ್ಧತೆಗಳು";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "ಮತ್ತೊಂದು ಹುಡುಕಾಟ ಇಂಜಿನ್ ಅನ್ನು ಸೇರಿಸಿ";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ ಮತ್ತೊಂದು ಹುಡುಕಾಟ ಎಂಜಿನ್ ಸೇರಿಸಿ";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "ಹುಡುಕು ಸಾಧನವನ್ನು ಸೇರಿಸಿ";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "INSTALLED SEARCH ENGINES";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "ಪ್ರದರ್ಶಿಸಲು ಹೆಸರು";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "ಹೊಸ ಹುಡುಕಾಟ ಎಂಜಿನ್ ಸೇರಿಸಲಾಗಿದೆ.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "ಪೂರ್ವನಿಯೋಜಿತ ಹುಡುಕು ಎಂಜಿನ್‌ ಮರುಹೊಂದಿಸು";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "ಹುಡುಕಾಟ ಎಂಜಿನ್ ಹೆಸರು";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "ಉದಾಹರಣೆ: searchengineexample.com/search/?q=%s";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "ಅಂಟಿಸಿ ಅಥವಾ ಹುಡುಕಾಟ ಸಾಲನ್ನು ನಮೂದಿಸಿ. ಅಗತ್ಯವಿದ್ದರೆ, ಹುಡುಕಾಟ ಪದವನ್ನು ಇದರೊಂದಿಗೆ ಬದಲಾಯಿಸಿ: %s.";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "ಹುಡುಕು ಸಾಧನ";
@@ -334,6 +376,12 @@
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "SIRI SHORTCUTS";
 
+/* Text for a share button */
+"share" = "ಹಂಚು";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "ವಿಳಾಸವನ್ನು ನಕಲಿಸು";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "ಪುಟದಲ್ಲಿ ಹುಡುಕು";
 
@@ -382,81 +430,6 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "ತೆರೆಯಲು URL";
 
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "ರದ್ದು ಮಾಡು";
-
-/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
-"URL.contextMenu" = "ಅಂಟಿಸು ಹಾಗು ಮುಂದುವರೆ";
-
-/* Erase button in the URL bar */
-"URL.eraseButtonLabel" = "ಅಳಿಸು";
-
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "ನಿಮ್ಮ ಜಾಲಾಟದ ಇತಿಹಾಸವನ್ನು ಅಳಿಸಲಾಗಿದೆ.";
-
-/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
-"URL.findOnPageLabel" = "ಪುಟದಲ್ಲಿ ಹುಡುಕು: %@";
-
-/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
-"URL.paste" = "ಅಂಟಿಸು";
-
-/* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "ಹುಡುಕಿ ಅಥವ ವಿಳಾಸ ನಮೂದಿಸಿ";
-
-/* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "%@ ಗಾಗಿ ಹುಡುಕು‍";
-
-/* Text for the URL bar showing the number of trackers blocked on a webpage. */
-"URL.trackersBlockedLabel" = "ಜಾಡುಹಿಡಿಯುವವರನ್ನು ನಿರ್ಭಂದಿಸಲಾಗಿದೆ";
-
-/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
-"actionSheet.openIn" = "ಇದರಲ್ಲಿ ತೆರೆ %@";
-
-/* Toast displayed after a URL has been copied to the clipboard */
-"browser.copyAddressToast" = "URL ಕ್ಲಿಪ್‌ಬೋರ್ಡಿಗೆ ಪ್ರತಿ ಮಾಡಲಾಗಿದೆ";
-
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
-"browserShortcutDescription.selectLocationBar" = "ಸ್ಥಳ ಪಟ್ಟಿ ಆಯ್ಕೆಮಾಡು";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "ನೀವು ನಕಲಿಸಿದ ಕೊಂಡಿ: %@";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "ಚಿತ್ರವನ್ನು ನಕಲಿಸು";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "ಕೊಂಡಿ ನಕಲಿಸು‍";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "ನೀವು ನಕಲಿಸಿದ ಕೊಂಡಿ:";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "ಚಿತ್ರವನ್ನು ಉಳಿಸು";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "ಕೊಂಡಿ ಹಂಚು";
-
-/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
-"externalAppLinkWithAppName.messageTitle" = "%1$@ %2$@ ಅನ್ನು ತೆರೆಯಲಿಚ್ಛಿಸುತ್ತಿದೆ";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "ಇದು ನಿಮಗೆ ಚಿತ್ರಗಳನ್ನು ಕ್ಯಾಮೆರಾ ಸುರಳಿಯಲ್ಲಿ ಉಳಿಸಲು ಬಿಡುತ್ತದೆ";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "ಸಿದ್ಧತೆಗಳನ್ನು ತೆರೆ";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "“%@” ನಿಮ್ಮ ಚಿತ್ರಗಳನ್ನು ಪ್ರವೇಶಿಸಲು ಬಯಸುತ್ತಿದೆ";
-
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "ಉದಾಹರಣೆ: searchengineexample.com/search/?q=%s";
-
-/* Text for a share button */
-"share" = "ಹಂಚು";
-
-/* Text for the share menu when a user wants to copy a URL. */
-"shareMenu.copyAddress" = "ವಿಳಾಸವನ್ನು ನಕಲಿಸು";
-
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "%@ ಗೆ ಹಿಂತಿರುಗಲು ಟಚ್ ID ಅನ್ನು ಬಳಸಿ";
 
@@ -489,4 +462,32 @@
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.trackerDescriptionLabel" = "%@ ಬ್ಲಾಕ್ಗಳ ಜಾಹೀರಾತು, ವಿಶ್ಲೇಷಣಾತ್ಮಕ, ಸಾಮಾಜಿಕ ಮತ್ತು ಇತರ ಟ್ರ್ಯಾಕರ್ಗಳು ಎಂಬುದನ್ನು ಆಯ್ಕೆಮಾಡಿ.";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "ರದ್ದು ಮಾಡು";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "ಅಂಟಿಸು ಹಾಗು ಮುಂದುವರೆ";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "ಅಳಿಸು";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "ನಿಮ್ಮ ಜಾಲಾಟದ ಇತಿಹಾಸವನ್ನು ಅಳಿಸಲಾಗಿದೆ.";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "ಪುಟದಲ್ಲಿ ಹುಡುಕು: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "ಅಂಟಿಸು";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "ಹುಡುಕಿ ಅಥವ ವಿಳಾಸ ನಮೂದಿಸಿ";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "%@ ಗಾಗಿ ಹುಡುಕು‍";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "ಜಾಡುಹಿಡಿಯುವವರನ್ನು ನಿರ್ಭಂದಿಸಲಾಗಿದೆ";
+
 

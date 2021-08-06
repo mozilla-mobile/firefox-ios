@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ vám dáva kontrolu.";
 
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "Otvoriť pomocou %@";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "Pre návrat do aplikácie %@ sa vyžaduje overenie";
 
@@ -121,6 +124,9 @@
 /* Copy URL button in URL long press menu */
 "Browser.copyAddressLabel" = "Kopírovať adresu";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "Skopírované do schránky";
+
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Kopírovať";
 
@@ -142,8 +148,29 @@
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Zastaviť";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Zvoliť panel s adresou";
+
 /* Label on button to cancel edits */
 "Cancel" = "Zrušiť";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "Skopírovaný odkaz: %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "Kopírovať obrázok";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "Kopírovať odkaz";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "Skopírovaný odkaz:";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "Uložiť obrázok";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "Zdieľať odkaz";
 
 /* Label on button to complete edits */
 "Done" = "Hotovo";
@@ -162,6 +189,9 @@
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "Otvoriť";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ chce otvoriť aplikáciu %2$@";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "Zavolať";
@@ -226,6 +256,15 @@
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
 
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "Toto vám umožní uložiť obrázok medzi vaše fotky";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "Otvoriť nastavenia";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "“%@” žiada o prístup k vašim fotografiám";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "Verzia stránky pre počítače";
 
@@ -259,36 +298,6 @@
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "Zobrazovať návrhy vyhľadávania?";
 
-/* Text for button to add another search engine in settings */
-"Settings.Search.AddSearchEngineButton" = "Pridať ďalší vyhľadávací modul";
-
-/* Text for button to add another search engine in settings with the + prefix */
-"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Pridať ďalší vyhľadávací modul";
-
-/* Title on add search engine settings screen */
-"Settings.Search.AddSearchEngineTitle" = "Pridať vyhľadávací modul";
-
-/* Header for rows of installed search engines */
-"Settings.Search.InstalledSearchEngines" = "NAINŠTALOVANÉ VYHĽADÁVACIE MODULY";
-
-/* Label for input field for the name of the search engine to be added */
-"Settings.Search.NameToDisplay" = "Názov, ktorý sa bude zobrazovať";
-
-/* Toast displayed after adding a search engine */
-"Settings.Search.NewSearchEngineAdded" = "Bol pridaný nový vyhľadávací modul.";
-
-/* Label for button to bring deleted default engines back */
-"Settings.Search.RestoreEngine" = "Obnoviť predvolené vyhľadávacie moduly";
-
-/* Placeholder text for input of new search engine name */
-"Settings.Search.SearchEngineName" = "Názov vyhľadávacieho modulu";
-
-/* Label for input of search engine template */
-"Settings.Search.SearchTemplate" = "Výraz vyhľadávania";
-
-/* Placeholder text for input of new search engine template */
-"Settings.Search.SearchTemplatePlaceholder" = "Prilepte alebo zadajte výraz vyhľadávania. Ak je to nutné, nahraďte výraz s: %s.";
-
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Automatické dokončovanie URL adries";
 
@@ -318,6 +327,39 @@
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Nastavenia";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Pridať ďalší vyhľadávací modul";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Pridať ďalší vyhľadávací modul";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Pridať vyhľadávací modul";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "NAINŠTALOVANÉ VYHĽADÁVACIE MODULY";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Názov, ktorý sa bude zobrazovať";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Bol pridaný nový vyhľadávací modul.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Obnoviť predvolené vyhľadávacie moduly";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Názov vyhľadávacieho modulu";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Výraz vyhľadávania";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Príklad: searchengineexample.com/search/?q=%s";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Prilepte alebo zadajte výraz vyhľadávania. Ak je to nutné, nahraďte výraz s: %s.";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Vyhľadávací modul";
@@ -403,6 +445,12 @@
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "SKRATKY PRE SIRI";
 
+/* Text for a share button */
+"share" = "Zdieľať";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Kopírovať adresu";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Hľadať na stránke";
 
@@ -457,84 +505,6 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "Adresa na otvorenie";
 
-/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
-"URL.addToAutocompleteLabel" = "Pridať odkaz na automatické dopĺňanie";
-
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "Zrušiť";
-
-/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
-"URL.contextMenu" = "Prilepiť a prejsť";
-
-/* Erase button in the URL bar */
-"URL.eraseButtonLabel" = "VYMAZAŤ";
-
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "Vaša história prehliadania bola vymazaná.";
-
-/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
-"URL.findOnPageLabel" = "Hľadať na stránke: %@";
-
-/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
-"URL.paste" = "Prilepiť";
-
-/* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "Zadajte vyhľadávanie alebo adresu";
-
-/* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "Vyhľadať %@";
-
-/* Text for the URL bar showing the number of trackers blocked on a webpage. */
-"URL.trackersBlockedLabel" = "Počet zablokovaných sledovacích prvkov";
-
-/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
-"actionSheet.openIn" = "Otvoriť pomocou %@";
-
-/* Toast displayed after a URL has been copied to the clipboard */
-"browser.copyAddressToast" = "Skopírované do schránky";
-
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
-"browserShortcutDescription.selectLocationBar" = "Zvoliť panel s adresou";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "Skopírovaný odkaz: %@";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "Kopírovať obrázok";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "Kopírovať odkaz";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "Skopírovaný odkaz:";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "Uložiť obrázok";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "Zdieľať odkaz";
-
-/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
-"externalAppLinkWithAppName.messageTitle" = "%1$@ chce otvoriť aplikáciu %2$@";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "Toto vám umožní uložiť obrázok medzi vaše fotky";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "Otvoriť nastavenia";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "“%@” žiada o prístup k vašim fotografiám";
-
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Príklad: searchengineexample.com/search/?q=%s";
-
-/* Text for a share button */
-"share" = "Zdieľať";
-
-/* Text for the share menu when a user wants to copy a URL. */
-"shareMenu.copyAddress" = "Kopírovať adresu";
-
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Pre návrat do aplikácie %@ použite Touch ID";
 
@@ -570,4 +540,35 @@
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.trackerDescriptionLabel" = "Vyberte si, či má %@ blokovať reklamné sledovacie prvky, analytické sledovacie prvky, sledovacie prvky sociálnych sietí či ostatné sledovacie prvky.";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "Pridať odkaz na automatické dopĺňanie";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "Zrušiť";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Prilepiť a prejsť";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "VYMAZAŤ";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "Vaša história prehliadania bola vymazaná.";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Hľadať na stránke: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Prilepiť";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Zadajte vyhľadávanie alebo adresu";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Vyhľadať %@";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "Počet zablokovaných sledovacích prvkov";
+
 

@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ က သင့်ကို ထိန်းချုပ်နိုင်စွမ်း ရှိစေသည်။";
 
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "%@ တွင် ဖွင့်ပါ";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "%@ ကို ပြန်သွားရန် အတည်ပြုပါ";
 
@@ -121,6 +124,9 @@
 /* Copy URL button in URL long press menu */
 "Browser.copyAddressLabel" = "လိပ်စာကို ကူးယူပါ";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL ကို ကလစ်ဘုတ်သို့ ကူးယူပြီး";
+
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "ကူးယူ";
 
@@ -142,8 +148,29 @@
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "ရပ်ပါ";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "တည်နေရာဘားတန်းကို ရွေးပါ";
+
 /* Label on button to cancel edits */
 "Cancel" = "မဆောင်ရွက်တော့ပါ";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "ကူးယူထားသော လင့်ခ်။ %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "ရုပ်ပုံကို ကူးရန်";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "လင့်ခ်ကို ကူးရန်";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "သင်ကူးယူထားသော လင့်ခ်၊";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "ရုပ်ပုံကို သိမ်းရန်";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "လင့်ခ်ကို မျှရန်";
 
 /* Label on button to complete edits */
 "Done" = "ပြီးပြီ";
@@ -162,6 +189,9 @@
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "ဖွင့်ပါ";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ သည် %2$@ ကို ဖွင့်လိုသည်";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "ခေါ်ဆိုပါ";
@@ -226,6 +256,15 @@
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
 
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "ဓါတ်ပုံများကို Camera Roll ထဲတွင် သိမ်းဆည်းနိုင်စေသည်";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "အပြင်အဆင်များကို ဖွင့်ပါ";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "“%@” သည် သင့်ဓါတ်ပုံများကို အသုံးပြုခွင့် ရလိုသည်";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "ဒတ်စ်တောခ့်ဆိုက်ကို တောင်းပါ";
 
@@ -259,36 +298,6 @@
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "ရှာဖွေရေး အကြံပြုချက်များကို ပြမည်လား။";
 
-/* Text for button to add another search engine in settings */
-"Settings.Search.AddSearchEngineButton" = "အခြားသော ရှာဖွေအင်ဂျင် ပေါင်းထည့်ပါ";
-
-/* Text for button to add another search engine in settings with the + prefix */
-"Settings.Search.AddSearchEngineButtonWithPlus" = "+ အခြားသော ရှာဖွေအင်ဂျင် ပေါင်းထည့်ပါ";
-
-/* Title on add search engine settings screen */
-"Settings.Search.AddSearchEngineTitle" = "ရှာဖွေအင်ဂျင် ပေါင်းထည့်ပါ";
-
-/* Header for rows of installed search engines */
-"Settings.Search.InstalledSearchEngines" = "INSTALLED SEARCH ENGINES";
-
-/* Label for input field for the name of the search engine to be added */
-"Settings.Search.NameToDisplay" = "ပြသရန် နာမည်ပေးပါ";
-
-/* Toast displayed after adding a search engine */
-"Settings.Search.NewSearchEngineAdded" = "ရှာဖွေအင်ဂျင်အသစ် ပေါင်းထည့်ခဲ့သည်";
-
-/* Label for button to bring deleted default engines back */
-"Settings.Search.RestoreEngine" = "ရှာဖွေအင်ဂျင်ကို ပုံသေအတိုင်းထားပါ";
-
-/* Placeholder text for input of new search engine name */
-"Settings.Search.SearchEngineName" = "အင်ဂျင်နာမည် ရှာဖွေပါ";
-
-/* Label for input of search engine template */
-"Settings.Search.SearchTemplate" = "စာကြောင်းကို အသုံးပြုရန် ရှာဖွေပါ";
-
-/* Placeholder text for input of new search engine template */
-"Settings.Search.SearchTemplatePlaceholder" = "ရှာထားသောစာကြောင်းကို ကူးယူ သို့မဟုတ် ဝင်ရောက်ပါ လိုအပ်လှျင် %s နှင့်ရှာဖွေသုံးနှုန်းများကို ပြန်ထားပါ";
-
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "URL အလိုအလျှောက်ဖြည့်စွက်";
 
@@ -318,6 +327,39 @@
 
 /* Title for settings screen */
 "Settings.screenTitle" = "အပြင်အဆင်များ";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "အခြားသော ရှာဖွေအင်ဂျင် ပေါင်းထည့်ပါ";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ အခြားသော ရှာဖွေအင်ဂျင် ပေါင်းထည့်ပါ";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "ရှာဖွေအင်ဂျင် ပေါင်းထည့်ပါ";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "INSTALLED SEARCH ENGINES";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "ပြသရန် နာမည်ပေးပါ";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "ရှာဖွေအင်ဂျင်အသစ် ပေါင်းထည့်ခဲ့သည်";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "ရှာဖွေအင်ဂျင်ကို ပုံသေအတိုင်းထားပါ";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "အင်ဂျင်နာမည် ရှာဖွေပါ";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "စာကြောင်းကို အသုံးပြုရန် ရှာဖွေပါ";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "ဥပမာ. searchengineexample.com /search/?q=%s";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "ရှာထားသောစာကြောင်းကို ကူးယူ သို့မဟုတ် ဝင်ရောက်ပါ လိုအပ်လှျင် %s နှင့်ရှာဖွေသုံးနှုန်းများကို ပြန်ထားပါ";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "ရှာဖွေ အင်ဂျင်";
@@ -403,6 +445,12 @@
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "SIRI နည်းလမ်းတိုများ";
 
+/* Text for a share button */
+"share" = "မျှဝေရန်";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "လိပ်စာကို ကူးယူရန်";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "စာမျက်နှာထဲတွင် ရှာပါ";
 
@@ -454,84 +502,6 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "ဖွင့်ရန် URL";
 
-/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
-"URL.addToAutocompleteLabel" = "အလိုအလျက်ဖြည့်ရန် လင့်ခ်ကို ထည့်ပေးပါ";
-
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "မလုပ်ဆောင်တော့ပါ";
-
-/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
-"URL.contextMenu" = "ကူးထားခြင်းမှ ပွားပြီး ၎င်းသို့ သွားရောက်ပါ";
-
-/* Erase button in the URL bar */
-"URL.eraseButtonLabel" = "ERASE";
-
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "ကြည့်ရှုမှုမှတ်တမ်းကို ဖယ်ရှားရှင်းလင်းပြီးပြီ။";
-
-/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
-"URL.findOnPageLabel" = "စာမျက်နှာထဲတွင် ရှာပါ %@";
-
-/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
-"URL.paste" = "ပွားရန်";
-
-/* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "ရှာဖွေ သို့မဟုတ် လိပ်စာရိုက်ပါ";
-
-/* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "%@ ကို ရှာဖွေရန်";
-
-/* Text for the URL bar showing the number of trackers blocked on a webpage. */
-"URL.trackersBlockedLabel" = "နောက်ယောင်ခံများကို တားဆီးထားသည်";
-
-/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
-"actionSheet.openIn" = "%@ တွင် ဖွင့်ပါ";
-
-/* Toast displayed after a URL has been copied to the clipboard */
-"browser.copyAddressToast" = "URL ကို ကလစ်ဘုတ်သို့ ကူးယူပြီး";
-
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
-"browserShortcutDescription.selectLocationBar" = "တည်နေရာဘားတန်းကို ရွေးပါ";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "ကူးယူထားသော လင့်ခ်။ %@";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "ရုပ်ပုံကို ကူးရန်";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "လင့်ခ်ကို ကူးရန်";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "သင်ကူးယူထားသော လင့်ခ်၊";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "ရုပ်ပုံကို သိမ်းရန်";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "လင့်ခ်ကို မျှရန်";
-
-/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
-"externalAppLinkWithAppName.messageTitle" = "%1$@ သည် %2$@ ကို ဖွင့်လိုသည်";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "ဓါတ်ပုံများကို Camera Roll ထဲတွင် သိမ်းဆည်းနိုင်စေသည်";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "အပြင်အဆင်များကို ဖွင့်ပါ";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "“%@” သည် သင့်ဓါတ်ပုံများကို အသုံးပြုခွင့် ရလိုသည်";
-
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "ဥပမာ. searchengineexample.com /search/?q=%s";
-
-/* Text for a share button */
-"share" = "မျှဝေရန်";
-
-/* Text for the share menu when a user wants to copy a URL. */
-"shareMenu.copyAddress" = "လိပ်စာကို ကူးယူရန်";
-
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "%@ ကို ပြန်သွားရန် Touch ID ကို အသုံးပြုပါ";
 
@@ -564,4 +534,35 @@
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.trackerDescriptionLabel" = "%@ သည် မည်သည့် ကြော်ငြာ၊ သရုပ်ခွဲ၊ လူမှုဆိုင်ရာနှင့် အခြားသော နောက်ယောင်ခံ ကိရိယာများကို ပိတ်ရမည်ဆိုတာ ရွေးချယ်ပါ။";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "အလိုအလျက်ဖြည့်ရန် လင့်ခ်ကို ထည့်ပေးပါ";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "မလုပ်ဆောင်တော့ပါ";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "ကူးထားခြင်းမှ ပွားပြီး ၎င်းသို့ သွားရောက်ပါ";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "ERASE";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "ကြည့်ရှုမှုမှတ်တမ်းကို ဖယ်ရှားရှင်းလင်းပြီးပြီ။";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "စာမျက်နှာထဲတွင် ရှာပါ %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "ပွားရန်";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "ရှာဖွေ သို့မဟုတ် လိပ်စာရိုက်ပါ";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "%@ ကို ရှာဖွေရန်";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "နောက်ယောင်ခံများကို တားဆီးထားသည်";
+
 

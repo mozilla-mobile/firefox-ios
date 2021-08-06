@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@로 데이터 제어가 가능합니다.";
 
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "%@에서 열기";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "%@로 돌아올 때 인증함";
 
@@ -121,6 +124,9 @@
 /* Copy URL button in URL long press menu */
 "Browser.copyAddressLabel" = "주소 복사";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "클립보드에 URL 복사됨";
+
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "복사";
 
@@ -142,8 +148,29 @@
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "중지";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "주소창 선택";
+
 /* Label on button to cancel edits */
 "Cancel" = "취소";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "복사된 링크: %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "이미지 복사";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "링크 복사";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "복사 한 링크:";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "이미지 저장";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "링크 공유";
 
 /* Label on button to complete edits */
 "Done" = "완료";
@@ -162,6 +189,9 @@
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "열기";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@가 %2$@를 열려고 합니다";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "통화";
@@ -226,6 +256,15 @@
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
 
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "이미지를 카메라롤에 저장할 수 있게 되었습니다";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "설정 열기";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "“%@”가 사진에 접근하려고 합니다";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "데스크톱 사이트 요청";
 
@@ -259,36 +298,6 @@
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "추천 검색을 사용할까요?";
 
-/* Text for button to add another search engine in settings */
-"Settings.Search.AddSearchEngineButton" = "다른 검색 엔진 추가";
-
-/* Text for button to add another search engine in settings with the + prefix */
-"Settings.Search.AddSearchEngineButtonWithPlus" = "+ 다른 검색 엔진 추가";
-
-/* Title on add search engine settings screen */
-"Settings.Search.AddSearchEngineTitle" = "검색 엔진 추가";
-
-/* Header for rows of installed search engines */
-"Settings.Search.InstalledSearchEngines" = "설치된 검색 엔진";
-
-/* Label for input field for the name of the search engine to be added */
-"Settings.Search.NameToDisplay" = "표시할 이름";
-
-/* Toast displayed after adding a search engine */
-"Settings.Search.NewSearchEngineAdded" = "새 검색 엔진이 추가되었습니다.";
-
-/* Label for button to bring deleted default engines back */
-"Settings.Search.RestoreEngine" = "기본 검색 엔진 되돌리기";
-
-/* Placeholder text for input of new search engine name */
-"Settings.Search.SearchEngineName" = "검색 엔진 이름";
-
-/* Label for input of search engine template */
-"Settings.Search.SearchTemplate" = "사용할 검색 문구";
-
-/* Placeholder text for input of new search engine template */
-"Settings.Search.SearchTemplatePlaceholder" = "검색 문구를 붙여넣거나 입력하세요. 필요한 경우, 검색 용어를 %s로 바꾸실 수 있습니다.";
-
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "URL 자동 완성";
 
@@ -318,6 +327,39 @@
 
 /* Title for settings screen */
 "Settings.screenTitle" = "설정";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "다른 검색 엔진 추가";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ 다른 검색 엔진 추가";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "검색 엔진 추가";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "설치된 검색 엔진";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "표시할 이름";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "새 검색 엔진이 추가되었습니다.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "기본 검색 엔진 되돌리기";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "검색 엔진 이름";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "사용할 검색 문구";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "예: searchengineexample.com/search/?q=%s";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "검색 문구를 붙여넣거나 입력하세요. 필요한 경우, 검색 용어를 %s로 바꾸실 수 있습니다.";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "검색 엔진";
@@ -403,6 +445,12 @@
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "SIRI 단축키";
 
+/* Text for a share button */
+"share" = "공유";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "주소 복사";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "페이지내 검색";
 
@@ -454,84 +502,6 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "열 URL";
 
-/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
-"URL.addToAutocompleteLabel" = "자동 완성에 링크 추가";
-
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "취소";
-
-/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
-"URL.contextMenu" = "붙여넣어서 가기";
-
-/* Erase button in the URL bar */
-"URL.eraseButtonLabel" = "삭제";
-
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "페이지 탐색 기록이 삭제되었습니다.";
-
-/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
-"URL.findOnPageLabel" = "페이지내 검색: %@";
-
-/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
-"URL.paste" = "붙여넣기";
-
-/* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "검색어 또는 주소 입력";
-
-/* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "%@ 검색";
-
-/* Text for the URL bar showing the number of trackers blocked on a webpage. */
-"URL.trackersBlockedLabel" = "차단된 추적기";
-
-/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
-"actionSheet.openIn" = "%@에서 열기";
-
-/* Toast displayed after a URL has been copied to the clipboard */
-"browser.copyAddressToast" = "클립보드에 URL 복사됨";
-
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
-"browserShortcutDescription.selectLocationBar" = "주소창 선택";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "복사된 링크: %@";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "이미지 복사";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "링크 복사";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "복사 한 링크:";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "이미지 저장";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "링크 공유";
-
-/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
-"externalAppLinkWithAppName.messageTitle" = "%1$@가 %2$@를 열려고 합니다";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "이미지를 카메라롤에 저장할 수 있게 되었습니다";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "설정 열기";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "“%@”가 사진에 접근하려고 합니다";
-
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "예: searchengineexample.com/search/?q=%s";
-
-/* Text for a share button */
-"share" = "공유";
-
-/* Text for the share menu when a user wants to copy a URL. */
-"shareMenu.copyAddress" = "주소 복사";
-
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Touch ID를 사용하여 %@로 돌아옴";
 
@@ -564,4 +534,35 @@
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.trackerDescriptionLabel" = "광고 액세스 분석, 소셜 등 추적을 %@가 어떻게 차단할지 선택하세요.";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "자동 완성에 링크 추가";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "취소";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "붙여넣어서 가기";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "삭제";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "페이지 탐색 기록이 삭제되었습니다.";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "페이지내 검색: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "붙여넣기";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "검색어 또는 주소 입력";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "%@ 검색";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "차단된 추적기";
+
 

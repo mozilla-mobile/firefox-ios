@@ -31,6 +31,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ ले तपाईंलाई नियन्त्रणमा राख्छ।";
 
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "%@मा खोल्नुहोस्";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "अनुकूल URL थप्नुहोस्";
 
@@ -91,8 +94,26 @@
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "रोक्नुहोस्";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "स्थानपट्टी चयन गर्नुहोस्";
+
 /* Label on button to cancel edits */
 "Cancel" = "रद्द गर्नुहोस्";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "तपाईँले प्रतिलिपी गर्नुभएको लिन्क: %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "तस्विर प्रतिलिपि गर्नुहोस्";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "लिङ्कको प्रतिलिपि बनाउनुहोस्";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "तस्विर सङ्ग्रह गर्नुहोस्";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "लिङ्क साझा गर्नुहोस्";
 
 /* Label on button to complete edits */
 "Done" = "सम्पन्न भयो";
@@ -111,6 +132,9 @@
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "खोल्नुहोस्";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ ले %2$@ खोल्न चाहन्छ";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "फोन गर्नुहोस्";
@@ -148,6 +172,15 @@
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
 
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "यसले तस्विरहरु तपाईँको क्यामेरा रोलमा सङ्ग्रह गर्न दिन्छ";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "सेटिङ्गहरू खोल्नुहोस्";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "\"%@\" ले तपाईँको तस्बिरहरूमा पहुँच बनाउन चाहन्छ";
+
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsEnable" = "%@ सक्षम पार्नुहोस्";
 
@@ -159,6 +192,24 @@
 
 /* Save button label */
 "Save" = "सङ्ग्रह गर्नुहोस्";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "URL स्वत: पूर्ण";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "पर्दैन, धन्यबाद";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "मैले बुझेँ";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla सबैको लागि %@ प्रदान र सुधार गर्न आवश्यक कुरा मात्र संकलन गर्ने प्रयास गर्दछ ।";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "थप जान्नुहोस् ।";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "सेटिङहरू";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "अर्को खोजी इन्जिन थप्नुहोस्";
@@ -187,23 +238,8 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "प्रयोग गर्न स्ट्रिङ खोजी गर्नुहोस्";
 
-/* Title for the URL Autocomplete row */
-"Settings.autocompleteSection" = "URL स्वत: पूर्ण";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "पर्दैन, धन्यबाद";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "मैले बुझेँ";
-
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSendUsageData" = "Mozilla सबैको लागि %@ प्रदान र सुधार गर्न आवश्यक कुरा मात्र संकलन गर्ने प्रयास गर्दछ ।";
-
-/* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.learnMore" = "थप जान्नुहोस् ।";
-
-/* Title for settings screen */
-"Settings.screenTitle" = "सेटिङहरू";
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Example: searchengineexample.com/search/?q=%s";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "खोजी इन्जिन";
@@ -262,6 +298,27 @@
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "%@मा खोल्नुहोस्";
 
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "विज्ञापन ट्रयाकरहरू";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "विश्लेषणात्मक ट्रयाकरहरू";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "सामग्री ट्रयाकरहरू";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "ट्रयाकिङ्ग सुरक्षा बन्द छ";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "थप जान्नुहोस्";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "सामाजिक ट्रयाकरहरू";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "ट्रयाकिङ्ग सुरक्षा";
+
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "रद्द गर्नुहोस्";
 
@@ -283,60 +340,4 @@
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "त्ट्रयाकरहरु अवरुद्ध गरियो";
 
-/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
-"actionSheet.openIn" = "%@मा खोल्नुहोस्";
-
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
-"browserShortcutDescription.selectLocationBar" = "स्थानपट्टी चयन गर्नुहोस्";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "तपाईँले प्रतिलिपी गर्नुभएको लिन्क: %@";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "तस्विर प्रतिलिपि गर्नुहोस्";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "लिङ्कको प्रतिलिपि बनाउनुहोस्";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "तस्विर सङ्ग्रह गर्नुहोस्";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "लिङ्क साझा गर्नुहोस्";
-
-/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
-"externalAppLinkWithAppName.messageTitle" = "%1$@ ले %2$@ खोल्न चाहन्छ";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "यसले तस्विरहरु तपाईँको क्यामेरा रोलमा सङ्ग्रह गर्न दिन्छ";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "सेटिङ्गहरू खोल्नुहोस्";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "\"%@\" ले तपाईँको तस्बिरहरूमा पहुँच बनाउन चाहन्छ";
-
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Example: searchengineexample.com/search/?q=%s";
-
-/* Label for ad trackers. */
-"trackingProtection.adTrackersLabel" = "विज्ञापन ट्रयाकरहरू";
-
-/* label for analytic trackers. */
-"trackingProtection.analyticTrackerLabel" = "विश्लेषणात्मक ट्रयाकरहरू";
-
-/* label for content trackers. */
-"trackingProtection.contentTrackerLabel" = "सामग्री ट्रयाकरहरू";
-
-/* text showing the tracking protection is disabled. */
-"trackingProtection.disabledLabel" = "ट्रयाकिङ्ग सुरक्षा बन्द छ";
-
-/* Text for the button to learn more about Tracking Protection. */
-"trackingProtection.learnMore" = "थप जान्नुहोस्";
-
-/* label for social trackers. */
-"trackingProtection.socialTrackerLabel" = "सामाजिक ट्रयाकरहरू";
-
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "ट्रयाकिङ्ग सुरक्षा";
 

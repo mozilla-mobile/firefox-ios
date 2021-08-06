@@ -40,6 +40,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ ເຮັດໃຫ້ທ່ານສາມາດຄວບຄຸມໄດ້ດັ່ງລຸ່ມນີ້:";
 
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "ເປີດໃນ %@";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "ເພີ່ມ URL ທີ່ກຳນົດເອງ";
 
@@ -106,8 +109,26 @@
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "ຢຸດ";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "ເລືອກຕຳແຫນ່ງທີ່ຕັ້ງບາ";
+
 /* Label on button to cancel edits */
 "Cancel" = "ຍົກເລີກ";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "ລີ້ງທີ່ທ່ານໄດ້ສຳເນົາໄວ້: %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "ສຳເນົາຮູບພາບ";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "ສຳເນົາທີ່ຢູ່ລີ້ງ";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "ບັນທຶກຮູບພາບ";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "ແບ່ງປັນລີ້ງ";
 
 /* Label on button to complete edits */
 "Done" = "ສຳເລັດ";
@@ -126,6 +147,9 @@
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "ເປີດ";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ ຕ້ອງການເປີດໃນ %2$@";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "ໂທ";
@@ -178,6 +202,15 @@
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
 
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "ນີ້ຊ່ວຍໃຫ້ທ່ານບັນທຶກຮູບພາບໄປໄວ້ໃນທີ່ເກັບຮູບພາບຂອງທ່ານ";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "ເປີດການຕັ້ງຄ່າ";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "“%@” ຕ້ອງການເຂົ້າເຖິງຮູບພາບຂອງທ່ານ";
+
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "ແຕະ Safari, ຫລັງຈາກນັ້ນເລືອກຕົວບັອກເນື້ອຫາ";
 
@@ -192,6 +225,27 @@
 
 /* Save button label */
 "Save" = "ບັນທຶກ";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "ການເຕີມ URL ແບບອັດຕະໂນມັດ";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "ການບັອກຕົວຕິດຕາມຂອງເນື້ອຫາຕ່າງໆອາດຈະເຮັດໃຫ້ບາງວິດີໂອ ແລະ ຫນ້າເວັບບໍ່ສົມບູນໄດ້.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "ໄດ້ແລ້ວ, ຂອບໃຈ";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "ຂ້ອຍຮັບຮູ້ເງືອນໄຂແລ້ວ";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla ພະຍາຍາມທີ່ຈະເກັບຮວບຮ່ວມສະເພາະສິ່ງທີ່ຈຳເປັນຕໍ່ການປັບປູງ %@ ສຳລັບທຸກໆຄົນ.";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "ຮຽນຮູ້ເພີ່ມເຕີມ.";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "ການຕັ້ງຄ່າ";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "ເພີ່ມເຄື່ອງມືການຄົ້ນຫາຕົວອື່ນ";
@@ -220,29 +274,11 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "ຊອກຫາສະຕຣິງທີ່ຈະໃຊ້";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "ຕົວຢ່າງ: searchengineexample.com/search/?q=%s";
+
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "ວາງ ຫຼື ປ້ອນ String ການຄົ້ນຫາ ຫາກຈຳເປັນໃຫ້ແທນທີ່ຄຳຄົ້ນຫາດ້ວຍ: %s.";
-
-/* Title for the URL Autocomplete row */
-"Settings.autocompleteSection" = "ການເຕີມ URL ແບບອັດຕະໂນມັດ";
-
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "ການບັອກຕົວຕິດຕາມຂອງເນື້ອຫາຕ່າງໆອາດຈະເຮັດໃຫ້ບາງວິດີໂອ ແລະ ຫນ້າເວັບບໍ່ສົມບູນໄດ້.";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "ໄດ້ແລ້ວ, ຂອບໃຈ";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "ຂ້ອຍຮັບຮູ້ເງືອນໄຂແລ້ວ";
-
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSendUsageData" = "Mozilla ພະຍາຍາມທີ່ຈະເກັບຮວບຮ່ວມສະເພາະສິ່ງທີ່ຈຳເປັນຕໍ່ການປັບປູງ %@ ສຳລັບທຸກໆຄົນ.";
-
-/* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.learnMore" = "ຮຽນຮູ້ເພີ່ມເຕີມ.";
-
-/* Title for settings screen */
-"Settings.screenTitle" = "ການຕັ້ງຄ່າ";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "ເຄື່ອງມືການຄົ້ນຫາ";
@@ -307,63 +343,6 @@
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "ເປີດໃນ %@";
 
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "ຍົກເລີກ";
-
-/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
-"URL.contextMenu" = "ວາງແລ້ວໄປ";
-
-/* Erase button in the URL bar */
-"URL.eraseButtonLabel" = "ລຶບອອກ";
-
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "ປະຫວັດການທ່ອງເວັບຂອງທ່ານໄດ້ຖືກລຶບອອກແລ້ວ.";
-
-/* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "ຄົ້ນຫາ ຫລື ປ້ອນທີ່ຢູ່ໃສ່ນີ້";
-
-/* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "ຄົ້ນຫາສຳລັບ %@";
-
-/* Text for the URL bar showing the number of trackers blocked on a webpage. */
-"URL.trackersBlockedLabel" = "ຕົວຕິດຕາມໄດ້ຖືກບັອກ";
-
-/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
-"actionSheet.openIn" = "ເປີດໃນ %@";
-
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
-"browserShortcutDescription.selectLocationBar" = "ເລືອກຕຳແຫນ່ງທີ່ຕັ້ງບາ";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "ລີ້ງທີ່ທ່ານໄດ້ສຳເນົາໄວ້: %@";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "ສຳເນົາຮູບພາບ";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "ສຳເນົາທີ່ຢູ່ລີ້ງ";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "ບັນທຶກຮູບພາບ";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "ແບ່ງປັນລີ້ງ";
-
-/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
-"externalAppLinkWithAppName.messageTitle" = "%1$@ ຕ້ອງການເປີດໃນ %2$@";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "ນີ້ຊ່ວຍໃຫ້ທ່ານບັນທຶກຮູບພາບໄປໄວ້ໃນທີ່ເກັບຮູບພາບຂອງທ່ານ";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "ເປີດການຕັ້ງຄ່າ";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "“%@” ຕ້ອງການເຂົ້າເຖິງຮູບພາບຂອງທ່ານ";
-
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "ຕົວຢ່າງ: searchengineexample.com/search/?q=%s";
-
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "ຕົວຕິດຕາມໂຄສະນາ";
 
@@ -390,4 +369,26 @@
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.trackerDescriptionLabel" = "ເລືອກວ່າຈະໃຫ້ %@ ບັອກຕົວຕິດຕາມໂຄສະນາ, ການວິເຄາະ, ສືສັງຄົມ ແລະ ຕົວຕິດຕາມອື່ນໆ.";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "ຍົກເລີກ";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "ວາງແລ້ວໄປ";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "ລຶບອອກ";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "ປະຫວັດການທ່ອງເວັບຂອງທ່ານໄດ້ຖືກລຶບອອກແລ້ວ.";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "ຄົ້ນຫາ ຫລື ປ້ອນທີ່ຢູ່ໃສ່ນີ້";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "ຄົ້ນຫາສຳລັບ %@";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "ຕົວຕິດຕາມໄດ້ຖືກບັອກ";
+
 

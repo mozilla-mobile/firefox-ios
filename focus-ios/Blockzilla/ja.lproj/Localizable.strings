@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ でプライバシー保護。";
 
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "%@ で開く";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "認証して %@ へ戻る";
 
@@ -121,6 +124,9 @@
 /* Copy URL button in URL long press menu */
 "Browser.copyAddressLabel" = "アドレスをコピー";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL をクリップボードにコピーしました";
+
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "コピー";
 
@@ -142,8 +148,29 @@
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "中止";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "ロケーションバーを選択";
+
 /* Label on button to cancel edits */
 "Cancel" = "キャンセル";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "コピーしたリンク: %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "画像をコピー";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "リンクアドレスをコピー";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "コピーしたリンク:";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "画像を保存";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "リンクを共有";
 
 /* Label on button to complete edits */
 "Done" = "完了";
@@ -162,6 +189,9 @@
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "開く";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ が %2$@ を開こうとしています";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "発信";
@@ -226,6 +256,15 @@
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
 
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "これにより画像をカメラロールに保存できるようになります";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "環境設定を開く";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "「%@」が写真へのアクセスを求めています";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "デスクトップ版を見る";
 
@@ -259,36 +298,6 @@
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "検索候補を表示しますか？";
 
-/* Text for button to add another search engine in settings */
-"Settings.Search.AddSearchEngineButton" = "別の検索エンジンを追加";
-
-/* Text for button to add another search engine in settings with the + prefix */
-"Settings.Search.AddSearchEngineButtonWithPlus" = "+ 別の検索エンジンを追加";
-
-/* Title on add search engine settings screen */
-"Settings.Search.AddSearchEngineTitle" = "検索エンジンを追加";
-
-/* Header for rows of installed search engines */
-"Settings.Search.InstalledSearchEngines" = "選択可能な検索エンジン";
-
-/* Label for input field for the name of the search engine to be added */
-"Settings.Search.NameToDisplay" = "表示名";
-
-/* Toast displayed after adding a search engine */
-"Settings.Search.NewSearchEngineAdded" = "新規検索エンジンを追加しました。";
-
-/* Label for button to bring deleted default engines back */
-"Settings.Search.RestoreEngine" = "デフォルト検索エンジンに戻す";
-
-/* Placeholder text for input of new search engine name */
-"Settings.Search.SearchEngineName" = "検索エンジン名";
-
-/* Label for input of search engine template */
-"Settings.Search.SearchTemplate" = "使用する検索語";
-
-/* Placeholder text for input of new search engine template */
-"Settings.Search.SearchTemplatePlaceholder" = "検索 URL をペーストまたは入力してください。必要に応じて、検索語を %s で置き換えてください。";
-
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "URL 自動補完";
 
@@ -318,6 +327,39 @@
 
 /* Title for settings screen */
 "Settings.screenTitle" = "環境設定";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "別の検索エンジンを追加";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ 別の検索エンジンを追加";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "検索エンジンを追加";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "選択可能な検索エンジン";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "表示名";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "新規検索エンジンを追加しました。";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "デフォルト検索エンジンに戻す";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "検索エンジン名";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "使用する検索語";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "入力例: searchengineexample.com/search/?q=%s";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "検索 URL をペーストまたは入力してください。必要に応じて、検索語を %s で置き換えてください。";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "検索エンジン";
@@ -403,6 +445,12 @@
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "SIRI ショートカット";
 
+/* Text for a share button */
+"share" = "共有";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "アドレスをコピー";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "ページ内検索";
 
@@ -457,84 +505,6 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "開く URL";
 
-/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
-"URL.addToAutocompleteLabel" = "自動補完にリンクを追加";
-
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "キャンセル";
-
-/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
-"URL.contextMenu" = "ペーストして移動";
-
-/* Erase button in the URL bar */
-"URL.eraseButtonLabel" = "消去";
-
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "ページの表示履歴が消去されました。";
-
-/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
-"URL.findOnPageLabel" = "ページ内検索: %@";
-
-/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
-"URL.paste" = "ペースト";
-
-/* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "検索語またはアドレスを入力";
-
-/* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "%@ を検索";
-
-/* Text for the URL bar showing the number of trackers blocked on a webpage. */
-"URL.trackersBlockedLabel" = "ブロックした追跡";
-
-/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
-"actionSheet.openIn" = "%@ で開く";
-
-/* Toast displayed after a URL has been copied to the clipboard */
-"browser.copyAddressToast" = "URL をクリップボードにコピーしました";
-
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
-"browserShortcutDescription.selectLocationBar" = "ロケーションバーを選択";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "コピーしたリンク: %@";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "画像をコピー";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "リンクアドレスをコピー";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "コピーしたリンク:";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "画像を保存";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "リンクを共有";
-
-/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
-"externalAppLinkWithAppName.messageTitle" = "%1$@ が %2$@ を開こうとしています";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "これにより画像をカメラロールに保存できるようになります";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "環境設定を開く";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "「%@」が写真へのアクセスを求めています";
-
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "入力例: searchengineexample.com/search/?q=%s";
-
-/* Text for a share button */
-"share" = "共有";
-
-/* Text for the share menu when a user wants to copy a URL. */
-"shareMenu.copyAddress" = "アドレスをコピー";
-
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Touch ID を使って %@ へ戻る";
 
@@ -570,4 +540,35 @@
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.trackerDescriptionLabel" = "広告、アクセス解析、ソーシャルなどトラッキングを %@ がどのようにブロックするか選択してください。";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "自動補完にリンクを追加";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "キャンセル";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "ペーストして移動";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "消去";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "ページの表示履歴が消去されました。";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "ページ内検索: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "ペースト";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "検索語またはアドレスを入力";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "%@ を検索";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "ブロックした追跡";
+
 
