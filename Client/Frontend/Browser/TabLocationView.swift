@@ -370,7 +370,6 @@ extension TabLocationView: UIGestureRecognizerDelegate {
     }
 }
 
-@available(iOS 11.0, *)
 extension TabLocationView: UIDragInteractionDelegate {
     func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
         // Ensure we actually have a URL in the location bar and that the URL is not local.

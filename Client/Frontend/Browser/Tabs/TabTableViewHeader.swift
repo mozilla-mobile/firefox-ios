@@ -39,13 +39,8 @@ class TabTableViewHeader: UITableViewHeaderFooterView, Themeable {
     }
 
     func applyTheme() {
-        if #available(iOS 13.0, *) {
-            contentView.backgroundColor = UIColor.systemGroupedBackground
-            titleLabel.textColor = UIColor.secondaryLabel
-        } else {
-            contentView.backgroundColor = UIColor.theme.tableView.headerBackground
-            titleLabel.textColor = UIColor.theme.tableView.headerTextLight
-        }
+        contentView.backgroundColor = UIColor.systemGroupedBackground
+        titleLabel.textColor = UIColor.secondaryLabel
     }
 
     override func prepareForReuse() {

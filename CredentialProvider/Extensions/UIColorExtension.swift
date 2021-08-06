@@ -5,7 +5,6 @@
 import UIKit
 
 extension UIColor {
-    
     struct CredentialProvider {
         static var titleColor: UIColor {
             return UIColor(named: "labelColor") ?? UIColor.Photon.DarkGrey90
@@ -15,17 +14,10 @@ extension UIColor {
             return UIColor(named: "credentialCellColor") ?? UIColor.Photon.White100
         }
         
-        static var tableViewBackgroundColor: UIColor {
-            if #available(iOSApplicationExtension 13.0, *) {
-                return .systemGroupedBackground
-            } else {
-                return UIColor.Photon.Grey10
-            }
-        }
+        static var tableViewBackgroundColor: UIColor = .systemGroupedBackground
         
         static var welcomeScreenBackgroundColor: UIColor {
             return UIColor(named: "launchScreenBackgroundColor") ?? UIColor.Photon.White100
         }
     }
-    
 }

@@ -20,9 +20,7 @@ class CredentialWelcomeViewController: UIViewController {
     
     lazy private var activityIndicator: UIActivityIndicatorView = {
         let loadingIndicator = UIActivityIndicatorView()
-        if #available(iOSApplicationExtension 13.0, *) {
-            loadingIndicator.style = .large
-        }
+        loadingIndicator.style = .large
         return loadingIndicator
     }()
     

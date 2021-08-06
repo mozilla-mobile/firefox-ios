@@ -177,20 +177,16 @@ class LoginListViewController: SensitiveViewController {
         selectionButton.backgroundColor = UIColor.theme.general.highlightBlue
 
         let isDarkTheme = ThemeManager.instance.currentName == .dark
-        var searchTextField: UITextField?
-        if #available(iOS 13.0, *) {
-            searchTextField = searchController.searchBar.searchTextField
-        } else {
-            searchTextField = searchController.searchBar.value(forKey: "searchField") as? UITextField
-        }
+        var searchTextField = searchController.searchBar.searchTextField
+        
         // Theme the search text field (Dark / Light)
         if isDarkTheme {
-            searchTextField?.defaultTextAttributes[NSAttributedString.Key.foregroundColor] = UIColor.white
+            searchTextField.defaultTextAttributes[NSAttributedString.Key.foregroundColor] = UIColor.white
         } else {
-            searchTextField?.defaultTextAttributes[NSAttributedString.Key.foregroundColor] = UIColor.black
+            searchTextField.defaultTextAttributes[NSAttributedString.Key.foregroundColor] = UIColor.black
         }
         // Theme the glass icon next to the search text field
-        if let glassIconView = searchTextField?.leftView as? UIImageView {
+        if let glassIconView = searchTextField.leftView as? UIImageView {
             //Magnifying glass
             glassIconView.image = glassIconView.image?.withRenderingMode(.alwaysTemplate)
             glassIconView.tintColor = UIColor.theme.tableView.headerTextLight

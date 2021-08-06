@@ -114,13 +114,7 @@ class ToolbarTests: BaseTestCase {
         waitUntilPageLoad()
         waitForExistence(app.buttons["TabLocationView.pageOptionsButton"], timeout: 10)
         let pageActionMenuButton = app.buttons["TabLocationView.pageOptionsButton"]
-        let statusbarElement: XCUIElement = {
-            if #available(iOS 13, *) {
-                return XCUIApplication(bundleIdentifier: "com.apple.springboard").statusBars.firstMatch
-            } else {
-                return app.statusBars.children(matching: .other).element.children(matching: .other).element(boundBy: 0)
-            }
-        }()
+        let statusbarElement: XCUIElement = XCUIApplication(bundleIdentifier: "com.apple.springboard").statusBars.firstMatch
         app.swipeUp()
         XCTAssertFalse(pageActionMenuButton.exists)
         statusbarElement.tap(force: true)

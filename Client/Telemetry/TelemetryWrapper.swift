@@ -90,11 +90,7 @@ class TelemetryWrapper {
 
             outputDict["openTabCount"] = delegate?.tabManager.count ?? 0
 
-            var userInterfaceStyle = "unknown" // unknown implies that device is on pre-iOS 13
-            if #available(iOS 13.0, *) {
-                userInterfaceStyle = UITraitCollection.current.userInterfaceStyle == .dark ? "dark" : "light"
-            }
-            outputDict["systemTheme"] = userInterfaceStyle
+            outputDict["systemTheme"] = UITraitCollection.current.userInterfaceStyle == .dark ? "dark" : "light"
 
             return outputDict
         }

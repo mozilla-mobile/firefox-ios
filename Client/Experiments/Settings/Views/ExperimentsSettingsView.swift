@@ -38,10 +38,7 @@ class ExperimentsSettingsView: UIView {
 
     convenience init() {
         self.init(frame: .zero)
-
-        if #available(iOS 13.0, *) {
-            backgroundColor = .systemBackground
-        }
+        backgroundColor = .systemBackground
 
         addSubviews(customRemoteSettingsTextField, reloadButton, usePreviewPrompt,
                     usePreviewToggle, customExperimentDataTextView, updateButton, gapView)

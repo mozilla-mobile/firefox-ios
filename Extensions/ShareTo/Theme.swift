@@ -19,16 +19,12 @@ public struct ModernColor {
     }
 
     public var color: UIColor {
-        if #available(iOS 13, *) {
-            return UIColor { (traitCollection: UITraitCollection) -> UIColor in
-                if traitCollection.userInterfaceStyle == .dark {
-                    return self.color(for: .dark)
-                } else {
-                    return self.color(for: .light)
-                }
+        return UIColor { (traitCollection: UITraitCollection) -> UIColor in
+            if traitCollection.userInterfaceStyle == .dark {
+                return self.color(for: .dark)
+            } else {
+                return self.color(for: .light)
             }
-        } else {
-            return color(for: .light)
         }
     }
 

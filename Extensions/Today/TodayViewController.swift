@@ -72,13 +72,9 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         self.extensionContext?.widgetLargestAvailableDisplayMode = .compact
         viewModel.setViewDelegate(todayViewDelegate: self)
         NotificationCenter.default.addObserver(self, selector: #selector(preferredContentSizeChanged(_:)), name: UIContentSizeCategory.didChangeNotification, object: nil)
-        let effectView: UIVisualEffectView
-
-        if #available(iOS 13, *) {
-            effectView = UIVisualEffectView(effect: UIVibrancyEffect.widgetEffect(forVibrancyStyle: .label))
-        } else {
-            effectView = UIVisualEffectView(effect: .none)
-        }
+        
+        let effectView = UIVisualEffectView(effect: UIVibrancyEffect.widgetEffect(forVibrancyStyle: .label))
+        
         self.view.addSubview(effectView)
         effectView.snp.makeConstraints { make in
             make.edges.equalTo(self.view)

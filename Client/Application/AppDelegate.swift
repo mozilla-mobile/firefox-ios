@@ -252,37 +252,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             }
         }
 
-        if #available(iOS 13.0, *) {
-            BGTaskScheduler.shared.register(forTaskWithIdentifier: "org.mozilla.ios.sync.part1", using: DispatchQueue.global()) { task in
-                guard self.profile?.hasSyncableAccount() ?? false else {
-                    self.shutdownProfileWhenNotActive(application)
-                    return
-                }
-
-                NSLog("background sync part 1") // NSLog to see in device console
-                let collection = ["bookmarks", "history"]
-                self.profile?.syncManager.syncNamedCollections(why: .backgrounded, names: collection).uponQueue(.main) { _ in
-                    task.setTaskCompleted(success: true)
-                    let request = BGProcessingTaskRequest(identifier: "org.mozilla.ios.sync.part2")
-                    request.earliestBeginDate = Date(timeIntervalSinceNow: 1)
-                    request.requiresNetworkConnectivity = true
-                    do {
-                        try BGTaskScheduler.shared.submit(request)
-                    } catch {
-                        NSLog(error.localizedDescription)
-                    }
-                }
+        
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: "org.mozilla.ios.sync.part1", using: DispatchQueue.global()) { task in
+            guard self.profile?.hasSyncableAccount() ?? false else {
+                self.shutdownProfileWhenNotActive(application)
+                return
             }
 
-            // Split up the sync tasks so each can get maximal time for a bg task.
-            // This task runs after the bookmarks+history sync.
-            BGTaskScheduler.shared.register(forTaskWithIdentifier: "org.mozilla.ios.sync.part2", using: DispatchQueue.global()) { task in
-                NSLog("background sync part 2") // NSLog to see in device console
-                let collection = ["tabs", "logins", "clients"]
-                self.profile?.syncManager.syncNamedCollections(why: .backgrounded, names: collection).uponQueue(.main) { _ in
-                    self.shutdownProfileWhenNotActive(application)
-                    task.setTaskCompleted(success: true)
+            NSLog("background sync part 1") // NSLog to see in device console
+            let collection = ["bookmarks", "history"]
+            self.profile?.syncManager.syncNamedCollections(why: .backgrounded, names: collection).uponQueue(.main) { _ in
+                task.setTaskCompleted(success: true)
+                let request = BGProcessingTaskRequest(identifier: "org.mozilla.ios.sync.part2")
+                request.earliestBeginDate = Date(timeIntervalSinceNow: 1)
+                request.requiresNetworkConnectivity = true
+                do {
+                    try BGTaskScheduler.shared.submit(request)
+                } catch {
+                    NSLog(error.localizedDescription)
                 }
+            }
+        }
+
+        // Split up the sync tasks so each can get maximal time for a bg task.
+        // This task runs after the bookmarks+history sync.
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: "org.mozilla.ios.sync.part2", using: DispatchQueue.global()) { task in
+            NSLog("background sync part 2") // NSLog to see in device console
+            let collection = ["tabs", "logins", "clients"]
+            self.profile?.syncManager.syncNamedCollections(why: .backgrounded, names: collection).uponQueue(.main) { _ in
+                self.shutdownProfileWhenNotActive(application)
+                task.setTaskCompleted(success: true)
             }
         }
         updateSessionCount()
@@ -415,11 +414,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         singleShotTimer.resume()
         shutdownWebServer = singleShotTimer
 
-        if #available(iOS 13.0, *) {
-            scheduleBGSync(application: application)
-        } else {
-            syncOnDidEnterBackground(application: application)
-        }
+        scheduleBGSync(application: application)
 
         tabManager.preserveTabs()
     }
@@ -430,33 +425,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         if #available(iOS 14.0, *) {
             guard let profile = profile else { return }
             TopSitesHandler.writeWidgetKitTopSites(profile: profile)
-        }
-    }
-
-    fileprivate func syncOnDidEnterBackground(application: UIApplication) {
-        guard let profile = self.profile else {
-            return
-        }
-
-        profile.syncManager.applicationDidEnterBackground()
-
-        // Create an expiring background task. This allows plenty of time for db locks to be released
-        // async. Otherwise we are getting crashes due to db locks not released yet.
-        var taskId = UIBackgroundTaskIdentifier(rawValue: 0)
-        taskId = application.beginBackgroundTask(expirationHandler: {
-            print("Running out of background time, but we have a profile shutdown pending.")
-            self.shutdownProfileWhenNotActive(application)
-            application.endBackgroundTask(taskId)
-        })
-
-        if profile.hasSyncableAccount() {
-            profile.syncManager.syncEverything(why: .backgrounded).uponQueue(.main) { _ in
-                self.shutdownProfileWhenNotActive(application)
-                application.endBackgroundTask(taskId)
-            }
-        } else {
-            profile._shutdown()
-            application.endBackgroundTask(taskId)
         }
     }
 
@@ -536,11 +504,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         let bvc = BrowserViewController.foregroundBVC()
-        if #available(iOS 12.0, *) {
-            if userActivity.activityType == SiriShortcuts.activityType.openURL.rawValue {
-                bvc.openBlankNewTab(focusLocationField: false)
-                return true
-            }
+        if userActivity.activityType == SiriShortcuts.activityType.openURL.rawValue {
+            bvc.openBlankNewTab(focusLocationField: false)
+            return true
         }
 
         // If the `NSUserActivity` has a `webpageURL`, it is either a deep link or an old history item
@@ -586,7 +552,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         completionHandler(handledShortCutItem)
     }
 
-    @available(iOS 13.0, *)
     private func scheduleBGSync(application: UIApplication) {
         if profile?.syncManager.isSyncing ?? false {
             // If syncing, create a bg task because _shutdown() is blocking and might take a few seconds to complete

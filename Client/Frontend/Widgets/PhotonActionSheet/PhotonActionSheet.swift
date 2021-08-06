@@ -335,7 +335,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
             } else if title != nil {
                 return PhotonActionSheetUX.TitleHeaderSectionHeight
             } else {
-                if #available(iOS 13.0, *) { return 0 } else { return 1 }
+                return 0
             }
         } else {
             if site != nil || title != nil {

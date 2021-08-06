@@ -361,7 +361,6 @@ extension TabDisplayManager: TabSelectionDelegate {
     }
 }
 
-@available(iOS 11.0, *)
 extension TabDisplayManager: UIDropInteractionDelegate {
     func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
         // Prevent tabs from being dragged and dropped onto the "New Tab" button.
@@ -419,7 +418,6 @@ extension TabDisplayManager: UICollectionViewDragDelegate {
     }
 }
 
-@available(iOS 11.0, *)
 extension TabDisplayManager: UICollectionViewDropDelegate {
     private func dragPreviewParameters(_ collectionView: UICollectionView, dragPreviewParametersForItemAt indexPath: IndexPath) -> UIDragPreviewParameters? {
         guard let cell = collectionView.cellForItem(at: indexPath) as? TopTabCell else { return nil }
