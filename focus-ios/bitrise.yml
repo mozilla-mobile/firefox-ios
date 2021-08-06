@@ -234,6 +234,7 @@ workflows:
         inputs:
         - channel: "#focus-ios-alerts"
         - message: "The build run the testPlan: $TEST_PLAN_NAME"
+        - messageOnError: "The build run the testPlan: $TEST_PLAN_NAME"
         - webhook_url: "$SLACK_WEBHOOK"
     meta:
       bitrise.io:
@@ -303,6 +304,7 @@ workflows:
         inputs:
         - channel: "#focus-ios-alerts"
         - message: "The build run the testPlan: $TEST_PLAN_NAME"
+        - messageOnError: "The build run the testPlan: $TEST_PLAN_NAME"
         - webhook_url: "$SLACK_WEBHOOK"
     meta:
       bitrise.io:
@@ -348,6 +350,13 @@ workflows:
         - scheme: Focus
         - simulator_device: iPad Air (4th generation)
     - deploy-to-bitrise-io@1: {}
+    - slack@3:
+        run_if: ".IsBuildFailed"
+        inputs:
+        - channel: "#focus-ios-alerts"
+        - message: "The build run the Full and Smoke tests for iPad"
+        - messageOnError: "The build run the Full and Smoke tests iPad"
+        - webhook_url: "$SLACK_WEBHOOK"
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
