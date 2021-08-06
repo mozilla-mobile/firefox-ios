@@ -46,7 +46,6 @@ enum MiddleButtonState {
     case reload
     case stop
     case search
-    case newTab
 }
 
 @objcMembers
@@ -69,9 +68,6 @@ open class TabToolbarHelper: NSObject {
             case .search:
                 toolbar.multiStateButton.setImage(ImageSearch, for: .normal)
                 toolbar.multiStateButton.accessibilityLabel = .TabToolbarSearchAccessibilityLabel
-            case .newTab:
-                toolbar.multiStateButton.setImage(ImageNewTab, for: .normal)
-                toolbar.multiStateButton.accessibilityLabel = .TabToolbarNewTabAccessibilityLabel
         }
     }
     
@@ -177,8 +173,6 @@ open class TabToolbarHelper: NSObject {
         case .search:
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .startSearchButton)
             toolbar.tabToolbarDelegate?.tabToolbarDidPressSearch(toolbar, button: toolbar.multiStateButton)
-        case .newTab:
-            toolbar.tabToolbarDelegate?.tabToolbarDidPressAddNewTab(toolbar, button: toolbar.addNewTabButton)
         case .stop:
             toolbar.tabToolbarDelegate?.tabToolbarDidPressStop(toolbar, button: toolbar.multiStateButton)
         }
@@ -186,7 +180,7 @@ open class TabToolbarHelper: NSObject {
 
     func didLongPressMultiStateButton(_ recognizer: UILongPressGestureRecognizer) {
         switch middleButtonState {
-        case .search, .newTab:
+        case .search:
             return
         default:
             if recognizer.state == .began {
