@@ -10,13 +10,14 @@ class EnhancedTrackingProtectionMenuVM {
     // MARK: - Variables
 
     var tab: Tab
+    var tabManager: TabManager
     var profile: Profile
+    var onClose: (() -> Void)?
 
     var websiteTitle: String {
         return tab.url?.baseDomain ?? ""
     }
 
-//            let trackingProtectionMenu = self.getTrackingSubMenu(for: tab)
     var favIcon: URL? {
         if let icon = tab.displayFavicon, let url = URL(string: icon.url) { return url }
         return nil
@@ -36,19 +37,26 @@ class EnhancedTrackingProtectionMenuVM {
         return tab.webView?.hasOnlySecureContent ?? false
     }
 
-    var isETPEnabled: Bool {
+    var isSiteETPEnabled: Bool {
+        guard let blocker = tab.contentBlocker else { return true }
+
+        switch blocker.status {
+        case .noBlockedURLs, .blocking, .disabled: return true
+        case .safelisted: return false
+        }
+    }
+
+    var globalETPIsEnabled: Bool {
         return FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs)
     }
 
     // MARK: - Initializers
 
-    init(tab: Tab, profile: Profile) {
+    init(tab: Tab, profile: Profile, tabManager: TabManager) {
         self.tab = tab
         self.profile = profile
-    }
-
-    deinit {
-        print("ROUX - VM out")
+        self.tabManager = tabManager
+        
     }
 
     // MARK: - Functions
@@ -64,8 +72,12 @@ class EnhancedTrackingProtectionMenuVM {
                                                    connectionSecure: connectionSecure)
     }
 
-    func setTracking(to status: Bool) {
-        FirefoxTabContentBlocker.setTrackingProtection(enabled: status, prefs: profile.prefs)
-        tab.reload()
+    func toggleSiteSafelistStatus() {
+        guard let currentURL = tab.url else { return }
+
+        TelemetryWrapper.recordEvent(category: .action, method: .add, object: .trackingProtectionSafelist)
+        ContentBlocker.shared.safelist(enable: tab.contentBlocker?.status != .safelisted, url: currentURL) {
+            self.tab.reload()
+        }
     }
 }

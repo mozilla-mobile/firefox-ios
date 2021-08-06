@@ -142,8 +142,8 @@ class TabLocationView: UIView {
         var separatorLine: UIView?
     }
 
-    lazy var trackingProtectionButton: TrackingProtectionButton = {
-        let trackingProtectionButton = TrackingProtectionButton()
+    lazy var trackingProtectionButton: UIButton = {
+        let trackingProtectionButton = UIButton()
         trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection"), for: .normal)
         trackingProtectionButton.addTarget(self, action: #selector(didPressTPShieldButton(_:)), for: .touchUpInside)
         trackingProtectionButton.tintColor = UIColor.Photon.Grey50
@@ -224,7 +224,7 @@ class TabLocationView: UIView {
         }
 
         // Link these so they hide/show in-sync.
-        trackingProtectionButton.separatorLine = separatorLineForTP
+//        trackingProtectionButton.separatorLine = separatorLineForTP
 
         pageOptionsButton.separatorLine = separatorLineForPageOptions
 
@@ -435,7 +435,7 @@ extension TabLocationView: TabEventHandler {
         case .safelisted:
             trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection-off"), for: .normal)
         case .disabled:
-            trackingProtectionButton.isHidden = true
+            trackingProtectionButton.isHidden = false
         }
     }
 

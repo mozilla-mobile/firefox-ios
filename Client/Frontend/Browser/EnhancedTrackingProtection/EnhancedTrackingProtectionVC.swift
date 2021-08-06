@@ -105,7 +105,6 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
     }
 
     let toggleSwitch: UISwitch = .build { toggleSwitch in
-        toggleSwitch.isOn = true
         toggleSwitch.isEnabled = true
         toggleSwitch.onTintColor = .systemBlue
     }
@@ -132,6 +131,12 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
     var hasSetPointOrigin = false
     var pointOrigin: CGPoint?
 
+    var toggleContainerShouldBeHidden: Bool {
+        return !viewModel.globalETPIsEnabled
+    }
+
+    var protectionViewTopConstraint: NSLayoutConstraint?
+
     // MARK: - View lifecycle
 
     init(viewModel: EnhancedTrackingProtectionMenuVM) {
@@ -144,15 +149,10 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
-        print("ROUX - VC out!")
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         addGestureRecognizer()
         setupView()
-        applyTheme()
     }
 
     override func viewDidLayoutSubviews() {
@@ -165,6 +165,8 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateViewDetails()
+        showToggleView()
+        applyTheme()
     }
 
     private func setupView() {
@@ -248,9 +250,9 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
 
     private func setupToggleView() {
         toggleView.addSubview(toggleLabel)
+        toggleView.addSubview(toggleSwitch)
         toggleContainer.addSubview(toggleView)
         toggleContainer.addSubview(toggleStatusLabel)
-        toggleContainer.addSubview(toggleSwitch)
         view.addSubview(toggleContainer)
 
         let toggleConstraints = [
@@ -282,9 +284,10 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
         view.addSubview(protectionView)
 
         let protectionConstraints = [
+            // NB: ProtectionView's top anchor constraint is set separately in `showToggleView()`
+            // and as such is absent here.
             protectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: ETPMenuUX.UX.gutterDistance),
             protectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -ETPMenuUX.UX.gutterDistance),
-            protectionView.topAnchor.constraint(equalTo: toggleContainer.bottomAnchor),
             protectionView.heightAnchor.constraint(equalToConstant: ETPMenuUX.UX.viewHeight),
 
             protectionButton.leadingAnchor.constraint(equalTo: protectionView.leadingAnchor, constant: ETPMenuUX.UX.gutterDistance),
@@ -309,7 +312,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
         connectionLabel.text = viewModel.connectionStatusString
         connectionImage.image = viewModel.connectionStatusImage
 
-        toggleSwitch.isOn = viewModel.isETPEnabled
+        toggleSwitch.isOn = viewModel.isSiteETPEnabled
         toggleLabel.text = Strings.TrackingProtectionEnableTitle
         toggleStatusLabel.text = toggleSwitch.isOn ? Strings.ETPOn : Strings.ETPOff
     }
@@ -319,6 +322,21 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
         connectionButton.addTarget(self, action: #selector(connectionDetailsTapped), for: .touchUpInside)
         toggleSwitch.addTarget(self, action: #selector(trackingProtectionToggleTapped), for: .valueChanged)
         protectionButton.addTarget(self, action: #selector(protectionSettingsTapped), for: .touchUpInside)
+    }
+
+    private func showToggleView() {
+        if toggleContainerShouldBeHidden {
+            protectionViewTopConstraint?.isActive = false
+            protectionViewTopConstraint = protectionView.topAnchor.constraint(equalTo: connectionView.bottomAnchor, constant: 32)
+            protectionViewTopConstraint?.isActive = true
+            toggleContainer.isHidden = true
+        } else {
+            protectionViewTopConstraint?.isActive = false
+            protectionViewTopConstraint = protectionView.topAnchor.constraint(equalTo: toggleContainer.bottomAnchor)
+            protectionViewTopConstraint?.isActive = true
+            toggleContainer.isHidden = false
+        }
+        view.layoutIfNeeded()
     }
 
     // MARK: - Button actions
@@ -334,38 +352,21 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
     }
 
     @objc func trackingProtectionToggleTapped() {
-        let toggleStatus = toggleSwitch.isOn
-        switch toggleStatus {
-        case true:
-            viewModel.setTracking(to: toggleStatus)
-            toggleStatusLabel.text = Strings.ETPOn
-        case false:
-            viewModel.setTracking(to: toggleStatus)
-            toggleStatusLabel.text = Strings.ETPOff
+        // site is safelisted if site ETP is disabled
+        viewModel.toggleSiteSafelistStatus()
+        switch viewModel.isSiteETPEnabled {
+        case true: toggleStatusLabel.text = Strings.ETPOn
+        case false: toggleStatusLabel.text = Strings.ETPOff
         }
     }
 
     @objc func protectionSettingsTapped() {
-//        let settings = PhotonActionSheetItem(title: Strings.TPProtectionSettings, iconString: "settings") { _, _ in
-//            let settingsTableViewController = AppSettingsTableViewController()
-//            settingsTableViewController.profile = self.profile
-//            settingsTableViewController.tabManager = self.tabManager
-//            guard let bvc = self as? BrowserViewController else { return }
-//            settingsTableViewController.settingsDelegate = bvc
-//            settingsTableViewController.showContentBlockerSetting = true
-//
-//            let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
-//            controller.presentingModalViewControllerDelegate = bvc
-//
-//            // Wait to present VC in an async dispatch queue to prevent a case where dismissal
-//            // of this popover on iPad seems to block the presentation of the modal VC.
-//            DispatchQueue.main.async {
-//                bvc.present(controller, animated: true, completion: nil)
-//            }
-//        }
-    }
+        self.dismiss(animated: true) {
+            self.viewModel.onClose?()
+        }
+}
 
-    // MARK: - Gesture Recognizer
+// MARK: - Gesture Recognizer
 
     private func addGestureRecognizer() {
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panGestureRecognizerAction))
@@ -399,6 +400,12 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
                 }
             }
         }
+    }
+}
+
+extension EnhancedTrackingProtectionMenuVC: PresentingModalViewControllerDelegate {
+    func dismissPresentedModalViewController(_ modalViewController: UIViewController, animated: Bool) {
+        self.dismiss(animated: true, completion: nil)
     }
 }
 

@@ -130,6 +130,7 @@ extension PhotonActionSheetProtocol {
     }
 
     private func menuActionsForTrackingProtectionEnabled(for tab: Tab, isSafelisted: Bool = false) -> [[PhotonActionSheetItem]] {
+        // ROUX
         guard let blocker = tab.contentBlocker, let currentURL = tab.url else {
             return []
         }

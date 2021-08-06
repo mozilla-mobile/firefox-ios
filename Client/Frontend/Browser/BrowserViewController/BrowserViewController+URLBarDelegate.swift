@@ -167,7 +167,23 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
     func urlBarDidTapShield(_ urlBar: URLBarView) {
         if let tab = self.tabManager.selectedTab {
             // ROUX
-            let etpViewModel = EnhancedTrackingProtectionMenuVM(tab: tab, profile: profile)
+            let etpViewModel = EnhancedTrackingProtectionMenuVM(tab: tab, profile: profile, tabManager: tabManager)
+            etpViewModel.onClose = {
+                let settingsTableViewController = AppSettingsTableViewController()
+                settingsTableViewController.profile = self.profile
+                settingsTableViewController.tabManager = self.tabManager
+                settingsTableViewController.settingsDelegate = self
+                settingsTableViewController.showContentBlockerSetting = true
+
+                let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
+                controller.presentingModalViewControllerDelegate = self
+
+                // Wait to present VC in an async dispatch queue to prevent a case where dismissal
+                // of this popover on iPad seems to block the presentation of the modal VC.
+                DispatchQueue.main.async {
+                    self.present(controller, animated: true, completion: nil)
+                }
+            }
             let etpVC = EnhancedTrackingProtectionMenuVC(viewModel: etpViewModel)
             etpVC.modalPresentationStyle = .custom
             etpVC.transitioningDelegate = self
