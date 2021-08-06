@@ -34,9 +34,6 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "దీనిని Safari పొడిగింతగా వాడండి:";
 
-/* (No Comment) */
-"About.screenTitle" = "గురించి";
-
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
 "About.title" = "%@ గురించి";
 
@@ -328,9 +325,6 @@
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Firefox App ను పొందండి";
 
-/* Text for the share menu option when a user wants to open a page in Focus. */
-"ShareMenu.OpenInFocus" = "%@ లో తెరువు";
-
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "పేజీ చర్యలు";
 
@@ -379,9 +373,6 @@
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "ERASE";
 
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "మీ విహరణ చరిత్ర తొలగించబడింది.";
-
 /* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
 "URL.paste" = "అతికించు";
 
@@ -393,5 +384,4 @@
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "నిరోధించిన ట్రాకర్లు";
-
 

@@ -31,9 +31,6 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Undan Safari kengaytmasi sifatida foydalaning:";
 
-/* (No Comment) */
-"About.screenTitle" = "Dastur haqida";
-
 /* Label on About screen */
 "About.topLabel" = "%@ boshqarish imkonini sizga beradi.";
 
@@ -163,13 +160,9 @@
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "TOZALASH";
 
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "Kirilgan saytlar haqidagi ma’lumot tozalandi.";
-
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Izlang yoki manzilni kiriting";
 
 /* Label displayed for search button when typing in the URL bar */
 "URL.searchLabel" = "Izlash: %@";
-
 

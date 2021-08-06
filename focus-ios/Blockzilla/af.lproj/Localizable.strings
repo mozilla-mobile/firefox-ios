@@ -31,9 +31,6 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Gebruik dit as ’n uitbreiding vir Safari:";
 
-/* (No Comment) */
-"About.screenTitle" = "Aangaande";
-
 /* Label on About screen */
 "About.topLabel" = "%@ plaas mens in beheer.";
 
@@ -163,13 +160,9 @@
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "VEE UIT";
 
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "U blaaigeskiedenis is uitgevee.";
-
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Soek, of tik adres in";
 
 /* Label displayed for search button when typing in the URL bar */
 "URL.searchLabel" = "Soek vir %@";
-
 

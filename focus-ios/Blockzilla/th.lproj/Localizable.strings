@@ -34,9 +34,6 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "ใช้เป็นส่วนขยาย Safari:";
 
-/* (No Comment) */
-"About.screenTitle" = "เกี่ยวกับ";
-
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
 "About.title" = "เกี่ยวกับ %@";
 
@@ -89,7 +86,7 @@
 "Autocomplete.defaultTitle" = "รายการ URL เริ่มต้น";
 
 /* label describing URL Autocomplete as disabled */
-"Autocomplete.disabled" = "ถูกปิดใช้งาน";
+"Autocomplete.disabled" = "ปิดใช้งานอยู่";
 
 /* Label for toast alerting that the custom URL being added is a duplicate */
 "Autocomplete.duplicateUrl" = "มี URL อยู่แล้ว";
@@ -98,7 +95,7 @@
 "Autocomplete.emptyState" = "ไม่มี URL ที่กำหนดเองที่จะแสดงผล";
 
 /* label describing URL Autocomplete as enabled */
-"Autocomplete.enabled" = "ถูกเปิดใช้งาน";
+"Autocomplete.enabled" = "เปิดใช้งานอยู่";
 
 /* Label for button taking you to your custom Autocomplete URL list */
 "Autocomplete.manageSites" = "จัดการไซต์";
@@ -116,7 +113,7 @@
 "BiometricPrompt.newSession" = "วาระใหม่";
 
 /* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
-"BiometricPrompt.reason" = "ปลดล็อค %@ เมื่อเปิดใหม่เพื่อป้องกันการเข้าถึงที่ไม่ได้รับอนุญาต";
+"BiometricPrompt.reason" = "ปลดล็อก %@ เมื่อเปิดใหม่เพื่อป้องกันการเข้าถึงที่ไม่ได้รับอนุญาต";
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "ย้อนกลับ";
@@ -257,13 +254,13 @@
 "Open.Safari" = "Safari";
 
 /* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "สิ่งนี้ช่วยให้คุณบันทึกภาพไปยังม้วนฟิล์มของคุณ";
+"photosPermission.description" = "สิ่งนี้ช่วยให้คุณบันทึกภาพไปยัง ม้วนฟิล์ม ของคุณ";
 
 /* Title for button that takes the user to system settings */
 "photosPermission.openSettings" = "เปิดการตั้งค่า";
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "“%@” ต้องการเข้าถึงรูปภาพของคุณ";
+"photosPermission.title" = "“%@” ต้องการเข้าถึงรูปถ่ายของคุณ";
 
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "ขอไซต์สำหรับเดสก์ท็อป";
@@ -275,7 +272,7 @@
 "Safari.instructionsEnable" = "เปิดใช้งาน %@";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
-"Safari.instructionsNotEnabled" = "%@ ไม่ได้ถูกเปิดใช้งาน";
+"Safari.instructionsNotEnabled" = "ไม่ได้เปิดใช้งาน %@";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "เปิดแอป การตั้งค่า";
@@ -416,7 +413,7 @@
 "Settings.toggleFaceID" = "ใช้ Face ID เพื่อปลดล็อคแอป";
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
-"Settings.toggleFaceIDDescription" = "Face ID สามารถปลดล็อค %@ หาก URL ถูกเปิดอยู่แล้วในแอป";
+"Settings.toggleFaceIDDescription" = "Face ID สามารถปลดล็อค %@ หากเปิด URL อยู่แล้วในแอป";
 
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "แสดงเคล็ดลับหน้าจอหลัก";
@@ -434,10 +431,7 @@
 "Settings.toggleTouchID" = "ใช้ Touch ID เพื่อปลดล็อคแอป";
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
-"Settings.toggleTouchIDDescription" = "Touch ID สามารถปลดล็อค %@ หาก URL ถูกเปิดอยู่แล้วในแอป";
-
-/* URL for the learn more of the send usage data toggle */
-"Settings.usageData" = "usage-data";
+"Settings.toggleTouchIDDescription" = "Touch ID สามารถปลดล็อค %@ หากเปิด URL อยู่แล้วในแอป";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "มีอะไรใหม่";
@@ -457,11 +451,8 @@
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "รับแอป Firefox";
 
-/* Text for the share menu option when a user wants to open a page in Focus. */
-"ShareMenu.OpenInFocus" = "เปิดใน %@";
-
 /* Title for the share menu where users can take actions for the current website they are on. */
-"ShareMenu.PageActions" = "การกระทำของหน้า";
+"ShareMenu.PageActions" = "การกระทำหน้า";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "ขอไซต์สำหรับเดสก์ท็อป";
@@ -553,9 +544,6 @@
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "ล้าง";
 
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "ล้างประวัติการท่องเว็บของคุณแล้ว";
-
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "ค้นหาในหน้า: %@";
 
@@ -569,6 +557,5 @@
 "URL.searchLabel" = "ค้นหา %@";
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
-"URL.trackersBlockedLabel" = "ตัวติดตามที่ถูกปิดกั้น";
-
+"URL.trackersBlockedLabel" = "ตัวติดตามที่ปิดกั้น";
 

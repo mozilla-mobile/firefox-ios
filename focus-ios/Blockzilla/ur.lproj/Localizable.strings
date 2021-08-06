@@ -34,9 +34,6 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "اس کو Safari کی توسیعات کے طور پر استعمال کریں:";
 
-/* (No Comment) */
-"About.screenTitle" = "کے بارے میں";
-
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
 "About.title" = "%@ کے بارے میں";
 
@@ -412,14 +409,14 @@
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Firefox ایب حاصل کریں";
 
-/* Text for the share menu option when a user wants to open a page in Focus. */
-"ShareMenu.OpenInFocus" = "%@ میں کھولیں";
-
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "صفحہ اعمال";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "ڈیسک ٹاپ سائٹ کی درخواست کریں";
+
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "موبائل سائٹ کی درخواست کریں";
 
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Chrome میں کھولیں";
@@ -490,9 +487,6 @@
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "مٹائيں";
 
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "آپ کے برائوزنگ سابقات مٹا دیئے گئے ہیں۔";
-
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "صفحہ میں ڈھونڈیں: %@";
 
@@ -507,5 +501,4 @@
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "بلاک کردہ ٹریکر";
-
 

@@ -34,9 +34,6 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Օգտագործել որպես Safari-ի ընդլայնում.";
 
-/* (No Comment) */
-"About.screenTitle" = "Մասին";
-
 /* Label on About screen */
 "About.topLabel" = "%@-ը տալիս է ձեզ կառավարում:";
 
@@ -340,9 +337,6 @@
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Ստանալ Firefox-ը";
 
-/* Text for the share menu option when a user wants to open a page in Focus. */
-"ShareMenu.OpenInFocus" = "Բացել %@-ում";
-
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Գովազդի արգելափակում";
 
@@ -379,9 +373,6 @@
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "ՋՆՋԵԼ";
 
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "Դիտարկումների պատմությունը ջնջվել է:";
-
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Մուտքագրեք կայքի հասցե կամ որոնում";
 
@@ -390,5 +381,4 @@
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "Արգելել հետագծումները";
-
 

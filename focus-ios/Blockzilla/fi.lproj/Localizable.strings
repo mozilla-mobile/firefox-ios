@@ -2,6 +2,9 @@
 "About.learnMoreButton" = "Lue lisää";
 
 /* Label on About screen */
+"About.missionLabel" = "%@ on Mozillan valmistama. Tavoitteenamme on edistää tervettä ja avointa Internetiä.";
+
+/* Label on About screen */
 "About.privateBullet1" = "Hae ja selaa suoraan sovelluksessa";
 
 /* Label on About screen */
@@ -25,9 +28,6 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Käytä sitä Safari-laajennuksena:";
 
-/* (No Comment) */
-"About.screenTitle" = "Tietoja";
-
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
 "About.title" = "Tietoja: %@";
 
@@ -39,6 +39,9 @@
 
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "Lisää mukautettu osoite";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "Tarkista kirjoittamasi osoite.";
 
 /* A label displaying an example URL */
 "Autocomplete.addCustomUrlExample" = "Esimerkki: example.com";
@@ -69,6 +72,9 @@
 
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Pois käytöstä";
+
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "Osoite on jo olemassa";
 
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Käytössä";
@@ -175,11 +181,23 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Avaa Kartat";
 
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "Sivulta etsiminen ohi";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "Etsi sivulta seuraava";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "Etsi sivulta edellinen";
+
 /* Label on button to dismiss first run UI */
 "FirstRun.lastSlide.buttonLabel" = "Selvä!";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Selaa kuin kukaan ei katselisi.";
+
+/* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
+"Focus.handoffSyncing" = "Apple Handoff synkronoi";
 
 /* First label for product description on the home screen */
 "Home.descriptionLabel1" = "Automaattista yksityistä selausta.";
@@ -358,8 +376,8 @@
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Hanki Firefox-sovellus";
 
-/* Text for the share menu option when a user wants to open a page in Focus. */
-"ShareMenu.OpenInFocus" = "Avaa sovelluksella %@";
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "Sivun toiminnot";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Pyydä työpöytäversio";
@@ -427,9 +445,6 @@
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "TYHJENNÄ";
 
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "Selaushistoria tyhjennetty.";
-
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Etsi sivulta: %@";
 
@@ -444,5 +459,4 @@
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "Seuraimia estetty";
-
 

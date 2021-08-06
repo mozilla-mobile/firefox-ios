@@ -34,9 +34,6 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Safari extension အနေနှင့် အသုံးပြုပါ။";
 
-/* (No Comment) */
-"About.screenTitle" = "အကြောင်း";
-
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
 "About.title" = "%@ အကြောင်း";
 
@@ -436,9 +433,6 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "ဤ app ထဲတွင် URL ကိုဖွင့်ထားလျှင် လက်ဗွေအိုင်ဒီ ဖြင့် %@ ကို ဖွင့်နိုင်သည်";
 
-/* URL for the learn more of the send usage data toggle */
-"Settings.usageData" = "အသုံးပြုမှု-ဒေတာ";
-
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "အသစ်ထွက် ?";
 
@@ -457,14 +451,14 @@
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Firefox အက်ပ်ကို ရယူပါ";
 
-/* Text for the share menu option when a user wants to open a page in Focus. */
-"ShareMenu.OpenInFocus" = "%@ တွင် ဖွင့်ပါ";
-
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "စာမျက်နှာဆိုင်ရာ လုပ်ဆောင်ချက်များ";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Desktop ဆိုက်ကို တောင်းပါ";
+
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "မိုဘိုင်းဖုန်းကြည့် ဝဘ်ဆိုက်ဖြင့် ပြရန်";
 
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Chrome တွင် ဖွင့်ပါ";
@@ -520,6 +514,9 @@
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "ခြေရာခံ ကာကွယ်မှု";
 
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "ယခုအရာကို ပိတ်ခြင်းအားဖြင့် အချို့သော ဝဘ်ဆိုက်ပြဿနာများကို ပြေလည်စေနိုင်သည်";
+
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "ပိုမိုလေ့လာရန်";
 
@@ -547,9 +544,6 @@
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "ERASE";
 
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "ကြည့်ရှုမှုမှတ်တမ်းကို ဖယ်ရှားရှင်းလင်းပြီးပြီ။";
-
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "စာမျက်နှာထဲတွင် ရှာပါ %@";
 
@@ -564,5 +558,4 @@
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "နောက်ယောင်ခံများကို တားဆီးထားသည်";
-
 

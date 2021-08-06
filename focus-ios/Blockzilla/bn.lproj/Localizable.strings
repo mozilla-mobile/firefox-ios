@@ -34,9 +34,6 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Safari-র এক্সটেনশন হিসাবে এটিকে ব্যবহার করুন:";
 
-/* (No Comment) */
-"About.screenTitle" = "সম্পর্কে";
-
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
 "About.title" = "পরিচিতি %@";
 
@@ -45,6 +42,9 @@
 
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "%@ অ্যাপে খুলুন";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "%@ এ ফেরত আসতে প্রমাণীকরণ করুন";
 
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "কাস্টম URL যোগ করুন";
@@ -64,6 +64,9 @@
 /* Label for button to add a custom URL with the + prefix */
 "Autocomplete.addCustomUrlWithPlus" = "কাস্টম URL এ + যুক্ত করুন";
 
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "কাস্টম অটোকমপ্লিট URLs যুক্ত ও ব্যবস্থাপনা করুন।";
+
 /* Label for button taking you to your custom Autocomplete URL list */
 "Autocomplete.customLabel" = "কাস্টম URL";
 
@@ -73,6 +76,9 @@
 /* Label for toast alerting a custom URL has been added */
 "Autocomplete.customUrlAdded" = "নতুন কাস্টম URL যোগ করা হয়েছ।";
 
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "অ্যাড্রেস বারে 450 টি জনপ্রিয় URLs %@ কে অটোকমপ্লিট করতে সক্ষম করুন।";
+
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.defaultLabel" = "স্বয়ংসম্পূর্ণ";
 
@@ -81,6 +87,9 @@
 
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "নিষ্ক্রিয় করা হল";
+
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "URL আগে থেকেই রয়েছে";
 
 /* Label for button to add a custom URL */
 "Autocomplete.emptyState" = "দেখানোর মত কোন কাস্টম URL নেই";
@@ -94,17 +103,26 @@
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.mySites" = "আমার সাইট";
 
+/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.mySitesDesc" = "আপনার পছন্দসই URLs গুলি %@ অটোকমপ্লিট করতে সক্ষম করুন।";
+
 /* Label for enabling or disabling top sites */
 "Autocomplete.topSites" = "শীর্ষ সাইট";
 
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "নতুন সেশন";
 
+/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
+"BiometricPrompt.reason" = "অননুমোদিত প্রবেশাধিকার প্রতিরোধ করতে পুনরায় খোলা হলে %@ আনলক করুন।";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "পূর্ববর্তী";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyAddressLabel" = "ঠিকানা অনুলিপি";
+
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "ক্লিপবোর্ডে অনুলিপিকৃত URL";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "অনুলিপি";
@@ -141,6 +159,9 @@
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "লিংক কপি করুন";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "আপনার অনুলিপিকৃত লিঙ্ক:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "ছবি সংরক্ষণ করুন";
@@ -259,11 +280,20 @@
 /* Save button label */
 "Save" = "সংরক্ষণ করুন";
 
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "এটি কাজ করেনি। অনুসন্ধানের পদটি %s দিয়ে প্রতিস্থাপন করে চেষ্টা করুন।";
+
 /* Label for disable option on search suggestions prompt */
 "SearchSuggestions.promptDisable" = "না";
 
 /* Label for enable option on search suggestions prompt */
 "SearchSuggestions.promptEnable" = "হ্যাঁ";
+
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "পরামর্শ পেতে, ঠিকানা বারে আপনি যা টাইপ করবেন তা %@ কে অনুসন্ধান ইঞ্জিনে পাঠাতে হবে।";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "অনুসন্ধান পরামর্শ দেখানো হবে কি?";
 
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "URL স্বয়ংসম্পূর্ণ";
@@ -277,11 +307,20 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes" = "আমি বুঝেছি";
 
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "আপনি যা ঠিকানা বারে টাইপ করেছেন তা %@ আপনার অনুসন্ধান ইঞ্জিনে পাঠাবে।";
+
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla এর প্রচেষ্টা হচ্ছে অত্যাবশ্যকীয় এবং প্রয়োজনীয় তথ্য ও উপাত্ত সংগ্রহ করে, সকলের জন্যে %@ এর আরও উন্নত সংস্করণ তৈরী করা।";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "আরও জানুন।";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "রেট %@";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "SAFARI INTEGRATION";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "সেটিংস";
@@ -316,11 +355,17 @@
 /* Text displayed as an example of the template to add a search engine. */
 "settings.Search.SearchTemplateExample" = "উদাহরণ: searchengineexample.com/search/?q=%s";
 
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "প্রতিলেপন বা অনুসন্ধান বাক্য লিখুন। প্রয়োজন হলে, অনুসন্ধান শব্দটি %s দিয়ে প্রতিস্থাপন করুন।";
+
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "সার্চ ইঞ্জিন";
 
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "অনুসন্ধান পরামর্শ পান";
+
 /* Title for the search selection screen */
-"Settings.searchTitle2" = "SEARCH";
+"Settings.searchTitle2" = "অনুসন্ধান";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "একত্রিকরণ";
@@ -333,6 +378,9 @@
 
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "গোপনীয়তা";
+
+/* Header label for security toggles displayed in the settings menu */
+"Settings.sectionSecurity" = "নিরাপত্তা";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "বিজ্ঞাপনদাতা ট্রাকারদেরকে অবরুদ্ধ করুন";
@@ -361,6 +409,15 @@
 /* Description for 'Block social Trackers' */
 "Settings.toggleBlockSocialDescription" = "সাইটসমূহে এমবেডেড করা থাকে আপনার ওয়েব ভিজিট ট্র্যাক করার জন্যে অথচ এগুলো শেয়ার বাটনের মত কাজ করবে বলে প্রদর্শন করা হয়ে থাকে";
 
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "অ্যাপ চালু করার জন্য ফেস আইডি ব্যবহার করুন";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "যদি কোন URL ইতিমধ্যেই অ্যাপে খোলা থাকে তবে ফেস আইডি %@ কে আনলক করতে পারে";
+
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "হোম স্ক্রিন টিপস দেখাও";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "কিছু ভিডিও এবং ওয়েব পেজে সমস্যা দেখা যেতে পারে";
 
@@ -370,14 +427,77 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "ব্যবহারের উপাত্ত প্রেরণ করে";
 
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "অ্যাপ চালু করার জন্য টাচ আইডি ব্যবহার করুন";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "URL ইতিমধ্যে অ্যাপে খোলা থাকলে টাচ আইডি %@ আনলক করতে পারে";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "নতুন যা কিছু";
+
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "SIRI শর্টকার্ট";
+
+/* Text for a share button */
+"share" = "শেয়ার";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "ঠিকানা অনুলিপি করুন";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "পাতায় অনুসন্ধান";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Firefox অ্যাপ নিন";
 
-/* Text for the share menu option when a user wants to open a page in Focus. */
-"ShareMenu.OpenInFocus" = "%@ অ্যাপে খুলুন";
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "পেজ একশন";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "ডেস্কটপ সাইটের জন্য অনুরোধ করুন";
+
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "মোবাইল সাইটের জন্য অনুরোধ করুন";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Chrome এ খুলুন";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Firefox এ খুলুন";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "Safari তে খুলুন";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "পাতা শেয়ার করুন...";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "যোগ";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Siri তে যোগ করুন";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "পুনরায় রেকর্ড বা শর্টকাট অপসারন";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "মুছে ফেলুন";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "মুছে ফেলুন ও খুলুন";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "প্রিয় সাইট খুলুন";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "প্রিয় সাইট খুলুন";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "খুলতে URL";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "%@ এ ফিরে আসার জন্য Touch ID ব্যবহার করুন";
 
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "ট্র্যাকার যোগ করুন";
@@ -390,6 +510,12 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "ট্র্যাকিং সুরক্ষা বন্ধ";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "ট্র্যাকিং সুরক্ষা";
+
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "এইটা বন্ধ করা হলে সাইটের সমস্যা ঠিক হতে পারে";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "আরও জানুন";
@@ -406,6 +532,9 @@
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.trackerDescriptionLabel" = "%@ বিজ্ঞাপন ব্লক করবে নাকি এনালিটিক, স্যোশাল বা অন্য ট্র্যাকার ব্লক করবে তা নির্বাচন করুন।";
 
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "অটোকমপ্লিট করতে লিঙ্ক যোগ করুন";
+
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "বাতিল";
 
@@ -415,8 +544,11 @@
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "মুছুন";
 
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "আপনার ব্রাউজিংয়ের পূর্ববর্তী তথ্য মুছে ফেলা হয়েছে।";
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "পাতায় অনুসন্ধান: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "প্রতিলেপন";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "অনুসন্ধান করুন বা ঠিকানা লিখুন";
@@ -426,5 +558,4 @@
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "ট্র্যাকার ব্লক করা হয়েছে";
-
 

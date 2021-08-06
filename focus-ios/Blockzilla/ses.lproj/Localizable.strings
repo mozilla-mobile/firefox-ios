@@ -31,9 +31,6 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "A ka goy sanda Safari dobuyan:";
 
-/* (No Comment) */
-"About.screenTitle" = "A ga";
-
 /* Label on About screen */
 "About.topLabel" = "%@ ka war noo juwaloo.";
 
@@ -163,13 +160,9 @@
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "TUUSU";
 
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "War naaruyan taarikoo n' ka tuusandi.";
-
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Ceeci wala aderesu dam";
 
 /* Label displayed for search button when typing in the URL bar */
 "URL.searchLabel" = "Wa %@ ceeci";
-
 

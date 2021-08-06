@@ -34,9 +34,6 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "ಇದನ್ನು ಸಫಾರಿ ಎಕ್ಸ್‍ಟೆಂಷನ್ ಆಗಿ ಬಳಸಿ:";
 
-/* (No Comment) */
-"About.screenTitle" = "‍ಬಗ್ಗೆ";
-
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
 "About.title" = "ಬಗ್ಗೆ %@";
 
@@ -85,8 +82,20 @@
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "ನಿಷ್ಕ್ರಿಯಗೊಳಿಸು";
 
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "URL ಈಗಾಗಲೆ ಅಸ್ತಿತ್ವದಲ್ಲಿದೆ";
+
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "ಸಕ್ರಿಯಗೊಳಿಸು";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "ತಾಣಗಳನ್ನು ನಿರ್ವಹಿಸಿ";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "ನನ್ನ ತಾಣಗಳು";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "ಪ್ರಮುಖ ತಾಣಗಳು";
 
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "ಹೊಸ ಅಧಿವೇಶನ";
@@ -256,6 +265,12 @@
 /* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
 "SearchEngine.addEngineError" = "ಅದು ಕೆಲಸ ಮಾಡಲಿಲ್ಲ. ಹುಡುಕಾಟ ಪದವನ್ನು ಇದರೊಂದಿಗೆ ಬದಲಿಸಿ ಪ್ರಯತ್ನಿಸಿ: %s.";
 
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "ಇಲ್ಲ";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "ಹೌದು";
+
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "URL ಸ್ವಯಂಪೂರ್ಣಗೊಳಿಸು";
 
@@ -388,14 +403,14 @@
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Firefox ಅನ್ವಯ ಪಡೆಯಿರಿ";
 
-/* Text for the share menu option when a user wants to open a page in Focus. */
-"ShareMenu.OpenInFocus" = "ಇದರಲ್ಲಿ ತೆರೆ %@";
-
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "ಪುಟದ ಕಾರ್ಯಗಳು";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "ಡೆಸ್ಕ್ಟಾಪ್ ತಾಣವನ್ನು ಕೇಳಿ";
+
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "ಮೊಬೈಲ್ ತಾಣ ಕೇಳಿ";
 
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "ಕ್ರೋಮ್ನಲ್ಲಿ ತೆರೆ";
@@ -414,6 +429,9 @@
 
 /* Button to add a specified shortcut option to Siri. */
 "Siri.addTo" = "ಸಿರಿಗೆ ಸೇರಿಸು";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "ಮರು-ದಾಖಲೆ ಅಥವಾ ಅಳಿಸು ಶಾರ್ಟ್ಕಟ್";
 
 /* Title of option in settings to set up Siri to erase */
 "Siri.erase" = "ಅಳಿಸು";
@@ -448,6 +466,9 @@
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "ಜಾಡು ಇರಿಸುವಿಕೆಗೆ ರಕ್ಷಣೆ";
 
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "ಇದನ್ನು ಆಫ್ ಮಾಡುವುದರಿಂದ ತಾಣದ ಕೆಲವು ಸಮಸ್ಯೆಗಳನ್ನು ಸರಿಪಡಿಸಬಹುದು";
+
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ";
 
@@ -463,6 +484,9 @@
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.trackerDescriptionLabel" = "%@ ಬ್ಲಾಕ್ಗಳ ಜಾಹೀರಾತು, ವಿಶ್ಲೇಷಣಾತ್ಮಕ, ಸಾಮಾಜಿಕ ಮತ್ತು ಇತರ ಟ್ರ್ಯಾಕರ್ಗಳು ಎಂಬುದನ್ನು ಆಯ್ಕೆಮಾಡಿ.";
 
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "ಸ್ವಯಂಪೂರ್ಣತೆಗೆ ಲಿಂಕ್ ಸೇರಿಸಿ";
+
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "ರದ್ದು ಮಾಡು";
 
@@ -471,9 +495,6 @@
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "ಅಳಿಸು";
-
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "ನಿಮ್ಮ ಜಾಲಾಟದ ಇತಿಹಾಸವನ್ನು ಅಳಿಸಲಾಗಿದೆ.";
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "ಪುಟದಲ್ಲಿ ಹುಡುಕು: %@";
@@ -489,5 +510,4 @@
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "ಜಾಡುಹಿಡಿಯುವವರನ್ನು ನಿರ್ಭಂದಿಸಲಾಗಿದೆ";
-
 

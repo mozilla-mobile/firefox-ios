@@ -34,8 +34,8 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "ໃຊ້ມັນເປັນແບບເອັກເທັນຊັນຂອງ Safari:";
 
-/* (No Comment) */
-"About.screenTitle" = "ກ່ຽວກັບ";
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "ກ່ຽວກັບ %@";
 
 /* Label on About screen */
 "About.topLabel" = "%@ ເຮັດໃຫ້ທ່ານສາມາດຄວບຄຸມໄດ້ດັ່ງລຸ່ມນີ້:";
@@ -190,6 +190,9 @@
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "ທ່ອງເວັບ ແລະ ລຶບຂໍ້ມູນການທ່ອງເວັບຕ່າງໆອອກ.";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "ປິດ";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "ຍົກເລີກ";
 
@@ -337,11 +340,26 @@
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "ສິງໃຫມ່ໆ";
 
+/* Text for a share button */
+"share" = "ແບ່ງປັນ";
+
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "ຕິດຕັ້ງແອັບ Firefox";
 
-/* Text for the share menu option when a user wants to open a page in Focus. */
-"ShareMenu.OpenInFocus" = "ເປີດໃນ %@";
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "ການກະທຳຂອງຫນ້າ";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "ເປີດໃນ Chrome";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "ເປີດໃນ Firefox";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "ເປີດໃນ Safari";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "ເພີ່ມ";
 
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "ຕົວຕິດຕາມໂຄສະນາ";
@@ -354,6 +372,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "ປິດການປ້ອງກັນການຕິດຕາມ";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "ການປ້ອງກັນການຕິດຕາມ";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "ຮຽນຮູ້ເພີ່ມເຕີມ";
@@ -379,9 +400,6 @@
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "ລຶບອອກ";
 
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "ປະຫວັດການທ່ອງເວັບຂອງທ່ານໄດ້ຖືກລຶບອອກແລ້ວ.";
-
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "ຄົ້ນຫາ ຫລື ປ້ອນທີ່ຢູ່ໃສ່ນີ້";
 
@@ -390,5 +408,4 @@
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "ຕົວຕິດຕາມໄດ້ຖືກບັອກ";
-
 

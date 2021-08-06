@@ -34,9 +34,6 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Használja Safari bővítményként:";
 
-/* (No Comment) */
-"About.screenTitle" = "Névjegy";
-
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
 "About.title" = "A %@ névjegye";
 
@@ -436,9 +433,6 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "A Touch ID feloldhatja a %@t, ha az URL már meg van nyitva az alkalmazásban";
 
-/* URL for the learn more of the send usage data toggle */
-"Settings.usageData" = "hasznalati-adatok";
-
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Újdonságok";
 
@@ -456,9 +450,6 @@
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "App Store: Firefox";
-
-/* Text for the share menu option when a user wants to open a page in Focus. */
-"ShareMenu.OpenInFocus" = "Megnyitás ebben: %@";
 
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "Lapműveletek";
@@ -553,9 +544,6 @@
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "TÖRLÉS";
 
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "A böngészési előzmények törölve.";
-
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Keresés az oldalon: %@";
 
@@ -570,5 +558,4 @@
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "Blokkolt követők";
-
 

@@ -34,9 +34,6 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Sử dụng nó như phần mở rộng của Safari:";
 
-/* (No Comment) */
-"About.screenTitle" = "Giới thiệu";
-
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
 "About.title" = "Giới thiệu %@";
 
@@ -125,7 +122,7 @@
 "Browser.copyAddressLabel" = "Sao chép địa chỉ liên kết";
 
 /* Toast displayed after a URL has been copied to the clipboard */
-"browser.copyAddressToast" = "URL đã được sao chép vào Clipboard";
+"browser.copyAddressToast" = "URL đã được sao chép vào clipboard";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Sao chép";
@@ -293,7 +290,7 @@
 "SearchSuggestions.promptEnable" = "Có";
 
 /* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
-"SearchSuggestions.promptMessage" = "Để nhận đề xuất, %@ cần gửi những gì bạn nhập vào thanh địa chỉ cho công cụ tìm kiếm.";
+"SearchSuggestions.promptMessage" = "Để nhận gợi ý, %@ cần gửi những gì bạn nhập vào thanh địa chỉ cho công cụ tìm kiếm.";
 
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "Hiển thị đề xuất tìm kiếm?";
@@ -365,7 +362,7 @@
 "Settings.searchLabel" = "Công cụ tìm kiếm";
 
 /* Label for the Search Suggestions toggle row */
-"Settings.searchSuggestions" = "Nhận đề xuất tìm kiếm";
+"Settings.searchSuggestions" = "Nhận gợi ý tìm kiếm";
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "TÌM KIẾM";
@@ -436,9 +433,6 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Touch ID có thể mở khóa %@ nếu một URL đã được mở trong ứng dụng";
 
-/* URL for the learn more of the send usage data toggle */
-"Settings.usageData" = "usage-data";
-
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Có gì mới";
 
@@ -456,9 +450,6 @@
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Tải ứng dụng Firefox";
-
-/* Text for the share menu option when a user wants to open a page in Focus. */
-"ShareMenu.OpenInFocus" = "Mở trong %@";
 
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "Hành động trang";
@@ -548,13 +539,10 @@
 "URL.cancelLabel" = "Hủy bỏ";
 
 /* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
-"URL.contextMenu" = "Dán & Mở đường dẫn";
+"URL.contextMenu" = "Dán & mở";
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "XÓA";
-
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "Lịch sử duyệt web của bạn đã bị xóa.";
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Tìm trong trang: %@";
@@ -570,5 +558,4 @@
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "Theo dõi bị chặn";
-
 

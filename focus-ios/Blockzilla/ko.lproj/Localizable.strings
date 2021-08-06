@@ -34,9 +34,6 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Safari 확장 기능 사용:";
 
-/* (No Comment) */
-"About.screenTitle" = "정보";
-
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
 "About.title" = "%@ 정보";
 
@@ -436,9 +433,6 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "앱에서 URL이 이미 열렸다면 Touch ID를 사용해서 %@ 잠금을 해제할 수 있습니다.";
 
-/* URL for the learn more of the send usage data toggle */
-"Settings.usageData" = "사용 데이타";
-
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "새로운 기능";
 
@@ -456,9 +450,6 @@
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Firefox 앱 설치";
-
-/* Text for the share menu option when a user wants to open a page in Focus. */
-"ShareMenu.OpenInFocus" = "%@에서 열기";
 
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "페이지 작업";
@@ -547,9 +538,6 @@
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "삭제";
 
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "페이지 탐색 기록이 삭제되었습니다.";
-
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "페이지내 검색: %@";
 
@@ -564,5 +552,4 @@
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "차단된 추적기";
-
 
