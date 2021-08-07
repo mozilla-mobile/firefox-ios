@@ -44,7 +44,17 @@ struct ImportTask {
     ]
 
     // We don't want to expose these to our localization team
-    private let EXCLUDED_TRANSLATIONS: Set<String> = ["CFBundleName", "CFBundleDisplayName", "CFBundleShortVersionString"]
+    private let EXCLUDED_TRANSLATIONS: Set<String> = [
+        "CFBundleName",
+        "CFBundleDisplayName",
+        "CFBundleShortVersionString",
+    ]
+
+    // Locales that we do not want to import
+    private let EXCLUDED_LOCALES: Set<String> = [
+        "en-US", // This is our base language and the source of truth is in the app, not Pontoon
+        "es-ES", "lt", "lv" // These are only excluded because they are new and we don't know yet what to do with them
+    ]
 
     // InfoPlist.strings requre these keys to have content or the application will crash
     private let REQUIRED_TRANSLATIONS: Set<String> = [
@@ -95,9 +105,14 @@ struct ImportTask {
             
             var translations = try! fileNode.nodes(forXPath: "body/trans-unit")
             for case let translation as XMLElement in translations {
+                // Skip translations that we do not care about (CFBundle*)
                 if translation.attribute(forName: "id")?.stringValue.map(EXCLUDED_TRANSLATIONS.contains) == true {
                     translation.detach()
+                    continue
                 }
+
+                // The app will crash if one of the NS* permission prompt strings is empty so
+                // in case those are missing, default to the english base for it.
                 if translation.attribute(forName: "id")?.stringValue.map(REQUIRED_TRANSLATIONS.contains) == true {
                     let nodes = try! translation.nodes(forXPath: "target")
                     let source = try! translation.nodes(forXPath: "source").first!.stringValue ?? ""
@@ -107,6 +122,8 @@ struct ImportTask {
                     }
                 }
             }
+
+            // Drop this file if after the above checks, no trans-unit elements remain
             translations = try! fileNode.nodes(forXPath: "body/trans-unit")
             if translations.isEmpty {
                 fileNode.detach()
@@ -133,6 +150,11 @@ struct ImportTask {
     }
 
     func run() {
-        locales.forEach(prepareLocale(locale:))
+        locales.forEach { locale in
+            if !EXCLUDED_LOCALES.contains(locale) {
+                print("[*] Processing locale \(locale)")
+                prepareLocale(locale: locale)
+            }
+        }
     }
 }
