@@ -6,99 +6,21 @@
 //
 
 import Foundation
-//    locale_mapping = {
-//        'es-ES': 'es',
-//        'ga-IE': 'ga',
-//        'nb-NO': 'nb',
-//        'nn-NO': 'nn',
-//        'sv-SE': 'sv',
-//        'tl'   : 'fil',
-//        'zgh'  : 'tzm',
-//        'sat'  : 'sat-Olck'
-
 
 struct ExportTask {
     let xcodeProjPath: String
     let l10nRepoPath: String
 
-    let locales: [String] = [
-        "af",
-        "an",
-        "ar",
-        "ast",
-        "az",
-        "bg",
-        "bn",
-        "br",
-        "bs",
-        "ca",
-        "cs",
-        "cy",
-        "da",
-        "de",
-        "dsb",
-        "el",
-        "en-US",
-        "eo",
-        "es-AR",
-        "es-CL",
-        "es-ES",
-        "es-MX",
-        "eu",
-        "fa",
-        "fi",
-        "fr",
-        "ga-IE",
-        "gd",
-        "gu-IN",
-        "hsb",
-        "hu",
-        "hy-AM",
-        "ia",
-        "id",
-        "is",
-        "it",
-        "ja",
-        "ka",
-        "kab",
-        "kk",
-        "kn",
-        "ko",
-        "lo",
-        "lt",
-        "lv",
-        "mr",
-        "ms",
-        "my",
-        "nb-NO",
-        "ne-NP",
-        "nl",
-        "nn-NO",
-        "pl",
-        "pt-BR",
-        "pt-PT",
-        "ro",
-        "ru",
-        "ses",
-        "sk",
-        "sl",
-        "sq",
-        "sv-SE",
-        "ta",
-        "te",
-        "th",
-        "tl",
-        "tr",
-        "uk",
-        "ur",
-        "uz",
-        "vi",
-        "zh-CN",
-        "zh-TW"
+    // Locales that are in the Xcode project
+    let LOCALES: [String] = [
+        "af", "an", "ar", "ast", "az", "bg", "bn", "br", "bs", "ca", "cs", "cy", "da", "de", "dsb",
+        "el", "en", "eo", "es-AR", "es-CL", "es-ES", "es-MX", "eu", "fa", "fi", "fil", "fr", "ga", "gd", "gu-IN",
+        "he", "hi-IN", "hsb", "hu", "hy-AM", "ia", "id", "is", "it", "ja", "ka", "kab", "kk", "kn", "ko",
+        "lo", "mr", "ms", "my", "nb", "ne-NP", "nl", "nn", "pl", "pt-BR", "pt-PT", "ro", "ru", "ses", "sk",
+        "sl", "sq", "sv", "ta", "te", "th", "tr", "uk", "ur", "uz", "vi", "zh-CN", "zh-TW",
     ]
     
     private let EXCLUDED_FILES: Set<String> = [
-        "Blockzilla/Settings.bundle/en.lproj/Root.strings",
         "Blockzilla/en.lproj/Intents.strings"
     ]
     
@@ -109,6 +31,8 @@ struct ExportTask {
         "1Password Fill Browser Action"
     ]
     
+    // Keys in Info.plist that we require. TODO Does this work because focus does not have that
+    // ShortcutItemTitleQRCode and no warnings are raised. This is the Firefox iOS list.
     private let REQUIRED_TRANSLATIONS: Set<String> = [
         "NSCameraUsageDescription",
         "NSLocationWhenInUseUsageDescription",
@@ -118,7 +42,10 @@ struct ExportTask {
         "ShortcutItemTitleNewTab",
         "ShortcutItemTitleQRCode",
     ]
-    private let LOCALE_MAPPING = [
+
+    // Mapping locale identifiers from Pontoon to Xcode
+    private let XCODE_TO_PONTOON = [
+        "en" : "en-US",
         "ga" : "ga-IE",
         "nb" : "nb-NO",
         "nn" : "nn-NO",
@@ -132,11 +59,10 @@ struct ExportTask {
         "/tmp/ios-localization-\(getpid())"
     }
     
-    
+    // Ask xcodebuild to export all locales
     private func exportLocales() {
         let command = "xcodebuild -exportLocalizations -project \(xcodeProjPath) -localizationPath \(EXPORT_BASE_PATH)"
-        let command2 = locales
-            .map { "-exportLanguage \($0)" }.joined(separator: " ")
+        let command2 = LOCALES.map { "-exportLanguage \($0)" }.joined(separator: " ")
 
         let task = Process()
         task.launchPath = "/bin/sh"
@@ -144,79 +70,67 @@ struct ExportTask {
         try! task.run()
         task.waitUntilExit()
     }
-    
-    private func handleXML(path: String, locale: String, commentOverrides: [String : String]) {
+
+    // Process/transform the exported XLIFF
+    private func handleXML(path: String, locale: String) {
         let url = URL(fileURLWithPath: path.appending("/\(locale).xcloc/Localized Contents/\(locale).xliff"))
-        //let manifestUrl = URL(fileURLWithPath: path.appending("/\(locale).xcloc/contents.json"))
         let xml = try! XMLDocument(contentsOf: url, options: [.nodePreserveWhitespace, .nodeCompactEmptyElement])
-        guard let root = xml.rootElement() else { return }
-        let fileNodes = try! root.nodes(forXPath: "file")
-        for case let fileNode as XMLElement in fileNodes {
+        guard let root = xml.rootElement() else {
+            print("[W] Locale \(locale) did not have anything to parse?")
+            return
+        }
+
+        for case let fileNode as XMLElement in try! root.nodes(forXPath: "file") {
+            // Remove <file> nodes that we do not care about
             if let original = fileNode.attribute(forName: "original")?.stringValue, EXCLUDED_FILES.contains(original) {
                 print("Skipping a file")
                 fileNode.detach()
                 continue
             }
             
-            if let xcodeLocale = LOCALE_MAPPING[locale] {
-                fileNode.attribute(forName: "target-language")?.setStringValue(xcodeLocale, resolvingEntities: false)
+            // Change the target language identifier from Xcode to Pontoon
+            if let pontoonLocale = XCODE_TO_PONTOON[locale] {
+                fileNode.attribute(forName: "target-language")?.setStringValue(pontoonLocale, resolvingEntities: false)
             }
             
-            let translations = try! fileNode.nodes(forXPath: "body/trans-unit")
-            for case let translation as XMLElement in translations {
+            // Delete <trans-unit> nodes that we don't want to translate
+            for case let translation as XMLElement in try! fileNode.nodes(forXPath: "body/trans-unit") {
                 if translation.attribute(forName: "id")?.stringValue.map(EXCLUDED_TRANSLATIONS.contains) == true {
                     translation.detach()
                 }
-                
-                if let comment = translation.attribute(forName: "id")?.stringValue.flatMap({ commentOverrides[$0] }) {
-                    if let element = try? translation.nodes(forXPath: "note").first {
-                        element.setStringValue(comment, resolvingEntities: true)
-                    }
-                }
             }
             
+            // If this <file> node has no translations left then remove it
             let remainingTranslations = try! fileNode.nodes(forXPath: "body/trans-unit")
-            
             if remainingTranslations.isEmpty {
                 fileNode.detach()
             }
         }
         
-        // Drop the xml:space="preserve" that is being added. Nobody cares about that.
+        // Drop the xml:space="preserve" that is being added. XMLDocument adds it but we don't care
+        // about it and it adds a lot of noise to the diff.
         let s = xml.xmlString.replacingOccurrences(of: " xml:space=\"preserve\">", with: ">") + "\n\n"
         try! s.write(to: url, atomically: true, encoding: .utf8)
     }
     
     
+    // Copy the xliff file from the export into the pontoon repository
     private func copyToL10NRepo(locale: String) {
         let source = URL(fileURLWithPath: "\(EXPORT_BASE_PATH)/\(locale).xcloc/Localized Contents/\(locale).xliff")
-        let l10nLocale: String
-        if locale == "en" {
-            l10nLocale = "en-US"
-        } else {
-            l10nLocale = LOCALE_MAPPING[locale] ?? locale
-        }
-        let destination = URL(fileURLWithPath: "\(l10nRepoPath)/\(l10nLocale)/focus-ios.xliff")
+        let pontoonLocale = XCODE_TO_PONTOON[locale] ?? locale
+        let destination = URL(fileURLWithPath: "\(l10nRepoPath)/\(pontoonLocale)/focus-ios.xliff")
         let _ = try! FileManager.default.replaceItemAt(destination, withItemAt: source)
     }
 
     
     func run() {
+        print("[*] Exporting \(LOCALES) to \(EXPORT_BASE_PATH)")
         exportLocales()
-        let commentOverrideURL = URL(fileURLWithPath: xcodeProjPath).deletingLastPathComponent().appendingPathComponent("l10n_comments.txt")
-        let commentOverrides: [String : String] = (try? String(contentsOf: commentOverrideURL))?
-            .split(whereSeparator: \.isNewline)
-            .reduce(into: [String : String]()) { result, item in
-                let items = item.split(separator: "=")
-                guard let key = items.first, let value = items.last else { return }
-                result[String(key)] = String(value)
-            } ?? [:]
-        
-        locales.forEach { locale in
-            handleXML(path: EXPORT_BASE_PATH, locale: locale, commentOverrides: commentOverrides)
+
+        LOCALES.forEach { locale in
+            print("[*] Exporting \(locale)")
+            handleXML(path: EXPORT_BASE_PATH, locale: locale)
             copyToL10NRepo(locale: locale)
         }
-
-        print(xcodeProjPath, l10nRepoPath, locales)
     }
 }
