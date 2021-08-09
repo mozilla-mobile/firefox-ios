@@ -381,14 +381,23 @@ workflows:
         inputs:
         - content: >-
             #!/usr/bin/env bash
+
             # fail if any commands fails
+
             set -e
+
             # debug log
+
             set -x
-            curl --location --retry 5 --output l10n-screenshots-dd.zip
-            "$MOZ_DERIVED_DATA_PATH"
+
+            echo "curl to Download derived data"
+
+            curl --location --retry 5 --output l10n-screenshots-dd.zip "$MOZ_DERIVED_DATA_PATH"
+
             mkdir l10n-screenshots-dd
+
             unzip l10n-screenshots-dd.zip -d l10n-screenshots-dd
+
             rm l10n-screenshots-dd.zip
         title: Download derived data path
     - script@1:
