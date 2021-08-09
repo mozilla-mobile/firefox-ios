@@ -98,7 +98,8 @@ class Tab: NSObject {
     }
     
     var adsTelemetryUrlList: [String] = [String]()
-
+    var adsProviderName: String = ""
+    
     // To check if current URL is the starting page i.e. either blank page or internal page like topsites
     var isURLStartingPage: Bool {
         guard url != nil else { return true }

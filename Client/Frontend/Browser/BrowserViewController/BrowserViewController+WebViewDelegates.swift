@@ -131,8 +131,9 @@ extension BrowserViewController: WKUIDelegate {
                 if currentTab == self.tabManager.selectedTab, currentTab.adsTelemetryUrlList.count > 0 {
                     let adUrl = rURL.absoluteString
                     if currentTab.adsTelemetryUrlList.contains(adUrl) {
-                        print("TRACK ADS CLICKED ON PROVIDER PAGE - OPEN IN NEW TAB")
+                        if !currentTab.adsProviderName.isEmpty { AdsTelemetryHelper.trackAdsFoundOnPage(providerName: currentTab.adsProviderName) }
                         currentTab.adsTelemetryUrlList.removeAll()
+                        currentTab.adsProviderName = ""
                     }
                 }
                 let tab = self.tabManager.addTab(URLRequest(url: rURL as URL), afterTab: currentTab, isPrivate: isPrivate)
@@ -353,8 +354,9 @@ extension BrowserViewController: WKNavigationDelegate {
         if tab == tabManager.selectedTab, navigationAction.navigationType == .linkActivated, tab.adsTelemetryUrlList.count > 0 {
             let adUrl = url.absoluteString
             if tab.adsTelemetryUrlList.contains(adUrl) {
-                print("TRACK ADS CLICKED ON PROVIDER PAGE")
+                if !tab.adsProviderName.isEmpty { AdsTelemetryHelper.trackAdsFoundOnPage(providerName: tab.adsProviderName) }
                 tab.adsTelemetryUrlList.removeAll()
+                tab.adsProviderName = ""
             }
         }
         

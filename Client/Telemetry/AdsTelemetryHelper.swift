@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 import WebKit
+import MozillaAppServices
 
 struct SearchProviderModel {
     typealias Predicate = (String) -> Bool
@@ -131,8 +132,9 @@ class AdsTelemetryHelper: TabContentScript {
             let body = message.body as? [String : Any],
             let urls = body["urls"] as? [String] else { return }
         let webpageHasAds = provider.containsAds(urls: urls)
-        print("TRACK ADS Found on a provider page ",webpageHasAds)
         if webpageHasAds {
+            AdsTelemetryHelper.trackAdsFoundOnPage(providerName: provider.name)
+            tab?.adsProviderName = provider.name
             tab?.adsTelemetryUrlList = urls
         }
     }
@@ -145,5 +147,15 @@ class AdsTelemetryHelper: TabContentScript {
         }
         
         return nil
+    }
+    
+    // Tracking
+    
+    public static func trackAdsFoundOnPage(providerName: String) {
+        GleanMetrics.BrowserSearch.withAds["provider-\(providerName)"].add()
+    }
+    
+    public static func trackAdsClickedOnPage(providerName: String) {
+        GleanMetrics.BrowserSearch.adClicks["provider-\(providerName)"].add()
     }
 }
