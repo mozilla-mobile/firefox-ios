@@ -922,14 +922,23 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidTapShield(_ urlBar: URLBar) {
         Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.trackingProtectionDrawer))
 
+        guard let modalDelegate = modalDelegate else { return }
+
         switch trackingProtectionStatus {
-        case .on(let info):
-            let menuOn = buildTrackingProtectionMenu(info: info)
-            presentPhotonActionSheet(menuOn, from: urlBar.shieldIcon)
+        case .on:
+            Settings.set(true, forToggle: .trackingProtection)
         case .off:
-            let menuOff = buildTrackingProtectionMenu(info: nil)
-            presentPhotonActionSheet(menuOff, from: urlBar.shieldIcon)
+            Settings.set(false, forToggle: .trackingProtection)
         }
+    
+        let trackingProtectionViewController = TrackingProtectionViewController()
+        
+        trackingProtectionViewController.delegate = self
+        
+        let trackingNavController = UINavigationController(rootViewController: trackingProtectionViewController)
+        trackingNavController.modalPresentationStyle = .formSheet
+
+        modalDelegate.presentModal(viewController: trackingNavController, animated: true)
     }
 
     func urlBarDidLongPress(_ urlBar: URLBar) {
@@ -1012,6 +1021,19 @@ extension BrowserViewController: PhotonActionSheetDelegate {
         darkView.isHidden = true
     }
     func photonActionSheetDidToggleProtection(enabled: Bool) {
+        enabled ? webViewController.enableTrackingProtection() : webViewController.disableTrackingProtection()
+
+        let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.trackingProtectionToggle)
+        telemetryEvent.addExtra(key: "to", value: enabled)
+        Telemetry.default.recordEvent(telemetryEvent)
+        UserDefaults.standard.set(false, forKey: TipManager.TipKey.sitesNotWorkingTip)
+
+        webViewController.reload()
+    }
+}
+
+extension BrowserViewController: TrackingProtectionDelegate {
+    func trackingProtectionDidToggleProtection(enabled: Bool) {
         enabled ? webViewController.enableTrackingProtection() : webViewController.disableTrackingProtection()
 
         let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.trackingProtectionToggle)

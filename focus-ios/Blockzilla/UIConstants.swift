@@ -128,8 +128,8 @@ struct UIConstants {
         static let aboutText = UIFont.systemFont(ofSize: 14)
         static let cancelButton = UIFont.systemFont(ofSize: 15)
         static let copyButton = UIFont.systemFont(ofSize: 16)
-        static let copyButtonQuery = UIFont.systemFont(ofSize: 16)
-        static let copyButtonRest = UIFont.boldSystemFont(ofSize: 16)
+        static let copyButtonQuery = UIFont.systemFont(ofSize: 17)
+        static let copyButtonRest = UIFont.boldSystemFont(ofSize: 17)
         static let deleteButton = UIFont.systemFont(ofSize: 11)
         static let firstRunDisclaimer = UIFont.systemFont(ofSize: 14)
         static let firstRunMessage = UIFont.systemFont(ofSize: 14)
@@ -158,6 +158,9 @@ struct UIConstants {
 		static let promptTitle = UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.bold)
 		static let promptMessage = UIFont.systemFont(ofSize: 15)
         static let promptButton = UIFont.systemFont(ofSize: 17, weight: .medium)
+        static let trackingProtectionHeader = UIFont.systemFont(ofSize: 15)
+        static let trackingProtectionStatsText = UIFont.systemFont(ofSize: 15)
+        static let trackingProtectionStatsDetail = UIFont.systemFont(ofSize: 20)
     }
 
     struct layout {
@@ -227,6 +230,11 @@ struct UIConstants {
         static let progressBarHeight: CGFloat = 1.5
 		static let progressBarOffset: CGFloat = 1
 		static let trackingProtectionHeight: CGFloat = 18
+        static let trackingProtectionTableInset: CGFloat = 16
+        static let trackingProtectionHeaderHeight: CGFloat = 120
+        static let trackingProtectionHeaderDefault: CGFloat = 36
+        static let trackingProtectionFooterHeight: CGFloat = 60
+        static let trackingProtectionFooterDefault: CGFloat = 20
 		static let collapsedProtectionBadgeOffset: CGFloat = 10
 		static let truncatedUrlTextOffset: CGFloat = 5
 		static let addSearchEngineInputHeight: CGFloat = 44
@@ -317,18 +325,14 @@ struct UIConstants {
         static let firstRunTitle = NSLocalizedString("FirstRun.messageLabelTagline", value: "Browse like no one’s watching.", comment: "Message label on the first run screen")
         static let homeLabel1 = NSLocalizedString("Home.descriptionLabel1", value: "Automatic private browsing.", comment: "First label for product description on the home screen")
         static let homeLabel2 = NSLocalizedString("Home.descriptionLabel2", value: "Browse. Erase. Repeat.", comment: "Second label for product description on the home screen")
-        static let labelBlockAds = NSLocalizedString("Settings.toggleBlockAds", value: "Block ad trackers", comment: "Label for toggle on main screen")
-        static let labelBlockAdsDescription = NSLocalizedString("Settings.toggleBlockAdsDescription", value: "Some ads track site visits, even if you don’t click the ads", comment: "Description for 'Block ad Trackers'")
+        static let labelBlockAds2 = NSLocalizedString("Settings.toggleBlockAds", value: "Advertising", comment: "Label for toggle on main screen")
         static let labelFaceIDLogin = NSLocalizedString("Settings.toggleFaceID", value: "Use Face ID to unlock app", comment: "Label for toggle on settings screen")
         static let labelFaceIDLoginDescription = NSLocalizedString("Settings.toggleFaceIDDescription", value: "Face ID can unlock %@ if a URL is already open in the app", comment: "%@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu.")
         static let labelTouchIDLogin = NSLocalizedString("Settings.toggleTouchID", value: "Use Touch ID to unlock app", comment: "Label for toggle on settings screen")
         static let labelTouchIDLoginDescription = NSLocalizedString("Settings.toggleTouchIDDescription", value: "Touch ID can unlock %@ if a URL is already open in the app", comment: "%@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu.")
-        static let labelBlockAnalytics = NSLocalizedString("Settings.toggleBlockAnalytics", value: "Block analytics trackers", comment: "Label for toggle on main screen")
-        static let labelBlockAnalyticsDescription = NSLocalizedString("Settings.toggleBlockAnalyticsDescription", value: "Used to collect, analyze and measure activities like tapping and scrolling", comment: "Description for 'Block analytics Trackers'")
-        static let labelBlockSocial = NSLocalizedString("Settings.toggleBlockSocial", value: "Block social trackers", comment: "Label for toggle on main screen")
-        static let labelBlockSocialDescription = NSLocalizedString("Settings.toggleBlockSocialDescription", value: "Embedded on sites to track your visits and to display functionality like share buttons", comment: "Description for 'Block social Trackers'")
-        static let labelBlockOther = NSLocalizedString("Settings.toggleBlockOther", value: "Block other content trackers", comment: "Label for toggle on main screen")
-        static let labelBlockOtherDescription = NSLocalizedString("Settings.toggleBlockOtherDescription", value: "Enabling may cause some pages to behave unexpectedly", comment: "Description for 'Block other content Trackers'")
+        static let labelBlockAnalytics = NSLocalizedString("Settings.toggleBlockAnalytics", value: "Analytics", comment: "Label for toggle on main screen")
+        static let labelBlockSocial = NSLocalizedString("Settings.toggleBlockSocial", value: "Social", comment: "Label for toggle on main screen")
+        static let labelBlockOther = NSLocalizedString("Settings.toggleBlockOther", value: "Content", comment: "Label for toggle on main screen")
         static let labelBlockFonts = NSLocalizedString("Settings.toggleBlockFonts", value: "Block Web fonts", comment: "Label for toggle on main screen")
         static let labelSendAnonymousUsageData = NSLocalizedString("Settings.toggleSendUsageData", value: "Send usage data", comment: "Label for Send Usage Data toggle on main screen")
         static let detailTextSendUsageData = NSLocalizedString("Settings.detailTextSendUsageData", value: "Mozilla strives to collect only what we need to provide and improve %@ for everyone.", comment: "Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar)")
@@ -386,6 +390,7 @@ struct UIConstants {
         static let share = NSLocalizedString("share", value: "Share", comment: "Text for a share button")
         static let copyLink = NSLocalizedString("contextMenu.copyLink", value: "Copy Link", comment: "Text for the context menu when a user wants to copy a link after long pressing it.")
         static let trackersBlocked = NSLocalizedString("URL.trackersBlockedLabel", value: "Trackers blocked", comment: "Text for the URL bar showing the number of trackers blocked on a webpage.")
+        static let trackersBlockedSince = NSLocalizedString("trackingProtection.trackersBlockedLabel", value: "Trackers blocked since ", comment: "Text for tracking protection screen showing the number of trackers blocked since the app install")
         static let externalAppLink = NSLocalizedString("ExternalAppLink.messageTitle", value: "%@ wants to open another App", comment: "Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar.")
         static let externalAppLinkWithAppName = NSLocalizedString("externalAppLinkWithAppName.messageTitle", value: "%@ wants to open %@", comment: "Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open.")
         static let open = NSLocalizedString("ExternalAppLink.openTitle", value: "Open", comment: "Button label for opening another app from Focus")
@@ -400,7 +405,11 @@ struct UIConstants {
         static let copiedLink = NSLocalizedString("contextMenu.linkCopied", value: "Link you copied: ", comment: "Text for the context menu when a user has a link on their clipboard.")
         static let trackingProtectionLabel = NSLocalizedString("trackingProtection.label", value: "Tracking Protection", comment: "Title for the tracking settings page to change what trackers are blocked.")
         static let trackingProtectionLabelDescription = NSLocalizedString("trackingProtection.labelDescription", value: "Turning this off may fix some site problems", comment: "Description/subtitle for the tracking protection label.")
-        static let trackingProtectionToggleLabel = NSLocalizedString("trackingProtection.toggleLabel", value: "Tracking Protection", comment: "Text for the toggle that temporarily disables tracking protection.") // deprecated
+        static let trackingProtectionToggleLabel = NSLocalizedString("trackingProtection.toggleLabel", value: "Enhanced Tracking Protection", comment: "Text for the toggle that temporarily disables tracking protection.") // deprecated
+        static let trackingProtectionMoreSettings = NSLocalizedString("trackingProtection.moreSettings", value: "More Settings", comment: "Text for the button to learn more about Tracking Protection.")
+        static let trackersHeader = NSLocalizedString("trackingProtection.trackersHeader", value: "Trackers and scripts to block", comment: "Text for the header of trackers section from Tracking Protection.")
+        static let trackingProtectionOn = NSLocalizedString("trackingProtection.statusOn", value: "Protections are ON for this session", comment: "Text for the status on from Tracking Protection.")
+        static let trackingProtectionOff = NSLocalizedString("trackingProtection.statusOff", value: "Protections are OFF for this session", comment: "Text for the status off from Tracking Protection.")
         static let trackingProtectionToggleDescription = NSLocalizedString("trackingProtection.toggleDescription1", value: "Disable until you close %@ or tap ERASE.", comment: "Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar")
         static let trackingProtectionDisabledLabel = NSLocalizedString("trackingProtection.disabledLabel", value: "Tracking Protection off", comment: "text showing the tracking protection is disabled.")
         static let adTrackerLabel = NSLocalizedString("trackingProtection.adTrackersLabel", value: "Ad trackers", comment: "Label for ad trackers.")
@@ -408,7 +417,7 @@ struct UIConstants {
         static let socialTrackerLabel = NSLocalizedString("trackingProtection.socialTrackerLabel", value: "Social trackers", comment: "label for social trackers.")
         static let contentTrackerLabel = NSLocalizedString("trackingProtection.contentTrackerLabel", value: "Content trackers", comment: "label for content trackers.")
         static let selectLocationBarTitle = NSLocalizedString("browserShortcutDescription.selectLocationBar", value: "Select Location Bar", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
-        static let trackersDescriptionLabel = NSLocalizedString("trackingProtection.trackerDescriptionLabel", value: "Choose whether %@ blocks ad, analytic, social, and other trackers.", comment: "General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar")
+        static let trackersDescriptionLabel2 = NSLocalizedString("trackingProtection.trackerDescriptionLabel", value: "Keep your data to yourself. %@ protects you from many of the most common trackers that follow what you do online.", comment: "General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar")
         static let trackingProtectionLearnMore = NSLocalizedString("trackingProtection.learnMore", value: "Learn More", comment: "Text for the button to learn more about Tracking Protection.")
         static let ratingSetting = NSLocalizedString("Settings.rate", value: "Rate %@", comment: "%@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store.")
         static let CardTitleWelcome = NSLocalizedString("Intro.Slides.Welcome.Title", tableName: "Intro", value: "Power up your privacy", comment: "Title for the first panel 'Welcome' in the First Run tour.")

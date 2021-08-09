@@ -386,31 +386,19 @@
 "Settings.sectionSecurity" = "SECURITY";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Block ad trackers";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Some ads track site visits, even if you don’t click the ads";
+"Settings.toggleBlockAds" = "Advertising";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Block analytics trackers";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Used to collect, analyze and measure activities like tapping and scrolling";
+"Settings.toggleBlockAnalytics" = "Analytics";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Block Web fonts";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Block other content trackers";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Enabling may cause some pages to behave unexpectedly";
+"Settings.toggleBlockOther" = "Content";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Block social trackers";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Embedded on sites to track your visits and to display functionality like share buttons";
+"Settings.toggleBlockSocial" = "Social";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Use Face ID to unlock app";
@@ -536,10 +524,10 @@
 "trackingProtection.toggleDescription1" = "Disable until you close %@ or tap ERASE.";
 
 /* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Tracking Protection";
+"trackingProtection.toggleLabel2" = "Enhanced Tracking Protection";
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Choose whether %@ blocks ad, analytic, social, and other trackers.";
+"trackingProtection.trackerDescriptionLabel2" = "Keep your data to yourself. %@ protects you from many of the most common trackers that follow what you do online.";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Add link to autocomplete";
