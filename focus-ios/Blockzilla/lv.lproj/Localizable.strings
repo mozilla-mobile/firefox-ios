@@ -1,0 +1,87 @@
+/* Button on About screen */
+"About.learnMoreButton" = "Uzzināt vairāk";
+
+/* Label for row in About screen */
+"About.rowHelp" = "Palīdzība";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "Manas vietnes";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "Atpakaļ";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "Kopēt adresi";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "Kopēt";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "Uz priekšu";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "Pārlādēt";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "Iestatījumi";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "Dalīties";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "Apturēt";
+
+/* Label on button to cancel edits */
+"Cancel" = "Atcelt";
+
+/* Label on button to allow edits */
+"Edit" = "Rediģēt";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "Mēģināt vēlreiz";
+
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "Atcelt";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "Atvērt";
+
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "Zvanīt";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "Atcelt";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "Epasts";
+
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "Aizvērt";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "Atcelt";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "Firefox (Private Browsing)";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "Vairāk";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "Safari";
+
+/* Save button label */
+"Save" = "Saglabāt";
+
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "Nē";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "Jā";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "Nē, paldies";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "Es saprotu";
+
