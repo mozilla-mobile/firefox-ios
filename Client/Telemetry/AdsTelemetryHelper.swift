@@ -18,21 +18,23 @@ struct SearchProviderModel {
     let extraAdServersRegexps: [String]
     let searchProviderCookie: SearchProviderCookie?
     
-    func containsAds(urls: [String]) -> Bool {
+    func listAdUrls(urls: [String]) -> [String] {
         let predicates: [Predicate] = extraAdServersRegexps.map { regex in
             return { url in
                 return url.range(of: regex, options: .regularExpression) != nil
             }
         }
-        
+
+        var adUrls = [String]()
         for url in urls {
+            print(url)
             for predicate in predicates {
                 guard predicate(url) else { continue }
-                return true
+                adUrls.append(url)
             }
         }
         
-        return false
+        return adUrls
     }
 }
 
@@ -54,7 +56,10 @@ class AdsTelemetryHelper: TabContentScript {
             codeParam: "client",
             codePrefixes: ["firefox"],
             followOnParams: ["oq", "ved", "ei"],
-            extraAdServersRegexps: [#"^https?:\/\/www\.google(?:adservices)?\.com\/(?:pagead\/)?aclk"#],
+            extraAdServersRegexps: [
+                #"^https?:\/\/www\.google(?:adservices)?\.com\/(?:pagead\/)?aclk"#,
+                #"^(http|https):\/\/clickserve.dartsearch.net\/link\/"#
+            ],
             searchProviderCookie: nil
         ),
         SearchProviderModel(
@@ -70,6 +75,7 @@ class AdsTelemetryHelper: TabContentScript {
             ],
             searchProviderCookie: nil
         ),
+        // Note: Yahoo shows ads from bing and google
         SearchProviderModel(
             name: "yahoo",
             regexp: #"^https:\/\/(?:.*)search\.yahoo\.com\/search"#,
@@ -77,7 +83,9 @@ class AdsTelemetryHelper: TabContentScript {
             codeParam: "",
             codePrefixes: [],
             followOnParams: [],
-            extraAdServersRegexps: [],
+            extraAdServersRegexps: [#"^(http|https):\/\/clickserve.dartsearch.net\/link\/"#,
+                                    #"^https:\/\/www\.bing\.com\/acli?c?k"#,
+                                    #"^https:\/\/www\.bing\.com\/fd\/ls\/GLinkPingPost\.aspx.*acli?c?k"#],
             searchProviderCookie: nil
         ),
         SearchProviderModel(
@@ -131,11 +139,11 @@ class AdsTelemetryHelper: TabContentScript {
             let provider = getProviderForMessage(message: message),
             let body = message.body as? [String : Any],
             let urls = body["urls"] as? [String] else { return }
-        let webpageHasAds = provider.containsAds(urls: urls)
-        if webpageHasAds {
+        let adUrls = provider.listAdUrls(urls: urls)
+        if !adUrls.isEmpty {
             AdsTelemetryHelper.trackAdsFoundOnPage(providerName: provider.name)
             tab?.adsProviderName = provider.name
-            tab?.adsTelemetryUrlList = urls
+            tab?.adsTelemetryUrlList = adUrls
         }
     }
     
