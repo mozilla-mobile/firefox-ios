@@ -12,6 +12,7 @@ protocol TabToolbarProtocol: AnyObject {
     var tabsButton: TabsButton { get }
     var appMenuButton: ToolbarButton { get }
     var bookmarksButton: ToolbarButton { get }
+    var homeButton: ToolbarButton { get }
     var forwardButton: ToolbarButton { get }
     var backButton: ToolbarButton { get }
     var multiStateButton: ToolbarButton { get }
@@ -112,6 +113,12 @@ open class TabToolbarHelper: NSObject {
         toolbar.appMenuButton.addTarget(self, action: #selector(didClickMenu), for: .touchUpInside)
         toolbar.appMenuButton.accessibilityIdentifier = "TabToolbar.menuButton"
 
+        toolbar.homeButton.contentMode = .center
+        toolbar.homeButton.setImage(UIImage.templateImageNamed("menu-Home"), for: .normal)
+        toolbar.homeButton.accessibilityLabel = Strings.AppMenuButtonAccessibilityLabel
+        toolbar.homeButton.addTarget(self, action: #selector(didClickHome), for: .touchUpInside)
+        toolbar.homeButton.accessibilityIdentifier = "TabToolbar.homeButton"
+
         toolbar.bookmarksButton.contentMode = .center
         toolbar.bookmarksButton.setImage(UIImage.templateImageNamed("menu-panel-Bookmarks"), for: .normal)
         toolbar.bookmarksButton.accessibilityLabel = Strings.AppMenuButtonAccessibilityLabel
@@ -152,6 +159,10 @@ open class TabToolbarHelper: NSObject {
 
     func didClickMenu() {
         toolbar.tabToolbarDelegate?.tabToolbarDidPressMenu(toolbar, button: toolbar.appMenuButton)
+    }
+
+    func didClickHome() {
+        toolbar.tabToolbarDelegate?.tabToolbarDidPressHome(toolbar, button: toolbar.appMenuButton)
     }
 
     func didClickLibrary() {
@@ -313,6 +324,8 @@ class TabToolbar: UIView {
 }
 
 extension TabToolbar: TabToolbarProtocol {
+    var homeButton: ToolbarButton { multiStateButton }
+
     func privateModeBadge(visible: Bool) {
         privateModeBadge.show(visible)
     }
