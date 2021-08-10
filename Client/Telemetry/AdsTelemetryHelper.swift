@@ -16,7 +16,6 @@ struct SearchProviderModel {
     let codePrefixes: [String]
     let followOnParams: [String]
     let extraAdServersRegexps: [String]
-    let searchProviderCookie: SearchProviderCookie?
     
     func listAdUrls(urls: [String]) -> [String] {
         let predicates: [Predicate] = extraAdServersRegexps.map { regex in
@@ -38,15 +37,6 @@ struct SearchProviderModel {
     }
 }
 
-struct SearchProviderCookie {
-    let extraCodeParam: String
-    let extraCodePrefixes: [String]
-    let host: String
-    let name: String
-    let codeParam: String
-    let codePrefixes: [String]
-}
-
 class AdsTelemetryHelper: TabContentScript {
     let searchProviderList = [
         SearchProviderModel(
@@ -59,8 +49,7 @@ class AdsTelemetryHelper: TabContentScript {
             extraAdServersRegexps: [
                 #"^https?:\/\/www\.google(?:adservices)?\.com\/(?:pagead\/)?aclk"#,
                 #"^(http|https):\/\/clickserve.dartsearch.net\/link\/"#
-            ],
-            searchProviderCookie: nil
+            ]
         ),
         SearchProviderModel(
             name: "duckduckgo",
@@ -72,8 +61,7 @@ class AdsTelemetryHelper: TabContentScript {
             extraAdServersRegexps: [
                 #"^https:\/\/duckduckgo.com\/y\.js"#,
                 #"^https:\/\/www\.amazon\.(?:[a-z.]{2,24}).*(?:tag=duckduckgo-)"#
-            ],
-            searchProviderCookie: nil
+            ]
         ),
         // Note: Yahoo shows ads from bing and google
         SearchProviderModel(
@@ -85,18 +73,7 @@ class AdsTelemetryHelper: TabContentScript {
             followOnParams: [],
             extraAdServersRegexps: [#"^(http|https):\/\/clickserve.dartsearch.net\/link\/"#,
                                     #"^https:\/\/www\.bing\.com\/acli?c?k"#,
-                                    #"^https:\/\/www\.bing\.com\/fd\/ls\/GLinkPingPost\.aspx.*acli?c?k"#],
-            searchProviderCookie: nil
-        ),
-        SearchProviderModel(
-            name: "baidu",
-            regexp: #"^https:\/\/m\.baidu\.com(?:.*)\/s"#,
-            queryParam: "word",
-            codeParam: "from",
-            codePrefixes: ["1000969a"],
-            followOnParams: ["oq"],
-            extraAdServersRegexps: [],
-            searchProviderCookie: nil
+                                    #"^https:\/\/www\.bing\.com\/fd\/ls\/GLinkPingPost\.aspx.*acli?c?k"#]
         ),
         SearchProviderModel(
             name: "bing",
@@ -108,15 +85,7 @@ class AdsTelemetryHelper: TabContentScript {
             extraAdServersRegexps: [
                 #"^https:\/\/www\.bing\.com\/acli?c?k"#,
                 #"^https:\/\/www\.bing\.com\/fd\/ls\/GLinkPingPost\.aspx.*acli?c?k"#
-            ],
-            searchProviderCookie: SearchProviderCookie(
-                extraCodeParam: "form",
-                extraCodePrefixes: ["QBRE"],
-                host: "www.bing.com",
-                name: "SRCHS",
-                codeParam: "PC",
-                codePrefixes: ["MOZ", "MZ"]
-            )
+            ]
         ),
     ]
     
