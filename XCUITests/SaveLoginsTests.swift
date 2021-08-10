@@ -207,6 +207,7 @@ class SaveLoginTest: BaseTestCase {
         XCTAssertEqual(passwordValue as! String, "••••••••")
     }
 
+    // Smoketest
     func testCreateLoginManually() {
         closeURLBar()
         navigator.goto(LoginsSettings)
