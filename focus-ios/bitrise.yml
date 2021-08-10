@@ -414,6 +414,7 @@ workflows:
 
             ./l10n-screenshots.sh --test-without-building $MOZ_LOCALES
             mkdir -p artifacts
+
             for locale in $(echo $MOZ_LOCALES); do
               # Only Focus for now
               zip -9 -j "$locale.zip" "l10n-screenshots/$locale/$locale/"*
@@ -422,7 +423,6 @@ workflows:
     - deploy-to-bitrise-io@1.10:
         inputs:
         - deploy_path: artifacts/
-        - is_compress: 'true'
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
