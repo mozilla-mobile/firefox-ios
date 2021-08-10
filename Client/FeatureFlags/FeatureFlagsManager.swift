@@ -64,7 +64,7 @@ class FeatureFlagsManager {
         let chronTabs = FlaggableFeature(withID: .chronologicalTabs, and: profile, enabledFor: [.developer])
         features[.chronologicalTabs] = chronTabs
 
-        let inactiveTabs = FlaggableFeature(withID: .inactiveTabs, and: profile, enabledFor: [.beta, .developer])
+        let inactiveTabs = FlaggableFeature(withID: .inactiveTabs, and: profile, enabledFor: [.developer])
         features[.inactiveTabs] = inactiveTabs
 
         let jumpBackIn = FlaggableFeature(withID: .jumpBackIn, and: profile, enabledFor: [.beta, .developer])
