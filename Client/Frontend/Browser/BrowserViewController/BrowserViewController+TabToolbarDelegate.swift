@@ -5,6 +5,16 @@
 import Shared
 
 extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
+    func tabToolbarDidPressHome(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        let page = NewTabAccessors.getHomePage(self.profile.prefs)
+        if page == .homePage, let homePageURL = HomeButtonHomePageAccessors.getHomePage(self.profile.prefs) {
+            tabManager.selectedTab?.loadRequest(PrivilegedRequest(url: homePageURL) as URLRequest)
+        } else if let homePanelURL = page.url {
+            tabManager.selectedTab?.loadRequest(PrivilegedRequest(url: homePanelURL) as URLRequest)
+        }
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .home)
+    }
+
     func tabToolbarDidPressLibrary(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
     }
     
@@ -16,28 +26,6 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
         showBackForwardList()
-    }
-
-    func tabToolbarDidPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        tabManager.selectedTab?.reload()
-    }
-
-    func tabToolbarDidLongPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        guard let tab = tabManager.selectedTab else {
-            return
-        }
-        let urlActions = self.getRefreshLongPressMenu(for: tab)
-        guard !urlActions.isEmpty else {
-            return
-        }
-        let generator = UIImpactFeedbackGenerator(style: .heavy)
-        generator.impactOccurred()
-        let shouldSuppress = UIDevice.current.userInterfaceIdiom != .pad
-        presentSheetWith(actions: [urlActions], on: self, from: button, suppressPopover: shouldSuppress)
-    }
-
-    func tabToolbarDidPressStop(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        tabManager.selectedTab?.stop()
     }
 
     func tabToolbarDidPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton) {

@@ -433,8 +433,6 @@ class URLBarView: UIView {
     }
 
     func updateProgressBar(_ progress: Float) {
-        locationView.reloadButton.reloadButtonState = .disabled
-
         progressBar.alpha = 1
         progressBar.isHidden = false
         progressBar.setProgress(progress, animated: !isTransitioning)

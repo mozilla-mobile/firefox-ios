@@ -31,9 +31,7 @@ protocol TabToolbarDelegate: AnyObject {
     func tabToolbarDidPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidLongPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidLongPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton)
-    func tabToolbarDidPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton)
-    func tabToolbarDidLongPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton)
-    func tabToolbarDidPressStop(_ tabToolbar: TabToolbarProtocol, button: UIButton)
+    func tabToolbarDidPressHome(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressBookmarks(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
@@ -46,6 +44,7 @@ enum MiddleButtonState {
     case reload
     case stop
     case search
+    case home
 }
 
 @objcMembers
@@ -55,24 +54,23 @@ open class TabToolbarHelper: NSObject {
     let ImageStop = UIImage.templateImageNamed("nav-stop")
     let ImageSearch = UIImage.templateImageNamed("search")
     let ImageNewTab = UIImage.templateImageNamed("nav-add")
+    let ImageHome = UIImage(named: "menu-Home")
     
     func setMiddleButtonState(_ state: MiddleButtonState) {
-        middleButtonState = state
         switch state {
-            case .reload:
-                toolbar.multiStateButton.setImage(ImageReload, for: .normal)
-                toolbar.multiStateButton.accessibilityLabel = .TabToolbarReloadAccessibilityLabel
-            case .stop:
-                toolbar.multiStateButton.setImage(ImageStop, for: .normal)
-                toolbar.multiStateButton.accessibilityLabel = .TabToolbarStopAccessibilityLabel
-            case .search:
-                toolbar.multiStateButton.setImage(ImageSearch, for: .normal)
-                toolbar.multiStateButton.accessibilityLabel = .TabToolbarSearchAccessibilityLabel
+        case .search:
+            middleButtonState = .search
+            toolbar.multiStateButton.setImage(ImageSearch, for: .normal)
+            toolbar.multiStateButton.accessibilityLabel = .TabToolbarSearchAccessibilityLabel
+        default:
+            toolbar.multiStateButton.setImage(ImageHome, for: .normal)
+            toolbar.multiStateButton.accessibilityLabel = .TabToolbarSearchAccessibilityLabel
+            middleButtonState = .home
         }
     }
     
     // Default state as reload
-    var middleButtonState: MiddleButtonState = .reload
+    var middleButtonState: MiddleButtonState = .home
 
     fileprivate func setTheme(forButtons buttons: [Themeable]) {
         buttons.forEach { $0.applyTheme() }
@@ -96,8 +94,7 @@ open class TabToolbarHelper: NSObject {
 
         toolbar.multiStateButton.setImage(UIImage.templateImageNamed("nav-refresh"), for: .normal)
         toolbar.multiStateButton.accessibilityLabel = .TabToolbarReloadAccessibilityLabel
-        let longPressMultiStateButton = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressMultiStateButton))
-        toolbar.multiStateButton.addGestureRecognizer(longPressMultiStateButton)
+
         toolbar.multiStateButton.addTarget(self, action: #selector(didPressMultiStateButton), for: .touchUpInside)
 
         toolbar.tabsButton.addTarget(self, action: #selector(didClickTabs), for: .touchUpInside)
@@ -168,24 +165,12 @@ open class TabToolbarHelper: NSObject {
 
     func didPressMultiStateButton() {
         switch middleButtonState {
-        case .reload:
-            toolbar.tabToolbarDelegate?.tabToolbarDidPressReload(toolbar, button: toolbar.multiStateButton)
+        case .home:
+            toolbar.tabToolbarDelegate?.tabToolbarDidPressHome(toolbar, button: toolbar.multiStateButton)
         case .search:
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .startSearchButton)
             toolbar.tabToolbarDelegate?.tabToolbarDidPressSearch(toolbar, button: toolbar.multiStateButton)
-        case .stop:
-            toolbar.tabToolbarDelegate?.tabToolbarDidPressStop(toolbar, button: toolbar.multiStateButton)
-        }
-    }
-
-    func didLongPressMultiStateButton(_ recognizer: UILongPressGestureRecognizer) {
-        switch middleButtonState {
-        case .search:
-            return
-        default:
-            if recognizer.state == .began {
-                toolbar.tabToolbarDelegate?.tabToolbarDidLongPressReload(toolbar, button: toolbar.multiStateButton)
-            }
+        default: break;
         }
     }
 }
