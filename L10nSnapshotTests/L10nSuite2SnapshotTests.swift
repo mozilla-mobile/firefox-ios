@@ -157,7 +157,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
 
         app.tables["Login List"].cells.element(boundBy: 2).tap()
         snapshot("CreatedLoginDetailedView")
-        sleep(2)
+
         app.tables["Login Detail List"].cells.element(boundBy: 5).tap()
         snapshot("RemoveLoginDetailedView")
     }
