@@ -131,7 +131,7 @@ extension BrowserViewController: WKUIDelegate {
                 if currentTab == self.tabManager.selectedTab, currentTab.adsTelemetryUrlList.count > 0 {
                     let adUrl = rURL.absoluteString
                     if currentTab.adsTelemetryUrlList.contains(adUrl) {
-                        if !currentTab.adsProviderName.isEmpty { AdsTelemetryHelper.trackAdsFoundOnPage(providerName: currentTab.adsProviderName) }
+                        if !currentTab.adsProviderName.isEmpty { AdsTelemetryHelper.trackAdsClickedOnPage(providerName: currentTab.adsProviderName) }
                         currentTab.adsTelemetryUrlList.removeAll()
                         currentTab.adsProviderName = ""
                     }
@@ -354,7 +354,7 @@ extension BrowserViewController: WKNavigationDelegate {
         if tab == tabManager.selectedTab, navigationAction.navigationType == .linkActivated, tab.adsTelemetryUrlList.count > 0 {
             let adUrl = url.absoluteString
             if tab.adsTelemetryUrlList.contains(adUrl) {
-                if !tab.adsProviderName.isEmpty { AdsTelemetryHelper.trackAdsFoundOnPage(providerName: tab.adsProviderName) }
+                if !tab.adsProviderName.isEmpty { AdsTelemetryHelper.trackAdsClickedOnPage(providerName: tab.adsProviderName) }
                 tab.adsTelemetryUrlList.removeAll()
                 tab.adsProviderName = ""
             }
