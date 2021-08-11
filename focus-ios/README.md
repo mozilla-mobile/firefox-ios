@@ -19,7 +19,7 @@ We also tag recommended bugs for contributions with [help wanted](https://github
 Main Branch
 ----------------
 
-This branch works with Xcode 12.5 and supports iOS 11.4+.
+This branch works with Xcode 12.5.1 and supports iOS 11.4+.
 
 Pull requests should be submitted with `main` as the base branch.
 
