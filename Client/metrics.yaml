@@ -1318,3 +1318,33 @@ inactive_tabs_tray:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-01-08"
+
+browser_search:
+  with_ads:
+    type: labeled_counter
+    description: |
+      Records counts of SERP pages with adverts displayed.
+      The key format is ‘<provider-name>’.
+    send_in_pings:
+      - metrics
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7616
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8970
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-02-09"
+  ad_clicks:
+    type: labeled_counter
+    description: |
+      Records clicks of adverts on SERP pages.
+      The key format is ‘<provider-name>’.
+    send_in_pings:
+      - metrics
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7616
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8970
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-02-09"
