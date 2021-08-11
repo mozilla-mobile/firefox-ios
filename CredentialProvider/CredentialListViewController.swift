@@ -205,7 +205,13 @@ extension CredentialListViewController: UITableViewDelegate {
         case .none:
             return 44
         }
-    }    
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        if  let searchBar = searchController?.searchBar, searchBar.isFirstResponder {
+            searchBar.resignFirstResponder()
+        }
+    }
 }
 
 
