@@ -55,58 +55,50 @@ class DatabaseFixtureTest: BaseTestCase {
     }
 
     func testPerfHistory4000startUp() {
-        if #available(iOS 13.0, *) {
-            measure(metrics: [
-                XCTMemoryMetric(),
-                XCTClockMetric(), // to measure timeClock Mon
-                XCTCPUMetric(), // to measure cpu cycles
-                XCTStorageMetric(), // to measure storage consuming
-                XCTMemoryMetric()]) {
-                // activity measurement here
-                app.launch()
-            }
+        measure(metrics: [
+            XCTMemoryMetric(),
+            XCTClockMetric(), // to measure timeClock Mon
+            XCTCPUMetric(), // to measure cpu cycles
+            XCTStorageMetric(), // to measure storage consuming
+            XCTMemoryMetric()]) {
+            // activity measurement here
+            app.launch()
         }
     }
 
     func testPerfHistory4000openMenu() {
-        if #available(iOS 13.0, *) {
-            measure(metrics: [
-                XCTMemoryMetric(),
-                XCTClockMetric(), // to measure timeClock Mon
-                XCTCPUMetric(), // to measure cpu cycles
-                XCTStorageMetric(), // to measure storage consuming
-                XCTMemoryMetric()]) {
-                // activity measurement here
-                navigator.goto(LibraryPanel_History)
-            }
+        measure(metrics: [
+            XCTMemoryMetric(),
+            XCTClockMetric(), // to measure timeClock Mon
+            XCTCPUMetric(), // to measure cpu cycles
+            XCTStorageMetric(), // to measure storage consuming
+            XCTMemoryMetric()]) {
+            // activity measurement here
+            navigator.goto(LibraryPanel_History)
         }
     }
 
     func testPerfBookmarks1000startUp() {
-        if #available(iOS 13.0, *) {
-            measure(metrics: [
-                XCTMemoryMetric(),
-                XCTClockMetric(), // to measure timeClock Mon
-                XCTCPUMetric(), // to measure cpu cycles
-                XCTStorageMetric(), // to measure storage consuming
-                XCTMemoryMetric()]) {
-                // activity measurement here
-                app.launch()
-            }
+        measure(metrics: [
+            XCTMemoryMetric(),
+            XCTClockMetric(), // to measure timeClock Mon
+            XCTCPUMetric(), // to measure cpu cycles
+            XCTStorageMetric(), // to measure storage consuming
+            XCTMemoryMetric()]) {
+            // activity measurement here
+            app.launch()
         }
     }
 
     func testPerfBookmarks1000openMenu() {
-        if #available(iOS 13.0, *) {
-            measure(metrics: [
-                XCTMemoryMetric(),
-                XCTClockMetric(), // to measure timeClock Mon
-                XCTCPUMetric(), // to measure cpu cycles
-                XCTStorageMetric(), // to measure storage consuming
-                XCTMemoryMetric()]) {
-                // activity measurement here
-                navigator.goto(LibraryPanel_Bookmarks)
-            }
+        measure(metrics: [
+            XCTMemoryMetric(),
+            XCTClockMetric(), // to measure timeClock Mon
+            XCTCPUMetric(), // to measure cpu cycles
+            XCTStorageMetric(), // to measure storage consuming
+            XCTMemoryMetric()]) {
+            // activity measurement here
+            navigator.goto(LibraryPanel_Bookmarks)
         }
     }
 }

@@ -8,7 +8,6 @@ import Shared
 import Storage
 import Sync
 
-@available(iOS 12, *)
 protocol CredentialProviderViewProtocol: AnyObject, AlertControllerView {
     var extensionContext: ASCredentialProviderExtensionContext { get }
 

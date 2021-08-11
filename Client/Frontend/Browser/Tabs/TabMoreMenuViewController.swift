@@ -33,12 +33,7 @@ class TabMoreMenuViewController: UIViewController, Themeable {
                                                  UIImageView(image: UIImage.templateImageNamed("menu-Send-to-Device"))]
     ]
     lazy var tableView: UITableView = {
-        var tableView: UITableView
-        if #available(iOS 13.0, *) {
-            tableView = UITableView(frame: CGRect(), style: .insetGrouped)
-        } else {
-            tableView = UITableView()
-        }
+        var tableView = UITableView(frame: CGRect(), style: .insetGrouped)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "moreMenuCell")
         tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "moreMenuHeader")
         tableView.dataSource = self
@@ -189,11 +184,7 @@ extension TabMoreMenuViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if #available(iOS 13.0, *) {
-            return 0
-        } else {
-            return 8
-        }
+        return 0
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

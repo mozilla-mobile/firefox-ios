@@ -39,12 +39,10 @@ class NestedTableDataSource: NSObject, UITableViewDataSource, UITableViewDelegat
 fileprivate var nestedTableViewDomainList: NestedTableViewDelegate?
 
 extension PhotonActionSheetProtocol {
-    @available(iOS 11.0, *)
     private func menuActionsForNotBlocking() -> [PhotonActionSheetItem] {
         return [PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TPNoBlockingDescription, iconString: "menu-TrackingProtection")]
     }
 
-    @available(iOS 11.0, *)
     func getTrackingSubMenu(for tab: Tab) -> [[PhotonActionSheetItem]] {
         guard let blocker = tab.contentBlocker else {
             return []
@@ -61,7 +59,6 @@ extension PhotonActionSheetProtocol {
         }
     }
 
-    @available(iOS 11.0, *)
     private func menuActionsForTrackingProtectionDisabled(for tab: Tab) -> [[PhotonActionSheetItem]] {
         let enableTP = PhotonActionSheetItem(title: Strings.EnableTPBlockingGlobally, iconString: "menu-TrackingProtection") { _, _ in
             FirefoxTabContentBlocker.toggleTrackingProtectionEnabled(prefs: self.profile.prefs)
@@ -132,7 +129,6 @@ extension PhotonActionSheetProtocol {
         self.presentSheetWith(title: title, actions: actions, on: bvc, from: urlbar)
     }
 
-    @available(iOS 11.0, *)
     private func menuActionsForTrackingProtectionEnabled(for tab: Tab, isSafelisted: Bool = false) -> [[PhotonActionSheetItem]] {
         guard let blocker = tab.contentBlocker, let currentURL = tab.url else {
             return []
@@ -248,7 +244,6 @@ extension PhotonActionSheetProtocol {
         return items + [[settings]]
     }
 
-    @available(iOS 11.0, *)
     private func menuActionsForSafelistedSite(for tab: Tab) -> [[PhotonActionSheetItem]] {
         guard let currentURL = tab.url else {
             return []

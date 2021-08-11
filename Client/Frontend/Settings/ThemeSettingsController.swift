@@ -36,13 +36,7 @@ class ThemeSettingsController: ThemedTableViewController {
         return ThemeManager.instance.systemThemeIsOn
     }
 
-    private var shouldHideSystemThemeSection: Bool = {
-        if #available(iOS 13.0, *) {
-            return false
-        } else {
-            return true
-        }
-    }()
+    private var shouldHideSystemThemeSection = false
 
     init() {
         super.init(style: .grouped)
@@ -126,15 +120,15 @@ class ThemeSettingsController: ThemedTableViewController {
 
     @objc func systemThemeSwitchValueChanged(control: UISwitch) {
         ThemeManager.instance.systemThemeIsOn = control.isOn
-        if #available(iOS 13.0, *) {
-            let userInterfaceStyle = traitCollection.userInterfaceStyle
-            if control.isOn {
-                ThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
-            } else if ThemeManager.instance.automaticBrightnessIsOn {
-                ThemeManager.instance.updateCurrentThemeBasedOnScreenBrightness()
-            }
-            TelemetryWrapper.recordEvent(category: .action, method: .press, object: .setting, value: .systemThemeSwitch, extras: ["to": control.isOn])
+    
+        let userInterfaceStyle = traitCollection.userInterfaceStyle
+        if control.isOn {
+            ThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
+        } else if ThemeManager.instance.automaticBrightnessIsOn {
+            ThemeManager.instance.updateCurrentThemeBasedOnScreenBrightness()
         }
+        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .setting, value: .systemThemeSwitch, extras: ["to": control.isOn])
+
         // Switch animation must begin prior to scheduling table view update animation (or the switch will be auto-synchronized to the slower tableview animation and makes the switch behaviour feel slow and non-standard).
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             UIView.transition(with: self.tableView, duration: 0.2, options: .transitionCrossDissolve, animations: { self.tableView.reloadData()  })
@@ -247,11 +241,7 @@ class ThemeSettingsController: ThemedTableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case Section.systemTheme.rawValue:
-            if #available(iOS 13.0, *) {
-                return 1
-            } else {
-                return 0
-            }
+            return 1
         case Section.automaticBrightness.rawValue:
             return 2
         case Section.lightDarkPicker.rawValue:

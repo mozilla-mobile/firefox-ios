@@ -1116,7 +1116,6 @@ class HomeSetting: Setting {
     }
 }
 
-@available(iOS 12.0, *)
 class SiriPageSetting: Setting {
     let profile: Profile
 

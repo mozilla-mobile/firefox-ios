@@ -75,14 +75,8 @@ class TabMoreMenuHeader: UIView {
     }
     
     func applyTheme() {
-        if #available(iOS 13.0, *) {
-            backgroundColor = UIColor.secondarySystemGroupedBackground
-            titleLabel.textColor = UIColor.label
-            descriptionLabel.textColor = UIColor.secondaryLabel
-        } else {
-            backgroundColor = UIColor.theme.tableView.rowBackground
-            titleLabel.textColor = UIColor.theme.tableView.rowText
-            descriptionLabel.textColor = UIColor.theme.tableView.rowDetailText
-        }
+        backgroundColor = UIColor.secondarySystemGroupedBackground
+        titleLabel.textColor = UIColor.label
+        descriptionLabel.textColor = UIColor.secondaryLabel
     }
 }

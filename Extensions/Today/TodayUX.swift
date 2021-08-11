@@ -13,18 +13,6 @@ struct TodayUX {
     static let margin: CGFloat = 8
     static let buttonsHorizontalMarginPercentage: CGFloat = 0.1
     static let buttonStackViewSpacing: CGFloat = 4.0
-    static var labelColor: UIColor {
-        if #available(iOS 13, *) {
-            return UIColor(named: "widgetLabelColors") ?? UIColor(rgb: 0x242327)
-        } else {
-            return UIColor(rgb: 0x242327)
-        }
-    }
-    static var subtitleLabelColor: UIColor {
-        if #available(iOS 13, *) {
-            return UIColor(named: "subtitleLableColor") ?? UIColor(rgb: 0x38383C)
-        } else {
-            return UIColor(rgb: 0x38383C)
-        }
-    }
+    static var labelColor: UIColor = UIColor(named: "widgetLabelColors") ?? UIColor(rgb: 0x242327)
+    static var subtitleLabelColor: UIColor = UIColor(named: "subtitleLableColor") ?? UIColor(rgb: 0x38383C)
 }

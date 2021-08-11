@@ -75,11 +75,6 @@ class ChronologicalTabsViewController: UIViewController, Themeable, TabTrayViewD
     }
 
     private func viewSetup() {
-        if #available(iOS 13.0, *) { } else {
-            parent?.navigationItem.leftBarButtonItem = UIBarButtonItem(title: Strings.CloseButtonTitle, style: .done, target: self, action: #selector(dismissTabTray))
-            TelemetryWrapper.recordEvent(category: .action, method: .close, object: .tabTray)
-        }
-
         // Add Subviews
         view.addSubview(tableView)
         view.addSubview(emptyPrivateTabsView)
@@ -109,19 +104,12 @@ class ChronologicalTabsViewController: UIViewController, Themeable, TabTrayViewD
     }
 
     func applyTheme() {
-        if #available(iOS 13.0, *) {
-            overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
-            bottomSheetVC?.overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
-            tableView.backgroundColor = UIColor.systemGroupedBackground
-            emptyPrivateTabsView.titleLabel.textColor = UIColor.label
-            emptyPrivateTabsView.descriptionLabel.textColor = UIColor.secondaryLabel
-        } else {
-            tableView.backgroundColor = UIColor.theme.tableView.headerBackground
-            view.backgroundColor = UIColor.theme.tableView.headerBackground
-            tableView.separatorColor = UIColor.theme.tableView.separator
-            emptyPrivateTabsView.titleLabel.textColor = UIColor.theme.tableView.rowText
-            emptyPrivateTabsView.descriptionLabel.textColor = UIColor.theme.tableView.rowDetailText
-        }
+        overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
+        bottomSheetVC?.overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
+        tableView.backgroundColor = UIColor.systemGroupedBackground
+        emptyPrivateTabsView.titleLabel.textColor = UIColor.label
+        emptyPrivateTabsView.descriptionLabel.textColor = UIColor.secondaryLabel
+        
         setNeedsStatusBarAppearanceUpdate()
         bottomSheetVC?.applyTheme()
     }
@@ -136,10 +124,8 @@ class ChronologicalTabsViewController: UIViewController, Themeable, TabTrayViewD
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
-        if #available(iOS 13.0, *) {
-            if ThemeManager.instance.systemThemeIsOn {
-                tableView.reloadData()
-            }
+        if ThemeManager.instance.systemThemeIsOn {
+            tableView.reloadData()
         }
     }
 }

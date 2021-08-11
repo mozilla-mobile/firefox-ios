@@ -70,7 +70,6 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         return actions
     }()
 
-    @available(iOS 13, *)
     func contextActions(defaultActions: [UIMenuElement]) -> UIMenu {
         var actions = [UIAction]()
 

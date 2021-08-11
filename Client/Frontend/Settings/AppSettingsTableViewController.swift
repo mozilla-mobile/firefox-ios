@@ -53,9 +53,8 @@ class AppSettingsTableViewController: SettingsTableViewController {
                         titleText: .AppSettingsBlockPopups),
            ]
 
-        if #available(iOS 12.0, *) {
-            generalSettings.insert(SiriPageSetting(settings: self), at: 5)
-        }
+        generalSettings.insert(SiriPageSetting(settings: self), at: 5)
+        
 
         let accountChinaSyncSetting: [Setting]
         if !AppInfo.isChinaEdition {

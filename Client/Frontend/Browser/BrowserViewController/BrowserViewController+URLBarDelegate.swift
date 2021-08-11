@@ -60,20 +60,13 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
         
         guard self.tabTrayViewController != nil else { return }
         
-        let controller: DismissableNavigationViewController
-
-        if #available(iOS 13.0, *) {
-            controller = DismissableNavigationViewController(rootViewController: tabTrayViewController!)
-            controller.presentationController?.delegate = tabTrayViewController
-            // If we're not using the system theme, override the view's style to match
-            if !ThemeManager.instance.systemThemeIsOn {
-                controller.overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
-            }
-        } else {
-            let themedController = ThemedNavigationController(rootViewController: tabTrayViewController!)
-            themedController.presentingModalViewControllerDelegate = self
-            controller = themedController
+        let controller = DismissableNavigationViewController(rootViewController: tabTrayViewController!)
+        controller.presentationController?.delegate = tabTrayViewController
+        // If we're not using the system theme, override the view's style to match
+        if !ThemeManager.instance.systemThemeIsOn {
+            controller.overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
         }
+   
         self.present(controller, animated: true, completion: nil)
 
         if let tab = tabManager.selectedTab {

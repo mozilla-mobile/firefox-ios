@@ -329,11 +329,7 @@ class DevicePickerTableViewCell: UITableViewCell {
         nameLabel.font = DevicePickerViewControllerUX.DeviceRowTextFont
         nameLabel.numberOfLines = 2
         nameLabel.lineBreakMode = .byWordWrapping
-        if #available(iOS 13.0, *) {
-            self.tintColor = UIColor.label
-        } else {
-            self.tintColor = UIColor.gray
-        }
+        self.tintColor = UIColor.label
         self.preservesSuperviewLayoutMargins = false
         self.selectionStyle = .none
     }

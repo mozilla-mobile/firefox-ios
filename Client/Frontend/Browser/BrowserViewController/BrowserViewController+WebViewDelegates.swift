@@ -106,7 +106,6 @@ extension BrowserViewController: WKUIDelegate {
         }
     }
 
-    @available(iOS 13.0, *)
     func webView(_ webView: WKWebView, contextMenuConfigurationForElement elementInfo: WKContextMenuElementInfo, completionHandler: @escaping (UIContextMenuConfiguration?) -> Void) {
         completionHandler(UIContextMenuConfiguration(identifier: nil, previewProvider: {
             guard let url = elementInfo.linkURL, self.profile.prefs.boolForKey(PrefsKeys.ContextMenuShowLinkPreviews) ?? true else { return nil }
@@ -507,27 +506,25 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
-        if #available(iOS 12.0, *) {
-            // Check if this response should be displayed in a QuickLook for USDZ files.
-            if let previewHelper = OpenQLPreviewHelper(request: request, response: response, canShowInWebView: canShowInWebView, forceDownload: forceDownload, browserViewController: self) {
+        // Check if this response should be displayed in a QuickLook for USDZ files.
+        if let previewHelper = OpenQLPreviewHelper(request: request, response: response, canShowInWebView: canShowInWebView, forceDownload: forceDownload, browserViewController: self) {
 
-                // Certain files are too large to download before the preview presents, block and use a temporary document instead
-                if let tab = tabManager[webView] {
-                    if navigationResponse.isForMainFrame, response.mimeType != MIMEType.HTML, let request = request {
-                        tab.temporaryDocument = TemporaryDocument(preflightResponse: response, request: request)
-                        previewHelper.url = tab.temporaryDocument!.getURL().value as NSURL
+            // Certain files are too large to download before the preview presents, block and use a temporary document instead
+            if let tab = tabManager[webView] {
+                if navigationResponse.isForMainFrame, response.mimeType != MIMEType.HTML, let request = request {
+                    tab.temporaryDocument = TemporaryDocument(preflightResponse: response, request: request)
+                    previewHelper.url = tab.temporaryDocument!.getURL().value as NSURL
 
-                        // Open our helper and cancel this response from the webview.
-                        previewHelper.open()
-                        decisionHandler(.cancel)
-                        return
-                    } else {
-                        tab.temporaryDocument = nil
-                    }
+                    // Open our helper and cancel this response from the webview.
+                    previewHelper.open()
+                    decisionHandler(.cancel)
+                    return
+                } else {
+                    tab.temporaryDocument = nil
                 }
-
-                // We don't have a temporary document, fallthrough
             }
+
+            // We don't have a temporary document, fallthrough
         }
 
         // Check if this response should be downloaded.
