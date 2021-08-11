@@ -623,6 +623,7 @@
 		D3E54FDD1DF0E0D6003E1AFF /* UIImageExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageExtensions.swift; sourceTree = "<group>"; };
 		D3E54FDF1DF0E221003E1AFF /* SearchSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchSettingsViewController.swift; sourceTree = "<group>"; };
 		D4341F802669342A00294A15 /* FullFunctionalTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = FullFunctionalTests.xctestplan; sourceTree = "<group>"; };
+		D43A61BD26B4627100814232 /* SmokeTestRefresh.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = SmokeTestRefresh.xctestplan; sourceTree = "<group>"; };
 		D47940D92664E15D00C286BB /* SmokeTest.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = SmokeTest.xctestplan; sourceTree = "<group>"; };
 		D50939A81FBF807A005D4316 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		D597608B1F9FEFB300A2D212 /* TrackingProtection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtection.swift; sourceTree = "<group>"; };
@@ -1199,6 +1200,7 @@
 		E4BF2DCA1BACE8CA00DA9D68 = {
 			isa = PBXGroup;
 			children = (
+				D43A61BD26B4627100814232 /* SmokeTestRefresh.xctestplan */,
 				D4341F802669342A00294A15 /* FullFunctionalTests.xctestplan */,
 				D47940D92664E15D00C286BB /* SmokeTest.xctestplan */,
 				C817A35222CE73B4002529FF /* Deferred */,

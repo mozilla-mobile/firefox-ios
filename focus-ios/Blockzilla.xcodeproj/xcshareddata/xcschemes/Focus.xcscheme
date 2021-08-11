@@ -58,6 +58,9 @@
          <TestPlanReference
             reference = "container:FullFunctionalTests.xctestplan">
          </TestPlanReference>
+         <TestPlanReference
+            reference = "container:SmokeTestRefresh.xctestplan">
+         </TestPlanReference>
       </TestPlans>
       <Testables>
          <TestableReference
