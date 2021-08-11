@@ -640,7 +640,24 @@ class ToggleInactiveTabs: HiddenSetting, FeatureFlagsProtocol {
     }
 }
 
+class ToggleStartAtHome: HiddenSetting, FeatureFlagsProtocol {
+    override var title: NSAttributedString? {
+        let toNewStatus = featureFlags.isFeatureActive(.startAtHome) ? "OFF" : "ON"
+        return NSAttributedString(string: "Debug: Toggle Start at Home: \(toNewStatus)",
+                                  attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
 
+    override func onClick(_ navigationController: UINavigationController?) {
+        featureFlags.toggle(.startAtHome)
+        updateCell(navigationController)
+    }
+
+    func updateCell(_ navigationController: UINavigationController?) {
+        let controller = navigationController?.topViewController
+        let tableView = (controller as? AppSettingsTableViewController)?.tableView
+        tableView?.reloadData()
+    }
+}
 
 // Show the current version of Firefox
 class VersionSetting: Setting {

@@ -107,6 +107,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         let profile = getProfile(application)
 
         telemetry = TelemetryWrapper(profile: profile)
+        NSUserDefaultsPrefs(prefix: "profile").setBool(true, forKey: "isColdLaunch")
         FeatureFlagsManager.shared.setupFeatures(with: profile)
 
         // Start intialzing the Nimbus SDK. This should be done after Glean
@@ -384,8 +385,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
-        // update top sites widget
         updateTopSitesWidget()
+        UserDefaults.standard.setValue(Date(), forKey: "LastActiveTimestamp")
+        NSUserDefaultsPrefs(prefix: "profile").setBool(false, forKey: "isColdLaunch")
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {

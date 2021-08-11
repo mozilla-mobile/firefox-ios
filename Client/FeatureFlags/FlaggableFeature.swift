@@ -67,6 +67,8 @@ struct FlaggableFeature {
             return PrefsKeys.jumpBackInSectionEnabled
         case .recentlySaved:
             return PrefsKeys.recentlySavedSectionEnabled
+        case .startAtHome:
+            return PrefsKeys.StartAtHome
         default:
             return nil
         }

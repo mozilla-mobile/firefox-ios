@@ -746,6 +746,18 @@ preferences:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-01-01"
+  home_page_setting:
+    type: string
+    description: |
+      The setting a user chooses as their Home page. By default,
+      it is initially set to Firefox Home.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-1739
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8887
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-01-01"
   save_logins:
     type: boolean
     description: |

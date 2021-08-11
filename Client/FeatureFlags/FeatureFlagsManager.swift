@@ -13,6 +13,7 @@ extension FeatureFlagsProtocol {
 }
 
 /// An enum describing the featureID of all features, historical, avalable, or in development.
+/// Please add new features alphabetically.
 enum FeatureFlagName: String, CaseIterable {
     case chronologicalTabs
     case inactiveTabs
@@ -20,6 +21,7 @@ enum FeatureFlagName: String, CaseIterable {
     case nimbus
     case recentlySaved
     case shakeToRestore
+    case startAtHome
 }
 
 /// Manages feature flags for the application.
@@ -80,5 +82,8 @@ class FeatureFlagsManager {
 
         let shakeToRestore = FlaggableFeature(withID: .shakeToRestore, and: profile, enabledFor: [.beta, .developer, .other])
         features[.shakeToRestore] = shakeToRestore
+        
+        let startAtHome = FlaggableFeature(withID: .startAtHome, and: profile, enabledFor: [.beta, .developer])
+        features[.startAtHome] = startAtHome
     }
 }

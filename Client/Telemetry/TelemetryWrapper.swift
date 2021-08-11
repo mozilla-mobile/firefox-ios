@@ -195,6 +195,18 @@ class TelemetryWrapper {
         } else {
             GleanMetrics.Preferences.newTabExperience.set(NewTabAccessors.Default.rawValue)
         }
+        // Record `Home` setting, where Firefox Home is "Home", a custom URL is "other" and blank is "Blank".
+        let homePageSetting = NewTabAccessors.getHomePage(prefs)
+        switch homePageSetting {
+        case .topSites:
+            let firefoxHome = "Home"
+            GleanMetrics.Preferences.homePageSetting.set(firefoxHome)
+        case .homePage:
+            let customUrl = "other"
+            GleanMetrics.Preferences.homePageSetting.set(customUrl)
+        default:
+            GleanMetrics.Preferences.homePageSetting.set(homePageSetting.rawValue)
+        }
         // Save logins
         if let saveLogins = prefs.boolForKey(PrefsKeys.LoginsSaveEnabled) {
             GleanMetrics.Preferences.saveLogins.set(saveLogins)
