@@ -15,10 +15,10 @@ public class RustPlaces {
     let writerQueue: DispatchQueue
     let readerQueue: DispatchQueue
 
-    var api: PlacesAPI?
+    public var api: PlacesAPI?
 
-    var writer: PlacesWriteConnection?
-    var reader: PlacesReadConnection?
+    public var writer: PlacesWriteConnection?
+    public var reader: PlacesReadConnection?
 
     public fileprivate(set) var isOpen: Bool = false
 
@@ -236,10 +236,17 @@ public class RustPlaces {
             return try connection.createFolder(parentGUID: parentGUID, title: title, position: position)
         }
     }
+    
 
     public func createSeparator(parentGUID: GUID, position: UInt32? = nil) -> Deferred<Maybe<GUID>> {
         return withWriter { connection in
             return try connection.createSeparator(parentGUID: parentGUID, position: position)
+        }
+    }
+    
+    public func recordHistoryMetaData(key: HistoryMetadataKey, observation: HistoryMetadataObservation) -> Deferred<Maybe<Void>> {
+        return withWriter { connection in
+            return try connection.noteHistoryMetadataObservation(key: key, observation: observation)
         }
     }
 

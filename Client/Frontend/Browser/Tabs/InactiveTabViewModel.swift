@@ -70,7 +70,14 @@ class InactiveTabViewModel {
     var inactiveTabs = [Tab]()
     var activeTabs = [Tab]()
     var recentlyClosedTabs = [Tab]()
-
+    var historyViewModel = HistoryMetaDataViewModel()
+    
+    func updateTabMeta(profile: Profile) {
+        for tab in tabs {
+            historyViewModel.updateHistorymetaData(url: tab.url?.absoluteString ?? "", profile: profile)
+        }
+    }
+    
     func updateInactiveTabs(with selectedTab: Tab?, tabs: [Tab]) {
         self.tabs = tabs
         self.selectedTab = selectedTab
@@ -99,7 +106,7 @@ class InactiveTabViewModel {
         let currentDate = Date()
         let noon = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: currentDate) ?? Date()
         let day4_Old = Calendar.current.date(byAdding: .day, value: -4, to: noon) ?? Date()
-
+        
         for tab in tabs {
             let tabTimeStamp = tab.lastExecutedTime ?? tab.sessionData?.lastUsedTime ?? tab.firstCreatedTime ?? 0
             let tabDate = Date.fromTimestamp(tabTimeStamp)
