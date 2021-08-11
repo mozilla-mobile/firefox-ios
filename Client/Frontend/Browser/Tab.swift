@@ -96,7 +96,10 @@ class Tab: NSObject {
             screenshotUUIDString = value?.uuidString ?? ""
         }
     }
-
+    
+    var adsTelemetryUrlList: [String] = [String]()
+    var adsProviderName: String = ""
+    
     // To check if current URL is the starting page i.e. either blank page or internal page like topsites
     var isURLStartingPage: Bool {
         guard url != nil else { return true }
@@ -502,7 +505,6 @@ class Tab: NSObject {
             if let url = request.url, url.isFileURL, request.isPrivileged {
                 return webView.loadFileURL(url, allowingReadAccessTo: url)
             }
-
             return webView.load(request)
         }
         return nil
