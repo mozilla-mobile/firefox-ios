@@ -26,7 +26,6 @@ struct SearchProviderModel {
 
         var adUrls = [String]()
         for url in urls {
-            print(url)
             for predicate in predicates {
                 guard predicate(url) else { continue }
                 adUrls.append(url)
