@@ -466,13 +466,9 @@ class BrowserViewController: UIViewController {
         let dropInteraction = UIDropInteraction(delegate: self)
         view.addInteraction(dropInteraction)
 
-        if !NightModeHelper.isActivated(profile.prefs) {
-            if #available(iOS 13.0, *) {
-                if ThemeManager.instance.systemThemeIsOn {
-                    let userInterfaceStyle = traitCollection.userInterfaceStyle
-                    ThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
-                }
-            }
+        if !NightModeHelper.isActivated(profile.prefs) && ThemeManager.instance.systemThemeIsOn {
+            let userInterfaceStyle = traitCollection.userInterfaceStyle
+            ThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
         }
 
         NotificationCenter.default.addObserver(self, selector: #selector(self.appMenuBadgeUpdate), name: .FirefoxAccountStateChange, object: nil)
@@ -1312,11 +1308,9 @@ class BrowserViewController: UIViewController {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
-        if #available(iOS 13.0, *) {
-            if self.traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection), ThemeManager.instance.systemThemeIsOn {
-                let userInterfaceStyle = traitCollection.userInterfaceStyle
-                ThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
-            }
+        if self.traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection), ThemeManager.instance.systemThemeIsOn {
+            let userInterfaceStyle = traitCollection.userInterfaceStyle
+            ThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
         }
     }
 }
@@ -1683,19 +1677,17 @@ extension BrowserViewController: TabManagerDelegate {
             // after a short 100ms delay. *facepalm*
             //
             // https://bugzilla.mozilla.org/show_bug.cgi?id=1516524
-            if #available(iOS 12.0, *) {
-                if tab.mimeType == MIMEType.PDF {
-                    let previousZoomScale = webView.scrollView.zoomScale
-                    let previousContentOffset = webView.scrollView.contentOffset
+            if tab.mimeType == MIMEType.PDF {
+                let previousZoomScale = webView.scrollView.zoomScale
+                let previousContentOffset = webView.scrollView.contentOffset
 
-                    if let currentItem = webView.backForwardList.currentItem {
-                        webView.go(to: currentItem)
-                    }
+                if let currentItem = webView.backForwardList.currentItem {
+                    webView.go(to: currentItem)
+                }
 
-                    DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
-                        webView.scrollView.setZoomScale(previousZoomScale, animated: false)
-                        webView.scrollView.setContentOffset(previousContentOffset, animated: false)
-                    }
+                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
+                    webView.scrollView.setZoomScale(previousZoomScale, animated: false)
+                    webView.scrollView.setContentOffset(previousContentOffset, animated: false)
                 }
             }
 

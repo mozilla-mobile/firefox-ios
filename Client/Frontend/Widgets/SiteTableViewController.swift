@@ -207,7 +207,6 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 }
 
-@available(iOS 11.0, *)
 extension SiteTableViewController: UITableViewDragDelegate {
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         guard let homePanelVC = self as? HomePanelContextMenu, let site = homePanelVC.getSiteDetails(for: indexPath), let url = URL(string: site.url), let itemProvider = NSItemProvider(contentsOf: url) else {

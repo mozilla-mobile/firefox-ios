@@ -6,7 +6,6 @@ import UIKit
 import AuthenticationServices
 import SwiftKeychainWrapper
 
-@available(iOS 12, *)
 class CredentialProviderPresenter {
     weak var view: CredentialProviderViewProtocol?
     private let profile: Profile
@@ -96,7 +95,6 @@ class CredentialProviderPresenter {
     }
 }
 
-@available(iOS 12, *)
 private extension CredentialProviderPresenter {
     func cancel(with errorCode: ASExtensionError.Code) {
         let error = NSError(domain: ASExtensionErrorDomain,

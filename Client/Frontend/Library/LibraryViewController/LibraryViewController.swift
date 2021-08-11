@@ -481,10 +481,9 @@ extension LibraryViewController: Themeable {
     @objc func applyTheme() {
         viewModel.panelDescriptors.forEach { item in
             (item.viewController as? Themeable)?.applyTheme()
-        }
-        if #available(iOS 13.0, *) {
-            overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
-        }
+        }        
+        overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
+
         // There is an ANNOYING bar in the nav bar above the segment control. These are the
         // UIBarBackgroundShadowViews. We must set them to be clear images in order to
         // have a seamless nav bar, if embedding the segmented control.

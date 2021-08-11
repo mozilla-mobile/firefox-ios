@@ -48,11 +48,7 @@ class IntroScreenWelcomeView: UIView, CardTheme {
     private var closeButton: UIButton = {
         let closeButton = UIButton()
         closeButton.setImage(UIImage(named: "close-large"), for: .normal)
-        if #available(iOS 13, *) {
-            closeButton.tintColor = .secondaryLabel
-        } else {
-            closeButton.tintColor = .black
-        }
+        closeButton.tintColor = .secondaryLabel
         return closeButton
     }()
     private lazy var signUpButton: UIButton = {
@@ -178,12 +174,8 @@ class IntroScreenWelcomeView: UIView, CardTheme {
             make.top.equalToSuperview().offset(buttonEdgeInset)
             make.right.equalToSuperview().inset(buttonEdgeInset)
         }
-        if #available(iOS 13, *) {
-            closeButton.tintColor = .secondaryLabel
-        } else {
-            closeButton.tintColor = .black
-        }
 
+        closeButton.tintColor = .secondaryLabel
     }
     
     // MARK: Button Actions
