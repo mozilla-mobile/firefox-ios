@@ -92,7 +92,7 @@ workflows:
         title: Build Focus
     - deploy-to-itunesconnect-application-loader@1:
         inputs:
-        - connection: off
+        - connection: 'off'
         - app_password: "$APPLE_ACCOUNT_PW"
         - itunescon_user: "$APPLE_ACCOUNT_ID"
     - xcode-archive@3:
@@ -102,7 +102,7 @@ workflows:
         title: Build Klar
     - deploy-to-itunesconnect-application-loader@1:
         inputs:
-        - connection: off
+        - connection: 'off'
         - app_password: "$APPLE_ACCOUNT_PW"
         - itunescon_user: "$APPLE_ACCOUNT_ID"
     meta:
@@ -126,7 +126,7 @@ workflows:
         title: Build Focus
     - deploy-to-itunesconnect-application-loader@1:
         inputs:
-        - connection: off
+        - connection: 'off'
         - app_password: "$APPLE_ACCOUNT_PW"
         - itunescon_user: "$APPLE_ACCOUNT_ID"
     - xcode-archive@3:
@@ -136,7 +136,7 @@ workflows:
         title: Build Klar
     - deploy-to-itunesconnect-application-loader@1:
         inputs:
-        - connection: off
+        - connection: 'off'
         - app_password: "$APPLE_ACCOUNT_PW"
         - itunescon_user: "$APPLE_ACCOUNT_ID"
     meta:
