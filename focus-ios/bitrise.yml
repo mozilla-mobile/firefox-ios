@@ -92,7 +92,7 @@ workflows:
         title: Build Focus
     - deploy-to-itunesconnect-application-loader@1:
         inputs:
-        - connection: off
+        - connection: 'off'
         - app_password: "$APPLE_ACCOUNT_PW"
         - itunescon_user: "$APPLE_ACCOUNT_ID"
     - xcode-archive@3:
@@ -102,7 +102,7 @@ workflows:
         title: Build Klar
     - deploy-to-itunesconnect-application-loader@1:
         inputs:
-        - connection: off
+        - connection: 'off'
         - app_password: "$APPLE_ACCOUNT_PW"
         - itunescon_user: "$APPLE_ACCOUNT_ID"
     meta:
@@ -123,20 +123,20 @@ workflows:
         - scheme: Focus
         - team_id: 43AQ936H96
         - export_method: app-store
-        title: Build Focus
+        title: "Build Focus (Refresh)"
     - deploy-to-itunesconnect-application-loader@1:
         inputs:
-        - connection: off
+        - connection: 'off'
         - app_password: "$APPLE_ACCOUNT_PW"
         - itunescon_user: "$APPLE_ACCOUNT_ID"
     - xcode-archive@3:
         inputs:
         - scheme: Klar
         - export_method: app-store
-        title: Build Klar
+        title: "Build Klar (Refresh)"
     - deploy-to-itunesconnect-application-loader@1:
         inputs:
-        - connection: off
+        - connection: 'off'
         - app_password: "$APPLE_ACCOUNT_PW"
         - itunescon_user: "$APPLE_ACCOUNT_ID"
     meta:
