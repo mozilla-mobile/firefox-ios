@@ -89,6 +89,7 @@
         "ReaderViewTest\/testAddToReaderListOptions()",
         "ReaderViewTest\/testAddToReadingList()",
         "ReaderViewTest\/testLoadReaderContent()",
+        "SaveLoginTest\/testCreateLoginManually()",
         "SaveLoginTest\/testEditOneLoginEntry()",
         "SaveLoginTest\/testSaveLogin()",
         "SaveLoginTest\/testSavedLoginAutofilled()",

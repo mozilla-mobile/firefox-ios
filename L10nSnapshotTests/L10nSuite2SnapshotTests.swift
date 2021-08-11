@@ -134,10 +134,31 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         snapshot("PasscodeIntervalScreen-1")
     }
 
-    func testDefaultTopSites() {
+    func testLoginDetails() {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         app.buttons["urlBar-cancel"].tap()
         navigator.nowAt(NewTabScreen)
-        snapshot("DefaultTopSites-01")
+        navigator.goto(SettingsScreen)
+        navigator.goto(LoginsSettings)
+        waitForExistence(app.tables["Login List"])
+        app.buttons.element(boundBy: 1).tap()
+        waitForExistence(app.tables["Add Credential"], timeout: 3)
+        snapshot("CreateLogin")
+        app.tables["Add Credential"].cells.element(boundBy: 0).tap()
+        app.keyboards.keys.element(boundBy: 3).tap()
+        app.tables["Add Credential"].cells.element(boundBy: 1).tap()
+        app.keyboards.keys.element(boundBy: 3).tap()
+        app.tables["Add Credential"].cells.element(boundBy: 2).tap()
+        app.keyboards.keys.element(boundBy: 3).tap()
+        app.navigationBars["Client.AddCredentialView"].buttons.element(boundBy: 1).tap()
+
+        waitForExistence(app.tables["Login List"],timeout: 5)
+        snapshot("CreatedLoginView")
+
+        app.tables["Login List"].cells.element(boundBy: 2).tap()
+        snapshot("CreatedLoginDetailedView")
+
+        app.tables["Login Detail List"].cells.element(boundBy: 5).tap()
+        snapshot("RemoveLoginDetailedView")
     }
 }
