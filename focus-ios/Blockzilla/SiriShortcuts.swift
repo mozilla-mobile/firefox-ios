@@ -28,7 +28,7 @@ class SiriShortcuts {
         switch type {
         case .erase:
             let intent = EraseIntent()
-            intent.suggestedInvocationPhrase = "Erase"
+            intent.suggestedInvocationPhrase = UIConstants.strings.eraseSiri
             return intent
         default:
             return nil

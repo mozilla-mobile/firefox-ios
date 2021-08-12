@@ -18,7 +18,7 @@
 			<key>INIntentCategory</key>
 			<string>generic</string>
 			<key>INIntentDescription</key>
-			<string>Erase browsing session</string>
+			<string></string>
 			<key>INIntentDescriptionID</key>
 			<string>MLjPgP</string>
 			<key>INIntentLastParameterTag</key>
@@ -40,7 +40,7 @@
 					<key>INIntentParameterCombinationTitle</key>
 					<string>Erase</string>
 					<key>INIntentParameterCombinationTitleID</key>
-					<string>HLtAvi</string>
+					<string>Intents.Erase.Title</string>
 				</dict>
 			</dict>
 			<key>INIntentParameters</key>
@@ -80,7 +80,7 @@
 			<key>INIntentTitle</key>
 			<string>Erase</string>
 			<key>INIntentTitleID</key>
-			<string>GZZka8</string>
+			<string>Intents.Erase.Title</string>
 			<key>INIntentType</key>
 			<string>Custom</string>
 			<key>INIntentUserConfirmationRequired</key>
