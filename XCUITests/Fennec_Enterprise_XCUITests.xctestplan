@@ -38,6 +38,7 @@
         "BaseTestCase",
         "BookmarkingTests\/testBookmarkLibraryAddDeleteBookmark()",
         "BookmarkingTests\/testBookmarksAwesomeBar()",
+        "BookmarkingTests\/testUndoDeleteBookmark()",
         "BrowsingPDFTests",
         "ClipBoardTests\/testClipboardPasteAndGo()",
         "CronTabsPerformanceTest",

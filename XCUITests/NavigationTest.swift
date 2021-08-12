@@ -80,11 +80,6 @@ class NavigationTest: BaseTestCase {
         navigator.goto(Intro_FxASignin)
         navigator.performAction(Action.OpenEmailToSignIn)
         checkFirefoxSyncScreenShown()
-
-        // Disabled due to issue 5937, not possible to tap on Close button
-        // Go back to NewTabScreen
-        // navigator.goto(HomePanelsScreen)
-        // waitForExistence(app.cells["TopSitesCell"])
     }
     
     func testTapSigninShowsFxAFromSettings() {
@@ -135,24 +130,6 @@ class NavigationTest: BaseTestCase {
     private func checkFirefoxSyncScreenShown() {
         // Disable check, page load issues on iOS13.3 sims, issue #5937
         waitForExistence(app.webViews.firstMatch, timeout: 20)
-        // Workaround BB iOS13
-//        waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 60)
-//        if isTablet {
-//            waitForExistence(app.webViews.textFields.element(boundBy: 0), timeout: 40)
-//            let email = app.webViews.textFields.element(boundBy: 0)
-//            // Verify the placeholdervalues here for the textFields
-//            let mailPlaceholder = "Email"
-//            let defaultMailPlaceholder = email.placeholderValue!
-//            XCTAssertEqual(mailPlaceholder, defaultMailPlaceholder, "The mail placeholder does not show the correct value")
-//        } else {
-//            waitForExistence(app.textFields.element(boundBy: 0), timeout: 40)
-//            let email = app.textFields.element(boundBy: 0)
-//            XCTAssertTrue(email.exists) // the email field
-//            // Verify the placeholdervalues here for the textFields
-//            let mailPlaceholder = "Email"
-//            let defaultMailPlaceholder = email.placeholderValue!
-//            XCTAssertEqual(mailPlaceholder, defaultMailPlaceholder, "The mail placeholder does not show the correct value")
-//        }
     }
 
     func testScrollsToTopWithMultipleTabs() {
@@ -328,23 +305,6 @@ class NavigationTest: BaseTestCase {
         waitForExistence(app.buttons["Copy"], timeout: 3)
         XCTAssertTrue(app.buttons["Copy"].exists, "The share menu is not shown")
     }
-
-    // Disable, no Cancel button now and no option to
-    // tap on PopoverDismissRegion
-    /*
-    func testCancelLongPressLinkMenu() {
-        navigator.openURL(website_2["url"]!)
-        app.webViews.links[website_2["link"]!].press(forDuration: 2)
-        
-        if iPad() {
-            // For iPad there is no Cancel, so we tap to dismiss the menu
-            app/*@START_MENU_TOKEN@*/.otherElements["PopoverDismissRegion"]/*[[".otherElements[\"dismiss popup\"]",".otherElements[\"PopoverDismissRegion\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
-        } else {
-            app.buttons["Cancel"].tap()
-        }
-        waitForNoExistence(app.sheets[website_2["moreLinkLongPressInfo"]!])
-        XCTAssertEqual(app.textFields["url"].value! as? String, "www.example.com/", "After canceling the menu user is in a different website")
-    }*/
 
     // Smoketest
     func testPopUpBlocker() {
