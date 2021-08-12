@@ -4,7 +4,6 @@
 
 import Foundation
 import UIKit
-import SnapKit
 import Shared
 
 /*
@@ -43,6 +42,9 @@ struct DBOnboardingUX {
 }
 
 class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissable {
+    
+    // MARK: - Properties
+    
     var onViewDismissed: (() -> Void)? = nil
     // Public constants
     let viewModel = DefaultBrowserOnboardingViewModel()
@@ -64,83 +66,76 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     }
     // Orientation independent screen size
     private let screenSize = DeviceInfo.screenSizeOrientationIndependent()
-    private lazy var closeButton: UIButton = {
-        let closeButton = UIButton()
-        closeButton.setImage(UIImage(named: "close-large"), for: .normal)
-        closeButton.tintColor = .secondaryLabel
-        return closeButton
-    }()
-    private lazy var topImageView: UIImageView = {
-        let imgView = UIImageView(image: viewModel.model?.titleImage)
-        imgView.contentMode = .scaleAspectFit
-        imgView.clipsToBounds = true
-        return imgView
-    }()
-    private lazy var textView: UIView = {
-        let view = UIView()
-        return view
-    }()
-    private lazy var imageText: UILabel = {
-        let label = UILabel()
-        label.text = viewModel.model?.imageText
-        label.font = UIFont.systemFont(ofSize: 18)
+
+    // UI
+    private lazy var closeButton: UIButton = .build { [weak self] button in
+        button.setImage(UIImage(named: "close-large"), for: .normal)
+        button.tintColor = .secondaryLabel
+        button.addTarget(self, action: #selector(self?.dismissAnimated), for: .touchUpInside)
+    }
+    private lazy var topImageView: UIImageView = .build { [weak self] imageView in
+        imageView.image = self?.viewModel.model?.titleImage
+        imageView.contentMode = .scaleAspectFit
+        imageView.clipsToBounds = true
+    }
+    private let textView: UIView = .build { view in }
+    private lazy var imageText: UILabel = .build { [weak self] label in
+        label.text = self?.viewModel.model?.imageText
+        label.font = .systemFont(ofSize: 18)
         label.textAlignment = .left
         label.numberOfLines = 1
-        return label
-    }()
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = viewModel.model?.titleText
-        label.font = UIFont.boldSystemFont(ofSize: titleFontSize)
+        label.adjustsFontSizeToFitWidth = true
+    }
+    private lazy var titleLabel: UILabel = .build { [weak self] label in
+        guard let self = self else { return }
+        label.text = self.viewModel.model?.titleText
+        label.font = .boldSystemFont(ofSize: self.titleFontSize)
         label.textAlignment = .center
         label.numberOfLines = 2
-        return label
-    }()
-    private lazy var descriptionText: UILabel = {
-        let label = UILabel()
-        label.text = viewModel.model?.descriptionText[0]
-        label.font = UIFont.systemFont(ofSize: descriptionFontSize)
+    }
+    private lazy var descriptionText: UILabel = .build { [weak self] label in
+        guard let self = self else { return }
+        label.text = self.viewModel.model?.descriptionText[0]
+        label.font = UIFont.systemFont(ofSize: self.descriptionFontSize)
         label.textAlignment = .left
-        label.numberOfLines = 3
-        return label
-    }()
-    private lazy var descriptionLabel1: UILabel = {
-        let label = UILabel()
-        label.text = viewModel.model?.descriptionText[1]
-        label.font = UIFont.systemFont(ofSize: descriptionFontSize)
+        label.numberOfLines = 4
+    }
+    private lazy var descriptionLabel1: UILabel = .build() { [weak self] label in
+        guard let self = self else { return }
+        label.text = self.viewModel.model?.descriptionText[1]
+        label.font = UIFont.systemFont(ofSize: self.descriptionFontSize)
         label.textAlignment = .left
         label.numberOfLines = 0
-        return label
-    }()
-    private lazy var descriptionLabel2: UILabel = {
-        let label = UILabel()
-        label.text = viewModel.model?.descriptionText[2]
-        label.font = UIFont.systemFont(ofSize: descriptionFontSize)
+    }
+    private lazy var descriptionLabel2: UILabel = .build { [weak self] label in
+        guard let self = self else { return }
+        label.text = self.viewModel.model?.descriptionText[2]
+        label.font = UIFont.systemFont(ofSize: self.descriptionFontSize)
         label.textAlignment = .left
         label.numberOfLines = 0
-        return label
-    }()
-    private lazy var descriptionLabel3: UILabel = {
-        let label = UILabel()
-        label.text = viewModel.model?.descriptionText[3]
-        label.font = UIFont.systemFont(ofSize: descriptionFontSize)
+    }
+    private lazy var descriptionLabel3: UILabel = .build { [weak self] label in
+        guard let self = self else { return }
+        label.text = self.viewModel.model?.descriptionText[3]
+        label.font = UIFont.systemFont(ofSize: self.descriptionFontSize)
         label.textAlignment = .left
         label.numberOfLines = 0
-        return label
-    }()
-    private lazy var goToSettingsButton: UIButton = {
-        let button = UIButton()
+    }
+    private lazy var goToSettingsButton: UIButton = .build { [weak self] button in
+        guard let self = self else { return }
         button.setTitle(Strings.CoverSheetETPSettingsButton, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: descriptionFontSize)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: self.descriptionFontSize)
         button.layer.cornerRadius = UpdateViewControllerUX.StartBrowsingButton.cornerRadius
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UpdateViewControllerUX.StartBrowsingButton.colour
         button.accessibilityIdentifier = "DefaultBrowserCard.goToSettingsButton"
-        return button
-    }()
+        button.addTarget(self, action: #selector(self.goToSettings), for: .touchUpInside)
+    }
     
     // Used to set the part of text in center 
     private var containerView = UIView()
+    
+    // MARK: - Inits
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -150,6 +145,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Lifecycles
     override func viewDidLoad() {
         super.viewDidLoad()
         initialViewSetup()
@@ -178,18 +174,12 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         
         // Initialize
         if viewModel.displayTitleImage {
-            self.view.addSubview(topImageView)
-            self.view.addSubview(imageText)
+            view.addSubviews(topImageView, imageText)
         }
-        self.view.addSubview(closeButton)
+        view.addSubview(closeButton)
         textView.addSubview(containerView)
-        containerView.addSubview(titleLabel)
-        containerView.addSubview(descriptionText)
-        containerView.addSubview(descriptionLabel1)
-        containerView.addSubview(descriptionLabel2)
-        containerView.addSubview(descriptionLabel3)
-        self.view.addSubview(textView)
-        self.view.addSubview(goToSettingsButton)
+        containerView.addSubviews(titleLabel, descriptionText, descriptionLabel1, descriptionLabel2, descriptionLabel3)
+        view.addSubviews(textView, goToSettingsButton)
         
         // Constraints
         setupView()
@@ -203,98 +193,74 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     }
     
     private func setupView() {
-        // Close button target setup
-        closeButton.addTarget(self, action: #selector(dismissAnimated), for: .touchUpInside)
-        // Close button constraints setup
-        // This button is located at top right hence top, right and height
-        closeButton.snp.makeConstraints { make in
-            make.top.equalTo(view.snp.topMargin).offset(10)
-            make.right.equalToSuperview().inset(UpdateViewControllerUX.DoneButton.paddingRight)
-            make.height.equalTo(44)
-        }
-        
         if viewModel.displayTitleImage {
-            // The top imageview constraints setup
-            topImageView.snp.makeConstraints { make in
-                make.centerX.equalToSuperview()
-                make.top.equalTo(closeButton.snp.bottom).offset(10)
-                make.height.equalTo(200)
-                make.width.equalTo(340)
-            }
-            let layoutDirection = UIApplication.shared.userInterfaceLayoutDirection
-            imageText.snp.makeConstraints { make in
-                make.top.equalTo(topImageView.snp.top).offset(121)
-                if layoutDirection == .leftToRight {
-                    make.left.equalTo(topImageView.snp.left).inset(20)
-                } else {
-                    make.right.equalTo(topImageView.snp.right).inset(20)
-                }
-            }
+            NSLayoutConstraint.activate([
+                topImageView.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: 10),
+                topImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                topImageView.heightAnchor.constraint(equalToConstant: 200),
+                topImageView.widthAnchor.constraint(equalToConstant: 340),
+                
+                imageText.topAnchor.constraint(equalTo: topImageView.topAnchor, constant: 121),
+                imageText.leadingAnchor.constraint(equalTo: topImageView.leadingAnchor, constant: 20),
+                imageText.trailingAnchor.constraint(equalTo: topImageView.trailingAnchor, constant: -80)
+            ])
         }
+        
         let textOffset = screenSize.height > 668 ? DBOnboardingUX.textOffset : DBOnboardingUX.textOffsetSmall
-        textView.snp.makeConstraints { make in
-            let offset = viewModel.displayTitleImage ? textOffset : 10
-            make.top.equalTo(viewModel.displayTitleImage ? topImageView.snp.bottom : closeButton.snp.bottom).offset(offset)
-            make.left.right.equalToSuperview().inset(36)
-            make.bottom.equalTo(goToSettingsButton.snp.top)
-        }
+        let offset = viewModel.displayTitleImage ? textOffset : 10
+
+        NSLayoutConstraint.activate([
+            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 10),
+            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            closeButton.heightAnchor.constraint(equalToConstant: 44),
+            
+            viewModel.displayTitleImage ? textView.topAnchor.constraint(equalTo: topImageView.bottomAnchor) :
+                textView.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: CGFloat(offset)),
+            textView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 36),
+            textView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -36),
+            textView.bottomAnchor.constraint(equalTo: goToSettingsButton.topAnchor),
+            
+            titleLabel.centerXAnchor.constraint(lessThanOrEqualTo: view.centerXAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
+            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
+            
+            descriptionText.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: CGFloat(textOffset)),
+            descriptionText.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: CGFloat(textOffset)),
+            descriptionText.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: CGFloat(-textOffset)),
+            
+            descriptionLabel1.topAnchor.constraint(equalTo: descriptionText.bottomAnchor, constant: CGFloat(textOffset)),
+            descriptionLabel1.leadingAnchor.constraint(equalTo: descriptionText.leadingAnchor),
+            descriptionLabel1.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            descriptionLabel2.topAnchor.constraint(equalTo: descriptionLabel1.bottomAnchor, constant: CGFloat(textOffset)),
+            descriptionLabel2.leadingAnchor.constraint(equalTo: descriptionLabel1.leadingAnchor),
+            descriptionLabel2.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            descriptionLabel3.topAnchor.constraint(equalTo: descriptionLabel2.bottomAnchor, constant: CGFloat(textOffset)),
+            descriptionLabel3.leadingAnchor.constraint(equalTo: descriptionLabel2.leadingAnchor),
+            descriptionLabel3.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
         
-        let containerViewHeight = screenSize.height > 1000 ? DBOnboardingUX.containerViewHeightSmall :
-                                  screenSize.height > 668 ? DBOnboardingUX.containerViewHeight :
-                                  screenSize.height > 640 ? DBOnboardingUX.containerViewHeightSmall : DBOnboardingUX.containerViewHeightXSmall
-        let containerViewWidth = screenSize.height > 668 ? 350 : 300
-        containerView.snp.makeConstraints { make in
-            if containerViewHeight <= DBOnboardingUX.containerViewHeightSmall {
-                make.centerY.equalToSuperview()
-            } else {
-                make.top.equalToSuperview()
-            }
-            make.centerX.equalToSuperview()
-            make.height.equalTo(containerViewHeight)
-            make.width.equalTo(containerViewWidth)
+        if screenSize.height > 1000 {
+            NSLayoutConstraint.activate([
+                goToSettingsButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -60),
+                goToSettingsButton.heightAnchor.constraint(equalToConstant: 50),
+                goToSettingsButton.widthAnchor.constraint(equalToConstant: 350)
+            ])
+        } else if screenSize.height > 640 {
+            NSLayoutConstraint.activate([
+                goToSettingsButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -5),
+                goToSettingsButton.heightAnchor.constraint(equalToConstant: 60),
+                goToSettingsButton.widthAnchor.constraint(equalToConstant: 350)
+            ])
+        } else {
+            NSLayoutConstraint.activate([
+                goToSettingsButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -5),
+                goToSettingsButton.heightAnchor.constraint(equalToConstant: 50),
+                goToSettingsButton.widthAnchor.constraint(equalToConstant: 300)
+            ])
         }
-        
-        // Top title label constraints setup
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.left.right.equalToSuperview()
-        }
-        
-        descriptionText.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(textOffset)
-            make.left.right.equalToSuperview()
-        }
-        // Description title label constraints setup
-        descriptionLabel1.snp.makeConstraints { make in
-            make.top.equalTo(descriptionText.snp.bottom).offset(textOffset)
-        }
-        // Description title label constraints setup
-        descriptionLabel2.snp.makeConstraints { make in
-            make.top.equalTo(descriptionLabel1.snp.bottom).offset(textOffset)
-        }
-        // Description title label constraints setup
-        descriptionLabel3.snp.makeConstraints { make in
-            make.top.equalTo(descriptionLabel2.snp.bottom).offset(textOffset)
-        }
-        // Bottom settings button constraints
-        goToSettingsButton.snp.makeConstraints { make in
-            if screenSize.height > 1000 {
-                make.bottom.equalTo(view.safeArea.bottom).offset(-60)
-                make.height.equalTo(50)
-                make.width.equalTo(350)
-            } else if screenSize.height > 640 {
-                make.bottom.equalTo(view.safeArea.bottom).offset(-5)
-                make.height.equalTo(60)
-                make.width.equalTo(350)
-            } else {
-                make.bottom.equalTo(view.safeArea.bottom).offset(-5)
-                make.height.equalTo(50)
-                make.width.equalTo(300)
-            }
-            make.centerX.equalToSuperview()
-        }
-        // Bottom goto settings button
-        goToSettingsButton.addTarget(self, action: #selector(goToSettings), for: .touchUpInside)
+        goToSettingsButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     }
     
     // Button Actions
