@@ -182,6 +182,10 @@
 		F85F7A2D2655AD5800395515 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A2C2655AD5800395515 /* Sentry */; };
 		F85F7A2F2655AD5800395515 /* Telemetry in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A2E2655AD5800395515 /* Telemetry */; };
 		F85F7A352656885C00395515 /* Glean in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A342656885C00395515 /* Glean */; };
+		F8DEC61226C6A29D00C5F26B /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D392887E1BC5E47E0016A9A0 /* UIConstants.swift */; };
+		F8DEC61326C6A2BE00C5F26B /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D392881C1BC5CF180016A9A0 /* UIColorExtensions.swift */; };
+		F8DEC61426C6A31700C5F26B /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E251FA1DAF0668005918DC /* AppInfo.swift */; };
+		F8DEC61526C6A33200C5F26B /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35C11461E04AADA005FFFEF /* AppConfig.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1810,6 +1814,7 @@
 				0B37F9A61E2FCAD4002DF74B /* SearchProviderTest.swift in Sources */,
 				58408BA5265FC524003C4E4F /* BasicBrowsing.swift in Sources */,
 				1DD317E120BF1B3000DFA44E /* OnboardingTest.swift in Sources */,
+				F8DEC61526C6A33200C5F26B /* AppConfig.swift in Sources */,
 				166E4BFB212F7DEC0029E2A5 /* UserAgentTest.swift in Sources */,
 				0B70C1631DE6128900CEF7E0 /* WebsiteMemoryTest.swift in Sources */,
 				4F582F7B1F44A10F006C744B /* OpenInFocusTest.swift in Sources */,
@@ -1818,6 +1823,9 @@
 				4F1284861FC5E242001A775B /* TPSettingsTest.swift in Sources */,
 				4FE4E6F61FBB5E2C001BB779 /* TPSidebarBadge.swift in Sources */,
 				1DE6DA2220BF410400CE337B /* QuickAddAutocompleteURLTest.swift in Sources */,
+				F8DEC61326C6A2BE00C5F26B /* UIColorExtensions.swift in Sources */,
+				F8DEC61426C6A31700C5F26B /* AppInfo.swift in Sources */,
+				F8DEC61226C6A29D00C5F26B /* UIConstants.swift in Sources */,
 				F74E8109218183F400D18535 /* SearchSuggestionsTest.swift in Sources */,
 				0BA39A861DD2B8E4005F970A /* WebsiteAccessTest.swift in Sources */,
 				0B0D6BC41F3CDDBB00497D08 /* CollapsedURLTest.swift in Sources */,

@@ -76,13 +76,13 @@ class SettingAppearanceTest: BaseTestCase {
         let alertsQuery = app.alerts
 
         // Say yes this time, the switch should be enabled
-        alertsQuery.buttons["I Understand"].tap()
+        alertsQuery.buttons[UIConstants.strings.settingsBlockOtherYes].tap()
         XCTAssertEqual(otherContentSwitch.value as! String, "1")
         otherContentSwitch.tap()
 
         // Say No this time, the switch should remain disabled
         otherContentSwitch.tap()
-        alertsQuery.buttons["No, Thanks"].tap()
+        alertsQuery.buttons[UIConstants.strings.settingsBlockOtherNo].tap()
         XCTAssertEqual(otherContentSwitch.value as! String, "0")
 
         // Go back to settings
