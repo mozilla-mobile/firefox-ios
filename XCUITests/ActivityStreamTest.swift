@@ -60,26 +60,6 @@ class ActivityStreamTest: BaseTestCase {
         }
     }
 
-    // Disabled due to issue #7611
-    /*func testTopSitesRemove() {
-        loadWebPage("http://example.com")
-        waitForTabsButton()
-        if iPad() {
-            app.buttons["URLBarView.backButton"].tap()
-        } else {
-            app.buttons["TabToolbar.backButton"].tap()
-        }
-        navigator.goto(TabTray)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        // A new site has been added to the top sites
-        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
-
-        TopSiteCellgroup.cells["example"].press(forDuration: 1) //example is the name of the domain. (example.com)
-        app.tables["Context Menu"].cells["Remove"].tap()
-        // A top site has been removed
-        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
-    }*/
-
     func testTopSites3RemoveDefaultTopSite() {
         TopSiteCellgroup.cells[defaultTopSite["topSiteLabel"]!].press(forDuration: 1)
 
@@ -87,33 +67,6 @@ class ActivityStreamTest: BaseTestCase {
         selectOptionFromContextMenu(option: "Remove")
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 4)
     }
-
-    // Disabled due to issue #7611
-    /*func testTopSitesRemoveAllDefaultTopSitesAddNewOne() {
-        // Remove all default Top Sites
-        waitForExistence(app.cells["facebook"])
-        for element in allDefaultTopSites {
-            TopSiteCellgroup.cells[element].press(forDuration: 1)
-            selectOptionFromContextMenu(option: "Remove")
-        }
-
-        let numberOfTopSites = TopSiteCellgroup.cells.matching(identifier: "TopSite").count
-        waitForNoExistence(TopSiteCellgroup.cells["TopSite"])
-        XCTAssertEqual(numberOfTopSites, 0, "All top sites should have been removed")
-
-        // Open a new page and wait for the completion
-        navigator.nowAt(HomePanelsScreen)
-        navigator.openURL(newTopSite["url"]!)
-        waitUntilPageLoad()
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(TabTray)
-        // Workaround to have visited website in top sites
-        navigator.performAction(Action.AcceptRemovingAllTabs)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-
-        waitForExistence(TopSiteCellgroup.staticTexts[newTopSite["topSiteLabel"]!])
-        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 1)
-    }*/
 
     // Disabled due to issue #7611
     /*func testTopSitesRemoveAllExceptDefaultClearPrivateData() {
@@ -290,60 +243,6 @@ class ActivityStreamTest: BaseTestCase {
         }
         XCTAssertEqual(numTabsOpen, 1, "New tab not open")
     }
-    /* Disable due to https://github.com/mozilla-mobile/firefox-ios/issues/7521
-    func testTopSitesBookmarkDefaultTopSite() {
-        // Bookmark a default TopSite, Wikipedia, third top site
-        waitForExistence(app.cells["TopSitesCell"].cells.element(boundBy: 3), timeout: 3)
-        app.cells["TopSitesCell"].cells.element(boundBy: 3).press(forDuration:1)
-        selectOptionFromContextMenu(option: "Bookmark")
-
-        // Check that it appears under Bookmarks menu
-        navigator.goto(LibraryPanel_Bookmarks)
-        waitForExistence(app.cells.staticTexts["Mobile Bookmarks"], timeout: 5)
-        navigator.goto(MobileBookmarks)
-        waitForExistence(app.tables["Bookmarks List"])
-        XCTAssertTrue(app.tables["Bookmarks List"].staticTexts[defaultTopSite["bookmarkLabel"]!].exists)
-
-        // Check that longtapping on the TopSite gives the option to remove it
-        navigator.performAction(Action.ExitMobileBookmarksFolder)
-        navigator.nowAt(LibraryPanel_Bookmarks)
-        navigator.performAction(Action.CloseBookmarkPanel)
-
-        app.cells["TopSitesCell"].cells[defaultTopSite["topSiteLabel"]!]
-            .press(forDuration: 2)
-        XCTAssertTrue(app.tables["Context Menu"].cells["Remove Bookmark"].exists)
-
-        // Unbookmark it
-        selectOptionFromContextMenu(option: "Remove Bookmark")
-        navigator.goto(LibraryPanel_Bookmarks)
-        XCTAssertFalse(app.tables["Bookmarks List"].staticTexts[defaultTopSite["bookmarkLabel"]!].exists)
-    }*/
-
-    /* Disable due to https://github.com/mozilla-mobile/firefox-ios/issues/7521
-    func testTopSitesBookmarkNewTopSite() {
-        let topSiteCells = TopSiteCellgroup.cells
-        waitForExistence(topSiteCells[newTopSite["topSiteLabel"]!])
-        topSiteCells[newTopSite["topSiteLabel"]!].press(forDuration: 1)
-        selectOptionFromContextMenu(option: "Bookmark")
-
-        // Check that it appears under Bookmarks menu
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(LibraryPanel_Bookmarks)
-        waitForExistence(app.cells.staticTexts["Mobile Bookmarks"], timeout: 5)
-        navigator.goto(MobileBookmarks)
-        XCTAssertTrue(app.tables["Bookmarks List"].staticTexts[newTopSite["bookmarkLabel"]!].exists)
-
-        // Check that longtapping on the TopSite gives the option to remove it
-        navigator.performAction(Action.ExitMobileBookmarksFolder)
-        navigator.goto(HomePanelsScreen)
-        waitForExistence(TopSiteCellgroup.cells[newTopSite["topSiteLabel"]!])
-        TopSiteCellgroup.cells[newTopSite["topSiteLabel"]!].press(forDuration: 1)
-
-        // Unbookmark it
-        selectOptionFromContextMenu(option: "Remove Bookmark")
-        navigator.goto(LibraryPanel_Bookmarks)
-        XCTAssertFalse(app.tables["Bookmarks List"].staticTexts[newTopSite["bookmarkLabel"]!].exists)
-    }*/
 
     func testTopSites1ShareDefaultTopSite() {
         TopSiteCellgroup.cells[defaultTopSite["topSiteLabel"]!]
@@ -352,26 +251,11 @@ class ActivityStreamTest: BaseTestCase {
         // Tap on Share option and verify that the menu is shown and it is possible to cancel it
         selectOptionFromContextMenu(option: "Share")
         // Comenting out until share sheet can be managed with automated tests issue #5477
-        //if !iPad() {
-        //    app.buttons["Cancel"].tap()
-        //}
+        if !iPad() {
+            waitForExistence( app.buttons["Close"], timeout: 10)
+            app.buttons["Close"].tap()
+        }
     }
-
-    // Disable #5554
-    /*
-    func testTopSitesShareNewTopSite() {
-        navigator.goto(HomePanelsScreen)
-        let topSiteCells = TopSiteCellgroup.cells
-        waitForExistence(topSiteCells[newTopSite["topSiteLabel"]!])
-        topSiteCells[newTopSite["topSiteLabel"]!].press(forDuration: 1)
-
-        // Tap on Share option and verify that the menu is shown and it is possible to cancel it....
-        selectOptionFromContextMenu(option: "Share")
-        // Comenting out until share sheet can be managed with automated tests issue #5477
-        //if !iPad() {
-        //    app.buttons["Cancel"].tap()
-        //}
-    }*/
 
     private func selectOptionFromContextMenu(option: String) {
         XCTAssertTrue(app.tables["Context Menu"].cells[option].exists)

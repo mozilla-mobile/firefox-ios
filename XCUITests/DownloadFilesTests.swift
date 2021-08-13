@@ -104,14 +104,6 @@ class DownloadFilesTests: BaseTestCase {
 
         XCTAssertTrue(app.tables.cells.buttons["Share"].exists)
         XCTAssertTrue(app.tables.cells.buttons["Delete"].exists)
-        //Comenting out until share sheet can be managed with automated tests issue #5477
-        //app.tables.cells.buttons["Share"].tap()
-        //waitForExistence(app.otherElements["ActivityListView"])
-        //if iPad() {
-        //    app.otherElements["PopoverDismissRegion"].tap()
-        //} else {
-        //    app.buttons["Cancel"].tap()
-        //}
     }
 
     func testLongPressOnDownloadedFile() {
@@ -121,13 +113,13 @@ class DownloadFilesTests: BaseTestCase {
 
         waitForExistence(app.tables["DownloadsTable"])
         //Comenting out until share sheet can be managed with automated tests issue #5477
-        //app.tables.cells.staticTexts[testFileName].press(forDuration: 2)
-        //waitForExistence(app.otherElements["ActivityListView"])
-        //if iPad() {
-        //    app.otherElements["PopoverDismissRegion"].tap()
-        //} else {
-        //    app.buttons["Cancel"].tap()
-        //}
+        app.tables.cells.staticTexts[testFileName].press(forDuration: 2)
+        waitForExistence(app.otherElements["ActivityListView"])
+        if iPad() {
+            app.otherElements["PopoverDismissRegion"].tap()
+        } else {
+            app.buttons["Close"].tap()
+        }
      }
 
     private func downloadFile(fileName: String, numberOfDownlowds: Int) {
