@@ -171,6 +171,7 @@ struct UIConstants {
         static let displayKeyboardDeleteAnimationDuration: TimeInterval = deleteAnimationDuration * (1 / 3)
         static let lockIconInset: Float = 4
         static let shieldIconInset: Float = 9
+        static let shieldIconIPadInset: Float = 15
         static let shieldIconSize: Float = 19
         static let navigationDoneOffset: Float = -10
         static let overlayAnimationDuration: TimeInterval = 0.25
@@ -185,6 +186,8 @@ struct UIConstants {
         static let toastDuration: TimeInterval = 1.5
         static let toolbarFadeAnimationDuration = 0.25
         static let toolbarButtonInsets = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
+        static let urlBarInitialWidthMultiplier: CGFloat = 0.7
+        static let urlTextOffset: Float = 15
         static let urlBarCornerRadius: CGFloat = 10
         static let urlBarHeight: CGFloat = 54
         static let collapsedUrlBarHeight: CGFloat = 22
@@ -203,11 +206,14 @@ struct UIConstants {
 		static let urlBarClearButtonWidth: CGFloat = 20
 		static let urlBarClearButtonHeight: CGFloat = 20
 		static let urlBarLayoutPriorityRawValue: Float = 1000
+        static let reloadButtonIPadOffset: CGFloat = -15
         static let deleteButtonInset: CGFloat = -12
+        static let deleteButtonOffset: CGFloat = -5
         static let urlBarIconInset: CGFloat = 8
         static let settingsDefaultTitleOffset = 3
         static let settingsFirstTitleOffset = 16
         static let urlBarToolsetOffset: CGFloat = 60
+        static let urlBarIPadToolsetOffset: CGFloat = 110
         static let textLogoOffset: CGFloat = -10 - browserToolbarHeight / 2
         static let textLogoMargin: CGFloat = 44
         static let urlBarButtonImageSize: CGFloat = 20

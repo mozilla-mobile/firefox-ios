@@ -72,6 +72,7 @@ class BrowserViewController: UIViewController {
 
     private let searchSuggestionsDebouncer = Debouncer(timeInterval: 0.1)
     private var shouldEnsureBrowsingMode = false
+    private var isIPadRegularDimensions: Bool = false
     private var initialUrl: URL?
     var tipManager: TipManager?
 
@@ -95,10 +96,12 @@ class BrowserViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         setupBiometrics()
         NotificationCenter.default.addObserver(self, selector: #selector(orientationChanged), name: UIDevice.orientationDidChangeNotification, object: nil)
         view.addSubview(mainContainerView)
+        
+        isIPadRegularDimensions = traitCollection.horizontalSizeClass == .regular && traitCollection.verticalSizeClass == .regular
 
         darkView.isHidden = true
         darkView.backgroundColor = UIConstants.colors.background
@@ -359,16 +362,31 @@ class BrowserViewController: UIViewController {
     }
 
     private func createURLBar() {
+        
         urlBar = URLBar()
         urlBar.delegate = self
         urlBar.toolsetDelegate = self
         urlBar.shrinkFromView = urlBarContainer
+        urlBar.isIPadRegularDimensions = isIPadRegularDimensions
         urlBar.shouldShowToolset = showsToolsetInURLBar
         mainContainerView.insertSubview(urlBar, aboveSubview: urlBarContainer)
 
+        addURLBarConstraints()
+        
+    }
+    
+    private func addURLBarConstraints() {
+        
         urlBar.snp.makeConstraints { make in
             urlBarTopConstraint = make.top.equalTo(mainContainerView.safeAreaLayoutGuide.snp.top).constraint
-            make.leading.trailing.bottom.equalTo(urlBarContainer)
+            
+            if isIPadRegularDimensions {
+                make.width.equalToSuperview().multipliedBy(UIConstants.layout.urlBarInitialWidthMultiplier)
+                make.centerX.equalToSuperview()
+                make.bottom.equalTo(urlBarContainer)
+            } else {
+                make.leading.trailing.bottom.equalTo(urlBarContainer)
+            }
         }
     }
 
@@ -593,6 +611,13 @@ class BrowserViewController: UIViewController {
     func submit(url: URL) {
         // If this is the first navigation, show the browser and the toolbar.
         guard isViewLoaded else { initialUrl = url; return }
+        
+        if isIPadRegularDimensions {
+            urlBar.snp.makeConstraints { make in
+                make.width.equalTo(view)
+                make.leading.equalTo(view)
+            }
+        }
 
         if webViewContainer.isHidden {
             webViewContainer.isHidden = false
@@ -629,6 +654,22 @@ class BrowserViewController: UIViewController {
         // UIDevice.current.orientation isn't reliable. See https://bugzilla.mozilla.org/show_bug.cgi?id=1315370#c5
         // As a workaround, consider the phone to be in landscape if the new width is greater than the height.
         showsToolsetInURLBar = (UIDevice.current.userInterfaceIdiom == .pad && (UIScreen.main.bounds.width == size.width || size.width > size.height)) || (UIDevice.current.userInterfaceIdiom == .phone && size.width > size.height)
+        
+        //isIPadRegularDimensions check if the device is a Ipad and the app is not in split mode
+        isIPadRegularDimensions = ((UIDevice.current.userInterfaceIdiom == .pad && (UIScreen.main.bounds.width == size.width || size.width > size.height))) || (UIDevice.current.userInterfaceIdiom == .pad &&  UIApplication.shared.statusBarOrientation.isPortrait && UIScreen.main.bounds.width == size.width)
+        urlBar.isIPadRegularDimensions = isIPadRegularDimensions
+        
+        if urlBar.state == .default {
+            urlBar.snp.removeConstraints()
+            addURLBarConstraints()
+            
+        } else {
+            urlBar.snp.makeConstraints { make in
+                make.width.equalTo(view)
+                make.leading.equalTo(view)
+            }
+        }
+        
         urlBar.updateConstraints()
         browserToolbar.updateConstraints()
 
