@@ -172,27 +172,47 @@ class OverlayView: UIView {
      
      */
 	func getAttributedButtonTitle(phrase: String, localizedStringFormat: String) -> NSAttributedString {
-		let attributedString = NSMutableAttributedString(string: localizedStringFormat, attributes: [.foregroundColor: UIConstants.Photon.Grey10])
-		let phraseString = NSAttributedString(string: phrase, attributes: [.font: UIConstants.fonts.copyButtonQuery,
-																		   .foregroundColor: UIConstants.Photon.Grey10])
+		let localizedAttributedStringFormat =
+            NSMutableAttributedString(
+                string: localizedStringFormat,
+                attributes: [.foregroundColor: UIConstants.Photon.Grey10]
+            )
+        
+		let phraseAttributedString =
+            NSAttributedString(
+                string: phrase,
+                attributes: [.font: UIConstants.fonts.copyButtonQuery,
+                             .foregroundColor: UIConstants.Photon.Grey10]
+            )
+        
 		if phrase != searchQuery {
-			let searchString = NSAttributedString(string: searchQuery, attributes: [.font: UIConstants.fonts.copyButtonQuery,
-																					.foregroundColor: UIConstants.Photon.Grey10])
+			let searchAttributedString =
+                NSAttributedString(
+                    string: searchQuery,
+                    attributes: [.font: UIConstants.fonts.copyButtonQuery,
+                                 .foregroundColor: UIConstants.Photon.Grey10]
+                )
+            
 			// split suggestion into searchQuery and suggested part
-			let suggestion = phrase.components(separatedBy: searchQuery)
+            let suggestion = phrase.deletingPrefix(searchQuery)
 			// suggestion was split
-			if suggestion.count > 1 {
-				let restOfSuggestion = NSAttributedString(string: suggestion[1], attributes: [
-					.foregroundColor: UIConstants.colors.searchSuggestion])
-				attributedString.append(searchString)
-				attributedString.append(restOfSuggestion)
-				return attributedString
+			if !suggestion.isEmpty {
+				let restOfSuggestion =
+                    NSAttributedString(
+                        string: suggestion,
+                        attributes: [.foregroundColor: UIConstants.colors.searchSuggestion]
+                    )
+				localizedAttributedStringFormat.append(searchAttributedString)
+				localizedAttributedStringFormat.append(restOfSuggestion)
+				return localizedAttributedStringFormat
 			}
 		}
-		guard let range = attributedString.string.range(of: "%@") else { return phraseString }
-		let replaceRange = NSRange(range, in: attributedString.string)
-		attributedString.replaceCharacters(in: replaceRange, with: phraseString)
-		return attributedString
+        
+		guard let range = localizedAttributedStringFormat.string.range(of: "%@") else { return phraseAttributedString }
+		let replaceRange = NSRange(range, in: localizedAttributedStringFormat.string)
+		localizedAttributedStringFormat.replaceCharacters(in: replaceRange, with: phraseAttributedString)
+        
+		return localizedAttributedStringFormat
 	}
 
     func setAttributedButtonTitle(phrase: String, button: InsetButton, localizedStringFormat: String) {
