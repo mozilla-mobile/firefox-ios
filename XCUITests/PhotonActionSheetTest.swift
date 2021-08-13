@@ -53,7 +53,7 @@ class PhotonActionSheetTest: BaseTestCase {
         pageObjectButtonCenter.press(forDuration: 1)
 
         // Wait to see the Share options sheet
-        // waitForExistence(app.buttons["Copy"], timeout: 15)
+        waitForExistence(app.buttons["Close"], timeout: 15)
     }
 
     func testSendToDeviceFromPageOptionsMenu() {
