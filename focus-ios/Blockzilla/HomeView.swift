@@ -148,7 +148,7 @@ class HomeView: UIView {
             case TipManager.TipKey.shareTrackersTip:
                 hideTextTip()
                 let numberOfTrackersBlocked = UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
-                showTrackerStatsShareButton(text: String(format: tip.title, String(numberOfTrackersBlocked)))
+                showTrackerStatsShareButton(text: String(format: tip.description!, String(numberOfTrackersBlocked)))
                 Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.trackerStatsShareButton)
             default:
                 hideTrackerStatsShareButton()
@@ -213,8 +213,6 @@ class HomeView: UIView {
         tipDescriptionLabel.isHidden = false
 
         switch tip.identifier {
-        case TipManager.TipKey.autocompleteTip:
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.autocompleteTip)
         case TipManager.TipKey.biometricTip:
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.biometricTip)
         case TipManager.TipKey.requestDesktopTip:

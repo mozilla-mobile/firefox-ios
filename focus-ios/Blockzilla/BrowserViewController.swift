@@ -985,7 +985,6 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidLongPress(_ urlBar: URLBar) {
         let customURLItem = PhotonActionSheetItem(title: UIConstants.strings.customURLMenuButton, iconString: "icon_link") { action in
             urlBar.addCustomURL()
-            UserDefaults.standard.set(false, forKey: TipManager.TipKey.autocompleteTip)
         }
         var actions = [PhotonActionSheetItem]()
         if let clipboardString = UIPasteboard.general.string {
