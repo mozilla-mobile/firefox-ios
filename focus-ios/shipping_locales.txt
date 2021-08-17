@@ -27,6 +27,7 @@ fr
 ga-IE
 gd
 gu-IN
+he
 hsb
 hu
 hy-AM
