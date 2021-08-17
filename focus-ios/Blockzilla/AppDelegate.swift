@@ -57,12 +57,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         UserDefaults.standard.set(currentLaunchCount + 1, forKey: UIConstants.strings.userDefaultsLaunchCountKey)
 
         // Set original default values for showing tips
-        let tipDefaults = [TipManager.TipKey.sitesNotWorkingTip: true,
-                           TipManager.TipKey.siriFavoriteTip: true,
-                           TipManager.TipKey.biometricTip: true,
-                           TipManager.TipKey.shareTrackersTip: true,
-                           TipManager.TipKey.siriEraseTip: true,
-                           TipManager.TipKey.requestDesktopTip: true]
+        let tipDefaults = [
+            TipManager.TipKey.shortcutsTip: true,
+            TipManager.TipKey.sitesNotWorkingTip: true,
+            TipManager.TipKey.siriFavoriteTip: true,
+            TipManager.TipKey.biometricTip: true,
+            TipManager.TipKey.shareTrackersTip: true,
+            TipManager.TipKey.siriEraseTip: true,
+            TipManager.TipKey.requestDesktopTip: true,
+        ]
         UserDefaults.standard.register(defaults: tipDefaults)
 
         // Disable localStorage.
