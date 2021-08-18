@@ -14,8 +14,8 @@ class BasicBrowsing: BaseTestCase {
         waitForWebPageLoad()
 
         // Tap on Page Action button
-        waitForExistence( app.buttons["URLBar.pageActionsButton"])
-        app.buttons["URLBar.pageActionsButton"].tap()
+        waitForExistence(app.buttons["HomeView.settingsButton"])
+        app.buttons["HomeView.settingsButton"].tap()
 
         // Tap Share button
         let ShareButton = app.cells["Share Page With..."]

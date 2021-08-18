@@ -11,9 +11,15 @@ class SettingAppearanceTest: BaseTestCase {
     // Smoketest
     // Check for the basic appearance of the Settings Menu
     func testCheckSetting() {
-        waitForExistence(app.buttons["Settings"], timeout: 10)
+        
+        // Tap on Page Action button
+        waitForExistence(app.buttons["Settings"])
         app.buttons["Settings"].tap()
 
+        let settingsButton = app.cells["Settings"]
+        waitForExistence(settingsButton, timeout: 10)
+        settingsButton.tap()
+        
         // Check About page
         app.tables.firstMatch.swipeUp()
         let aboutCell = app.cells["settingsViewController.about"]
@@ -203,6 +209,10 @@ class SettingAppearanceTest: BaseTestCase {
     func testSafariIntegration() {
         waitForExistence(app.buttons["Settings"], timeout: 10)
         app.buttons["Settings"].tap()
+        
+        let settingsButton = app.cells["Settings"]
+        waitForExistence(settingsButton, timeout: 10)
+        settingsButton.tap()
 
         // Check that Safari toggle is off, swipe to get to Safarin Integration menu
         waitForExistence(app.otherElements["SIRI SHORTCUTS"])

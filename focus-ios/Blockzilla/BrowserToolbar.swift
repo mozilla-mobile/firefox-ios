@@ -37,9 +37,8 @@ class BrowserToolbar: UIView {
 
         stackView.addArrangedSubview(toolset.backButton)
         stackView.addArrangedSubview(toolset.forwardButton)
-        stackView.addArrangedSubview(toolset.stopReloadButton)
         stackView.addArrangedSubview(toolset.deleteButton)
-        stackView.addArrangedSubview(toolset.settingsButton)
+        stackView.addArrangedSubview(toolset.contextMenuButton)
         addSubview(stackView)
 
         borderView.snp.makeConstraints { make in

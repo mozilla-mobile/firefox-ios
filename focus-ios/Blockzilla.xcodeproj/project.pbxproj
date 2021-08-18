@@ -72,6 +72,7 @@
 		B3CD41CE1FD1CDE300AEBD58 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3CD41CD1FD1CDE300AEBD58 /* Result.swift */; };
 		B3D23BEF1FA3A9E500D9C50F /* postload.js in Resources */ = {isa = PBXBuildFile; fileRef = B3D23BEE1FA3A9E500D9C50F /* postload.js */; };
 		B3F4A3171FA136E70029A6F2 /* preload.js in Resources */ = {isa = PBXBuildFile; fileRef = B3F4A3161FA136E60029A6F2 /* preload.js */; };
+		C80F901C26C554B800F5112B /* PhotonActionSheetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80F901B26C554B800F5112B /* PhotonActionSheetCell.swift */; };
 		C817A35722CE73B4002529FF /* Deferred.swift in Sources */ = {isa = PBXBuildFile; fileRef = C817A35322CE73B4002529FF /* Deferred.swift */; };
 		C817A35822CE73B4002529FF /* ReadWriteLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C817A35522CE73B4002529FF /* ReadWriteLock.swift */; };
 		C817A35922CE73B4002529FF /* LockProtected.swift in Sources */ = {isa = PBXBuildFile; fileRef = C817A35622CE73B4002529FF /* LockProtected.swift */; };
@@ -567,6 +568,7 @@
 		B3F4A3161FA136E60029A6F2 /* preload.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = preload.js; sourceTree = "<group>"; };
 		BC16C41C8D4A74C79A493D42 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		C652A61E213D254A86DF5736 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		C80F901B26C554B800F5112B /* PhotonActionSheetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetCell.swift; sourceTree = "<group>"; };
 		C817A35322CE73B4002529FF /* Deferred.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Deferred.swift; sourceTree = "<group>"; };
 		C817A35422CE73B4002529FF /* Deferred.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Deferred.h; sourceTree = "<group>"; };
 		C817A35522CE73B4002529FF /* ReadWriteLock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadWriteLock.swift; sourceTree = "<group>"; };
@@ -1297,6 +1299,7 @@
 				F7B3E49C2165C32B00118785 /* SearchSuggestionsPromptView.swift */,
 				16D716A4211503CD000C8A66 /* PageActionSheetItems.swift */,
 				16074B6C2114364C003B671F /* PhotonActionSheet.swift */,
+				C80F901B26C554B800F5112B /* PhotonActionSheetCell.swift */,
 				D3E251E81DAD714C005918DC /* SafariInstructionsViewController.swift */,
 				D3426AF51DB84E7A0016DA5A /* SearchEngine.swift */,
 				D3E54FD01DEFB063003E1AFF /* SearchEngineManager.swift */,
@@ -1946,6 +1949,7 @@
 				D8E0152C1FB4136E00CA3B9F /* AddSearchEngineViewController.swift in Sources */,
 				D3E251EB1DAD714C005918DC /* SafariInstructionsViewController.swift in Sources */,
 				16D7169E2114F00E000C8A66 /* TrackingProtectionViewController.swift in Sources */,
+				C80F901C26C554B800F5112B /* PhotonActionSheetCell.swift in Sources */,
 				D35A0E021E26C94F00297884 /* ClosedRangeExtensions.swift in Sources */,
 				D3E2C8FA1D9F170200DEBE3D /* LocalContentBlocker.swift in Sources */,
 				C817A35722CE73B4002529FF /* Deferred.swift in Sources */,

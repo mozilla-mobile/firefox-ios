@@ -5,12 +5,7 @@
 import UIKit
 import SnapKit
 
-private func isSmallScreen() -> Bool {
-    let size = UIScreen.main.bounds.size
-    return min(size.width, size.height) < 700
-}
-
-private struct PhotonActionSheetUX {
+struct PhotonActionSheetUX {
     static let MaxWidth: CGFloat = 414
     static let Padding: CGFloat = 10
     static let HeaderFooterHeight: CGFloat = 0
@@ -22,15 +17,16 @@ private struct PhotonActionSheetUX {
     static let IconSize = CGSize(width: 24, height: 24)
     static let SiteHeaderName  = "PhotonActionSheetSiteHeaderView"
     static let TitleHeaderName = "PhotonActionSheetTitleHeaderView"
-    static let CellName = "PhotonActionSheetCell"
     static let CloseButtonHeight: CGFloat  = 56
     static let TablePadding: CGFloat = 6
     static let BackgroundAlpha: CGFloat = 0.9
     static let TitleHeaderHeight: CGFloat = 36
     static let SeparatorHeaderHeight: CGFloat = 12
     static let SeparatorColor = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
+    static let SectionSeparatorColor = UIConstants.Photon.Grey50.withAlphaComponent(0.5)
     static let TableViewBackgroundColor = UIConstants.Photon.Ink90.withAlphaComponent(PhotonActionSheetUX.BackgroundAlpha)
     static let BlurAlpha: CGFloat = 0.7
+    static let SeparatorRowHeight: CGFloat = 8
 }
 
 // Ported with modifications from Firefox iOS (https://github.com/mozilla-mobile/firefox-ios)
@@ -82,9 +78,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     private(set) var actions: [[PhotonActionSheetItem]]
 
     private var tintColor = UIConstants.Photon.Grey10
-    private var heightConstraint: Constraint?
-    var tableView = UITableView(frame: .zero, style: .grouped)
-    var darkenedBackgroundView = UIView()
+    private var tableView = UITableView(frame: .zero, style: .grouped)
 
     lazy var tapRecognizer: UITapGestureRecognizer = {
         let tapRecognizer = UITapGestureRecognizer()
@@ -95,29 +89,16 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         return tapRecognizer
     }()
 
-    lazy var closeButton: UIButton = {
-        let button = UIButton()
-        button.setTitle(UIConstants.strings.close, for: .normal)
-        button.backgroundColor = UIConstants.Photon.Ink80
-        button.setTitleColor(UIConstants.Photon.Grey10, for: .normal)
-        button.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
-        button.titleLabel?.font = UIConstants.fonts.closeButtonTitle
-        button.addTarget(self, action: #selector(dismiss), for: .touchUpInside)
-        button.accessibilityIdentifier = "PhotonMenu.close"
-        return button
-    }()
-
     var photonTransitionDelegate: UIViewControllerTransitioningDelegate? {
         didSet {
             self.transitioningDelegate = photonTransitionDelegate
         }
     }
 
-    init(title: String? = nil, actions: [[PhotonActionSheetItem]], closeButtonTitle: String = UIConstants.strings.close, style presentationStyle: UIModalPresentationStyle) {
+    init(title: String? = nil, actions: [[PhotonActionSheetItem]]) {
         self.actions = actions
         super.init(nibName: nil, bundle: nil)
         self.title = title
-        self.closeButton.setTitle(closeButtonTitle, for: .normal)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -126,54 +107,29 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        overrideUserInterfaceStyle = .dark
+        tableView.backgroundColor = .clear
         view.addGestureRecognizer(tapRecognizer)
         view.addSubview(tableView)
         view.accessibilityIdentifier = "Action Sheet"
-
-        // In a popover the popover provides the blur background
-        // Not using a background color allows the view to style correctly with the popover arrow
-        if self.popoverPresentationController == nil {
-            tableView.backgroundColor = PhotonActionSheetUX.TableViewBackgroundColor
-            let blurEffect = UIBlurEffect(style: .regular)
-            let blurEffectView = UIVisualEffectView(effect: blurEffect)
-            blurEffectView.alpha = PhotonActionSheetUX.BlurAlpha
-            tableView.backgroundView = blurEffectView
-        } else {
-            tableView.backgroundColor = .clear
-        }
-
-        let width = min(self.view.frame.size.width, PhotonActionSheetUX.MaxWidth) - (PhotonActionSheetUX.Padding * 2)
-
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            self.view.addSubview(closeButton)
-            closeButton.snp.makeConstraints { make in
-                make.centerX.equalTo(self.view.snp.centerX)
-                make.width.equalTo(width)
-                make.height.equalTo(PhotonActionSheetUX.CloseButtonHeight)
-                make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).inset(PhotonActionSheetUX.Padding)
-            }
-        }
+        view.isOpaque = false
+        tableView.isOpaque = false
+        
+        let width = UIDevice.current.userInterfaceIdiom == .pad ? 400 : 250
 
         tableView.snp.makeConstraints { make in
-            make.centerX.equalTo(self.view.snp.centerX)
-            if UIDevice.current.userInterfaceIdiom == .phone {
-                make.bottom.equalTo(closeButton.snp.top).offset(-PhotonActionSheetUX.Padding)
-            } else {
-                make.edges.equalTo(self.view)
-            }
+            make.top.bottom.equalTo(self.view)
             make.width.equalTo(width)
         }
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
         tableView.bounces = false
         tableView.delegate = self
         tableView.dataSource = self
         tableView.keyboardDismissMode = .onDrag
-        tableView.register(PhotonActionSheetCell.self, forCellReuseIdentifier: PhotonActionSheetUX.CellName)
+        tableView.register(PhotonActionSheetCell.self, forCellReuseIdentifier: PhotonActionSheetCell.reuseIdentifier)
         tableView.register(PhotonActionSheetSeparator.self, forHeaderFooterViewReuseIdentifier: "SeparatorSectionHeader")
         tableView.register(PhotonActionSheetTitleHeaderView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.TitleHeaderName)
         tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "EmptyHeader")
@@ -190,20 +146,11 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         let size = CGSize(width: tableView.frame.width, height: PhotonActionSheetUX.Padding)
         let footer = UIView(frame: CGRect(origin: origin, size: size))
         tableView.tableHeaderView = footer
-        tableView.tableFooterView = footer.clone()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        let maxHeight = self.view.frame.height - PhotonActionSheetUX.CloseButtonHeight
-        tableView.snp.makeConstraints { make in
-            heightConstraint?.deactivate()
-            // The height of the menu should be no more than 85 percent of the screen
-            heightConstraint = make.height.equalTo(min(self.tableView.contentSize.height, maxHeight * 0.90)).constraint
-        }
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            self.preferredContentSize = self.tableView.contentSize
-        }
+        self.preferredContentSize = self.tableView.contentSize
     }
 
     private func applyBackgroundBlur() {
@@ -286,7 +233,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: PhotonActionSheetUX.CellName, for: indexPath) as! PhotonActionSheetCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: PhotonActionSheetCell.reuseIdentifier, for: indexPath) as! PhotonActionSheetCell
         let action = actions[indexPath.section][indexPath.row]
         cell.tintColor = self.tintColor
         cell.accessibilityIdentifier = action.title
@@ -401,25 +348,15 @@ private class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView {
     }
 }
 
-private struct PhotonActionSheetCellUX {
-    static let LabelColor = UIColor.blue
-    static let BorderWidth: CGFloat = CGFloat(0.5)
-    static let CellSideOffset = 20
-    static let TitleLabelOffset = 10
-    static let CellTopBottomOffset = 12
-    static let StatusIconSize = 24
-    static let SelectedOverlayColor = UIColor(rgb: 0x5D5F79)
-    static let CornerRadius: CGFloat = 3
-}
-
 private class PhotonActionSheetSeparator: UITableViewHeaderFooterView {
 
-    let separatorLineView = UIView()
+    private let separatorLineView = UIView()
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         self.backgroundView = UIView()
-        separatorLineView.backgroundColor = PhotonActionSheetUX.SeparatorColor
+        separatorLineView.backgroundColor = .clear
+        contentView.backgroundColor = PhotonActionSheetUX.SectionSeparatorColor
         self.contentView.addSubview(separatorLineView)
         separatorLineView.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
@@ -437,166 +374,4 @@ public enum PhotonActionSheetCellAccessoryType {
     case Switch
     case Text
     case None
-}
-
-private class PhotonActionSheetCell: UITableViewCell {
-    static let Padding: CGFloat = 16
-    static let HorizontalPadding: CGFloat = 10
-    static let VerticalPadding: CGFloat = 2
-    static let IconSize = 16
-    var actionSheet: PhotonActionSheet?
-
-    private func createLabel() -> UILabel {
-        let label = UILabel()
-        label.minimumScaleFactor = 0.75 // Scale the font if we run out of space
-        label.textColor = PhotonActionSheetCellUX.LabelColor
-        label.setContentHuggingPriority(.defaultHigh, for: .vertical)
-        label.adjustsFontSizeToFitWidth = true
-        return label
-    }
-
-    private func createIconImageView() -> UIImageView {
-        let icon = UIImageView()
-        icon.contentMode = .scaleAspectFit
-        icon.clipsToBounds = true
-        icon.layer.cornerRadius = PhotonActionSheetCellUX.CornerRadius
-        icon.setContentHuggingPriority(.required, for: .horizontal)
-        icon.setContentCompressionResistancePriority(.required, for: .horizontal)
-        return icon
-    }
-
-    lazy var titleLabel: UILabel = {
-        let label = createLabel()
-        label.numberOfLines = 4
-        label.font = UIConstants.fonts.actionMenuItem
-        return label
-    }()
-
-    lazy var subtitleLabel: UILabel = {
-        let label = createLabel()
-        label.numberOfLines = 0
-        label.font = UIConstants.fonts.actionMenuItem
-        return label
-    }()
-
-    lazy var statusIcon: UIImageView = {
-        return createIconImageView()
-    }()
-
-    lazy var disclosureLabel: UILabel = {
-        let label = UILabel()
-        return label
-    }()
-
-    lazy var disclosureIndicator: UIImageView = {
-        let disclosureIndicator = createIconImageView()
-        disclosureIndicator.image = UIImage(named: "menu-Disclosure")
-        return disclosureIndicator
-    }()
-
-    lazy var stackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.spacing = PhotonActionSheetCell.Padding
-        stackView.alignment = .center
-        stackView.axis = .horizontal
-        return stackView
-    }()
-
-    override func prepareForReuse() {
-        self.statusIcon.image = nil
-        disclosureIndicator.removeFromSuperview()
-        disclosureLabel.removeFromSuperview()
-        statusIcon.layer.cornerRadius = PhotonActionSheetCellUX.CornerRadius
-    }
-
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-
-        isAccessibilityElement = true
-        backgroundColor = .clear
-
-        // Setup our StackViews
-        let textStackView = UIStackView(arrangedSubviews: [titleLabel, subtitleLabel])
-        textStackView.spacing = PhotonActionSheetCell.VerticalPadding
-        textStackView.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        textStackView.alignment = .leading
-        textStackView.axis = .vertical
-
-        stackView.addArrangedSubview(statusIcon)
-        stackView.addArrangedSubview(textStackView)
-        contentView.addSubview(stackView)
-
-        let padding = PhotonActionSheetCell.Padding
-        let shrinkage: CGFloat = isSmallScreen() ? 3 : 0
-        let topPadding = PhotonActionSheetCell.HorizontalPadding - shrinkage
-        stackView.snp.makeConstraints { make in
-            make.edges.equalTo(contentView).inset(UIEdgeInsets(top: topPadding, left: padding, bottom: topPadding, right: padding))
-        }
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    func configure(with action: PhotonActionSheetItem) {
-        titleLabel.text = action.title
-        titleLabel.textColor = self.tintColor
-        titleLabel.textColor = action.accessory == .Text ? titleLabel.textColor.withAlphaComponent(0.6) : titleLabel.textColor
-        titleLabel.numberOfLines = 1
-        titleLabel.adjustsFontSizeToFitWidth = true
-        titleLabel.minimumScaleFactor = 0.5
-
-        subtitleLabel.text = action.text
-        subtitleLabel.textColor = self.tintColor
-        subtitleLabel.isHidden = action.text == nil
-        titleLabel.font  = action.bold ? UIConstants.fonts.actionMenuItemBold : UIConstants.fonts.actionMenuItem
-        accessibilityIdentifier = action.iconString
-        accessibilityLabel = action.title
-        selectionStyle = .none
-
-        if let iconName = action.iconString, let image = UIImage(named: iconName) {
-            statusIcon.image = image.createScaled(size: PhotonActionSheetUX.IconSize)
-            if statusIcon.superview == nil {
-                if action.iconAlignment == .right {
-                    stackView.addArrangedSubview(statusIcon)
-                } else {
-                    stackView.insertArrangedSubview(statusIcon, at: 0)
-                }
-            } else {
-                if action.iconAlignment == .right {
-                    statusIcon.removeFromSuperview()
-                    stackView.addArrangedSubview(statusIcon)
-                }
-            }
-        } else {
-            statusIcon.removeFromSuperview()
-        }
-
-        if action.textStyle == .subtitle {
-            subtitleLabel.textColor = UIConstants.colors.actionMenuItemSubtitleLabel
-            subtitleLabel.font = UIConstants.fonts.actionMenuItemSubtitle
-        }
-
-        switch action.accessory {
-        case .Text:
-            disclosureLabel.font  = action.bold ? UIConstants.fonts.actionMenuItemBold : UIConstants.fonts.actionMenuItem
-            disclosureLabel.text = action.accessoryText
-            disclosureLabel.textColor = titleLabel.textColor
-            disclosureLabel.accessibilityIdentifier = "\(action.title).Subtitle"
-            stackView.addArrangedSubview(disclosureLabel)
-        case .Switch:
-            let toggle = UISwitch()
-            toggle.isOn = action.isEnabled
-            toggle.onTintColor = UIConstants.colors.toggleOn
-            toggle.tintColor = UIConstants.colors.toggleOff
-            toggle.addTarget(self, action: #selector(valueChanged(sender:)), for: .valueChanged)
-            toggle.accessibilityIdentifier = "\(action.title).Toggle"
-            stackView.addArrangedSubview(toggle)
-        default:
-            break
-        }
-    }
-    @objc func valueChanged(sender: UISwitch) {
-        actionSheet?.didToggle(enabled: sender.isOn)
-    }
 }

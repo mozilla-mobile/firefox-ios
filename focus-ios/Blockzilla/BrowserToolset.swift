@@ -12,7 +12,7 @@ protocol BrowserToolsetDelegate: class {
     func browserToolsetDidLongPressReload(_ browserToolbar: BrowserToolset)
     func browserToolsetDidPressStop(_ browserToolbar: BrowserToolset)
     func browserToolsetDidPressDelete(_ browserToolbar: BrowserToolset)
-    func browserToolsetDidPressSettings(_ browserToolbar: BrowserToolset)
+    func browserToolsetDidPressContextMenu(_ browserToolbar: BrowserToolset, menuButton: InsetButton)
 }
 
 class BrowserToolset {
@@ -22,7 +22,7 @@ class BrowserToolset {
     let forwardButton = InsetButton()
     let stopReloadButton = InsetButton()
     let deleteButton = InsetButton()
-    let settingsButton = InsetButton()
+    let contextMenuButton = InsetButton()
 
     init() {
         backButton.tintColor = .primaryText
@@ -58,11 +58,12 @@ class BrowserToolset {
         deleteButton.accessibilityIdentifier = "URLBar.deleteButton"
         deleteButton.isEnabled = false
 
-        settingsButton.tintColor = .primaryText
-        settingsButton.addTarget(self, action: #selector(didPressSettings), for: .touchUpInside)
-        settingsButton.accessibilityLabel = UIConstants.strings.browserSettings
-        settingsButton.accessibilityIdentifier = "HomeView.settingsButton"
-        settingsButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
+        contextMenuButton.tintColor = .primaryText
+        contextMenuButton.addTarget(self, action: #selector(didPressContextMenu), for: .touchUpInside)
+        contextMenuButton.accessibilityLabel = UIConstants.strings.browserSettings
+        contextMenuButton.accessibilityIdentifier = "HomeView.settingsButton"
+        contextMenuButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
+        
         setHighlightWhatsNew(shouldHighlight: shouldShowWhatsNew())
     }
 
@@ -128,15 +129,15 @@ class BrowserToolset {
         }
     }
 
-    @objc private func didPressSettings() {
-        delegate?.browserToolsetDidPressSettings(self)
+    @objc private func didPressContextMenu(_ sender: InsetButton) {
+        delegate?.browserToolsetDidPressContextMenu(self, menuButton: sender)
     }
 
     func setHighlightWhatsNew(shouldHighlight: Bool) {
         if shouldHighlight {
-            settingsButton.setImage(UIImage(named: "preferences_updated"), for: .normal)
+            contextMenuButton.setImage(UIImage(named: "preferences_updated"), for: .normal)
         } else {
-            settingsButton.setImage(#imageLiteral(resourceName: "icon_settings"), for: .normal)
+            contextMenuButton.setImage(UIImage(named: "icon_hamburger_menu"), for: .normal)
         }
     }
 }
