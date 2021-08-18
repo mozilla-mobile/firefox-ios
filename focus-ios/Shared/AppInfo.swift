@@ -39,8 +39,19 @@ class AppInfo {
         return Bundle.main.infoDictionary!["CFBundleName"] as! String
     }
 
+    /// Return application's ShortVersionString. Like `35`, `38.0` or `38.1.1`. Will crash if the value is missing
+    /// from the Info.plist. (Which is a fatal packaging error.)
     static var shortVersion: String {
         return Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
+    }
+
+    /// Return the application's major version. It will only handle versions like `9000` or `38.1` or `38.1.1`. It
+    /// will crash if the `shortVersion` is missing or malformed. (Which is a fatal packaging error.)
+    static var majorVersion: Int {
+        guard let dotIndex = shortVersion.index(of: ".") else {
+            return Int(shortVersion)!
+        }
+        return Int(String(shortVersion.prefix(upTo: dotIndex)))!
     }
 
     static var buildNumber: String {

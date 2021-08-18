@@ -518,10 +518,6 @@ struct UIConstants {
         static let siriEraseTipDescription = "Add Siri shortcut"
         static let shareTrackersTipTitle = String(format: "You browse. %@ blocks.", AppInfo.productName)
         static let shareTrackersTipDescription = "%@ trackers blocked so far"
-        static let sumoTopicWhatsNew = "whats-new-focus-ios-8"
-        static let klarSumoTopicWhatsNew = "whats-new-firefox-klar-ios-version-8"
-        static let sumoTopicSearchSuggestion = "search-suggestions-focus-ios"
-        static let sumoTopicUsageData = "usage-data"
         static let encodingNameUTF8 = "utf-8"
         static let googleAmpURLPrefix = "https://www.google.com/amp/s/"
         static let truncateLeader = "..."

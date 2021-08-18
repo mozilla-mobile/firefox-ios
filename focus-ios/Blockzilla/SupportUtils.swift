@@ -4,17 +4,47 @@
 
 import Foundation
 
-/// Utility functions related to SUMO.
-public struct SupportUtils {
-    /// Construct a NSURL pointing to a specific topic on SUMO. The topic should be a non-escaped string. It will
-    /// be properly escaped by this function.
-    ///
-    /// The resulting NSURL will include the app version, operating system and locale code. For example, a topic
-    /// "cheese" will be turned into a link that looks like https://support.mozilla.org/1/mobile/2.0/iOS/en-US/cheese
-    public static func URLForTopic(topic: String) -> URL? {
-        guard let escapedTopic = topic.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlPathAllowed), let languageIdentifier = Locale.preferredLanguages.first else {
-            return nil
+public enum SupportTopic: CaseIterable {
+    case whatsNew
+    case searchSuggestions
+    case usageData
+    case autofillDomain
+    case trackingProtection
+    case addSearchEngine
+
+    public var slug: String {
+        switch self {
+        case .whatsNew:
+            return "whats-new-\(AppInfo.config.productName.lowercased())-ios-\(AppInfo.majorVersion)"
+        case .searchSuggestions:
+            return "search-suggestions-focus-ios"
+        case .usageData:
+            return "usage-data"
+        case .autofillDomain:
+            return "autofill-domain-ios"
+        case .trackingProtection:
+            return "tracking-protection-focus-ios"
+        case .addSearchEngine:
+            return "add-search-engine-ios"
         }
-        return URL(string: "https://support.mozilla.org/1/mobile/\(AppInfo.shortVersion)/iOS/\(languageIdentifier)/\(escapedTopic)")
+    }
+    
+    static let fallbackURL = "https://support.mozilla.org"
+}
+
+extension URL {
+    /// Construct an URL pointing to a specific topic on SUMO. The topic comes from the Topics enum.
+    ///
+    /// The resulting URL will include the app version, operating system and locale code. For example, a topic
+    /// "cheese" will be turned into a link that looks like https://support.mozilla.org/1/mobile/2.0/iOS/en-US/cheese
+    ///
+    /// If for some reason the URL could not be created, a default URL to support.mozilla.org is returned. This is
+    /// a very rare case that should not happen except in the rare case where the URL may be dynamically formatted.
+    init(forSupportTopic topic: SupportTopic) {
+        guard let escapedTopic = topic.slug.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlPathAllowed), let languageIdentifier = Locale.preferredLanguages.first else {
+            self.init(string: SupportTopic.fallbackURL)!
+            return
+        }
+        self.init(string: "https://support.mozilla.org/1/mobile/\(AppInfo.shortVersion)/iOS/\(languageIdentifier)/\(escapedTopic)")!
     }
 }

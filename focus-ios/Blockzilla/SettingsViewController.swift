@@ -121,7 +121,6 @@ class SettingsTableViewToggleCell: SettingsTableViewCell {
 
         accessoryView = PaddedSwitch(switchView: toggle.toggle)
         selectionStyle = .none
-
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -638,19 +637,18 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     
-    private func tappedFooter(topic: String) {
-        guard let url = SupportUtils.URLForTopic(topic: topic) else { return }
-        let contentViewController = SettingsContentViewController(url: url)
+    private func tappedFooter(forSupportTopic topic: SupportTopic) {
+        let contentViewController = SettingsContentViewController(url: URL(forSupportTopic: topic))
         navigationController?.navigationBar.tintColor = .accent
         navigationController?.pushViewController(contentViewController, animated: true)
     }
     
     @objc func tappedLearnMoreFooter(gestureRecognizer: UIGestureRecognizer) {
-        tappedFooter(topic: UIConstants.strings.sumoTopicUsageData)
+        tappedFooter(forSupportTopic: .usageData)
     }
 
     @objc func tappedLearnMoreSearchSuggestionsFooter(gestureRecognizer: UIGestureRecognizer) {
-        tappedFooter(topic: UIConstants.strings.sumoTopicSearchSuggestion)
+        tappedFooter(forSupportTopic: .searchSuggestions)
     }
 
     @objc private func dismissSettings() {
@@ -663,15 +661,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     @objc private func whatsNewClicked() {
         highlightsButton?.tintColor = UIColor.white
-        guard let focusURL = SupportUtils.URLForTopic(topic: UIConstants.strings.sumoTopicWhatsNew) else { return }
-        guard let klarURL = SupportUtils.URLForTopic(topic: UIConstants.strings.klarSumoTopicWhatsNew) else { return }
-
-        if AppInfo.isKlar {
-            navigationController?.pushViewController(SettingsContentViewController(url: klarURL), animated: true)
-        } else {
-            navigationController?.pushViewController(SettingsContentViewController(url: focusURL), animated: true)
-        }
-
+        navigationController?.pushViewController(SettingsContentViewController(url: URL(forSupportTopic: .whatsNew)), animated: true)
         whatsNew.didShowWhatsNew()
     }
 
