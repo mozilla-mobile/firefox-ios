@@ -101,13 +101,12 @@ class SettingsTableViewAccessoryCell: SettingsTableViewCell {
 
 class SettingsTableViewToggleCell: SettingsTableViewCell {
     private let newLabel = SmartLabel()
-    private let newDetailLabel = SmartLabel()
     private let spacerView = UIView()
     var navigationController: UINavigationController?
 
     init(style: UITableViewCell.CellStyle, reuseIdentifier: String?, toggle: BlockerToggle) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupDynamicFont(forLabels: [newLabel, newDetailLabel], addObserver: true)
+        setupDynamicFont(forLabels: [newLabel], addObserver: true)
 
         newLabel.numberOfLines = 0
         newLabel.text = toggle.label
@@ -115,84 +114,14 @@ class SettingsTableViewToggleCell: SettingsTableViewCell {
         textLabel?.numberOfLines = 0
         textLabel?.text = toggle.label
 
-        newDetailLabel.numberOfLines = 0
-        detailTextLabel?.numberOfLines = 0
-        detailTextLabel?.text = toggle.subtitle
-
         backgroundColor = UIConstants.colors.cellBackground
         newLabel.textColor = UIConstants.colors.settingsTextLabel
         textLabel?.textColor = UIConstants.colors.settingsTextLabel
         layoutMargins = UIEdgeInsets.zero
-        newDetailLabel.textColor = UIConstants.colors.settingsDetailLabel
-        detailTextLabel?.textColor = UIConstants.colors.settingsDetailLabel
 
         accessoryView = PaddedSwitch(switchView: toggle.toggle)
         selectionStyle = .none
 
-        // Add "Learn More" button recognition
-        if toggle.label == UIConstants.strings.labelSendAnonymousUsageData || toggle.label == UIConstants.strings.settingsSearchSuggestions {
-
-            addSubview(newLabel)
-            addSubview(newDetailLabel)
-            addSubview(spacerView)
-
-            textLabel?.isHidden = true
-
-            let selector = toggle.label == UIConstants.strings.labelSendAnonymousUsageData ? #selector(tappedLearnMoreFooter) : #selector(tappedLearnMoreSearchSuggestionsFooter)
-            let learnMoreButton = UIButton()
-            learnMoreButton.setTitle(UIConstants.strings.learnMore, for: .normal)
-            learnMoreButton.setTitleColor(.accentButton, for: .normal)
-            if let cellFont = detailTextLabel?.font {
-                learnMoreButton.titleLabel?.font = UIFont(name: cellFont.fontName, size: cellFont.pointSize)
-            }
-            let tapGesture = UITapGestureRecognizer(target: self, action: selector)
-            learnMoreButton.addGestureRecognizer(tapGesture)
-            addSubview(learnMoreButton)
-
-            // Adjust the offsets to allow the buton to fit
-            spacerView.snp.makeConstraints { make in
-                make.top.bottom.leading.equalToSuperview()
-                make.trailing.equalTo(textLabel!.snp.leading)
-            }
-
-            newLabel.snp.makeConstraints { make in
-                make.leading.equalTo(spacerView.snp.trailing)
-                make.top.equalToSuperview().offset(8)
-            }
-
-            learnMoreButton.snp.makeConstraints { make in
-                make.leading.equalTo(spacerView.snp.trailing)
-                make.bottom.equalToSuperview().offset(4)
-            }
-
-            newDetailLabel.snp.makeConstraints { make in
-                let lineHeight = newLabel.font.lineHeight
-                make.top.equalToSuperview().offset(10 + lineHeight)
-                make.leading.equalTo(spacerView.snp.trailing)
-                make.trailing.equalTo(contentView)
-
-                if let learnMoreHeight = learnMoreButton.titleLabel?.font.lineHeight {
-                    make.bottom.equalToSuperview().offset(-8 - learnMoreHeight)
-                }
-            }
-
-            newLabel.setupShrinkage()
-            newDetailLabel.setupShrinkage()
-        }
-    }
-
-    private func tappedFooter(topic: String) {
-        guard let url = SupportUtils.URLForTopic(topic: topic) else { return }
-        let contentViewController = SettingsContentViewController(url: url)
-        navigationController?.pushViewController(contentViewController, animated: true)
-    }
-
-    @objc func tappedLearnMoreFooter(gestureRecognizer: UIGestureRecognizer) {
-        tappedFooter(topic: UIConstants.strings.sumoTopicUsageData)
-    }
-
-    @objc func tappedLearnMoreSearchSuggestionsFooter(gestureRecognizer: UIGestureRecognizer) {
-        tappedFooter(topic: UIConstants.strings.sumoTopicSearchSuggestion)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -202,13 +131,14 @@ class SettingsTableViewToggleCell: SettingsTableViewCell {
 
 class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     enum Section: String {
-        case privacy, search, siri, integration, mozilla
+        case privacy, usageData, search, siri, integration, mozilla
 
         var numberOfRows: Int {
             switch self {
             case .privacy:
-                if BiometryType(context: LAContext()).hasBiometry { return 4 }
-                return 3
+                if BiometryType(context: LAContext()).hasBiometry { return 3 }
+                return 2
+            case .usageData: return 1
             case .search: return 3
             case .siri: return 3
             case .integration: return 1
@@ -221,6 +151,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         var headerText: String? {
             switch self {
             case .privacy: return UIConstants.strings.toggleSectionPrivacy
+            case .usageData: return nil
             case .search: return UIConstants.strings.settingsSearchTitle
             case .siri: return UIConstants.strings.siriShortcutsTitle
             case .integration: return UIConstants.strings.toggleSectionSafari
@@ -230,9 +161,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
         static func getSections() -> [Section] {
             if #available(iOS 12.0, *) {
-                return [.privacy, .search, .siri, integration, .mozilla]
+                return [.privacy, .usageData, .search, .siri, integration, .mozilla]
             } else {
-                return [.privacy, .search, integration, .mozilla]
+                return [.privacy, .usageData, .search, integration, .mozilla]
             }
         }
     }
@@ -309,10 +240,13 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
         if let privacyIndex = getSectionIndex(Section.privacy) {
             if let biometricToggle = createBiometricLoginToggleIfAvailable() {
-                toggles[privacyIndex] =  [1: blockFontsToggle, 2: biometricToggle, 3: usageDataToggle]
+                toggles[privacyIndex] =  [1: blockFontsToggle, 2: biometricToggle]
             } else {
-                toggles[privacyIndex] = [1: blockFontsToggle, 2: usageDataToggle]
+                toggles[privacyIndex] = [1: blockFontsToggle]
             }
+        }
+        if let usageDataIndex = getSectionIndex(Section.usageData) {
+            toggles[usageDataIndex] = [0: usageDataToggle]
         }
         if let searchIndex = getSectionIndex(Section.search) {
             toggles[searchIndex] = [2: searchSuggestionToggle]
@@ -489,6 +423,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             } else {
                 cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
             }
+        case .usageData:
+            cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
         case .search:
             if indexPath.row < 2 {
                 guard let searchCell = tableView.dequeueReusableCell(withIdentifier: "accessoryCell") as? SettingsTableViewAccessoryCell else { fatalError("Accessory cells do not exist") }
@@ -574,35 +510,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     func numberOfSections(in tableView: UITableView) -> Int {
         return sections.count
     }
-
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        // Height for the Search Engine and Learn More row.
-        if indexPath.section == 5 ||
-            (indexPath.section == 4 && indexPath.row >= 1) {
-            return 44
-        }
-
-        // We have to manually calculate the cell height since UITableViewCell doesn't correctly
-        // layout multiline detailTextLabels.
-        let toggle = toggleForIndexPath(indexPath)
-        let tableWidth = tableView.frame.width
-        let accessoryWidth = dummyToggleCell.accessoryView!.frame.width
-        let insetsWidth = 2 * tableView.separatorInset.left
-        let width = tableWidth - accessoryWidth - insetsWidth
-
-        var height = heightForLabel(dummyToggleCell.textLabel!, width: width, text: toggle.label)
-        if let subtitle = toggle.subtitle {
-            height += heightForLabel(dummyToggleCell.detailTextLabel!, width: width, text: subtitle)
-            if toggle.label == UIConstants.strings.labelSendAnonymousUsageData ||
-                toggle.label == UIConstants.strings.settingsSearchSuggestions {
-                height += 10
-                if toggle.label == UIConstants.strings.settingsSearchSuggestions && UIDevice.current.userInterfaceIdiom == .pad {
-                    height += 15
-                }
-            }
-        }
-
-        return height + 22
+        return 44
     }
 
     private func heightForLabel(_ label: UILabel, width: CGFloat, text: String) -> CGFloat {
@@ -637,6 +547,28 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             make.centerY.equalTo(cell.textLabel!).offset(groupingOffset)
         }
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        if let text = toggles[section]?.first?.value.subtitle {
+            let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
+            cell.backgroundColor = .primaryBackground
+            cell.textLabel?.numberOfLines = 0
+            cell.textLabel?.textColor = .secondaryText.withAlphaComponent(0.6)
+            cell.textLabel?.font = .systemFont(ofSize: 13)
+            cell.textLabel?.text = text
+            
+            if section == 1 || section == 2 {
+                let selector = toggles[section]?.first?.value.label == UIConstants.strings.labelSendAnonymousUsageData ? #selector(tappedLearnMoreFooter) : #selector(tappedLearnMoreSearchSuggestionsFooter)
+                let tapGesture = UITapGestureRecognizer(target: self, action: selector)
+                cell.detailTextLabel?.text = UIConstants.strings.learnMore
+                cell.detailTextLabel?.textColor = .accent
+                cell.addGestureRecognizer(tapGesture)
+            }
+            return cell
+        } else {
+            return nil
+        }
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -704,6 +636,21 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             safariToggle.isEnabled = true
             self?.isSafariEnabled = enabled
         }
+    }
+    
+    private func tappedFooter(topic: String) {
+        guard let url = SupportUtils.URLForTopic(topic: topic) else { return }
+        let contentViewController = SettingsContentViewController(url: url)
+        navigationController?.navigationBar.tintColor = .accent
+        navigationController?.pushViewController(contentViewController, animated: true)
+    }
+    
+    @objc func tappedLearnMoreFooter(gestureRecognizer: UIGestureRecognizer) {
+        tappedFooter(topic: UIConstants.strings.sumoTopicUsageData)
+    }
+
+    @objc func tappedLearnMoreSearchSuggestionsFooter(gestureRecognizer: UIGestureRecognizer) {
+        tappedFooter(topic: UIConstants.strings.sumoTopicSearchSuggestion)
     }
 
     @objc private func dismissSettings() {
