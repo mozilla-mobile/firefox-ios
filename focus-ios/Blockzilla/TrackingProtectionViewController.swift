@@ -299,10 +299,12 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
         }
         return dateFormatter.string(from: Date())
     }
-    
+        
     private func getNumberOfTrackersBlocked() -> String {
-        let numberOfTrackersBlocked = UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
-        return String(numberOfTrackersBlocked)
+        let numberOfTrackersBlocked = NSNumber(integerLiteral: UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey))
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        return formatter.string(from: numberOfTrackersBlocked) ?? "0"
     }
     
     @objc private func toggleProtection(sender: UISwitch) {
