@@ -29,9 +29,6 @@
 "About.safariBullet1" = "ಉತ್ತಮಗೊಳಿಸಿದ ಗೌಪ್ಯತೆಗಾಗಿ ಜಾಡುಹಿಡಿಯುವವರನ್ನು ನಿರ್ಬಂಧಿಸಿ";
 
 /* Label on About screen */
-"About.safariBullet2" = "ಪುಟದ ಗಾತ್ರ ಕುಗ್ಗಿಸಲು ಜಾಲದ ಫಾಂಟುಗನ್ನು ನಿರ್ಬಂಧಿಸಿ";
-
-/* Label on About screen */
 "About.safariBulletHeader" = "ಇದನ್ನು ಸಫಾರಿ ಎಕ್ಸ್‍ಟೆಂಷನ್ ಆಗಿ ಬಳಸಿ:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -274,15 +271,6 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "URL ಸ್ವಯಂಪೂರ್ಣಗೊಳಿಸು";
 
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "ಇತರೆ ಮಾಹಿತಿ ಜಾಡುಹಿಡಿಯುವವರನ್ನು ನಿರ್ಬಂಧಿಸುವುದರಿಂದ ಕೆಲವು ವಿಡಿಯೋ ಮತ್ತು ಜಾಲ ಪುಟಗಳು ಕೆಡಬಹುದು.";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "ಇಲ್ಲ, ಪರವಾಗಿಲ್ಲ";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "ನನಗೆ ಅರ್ಥವಾಗುತ್ತದೆ‍";
-
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla ಎಲ್ಲರಿಗಾಗಿ %@ ಅನ್ನು ಉತ್ತಮಗೊಳಿಸಿ ಕೊಡುವುದಕ್ಕೆ ಬೇಕಾದ್ದನ್ನು ಮಾತ್ರ ಸಂಗ್ರಹಿಸುತ್ತದೆ.";
 
@@ -348,21 +336,6 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "SECURITY";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "ಜಾಹೀರಾತು ಜಾಡುಹಿಡಿಯುವರನ್ನು ನಿರ್ಬಂಧಿಸು";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "ಅನಲಿಟಿಕ್ಸ್ ಜಾಡುಹಿಡಿಯುವರನ್ನು ನಿರ್ಬಂಧಿಸು";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "ವೆಬ್ ಫಾಂಟುಗಳನ್ನು ನಿರ್ಬಂಧಿಸು";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "ಇತರೆ ಮಾಹಿತಿ ಜಾಡುಹಿಡಿಯುವವರನ್ನು ನಿರ್ಬಂಧಿಸು";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "ಸಾಮಾಜಿಕ ಜಾಡುಹಿಡಿಯುವರನ್ನು ನಿರ್ಬಂಧಿಸು";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "ಅಪ್ಲಿಕೇಶನ್ ಅನ್ಲಾಕ್ ಮಾಡಲು ಫೇಸ್ ID ಬಳಸಿ";
@@ -477,12 +450,6 @@
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "ನೀವು %@ ಅನ್ನು ಮುಚ್ಚಿ ಅಥವಾ ERASE ಅನ್ನು ಟ್ಯಾಪ್ ಮಾಡುವವರೆಗೆ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ.";
-
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "ಟ್ರ್ಯಾಕಿಂಗ್ ಪ್ರೊಟೆಕ್ಷನ್";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "%@ ಬ್ಲಾಕ್ಗಳ ಜಾಹೀರಾತು, ವಿಶ್ಲೇಷಣಾತ್ಮಕ, ಸಾಮಾಜಿಕ ಮತ್ತು ಇತರ ಟ್ರ್ಯಾಕರ್ಗಳು ಎಂಬುದನ್ನು ಆಯ್ಕೆಮಾಡಿ.";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "ಸ್ವಯಂಪೂರ್ಣತೆಗೆ ಲಿಂಕ್ ಸೇರಿಸಿ";

@@ -145,12 +145,6 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "URL સ્વતઃપૂર્ણ";
 
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "ના, આભાર";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "હુ સમજયો";
-
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "વધુ શીખો.";
 
@@ -195,12 +189,6 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "સુરક્ષા";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "જાહેરાત ટ્રેકર્સને અવરોધિત કરો";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "વિશ્લેષણાત્મક ટ્રેકર્સને અવરોધિત કરો";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
@@ -258,9 +246,6 @@
 
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "સામાજિક ટ્રેકર્સ";
-
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "ટ્રેકિંગ રક્ષણ";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "રદ કરો";

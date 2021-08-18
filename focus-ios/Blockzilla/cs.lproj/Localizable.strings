@@ -29,9 +29,6 @@
 "About.safariBullet1" = "Blokujte sledovací prvky pro zvýšení soukromí";
 
 /* Label on About screen */
-"About.safariBullet2" = "Blokujte webové fonty pro zmenšení velikosti stránky";
-
-/* Label on About screen */
 "About.safariBulletHeader" = "Používejte ho jako rozšíření Safari:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -298,15 +295,6 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Automatické doplňování URL adres";
 
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Blokování ostatních sledovacích prvků může rozbít některá videa a webové stránky.";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Ne, děkuji";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Rozumím";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ bude odesílat text zadávaný to adresního řádku vyhledávači.";
 
@@ -381,33 +369,6 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "ZABEZPEČENÍ";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Blokovat sledující reklamy";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Některé reklamy sledují návštěvy stránek i v případě, že na reklamy nekliknete";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Blokovat analytické prvky";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Slouží k shromažďování, analýze a měření aktivit jako je klepnutí nebo posouvání";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Blokovat webové fonty";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Blokovat ostatní sledovací prvky";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Zapnutí může způsobit, že se některé stránky budou chovat neočekávaně";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Blokovat sledovací prvky sociálních sítí";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Vloženo do stránek pro sledování vašich návštěv a zobrazování funkcí jako tlačítka pro sdílení";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Použít Face ID pro odemčení aplikace";
@@ -525,12 +486,6 @@
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Zakázat, dokud nezavřete aplikaci %@ nebo nekliknete na VYMAZAT.";
-
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Ochrana proti sledování";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Zvolte, zda má %@ blokovat reklamy, analytické prvky, sociální sítě a jiné sledovací prvky.";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Přidat tuto stránku mezi našeptávané";

@@ -1,15 +1,18 @@
-/* (No Comment) */
+/* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Hiermit können Sie Fotos machen und hochladen.";
 
-/* (No Comment) */
+/* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Hiermit können Sie die App entsperren.";
 
-/* (No Comment) */
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Von Ihnen besuchte Websites können Ihren Standort abfragen.";
 
-/* (No Comment) */
+/* Privacy - Microphone Usage Description */
 "NSMicrophoneUsageDescription" = "Hiermit können Sie Videos aufnehmen und hochladen.";
 
-/* (No Comment) */
+/* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Hiermit können Sie Fotos speichern und hochladen.";
+
+/* This is the menu item that appears when you long press the Focus icon on the phone home screen. */
+"UIApplicationShortcutItemTitle.EraseAndOpen" = "Löschen und öffnen";
 

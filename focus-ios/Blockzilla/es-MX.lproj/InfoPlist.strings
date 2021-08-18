@@ -1,15 +1,15 @@
-/* (No Comment) */
+/* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Esto te permite tomar y subir fotos.";
 
-/* (No Comment) */
+/* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Esto te permite desbloquear la aplicación.";
 
-/* (No Comment) */
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Los sitios web que visitas pueden pedir tu ubicación.";
 
-/* (No Comment) */
+/* Privacy - Microphone Usage Description */
 "NSMicrophoneUsageDescription" = "Esto te permite grabar y subir videos.";
 
-/* (No Comment) */
+/* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Esto te permite guardar y actualizar tus fotos.";
 

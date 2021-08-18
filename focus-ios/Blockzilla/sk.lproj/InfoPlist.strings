@@ -1,15 +1,15 @@
-/* (No Comment) */
+/* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Toto umožňuje vytvárať a odosielať fotografie.";
 
-/* (No Comment) */
+/* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Toto vám umožňuje odomknúť aplikáciu.";
 
-/* (No Comment) */
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Stránky, ktoré navštevujete, môžu požiadať o prezradenie vašej polohy.";
 
-/* (No Comment) */
+/* Privacy - Microphone Usage Description */
 "NSMicrophoneUsageDescription" = "Toto umožňuje tvoriť a nahrávať videá.";
 
-/* (No Comment) */
+/* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Toto umožňuje ukladať a nahrávať fotografie.";
 

@@ -2,7 +2,7 @@
 "About.learnMoreButton" = "מידע נוסף";
 
 /* Label on About screen */
-"About.missionLabel" = "\u200f%@ פותח על־ידי Mozilla. המשימה שלנו היא לטפח רשת אינטרנט פתוחה ובריאה.";
+"About.missionLabel" = "u200f%@ פותח על־ידי Mozilla. המשימה שלנו היא לטפח רשת אינטרנט פתוחה ובריאה.";
 
 /* Label on About screen */
 "About.privateBullet1" = "חיפוש וגלישה ישירות מהיישום";
@@ -29,22 +29,25 @@
 "About.safariBullet1" = "חסימת רכיבי מעקב, לפרטיות מוגברת";
 
 /* Label on About screen */
-"About.safariBullet2" = "חסימת גופני רשת כדי לצמצם את משקל הדף";
-
-/* Label on About screen */
 "About.safariBulletHeader" = "שימוש כהרחבה עבור Safari:";
-
-/* (No Comment) */
-"About.screenTitle" = "אודות";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
 "About.title" = "על אודות %@";
 
 /* Label on About screen */
-"About.topLabel" = "\u200f%@ שם אותך בשליטה.";
+"About.topLabel" = "u200f%@ שם אותך בשליטה.";
 
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "פתיחה ב־%@";
+
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "אישור";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "אירעה תקלה בעת הוספת הססמה לארנק. נא לנסות שוב מאוחר יותר.";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "הוספת הססמה נכשלה";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "עליך לעבור אימות כדי לחזור אל %@";
@@ -269,7 +272,7 @@
 "Safari.instructionsEnable" = "הפעלת %@";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
-"Safari.instructionsNotEnabled" = "\u200f%@ לא מופעל.";
+"Safari.instructionsNotEnabled" = "u200f%@ לא מופעל.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "פתחו את היישום הגדרות";
@@ -283,17 +286,17 @@
 /* Label for enable option on search suggestions prompt */
 "SearchSuggestions.promptEnable" = "כן";
 
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "כדי לקבל הצעות, על %@ לשלוח מה שמוקלד בשורת הכתובת אל מנוע החיפוש.";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "להציג הצעות חיפוש?";
+
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "השלמת כתובת אוטומטית";
 
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "חסימת רכיבי מעקב אחרים עלולה לשבש את פעילותם של דפי אינטרנט ומספר סרטונים.";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "לא, תודה";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "הבנתי";
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "‏%@ ישלח מה שיוקלד בשורת הכתובת אל מנוע החיפוש שלך.";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla חותרת לאסוף רק מה שנדרש לצורך שיפור %@ לטובת הכלל.";
@@ -367,38 +370,11 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "אבטחה";
 
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "חסימת מעקב פרסומות";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "ישנן פרסומות העוקבות אחרי ביקורים באתרים, גם אם לא לוחצים על הפרסומות";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "חסימת מעקב של כלי ניתוח";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "משמש לאיסוף, ניתוח ומדידת פעילויות כמו הקשה וגלילה";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "חסימת גופני רשת";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "חסימת מעקב תוכן אחר";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "הפעלת אפשרות זו עשויה לגרום למספר דפים להתנהג בצורה לא צפויה";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "חסימת רכיבי מעקב חברתיים";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "מוטמעים באתרים כדי לעקוב אחר הביקורים שלך ולהציג תכונות כגון כפתורי שיתוף";
-
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "שימוש ב־Face ID כדי לשחרר את נעילת היישומון";
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
-"Settings.toggleFaceIDDescription" = "\u200fFace ID יכול לשחרר את הנעילה של %@ אם כתובת אתר כבר פתוחה ביישומון";
+"Settings.toggleFaceIDDescription" = "u200fFace ID יכול לשחרר את הנעילה של %@ אם כתובת אתר כבר פתוחה ביישומון";
 
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "הצגת עצות במסך הבית";
@@ -416,10 +392,7 @@
 "Settings.toggleTouchID" = "שימוש ב־Touch ID כדי לשחרר את נעילת היישומון";
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
-"Settings.toggleTouchIDDescription" = "\u200fTouch ID יכול לשחרר את הנעילה של %@ אם כתובת אתר כבר פתוחה ביישומון";
-
-/* URL for the learn more of the send usage data toggle */
-"Settings.usageData" = "usage-data";
+"Settings.toggleTouchIDDescription" = "u200fTouch ID יכול לשחרר את הנעילה של %@ אם כתובת אתר כבר פתוחה ביישומון";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "מה חדש";
@@ -439,14 +412,14 @@
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "קבלו את Firefox";
 
-/* Text for the share menu option when a user wants to open a page in Focus. */
-"ShareMenu.OpenInFocus" = "פתיחה ב־%@";
-
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "פעולות דף";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "בקשת אתר שולחני";
+
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "בקשת אתר מותאם לנייד";
 
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "פתיחה ב־Chrome";
@@ -511,12 +484,6 @@
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "ניטרול עד לסגירת %@ או לחיצה על מחיקה.";
 
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "הגנת מעקב";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "ניתן לבחור האם לחסום פרסומות, ניתוחי מידע, שירותים חברתיים ושאר רכיבי מעקב ב־%@.";
-
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "הוספת קישור להשלמה אוטומטית";
 
@@ -530,7 +497,7 @@
 "URL.eraseButtonLabel" = "מחיקה";
 
 /* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "היסטוריית הגלישה שלך נמחקה.";
+"URL.eraseMessageLabel2" = "היסטוריית הגלישה נמחקה";
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "חיפוש בדף: %@";

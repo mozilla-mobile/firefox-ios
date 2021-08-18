@@ -29,9 +29,6 @@
 "About.safariBullet1" = "ကိုယ်ရေးလုံခြုံမှု ပိုမိုကောင်းမွန်စေရန် နောက်ယောင်ခံကိရိယာများကို ပိတ်ပါ";
 
 /* Label on About screen */
-"About.safariBullet2" = "စာမျက်နှာ ဖိုင်အရွယ်အစားကို လျှော့ချရန် ဝဘ်ဖောင့်အသုံးပြုခြင်းကို ပိတ်ပါ";
-
-/* Label on About screen */
 "About.safariBulletHeader" = "Safari extension အနေနှင့် အသုံးပြုပါ။";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -298,15 +295,6 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "URL အလိုအလျှောက်ဖြည့်စွက်";
 
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "အခြား အကြောင်းအရာနောက်ယောင်ခံကိရိယာများကို ပိတ်ခြင်းသည် အချို့သော ဗီဒီယိုများနှင့် ဝဘ်စာမျက်နှာများကို ကောင်းမွန်စွာ လုပ်ဆောင်နိုင်စေမည် မဟုတ်ပါ။";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "မလိုပါ၊ ကျေးဇူးတင်ပါသည်။";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "နားလည်သဘောပေါက်ပါသည်";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ သည် လိပ်စာဘားတန်းတွင် ရိုက်သမျှကို ရှာဖွေရေးယန္တရားသို့ ပေးပို့ပါမည်။";
 
@@ -381,33 +369,6 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "SECURITY";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "ကြော်ငြာနောက်ယောက်ခံ ကိရိယာများကို ပိတ်ပင်ပါ";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "အချို့သော ကြော်ငြာများသည် ၎င်းတို့ကို ကလစ်နှိပ်ခြင်း မပြုလုပ်ပါပဲနှင့် ဆိုက်များကြည့်ရှုခြင်းကို မှတ်သားသည်။";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "သရုပ်ခွဲလေ့လာသည့် နောက်ယောင်ခံကိရိယာများကို ပိတ်ပင်ပါ";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "တို့ထိခြင်း၊ အထက်/အောက်ရွှေ့ခြင်း စသည့် လှုပ်ရှားမှုများကို စုဆောင်းရန်၊ ပိုင်းခြားစိတ်ဖြာရန်နှင့် တိုင်းတာရန်အတွက် အသုံးပြုသည်။";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "ဝဘ်ဖောင့်များကို ပိတ်ပင်ပါ";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "အခြားသော အကြောင်းအရာနောက်ယောက်ခံကိရိယာများကို ပိတ်ပင်ပါ";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "လုပ်ဆောင်ချက်ကို ဖွင့်လိုက်ခြင်းသည် အချို့သော ဝဘ်စာမျက်နှာများ၏ လုပ်ဆောင်ချက်များကို ထိခိုက်စေနိုင်သည်။";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "လူမှုမီဒီယာ နောက်ယောင်ခံကိရိယာများကို ပိတ်ပင်ပါ";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "ဝဘ်ဆိုက်များတွင် မြှုပ်ထည့်ထားခြင်းသည် လည်ပတ်ခြင်းကို မှတ်သားရန်နှင့် မျှဝေခလုတ်များကဲသို့ လုပ်ဆောင်မှုများကို ပြသရန်အတွက် ဖြစ်သည်။";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "အက်ပ်ဖွင့်ရန် မျက်နှာအိုင်ဒီကိုသုံးပါ";
@@ -525,12 +486,6 @@
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "%@ ကို မပိတ်သေးသ၍ သို့မဟုတ် ERASE ကို မနှိပ်သေးသ၍ လုပ်ဆောင်ချက်ကို ပိတ်ထားပါ။";
-
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "ခြေရာခံ ကာကွယ်မှု";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "%@ သည် မည်သည့် ကြော်ငြာ၊ သရုပ်ခွဲ၊ လူမှုဆိုင်ရာနှင့် အခြားသော နောက်ယောင်ခံ ကိရိယာများကို ပိတ်ရမည်ဆိုတာ ရွေးချယ်ပါ။";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "အလိုအလျက်ဖြည့်ရန် လင့်ခ်ကို ထည့်ပေးပါ";

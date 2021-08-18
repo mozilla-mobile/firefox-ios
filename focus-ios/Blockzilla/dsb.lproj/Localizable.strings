@@ -29,9 +29,6 @@
 "About.safariBullet1" = "Blokěrujśo pśeslědowaki za pólěpšonu priwatnosć";
 
 /* Label on About screen */
-"About.safariBullet2" = "Blokěrujśo webpisma, aby wjelikosć boka reducěrował";
-
-/* Label on About screen */
 "About.safariBulletHeader" = "Wužywajśo jen ako rozšyrjenje za Safari:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -42,6 +39,15 @@
 
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "W %@ wócyniś";
+
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "W pórěźe";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "Pśi pśidawanju pasa listowce jo zmólka nastała. Pšosym wopytajśo pózdźej hyšći raz.";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "Pas njedajo se pśidaś";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "Awtentificěrujśo, aby k %@ wrośił";
@@ -298,15 +304,6 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Awtomatiske wudopołnjenje URL";
 
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Blokěrowanje drugich pśeslědowaki móžo někotare wideo a webboki kazyś.";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Ně, źěkujom se";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Rozmějom";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ se na wašu pytnicu pósćelo, což w adresowem pólu zapódajośo.";
 
@@ -381,33 +378,6 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "WĚSTOTA";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Wabjeńske pśeslědowaki blokěrowaś";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Někotare wabjeńske anonse woglědy sedłow slěduju, samo gaby wy na anonse njekliknuł";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Analyzowe pśeslědowaki blokěrowaś";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Z tym se aktiwity ako pótuskowanje a kulanje pśez boki gromaźe, analyzěruju a měrje";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Webpisma blokěrowaś";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Druge wopśimjeśowe pśeslědowaki blokěrowaś";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "To móžo wjasć k tomu, až se někotare boki njewšednje zaźarže";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Socialne pśeslědowaki blokěrowaś";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Na sedłach zasajźone, aby wóne waše woglědy slědowali a funkcije ako tłocaški za źělenje zwobraznili";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Face ID za wótwórjanje nałoženja wužywaś";
@@ -526,12 +496,6 @@
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Znjemóžniś, daniž %@ njezacynjaśo abo pótusniśo ERASE.";
 
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Šćit pśed slědowanim";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Rozsuźćo, lěc %@ wabjenje, analytiske, socialne a druge pśeslědowaki blokěrujo.";
-
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Wótkaz za awtowudopołnjenje pśidaś";
 
@@ -543,6 +507,9 @@
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "WULAŠOWAŚ";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "Pśeglědowańska historija jo se wulašowała";
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Na boku pytaś: %@";

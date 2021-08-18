@@ -29,9 +29,6 @@
 "About.safariBullet1" = "Bloquear rastreadores para melhorar a privacidade";
 
 /* Label on About screen */
-"About.safariBullet2" = "Bloquear fontes web para reduzir o tamanho da página";
-
-/* Label on About screen */
 "About.safariBulletHeader" = "Usá-lo como uma extensão do Safari:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -42,6 +39,15 @@
 
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Abrir com %@";
+
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "Ok";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "Ocorreu um erro ao adicionar a senha no Wallet. Tente novamente mais tarde.";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "Falha ao adicionar senha";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "Faça a autenticação para retornar ao %@";
@@ -298,15 +304,6 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Preenchimento automático de URL";
 
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "O bloqueio de outros rastreadores pode quebrar alguns vídeos e páginas da Web.";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Não, obrigado";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Eu compreendo";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "O %@ enviará o que você escreve na barra de endereços para seu mecanismo de pesquisa.";
 
@@ -381,33 +378,6 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "SEGURANÇA";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Bloquear rastreadores de anúncios";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Alguns anúncios rastreiam visitas ao site, mesmo que você não clique nos anúncios";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Bloquear rastreadores analíticos";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Usado para coletar, analisar e medir atividades como tocar e deslizar";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Bloquear fontes web";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Bloquear outros rastreadores";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Ativar pode causar comportamento inesperado em algumas páginas";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Bloquear rastreadores sociais";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Inserido em sites para rastrear suas visitas e exibir funcionalidades como botões de compartilhamento";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Utilizar Face ID para desbloquear o aplicativo";
@@ -526,12 +496,6 @@
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Desabilitar até você fechar o %@ ou tocar em APAGAR.";
 
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Proteção contra rastreamento";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Escolha se o %@ bloqueará rastreadores sociais, analíticos, de propaganda ou outros.";
-
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Adicionar link para completar automaticamente";
 
@@ -543,6 +507,9 @@
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "APAGAR";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "Histórico de navegação foi limpo";
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Procurar na página: %@";

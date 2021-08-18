@@ -29,9 +29,6 @@
 "About.safariBullet1" = "Спирайте проследяването за подобрена поверителност";
 
 /* Label on About screen */
-"About.safariBullet2" = "Спирайте зареждането на шрифтове за по-малък мрежов трафик";
-
-/* Label on About screen */
 "About.safariBulletHeader" = "Използвайте като разширение на Safari:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -298,15 +295,6 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Автоматично довършване на адреси";
 
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Спирането на други проследяващи елементи може да развали показването на някои видеота и уеб страници.";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Не, благодаря";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Разбирам";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ ще изпраща към търсачката всичко, каквото въвеждате в адресната лента.";
 
@@ -381,33 +369,6 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "ЗАЩИТА";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Спиране на проследяването от реклами";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Някои реклами проследяват посещенията, даже и да не натискате върху тях";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Спиране на проследяването за анализи";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Използва се, за да се събират, анализират и измерват дейности като докосване и плъзгане";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Спиране на уеб шрифтовете";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Спиране на следене през друго съдържание";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Активирането може да предизвика неочаквано поведение на някои страници";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Спиране на проследяването от социалните мрежи";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Вградени в сайтове, за да ви проследява и да показва функционални елементи, като например бутони за споделяне";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Използване на лицево разпознаване за отключване на приложението";
@@ -525,12 +486,6 @@
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Изключване до затварянето на %@ или докосването на ИЗЧИСТВАНЕ.";
-
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Защита от проследяване";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Избиране дали %@ да спира проследяването от реклами, анализи, социални мрежи или други.";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Добавяне на препратката към автоматичното довършване";

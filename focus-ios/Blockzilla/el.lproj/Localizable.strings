@@ -29,9 +29,6 @@
 "About.safariBullet1" = "Αποκλείστε trackers για βελτιωμένο απόρρητο";
 
 /* Label on About screen */
-"About.safariBullet2" = "Αποκλείστε τις γραμματοσειρές ιστού για μείωση μεγέθους σελίδας";
-
-/* Label on About screen */
 "About.safariBulletHeader" = "Χρησιμοποιήστε το ως επέκταση του Safari:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -42,6 +39,9 @@
 
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Άνοιγμα σε %@";
+
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "OK";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "Πιστοποίηση για επιστροφή στο %@";
@@ -298,15 +298,6 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Αυτόματη συμπλήρωση URL";
 
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Η φραγή των trackers άλλου περιεχομένου ενδέχεται να χαλάσει μερικά βίντεο και ιστοσελίδες.";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Όχι, ευχαριστώ";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Καταλαβαίνω";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "Το %@ θα στείλει ό,τι πληκτρολογείτε στη γραμμή διευθύνσεων στη μηχανή αναζήτησης.";
 
@@ -381,33 +372,6 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "ΑΣΦΑΛΕΙΑ";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Φραγή trackers διαφημίσεων";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Ορισμένες διαφημίσεις παρακολουθούν τις επισκέψεις στον ιστότοπο, ακόμη και αν δεν κάνετε κλικ στις διαφημίσεις";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Φραγή trackers αναλύσεων";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Χρησιμοποιούνται για συλλογή, ανάλυση και μέτρηση δραστηριοτήτων, όπως πάτημα και κύλιση";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Φραγή γραμματοσειρών ιστού";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Φραγή trackers άλλου περιεχομένου";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Η ενεργοποίηση ενδέχεται να προκαλέσει απροσδόκητη συμπεριφορά σε ορισμένες σελίδες";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Φραγή κοινωνικών trackers";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Ενσωματώνονται σε ιστοσελίδες για καταγραφή επισκέψεων και προβολή λειτουργιών, όπως κουμπιά κοινοποίησης";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Χρήση Face ID για ξεκλείδωμα εφαρμογής";
@@ -525,12 +489,6 @@
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Απενεργοποίηση μέχρι να κλείσετε το %@ ή να πατήσετε ΔΙΑΓΡΑΦΗ.";
-
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Προστασία από παρακολούθηση";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Επιλέξτε αν το %@ θα αποκλείει διαφημιστικούς, αναλυτικούς, κοινωνικούς και άλλους ιχνηλάτες.";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Προσθήκη συνδέσμου για αυτόματη συμπλήρωση";

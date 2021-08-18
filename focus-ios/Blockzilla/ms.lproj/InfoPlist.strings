@@ -1,15 +1,15 @@
-/* (No Comment) */
+/* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Ciri ini membolehkan anda mengambil dan memuat naik foto.";
 
-/* (No Comment) */
+/* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Ini membolehkan anda membuka aplikasi.";
 
-/* (No Comment) */
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Laman web yang anda lawati mungkin meminta lokasi anda.";
 
-/* (No Comment) */
+/* Privacy - Microphone Usage Description */
 "NSMicrophoneUsageDescription" = "Ciri ini membolehkan anda mengambil dan memuat naik video.";
 
-/* (No Comment) */
+/* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Ciri ini membolehkan anda menyimpan dan memuat naik foto.";
 

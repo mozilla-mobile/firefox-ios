@@ -1,15 +1,15 @@
-/* (No Comment) */
+/* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "ဓါတ်ပုံရိုက်ခြင်းနှင့် တင်ပို့ခြင်းတို့ကို ဆောင်ရွက်နိုင်စေသည်။";
 
-/* (No Comment) */
+/* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "၎င်းသည် သင့်အက်ပ်ကို ပွင့်စေသည်";
 
-/* (No Comment) */
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "သင်ကြည့်ရှုနေသော ဝဘ်ဆိုက်များသည် သင့်တည်နေရာကို တောင်းဆိုကောင်း တောင်းဆိုပါလိမ့်မည်။";
 
-/* (No Comment) */
+/* Privacy - Microphone Usage Description */
 "NSMicrophoneUsageDescription" = "ဗီဒီယိုရိုက်ခြင်းနှင့် တင်ပို့ခြင်းတို့ကို ဆောင်ရွက်နိုင်စေသည်။";
 
-/* (No Comment) */
+/* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "ဓါတ်ပုံသိမ်းခြင်းနှင့် တင်ပို့ခြင်းတို့ကို ဆောင်ရွက်နိုင်စေသည်။";
 

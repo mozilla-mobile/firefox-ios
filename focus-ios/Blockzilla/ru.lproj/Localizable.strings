@@ -29,9 +29,6 @@
 "About.safariBullet1" = "Блокируйте трекеры для повышения приватности";
 
 /* Label on About screen */
-"About.safariBullet2" = "Блокируйте веб-шрифты для уменьшения размера страниц";
-
-/* Label on About screen */
 "About.safariBulletHeader" = "Используйте его как расширение Safari:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -42,6 +39,15 @@
 
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Открыть в %@";
+
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "Ок";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "При добавлении пароля в Wallet произошла ошибка. Пожалуйста, попробуйте снова.";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "Не удалось добавить пароль";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "Аутентифицируйтесь для возврата в %@";
@@ -110,7 +116,7 @@
 "Autocomplete.topSites" = "Топ сайтов";
 
 /* Create a new session after failing a biometric check */
-"BiometricPrompt.newSession" = "Новая сессия";
+"BiometricPrompt.newSession" = "Новый сеанс";
 
 /* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
 "BiometricPrompt.reason" = "Блокируйте %@, при открытии его заново, чтобы предотвратить доступ посторонних.";
@@ -298,15 +304,6 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "URL-адрес автодополнения";
 
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Блокирование других трекеров содержимого может нарушить работу некоторых видео и веб-страниц.";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Нет, спасибо";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Я понимаю";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ будет отправлять в поисковую систему то, что вы вводите в адресной строке.";
 
@@ -381,33 +378,6 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "БЕЗОПАСНОСТЬ";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Блокировать трекеры рекламы";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Некоторая реклама отслеживает посещения сайтов, даже если вы на неё не нажимали";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Блокировать трекеры аналитики";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Используются для сбора, анализа и измерения активности, например, нажатий и скроллинга";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Блокировать веб-шрифты";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Блокировать другие трекеры содержимого";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Включение этой функции может вызвать непредсказуемое поведение некоторых страниц";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Блокировать социальные трекеры";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Вставляются на сайты, чтобы отслеживать ваши посещения и внедрять дополнительную функциональность, например, кнопку «Поделиться»";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Использовать Face ID для разблокировки приложения";
@@ -526,12 +496,6 @@
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Отключить, пока вы не закроете %@ или нажмёте СТЕРЕТЬ.";
 
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Защита от отслеживания";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Выберите, будет ли %@ блокировать рекламные, аналитические, социальные и другие трекеры.";
-
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Добавить ссылку для автодополнения";
 
@@ -543,6 +507,9 @@
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "СТЕРЕТЬ";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "История веб-сёрфинга удалена";
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Найти на странице: %@";

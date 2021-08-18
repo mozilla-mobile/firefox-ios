@@ -29,9 +29,6 @@
 "About.safariBullet1" = "Sekat penjejak untuk privasi yang lebih baik";
 
 /* Label on About screen */
-"About.safariBullet2" = "Sekat fon Web untuk mengurangkan saiz halaman";
-
-/* Label on About screen */
 "About.safariBulletHeader" = "Gunakan sebagai ekstensi Safari:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -298,15 +295,6 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Auto-lengkap URL";
 
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Penyekatan penjejak kandungan lain boleh mengganggu sesetengah kandungan video dan laman Web.";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Tidak, Terima kasih";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Saya Faham";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ akan menghantar apa yang anda taip dalam bar alamat ke enjin carian.";
 
@@ -381,33 +369,6 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "SEKURITI";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Sekat penjejak iklan";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Sesetengah iklan menjejaki lawatan anda dalam laman, walaupun anda tidak klik iklan ini";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Sekat penjejak analitik";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Digunakan untuk mengumpul, menganalisis dan menilai aktiviti, seperti klik dan skrol";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Sekat fon Web";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Sekat penjejak kandungan lain";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Sesetengah halaman mungkin tidak berfungsi dengan sempurna jika ciri ini diaktifkan";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Sekat penjejak sosial";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Disisipkan di dalam laman untuk menjejaki lawatan anda dan memaparkan fungsi seperti butang kongsi";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Guna ID Muka untuk membuka aplikasi";
@@ -519,12 +480,6 @@
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Nyahdayakan sehingga anda tutup %@ atau tekan BUANG.";
-
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Perlindungan Penjejakan";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Pilih sama ada %@ menyekat iklan, analitik, sosial dan penjejak lain.";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Tambah pautan ke autolengkap";

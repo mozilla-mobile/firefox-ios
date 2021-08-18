@@ -1,15 +1,15 @@
-/* (No Comment) */
+/* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Αυτό σάς επιτρέπει να τραβάτε και να μεταφορτώνετε φωτογραφίες.";
 
-/* (No Comment) */
+/* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Σάς επιτρέπει να ξεκλειδώσετε την εφαρμογή.";
 
-/* (No Comment) */
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Οι ιστοσελίδες που επισκέπτεστε ενδέχεται να ζητήσουν την τοποθεσία σας.";
 
-/* (No Comment) */
+/* Privacy - Microphone Usage Description */
 "NSMicrophoneUsageDescription" = "Αυτό σάς επιτρέπει να τραβάτε και να μεταφορτώνετε βίντεο.";
 
-/* (No Comment) */
+/* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Αυτό σάς επιτρέπει να αποθηκεύετε και να μεταφορτώνετε φωτογραφίες.";
 

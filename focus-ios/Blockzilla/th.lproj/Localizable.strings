@@ -29,9 +29,6 @@
 "About.safariBullet1" = "ปิดกั้นตัวติดตามเพื่อความเป็นส่วนตัวที่เพิ่มขึ้น";
 
 /* Label on About screen */
-"About.safariBullet2" = "ปิดกั้นแบบอักษรเว็บเพื่อลดขนาดหน้า";
-
-/* Label on About screen */
 "About.safariBulletHeader" = "ใช้เป็นส่วนขยาย Safari:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -42,6 +39,15 @@
 
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "เปิดใน %@";
+
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "ตกลง";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "เกิดข้อผิดพลาดขณะเพิ่มบัตรผ่านไปยัง Wallet โปรดลองอีกครั้งในภายหลัง";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "ไม่สามารถเพิ่มบัตรผ่าน";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "รับรองความถูกต้องเพื่อกลับสู่ %@";
@@ -298,15 +304,6 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "การเติม URL อัตโนมัติ";
 
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "การปิดกั้นตัวติดตามของเนื้อหาอื่น ๆ อาจทำให้วิดีโอและหน้าเว็บบางส่วนไม่สมบูรณ์";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "ไม่ ขอบคุณ";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "ฉันเข้าใจ";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ จะส่งสิ่งที่คุณพิมพ์ในแถบที่อยู่ไปยังเครื่องมือค้นหาของคุณ";
 
@@ -381,33 +378,6 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "ความปลอดภัย";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "ปิดกั้นตัวติดตามของโฆษณา";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "โฆษณาบางตัวติดตามการเยี่ยมชมไซต์ แม้ว่าคุณไม่ได้คลิกโฆษณา";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "ปิดกั้นตัวติดตามของการวิเคราะห์";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "ใช้เพื่อเก็บรวบรวม วิเคราะห์ และวัดกิจกรรมอย่างการแตะและการเลื่อน";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "ปิดกั้นแบบอักษรเว็บ";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "ปิดกั้นตัวติดตามของเนื้อหาอื่น ๆ";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "การเปิดใช้งานอาจส่งผลให้หน้าบางส่วนทำงานอย่างไม่คาดคิด";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "ปิดกั้นตัวติดตามทางสังคม";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "ฝังอยู่ในไซต์เพื่อติดตามการเยี่ยมชมของคุณและแสดงผลฟังก์ชันอย่างปุ่มแบ่งปัน";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "ใช้ Face ID เพื่อปลดล็อคแอป";
@@ -526,12 +496,6 @@
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "ปิดใช้งานจนกระทั่งคุณปิด %@ หรือแตะ ล้าง";
 
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "การป้องกันการติดตาม";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "เลือกว่าจะให้ %@ ปิดกั้นตัวติดตามของโฆษณา, การวิเคราะห์, สังคม และอื่น ๆ หรือไม่";
-
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "เพิ่มลิงก์ไปยังการเติมอัตโนมัติ";
 
@@ -543,6 +507,9 @@
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "ล้าง";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "ล้างประวัติการท่องเว็บแล้ว";
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "ค้นหาในหน้า: %@";

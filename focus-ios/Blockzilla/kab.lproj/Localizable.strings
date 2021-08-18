@@ -29,9 +29,6 @@
 "About.safariBullet1" = "Sewḥel inedfaṛen i ugar n tudert tusligt";
 
 /* Label on About screen */
-"About.safariBullet2" = "Sewḥel tisefsiyin web akken ad ifsusen isebtar";
-
-/* Label on About screen */
 "About.safariBulletHeader" = "Seqdec-it am usiɣzef Safari:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -298,15 +295,6 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Taččart tawurmant URL";
 
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Asewḥel n ineḍfaṛen nniḍen n ugbur yezmer ad isewḥel kra n tvidyutin akked isebtar web ad d-banen akken iwata.";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Ala, tanemmirt";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Gziɣ";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ ad ak-n-yazen tawsit-inek deg ufeggag n tansiwin ɣer umsedday-inek n unadi.";
 
@@ -381,33 +369,6 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "TAƔELLIST";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Sewḥel inedfaṛen";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Kra n udellel iṭṭafaṛ tirza inek γer izmal web, Γas ur tsit ara γef udellel";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Sewḥel inedfaṛen usliḍen";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Ittwaseqdec i welqqaḍ , Aslaḍ d uktili n wamud am usekcem n isekillen akked usenned";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Sewḥel tisefsiyin Web";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Sewḥel ineḍfaṛen nniḍen n ugbur";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Armad n uγwwaṛèagi izmer ad yeglu s kra n wuguren di kra n isebtar";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Sewḥel inedfaṛen n tmetti";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Ittwarna deg kra n ismal akken ad isfuγel tirziwin inek , akken daγen ad d-yesken timahaltin am tqefalt n beṭṭu";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Seqdec Face ID akken ad tserḥeḍ i usnas";
@@ -525,12 +486,6 @@
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Sens armi yemdel neɣ mdel %@ neɣ ERASE.";
-
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Ammesten mgal asfuɣel";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Fren asewḥel n uzegrir %@, n waddad, imettiyen d ineḍfaṛen nniḍen.";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Rnu aseɣwen i taččart tawurmant";

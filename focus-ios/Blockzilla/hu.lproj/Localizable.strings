@@ -29,9 +29,6 @@
 "About.safariBullet1" = "Blokkolja a követőket a nagyobb magánszféra érdekében";
 
 /* Label on About screen */
-"About.safariBullet2" = "Blokkolja a webes betűkészleteket az oldalméret csökkentése érdekében";
-
-/* Label on About screen */
 "About.safariBulletHeader" = "Használja Safari bővítményként:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -42,6 +39,15 @@
 
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Megnyitás ezzel: %@";
+
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "Rendben";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "Hiba történt a jegy Wallethez adása során. Próbálja újra később.";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "A jegy hozzáadása sikertelen";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "Hitelesítsen a %@hoz visszatéréshez";
@@ -298,15 +304,6 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Automatikus URL kiegészítés";
 
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "A többi tartalomkövető blokkolása eltörhet bizonyos videókat és weblapokat.";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Nem, köszönöm";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Értem";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "A %@ elküldi a címsávba írt szöveget a keresőszolgáltatásának.";
 
@@ -381,33 +378,6 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "BIZTONSÁG";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Reklámkövetők blokkolása";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Néhány hirdetés követi az oldallátogatásokat, még akkor is, ha nem kattint a hirdetésekre";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Analitikai követők blokkolása";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Arra használatosak, hogy begyűjtsék, elemezzék és mérjék az olyan tevékenységeket, mint az érintés vagy a görgetés";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Webes betűkészletek blokkolása";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Más tartalomkövetők blokkolása";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Az engedélyezés néhány oldalon váratlan működést okozhat";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Közösségi oldalak követőinek blokkolása";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Az oldalakba vannak ágyazva, hogy kövessék a látogatásait, és megosztás gombokat jelenítsenek meg";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Face ID használata az alkalmazás kinyitásához";
@@ -526,12 +496,6 @@
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Letiltás a %@ bezárásáig, vagy megérinti a TÖRLÉS gombot.";
 
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Követés elleni védelem";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Válassza ki, hogy a %@ blokkolja-e a reklám, analitikai, közösségi vagy más követőket.";
-
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Hivatkozás hozzáadása az automatikus kiegészítéshez";
 
@@ -543,6 +507,9 @@
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "TÖRLÉS";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "Böngészési előzmények törölve";
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Keresés az oldalon: %@";

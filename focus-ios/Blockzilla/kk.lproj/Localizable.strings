@@ -29,9 +29,6 @@
 "About.safariBullet1" = "Жекелікті арттыру үшін трекерлерді блоктаңыз";
 
 /* Label on About screen */
-"About.safariBullet2" = "Парақтар өлшемдерін азайту үшін веб қаріптерін блоктаңыз";
-
-/* Label on About screen */
 "About.safariBulletHeader" = "Оны Safari кеңейтуі ретінде қолданыңыз:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -298,15 +295,6 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "URL автотолықтыру";
 
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Басқа трекерлерді блоктау кейбір видео және веб парақтарының жұмысына кері әсерін тигізуі мүмкін.";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Жоқ, рахмет";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Мен түсінемін";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ сіз адрестік жолақта терген нәрсені сіздің іздеу жүйеңізге жіберетін болады.";
 
@@ -381,33 +369,6 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "ҚАУІПСІЗДІК";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Жарнама трекерлерін блоктау";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Кейбір жарналамалар сайт шолуды бақылайды, жарнамаларға шертпесеңіз де";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Аналитикалық трекерлерді блоктау";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Шерту және айналдыру әрекеттерін жинау, зерттеу және өлшеуге пайдаланылады";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Веб қаріптерін блоктау";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Басқа құрама трекерлерін блоктау";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Бұны іске қосу кейбір сайттардың мінез-құлығын күтпегендей өзгертеді";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Әлеуметтік желілер трекерлерін блоктау";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Шолуыңызды бақылау және бөлісу батырмалары сияқты мүмкіндіктерді көрсету мақсатымен сайттарға ендірілген";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Қолданбаны босату үшін Face ID қолданыңыз";
@@ -525,12 +486,6 @@
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "%@ жабу немесе ӨШІРУ шертуге дейін сөндіру.";
-
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Бақылаудан қорғаныс";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "%@ жарнама, аналитика, әлеуметтік және т.б. трекерлерді блоктау керектігін таңдаңыз.";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Автотолықтыру үшін сілтемені қосу";

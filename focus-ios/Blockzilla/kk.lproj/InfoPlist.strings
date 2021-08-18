@@ -1,15 +1,15 @@
-/* (No Comment) */
+/* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Бұл арқылы фотоларды түсіріп, жүктеуге болады.";
 
-/* (No Comment) */
+/* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Бұл көмегімен қолданбаны босата аласыз.";
 
-/* (No Comment) */
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Сіз ашатын веб-сайттар сізден орналасуыңызды сұрауы мүмкін.";
 
-/* (No Comment) */
+/* Privacy - Microphone Usage Description */
 "NSMicrophoneUsageDescription" = "Бұл арқылы видеоларды түсіріп, жүктеуге болады.";
 
-/* (No Comment) */
+/* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Бұл арқылы фотоларды сақтап, жүктеуге болады.";
 

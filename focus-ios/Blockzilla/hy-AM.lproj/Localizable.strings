@@ -29,9 +29,6 @@
 "About.safariBullet1" = "Արգելափակել հետագծումները՝ գաղտնիությունը լավարկելու համար";
 
 /* Label on About screen */
-"About.safariBullet2" = "Արգելափակել վեբ տառատեսակները՝ էջի չափը նվազեցնելու համար";
-
-/* Label on About screen */
 "About.safariBulletHeader" = "Օգտագործել որպես Safari-ի ընդլայնում.";
 
 /* Label on About screen */
@@ -226,15 +223,6 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "URL ինքնալրացում";
 
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Բովանդակության այլ հետագծումների արգելափակումը կարող է ընդհատել որոշ տեսանյութեր և վեբ էջեր:";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Ոչ, շնորհակալ եմ";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Ես հասկանում եմ";
-
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla-ն ձգտում է հավաքել միայն այն, ինչ պետք է՝ %1$s-ը լավարկելու համար:";
 
@@ -295,33 +283,6 @@
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "ԳԱՂՏՆԻՈՒԹՅՈՒՆ";
 
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Արգելափակեք գովազդի հետագծումները";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Որոշ գովազդներ հետևում են կայքի այցելուներին, եթե անգամ չեք սեղմում գովազդին";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Արգելափակել վերլուծական հետագծումները";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Օգտագործվում է հավաքելու, վերլուծելու և ակտիվությունը չափելու համար, ինչպես օրինակ՝ հպումը և գլորումը:";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Արգելափակել վեբ տառատեսակները";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Արգելափակել այլ բովանդակության հետագծումները";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Միացնելու դեպքում որոշ էջեր կարող են անսպասելի վարք ցուցադրել";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Արգելափակել սոցիալական հետագծումները";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Ներկառուցված կայքերում՝ հետևելուհ ամար ձեր այցելուներին և ցուցադրելու համար գործառությունը, ինչպես օրինակ՝ կոճակների համօգտագործում";
-
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Կարող է ընդհատել որոշ տեսանյութեր և վեբ էջեր";
 
@@ -357,12 +318,6 @@
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Անջատել, մինչև կփակեք %@-ը կամ հպեք ՋՆՋԵԼ:";
-
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Հետագծման պաշտպանություն";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Ընտրեք՝ %@-ը արգելափակի գովազդը, վերլուծական, սոցիալական, թե այլ հետագծումները:";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Չեղարկել";

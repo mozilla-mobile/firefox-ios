@@ -29,9 +29,6 @@
 "About.safariBullet1" = "Gizliliğinizi artırmak için takipçileri engelleyebilirsiniz";
 
 /* Label on About screen */
-"About.safariBullet2" = "Sayfa boyutunu azaltmak için web fontlarını engelleyebilirsiniz";
-
-/* Label on About screen */
 "About.safariBulletHeader" = "Onu Safari uzantısı olarak kullanabilirsiniz:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -42,6 +39,15 @@
 
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "%@ ile aç";
+
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "Tamam";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "Kart Wallet’a eklenirken bir hata oluştu. Lütfen daha sonra yeniden deneyin.";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "Kart eklenemedi";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "%@’a dönmek için kimliğinizi doğrulayın";
@@ -298,15 +304,6 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Otomatik adres tamamlama";
 
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Diğer içerik takipçilerini engellemek bazı videoları ve web sayfalarını bozabilir.";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Vazgeçtim";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Anladım";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@, adres çubuğuna yazdıklarını arama motorunuza gönderecektir.";
 
@@ -381,33 +378,6 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "GÜVENLİK";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Reklam takipçilerini engelle";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Bazı reklamlar, siz onlara tıklamasanız bile ziyaret ettiğiniz siteleri takip eder";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Analitik takipçilerini engelle";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Dokunma ve kaydırma gibi etkinlikleri kaydetmek, çözümlemek ve ölçmek için kullanılır";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Web fontlarını engelle";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Diğer içerik takipçilerini engelle";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Bunu açarsanız bazı sayfalar olması gerektiği gibi çalışmayabilir";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Sosyal takipçileri engelle";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Sosyal medyada paylaşım düğmeleri, ziyaret ettiğiniz siteleri de takip eder";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Uygulamanın kilidini açmak için Face ID’yi kullan";
@@ -526,12 +496,6 @@
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "%@’u kapatana veya SİL’e basana kadar devre dışı bırak.";
 
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "İzlenme Koruması";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "%@’un reklam ve analitik takipçileri ile sosyal ve diğer takipçileri engelleyip engellemeyeceğini seçin.";
-
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Bağlantıyı otomatik tamamlamaya ekle";
 
@@ -543,6 +507,9 @@
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "SİL";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "Gezinti geçmişi temizlendi";
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Sayfada bul: %@";

@@ -29,9 +29,6 @@
 "About.safariBullet1" = "Blocar trazadors pa amillorar la privacidat";
 
 /* Label on About screen */
-"About.safariBullet2" = "Blocar las fuents web pa reducir la mida d'a pachina";
-
-/* Label on About screen */
 "About.safariBulletHeader" = "Usar-lo como una extensión de Safari";
 
 /* Label on About screen */
@@ -226,15 +223,6 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Autocompletar URL";
 
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Blocar atros trazadors de contenius puede fer que no s'amuestren bien bells videos u pachinas web.";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "No, gracias";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Comprendo";
-
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla s'esfuerza per replegar nomás lo necesario pa fornir y amillorar %@ pa totz.";
 
@@ -295,33 +283,6 @@
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "PRIVACIDAT";
 
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Blocar los trazadors publicitarios";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Bells anuncios fan seguimiento d'as visitas alo puesto, mesmo si no fas clic en os anuncios";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Bloca los trazadors analiticos";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Usaus pa replegar, analisar y medir actividatz como toques a la pantalla y desplazamientos de pantalles";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Blocar fuents de Web";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Bloca los trazadors d'atro conteniu";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Activar esta opción puede provocar problemas en bellas pachinas";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Bloca los trazadors socials";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Incrustaus en puestos web pa trazar las tuyas visitas y amostrar funcionalidatz coo los botons de compartición";
-
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Puede privar que se veigan bien bells videos y pachinas web";
 
@@ -357,12 +318,6 @@
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Desactivar dica que zarres %@ u toques BORRAR.";
-
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Protección contra o seguimiento";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Trigar si %@ bloca trazadors publicitarios, analiticos, socials u atros.";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Cancelar";

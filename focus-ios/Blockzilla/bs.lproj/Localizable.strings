@@ -29,9 +29,6 @@
 "About.safariBullet1" = "Blokiraj tragače za poboljšanu privatnost";
 
 /* Label on About screen */
-"About.safariBullet2" = "Blokiraj web fontove za smanjene veličine stranice";
-
-/* Label on About screen */
 "About.safariBulletHeader" = "Koristi kao Safari ekstenziju:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -253,15 +250,6 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Automatsko završavanje URL-a";
 
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Blokiranje drugih tragača sadržaja može prekinuti neki video i web stranice.";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Ne, hvala";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Shvatam";
-
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozila nastoji prikupljati samo ono što je potrebno da osigura i poboljša %@ za sve.";
 
@@ -328,33 +316,6 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "SIGURNOST";
 
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Blokiraj reklame";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Neke reklame prate posjete stranica, čak i kad ne klinete na reklame";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Blokiraj analitičke pratioce";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Koristi se za sakupljanje, analiziranje i mjerenje aktivnosti kao što su tipkanje i skrolovanje";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Blokiraj web fontove";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Blokiraj pratioce ostalog sadržaja";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Omogućavanje može uticati loše na neke stranice";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Blokiraj društvene pratioce";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Ugrađene u stranice kako bi pratile vaše posjete i da prikažu funkcije kao što su dugmići za dijeljenje";
-
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Koristite Face ID za otključavanje aplikacije";
 
@@ -414,12 +375,6 @@
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Onemogući dok ne zatvoriš %@ ili dodirni ERASE.";
-
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Zaštita od praćenja";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Birajte da li %@ blokirati reklame, analitike, socijalne mreže i druge tragače.";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Otkaži";

@@ -29,9 +29,6 @@
 "About.safariBullet1" = "Loka á rekjara fyrir aukna gagnaleynd";
 
 /* Label on About screen */
-"About.safariBullet2" = "Loka á vef leturgerðir til að minnka stærð síðunnar";
-
-/* Label on About screen */
 "About.safariBulletHeader" = "Nota sem Safari viðauka til að:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -298,15 +295,6 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Sjálfvirk leiðrétting á slóðum";
 
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Að loka á aðra efnisrekjara gæti haft áhrif á sum myndbönd og vefsíður.";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Nei takk";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Ég skil";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "% @ mun senda það sem þú skrifar í slóðina yfir á leitarvélina þína.";
 
@@ -381,33 +369,6 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "ÖRYGGI";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Loka á auglýsinga rekjara";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Sumar auglýsingar geyma upplýsingar um vefsvæði sem hafa verið heimsótt, þótt sé smellt ekki á auglýsingarnar";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Loka á greininga rekjara";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Notað til að safna, greina og fylgjast með virkni, eins og að snerta og skruna";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Loka á vef leturgerðir";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Loka á aðra efnisrekjara";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Virkjun gæti valdið því að sum vefsvæði hagi sér á óvæntan hátt";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Loka á félagsrekjara";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Innbyggt í vefsvæðum til að fylgjast með heimsóknum þínum og sýna virkni eins og deilihnappar";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Nota andlitsauðkenningu til að aflæsa smáforrit";
@@ -525,12 +486,6 @@
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Slökkva á þar til þú lokar %@ eða snertir ERASE.";
-
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Vörn gegn gagnasöfnun";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Velja hvort %@ lokar á auglýsinga-, greininga-, samfélagslega- og aðra gagnasafnara.";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Bæta vefslóð við í autocomplete";

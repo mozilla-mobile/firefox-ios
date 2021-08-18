@@ -1,15 +1,18 @@
-/* (No Comment) */
+/* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "אפשרות זו מאפשרת לצלם ולהעלות תמונות.";
 
-/* (No Comment) */
+/* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "אפשרות זו מאפשרת לך לשחרר את הנעילה של היישומון.";
 
-/* (No Comment) */
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "אתרים בשימושך עשויים לבקש ממך את המיקום שלך.";
 
-/* (No Comment) */
+/* Privacy - Microphone Usage Description */
 "NSMicrophoneUsageDescription" = "אפשרות זו מאפשרת להסריט ולהעלות וידאו.";
 
-/* (No Comment) */
+/* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "תכונה זו מאפשרת לך לשמור ולהעלות תמונות.";
+
+/* This is the menu item that appears when you long press the Focus icon on the phone home screen. */
+"UIApplicationShortcutItemTitle.EraseAndOpen" = "מחיקה ופתיחה";
 

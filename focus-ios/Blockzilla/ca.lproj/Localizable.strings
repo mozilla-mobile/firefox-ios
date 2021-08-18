@@ -29,9 +29,6 @@
 "About.safariBullet1" = "Blocar els elements de seguiment per millorar la privadesa";
 
 /* Label on About screen */
-"About.safariBullet2" = "Blocar els tipus de lletra web per reduir la mida de la pàgina";
-
-/* Label on About screen */
 "About.safariBulletHeader" = "Com a extensió del Safari, us permet:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -298,15 +295,6 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Emplenament automàtic d'URL";
 
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Si bloqueu altres elements de seguiment de contingut, és possible que alguns vídeos i pàgines web no funcionin correctament.";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "No, gràcies";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Entesos";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "El %@ enviarà al motor de cerca tot allò que escriviu a la barra d'adreces.";
 
@@ -381,33 +369,6 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "SEGURETAT";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Bloca els elements de seguiment de publicitat";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Alguns anuncis fan el seguiment de les visites als llocs, fins i tot si no feu clic als anuncis";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Bloca els elements de seguiment d'anàlisi";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "S'utilitzen per recollir, analitzar i mesurar activitats com ara els tocs i el desplaçament";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Bloca tipus de lletra web";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Bloca altres elements de seguiment de contingut";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Si s'activa, algunes pàgines podrien comportar-se de forma inesperada";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Bloca els elements de seguiment social";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Està incrustat en els llocs per fer el seguiment de les vostres visites i per mostrar alguns elements com els botons de compartició";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Utilitza el Face ID per desblocar l'aplicació";
@@ -525,12 +486,6 @@
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Desactiva fins que tanqui el %@ o toqui ESBORRA.";
-
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Protecció contra el seguiment";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Trieu si el %@ ha de blocar, entre d'altres, els elements de seguiment de publicitat, d'anàlisi i social.";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Afegeix l'enllaç a l'emplenament automàtic";

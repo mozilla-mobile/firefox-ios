@@ -29,9 +29,6 @@
 "About.safariBullet1" = "Stankit an heulierien evit difenn ho puhez prevez";
 
 /* Label on About screen */
-"About.safariBullet2" = "Stankit an nodrezhoù web evit digreskiñ ment ar bajenn";
-
-/* Label on About screen */
 "About.safariBulletHeader" = "Arverit anezhañ evel un askouezh Safari:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -298,15 +295,6 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Klokadur emgefreek an URL";
 
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Stankañ heulierien endalc'hadoù all a c'hall mirout videoioù ha pajennadoù web da vont en-dro en un doare dereat.";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Nullañ";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Komprenet am eus";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ a gaso ar pezh a vizskrivit er varrenn chomlec'hioù d'ho lusker enklask.";
 
@@ -381,33 +369,6 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "DIOGELROEZ";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Stankañ an heulierien bruderezh";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Bruderezhioù 'zo a heul ho kweladennoù war al lec'hiennoù, ha pa ne glikfec'h ket war ar bruderezhioù zoken";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Stankañ an heulierien stadegoù";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Implijet evit dastum, dielfennañ ha muzuliañ an oberiadennoù evel stokañ ha dibunañ";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Stankañ an nodrezhoù web";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Stankañ an heulierien endalc'hadoù all";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Gweredekaat a c'hallfe degas un darn a gudennoù war pajennoù 'zo";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Stankañ an heulierien kevredadel";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Enkorfet el lec'hiennoù evit heuliañ ho weladennoù ha diskouez keweriusterioù evel an afelloù rannañ";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Implijit Face ID evit dibrennañ an arload";
@@ -525,12 +486,6 @@
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Diweredekaat betek ma vo serret %@ pe stoket DILEMEL.";
-
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Gwarez heuliañ";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Dibab ma vo stanked an heulieroù bruderezh, digejañ, kevredadel hag all gant %@.";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Ouzhpennañ un ere d'al leuniadur emgefreek";

@@ -29,9 +29,6 @@
 "About.safariBullet1" = "Bloku spurilojn por plibonigita privateco";
 
 /* Label on About screen */
-"About.safariBullet2" = "Bloku teksaĵajn tiparojn por malpezigi paĝojn";
-
-/* Label on About screen */
 "About.safariBulletHeader" = "Uzu ĝin kiel etendaĵon de Safari:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -298,15 +295,6 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Aŭtomata kompletigo de adresoj";
 
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Blokado de aliaj enhavaj spuriloj povus paneigi filmetojn kaj retpaĝojn.";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Ne, dankon";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Mi komprenas";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ sendos tion, kion vi tajpas en la adresa strio, al via serĉilo.";
 
@@ -381,33 +369,6 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "SEKURECO";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Bloki reklamajn spurilojn";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Kelkaj reklamoj spuras viajn vizitojn, eĉ se vi ne alklakas ilin";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Bloki retanalizajn spurilojn";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Uzataj por kolekti, analizi kaj mezuri agojn kiel tuŝetojn kaj ŝovon";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Bloki teksaĵajn tiparojn";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Bloki aliajn enhavajn spurilojn";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Se vi ŝaltas tion ĉi, kelkaj paĝoj povus neatendite konduti";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Bloki spurilojn de interkonaj retejoj";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Inkluzivitaj en retejoj por spuri viajn vizitojn kaj montri funkciojn, kiel dividajn butonojn";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Malbloki programon per Face ID";
@@ -525,12 +486,6 @@
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Malŝalti ĝis kiam vi fermos %@ aŭ vi tajpos FORIGI.";
-
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Protekto kontraŭ spurado";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Elektu ĉu %@ blokos reklamajn, analizajn, sociajn kaj aliajn spurilojn.";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Aldoni aŭtomate kompletigotan ligilon";

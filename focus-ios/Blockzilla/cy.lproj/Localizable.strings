@@ -29,9 +29,6 @@
 "About.safariBullet1" = "Rhwystro tracwyr ar gyfer gwell preifatrwydd";
 
 /* Label on About screen */
-"About.safariBullet2" = "Rhwystro ffontiau Gwe i leihau maint tudalen";
-
-/* Label on About screen */
 "About.safariBulletHeader" = "Ei ddefnyddio fel estyniad Safari:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -42,6 +39,15 @@
 
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Agor yn %@";
+
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "Iawn";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "Digwyddodd gwall wrth ychwanegu'r tocyn i Wallet. Ceisiwch eto'n hwyrach.";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "Wedi methu Ychwanegu Pas";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "Dilysu i ddychwelyd i %@";
@@ -298,15 +304,6 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Awtogwblhau URL";
 
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Gall rwystro tracwyr cynnwys eraill dorri rhai fideos a thudalennau Gwe.";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Na, Dim Diolch";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Rwy'n Deall";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "Bydd %@ yn anfon yr hyn rydych yn ei deipio yn y bar cyfeiriad i'ch peiriant chwilio.";
 
@@ -381,33 +378,6 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "DIOGELWCH";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Rhwystro tracwyr hysbysebion";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Mae rhai hysbysebion yn tracio ymweliadau â gwefannau, hyd yn oed heb i chi eu clicio";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Rhwystro tracwyr dadansoddi";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Yn cael eu defnyddio i gasglu, dadansoddi a mesur gweithgareddau fel tapio a sgrolio";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Rhwystro ffontiau Gwe";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Rhwystro tracwyr cynnwys eraill";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Gall ei alluogi achosi i rai tudalennau i ymddwyn yn rhyfedd";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Rhwystro tracwyr cymdeithasol";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Wedi eu mewnblannu ar wefannau er mwyn tracio eich ymweliadau ac i ddangos swyddogaethau fel botymau rhannu";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Defnyddio Face ID i ddatgloi ap";
@@ -526,12 +496,6 @@
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Analluogi nes i chi gau %@ neu dapio ERASE.";
 
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Diogelwch rhag Tracio";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Dewiswch p'un ai fydd %@ yn rhwystro tracwyr hysbysebion, dadansoddi, cymdeithasol a rhai eraill.";
-
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Ychwanegu dolen i awtogwblhau";
 
@@ -543,6 +507,9 @@
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "DILEU";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "Hanes pori wedi’i glirio";
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Canfod ar dudalen: %@";

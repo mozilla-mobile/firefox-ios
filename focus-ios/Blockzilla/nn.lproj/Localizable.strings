@@ -29,9 +29,6 @@
 "About.safariBullet1" = "Blokker sporfølgjarar for betre personvern";
 
 /* Label on About screen */
-"About.safariBullet2" = "Blokker nettskrifter for å redusera sidestørrelsen";
-
-/* Label on About screen */
 "About.safariBulletHeader" = "Bruk han som ei Safari-utviding:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -298,15 +295,6 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Adresse-autofullføring";
 
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Blokkering av andre innhaldssporfølgjarar, kan øydeleggja nokre videoar og nettsider.";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Nei, takk";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Eg forstår";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ sender det du skriv i adressefeltet til søkjemotoren din.";
 
@@ -381,33 +369,6 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "SIKKERHEIT";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Blokker sporfølgjarar for reklame";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Nokre annonsar sporfølgjer nettstadbesøk, sjølv om du ikkje klikkar på annonsane";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Blokker sporfølgjarar for analyser";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Brukt for å samla inn, analysera og måle aktivitetar som tastetrykk og rulling";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Blokker nettskrifter";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Blokker andre innhaldssporfølgjarar";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Aktivering kan føre til at nokre sider oppfører seg uventa";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Blokker sporfølgjarar for sosiale media";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Innebygd på nettstadar for å spora besøka dine og å visa funksjonalitet som dele-knappar";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Bruk «Face ID» for å låse opp appen";
@@ -525,12 +486,6 @@
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Deaktiver til du lèt att %@ eller trykkjer SLETT.";
-
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Sporingsvern";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Vel om %@ blokkerer annonse-, analyse-, sosiale- og andre sporfølgjarar.";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Legg til lenke til autofullfør";

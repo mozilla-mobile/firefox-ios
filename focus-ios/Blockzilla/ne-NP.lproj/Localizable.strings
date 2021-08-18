@@ -193,12 +193,6 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "URL स्वत: पूर्ण";
 
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "पर्दैन, धन्यबाद";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "मैले बुझेँ";
-
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla सबैको लागि %@ प्रदान र सुधार गर्न आवश्यक कुरा मात्र संकलन गर्ने प्रयास गर्दछ ।";
 
@@ -256,27 +250,6 @@
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "PRIVACY";
 
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "विज्ञापन ट्रयाकरहरू अवरुद्द गर्नुहोस्";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "विश्लेषणात्मक ट्रयाकहरू अवरुद्द गर्नुहोस्";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "ट्याप गर्ने र स्क्रोल गर्ने जस्ता क्रियाकलापहरू संकलन, विश्लेषण र माप गर्न प्रयोग गरियो";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "वेब फन्टहरू अवरुद्ध गर्नुहोस्";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "अन्य सामग्री ट्रयाकरहरू ब्लक गर्नुहोस्";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "सक्षम पार्नाले केहि पृष्ठहरू अनपेक्षित रूपमा व्यवहार गर्न सक्छन्";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "सामाजिक ट्रयाकहरू अवरुद्द गर्नुहोस्";
-
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "केहि भिडियोहरु र वेब पेजहरू बिग्रन सक्छ";
 
@@ -309,9 +282,6 @@
 
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "सामाजिक ट्रयाकरहरू";
-
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "ट्रयाकिङ्ग सुरक्षा";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "रद्द गर्नुहोस्";

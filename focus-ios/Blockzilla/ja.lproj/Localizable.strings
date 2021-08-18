@@ -29,9 +29,6 @@
 "About.safariBullet1" = "追跡をブロックしてプライバシーを保護します";
 
 /* Label on About screen */
-"About.safariBullet2" = "ウェブフォントをブロックしてページのデータ転送量を削減します";
-
-/* Label on About screen */
 "About.safariBulletHeader" = "Safari の拡張機能として使用すると:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -42,6 +39,15 @@
 
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "%@ で開く";
+
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "OK";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "Wallet へのパスの追加中にエラーが発生しました。後で再度試してください。";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "パスの追加に失敗しました";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "認証して %@ へ戻る";
@@ -298,15 +304,6 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "URL 自動補完";
 
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "他の追跡コンテンツをブロックすると、動画やウェブページが正常に表示されない場合があります。";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "ブロックしない";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "ブロックする";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "アドレスバーに入力した内容を %@ が検索エンジンに送信します。";
 
@@ -381,33 +378,6 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "セキュリティ";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "追跡広告をブロック";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "公告によっては、あなたがその広告をクリックしなくてもユーザーが訪れたサイトを追跡します";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "アクセス解析をブロック";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "タップやスクロールなどの操作を収集、解析、計測するために使用されます";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "ウェブフォントをブロック";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "他の追跡コンテンツをブロック";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "有効にすると、一部のページが予期しない動作をすることがあります";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "ソーシャル追跡をブロック";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "ユーザーの訪問を追跡するためサイトに埋め込まれ、共有ボタンのように表示されています";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "アプリのロック解除に Face ID を使用";
@@ -526,12 +496,6 @@
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "%@ を閉じるまで無効化するか「消去」をタップしてください。";
 
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "トラッキング防止";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "広告、アクセス解析、ソーシャルなどトラッキングを %@ がどのようにブロックするか選択してください。";
-
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "自動補完にリンクを追加";
 
@@ -543,6 +507,9 @@
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "消去";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "ブラウジング履歴を消去しました";
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "ページ内検索: %@";

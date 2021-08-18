@@ -29,9 +29,6 @@
 "About.safariBullet1" = "بہتر رازداریکے لیئے سراغ راہ بلاک کریں";
 
 /* Label on About screen */
-"About.safariBullet2" = "صفحہ کا ماپ گھٹانے کے لیے ویب فانٹ بلاک کریں";
-
-/* Label on About screen */
 "About.safariBulletHeader" = "اس کو Safari کی توسیعات کے طور پر استعمال کریں:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -277,15 +274,6 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "URL خودکار تکميل";
 
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "دیگر مواد ٹریکرز کو روکنے سے کچھ ویڈیوز اور ویب صفحات ٹوٹ سکتے ہیں۔";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "نہیں، شکریہ";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "مجھے سمجھ آ گئی";
-
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "مزید سیکھیں۔";
 
@@ -354,30 +342,6 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "SECURITY";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "اشتھار ٹریکرز کو بلاک کریں";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "چند اشتہاری ٹریکر سائَٹ دورہ کرتی ہیں حب کہ آپ نے اشتتہارات پر کلک بھی نہ کیا ہو";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "تجزیاتی ٹریکرز کو بلاک کریں";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "سرگرمی جیسے کہ تھپتپانا اور طورمار کرنا کی پہمائش اور تجزیہ کرنے کے لیئے استعمال ہوتا ہے";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "ویب فونٹس بلاک کریں";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "دیگر مواد کے ٹڑیکرز بلاک کریں";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "اہل بنانے کی وجہ سے شاید چند صفحات غیر متوقع برتائو کر سکتے ہیں";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "سماجی ٹریکرس بلاک کریں";
 
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "ابتدائی صفحہ کی تجاویز دکھائیں";
@@ -471,12 +435,6 @@
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "%@ کے بند ہونے تک نااہل بنائیں یا ERASE کو تھبتھبائیں۔";
-
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "سراغ کاری حفاظت";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "انتخاب کریں %@ کیا اشتہاری، تجزیاتی، سماجی اور دیگر ٹریکرز بلاک کرے۔";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "منسوخ کریں";

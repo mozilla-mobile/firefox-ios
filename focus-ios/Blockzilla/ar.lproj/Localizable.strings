@@ -2,7 +2,7 @@
 "About.learnMoreButton" = "اطّلع على المزيد";
 
 /* Label on About screen */
-"About.missionLabel" = "\u200f%@ منتج من موزيلا. مهمتنا تشجيع إنترنت مفتوح و صحي.";
+"About.missionLabel" = "u200f%@ منتج من موزيلا. مهمتنا تشجيع إنترنت مفتوح و صحي.";
 
 /* Label on About screen */
 "About.privateBullet1" = "ابحث و تصفح مباشرة في التطبيق";
@@ -27,9 +27,6 @@
 
 /* Label on About screen */
 "About.safariBullet1" = "احجب المتعقبات لتحسين الخصوصية";
-
-/* Label on About screen */
-"About.safariBullet2" = "احجب خطوط الوب لتقليل حجم الصفحات";
 
 /* Label on About screen */
 "About.safariBulletHeader" = "استخدمه كامتداد لمتصفح سفاري:";
@@ -272,7 +269,7 @@
 "Safari.instructionsEnable" = "فعّل %@";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
-"Safari.instructionsNotEnabled" = "\u200f%@ ليس مفعّلا.";
+"Safari.instructionsNotEnabled" = "u200f%@ ليس مفعّلا.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "افتح تطبيق الإعدادات";
@@ -297,15 +294,6 @@
 
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "إكمال المسارات تلقائيا";
-
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "حجب متعقبات المحتوى الأخرى قد يعطل بعض الڤديو و صفحات الوب.";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "لا، شكرًا";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "أفهم هذا";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "سيُرسل %@ ما تكتبه في شريط العنوان إلى محرك البحث الذي تُفضّله.";
@@ -356,7 +344,7 @@
 "settings.Search.SearchTemplateExample" = "مثال: searchengineexample.com/search/?q=%s";
 
 /* Placeholder text for input of new search engine template */
-"Settings.Search.SearchTemplatePlaceholder" = "انقر أو أدخِل نص البحث. إن استلزم الأمر اسبتدل مصطلح البحث بِ‍: \u200e%s.";
+"Settings.Search.SearchTemplatePlaceholder" = "انقر أو أدخِل نص البحث. إن استلزم الأمر اسبتدل مصطلح البحث بِ‍: u200e%s.";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "محرك البحث";
@@ -381,33 +369,6 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "الأمان";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "احجب متعقبات الإعلانات";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "تتعقّب بعض الإعلانات زياراتك إلى المواقع، حتى إن لم تنقرها";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "احجب متعقبات التحليلات";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "تُستخدم لجمع نشاطاتك وتحليلها وقياسها، مثل النقر وتمرير الصفحات";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "احجب خطوط الوب";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "احجب متعقبات المحتوى الأخرى";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "تفعيل الخيار قد يتسبب بألا تعمل بعض الصفحات كما يجب";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "احجب المتعقبات الاجتماعية";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "تُضمّن في المواقع لتتعقب زياراتك ولعرض بعض الخصائص مثل أزرار المشاركة";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "استخدم معّرف الوجه لإلغاء قفل التطبيق";
@@ -525,12 +486,6 @@
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "عطّله حتى تُغلق %@ أو تنقر ERASE.";
-
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "الحماية من التعقّب";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "اختر فيما إذا كان على %@ حجب متعقبات الإعلانات والمتعقبات الإحصائية والاجتماعية وغيرها.";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "أضِف رابطا لإكماله تلقائيا";
