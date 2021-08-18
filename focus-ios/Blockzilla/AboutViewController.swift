@@ -11,10 +11,10 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
         let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.backgroundColor = UIConstants.colors.background
+        tableView.backgroundColor = .primaryBackground
         tableView.layoutMargins = UIEdgeInsets.zero
         tableView.estimatedRowHeight = 44
-        tableView.separatorColor = UIConstants.colors.settingsSeparator
+        tableView.separatorStyle = .none
 
         // Don't show trailing rows.
         tableView.tableFooterView = UIView(frame: CGRect.zero)
@@ -25,6 +25,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
 
     override func viewDidLoad() {
         headerView.delegate = self
+        navigationController?.navigationBar.tintColor = .accent
 
         title = String(format: UIConstants.strings.aboutTitle, AppInfo.productName)
 
@@ -33,9 +34,11 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
 
     private func configureTableView() {
         view.addSubview(tableView)
+        view.backgroundColor = .primaryBackground
 
         tableView.snp.makeConstraints { make in
-            make.edges.equalTo(self.view)
+            make.top.bottom.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(UIConstants.layout.settingsItemInset)
         }
     }
 
@@ -54,12 +57,17 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
 
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         configureCell(cell, forRowAt: indexPath)
+        indexPath.row == 1 ? cell.roundedCorners(tableView: tableView, indexPath: IndexPath(row: indexPath.row - 1, section: 0)) : cell.roundedCorners(tableView: tableView, indexPath: indexPath)
+        if indexPath.row != 0 {
+            cell.addSeparator(tableView: tableView, indexPath: indexPath)
+        }
     }
 
     private func configureCell(_ cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         switch (indexPath as NSIndexPath).row {
         case 0:
             cell.contentView.addSubview(headerView)
+            cell.contentView.backgroundColor = .primaryBackground
             headerView.snp.makeConstraints { make in
                 make.edges.equalTo(cell)
             }
@@ -69,24 +77,23 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
         default: break
         }
 
-        cell.backgroundColor = UIConstants.colors.background
+        cell.backgroundColor = .secondaryBackground
 
         let cellBG = UIView()
-        cellBG.backgroundColor = UIConstants.colors.cellSelected
+        cellBG.backgroundColor = .primaryBackground
         cell.selectedBackgroundView = cellBG
 
-        cell.textLabel?.textColor = UIConstants.colors.defaultFont
+        cell.textLabel?.textColor = .primaryText
         cell.layoutMargins = UIEdgeInsets.zero
-        cell.separatorInset = UIEdgeInsets.zero
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 0 {
             let cell = UITableViewCell()
-            cell.backgroundColor = UIConstants.colors.background
+            cell.backgroundColor = .primaryBackground
             // Hack to cover header separator line
             let footer = UIView()
-            footer.backgroundColor = UIConstants.colors.background
+            footer.backgroundColor = .primaryBackground
             cell.addSubview(footer)
             cell.sendSubviewToBack(footer)
             footer.snp.makeConstraints { make in
@@ -199,7 +206,7 @@ private class AboutHeaderView: UIView {
     private lazy var learnMoreButton: UIButton = {
         let learnMoreButton = UIButton()
         learnMoreButton.setTitle(UIConstants.strings.aboutLearnMoreButton, for: .normal)
-        learnMoreButton.setTitleColor(UIConstants.colors.settingsLink, for: .normal)
+        learnMoreButton.setTitleColor(.accentButton, for: .normal)
         learnMoreButton.setTitleColor(UIConstants.colors.buttonHighlight, for: .highlighted)
         learnMoreButton.titleLabel?.font = UIConstants.fonts.aboutText
         learnMoreButton.addTarget(self, action: #selector(didPressLearnMore), for: .touchUpInside)

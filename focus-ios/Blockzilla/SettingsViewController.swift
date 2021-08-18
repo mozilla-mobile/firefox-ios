@@ -141,7 +141,7 @@ class SettingsTableViewToggleCell: SettingsTableViewCell {
             let selector = toggle.label == UIConstants.strings.labelSendAnonymousUsageData ? #selector(tappedLearnMoreFooter) : #selector(tappedLearnMoreSearchSuggestionsFooter)
             let learnMoreButton = UIButton()
             learnMoreButton.setTitle(UIConstants.strings.learnMore, for: .normal)
-            learnMoreButton.setTitleColor(UIConstants.colors.settingsLink, for: .normal)
+            learnMoreButton.setTitleColor(.accentButton, for: .normal)
             if let cellFont = detailTextLabel?.font {
                 learnMoreButton.titleLabel?.font = UIFont(name: cellFont.fontName, size: cellFont.pointSize)
             }
@@ -347,48 +347,49 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     override func viewDidLoad() {
-        view.backgroundColor = UIConstants.colors.background
+        view.backgroundColor = .primaryBackground
 
         title = UIConstants.strings.settingsTitle
 
         let navigationBar = navigationController!.navigationBar
         navigationBar.isTranslucent = false
-        navigationBar.barTintColor = UIConstants.colors.settingsNavBar
-        navigationBar.tintColor = UIConstants.colors.navigationButton
-        navigationBar.titleTextAttributes = [.foregroundColor: UIConstants.colors.navigationTitle]
+        navigationBar.setBackgroundImage(UIImage(), for:.default)
+        navigationBar.shadowImage = UIImage()
+        navigationBar.layoutIfNeeded()
+        navigationBar.barTintColor = .primaryBackground
+        navigationBar.titleTextAttributes = [.foregroundColor: UIColor.primaryText]
 
-        let navBarBorderRect = CGRect(x: 0.0, y: 0.0, width: 1.0, height: 0.25)
-        let imageRenderer = UIGraphicsImageRenderer(bounds: navBarBorderRect)
-        let borderImage = imageRenderer.image(actions: { (context) in
-            UIConstants.colors.settingsNavBorder.setFill()
-            context.cgContext.fill(navBarBorderRect)
-        })
-        navigationController?.navigationBar.shadowImage = borderImage
+        let backButton = UIButton(type: .custom)
+        backButton.setImage(UIImage(named: "icon_cancel")?.withTintColor(.accentButton), for: .normal)
+        backButton.tintColor = .accentButton
+        backButton.setTitle(" " + UIConstants.strings.browserBack, for: .normal)
+        backButton.setTitleColor(backButton.tintColor, for: .normal)
+        backButton.addTarget(self, action: #selector(dismissSettings), for: .touchUpInside)
+        backButton.accessibilityIdentifier = "SettingsViewController.doneButton"
 
-        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissSettings))
-        doneButton.tintColor = UIConstants.Photon.Magenta40
-        doneButton.accessibilityIdentifier = "SettingsViewController.doneButton"
-        navigationItem.leftBarButtonItem = doneButton
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
 
         highlightsButton = UIBarButtonItem(title: UIConstants.strings.whatsNewTitle, style: .plain, target: self, action: #selector(whatsNewClicked))
         highlightsButton?.image = UIImage(named: "highlight")
+        highlightsButton?.tintColor = .accentButton
         highlightsButton?.accessibilityIdentifier = "SettingsViewController.whatsNewButton"
         navigationItem.rightBarButtonItem = highlightsButton
 
         if whatsNew.shouldShowWhatsNew() {
-            highlightsButton?.tintColor = UIConstants.colors.whatsNew
+            highlightsButton?.tintColor = .accentButton
         }
 
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
-            make.edges.equalTo(self.view)
+            make.top.bottom.equalTo(self.view)
+            make.leading.trailing.equalTo(self.view).inset(UIConstants.layout.settingsItemInset)
         }
 
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.backgroundColor = UIConstants.colors.background
+        tableView.backgroundColor = .primaryBackground
         tableView.layoutMargins = UIEdgeInsets.zero
-        tableView.separatorColor = UIConstants.colors.settingsSeparator
+        tableView.separatorColor = .searchSeparator.withAlphaComponent(0.65)
         tableView.allowsSelection = true
         tableView.estimatedRowHeight = 44
 
@@ -396,7 +397,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         for (sectionIndex, toggleArray) in toggles {
             for (cellIndex, blockerToggle) in toggleArray {
                 let toggle = blockerToggle.toggle
-                toggle.onTintColor = UIConstants.colors.toggleOn
+                toggle.onTintColor = .accentButton
+                toggle.tintColor = .darkGray
                 toggle.addTarget(self, action: #selector(toggleSwitched(_:)), for: .valueChanged)
                 toggle.isOn = Settings.getToggle(blockerToggle.setting)
                 toggles[sectionIndex]?[cellIndex] = blockerToggle
@@ -475,10 +477,15 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         switch sections[indexPath.section] {
         case .privacy:
             if indexPath.row == 0 {
-                cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "trackingCell")
-                cell.textLabel?.text = String(format: UIConstants.strings.trackingProtectionLabel)
-                cell.accessibilityIdentifier = "settingsViewController.trackingCell"
-                cell.accessoryType = .disclosureIndicator
+                let trackingCell = SettingsTableViewAccessoryCell(style: .subtitle, reuseIdentifier: "trackingCell")
+                trackingCell.textLabel?.text = String(format: UIConstants.strings.trackingProtectionLabel)
+                trackingCell.accessibilityIdentifier = "settingsViewController.trackingCell"
+                trackingCell.accessoryType = .disclosureIndicator
+                trackingCell.accessoryLabelText = Settings.getToggle(.trackingProtection) ?
+                    UIConstants.strings.settingsTrackingProtectionOn :
+                    UIConstants.strings.settingsTrackingProtectionOff
+                cell = trackingCell
+                
             } else {
                 cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
             }
@@ -544,7 +551,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
         }
 
-        cell.backgroundColor = UIConstants.colors.cellBackground
+        cell.backgroundColor = .secondaryBackground
         cell.textLabel?.textColor = UIConstants.colors.settingsTextLabel
         cell.layoutMargins = UIEdgeInsets.zero
         cell.detailTextLabel?.textColor = UIConstants.colors.settingsDetailLabel
@@ -553,6 +560,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         cell.detailTextLabel?.setupShrinkage()
 
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath)
+    {
+        cell.roundedCorners(tableView: tableView, indexPath: indexPath)
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -612,7 +624,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         // constraints for our custom label based on the cell's label.
         let cell = UITableViewCell()
         cell.textLabel?.text = " "
-        cell.backgroundColor = UIConstants.colors.background
+        cell.backgroundColor = .primaryBackground
 
         let label = SmartLabel()
         label.text = sections[section].headerText

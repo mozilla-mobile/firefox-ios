@@ -34,24 +34,25 @@ class SiriFavoriteViewController: UIViewController {
 
     private func setUpInputUI() {
         title = UIConstants.strings.favoriteUrlTitle
-        navigationController?.navigationBar.barTintColor = UIConstants.colors.background
+        navigationController?.navigationBar.tintColor = .accent
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIConstants.colors.defaultFont]
         navigationController?.navigationBar.isTranslucent = false
-        view.backgroundColor = UIConstants.colors.background
+        view.backgroundColor = .primaryBackground
 
         inputLabel.text = UIConstants.strings.urlToOpen
         inputLabel.font = UIConstants.fonts.settingsInputLabel
-        inputLabel.textColor = UIConstants.colors.settingsTextLabel
+        inputLabel.textColor = .primaryText
         view.addSubview(inputLabel)
 
-        textInput.backgroundColor = UIConstants.colors.cellBackground
+        textInput.backgroundColor = .secondaryBackground
         textInput.keyboardType = .URL
         textInput.autocapitalizationType = .none
         textInput.autocorrectionType = .no
         textInput.returnKeyType = .done
-        textInput.textColor = .white
-        textInput.tintColor = UIConstants.colors.siriTint
+        textInput.textColor = .primaryText
+        textInput.tintColor = .accent
         textInput.delegate = self
+        textInput.layer.cornerRadius = UIConstants.layout.settingsCellCornerRadius
         if let storedFavorite = UserDefaults.standard.value(forKey: "favoriteUrl") as? String {
             textInput.text = storedFavorite
         } else {
@@ -63,34 +64,33 @@ class SiriFavoriteViewController: UIViewController {
         view.addSubview(textInput)
 
         inputDescription.text = UIConstants.strings.autocompleteAddCustomUrlExample
-        inputDescription.textColor = UIConstants.colors.settingsTextLabel
+        inputDescription.textColor = .primaryText
         inputDescription.font = UIConstants.fonts.settingsDescriptionText
         view.addSubview(inputDescription)
 
         inputLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(UIConstants.layout.siriUrlSectionPadding)
             make.trailing.equalTo(self.view.safeAreaLayoutGuide.snp.trailing)
-            make.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading).offset(UIConstants.layout.settingsTextPadding)
+            make.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading).offset(UIConstants.layout.settingsItemOffset)
         }
 
         textInput.snp.makeConstraints { make in
             make.height.equalTo(UIConstants.layout.settingsSectionHeight)
-            make.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading)
-            make.trailing.equalTo(self.view.safeAreaLayoutGuide.snp.trailing)
             make.top.equalTo(inputLabel.snp.bottom).offset(UIConstants.layout.settingsTextPadding)
+            make.leading.trailing.equalToSuperview().inset(UIConstants.layout.settingsItemInset)
         }
 
         inputDescription.snp.makeConstraints { make in
             make.top.equalTo(textInput.snp.bottom).offset(UIConstants.layout.settingsTextPadding)
-            make.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading).offset(UIConstants.layout.settingsTextPadding)
+            make.leading.equalToSuperview().offset(UIConstants.layout.settingsItemOffset)
         }
 
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: UIConstants.strings.cancel, style: .plain, target: self, action: #selector(SiriFavoriteViewController.cancelTapped))
-        self.navigationItem.leftBarButtonItem?.tintColor = UIConstants.colors.siriTint
+        self.navigationItem.leftBarButtonItem?.tintColor = .accentButton
     }
 
     private func setUpEditUI() {
-        editView.backgroundColor = UIConstants.colors.cellBackground
+        editView.backgroundColor = .secondaryBackground
         view.addSubview(editView)
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(SiriFavoriteViewController.editTapped))
@@ -135,7 +135,7 @@ class SiriFavoriteViewController: UIViewController {
         let doneButton = UIBarButtonItem(title: UIConstants.strings.Done, style: .done, target: self, action: #selector(SiriFavoriteViewController.doneTapped))
         nextButton.accessibilityIdentifier = "doneButton"
         self.navigationItem.rightBarButtonItem = addedToSiri ? doneButton : nextButton
-        self.navigationItem.rightBarButtonItem?.tintColor = UIConstants.colors.siriTint
+        self.navigationItem.rightBarButtonItem?.tintColor = .accentButton
     }
 
     @objc func cancelTapped() {

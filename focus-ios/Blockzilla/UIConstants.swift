@@ -212,6 +212,9 @@ struct UIConstants {
         static let urlBarIconInset: CGFloat = 8
         static let settingsDefaultTitleOffset = 3
         static let settingsFirstTitleOffset = 16
+        static let settingsItemInset = 16
+        static let settingsItemOffset: CGFloat = 26
+        static let settingsCellCornerRadius: CGFloat = 8
         static let urlBarToolsetOffset: CGFloat = 60
         static let urlBarIPadToolsetOffset: CGFloat = 110
         static let textLogoOffset: CGFloat = -10 - browserToolbarHeight / 2
@@ -366,7 +369,9 @@ struct UIConstants {
         static let detailTextSearchSuggestion = NSLocalizedString("Settings.detailTextSearchSuggestion", value: "%@ will send what you type in the address bar to your search engine.", comment: "Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar)")
         static let settingsAutocompleteSection = NSLocalizedString("Settings.autocompleteSection", value: "URL Autocomplete", comment: "Title for the URL Autocomplete row")
         static let settingsTitle = NSLocalizedString("Settings.screenTitle", value: "Settings", comment: "Title for settings screen")
-        static let settingsToggleOtherSubtitle = NSLocalizedString("Settings.toggleOtherSubtitle", value: "May break some videos and web pages", comment: "Label subtitle for toggle on main screen")
+        static let settingsTrackingProtectionOn = NSLocalizedString("Settings.trackingProtectionOn", value: "On", comment: "Status on for tracking protection in settings screen")
+        static let settingsTrackingProtectionOff = NSLocalizedString("Settings.trackingProtectionOff", value: "Off", comment: "Status off for tracking protection in settings screen")
+        static let settingsToggleOtherSubtitle = NSLocalizedString("Settings.toggleOtherSubtitle", value: "May break some videos and Web pages", comment: "Label subtitle for toggle on main screen")
         static let learnMore = NSLocalizedString("Settings.learnMore", value: "Learn more.", comment: "Subtitle for Send Anonymous Usage Data toggle on main screen")
         static let toggleHomeScreenTips = NSLocalizedString("Settings.toggleHomeScreenTips", value: "Show home screen tips", comment: "Show home screen tips toggle label on settings screen")
         static let toggleSectionIntegration = NSLocalizedString("Settings.sectionIntegration", value: "INTEGRATION", comment: "Label for Safari integration section") // deprecated

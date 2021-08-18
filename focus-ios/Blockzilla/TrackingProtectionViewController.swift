@@ -43,6 +43,7 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
         view.backgroundColor = .primaryBackground
         title = UIConstants.strings.trackingProtectionLabel
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.primaryText]
+        navigationController?.navigationBar.tintColor = .accent
         
         if !isOpenedFromSetting {
             let doneButton = UIBarButtonItem(title: UIConstants.strings.done, style: .plain, target: self, action: #selector(doneTapped))
@@ -164,26 +165,7 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath)
     {
-        let cornerRadius = 8
-        var corners: UIRectCorner = []
-
-        if indexPath.row == 0
-        {
-            corners.update(with: .topLeft)
-            corners.update(with: .topRight)
-        }
-
-        if indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
-        {
-            corners.update(with: .bottomLeft)
-            corners.update(with: .bottomRight)
-        }
-
-        let maskLayer = CAShapeLayer()
-        maskLayer.path = UIBezierPath(roundedRect: cell.bounds,
-                                      byRoundingCorners: corners,
-                                      cornerRadii: CGSize(width: cornerRadius, height: cornerRadius)).cgPath
-        cell.layer.mask = maskLayer
+        cell.roundedCorners(tableView: tableView, indexPath: indexPath)
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
