@@ -207,7 +207,7 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
     
     private func statsCell() -> UITableViewCell {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "trackingStats")
-        cell.textLabel?.text = UIConstants.strings.trackersBlockedSince + getAppInstallDate()
+        cell.textLabel?.text = String(format: UIConstants.strings.trackersBlockedSince, getAppInstallDate())
         cell.textLabel?.textColor = .primaryText.withAlphaComponent(0.6)
         cell.textLabel?.font = UIConstants.fonts.trackingProtectionStatsText
         cell.detailTextLabel?.text = getNumberOfTrackersBlocked()
@@ -291,7 +291,7 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
     private func getAppInstallDate() -> String {
         let urlToDocumentsFolder = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MMM dd, YYYY"
+        dateFormatter.dateStyle = .medium
         if let installDate = (try! FileManager.default.attributesOfItem(atPath: urlToDocumentsFolder.path)[FileAttributeKey.creationDate]) as? Date {
             let stringDate = dateFormatter.string(from: installDate)
             return stringDate
