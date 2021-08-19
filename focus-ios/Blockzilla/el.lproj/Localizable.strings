@@ -29,6 +29,9 @@
 "About.safariBullet1" = "Αποκλείστε trackers για βελτιωμένο απόρρητο";
 
 /* Label on About screen */
+"About.safariBullet2" = "Αποκλείστε τις γραμματοσειρές ιστού για μείωση μεγέθους σελίδας";
+
+/* Label on About screen */
 "About.safariBulletHeader" = "Χρησιμοποιήστε το ως επέκταση του Safari:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -298,6 +301,9 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Αυτόματη συμπλήρωση URL";
 
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Η φραγή των trackers άλλου περιεχομένου ενδέχεται να χαλάσει μερικά βίντεο και ιστοσελίδες.";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "Το %@ θα στείλει ό,τι πληκτρολογείτε στη γραμμή διευθύνσεων στη μηχανή αναζήτησης.";
 
@@ -372,6 +378,9 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "ΑΣΦΑΛΕΙΑ";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Φραγή γραμματοσειρών ιστού";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Χρήση Face ID για ξεκλείδωμα εφαρμογής";

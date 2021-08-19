@@ -29,6 +29,9 @@
 "About.safariBullet1" = "بہتر رازداریکے لیئے سراغ راہ بلاک کریں";
 
 /* Label on About screen */
+"About.safariBullet2" = "صفحہ کا ماپ گھٹانے کے لیے ویب فانٹ بلاک کریں";
+
+/* Label on About screen */
 "About.safariBulletHeader" = "اس کو Safari کی توسیعات کے طور پر استعمال کریں:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -274,6 +277,9 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "URL خودکار تکميل";
 
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "دیگر مواد ٹریکرز کو روکنے سے کچھ ویڈیوز اور ویب صفحات ٹوٹ سکتے ہیں۔";
+
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "مزید سیکھیں۔";
 
@@ -342,6 +348,9 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "SECURITY";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "ویب فونٹس بلاک کریں";
 
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "ابتدائی صفحہ کی تجاویز دکھائیں";

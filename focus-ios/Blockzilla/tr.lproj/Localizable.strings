@@ -29,6 +29,9 @@
 "About.safariBullet1" = "Gizliliğinizi artırmak için takipçileri engelleyebilirsiniz";
 
 /* Label on About screen */
+"About.safariBullet2" = "Sayfa boyutunu azaltmak için web fontlarını engelleyebilirsiniz";
+
+/* Label on About screen */
 "About.safariBulletHeader" = "Onu Safari uzantısı olarak kullanabilirsiniz:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -304,6 +307,9 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Otomatik adres tamamlama";
 
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Diğer içerik takipçilerini engellemek bazı videoları ve web sayfalarını bozabilir.";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@, adres çubuğuna yazdıklarını arama motorunuza gönderecektir.";
 
@@ -378,6 +384,9 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "GÜVENLİK";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Web fontlarını engelle";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Uygulamanın kilidini açmak için Face ID’yi kullan";

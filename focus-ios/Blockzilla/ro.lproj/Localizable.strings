@@ -301,12 +301,6 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Blocarea altor elementele de urmărire de conținut ar putea afecta funcționalitatea unor videouri sau pagini web.";
 
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Nu, mersi";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Înțeleg";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ va trimite ce tastezi în bara de adresă la motorul de căutare.";
 
@@ -383,31 +377,7 @@
 "Settings.sectionSecurity" = "SECURITATE";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Blochează elementele de urmărire publicitare";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Anumite reclame urmăresc vizitele pe site, chiar dacă nu dai clic pe reclame";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Blochează elementele de urmărire analitice";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Folosite pentru a colecta, a analiza și a măsura activități precum atingerea și derularea";
-
-/* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Blochează fonturile web";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Blochează alte elemente de urmărire de conținut";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Activarea poate cauza un comportament neașteptat al unor pagini";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Blochează elementele de urmărire ale rețelelor sociale";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Încorporate în site-uri pentru a-ți urmări vizitele și a afișa funcții precum butoanele de distribuire";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Folosește Face ID pentru a debloca aplicația";
@@ -525,12 +495,6 @@
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Dezactivează până când închizi %@ sau apeși ȘTERGE.";
-
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Protecție împotriva urmăririi";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Alege dacă %@ blochează elementele de urmărire publicitare, analitice, ale rețelelor sociale și altele.";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Adaugă un link pentru completare automată";

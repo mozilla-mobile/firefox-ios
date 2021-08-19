@@ -29,6 +29,9 @@
 "About.safariBullet1" = "ကိုယ်ရေးလုံခြုံမှု ပိုမိုကောင်းမွန်စေရန် နောက်ယောင်ခံကိရိယာများကို ပိတ်ပါ";
 
 /* Label on About screen */
+"About.safariBullet2" = "စာမျက်နှာ ဖိုင်အရွယ်အစားကို လျှော့ချရန် ဝဘ်ဖောင့်အသုံးပြုခြင်းကို ပိတ်ပါ";
+
+/* Label on About screen */
 "About.safariBulletHeader" = "Safari extension အနေနှင့် အသုံးပြုပါ။";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -295,6 +298,9 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "URL အလိုအလျှောက်ဖြည့်စွက်";
 
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "အခြား အကြောင်းအရာနောက်ယောင်ခံကိရိယာများကို ပိတ်ခြင်းသည် အချို့သော ဗီဒီယိုများနှင့် ဝဘ်စာမျက်နှာများကို ကောင်းမွန်စွာ လုပ်ဆောင်နိုင်စေမည် မဟုတ်ပါ။";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ သည် လိပ်စာဘားတန်းတွင် ရိုက်သမျှကို ရှာဖွေရေးယန္တရားသို့ ပေးပို့ပါမည်။";
 
@@ -369,6 +375,9 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "SECURITY";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "ဝဘ်ဖောင့်များကို ပိတ်ပင်ပါ";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "အက်ပ်ဖွင့်ရန် မျက်နှာအိုင်ဒီကိုသုံးပါ";

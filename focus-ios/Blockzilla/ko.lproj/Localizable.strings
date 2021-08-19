@@ -29,6 +29,9 @@
 "About.safariBullet1" = "추적 차단 및 개인 정보 보호";
 
 /* Label on About screen */
+"About.safariBullet2" = "데이터 전송량 절감을 위해 웹 폰트 차단";
+
+/* Label on About screen */
 "About.safariBulletHeader" = "Safari 확장 기능 사용:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -304,6 +307,9 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "URL 자동 완성";
 
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "기타 콘텐츠 추적기를 차단하면, 동영상이나 웹 페이지가 제대로 표시되지 않을 수 있습니다.";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@가 주소창에 입력한 내용을 검색엔진에 전송합니다.";
 
@@ -378,6 +384,9 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "보안";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "웹 폰트 차단";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Face ID를 사용해서 앱 잠금 해제";

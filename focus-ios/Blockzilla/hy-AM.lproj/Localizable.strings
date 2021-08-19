@@ -29,6 +29,9 @@
 "About.safariBullet1" = "Արգելափակել հետագծումները՝ գաղտնիությունը լավարկելու համար";
 
 /* Label on About screen */
+"About.safariBullet2" = "Արգելափակել վեբ տառատեսակները՝ էջի չափը նվազեցնելու համար";
+
+/* Label on About screen */
 "About.safariBulletHeader" = "Օգտագործել որպես Safari-ի ընդլայնում.";
 
 /* Label on About screen */
@@ -223,6 +226,9 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "URL ինքնալրացում";
 
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Բովանդակության այլ հետագծումների արգելափակումը կարող է ընդհատել որոշ տեսանյութեր և վեբ էջեր:";
+
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla-ն ձգտում է հավաքել միայն այն, ինչ պետք է՝ %1$s-ը լավարկելու համար:";
 
@@ -282,6 +288,9 @@
 
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "ԳԱՂՏՆԻՈՒԹՅՈՒՆ";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Արգելափակել վեբ տառատեսակները";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Կարող է ընդհատել որոշ տեսանյութեր և վեբ էջեր";

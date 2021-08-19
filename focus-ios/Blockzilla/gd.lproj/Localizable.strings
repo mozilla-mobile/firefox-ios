@@ -301,12 +301,6 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Ma bhacas tu tracaichean susbaint eile, dh’fhaoidte nach obraich cuid a dhuilleagan-lìn is videothan tuilleadh.";
 
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Na bac iad, mòran taing";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Bac iad co-dhiù";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "Cuiridh %@ na sgrìobhas tu ann am bàr an t-seòlaidh gun einnsan-luirg agad.";
 
@@ -383,31 +377,7 @@
 "Settings.sectionSecurity" = "TÈARAINTEACHD";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Bac tracaichean sanasachd";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Tracaichidh cuid dhen t-sanasachd tadhlan air an làrach, fiù mur am briog thu orra";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Bac tracaichean anailiseach";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Thèid seo a chleachdadh airson gnìomhan mar ghnogadh is sgroladh a chruinneachadh, a sgrùdadh is a thomhas";
-
-/* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Bac cruthan-clò lìn";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Bac tracaichean susbaint eile";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Ma chuireas tu seo an comas, dh’fhaoidte nach obraich cuid a dhuilleagan buileach mar bu chòir";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Bac tracaichean sòisealta";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Thèid seo a leabachadh air làraichean airson tracadh a dhèanamh ort ma thadhlas tu air làrach agus airson rudan mar phutanan co-roinnidh a shealltainn dhut";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Cleachd Face ID airson a’ ghlas a thoirt far na h-aplacaid";
@@ -525,12 +495,6 @@
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Cuir à comas gus an dùin thu %@ no gus an doir thu gnogag air “SUATH ÀS”.";
-
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Dìon o thracadh";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Cuir romhad am bac %@ tracaichean sanasachd is sgrùdaidh, tracaichean sòisealta is feadhainn eile.";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Cuir ceangal ris airson a choileanadh gu fèin-obrachail";

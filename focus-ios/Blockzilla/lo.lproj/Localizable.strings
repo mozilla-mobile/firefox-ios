@@ -235,12 +235,6 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "ການບັອກຕົວຕິດຕາມຂອງເນື້ອຫາຕ່າງໆອາດຈະເຮັດໃຫ້ບາງວິດີໂອ ແລະ ຫນ້າເວັບບໍ່ສົມບູນໄດ້.";
 
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "ໄດ້ແລ້ວ, ຂອບໃຈ";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "ຂ້ອຍຮັບຮູ້ເງືອນໄຂແລ້ວ";
-
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla ພະຍາຍາມທີ່ຈະເກັບຮວບຮ່ວມສະເພາະສິ່ງທີ່ຈຳເປັນຕໍ່ການປັບປູງ %@ ສຳລັບທຸກໆຄົນ.";
 
@@ -302,31 +296,7 @@
 "Settings.sectionPrivacy" = "PRIVACY";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "ບັອກຕົວຕິດຕາມຂອງການໂຄສະນາ";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "ມີໂຄສະນາບາງໂຕສາມາດຕິດຕາມການເຂົ້າໄປເວັບຕ່າງໆ ເຖິງແມ່ນວ່າທ່ານຈະບໍ່ໄດ້ຄິກໃສ່ໂຄສະນານັ້ນເລີຍ";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "ບັອກຕົວຕິດຕາມຂອງການວິເຄາະ";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "ໃຊ້ເພື່ອເກັບກຳຮວບຮ່ວມ, ວິເຄາະ ແລະ ວັດແທກກິດຈະກຳເຊັນວ່າການແຕະ ແລະ ການເລື່ອນ";
-
-/* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "ບັອກຕົວອັກສອນເວັບ";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "ບັອກຕົວຕິດຕາມຂອງເນື້ອຫາຕ່າງໆ";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "ການເປີດໃຊ້ງານອາດຈະເຮັດໃຫ້ບາງຫນ້າເຮັດວຽກຜຶດປົກກະຕິ";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "ບັອກຕົວຕິດຕາມຂອງສືສັງຄົມອອນໄລນ໌";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "ຝັງໄວ້ຢູ່ໃນເວັບໄຊທ໌ເພື່ອຕິດຕາມເບິງການເຂົ້າມາເບິງຂອງທ່ານ ແລະ ເພື່ອສະແດງຟັງຊັນເຊັ່ນວ່າປຸ່ມແບ່ງປັນ";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "ອາດຈະເຮັດໃຫ້ບາງວິດີໂອ ແລະ ຫນ້າເວັບບໍ່ສົມບູນ";
@@ -384,12 +354,6 @@
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "ປິດໃຊ້ງານຈົນກະທັ້ງທ່ານປິດ %@ ຫລື ແຕະ ERASE.";
-
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "ການປ້ອງກັນການຕິດຕາມ";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "ເລືອກວ່າຈະໃຫ້ %@ ບັອກຕົວຕິດຕາມໂຄສະນາ, ການວິເຄາະ, ສືສັງຄົມ ແລະ ຕົວຕິດຕາມອື່ນໆ.";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "ຍົກເລີກ";

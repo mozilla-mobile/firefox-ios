@@ -250,6 +250,9 @@
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "PRIVACY";
 
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "वेब फन्टहरू अवरुद्ध गर्नुहोस्";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "केहि भिडियोहरु र वेब पेजहरू बिग्रन सक्छ";
 

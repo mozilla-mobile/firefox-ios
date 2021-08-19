@@ -29,6 +29,9 @@
 "About.safariBullet1" = "Blocar trazadors pa amillorar la privacidat";
 
 /* Label on About screen */
+"About.safariBullet2" = "Blocar las fuents web pa reducir la mida d'a pachina";
+
+/* Label on About screen */
 "About.safariBulletHeader" = "Usar-lo como una extensión de Safari";
 
 /* Label on About screen */
@@ -223,6 +226,9 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Autocompletar URL";
 
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Blocar atros trazadors de contenius puede fer que no s'amuestren bien bells videos u pachinas web.";
+
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla s'esfuerza per replegar nomás lo necesario pa fornir y amillorar %@ pa totz.";
 
@@ -282,6 +288,9 @@
 
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "PRIVACIDAT";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Blocar fuents de Web";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Puede privar que se veigan bien bells videos y pachinas web";

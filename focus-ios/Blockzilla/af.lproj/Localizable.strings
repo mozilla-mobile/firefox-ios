@@ -26,6 +26,9 @@
 "About.safariBullet1" = "Blokkeer speurders vir beter privaatheid";
 
 /* Label on About screen */
+"About.safariBullet2" = "Blokkeer webfonte om bladsygrootte te verminder";
+
+/* Label on About screen */
 "About.safariBulletHeader" = "Gebruik dit as ’n uitbreiding vir Safari:";
 
 /* Label on About screen */
@@ -106,6 +109,9 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Maak die instellings oop";
 
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Die blokkering van ander inhoudspeurders kan sommige video’s en webbladsye breek.";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "Instellings";
 
@@ -120,6 +126,9 @@
 
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "PRIVAATHEID";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Blokkeer webfonte";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Kan sommige video's en webbladsye breek";

@@ -29,6 +29,9 @@
 "About.safariBullet1" = "Bloquear rastreadores para mejorar la privacidad";
 
 /* Label on About screen */
+"About.safariBullet2" = "Bloquear fuentes web para reducir el peso de las páginas";
+
+/* Label on About screen */
 "About.safariBulletHeader" = "Usalo como extensión de Safari:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -304,6 +307,9 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Autocompletar URL";
 
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Bloquear otros rastreadores de contenidos puede hacer que algunos videos y páginas web fallen.";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ enviará lo que ingrese en la barra de direcciones a su motor de búsqueda.";
 
@@ -378,6 +384,9 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "SECURITY";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Bloquear fuentes web";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Usar Face ID para desbloquear la aplicación";

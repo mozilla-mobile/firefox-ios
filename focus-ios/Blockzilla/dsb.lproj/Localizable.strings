@@ -29,6 +29,9 @@
 "About.safariBullet1" = "Blokěrujśo pśeslědowaki za pólěpšonu priwatnosć";
 
 /* Label on About screen */
+"About.safariBullet2" = "Blokěrujśo webpisma, aby wjelikosć boka reducěrował";
+
+/* Label on About screen */
 "About.safariBulletHeader" = "Wužywajśo jen ako rozšyrjenje za Safari:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -304,6 +307,9 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Awtomatiske wudopołnjenje URL";
 
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Blokěrowanje drugich pśeslědowaki móžo někotare wideo a webboki kazyś.";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ se na wašu pytnicu pósćelo, což w adresowem pólu zapódajośo.";
 
@@ -378,6 +384,9 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "WĚSTOTA";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Webpisma blokěrowaś";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Face ID za wótwórjanje nałoženja wužywaś";

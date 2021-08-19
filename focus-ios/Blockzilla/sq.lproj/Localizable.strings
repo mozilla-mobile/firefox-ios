@@ -301,12 +301,6 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Bllokimi i gjurmuesve të tjerë mund të pengojë funksionimin e disa videove dhe faqeve Web.";
 
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Jo, Faleminderit";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "E kuptoj";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ do të dërgojë te motori juaj i kërkimeve atë çka shtypni te shtylla e adresave.";
 
@@ -383,31 +377,7 @@
 "Settings.sectionSecurity" = "SIGURI";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Blloko gjurmues reklamash";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Disa reklama ndjekin vizita sajti, madje edhe kur nuk klikoni mbi reklamat";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Blloko gjurmues analizash";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Të përdorur për të grumbulluar, analizuar dhe matur veprimtari të tilla si prekje dhe rrëshqitje në faqe";
-
-/* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Blloko shkronja Web";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Blloko të tjerë gjurmues lënde";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Aktivizimi mund të bëjë që disa faqe të sillen ndryshe nga ç’pritet";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Blloko gjurmues platformash shoqërore";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Të trupëzuara në sajte për të gjurmuar vizitat tuaja dhe për të shfaqur funksione, të tillë si butona ndarjeje me të tjerët";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Përdorni Face ID që të shkyçni aplikacionin";
@@ -525,12 +495,6 @@
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Çaktivizoje derisa të mbyll %@ ose prekë FSHIJE.";
-
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Mbrojtje Nga Gjurmimet";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Zgjidhni se ç’bllokon %@, reklama, analizues, socialë, apo gjurmues të tjerë.";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Shtoni lidhje për vetëplotësim";

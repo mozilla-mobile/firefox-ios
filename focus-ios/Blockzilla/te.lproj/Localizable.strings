@@ -29,6 +29,9 @@
 "About.safariBullet1" = "మెరుగైన గోప్యత కోసం ట్రాకర్లని నిరోధించండి";
 
 /* Label on About screen */
+"About.safariBullet2" = "పేజీ పరిమాణం తగ్గించుటకు వెబ్ ఫాంట్లని నిరోధించండి";
+
+/* Label on About screen */
 "About.safariBulletHeader" = "దీనిని Safari పొడిగింతగా వాడండి:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -244,6 +247,9 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "URL స్వయంపూర్తి";
 
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "ఇతర కంటెంట్ ట్రాకర్లను నిరోధించడం వలన కొన్ని వీడియోలు మరియు వెబ్ పేజీలు విరిగిపోవచ్చు.";
+
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "ప్రతి ఒక్కరికీ %@ ను అందించడానికి మరియు మెరుగుపరచడానికి Mozilla అవసరమైనవి మాత్రమే సేకరించేందుకు కృషి చేస్తుంది.";
 
@@ -279,6 +285,9 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "భద్రత";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "వెబ్ ఫాంట్లను నిరోధించండి";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "కొన్ని వీడియోలను మరియు వెబ్ పేజీలను విచ్ఛిన్నం చేయవచ్చు";

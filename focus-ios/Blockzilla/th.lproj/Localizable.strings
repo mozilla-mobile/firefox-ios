@@ -29,6 +29,9 @@
 "About.safariBullet1" = "ปิดกั้นตัวติดตามเพื่อความเป็นส่วนตัวที่เพิ่มขึ้น";
 
 /* Label on About screen */
+"About.safariBullet2" = "ปิดกั้นแบบอักษรเว็บเพื่อลดขนาดหน้า";
+
+/* Label on About screen */
 "About.safariBulletHeader" = "ใช้เป็นส่วนขยาย Safari:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -304,6 +307,9 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "การเติม URL อัตโนมัติ";
 
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "การปิดกั้นตัวติดตามของเนื้อหาอื่น ๆ อาจทำให้วิดีโอและหน้าเว็บบางส่วนไม่สมบูรณ์";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ จะส่งสิ่งที่คุณพิมพ์ในแถบที่อยู่ไปยังเครื่องมือค้นหาของคุณ";
 
@@ -378,6 +384,9 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "ความปลอดภัย";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "ปิดกั้นแบบอักษรเว็บ";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "ใช้ Face ID เพื่อปลดล็อคแอป";

@@ -23,6 +23,9 @@
 "About.safariBullet1" = "Estä seuraimet ja paranna yksityisyyttäsi";
 
 /* Label on About screen */
+"About.safariBullet2" = "Estä web-fontit vähentääksesi sivujen kokoa";
+
+/* Label on About screen */
 "About.safariBulletHeader" = "Käytä sitä Safari-laajennuksena:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -318,6 +321,9 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "TURVALLISUUS";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Estä verkkosivujen kirjasinlajit";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Käytä Face ID:tä sovelluksen lukituksen avaamiseen";

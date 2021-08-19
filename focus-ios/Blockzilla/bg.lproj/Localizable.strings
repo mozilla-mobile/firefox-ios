@@ -29,6 +29,9 @@
 "About.safariBullet1" = "Спирайте проследяването за подобрена поверителност";
 
 /* Label on About screen */
+"About.safariBullet2" = "Спирайте зареждането на шрифтове за по-малък мрежов трафик";
+
+/* Label on About screen */
 "About.safariBulletHeader" = "Използвайте като разширение на Safari:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -295,6 +298,9 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Автоматично довършване на адреси";
 
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Спирането на други проследяващи елементи може да развали показването на някои видеота и уеб страници.";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ ще изпраща към търсачката всичко, каквото въвеждате в адресната лента.";
 
@@ -369,6 +375,9 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "ЗАЩИТА";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Спиране на уеб шрифтовете";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Използване на лицево разпознаване за отключване на приложението";

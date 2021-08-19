@@ -29,6 +29,9 @@
 "About.safariBullet1" = "Rhwystro tracwyr ar gyfer gwell preifatrwydd";
 
 /* Label on About screen */
+"About.safariBullet2" = "Rhwystro ffontiau Gwe i leihau maint tudalen";
+
+/* Label on About screen */
 "About.safariBulletHeader" = "Ei ddefnyddio fel estyniad Safari:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -304,6 +307,15 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Awtogwblhau URL";
 
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Gall rwystro tracwyr cynnwys eraill dorri rhai fideos a thudalennau Gwe.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "Diddymu";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes2" = "Rhwystro Tracwyr Cynnwys";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "Bydd %@ yn anfon yr hyn rydych yn ei deipio yn y bar cyfeiriad i'ch peiriant chwilio.";
 
@@ -379,6 +391,21 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "DIOGELWCH";
 
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "Hysbysebu";
+
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "Dadansoddeg";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Rhwystro ffontiau Gwe";
+
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "Cynnwys";
+
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "Cymdeithasol";
+
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Defnyddio Face ID i ddatgloi ap";
 
@@ -402,6 +429,12 @@
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Gall Touch ID ddatgloi %@ os oes URL eisoes ar agor yn yr ap";
+
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "Diffodd";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "Ymlaen";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Be sy'n Newydd";
@@ -490,11 +523,32 @@
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Dysgu Rhagor";
 
+/* Text for the button that closes the Shield Data and opens the regular Settings screen. */
+"trackingProtection.moreSettings" = "Rhagor o Osodiadau";
+
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Tracwyr cymdeithasol";
 
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "Mae diogelu I FFWRDD ar gyfer y sesiwn hon";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "Mae diogelu YMLAEN ar gyfer y sesiwn hon";
+
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Analluogi nes i chi gau %@ neu dapio ERASE.";
+
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "Diogelwch Uwch Rhag Tracio";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel2" = "Cadwch eich data i chi’ch hun. Mae %@ yn eich diogelu rhag llawer o’r tracwyr mwyaf cyffredin sy’n eich dilyn ar-lein.";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "Tracwyr wedi'u rhwystro ers %@";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "Tracwyra sgriptiau i'w rhwystro";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Ychwanegu dolen i awtogwblhau";

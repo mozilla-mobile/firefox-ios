@@ -26,6 +26,9 @@
 "About.safariBullet1" = "Maxfiylikni ta’minlash uchun kuzatuvchilarni bloklang";
 
 /* Label on About screen */
+"About.safariBullet2" = "Sahifa hajmini kichiklashtirish uchun veb-shriftlarni bloklang";
+
+/* Label on About screen */
 "About.safariBulletHeader" = "Undan Safari kengaytmasi sifatida foydalaning:";
 
 /* Label on About screen */
@@ -106,6 +109,9 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Ilova sozlamalarini oching";
 
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Kuzatuvchilarning boshqa kontentlarini bloklasangiz, ba’zi video va veb-sahifalar ishlamay qolishi mumkin.";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "Sozlamalar";
 
@@ -120,6 +126,9 @@
 
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "MAXFIYLIK";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Veb-shriftlarni bloklash";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Ba’zi video va veb sahifalarning ishlashiga halaqit berishi mumkin";

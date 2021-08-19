@@ -29,6 +29,9 @@
 "About.safariBullet1" = "Sekat penjejak untuk privasi yang lebih baik";
 
 /* Label on About screen */
+"About.safariBullet2" = "Sekat fon Web untuk mengurangkan saiz halaman";
+
+/* Label on About screen */
 "About.safariBulletHeader" = "Gunakan sebagai ekstensi Safari:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -295,6 +298,9 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Auto-lengkap URL";
 
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Penyekatan penjejak kandungan lain boleh mengganggu sesetengah kandungan video dan laman Web.";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ akan menghantar apa yang anda taip dalam bar alamat ke enjin carian.";
 
@@ -369,6 +375,9 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "SEKURITI";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Sekat fon Web";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Guna ID Muka untuk membuka aplikasi";

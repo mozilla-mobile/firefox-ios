@@ -301,12 +301,6 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Blokowanje drugich přesćěhowakow móže někotrym widejam a webstronam haćić.";
 
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Ně, dźakuju so";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Rozumju";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ so na wašu pytawu pósćele, štož w adresowym polu zapodaće.";
 
@@ -383,31 +377,7 @@
 "Settings.sectionSecurity" = "WĚSTOTA";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Wabjenske přesćěhowaki blokować";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Někotre wabjenske anonsy wopyty sydłow slěduja, samo hdyž na anonsy njekliknjeće";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Analyzowe přesćěhowaki blokować";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Z tym so aktiwity kaž dótkanje a kulenje přez strony hromadźa, analyzuja a měrja";
-
-/* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Webpisma blokować";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Druhe wobsahowe přesćěhowaki blokować";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "To móže wjesć k tomu, zo so někotre strony njewšědnje zadźerža";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Socialne přesćěhowaki blokować";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Na sydłach zasadźene, zo bychu waše wopyty slědowali a funkcije kaž tłóčatka za dźělenje zwobraznili";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Face ID za wotewěranje nałoženja wužiwać";
@@ -525,12 +495,6 @@
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Znjemóžnić, doniž %@ njezačinjeće abo podótkńće ERASE.";
-
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Škit před slědowanjom";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Rozsudźće, hač %@ wabjenje, analytiske, socialne a druhe přesćěhowaki blokuje.";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Wotkaz za awtowudospołnjenje přidać";

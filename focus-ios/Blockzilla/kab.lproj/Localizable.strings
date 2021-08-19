@@ -29,6 +29,9 @@
 "About.safariBullet1" = "Sewḥel inedfaṛen i ugar n tudert tusligt";
 
 /* Label on About screen */
+"About.safariBullet2" = "Sewḥel tisefsiyin web akken ad ifsusen isebtar";
+
+/* Label on About screen */
 "About.safariBulletHeader" = "Seqdec-it am usiɣzef Safari:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -295,6 +298,9 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Taččart tawurmant URL";
 
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Asewḥel n ineḍfaṛen nniḍen n ugbur yezmer ad isewḥel kra n tvidyutin akked isebtar web ad d-banen akken iwata.";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ ad ak-n-yazen tawsit-inek deg ufeggag n tansiwin ɣer umsedday-inek n unadi.";
 
@@ -369,6 +375,9 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "TAƔELLIST";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Sewḥel tisefsiyin Web";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Seqdec Face ID akken ad tserḥeḍ i usnas";

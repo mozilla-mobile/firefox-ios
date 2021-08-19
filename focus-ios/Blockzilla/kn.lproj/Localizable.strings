@@ -29,6 +29,9 @@
 "About.safariBullet1" = "ಉತ್ತಮಗೊಳಿಸಿದ ಗೌಪ್ಯತೆಗಾಗಿ ಜಾಡುಹಿಡಿಯುವವರನ್ನು ನಿರ್ಬಂಧಿಸಿ";
 
 /* Label on About screen */
+"About.safariBullet2" = "ಪುಟದ ಗಾತ್ರ ಕುಗ್ಗಿಸಲು ಜಾಲದ ಫಾಂಟುಗನ್ನು ನಿರ್ಬಂಧಿಸಿ";
+
+/* Label on About screen */
 "About.safariBulletHeader" = "ಇದನ್ನು ಸಫಾರಿ ಎಕ್ಸ್‍ಟೆಂಷನ್ ಆಗಿ ಬಳಸಿ:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -271,6 +274,9 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "URL ಸ್ವಯಂಪೂರ್ಣಗೊಳಿಸು";
 
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "ಇತರೆ ಮಾಹಿತಿ ಜಾಡುಹಿಡಿಯುವವರನ್ನು ನಿರ್ಬಂಧಿಸುವುದರಿಂದ ಕೆಲವು ವಿಡಿಯೋ ಮತ್ತು ಜಾಲ ಪುಟಗಳು ಕೆಡಬಹುದು.";
+
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla ಎಲ್ಲರಿಗಾಗಿ %@ ಅನ್ನು ಉತ್ತಮಗೊಳಿಸಿ ಕೊಡುವುದಕ್ಕೆ ಬೇಕಾದ್ದನ್ನು ಮಾತ್ರ ಸಂಗ್ರಹಿಸುತ್ತದೆ.";
 
@@ -336,6 +342,9 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "SECURITY";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "ವೆಬ್ ಫಾಂಟುಗಳನ್ನು ನಿರ್ಬಂಧಿಸು";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "ಅಪ್ಲಿಕೇಶನ್ ಅನ್ಲಾಕ್ ಮಾಡಲು ಫೇಸ್ ID ಬಳಸಿ";

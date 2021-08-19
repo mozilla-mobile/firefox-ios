@@ -29,6 +29,9 @@
 "About.safariBullet1" = "Harangin ang mga tracker para mapabuti ang privacy";
 
 /* Label on About screen */
+"About.safariBullet2" = "I-block ang Web font upang bawasan ang laki ng pahina";
+
+/* Label on About screen */
 "About.safariBulletHeader" = "Gamitin ito bilang isang Safari extension:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -268,6 +271,9 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "URL Autocomplete";
 
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Ang pag-block ng iba pang nilalaman ng trackers ay maaaring masira ang ilang mga video at mga pahina ng Web pages.";
+
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla ay nag susumikap na kolektahin lamang kung ano ang kailangan naming ibigay at pagbutihin ang %@ para sa lahat.";
 
@@ -336,6 +342,9 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "SECURITY";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Harangan ang Web fonts";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Gamitin ang Face ID upang i-unlock ang app";

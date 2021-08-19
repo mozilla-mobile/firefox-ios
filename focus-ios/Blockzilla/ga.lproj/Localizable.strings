@@ -26,6 +26,9 @@
 "About.safariBullet1" = "Cuir cosc ar lorgairí chun do phríobháideachas a chosaint";
 
 /* Label on About screen */
+"About.safariBullet2" = "Cuir cosc ar chlónna Gréasáin chun leathanaigh a laghdú";
+
+/* Label on About screen */
 "About.safariBulletHeader" = "Úsáid mar eisínteacht Safari é:";
 
 /* Label on About screen */
@@ -106,6 +109,9 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Oscail Aip na Socruithe";
 
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Má chuireann tú cosc ar lorgairí ábhair eile, seans go mbrisfidh sé físeáin agus leathanaigh Ghréasáin áirithe.";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "Socruithe";
 
@@ -120,6 +126,9 @@
 
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "PRÍOBHÁIDEACHAS";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Cuir cosc ar chlónna Gréasáin";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Seans go mbrisfidh seo físeáin agus leathanaigh Ghréasáin áirithe";

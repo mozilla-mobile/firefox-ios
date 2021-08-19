@@ -29,6 +29,9 @@
 "About.safariBullet1" = "احجب المتعقبات لتحسين الخصوصية";
 
 /* Label on About screen */
+"About.safariBullet2" = "احجب خطوط الوب لتقليل حجم الصفحات";
+
+/* Label on About screen */
 "About.safariBulletHeader" = "استخدمه كامتداد لمتصفح سفاري:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -295,6 +298,9 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "إكمال المسارات تلقائيا";
 
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "حجب متعقبات المحتوى الأخرى قد يعطل بعض الڤديو و صفحات الوب.";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "سيُرسل %@ ما تكتبه في شريط العنوان إلى محرك البحث الذي تُفضّله.";
 
@@ -369,6 +375,9 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "الأمان";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "احجب خطوط الوب";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "استخدم معّرف الوجه لإلغاء قفل التطبيق";

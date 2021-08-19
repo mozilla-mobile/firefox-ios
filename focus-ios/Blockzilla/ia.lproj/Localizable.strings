@@ -29,6 +29,9 @@
 "About.safariBullet1" = "Bloca le traciatores pro un melior confidentialitate";
 
 /* Label on About screen */
+"About.safariBullet2" = "Bloca le discargamento de characteres web pro reducer le dimension del pagina";
+
+/* Label on About screen */
 "About.safariBulletHeader" = "Usa lo como extension de Safari:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -304,6 +307,15 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Auto-completamento del URL";
 
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Blocar altere traciatores de contento pote render mal-functionate alcun videos e paginas web.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "Cancellar";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes2" = "Blocar le traciatores de contento";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ inviara a tu motor de recerca lo que tu scribe in le barra de adresse.";
 
@@ -379,6 +391,21 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "SECURITATE";
 
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "Publicitate";
+
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "Analyse datos";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Blocar le typos de character de web";
+
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "Contento";
+
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "Social";
+
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Usar Face ID pro disblocar le application";
 
@@ -402,6 +429,12 @@
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Touch ID pote disblocar %@ si un URL es jam aperte in le application";
+
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "Inactive";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "Active";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Novas";
@@ -490,11 +523,32 @@
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Saper plus";
 
+/* Text for the button that closes the Shield Data and opens the regular Settings screen. */
+"trackingProtection.moreSettings" = "Altere parametros";
+
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Traciatores social";
 
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "Protectiones es INACTIVE pro iste session";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "Protectiones es ACTIVE pro iste session";
+
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Disactiva usque %@ es claudite o tocca ELIMINA.";
+
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "Protection antitraciamento reinfortiate";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel2" = "Mantene tu datos pro te mesme. %@ te protege contra multe del plus commun traciatores que seque lo que tu face online.\n";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "Traciatores blocate desde %@";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "Traciatores e scripts a blocar";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Adde ligamine pro autocompletar";

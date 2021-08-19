@@ -301,12 +301,6 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "मजकुराचा मागोवा घेणारे इतर घटक बंद केल्यास काही विडिओ आणि वेब पृष्ठे निकामी होऊ शकतात.";
 
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "नाही धन्यवाद";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "मला समजले";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "आपण जे पत्ता पट्टी मध्ये टाईप कराल ते %@ आपल्या शोध इंजिनला पाठवेल.";
 
@@ -383,31 +377,7 @@
 "Settings.sectionSecurity" = "सुरक्षा";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "जाहिरात ट्रॅकर्स अवरोधित करा";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "काही जाहिराती संकेतस्थळावरील भेटीची नोंद करून ठेवतात, जरी तुम्ही जाहिरातीवर क्लिक केले नाही तरी";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "अॅनालिटिक्स ट्रॅकर्स अवरोधित करा";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "टॅपिंग आणि स्क्रोलिंगसारख्या क्रियाकलाप एकत्रित करण्यासाठी, मोजमाप आणि विश्लेषण करण्यासाठी वापरला जातो";
-
-/* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "वेब फॉन्ट अवरोधित करा";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "इतर सामग्री ट्रॅकर्स अवरोधित करा";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "सक्षम करण्यामुळे काही पृष्ठ अनपेक्षितरित्या वागू शकतात";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "सोशल ट्रॅकर अवरोधित करा";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "आपल्या भेटींचा मागोवा घेण्यासाठी आणि शेअर बटन सारखी सुविधा दर्शवण्यासाठी साईट वर ठेवले आहे";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "अँप उघडण्यासाठी Face ID वापरा";
@@ -525,12 +495,6 @@
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "आपण %@ बंद करेपर्यंत निष्क्रिय करा किंवा खोडा वर टॅप करा.";
-
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "ट्रॅकिंग संरक्षण";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "%@ जाहिरात, विश्लेषक, सामाजिक किंवा इतर मागोवा घेणाऱ्यांना अडवते का ते निवडा.";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "स्वयंपूर्ण करण्यासाठी दुवा जोडा";

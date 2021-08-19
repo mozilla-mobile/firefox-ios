@@ -29,6 +29,9 @@
 "About.safariBullet1" = "Жекелікті арттыру үшін трекерлерді блоктаңыз";
 
 /* Label on About screen */
+"About.safariBullet2" = "Парақтар өлшемдерін азайту үшін веб қаріптерін блоктаңыз";
+
+/* Label on About screen */
 "About.safariBulletHeader" = "Оны Safari кеңейтуі ретінде қолданыңыз:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -295,6 +298,9 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "URL автотолықтыру";
 
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Басқа трекерлерді блоктау кейбір видео және веб парақтарының жұмысына кері әсерін тигізуі мүмкін.";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ сіз адрестік жолақта терген нәрсені сіздің іздеу жүйеңізге жіберетін болады.";
 
@@ -369,6 +375,9 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "ҚАУІПСІЗДІК";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Веб қаріптерін блоктау";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Қолданбаны босату үшін Face ID қолданыңыз";

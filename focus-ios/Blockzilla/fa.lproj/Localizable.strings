@@ -29,6 +29,9 @@
 "About.safariBullet1" = "ردیاب‌ها را برای بهبود حریم‌خصوصی خود مسدود کنید";
 
 /* Label on About screen */
+"About.safariBullet2" = "قلم‌های وب را برای کاهش حجم صفحه‌ها مسدود کنید";
+
+/* Label on About screen */
 "About.safariBulletHeader" = "از آن به عنوان یک افزونه برای Safari استفاده کنید:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -295,6 +298,9 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "تکمیل خودکار نشانی";
 
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "مسدود کردن سایر ردیاب‌های محتوا ممکن است باعث خراب شدن تعدادی از فیلم‌ها و صفحات وب شود.";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ آدرسی که در نوار آدرس وارد کنید را به موتور جست‌ و جو ارسال می‌کند.";
 
@@ -369,6 +375,9 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "SECURITY";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "مسدود کردن قلم‌های وب";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "استفاده از تشخیص چهره برای باز‌کردن برنامه";

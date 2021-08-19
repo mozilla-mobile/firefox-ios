@@ -43,6 +43,15 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Відкрити в %@";
 
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "Гаразд";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "При додаванні картки до Wallet сталася помилка. Спробуйте знову пізніше.";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "Не вдалося додати картку";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "Зареєструйтеся для повернення до %@";
 
@@ -302,10 +311,10 @@
 "Settings.blockOtherMessage" = "Блокування інших елементів стеження може пошкодити деякі відео і веб-сторінки.";
 
 /* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Ні, дякую";
+"Settings.blockOtherNo2" = "Скасувати";
 
 /* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Я розумію";
+"Settings.blockOtherYes2" = "Блокувати стеження вмісту";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ відправлятиме провайдеру пошуку текст, введений в адресному рядку.";
@@ -382,32 +391,20 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "БЕЗПЕКА";
 
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Блокувати рекламу зі стеженням";
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "Реклама";
 
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Деяка реклама відстежує відвідування сайтів, навіть якщо ви на неї не натискали";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Блокувати аналітику зі стеженням";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Використовуються для збору, аналізу та вимірювання активності, наприклад, дотики і прокручування";
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "Аналітика";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Блокувати веб-шрифти";
 
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Блокувати інші елементи стеження";
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "Вміст";
 
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Увімкнення цієї функції може викликати непередбачувану поведінку деяких сторінок";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Блокувати стеження соціальних мереж";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Вбудовуються в сайти для відстеження ваших відвідувань та показу додаткових функцій, наприклад, кнопки \"Поділитися\"";
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "Соціальні мережі";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Використовувати Face ID для розблокування програми";
@@ -432,6 +429,12 @@
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Touch ID може розблокувати %@ якщо URL-адреса вже відкрита в програмі";
+
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "Вимкнено";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "Увімкнено";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Що нового";
@@ -520,17 +523,32 @@
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Докладніше";
 
+/* Text for the button that closes the Shield Data and opens the regular Settings screen. */
+"trackingProtection.moreSettings" = "Інші параметри";
+
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Стеження соціальних мереж";
+
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "Захист вимкнено для цього сеансу";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "Захист увімкнено для цього сеансу";
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Вимкнути до закриття %@, або оберіть СТЕРТИ.";
 
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Захист від стеження";
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "Розширений захист від стеження";
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Визначте, чи буде %@ блокувати рекламу, аналітику, соціальне та інше стеження.";
+"trackingProtection.trackerDescriptionLabel2" = "Зберігайте свої дані при собі. %@ захищає вас від численних найпоширеніших елементів стеження, що переслідують вас в мережі.";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "Заблоковано стеження, починаючи з %@";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "Блокувати стеження й скрипти";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Додати посилання для автозавершення";
@@ -543,6 +561,9 @@
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "СТЕРТИ";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "Історію перегляду очищено";
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Знайти на сторінці: %@";

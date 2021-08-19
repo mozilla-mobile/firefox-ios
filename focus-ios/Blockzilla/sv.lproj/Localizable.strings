@@ -29,6 +29,9 @@
 "About.safariBullet1" = "Blockera trackers för ökad integritet";
 
 /* Label on About screen */
+"About.safariBullet2" = "Blockera webbtypsnitt för att minska sidstorlek";
+
+/* Label on About screen */
 "About.safariBulletHeader" = "Använd som ett Safari-tillägg:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -304,6 +307,9 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Autokomplettera webbadress";
 
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Blockering av andra innehållstrackers kan störa vissa videor och webbsidor.";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ skickar det du skriver i adressfältet till din sökmotor.";
 
@@ -378,6 +384,9 @@
 
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "SÄKERHET";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Blockera webbtypsnitt";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Använd Face ID för att låsa upp appen";
