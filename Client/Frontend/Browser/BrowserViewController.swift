@@ -133,7 +133,7 @@ class BrowserViewController: UIViewController {
     weak var pendingDownloadWebView: WKWebView?
 
     let downloadQueue = DownloadQueue()
-    var isCmdClickForNewTab = false
+    var isOnlyCmdPressed = false
 
     fileprivate var shouldShowIntroScreen: Bool { profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil }
 
@@ -2142,20 +2142,24 @@ extension BrowserViewController: ContextMenuHelperDelegate {
         }
     }
     
-    //Support for CMD+ Click on link to open in a new tab
-     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-         super.pressesBegan(presses, with: event)
-         if #available(iOS 13.4, *) {
-             guard let key = presses.first?.key, (key.keyCode == .keyboardLeftGUI || key.keyCode == .keyboardRightGUI) else { return } //GUI buttons = CMD buttons on ipad/mac
-             self.isCmdClickForNewTab = true
-         }
+    override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        // Temporary solution to support CMD + Click to open an unselected new tab
+        if #available(iOS 13.4, *) {
+            if let event = event, event.allPresses.count > 1 {
+                isOnlyCmdPressed = false
+            } else if let key = presses.first?.key, (key.keyCode == .keyboardLeftGUI || key.keyCode == .keyboardRightGUI) { // GUI equates to CMD key on physical keyboard
+                isOnlyCmdPressed = true
+            }
+        }
+        
+        super.pressesBegan(presses, with: event)
     }
     
     override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
         super.pressesEnded(presses, with: event)
         if #available(iOS 13.4, *) {
             guard let key = presses.first?.key, (key.keyCode == .keyboardLeftGUI || key.keyCode == .keyboardRightGUI) else { return }
-            self.isCmdClickForNewTab = false
+            isOnlyCmdPressed = false
         }
     }
 }
