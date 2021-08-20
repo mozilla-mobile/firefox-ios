@@ -14,7 +14,6 @@ enum NimbusFeatureId: String {
     case nimbusValidation = "nimbus-validation"
     case onboardingDefaultBrowser = "onboarding-default-browser"
     case inactiveTabs = "inactiveTabs"
-    case librarySectionExperiment = "library-section-experiment"
     case search = "search"
 }
 
@@ -30,10 +29,5 @@ enum NimbusExperimentBranch {
     enum InactiveTab {
         static let control = "inactiveTabControl"
         static let treatment = "inactiveTabTreatment"
-    }
-
-    enum LibrarySectionABTest {
-        static let control = "librarySectionABTestShowLibrary"
-        static let variation = "librarySectionABTestShowRecentlySaved"
     }
 }

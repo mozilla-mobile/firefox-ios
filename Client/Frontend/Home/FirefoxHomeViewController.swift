@@ -143,7 +143,7 @@ extension HomePanelContextMenu {
 
 // MARK: - HomeVC
 
-class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureFlagsProtocol, UserResearch {
+class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureFlagsProtocol {
     weak var homePanelDelegate: HomePanelDelegate?
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     fileprivate let profile: Profile
@@ -178,24 +178,14 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
 
     var pocketStories: [PocketStory] = []
 
-    // Temporary variables to track the nimbus setting.
-    var nimbusExperimentShowLibrarySetting: Bool = true
-
-    var isYourLibrarySectionEnabled: Bool {
-        get {
-            // Library shortcuts should be disabled on the iPad
-            return UIDevice.current.userInterfaceIdiom != .pad && nimbusExperimentShowLibrarySetting
-        }
-    }
+    var isYourLibrarySectionEnabled: Bool { UIDevice.current.userInterfaceIdiom != .pad }
     
     var hasRecentBookmarks = false
     var hasReadingListitems = false
     var isRecentlySavedSectionEnabled: Bool {
-        get {
-            guard featureFlags.isFeatureActive(.recentlySaved) else { return false }
+        guard featureFlags.isFeatureActive(.recentlySaved) else { return false }
 
-            return (hasRecentBookmarks || hasReadingListitems) && !nimbusExperimentShowLibrarySetting
-        }
+        return hasRecentBookmarks || hasReadingListitems
     }
 
     var isJumpBackInSectionEnabled: Bool {
@@ -227,8 +217,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupExperiment()
-
         Section.allCases.forEach { collectionView.register($0.cellType, forCellWithReuseIdentifier: $0.cellIdentifier) }
         self.collectionView?.register(ASHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header")
         collectionView?.keyboardDismissMode = .onDrag
@@ -259,7 +247,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reloadAll()
-        setupExperiment()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -286,17 +273,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     }
     
     // MARK: - Helpers
-
-    func setupExperiment() {
-        nimbusExperimentShowLibrarySetting = experiments.withExperiment(featureId: .librarySectionExperiment) { branch -> Bool in
-                switch branch {
-                case .some(NimbusExperimentBranch.LibrarySectionABTest.control): return true
-                case .some(NimbusExperimentBranch.LibrarySectionABTest.variation): return false
-                default: return true
-            }
-        }
-    }
-    
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         self.topSitesManager.currentTraits = self.traitCollection
