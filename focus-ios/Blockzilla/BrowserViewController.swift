@@ -72,7 +72,11 @@ class BrowserViewController: UIViewController {
 
     private let searchSuggestionsDebouncer = Debouncer(timeInterval: 0.1)
     private var shouldEnsureBrowsingMode = false
-    private var isIPadRegularDimensions: Bool = false
+    private var isIPadRegularDimensions: Bool = false {
+        didSet {
+            overlayView.isIpadView = isIPadRegularDimensions
+        }
+    }
     private var initialUrl: URL?
     var tipManager: TipManager?
 
@@ -138,7 +142,7 @@ class BrowserViewController: UIViewController {
         overlayView.isHidden = true
         overlayView.alpha = 0
         overlayView.delegate = self
-        overlayView.backgroundColor = .scrim.withAlphaComponent(0.48)
+        overlayView.backgroundColor = isIPadRegularDimensions ? .clear : .scrim.withAlphaComponent(0.48)
         overlayView.setSearchSuggestionsPromptViewDelegate(delegate: self)
         mainContainerView.addSubview(overlayView)
 
@@ -664,7 +668,7 @@ class BrowserViewController: UIViewController {
             addURLBarConstraints()
             
         } else {
-            urlBar.snp.makeConstraints { make in
+            urlBarContainer.snp.makeConstraints { make in
                 make.width.equalTo(view)
                 make.leading.equalTo(view)
             }

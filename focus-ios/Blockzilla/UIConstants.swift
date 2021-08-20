@@ -224,6 +224,9 @@ struct UIConstants {
         static let settingsTextPadding: CGFloat = 10
         static let siriUrlSectionPadding: CGFloat = 40
         static let settingsSectionHeight: CGFloat = 44
+        static let suggestionViewCornerRadius: CGFloat = 10
+        static let suggestionViewHeightMultiplier: CGFloat = 0.25
+        static let suggestionViewWidthMultiplier: CGFloat = 0.75
         static let separatorHeight: CGFloat = 0.5
         static let shareTrackersBottomOffset: CGFloat = -20
         static let shareTrackersHeight: CGFloat = 36

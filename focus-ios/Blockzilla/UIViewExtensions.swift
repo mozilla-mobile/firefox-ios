@@ -63,4 +63,14 @@ extension UIView {
         gradientLayer.frame = self.bounds
         self.layer.insertSublayer(gradientLayer, at: 0)
     }
+    
+    func removeGradient() {
+        if let  buttonSublayers = self.layer.sublayers {
+            for layer in buttonSublayers {
+                if layer is CAGradientLayer {
+                    layer.removeFromSuperlayer()
+                }
+            }
+        }
+    }
 }

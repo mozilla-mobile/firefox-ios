@@ -38,16 +38,31 @@ class OverlayView: UIView {
     private let findInPageButton = InsetButton()
     private let searchSuggestionsPrompt = SearchSuggestionsPromptView()
     private let topBorder = UIView()
+    private let lastSeparator = UIView()
     private var separatorGroup = [UIView]()
     private var arrowButtons = [UIButton]()
     private let maxNumOfSuggestions = UIDevice.current.isSmallDevice() ? UIConstants.layout.smallDeviceMaxNumSuggestions : UIConstants.layout.largeDeviceMaxNumSuggestions
     public var currentURL = ""
+    
+    var isIpadView: Bool = false {
+        didSet {
+            searchSuggestionsPrompt.isIpadView = isIpadView
+            updateLayout(for: isIpadView)
+            updateSearchButtons()
+        }
+    }
+    
+    private var shouldShowFindInPage: Bool =  false {
+        didSet {
+            searchSuggestionsPrompt.shouldShowFindInPage = shouldShowFindInPage
+            updateDesign(shouldShowFindInPage)
+        }
+    }
 
     init() {
         super.init(frame: CGRect.zero)
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
-
-        searchSuggestionsPrompt.backgroundColor = UIConstants.colors.background
+    
         searchSuggestionsPrompt.clipsToBounds = true
         searchSuggestionsPrompt.accessibilityIdentifier = "SearchSuggestionsPromptView"
         addSubview(searchSuggestionsPrompt)
@@ -62,35 +77,6 @@ class OverlayView: UIView {
 
         topBorder.backgroundColor = UIConstants.Photon.Grey90.withAlphaComponent(0.4)
         addSubview(topBorder)
-
-        topBorder.snp.makeConstraints { make in
-            make.top.equalTo(searchSuggestionsPrompt.snp.bottom)
-            make.leading.trailing.equalTo(safeAreaLayoutGuide)
-            make.height.equalTo(1)
-        }
-
-        self.searchButtonGroup[0].snp.makeConstraints { make in
-            make.top.equalTo(topBorder.snp.bottom)
-            make.leading.trailing.equalTo(safeAreaLayoutGuide)
-        }
-        for i in 1..<maxNumOfSuggestions {
-            self.searchButtonGroup[i].snp.makeConstraints { make in
-                make.top.equalTo(searchButtonGroup[i-1].snp.bottom)
-                make.leading.trailing.equalTo(safeAreaLayoutGuide)
-                make.height.equalTo(UIConstants.layout.overlayButtonHeight)
-            }
-            self.separatorGroup[i - 1].snp.makeConstraints { make in
-                make.height.equalTo(0.5)
-                make.top.equalTo(searchButtonGroup[i - 1].snp.bottom)
-                make.leading.equalTo(searchButtonGroup[i].snp.leading).inset(52)
-                make.trailing.equalTo(searchButtonGroup[i].snp.trailing)
-            }
-            self.arrowButtons[i - 1].snp.makeConstraints { make in
-                make.height.width.equalTo(30)
-                make.trailing.equalTo(searchButtonGroup[i].snp.trailing).inset(12)
-                make.centerY.equalTo(searchButtonGroup[i])
-            }
-        }
 
         let padding = UIConstants.layout.searchButtonInset
         let attributedString = NSMutableAttributedString(string: UIConstants.strings.addToAutocompleteButton, attributes: [.foregroundColor: UIConstants.Photon.Grey10])
@@ -112,19 +98,23 @@ class OverlayView: UIView {
         }
 
         findInPageButton.isHidden = true
+        shouldShowFindInPage = false
         findInPageButton.titleLabel?.font = UIConstants.fonts.copyButton
         findInPageButton.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
         findInPageButton.titleLabel?.lineBreakMode = .byTruncatingTail
         findInPageButton.addTarget(self, action: #selector(didPressFindOnPage), for: .touchUpInside)
         findInPageButton.accessibilityIdentifier = "FindInPageBar.button"
-        findInPageButton.backgroundColor = UIConstants.colors.background
+        
         if UIView.userInterfaceLayoutDirection(for: findInPageButton.semanticContentAttribute) == .rightToLeft {
             findInPageButton.contentHorizontalAlignment = .right
         } else {
             findInPageButton.contentHorizontalAlignment = .left
         }
         addSubview(findInPageButton)
-
+        
+        lastSeparator.isHidden = true
+        addSubview(lastSeparator)
+        
         copyButton.titleLabel?.font = UIConstants.fonts.copyButton
         copyButton.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
         copyButton.titleLabel?.lineBreakMode = .byTruncatingTail
@@ -136,6 +126,74 @@ class OverlayView: UIView {
         }
         copyButton.addTarget(self, action: #selector(didPressCopy), for: .touchUpInside)
         addSubview(copyButton)
+        
+        updateLayout(for: isIpadView)
+    }
+    
+    private func updateLayout(for iPadView: Bool) {
+        searchSuggestionsPrompt.backgroundColor = iPadView ? .clear : UIConstants.colors.background
+        
+        topBorder.snp.remakeConstraints { make in
+            make.top.equalTo(searchSuggestionsPrompt.snp.bottom)
+            make.leading.trailing.equalTo(safeAreaLayoutGuide)
+            make.height.equalTo(iPadView ? 0.5 : 1)
+        }
+        
+        self.searchButtonGroup[0].snp.remakeConstraints { make in
+            make.top.equalTo(topBorder.snp.bottom)
+            if iPadView {
+                make.width.equalTo(searchSuggestionsPrompt).multipliedBy(UIConstants.layout.suggestionViewWidthMultiplier)
+                make.centerX.equalToSuperview()
+            } else {
+                make.width.equalTo(safeAreaLayoutGuide)
+                make.leading.trailing.equalTo(safeAreaLayoutGuide)
+            }
+        }
+        
+        for i in 1..<maxNumOfSuggestions {
+            self.searchButtonGroup[i].snp.removeConstraints()
+            self.searchButtonGroup[i].snp.makeConstraints { make in
+                make.top.equalTo(searchButtonGroup[i-1].snp.bottom)
+                make.leading.trailing.equalTo(iPadView ? searchButtonGroup[i-1] :safeAreaLayoutGuide)
+                make.height.equalTo(UIConstants.layout.overlayButtonHeight)
+            }
+            
+            self.separatorGroup[i - 1].snp.remakeConstraints { make in
+                make.height.equalTo(0.5)
+                make.top.equalTo(searchButtonGroup[i - 1].snp.bottom)
+                make.leading.equalTo(searchButtonGroup[i].snp.leading).inset(52)
+                make.trailing.equalTo(searchButtonGroup[i].snp.trailing)
+            }
+            
+            self.arrowButtons[i - 1].snp.remakeConstraints { make in
+                make.height.width.equalTo(30)
+                make.trailing.equalTo(searchButtonGroup[i].snp.trailing).inset(12)
+                make.centerY.equalTo(searchButtonGroup[i])
+            }
+        }
+        
+        findInPageButton.backgroundColor = iPadView ? .searchSuggestionIPad : UIConstants.colors.background
+        
+        remakeConstraintsForFindInPage()
+        
+        if iPadView {
+            searchButtonGroup.first?.layer.cornerRadius = UIConstants.layout.suggestionViewCornerRadius
+            searchButtonGroup.first?.clipsToBounds = true
+            searchButtonGroup.first?.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+            findInPageButton.layer.cornerRadius = UIConstants.layout.suggestionViewCornerRadius
+            findInPageButton.clipsToBounds =  true
+            findInPageButton.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+            lastSeparator.backgroundColor = .searchSeparator.withAlphaComponent(0.65)
+            topBorder.backgroundColor = .clear
+            
+        } else {
+            searchButtonGroup.first?.layer.cornerRadius = 0
+            findInPageButton.layer.cornerRadius = 0
+            lastSeparator.backgroundColor = .clear
+            topBorder.backgroundColor =  UIConstants.Photon.Grey90.withAlphaComponent(0.4)
+            
+        }
+        setGradientToSearchButtons()
     }
 
     private func makeSearchSuggestionButton(atIndex i: Int) {
@@ -173,7 +231,12 @@ class OverlayView: UIView {
     
     func setGradientToSearchButtons() {
         for button in searchButtonGroup {
-            button.applyGradient(colors: [.searchGradientFirst, .searchGradientSecond, .searchGradientThird, .searchGradientFourth])
+            if isIpadView {
+                button.removeGradient()
+                button.backgroundColor = .searchSuggestionIPad
+            } else {
+                button.applyGradient(colors: [.searchGradientFirst, .searchGradientSecond, .searchGradientThird, .searchGradientFourth])
+            }
         }
     }
 
@@ -253,7 +316,9 @@ class OverlayView: UIView {
             self.updateSearchSuggestionsPrompt(hidden: searchSuggestionsPromptHidden)
             // Hide the autocomplete button on home screen and when the user is typing
             self.addToAutocompleteButton.animateHidden(hideAddToComplete, duration: 0)
+            if !self.isIpadView {
             self.topBorder.backgroundColor =  searchSuggestionsPromptHidden ? UIConstants.Photon.Grey90.withAlphaComponent(0.4) : UIColor(rgb: 0x42455A)
+            }
             self.updateSearchButtons()
             let lastSearchButtonIndex = min(self.searchSuggestions.count, self.searchButtonGroup.count) - 1
             self.updateFindInPageConstraints(
@@ -271,9 +336,12 @@ class OverlayView: UIView {
     private func updateSearchButtons() {
         for index in 0..<self.searchButtonGroup.count {
             let hasSuggestionInIndex = index < self.searchSuggestions.count
-            let show = searchSuggestionsPrompt.isHidden && Settings.getToggle(.enableSearchSuggestions) && hasSuggestionInIndex
-            self.searchButtonGroup[index].isHidden = !show
-
+            if isIpadView {
+                let show = searchSuggestionsPrompt.isHidden && Settings.getToggle(.enableSearchSuggestions) && hasSuggestionInIndex
+                self.searchButtonGroup[index].isHidden = !show
+            } else {
+                self.searchButtonGroup[index].isHidden = !hasSuggestionInIndex
+            }
             if hasSuggestionInIndex {
                 self.setAttributedButtonTitle(
                     phrase: self.searchSuggestions[index],
@@ -287,15 +355,35 @@ class OverlayView: UIView {
 
     private func updateFindInPageConstraints(findInPageHidden: Bool, lastSearchButtonIndex: Int) {
         findInPageButton.isHidden = findInPageHidden
-
+        shouldShowFindInPage = !findInPageHidden
+        
         findInPageButton.snp.remakeConstraints { (make) in
-            make.leading.trailing.equalTo(safeAreaLayoutGuide)
+            if isIpadView {
+                make.width.equalTo(searchSuggestionsPrompt).multipliedBy(UIConstants.layout.suggestionViewWidthMultiplier)
+                if let firstButton = searchButtonGroup.first {
+                    make.leading.equalTo(firstButton.snp.leading)
+                } else {
+                    make.leading.equalTo(searchSuggestionsPrompt.snp.leading)
+                }
+            } else {
+                make.leading.trailing.equalTo(safeAreaLayoutGuide)
+            }
             if lastSearchButtonIndex >= 0 && !searchButtonGroup[lastSearchButtonIndex].isHidden {
                 make.top.equalTo(searchButtonGroup[lastSearchButtonIndex].snp.bottom)
             } else {
                 make.top.equalTo(topBorder.snp.bottom)
             }
             make.height.equalTo(UIConstants.layout.overlayButtonHeight)
+        }
+        
+        if isIpadView {
+            lastSeparator.snp.makeConstraints { make in
+                make.height.equalTo(0.5)
+                make.bottom.equalTo(findInPageButton.snp.top)
+                make.leading.equalTo(findInPageButton.snp.leading).inset(52)
+                make.trailing.equalTo(findInPageButton.snp.trailing)
+            }
+            lastSeparator.isHidden = !shouldShowFindInPage
         }
 
         self.setAttributedButtonTitle(phrase: self.searchQuery, button: self.findInPageButton, localizedStringFormat: UIConstants.strings.findInPageButton)
@@ -318,6 +406,43 @@ class OverlayView: UIView {
             }
 
             make.leading.trailing.equalTo(safeAreaLayoutGuide)
+            make.height.equalTo(UIConstants.layout.overlayButtonHeight)
+        }
+    }
+    
+    private func updateDesign(_ shouldShowFindInPage: Bool) {
+        guard isIpadView  else {
+            return
+        }
+        if shouldShowFindInPage {
+            searchButtonGroup.last?.layer.maskedCorners = []
+        } else {
+            topBorder.backgroundColor = .clear
+            searchButtonGroup.last?.layer.cornerRadius = UIConstants.layout.suggestionViewCornerRadius
+            searchButtonGroup.last?.clipsToBounds =  true
+            searchButtonGroup.last?.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+        }
+    }
+    
+    private func remakeConstraintsForFindInPage() {
+        findInPageButton.snp.remakeConstraints { (make) in
+            if isIpadView {
+                make.width.equalTo(searchSuggestionsPrompt).multipliedBy(UIConstants.layout.suggestionViewWidthMultiplier)
+                if let firstButton = searchButtonGroup.first {
+                    make.leading.equalTo(firstButton.snp.leading)
+                } else {
+                    make.leading.equalTo(searchSuggestionsPrompt.snp.leading)
+                }
+            } else {
+                make.leading.trailing.equalTo(safeAreaLayoutGuide)
+            }
+            if let lastSearchButton = searchButtonGroup.last {
+                if searchButtonGroup.count >= 0 && !lastSearchButton.isHidden {
+                    make.top.equalTo(lastSearchButton.snp.bottom)
+                } else {
+                    make.top.equalTo(topBorder.snp.bottom)
+                }
+            }
             make.height.equalTo(UIConstants.layout.overlayButtonHeight)
         }
     }
