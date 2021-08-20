@@ -1096,28 +1096,6 @@ extension BrowserViewController: TrackingProtectionDelegate {
 }
 
 extension BrowserViewController: BrowserToolsetDelegate {
-    func browserToolsetDidLongPressReload(_ browserToolbar: BrowserToolset) {
-        // Request desktop site
-        urlBar.dismiss()
-
-        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        let title = webViewController.userAgentString == UserAgent.desktopUserAgent() ? "Request Mobile Site" : "Request Desktop Site"
-        let object = webViewController.userAgentString == UserAgent.desktopUserAgent() ? TelemetryEventObject.requestMobile : TelemetryEventObject.requestDesktop
-
-        alert.addAction(UIAlertAction(title: title, style: .default, handler: { (action) in
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: object)
-            self.webViewController.requestUserAgentChange()
-        }))
-        alert.addAction(UIAlertAction(title: "Close", style: .cancel, handler: nil))
-
-        // Must handle iPad interface separately, as it does not implement action sheets
-        let iPadAlert = alert.popoverPresentationController
-        iPadAlert?.sourceView = browserToolbar.stopReloadButton
-        iPadAlert?.sourceRect = browserToolbar.stopReloadButton.bounds
-
-        present(alert, animated: true)
-    }
-
     func browserToolsetDidPressBack(_ browserToolset: BrowserToolset) {
         webViewController.goBack()
     }

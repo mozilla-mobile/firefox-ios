@@ -5,11 +5,10 @@
 import UIKit
 import CoreGraphics
 
-protocol BrowserToolsetDelegate: class {
+protocol BrowserToolsetDelegate: AnyObject {
     func browserToolsetDidPressBack(_ browserToolbar: BrowserToolset)
     func browserToolsetDidPressForward(_ browserToolbar: BrowserToolset)
     func browserToolsetDidPressReload(_ browserToolbar: BrowserToolset)
-    func browserToolsetDidLongPressReload(_ browserToolbar: BrowserToolset)
     func browserToolsetDidPressStop(_ browserToolbar: BrowserToolset)
     func browserToolsetDidPressDelete(_ browserToolbar: BrowserToolset)
     func browserToolsetDidPressContextMenu(_ browserToolbar: BrowserToolset, menuButton: InsetButton)
@@ -45,8 +44,6 @@ class BrowserToolset {
         stopReloadButton.setImage(#imageLiteral(resourceName: "icon_refresh_menu"), for: .normal)
         stopReloadButton.setImage(#imageLiteral(resourceName: "icon_refresh_menu").alpha(UIConstants.layout.browserToolbarDisabledOpacity), for: .disabled)
         stopReloadButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
-        let longPressGestureStopReloadButton = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressReload))
-        stopReloadButton.addGestureRecognizer(longPressGestureStopReloadButton)
         stopReloadButton.addTarget(self, action: #selector(didPressStopReload), for: .touchUpInside)
         stopReloadButton.accessibilityIdentifier = "BrowserToolset.stopReloadButton"
         
@@ -119,13 +116,6 @@ class BrowserToolset {
     @objc func didPressDelete() {
         if canDelete {
             delegate?.browserToolsetDidPressDelete(self)
-        }
-    }
-
-    @objc func didLongPressReload(recognizer: UILongPressGestureRecognizer) {
-        if recognizer.state == .began && !isLoading {
-            stopReloadButton.alpha = 1
-            delegate?.browserToolsetDidLongPressReload(self)
         }
     }
 
