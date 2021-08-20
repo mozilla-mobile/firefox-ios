@@ -143,7 +143,7 @@ extension HomePanelContextMenu {
 
 // MARK: - HomeVC
 
-class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureFlagsProtocol, UserResearch {
+class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureFlagsProtocol {
     weak var homePanelDelegate: HomePanelDelegate?
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     fileprivate let profile: Profile
