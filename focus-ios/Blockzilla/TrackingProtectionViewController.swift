@@ -92,6 +92,10 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
         }
     }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        tableView.reloadData()
+    }
+    
     private func showSettings() {
         guard let modalDelegate = modalDelegate else { return }
 
