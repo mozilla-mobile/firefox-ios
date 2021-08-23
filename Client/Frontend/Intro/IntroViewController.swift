@@ -61,6 +61,7 @@ class IntroViewController: UIViewController, OnViewDismissable {
                 self.welcomeCard.alpha = 0
             }) { _ in
                 self.welcomeCard.isHidden = true
+                TelemetryWrapper.recordEvent(category: .action, method: .view, object: .syncScreenView)
             }
         }
         // Close button action
