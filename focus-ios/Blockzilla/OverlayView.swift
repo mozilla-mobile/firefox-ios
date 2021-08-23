@@ -172,7 +172,7 @@ class OverlayView: UIView {
             }
         }
         
-        findInPageButton.backgroundColor = iPadView ? .searchSuggestionIPad : UIConstants.colors.background
+        findInPageButton.backgroundColor = iPadView ? .searchSuggestionIPad : .foundation
         
         remakeConstraintsForFindInPage()
         
@@ -193,7 +193,7 @@ class OverlayView: UIView {
             topBorder.backgroundColor =  UIConstants.Photon.Grey90.withAlphaComponent(0.4)
             
         }
-        setGradientToSearchButtons()
+        setColorstToSearchButtons()
     }
 
     private func makeSearchSuggestionButton(atIndex i: Int) {
@@ -229,14 +229,9 @@ class OverlayView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setGradientToSearchButtons() {
+    func setColorstToSearchButtons() {
         for button in searchButtonGroup {
-            if isIpadView {
-                button.removeGradient()
-                button.backgroundColor = .searchSuggestionIPad
-            } else {
-                button.applyGradient(colors: [.searchGradientFirst, .searchGradientSecond, .searchGradientThird, .searchGradientFourth])
-            }
+            button.backgroundColor = isIpadView ? .searchSuggestionIPad : .foundation
         }
     }
 

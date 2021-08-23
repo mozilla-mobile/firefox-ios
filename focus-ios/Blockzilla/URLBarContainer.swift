@@ -12,7 +12,7 @@ class URLBarContainer: UIView {
     init() {
         super.init(frame: CGRect.zero)
 
-        backgroundEditing.backgroundColor = .secondayButton
+        backgroundEditing.backgroundColor = .foundation
         addSubview(backgroundEditing)
 
         backgroundDark.backgroundColor = UIConstants.colors.background
@@ -20,7 +20,7 @@ class URLBarContainer: UIView {
         backgroundDark.alpha = 0
         addSubview(backgroundDark)
 
-        backgroundBright.backgroundColor = .secondayButton
+        backgroundBright.backgroundColor = .foundation
         backgroundBright.isHidden = true
         backgroundBright.alpha = 0
         addSubview(backgroundBright)

@@ -660,7 +660,6 @@ class URLBar: UIView {
             }
 
             self.urlBarBorderView.backgroundColor = borderColor
-            self.urlBarBackgroundView.backgroundColor = backgroundColor
         }, completion: { finished in
             if finished {
                 self.displayClearButton(shouldDisplay: self.isEditing)
