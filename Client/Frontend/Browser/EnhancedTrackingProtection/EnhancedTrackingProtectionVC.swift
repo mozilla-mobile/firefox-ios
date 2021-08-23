@@ -172,6 +172,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
     private func setupView() {
         constraints.removeAll()
 
+
         setupHeaderView()
         setupConnectionStatusView()
         setupToggleView()
@@ -179,6 +180,10 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
         setupViewActions()
 
         NSLayoutConstraint.activate(constraints)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            let viewWidth = view.widthAnchor.constraint(equalToConstant: 400)
+            viewWidth.isActive = true
+        }
     }
 
     private func setupHeaderView() {
@@ -294,6 +299,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
             protectionButton.trailingAnchor.constraint(equalTo: protectionView.trailingAnchor, constant: -ETPMenuUX.UX.gutterDistance),
             protectionButton.topAnchor.constraint(equalTo: protectionView.topAnchor),
             protectionButton.bottomAnchor.constraint(equalTo: protectionView.bottomAnchor)
+
         ]
 
         constraints.append(contentsOf: protectionConstraints)

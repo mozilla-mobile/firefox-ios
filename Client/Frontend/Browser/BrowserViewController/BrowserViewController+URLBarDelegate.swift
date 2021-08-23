@@ -184,14 +184,21 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
                     self.present(controller, animated: true, completion: nil)
                 }
             }
-            let etpVC = EnhancedTrackingProtectionMenuVC(viewModel: etpViewModel)
-            etpVC.modalPresentationStyle = .custom
-            etpVC.transitioningDelegate = self
 
-            self.present(etpVC, animated: true, completion: nil)
+            let etpVC = EnhancedTrackingProtectionMenuVC(viewModel: etpViewModel)
+//            if UIDevice.current.userInterfaceIdiom == .phone {
+                etpVC.modalPresentationStyle = .custom
+                etpVC.transitioningDelegate = self
+//            } else {
+//                etpVC.modalPresentationStyle = .popover
+//                etpVC.popoverPresentationController?.delegate = self
+//                etpVC.popoverPresentationController?.sourceView = view
+//                etpVC.popoverPresentationController?.sourceRect = view.bounds
+//                etpVC.popoverPresentationController?.permittedArrowDirections = .any
+//            }
+
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
-//            let shouldSuppress = UIDevice.current.userInterfaceIdiom != .pad
-//            self.presentSheetWith(title: title, actions: trackingProtectionMenu, on: self, from: urlBar, suppressPopover: shouldSuppress)
+            self.present(etpVC, animated: true, completion: nil)
         }
     }
 
