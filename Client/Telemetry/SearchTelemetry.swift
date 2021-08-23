@@ -18,7 +18,7 @@ struct SearchPartner {
         case .google:
             return google[region] ?? ""
         case .none:
-            return ""
+            return "none"
         }
     }
 }
