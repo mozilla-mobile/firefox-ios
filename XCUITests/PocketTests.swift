@@ -6,8 +6,8 @@ import XCTest
 
 class PocketTest: BaseTestCase {
 
-    // Disabled due to #7855
-    /*func testPocketEnabledByDefault() {
+    func testPocketEnabledByDefault() throws {
+        throw XCTSkip("Disabled due to #7855")
         navigator.goto(NewTabScreen)
         waitForExistence(app.staticTexts["pocketTitle"])
         XCTAssertEqual(app.staticTexts["pocketTitle"].label, "Trending on Pocket")
@@ -34,7 +34,7 @@ class PocketTest: BaseTestCase {
         waitUntilPageLoad()
         // The url textField is not empty
         XCTAssertNotEqual(app.textFields["url"].value as! String, "", "The url textField is empty")
-    }*/
+    }
 
     func testTapOnMore() {
         waitForExistence(app.buttons["More"], timeout: 5)

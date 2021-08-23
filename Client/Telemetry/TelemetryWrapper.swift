@@ -90,11 +90,7 @@ class TelemetryWrapper {
 
             outputDict["openTabCount"] = delegate?.tabManager.count ?? 0
 
-            var userInterfaceStyle = "unknown" // unknown implies that device is on pre-iOS 13
-            if #available(iOS 13.0, *) {
-                userInterfaceStyle = UITraitCollection.current.userInterfaceStyle == .dark ? "dark" : "light"
-            }
-            outputDict["systemTheme"] = userInterfaceStyle
+            outputDict["systemTheme"] = UITraitCollection.current.userInterfaceStyle == .dark ? "dark" : "light"
 
             return outputDict
         }
@@ -198,6 +194,18 @@ class TelemetryWrapper {
             GleanMetrics.Preferences.newTabExperience.set(newTabChoice)
         } else {
             GleanMetrics.Preferences.newTabExperience.set(NewTabAccessors.Default.rawValue)
+        }
+        // Record `Home` setting, where Firefox Home is "Home", a custom URL is "other" and blank is "Blank".
+        let homePageSetting = NewTabAccessors.getHomePage(prefs)
+        switch homePageSetting {
+        case .topSites:
+            let firefoxHome = "Home"
+            GleanMetrics.Preferences.homePageSetting.set(firefoxHome)
+        case .homePage:
+            let customUrl = "other"
+            GleanMetrics.Preferences.homePageSetting.set(customUrl)
+        default:
+            GleanMetrics.Preferences.homePageSetting.set(homePageSetting.rawValue)
         }
         // Save logins
         if let saveLogins = prefs.boolForKey(PrefsKeys.LoginsSaveEnabled) {
@@ -538,7 +546,7 @@ extension TelemetryWrapper {
         // Pocket
         case (.action, .tap, .pocketStory, _, let extras):
             if let position = extras?[EventExtraKey.pocketTilePosition.rawValue] as? String {
-                GleanMetrics.Pocket.openStoryPosition["Position-"+position].add()
+                GleanMetrics.Pocket.openStoryPosition["position-"+position].add()
             } else {
                 let msg = "Uninstrumented pref metric: \(category), \(method), \(object), \(value), \(String(describing: extras))"
                 Sentry.shared.send(message: msg, severity: .debug)

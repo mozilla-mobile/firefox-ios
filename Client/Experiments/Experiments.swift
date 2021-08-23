@@ -116,6 +116,8 @@ enum Experiments {
     static func usePreviewCollection(storage: UserDefaults = .standard) -> Bool {
         storage.bool(forKey: NIMBUS_USE_PREVIEW_COLLECTION_KEY)
     }
+    
+    static var customTargetingAttributes: [String: String] = [:]
 
     static var serverSettings: NimbusServerSettings? = {
         // If no URL is specified, or it's not valid continue with as if
@@ -152,7 +154,8 @@ enum Experiments {
         // thinks it is.
         let appSettings = NimbusAppSettings(
             appName: nimbusAppName,
-            channel: AppConstants.BuildChannel.nimbusString
+            channel: AppConstants.BuildChannel.nimbusString,
+            customTargetingAttributes: Experiments.customTargetingAttributes
         )
 
         let errorReporter: NimbusErrorReporter = { err in

@@ -8,10 +8,11 @@ import Shared
 import XCGLogger
 
 private let log = Logger.browserLogger
-class TabManagerStore {
+class TabManagerStore: FeatureFlagsProtocol {
     fileprivate var lockedForReading = false
     fileprivate let imageStore: DiskImageStore?
     fileprivate var fileManager = FileManager.default
+    fileprivate let prefs: Prefs
     fileprivate let serialQueue = DispatchQueue(label: "tab-manager-write-queue")
     fileprivate var writeOperation = DispatchWorkItem {}
 
@@ -20,13 +21,25 @@ class TabManagerStore {
         return SiteArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath())
     }()
 
-    init(imageStore: DiskImageStore?, _ fileManager: FileManager = FileManager.default) {
+    init(imageStore: DiskImageStore?, _ fileManager: FileManager = FileManager.default, prefs: Prefs) {
         self.fileManager = fileManager
         self.imageStore = imageStore
+        self.prefs = prefs
     }
 
     var isRestoringTabs: Bool {
         return lockedForReading
+    }
+    
+    var shouldOpenHome: Bool {
+        let isColdLaunch = NSUserDefaultsPrefs(prefix: "profile").boolForKey("isColdLaunch")
+        guard let coldLaunch = isColdLaunch, featureFlags.isFeatureActive(.startAtHome) else { return false }
+        
+        let lastActiveTimestamp = UserDefaults.standard.object(forKey: "LastActiveTimestamp") as? Date ?? Date()
+        let dateComponents = Calendar.current.dateComponents([.hour], from: lastActiveTimestamp, to: Date())
+        let hours = dateComponents.hour ?? 0
+        
+        return hours > 4 || coldLaunch
     }
 
     var hasTabsToRestoreAtStartup: Bool {
@@ -128,6 +141,9 @@ class TabManagerStore {
         }
 
         var tabToSelect: Tab?
+        var fxHomeTab: Tab?
+        var customHomeTab: Tab?
+        
         for savedTab in savedTabs {
             // Provide an empty request to prevent a new tab from loading the home screen
             var tab = tabManager.addTab(flushToDisk: false, zombie: true, isPrivate: savedTab.isPrivate)
@@ -135,12 +151,33 @@ class TabManagerStore {
             if savedTab.isSelected {
                 tabToSelect = tab
             }
+            
+            fxHomeTab = tab.isFxHomeTab ? tab : nil
+            customHomeTab = tab.isCustomHomeTab ? customHomeTab : nil
         }
 
         if tabToSelect == nil {
             tabToSelect = tabManager.tabs.first(where: { $0.isPrivate == false })
         }
-
+        
+        if shouldOpenHome {
+            let page = NewTabAccessors.getHomePage(prefs)
+            let customUrl = HomeButtonHomePageAccessors.getHomePage(prefs)
+            let homeUrl = URL(string: "internal://local/about/home")
+            
+            if page == .homePage, let customUrl = customUrl {
+                return customHomeTab ?? tabManager.addTab(URLRequest(url: customUrl))
+            } else if page == .topSites, let homeUrl = homeUrl {
+                let home = fxHomeTab ?? tabManager.addTab()
+                home.loadRequest(PrivilegedRequest(url: homeUrl) as URLRequest)
+                home.url = homeUrl
+                return home
+            }
+            else {
+                tabToSelect = tabManager.addTab()
+            }
+        }
+        
         return tabToSelect
     }
 

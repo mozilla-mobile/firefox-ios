@@ -53,9 +53,8 @@ class AppSettingsTableViewController: SettingsTableViewController {
                         titleText: .AppSettingsBlockPopups),
            ]
 
-        if #available(iOS 12.0, *) {
-            generalSettings.insert(SiriPageSetting(settings: self), at: 5)
-        }
+        generalSettings.insert(SiriPageSetting(settings: self), at: 5)
+        
 
         let accountChinaSyncSetting: [Setting]
         if !AppInfo.isChinaEdition {
@@ -145,6 +144,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 ToggleChronTabs(settings: self),
                 ToggleJumpBackInSection(settings: self),
                 ToggleRecentlySavedSection(settings: self),
+                ToggleStartAtHome(settings: self),
                 ToggleInactiveTabs(settings: self),
                 ExperimentsSettings(settings: self)
             ])]

@@ -24,7 +24,7 @@ class CredentialListPresenter {
     
     func filterCredentials(for searchText: String) {
         filteredCredentials = loginsData.filter { item in
-            item.0.serviceIdentifier.identifier.lowercased().contains(searchText.lowercased())
+            item.0.serviceIdentifier.identifier.titleFromHostname.lowercased().contains(searchText.lowercased()) || item.0.user.lowercased().contains(searchText.lowercased())
         }
     }
     

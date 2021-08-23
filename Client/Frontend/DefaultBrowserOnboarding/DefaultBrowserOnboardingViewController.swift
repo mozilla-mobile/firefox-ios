@@ -67,11 +67,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     private lazy var closeButton: UIButton = {
         let closeButton = UIButton()
         closeButton.setImage(UIImage(named: "close-large"), for: .normal)
-        if #available(iOS 13, *) {
-            closeButton.tintColor = .secondaryLabel
-        } else {
-            closeButton.tintColor = .black
-        }
+        closeButton.tintColor = .secondaryLabel
         return closeButton
     }()
     private lazy var topImageView: UIImageView = {

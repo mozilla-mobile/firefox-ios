@@ -106,7 +106,6 @@ extension BrowserViewController: WKUIDelegate {
         }
     }
 
-    @available(iOS 13.0, *)
     func webView(_ webView: WKWebView, contextMenuConfigurationForElement elementInfo: WKContextMenuElementInfo, completionHandler: @escaping (UIContextMenuConfiguration?) -> Void) {
         completionHandler(UIContextMenuConfiguration(identifier: nil, previewProvider: {
             guard let url = elementInfo.linkURL, self.profile.prefs.boolForKey(PrefsKeys.ContextMenuShowLinkPreviews) ?? true else { return nil }
@@ -128,6 +127,14 @@ extension BrowserViewController: WKUIDelegate {
                 let elements = contextHelper.elements else { return nil }
             let isPrivate = currentTab.isPrivate
             let addTab = { (rURL: URL, isPrivate: Bool) in
+                if currentTab == self.tabManager.selectedTab, currentTab.adsTelemetryUrlList.count > 0 {
+                    let adUrl = rURL.absoluteString
+                    if currentTab.adsTelemetryUrlList.contains(adUrl) {
+                        if !currentTab.adsProviderName.isEmpty { AdsTelemetryHelper.trackAdsClickedOnPage(providerName: currentTab.adsProviderName) }
+                        currentTab.adsTelemetryUrlList.removeAll()
+                        currentTab.adsProviderName = ""
+                    }
+                }
                 let tab = self.tabManager.addTab(URLRequest(url: rURL as URL), afterTab: currentTab, isPrivate: isPrivate)
                 guard !self.topTabsVisible else {
                     return
@@ -342,7 +349,16 @@ extension BrowserViewController: WKNavigationDelegate {
             decisionHandler(.cancel)
             return
         }
-
+        
+        if tab == tabManager.selectedTab, navigationAction.navigationType == .linkActivated, tab.adsTelemetryUrlList.count > 0 {
+            let adUrl = url.absoluteString
+            if tab.adsTelemetryUrlList.contains(adUrl) {
+                if !tab.adsProviderName.isEmpty { AdsTelemetryHelper.trackAdsClickedOnPage(providerName: tab.adsProviderName) }
+                tab.adsTelemetryUrlList.removeAll()
+                tab.adsProviderName = ""
+            }
+        }
+        
         if InternalURL.isValid(url: url) {
             if navigationAction.navigationType != .backForward, navigationAction.isInternalUnprivileged {
                 log.warning("Denying unprivileged request: \(navigationAction.request)")
@@ -507,27 +523,25 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
-        if #available(iOS 12.0, *) {
-            // Check if this response should be displayed in a QuickLook for USDZ files.
-            if let previewHelper = OpenQLPreviewHelper(request: request, response: response, canShowInWebView: canShowInWebView, forceDownload: forceDownload, browserViewController: self) {
+        // Check if this response should be displayed in a QuickLook for USDZ files.
+        if let previewHelper = OpenQLPreviewHelper(request: request, response: response, canShowInWebView: canShowInWebView, forceDownload: forceDownload, browserViewController: self) {
 
-                // Certain files are too large to download before the preview presents, block and use a temporary document instead
-                if let tab = tabManager[webView] {
-                    if navigationResponse.isForMainFrame, response.mimeType != MIMEType.HTML, let request = request {
-                        tab.temporaryDocument = TemporaryDocument(preflightResponse: response, request: request)
-                        previewHelper.url = tab.temporaryDocument!.getURL().value as NSURL
+            // Certain files are too large to download before the preview presents, block and use a temporary document instead
+            if let tab = tabManager[webView] {
+                if navigationResponse.isForMainFrame, response.mimeType != MIMEType.HTML, let request = request {
+                    tab.temporaryDocument = TemporaryDocument(preflightResponse: response, request: request)
+                    previewHelper.url = tab.temporaryDocument!.getURL().value as NSURL
 
-                        // Open our helper and cancel this response from the webview.
-                        previewHelper.open()
-                        decisionHandler(.cancel)
-                        return
-                    } else {
-                        tab.temporaryDocument = nil
-                    }
+                    // Open our helper and cancel this response from the webview.
+                    previewHelper.open()
+                    decisionHandler(.cancel)
+                    return
+                } else {
+                    tab.temporaryDocument = nil
                 }
-
-                // We don't have a temporary document, fallthrough
             }
+
+            // We don't have a temporary document, fallthrough
         }
 
         // Check if this response should be downloaded.
@@ -561,10 +575,10 @@ extension BrowserViewController: WKNavigationDelegate {
             tab.mimeType = response.mimeType
         }
         
-        if isCmdClickForNewTab {
+        if isOnlyCmdPressed {
             guard let url = webView.url, let isPrivate = self.tabManager.selectedTab?.isPrivate else { return }
             homePanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate)
-            self.isCmdClickForNewTab = false
+            isOnlyCmdPressed = false
             decisionHandler(.cancel)
         }
 

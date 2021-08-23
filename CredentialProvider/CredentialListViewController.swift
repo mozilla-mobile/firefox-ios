@@ -87,15 +87,12 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
         searchController = self.getStyledSearchController()
         searchController?.delegate = self
         extendedLayoutIncludesOpaqueBars = true // Fixes tapping the status bar from showing partial pull-to-refresh
-        
-        if #available(iOSApplicationExtension 13.0, *) {
-            let navBarAppearance = UINavigationBarAppearance()
-            navBarAppearance.configureWithOpaqueBackground()
-            navigationController?.navigationBar.standardAppearance = navBarAppearance
-            navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
-        }
+
+        let navBarAppearance = UINavigationBarAppearance()
+        navBarAppearance.configureWithOpaqueBackground()
+        navigationController?.navigationBar.standardAppearance = navBarAppearance
+        navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
     }
-    
     
     private func getStyledSearchController() -> UISearchController {
         let searchController = UISearchController(searchResultsController: nil)
@@ -208,7 +205,13 @@ extension CredentialListViewController: UITableViewDelegate {
         case .none:
             return 44
         }
-    }    
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        if  let searchBar = searchController?.searchBar, searchBar.isFirstResponder {
+            searchBar.resignFirstResponder()
+        }
+    }
 }
 
 

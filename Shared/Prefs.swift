@@ -38,6 +38,7 @@ public struct PrefsKeys {
     public static let InstallType = "InstallType"
     public static let KeyCurrentInstallVersion = "KeyCurrentInstallVersion"
     public static let KeySecondRun = "SecondRun"
+    public static let StartAtHome = "startAtHome"
     
     // Activity Stream
     public static let KeyTopSitesCacheIsValid = "topSitesCacheIsValid"

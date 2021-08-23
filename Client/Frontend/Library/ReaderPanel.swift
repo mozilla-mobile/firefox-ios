@@ -418,7 +418,6 @@ extension ReadingListPanel: LibraryPanelContextMenu {
     }
 }
 
-@available(iOS 11.0, *)
 extension ReadingListPanel: UITableViewDragDelegate {
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         guard let site = getSiteDetails(for: indexPath), let url = URL(string: site.url), let itemProvider = NSItemProvider(contentsOf: url) else {

@@ -150,16 +150,11 @@ protocol Profile: AnyObject {
 
     var syncManager: SyncManager! { get }
     
-    @available(iOS 12, *)
     func syncCredentialIdentities() -> Deferred<Result<Void, Error>>
-    @available(iOS 12, *)
     func updateCredentialIdentities() -> Deferred<Result<Void, Error>>
-    @available(iOS 12, *)
     func clearCredentialStore() -> Deferred<Result<Void, Error>>
 }
 
-
-@available(iOS 12, *)
 extension Profile {
     
     func syncCredentialIdentities() -> Deferred<Result<Void, Error>> {
@@ -178,9 +173,7 @@ extension Profile {
         }
         return deferred
     }
-    
-    
-    @available(iOS 12, *)
+
     func updateCredentialIdentities() -> Deferred<Result<Void, Error>> {
         let deferred = Deferred<Result<Void, Error>>()
         self.logins.list().upon { loginResult in
@@ -196,8 +189,7 @@ extension Profile {
         }
         return deferred
     }
-    
-    @available(iOS 12, *)
+
     func populateCredentialStore(identities: [ASPasswordCredentialIdentity]) -> Deferred<Result<Void, Error>>  {
         let deferred = Deferred<Result<Void, Error>>()
         ASCredentialIdentityStore.shared.saveCredentialIdentities(identities) { (success, error) in
@@ -210,8 +202,7 @@ extension Profile {
         return deferred
         
     }
-    
-    @available(iOS 12, *)
+
     func clearCredentialStore() -> Deferred<Result<Void, Error>> {
         let deferred = Deferred<Result<Void, Error>>()
         
@@ -1065,10 +1056,8 @@ open class BrowserProfile: Profile {
                     }
 
                     let syncEngineStatsSession = SyncEngineStatsSession(collection: "logins")
-                    if #available(iOS 12, *), let self = self {
-                        self.profile.syncCredentialIdentities().upon { result in
-                            log.debug(result)
-                        }
+                    self?.profile.syncCredentialIdentities().upon { result in
+                        log.debug(result)
                     }
                     return deferMaybe(SyncStatus.completed(syncEngineStatsSession))
                 })

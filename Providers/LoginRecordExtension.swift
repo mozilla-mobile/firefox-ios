@@ -5,7 +5,6 @@
 import Storage
 import AuthenticationServices
 
-@available(iOS 12, *)
 extension LoginRecord {
     public var passwordCredentialIdentity: ASPasswordCredentialIdentity {
         let serviceIdentifier = ASCredentialServiceIdentifier(identifier: self.hostname, type: .URL)
