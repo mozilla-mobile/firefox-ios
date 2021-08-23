@@ -12,6 +12,7 @@ private let nimbusAppName = "firefox_ios"
 private let NIMBUS_URL_KEY = "NimbusURL"
 private let NIMBUS_LOCAL_DATA_KEY = "nimbus_local_data"
 private let NIMBUS_USE_PREVIEW_COLLECTION_KEY = "nimbus_use_preview_collection"
+private let NIMBUS_FIRST_RUN_DEFAULT_KEY = "NimbusFirstRun"
 
 /// `Experiments` is the main entry point to use the `Nimbus` experimentation platform in Firefox for iOS.
 ///
@@ -53,7 +54,7 @@ enum Experiments {
     /// - **normal**: initialize Nimbus with no custom configuration.
     /// - **testing**: initialize Nimbus with custom experiments data.
     enum InitializationOptions {
-        case preload(fileUrl: URL)
+        case dev(fileUrl: URL)
         case normal
         case testing(localPayload: String)
 
@@ -138,6 +139,14 @@ enum Experiments {
         }
     }()
 
+    /// An indicator if the application is currently in it's first run
+    public static var isFirstRun: Bool = {
+        let defaults = UserDefaults.standard
+        let isFirstRun = defaults.object(forKey: NIMBUS_FIRST_RUN_DEFAULT_KEY) == nil
+        defaults.set(false, forKey: NIMBUS_FIRST_RUN_DEFAULT_KEY)
+        return isFirstRun
+    }()
+
     /// The `NimbusApi` object. This is the entry point to do anything with the Nimbus SDK on device.
     public static var shared: NimbusApi = {
         guard FeatureFlagsManager.shared.isFeatureActive(.nimbus) else {
@@ -184,6 +193,24 @@ enum Experiments {
         }
     }()
 
+    static var waitingOnExperimentsQueue: [() -> Void] = []
+    
+    
+    static func listenApplyPendingExperiments() {
+        var applyObserver: NSObjectProtocol?
+        applyObserver = NotificationCenter.default.addObserver(forName: .nimbusExperimentsApplied, object: nil, queue: .main) { _ in
+            experimentsApplied = true
+            for callback in waitingOnExperimentsQueue {
+                callback()
+            }
+            waitingOnExperimentsQueue.removeAll()
+            // Safe to to unwrap the observer, since the block
+            // will only execute after the observer is created
+            // on the main thread
+            NotificationCenter.default.removeObserver(applyObserver!)
+        }
+    }
+
     /// A convenience method to initialize the `NimbusApi` object at startup.
     ///
     /// This includes opening the database, connecting to the Remote Settings server, and downloading
@@ -192,18 +219,20 @@ enum Experiments {
     /// All this is set to run off the main thread.
     ///
     /// - Parameters:
-    ///     - fireURL: an optional file URL that stores the initial experiments document.
-    ///     - firstRun: a flag indicating that this is the first time that the app has been run.
+    ///     - options: An `InitializationOptions` object that dictates if nimbus should be intialized
+    ///         for testing, developement, or nomal mode.
     public static func intialize(_ options: InitializationOptions) {
         let nimbus = Experiments.shared
 
         nimbus.initialize()
 
         switch options {
-        case .preload(let url): nimbus.setExperimentsLocally(url)
+        case .dev(let url): nimbus.setExperimentsLocally(url)
         case .testing(let payload): nimbus.setExperimentsLocally(payload)
         default: break /* noop */
         }
+
+        listenApplyPendingExperiments()
 
         // We should immediately calculate the experiment enrollments
         // that we've just acquired from the fileURL, or we fetched last run.
@@ -217,7 +246,65 @@ enum Experiments {
 
         log.info("Nimbus is initializing!")
     }
+    
+    static var experimentsApplied: Bool = false
+    
+    /// A function that will ensure the `callback` is only called once the experiments are applied for this run of the app
+    /// It's important that this function runs on the main thead, if you would like the callback
+    /// to be executed off the main thread, have the callback itself dispatch into another thread.
+    ///
+    /// - Parameters:
+    ///     - callback: The callback to be executed after experiment data is ready
+    public static func onExperimentsApplied(callback: @escaping () -> Void) {
+        // If the experiments were already applied
+        // in the past, we should just execute the
+        // callback
+        // The use of a boolean flag here is OK
+        // since both this function and the observer run on the main thread.
+        if experimentsApplied {
+            callback()
+            return
+        }
+        waitingOnExperimentsQueue.append(callback)
+    }
+
+    /// A convenience method to initialize the `NimbusApi` object at **first** startup.
+    ///
+    /// This includes opening the database, connecting to the Remote Settings server, and downloading
+    /// and applying changes.
+    ///
+    /// All this is set to run off the main thread.
+    ///
+    /// - Parameters:
+    ///     - options: An `InitializationOptions` object that dictates if nimbus should be intialized
+    ///         for testing, developement, or nomal mode.
+    public static func initializeFirstRun(_ options: InitializationOptions) {
+        let nimbus = Experiments.shared
+
+        nimbus.initialize()
+
+        switch options {
+        case .dev(let url): nimbus.setExperimentsLocally(url); nimbus.applyPendingExperiments()
+        case .testing(let payload): nimbus.setExperimentsLocally(payload); nimbus.applyPendingExperiments()
+        case .normal:
+            listenApplyPendingExperiments()
+
+            var fetchObserver: NSObjectProtocol?
+            fetchObserver = NotificationCenter.default.addObserver(forName: .nimbusExperimentsFetched, object: nil, queue: .main) { _ in
+                nimbus.applyPendingExperiments()
+                // Safe to to unwrap the observer, since the block
+                // will only execute after the observer is created
+                // on the main thread
+                NotificationCenter.default.removeObserver(fetchObserver!)
+            }
+            
+            nimbus.fetchExperiments()
+        }
+
+        log.info("Nimbus is initializing on First Run!")
+    }
 }
+
 
 /// Additional methods to allow us to use an application specific `FeatureId` enum.
 extension NimbusApi {

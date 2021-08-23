@@ -11,7 +11,7 @@ import Foundation
 /// each feature is documented in `Docs/features.md`.
 ///
 enum NimbusFeatureId: String {
-    case nimbusValidation = "nimbus-validation"
+    case nimbusValidation = "nimbusValidation"
     case onboardingDefaultBrowser = "onboarding-default-browser"
     case inactiveTabs = "inactiveTabs"
     case search = "search"
