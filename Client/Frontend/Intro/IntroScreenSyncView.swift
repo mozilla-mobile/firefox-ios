@@ -181,13 +181,13 @@ class IntroScreenSyncView: UIView, CardTheme {
     // MARK: Button Actions
     @objc private func signUpAction() {
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .dismissedOnboardingSignUp, extras: ["slide-num": 1])
-        print("Sign up")
+        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .syncScreenSignUp)
         signUp?()
     }
     
     @objc private func startBrowsingAction() {
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .dismissedOnboarding, extras: ["slide-num": 1])
-        print("Start Browsing")
+        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .syncScreenStartBrowse)
         startBrowsing?()
     }
 }
