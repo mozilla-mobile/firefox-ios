@@ -16,9 +16,9 @@ struct SearchPartner {
     static func getCode(searchEngine: SearchEngine, region: String) -> String {
         switch(searchEngine) {
         case .google:
-            return google[region] ?? ""
+            return google[region] ?? "none"
         case .none:
-            return ""
+            return "none"
         }
     }
 }
