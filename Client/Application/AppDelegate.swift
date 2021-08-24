@@ -225,8 +225,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         pushNotificationSetup()
 
-        // user research variable setup for New tab user research
-        _ = NewTabUserResearch()
         // user research variable setup for Chron tabs user research
         _ = ChronTabsUserResearch()
 
