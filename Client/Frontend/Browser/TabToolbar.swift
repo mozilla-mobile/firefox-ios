@@ -55,7 +55,7 @@ open class TabToolbarHelper: NSObject {
     let ImageStop = UIImage.templateImageNamed("nav-stop")
     let ImageSearch = UIImage.templateImageNamed("search")
     let ImageNewTab = UIImage.templateImageNamed("nav-add")
-    let ImageHome = UIImage(named: "menu-Home")
+    let ImageHome = UIImage.templateImageNamed("menu-Home")
     
     func setMiddleButtonState(_ state: MiddleButtonState) {
         switch state {
