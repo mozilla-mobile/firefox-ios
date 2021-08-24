@@ -68,7 +68,6 @@ class BrowserViewController: UIViewController {
     var searchLoader: SearchLoader?
     let alertStackView = UIStackView() // All content that appears above the footer should be added to this view. (Find In Page/SnackBars)
     var findInPageBar: FindInPageBar?
-    private var newTabUserResearch: NewTabUserResearch?
     var chronTabsUserResearch: ChronTabsUserResearch?
     lazy var mailtoLinkHandler = MailtoLinkHandler()
     var urlFromAnotherApp: UrlToOpenModel?
@@ -237,7 +236,6 @@ class BrowserViewController: UIViewController {
     func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator? = nil) {
         let showToolbar = shouldShowFooterForTraitCollection(newCollection)
         let showTopTabs = shouldShowTopTabsForTraitCollection(newCollection)
-        let shouldShowNewTabButton = false
         
         urlBar.topTabsIsShowing = showTopTabs
         urlBar.setShowToolbar(!showToolbar)
@@ -253,15 +251,7 @@ class BrowserViewController: UIViewController {
             toolbar?.applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
             toolbar?.applyTheme()
             toolbar?.addNewTabButton.isHidden = true
-            // This is for showing (+) add tab middle button with A/B test where we need to update both toolbar and url bar when (+) button is enabled.
-            // Urlbar already has reader mode state but we still need to refresh it so that if reader mode is available we don't accidently show reload or stop button in url bar
-            if shouldShowNewTabButton {
-                toolbar?.updateMiddleButtonState(.newTab)
-                let state = urlBar.locationView.readerModeState
-                urlBar.updateReaderModeState(state)
-            } else {
-                toolbar?.updateMiddleButtonState(currentMiddleButtonState ?? .search)
-            }
+            toolbar?.updateMiddleButtonState(currentMiddleButtonState ?? .search)
             updateTabCountUsingTabManager(self.tabManager)
         }
 
@@ -472,10 +462,7 @@ class BrowserViewController: UIViewController {
         }
 
         NotificationCenter.default.addObserver(self, selector: #selector(self.appMenuBadgeUpdate), name: .FirefoxAccountStateChange, object: nil)
-        
-        // Setup New Tab user research for A/B testing
-        newTabUserResearch = NewTabUserResearch()
-        urlBar.newTabUserResearch = newTabUserResearch
+
         // Setup chron tabs A/B test
         chronTabsUserResearch = ChronTabsUserResearch()
         searchTelemetry = SearchTelemetry()
@@ -830,7 +817,6 @@ class BrowserViewController: UIViewController {
 
             } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
                 hideFirefoxHome()
-                urlBar.locationView.reloadButton.reloadButtonState = .disabled
             }
             
         } else if isAboutHomeURL {
@@ -987,10 +973,9 @@ class BrowserViewController: UIViewController {
     }
     
     func setupMiddleButtonStatus(isLoading: Bool) {
-        let shouldShowNewTabButton = false
-        
         // No tab
         guard let tab = tabManager.selectedTab else {
+            urlBar.locationView.reloadButton.reloadButtonState = .disabled
             navigationToolbar.updateMiddleButtonState(.search)
             currentMiddleButtonState = .search
             return
@@ -998,13 +983,17 @@ class BrowserViewController: UIViewController {
         
         // Tab with starting page
         if tab.isURLStartingPage {
+            urlBar.locationView.reloadButton.reloadButtonState = .disabled
             navigationToolbar.updateMiddleButtonState(.search)
             currentMiddleButtonState = .search
             return
         }
         
-        let state: MiddleButtonState = shouldShowNewTabButton ? .newTab : (isLoading ? .stop : .reload)
+        let state: MiddleButtonState = isLoading ? .stop : .reload
         navigationToolbar.updateMiddleButtonState(state)
+        if toolbar != nil {
+            urlBar.locationView.reloadButton.reloadButtonState = isLoading ? .stop : .reload
+        }
         currentMiddleButtonState = state
     }
 
