@@ -83,7 +83,7 @@ class FeatureFlagsManager {
         let shakeToRestore = FlaggableFeature(withID: .shakeToRestore, and: profile, enabledFor: [.beta, .developer, .other])
         features[.shakeToRestore] = shakeToRestore
         
-        let startAtHome = FlaggableFeature(withID: .startAtHome, and: profile, enabledFor: [.beta, .developer])
+        let startAtHome = FlaggableFeature(withID: .startAtHome, and: profile, enabledFor: [.release, .beta, .developer])
         features[.startAtHome] = startAtHome
     }
 }
