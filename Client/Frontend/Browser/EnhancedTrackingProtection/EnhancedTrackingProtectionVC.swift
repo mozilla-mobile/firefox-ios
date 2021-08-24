@@ -354,7 +354,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
 
     @objc func protectionSettingsTapped() {
         self.dismiss(animated: true) {
-            self.viewModel.onClose?()
+            self.viewModel.onOpenSettingsTapped?()
         }
 }
 

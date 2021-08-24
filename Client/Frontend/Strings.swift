@@ -658,6 +658,8 @@ extension Strings {
     public static let TPPageMenuNoTrackersBlocked = MZLocalizedString("Menu.TrackingProtection.NoTrackersBlockedTitle", value: "No trackers known to Firefox were detected on this page.", comment: "Message in menu when no trackers blocked.")
     public static let TPPageMenuBlockedTitle = MZLocalizedString("Menu.TrackingProtection.BlockedTitle", value: "Blocked", comment: "Title on tracking protection menu for blocked items.")
 
+    public static let TPDetailsVerifiedBy = MZLocalizedString("Menu.TrackingProtection.Details.Verifier", value: "Verified by %@", comment: "String to let users know the site verifier")
+
     // Category Titles
     public static let TPCryptominersBlocked = MZLocalizedString("Menu.TrackingProtectionCryptominersBlocked.Title", value: "Cryptominers", comment: "The title that shows the number of cryptomining scripts blocked")
     public static let TPFingerprintersBlocked = MZLocalizedString("Menu.TrackingProtectionFingerprintersBlocked.Title", value: "Fingerprinters", comment: "The title that shows the number of fingerprinting scripts blocked")

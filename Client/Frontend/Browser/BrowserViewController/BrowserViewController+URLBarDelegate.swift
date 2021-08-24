@@ -166,9 +166,8 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
 
     func urlBarDidTapShield(_ urlBar: URLBarView) {
         if let tab = self.tabManager.selectedTab {
-            // ROUX
             let etpViewModel = EnhancedTrackingProtectionMenuVM(tab: tab, profile: profile, tabManager: tabManager)
-            etpViewModel.onClose = {
+            etpViewModel.onOpenSettingsTapped = {
                 let settingsTableViewController = AppSettingsTableViewController()
                 settingsTableViewController.profile = self.profile
                 settingsTableViewController.tabManager = self.tabManager
@@ -186,17 +185,13 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
             }
 
             let etpVC = EnhancedTrackingProtectionMenuVC(viewModel: etpViewModel)
-            // ROUX
-//            if UIDevice.current.userInterfaceIdiom == .phone {
+            if UIDevice.current.userInterfaceIdiom == .phone {
                 etpVC.modalPresentationStyle = .custom
                 etpVC.transitioningDelegate = self
-//            } else {
-//                etpVC.modalPresentationStyle = .popover
-//                etpVC.popoverPresentationController?.delegate = self
-//                etpVC.popoverPresentationController?.sourceView = view
-//                etpVC.popoverPresentationController?.sourceRect = view.bounds
-//                etpVC.popoverPresentationController?.permittedArrowDirections = .any
-//            }
+            } else {
+                etpVC.modalPresentationStyle = .popover
+                etpVC.popoverPresentationController?.delegate = self
+            }
 
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
             self.present(etpVC, animated: true, completion: nil)

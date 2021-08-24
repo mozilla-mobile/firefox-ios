@@ -8,11 +8,10 @@ import Storage
 class EnhancedTrackingProtectionMenuVM {
 
     // MARK: - Variables
-
     var tab: Tab
     var tabManager: TabManager
     var profile: Profile
-    var onClose: (() -> Void)?
+    var onOpenSettingsTapped: (() -> Void)?
 
     var websiteTitle: String {
         return tab.url?.baseDomain ?? ""
@@ -62,13 +61,14 @@ class EnhancedTrackingProtectionMenuVM {
     // MARK: - Functions
 
     func getDetailsViewModel(withCachedImage cachedImage: UIImage?) -> EnhancedTrackingProtectionDetailsVM {
+        let verifier = String(format: Strings.TPDetailsVerifiedBy, "EXAMPLE VERIFIER")
         return EnhancedTrackingProtectionDetailsVM(topLevelDomain: websiteTitle,
                                                    title: tab.displayTitle,
                                                    image: cachedImage ?? UIImage(imageLiteralResourceName: "defaulFavicon"),
                                                    URL: tab.url?.absoluteDisplayString ?? websiteTitle,
                                                    lockIcon: connectionStatusImage,
                                                    connectionStatusMessage: connectionStatusString,
-                                                   connectionVerifier: "Test verifier",
+                                                   connectionVerifier: verifier,
                                                    connectionSecure: connectionSecure)
     }
 
