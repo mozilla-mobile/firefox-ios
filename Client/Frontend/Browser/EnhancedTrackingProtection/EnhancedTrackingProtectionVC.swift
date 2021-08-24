@@ -22,7 +22,7 @@ struct ETPMenuUX {
         static let closeButtonSize: CGFloat = 30
 
         struct Line {
-            static let distanceFromTopAnchor: CGFloat = 75
+            static let distanceFromHeroImage: CGFloat = 15
             static let height: CGFloat = 1
         }
     }
@@ -165,13 +165,11 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateViewDetails()
-        showToggleView()
         applyTheme()
     }
 
     private func setupView() {
         constraints.removeAll()
-
 
         setupHeaderView()
         setupConnectionStatusView()
@@ -180,10 +178,6 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
         setupViewActions()
 
         NSLayoutConstraint.activate(constraints)
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            let viewWidth = view.widthAnchor.constraint(equalToConstant: 400)
-            viewWidth.isActive = true
-        }
     }
 
     private func setupHeaderView() {
@@ -209,7 +203,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
 
             horizontalLine.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             horizontalLine.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            horizontalLine.topAnchor.constraint(equalTo: view.topAnchor, constant: ETPMenuUX.UX.Line.distanceFromTopAnchor),
+            horizontalLine.topAnchor.constraint(equalTo: heroImage.bottomAnchor, constant: ETPMenuUX.UX.Line.distanceFromHeroImage),
             horizontalLine.heightAnchor.constraint(equalToConstant: ETPMenuUX.UX.Line.height)
         ]
 
@@ -260,7 +254,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
         toggleContainer.addSubview(toggleStatusLabel)
         view.addSubview(toggleContainer)
 
-        let toggleConstraints = [
+        var toggleConstraints = [
             toggleContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             toggleContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             toggleContainer.topAnchor.constraint(equalTo: connectionView.bottomAnchor, constant: 32),
@@ -281,6 +275,14 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
             toggleStatusLabel.topAnchor.constraint(equalTo: toggleView.bottomAnchor, constant: 6)
         ]
 
+        if toggleContainerShouldBeHidden {
+            toggleConstraints.append(protectionView.topAnchor.constraint(equalTo: connectionView.bottomAnchor, constant: 32))
+            toggleContainer.isHidden = true
+        } else {
+            toggleConstraints.append(protectionView.topAnchor.constraint(equalTo: toggleContainer.bottomAnchor))
+            toggleContainer.isHidden = false
+        }
+
         constraints.append(contentsOf: toggleConstraints)
     }
 
@@ -289,11 +291,10 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
         view.addSubview(protectionView)
 
         let protectionConstraints = [
-            // NB: ProtectionView's top anchor constraint is set separately in `showToggleView()`
-            // and as such is absent here.
             protectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: ETPMenuUX.UX.gutterDistance),
             protectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -ETPMenuUX.UX.gutterDistance),
             protectionView.heightAnchor.constraint(equalToConstant: ETPMenuUX.UX.viewHeight),
+            protectionView.bottomAnchor.constraint(lessThanOrEqualTo: view.bottomAnchor),
 
             protectionButton.leadingAnchor.constraint(equalTo: protectionView.leadingAnchor, constant: ETPMenuUX.UX.gutterDistance),
             protectionButton.trailingAnchor.constraint(equalTo: protectionView.trailingAnchor, constant: -ETPMenuUX.UX.gutterDistance),
@@ -328,21 +329,6 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
         connectionButton.addTarget(self, action: #selector(connectionDetailsTapped), for: .touchUpInside)
         toggleSwitch.addTarget(self, action: #selector(trackingProtectionToggleTapped), for: .valueChanged)
         protectionButton.addTarget(self, action: #selector(protectionSettingsTapped), for: .touchUpInside)
-    }
-
-    private func showToggleView() {
-        if toggleContainerShouldBeHidden {
-            protectionViewTopConstraint?.isActive = false
-            protectionViewTopConstraint = protectionView.topAnchor.constraint(equalTo: connectionView.bottomAnchor, constant: 32)
-            protectionViewTopConstraint?.isActive = true
-            toggleContainer.isHidden = true
-        } else {
-            protectionViewTopConstraint?.isActive = false
-            protectionViewTopConstraint = protectionView.topAnchor.constraint(equalTo: toggleContainer.bottomAnchor)
-            protectionViewTopConstraint?.isActive = true
-            toggleContainer.isHidden = false
-        }
-        view.layoutIfNeeded()
     }
 
     // MARK: - Button actions
@@ -381,19 +367,16 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
 
     @objc func panGestureRecognizerAction(sender: UIPanGestureRecognizer) {
         let translation = sender.translation(in: view)
+        let originalYPosition = self.view.frame.origin.y
+        let originalXPosition = self.view.frame.origin.x
 
         // Not allowing the user to drag the view upward
         guard translation.y >= 0 else { return }
 
-        // Setting x as 0 or based on window calculation because we don't want
+        // Setting x based on window calculation because we don't want
         // users to move the frame side ways, only straight up or down
-        var xPosition: CGFloat = 0
-        var frameWidth: CGFloat = 0
-        if UIApplication.shared.statusBarOrientation.isLandscape {
-            frameWidth = view.frame.width
-            xPosition = (view.window?.frame.size.width)!/2 - (frameWidth/2)
-        }
-        view.frame.origin = CGPoint(x: xPosition, y: self.pointOrigin!.y + translation.y)
+        view.frame.origin = CGPoint(x: originalXPosition,
+                                    y: self.pointOrigin!.y + translation.y)
 
         if sender.state == .ended {
             let dragVelocity = sender.velocity(in: view)
@@ -402,7 +385,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
             } else {
                 // Set back to original position of the view controller
                 UIView.animate(withDuration: 0.3) {
-                    self.view.frame.origin = self.pointOrigin ?? CGPoint(x: 0, y: 400)
+                    self.view.frame.origin = self.pointOrigin ?? CGPoint(x: originalXPosition, y: originalYPosition)
                 }
             }
         }

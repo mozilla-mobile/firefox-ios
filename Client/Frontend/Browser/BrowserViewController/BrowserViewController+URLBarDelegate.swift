@@ -186,6 +186,7 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
             }
 
             let etpVC = EnhancedTrackingProtectionMenuVC(viewModel: etpViewModel)
+            // ROUX
 //            if UIDevice.current.userInterfaceIdiom == .phone {
                 etpVC.modalPresentationStyle = .custom
                 etpVC.transitioningDelegate = self
@@ -409,6 +410,11 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
 
 extension BrowserViewController: UIViewControllerTransitioningDelegate {
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
-        SlideOverPresentationController(presentedViewController: presented, presenting: presenting)
+        let globalETPStatus = FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs)
+        return SlideOverPresentationController(presentedViewController: presented,
+                                               presenting: presenting,
+                                               withGlobalETPStatus: globalETPStatus)
     }
 }
+
+

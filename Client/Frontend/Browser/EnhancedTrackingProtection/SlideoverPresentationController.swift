@@ -5,7 +5,8 @@
 import UIKit
 
 struct SlideOverUXConstants {
-    static let ETPMenuHeight: CGFloat = 385
+    static let ETPMenuHeightForGlobalOn: CGFloat = 365
+    static let ETPMenuHeightForGlobalOff: CGFloat = 265
     static let ETPMenuCornerRadius: CGFloat = 8
 }
 
@@ -13,8 +14,10 @@ class SlideOverPresentationController: UIPresentationController {
 
     let blurEffectView: UIVisualEffectView!
     var tapGestureRecognizer: UITapGestureRecognizer = UITapGestureRecognizer()
+    var globalETPStatus: Bool
 
-    override init(presentedViewController: UIViewController, presenting presentingViewController: UIViewController?) {
+    init(presentedViewController: UIViewController, presenting presentingViewController: UIViewController?, withGlobalETPStatus status: Bool) {
+        self.globalETPStatus = status
         let blurEffect = UIBlurEffect(style: .dark)
         blurEffectView = UIVisualEffectView(effect: blurEffect)
         super.init(presentedViewController: presentedViewController, presenting: presentingViewController)
@@ -25,17 +28,24 @@ class SlideOverPresentationController: UIPresentationController {
     }
 
     override var frameOfPresentedViewInContainerView: CGRect {
-        let yPosition = self.containerView!.frame.height - SlideOverUXConstants.ETPMenuHeight
+        var menuHeight: CGFloat
+        if globalETPStatus {
+            menuHeight = SlideOverUXConstants.ETPMenuHeightForGlobalOn
+        } else {
+            menuHeight = SlideOverUXConstants.ETPMenuHeightForGlobalOff
+        }
+
+        let yPosition = self.containerView!.frame.height - menuHeight
         var xPosition: CGFloat = 0
         var width: CGFloat = 0
-        if UIApplication.shared.statusBarOrientation.isLandscape {
+        if UIWindow.isLandscape {
             width = 600
             xPosition = self.containerView!.frame.width/2 - (width/2)
         } else {
             width = self.containerView!.frame.width
         }
         return CGRect(origin: CGPoint(x: xPosition, y: yPosition),
-                      size: CGSize(width: width, height: SlideOverUXConstants.ETPMenuHeight))
+                      size: CGSize(width: width, height: menuHeight))
     }
 
     override func presentationTransitionWillBegin() {
