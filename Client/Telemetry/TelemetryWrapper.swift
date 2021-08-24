@@ -317,9 +317,6 @@ extension TelemetryWrapper {
         case dismissedETPCoverSheet = "dismissed-etp-sheet"
         case dismissETPCoverSheetAndStartBrowsing = "dismissed-etp-cover-sheet-and-start-browsing"
         case dismissETPCoverSheetAndGoToSettings = "dismissed-update-cover-sheet-and-go-to-settings"
-        case dismissedOnboarding = "dismissed-onboarding"
-        case dismissedOnboardingEmailLogin = "dismissed-onboarding-email-login"
-        case dismissedOnboardingSignUp = "dismissed-onboarding-sign-up"
         case privateBrowsingButton = "private-browsing-button"
         case startSearchButton = "start-search-button"
         case addNewTabButton = "add-new-tab-button"
@@ -333,6 +330,17 @@ extension TelemetryWrapper {
         case settings = "settings"
         case settingsMenuSetAsDefaultBrowser = "set-as-default-browser-menu-go-to-settings"
         case onboarding = "onboarding"
+        case welcomeScreenView = "welcome-screen-view"
+        case welcomeScreenClose = "welcome-screen-close"
+        case welcomeScreenSignIn = "welcome-screen-sign-in"
+        case welcomeScreenSignUp = "welcome-screen-sign-up"
+        case welcomeScreenNext = "welcome-screen-next"
+        case syncScreenView = "sync-screen-view"
+        case syncScreenSignUp = "sync-screen-sign-up"
+        case syncScreenStartBrowse = "sync-screen-start-browse"
+        case dismissedOnboarding = "dismissed-onboarding"
+        case dismissedOnboardingSignUp = "dismissed-onboarding-sign-up"
+        case dismissedOnboardingEmailLogin = "dismissed-onboarding-email-login"
         case dismissDefaultBrowserCard = "default-browser-card"
         case goToSettingsDefaultBrowserCard = "default-browser-card-go-to-settings"
         case dismissDefaultBrowserOnboarding = "default-browser-onboarding"
@@ -525,6 +533,22 @@ extension TelemetryWrapper {
                 let msg = "Missing slide-num in onboarding metric: \(category), \(method), \(object), \(value), \(String(describing: extras))"
                 Sentry.shared.send(message: msg, severity: .debug)
             }
+        case (.action, .view, .welcomeScreenView, _, _):
+            GleanMetrics.Onboarding.welcomeScreen.add()
+        case(.action, .press, .welcomeScreenSignUp, _, _):
+            GleanMetrics.Onboarding.welcomeScreenSignUp.add()
+        case (.action, .press, .welcomeScreenSignIn, _, _):
+            GleanMetrics.Onboarding.welcomeScreenSignIn.add()
+        case(.action, .press, .welcomeScreenNext, _, _):
+            GleanMetrics.Onboarding.welcomeScreenNext.add()
+        case(.action, .press, .welcomeScreenClose, _, _):
+            GleanMetrics.Onboarding.welcomeScreenClose.add()
+        case(.action, .view, .syncScreenView, _, _):
+            GleanMetrics.Onboarding.syncScreen.add()
+        case(.action, .press, .syncScreenSignUp, _, _):
+            GleanMetrics.Onboarding.syncScreenSignUp.add()
+        case(.action, .press, .syncScreenStartBrowse, _, _):
+            GleanMetrics.Onboarding.syncScreenBrowse.add()
         // Widget
         case (.action, .open, .mediumTabsOpenUrl, _, _):
             GleanMetrics.Widget.mTabsOpenUrl.add()
