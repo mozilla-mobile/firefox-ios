@@ -58,6 +58,7 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController {
 
     let connectionVerifierLabel: UILabel = .build { label in
         label.font = ETPMenuUX.Fonts.minorInfoLabel
+        label.isHidden = true
     }
 
     // MARK: - Variables
@@ -137,14 +138,15 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController {
             connectionImage.widthAnchor.constraint(equalToConstant: 20),
 
             connectionStatusLabel.leadingAnchor.constraint(equalTo: connectionImage.trailingAnchor, constant: 28),
-            connectionStatusLabel.topAnchor.constraint(equalTo: connectionView.topAnchor, constant: 8),
+//            connectionStatusLabel.topAnchor.constraint(equalTo: connectionView.topAnchor, constant: 8),
             connectionStatusLabel.trailingAnchor.constraint(equalTo: connectionView.trailingAnchor, constant: -21),
             connectionStatusLabel.heightAnchor.constraint(equalToConstant: 22),
+            connectionStatusLabel.centerYAnchor.constraint(equalTo: connectionView.centerYAnchor)
 
-            connectionVerifierLabel.leadingAnchor.constraint(equalTo: connectionStatusLabel.leadingAnchor),
-            connectionVerifierLabel.bottomAnchor.constraint(equalTo: connectionView.bottomAnchor, constant: -8),
-            connectionVerifierLabel.trailingAnchor.constraint(equalTo: connectionView.trailingAnchor, constant: -21),
-            connectionVerifierLabel.heightAnchor.constraint(equalToConstant: 20),
+//            connectionVerifierLabel.leadingAnchor.constraint(equalTo: connectionStatusLabel.leadingAnchor),
+//            connectionVerifierLabel.bottomAnchor.constraint(equalTo: connectionView.bottomAnchor, constant: -8),
+//            connectionVerifierLabel.trailingAnchor.constraint(equalTo: connectionView.trailingAnchor, constant: -21),
+//            connectionVerifierLabel.heightAnchor.constraint(equalToConstant: 20),
         ])
     }
 

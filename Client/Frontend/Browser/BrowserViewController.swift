@@ -1089,6 +1089,7 @@ class BrowserViewController: UIViewController {
     /// Call this whenever the page URL changes.
     fileprivate func updateURLBarDisplayURL(_ tab: Tab) {
         urlBar.currentURL = tab.url?.displayURL
+        urlBar.locationView.showLockIcon(for: tab)
         urlBar.locationView.tabDidChangeContentBlocking(tab)
         let isPage = tab.url?.displayURL?.isWebPage() ?? false
         navigationToolbar.updatePageStatus(isPage)
@@ -1256,6 +1257,7 @@ class BrowserViewController: UIViewController {
 
         if let url = webView.url {
             if tab === tabManager.selectedTab {
+                urlBar.locationView.showLockIcon(for: tab)
                 urlBar.locationView.tabDidChangeContentBlocking(tab)
             }
 

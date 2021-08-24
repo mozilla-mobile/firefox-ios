@@ -48,6 +48,15 @@ class TabLocationView: UIView {
         didSet { updateTextWithURL() }
     }
 
+    func showLockIcon(for tab: Tab) {
+        if let tabURL = tab.url, (tabURL.absoluteString == "about:blank") {
+            // Matching the desktop behaviour, we don't mark these pages as secure.
+            trackingProtectionButton.isHidden = true
+        } else {
+            trackingProtectionButton.isHidden = false
+        }
+    }
+
     var url: URL? {
         didSet {
             updateTextWithURL()
@@ -384,15 +393,15 @@ extension TabLocationView: TabEventHandler {
 
         var lockImage: UIImage
         let imageID = ThemeManager.instance.currentName == .dark ? "lock_blocked_dark" : "lock_blocked"
-        // Matching desktop behaviour, we don't mark "about:blank" pages as secure
-        if let tabURL = tab.url, (tabURL.absoluteString == "about:blank") {
-            lockImage = UIImage(imageLiteralResourceName: imageID)
+//        if let tabURL = tab.url, (tabURL.absoluteString == "about:blank") {
+//            lockImage = UIImage(imageLiteralResourceName: imageID)
 
-        } else if !(tab.webView?.hasOnlySecureContent ?? false) {
+//        } else
+        if !(tab.webView?.hasOnlySecureContent ?? false) {
             lockImage = UIImage(imageLiteralResourceName: imageID)
 
         } else {
-            lockImage = UIImage(imageLiteralResourceName: "lock_verified")
+            lockImage = UIImage(imageLiteralResourceName: "lock_verified").withRenderingMode(.alwaysTemplate)
         }
 
         switch blocker.status {
