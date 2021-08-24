@@ -153,7 +153,7 @@ class TabManagerStore: FeatureFlagsProtocol {
             }
             
             fxHomeTab = tab.isFxHomeTab ? tab : nil
-            customHomeTab = tab.isCustomHomeTab ? customHomeTab : nil
+            customHomeTab = tab.isCustomHomeTab ? tab : nil
         }
 
         if tabToSelect == nil {
