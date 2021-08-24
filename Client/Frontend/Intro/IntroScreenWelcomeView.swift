@@ -105,7 +105,9 @@ class IntroScreenWelcomeView: UIView, CardTheme {
     // MARK: Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         initialViewSetup()
+        TelemetryWrapper.recordEvent(category: .action, method: .view, object: .welcomeScreenView)
     }
     
     // MARK: View setup
@@ -169,7 +171,7 @@ class IntroScreenWelcomeView: UIView, CardTheme {
             make.height.equalTo(buttonHeight)
         }
         addSubview(closeButton)
-        closeButton.addTarget(self, action: #selector(startBrowsing), for: .touchUpInside)
+        closeButton.addTarget(self, action: #selector(handleCloseButtonTapped), for: .touchUpInside)
         closeButton.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(buttonEdgeInset)
             make.right.equalToSuperview().inset(buttonEdgeInset)
@@ -179,22 +181,26 @@ class IntroScreenWelcomeView: UIView, CardTheme {
     }
     
     // MARK: Button Actions
-    @objc func startBrowsing() {
+    @objc func handleCloseButtonTapped() {
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .dismissedOnboarding, extras: ["slide-num": currentPage])
+        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .welcomeScreenClose)
         closeClosure?()
     }
 
     @objc func showEmailLoginFlow() {
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .dismissedOnboardingEmailLogin, extras: ["slide-num": currentPage])
+        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .welcomeScreenSignIn)
         signInClosure?()
     }
 
     @objc func showSignUpFlow() {
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .dismissedOnboardingSignUp, extras: ["slide-num": currentPage])
+        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .welcomeScreenSignUp)
         signUpClosure?()
     }
     
     @objc private func nextAction() {
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .welcomeScreenNext)
         nextClosure?()
     }
     
