@@ -81,7 +81,6 @@ class URLBarView: UIView {
 
     var toolbarIsShowing = false
     var topTabsIsShowing = false
-    var newTabUserResearch: NewTabUserResearch?
 
     fileprivate var locationTextField: ToolbarTextField?
 
@@ -163,6 +162,7 @@ class URLBarView: UIView {
     
     var appMenuButton = ToolbarButton()
     var bookmarksButton = ToolbarButton()
+    var homeButton = ToolbarButton()
     var addNewTabButton = ToolbarButton()
     var forwardButton = ToolbarButton()
     var multiStateButton = ToolbarButton()
@@ -173,7 +173,7 @@ class URLBarView: UIView {
         return backButton
     }()
 
-    lazy var actionButtons: [Themeable & UIButton] = [self.tabsButton, self.bookmarksButton, self.appMenuButton, self.addNewTabButton,  self.forwardButton, self.backButton, self.multiStateButton]
+    lazy var actionButtons: [Themeable & UIButton] = [self.tabsButton, self.homeButton, self.bookmarksButton, self.appMenuButton, self.addNewTabButton,  self.forwardButton, self.backButton, self.multiStateButton]
 
     var currentURL: URL? {
         get {
@@ -216,7 +216,7 @@ class URLBarView: UIView {
         locationContainer.addSubview(locationView)
         
         [scrollToTopButton, line, tabsButton, progressBar, cancelButton, showQRScannerButton,
-         bookmarksButton, appMenuButton, addNewTabButton, forwardButton, backButton, multiStateButton, locationContainer].forEach {
+         homeButton, bookmarksButton, appMenuButton, addNewTabButton, forwardButton, backButton, multiStateButton, locationContainer].forEach {
             addSubview($0)
         }
 
@@ -288,6 +288,12 @@ class URLBarView: UIView {
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
 
+        homeButton.snp.makeConstraints { make in
+            make.trailing.equalTo(self.bookmarksButton.snp.leading)
+            make.centerY.equalTo(self)
+            make.size.equalTo(URLBarViewUX.ButtonHeight)
+        }
+
         bookmarksButton.snp.makeConstraints { make in
             make.trailing.equalTo(self.appMenuButton.snp.leading)
             make.centerY.equalTo(self)
@@ -301,7 +307,7 @@ class URLBarView: UIView {
         }
         
         addNewTabButton.snp.makeConstraints { make in
-            make.trailing.equalTo(self.tabsButton.snp.leading)
+            make.trailing.equalTo(self.homeButton.snp.leading)
             make.centerY.equalTo(self)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
@@ -350,7 +356,7 @@ class URLBarView: UIView {
                     // If we are showing a toolbar, show the text field next to the forward button
                     make.leading.equalTo(self.multiStateButton.snp.trailing).offset(URLBarViewUX.Padding)
                     if self.topTabsIsShowing {
-                        make.trailing.equalTo(self.bookmarksButton.snp.leading).offset(-URLBarViewUX.Padding)
+                        make.trailing.equalTo(self.homeButton.snp.leading).offset(-URLBarViewUX.Padding)
                     } else {
                         make.trailing.equalTo(self.addNewTabButton.snp.leading).offset(-URLBarViewUX.Padding)
                     }
@@ -434,13 +440,6 @@ class URLBarView: UIView {
     }
 
     func updateProgressBar(_ progress: Float) {
-        let shouldShowNewTabButton = false
-        if shouldShowNewTabButton {
-            locationView.reloadButton.reloadButtonState = progress != 1 ? .stop : .reload
-        } else {
-            locationView.reloadButton.reloadButtonState = .disabled
-        }
-        
         progressBar.alpha = 1
         progressBar.isHidden = false
         progressBar.setProgress(progress, animated: !isTransitioning)
@@ -531,6 +530,7 @@ class URLBarView: UIView {
         progressBar.isHidden = false
         addNewTabButton.isHidden = !toolbarIsShowing || !topTabsIsShowing
         appMenuButton.isHidden = !toolbarIsShowing
+        homeButton.isHidden = !toolbarIsShowing || !topTabsIsShowing
         bookmarksButton.isHidden = !toolbarIsShowing || !topTabsIsShowing
         forwardButton.isHidden = !toolbarIsShowing
         backButton.isHidden = !toolbarIsShowing
@@ -545,6 +545,7 @@ class URLBarView: UIView {
         progressBar.alpha = inOverlayMode || didCancel ? 0 : 1
         tabsButton.alpha = inOverlayMode ? 0 : 1
         appMenuButton.alpha = inOverlayMode ? 0 : 1
+        homeButton.alpha = inOverlayMode ? 0 : 1
         bookmarksButton.alpha = inOverlayMode ? 0 : 1
         addNewTabButton.alpha = inOverlayMode ? 0 : 1
         forwardButton.alpha = inOverlayMode ? 0 : 1
@@ -678,7 +679,7 @@ extension URLBarView: TabToolbarProtocol {
                 return [locationTextField, cancelButton]
             } else {
                 if toolbarIsShowing {
-                    return [backButton, forwardButton, multiStateButton, locationView, tabsButton, bookmarksButton, appMenuButton, addNewTabButton, progressBar]
+                    return [backButton, forwardButton, multiStateButton, locationView, tabsButton, homeButton, bookmarksButton, appMenuButton, addNewTabButton, progressBar]
                 } else {
                     return [locationView, progressBar]
                 }

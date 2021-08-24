@@ -4953,7 +4953,6 @@
 		434F97F124196B4200812FDF /* UserResearch */ = {
 			isa = PBXGroup;
 			children = (
-				4368BC6724FF14650021931D /* NewTabUserResearch.swift */,
 				23F8D70B255B0411003B605D /* ChronTabsUserResearch.swift */,
 			);
 			path = UserResearch;
@@ -7971,7 +7970,6 @@
 				EBF47E701F7979DF00899189 /* TelemetryWrapper.swift in Sources */,
 				E68F36981EA694000048CF44 /* PanelDataObservers.swift in Sources */,
 				31ADB5DA1E58CEC300E87909 /* ClipboardBarDisplayHandler.swift in Sources */,
-				4368BC6824FF14650021931D /* NewTabUserResearch.swift in Sources */,
 				39EF4363260CEE5E0011E22E /* ExperimentConstants.swift in Sources */,
 				745DAB3F1CDAB09E00D44181 /* HistoryBackButton.swift in Sources */,
 				EB9A179D20E69A7F00B12184 /* Theme.swift in Sources */,

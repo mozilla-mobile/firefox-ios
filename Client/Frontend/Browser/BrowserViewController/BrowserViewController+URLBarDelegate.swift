@@ -144,12 +144,11 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
 
         // Wait for both the bookmark status and the pinned status
         deferredBookmarkStatus.both(deferredPinnedTopSiteStatus).uponQueue(.main) {
-            let shouldShowNewTabButton = false
             let isBookmarked = $0.successValue ?? false
             let isPinned = $1.successValue ?? false
             let pageActions = self.getTabActions(tab: tab, buttonView: button, presentShareMenu: actionMenuPresenter,
                                                  findInPage: findInPageAction, reportSiteIssue: reportSiteIssue, presentableVC: self, isBookmarked: isBookmarked,
-                                                 isPinned: isPinned, shouldShowNewTabButton: shouldShowNewTabButton, success: successCallback)
+                                                 isPinned: isPinned, success: successCallback)
             self.presentSheetWith(actions: pageActions, on: self, from: button)
         }
     }
