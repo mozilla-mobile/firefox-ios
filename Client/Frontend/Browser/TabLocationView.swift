@@ -385,15 +385,12 @@ extension TabLocationView: TabEventHandler {
 
         var lockImage: UIImage
         let imageID = ThemeManager.instance.currentName == .dark ? "lock_blocked_dark" : "lock_blocked"
-//        if let tabURL = tab.url, (tabURL.absoluteString == "about:blank") {
-//            lockImage = UIImage(imageLiteralResourceName: imageID)
-
-//        } else
         if !(tab.webView?.hasOnlySecureContent ?? false) {
             lockImage = UIImage(imageLiteralResourceName: imageID)
 
         } else {
-            lockImage = UIImage(imageLiteralResourceName: "lock_verified").withRenderingMode(.alwaysTemplate)
+            lockImage = UIImage(imageLiteralResourceName: "lock_verified").withTintColor(pageOptionsButton.tintColor, renderingMode: .alwaysTemplate)
+
         }
 
         switch blocker.status {

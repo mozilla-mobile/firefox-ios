@@ -52,7 +52,7 @@ class SlideOverPresentationController: UIPresentationController {
         self.blurEffectView.alpha = 0
         self.containerView?.addSubview(blurEffectView)
         self.presentedViewController.transitionCoordinator?.animate(alongsideTransition: { (UIViewControllerTransitionCoordinatorContext) in
-            self.blurEffectView.alpha = 0.5
+            self.blurEffectView.alpha = 0.1
         }, completion: { (UIViewControllerTransitionCoordinatorContext) in })
     }
 
