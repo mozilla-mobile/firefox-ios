@@ -36,7 +36,7 @@ private struct SearchViewControllerUX {
 }
 
 protocol SearchViewControllerDelegate: AnyObject {
-    func searchViewController(_ searchViewController: SearchViewController, didSelectURL url: URL)
+    func searchViewController(_ searchViewController: SearchViewController, didSelectURL url: URL, searchTerm: String?)
     func searchViewController(_ searchViewController: SearchViewController, uuid: String)
     func presentSearchSettingsController()
     func searchViewController(_ searchViewController: SearchViewController, didHighlightText text: String, search: Bool)
@@ -290,7 +290,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         Telemetry.default.recordSearch(location: .quickSearch, searchEngine: engine.engineID ?? "other")
         GleanMetrics.Search.counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.quickSearch.rawValue)"].add()
 
-        searchDelegate?.searchViewController(self, didSelectURL: url)
+        searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: "")
     }
 
     @objc func didClickSearchButton() {
@@ -470,18 +470,18 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 //                let metaDataKey = HistoryMetadataKey(url: "", searchTerm: "", referrerUrl: "")
 //                let observation = HistoryMetadataObservation()
                 profile.places.recordHistoryMetaData(key: key, observation: observation)
-                searchDelegate?.searchViewController(self, didSelectURL: url)
+                searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: suggestion)
             }
         case .openedTabs:
             let tab = self.filteredOpenedTabs[indexPath.row]
             searchDelegate?.searchViewController(self, uuid: tab.tabUUID)
         case .remoteTabs:
             let remoteTab = self.filteredRemoteClientTabs[indexPath.row].tab
-            searchDelegate?.searchViewController(self, didSelectURL: remoteTab.URL)
+            searchDelegate?.searchViewController(self, didSelectURL: remoteTab.URL, searchTerm: nil)
         case .bookmarksAndHistory:
             if let site = data[indexPath.row] {
                 if let url = URL(string: site.url) {
-                    searchDelegate?.searchViewController(self, didSelectURL: url)
+                    searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)
                     TelemetryWrapper.recordEvent(category: .action, method: .open, object: .bookmark, value: .awesomebarResults)
                 }
             }

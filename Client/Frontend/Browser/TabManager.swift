@@ -229,7 +229,10 @@ class TabManager: NSObject, FeatureFlagsProtocol {
     func selectTab(_ tab: Tab?, previous: Tab? = nil) {
         assert(Thread.isMainThread)
         let previous = previous ?? selectedTab
-
+        
+        previous?.updateTimerAndObserving(state: .tabSwitched)
+        tab?.updateTimerAndObserving(state: .tabSelected)
+        
         // Make sure to wipe the private tabs if the user has the pref turned on
         if shouldClearPrivateTabs(), !(tab?.isPrivate ?? false) {
             removeAllPrivateTabs()
