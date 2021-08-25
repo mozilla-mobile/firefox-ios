@@ -5,8 +5,8 @@
 import UIKit
 
 struct SlideOverUXConstants {
-    static let ETPMenuHeightForGlobalOn: CGFloat = 365
-    static let ETPMenuHeightForGlobalOff: CGFloat = 265
+    static let ETPMenuHeightForGlobalOn: CGFloat = 385
+    static let ETPMenuHeightForGlobalOff: CGFloat = 285
     static let ETPMenuCornerRadius: CGFloat = 8
 }
 

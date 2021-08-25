@@ -48,19 +48,11 @@ class TabLocationView: UIView {
         didSet { updateTextWithURL() }
     }
 
-    func showLockIcon(for tab: Tab) {
-        if let tabURL = tab.url, (tabURL.absoluteString == "about:blank") {
-            // Matching the desktop behaviour, we don't mark these pages as secure.
-            trackingProtectionButton.isHidden = true
-        } else {
-            trackingProtectionButton.isHidden = false
-        }
-    }
-
     var url: URL? {
         didSet {
             updateTextWithURL()
             pageOptionsButton.isHidden = (url == nil)
+            trackingProtectionButton.isHidden = !["https", "http"].contains(url?.scheme ?? "")
             setNeedsUpdateConstraints()
         }
     }
