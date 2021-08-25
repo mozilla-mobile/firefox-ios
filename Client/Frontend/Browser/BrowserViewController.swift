@@ -1048,9 +1048,9 @@ class BrowserViewController: UIViewController {
             // didCommitNavigation to confirm the page load.
             if tab.url?.origin == webView.url?.origin {
                 
-                if tab == tabManager.selectedTab, tab.url?.absoluteString != webView.url?.absoluteString {
-                    tab.updateTimerAndObserving(state: .tabNavigatedToDifferentUrl)
-                }
+//                if tab == tabManager.selectedTab, tab.url?.absoluteString != webView.url?.absoluteString {
+//                    tab.updateTimerAndObserving(state: .tabNavigatedToDifferentUrl)
+//                }
                 
                 tab.url = webView.url
 
@@ -1104,6 +1104,9 @@ class BrowserViewController: UIViewController {
     /// Updates the URL bar text and button states.
     /// Call this whenever the page URL changes.
     fileprivate func updateURLBarDisplayURL(_ tab: Tab) {
+        if tab == tabManager.selectedTab, let displayUrl = tab.url?.displayURL, urlBar.currentURL != displayUrl {
+            tab.updateTimerAndObserving(state: .tabNavigatedToDifferentUrl, nextUrl: displayUrl.absoluteString)
+        }
         urlBar.currentURL = tab.url?.displayURL
         urlBar.locationView.showLockIcon(forSecureContent: tab.webView?.hasOnlySecureContent ?? false)
         let isPage = tab.url?.displayURL?.isWebPage() ?? false

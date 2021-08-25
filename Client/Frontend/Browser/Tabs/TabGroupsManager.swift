@@ -47,7 +47,7 @@ struct TabGroup {
 class StopWatchTimer {
     private var timer: Timer?
     var isPaused = true
-    var elpasedTime = 0
+    var elpasedTime: Int32 = 0
     
     func startOrResume() {
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(incrementValue), userInfo: nil, repeats: true)

@@ -91,6 +91,7 @@ class Tab: NSObject {
     var tabGroupTimerState: TabGroupTimerState = .none
     var tabAssociatedSearchTerm: String = "" // Search term that a user initially used on this tab
     var tabAssociatedSearchUrl: String = ""
+    var tabHistoryMetadatakey: HistoryMetadataKey?
     
     // PageMetadata is derived from the page content itself, and as such lags behind the
     // rest of the tab.
@@ -165,6 +166,7 @@ class Tab: NSObject {
         didSet {
             if let _url = url, let internalUrl = InternalURL(_url), internalUrl.isAuthorized {
                 url = URL(string: internalUrl.stripAuthorization)
+                print("URLLLLL - SET \(url)")
             }
         }
     }
@@ -300,55 +302,6 @@ class Tab: NSObject {
     func updateTimerAndObserving(state: TabGroupTimerState, searchTerm: String? = nil, searchProviderUrl: URL? = nil, nextUrl: String = "") {
         switch state {
         case .navSearchLoaded:
-            let provider = BasicSearchProvider(rawValue: searchProviderUrl?.shortDisplayString ?? "")
-            let p = SearchProviderList
-            let s = searchProviderUrl?.shortDisplayString
-            var onSearchProviderUrl = false
-            if let s = searchProviderUrl?.absoluteString {
-                for provider in SearchProviderList {
-                    guard s.range(of: provider.regexp, options: .regularExpression) != nil else { continue }
-                    onSearchProviderUrl = true
-                    break
-                }
-            }
-            print("Before: updateTimerAndObserving - navSearchLoaded \(tabGroupsTimerHelper.elpasedTime)")
-            tabGroupsTimerHelper.startOrResume()
-            print("""
-                  updateTimerAndObserving - navSearchLoaded
-                  // searchTerm -> \(searchTerm ?? "")
-                  // onSearchProviderUrl = \(onSearchProviderUrl)
-                  // nextUrl = \(nextUrl)
-                  // elpasedTime = \(tabGroupsTimerHelper.elpasedTime)
-                  """)
-            tabAssociatedSearchUrl = searchProviderUrl?.absoluteString ?? ""
-            tabAssociatedSearchTerm = searchTerm ?? ""
-        case .newTab:
-            print("Before: updateTimerAndObserving - newTab // elpasedTime = \(tabGroupsTimerHelper.elpasedTime)")
-            tabGroupsTimerHelper.resetTimer()
-            tabGroupsTimerHelper.startOrResume()
-            print("updateTimerAndObserving - newTab // elpasedTime = \(tabGroupsTimerHelper.elpasedTime)")
-        case .tabNavigatedToDifferentUrl:
-            print("Before: updateTimerAndObserving - tabNavigatedToDifferentUrl // elpasedTime = \(tabGroupsTimerHelper.elpasedTime)")
-            tabGroupsTimerHelper.resetTimer()
-            tabGroupsTimerHelper.startOrResume()
-            print("updateTimerAndObserving - tabNavigatedToDifferentUrl // elpasedTime = \(tabGroupsTimerHelper.elpasedTime)")
-        case .tabSelected:
-            print("Before: updateTimerAndObserving - tabSelected // elpasedTime = \(tabGroupsTimerHelper.elpasedTime)")
-            tabGroupsTimerHelper.startOrResume()
-            print("updateTimerAndObserving - tabSelected // elpasedTime = \(tabGroupsTimerHelper.elpasedTime)")
-        case .tabSwitched:
-            print("Before: updateTimerAndObserving - tabSwitched // elpasedTime = \(tabGroupsTimerHelper.elpasedTime)")
-            tabGroupsTimerHelper.pauseOrStop()
-            print("updateTimerAndObserving - tabSwitched // elpasedTime = \(tabGroupsTimerHelper.elpasedTime)")
-        case .none:
-            print("updateTimerAndObserving - none // elpasedTime = \(tabGroupsTimerHelper.elpasedTime)")
-        }
-    }
-    
-    
-//    func updateTimerAndObserving(state: TabGroupTimerState, searchTerm: String? = nil, searchProviderUrl: URL? = nil, nextUrl: String = "") {
-//        switch state {
-//        case .navSearchLoaded:
 //            let provider = BasicSearchProvider(rawValue: searchProviderUrl?.shortDisplayString ?? "")
 //            let p = SearchProviderList
 //            let s = searchProviderUrl?.shortDisplayString
@@ -360,49 +313,65 @@ class Tab: NSObject {
 //                    break
 //                }
 //            }
+            print("Before: updateTimerAndObserving - navSearchLoaded \(tabGroupsTimerHelper.elpasedTime)")
+            tabGroupsTimerHelper.startOrResume()
 //            print("""
 //                  updateTimerAndObserving - navSearchLoaded
 //                  // searchTerm -> \(searchTerm ?? "")
 //                  // onSearchProviderUrl = \(onSearchProviderUrl)
 //                  // nextUrl = \(nextUrl)
+//                  // elpasedTime = \(tabGroupsTimerHelper.elpasedTime)
 //                  """)
-//            tabAssociatedSearchUrl = searchProviderUrl?.absoluteString ?? ""
-//            tabAssociatedSearchTerm = searchTerm ?? ""
-//            tabGroupsTimerHelper.startTimer()
-//        case .newTab:
-//            print("updateTimerAndObserving - newTab")
-//            if tabGroupsTimerHelper.isActive {
-//                tabGroupsTimerHelper.endTimer()
-//            }
-//            tabGroupsTimerHelper.startTimer()
-//        case .tabNavigatedToDifferentUrl:
-//            print("updateTimerAndObserving - tabNavigatedToDifferentUrl")
-//            if tabGroupsTimerHelper.isActive {
-//                tabGroupsTimerHelper.endTimer()
-//                print("Elpased Time (updateTimerAndObserving) for previous url - \(tabGroupsTimerHelper.elpasedTime)")
-//            }
-//            tabGroupsTimerHelper.resetTimer()
-//            tabGroupsTimerHelper.startTimer()
-//        case .tabSelected:
-//            print("updateTimerAndObserving - tabSelected")
-//            if tabGroupsTimerHelper.isActive {
-//                tabGroupsTimerHelper.endTimer()
-//                print("Elpased Time (updateTimerAndObserving) for previous url - \(tabGroupsTimerHelper.elpasedTime)")
-//            }
-//            tabGroupsTimerHelper.resetTimer()
-//            tabGroupsTimerHelper.startTimer()
-//        case .tabSwitched:
-//            print("updateTimerAndObserving - tabSwitched")
-//            if tabGroupsTimerHelper.isActive {
-//                tabGroupsTimerHelper.endTimer()
-//                print("Elpased Time (updateTimerAndObserving) for previous url - \(tabGroupsTimerHelper.elpasedTime)")
-//            }
-//            tabGroupsTimerHelper.resetTimer()
-//            tabGroupsTimerHelper.startTimer()
-//        case .none:
-//            print("updateTimerAndObserving - none")
-//        }
-//    }
+            tabAssociatedSearchUrl = searchProviderUrl?.absoluteString ?? ""
+            tabAssociatedSearchTerm = searchTerm ?? ""
+            if let profile = self.browserViewController?.profile, let searchTerm = searchTerm, let searchUrl = searchProviderUrl {
+                self.tabHistoryMetadatakey = HistoryMetadataKey(url: searchUrl.absoluteString, searchTerm: searchTerm, referrerUrl: "")
+                let observation: HistoryMetadataObservation = HistoryMetadataObservation(titleObservation: self.displayTitle, viewTimeObservation: tabGroupsTimerHelper.elpasedTime, documentTypeObservation: .regular)
+//                profile.places.recordHistoryMetaData(key: tabHistoryMetadatakey!, observation: observation)
+            }
+//            let observation: HistoryMetadataObservation = HistoryMetadataObservation(titleObservation: "sometitle", viewTimeObservation: 2, documentTypeObservation: .regular)
+//            profile.places.recordHistoryMetaData(key: key, observation: observation)
+        case .newTab:
+            print("Before: updateTimerAndObserving - newTab // elpasedTime = \(tabGroupsTimerHelper.elpasedTime)")
+            tabGroupsTimerHelper.resetTimer()
+            tabGroupsTimerHelper.startOrResume()
+            print("updateTimerAndObserving - newTab // elpasedTime = \(tabGroupsTimerHelper.elpasedTime)")
+        case .tabNavigatedToDifferentUrl:
+            print("Before: updateTimerAndObserving - tabNavigatedToDifferentUrl // elpasedTime = \(tabGroupsTimerHelper.elpasedTime)")
+            tabGroupsTimerHelper.resetTimer()
+            tabGroupsTimerHelper.startOrResume()
+            print("updateTimerAndObserving - tabNavigatedToDifferentUrl // elpasedTime = \(tabGroupsTimerHelper.elpasedTime)")
+            if let profile = self.browserViewController?.profile, !tabAssociatedSearchTerm.isEmpty, !tabAssociatedSearchUrl.isEmpty, !nextUrl.isEmpty {
+                self.tabHistoryMetadatakey = HistoryMetadataKey(url: tabAssociatedSearchUrl, searchTerm: tabAssociatedSearchTerm, referrerUrl: nextUrl)
+                let observation1: HistoryMetadataObservation = HistoryMetadataObservation(titleObservation: self.displayTitle, viewTimeObservation: nil, documentTypeObservation: nil)
+                profile.places.recordHistoryMetaData(key: tabHistoryMetadatakey!, observation: observation1)
+                
+                let observation2: HistoryMetadataObservation = HistoryMetadataObservation(titleObservation: nil, viewTimeObservation: tabGroupsTimerHelper.elpasedTime, documentTypeObservation: nil)
+                profile.places.recordHistoryMetaData(key: tabHistoryMetadatakey!, observation: observation2)
+                
+                let observation3: HistoryMetadataObservation = HistoryMetadataObservation(titleObservation: nil, viewTimeObservation: nil, documentTypeObservation: .regular)
+                profile.places.recordHistoryMetaData(key: tabHistoryMetadatakey!, observation: observation3)
+            }
+        case .tabSelected:
+            print("Before: updateTimerAndObserving - tabSelected // elpasedTime = \(tabGroupsTimerHelper.elpasedTime)")
+            if tabGroupsTimerHelper.isPaused {
+                tabGroupsTimerHelper.startOrResume()
+            }
+            
+            let temp = self.browserViewController?.profile.places.getSearchTermMetaData().uponQueue(.main) { [weak self] result in
+                if let val = result.successValue {
+                    print("updateTimerAndObserving - result \(val)")
+                }
+            }
+            print("updateTimerAndObserving - tabSelected // elpasedTime = \(tabGroupsTimerHelper.elpasedTime)")
+        case .tabSwitched:
+            print("Before: updateTimerAndObserving - tabSwitched // elpasedTime = \(tabGroupsTimerHelper.elpasedTime)")
+            tabGroupsTimerHelper.pauseOrStop()
+            print("updateTimerAndObserving - tabSwitched // elpasedTime = \(tabGroupsTimerHelper.elpasedTime)")
+        case .none:
+            print("updateTimerAndObserving - none // elpasedTime = \(tabGroupsTimerHelper.elpasedTime)")
+        }
+    }
 
     class func toRemoteTab(_ tab: Tab) -> RemoteTab? {
         if tab.isPrivate {
@@ -625,9 +594,9 @@ class Tab: NSObject {
                 lastRequest = readerModeRequest
                 return webView.load(readerModeRequest)
             }
-            if self.url?.absoluteString != request.url?.absoluteString {
-                self.updateTimerAndObserving(state: .tabNavigatedToDifferentUrl)
-            }
+//            if self.url?.absoluteString != request.url?.absoluteString {
+//                self.updateTimerAndObserving(state: .tabNavigatedToDifferentUrl)
+//            }
             lastRequest = request
             if let url = request.url, url.isFileURL, request.isPrivileged {
                 return webView.loadFileURL(url, allowingReadAccessTo: url)

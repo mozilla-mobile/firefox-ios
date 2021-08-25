@@ -148,6 +148,13 @@ public class RustPlaces {
             Sentry.shared.sendWithStacktrace(message: "Error encountered while migrating bookmarks from BrowserDB", tag: SentryTag.rustPlaces, severity: .error, description: err.localizedDescription)
         }
     }
+    
+    public func getSearchTermMetaData() -> Deferred<Maybe<[HistoryMetadata]?>> {
+        return withReader { connection in
+            let lastTwoWeek = Int64(Date().lastTwoWeek.timeIntervalSince1970)
+            return try connection.getHistoryMetadataSince(since: lastTwoWeek)
+        }
+    }
 
     public func getBookmarksTree(rootGUID: GUID, recursive: Bool) -> Deferred<Maybe<BookmarkNode?>> {
         return withReader { connection in

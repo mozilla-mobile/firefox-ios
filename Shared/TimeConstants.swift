@@ -128,6 +128,9 @@ extension Date {
 extension Date {
     public static var yesterday: Date { return Date().dayBefore }
     public static var tomorrow: Date { return Date().dayAfter }
+    public var lastTwoWeek: Date {
+        return Calendar.current.date(byAdding: .day, value: -14, to: noon) ?? Date()
+    }
     public var lastWeek: Date {
         return Calendar.current.date(byAdding: .day, value: -8, to: noon) ?? Date()
     }
