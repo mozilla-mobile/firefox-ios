@@ -318,7 +318,7 @@ private class SQLiteDBStatement {
             } else if obj is String {
                 typealias CFunction = @convention(c) (UnsafeMutableRawPointer?) -> Void
                 let transient = unsafeBitCast(-1, to: CFunction.self)
-                status = sqlite3_bind_text(pointer, Int32(index+1), (obj as! String).cString(using: .utf8)!, -1, transient)
+                status = sqlite3_bind_text(pointer, Int32(index+1), makeUtf8CString(from: (obj as! String)), -1, transient)
             } else if obj is Data {
                 status = sqlite3_bind_blob(pointer, Int32(index+1), ((obj as! Data) as NSData).bytes, -1, nil)
             } else if obj is Date {
@@ -349,6 +349,14 @@ private class SQLiteDBStatement {
         if nil != self.pointer {
             sqlite3_finalize(self.pointer)
         }
+    }
+    
+    func makeUtf8CString(from str: String) -> UnsafeMutablePointer<Int8> {
+        let count = str.utf8CString.count
+        let result: UnsafeMutableBufferPointer<Int8> = UnsafeMutableBufferPointer<Int8>.allocate(capacity: count)
+        // func initialize<S>(from: S) -> (S.Iterator, UnsafeMutableBufferPointer<Element>.Index)
+        _ = result.initialize(from: str.utf8CString)
+        return result.baseAddress!
     }
 }
 
