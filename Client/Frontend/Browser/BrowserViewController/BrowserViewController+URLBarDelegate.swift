@@ -189,7 +189,10 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
                 etpVC.modalPresentationStyle = .custom
                 etpVC.transitioningDelegate = self
             } else {
+                etpVC.asPopover = true
                 etpVC.modalPresentationStyle = .popover
+                etpVC.popoverPresentationController?.sourceView = urlBar.locationView.trackingProtectionButton
+                etpVC.popoverPresentationController?.permittedArrowDirections = .up
                 etpVC.popoverPresentationController?.delegate = self
             }
 
@@ -411,5 +414,3 @@ extension BrowserViewController: UIViewControllerTransitioningDelegate {
                                                withGlobalETPStatus: globalETPStatus)
     }
 }
-
-

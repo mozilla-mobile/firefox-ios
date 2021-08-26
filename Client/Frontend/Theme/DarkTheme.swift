@@ -68,9 +68,10 @@ fileprivate class DarkTabTrayColor: TabTrayColor {
 
 fileprivate class DarkEnhancedTrackingProtectionMenuColor: EnhancedTrackingProtectionMenuColor {
     override var defaultImageTints: UIColor { return defaultTextAndTint }
-    override var background: UIColor { return UIColor.Photon.DarkGrey60 }
-    override var sectionColor: UIColor { return UIColor.Photon.DarkGrey05 }
-    override var subtextColor: UIColor { return defaultTextAndTint }
+    override var background: UIColor { return UIColor.Photon.DarkGrey80 }
+    override var sectionColor: UIColor { return UIColor.Photon.DarkGrey65 }
+    override var switchAndButtonTint: UIColor { return UIColor.Photon.Blue20 }
+    override var subtextColor: UIColor { return UIColor.Photon.LightGrey05 }
 }
 
 fileprivate class DarkTopTabsColor: TopTabsColor {
