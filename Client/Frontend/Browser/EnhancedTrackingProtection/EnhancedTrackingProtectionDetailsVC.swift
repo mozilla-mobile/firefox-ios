@@ -12,11 +12,11 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController {
 
     // MARK: - UI
 
-    let siteTitleLabel: UILabel = .build { label in
+    private let siteTitleLabel: UILabel = .build { label in
         label.font = ETPMenuUX.Fonts.websiteTitle
     }
 
-    var closeButton: UIButton = .build { button in
+    private var closeButton: UIButton = .build { button in
         button.layer.cornerRadius = 0.5 * ETPMenuUX.UX.closeButtonSize
         button.clipsToBounds = true
         button.setTitle(.AppSettingsDone, for: .normal)
@@ -24,39 +24,39 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController {
         button.setTitleColor(.systemBlue, for: .normal)
     }
 
-    let siteInfoSection = ETPSectionView(frame: .zero)
+    private let siteInfoSection = ETPSectionView(frame: .zero)
 
-    let siteInfoImage: UIImageView = .build { image in
+    private let siteInfoImage: UIImageView = .build { image in
         image.contentMode = .scaleAspectFit
         image.clipsToBounds = true
         image.layer.masksToBounds = true
         image.layer.cornerRadius = 5
     }
 
-    var siteInfoTitleLabel: UILabel = .build { label in
+    private var siteInfoTitleLabel: UILabel = .build { label in
         label.font = ETPMenuUX.Fonts.viewTitleLabels
         label.numberOfLines = 0
     }
 
-    var siteInfoURLLabel: UILabel = .build { label in
+    private var siteInfoURLLabel: UILabel = .build { label in
         label.font = ETPMenuUX.Fonts.minorInfoLabel
         label.numberOfLines = 0
     }
 
-    let connectionView = ETPSectionView(frame: .zero)
+    private let connectionView = ETPSectionView(frame: .zero)
 
-    let connectionImage: UIImageView = .build { image in
+    private let connectionImage: UIImageView = .build { image in
         image.contentMode = .scaleAspectFit
         image.clipsToBounds = true
         image.layer.masksToBounds = true
         image.layer.cornerRadius = 5
     }
 
-    let connectionStatusLabel: UILabel = .build { label in
+    private let connectionStatusLabel: UILabel = .build { label in
         label.font = ETPMenuUX.Fonts.viewTitleLabels
     }
 
-    let connectionVerifierLabel: UILabel = .build { label in
+    private let connectionVerifierLabel: UILabel = .build { label in
         label.font = ETPMenuUX.Fonts.minorInfoLabel
         label.isHidden = true
     }

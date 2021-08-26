@@ -335,7 +335,6 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
             protectionButton.trailingAnchor.constraint(equalTo: protectionView.trailingAnchor, constant: -ETPMenuUX.UX.gutterDistance),
             protectionButton.topAnchor.constraint(equalTo: protectionView.topAnchor),
             protectionButton.bottomAnchor.constraint(equalTo: protectionView.bottomAnchor)
-
         ]
 
         constraints.append(contentsOf: protectionConstraints)
