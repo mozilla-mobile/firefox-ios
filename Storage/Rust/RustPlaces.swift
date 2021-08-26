@@ -334,4 +334,31 @@ public class RustPlaces {
 
         return deferred
     }
+
+    public func getHistoryMetadataSince(since: Int64) -> Deferred<Maybe<[HistoryMetadata]>> {
+        return withReader { connection in
+            return try connection.getHistoryMetadataSince(since: since)
+        }
+    }
+    
+    public func queryHistoryMetadata(query: String, limit: Int32) -> Deferred<Maybe<[HistoryMetadata]>> {
+        return withReader { connection in
+            return try connection.queryHistoryMetadata(query: query, limit: limit)
+        }
+    }
+    
+    /**
+        Title observations must be made first for any given url. Observe one fact at a time (e.g. just the viewTime, or just the documentType).
+     */
+    public func noteHistoryMetadataObservation(key: HistoryMetadataKey, observation: HistoryMetadataObservation) -> Deferred<Maybe<Void>> {
+        return withWriter { connection in
+            return try connection.noteHistoryMetadataObservation(key: key, observation: observation)
+        }
+    }
+    
+    public func deleteHistoryMetadataOlderThan(olderThan: Int64) -> Deferred<Maybe<Void>> {
+        return withWriter { connection in
+            return try connection.deleteHistoryMetadaOlderThan(olderThan: olderThan)
+        }
+    }
 }
