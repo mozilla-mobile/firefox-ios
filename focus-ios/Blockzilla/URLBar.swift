@@ -796,7 +796,7 @@ extension URLBar: AutocompleteTextFieldDelegate {
         setTextToURL(displayFullUrl: true)
         autocompleteTextField.highlightAll()
 
-        if !isEditing && inBrowsingMode {
+        if !isEditing {
             isEditing = true
             delegate?.urlBarDidActivate(self)
         }
