@@ -21,6 +21,23 @@ class PageActionSheetItems {
     var canOpenInChrome: Bool {
         return app.canOpenURL(URL(string: "googlechrome://")!)
     }
+    
+    var canAddToShortcuts: Bool {
+        let shortcut = Shortcut(url: self.url)
+        return ShortcutsManager.shared.canSave(shortcut: shortcut)
+    }
+    
+    lazy var addToShortcutsItem = PhotonActionSheetItem(title: UIConstants.strings.shareMenuAddToShortcuts, iconString: "icon_shortcuts_add") { action in
+        //TODO: add telemetry
+        let shortcut = Shortcut(url: self.url)
+        ShortcutsManager.shared.addToShortcuts(shortcut: shortcut)
+    }
+    
+    lazy var removeFromShortcutsItem = PhotonActionSheetItem(title: UIConstants.strings.shareMenuRemoveFromShortcuts, iconString: "icon_shortcuts_remove") { action in
+        //TODO: add telemetry
+        let shortcut = Shortcut(url: self.url)
+        ShortcutsManager.shared.removeFromShortcuts(shortcut: shortcut)
+    }
 
     lazy var openInFireFoxItem = PhotonActionSheetItem(title: UIConstants.strings.shareOpenInFirefox, iconString: "open_in_firefox_icon") { action in
         guard let escaped = self.url.absoluteString.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed),

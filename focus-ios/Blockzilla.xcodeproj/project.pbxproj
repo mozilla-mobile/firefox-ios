@@ -60,6 +60,8 @@
 		746BD9281F75C45A00BE8DB9 /* DictionaryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746BD9271F75C45A00BE8DB9 /* DictionaryExtensions.swift */; };
 		747ADA181FC38EFC00970132 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747ADA171FC38EFC00970132 /* IntroViewController.swift */; };
 		74F94FF21FD9CA070047E629 /* Intro.strings in Resources */ = {isa = PBXBuildFile; fileRef = 74F94FF41FD9CA070047E629 /* Intro.strings */; };
+		845174A626CD0C2500510113 /* ShortcutsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845174A526CD0C2500510113 /* ShortcutsManager.swift */; };
+		845174A826CD2C7100510113 /* ShortcutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845174A726CD2C7100510113 /* ShortcutView.swift */; };
 		846A23182668CC4500DB3C37 /* FullScreen.js in Resources */ = {isa = PBXBuildFile; fileRef = 846A23172668CC4500DB3C37 /* FullScreen.js */; };
 		8493C54B267B478B001686E9 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8493C54A267B478B001686E9 /* Colors.xcassets */; };
 		84D6F8E226C656610006D634 /* UITableViewCellExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D6F8E126C656610006D634 /* UITableViewCellExtensions.swift */; };
@@ -553,6 +555,8 @@
 		74F9507E1FD9D08A0047E629 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Intro.strings; sourceTree = "<group>"; };
 		74F950801FD9D0A00047E629 /* af */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = af; path = af.lproj/Intro.strings; sourceTree = "<group>"; };
 		80D9AA926EFBD788739486EB /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		845174A526CD0C2500510113 /* ShortcutsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsManager.swift; sourceTree = "<group>"; };
+		845174A726CD2C7100510113 /* ShortcutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutView.swift; sourceTree = "<group>"; };
 		846A23172668CC4500DB3C37 /* FullScreen.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = FullScreen.js; sourceTree = "<group>"; };
 		8493C54A267B478B001686E9 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		84D6F8E126C656610006D634 /* UITableViewCellExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITableViewCellExtensions.swift; sourceTree = "<group>"; };
@@ -1319,6 +1323,8 @@
 				D0967A801EC50002009D937F /* TelemetryIntegration.swift */,
 				31421EB02176492A0015F48B /* TitleActivityItemProvider.swift */,
 				16837EA52135EFCC000424BB /* TipManager.swift */,
+				845174A526CD0C2500510113 /* ShortcutsManager.swift */,
+				845174A726CD2C7100510113 /* ShortcutView.swift */,
 				D30DF93D1DC1634F0064736C /* Toast.swift */,
 				16D7169D2114F00E000C8A66 /* TrackingProtectionViewController.swift */,
 				D392881C1BC5CF180016A9A0 /* UIColorExtensions.swift */,
@@ -1915,6 +1921,7 @@
 				D30179C31BCC6F65009AD388 /* AboutViewController.swift in Sources */,
 				B3AFC2BC1F7C0B9F001AEF38 /* WebViewController.swift in Sources */,
 				D5ABA3DA1FCC846800D5C060 /* AutocompleteSettingViewController.swift in Sources */,
+				845174A826CD2C7100510113 /* ShortcutView.swift in Sources */,
 				D5ABA3D91FCC846800D5C060 /* AddCustomDomainViewController.swift in Sources */,
 				D3426AEB1DB7F8AA0016DA5A /* OverlayView.swift in Sources */,
 				746BD9241F758FDA00BE8DB9 /* Bytes.swift in Sources */,
@@ -1973,6 +1980,7 @@
 				F81DF84F2653477F00C83C61 /* AutocompleteTextField.swift in Sources */,
 				D3E2C96B1DA3069000DEBE3D /* URIFixup.swift in Sources */,
 				D3DA77851DC2C307009C114E /* ErrorPage.swift in Sources */,
+				845174A626CD0C2500510113 /* ShortcutsManager.swift in Sources */,
 				D3426AE91DB7F4060016DA5A /* KeyboardHelper.swift in Sources */,
 				B3CD41CC1FD1CAF000AEBD58 /* PaddedSwitch.swift in Sources */,
 				84D6F8E226C656610006D634 /* UITableViewCellExtensions.swift in Sources */,
