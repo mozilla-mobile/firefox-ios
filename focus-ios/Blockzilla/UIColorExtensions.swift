@@ -35,7 +35,6 @@ extension UIColor {
     static let secondaryBackground = UIColor(named: "SecondaryBackground")!
     static let secondaryText = UIColor(named: "SecondaryText")!
     static let secondayButton = UIColor(named: "SecondayButton")!
-    static let searchSuggestionIPad = UIColor(named: "SearchSuggestionIPad")!
     static let warning = UIColor(named: "Warning")!
     
     /**

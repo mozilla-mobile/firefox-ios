@@ -105,7 +105,7 @@ class SearchSuggestionsPromptView: UIView {
     }
     
     private func updateUI(_ isIpadView: Bool) {
-        promptContainer.backgroundColor = isIpadView ? .searchSuggestionIPad : .foundation
+        promptContainer.backgroundColor = isIpadView ? .primaryBackground.withAlphaComponent(0.95) : .foundation
         if isIpadView {
             promptContainer.layer.cornerRadius = UIConstants.layout.suggestionViewCornerRadius
             promptContainer.clipsToBounds = true

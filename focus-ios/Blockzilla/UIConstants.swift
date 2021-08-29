@@ -287,12 +287,20 @@ struct UIConstants {
         static let pageControlSpacing: CGFloat = 2
         static let toastMessageHeight: CGFloat = 48
         static let shortcutViewWidth: CGFloat = 60
+        static let shortcutViewWidthIPad: CGFloat = 80
         static let shortcutViewInnerDimension: CGFloat = 36
+        static let shortcutViewInnerDimensionIPad: CGFloat = 48
         static let shortcutViewHeight: CGFloat = 84
+        static let shortcutViewHeightIPad: CGFloat = 100
         static let shortcutsContainerWidth: CGFloat = 326
+        static let shortcutsContainerWidthIPad: CGFloat = 440
         static let shortcutsContainerOffset: CGFloat = 24
+        static let shortcutsContainerOffsetIPad: CGFloat = 36
         static let shortcutsContainerSpacing: CGFloat = 28
+        static let shortcutsContainerSpacingIPad: CGFloat = 40
         static let shortcutsBackgroundHeight: CGFloat = 140
+        static let shortcutsBackgroundHeightIPad: CGFloat = 176
+        static let shortcutsBackgroundWidthIPad: CGFloat = 676
     }
 
     struct strings {

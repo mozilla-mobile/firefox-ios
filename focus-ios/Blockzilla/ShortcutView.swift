@@ -13,15 +13,17 @@ protocol ShortcutViewDelegate: AnyObject {
 }
 
 class ShortcutView: UIView {
-    private let dimension = UIConstants.layout.shortcutViewWidth
-    private let innerDimension = UIConstants.layout.shortcutViewInnerDimension
-    
     private var shortcut: Shortcut?
     weak var delegate: ShortcutViewDelegate?
+    private var isIpad = false
     
-    init(shortcut: Shortcut) {
+    init(shortcut: Shortcut, isIpad: Bool) {
+        let dimension = isIpad ? UIConstants.layout.shortcutViewWidthIPad : UIConstants.layout.shortcutViewWidth
+        let innerDimension = isIpad ? UIConstants.layout.shortcutViewInnerDimensionIPad :  UIConstants.layout.shortcutViewInnerDimension
+        let height = isIpad ? UIConstants.layout.shortcutViewHeightIPad :  UIConstants.layout.shortcutViewHeight
+        
         super.init(frame: CGRect.zero)
-        self.frame = CGRect(x: 0, y: 0, width: UIConstants.layout.shortcutViewWidth, height: UIConstants.layout.shortcutViewHeight)
+        self.frame = CGRect(x: 0, y: 0, width: dimension, height: height)
         
         self.shortcut = shortcut
         

@@ -172,7 +172,7 @@ class OverlayView: UIView {
             }
         }
         
-        findInPageButton.backgroundColor = iPadView ? .searchSuggestionIPad : .foundation
+        findInPageButton.backgroundColor = iPadView ? .primaryBackground.withAlphaComponent(0.95) : .foundation
         
         remakeConstraintsForFindInPage()
         
@@ -231,7 +231,7 @@ class OverlayView: UIView {
     
     func setColorstToSearchButtons() {
         for button in searchButtonGroup {
-            button.backgroundColor = isIpadView ? .searchSuggestionIPad : .foundation
+            button.backgroundColor = isIpadView ? .primaryBackground.withAlphaComponent(0.95) : .foundation
         }
     }
 
