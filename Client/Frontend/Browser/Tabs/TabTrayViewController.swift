@@ -225,7 +225,7 @@ class TabTrayViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .DisplayThemeChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .ProfileDidStartSyncing, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .ProfileDidFinishSyncing, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .TabDidClosed, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .TabClosed, object: nil)
     }
 
     fileprivate func updateTitle() {
@@ -311,7 +311,7 @@ class TabTrayViewController: UIViewController {
             applyTheme()
         case .ProfileDidStartSyncing, .ProfileDidFinishSyncing:
             updateButtonTitle(notification)
-        case .TabDidClosed:
+        case .TabClosed:
             countLabel.text = viewModel.normalTabsCount
             iPhoneNavigationMenuIdentifiers.setImage(UIImage(named: "nav-tabcounter")!.overlayWith(image: countLabel), forSegmentAt: 0)
         default:
