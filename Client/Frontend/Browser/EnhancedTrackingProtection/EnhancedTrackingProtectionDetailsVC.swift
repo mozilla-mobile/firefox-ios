@@ -72,9 +72,14 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        setupNotifications()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -146,6 +151,19 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController {
         ])
     }
 
+    private func setupNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .DisplayThemeChanged, object: nil)
+    }
+
+    @objc private func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        default:
+            break
+        }
+    }
+
     private func updateViewDetails() {
         siteTitleLabel.text = viewModel.topLevelDomain
         siteInfoImage.image = viewModel.image
@@ -166,9 +184,7 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController {
 // MARK: - Themable
 extension EnhancedTrackingProtectionDetailsVC: Themeable {
     @objc func applyTheme() {
-        if #available(iOS 13.0, *) {
-            overrideUserInterfaceStyle =  ThemeManager.instance.userInterfaceStyle
-        }
+        overrideUserInterfaceStyle =  ThemeManager.instance.userInterfaceStyle
         view.backgroundColor = UIColor.theme.etpMenu.background
         siteInfoSection.backgroundColor = UIColor.theme.etpMenu.sectionColor
         siteInfoURLLabel.textColor = UIColor.theme.etpMenu.subtextColor

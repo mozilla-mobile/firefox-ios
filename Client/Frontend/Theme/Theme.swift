@@ -124,7 +124,7 @@ class TabTrayColor {
 
 class EnhancedTrackingProtectionMenuColor {
     var defaultImageTints: UIColor { return defaultTextAndTint }
-    var background: UIColor { return UIColor.Photon.Grey10 }
+    var background: UIColor { return UIColor.Photon.Grey12 }
     var horizontalLine: UIColor { return UIColor.Photon.Grey75A39 }
     var sectionColor: UIColor { return .white }
     var switchAndButtonTint: UIColor { return UIColor.Photon.Blue50 }

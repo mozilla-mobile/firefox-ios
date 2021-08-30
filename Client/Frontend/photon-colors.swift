@@ -146,6 +146,7 @@ extension UIColor {
         static let Grey10A40 = UIColor(rgba: 0xf9f9fa66)
         static let Grey10A60 = UIColor(rgba: 0xf9f9fa99)
         static let Grey10A80 = UIColor(rgba: 0xf9f9facc)
+        static let Grey12 = UIColor(rgb: 0xf7f7f8)
         static let Grey20 = UIColor(rgb: 0xededf0)
         static let Grey25 = UIColor(rgb: 0xe3e3e6)
         static let Grey30 = UIColor(rgb: 0xd7d7db)
