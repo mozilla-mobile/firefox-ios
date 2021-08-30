@@ -50,9 +50,13 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel {
         tableViewController.didMove(toParent: self)
 
         self.view.addSubview(tableViewController.view)
-        tableViewController.view.snp.makeConstraints { make in
-            make.edges.equalTo(self.view)
-        }
+        
+        NSLayoutConstraint.activate([
+            tableViewController.view.topAnchor.constraint(equalTo: view.topAnchor),
+            tableViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            tableViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
     }
 }
 
