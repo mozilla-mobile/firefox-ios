@@ -89,18 +89,13 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController {
     }
 
     private func setupView() {
-        view.addSubview(siteTitleLabel)
-        view.addSubview(closeButton)
+        view.addSubviews(siteTitleLabel, closeButton)
         closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
 
-        siteInfoSection.addSubview(siteInfoImage)
-        siteInfoSection.addSubview(siteInfoTitleLabel)
-        siteInfoSection.addSubview(siteInfoURLLabel)
+        siteInfoSection.addSubviews(siteInfoImage, siteInfoTitleLabel, siteInfoURLLabel)
         view.addSubview(siteInfoSection)
 
-        connectionView.addSubview(connectionImage)
-        connectionView.addSubview(connectionStatusLabel)
-        connectionView.addSubview(connectionVerifierLabel)
+        connectionView.addSubviews(connectionImage, connectionStatusLabel, connectionVerifierLabel)
         view.addSubview(connectionView)
 
         NSLayoutConstraint.activate([

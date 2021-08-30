@@ -198,10 +198,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
     }
 
     private func setupHeaderView() {
-        headerContainer.addSubview(heroImage)
-        headerContainer.addSubview(siteDomainLabel)
-        headerContainer.addSubview(closeButton)
-        headerContainer.addSubview(horizontalLine)
+        headerContainer.addSubviews(heroImage, siteDomainLabel, closeButton, horizontalLine)
         view.addSubview(headerContainer)
 
         var headerConstraints = [
@@ -239,11 +236,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
     }
 
     private func setupConnectionStatusView() {
-        // Connection View
-        connectionView.addSubview(connectionImage)
-        connectionView.addSubview(connectionLabel)
-        connectionView.addSubview(connectionDetailArrow)
-        connectionView.addSubview(connectionButton)
+        connectionView.addSubviews(connectionImage, connectionLabel, connectionDetailArrow, connectionButton)
         view.addSubview(connectionView)
 
         let connectionConstraints = [
@@ -278,10 +271,8 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
     }
 
     private func setupToggleView() {
-        toggleView.addSubview(toggleLabel)
-        toggleView.addSubview(toggleSwitch)
-        toggleContainer.addSubview(toggleView)
-        toggleContainer.addSubview(toggleStatusLabel)
+        toggleView.addSubviews(toggleLabel, toggleSwitch)
+        toggleContainer.addSubviews(toggleView, toggleStatusLabel)
         view.addSubview(toggleContainer)
 
         var toggleConstraints = [
