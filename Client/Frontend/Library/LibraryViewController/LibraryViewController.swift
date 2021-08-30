@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Shared
-import SnapKit
 import UIKit
 import Storage
 
@@ -24,7 +23,7 @@ class LibraryViewController: UIViewController {
     var onViewDismissed: (() -> Void)? = nil
 
     // Views
-    fileprivate var controllerContainerView = UIView()
+    fileprivate var controllerContainerView: UIView = .build { view in }
     fileprivate var buttons: [LibraryPanelButton] = []
 
     // UI Elements
@@ -37,16 +36,15 @@ class LibraryViewController: UIViewController {
         librarySegmentControl.accessibilityIdentifier = "librarySegmentControl"
         librarySegmentControl.selectedSegmentIndex = 1
         librarySegmentControl.addTarget(self, action: #selector(panelChanged), for: .valueChanged)
+        librarySegmentControl.translatesAutoresizingMaskIntoConstraints = false
         return librarySegmentControl
     }()
 
-    lazy var navigationToolbar: UIToolbar = {
-        let toolbar = UIToolbar()
+    lazy var navigationToolbar: UIToolbar = .build { [weak self] toolbar in
+        guard let self = self else { return }
         toolbar.delegate = self
-        toolbar.setItems([UIBarButtonItem(customView: librarySegmentControl)], animated: false)
-
-        return toolbar
-    }()
+        toolbar.setItems([UIBarButtonItem(customView: self.librarySegmentControl)], animated: false)
+    }
 
     fileprivate lazy var topLeftButton: UIBarButtonItem =  {
         let button = UIBarButtonItem(image: UIImage.templateImageNamed("goBack"),
@@ -128,25 +126,21 @@ class LibraryViewController: UIViewController {
 
         setToolbarItems(bottomToolbarItemsSingleButton, animated: false)
         navigationItem.rightBarButtonItem = topRightButton
+        view.addSubviews(controllerContainerView, navigationToolbar)
 
-        view.addSubview(controllerContainerView)
-        view.addSubview(navigationToolbar)
-
-        navigationToolbar.snp.makeConstraints { make in
-            make.left.right.equalTo(view)
-            make.top.equalTo(view.safeArea.top)
-        }
-
-        librarySegmentControl.snp.makeConstraints { make in
-            make.width.lessThanOrEqualTo(343)
-            make.height.equalTo(ChronologicalTabsControllerUX.navigationMenuHeight)
-        }
-
-        controllerContainerView.snp.makeConstraints { make in
-            make.top.equalTo(navigationToolbar.snp.bottom)
-            make.bottom.equalTo(view.snp.bottom)
-            make.leading.trailing.equalTo(view)
-        }
+        NSLayoutConstraint.activate([
+            navigationToolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            navigationToolbar.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            navigationToolbar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            
+            librarySegmentControl.widthAnchor.constraint(equalToConstant: 343),
+            librarySegmentControl.heightAnchor.constraint(equalToConstant: CGFloat(ChronologicalTabsControllerUX.navigationMenuHeight)),
+            
+            controllerContainerView.topAnchor.constraint(equalTo: navigationToolbar.bottomAnchor),
+            controllerContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            controllerContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            controllerContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
 
         if selectedPanel == nil {
             selectedPanel = .bookmarks
@@ -275,9 +269,14 @@ class LibraryViewController: UIViewController {
         controllerContainerView.addSubview(libraryPanel.view)
         view.bringSubviewToFront(navigationToolbar)
         libraryPanel.endAppearanceTransition()
-        libraryPanel.view.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+
+        libraryPanel.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            libraryPanel.view.topAnchor.constraint(equalTo: navigationToolbar.bottomAnchor),
+            libraryPanel.view.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            libraryPanel.view.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            libraryPanel.view.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+        ])
         libraryPanel.didMove(toParent: self)
         updateTitle()
     }

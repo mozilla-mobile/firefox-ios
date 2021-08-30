@@ -47,7 +47,21 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     let TwoLineImageOverlayCellIdentifier = "TwoLineImageOverlayCellIdentifier"
     let SiteTableViewHeaderIdentifier = "SiteTableViewHeaderIdentifier"
     let profile: Profile
-    var tableView = UITableView()
+    lazy var tableView: UITableView = .build { [weak self] tableView in
+        guard let self = self else { return }
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: self.TwoLineImageOverlayCellIdentifier)
+        tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: self.SiteTableViewHeaderIdentifier)
+        tableView.layoutMargins = .zero
+        tableView.keyboardDismissMode = .onDrag
+        tableView.accessibilityIdentifier = "DownloadsTable"
+        tableView.cellLayoutMarginsFollowReadableWidth = false
+
+        // Set an empty footer to prevent empty cells from appearing in the list.
+        tableView.tableFooterView = UIView()
+    }
+    
 
     private let events: [Notification.Name] = [.FileDidDownload, .PrivateDataClearedDownloadedFiles, .DynamicFontChanged]
 
@@ -76,22 +90,13 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         super.viewDidLoad()
 
         view.addSubview(tableView)
-        tableView.snp.makeConstraints { make in
-            make.edges.equalTo(self.view)
-            return
-        }
-
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: TwoLineImageOverlayCellIdentifier)
-        tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: SiteTableViewHeaderIdentifier)
-        tableView.layoutMargins = .zero
-        tableView.keyboardDismissMode = .onDrag
-        tableView.accessibilityIdentifier = "DownloadsTable"
-        tableView.cellLayoutMarginsFollowReadableWidth = false
-
-        // Set an empty footer to prevent empty cells from appearing in the list.
-        tableView.tableFooterView = UIView()
+        
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
     }
 
     deinit {
@@ -232,9 +237,13 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
             if emptyStateOverlayView.superview == nil {
                 view.addSubview(emptyStateOverlayView)
                 view.bringSubviewToFront(emptyStateOverlayView)
-                emptyStateOverlayView.snp.makeConstraints { make in
-                    make.edges.equalTo(self.tableView)
-                }
+                
+                NSLayoutConstraint.activate([
+                    emptyStateOverlayView.topAnchor.constraint(equalTo: view.topAnchor),
+                    emptyStateOverlayView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                    emptyStateOverlayView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+                    emptyStateOverlayView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+                ])
             }
         } else {
             emptyStateOverlayView.removeFromSuperview()
@@ -242,36 +251,36 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 
     fileprivate func createEmptyStateOverlayView() -> UIView {
-        let overlayView = UIView()
-        overlayView.backgroundColor = UIColor.theme.homePanel.panelBackground
+        let overlayView: UIView = .build { view in
+            view.backgroundColor = UIColor.theme.homePanel.panelBackground
+            view.translatesAutoresizingMaskIntoConstraints = false
+        }
+        let logoImageView: UIImageView = .build { imageView in
+            imageView.image = UIImage.templateImageNamed("emptyDownloads")
+            imageView.tintColor = UIColor.Photon.Grey60
+        }
+        let welcomeLabel: UILabel = .build { label in
+            label.text = Strings.DownloadsPanelEmptyStateTitle
+            label.textAlignment = .center
+            label.font = DynamicFontHelper.defaultHelper.DeviceFontLight
+            label.textColor = UIColor.theme.homePanel.welcomeScreenText
+            label.numberOfLines = 0
+            label.adjustsFontSizeToFitWidth = true
+        }
 
-        let logoImageView = UIImageView(image: UIImage.templateImageNamed("emptyDownloads"))
-        logoImageView.tintColor = UIColor.Photon.Grey60
         overlayView.addSubview(logoImageView)
-        logoImageView.snp.makeConstraints { make in
-            make.centerX.equalTo(overlayView)
-            make.size.equalTo(60)
-            // Sets proper top constraint for iPhone 6 in portait and for iPad.
-            make.centerY.equalTo(overlayView).offset(LibraryPanelUX.EmptyTabContentOffset).priority(100)
-
-            // Sets proper top constraint for iPhone 4, 5 in portrait.
-            make.top.greaterThanOrEqualTo(overlayView).offset(50)
-        }
-
-        let welcomeLabel = UILabel()
         overlayView.addSubview(welcomeLabel)
-        welcomeLabel.text = Strings.DownloadsPanelEmptyStateTitle
-        welcomeLabel.textAlignment = .center
-        welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontLight
-        welcomeLabel.textColor = UIColor.theme.homePanel.welcomeScreenText
-        welcomeLabel.numberOfLines = 0
-        welcomeLabel.adjustsFontSizeToFitWidth = true
-
-        welcomeLabel.snp.makeConstraints { make in
-            make.centerX.equalTo(overlayView)
-            make.top.equalTo(logoImageView.snp.bottom).offset(DownloadsPanelUX.WelcomeScreenPadding)
-            make.width.equalTo(DownloadsPanelUX.WelcomeScreenItemWidth)
-        }
+        
+        NSLayoutConstraint.activate([
+            logoImageView.topAnchor.constraint(equalTo: overlayView.topAnchor, constant: 120),
+            logoImageView.centerXAnchor.constraint(equalTo: overlayView.centerXAnchor),
+            logoImageView.heightAnchor.constraint(equalToConstant: 60),
+            logoImageView.widthAnchor.constraint(equalToConstant: 60),
+            
+            welcomeLabel.centerXAnchor.constraint(equalTo: overlayView.centerXAnchor),
+            welcomeLabel.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: CGFloat(DownloadsPanelUX.WelcomeScreenPadding)),
+            welcomeLabel.widthAnchor.constraint(equalToConstant: CGFloat(DownloadsPanelUX.WelcomeScreenItemWidth))
+        ])
 
         return overlayView
     }

@@ -4,7 +4,6 @@
 
 import Foundation
 import UIKit
-import SnapKit
 import Shared
 
 class IntroViewController: UIViewController, OnViewDismissable {
@@ -13,11 +12,13 @@ class IntroViewController: UIViewController, OnViewDismissable {
     // Private views
     private lazy var welcomeCard: IntroScreenWelcomeView = {
         let welcomeCardView = IntroScreenWelcomeView()
+        welcomeCardView.translatesAutoresizingMaskIntoConstraints = false
         welcomeCardView.clipsToBounds = true
         return welcomeCardView
     }()
     private lazy var syncCard: IntroScreenSyncView = {
         let syncCardView = IntroScreenSyncView()
+        syncCardView.translatesAutoresizingMaskIntoConstraints = false
         syncCardView.clipsToBounds = true
         return syncCardView
     }()
@@ -49,11 +50,25 @@ class IntroViewController: UIViewController, OnViewDismissable {
         setupIntroView()
     }
     
-    private func setupWelcomeCard() {
+    //onboarding intro view
+    private func setupIntroView() {
+        // Initialize
+        view.addSubview(syncCard)
+        view.addSubview(welcomeCard)
+        
         // Constraints
-        welcomeCard.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+        setupWelcomeCard()
+        setupSyncCard()
+    }
+    
+    private func setupWelcomeCard() {
+        NSLayoutConstraint.activate([
+            welcomeCard.topAnchor.constraint(equalTo: view.topAnchor),
+            welcomeCard.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            welcomeCard.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            welcomeCard.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+        
         // Buton action closures
         // Next button action
         welcomeCard.nextClosure = {
@@ -78,20 +93,13 @@ class IntroViewController: UIViewController, OnViewDismissable {
         }
     }
     
-    //onboarding intro view
-    private func setupIntroView() {
-        // Initialize
-        view.addSubview(syncCard)
-        view.addSubview(welcomeCard)
-        // Constraints
-        setupWelcomeCard()
-        setupSyncCard()
-    }
-    
     private func setupSyncCard() {
-        syncCard.snp.makeConstraints() { make in
-            make.edges.equalToSuperview()
-        }
+        NSLayoutConstraint.activate([
+            syncCard.topAnchor.constraint(equalTo: view.topAnchor),
+            syncCard.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            syncCard.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            syncCard.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
         // Start browsing button action
         syncCard.startBrowsing = {
             self.didFinishClosure?(self, nil)
