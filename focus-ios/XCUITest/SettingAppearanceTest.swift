@@ -11,8 +11,11 @@ class SettingAppearanceTest: BaseTestCase {
     // Smoketest
     // Check for the basic appearance of the Settings Menu
     func testCheckSetting() {
-        
-        // Tap on Page Action button
+
+        // Workaround for accessing Settings as on first launch the URL bar is focused
+        app.buttons["URLBar.cancelButton"].tap()
+
+        // Navigate to Settings
         waitForExistence(app.buttons["Settings"])
         app.buttons["Settings"].tap()
 
@@ -23,7 +26,7 @@ class SettingAppearanceTest: BaseTestCase {
         // Check About page
         app.tables.firstMatch.swipeUp()
         let aboutCell = app.cells["settingsViewController.about"]
-        waitForHittable(aboutCell)
+        waitForHittable(aboutCell, timeout: 10)
         aboutCell.tap()
 
         let tablesQuery = app.tables
@@ -118,8 +121,8 @@ class SettingAppearanceTest: BaseTestCase {
         let safariapp = XCUIApplication(privateWithPath: nil, bundleID: "com.apple.mobilesafari")!
         loadWebPage("https://www.google.com", waitForLoadToFinish: true)
 
-        waitForHittable(app.buttons["URLBar.pageActionsButton"])
-        app.buttons["URLBar.pageActionsButton"].tap()
+        waitForHittable(app.buttons["Settings"], timeout: 15)
+        app.buttons["Settings"].tap()
 
         let safariButton = app.cells["Open in Safari"]
         waitForHittable(safariButton)
@@ -141,9 +144,16 @@ class SettingAppearanceTest: BaseTestCase {
     }
 
     func testDisableAutocomplete() {
+        // Workaround for accessing Settings as on first launch the URL bar is focused
+        app.buttons["URLBar.cancelButton"].tap()
+
         // Navigate to Settings
-        waitForExistence(app.buttons["Settings"], timeout: 10)
+        waitForExistence(app.buttons["Settings"])
         app.buttons["Settings"].tap()
+
+        let settingsButton = app.cells["Settings"]
+        waitForExistence(settingsButton, timeout: 10)
+        settingsButton.tap()
 
         // Navigate to Autocomplete Settings
         waitForHittable(app.tables.cells["SettingsViewController.autocompleteCell"])
@@ -163,9 +173,16 @@ class SettingAppearanceTest: BaseTestCase {
     }
 
     func testAddRemoveCustomDomain() {
+        // Workaround for accessing Settings as on first launch the URL bar is focused
+        app.buttons["URLBar.cancelButton"].tap()
+
         // Navigate to Settings
-        waitForExistence(app.buttons["Settings"], timeout: 10)
+        waitForExistence(app.buttons["Settings"])
         app.buttons["Settings"].tap()
+
+        let settingsButton = app.cells["Settings"]
+        waitForExistence(settingsButton, timeout: 10)
+        settingsButton.tap()
 
         // Navigate to Autocomplete Settings
         waitForHittable(app.tables.cells["SettingsViewController.autocompleteCell"])
@@ -207,9 +224,13 @@ class SettingAppearanceTest: BaseTestCase {
 
     // Smoktest
     func testSafariIntegration() {
-        waitForExistence(app.buttons["Settings"], timeout: 10)
+        // Workaround for accessing Settings as on first launch the URL bar is focused
+        app.buttons["URLBar.cancelButton"].tap()
+
+        // Navigate to Settings
+        waitForExistence(app.buttons["Settings"])
         app.buttons["Settings"].tap()
-        
+
         let settingsButton = app.cells["Settings"]
         waitForExistence(settingsButton, timeout: 10)
         settingsButton.tap()
