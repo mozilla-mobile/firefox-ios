@@ -59,6 +59,7 @@ public struct PrefsKeys {
     
     // Tabs Tray
     public static let KeyEnableInactiveTabs = "KeyInactiveTabs"
+    public static let KeyInactiveTabsModel = "KeyInactiveTabsModel"
     
     // Widgetkit Key
     public static let WidgetKitSimpleTabKey = "WidgetKitSimpleTabKey"

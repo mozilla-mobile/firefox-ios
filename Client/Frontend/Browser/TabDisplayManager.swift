@@ -158,21 +158,47 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         }
     }
 
+    func updateTabs() {
+        let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
+        guard allTabs.count > 0, let inactiveViewModel = inactiveViewModel else { return }
+        guard allTabs.count > 1 else { return }
+        let selectedTab = tabManager.selectedTab
+        // Make sure selected tab has latest time
+        selectedTab?.lastExecutedTime = Date.now()
+        inactiveViewModel.updateInactiveTabs(with: tabManager.selectedTab, tabs: allTabs, forceUpdate: true)
+        inactiveViewModel.updateFilteredTabs()
+        isInactiveViewExpanded = inactiveViewModel.filteredInactiveTabs.count > 0
+        let recentlyClosedTabs = inactiveViewModel.filteredRecentlyClosedTabs
+        if recentlyClosedTabs.count > 0 {
+            tabManager.removeTabs(recentlyClosedTabs, shouldNotify: true)
+            tabManager.selectTab(selectedTab)
+        }
+    }
+    
+    func getTabsToDisplay2() -> [Tab] {
+        let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
+        guard allTabs.count > 0, let inactiveViewModel = inactiveViewModel else { return [Tab]() }
+        guard allTabs.count > 1 else { return allTabs }
+        inactiveViewModel.updateFilteredTabs()
+        return inactiveViewModel.filteredNormalTabs
+    }
+    
     func getTabsToDisplay() -> [Tab] {
         let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         guard allTabs.count > 0, let inactiveViewModel = inactiveViewModel else { return [Tab]() }
         guard allTabs.count > 1 else { return allTabs }
         let selectedTab = tabManager.selectedTab
-        // Make sure selected tab has latest time 
+        // Make sure selected tab has latest time
         selectedTab?.lastExecutedTime = Date.now()
-        _ = inactiveViewModel.updateInactiveTabs(with: tabManager.selectedTab, tabs: allTabs)
-        isInactiveViewExpanded = inactiveViewModel.inactiveTabs.count > 0
-        let recentlyClosedTabs = inactiveViewModel.recentlyClosedTabs
+        inactiveViewModel.updateInactiveTabs(with: tabManager.selectedTab, tabs: allTabs, forceUpdate: true)
+        inactiveViewModel.updateFilteredTabs()
+        isInactiveViewExpanded = inactiveViewModel.filteredInactiveTabs.count > 0
+        let recentlyClosedTabs = inactiveViewModel.filteredRecentlyClosedTabs
         if recentlyClosedTabs.count > 0 {
             tabManager.removeTabs(recentlyClosedTabs, shouldNotify: true)
             tabManager.selectTab(selectedTab)
         }
-        return inactiveViewModel.normalTabs
+        return inactiveViewModel.filteredNormalTabs
     }
     
     func togglePrivateMode(isOn: Bool, createTabOnEmptyPrivateMode: Bool) {
@@ -243,6 +269,13 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         guard let index = collectionView.indexPath(for: cell)?.item, let tab = dataStore.at(index) else {
             return
         }
+        
+        if getTabsToDisplay().count == 1 {
+            tabManager.removeTabs([tab])
+            tabManager.selectTab(tabManager.addTab())
+            return
+        }
+        
         tabManager.removeTabAndUpdateSelectedIndex(tab)
     }
 
@@ -298,11 +331,11 @@ extension TabDisplayManager: UICollectionViewDataSource {
             cell = tabDisplayer?.cellFactory(for: cell, using: tab) ?? cell
         case .inactiveTabs:
             if let inactiveCell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabCell.Identifier, for: indexPath) as? InactiveTabCell {
-                let tabs = inactiveViewModel?.inactiveTabs
+//                let tabs = inactiveViewModel?.filteredInactiveTabs
                 inactiveCell.inactiveTabsViewModel = inactiveViewModel
                 inactiveCell.hasExpanded = isInactiveViewExpanded
-                inactiveCell.inactiveTabsViewModel?.inactiveTabs.removeAll()
-                inactiveCell.inactiveTabsViewModel?.inactiveTabs.append(contentsOf: tabs ?? [])
+//                inactiveCell.inactiveTabsViewModel?.inactiveTabs.removeAll()
+//                inactiveCell.inactiveTabsViewModel?.inactiveTabs.append(contentsOf: tabs ?? [])
                 inactiveCell.delegate = self
                 inactiveCell.tableView.reloadData()
                 cell = inactiveCell

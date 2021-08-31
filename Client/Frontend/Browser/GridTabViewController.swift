@@ -633,7 +633,7 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
             var totalHeight = headerFooterCellCombinedHeight + minInactiveCellHeight
             let width = collectionView.frame.size.width - 30
 
-            if let inactiveTabs = tabDisplayManager.inactiveViewModel?.inactiveTabs, inactiveTabs.count > 0 {
+            if let inactiveTabs = tabDisplayManager.inactiveViewModel?.filteredInactiveTabs, inactiveTabs.count > 0 {
                 // Calculate height based on number of tabs in the inactive tab section section
                 totalHeight = minInactiveCellHeight*inactiveTabs.count + headerFooterCellCombinedHeight
             }

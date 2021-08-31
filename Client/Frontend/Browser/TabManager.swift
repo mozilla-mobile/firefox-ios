@@ -421,6 +421,10 @@ class TabManager: NSObject {
             value: tab.isPrivate ? .privateTab : .normalTab
         )
     }
+    
+    func removeAndAddTabForSelectedIndex(_ tab: Tab) {
+        
+    }
 
     private func updateIndexAfterRemovalOf(_ tab: Tab, deletedIndex: Int) {
         let closedLastNormalTab = !tab.isPrivate && normalTabs.isEmpty
