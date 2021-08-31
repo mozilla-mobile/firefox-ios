@@ -466,10 +466,10 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 Telemetry.default.recordSearch(location: .suggestion, searchEngine: engine.engineID ?? "other")
                 GleanMetrics.Search.counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.suggestion.rawValue)"].add()
                 let key: HistoryMetadataKey = HistoryMetadataKey(url: url.absoluteString, searchTerm: suggestion, referrerUrl: "")
-                let observation: HistoryMetadataObservation = HistoryMetadataObservation(titleObservation: "sometitle", viewTimeObservation: 2, documentTypeObservation: .regular)
+//                let observation: HistoryMetadataObservation = HistoryMetadataObservation(titleObservation: "sometitle", viewTimeObservation: 2, documentTypeObservation: .regular)
 //                let metaDataKey = HistoryMetadataKey(url: "", searchTerm: "", referrerUrl: "")
 //                let observation = HistoryMetadataObservation()
-                profile.places.recordHistoryMetaData(key: key, observation: observation)
+//                profile.places.recordHistoryMetaData(key: key, observation: observation)
                 searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: suggestion)
             }
         case .openedTabs:
