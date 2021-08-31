@@ -10,9 +10,6 @@ import UIKit
 class InsetButton: UIButton {
     init() {
         super.init(frame: CGRect.zero)
-
-        addTarget(self, action: #selector(didTouchDismiss), for: [.touchDown, .touchDragEnter])
-        addTarget(self, action: #selector(didTouchUpDismiss), for: [.touchCancel, .touchDragExit, .touchUpInside, .touchUpOutside])
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -24,16 +21,25 @@ class InsetButton: UIButton {
         return CGSize(width: size.width + titleEdgeInsets.left + titleEdgeInsets.right,
                       height: size.height + titleEdgeInsets.top + titleEdgeInsets.bottom)
     }
+    
+    var highlightedBackgroundColor: UIColor?
+    var savedBackgroundColor: UIColor?
 
-    @objc private func didTouchDismiss() {
-        UIView.animate(withDuration: 0.1) {
-            self.alpha = 0.5
-        }
-    }
-
-    @objc private func didTouchUpDismiss() {
-        UIView.animate(withDuration: 0.1) {
-            self.alpha = 1
+    @objc override var isHighlighted: Bool {
+        didSet {
+            if isHighlighted {
+                if savedBackgroundColor == nil && backgroundColor != nil {
+                    if let color = highlightedBackgroundColor {
+                        savedBackgroundColor = backgroundColor
+                        backgroundColor = color
+                    }
+                }
+            } else {
+                if let color = savedBackgroundColor {
+                    backgroundColor = color
+                    savedBackgroundColor = nil
+                }
+            }
         }
     }
 }

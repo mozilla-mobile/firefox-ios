@@ -232,6 +232,7 @@ class OverlayView: UIView {
     func setColorstToSearchButtons() {
         for button in searchButtonGroup {
             button.backgroundColor = isIpadView ? .primaryBackground.withAlphaComponent(0.95) : .foundation
+            button.highlightedBackgroundColor = UIColor(named: "SearchSuggestionButtonHighlight")
         }
     }
 
