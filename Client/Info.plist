@@ -34,7 +34,7 @@
 			<string>org.mozilla.Client</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>firefox</string>
+				<string>$(MOZ_PUBLIC_URL_SCHEME)</string>
 				<string>$(MOZ_INTERNAL_URL_SCHEME)</string>
 				<string>http</string>
 				<string>https</string>
@@ -73,6 +73,10 @@
 	<true/>
 	<key>MozDevelopmentTeam</key>
 	<string>$(DEVELOPMENT_TEAM)</string>
+	<key>MozInternalURLScheme</key>
+	<string>$(MOZ_INTERNAL_URL_SCHEME)</string>
+	<key>MozPublicURLScheme</key>
+	<string>$(MOZ_PUBLIC_URL_SCHEME)</string>
 	<key>MozWhatsNewTopic</key>
 	<string>whats-new-ios-18</string>
 	<key>NSAppTransportSecurity</key>
