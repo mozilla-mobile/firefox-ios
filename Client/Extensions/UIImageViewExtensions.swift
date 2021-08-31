@@ -111,4 +111,18 @@ extension UIImage {
         
         return newImage
     }
+
+    func overlayWith(image: UIImage) -> UIImage {
+        let newSize = CGSize(width: size.width, height: size.height)
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0)
+        draw(in: CGRect(origin: CGPoint.zero, size: newSize))
+        let modifier: CGFloat = 0.35
+        image.draw(in: CGRect(origin: CGPoint(x: 15, y: 16),
+                              size: CGSize(width: size.width * modifier,
+                                           height: size.height * modifier)))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+
+        return newImage
+    }
 }

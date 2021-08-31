@@ -66,6 +66,14 @@ fileprivate class DarkTabTrayColor: TabTrayColor {
     override var searchBackground: UIColor { return UIColor.Photon.Grey60 }
 }
 
+fileprivate class DarkEnhancedTrackingProtectionMenuColor: EnhancedTrackingProtectionMenuColor {
+    override var defaultImageTints: UIColor { return defaultTextAndTint }
+    override var background: UIColor { return UIColor.Photon.DarkGrey80 }
+    override var sectionColor: UIColor { return UIColor.Photon.DarkGrey65 }
+    override var switchAndButtonTint: UIColor { return UIColor.Photon.Blue20 }
+    override var subtextColor: UIColor { return UIColor.Photon.LightGrey05 }
+}
+
 fileprivate class DarkTopTabsColor: TopTabsColor {
     override var background: UIColor { UIColor.Photon.DarkGrey80 }
     override var tabBackgroundSelected: UIColor { return UIColor.Photon.DarkGrey30 }
@@ -162,6 +170,7 @@ class DarkTheme: NormalTheme {
     override var browser: BrowserColor { return DarkBrowserColor() }
     override var toolbarButton: ToolbarButtonColor { return DarkToolbarButtonColor() }
     override var tabTray: TabTrayColor { return DarkTabTrayColor() }
+    override var etpMenu: EnhancedTrackingProtectionMenuColor { return DarkEnhancedTrackingProtectionMenuColor() }
     override var topTabs: TopTabsColor { return DarkTopTabsColor() }
     override var textField: TextFieldColor { return DarkTextFieldColor() }
     override var homePanel: HomePanelColor { return DarkHomePanelColor() }

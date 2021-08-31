@@ -91,7 +91,7 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
 
         if let item = viewModel.jumpableTabs[safe: indexPath.row] {
             let itemURL = item.url?.absoluteString ?? ""
-            let site = Site(url: itemURL, title: item.displayTitle, bookmarked: true)
+            let site = Site(url: itemURL, title: item.displayTitle)
 
             profile?.favicons.getFaviconImage(forSite: site).uponQueue(.main, block: { result in
                 guard let image = result.successValue else { return }

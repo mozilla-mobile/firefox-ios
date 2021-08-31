@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "lock_blocked_dark.pdf",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
