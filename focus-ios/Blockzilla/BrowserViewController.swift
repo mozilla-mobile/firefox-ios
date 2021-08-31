@@ -102,6 +102,26 @@ class BrowserViewController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: UIDevice.orientationDidChangeNotification, object: nil)
     }
 
+    fileprivate func addShortcutsBackgroundConstraints() {
+        shortcutsBackground.backgroundColor = isIPadRegularDimensions ? .primaryBackground.withAlphaComponent(0.85) : .foundation
+        shortcutsBackground.layer.cornerRadius = isIPadRegularDimensions ? 10 : 0
+        
+        if isIPadRegularDimensions {
+            shortcutsBackground.snp.makeConstraints { make in
+                make.top.equalTo(urlBarContainer.snp.bottom)
+                make.width.equalTo(UIConstants.layout.shortcutsBackgroundWidthIPad)
+                make.height.equalTo(UIConstants.layout.shortcutsBackgroundHeightIPad)
+                make.centerX.equalTo(urlBarContainer)
+            }
+        } else {
+            shortcutsBackground.snp.makeConstraints { make in
+                make.top.equalTo(urlBarContainer.snp.bottom)
+                make.left.right.equalToSuperview()
+                make.height.equalTo(UIConstants.layout.shortcutsBackgroundHeight)
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -142,6 +162,12 @@ class BrowserViewController: UIViewController {
         browserToolbar.delegate = self
         browserToolbar.translatesAutoresizingMaskIntoConstraints = false
         mainContainerView.addSubview(browserToolbar)
+        
+        mainContainerView.addSubview(shortcutsBackground)
+        shortcutsBackground.isHidden = true
+        addShortcutsBackgroundConstraints()
+        setupShortcuts()
+        mainContainerView.addSubview(shortcutsContainer)
 
         overlayView.isHidden = true
         overlayView.alpha = 0
@@ -149,13 +175,6 @@ class BrowserViewController: UIViewController {
         overlayView.backgroundColor = isIPadRegularDimensions ? .clear : .scrim.withAlphaComponent(0.48)
         overlayView.setSearchSuggestionsPromptViewDelegate(delegate: self)
         mainContainerView.addSubview(overlayView)
-        
-        shortcutsBackground.backgroundColor = isIPadRegularDimensions ? .primaryBackground.withAlphaComponent(0.85) : .foundation
-        shortcutsBackground.layer.cornerRadius = isIPadRegularDimensions ? 10 : 0
-        shortcutsBackground.isHidden = true
-        mainContainerView.addSubview(shortcutsBackground)
-        
-        setupShortcuts()
 
         background.snp.makeConstraints { make in
             make.edges.equalTo(mainContainerView)
@@ -195,34 +214,20 @@ class BrowserViewController: UIViewController {
             make.leading.trailing.bottom.equalTo(mainContainerView)
         }
         
-        if isIPadRegularDimensions {
-            shortcutsBackground.snp.makeConstraints { make in
-                make.top.equalTo(urlBarContainer.snp.bottom)
-                make.width.equalTo(UIConstants.layout.shortcutsBackgroundWidthIPad)
-                make.height.equalTo(UIConstants.layout.shortcutsBackgroundHeightIPad)
-                make.centerX.equalTo(urlBarContainer)
-            }
-        } else {
-            shortcutsBackground.snp.makeConstraints { make in
-                make.top.equalTo(urlBarContainer.snp.bottom)
-                make.left.right.equalToSuperview()
-                make.height.equalTo(UIConstants.layout.shortcutsBackgroundHeight)
-            }
-        }
-        
         shortcutsContainer.snp.makeConstraints { make in
             make.top.equalTo(urlBarContainer.snp.bottom).offset(isIPadRegularDimensions ? UIConstants.layout.shortcutsContainerOffsetIPad : UIConstants.layout.shortcutsContainerOffset)
             make.width.equalTo(isIPadRegularDimensions ?
                                 UIConstants.layout.shortcutsContainerWidthIPad :
-                                UIConstants.layout.shortcutsContainerWidth)
+                                UIConstants.layout.shortcutsContainerWidth).priority(.medium)
             make.height.equalTo(isIPadRegularDimensions ?
                                     UIConstants.layout.shortcutViewHeightIPad :
                                     UIConstants.layout.shortcutViewHeight)
             make.centerX.equalToSuperview()
+            make.leading.greaterThanOrEqualTo(mainContainerView).inset(8)
+            make.trailing.lessThanOrEqualTo(mainContainerView).inset(-8)
+
         }
         
-        
-
         view.addSubview(alertStackView)
         alertStackView.axis = .vertical
         alertStackView.alignment = .center
@@ -358,7 +363,6 @@ class BrowserViewController: UIViewController {
             UIConstants.layout.shortcutsContainerSpacing
         
         addShortcuts()
-        mainContainerView.addSubview(shortcutsContainer)
     }
     
     @objc func orientationChanged() {
@@ -766,6 +770,12 @@ class BrowserViewController: UIViewController {
                 self.updateViewConstraints()
             })
         })
+        
+        shortcutsContainer.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        addShortcuts()
+        
+        shortcutsBackground.snp.removeConstraints()
+        addShortcutsBackgroundConstraints()
     }
 
     private func presentImageActionSheet(title: String, link: String?, saveAction: @escaping () -> Void, copyAction: @escaping () -> Void) {
