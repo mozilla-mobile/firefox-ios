@@ -122,6 +122,15 @@ class TabTrayColor {
     var searchBackground: UIColor { return UIColor.Photon.Grey30 }
 }
 
+class EnhancedTrackingProtectionMenuColor {
+    var defaultImageTints: UIColor { return defaultTextAndTint }
+    var background: UIColor { return UIColor.Photon.Grey12 }
+    var horizontalLine: UIColor { return UIColor.Photon.Grey75A39 }
+    var sectionColor: UIColor { return .white }
+    var switchAndButtonTint: UIColor { return UIColor.Photon.Blue50 }
+    var subtextColor: UIColor { return UIColor.Photon.Grey75A60}
+}
+
 class TopTabsColor {
     var background: UIColor { return UIColor.Photon.LightGrey20 }
     var tabBackgroundSelected: UIColor { return UIColor.Photon.Grey10 }
@@ -233,6 +242,7 @@ protocol Theme {
     var toolbarButton: ToolbarButtonColor { get }
     var loadingBar: LoadingBarColor { get }
     var tabTray: TabTrayColor { get }
+    var etpMenu: EnhancedTrackingProtectionMenuColor { get }
     var topTabs: TopTabsColor { get }
     var textField: TextFieldColor { get }
     var homePanel: HomePanelColor { get }
@@ -254,6 +264,7 @@ class NormalTheme: Theme {
     var loadingBar: LoadingBarColor { return LoadingBarColor() }
     var tabTray: TabTrayColor { return TabTrayColor() }
     var topTabs: TopTabsColor { return TopTabsColor() }
+    var etpMenu: EnhancedTrackingProtectionMenuColor { return EnhancedTrackingProtectionMenuColor() }
     var textField: TextFieldColor { return TextFieldColor() }
     var homePanel: HomePanelColor { return HomePanelColor() }
     var snackbar: SnackBarColor { return SnackBarColor() }
