@@ -27,7 +27,7 @@
         "SettingAppearanceTest\/testAddRemoveCustomDomain()",
         "SettingAppearanceTest\/testDisableAutocomplete()",
         "SettingAppearanceTest\/testOpenInSafari()",
-        "SettingAppearanceTest\/testCheckSettings()",
+        "SettingAppearanceTest\/testCheckSetting()",
         "TrackingProtectionMenu\/testInactiveProtectionSidebar()",
         "TrackingProtectionSettings",
         "UserAgentTest",
