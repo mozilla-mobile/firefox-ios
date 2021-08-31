@@ -648,8 +648,8 @@ extension Strings {
     public static let TPEnabledConfirmed = MZLocalizedString("Menu.TrackingProtectionEnabled.Title", value: "Tracking Protection is now on for this site.", comment: "The confirmation toast once tracking protection has been enabled")
     public static let TPDisabledConfirmed = MZLocalizedString("Menu.TrackingProtectionDisabled.Title", value: "Tracking Protection is now off for this site.", comment: "The confirmation toast once tracking protection has been disabled")
     public static let TPBlockingSiteDisabled = MZLocalizedString("Menu.TrackingProtectionDisable1.Title", value: "Disabled for this site", comment: "The button that disabled TP for a site.")
-    public static let ETPOn = MZLocalizedString("Menu.EnhancedTrackingProtectionOn.Title", value: "Enhanced Tracking Protection is ON for this site.", comment: "A switch to enable enhanced tracking protection inside the menu.")
-    public static let ETPOff = MZLocalizedString("Menu.EnhancedTrackingProtectionOff.Title", value: "Enhanced Tracking Protection is OFF for this site.", comment: "A switch to disable enhanced tracking protection inside the menu.")
+    public static let ETPOn = MZLocalizedString("Menu.EnhancedTrackingProtectionOn.Title", value: "Protections are ON for this site", comment: "A switch to enable enhanced tracking protection inside the menu.")
+    public static let ETPOff = MZLocalizedString("Menu.EnhancedTrackingProtectionOff.Title", value: "Protections are OFF for this site", comment: "A switch to disable enhanced tracking protection inside the menu.")
     public static let StrictETPWithITP = MZLocalizedString("Menu.EnhancedTrackingProtectionStrictWithITP.Title", value: "Firefox blocks cross-site trackers, social trackers, cryptominers, fingerprinters, and tracking content.", comment: "Description for having strict ETP protection with ITP offered in iOS14+")
     public static let StandardETPWithITP = MZLocalizedString("Menu.EnhancedTrackingProtectionStandardWithITP.Title", value: "Firefox blocks cross-site trackers, social trackers, cryptominers, and fingerprinters.", comment: "Description for having standard ETP protection with ITP offered in iOS14+")
 
@@ -657,6 +657,8 @@ extension Strings {
     public static let TPPageMenuTitle = MZLocalizedString("Menu.TrackingProtection.TitlePrefix", value: "Protections for %@", comment: "Title on tracking protection menu showing the domain. eg. Protections for mozilla.org")
     public static let TPPageMenuNoTrackersBlocked = MZLocalizedString("Menu.TrackingProtection.NoTrackersBlockedTitle", value: "No trackers known to Firefox were detected on this page.", comment: "Message in menu when no trackers blocked.")
     public static let TPPageMenuBlockedTitle = MZLocalizedString("Menu.TrackingProtection.BlockedTitle", value: "Blocked", comment: "Title on tracking protection menu for blocked items.")
+
+    public static let TPDetailsVerifiedBy = MZLocalizedString("Menu.TrackingProtection.Details.Verifier", value: "Verified by %@", comment: "String to let users know the site verifier")
 
     // Category Titles
     public static let TPCryptominersBlocked = MZLocalizedString("Menu.TrackingProtectionCryptominersBlocked.Title", value: "Cryptominers", comment: "The title that shows the number of cryptomining scripts blocked")
