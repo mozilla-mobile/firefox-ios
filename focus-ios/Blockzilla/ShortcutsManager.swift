@@ -5,12 +5,7 @@
 import UIKit
 
 struct Shortcut: Equatable, Codable {
-    
     var url: URL
-    
-    static func == (lhs: Shortcut, rhs: Shortcut) -> Bool {
-        return lhs.url == rhs.url
-    }
 }
 
 protocol ShortcutsManagerDelegate: class {

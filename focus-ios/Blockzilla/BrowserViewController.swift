@@ -89,8 +89,8 @@ class BrowserViewController: UIViewController {
         self.appSplashController = appSplashController
         self.tipManager = tipManager
         self.shortcutManager = shortcutManager
-
         super.init(nibName: nil, bundle: nil)
+        shortcutManager.delegate = self
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
     }
 
@@ -329,7 +329,6 @@ class BrowserViewController: UIViewController {
     private func addShortcuts() {
         if shortcutManager.numberOfShortcuts != 0 {
             for i in 0..<shortcutManager.numberOfShortcuts {
-                shortcutManager.delegate = self
                 let shortcut = shortcutManager.shortcutAt(index: i)
                 let shortcutView = ShortcutView(shortcut: shortcut, isIpad: isIPadRegularDimensions)
                 shortcutView.setContentCompressionResistancePriority(.required, for: .horizontal)
@@ -360,11 +359,6 @@ class BrowserViewController: UIViewController {
         
         addShortcuts()
         mainContainerView.addSubview(shortcutsContainer)
-    }
-    
-    func showShortcuts(visible: Bool) {
-        shortcutsContainer.isHidden = !visible
-        shortcutsBackground.isHidden = !visible
     }
     
     @objc func orientationChanged() {
@@ -697,8 +691,8 @@ class BrowserViewController: UIViewController {
     func submit(url: URL) {
         // If this is the first navigation, show the browser and the toolbar.
         guard isViewLoaded else { initialUrl = url; return }
-        
-        showShortcuts(visible: false)
+        shortcutsContainer.isHidden = true
+        shortcutsBackground.isHidden = true
         
         if isIPadRegularDimensions {
             urlBar.snp.makeConstraints { make in
@@ -807,7 +801,8 @@ class BrowserViewController: UIViewController {
     @objc private func selectLocationBar() {
         showToolbars()
         urlBar.activateTextField()
-        showShortcuts(visible: true)
+        shortcutsContainer.isHidden = false
+        shortcutsBackground.isHidden = !urlBar.inBrowsingMode
     }
 
     @objc private func reload() {
@@ -943,8 +938,9 @@ extension BrowserViewController: URLBarDelegate {
     func urlBar(_ urlBar: URLBar, didEnterText text: String) {
         let trimmedText = text.trimmingCharacters(in: .whitespaces)
         let isOnHomeView = homeView != nil
-
-        showShortcuts(visible: trimmedText.isEmpty && shortcutManager.numberOfShortcuts != 0)
+        let shouldShowShortcuts = trimmedText.isEmpty && shortcutManager.numberOfShortcuts != 0
+        shortcutsContainer.isHidden = !shouldShowShortcuts
+        shortcutsBackground.isHidden = !shouldShowShortcuts
         
         if Settings.getToggle(.enableSearchSuggestions) && !trimmedText.isEmpty {
             searchSuggestionsDebouncer.renewInterval()
@@ -1028,8 +1024,8 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidDismiss(_ urlBar: URLBar) {
         overlayView.dismiss()
         toggleURLBarBackground(isBright: !webViewController.isLoading)
-        showShortcuts(visible: false)
-
+        shortcutsContainer.isHidden = urlBar.inBrowsingMode
+        shortcutsBackground.isHidden = true
     }
 
     func urlBarDidFocus(_ urlBar: URLBar) {
@@ -1039,7 +1035,9 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidActivate(_ urlBar: URLBar) {
-        showShortcuts(visible: shortcutManager.numberOfShortcuts != 0)
+        let shouldShowShortcuts = shortcutManager.numberOfShortcuts != 0
+        shortcutsContainer.isHidden = !shouldShowShortcuts
+        shortcutsBackground.isHidden = !shouldShowShortcuts || !urlBar.inBrowsingMode
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {
             self.urlBarContainer.alpha = 1
             self.updateFindInPageVisibility(visible: false)
