@@ -145,9 +145,11 @@ class InactiveTabViewModel {
                 }
                 
                 let tabType = inactiveTabModel.tabWithStatus[tab.tabUUID]
-                if tabType?.last == .shouldBecomeInactive || tabType?.last == .shouldBecomeRecentlyClosed {
+                if tab == selectedTab {
+                    inactiveTabModel.tabWithStatus[tab.tabUUID] = [.normal]
+                } else if tabType?.last == .shouldBecomeInactive || tabType?.last == .shouldBecomeRecentlyClosed {
                     continue
-                } else if tab == selectedTab || tabDate > day4_Old || tabTimeStamp == 0 {
+                } else if tabDate > day4_Old || tabTimeStamp == 0 {
                     if inactiveTabModel.tabWithStatus[tab.tabUUID]?.last != .normal {
                         inactiveTabModel.tabWithStatus[tab.tabUUID] = [.normal]
                     }
