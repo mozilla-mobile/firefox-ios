@@ -55,17 +55,24 @@ extension UIView {
     }
 
     /**
-     * Rounds the requested corners of a view with the provided radius.
+     * rounds the requested corners of a view with the provided radius
      */
-    func addRoundedCorners(_ cornersToRound: UIRectCorner, radius: CGFloat) {
-        let maskPath = UIBezierPath(roundedRect: bounds,
-                                    byRoundingCorners: cornersToRound,
-                                    cornerRadii: CGSize(width: radius, height: radius))
+    func addRoundedCorners(_ cornersToRound: UIRectCorner, cornerRadius: CGSize, color: UIColor) {
+        let rect = bounds
+        let maskPath = UIBezierPath(roundedRect: rect, byRoundingCorners: cornersToRound, cornerRadii: cornerRadius)
 
         // Create the shape layer and set its path
         let maskLayer = CAShapeLayer()
+        maskLayer.frame = rect
         maskLayer.path = maskPath.cgPath
-        layer.mask = maskLayer
+
+        let roundedLayer = CALayer()
+        roundedLayer.backgroundColor = color.cgColor
+        roundedLayer.frame = rect
+        roundedLayer.mask = maskLayer
+
+        layer.insertSublayer(roundedLayer, at: 0)
+        backgroundColor = UIColor.clear
     }
 
     /**
