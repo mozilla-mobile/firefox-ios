@@ -11,7 +11,6 @@ class SettingAppearanceTest: BaseTestCase {
     // Smoketest
     // Check for the basic appearance of the Settings Menu
     func testCheckSetting() {
-
         // Workaround for accessing Settings as on first launch the URL bar is focused
         app.buttons["URLBar.cancelButton"].tap()
 
@@ -26,7 +25,7 @@ class SettingAppearanceTest: BaseTestCase {
         // Check About page
         app.tables.firstMatch.swipeUp()
         let aboutCell = app.cells["settingsViewController.about"]
-        waitForHittable(aboutCell, timeout: 10)
+        waitForExistence(aboutCell, timeout: 10)
         aboutCell.tap()
 
         let tablesQuery = app.tables
@@ -244,7 +243,11 @@ class SettingAppearanceTest: BaseTestCase {
         waitForExistence(iOS_Settings.cells["Safari"])
         iOS_Settings.cells["Safari"].tap()
         iOS_Settings.cells["AutoFill"].swipeUp()
-        iOS_Settings.cells.staticTexts["CONTENT_BLOCKERS"].tap()
+        if #available(iOS 15.0, *) {
+            iOS_Settings.cells.staticTexts["Extensions"].tap()
+        } else {
+            iOS_Settings.cells.staticTexts["CONTENT_BLOCKERS"].tap()
+        }
         iOS_Settings.tables.cells.switches.element(boundBy: 0).tap()
         iOS_Settings.terminate()
         // Commenting this part due to error re-launching the app

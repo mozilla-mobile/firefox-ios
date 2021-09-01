@@ -18,11 +18,6 @@ class QuickAddAutocompleteURLTest: BaseTestCase {
         urlBarTextField.tap()
         urlBarTextField.typeText("reddit.c\n")
 
-        guard let text = urlBarTextField.value as? String else {
-            XCTFail()
-            return
-        }
-
-        XCTAssert(text == "www.reddit.com")
+        waitForValueContains(app.textFields["URLBar.urlText"], value: "reddit.com")
     }
 }

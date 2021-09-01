@@ -6,14 +6,12 @@ import XCTest
 
 class CollapsedURLTest: BaseTestCase {
     func testCheckCollapsedURL() {
-        let app = XCUIApplication()
 
         // Visit a page that scrolls
         loadWebPage("https://news.ycombinator.com") //
 
         // Wait for the website to load
         waitForExistence(app.webViews.otherElements["Hacker News"])
-        let webView = app.webViews.children(matching: .other).element
         app.swipeUp()
         app.swipeUp()
         let collapsedTruncatedurltextTextView = app.textViews["Collapsed.truncatedUrlText"]

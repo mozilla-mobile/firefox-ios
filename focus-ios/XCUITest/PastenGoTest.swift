@@ -78,6 +78,6 @@ class PastenGoTest: BaseTestCase {
         searchOrEnterAddressTextField.tap()
         waitForExistence(app.menuItems["Paste"], timeout: 5)
         app.menuItems["Paste"].tap()
-//        waitForExistence(app.buttons["Search for " + clipboard], timeout: 5) - Different for refresh branch - change it later
+        waitForValueContains(app.textFields["URLBar.urlText"], value: "1(*&)(*%@@$^%^12345)")
     }
 }

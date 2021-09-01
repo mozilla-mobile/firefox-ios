@@ -116,7 +116,7 @@ class TrackingProtectionMenu: BaseTestCase {
         // Erase the history
         waitForHittable(app.buttons["URLBar.deleteButton"])
         app.buttons["URLBar.deleteButton"].tap()
-        waitForExistence(app.staticTexts["Your browsing history has been erased."])
+        waitForExistence(app.staticTexts["Browsing history cleared"])
     }
 
     private func waitForZeroTrackers() {

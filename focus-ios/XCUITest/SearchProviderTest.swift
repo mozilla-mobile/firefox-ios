@@ -85,13 +85,13 @@ class SearchProviderTest: BaseTestCase {
 	}
 
 	private func doSearch(searchWord: String, provider: String) {
-		let searchForText = "Search for " + searchWord
-        let urlbarUrltextTextField = app.textFields["URLBar.urlText"]
+		let urlbarUrltextTextField = app.textFields["URLBar.urlText"]
         let cancelButton = app.buttons["URLBar.cancelButton"]
 		urlbarUrltextTextField.tap()
 		urlbarUrltextTextField.typeText(searchWord)
-		waitForExistence(app.buttons[searchForText])
-		app.buttons[searchForText].tap()
+        app.buttons["SearchSuggestionsPromptView.enableButton"].tap()
+        print(app.debugDescription)
+        app.buttons["OverlayView.searchButton"].tap()
         waitForWebPageLoad()
 
         urlbarUrltextTextField.tap()
