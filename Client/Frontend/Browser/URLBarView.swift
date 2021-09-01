@@ -453,10 +453,8 @@ class URLBarView: UIView {
     func updateReaderModeState(_ state: ReaderModeState) {
         locationView.readerModeState = state
         switch state {
-        case .active:
-            locationView.reloadButton.isHidden = true
-        case .available:
-            locationView.reloadButton.isHidden = true
+        case .active, .available:
+            locationView.reloadButton.isHidden = false
         case .unavailable:
             if (!toolbarIsShowing) { locationView.reloadButton.isHidden = false }
         }
