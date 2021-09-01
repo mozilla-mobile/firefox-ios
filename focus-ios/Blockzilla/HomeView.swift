@@ -31,7 +31,7 @@ class HomeView: UIView {
     init(tipManager: TipManager? = nil) {
         super.init(frame: CGRect.zero)
         rotated()
-        NotificationCenter.default.addObserver(self, selector: #selector(HomeView.rotated), name: UIDevice.orientationDidChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(rotated), name: UIDevice.orientationDidChangeNotification, object: nil)
         
         let swipeNext = UISwipeGestureRecognizer(target: self, action: #selector(HomeView.swipeNextTip))
         swipeNext.direction = .left
@@ -181,7 +181,13 @@ class HomeView: UIView {
     }
 
     @objc private func rotated() {
-        if UIDevice.current.orientation.isLandscape {
+        let orientation = UIApplication
+            .shared
+            .windows
+            .first(where: { $0.isKeyWindow })?
+            .windowScene?
+            .interfaceOrientation
+        if orientation?.isLandscape == true {
             hideTextLogo()
         } else {
             showTextLogo()
