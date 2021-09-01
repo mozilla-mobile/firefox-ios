@@ -445,6 +445,9 @@
 /* Text for a share button */
 "share" = "Delen";
 
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "Aan snelkoppelingen toevoegen";
+
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "Adres kopiëren";
 
@@ -456,6 +459,9 @@
 
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "Pagina-acties";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "Verwijderen uit Snelkoppelingen";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Desktop­website opvragen";
@@ -474,6 +480,9 @@
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Pagina delen met…";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "Verwijderen uit Snelkoppelingen";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Toevoegen";
@@ -507,6 +516,12 @@
 
 /* label for analytic trackers. */
 "trackingProtection.analyticTrackerLabel" = "Analysetrackers";
+
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "Verbinding is niet beveiligd";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "Verbinding is beveiligd";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Inhoudstrackers";

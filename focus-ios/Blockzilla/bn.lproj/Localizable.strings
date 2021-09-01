@@ -301,12 +301,6 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "অন্যান্য কন্টেন্ট ট্রাকারদেরকে অবরুদ্ধ করা হলে কিছু ভিডিও এবং ওয়েব পেজে সমস্যা হতে পারে।";
 
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "না, ধন্যবাদ";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "আমি বুঝেছি";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "আপনি যা ঠিকানা বারে টাইপ করেছেন তা %@ আপনার অনুসন্ধান ইঞ্জিনে পাঠাবে।";
 
@@ -383,31 +377,7 @@
 "Settings.sectionSecurity" = "নিরাপত্তা";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "বিজ্ঞাপনদাতা ট্রাকারদেরকে অবরুদ্ধ করুন";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "কিছু এমন বিজ্ঞাপন আছে, যেগুলিতে আপনি ক্লিক না করা সত্ত্বেও আপনার ভিজিটকৃত সাইট ট্র্যাকিং করে";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "বিশ্লেষণধর্মী ট্রাকারদের অবরুদ্ধ করুন";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "ট্যাপিং এবং স্ক্রলিং এর মত এক্টিভিটি পরিমাপ, বিশ্লেষণ করার জন্যে সংগ্রহ করা হয়";
-
-/* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "ওয়েব ফন্ট অবরুদ্ধ করুন";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "অন্যান্য কন্টেন্ট ট্রাকারদেরকে অবরুদ্ধ করুন";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "এটা সক্রিয় করলে কিছু পেজ অনাকাঙ্খিত আচরণ করতে পারে";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "সোসাল-নেটওয়ার্ক ট্রাকারদের অবরুদ্ধ করুন";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "সাইটসমূহে এমবেডেড করা থাকে আপনার ওয়েব ভিজিট ট্র্যাক করার জন্যে অথচ এগুলো শেয়ার বাটনের মত কাজ করবে বলে প্রদর্শন করা হয়ে থাকে";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "অ্যাপ চালু করার জন্য ফেস আইডি ব্যবহার করুন";
@@ -525,12 +495,6 @@
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "আপনি যতক্ষণ ERASE ট্যাপ না করছেন বা %@ বন্ধ না করছেন, ততক্ষণ পর্যন্ত নিষ্ক্রিয়।";
-
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "ট্র্যাকিং সুরক্ষা";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "%@ বিজ্ঞাপন ব্লক করবে নাকি এনালিটিক, স্যোশাল বা অন্য ট্র্যাকার ব্লক করবে তা নির্বাচন করুন।";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "অটোকমপ্লিট করতে লিঙ্ক যোগ করুন";

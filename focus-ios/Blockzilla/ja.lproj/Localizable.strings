@@ -29,6 +29,9 @@
 "About.safariBullet1" = "追跡をブロックしてプライバシーを保護します";
 
 /* Label on About screen */
+"About.safariBullet2" = "ウェブフォントをブロックしてページのサイズを削減";
+
+/* Label on About screen */
 "About.safariBulletHeader" = "Safari の拡張機能として使用すると:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -304,6 +307,15 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "URL 自動補完";
 
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "他の追跡コンテンツをブロックすると、動画やウェブページが正常に表示されない場合があります。";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "キャンセル";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes2" = "追跡コンテンツをブロック";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "アドレスバーに入力した内容を %@ が検索エンジンに送信します。";
 
@@ -379,6 +391,21 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "セキュリティ";
 
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "広告";
+
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "解析";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "ウェブフォントをブロック";
+
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "コンテンツ";
+
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "ソーシャル";
+
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "アプリのロック解除に Face ID を使用";
 
@@ -403,6 +430,12 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "URL をアプリ内ですでに開いていても、Touch ID で %@ のロックを解除できます";
 
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "オフ";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "オン";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "新機能";
 
@@ -411,6 +444,9 @@
 
 /* Text for a share button */
 "share" = "共有";
+
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "ショートカットを追加";
 
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "アドレスをコピー";
@@ -423,6 +459,9 @@
 
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "ページ操作";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "ショートカットから削除";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "デスクトップ版を見る";
@@ -441,6 +480,9 @@
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "ページを共有...";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "ショートカットから削除";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "追加";
@@ -475,6 +517,12 @@
 /* label for analytic trackers. */
 "trackingProtection.analyticTrackerLabel" = "アクセス解析";
 
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "接続は安全ではありません";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "接続は安全です";
+
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "追跡コンテンツ";
 
@@ -490,11 +538,32 @@
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "詳細情報";
 
+/* Text for the button that closes the Shield Data and opens the regular Settings screen. */
+"trackingProtection.moreSettings" = "他の設定";
+
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "ソーシャル追跡";
 
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "このセッションでは保護が無効になっています";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "このセッションでは保護が有効になっています";
+
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "%@ を閉じるまで無効化するか「消去」をタップしてください。";
+
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "強化型トラッキング防止機能";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel2" = "個人データの収集を防止します。%@ はオンラインでのあなたの行動を追跡するよく知られた数多くのトラッカーからあなたを守ります。";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "%@ 以降トラッカーがブロックされました";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "ブロックするトラッカーとスクリプト";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "自動補完にリンクを追加";

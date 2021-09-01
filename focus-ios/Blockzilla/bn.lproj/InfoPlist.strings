@@ -1,15 +1,15 @@
-/* (No Comment) */
+/* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "এটা আপনাকে ছবি তোলা এবং আপলোড করার সুযোগ দেবে।";
 
-/* (No Comment) */
+/* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "এইটা আপনাকে অ্যাপলিকেশন আনলক করতে দেয়।";
 
-/* (No Comment) */
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "যেসকল ওয়েবসাইটগুলি আপনি দেখছেন, সেগুলো আপনার অবস্থান জানতে চাইতে পারে।";
 
-/* (No Comment) */
+/* Privacy - Microphone Usage Description */
 "NSMicrophoneUsageDescription" = "এটা আপনাকে ভিডিও নেওয়া এবং আপোলড করার সুযোগ দেবে।";
 
-/* (No Comment) */
+/* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "এটা আপনাকে ছবি সংরক্ষণ এবং আপলোড করার সুযোগ দেবে।";
 

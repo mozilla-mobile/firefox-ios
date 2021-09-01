@@ -445,6 +445,9 @@
 /* Text for a share button */
 "share" = "Compartir";
 
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "Adder al vias breve";
+
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "Copiar le adresse";
 
@@ -456,6 +459,9 @@
 
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "Actiones del pagina";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "Remover del vias breve";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Requirer le version scriptorio del sito";
@@ -474,6 +480,9 @@
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Compartir le pagina con...";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "Remover del vias breve";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Adder";
@@ -507,6 +516,12 @@
 
 /* label for analytic trackers. */
 "trackingProtection.analyticTrackerLabel" = "Traciatores analytic";
+
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "Le connexion non es secur";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "Connexion secur";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Traciatores de contento";
@@ -542,7 +557,7 @@
 "trackingProtection.toggleLabel2" = "Protection antitraciamento reinfortiate";
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel2" = "Mantene tu datos pro te mesme. %@ te protege contra multe del plus commun traciatores que seque lo que tu face online.\n";
+"trackingProtection.trackerDescriptionLabel2" = "Mantene tu datos pro te mesme. %@ te protege contra multe del plus commun traciatores que seque lo que tu face online.";
 
 /* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
 "trackingProtection.trackersBlockedLabel" = "Traciatores blocate desde %@";

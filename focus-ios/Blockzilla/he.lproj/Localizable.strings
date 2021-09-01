@@ -433,6 +433,9 @@
 /* Text for a share button */
 "share" = "שיתוף";
 
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "הוספה לקיצורי הדרך";
+
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "העתקת כתובת";
 
@@ -444,6 +447,9 @@
 
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "פעולות דף";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "הסרה מקיצורי הדרך";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "בקשת אתר שולחני";
@@ -462,6 +468,9 @@
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "שיתוף הדף עם...";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "הסרה מקיצורי הדרך";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "הוספה";
@@ -495,6 +504,12 @@
 
 /* label for analytic trackers. */
 "trackingProtection.analyticTrackerLabel" = "עוקבי ניתוח נתונים";
+
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "החיבור אינו מאובטח";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "החיבור מאובטח";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "עוקבי תוכן";

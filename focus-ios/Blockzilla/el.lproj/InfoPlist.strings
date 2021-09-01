@@ -1,15 +1,18 @@
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Αυτό σάς επιτρέπει να τραβάτε και να μεταφορτώνετε φωτογραφίες.";
+"NSCameraUsageDescription" = "Επιτρέπει τη λήψη και μεταφόρτωση φωτογραφιών.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Σάς επιτρέπει να ξεκλειδώσετε την εφαρμογή.";
+"NSFaceIDUsageDescription" = "Επιτρέπει να ξεκλειδώνετε την εφαρμογή.";
 
 /* Privacy - Location When In Use Usage Description */
-"NSLocationWhenInUseUsageDescription" = "Οι ιστοσελίδες που επισκέπτεστε ενδέχεται να ζητήσουν την τοποθεσία σας.";
+"NSLocationWhenInUseUsageDescription" = "Οι ιστότοποι ενδέχεται να ζητήσουν την τοποθεσία σας.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Αυτό σάς επιτρέπει να τραβάτε και να μεταφορτώνετε βίντεο.";
+"NSMicrophoneUsageDescription" = "Επιτρέπει τη λήψη και μεταφόρτωση βίντεο.";
 
 /* Privacy - Photo Library Additions Usage Description */
-"NSPhotoLibraryAddUsageDescription" = "Αυτό σάς επιτρέπει να αποθηκεύετε και να μεταφορτώνετε φωτογραφίες.";
+"NSPhotoLibraryAddUsageDescription" = "Επιτρέπει την αποθήκευση και μεταφόρτωση φωτογραφιών.";
+
+/* This is the menu item that appears when you long press the Focus icon on the phone home screen. */
+"UIApplicationShortcutItemTitle.EraseAndOpen" = "Διαγραφή και άνοιγμα";
 

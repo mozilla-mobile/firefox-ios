@@ -337,6 +337,9 @@
 /* Title of option in settings to set up Siri to erase and then open the app. */
 "Siri.eraseAndOpen" = "తుడిచివేసి తెరువు";
 
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "తెరవాల్సిన చిరునామా";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "యాడ్ ట్రాకర్లు";
 

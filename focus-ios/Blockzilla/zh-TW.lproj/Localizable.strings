@@ -445,6 +445,9 @@
 /* Text for a share button */
 "share" = "分享";
 
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "新增捷徑";
+
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "複製網址";
 
@@ -456,6 +459,9 @@
 
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "頁面操作";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "刪除捷徑";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "開啟桌面版網站";
@@ -475,6 +481,9 @@
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "分享頁面…";
 
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "刪除捷徑";
+
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "新增";
 
@@ -485,7 +494,7 @@
 "Siri.editOpenUrl" = "重新記錄或刪除捷徑";
 
 /* Title of option in settings to set up Siri to erase */
-"Siri.erase" = "清除";
+"Siri.erase" = "清除上網紀錄";
 
 /* Title of option in settings to set up Siri to erase and then open the app. */
 "Siri.eraseAndOpen" = "清除並開啟";
@@ -507,6 +516,12 @@
 
 /* label for analytic trackers. */
 "trackingProtection.analyticTrackerLabel" = "統計追蹤器";
+
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "連線不安全";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "連線安全";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "內容追蹤器";
@@ -545,13 +560,13 @@
 "trackingProtection.trackerDescriptionLabel2" = "自己保留自己的資料。%@ 不讓常見的追蹤器記錄您的上網行為。";
 
 /* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
-"trackingProtection.trackersBlockedLabel" = "自 %@ 起封鎖的追蹤器";
+"trackingProtection.trackersBlockedLabel" = "自 %@起封鎖的追蹤器數量";
 
 /* Text for the header of trackers section from Tracking Protection. */
 "trackingProtection.trackersHeader" = "要封鎖的追蹤器與指令碼";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
-"URL.addToAutocompleteLabel" = "加入鏈結來自動完成";
+"URL.addToAutocompleteLabel" = "將鏈結加入自動完成清單";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "取消";

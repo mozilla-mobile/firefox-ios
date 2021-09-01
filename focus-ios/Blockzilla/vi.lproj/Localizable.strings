@@ -445,6 +445,9 @@
 /* Text for a share button */
 "share" = "Chia sẻ";
 
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "Thêm vào lối tắt";
+
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "Sao chép địa chỉ liên kết";
 
@@ -456,6 +459,9 @@
 
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "Hành động trang";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "Xóa khỏi lối tắt";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Yêu cầu trang web trên máy tính";
@@ -474,6 +480,9 @@
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Chia sẻ trang với...";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "Xóa khỏi lối tắt";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Thêm";
@@ -507,6 +516,12 @@
 
 /* label for analytic trackers. */
 "trackingProtection.analyticTrackerLabel" = "Trình theo dõi phân tích";
+
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "Kết nối không an toàn";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "Kết nối an toàn";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Trình theo dõi nội dung";
@@ -546,6 +561,9 @@
 
 /* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
 "trackingProtection.trackersBlockedLabel" = "Trình theo dõi bị chặn kể từ %@";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "Trình theo dõi và script để chặn";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Thêm liên kết vào tự động điền";

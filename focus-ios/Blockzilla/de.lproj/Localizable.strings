@@ -445,6 +445,9 @@
 /* Text for a share button */
 "share" = "Teilen";
 
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "Zu Verknüpfungen hinzufügen";
+
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "Adresse kopieren";
 
@@ -456,6 +459,9 @@
 
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "Aktionen für Seite";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "Aus Verknüpfungen entfernen";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Desktop-Website anfordern";
@@ -474,6 +480,9 @@
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Seite teilen mit…";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "Aus Verknüpfungen entfernen";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Hinzufügen";
@@ -507,6 +516,12 @@
 
 /* label for analytic trackers. */
 "trackingProtection.analyticTrackerLabel" = "Analyse-Tracker";
+
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "Verbindung ist nicht sicher";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "Verbindung ist sicher";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Inhalts-Tracker";

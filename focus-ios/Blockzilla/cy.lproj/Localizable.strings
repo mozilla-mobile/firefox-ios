@@ -445,6 +445,9 @@
 /* Text for a share button */
 "share" = "Rhannu";
 
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "Ychwanegu at y Llwybrau Byr";
+
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "Copïo Cyfeiriad";
 
@@ -456,6 +459,9 @@
 
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "Gweithredoedd Tudalen";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "Tynnu o'r Llwybrau Byr";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Gofyn am Wefan Lawn";
@@ -474,6 +480,9 @@
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Rhannu Tudalen Gyda...";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "Tynnu o'r Llwybrau Byr";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Ychwanegu";
@@ -507,6 +516,12 @@
 
 /* label for analytic trackers. */
 "trackingProtection.analyticTrackerLabel" = "Tracwyr dadansoddi";
+
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "Nid yw'r cysylltiad yn ddiogel";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "Mae'r cysylltiad yn ddiogel";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Tracwyr cynnwys";

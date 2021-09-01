@@ -29,6 +29,9 @@
 "About.safariBullet1" = "შეზღუდეთ თვალთვალი, მეტი პირადულობისთვის";
 
 /* Label on About screen */
+"About.safariBullet2" = "ვებშრიფტების შეზღუდვა, გვერდის მოცულობის შესამცირებლად";
+
+/* Label on About screen */
 "About.safariBulletHeader" = "გამოიყენეთ, Safari-ს დამატებად:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -304,6 +307,15 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "URL-ს თვითშევსება";
 
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "შიგთავსის სხვა მეთვალყურეების შეზღუდვამ, შესაძლოა ზოგი გვერდის ან ვიდეოს ჩვენება შეაფერხოს.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "გაუქმება";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes2" = "შიგთავსის მეთვალყურეების შეზღუდვა";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ გაუგზავნის საძიებო სისტემას, მისამართების ველში აკრეფილ ტექსტს";
 
@@ -379,6 +391,21 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "უსაფრთხოება";
 
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "Სარეკლამო";
+
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "საკვლევი";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "საიტის შრიფტების შეზღუდვა";
+
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "შიგთავსის";
+
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "სოცქსელების";
+
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "გამოიყენეთ სახის ამომცნობი, პროგრამის გასახსნელად";
 
@@ -403,6 +430,12 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "თითის ანაბეჭდით შესაძლებელია გაიხსნას %@ თუ URL-ბმული უკვე გახსნილია პროგრამაში";
 
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "გამორთ.";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "ჩართ.";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "რა სიახლეებია";
 
@@ -411,6 +444,9 @@
 
 /* Text for a share button */
 "share" = "გაზიარება";
+
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "მალსახმობებში დამატება";
 
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "მისამართის ასლი";
@@ -423,6 +459,9 @@
 
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "ვებგვერდზე მოქმედებები";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "მოცილება მალსახმობებიდან";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "სრული საიტის მოთხოვნა";
@@ -441,6 +480,9 @@
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "გვერდის გაზიარება…";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "მოცილება მალსახმობებიდან";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "დამატება";
@@ -475,6 +517,12 @@
 /* label for analytic trackers. */
 "trackingProtection.analyticTrackerLabel" = "სტატისტიკის აღმრიცხველი";
 
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "კავშირი დაუცველია";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "კავშირი დაცულია";
+
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "შიგთავსის აღმრიცხველი";
 
@@ -490,11 +538,32 @@
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "ვრცლად";
 
+/* Text for the button that closes the Shield Data and opens the regular Settings screen. */
+"trackingProtection.moreSettings" = "დამატებითი პარამეტრები";
+
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "სოც. ქსელის მეთვალყურე";
 
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "დაცვა ამჟამად გამორთულია";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "დაცვა ამჟამად ჩართულია";
+
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "გამორთვა %@-ის დახურვამდე ან გასუფთავებამდე.";
+
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "თვალთვალისგან გაძლიერებული დაცვა";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel2" = "დატოვეთ თქვენი მონაცემები პირადი. %@ აგარიდებთ ცნობილი მეთვალყურეების უმეტესობას, რომლებიც თან დაგყვებათ ინტერნეტში.";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "შეზღუდული მეთვალყურეები თარიღიდან %@";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "შესაზღუდი მეთვალყურეები";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "ბმულის დამატება თვითდასრულებისთვის";

@@ -226,12 +226,6 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Bloquiar el conteníu de los rastrexadores podría romper delles páxines web y videos.";
 
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Non, gracies";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Entiéndolo";
-
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla esfuérciase en recoyer namái lo que precisa pa fornir y ameyorar %@ pa tol mundu.";
 
@@ -293,31 +287,7 @@
 "Settings.sectionPrivacy" = "PRIVACIDÁ";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Bloquiar rastrexadores d'anuncios";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Dellos anuncios rastrexen les visites a sitios magar que nun calcares nellos";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Bloquiar rastrexadores d'analítiques";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Úsase pa recoyer, analizar y midir les actividaes como calcos y desplazamientos";
-
-/* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Bloquiar fontes web";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Bloquiar otros rastrexadores";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Activalo causaría que delles páxines se comporten de mou inesperáu";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Bloquiar rastrexadores sociales";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Intégrense en sitios pa rastrexar les tos visites y amosar funcionalidaes como botones de compartición";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Quiciabes ruempa delles páxines web y vídeos";
@@ -354,12 +324,6 @@
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Desactivar hasta que zarres %@ o calques en BALERAR.";
-
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Proteición de rastrexu";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Escueyi si %@ bloquia rastrexadores d'anuncios, analíques, sociales y otros.";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Encaboxar";

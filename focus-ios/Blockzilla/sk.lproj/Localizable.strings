@@ -43,6 +43,15 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Otvoriť pomocou %@";
 
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "OK";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "Pri pridávaní lístkov do aplikácie Wallet nastala chyba. Skúste to, prosím, neskôr.";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "Pridanie lístku zlyhalo";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "Pre návrat do aplikácie %@ sa vyžaduje overenie";
 
@@ -301,6 +310,12 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Blokovanie ostatných sledovacích prvkov môže rozbiť niektoré videá a webové stránky.";
 
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "Zrušiť";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes2" = "Blokovať sledovače obsahu";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ bude odosielať vami písaný text vyhľadávaciemu modulu.";
 
@@ -376,8 +391,20 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "BEZPEČNOSŤ";
 
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "Reklamy";
+
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "Analytika";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Blokovať webové písma";
+
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "Obsah";
+
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "Sociálne siete";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Na odomknutie aplikácie použiť Face ID";
@@ -403,6 +430,12 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Touch ID môže odomknúť %@ ak je URL v aplikácii už otvorené";
 
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "Vypnuté";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "Zapnuté";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Čo je nové";
 
@@ -411,6 +444,9 @@
 
 /* Text for a share button */
 "share" = "Zdieľať";
+
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "Pridať medzi Skratky";
 
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "Kopírovať adresu";
@@ -423,6 +459,9 @@
 
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "Akcie stránky";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "Odstrániť zo Skratiek";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Verzia stránky pre počítače";
@@ -441,6 +480,9 @@
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Zdieľať stránku s…";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "Odstrániť zo Skratiek";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Pridať";
@@ -475,6 +517,12 @@
 /* label for analytic trackers. */
 "trackingProtection.analyticTrackerLabel" = "Analytické sledovacie prvky";
 
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "Pripojenie nie je zabezpečené";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "Pripojenie je zabezpečené";
+
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Ostatné sledovacie prvky";
 
@@ -490,11 +538,32 @@
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Ďalšie informácie";
 
+/* Text for the button that closes the Shield Data and opens the regular Settings screen. */
+"trackingProtection.moreSettings" = "Ďalšie nastavenia";
+
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Sledovacie prvky sociálnych sietí";
 
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "Ochrana je v tejto relácii vypnutá";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "Ochrana je v tejto relácii zapnutá";
+
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Zákaz bude platiť do zavretia aplikácie %@ alebo do ťuknutia na tlačidlo VYMAZAŤ.";
+
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "Rozšírená ochrana pred sledovaním";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel2" = "%@ vás chráni pred mnohými sledovacími prvkami, ktoré zbierajú informácie o tom, čo robíte na internete.";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "Sledovacie prvky zablokované od %@";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "Sledovacie prvky a skripty na zablokovanie";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Pridať odkaz na automatické dopĺňanie";
@@ -507,6 +576,9 @@
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "VYMAZAŤ";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "História prehliadania bola vymazaná";
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Hľadať na stránke: %@";

@@ -43,6 +43,15 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Buka di %@";
 
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "Ok";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "Terjadi kesalahan ketika menambahkan pass ke Wallet. Silakan coba lagi.";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "Gagal Menambahkan Pass";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "Otentikasi untuk kembali ke %@";
 
@@ -301,6 +310,12 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Memblokir pelacak konten lainnya mungkin menghentikan beberapa video dan laman Web.";
 
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "Batal";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes2" = "Blokir Pelacak Konten";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ akan mengirim apa yang Anda ketikkan di bilah alamat ke mesin pencari Anda.";
 
@@ -376,8 +391,20 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "KEAMANAN";
 
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "Periklanan";
+
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "Analitis";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Blokir font Web";
+
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "Konten";
+
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "Media Sosial";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Gunakan Face ID untuk membuka aplikasi";
@@ -403,6 +430,12 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Touch ID dapat membuka %@ jika URL telah terbuka di aplikasi";
 
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "Mati";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "Aktif";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Yang Baru";
 
@@ -411,6 +444,9 @@
 
 /* Text for a share button */
 "share" = "Bagikan";
+
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "Tambahkan ke Pintasan";
 
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "Salin Alamat";
@@ -423,6 +459,9 @@
 
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "Aksi Laman";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "Hapuskan dari Shortcuts";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Minta Situs Desktop";
@@ -441,6 +480,9 @@
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Bagikan Laman Dengan...";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "Hapuskan dari Shortcuts";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Tambah";
@@ -475,6 +517,12 @@
 /* label for analytic trackers. */
 "trackingProtection.analyticTrackerLabel" = "Pelacak analitis";
 
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "Sambungan tidak aman ";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "Sambungan aman";
+
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Pelacak konten";
 
@@ -490,11 +538,32 @@
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Pelajari Lebih Lanjut";
 
+/* Text for the button that closes the Shield Data and opens the regular Settings screen. */
+"trackingProtection.moreSettings" = "Pengaturan Lainnya";
+
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Pelacak sosial";
 
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "Perlindungan DINONAKTIFKAN untuk sesi ini";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "Perlindungan DIAKTIFKAN untuk sesi ini";
+
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Nonaktifkan hingga Anda menutup %@ atau mengetuk HAPUS.";
+
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "Perlindungan Pelacakan Dipertingkat";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel2" = "Simpan data Anda untuk diri sendiri. %@ melindungi Anda dari banyak pelacak umum yang mengikuti apa yang Anda lakukan daring.";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "Pelacak diblokir sejak %@";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "Pelacak dan skrip yang diblokir";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Tambahkan tautan untuk dilengkapi secara otomatis";
@@ -507,6 +576,9 @@
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "HAPUS";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "Riwayat penjelajahan dihapus";
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Temukan di laman: %@";

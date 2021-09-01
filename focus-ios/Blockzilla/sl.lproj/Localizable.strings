@@ -298,6 +298,12 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Samodejno dopolni URL";
 
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "Prekliči";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes2" = "Zavračaj sledilce vsebine";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ bo natipkano v naslovno vrstico poslal iskalniku.";
 
@@ -373,6 +379,21 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "VARNOST";
 
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "Oglasi";
+
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "Analitika";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Zavračaj spletne pisave";
+
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "Vsebina";
+
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "Družbeno";
+
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Uporabljaj Face ID za odklepanje aplikacije";
 
@@ -397,6 +418,12 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Touch ID lahko odklene %@, če je spletni naslov že odprt v aplikaciji";
 
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "Izključeno";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "Vključeno";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Novosti";
 
@@ -405,6 +432,9 @@
 
 /* Text for a share button */
 "share" = "Deli";
+
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "Dodaj med bližnjice";
 
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "Kopiraj naslov";
@@ -417,6 +447,9 @@
 
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "Dejanja strani";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "Odstrani iz bližnjic";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Zahtevaj stran za namizja";
@@ -435,6 +468,9 @@
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Deli stran z …";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "Odstrani iz bližnjic";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Dodaj";
@@ -469,6 +505,12 @@
 /* label for analytic trackers. */
 "trackingProtection.analyticTrackerLabel" = "Analitični sledilci";
 
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "Povezava ni varna";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "Povezava je varna";
+
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Sledilci vsebine";
 
@@ -484,11 +526,26 @@
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Več o tem";
 
+/* Text for the button that closes the Shield Data and opens the regular Settings screen. */
+"trackingProtection.moreSettings" = "Več nastavitev";
+
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Družbeni sledilci";
 
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "Zaščite za to sejo so IZKLJUČENE";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "Zaščite za to sejo so VKLJUČENE";
+
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Onemogoči, dokler ne zaprete %@a ali tapnete IZBRIŠI.";
+
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "Izboljšana zaščita pred sledenjem";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel2" = "Obdržite svoje podatke zase. %@ vas ščiti pred številnimi najpogostejšimi sledilci, ki sledijo vašemu brskanju po spletu.";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Dodaj povezavo za samodejno dopolnjevanje";
