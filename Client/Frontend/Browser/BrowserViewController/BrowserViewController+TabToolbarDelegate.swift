@@ -18,6 +18,27 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     func tabToolbarDidPressLibrary(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
     }
     
+    func tabToolbarDidPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        tabManager.selectedTab?.reload()
+    }
+    
+    func tabToolbarDidLongPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        guard let tab = tabManager.selectedTab else { return }
+        
+        let urlActions = self.getRefreshLongPressMenu(for: tab)
+        guard !urlActions.isEmpty else { return }
+        
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred()
+        let shouldSuppress = UIDevice.current.userInterfaceIdiom != .pad
+        
+        presentSheetWith(actions: [urlActions], on: self, from: button, suppressPopover: shouldSuppress)
+    }
+    
+    func tabToolbarDidPressStop(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        tabManager.selectedTab?.stop()
+    }
+    
     func tabToolbarDidPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         tabManager.selectedTab?.goBack()
     }
