@@ -119,7 +119,7 @@ class HomeView: UIView {
 
         toolbar.snp.makeConstraints { make in
             make.bottom.equalToSuperview()
-            make.width.equalToSuperview().priority(.required)
+            make.leading.trailing.equalTo(safeAreaLayoutGuide)
         }
 
         trackerStatsShareButton.snp.makeConstraints { make in
