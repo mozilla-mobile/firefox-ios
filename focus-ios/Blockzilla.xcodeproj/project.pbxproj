@@ -5192,7 +5192,7 @@
 			repositoryURL = "https://github.com/mozilla/glean-swift/";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 39.0.2;
+				minimumVersion = 40.1.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
