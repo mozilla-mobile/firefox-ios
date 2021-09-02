@@ -58,6 +58,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
 
         // Set original default values for showing tips
         let tipDefaults = [
+            TipManager.TipKey.releaseTip: true,
             TipManager.TipKey.shortcutsTip: true,
             TipManager.TipKey.sitesNotWorkingTip: true,
             TipManager.TipKey.siriFavoriteTip: true,

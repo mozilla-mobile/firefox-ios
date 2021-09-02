@@ -57,6 +57,7 @@ class TelemetryEventObject {
     public static let openFavoriteSite = "open_favorite_site"
     public static let eraseAndOpen = "erase_and_open"
     public static let eraseInBackground = "erase_in_background"
+    public static let releaseTip = "release_tip"
     public static let autocompleteTip = "autocomplete_tip"
     public static let sitesNotWorkingTip = "tracking_protection_tip"
     public static let biometricTip = "biometric_tip"

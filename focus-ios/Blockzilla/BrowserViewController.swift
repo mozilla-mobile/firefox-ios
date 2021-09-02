@@ -1315,10 +1315,23 @@ extension BrowserViewController: HomeViewDelegate {
 
         present(shareController, animated: true)
     }
+    
+    /// Visit the given URL. We make sure we are in browsing mode, and dismiss all modals. This is currently private
+    /// because I don't think it is the best API to expose.
+    private func visit(url: URL) {
+        ensureBrowsingMode()
+        deactivateUrlBarOnHomeView()
+        dismissSettings()
+        dismissActionSheet()
+        submit(url: url)
+    }
 
     func tipTapped() {
         guard let tip = tipManager?.currentTip, tip.showVc else { return }
         switch tip.identifier {
+        case TipManager.TipKey.releaseTip:
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.releaseTip)
+            visit(url: URL(forSupportTopic: .whatsNew))
         case TipManager.TipKey.biometricTip:
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.biometricTip)
             showSettings()

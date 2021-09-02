@@ -527,6 +527,11 @@ struct UIConstants {
         static let requestDesktopNotification = "Notification.requestDesktop"
         static let requestMobileNotification = "Notification.requestMobile"
         static let findInPageNotification = "Notification.findInPage"
+        
+        // Home Screen Tips
+        
+        static let releaseTipTitle = "Why yes, we do have a fresh new look!"
+        static let releaseTipDescription = "Read more about this and other updates to %@."
         static let shortcutsTipTitle = "Create shortcuts to the sites you visit most:"
         static let shortcutsTipDescription = "Select Add to Shortcuts from the %@ menu"
         static let sitesNotWorkingTipTitle = "Site missing content or acting strange?"

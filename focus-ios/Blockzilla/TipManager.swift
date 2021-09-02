@@ -26,6 +26,7 @@ class TipManager {
     }
 
     class TipKey {
+        static let releaseTip = "releaseTip"
         static let shortcutsTip = "shortcutsTip"
         static let sitesNotWorkingTip = "sitesNotWorkingTip"
         static let biometricTip = "biometricTip"
@@ -46,6 +47,7 @@ class TipManager {
     }
 
     private func addAllTips() {
+        possibleTips.append(releaseTip)
         possibleTips.append(shortcutsTip)
         possibleTips.append(sitesNotWorkingTip)
         possibleTips.append(requestDesktopTip)
@@ -56,6 +58,8 @@ class TipManager {
             possibleTips.append(biometricTip)
         }
     }
+
+    lazy var releaseTip = Tip(title: String(format: UIConstants.strings.releaseTipTitle, AppInfo.config.productName), description: String(format: UIConstants.strings.releaseTipDescription, AppInfo.config.productName), identifier: TipKey.releaseTip, showVc: true)
     
     lazy var shortcutsTip = Tip(title: UIConstants.strings.shortcutsTipTitle, description: String(format: UIConstants.strings.shortcutsTipDescription, AppInfo.config.productName), identifier: TipKey.shortcutsTip)
 
