@@ -1543,6 +1543,17 @@ extension BrowserViewController: LibraryPanelDelegate {
     }
 }
 
+extension BrowserViewController: RecentlyClosedPanelDelegate {
+    func openRecentlyClosedSiteInSameTab(_ url: URL) {
+        tabTrayOpenRecentlyClosedTab(url)
+        libraryDrawerViewController?.close()
+    }
+    
+    func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
+        tabManager.selectTab(tabManager.addTab(URLRequest(url: url)))
+    }
+}
+
 extension BrowserViewController: HomePanelDelegate {
     func homePanelDidRequestToOpenLibrary(panel: LibraryPanelType) {
         showLibrary(panel: panel)
