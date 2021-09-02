@@ -73,6 +73,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
     let QueryLimitPerFetch = 100
 
     var libraryPanelDelegate: LibraryPanelDelegate?
+    var recentlyClosedTabsDelegate: RecentlyClosedPanelDelegate?
 
     var groupedSites = DateGroupedTableData<Site>()
 
@@ -250,6 +251,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         let nextController = RecentlyClosedTabsPanel(profile: profile)
         nextController.title = Strings.RecentlyClosedTabsButtonTitle
         nextController.libraryPanelDelegate = libraryPanelDelegate
+        nextController.recentlyClosedTabsDelegate = BrowserViewController.foregroundBVC()
         refreshControl?.endRefreshing()
         navigationController?.pushViewController(nextController, animated: true)
     }
