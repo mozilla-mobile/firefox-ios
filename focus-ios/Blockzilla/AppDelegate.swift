@@ -190,6 +190,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             } else {
                 queuedString = text
             }
+        } else if host == "glean" {
+            Glean.shared.handleCustomUrl(url: url)
         }
 
         return true
