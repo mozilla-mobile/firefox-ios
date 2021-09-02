@@ -1,18 +1,10 @@
-name: focus-ios, nameSpecified: Firefox Focus, owner: mozilla-mobile, version: 
+name: focus-ios, nameSpecified: Firefox Focus, owner: mozilla-mobile, version: main
 
-name: onepassword-extension, nameSpecified: , owner: AgileBits, version: 04f146a
+name: SnapKit, nameSpecified: , owner: SnapKit, version: 5.0.1
 
-name: SnapKit, nameSpecified: , owner: SnapKit, version: 4.0.0
+name: Fuzi, nameSpecified: , owner: cezheng, version: 3.1.3
 
-name: Fuzi, nameSpecified: , owner: cezheng, version: 53e3f15
-
-name: sentry-cocoa, nameSpecified: Sentry, owner: getsentry, version: 3.2.1
-
-name: AutocompleteTextField, nameSpecified: , owner: mozilla-mobile, version: 1f5eb6f
-
-name: telemetry-ios, nameSpecified: Telemetry, owner: mozilla-mobile, version: v1.0.6
-
-name: GCDWebServer, nameSpecified: , owner: swisspol, version: 3.3.3
+name: telemetry-ios, nameSpecified: Telemetry, owner: mozilla-mobile, version: main
 
 add-version-numbers: false
 
