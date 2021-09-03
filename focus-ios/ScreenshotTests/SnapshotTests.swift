@@ -7,7 +7,7 @@ import XCTest
 class SnapshotTests: XCTestCase {
 
     let app = XCUIApplication()
-    let testRunningFirstRun = ["test01Screenshots"]
+    let testRunningFirstRun = ["test01FirstRunScreens"]
 
     override func setUp() {
         super.setUp()
@@ -25,36 +25,21 @@ class SnapshotTests: XCTestCase {
         app.launch()
     }
 
-    func test01Screenshots() {
+    func test01FirstRunScreens() {
         snapshot("00FirstRun")
         app.swipeLeft()
         snapshot("01FirstRun")
         app.swipeLeft()
         snapshot("02FirstRun")
+        waitForExistence(app.buttons["IntroViewController.button"], timeout: 5)
         app.buttons["IntroViewController.button"].tap()
         snapshot("03Home")
-
-        app.textFields["URLBar.urlText"].tap()
-        app.textFields["URLBar.urlText"].typeText("bugzilla.mozilla.org")
-        snapshot("04SearchFor")
-
-        app.typeText("\n")
-        waitForValueContains(app.textFields["URLBar.urlText"], value: "bugzilla.mozilla.org")
-        snapshot("05EraseButton")
-
-        let searchOrEnterAddressTextField = app.textFields["URLBar.urlText"]
-        searchOrEnterAddressTextField.tap()
-        waitForExistence(app.buttons["URLBar.cancelButton"])
-        snapshot("06AddLinkToAutoComplete")
-
-        app.buttons["URLBar.cancelButton"].tap()
-        app.buttons["URLBar.deleteButton"].tap()
-        waitForExistence(app.staticTexts["Toast.label"])
-        snapshot("07YourBrowsingHistoryHasBeenErased")
     }
 
     func test02Settings() {
+        dismissURLBarFocused()
         app.buttons["HomeView.settingsButton"].tap()
+        app.tables.cells["icon_settings"].tap()
         snapshot("08Settings")
         app.swipeUp()
         snapshot("9Settings")
@@ -73,7 +58,9 @@ class SnapshotTests: XCTestCase {
     }
     
     func test03About() {
+        dismissURLBarFocused()
         app.buttons["HomeView.settingsButton"].tap()
+        app.tables.cells["icon_settings"].tap()
         app.cells["settingsViewController.about"].tap()
         snapshot("13About")
     }
@@ -82,13 +69,15 @@ class SnapshotTests: XCTestCase {
         app.textFields["URLBar.urlText"].tap()
         app.textFields["URLBar.urlText"].typeText("bugzilla.mozilla.org\n")
         waitForValueContains(app.textFields["URLBar.urlText"], value: "bugzilla.mozilla.org")
-        app.buttons["URLBar.pageActionsButton"].tap()
+        app.buttons["HomeView.settingsButton"].tap()
         app.tables["Context Menu"].cells["icon_openwith_active"].tap()
         snapshot("14ShareMenu")
     }
 
     func test05SafariIntegration() {
+        dismissURLBarFocused()
         app.buttons["HomeView.settingsButton"].tap()
+        app.tables.cells["icon_settings"].tap()
         app.tables.switches["BlockerToggle.Safari"].tap()
         snapshot("15SafariIntegrationInstructions")
     }
@@ -142,10 +131,45 @@ class SnapshotTests: XCTestCase {
     }
     
     func test10CustomSearchEngines() {
+        dismissURLBarFocused()
         app.buttons["HomeView.settingsButton"].tap()
+        app.tables.cells["icon_settings"].tap()
         app.cells["SettingsViewController.searchCell"].tap()
-        app.cells["addSearchEngine"].tap()
         snapshot("20CustomSearchEngines")
+    }
+
+    func test11WebsiteView() {
+        app.textFields.firstMatch.tap()
+        app.textFields.firstMatch.typeText("bugzilla.mozilla.org")
+        snapshot("04SearchFor")
+
+        app.typeText("\n")
+        waitForValueContains(app.textFields["URLBar.urlText"], value: "bugzilla.mozilla.org")
+        snapshot("05EraseButton")
+
+        app.buttons["URLBar.deleteButton"].tap()
+        snapshot("07YourBrowsingHistoryHasBeenErased")
+    }
+
+//    Run it only for EN locales for now
+//    func test12HomePageTipsCarrousel() {
+//        dismissURLBarFocused()
+//        snapshot("1stTip")
+//        app.staticTexts["Select Add to Shortcuts from the Focus menu"].swipeLeft()
+//        snapshot("2ndTip")
+//        app.staticTexts["Site missing content or acting strange?"].swipeLeft()
+//        snapshot("3rdTip")
+//        app.staticTexts["Page Actions > Request Desktop Site"].swipeLeft()
+//        snapshot("4thTip")
+//        app.staticTexts["“Siri, open my favorite site.”"].swipeLeft()
+//        snapshot("5thTip")
+//        app.staticTexts["“Siri, erase my Firefox Focus session.”"].swipeLeft()
+//        snapshot("6thTip")
+//    }
+
+    private func dismissURLBarFocused() {
+        waitForExistence(app.buttons["URLBar.cancelButton"], timeout: 15)
+        app.buttons["URLBar.cancelButton"].tap()
     }
 
     func waitForValueContains(_ element: XCUIElement, value: String, file: String = #file, line: UInt = #line) {
