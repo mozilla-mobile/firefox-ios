@@ -61,23 +61,37 @@ open class TabToolbarHelper: NSObject {
     let ImageHome = UIImage.templateImageNamed("menu-Home")
     
     func setMiddleButtonState(_ state: MiddleButtonState) {
-        switch state {
-        case .search:
-            middleButtonState = .search
-            toolbar.multiStateButton.setImage(ImageSearch, for: .normal)
-            toolbar.multiStateButton.accessibilityLabel = .TabToolbarSearchAccessibilityLabel
-        case .reload:
-            middleButtonState = .reload
-            toolbar.multiStateButton.setImage(ImageReload, for: .normal)
-            toolbar.multiStateButton.accessibilityLabel = .TabToolbarReloadAccessibilityLabel
-        case .stop:
-            middleButtonState = .stop
-            toolbar.multiStateButton.setImage(ImageStop, for: .normal)
-            toolbar.multiStateButton.accessibilityLabel = .TabToolbarStopAccessibilityLabel
-        default:
-            toolbar.multiStateButton.setImage(ImageHome, for: .normal)
-            toolbar.multiStateButton.accessibilityLabel = .TabToolbarSearchAccessibilityLabel
-            middleButtonState = .home
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            switch state {
+            case .search:
+                middleButtonState = .search
+                toolbar.multiStateButton.setImage(ImageSearch, for: .normal)
+                toolbar.multiStateButton.accessibilityLabel = .TabToolbarSearchAccessibilityLabel
+            default:
+                toolbar.multiStateButton.setImage(ImageHome, for: .normal)
+                toolbar.multiStateButton.accessibilityLabel = .TabToolbarSearchAccessibilityLabel
+                middleButtonState = .home
+            }
+
+        } else {
+            switch state {
+            case .search:
+                middleButtonState = .search
+                toolbar.multiStateButton.setImage(ImageSearch, for: .normal)
+                toolbar.multiStateButton.accessibilityLabel = .TabToolbarSearchAccessibilityLabel
+            case .reload:
+                middleButtonState = .reload
+                toolbar.multiStateButton.setImage(ImageReload, for: .normal)
+                toolbar.multiStateButton.accessibilityLabel = .TabToolbarReloadAccessibilityLabel
+            case .stop:
+                middleButtonState = .stop
+                toolbar.multiStateButton.setImage(ImageStop, for: .normal)
+                toolbar.multiStateButton.accessibilityLabel = .TabToolbarStopAccessibilityLabel
+            default:
+                toolbar.multiStateButton.setImage(ImageHome, for: .normal)
+                toolbar.multiStateButton.accessibilityLabel = .TabToolbarSearchAccessibilityLabel
+                middleButtonState = .home
+            }
         }
     }
     
@@ -104,7 +118,11 @@ open class TabToolbarHelper: NSObject {
         toolbar.forwardButton.addGestureRecognizer(longPressGestureForwardButton)
         toolbar.forwardButton.addTarget(self, action: #selector(didClickForward), for: .touchUpInside)
 
-        toolbar.multiStateButton.setImage(UIImage.templateImageNamed("nav-refresh"), for: .normal)
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            toolbar.multiStateButton.setImage(UIImage.templateImageNamed("menu-Home"), for: .normal)
+        } else {
+            toolbar.multiStateButton.setImage(UIImage.templateImageNamed("nav-refresh"), for: .normal)
+        }
         toolbar.multiStateButton.accessibilityLabel = .TabToolbarReloadAccessibilityLabel
         
         let longPressMultiStateButton = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressMultiStateButton))
