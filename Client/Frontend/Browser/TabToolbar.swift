@@ -61,37 +61,24 @@ open class TabToolbarHelper: NSObject {
     let ImageHome = UIImage.templateImageNamed("menu-Home")
     
     func setMiddleButtonState(_ state: MiddleButtonState) {
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            switch state {
-            case .search:
-                middleButtonState = .search
-                toolbar.multiStateButton.setImage(ImageSearch, for: .normal)
-                toolbar.multiStateButton.accessibilityLabel = .TabToolbarSearchAccessibilityLabel
-            default:
-                toolbar.multiStateButton.setImage(ImageHome, for: .normal)
-                toolbar.multiStateButton.accessibilityLabel = .TabToolbarSearchAccessibilityLabel
-                middleButtonState = .home
-            }
-
-        } else {
-            switch state {
-            case .search:
-                middleButtonState = .search
-                toolbar.multiStateButton.setImage(ImageSearch, for: .normal)
-                toolbar.multiStateButton.accessibilityLabel = .TabToolbarSearchAccessibilityLabel
-            case .reload:
-                middleButtonState = .reload
-                toolbar.multiStateButton.setImage(ImageReload, for: .normal)
-                toolbar.multiStateButton.accessibilityLabel = .TabToolbarReloadAccessibilityLabel
-            case .stop:
-                middleButtonState = .stop
-                toolbar.multiStateButton.setImage(ImageStop, for: .normal)
-                toolbar.multiStateButton.accessibilityLabel = .TabToolbarStopAccessibilityLabel
-            default:
-                toolbar.multiStateButton.setImage(ImageHome, for: .normal)
-                toolbar.multiStateButton.accessibilityLabel = .TabToolbarSearchAccessibilityLabel
-                middleButtonState = .home
-            }
+        let device = UIDevice.current.userInterfaceIdiom
+        switch (state, device) {
+        case (.search, _):
+            middleButtonState = .search
+            toolbar.multiStateButton.setImage(ImageSearch, for: .normal)
+            toolbar.multiStateButton.accessibilityLabel = .TabToolbarSearchAccessibilityLabel
+        case (.reload, .pad):
+            middleButtonState = .reload
+            toolbar.multiStateButton.setImage(ImageReload, for: .normal)
+            toolbar.multiStateButton.accessibilityLabel = .TabToolbarReloadAccessibilityLabel
+        case (.stop, .pad):
+            middleButtonState = .stop
+            toolbar.multiStateButton.setImage(ImageStop, for: .normal)
+            toolbar.multiStateButton.accessibilityLabel = .TabToolbarStopAccessibilityLabel
+        default:
+            toolbar.multiStateButton.setImage(ImageHome, for: .normal)
+            toolbar.multiStateButton.accessibilityLabel = .TabToolbarSearchAccessibilityLabel
+            middleButtonState = .home
         }
     }
     
