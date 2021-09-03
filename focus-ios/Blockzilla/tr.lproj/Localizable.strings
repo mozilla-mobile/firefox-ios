@@ -527,10 +527,10 @@
 "trackingProtection.contentTrackerLabel" = "İçerik takipçileri";
 
 /* text showing the tracking protection is disabled. */
-"trackingProtection.disabledLabel" = "İzlenme Koruması kapalı";
+"trackingProtection.disabledLabel" = "İzlenme koruması kapalı";
 
 /* Title for the tracking settings page to change what trackers are blocked. */
-"trackingProtection.label" = "İzlenme Koruması";
+"trackingProtection.label" = "İzlenme koruması";
 
 /* Description/subtitle for the tracking protection label. */
 "trackingProtection.labelDescription" = "Bunu kapatmak bazı site sorunlarını düzeltebilir";
@@ -563,7 +563,7 @@
 "trackingProtection.trackersBlockedLabel" = "%@ tarihinden beri engellenen takipçi";
 
 /* Text for the header of trackers section from Tracking Protection. */
-"trackingProtection.trackersHeader" = "Engellenecek takipçiler ve betikler";
+"trackingProtection.trackersHeader" = "ENGELLENECEK TAKİPÇİLER VE BETİKLER";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Bağlantıyı otomatik tamamlamaya ekle";

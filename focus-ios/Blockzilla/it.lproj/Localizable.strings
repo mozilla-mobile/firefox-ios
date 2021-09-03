@@ -113,7 +113,7 @@
 "Autocomplete.mySites" = "I miei siti";
 
 /* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"Autocomplete.mySitesDesc" = "Abilita %@ per avere il completamento automatico dei tuoi preferiti.";
+"Autocomplete.mySitesDesc" = "Attiva per fare in modo che %@ completi automaticamente i tuoi indirizzi preferiti.";
 
 /* Label for enabling or disabling top sites */
 "Autocomplete.topSites" = "Siti principali";
@@ -326,7 +326,7 @@
 "Settings.learnMore" = "Ulteriori informazioni.";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
-"Settings.rate" = "Vota %@";
+"Settings.rate" = "Valuta %@";
 
 /* Label for Safari integration section */
 "Settings.safariTitle" = "INTEGRAZIONE CON SAFARI";

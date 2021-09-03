@@ -497,7 +497,7 @@
 "Siri.erase" = "清除上網紀錄";
 
 /* Title of option in settings to set up Siri to erase and then open the app. */
-"Siri.eraseAndOpen" = "清除並開啟";
+"Siri.eraseAndOpen" = "清除並開啟新分頁";
 
 /* Title for screen to add a favorite URL to Siri. */
 "Siri.favoriteUrl" = "開啟最愛網站";
