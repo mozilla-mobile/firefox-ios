@@ -63,11 +63,11 @@ open class TabToolbarHelper: NSObject {
     func setMiddleButtonState(_ state: MiddleButtonState) {
         let isIpad = UIDevice.current.userInterfaceIdiom == .pad
         switch state {
-        case .reload where !isIpad:
+        case .reload where isIpad:
             middleButtonState = .reload
             toolbar.multiStateButton.setImage(ImageReload, for: .normal)
             toolbar.multiStateButton.accessibilityLabel = .TabToolbarReloadAccessibilityLabel
-        case .stop where !isIpad:
+        case .stop where isIpad:
             middleButtonState = .stop
             toolbar.multiStateButton.setImage(ImageStop, for: .normal)
             toolbar.multiStateButton.accessibilityLabel = .TabToolbarStopAccessibilityLabel
@@ -194,9 +194,9 @@ open class TabToolbarHelper: NSObject {
         let isIpad = UIDevice.current.userInterfaceIdiom == .pad
         if UIDevice.current.userInterfaceIdiom == .pad {
             switch middleButtonState {
-            case .reload where !isIpad:
+            case .reload where isIpad:
                 toolbar.tabToolbarDelegate?.tabToolbarDidPressReload(toolbar, button: toolbar.multiStateButton)
-            case .stop where !isIpad:
+            case .stop where isIpad:
                 toolbar.tabToolbarDelegate?.tabToolbarDidPressStop(toolbar, button: toolbar.multiStateButton)
             case .home:
                 toolbar.tabToolbarDelegate?.tabToolbarDidPressHome(toolbar, button: toolbar.multiStateButton)
