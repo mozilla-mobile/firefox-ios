@@ -80,39 +80,6 @@ open class TabToolbarHelper: NSObject {
             toolbar.multiStateButton.accessibilityLabel = .TabToolbarSearchAccessibilityLabel
             middleButtonState = .home
         }
-        
-//
-//        if UIDevice.current.userInterfaceIdiom == .pad {
-//            switch state {
-//            case .reload:
-//                middleButtonState = .reload
-//                toolbar.multiStateButton.setImage(ImageReload, for: .normal)
-//                toolbar.multiStateButton.accessibilityLabel = .TabToolbarReloadAccessibilityLabel
-//            case .stop:
-//                middleButtonState = .stop
-//                toolbar.multiStateButton.setImage(ImageStop, for: .normal)
-//                toolbar.multiStateButton.accessibilityLabel = .TabToolbarStopAccessibilityLabel
-//            case .search:
-//                middleButtonState = .search
-//                toolbar.multiStateButton.setImage(ImageSearch, for: .normal)
-//                toolbar.multiStateButton.accessibilityLabel = .TabToolbarSearchAccessibilityLabel
-//            default:
-//                toolbar.multiStateButton.setImage(ImageHome, for: .normal)
-//                toolbar.multiStateButton.accessibilityLabel = .TabToolbarSearchAccessibilityLabel
-//                middleButtonState = .home
-//            }
-//        } else {
-//            switch state {
-//            case .search:
-//                middleButtonState = .search
-//                toolbar.multiStateButton.setImage(ImageSearch, for: .normal)
-//                toolbar.multiStateButton.accessibilityLabel = .TabToolbarSearchAccessibilityLabel
-//            default:
-//                toolbar.multiStateButton.setImage(ImageHome, for: .normal)
-//                toolbar.multiStateButton.accessibilityLabel = .TabToolbarSearchAccessibilityLabel
-//                middleButtonState = .home
-//            }
-//        }
     }
     
     // Default state as reload
@@ -239,29 +206,6 @@ open class TabToolbarHelper: NSObject {
             default: break;
             }
         }
-        
-//        if UIDevice.current.userInterfaceIdiom == .pad {
-//            switch middleButtonState {
-//            case .reload:
-//                toolbar.tabToolbarDelegate?.tabToolbarDidPressReload(toolbar, button: toolbar.multiStateButton)
-//            case .stop:
-//                toolbar.tabToolbarDelegate?.tabToolbarDidPressStop(toolbar, button: toolbar.multiStateButton)
-//            case .home:
-//                toolbar.tabToolbarDelegate?.tabToolbarDidPressHome(toolbar, button: toolbar.multiStateButton)
-//            case .search:
-//                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .startSearchButton)
-//                toolbar.tabToolbarDelegate?.tabToolbarDidPressSearch(toolbar, button: toolbar.multiStateButton)
-//            }
-//        } else {
-//            switch middleButtonState {
-//            case .home:
-//                toolbar.tabToolbarDelegate?.tabToolbarDidPressHome(toolbar, button: toolbar.multiStateButton)
-//            case .search:
-//                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .startSearchButton)
-//                toolbar.tabToolbarDelegate?.tabToolbarDidPressSearch(toolbar, button: toolbar.multiStateButton)
-//            default: break;
-//            }
-//        }
     }
     
     func didLongPressMultiStateButton(_ recognizer: UILongPressGestureRecognizer) {

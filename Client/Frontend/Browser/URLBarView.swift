@@ -289,11 +289,12 @@ class URLBarView: UIView {
         }
 
         homeButton.snp.makeConstraints { make in
-            make.trailing.equalTo(self.bookmarksButton.snp.leading)
+            let trailing = UIDevice.current.userInterfaceIdiom == .pad ? self.tabsButton.snp.leading : self.bookmarksButton.snp.leading
+            make.trailing.equalTo(trailing)
             make.centerY.equalTo(self)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
-
+        
         bookmarksButton.snp.makeConstraints { make in
             make.trailing.equalTo(self.appMenuButton.snp.leading)
             make.centerY.equalTo(self)
@@ -452,12 +453,7 @@ class URLBarView: UIView {
 
     func updateReaderModeState(_ state: ReaderModeState) {
         locationView.readerModeState = state
-        switch state {
-        case .active, .available:
-            locationView.reloadButton.isHidden = false
-        case .unavailable:
-            if (!toolbarIsShowing) { locationView.reloadButton.isHidden = false }
-        }
+        locationView.reloadButton.isHidden = false
     }
 
     func setAutocompleteSuggestion(_ suggestion: String?) {
@@ -528,11 +524,11 @@ class URLBarView: UIView {
         progressBar.isHidden = false
         addNewTabButton.isHidden = !toolbarIsShowing || !topTabsIsShowing
         appMenuButton.isHidden = !toolbarIsShowing
-        homeButton.isHidden = !toolbarIsShowing || !topTabsIsShowing
+        homeButton.isHidden = false //!toolbarIsShowing || !topTabsIsShowing
         bookmarksButton.isHidden = !toolbarIsShowing || !topTabsIsShowing
         forwardButton.isHidden = !toolbarIsShowing
         backButton.isHidden = !toolbarIsShowing
-        tabsButton.isHidden = !toolbarIsShowing || topTabsIsShowing
+        tabsButton.isHidden =  false //!toolbarIsShowing || topTabsIsShowing
         multiStateButton.isHidden = !toolbarIsShowing
     }
 
@@ -579,7 +575,7 @@ class URLBarView: UIView {
         bookmarksButton.isHidden = !toolbarIsShowing || inOverlayMode || !topTabsIsShowing
         forwardButton.isHidden = !toolbarIsShowing || inOverlayMode
         backButton.isHidden = !toolbarIsShowing || inOverlayMode
-        tabsButton.isHidden = !toolbarIsShowing || inOverlayMode || topTabsIsShowing
+        tabsButton.isHidden = false //!toolbarIsShowing || inOverlayMode || topTabsIsShowing
         multiStateButton.isHidden = !toolbarIsShowing || inOverlayMode
 
         // badge isHidden is tied to private mode on/off, use alpha to hide in this case
@@ -714,7 +710,7 @@ extension URLBarView: TabLocationViewDelegate {
     }
 
     func tabLocationViewDidTapReload(_ tabLocationView: TabLocationView) {
-        let state = locationView.reloadButton.reloadButtonState
+        let state = locationView.reloadButton.isHidden ? locationView.reloadButton.reloadButtonState : .reload
         switch state {
         case .reload:
             delegate?.urlBarDidPressReload(self)
