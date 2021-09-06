@@ -299,7 +299,7 @@
 "SearchSuggestions.promptEnable" = "დიახ";
 
 /* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
-"SearchSuggestions.promptMessage" = "ძიების შემოთავაზებების მისაღებად, %@ საჭიროებს მისამართების ველში აკრეფილი ტექსტის, შერჩეული საძიებო სისტემისთვის გადაგზავნას.";
+"SearchSuggestions.promptMessage" = "ძიების შემოთავაზებებისთვის, %@ უგზავნის მისამართის ველში აკრეფილ ტექსტს, შერჩეულ საძიებო სისტემას.";
 
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "გსურთ ძიების შემოთავაზებების ჩვენება?";
@@ -371,7 +371,7 @@
 "Settings.searchLabel" = "საძიებო სისტემა";
 
 /* Label for the Search Suggestions toggle row */
-"Settings.searchSuggestions" = "ძიების შემოთავაზებების მიღება";
+"Settings.searchSuggestions" = "ძიების შემოთავაზებები";
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "ძიება";
@@ -560,7 +560,7 @@
 "trackingProtection.trackerDescriptionLabel2" = "დატოვეთ თქვენი მონაცემები პირადი. %@ აგარიდებთ ცნობილი მეთვალყურეების უმეტესობას, რომლებიც თან დაგყვებათ ინტერნეტში.";
 
 /* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
-"trackingProtection.trackersBlockedLabel" = "შეზღუდული მეთვალყურეები თარიღიდან %@";
+"trackingProtection.trackersBlockedLabel" = "სულ შეზღუდულია თარიღიდან %@";
 
 /* Text for the header of trackers section from Tracking Protection. */
 "trackingProtection.trackersHeader" = "შესაზღუდი მეთვალყურეები";

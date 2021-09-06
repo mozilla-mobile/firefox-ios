@@ -43,6 +43,15 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Abrir en %@";
 
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "Ok";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "Ocurrió un error al agregar el pase a Wallet. Por favor, vuelve a intentarlo más tarde.";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "Error al agregar el pase";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "Autenticar para regresar a %@";
 
@@ -301,6 +310,12 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Bloquear otros rastreadores de contenido puede interferir con algunos videos y páginas web.";
 
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "Cancelar";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes2" = "Bloquear rastreadores de contenido";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ enviará lo que escribes en la barra de direcciones para tu motor de búsqueda.";
 
@@ -376,8 +391,20 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "SEGURIDAD";
 
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "Publicidad";
+
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "Analítica";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Bloquear fuentes web";
+
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "Contenido";
+
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "Social";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Usar Face ID para desbloquear la aplicación";
@@ -403,6 +430,12 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Touch ID puede desbloquear %@ si ya hay abierta una URL en la aplicación";
 
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "Desactivada";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "Activada";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Novedades";
 
@@ -411,6 +444,9 @@
 
 /* Text for a share button */
 "share" = "Compartir";
+
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "Agregar a accesos directos";
 
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "Copiar dirección";
@@ -423,6 +459,9 @@
 
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "Acciones de la página";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "Eliminar de los accesos directos";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Solicitar sitio de escritorio";
@@ -441,6 +480,9 @@
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Compartir página con...";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "Eliminar de los accesos directos";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Agregar";
@@ -475,6 +517,12 @@
 /* label for analytic trackers. */
 "trackingProtection.analyticTrackerLabel" = "Rastreador de analítica";
 
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "La conexión no es segura";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "Conexión segura";
+
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Rastreadores de contenido";
 
@@ -490,11 +538,32 @@
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Saber más";
 
+/* Text for the button that closes the Shield Data and opens the regular Settings screen. */
+"trackingProtection.moreSettings" = "Más ajustes";
+
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Rastreadores sociales";
 
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "Las protecciones están desactivadas para esta sesión";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "Las protecciones están activadas para esta sesión";
+
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Deshabilitar hasta que cierres %@ o selecciones ELIMINAR.";
+
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "Protección mejorada contra el rastreo";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel2" = "Mantén tus datos privados. %@ te protege de la mayoría de los rastreadores comunes que siguen lo que haces en línea.";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "Rastreadores bloqueados desde %@";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "Rastreadores y scripts a bloquear";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Agregar enlace para autocompletar";
@@ -507,6 +576,9 @@
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "ERASE";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "Se borró el historial de navegación";
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Buscar en la página: %@";

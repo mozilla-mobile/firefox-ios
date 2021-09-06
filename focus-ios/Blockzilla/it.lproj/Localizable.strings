@@ -326,7 +326,7 @@
 "Settings.learnMore" = "Ulteriori informazioni.";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
-"Settings.rate" = "Valuta %@";
+"Settings.rate" = "Dai un voto a %@";
 
 /* Label for Safari integration section */
 "Settings.safariTitle" = "INTEGRAZIONE CON SAFARI";

@@ -29,6 +29,9 @@
 "About.safariBullet1" = "Zavračajte sledilce za več zasebnosti";
 
 /* Label on About screen */
+"About.safariBullet2" = "Ne prenašaj spletnih pisav za zmanjšanje velikosti strani";
+
+/* Label on About screen */
 "About.safariBulletHeader" = "Uporabljajte ga kot razširitev za Safari:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -42,6 +45,12 @@
 
 /* Button to dismiss the 'Add Pass Failed' alert. */
 "AddPass.Error.Dismiss" = "V redu";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "Med dodajanjem dovolilnice v Wallet je prišlo do težave. Poskusite znova pozneje.";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "Dodajanje dovolilnice neuspešno";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "Za vrnitev v %@ je zahtevana overitev";
@@ -298,6 +307,9 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Samodejno dopolni URL";
 
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Zavračanje drugih vsebinskih sledilcev lahko pokvari nekatere videoposnetke in strani.";
+
 /* Button label for declining Content blocker alert */
 "Settings.blockOtherNo2" = "Prekliči";
 
@@ -546,6 +558,12 @@
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.trackerDescriptionLabel2" = "Obdržite svoje podatke zase. %@ vas ščiti pred številnimi najpogostejšimi sledilci, ki sledijo vašemu brskanju po spletu.";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "Zavrnjeni sledilci od %@";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "Sledilci in skripte za zavračanje";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Dodaj povezavo za samodejno dopolnjevanje";

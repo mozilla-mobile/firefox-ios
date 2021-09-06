@@ -422,7 +422,7 @@
 "Settings.toggleSafari" = "Safari";
 
 /* Label for Send Usage Data toggle on main screen */
-"Settings.toggleSendUsageData" = "Mandà dati d’adopru";
+"Settings.toggleSendUsageData" = "Mandà i dati d’adopru";
 
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Impiegà Touch ID per spalancà l’appiecazione";

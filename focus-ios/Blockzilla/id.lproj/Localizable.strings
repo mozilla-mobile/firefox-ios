@@ -38,7 +38,7 @@
 "About.title" = "Tentang %@";
 
 /* Label on About screen */
-"About.topLabel" = "%@ menempatkan Anda dalam kontrol.";
+"About.topLabel" = "%@ menempatkan Anda dalam kendali.";
 
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Buka di %@";
