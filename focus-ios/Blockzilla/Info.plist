@@ -68,8 +68,6 @@
 		<key>openUrl</key>
 		<string>org.mozilla.ios.Klar.openUrl</string>
 	</dict>
-	<key>SentryDSN</key>
-	<string>$(SENTRY_DSN)</string>
 	<key>UIApplicationShortcutItems</key>
 	<array>
 		<dict>

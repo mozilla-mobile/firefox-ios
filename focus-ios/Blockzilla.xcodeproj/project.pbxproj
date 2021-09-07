@@ -54,7 +54,6 @@
 		745DC5DD1F39221100661635 /* ActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745DC5DC1F39221100661635 /* ActionViewController.swift */; };
 		745DC5E41F39221100661635 /* ShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 745DC5DA1F39221100661635 /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7460BD671F58B1B10096B745 /* GradientProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7460BD661F58B1B10096B745 /* GradientProgressBar.swift */; };
-		746BD91A1F75881D00BE8DB9 /* SentryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746BD9191F75881D00BE8DB9 /* SentryIntegration.swift */; };
 		746BD9241F758FDA00BE8DB9 /* Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746BD9231F758FDA00BE8DB9 /* Bytes.swift */; };
 		746BD9261F75C43C00BE8DB9 /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746BD9251F75C43C00BE8DB9 /* DataExtensions.swift */; };
 		746BD9281F75C45A00BE8DB9 /* DictionaryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746BD9271F75C45A00BE8DB9 /* DictionaryExtensions.swift */; };
@@ -183,7 +182,6 @@
 		F84AFE771DE77FE6005C4DD1 /* LaunchScreen@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F84AFE741DE77FE6005C4DD1 /* LaunchScreen@3x.png */; };
 		F85F7A292655AD5800395515 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A282655AD5800395515 /* SnapKit */; };
 		F85F7A2B2655AD5800395515 /* Fuzi in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A2A2655AD5800395515 /* Fuzi */; };
-		F85F7A2D2655AD5800395515 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A2C2655AD5800395515 /* Sentry */; };
 		F85F7A2F2655AD5800395515 /* Telemetry in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A2E2655AD5800395515 /* Telemetry */; };
 		F85F7A352656885C00395515 /* Glean in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A342656885C00395515 /* Glean */; };
 		F8DE0EC826CC887800A31419 /* SupportUtilsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DE0EC726CC887800A31419 /* SupportUtilsTest.swift */; };
@@ -461,7 +459,6 @@
 		745DC5DC1F39221100661635 /* ActionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionViewController.swift; sourceTree = "<group>"; };
 		745DC5E11F39221100661635 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7460BD661F58B1B10096B745 /* GradientProgressBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientProgressBar.swift; sourceTree = "<group>"; };
-		746BD9191F75881D00BE8DB9 /* SentryIntegration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentryIntegration.swift; sourceTree = "<group>"; };
 		746BD9231F758FDA00BE8DB9 /* Bytes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bytes.swift; sourceTree = "<group>"; };
 		746BD9251F75C43C00BE8DB9 /* DataExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensions.swift; sourceTree = "<group>"; };
 		746BD9271F75C45A00BE8DB9 /* DictionaryExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryExtensions.swift; sourceTree = "<group>"; };
@@ -1002,7 +999,6 @@
 				F85F7A292655AD5800395515 /* SnapKit in Frameworks */,
 				F85F7A2F2655AD5800395515 /* Telemetry in Frameworks */,
 				F85F7A2B2655AD5800395515 /* Fuzi in Frameworks */,
-				F85F7A2D2655AD5800395515 /* Sentry in Frameworks */,
 				F85F7A352656885C00395515 /* Glean in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1147,7 +1143,6 @@
 				D3E251FA1DAF0668005918DC /* AppInfo.swift */,
 				E4BF2E101BAD8AC500DA9D68 /* Settings.swift */,
 				D3E251F81DAF064B005918DC /* Utils.swift */,
-				746BD9191F75881D00BE8DB9 /* SentryIntegration.swift */,
 				746BD9231F758FDA00BE8DB9 /* Bytes.swift */,
 			);
 			name = Shared;
@@ -1506,7 +1501,6 @@
 			packageProductDependencies = (
 				F85F7A282655AD5800395515 /* SnapKit */,
 				F85F7A2A2655AD5800395515 /* Fuzi */,
-				F85F7A2C2655AD5800395515 /* Sentry */,
 				F85F7A2E2655AD5800395515 /* Telemetry */,
 				F85F7A342656885C00395515 /* Glean */,
 			);
@@ -1683,7 +1677,6 @@
 			packageReferences = (
 				F8324C2D264C807C007E4BFA /* XCRemoteSwiftPackageReference "SnapKit" */,
 				F8324CB8264DC8ED007E4BFA /* XCRemoteSwiftPackageReference "Fuzi" */,
-				F8324C76264DA5F1007E4BFA /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 				F8324E0726556E45007E4BFA /* XCRemoteSwiftPackageReference "telemetry-ios" */,
 				F85F7A332656885C00395515 /* XCRemoteSwiftPackageReference "glean-swift" */,
 			);
@@ -2004,7 +1997,6 @@
 				D3561B2B1DB5925100A5EEAF /* GradientBackgroundView.swift in Sources */,
 				D3E2C96D1DA3077400DEBE3D /* CharacterSetExtensions.swift in Sources */,
 				D3E2C96F1DA3093D00DEBE3D /* BrowserToolbar.swift in Sources */,
-				746BD91A1F75881D00BE8DB9 /* SentryIntegration.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5193,14 +5185,6 @@
 				version = 5.0.1;
 			};
 		};
-		F8324C76264DA5F1007E4BFA /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/getsentry/sentry-cocoa";
-			requirement = {
-				kind = exactVersion;
-				version = 5.2.2;
-			};
-		};
 		F8324CB8264DC8ED007E4BFA /* XCRemoteSwiftPackageReference "Fuzi" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/cezheng/Fuzi";
@@ -5237,11 +5221,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F8324CB8264DC8ED007E4BFA /* XCRemoteSwiftPackageReference "Fuzi" */;
 			productName = Fuzi;
-		};
-		F85F7A2C2655AD5800395515 /* Sentry */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F8324C76264DA5F1007E4BFA /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
-			productName = Sentry;
 		};
 		F85F7A2E2655AD5800395515 /* Telemetry */ = {
 			isa = XCSwiftPackageProductDependency;

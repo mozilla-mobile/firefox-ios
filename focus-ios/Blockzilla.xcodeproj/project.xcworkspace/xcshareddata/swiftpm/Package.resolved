@@ -20,15 +20,6 @@
         }
       },
       {
-        "package": "Sentry",
-        "repositoryURL": "https://github.com/getsentry/sentry-cocoa",
-        "state": {
-          "branch": null,
-          "revision": "80928b7e19a713fea798ba45c8bfda38096d7f30",
-          "version": "5.2.2"
-        }
-      },
-      {
         "package": "SnapKit",
         "repositoryURL": "https://github.com/SnapKit/SnapKit",
         "state": {
