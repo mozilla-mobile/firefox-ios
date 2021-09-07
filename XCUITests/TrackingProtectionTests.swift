@@ -6,7 +6,6 @@ import XCTest
 
 let standardBlockedElementsString = "Firefox blocks cross-site trackers, social trackers, cryptominers, and fingerprinters."
 let strictBlockedElementsString = "Firefox blocks cross-site trackers, social trackers, cryptominers, fingerprinters, and tracking content."
-let disabledStrictTPString = "No trackers known to Firefox were detected on this page."
 
 let websiteWithBlockedElements = "twitter.com"
 let differentWebsite = path(forTestPage: "test-example.html")
@@ -70,54 +69,29 @@ class TrackingProtectionTests: BaseTestCase {
         app.buttons["Done"].tap()
     }
 
-    func testDisableETPforSiteIsKeptAfterBrowsing() {
-        // commenting out as this is a whole new flow and QA is required for running this
-//        navigator.performAction(Action.CloseURLBarOpen)
-//        navigator.nowAt(NewTabScreen)
-//        // Enable Strict TP
-//        navigator.openURL(websiteWithBlockedElements)
-//        waitUntilPageLoad()
-//        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
-//        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"], timeout: 5)
-//        // Open ETP menu
-//        navigator.goto(TrackingProtectionContextMenuDetails)
-//        waitForExistence(app.tables["Context Menu"])
-//
-//        // Enable Strict Mode from TP menu
-//        navigator.performAction(Action.OpenSettingsFromTPMenu)
-//        enableStrictMode()
-//
-//        navigator.nowAt(BrowserTab)
-//        navigator.goto(TrackingProtectionContextMenuDetails)
-//
-//        disableEnableTrackingProtectionForSite()
-//        navigator.performAction(Action.CloseTPContextMenu)
-//        navigator.nowAt(BrowserTab)
-//
-//        // Go to a different site and verify that ETP is ON
-//        navigator.openNewURL(urlString: differentWebsite)
-//        waitUntilPageLoad()
-//        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
-//        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"], timeout: 5)
-//        navigator.goto(TrackingProtectionContextMenuDetails)
-//        waitForExistence(app.tables["Context Menu"], timeout: 5)
-//        XCTAssertTrue(app.cells.images["enabled"].exists)
-//        XCTAssertTrue(app.tables.cells[strictBlockedElementsString].exists, "ETP menu with elements blocked is not right")
-//        navigator.performAction(Action.CloseTPContextMenu)
-//        navigator.nowAt(BrowserTab)
-//
-//        // Go back to original site and verify that ETP is still OFF
-//        navigator.openURL(websiteWithBlockedElements)
-//        waitUntilPageLoad()
-//        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
-//        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"], timeout: 5)
-//        navigator.goto(TrackingProtectionContextMenuDetails)
-//        XCTAssertFalse(app.cells.images["enabled"].exists)
-//        XCTAssertTrue(app.tables.cells.staticTexts[disabledStrictTPString].exists, "ETP menu with elements blocked is not right")
-//
-//        // Verify that ETP can be enabled again
-//        navigator.performAction(Action.TrackingProtectionperSiteToggle)
-//        XCTAssertTrue(app.cells.images["enabled"].exists)
+    func testETPLockMenu() {
+        navigator.openURL(differentWebsite)
+        waitUntilPageLoad()
+        navigator.goto(TrackingProtectionContextMenuDetails)
+        waitForExistence(app.staticTexts["Insecure Connection"], timeout: 5)
+        let switchValue = app.switches.firstMatch.value!
+        XCTAssertEqual(switchValue as! String, "1")
+
+        app.switches.firstMatch.tap()
+        let switchValueOFF = app.switches.firstMatch.value!
+        XCTAssertEqual(switchValueOFF as! String, "0")
+
+        // Open TP Settings menu
+        app.buttons["Protection Settings"].tap()
+        waitForExistence(app.navigationBars["Tracking Protection"], timeout: 5)
+        let switchSettingsValue = app.switches["prefkey.trackingprotection.normalbrowsing"].value!
+        XCTAssertEqual(switchSettingsValue as! String, "1")
+        app.switches["prefkey.trackingprotection.normalbrowsing"].tap()
+        // Disable ETP from setting and check that it applies to the site
+        app.buttons["AppSettingsTableViewController.navigationItem.leftBarButtonItem"].tap()
+        navigator.nowAt(BrowserTab)
+        navigator.goto(TrackingProtectionContextMenuDetails)
+        waitForNoExistence(app.switches.firstMatch)
     }
 
     func testBasicMoreInfo() {
