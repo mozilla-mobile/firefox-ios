@@ -86,7 +86,7 @@ class SettingsTableViewAccessoryCell: SettingsTableViewCell {
         }
 
         newLabel.snp.makeConstraints { make in
-            make.leading.equalTo(spacerView.snp.trailing)
+            make.leading.equalTo(spacerView.snp.trailing).offset(3)
             make.top.equalToSuperview().offset(11)
             make.bottom.equalToSuperview().offset(-11)
             make.trailing.equalTo(accessoryLabel.snp.leading).offset(-10)
