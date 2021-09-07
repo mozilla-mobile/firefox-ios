@@ -4,6 +4,7 @@
 
 import UIKit
 import Telemetry
+import Glean
 
 protocol AddCustomDomainViewControllerDelegate: class {
     func addCustomDomainViewControllerDidFinish(_ viewController: AddCustomDomainViewController)
@@ -104,6 +105,7 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
             Toast(text: error.message).show()
         case .success:
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.customDomain)
+            GleanMetrics.SettingsScreen.autocompleteDomainAdded.add()
             Toast(text: UIConstants.strings.autocompleteCustomURLAdded).show()
             finish()
         }

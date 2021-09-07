@@ -21,6 +21,22 @@ legacy.ids:
       - sarentz@mozilla.com
     expires: never
 
+settings_screen:
+  autocomplete_domain_added:
+    type: counter
+    description: |
+      A counter that indicates how many times a user has added
+      a website to the autocomplete list.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2094
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2283
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - firefox-focus@mozilla.com
+    expires: "2022-08-17"
+
 tracking_protection:
   toolbar_shield_clicked:
     type: counter
