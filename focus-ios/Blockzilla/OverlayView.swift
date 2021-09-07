@@ -492,6 +492,7 @@ class OverlayView: UIView {
         self.isUserInteractionEnabled = false
         copyButton.isHidden = false
         addToAutocompleteButton.isHidden = true
+        self.backgroundColor = isOnHomeView ? .clear : .scrim.withAlphaComponent(0.48)
         animateHidden(false, duration: UIConstants.layout.overlayAnimationDuration) {
             self.isUserInteractionEnabled = true
         }

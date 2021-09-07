@@ -163,12 +163,6 @@ class BrowserViewController: UIViewController {
         browserToolbar.delegate = self
         browserToolbar.translatesAutoresizingMaskIntoConstraints = false
         mainContainerView.addSubview(browserToolbar)
-        
-        mainContainerView.addSubview(shortcutsBackground)
-        shortcutsBackground.isHidden = true
-        addShortcutsBackgroundConstraints()
-        setupShortcuts()
-        mainContainerView.addSubview(shortcutsContainer)
 
         overlayView.isHidden = true
         overlayView.alpha = 0
@@ -176,6 +170,12 @@ class BrowserViewController: UIViewController {
         overlayView.backgroundColor = isIPadRegularDimensions ? .clear : .scrim.withAlphaComponent(0.48)
         overlayView.setSearchSuggestionsPromptViewDelegate(delegate: self)
         mainContainerView.addSubview(overlayView)
+        
+        mainContainerView.addSubview(shortcutsBackground)
+        shortcutsBackground.isHidden = true
+        addShortcutsBackgroundConstraints()
+        setupShortcuts()
+        mainContainerView.addSubview(shortcutsContainer)
 
         background.snp.makeConstraints { make in
             make.edges.equalTo(mainContainerView)
