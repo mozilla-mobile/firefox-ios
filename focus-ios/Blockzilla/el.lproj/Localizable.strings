@@ -11,7 +11,7 @@
 "About.privateBullet2" = "Φραγή ιχνηλατών (ή αποδοχή, ενημερώνοντας τις ρυθμίσεις)";
 
 /* Label on About screen */
-"About.privateBullet3" = "Διαγραφή των cookie και του ιστορικού αναζητήσεων και περιήγησης";
+"About.privateBullet3" = "Διαγραφή των cookies και του ιστορικού αναζητήσεων και περιήγησης";
 
 /* Label on About screen */
 "About.privateBulletHeader" = "Χρησιμοποιήστε το για:";
@@ -95,7 +95,7 @@
 "Autocomplete.defaultTitle" = "ΛΙΣΤΑ ΑΡΧΙΚΩΝ URL";
 
 /* label describing URL Autocomplete as disabled */
-"Autocomplete.disabled" = "Ανενεργό";
+"Autocomplete.disabled" = "Ανενεργή";
 
 /* Label for toast alerting that the custom URL being added is a duplicate */
 "Autocomplete.duplicateUrl" = "Το URL υπάρχει ήδη";
@@ -104,7 +104,7 @@
 "Autocomplete.emptyState" = "Κανένα προσαρμοσμένο URL για προβολή";
 
 /* label describing URL Autocomplete as enabled */
-"Autocomplete.enabled" = "Ενεργό";
+"Autocomplete.enabled" = "Ενεργή";
 
 /* Label for button taking you to your custom Autocomplete URL list */
 "Autocomplete.manageSites" = "Διαχείριση ιστοτόπων";
@@ -233,7 +233,7 @@
 "FirstRun.lastSlide.buttonLabel" = "OK, κατάλαβα!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Αυτόματη φραγή ιχνηλατών κατά την περιήγηση. Πατήστε για διαγραφή του ιστορικού, των αναζητήσεων, των cookie και των κωδικών πρόσβασης από τη συσκευή σας.";
+"FirstRun.messageLabelDescription" = "Αυτόματη φραγή ιχνηλατών κατά την περιήγηση. Πατήστε για διαγραφή του ιστορικού, των αναζητήσεων, των cookies και των κωδικών πρόσβασης από τη συσκευή σας.";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Περιηγηθείτε σαν να μην σας βλέπει κανείς.";
@@ -431,10 +431,10 @@
 "Settings.toggleTouchIDDescription" = "Το Touch ID μπορεί να ξεκλειδώσει το %@ αν είναι ήδη ανοικτό κάποιο URL";
 
 /* Status off for tracking protection in settings screen */
-"Settings.trackingProtectionOff" = "Ανενεργό";
+"Settings.trackingProtectionOff" = "Ανενεργή";
 
 /* Status on for tracking protection in settings screen */
-"Settings.trackingProtectionOn" = "Ενεργό";
+"Settings.trackingProtectionOn" = "Ενεργή";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Τι νέο υπάρχει";
@@ -563,7 +563,7 @@
 "trackingProtection.trackersBlockedLabel" = "Αποκλεισμένοι ιχνηλάτες από τις %@";
 
 /* Text for the header of trackers section from Tracking Protection. */
-"trackingProtection.trackersHeader" = "Ιχνηλάτες και σενάρια για φραγή";
+"trackingProtection.trackersHeader" = "Ιχνηλατες και σεναρια για φραγη";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Προσθήκη συνδέσμου για αυτόματη συμπλήρωση";
@@ -578,7 +578,7 @@
 "URL.eraseButtonLabel" = "ΔΙΑΓΡΑΦΗ";
 
 /* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel2" = "Το ιστορικό περιήγησης απαλείφθηκε";
+"URL.eraseMessageLabel2" = "Το ιστορικό περιήγησης διαγράφτηκε";
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Εύρεση στη σελίδα: %@";
@@ -590,7 +590,7 @@
 "URL.placeholderText" = "Αναζήτηση ή εισαγωγή διεύθυνσης";
 
 /* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "Αναζήτηση για %@";
+"URL.searchLabel" = "Αναζήτηση για «%@»";
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "Αποκλεισμένοι ιχνηλάτες";

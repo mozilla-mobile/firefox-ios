@@ -353,7 +353,7 @@
 "Settings.Search.NewSearchEngineAdded" = "ახალი საძიებო სისტემა დამატებულია.";
 
 /* Label for button to bring deleted default engines back */
-"Settings.Search.RestoreEngine" = "ნაგულისხმევი საძიებო სისტემების აღდგენა";
+"Settings.Search.RestoreEngine" = "აღდგეს ნაგულისხმევი საძიებოები";
 
 /* Placeholder text for input of new search engine name */
 "Settings.Search.SearchEngineName" = "საძიებო სისტემის სახელი";
