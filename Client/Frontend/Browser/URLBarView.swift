@@ -430,7 +430,7 @@ class URLBarView: UIView {
         if !toolbarIsShowing {
             updateConstraintsIfNeeded()
         }
-        locationView.reloadButton.isHidden = toolbarIsShowing
+        locationView.reloadButton.isHidden = false
         updateViewsForOverlayModeAndToolbarChanges()
     }
 
@@ -452,12 +452,7 @@ class URLBarView: UIView {
 
     func updateReaderModeState(_ state: ReaderModeState) {
         locationView.readerModeState = state
-        switch state {
-        case .active, .available:
-            locationView.reloadButton.isHidden = false
-        case .unavailable:
-            if (!toolbarIsShowing) { locationView.reloadButton.isHidden = false }
-        }
+        locationView.reloadButton.isHidden = false
     }
 
     func setAutocompleteSuggestion(_ suggestion: String?) {
@@ -710,7 +705,8 @@ extension URLBarView: TabLocationViewDelegate {
     }
 
     func tabLocationViewDidTapReload(_ tabLocationView: TabLocationView) {
-        let state = locationView.reloadButton.reloadButtonState
+        let state = locationView.reloadButton.isHidden ? locationView.reloadButton.reloadButtonState : .reload
+        
         switch state {
         case .reload:
             delegate?.urlBarDidPressReload(self)
