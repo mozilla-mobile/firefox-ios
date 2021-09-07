@@ -145,7 +145,7 @@ class WebViewController: UIViewController, WebController {
         browserView = WKWebView(frame: .zero, configuration: wvConfig)
 
         browserView.allowsBackForwardNavigationGestures = true
-        browserView.allowsLinkPreview = false
+        browserView.allowsLinkPreview = true
         browserView.scrollView.clipsToBounds = false
         browserView.scrollView.delegate = self
         browserView.navigationDelegate = self
