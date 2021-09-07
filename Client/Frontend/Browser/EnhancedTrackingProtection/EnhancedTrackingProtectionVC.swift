@@ -222,6 +222,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
 
             horizontalLine.leadingAnchor.constraint(equalTo: headerContainer.leadingAnchor),
             horizontalLine.trailingAnchor.constraint(equalTo: headerContainer.trailingAnchor),
+          
             horizontalLine.topAnchor.constraint(equalTo: heroImage.bottomAnchor, constant: ETPMenuUX.UX.Line.distanceFromHeroImage),
             horizontalLine.heightAnchor.constraint(equalToConstant: ETPMenuUX.UX.Line.height),
             headerContainer.bottomAnchor.constraint(equalTo: horizontalLine.bottomAnchor)

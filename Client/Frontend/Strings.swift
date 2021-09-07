@@ -1139,6 +1139,7 @@ extension String {
     public static let TabToolbarNewTabAccessibilityLabel = MZLocalizedString("New Tab", comment: "Accessibility Label for the tab toolbar New tab button")
     public static let TabToolbarBackAccessibilityLabel = MZLocalizedString("Back", comment: "Accessibility label for the Back button in the tab toolbar.")
     public static let TabToolbarForwardAccessibilityLabel = MZLocalizedString("Forward", comment: "Accessibility Label for the tab toolbar Forward button")
+    public static let TabToolbarHomeAccessibilityLabel = MZLocalizedString("Home", comment: "Accessibility label for the tab toolbar indicating the Home button.")
     public static let TabToolbarNavigationToolbarAccessibilityLabel = MZLocalizedString("Navigation Toolbar", comment: "Accessibility label for the navigation toolbar displayed at the bottom of the screen.")
 }
 
