@@ -112,10 +112,9 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             }
         }
         
-        let section0 = getHomeAction(vcDelegate: self)
-        var section1 = getLibraryActions(vcDelegate: self)
-        var section2 = getOtherPanelActions(vcDelegate: self)
-        let section3 = getSettingsAction(vcDelegate: self)
+        let section0 = getLibraryActions(vcDelegate: self)
+        var section1 = getOtherPanelActions(vcDelegate: self)
+        let section2 = getSettingsAction(vcDelegate: self)
         
         let optionalActions = [viewLogins, syncAction].compactMap { $0 }
         if !optionalActions.isEmpty {
@@ -123,10 +122,10 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         }
         
         if let whatsNewAction = whatsNewAction {
-            section2.append(whatsNewAction)
+            section1.append(whatsNewAction)
         }
         
-        actions.append(contentsOf: [section0, section1, section2, section3])
+        actions.append(contentsOf: [section0, section1, section2])
 
         presentSheetWith(actions: actions, on: self, from: button)
     }
