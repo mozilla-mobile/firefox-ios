@@ -658,16 +658,12 @@ extension URLBarView: TabToolbarProtocol {
 
     func updateMiddleButtonState(_ state: MiddleButtonState) {
         helper?.setMiddleButtonState(state)
-        switch state {
-        case .stop:
-            multiStateButton.setImage(helper?.ImageStop, for: .normal)
-        default:
-            multiStateButton.setImage(helper?.ImageReload, for: .normal)
-        }
     }
 
     func updatePageStatus(_ isWebPage: Bool) {
-        multiStateButton.isEnabled = isWebPage
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            multiStateButton.isEnabled = isWebPage
+        }
     }
 
     var access: [Any]? {
