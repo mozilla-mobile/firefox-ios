@@ -32,6 +32,9 @@ protocol TabToolbarDelegate: AnyObject {
     func tabToolbarDidPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidLongPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidLongPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton)
+    func tabToolbarDidPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton)
+    func tabToolbarDidLongPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton)
+    func tabToolbarDidPressStop(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressHome(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressBookmarks(_ tabToolbar: TabToolbarProtocol, button: UIButton)
@@ -58,11 +61,20 @@ open class TabToolbarHelper: NSObject {
     let ImageHome = UIImage.templateImageNamed("menu-Home")
     
     func setMiddleButtonState(_ state: MiddleButtonState) {
-        switch state {
-        case .search:
+        let device = UIDevice.current.userInterfaceIdiom
+        switch (state, device) {
+        case (.search, _):
             middleButtonState = .search
             toolbar.multiStateButton.setImage(ImageSearch, for: .normal)
             toolbar.multiStateButton.accessibilityLabel = .TabToolbarSearchAccessibilityLabel
+        case (.reload, .pad):
+            middleButtonState = .reload
+            toolbar.multiStateButton.setImage(ImageReload, for: .normal)
+            toolbar.multiStateButton.accessibilityLabel = .TabToolbarReloadAccessibilityLabel
+        case (.stop, .pad):
+            middleButtonState = .stop
+            toolbar.multiStateButton.setImage(ImageStop, for: .normal)
+            toolbar.multiStateButton.accessibilityLabel = .TabToolbarStopAccessibilityLabel
         default:
             toolbar.multiStateButton.setImage(ImageHome, for: .normal)
             toolbar.multiStateButton.accessibilityLabel = .TabToolbarSearchAccessibilityLabel
@@ -93,8 +105,15 @@ open class TabToolbarHelper: NSObject {
         toolbar.forwardButton.addGestureRecognizer(longPressGestureForwardButton)
         toolbar.forwardButton.addTarget(self, action: #selector(didClickForward), for: .touchUpInside)
 
-        toolbar.multiStateButton.setImage(UIImage.templateImageNamed("nav-refresh"), for: .normal)
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            toolbar.multiStateButton.setImage(UIImage.templateImageNamed("menu-Home"), for: .normal)
+        } else {
+            toolbar.multiStateButton.setImage(UIImage.templateImageNamed("nav-refresh"), for: .normal)
+        }
         toolbar.multiStateButton.accessibilityLabel = .TabToolbarReloadAccessibilityLabel
+        
+        let longPressMultiStateButton = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressMultiStateButton))
+        toolbar.multiStateButton.addGestureRecognizer(longPressMultiStateButton)
 
         toolbar.multiStateButton.addTarget(self, action: #selector(didPressMultiStateButton), for: .touchUpInside)
 
@@ -181,7 +200,21 @@ open class TabToolbarHelper: NSObject {
         case .search:
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .startSearchButton)
             toolbar.tabToolbarDelegate?.tabToolbarDidPressSearch(toolbar, button: toolbar.multiStateButton)
-        default: break;
+        case .stop:
+            toolbar.tabToolbarDelegate?.tabToolbarDidPressStop(toolbar, button: toolbar.multiStateButton)
+        case .reload:
+            toolbar.tabToolbarDelegate?.tabToolbarDidPressReload(toolbar, button: toolbar.multiStateButton)
+        }
+    }
+    
+    func didLongPressMultiStateButton(_ recognizer: UILongPressGestureRecognizer) {
+        switch middleButtonState {
+        case .search:
+            return
+        default:
+            if recognizer.state == .began {
+                toolbar.tabToolbarDelegate?.tabToolbarDidLongPressReload(toolbar, button: toolbar.multiStateButton)
+            }
         }
     }
 }
