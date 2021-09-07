@@ -20,3 +20,66 @@ legacy.ids:
       - firefox-focus@mozilla.com
       - sarentz@mozilla.com
     expires: never
+
+shortcuts:
+  shortcuts_on_home_number:
+    type: quantity
+    description: |
+      The number of shortcuts the user has on home screen,
+      0, 1, 2, 3 or 4 (maximum)
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2092
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2232
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - firefox-focus@mozilla.com
+    expires: "2022-08-20"
+    unit: shortcut(s)
+  shortcut_opened_counter:
+    type: counter
+    description: |
+      A counter that indicates how many times a user has opened
+      a website from a shortcut in the home screen.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2092
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2232
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - firefox-focus@mozilla.com
+    expires: "2022-08-20"
+  shortcut_added_counter:
+    type: counter
+    description: |
+      A counter that indicates how many times a user has added
+      a website to shortcuts.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2092
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2232
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - firefox-focus@mozilla.com
+    expires: "2022-08-20"
+  shortcut_removed_counter:
+    type: labeled_counter
+    description: |
+      A counter that indicates how many times a user has removed
+      a website from shortcuts.
+      It also indicates the screen it was removed from, home or browser.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2092
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2232
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - firefox-focus@mozilla.com
+    expires: "2022-08-20"
+    labels:
+      - removed_from_browser_menu
+      - removed_from_home_screen
