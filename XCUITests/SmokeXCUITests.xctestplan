@@ -156,6 +156,7 @@
         "TopTabsTest\/testSwitchBetweenTabs()",
         "TopTabsTestIpad",
         "TrackingProtectionTests\/testBasicMoreInfo()",
+        "TrackingProtectionTests\/testETPLockMenu()",
         "TrackingProtectionTests\/testMenuWhenThereAreBlockedElements()",
         "WhatsNewTest"
       ],
