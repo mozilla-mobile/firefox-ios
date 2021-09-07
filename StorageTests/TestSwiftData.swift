@@ -29,6 +29,7 @@ class TestSwiftData: XCTestCase {
         XCTAssert(SwiftData.EnableWAL, "WAL enabled")
 
         XCTAssertNil(addSite(table, url: "http://url0", title: "title0"), "Added url0.")
+        XCTAssertNil(addSite(table, url: "http://url1", title: "Firefox/火狐/🔥🦊/ブラウザ"), "Added title with emoji.")
     }
 
     override func tearDown() {
@@ -117,6 +118,26 @@ class TestSwiftData: XCTestCase {
             let shouldBeNull = db.executeQuery("SELECT bar FROM foo WHERE baz = 1", factory: { (row) in row["bar"] }).asArray()[0]
             XCTAssertNil(shouldBeNull as? String)
             XCTAssertNil(shouldBeNull)
+        }.succeeded()
+    }
+    
+    func testUTF8String() {
+        guard let db = swiftData else {
+            XCTFail("DB not open")
+            return
+        }
+        // Test read utf8mb4 encoded string with SwiftData
+        db.withConnection(SwiftData.Flags.readWriteCreate) { db in
+            let shouldBeString = db.executeQuery("SELECT title FROM history WHERE url = 'http://url1'", factory: { (row) in row["title"] }).asArray()[0]
+            guard let title = shouldBeString as? String else {
+                XCTFail("Couldn't cast.")
+                return
+            }
+            let array = title.components(separatedBy: "/")
+            XCTAssertEqual(array[0], "Firefox")
+            XCTAssertEqual(array[1], "火狐")
+            XCTAssertEqual(array[2], "🔥🦊")
+            XCTAssertEqual(array[3], "ブラウザ")
         }.succeeded()
     }
 
