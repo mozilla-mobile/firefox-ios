@@ -41,6 +41,12 @@ struct FxHomeAccessibilityIdentifiers {
     }
 }
 
+struct FxHomeDevStrings {
+    struct GestureRecognizers {
+        static let dismissOverlay = "dismissOverlay"
+    }
+}
+
 
 /*
  Size classes are the way Apple requires us to specify our UI.
@@ -161,6 +167,13 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
+    
+    private var tapGestureRecognizer: UITapGestureRecognizer {
+        let dismissOverlay = UITapGestureRecognizer(target: self, action: #selector(dismissOverlayMode))
+        dismissOverlay.name = FxHomeDevStrings.GestureRecognizers.dismissOverlay
+        
+        return dismissOverlay
+    }
 
     // Not used for displaying. Only used for calculating layout.
     lazy var topSiteCell: ASHorizontalScrollCell = {
@@ -202,6 +215,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         collectionView.translatesAutoresizingMaskIntoConstraints = false
 
         collectionView?.addGestureRecognizer(longPressRecognizer)
+        collectionView?.addGestureRecognizer(tapGestureRecognizer)
 
         let refreshEvents: [Notification.Name] = [.DynamicFontChanged, .HomePanelPrefsChanged, .DisplayThemeChanged]
         refreshEvents.forEach { NotificationCenter.default.addObserver(self, selector: #selector(reload), name: $0, object: nil) }
@@ -303,6 +317,21 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
 
     func scrollToTop(animated: Bool = false) {
         collectionView?.setContentOffset(.zero, animated: animated)
+    }
+    
+    override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode()
+    }
+    
+    @objc func dismissOverlayMode() {
+        BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode()
+        if let gestureRecognizers = collectionView.gestureRecognizers {
+            for (index, gesture) in gestureRecognizers.enumerated() {
+                if gesture.name == FxHomeDevStrings.GestureRecognizers.dismissOverlay {
+                    collectionView.gestureRecognizers?.remove(at: index)
+                }
+            }
+        }
     }
     
     func configureItemsForRecentlySaved() {
