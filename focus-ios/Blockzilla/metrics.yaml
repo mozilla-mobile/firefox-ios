@@ -21,6 +21,23 @@ legacy.ids:
       - sarentz@mozilla.com
     expires: never
 
+mozilla_products:
+  has_firefox_installed:
+    type: boolean
+    lifetime: application
+    description: |
+       If Firefox is installed on the users's device.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2227
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2284
+    data_sensitivity:
+      - technical
+      - interaction
+    notification_emails:
+      - firefox-focus@mozilla.com
+    expires: "2022-09-01"
+
 settings_screen:
   autocomplete_domain_added:
     type: counter

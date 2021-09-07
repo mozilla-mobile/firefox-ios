@@ -417,6 +417,7 @@ extension AppDelegate {
         GleanMetrics.TrackingProtection.hasAnalyticsBlocked.set(Settings.getToggle(.blockAnalytics))
         GleanMetrics.TrackingProtection.hasContentBlocked.set(Settings.getToggle(.blockOther))
         GleanMetrics.TrackingProtection.hasSocialBlocked.set(Settings.getToggle(.blockSocial))
+        GleanMetrics.MozillaProducts.hasFirefoxInstalled.set(UIApplication.shared.canOpenURL(URL(string: "firefox://")!))
     }
 
     func presentModal(viewController: UIViewController, animated: Bool) {
