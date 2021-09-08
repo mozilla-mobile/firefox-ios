@@ -298,9 +298,11 @@ struct UIConstants {
         static let shortcutsContainerOffsetIPad: CGFloat = 36
         static let shortcutsContainerSpacing: CGFloat = 28
         static let shortcutsContainerSpacingIPad: CGFloat = 40
+        static let shortcutsContainerSpacingSmallestSplitView: CGFloat = 20
         static let shortcutsBackgroundHeight: CGFloat = 140
         static let shortcutsBackgroundHeightIPad: CGFloat = 176
         static let shortcutsBackgroundWidthIPad: CGFloat = 676
+        static let smallestSplitViewMaxWidthLimit: CGFloat = UIScreen.main.bounds.width * 0.45
     }
 
     struct strings {

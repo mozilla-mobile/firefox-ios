@@ -759,6 +759,10 @@ class BrowserViewController: UIViewController {
         
         urlBar.updateConstraints()
         browserToolbar.updateConstraints()
+        
+        shortcutsContainer.spacing = size.width < UIConstants.layout.smallestSplitViewMaxWidthLimit ?
+                                        UIConstants.layout.shortcutsContainerSpacingSmallestSplitView :
+                                        (isIPadRegularDimensions ? UIConstants.layout.shortcutsContainerSpacingIPad : UIConstants.layout.shortcutsContainerSpacing)
 
         coordinator.animate(alongsideTransition: { _ in
             self.urlBar.shouldShowToolset = self.showsToolsetInURLBar
