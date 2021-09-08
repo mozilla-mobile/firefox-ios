@@ -1445,7 +1445,7 @@ browser_search:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-02-09"
 
-mozilla_products:
+installed_mozilla_products:
   klar:
     type: boolean
     lifetime: application
