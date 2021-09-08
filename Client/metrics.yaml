@@ -1454,12 +1454,12 @@ mozilla_products:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/9089
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9090
     data_sensitivity:
       - technical
       - interaction
     notification_emails:
-      - firefox-ios@mozilla.com
+      - fx-ios-data-stewards@mozilla.com
     expires: "2022-09-01"
   focus:
     type: boolean
@@ -1469,10 +1469,10 @@ mozilla_products:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/9089
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9090
     data_sensitivity:
       - technical
       - interaction
     notification_emails:
-      - firefox-ios@mozilla.com
+      - fx-ios-data-stewards@mozilla.com
     expires: "2022-09-01"
