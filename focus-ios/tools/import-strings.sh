@@ -40,7 +40,7 @@ echo "\n\n[*] Importing Strings - takes a minute. (output in import-strings.log)
 tools/Localizations/.build/arm64-apple-macosx/debug/Localizations \
   --import \
   --project-path "$PWD/Blockzilla.xcodeproj" \
-  --l10n-project-path "$PWD/focusios-l10n" > export-strings.log 2>&1
+  --l10n-project-path "$PWD/focusios-l10n" > import-strings.log 2>&1
 
 echo "\n\n[!] Strings have been imported. You can now create a PR."
 
