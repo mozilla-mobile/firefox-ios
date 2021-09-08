@@ -973,23 +973,36 @@ class BrowserViewController: UIViewController {
     }
     
     func setupMiddleButtonStatus(isLoading: Bool) {
+        // Setting the default state to search to account for no tab or starting page tab
+        // `state` will be modified later if needed
+        var state: MiddleButtonState = .search
+
         // No tab
         guard let tab = tabManager.selectedTab else {
             urlBar.locationView.reloadButton.reloadButtonState = .disabled
-            navigationToolbar.updateMiddleButtonState(.search)
-            currentMiddleButtonState = .search
+            navigationToolbar.updateMiddleButtonState(state)
+            currentMiddleButtonState = state
             return
         }
         
         // Tab with starting page
         if tab.isURLStartingPage {
             urlBar.locationView.reloadButton.reloadButtonState = .disabled
-            navigationToolbar.updateMiddleButtonState(.search)
-            currentMiddleButtonState = .search
+            navigationToolbar.updateMiddleButtonState(state)
+            currentMiddleButtonState = state
             return
         }
-        
-        let state: MiddleButtonState = isLoading ? .stop : .reload
+
+        if isLoading {
+            state = .stop
+        } else {
+            if UIDevice.current.userInterfaceIdiom == .phone {
+                state = .home
+
+            } else {
+                state = .reload
+            }
+        }
         navigationToolbar.updateMiddleButtonState(state)
         if toolbar != nil {
             urlBar.locationView.reloadButton.reloadButtonState = isLoading ? .stop : .reload
@@ -1089,7 +1102,7 @@ class BrowserViewController: UIViewController {
     /// Call this whenever the page URL changes.
     fileprivate func updateURLBarDisplayURL(_ tab: Tab) {
         urlBar.currentURL = tab.url?.displayURL
-        urlBar.locationView.showLockIcon(forSecureContent: tab.webView?.hasOnlySecureContent ?? false)
+        urlBar.locationView.tabDidChangeContentBlocking(tab)
         let isPage = tab.url?.displayURL?.isWebPage() ?? false
         navigationToolbar.updatePageStatus(isPage)
     }
@@ -1256,7 +1269,7 @@ class BrowserViewController: UIViewController {
 
         if let url = webView.url {
             if tab === tabManager.selectedTab {
-                urlBar.locationView.showLockIcon(forSecureContent: webView.hasOnlySecureContent)
+                urlBar.locationView.tabDidChangeContentBlocking(tab)
             }
 
             if (!InternalURL.isValid(url: url) || url.isReaderModeURL), !url.isFileURL {
@@ -1540,6 +1553,17 @@ extension BrowserViewController: LibraryPanelDelegate {
             }
         })
         self.show(toast: toast)
+    }
+}
+
+extension BrowserViewController: RecentlyClosedPanelDelegate {
+    func openRecentlyClosedSiteInSameTab(_ url: URL) {
+        tabTrayOpenRecentlyClosedTab(url)
+        libraryDrawerViewController?.close()
+    }
+    
+    func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
+        tabManager.selectTab(tabManager.addTab(URLRequest(url: url)))
     }
 }
 

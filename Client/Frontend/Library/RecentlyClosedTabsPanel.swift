@@ -50,9 +50,13 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel {
         tableViewController.didMove(toParent: self)
 
         self.view.addSubview(tableViewController.view)
-        tableViewController.view.snp.makeConstraints { make in
-            make.edges.equalTo(self.view)
-        }
+        
+        NSLayoutConstraint.activate([
+            tableViewController.view.topAnchor.constraint(equalTo: view.topAnchor),
+            tableViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            tableViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
     }
 }
 
@@ -104,7 +108,7 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        recentlyClosedTabsDelegate?.openRecentlyClosedSiteInSameTab(recentlyClosedTabs[indexPath.row].url)
+        recentlyClosedTabsDelegate?.openRecentlyClosedSiteInNewTab(recentlyClosedTabs[indexPath.row].url, isPrivate: false)
         let visitType = VisitType.typed    // Means History, too.
         libraryPanelDelegate?.libraryPanel(didSelectURL: recentlyClosedTabs[indexPath.row].url, visitType: visitType)
     }

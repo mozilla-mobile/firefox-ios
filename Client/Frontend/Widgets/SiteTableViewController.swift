@@ -13,7 +13,10 @@ struct SiteTableViewControllerUX {
 }
 
 class SiteTableViewHeader: UITableViewHeaderFooterView, Themeable {
-    let titleLabel = UILabel()
+    let titleLabel: UILabel = .build { label in
+        label.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBold
+        label.textColor = UIColor.theme.tableView.headerTextDark
+    }
     fileprivate let bordersHelper = ThemedHeaderFooterViewBordersHelper()
 
     override var textLabel: UILabel? {
@@ -22,22 +25,17 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, Themeable {
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-        titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBold
-
+        
+        translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(titleLabel)
 
         bordersHelper.initBorders(view: self.contentView)
         setDefaultBordersValues()
 
-        // A table view will initialize the header with CGSizeZero before applying the actual size. Hence, the label's constraints
-        // must not impose a minimum width on the content view.
-        titleLabel.snp.makeConstraints { make in
-            make.left.equalTo(contentView).offset(SiteTableViewControllerUX.HeaderTextMargin).priority(1000)
-            make.right.equalTo(contentView).offset(-SiteTableViewControllerUX.HeaderTextMargin).priority(1000)
-            make.left.greaterThanOrEqualTo(contentView) // Fallback for when the left space constraint breaks
-            make.right.lessThanOrEqualTo(contentView) // Fallback for when the right space constraint breaks
-            make.centerY.equalTo(contentView)
-        }
+        NSLayoutConstraint.activate([
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: CGFloat(SiteTableViewControllerUX.HeaderTextMargin)),
+            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+        ])
 
         applyTheme()
     }
@@ -79,7 +77,27 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
     let profile: Profile
 
     var data: Cursor<Site> = Cursor<Site>(status: .success, msg: "No data set")
-    var tableView = UITableView()
+    lazy var tableView: UITableView = .build { [weak self] table in
+        guard let self = self else { return }
+        table.delegate = self
+        table.dataSource = self
+        table.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: self.CellIdentifier)
+        table.register(OneLineTableViewCell.self, forCellReuseIdentifier: self.OneLineCellIdentifier)
+        table.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: self.HeaderIdentifier)
+        table.layoutMargins = .zero
+        table.keyboardDismissMode = .onDrag
+        table.accessibilityIdentifier = "SiteTable"
+        table.cellLayoutMarginsFollowReadableWidth = false
+        table.estimatedRowHeight = SiteTableViewControllerUX.RowHeight
+        table.setEditing(false, animated: false)
+        
+        if let _ = self as? HomePanelContextMenu {
+            table.dragDelegate = self
+        }
+        
+        // Set an empty footer to prevent empty cells from appearing in the list.
+        table.tableFooterView = UIView()
+    }
 
     private override init(nibName: String?, bundle: Bundle?) {
         fatalError("init(coder:) has not been implemented")
@@ -99,29 +117,12 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         super.viewDidLoad()
 
         view.addSubview(tableView)
-        tableView.snp.makeConstraints { make in
-            make.edges.equalTo(self.view)
-            return
-        }
-
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: CellIdentifier)
-        tableView.register(OneLineTableViewCell.self, forCellReuseIdentifier: OneLineCellIdentifier)
-        tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: HeaderIdentifier)
-        tableView.layoutMargins = .zero
-        tableView.keyboardDismissMode = .onDrag
-
-        tableView.accessibilityIdentifier = "SiteTable"
-        tableView.cellLayoutMarginsFollowReadableWidth = false
-        tableView.estimatedRowHeight = SiteTableViewControllerUX.RowHeight
-
-        // Set an empty footer to prevent empty cells from appearing in the list.
-        tableView.tableFooterView = UIView()
-
-        if let _ = self as? HomePanelContextMenu {
-            tableView.dragDelegate = self
-        }
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
     }
 
     deinit {

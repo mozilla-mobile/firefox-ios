@@ -30,6 +30,7 @@ extension PhotonActionSheetProtocol {
         return [bookmarks, history, downloads, readingList]
     }
     
+    // Not part of AppMenu, but left for future use. 
     func getHomeAction(vcDelegate: Self.PageOptionsVC) -> [PhotonActionSheetItem] {
         guard let tab = self.tabManager.selectedTab else { return [] }
         

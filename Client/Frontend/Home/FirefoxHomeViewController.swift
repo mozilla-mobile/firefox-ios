@@ -8,7 +8,6 @@ import Storage
 import SDWebImage
 import XCGLogger
 import SyncTelemetry
-import SnapKit
 
 private let log = Logger.browserLogger
 
@@ -39,6 +38,12 @@ struct FxHomeAccessibilityIdentifiers {
         static let pocket = "pocketTitle"
         static let library = "libraryTitle"
         static let topSites = "topSitesTitle"
+    }
+}
+
+struct FxHomeDevStrings {
+    struct GestureRecognizers {
+        static let dismissOverlay = "dismissOverlay"
     }
 }
 
@@ -162,6 +167,13 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
+    
+    private var tapGestureRecognizer: UITapGestureRecognizer {
+        let dismissOverlay = UITapGestureRecognizer(target: self, action: #selector(dismissOverlayMode))
+        dismissOverlay.name = FxHomeDevStrings.GestureRecognizers.dismissOverlay
+        
+        return dismissOverlay
+    }
 
     // Not used for displaying. Only used for calculating layout.
     lazy var topSiteCell: ASHorizontalScrollCell = {
@@ -169,12 +181,9 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         customCell.delegate = self.topSitesManager
         return customCell
     }()
-
-    lazy var defaultBrowserCard: DefaultBrowserCard = {
-        let card = DefaultBrowserCard()
+    lazy var defaultBrowserCard: DefaultBrowserCard = .build { card in
         card.backgroundColor = UIColor.theme.homePanel.topSitesBackground
-        return card
-    }()
+    }
 
     var pocketStories: [PocketStory] = []
 
@@ -201,10 +210,12 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     init(profile: Profile, experiments: NimbusApi = Experiments.shared) {
         self.profile = profile
         super.init(collectionViewLayout: flowLayout)
-        self.collectionView?.delegate = self
-        self.collectionView?.dataSource = self
+        collectionView?.delegate = self
+        collectionView?.dataSource = self
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
 
         collectionView?.addGestureRecognizer(longPressRecognizer)
+        collectionView?.addGestureRecognizer(tapGestureRecognizer)
 
         let refreshEvents: [Notification.Name] = [.DynamicFontChanged, .HomePanelPrefsChanged, .DisplayThemeChanged]
         refreshEvents.forEach { NotificationCenter.default.addObserver(self, selector: #selector(reload), name: $0, object: nil) }
@@ -224,16 +235,18 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
 
         if #available(iOS 14.0, *), !UserDefaults.standard.bool(forKey: "DidDismissDefaultBrowserCard") {
             self.view.addSubview(defaultBrowserCard)
-            defaultBrowserCard.snp.makeConstraints { make in
-                make.top.equalToSuperview()
-                make.bottom.equalTo(collectionView.snp.top)
-                make.width.lessThanOrEqualTo(508)
-                make.centerX.equalTo(self.view)
-            }
-            collectionView.snp.makeConstraints { make in
-                make.top.equalTo(defaultBrowserCard.snp.bottom)
-                make.bottom.left.right.equalToSuperview()
-            }
+            NSLayoutConstraint.activate([
+                defaultBrowserCard.topAnchor.constraint(equalTo: view.topAnchor),
+                defaultBrowserCard.bottomAnchor.constraint(equalTo: collectionView.topAnchor),
+                defaultBrowserCard.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                defaultBrowserCard.widthAnchor.constraint(equalToConstant: 380),
+                
+                collectionView.topAnchor.constraint(equalTo: defaultBrowserCard.bottomAnchor),
+                collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+                collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            ])
+
             defaultBrowserCard.dismissClosure = {
                 self.dismissDefaultBrowserCard()
             }
@@ -281,10 +294,12 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     
     public func dismissDefaultBrowserCard() {
         self.defaultBrowserCard.removeFromSuperview()
-        self.collectionView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.bottom.left.right.equalToSuperview()
-        }
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
     }
 
     @objc func reload(notification: Notification) {
@@ -302,6 +317,21 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
 
     func scrollToTop(animated: Bool = false) {
         collectionView?.setContentOffset(.zero, animated: animated)
+    }
+    
+    override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode()
+    }
+    
+    @objc func dismissOverlayMode() {
+        BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode()
+        if let gestureRecognizers = collectionView.gestureRecognizers {
+            for (index, gesture) in gestureRecognizers.enumerated() {
+                if gesture.name == FxHomeDevStrings.GestureRecognizers.dismissOverlay {
+                    collectionView.gestureRecognizers?.remove(at: index)
+                }
+            }
+        }
     }
     
     func configureItemsForRecentlySaved() {
