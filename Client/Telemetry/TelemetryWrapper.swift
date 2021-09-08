@@ -245,6 +245,9 @@ class TelemetryWrapper {
         }
         // System theme enabled
         GleanMetrics.Theme.useSystemTheme.set(ThemeManager.instance.systemThemeIsOn)
+        // Installed Mozilla applications
+        GleanMetrics.MozillaProducts.focus.set(UIApplication.shared.canOpenURL(URL(string: "firefox-focus://")!))
+        GleanMetrics.MozillaProducts.klar.set(UIApplication.shared.canOpenURL(URL(string: "firefox-klar://")!))
     }
 
     @objc func uploadError(notification: NSNotification) {
