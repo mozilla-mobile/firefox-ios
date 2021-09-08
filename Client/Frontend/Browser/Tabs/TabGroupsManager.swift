@@ -4,45 +4,12 @@
 
 import Foundation
 import Shared
+import MozillaAppServices
 
 struct TabGroup {
     var searchTermName: String
     var tabs: [Tab]
 }
-
-//class StopWatchTimer {
-//    private var startTime: Date?
-//    private var endTime: Date?
-//    var isActive: Bool = false
-//    var elpasedTime: TimeInterval? {
-//        guard let endTime = endTime, let startTime = startTime else { return nil }
-//        let diff = Date.difference(recent: endTime, previous: startTime)
-//        return endTime.timeIntervalSinceReferenceDate - startTime.timeIntervalSinceReferenceDate
-//    }
-//
-//    func startTimer() {
-//        startTime = Date()
-//        isActive = true
-//    }
-//
-//    func endTimer() {
-//        endTime = Date()
-//        isActive = false
-//    }
-//
-//    func pauseTimer() {
-//
-//    }
-//
-//    func resumeTimer() {
-//
-//    }
-//    func resetTimer() {
-//        startTime = nil
-//        endTime = nil
-//    }
-//
-//}
 
 class StopWatchTimer {
     private var timer: Timer?
@@ -65,7 +32,6 @@ class StopWatchTimer {
         elpasedTime = 0
         timer = nil
     }
-    
 }
 
 class TabGroupsManager {
@@ -78,5 +44,52 @@ class TabGroupsManager {
         var tabGroup = TabGroup(searchTermName: "", tabs: [Tab]())
         
         return tabGroup
+    }
+    
+    static func getTabGroups(profile: Profile, tabs: [Tab], completion: @escaping ([String: [Tab]]?) -> Void) {
+        profile.places.getSearchTermMetaData().uponQueue(.main) { result in
+            guard let val = result.successValue else { return completion(nil) }
+//            let model = val!.map { metadata in
+//                $0.key.searchTerm
+//            }
+            let searchTerms = Set(val!.map({ return $0.key.searchTerm }))
+            var searchTermMetaDataGroup : [String: [HistoryMetadata]] = [:]
+            
+            for term in searchTerms {
+                let elements = val!.filter({ $0.key.searchTerm == term })
+                searchTermMetaDataGroup[term!] = elements
+            }
+
+            
+            // check if urls in tab matches search term groups
+            var searchTermTabGroup: [String: [Tab]] = [:]
+            var tabCopy: [Tab] = [Tab]()
+            tabCopy.append(contentsOf: tabs)
+            for tab in tabCopy {
+                for (key,val) in searchTermMetaDataGroup {
+                    for metadatas in val {
+                        if tab.lastKnownUrl?.absoluteString == metadatas.key.url {
+                            if let tabGroup = searchTermTabGroup[key] {
+                                searchTermTabGroup[key]?.append(tab)
+                                break
+                            } else {
+                                searchTermTabGroup[key] = [Tab]()
+                                searchTermTabGroup[key]?.append(tab)
+                                break
+                            }
+                        }
+                    }
+                }
+            }
+            
+            
+//            for (key,val) in searchTermMetaDataGroup {
+//                for metadatas in val {
+//                    searchTermTabGroup = tabs.filter({ $0.url?.absoluteString == metadatas.key.url })
+//                }
+//            }
+            
+            completion(searchTermTabGroup)
+        }
     }
 }

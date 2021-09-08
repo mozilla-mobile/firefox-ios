@@ -71,10 +71,12 @@ class InactiveTabViewModel {
     var activeTabs = [Tab]()
     var recentlyClosedTabs = [Tab]()
     var historyViewModel = HistoryMetaDataViewModel()
+    var tabGroups: [String: [Tab]]?
     
-    func updateTabMeta(profile: Profile) {
-        for tab in tabs {
-            historyViewModel.updateHistorymetaData(url: tab.url?.absoluteString ?? "", profile: profile)
+    func updateTabMeta(profile: Profile, activeTabs: [Tab]) {
+        TabGroupsManager.getTabGroups(profile: profile, tabs: activeTabs) { tabGroups in
+            self.tabGroups = tabGroups
+            print(tabGroups)
         }
     }
     
@@ -100,7 +102,7 @@ class InactiveTabViewModel {
     /// it is not a given that a tab has an active/inactive state. Thus, we must
     /// assume that if we want to use active/inactive state, we can do so without
     /// that particular feature being active but still respecting that logic.
-    static func getActiveEligibleTabsFrom(_ tabs: [Tab]) -> [Tab] {
+    static func getActiveEligibleTabsFrom(_ tabs: [Tab], profile: Profile) -> [Tab] {
         var activeTabs = [Tab]()
 
         let currentDate = Date()
@@ -115,7 +117,7 @@ class InactiveTabViewModel {
                 activeTabs.append(tab)
             }
         }
-
+        
         return activeTabs
     }
 

@@ -48,6 +48,7 @@ protocol TabDisplayer: AnyObject {
 }
 
 enum TabDisplaySection: Int, CaseIterable {
+    case groupedTabs
     case regularTabs
     case inactiveTabs
 
@@ -55,6 +56,7 @@ enum TabDisplaySection: Int, CaseIterable {
         switch self {
         case .regularTabs: return Strings.ASPocketTitle2
         case .inactiveTabs: return Strings.RecentlySavedSectionTitle
+        default: return nil
         }
     }
     
@@ -62,6 +64,7 @@ enum TabDisplaySection: Int, CaseIterable {
         switch self {
         case .regularTabs: return UIImage.templateImageNamed("menu-pocket")
         case .inactiveTabs: return UIImage.templateImageNamed("menu-pocket")
+        default: return nil
         }
     }
 }
@@ -169,7 +172,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         // Make sure selected tab has latest time
         selectedTab?.lastExecutedTime = Date.now()
         inactiveViewModel.updateInactiveTabs(with: tabManager.selectedTab, tabs: allTabs)
-        inactiveViewModel.updateTabMeta(profile: profile)
+        inactiveViewModel.updateTabMeta(profile: profile, activeTabs: inactiveViewModel.activeTabs)
         isInactiveViewExpanded = inactiveViewModel.inactiveTabs.count > 0
         let recentlyClosedTabs = inactiveViewModel.recentlyClosedTabs
         if recentlyClosedTabs.count > 0 {
@@ -287,6 +290,8 @@ extension TabDisplayManager: UICollectionViewDataSource {
         if !shouldEnableInactiveTabs { return dataStore.count }
         if tabDisplayType == .TopTabTray { return dataStore.count }
         switch TabDisplaySection(rawValue: section) {
+        case .groupedTabs:
+            return 1
         case .regularTabs:
             return dataStore.count
         case .inactiveTabs:
@@ -305,6 +310,13 @@ extension TabDisplayManager: UICollectionViewDataSource {
         }
         assert(tabDisplayer != nil)
         switch TabDisplaySection(rawValue: indexPath.section) {
+        case .groupedTabs:
+            if let groupedCell = collectionView.dequeueReusableCell(withReuseIdentifier: GroupedTabCell.Identifier, for: indexPath) as? GroupedTabCell {
+                groupedCell.groupedTabsViewModel = inactiveViewModel
+                groupedCell.hasExpanded = true
+                groupedCell.tableView.reloadData()
+                cell = groupedCell
+            }
         case .regularTabs:
             cell = tabDisplayer?.cellFactory(for: cell, using: tab) ?? cell
         case .inactiveTabs:

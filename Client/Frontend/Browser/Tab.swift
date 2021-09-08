@@ -357,7 +357,6 @@ class Tab: NSObject {
             tabGroupsTimerHelper.pauseOrStop()
             tabHistoryCurrentState = state
         case .none:
-            print("nothing")
             tabHistoryCurrentState = state
         }
     }
@@ -592,9 +591,6 @@ class Tab: NSObject {
                 lastRequest = readerModeRequest
                 return webView.load(readerModeRequest)
             }
-//            if self.url?.absoluteString != request.url?.absoluteString {
-//                self.updateTimerAndObserving(state: .tabNavigatedToDifferentUrl)
-//            }
             lastRequest = request
             if let url = request.url, url.isFileURL, request.isPrivileged {
                 return webView.loadFileURL(url, allowingReadAccessTo: url)

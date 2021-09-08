@@ -66,6 +66,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         super.init(nibName: nil, bundle: nil)
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.register(TabCell.self, forCellWithReuseIdentifier: TabCell.Identifier)
+        collectionView.register(GroupedTabCell.self, forCellWithReuseIdentifier: GroupedTabCell.Identifier)
         collectionView.register(InactiveTabCell.self, forCellWithReuseIdentifier: InactiveTabCell.Identifier)
         tabDisplayManager = TabDisplayManager(collectionView: self.collectionView, tabManager: self.tabManager, tabDisplayer: self, reuseID: TabCell.Identifier, tabDisplayType: .TabGrid, profile: profile)
         collectionView.dataSource = tabDisplayManager
@@ -623,6 +624,27 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let cellWidth = floor((collectionView.bounds.width - GridTabTrayControllerUX.Margin * CGFloat(numberOfColumns + 1)) / CGFloat(numberOfColumns))
         switch TabDisplaySection(rawValue: indexPath.section) {
+        case .groupedTabs:
+            let width = collectionView.frame.size.width
+            if let inactiveViewModel = tabDisplayManager.inactiveViewModel, inactiveViewModel.activeTabs.count > 1 {
+                inactiveViewModel.updateTabMeta(profile: tabDisplayManager.profile, activeTabs: inactiveViewModel.activeTabs)
+
+                let height: CGFloat = GroupedTabCell.defaultCellHeight * CGFloat(inactiveViewModel.tabGroups?.keys.count ?? 0)
+                
+                //NOTE: DO NOT USE TEMP HEIGHT
+                let tempHeightForTesting = GroupedTabCell.defaultCellHeight * 2
+                
+                if UIDevice.current.userInterfaceIdiom == .pad {
+                    // TO BE CALCULATED - PROPERLY
+                    return CGSize(width: Int(collectionView.frame.size.width/2), height: 100)
+                } else {
+                    return CGSize(width: width >= 0 ? Int(width) : 0, height: Int(tempHeightForTesting))
+                }
+            } else {
+                return CGSize(width: 0, height: 0)
+            }
+//            let inactiveTabs = tabDisplayManager.inactiveViewModel?.updateTabMeta(profile: tabDisplayManager.profile, activeTabs: <#T##[Tab]#>)
+            
         case .regularTabs, .none:
             return CGSize(width: cellWidth, height: self.cellHeightForCurrentDevice())
         case .inactiveTabs:
