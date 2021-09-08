@@ -199,25 +199,15 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
         }
     }
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        section == 0 ? UIConstants.layout.trackingProtectionHeaderHeight : UIConstants.layout.trackingProtectionHeaderDefault
-    }
-    
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         if section == 1 {
             let footer = UITableViewCell(style: .subtitle, reuseIdentifier: "trackingProtectionStatusFooter")
             footer.textLabel?.text = trackingProtectionEnabled ? UIConstants.strings.trackingProtectionOn : UIConstants.strings.trackingProtectionOff
             footer.textLabel?.textColor = .primaryText.withAlphaComponent(0.6)
+            footer.textLabel?.numberOfLines = 0
             return footer
         }
         return nil
-    }
-    
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        if section == 1 {
-            return UIConstants.layout.trackingProtectionFooterHeight
-        }
-        return UIConstants.layout.trackingProtectionFooterDefault
     }
     
     @objc func tappedTrackingProtectionLearnMoreHeader(sender: UIGestureRecognizer) {
@@ -230,6 +220,7 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
         cell.textLabel?.text = String(format: UIConstants.strings.trackersBlockedSince, getAppInstallDate())
         cell.textLabel?.textColor = .primaryText.withAlphaComponent(0.6)
         cell.textLabel?.font = UIConstants.fonts.trackingProtectionStatsText
+        cell.textLabel?.numberOfLines = 0
         cell.detailTextLabel?.text = getNumberOfTrackersBlocked()
         cell.detailTextLabel?.textColor = .primaryText
         cell.detailTextLabel?.font = UIConstants.fonts.trackingProtectionStatsDetail
@@ -246,6 +237,7 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
         trackingProtectionToggle.toggle.isOn = Settings.getToggle(trackingProtectionToggle.setting)
         cell.textLabel?.text = trackingProtectionToggle.label
         cell.textLabel?.textColor = .primaryText
+        cell.textLabel?.numberOfLines = 0
         cell.accessoryView = PaddedSwitch(switchView: trackingProtectionToggle.toggle)
         cell.backgroundColor = .secondaryBackground
         cell.selectionStyle = .none
@@ -304,6 +296,7 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
         let header = UITableViewCell(style: .subtitle, reuseIdentifier: "trackersHeader")
         header.textLabel?.text = UIConstants.strings.trackersHeader.uppercased()
         header.textLabel?.textColor = .primaryText.withAlphaComponent(0.6)
+        header.textLabel?.numberOfLines = 0
         
         return header
     }
