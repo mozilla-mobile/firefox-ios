@@ -280,6 +280,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
             toggleContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             toggleContainer.topAnchor.constraint(equalTo: connectionView.bottomAnchor, constant: 32),
             toggleContainer.heightAnchor.constraint(equalToConstant: 92),
+            toggleContainer.widthAnchor.constraint(equalTo: view.widthAnchor),
 
             toggleView.leadingAnchor.constraint(equalTo: toggleContainer.leadingAnchor, constant: ETPMenuUX.UX.gutterDistance),
             toggleView.trailingAnchor.constraint(equalTo: toggleContainer.trailingAnchor, constant: -ETPMenuUX.UX.gutterDistance),
@@ -291,6 +292,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
             toggleLabel.centerYAnchor.constraint(equalTo: toggleView.centerYAnchor),
             toggleLabel.topAnchor.constraint(equalTo: toggleView.topAnchor, constant: 11),
             toggleLabel.bottomAnchor.constraint(equalTo: toggleView.bottomAnchor, constant: -11),
+            toggleLabel.widthAnchor.constraint(equalTo: toggleView.widthAnchor, multiplier: 0.80),
 
             toggleSwitch.centerYAnchor.constraint(equalTo: toggleView.centerYAnchor),
             toggleSwitch.trailingAnchor.constraint(equalTo: toggleView.trailingAnchor, constant: -ETPMenuUX.UX.gutterDistance),
