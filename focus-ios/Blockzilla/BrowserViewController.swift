@@ -81,7 +81,7 @@ class BrowserViewController: UIViewController {
         }
     }
     private var initialUrl: URL?
-    var tipManager: TipManager?
+    var tipManager: TipManager
     var shortcutManager: ShortcutsManager
 
     static let userDefaultsTrackersBlockedKey = "lifetimeTrackersBlocked"
@@ -423,12 +423,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func createHomeView() {
-        let homeView: HomeView
-        if TipManager.shared.shouldShowTips() {
-            homeView = HomeView(tipManager: tipManager)
-        } else {
-            homeView = HomeView()
-        }
+        let homeView = HomeView(tipManager: tipManager)
         homeView.delegate = self
         homeView.toolbar.toolset.delegate = self
         homeViewContainer.addSubview(homeView)
@@ -441,7 +436,6 @@ class BrowserViewController: UIViewController {
             homeView.removeFromSuperview()
         }
         self.homeView = homeView
-
     }
 
     private func createURLBar() {
@@ -1188,7 +1182,7 @@ extension BrowserViewController: PhotonActionSheetDelegate {
         let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.trackingProtectionToggle)
         telemetryEvent.addExtra(key: "to", value: enabled)
         Telemetry.default.recordEvent(telemetryEvent)
-        UserDefaults.standard.set(false, forKey: TipManager.TipKey.sitesNotWorkingTip)
+        TipManager.sitesNotWorkingTip = false
 
         webViewController.reload()
     }
@@ -1242,7 +1236,7 @@ extension BrowserViewController: TrackingProtectionDelegate {
         let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.trackingProtectionToggle)
         telemetryEvent.addExtra(key: "to", value: enabled)
         Telemetry.default.recordEvent(telemetryEvent)
-        UserDefaults.standard.set(false, forKey: TipManager.TipKey.sitesNotWorkingTip)
+        TipManager.sitesNotWorkingTip = false
 
         webViewController.reload()
     }
@@ -1333,25 +1327,24 @@ extension BrowserViewController: HomeViewDelegate {
         submit(url: url)
     }
 
-    func tipTapped() {
-        guard let tip = tipManager?.currentTip, tip.showVc else { return }
-        switch tip.identifier {
-        case TipManager.TipKey.releaseTip:
+    func didTapTip(_ tip: TipManager.Tip) {
+        guard let action = tip.action else { return }
+        switch action {
+        case .visit(let topic):
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.releaseTip)
-            visit(url: URL(forSupportTopic: .whatsNew))
-        case TipManager.TipKey.biometricTip:
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.biometricTip)
-            showSettings()
-        case TipManager.TipKey.siriEraseTip:
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.siriEraseTip)
-            showSettings(shouldScrollToSiri: true)
-        case TipManager.TipKey.siriFavoriteTip:
-            if #available(iOS 12.0, *) {
+            visit(url: URL(forSupportTopic: topic))
+        case .showSettings(let destination):
+            switch destination {
+            case .siri:
+                Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.siriEraseTip)
+                showSettings(shouldScrollToSiri: true)
+            case .biometric:
+                Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.biometricTip)
+                showSettings()
+            case .siriFavorite:
                 Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.siriFavoriteTip)
                 showSiriFavoriteSettings()
             }
-        default:
-            break
         }
     }
 }

@@ -7,7 +7,7 @@ import Telemetry
 
 protocol HomeViewDelegate: class {
     func shareTrackerStatsButtonTapped()
-    func tipTapped()
+    func didTapTip(_ tip: TipManager.Tip)
 }
 
 class HomeView: UIView {
@@ -19,6 +19,7 @@ class HomeView: UIView {
     private let pageControl = TipsPageControl()
     private let shieldLogo = UIImageView()
     private let textLogo = UIImageView()
+    private let tipManager: TipManager
 
     let toolbar = HomeViewToolbar()
     let trackerStatsShareButton = UIButton()
@@ -28,7 +29,8 @@ class HomeView: UIView {
         tipView.gestureRecognizers?.removeAll()
     }
 
-    init(tipManager: TipManager? = nil) {
+    init(tipManager: TipManager) {
+        self.tipManager = tipManager
         super.init(frame: CGRect.zero)
         rotated()
         NotificationCenter.default.addObserver(self, selector: #selector(rotated), name: UIDevice.orientationDidChangeNotification, object: nil)
@@ -62,7 +64,7 @@ class HomeView: UIView {
         tipDescriptionLabel.minimumScaleFactor = UIConstants.layout.homeViewLabelMinimumScale
         tipView.addSubview(tipDescriptionLabel)
         
-        pageControl.numberOfPages = tipManager?.numberOfTips() ?? 0
+        pageControl.numberOfPages = tipManager.numberOfTips()
         addSubview(pageControl)
         
 
@@ -142,19 +144,16 @@ class HomeView: UIView {
             make.left.equalToSuperview()
         }
 
-        if let tipManager = tipManager, let tip = tipManager.fetchTip() {
+        if let tip = tipManager.fetchTip() {
             showTipView()
-            switch tip.identifier {
-            case TipManager.TipKey.shareTrackersTip:
-                hideTextTip()
-                let numberOfTrackersBlocked = UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
-                showTrackerStatsShareButton(text: String(format: tip.description!, String(numberOfTrackersBlocked)))
-                Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.trackerStatsShareButton)
-            default:
-                hideTrackerStatsShareButton()
-                showTextTip(tip)
-            }
+            hideTrackerStatsShareButton()
+            showTextTip(tip)
             tipManager.currentTip = tip
+        } else {
+            showTipView()
+            hideTextTip()
+            showTrackerStatsShareButton(text: tipManager.shareTrackersDescription())
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.trackerStatsShareButton)
         }
     }
 
@@ -206,7 +205,7 @@ class HomeView: UIView {
         tipTitleLabel.text = tip.title
         tipTitleLabel.sizeToFit()
         tipTitleLabel.isHidden = false
-        if let description = tip.description, tip.showVc {
+        if let description = tip.description, tip.action != nil {
             tipDescriptionLabel.text = description
             tipDescriptionLabel.isUserInteractionEnabled = true
             let tap = UITapGestureRecognizer(target: self, action: #selector(HomeView.tapTip))
@@ -244,11 +243,11 @@ class HomeView: UIView {
     }
 
     @objc private func tapTip() {
-        delegate?.tipTapped()
+        guard let tip = tipManager.currentTip else { return }
+        delegate?.didTapTip(tip)
     }
     
     @objc private func swipeNextTip() {
-        let tipManager = TipManager.shared
         if let nextTip = tipManager.getNextTip() {
             showTextTip(nextTip)
             pageControl.currentPage = tipManager.currentTipIndex()
@@ -256,7 +255,6 @@ class HomeView: UIView {
     }
 
     @objc private func swipePreviousTip() {
-        let tipManager = TipManager.shared
         if let previousTip = tipManager.getPreviousTip() {
             showTextTip(previousTip)
             pageControl.currentPage = tipManager.currentTipIndex()

@@ -56,19 +56,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         let currentLaunchCount = UserDefaults.standard.integer(forKey: UIConstants.strings.userDefaultsLaunchCountKey)
         UserDefaults.standard.set(currentLaunchCount + 1, forKey: UIConstants.strings.userDefaultsLaunchCountKey)
 
-        // Set original default values for showing tips
-        let tipDefaults = [
-            TipManager.TipKey.releaseTip: true,
-            TipManager.TipKey.shortcutsTip: true,
-            TipManager.TipKey.sitesNotWorkingTip: true,
-            TipManager.TipKey.siriFavoriteTip: true,
-            TipManager.TipKey.biometricTip: true,
-            TipManager.TipKey.shareTrackersTip: true,
-            TipManager.TipKey.siriEraseTip: true,
-            TipManager.TipKey.requestDesktopTip: true,
-        ]
-        UserDefaults.standard.register(defaults: tipDefaults)
-
         // Disable localStorage.
         // We clear the Caches directory after each Erase, but WebKit apparently maintains
         // localStorage in-memory (bug 1319208), so we just disable it altogether.

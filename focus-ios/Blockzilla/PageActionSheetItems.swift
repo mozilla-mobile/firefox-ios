@@ -32,6 +32,7 @@ class PageActionSheetItems {
         let shortcut = Shortcut(url: self.url)
         ShortcutsManager.shared.addToShortcuts(shortcut: shortcut)
         GleanMetrics.Shortcuts.shortcutAddedCounter.add()
+        TipManager.shortcutsTip = false
     }
     
     lazy var removeFromShortcutsItem = PhotonActionSheetItem(title: UIConstants.strings.shareMenuRemoveFromShortcuts, iconString: "icon_shortcuts_remove") { action in
