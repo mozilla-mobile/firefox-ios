@@ -373,9 +373,9 @@ class BrowserViewController: UIViewController {
     func setupBackgroundImage() {
         switch UIDevice.current.userInterfaceIdiom {
         case .phone:
-            background.image = UIDevice.current.orientation.isLandscape ? #imageLiteral(resourceName: "background_iphone_landscape") : #imageLiteral(resourceName: "background_iphone_portrait")
+            background.image = UIApplication.shared.orientation?.isLandscape == true ? #imageLiteral(resourceName: "background_iphone_landscape") : #imageLiteral(resourceName: "background_iphone_portrait")
         case .pad:
-            background.image = UIDevice.current.orientation.isLandscape ? #imageLiteral(resourceName: "background_ipad_landscape") : #imageLiteral(resourceName: "background_ipad_portrait")
+            background.image = UIApplication.shared.orientation?.isLandscape == true ? #imageLiteral(resourceName: "background_ipad_landscape") : #imageLiteral(resourceName: "background_ipad_portrait")
         default:
             background.image = #imageLiteral(resourceName: "background_iphone_portrait")
             

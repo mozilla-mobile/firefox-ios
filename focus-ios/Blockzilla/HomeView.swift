@@ -180,13 +180,7 @@ class HomeView: UIView {
     }
 
     @objc private func rotated() {
-        let orientation = UIApplication
-            .shared
-            .windows
-            .first(where: { $0.isKeyWindow })?
-            .windowScene?
-            .interfaceOrientation
-        if orientation?.isLandscape == true {
+        if UIApplication.shared.orientation?.isLandscape == true {
             hideTextLogo()
         } else {
             showTextLogo()
