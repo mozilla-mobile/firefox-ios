@@ -1,8 +1,8 @@
 /* Description for the 'History' panel in the First Run tour. */
-"Intro.Slides.History.Description" = "Limpe todo o seu histórico de navegação, senhas e cookies a qualquer momento, com um simples toque.";
+"Intro.Slides.History.Description" = "Limpe todo o histórico, senhas e cookies da sessão de navegação quando quiser, com um simples toque.";
 
 /* Title for the third  panel 'History' in the First Run tour. */
-"Intro.Slides.History.Title" = "O seu histórico é história";
+"Intro.Slides.History.Title" = "Seu histórico é passado";
 
 /* Button to go to the next card in Focus onboarding. */
 "Intro.Slides.Next.Button" = "Próximo";
@@ -17,7 +17,7 @@
 "Intro.Slides.Skip.Button" = "Pular";
 
 /* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description" = "Leve a navegação privativa ao próximo nível. Bloqueie propagandas e outros conteúdos que podem rastrear você entre os sites e diminuir o tempo de carregamento das páginas.";
+"Intro.Slides.Welcome.Description" = "Leve a navegação privativa ao próximo nível. Bloqueie anúncios e outros conteúdos que podem rastrear você entre sites e aumentar o tempo de carregamento de páginas.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title" = "Potencialize sua privacidade";

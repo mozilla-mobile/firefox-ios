@@ -79,9 +79,3 @@
 /* Label for enable option on search suggestions prompt */
 "SearchSuggestions.promptEnable" = "Jā";
 
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Nē, paldies";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Es saprotu";
-

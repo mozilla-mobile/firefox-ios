@@ -86,7 +86,7 @@
 "Autocomplete.customUrlAdded" = "Adicionada nova URL personalizada.";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"Autocomplete.defaultDescriptoin" = "Ative para o %@ completar automaticamente de mais de 450 URLs populares na barra de endereços.";
+"Autocomplete.defaultDescriptoin" = "Ative para o %@ completar automaticamente mais de 450 URLs populares na barra de endereços.";
 
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.defaultLabel" = "Completar automaticamente";
@@ -179,7 +179,7 @@
 "contextMenu.shareLinkTitle" = "Compartilhar link";
 
 /* Label on button to complete edits */
-"Done" = "Concluído";
+"Done" = "Pronto";
 
 /* Label on button to allow edits */
 "Edit" = "Editar";
@@ -230,7 +230,7 @@
 "FindInPage.PreviousResult" = "Procurar ocorrência anterior na página";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.lastSlide.buttonLabel" = "OK, entendi!";
+"FirstRun.lastSlide.buttonLabel" = "OK, entendi";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "Bloqueie automaticamente rastreadores online ao navegar. Depois toque para apagar páginas visitadas, pesquisas, cookies e senhas do seu dispositivo.";
@@ -305,7 +305,7 @@
 "SearchSuggestions.promptTitle" = "Mostrar sugestões de pesquisa?";
 
 /* Title for the URL Autocomplete row */
-"Settings.autocompleteSection" = "Completar URL automaticamente";
+"Settings.autocompleteSection" = "Completar URLs automaticamente";
 
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "O bloqueio de outros rastreadores pode quebrar alguns vídeos e páginas da Web.";
@@ -317,10 +317,10 @@
 "Settings.blockOtherYes2" = "Bloquear rastreadores de conteúdo";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSearchSuggestion" = "O %@ enviará o que você escreve na barra de endereços para seu mecanismo de pesquisa.";
+"Settings.detailTextSearchSuggestion" = "O %@ envia o que você escreve na barra de endereços para seu mecanismo de pesquisa.";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSendUsageData" = "A Mozilla se empenha para coletar somente o que é necessário para melhorar o %@ para todos.";
+"Settings.detailTextSendUsageData" = "A Mozilla se empenha em coletar somente o necessário para fornecer e melhorar o %@ para todos.";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Saiba mais.";
@@ -353,7 +353,7 @@
 "Settings.Search.NewSearchEngineAdded" = "Novo mecanismo de pesquisa adicionado.";
 
 /* Label for button to bring deleted default engines back */
-"Settings.Search.RestoreEngine" = "Restaurar os mecanismos de pesquisa padrões";
+"Settings.Search.RestoreEngine" = "Restaurar mecanismos de pesquisa padrão";
 
 /* Placeholder text for input of new search engine name */
 "Settings.Search.SearchEngineName" = "Nome do mecanismo de pesquisa";
@@ -560,7 +560,7 @@
 "trackingProtection.trackerDescriptionLabel2" = "Mantenha seus dados com você. O %@ te protege de muitos dos rastreadores mais comuns que tentam seguir o que você faz online.";
 
 /* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
-"trackingProtection.trackersBlockedLabel" = "Rastreadores bloqueados desde %@";
+"trackingProtection.trackersBlockedLabel" = "Bloqueados desde %@";
 
 /* Text for the header of trackers section from Tracking Protection. */
 "trackingProtection.trackersHeader" = "Rastreadores e scripts a bloquear";
@@ -578,7 +578,7 @@
 "URL.eraseButtonLabel" = "APAGAR";
 
 /* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel2" = "Histórico de navegação foi limpo";
+"URL.eraseMessageLabel2" = "O histórico de navegação foi limpo";
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Procurar na página: %@";
@@ -587,10 +587,10 @@
 "URL.paste" = "Colar";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "Pesquisar ou digitar um endereço";
+"URL.placeholderText" = "Pesquise ou digite um endereço";
 
 /* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "Pesquisar por %@";
+"URL.searchLabel" = "Pesquisar %@";
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "Rastreadores bloqueados";

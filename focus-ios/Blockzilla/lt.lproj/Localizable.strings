@@ -301,12 +301,6 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Blokuojant kitus turinio stebėjimo elementus, gali sutrikti kai kurių vaizdo įrašų ir tinklalapių veikimas.";
 
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Ne, ačiū";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Taip, suprantu";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "„%@“ perduos jūsų ieškyklei tai, ką rašote adreso lauke.";
 
@@ -383,31 +377,7 @@
 "Settings.sectionSecurity" = "SAUGA";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Blokuoti reklaminius stebėjimo elementus";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Kai kurios reklamos stebi apsilankymus svetainėse, net jeigu ir nespustelite jų";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Blokuoti analizės stebėjimo elementus";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Šie elementai naudojami rinkti, analizuoti ir matuoti tokioms veikloms, kaip bakstelėjimai ar slinkimas";
-
-/* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Blokuoti saityno šriftus";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Blokuoti kitus turinio stebėjimo elementus";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Įjungus gali sutrikti kai kurių tinklalapių veikimas";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Blokuoti socialinius stebėjimo elementus";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Šie elementai įterpiami svetainėse, siekiant stebėti jūsų apsilankymus ir rodyti tokias funkcijas, kaip dalijimosi mygtukai";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Naudoti veido atpažinimą programai atrakinti";
@@ -525,12 +495,6 @@
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Išjungti iki užversite „%@“ arba bakstelėsite VALYTI.";
-
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Apsauga nuo stebėjimo";
-
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Pasirinkite, ar „%@“ turėtų blokuoti reklaminius, analizės, socialinius ir kitus stebėjimo elementus.";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Įtraukti saitą į automatinį užbaigimą";
