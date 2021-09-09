@@ -149,7 +149,7 @@ class HomeView: UIView {
             hideTrackerStatsShareButton()
             showTextTip(tip)
             tipManager.currentTip = tip
-        } else {
+        } else if tipManager.shouldShowTips() {
             showTipView()
             hideTextTip()
             showTrackerStatsShareButton(text: tipManager.shareTrackersDescription())
