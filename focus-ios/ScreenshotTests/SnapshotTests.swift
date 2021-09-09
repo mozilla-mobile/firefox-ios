@@ -43,24 +43,39 @@ class SnapshotTests: XCTestCase {
         snapshot("08Settings")
         app.swipeUp()
         snapshot("9Settings")
+
+        // Siri menu
+        waitForExistence(app.cells["settingsViewController.siriOpenURLCell"])
+        app.cells["settingsViewController.siriOpenURLCell"].tap()
+        snapshot("SiriMenu")
+        app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).tap()
+        waitForExistence(app.cells["settingsViewController.siriOpenURLCell"])
         app.swipeDown()
 
+        // Tracking Protection menu
+        waitForExistence(app.cells["settingsViewController.trackingCell"])
         app.cells["settingsViewController.trackingCell"].tap()
         snapshot("10SettingsBlockOtherContentTrackers")
         app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).tap()
 
-        app.cells["SettingsViewController.searchCell"].tap()
-        snapshot("11SettingsSearchEngine")
-        app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).tap()
-
+        // AutoCompleteURL menus
+        waitForExistence(app.cells["SettingsViewController.autocompleteCell"], timeout: 5)
         app.cells["SettingsViewController.autocompleteCell"].tap()
-        snapshot("12SettingsSearchEngine")
+        snapshot("12AutocompleteCell")
+
+        app.cells["customURLS"].tap()
+        snapshot("AddCustomURL")
+        app.cells["addCustomDomainCell"].tap()
+        snapshot("AddCustomURLFields")
+        app.textFields["urlInput"].typeText("mozilla\n")
+        snapshot("AddedCustomURL")
     }
     
     func test03About() {
         dismissURLBarFocused()
         app.buttons["HomeView.settingsButton"].tap()
         app.tables.cells["icon_settings"].tap()
+        waitForExistence(app.cells["settingsViewController.about"])
         app.cells["settingsViewController.about"].tap()
         snapshot("13About")
     }
@@ -78,6 +93,7 @@ class SnapshotTests: XCTestCase {
         dismissURLBarFocused()
         app.buttons["HomeView.settingsButton"].tap()
         app.tables.cells["icon_settings"].tap()
+        waitForExistence(app.tables.switches["BlockerToggle.Safari"])
         app.tables.switches["BlockerToggle.Safari"].tap()
         snapshot("15SafariIntegrationInstructions")
     }
@@ -113,29 +129,20 @@ class SnapshotTests: XCTestCase {
         searchOrEnterAddressTextField.press(forDuration: 2)
         snapshot("18PasteAndGo")
     }
-    
-    func test09TrackingProtection() {
-        // Inject a string into clipboard
-        let clipboardString = "Hello world"
-        UIPasteboard.general.string = clipboardString
 
-        // Enter 'bugzilla.mozilla.org' on the search field as its URL does not change for locale.
-        let searchOrEnterAddressTextField = app.textFields["URLBar.urlText"]
-        searchOrEnterAddressTextField.tap()
-        searchOrEnterAddressTextField.typeText("bugzilla.mozilla.org\n")
-        
-        // Check the correct site is reached
-        waitForExistence(app.otherElements["URLBar.trackingProtectionIcon"], timeout: 5)
-        app.otherElements["URLBar.trackingProtectionIcon"].tap()
-        snapshot("19TrackingProtection")
-    }
-    
     func test10CustomSearchEngines() {
         dismissURLBarFocused()
         app.buttons["HomeView.settingsButton"].tap()
+        snapshot("20HomeViewSettings")
         app.tables.cells["icon_settings"].tap()
+        waitForExistence(app.cells["SettingsViewController.searchCell"])
         app.cells["SettingsViewController.searchCell"].tap()
-        snapshot("20CustomSearchEngines")
+        snapshot("SettingsSearchEngine")
+        app.cells["addSearchEngine"].tap()
+        snapshot("AddSearchEngine")
+        app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).tap()
+        waitForExistence(app.cells["addSearchEngine"])
+        app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).tap()
     }
 
     func test11WebsiteView() {
@@ -145,8 +152,6 @@ class SnapshotTests: XCTestCase {
 
         app.typeText("\n")
         waitForValueContains(app.textFields["URLBar.urlText"], value: "bugzilla.mozilla.org")
-        snapshot("05EraseButton")
-
         app.buttons["URLBar.deleteButton"].tap()
         snapshot("07YourBrowsingHistoryHasBeenErased")
     }
