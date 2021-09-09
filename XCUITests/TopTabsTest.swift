@@ -137,7 +137,7 @@ class TopTabsTest: BaseTestCase {
         navigator.goto(URLBarOpen)
         navigator.back()
         if iPad() {
-            navigator.goto(TabTray
+            navigator.goto(TabTray)
         }
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
 

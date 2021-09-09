@@ -34,8 +34,7 @@ class ToolbarTests: BaseTestCase {
         XCTAssertTrue(urlPlaceholder == defaultValuePlaceholder, "The placeholder does not show the correct value")
         XCTAssertFalse(app.buttons["URLBarView.backButton"].isEnabled)
         XCTAssertFalse(app.buttons["Forward"].isEnabled)
-        // Enable once rebasing main
-        // XCTAssertFalse(app.buttons["Reload"].isEnabled)
+        XCTAssertFalse(app.buttons["Search"].isEnabled)
 
         // Navigate to two pages and press back once so that all buttons are enabled in landscape mode.
         navigator.openURL(website1["url"]!)
@@ -45,8 +44,7 @@ class ToolbarTests: BaseTestCase {
         XCTAssertEqual(valueMozilla, urlValueLong)
         XCTAssertTrue(app.buttons["URLBarView.backButton"].isEnabled)
         XCTAssertFalse(app.buttons["Forward"].isEnabled)
-        // error in landscape, look for issue
-//        XCTAssertTrue(app.buttons["Reload"].isEnabled)
+        XCTAssertTrue(app.buttons["Reload"].isEnabled)
 
         navigator.openURL(website2)
         waitUntilPageLoad()
