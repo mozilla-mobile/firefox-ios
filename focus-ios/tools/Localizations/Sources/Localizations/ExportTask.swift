@@ -50,8 +50,6 @@ struct ExportTask {
         "nn" : "nn-NO",
         "sv" : "sv-SE",
         "fil" : "tl",
-        "tzm" : "zgh",
-        "sat-Olck" : "sat",
     ]
     
     private var EXPORT_BASE_PATH: String {

@@ -33,14 +33,11 @@ struct ImportTask {
 
     // Pontoon has slightly different keys than Xcode for a handful of locales.
     private let LOCALE_MAPPING = [
-        "es-ES": "es",
         "ga-IE": "ga",
         "nb-NO": "nb",
         "nn-NO": "nn",
         "sv-SE": "sv",
         "tl"   : "fil",
-        "zgh"  : "tzm",
-        "sat"  : "sat-Olck"
     ]
 
     // We don't want to expose these to our localization team
@@ -53,7 +50,6 @@ struct ImportTask {
     // Locales that we do not want to import
     private let EXCLUDED_LOCALES: Set<String> = [
         "en-US", // This is our base language and the source of truth is in the app, not Pontoon
-        "es-ES", "lt", "lv" // These are only excluded because they are new and we don't know yet what to do with them
     ]
 
     // InfoPlist.strings requre these keys to have content or the application will crash
