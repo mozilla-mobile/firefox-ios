@@ -171,6 +171,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     private var tapGestureRecognizer: UITapGestureRecognizer {
         let dismissOverlay = UITapGestureRecognizer(target: self, action: #selector(dismissOverlayMode))
         dismissOverlay.name = FxHomeDevStrings.GestureRecognizers.dismissOverlay
+        dismissOverlay.cancelsTouchesInView = false
         
         return dismissOverlay
     }
