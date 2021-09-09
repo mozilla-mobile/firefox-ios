@@ -14,6 +14,10 @@ class TabTrayViewModel {
     let tabTrayView: TabTrayViewDelegate
     let syncedTabsController: RemoteTabsPanel
 
+    var normalTabsCount: String {
+        (tabManager.normalTabs.count < 100) ? tabManager.normalTabs.count.description : "\u{221E}"
+    }
+
     init(tabTrayDelegate: TabTrayDelegate? = nil, profile: Profile, showChronTabs: Bool = false) {
         self.profile = profile
         self.tabManager = BrowserViewController.foregroundBVC().tabManager
