@@ -161,6 +161,7 @@ class TabTrayV2ViewModel: NSObject {
 
         let tabCount = self.getTabs().count
         tabManager.removeTabAndUpdateSelectedIndex(tab)
+        NotificationCenter.default.post(name: .TabClosed, object: nil)
         if tabCount == 1 && self.getTabs().count == 1 {
             // The last tab was removed. Dismiss the tab tray
             self.viewController.dismissTabTray()

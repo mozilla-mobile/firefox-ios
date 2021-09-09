@@ -85,7 +85,7 @@ class TabTrayViewController: UIViewController {
         label.font = TabsButtonUX.TitleFont
         label.layer.cornerRadius = TabsButtonUX.CornerRadius
         label.textAlignment = .center
-        label.text = (viewModel.tabManager.normalTabs.count < 100) ? viewModel.tabManager.normalTabs.count.description : "\u{221E}"
+        label.text = viewModel.normalTabsCount
         return label
     }()
 
@@ -225,6 +225,7 @@ class TabTrayViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .DisplayThemeChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .ProfileDidStartSyncing, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .ProfileDidFinishSyncing, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .TabClosed, object: nil)
     }
 
     fileprivate func updateTitle() {
@@ -310,6 +311,9 @@ class TabTrayViewController: UIViewController {
             applyTheme()
         case .ProfileDidStartSyncing, .ProfileDidFinishSyncing:
             updateButtonTitle(notification)
+        case .TabClosed:
+            countLabel.text = viewModel.normalTabsCount
+            iPhoneNavigationMenuIdentifiers.setImage(UIImage(named: "nav-tabcounter")!.overlayWith(image: countLabel), forSegmentAt: 0)
         default:
             break
         }
