@@ -17,7 +17,7 @@ legacy.ids:
     data_reviews:
       - https://github.com/mozilla-mobile/focus-ios/pull/1741#issuecomment-705853690
     notification_emails:
-      - firefox-focus@mozilla.com
+      - focus-ios-data-stewards@mozilla.com
       - sarentz@mozilla.com
     expires: never
 
@@ -35,7 +35,7 @@ mozilla_products:
       - technical
       - interaction
     notification_emails:
-      - firefox-focus@mozilla.com
+      - focus-ios-data-stewards@mozilla.com
     expires: "2022-09-01"
 
 settings_screen:
@@ -51,7 +51,7 @@ settings_screen:
     data_sensitivity:
       - interaction
     notification_emails:
-      - firefox-focus@mozilla.com
+      - focus-ios-data-stewards@mozilla.com
     expires: "2022-08-17"
 
 tracking_protection:
@@ -67,7 +67,7 @@ tracking_protection:
     data_sensitivity:
       - interaction
     notification_emails:
-      - firefox-focus@mozilla.com
+      - focus-ios-data-stewards@mozilla.com
     expires: "2022-08-17"
 
   tracking_protection_changed:
@@ -81,7 +81,7 @@ tracking_protection:
     data_sensitivity:
       - interaction
     notification_emails:
-      - firefox-focus@mozilla.com
+      - focus-ios-data-stewards@mozilla.com
     expires: "2022-08-17"
     extra_keys:
       is_enabled:
@@ -101,7 +101,7 @@ tracking_protection:
       - interaction
     lifetime: user
     notification_emails:
-      - firefox-focus@mozilla.com
+      - focus-ios-data-stewards@mozilla.com
       - sarentz@mozilla.com
     expires: never
 
@@ -116,7 +116,7 @@ tracking_protection:
     data_sensitivity:
       - interaction
     notification_emails:
-      - firefox-focus@mozilla.com
+      - focus-ios-data-stewards@mozilla.com
     expires: "2022-08-17"
     extra_keys:
       source_of_change:
@@ -142,7 +142,7 @@ tracking_protection:
     data_sensitivity:
       - interaction
     notification_emails:
-      - firefox-focus@mozilla.com
+      - focus-ios-data-stewards@mozilla.com
     expires: "2022-08-17"
 
   has_advertising_blocked:
@@ -157,7 +157,7 @@ tracking_protection:
     data_sensitivity:
       - interaction
     notification_emails:
-      - firefox-focus@mozilla.com
+      - focus-ios-data-stewards@mozilla.com
     expires: "2022-08-17"
 
   has_analytics_blocked:
@@ -172,7 +172,7 @@ tracking_protection:
     data_sensitivity:
       - interaction
     notification_emails:
-      - firefox-focus@mozilla.com
+      - focus-ios-data-stewards@mozilla.com
     expires: "2022-08-17"
 
   has_content_blocked:
@@ -187,7 +187,7 @@ tracking_protection:
     data_sensitivity:
       - interaction
     notification_emails:
-      - firefox-focus@mozilla.com
+      - focus-ios-data-stewards@mozilla.com
     expires: "2022-08-17"
 
 shortcuts:
@@ -203,7 +203,7 @@ shortcuts:
     data_sensitivity:
       - interaction
     notification_emails:
-      - firefox-focus@mozilla.com
+      - focus-ios-data-stewards@mozilla.com
     expires: "2022-08-20"
     unit: shortcut(s)
   shortcut_opened_counter:
@@ -218,7 +218,7 @@ shortcuts:
     data_sensitivity:
       - interaction
     notification_emails:
-      - firefox-focus@mozilla.com
+      - focus-ios-data-stewards@mozilla.com
     expires: "2022-08-20"
   shortcut_added_counter:
     type: counter
@@ -232,7 +232,7 @@ shortcuts:
     data_sensitivity:
       - interaction
     notification_emails:
-      - firefox-focus@mozilla.com
+      - focus-ios-data-stewards@mozilla.com
     expires: "2022-08-20"
   shortcut_removed_counter:
     type: labeled_counter
@@ -247,7 +247,7 @@ shortcuts:
     data_sensitivity:
       - interaction
     notification_emails:
-      - firefox-focus@mozilla.com
+      - focus-ios-data-stewards@mozilla.com
     expires: "2022-08-20"
     labels:
       - removed_from_browser_menu
