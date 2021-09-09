@@ -72,11 +72,17 @@ class InactiveTabViewModel {
     var recentlyClosedTabs = [Tab]()
     var historyViewModel = HistoryMetaDataViewModel()
     var tabGroups: [String: [Tab]]?
+    var urlGroups: [String: [URL]]?
     
-    func updateTabMeta(profile: Profile, activeTabs: [Tab]) {
-        TabGroupsManager.getTabGroups(profile: profile, tabs: activeTabs) { tabGroups in
+    var filteredActiveTabs = [Tab]()
+
+    func updateTabMeta(profile: Profile, activeTabs: [Tab], completion: @escaping ([String: [Tab]]?, _ filteredTabs: [Tab]) -> Void) {
+        TabGroupsManager.getTabGroups(profile: profile, tabs: activeTabs) { tabGroups, filteredActiveTabs  in
             self.tabGroups = tabGroups
-            print(tabGroups)
+            self.filteredActiveTabs = filteredActiveTabs
+            completion(tabGroups, filteredActiveTabs)
+//            let groupedTabs: [Tab] = self.tabGroups!.values.flatMap { $0 }
+//            self.activeTabs = self.activeTabs.filter { return !groupedTabs.contains($0) }
         }
     }
     

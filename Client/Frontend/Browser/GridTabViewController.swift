@@ -627,18 +627,18 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
         case .groupedTabs:
             let width = collectionView.frame.size.width
             if let inactiveViewModel = tabDisplayManager.inactiveViewModel, inactiveViewModel.activeTabs.count > 1 {
-                inactiveViewModel.updateTabMeta(profile: tabDisplayManager.profile, activeTabs: inactiveViewModel.activeTabs)
+                inactiveViewModel.updateTabMeta(profile: tabDisplayManager.profile, activeTabs: inactiveViewModel.activeTabs) { _,_ in }
 
                 let height: CGFloat = GroupedTabCell.defaultCellHeight * CGFloat(inactiveViewModel.tabGroups?.keys.count ?? 0)
                 
                 //NOTE: DO NOT USE TEMP HEIGHT
-                let tempHeightForTesting = GroupedTabCell.defaultCellHeight * 2
+//                let tempHeightForTesting = GroupedTabCell.defaultCellHeight * 2
                 
                 if UIDevice.current.userInterfaceIdiom == .pad {
                     // TO BE CALCULATED - PROPERLY
                     return CGSize(width: Int(collectionView.frame.size.width/2), height: 100)
                 } else {
-                    return CGSize(width: width >= 0 ? Int(width) : 0, height: Int(tempHeightForTesting))
+                    return CGSize(width: width >= 0 ? Int(width) : 0, height: Int(height))
                 }
             } else {
                 return CGSize(width: 0, height: 0)

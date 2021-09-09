@@ -93,12 +93,12 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         
         return inactiveNimbusExperimentStatus ? inactiveNimbusExperimentStatus : profile.prefs.boolForKey(PrefsKeys.KeyEnableInactiveTabs) ?? false
     }
-    
-    private var tabsToDisplay: [Tab] {
-        if shouldEnableInactiveTabs { return getTabsAndUpdateInactiveState() }
-        let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
-        return allTabs
-    }
+    var filteredTabs = [Tab]()
+//    private var tabsToDisplay: [Tab] {
+//        if shouldEnableInactiveTabs { return getTabsAndUpdateInactiveState() }
+//        let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
+//        return allTabs
+//    }
 
     private(set) var isPrivate = false
 
@@ -145,10 +145,12 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         tabManager.addDelegate(self)
         register(self, forTabEvents: .didLoadFavicon, .didChangeURL)
         self.dataStore.removeAll()
-        tabsToDisplay.forEach {
-            self.dataStore.insert($0)
+        getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
+            tabsToDisplay.forEach {
+                self.dataStore.insert($0)
+            }
+            self.collectionView.reloadData()
         }
-        collectionView.reloadData()
     }
     
     func setupExperiment() {
@@ -164,22 +166,40 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     /// This is a helper method to update inactive tab state and should not be called directly
     /// Even when we have inactive tabs enabled try to call `tabsToDisplay`
     /// `tabsToDisplay` will make sure to get the correct set ot tabs and also check if feature is enabled
-    private func getTabsAndUpdateInactiveState() -> [Tab] {
+    private func getTabsAndUpdateInactiveState(completion: @escaping ([String: [Tab]]?, [Tab]) -> Void) {
+        guard shouldEnableInactiveTabs else {
+            completion(nil, self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs)
+            return
+        }
         let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
-        guard allTabs.count > 0, let inactiveViewModel = inactiveViewModel else { return [Tab]() }
-        guard allTabs.count > 1 else { return allTabs }
+        guard allTabs.count > 0, let inactiveViewModel = inactiveViewModel else {
+            completion(nil, [Tab]())
+            return
+        }
+        guard allTabs.count > 1 else {
+            completion(nil, allTabs)
+            return
+        }
         let selectedTab = tabManager.selectedTab
         // Make sure selected tab has latest time
         selectedTab?.lastExecutedTime = Date.now()
         inactiveViewModel.updateInactiveTabs(with: tabManager.selectedTab, tabs: allTabs)
-        inactiveViewModel.updateTabMeta(profile: profile, activeTabs: inactiveViewModel.activeTabs)
-        isInactiveViewExpanded = inactiveViewModel.inactiveTabs.count > 0
-        let recentlyClosedTabs = inactiveViewModel.recentlyClosedTabs
-        if recentlyClosedTabs.count > 0 {
-            tabManager.removeTabs(recentlyClosedTabs, shouldNotify: true)
-            tabManager.selectTab(selectedTab)
+        inactiveViewModel.updateTabMeta(profile: profile, activeTabs: inactiveViewModel.activeTabs) { tabGroup, filteredActiveTabs in
+            completion(tabGroup, filteredActiveTabs)
+            self.isInactiveViewExpanded = inactiveViewModel.inactiveTabs.count > 0
+            let recentlyClosedTabs = inactiveViewModel.recentlyClosedTabs
+            if recentlyClosedTabs.count > 0 {
+                self.tabManager.removeTabs(recentlyClosedTabs, shouldNotify: true)
+                self.tabManager.selectTab(selectedTab)
+            }
         }
-        return inactiveViewModel.activeTabs
+//        isInactiveViewExpanded = inactiveViewModel.inactiveTabs.count > 0
+//        let recentlyClosedTabs = inactiveViewModel.recentlyClosedTabs
+//        if recentlyClosedTabs.count > 0 {
+//            tabManager.removeTabs(recentlyClosedTabs, shouldNotify: true)
+//            tabManager.selectTab(selectedTab)
+//        }
+//        return inactiveViewModel.activeTabs
     }
     
     func togglePrivateMode(isOn: Bool, createTabOnEmptyPrivateMode: Bool) {
@@ -198,10 +218,11 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
                 tabManager.addTab(isPrivate: true)
             }
         }
-        
-        let tab = mostRecentTab(inTabs: tabsToDisplay) ?? tabsToDisplay.last
-        if let tab = tab {
-            tabManager.selectTab(tab)
+        getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
+            let tab = mostRecentTab(inTabs: tabsToDisplay) ?? tabsToDisplay.last
+            if let tab = tab {
+                self.tabManager.selectTab(tab)
+            }
         }
     }
 
@@ -222,23 +243,26 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     func refreshStore(evenIfHidden: Bool = false) {
         operations.removeAll()
         dataStore.removeAll()
-        tabsToDisplay.forEach {
-            self.dataStore.insert($0)
-        }
-        collectionView.reloadData()
-        if evenIfHidden {
-            // reloadData() will reset the data for the collection view,
-            // but if called when offscreen it will not render properly,
-            // unless reloadItems is explicitly called on each item.
-            // Avoid calling with evenIfHidden=true, as it can cause a blink effect as the cell is updated.
-            // The cause of the blinking effect is unknown (and unusual).
-            var indexPaths = [IndexPath]()
-            for i in 0..<collectionView.numberOfItems(inSection: 0) {
-                indexPaths.append(IndexPath(item: i, section: 0))
+        
+        getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
+            tabsToDisplay.forEach {
+                self.dataStore.insert($0)
             }
-            collectionView.reloadItems(at: indexPaths)
+            self.collectionView.reloadData()
+            if evenIfHidden {
+                // reloadData() will reset the data for the collection view,
+                // but if called when offscreen it will not render properly,
+                // unless reloadItems is explicitly called on each item.
+                // Avoid calling with evenIfHidden=true, as it can cause a blink effect as the cell is updated.
+                // The cause of the blinking effect is unknown (and unusual).
+                var indexPaths = [IndexPath]()
+                for i in 0..<self.collectionView.numberOfItems(inSection: 0) {
+                    indexPaths.append(IndexPath(item: i, section: 0))
+                }
+                self.collectionView.reloadItems(at: indexPaths)
+            }
+            self.tabDisplayer?.focusSelectedTab()
         }
-        tabDisplayer?.focusSelectedTab()
     }
 
     // The user has tapped the close button or has swiped away the cell
@@ -251,13 +275,16 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
             return
         }
         
-        if self.isPrivate == false, tabsToDisplay.count == 1 {
-            tabManager.removeTabs([tab])
-            tabManager.selectTab(tabManager.addTab())
-            return
+        getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
+            if self.isPrivate == false, tabsToDisplay.count == 1 {
+                self.tabManager.removeTabs([tab])
+                self.tabManager.selectTab(self.tabManager.addTab())
+                return
+            }
+
+            self.tabManager.removeTabAndUpdateSelectedIndex(tab)
         }
 
-        tabManager.removeTabAndUpdateSelectedIndex(tab)
     }
 
     private func recordEventAndBreadcrumb(object: TelemetryWrapper.EventObject, method: TelemetryWrapper.EventMethod) {
@@ -367,10 +394,12 @@ extension TabDisplayManager: InactiveTabsDelegate {
 extension TabDisplayManager: TabSelectionDelegate {
     func didSelectTabAtIndex(_ index: Int) {
         guard let tab = dataStore.at(index) else { return }
-        if tabsToDisplay.firstIndex(of: tab) != nil {
-            tabManager.selectTab(tab)
+        getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
+            if tabsToDisplay.firstIndex(of: tab) != nil {
+                self.tabManager.selectTab(tab)
+            }
+            TelemetryWrapper.recordEvent(category: .action, method: .press, object: .tab)
         }
-        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .tab)
     }
 }
 
@@ -570,7 +599,7 @@ extension TabDisplayManager: TabManagerDelegate {
                 }
             }
             self.dataStore.insert(tab, at: indexToPlaceTab)
-            self.collectionView.insertItems(at: [IndexPath(row: indexToPlaceTab, section: 0)])
+            self.collectionView.insertItems(at: [IndexPath(row: indexToPlaceTab, section: 1)])
             
         }
     }

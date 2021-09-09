@@ -35,23 +35,10 @@ class StopWatchTimer {
 }
 
 class TabGroupsManager {
-    
-    static let shared = TabGroupsManager()
-    
-    private init(){}
-    
-    func getGroupedTabs(activeTabs: [Tab]) -> TabGroup {
-        var tabGroup = TabGroup(searchTermName: "", tabs: [Tab]())
-        
-        return tabGroup
-    }
-    
-    static func getTabGroups(profile: Profile, tabs: [Tab], completion: @escaping ([String: [Tab]]?) -> Void) {
+    static func getTabGroups(profile: Profile, tabs: [Tab], completion: @escaping ([String: [Tab]]?, _ filteredTabs: [Tab]) -> Void) {
         profile.places.getSearchTermMetaData().uponQueue(.main) { result in
-            guard let val = result.successValue else { return completion(nil) }
-//            let model = val!.map { metadata in
-//                $0.key.searchTerm
-//            }
+            guard let val = result.successValue else { return completion(nil, [Tab]()) }
+            
             let searchTerms = Set(val!.map({ return $0.key.searchTerm }))
             var searchTermMetaDataGroup : [String: [HistoryMetadata]] = [:]
             
@@ -59,7 +46,6 @@ class TabGroupsManager {
                 let elements = val!.filter({ $0.key.searchTerm == term })
                 searchTermMetaDataGroup[term!] = elements
             }
-
             
             // check if urls in tab matches search term groups
             var searchTermTabGroup: [String: [Tab]] = [:]
@@ -69,7 +55,7 @@ class TabGroupsManager {
                 for (key,val) in searchTermMetaDataGroup {
                     for metadatas in val {
                         if tab.lastKnownUrl?.absoluteString == metadatas.key.url {
-                            if let tabGroup = searchTermTabGroup[key] {
+                            if let _ = searchTermTabGroup[key] {
                                 searchTermTabGroup[key]?.append(tab)
                                 break
                             } else {
@@ -81,15 +67,14 @@ class TabGroupsManager {
                     }
                 }
             }
+
+            let filteredTabs = tabCopy.filter { tab in
+                return !searchTermTabGroup.values.contains { value -> Bool in
+                    (value as [Tab]).contains(tab) 
+                }
+            }
             
-            
-//            for (key,val) in searchTermMetaDataGroup {
-//                for metadatas in val {
-//                    searchTermTabGroup = tabs.filter({ $0.url?.absoluteString == metadatas.key.url })
-//                }
-//            }
-            
-            completion(searchTermTabGroup)
+            completion(searchTermTabGroup, filteredTabs)
         }
     }
 }

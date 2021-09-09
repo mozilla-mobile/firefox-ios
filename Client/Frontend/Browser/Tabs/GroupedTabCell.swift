@@ -76,7 +76,7 @@ class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UI
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return groupedTabsViewModel?.tabGroups?.keys.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -85,8 +85,8 @@ class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UI
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: GroupedTabCellIdentifier, for: indexPath) as! GroupedTabContainerCell
-        cell.tabs = groupedTabsViewModel?.activeTabs
-        cell.titleLabel.text = "Tab Group: // Need to update"
+        cell.tabs = groupedTabsViewModel?.tabGroups?.map { $0.value }[indexPath.item]
+        cell.titleLabel.text = groupedTabsViewModel?.tabGroups?.map { $0.key }[indexPath.item] ?? ""
         cell.backgroundColor = .clear
         cell.accessoryView = nil
         return cell
@@ -168,8 +168,6 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
         collectionView.backgroundColor = .white
         collectionView.layer.cornerRadius = 6.0
         collectionView.layer.borderWidth = 1.0
-//        collectionView.layer.borderColor = UIColor.white.cgColor
-//        collectionView.layer.backgroundColor = UIColor.white.cgColor
         collectionView.layer.masksToBounds = true
 
         return collectionView
@@ -197,7 +195,6 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
             make.edges.equalToSuperview()
         }
         
-//        titleLabel.text = searchGroupName
         titleLabel.snp.makeConstraints { make in
             make.height.equalTo(20)
             make.top.equalToSuperview().offset(30)
@@ -206,7 +203,6 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
         }
         
         collectionView.snp.makeConstraints { make in
-//            make.height.equalTo(100)
             make.top.equalTo(titleLabel.snp.bottom).offset(25)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
@@ -255,7 +251,8 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
 
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let cellWidth = floor((collectionView.bounds.width - GridTabTrayControllerUX.Margin * CGFloat(numberOfColumns + 1)) / CGFloat(numberOfColumns))
-            return CGSize(width: cellWidth - 10, height: 185)
+        let padding = 10
+        return CGSize(width: Int(cellWidth) - padding, height: 185)
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
