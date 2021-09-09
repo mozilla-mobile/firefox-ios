@@ -351,6 +351,27 @@ extension URL {
     }
 }
 
+// MARK: - Exported URL Schemes
+
+extension URL {
+
+    public static var mozPublicScheme: String = {
+        guard let string = Bundle.main.object(forInfoDictionaryKey: "MozPublicURLScheme") as? String, !string.isEmpty else {
+            // Something went wrong/weird, fall back to hard-coded.
+            return "firefox"
+        }
+        return string
+    }()
+
+    public static var mozInternalScheme: String = {
+        guard let string = Bundle.main.object(forInfoDictionaryKey: "MozInternalURLScheme") as? String, !string.isEmpty else {
+            // Something went wrong/weird, fallback to the public one.
+            return Self.mozPublicScheme
+        }
+        return string
+    }()
+}
+
 // Helpers to deal with ErrorPage URLs
 
 public struct InternalURL {
