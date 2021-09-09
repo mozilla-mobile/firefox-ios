@@ -294,14 +294,9 @@ class OverlayView: UIView {
         button.setAttributedTitle(attributedString, for: .normal)
     }
 
-    private func setURLicon(phrase: String, button: InsetButton) {
-        if phrase.isUrl {
-            button.setImage(#imageLiteral(resourceName: "icon_link"), for: .normal)
-            button.setImage(#imageLiteral(resourceName: "icon_link"), for: .highlighted)
-        } else {
+    private func setURLicon(button: InsetButton) {
             button.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .normal)
             button.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .highlighted)
-        }
     }
 
     func setSearchQuery(suggestions: [String], hideFindInPage: Bool, hideAddToComplete: Bool) {
@@ -344,7 +339,7 @@ class OverlayView: UIView {
                     button: self.searchButtonGroup[index],
                     localizedStringFormat: Settings.getToggle(.enableSearchSuggestions) ? "" : UIConstants.strings.searchButton
                 )
-                self.setURLicon(phrase: self.searchSuggestions[index], button: self.searchButtonGroup[index])
+                self.setURLicon(button: self.searchButtonGroup[index])
             }
         }
     }
