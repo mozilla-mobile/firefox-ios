@@ -18,6 +18,7 @@ HEADER_SEARCH_PATHS = $(inherited) /Applications/Xcode.app/Contents/Developer/To
 INCLUDE_SETTINGS_BUNDLE = NO
 IPHONEOS_DEPLOYMENT_TARGET = 13.0
 LD_RUNPATH_SEARCH_PATHS = $(inherited) @executable_path/../../Frameworks @executable_path/Frameworks @loader_path/Frameworks
+MOZ_PUBLIC_URL_SCHEME = firefox
 MOZ_TODAY_WIDGET_SEARCH_DISPLAY_NAME = Firefox - Search
 OTHER_LDFLAGS = -ObjC -lxml2
 OTHER_SWIFT_FLAGS_common = -DMOZ_TARGET_CLIENT
