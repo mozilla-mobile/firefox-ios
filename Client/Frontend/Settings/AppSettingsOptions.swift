@@ -640,6 +640,25 @@ class ToggleInactiveTabs: HiddenSetting, FeatureFlagsProtocol {
     }
 }
 
+class ToggleGroupedTabs: HiddenSetting, FeatureFlagsProtocol {
+    override var title: NSAttributedString? {
+        let toNewStatus = featureFlags.isFeatureActive(.groupedTabs) ? "OFF" : "ON"
+        return NSAttributedString(string: "Toggle grouped tabs: \(toNewStatus)",
+                                  attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        featureFlags.toggle(.groupedTabs)
+        updateCell(navigationController)
+    }
+
+    func updateCell(_ navigationController: UINavigationController?) {
+        let controller = navigationController?.topViewController
+        let tableView = (controller as? AppSettingsTableViewController)?.tableView
+        tableView?.reloadData()
+    }
+}
+
 class ToggleStartAtHome: HiddenSetting, FeatureFlagsProtocol {
     override var title: NSAttributedString? {
         let toNewStatus = featureFlags.isFeatureActive(.startAtHome) ? "OFF" : "ON"

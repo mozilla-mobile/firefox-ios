@@ -88,12 +88,21 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     private let tabReuseIdentifer: String
     var profile: Profile
     private var inactiveNimbusExperimentStatus: Bool = false
+    var shouldEnableGroupedTabs: Bool = true
+    
+//    {
+//        guard featureFlags.isFeatureActive(.groupedTabs) else { return false }
+//        
+//        return inactiveNimbusExperimentStatus ? inactiveNimbusExperimentStatus : profile.prefs.boolForKey(PrefsKeys.KeyEnableInactiveTabs) ?? false
+//    }
+    
     var shouldEnableInactiveTabs: Bool {
         guard featureFlags.isFeatureActive(.inactiveTabs) else { return false }
         
         return inactiveNimbusExperimentStatus ? inactiveNimbusExperimentStatus : profile.prefs.boolForKey(PrefsKeys.KeyEnableInactiveTabs) ?? false
     }
     var filteredTabs = [Tab]()
+    var tabGroups: [String: [Tab]]?
 //    private var tabsToDisplay: [Tab] {
 //        if shouldEnableInactiveTabs { return getTabsAndUpdateInactiveState() }
 //        let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
@@ -168,15 +177,29 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     /// `tabsToDisplay` will make sure to get the correct set ot tabs and also check if feature is enabled
     private func getTabsAndUpdateInactiveState(completion: @escaping ([String: [Tab]]?, [Tab]) -> Void) {
         guard shouldEnableInactiveTabs else {
-            completion(nil, self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs)
+            if !self.isPrivate && shouldEnableGroupedTabs {
+                TabGroupsManager.getTabGroups(profile: profile, tabs: tabManager.normalTabs) { tabGroups, filteredActiveTabs  in
+                    self.tabGroups = tabGroups
+                    self.filteredTabs = filteredActiveTabs
+                    completion(tabGroups, filteredActiveTabs)
+                }
+            } else {
+                self.tabGroups = nil
+                self.filteredTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
+                completion(nil, self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs)
+            }
             return
         }
         let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         guard allTabs.count > 0, let inactiveViewModel = inactiveViewModel else {
+            self.tabGroups = nil
+            self.filteredTabs = [Tab]()
             completion(nil, [Tab]())
             return
         }
         guard allTabs.count > 1 else {
+            self.tabGroups = nil
+            self.filteredTabs = allTabs
             completion(nil, allTabs)
             return
         }
@@ -184,15 +207,29 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         // Make sure selected tab has latest time
         selectedTab?.lastExecutedTime = Date.now()
         inactiveViewModel.updateInactiveTabs(with: tabManager.selectedTab, tabs: allTabs)
-        inactiveViewModel.updateTabMeta(profile: profile, activeTabs: inactiveViewModel.activeTabs) { tabGroup, filteredActiveTabs in
-            completion(tabGroup, filteredActiveTabs)
-            self.isInactiveViewExpanded = inactiveViewModel.inactiveTabs.count > 0
-            let recentlyClosedTabs = inactiveViewModel.recentlyClosedTabs
-            if recentlyClosedTabs.count > 0 {
-                self.tabManager.removeTabs(recentlyClosedTabs, shouldNotify: true)
-                self.tabManager.selectTab(selectedTab)
-            }
+        TabGroupsManager.getTabGroups(profile: profile, tabs: tabManager.normalTabs) { tabGroups, filteredActiveTabs  in
+            self.tabGroups = tabGroups
+            self.filteredTabs = filteredActiveTabs
+            completion(tabGroups, filteredActiveTabs)
         }
+        self.isInactiveViewExpanded = inactiveViewModel.inactiveTabs.count > 0
+        let recentlyClosedTabs = inactiveViewModel.recentlyClosedTabs
+        if recentlyClosedTabs.count > 0 {
+            self.tabManager.removeTabs(recentlyClosedTabs, shouldNotify: true)
+            self.tabManager.selectTab(selectedTab)
+        }
+        
+//        inactiveViewModel.updateTabMeta(profile: profile, activeTabs: inactiveViewModel.activeTabs) { tabGroup, filteredActiveTabs in
+//            completion(tabGroup, filteredActiveTabs)
+//            self.isInactiveViewExpanded = inactiveViewModel.inactiveTabs.count > 0
+//            let recentlyClosedTabs = inactiveViewModel.recentlyClosedTabs
+//            if recentlyClosedTabs.count > 0 {
+//                self.tabManager.removeTabs(recentlyClosedTabs, shouldNotify: true)
+//                self.tabManager.selectTab(selectedTab)
+//            }
+//        }
+        
+        
 //        isInactiveViewExpanded = inactiveViewModel.inactiveTabs.count > 0
 //        let recentlyClosedTabs = inactiveViewModel.recentlyClosedTabs
 //        if recentlyClosedTabs.count > 0 {
@@ -314,15 +351,15 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
 
 extension TabDisplayManager: UICollectionViewDataSource {
     @objc func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if !shouldEnableInactiveTabs { return dataStore.count }
+//        if !shouldEnableInactiveTabs { return dataStore.count }
         if tabDisplayType == .TopTabTray { return dataStore.count }
         switch TabDisplaySection(rawValue: section) {
         case .groupedTabs:
-            return 1
+            return shouldEnableGroupedTabs ? 1 : 0
         case .regularTabs:
             return dataStore.count
         case .inactiveTabs:
-            return isPrivate ? 0 : 1
+            return shouldEnableInactiveTabs ? (isPrivate ? 0 : 1) : 0
         case .none:
             return 0
         }
@@ -339,7 +376,8 @@ extension TabDisplayManager: UICollectionViewDataSource {
         switch TabDisplaySection(rawValue: indexPath.section) {
         case .groupedTabs:
             if let groupedCell = collectionView.dequeueReusableCell(withReuseIdentifier: GroupedTabCell.Identifier, for: indexPath) as? GroupedTabCell {
-                groupedCell.groupedTabsViewModel = inactiveViewModel
+//                groupedCell.groupedTabsViewModel = inactiveViewModel
+                groupedCell.tabGroups = self.tabGroups
                 groupedCell.hasExpanded = true
                 groupedCell.tableView.reloadData()
                 cell = groupedCell
@@ -361,9 +399,9 @@ extension TabDisplayManager: UICollectionViewDataSource {
     }
     
     @objc func numberOfSections(in collectionView: UICollectionView) -> Int {
-        if !shouldEnableInactiveTabs { return 1 }
+//        if !shouldEnableInactiveTabs { return 1 }
         if tabDisplayType == .TopTabTray { return 1 }
-        return TabDisplaySection.allCases.count
+        return  TabDisplaySection.allCases.count
     }
 }
 

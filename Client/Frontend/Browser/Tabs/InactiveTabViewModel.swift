@@ -71,20 +71,20 @@ class InactiveTabViewModel {
     var activeTabs = [Tab]()
     var recentlyClosedTabs = [Tab]()
     var historyViewModel = HistoryMetaDataViewModel()
-    var tabGroups: [String: [Tab]]?
+//    var tabGroups: [String: [Tab]]?
     var urlGroups: [String: [URL]]?
     
-    var filteredActiveTabs = [Tab]()
+//    var filteredActiveTabs = [Tab]()
 
-    func updateTabMeta(profile: Profile, activeTabs: [Tab], completion: @escaping ([String: [Tab]]?, _ filteredTabs: [Tab]) -> Void) {
-        TabGroupsManager.getTabGroups(profile: profile, tabs: activeTabs) { tabGroups, filteredActiveTabs  in
-            self.tabGroups = tabGroups
-            self.filteredActiveTabs = filteredActiveTabs
-            completion(tabGroups, filteredActiveTabs)
-//            let groupedTabs: [Tab] = self.tabGroups!.values.flatMap { $0 }
-//            self.activeTabs = self.activeTabs.filter { return !groupedTabs.contains($0) }
-        }
-    }
+//    func updateTabMeta(profile: Profile, activeTabs: [Tab], completion: @escaping ([String: [Tab]]?, _ filteredTabs: [Tab]) -> Void) {
+//        TabGroupsManager.getTabGroups(profile: profile, tabs: activeTabs) { tabGroups, filteredActiveTabs  in
+//            self.tabGroups = tabGroups
+//            self.filteredActiveTabs = filteredActiveTabs
+//            completion(tabGroups, filteredActiveTabs)
+////            let groupedTabs: [Tab] = self.tabGroups!.values.flatMap { $0 }
+////            self.activeTabs = self.activeTabs.filter { return !groupedTabs.contains($0) }
+//        }
+//    }
     
     func updateInactiveTabs(with selectedTab: Tab?, tabs: [Tab]) {
         self.tabs = tabs

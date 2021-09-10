@@ -22,7 +22,8 @@ struct GroupedTabCellUX {
 }
 
 class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UITableViewDelegate {
-    var groupedTabsViewModel: InactiveTabViewModel?
+//    var groupedTabsViewModel: InactiveTabViewModel?
+    var tabGroups: [String: [Tab]]?
     static let Identifier = "GroupedTabCellIdentifier"
     let GroupedTabsTableIdentifier = "GroupedTabsTableIdentifier"
     let GroupedTabsHeaderIdentifier = "GroupedTabsHeaderIdentifier"
@@ -50,7 +51,7 @@ class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UI
 
     convenience init(viewModel: InactiveTabViewModel) {
         self.init()
-        groupedTabsViewModel = viewModel
+//        groupedTabsViewModel = viewModel
     }
 
     override init(frame: CGRect) {
@@ -76,7 +77,7 @@ class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UI
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return groupedTabsViewModel?.tabGroups?.keys.count ?? 0
+        return tabGroups?.keys.count ?? 0 //groupedTabsViewModel?.tabGroups?.keys.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -85,8 +86,8 @@ class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UI
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: GroupedTabCellIdentifier, for: indexPath) as! GroupedTabContainerCell
-        cell.tabs = groupedTabsViewModel?.tabGroups?.map { $0.value }[indexPath.item]
-        cell.titleLabel.text = groupedTabsViewModel?.tabGroups?.map { $0.key }[indexPath.item] ?? ""
+        cell.tabs = tabGroups?.map { $0.value }[indexPath.item] // groupedTabsViewModel?.tabGroups?.map { $0.value }[indexPath.item]
+        cell.titleLabel.text = tabGroups?.map { $0.key }[indexPath.item] ?? "" //groupedTabsViewModel?.tabGroups?.map { $0.key }[indexPath.item] ?? ""
         cell.backgroundColor = .clear
         cell.accessoryView = nil
         return cell

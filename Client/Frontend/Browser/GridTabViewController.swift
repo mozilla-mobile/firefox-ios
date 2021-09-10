@@ -406,7 +406,7 @@ extension GridTabViewController: UIScrollViewAccessibilityDelegate {
 
         let firstTab = indexPaths.first!.row + 1
         let lastTab = indexPaths.last!.row + 1
-        let tabCount = collectionView.numberOfItems(inSection: 0)
+        let tabCount = collectionView.numberOfItems(inSection: 1)
 
         if firstTab == lastTab {
             let format: String = .TabTrayVisibleTabRangeAccessibilityHint
@@ -626,10 +626,12 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
         switch TabDisplaySection(rawValue: indexPath.section) {
         case .groupedTabs:
             let width = collectionView.frame.size.width
-            if let inactiveViewModel = tabDisplayManager.inactiveViewModel, inactiveViewModel.activeTabs.count > 1 {
-                inactiveViewModel.updateTabMeta(profile: tabDisplayManager.profile, activeTabs: inactiveViewModel.activeTabs) { _,_ in }
+//            if let inactiveViewModel = tabDisplayManager.inactiveViewModel, inactiveViewModel.activeTabs.count > 1 {
+//                inactiveViewModel.updateTabMeta(profile: tabDisplayManager.profile, activeTabs: inactiveViewModel.activeTabs) { _,_ in }
+            
+            if let keys = tabDisplayManager.tabGroups?.keys, keys.count > 0 {
 
-                let height: CGFloat = GroupedTabCell.defaultCellHeight * CGFloat(inactiveViewModel.tabGroups?.keys.count ?? 0)
+                let height: CGFloat = GroupedTabCell.defaultCellHeight * CGFloat(tabDisplayManager.tabGroups?.keys.count ?? 0)
                 
                 //NOTE: DO NOT USE TEMP HEIGHT
 //                let tempHeightForTesting = GroupedTabCell.defaultCellHeight * 2
