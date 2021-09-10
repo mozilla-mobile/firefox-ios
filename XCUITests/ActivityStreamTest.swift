@@ -144,14 +144,19 @@ class ActivityStreamTest: BaseTestCase {
 
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.goto(TabTray)
-        app.cells.staticTexts["Home"].tap()
+        app.cells.staticTexts["Home"].firstMatch.tap()
         waitForExistence(TopSiteCellgroup.cells["apple"])
         navigator.nowAt(HomePanelsScreen)
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(TabTray)
-        waitForExistence(app.cells.staticTexts["apple.com"])
-        XCTAssertTrue(app.cells.staticTexts["apple.com"].exists, "A new Tab has not been open")
+        if iPad() {
+            waitForExistence(app.cells.staticTexts["Apple"])
+            XCTAssertTrue(app.cells.staticTexts["Apple"].exists, "A new Tab has not been open")
+        } else {
+            waitForExistence(app.cells.staticTexts["apple.com"])
+            XCTAssertTrue(app.cells.staticTexts["apple.com"].exists, "A new Tab has not been open")
+        }
     }
 
     // Smoketest
