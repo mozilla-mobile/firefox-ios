@@ -949,7 +949,7 @@ extension BrowserViewController: URLBarDelegate {
         let isOnHomeView = homeView != nil
         let shouldShowShortcuts = trimmedText.isEmpty && shortcutManager.numberOfShortcuts != 0
         shortcutsContainer.isHidden = !shouldShowShortcuts
-        shortcutsBackground.isHidden = !shouldShowShortcuts
+        shortcutsBackground.isHidden = isOnHomeView ? true : !shouldShowShortcuts
         
         if Settings.getToggle(.enableSearchSuggestions) && !trimmedText.isEmpty {
             searchSuggestionsDebouncer.renewInterval()
