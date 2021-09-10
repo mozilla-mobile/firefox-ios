@@ -458,7 +458,7 @@ class BrowserViewController: UIViewController {
             urlBarTopConstraint = make.top.equalTo(mainContainerView.safeAreaLayoutGuide.snp.top).constraint
             
             if isIPadRegularDimensions {
-                make.width.equalToSuperview().multipliedBy(UIConstants.layout.urlBarInitialWidthMultiplier)
+                make.leading.trailing.equalToSuperview()
                 make.centerX.equalToSuperview()
                 make.bottom.equalTo(urlBarContainer)
             } else {

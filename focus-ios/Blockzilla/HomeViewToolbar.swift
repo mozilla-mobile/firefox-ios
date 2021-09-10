@@ -12,7 +12,9 @@ class HomeViewToolbar: UIView {
         super.init(frame: CGRect.zero)
         stackView.distribution = .fill
         stackView.addArrangedSubview(UIView())
-        stackView.addArrangedSubview(toolset.contextMenuButton)
+        if !URLBar().isIPadRegularDimensions {
+            stackView.addArrangedSubview(toolset.contextMenuButton)
+        }
         addSubview(stackView)
 
         stackView.snp.makeConstraints { make in

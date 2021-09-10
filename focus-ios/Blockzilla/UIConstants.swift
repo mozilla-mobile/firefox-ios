@@ -187,7 +187,6 @@ struct UIConstants {
         static let toastDuration: TimeInterval = 1.5
         static let toolbarFadeAnimationDuration = 0.25
         static let toolbarButtonInsets = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
-        static let urlBarInitialWidthMultiplier: CGFloat = 0.7
         static let urlTextOffset: Float = 15
         static let urlBarCornerRadius: CGFloat = 10
         static let urlBarHeight: CGFloat = 54
