@@ -626,27 +626,16 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
         switch TabDisplaySection(rawValue: indexPath.section) {
         case .groupedTabs:
             let width = collectionView.frame.size.width
-//            if let inactiveViewModel = tabDisplayManager.inactiveViewModel, inactiveViewModel.activeTabs.count > 1 {
-//                inactiveViewModel.updateTabMeta(profile: tabDisplayManager.profile, activeTabs: inactiveViewModel.activeTabs) { _,_ in }
-            
             if let keys = tabDisplayManager.tabGroups?.keys, keys.count > 0 {
-
                 let height: CGFloat = GroupedTabCell.defaultCellHeight * CGFloat(tabDisplayManager.tabGroups?.keys.count ?? 0)
-                
-                //NOTE: DO NOT USE TEMP HEIGHT
-//                let tempHeightForTesting = GroupedTabCell.defaultCellHeight * 2
-                
-                if UIDevice.current.userInterfaceIdiom == .pad {
-                    // TO BE CALCULATED - PROPERLY
-                    return CGSize(width: Int(collectionView.frame.size.width/2), height: 100)
-                } else {
+//                if UIDevice.current.userInterfaceIdiom == .pad {
+//                    return CGSize(width: Int(collectionView.frame.size.width/2), height: 100)
+//                } else {
                     return CGSize(width: width >= 0 ? Int(width) : 0, height: Int(height))
-                }
+//                }
             } else {
                 return CGSize(width: 0, height: 0)
             }
-//            let inactiveTabs = tabDisplayManager.inactiveViewModel?.updateTabMeta(profile: tabDisplayManager.profile, activeTabs: <#T##[Tab]#>)
-            
         case .regularTabs, .none:
             return CGSize(width: cellWidth, height: self.cellHeightForCurrentDevice())
         case .inactiveTabs:
