@@ -75,7 +75,7 @@ class TopTabsTest: BaseTestCase {
         navigator.goto(TabTray)
 
         waitForExistence(app.cells.staticTexts[urlLabel])
-        app.cells.staticTexts[urlLabel].tap()
+        app.cells.staticTexts[urlLabel].firstMatch.tap()
         let valueMozilla = app.textFields["url"].value as! String
         XCTAssertEqual(valueMozilla, urlValueLong)
 
@@ -84,7 +84,7 @@ class TopTabsTest: BaseTestCase {
         navigator.goto(TabTray)
 
         waitForExistence(app.cells.staticTexts[urlLabelExample])
-        app.cells.staticTexts[urlLabelExample].tap()
+        app.cells.staticTexts[urlLabelExample].firstMatch.tap()
         let value = app.textFields["url"].value as! String
         XCTAssertEqual(value, urlValueLongExample)
     }
@@ -96,9 +96,12 @@ class TopTabsTest: BaseTestCase {
         navigator.goto(TabTray)
 
         waitForExistence(app.cells.staticTexts[urlLabel])
-
         // Close the tab using 'x' button
-        app.cells.buttons["closeTabButtonTabTray"].tap()
+        if iPad() {
+            app.cells.buttons["tab close"].tap()
+        } else {
+            app.cells.buttons["closeTabButtonTabTray"].tap()
+        }
 
         // After removing only one tab it automatically goes to HomepanelView
         waitForExistence(app.collectionViews.cells["TopSitesCell"])
@@ -135,7 +138,6 @@ class TopTabsTest: BaseTestCase {
         navigator.back()
         if iPad() {
             navigator.goto(TabTray)
-            print(app.collectionViews.cells.count)
         }
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
 
@@ -144,7 +146,7 @@ class TopTabsTest: BaseTestCase {
 
         waitForExistence(app.otherElements.buttons.staticTexts["Undo"])
         app.otherElements.buttons.staticTexts["Undo"].tap()
-        print(app.debugDescription)
+
         waitForExistence(app.collectionViews.cells["TopSitesCell"], timeout: 5)
         navigator.nowAt(BrowserTab)
         if !iPad() {
@@ -235,8 +237,11 @@ class TopTabsTest: BaseTestCase {
         navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         // By default with new chron tab there is one tab in private mode
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 3)
-
+        if iPad() {
+            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+        } else {
+            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 3)
+        }
         // Close all tabs and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
         XCTAssertTrue(app.staticTexts["Private Browsing"].exists, "Private welcome screen is not shown")
@@ -321,9 +326,8 @@ fileprivate extension BaseTestCase {
         navigator.goto(TabTray)
         var numTabsOpen = userState.numTabs
         if iPad() {
-            numTabsOpen = app.collectionViews.element(boundBy: 2).cells.count
+            numTabsOpen = app.collectionViews.firstMatch.cells.count
         }
-
         XCTAssertEqual(numTabsOpen, expectedNumberOfTabsOpen, "The number of tabs open is not correct")
     }
 
@@ -487,7 +491,9 @@ class TopTabsTestIpad: IpadOnlyTestCase {
         waitForValueContains(app.textFields["url"], value: url)
     }
 
-    func testTopSitesScrollToVisible() {
+    func testTopSitesScrollToVisible() throws {
+        throw XCTSkip("Not sure about new behaviour with urlBar focused")
+
         if skipPlatform { return }
 
         // This first cell gets closed during the test
