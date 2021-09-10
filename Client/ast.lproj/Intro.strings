@@ -1,0 +1,15 @@
+/* Description for the 'Private Browsing' panel in the First Run tour. */
+"Intro.Slides.Private.Description" = "Toca l'iconu de la mázcara pa entrar nel mou de Restolar en privao.";
+
+/* Title for the third panel 'Private Browsing' in the First Run tour. */
+"Intro.Slides.Private.Title" = "Restola como si naide nun te viere";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "¿Busques daqué distinto? Escueyi otru motor de busca predetermináu (o amiesta'l de to) n'Axustes.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "Busques al to xeitu";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "Comenzar a restolar";
+

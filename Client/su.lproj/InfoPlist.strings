@@ -1,26 +1,14 @@
-/* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Ieu bisa anjeun paké jang nyomot sarta ngunjalkeun poto.";
 
-/* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox butuh Face ID pikeun muka login simpenan anjeun.";
-
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 "NSLocationWhenInUseUsageDescription" = "Raramatloka nu disorang ku anjeun sigana ménta lokasi anjeun.";
 
-/* Privacy - Microphone Usage Description */
 "NSMicrophoneUsageDescription" = "Ieu bisa anjeun paké jang nyomot sarta ngunjalkeun vidéo.";
 
-/* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Ieu bisa anjeun paké jang neundeun poto.";
 
-/* (No Comment) */
 "ShortcutItemTitleNewPrivateTab" = "Tab Nyamuni Anyar";
 
-/* (No Comment) */
 "ShortcutItemTitleNewTab" = "Tab Anyar";
 
-/* (No Comment) */
 "ShortcutItemTitleQRCode" = "Pindéy kodeu QR";
 

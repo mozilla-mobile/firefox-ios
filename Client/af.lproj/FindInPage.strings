@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "Klaar";
+
+/* Text selection menu item */
+"Find in Page" = "Vind in bladsy";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "Volgende resultaat op bladsy";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "Vorige resultaat op bladsy";
+

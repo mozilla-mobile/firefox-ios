@@ -1,0 +1,63 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Anjeun yakin?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Bolay";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Beresihan Pamaluruhan";
+
+/* Copy password text selection menu item */
+"Copy" = "Tiron";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "Dijieun %@";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Pupus";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Pilih Kabéh";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Asup Modeu Pamaluruhan";
+
+/* Hide password text selection menu item */
+"Hide" = "Samunikeun";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Asup log rék dipupus kalawan permanén";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Asup log bakal dipiceun ti sakumna parangkat nu nyambung.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "Dirobah %@";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Taya login kapanggih";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Buka & Eusian";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Kecap sandi";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Bolékérkeun";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Paluruh";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Widang Eusian Pamaluruhan";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Pilih Kabéh";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Sandiasma";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "Raramatloka";
+

@@ -1,0 +1,12 @@
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Button" = "Gå til Innstillinger";
+
+/* Description for small card shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Description" = "Angi at lenker fra nettsteder, e-postmeldinger og meldinger skal åpnes automatisk i Firefox.";
+
+/* Title for small card shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Title" = "Endre standard nettleser";
+
+/* Menu option for setting Firefox as default browser. */
+"Settings.DefaultBrowserMenuItem" = "Sett som standard nettleser";
+

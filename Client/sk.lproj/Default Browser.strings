@@ -1,0 +1,12 @@
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Button" = "Prejsť do Nastavení";
+
+/* Description for small card shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Description" = "Nastavte si automatické otváranie webových stránok, e-mailov a správ vo Firefoxe.";
+
+/* Title for small card shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Title" = "Zmeňte svoj predvolený prehliadač";
+
+/* Menu option for setting Firefox as default browser. */
+"Settings.DefaultBrowserMenuItem" = "Nastaviť ako predvolený prehliadač";
+

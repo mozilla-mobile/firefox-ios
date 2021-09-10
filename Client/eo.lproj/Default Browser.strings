@@ -1,0 +1,12 @@
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Button" = "Iri al agordoj";
+
+/* Description for small card shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Description" = "Aŭtomate malfermi ligilon en retejoj, retpoŝtoj kaj mesaĝoj per Firefox.";
+
+/* Title for small card shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Title" = "Ŝanĝi vian norman retumilon";
+
+/* Menu option for setting Firefox as default browser. */
+"Settings.DefaultBrowserMenuItem" = "Igi retumilon norma";
+

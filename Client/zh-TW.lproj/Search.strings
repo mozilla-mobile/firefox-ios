@@ -1,0 +1,9 @@
+/* Label for search engine buttons. The argument corresponds to the name of the search engine. */
+"%@ search" = "搜尋 %@";
+
+/* Label for search settings button. */
+"Search Settings" = "搜尋設定";
+
+/* Accessibility label for image of default search engine displayed left to the actual search suggestions from the engine. The parameter substituted for \"%@\" is the name of the search engine. E.g.: Search suggestions from Google */
+"Search suggestions from %@" = "來自 %@ 的搜尋建議";
+

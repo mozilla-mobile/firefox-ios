@@ -1,0 +1,78 @@
+/* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
+"Menu.AddBookmarkAction.Title" = "Էջանշել այս էջը";
+
+/* Label for the button, displayed in the menu, used to add a page to the reading list. */
+"Menu.AddToReadingList.Title" = "Ավելացնել ընթերցման ցուցակում";
+
+/* Label for the button, displayed in the menu, used to close all tabs currently open. */
+"Menu.CloseAllTabsAction.Title" = "Փակել բոլոր ներդիրները";
+
+/* Label for the button, displayed in the menu, used to copy the page url to the clipboard. */
+"Menu.CopyAddress.Title" = "Պատճենել հասցեն";
+
+/* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
+"Menu.FindInPageAction.Title" = "Գտնել էջում";
+
+/* Label for the button, displayed in the menu, used to Reload the webpage */
+"Menu.Library.Reload" = "Կրկին բեռնել";
+
+/* Label for the button, displayed in the menu, used to open the Library */
+"Menu.Library.Title" = "Ձեր գրադարանը";
+
+/* Label for the button, displayed in the menu, used to open a new private tab. */
+"Menu.NewPrivateTabAction.Title" = "Նոր Գաղտնի ներդիր";
+
+/* Label for the button, displayed in the menu, used to open a new tab */
+"Menu.NewTabAction.Title" = "Նոր ներդիր";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Bookmarks home panel. Please keep as short as possible, <15 chars of space available. */
+"Menu.OpenBookmarksAction.AccessibilityLabel.v2" = "Էջանիշեր";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Downloads home panel. Please keep as short as possible, <15 chars of space available. */
+"Menu.OpenDownloadsAction.AccessibilityLabel.v2" = "Ներբեռնումներ";
+
+/* Accessibility label for the button, displayed in the menu, used to open the History home panel. Please keep as short as possible, <15 chars of space available. */
+"Menu.OpenHistoryAction.AccessibilityLabel.v2" = "Պատմություն";
+
+/* Label for the button, displayed in the menu, used to navigate to the home page. */
+"Menu.OpenHomePageAction.Title" = "Գլխավոր էջ";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. Please keep as short as possible, <15 chars of space available. */
+"Menu.OpenReadingListAction.AccessibilityLabel.v2" = "Ընթերցման ցուցակում";
+
+/* Label for the button, displayed in the menu, used to open the Settings menu. */
+"Menu.OpenSettingsAction.Title" = "Կարգավորումներ";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Synced Tabs home panel. Please keep as short as possible, <15 chars of space available. */
+"Menu.OpenSyncedTabsAction.AccessibilityLabel.v2" = "Համաժամեցված ներդիրներ";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Top Sites home panel. */
+"Menu.OpenTopSitesAction.AccessibilityLabel" = "Լավագույն կայքեր";
+
+/* Label for the button, displayed in the menu, used to show the html page source */
+"Menu.PageSourceAction.Title" = "Դիտել էջի աղբյուրը";
+
+/* Label for the button, displayed in the menu, used to delete an existing bookmark for the current website. */
+"Menu.RemoveBookmarkAction.Title" = "Հեռացնել էջանիշը";
+
+/* Label for the button, displayed in the menu, used to open the QR code scanner. */
+"Menu.ScanQRCodeAction.Title" = "Սկանավորել QR կոդը";
+
+/* Label for the button, displayed in Firefox Home, used to see all Library panels. */
+"Menu.SeeAllAction.Title" = "Տեսնել բոլորը";
+
+/* Label for the button, displayed in the menu, used to open the share dialog. */
+"Menu.SharePageAction.Title" = "Համօգտագործել էջը՝";
+
+/* Label for the button, displayed in the menu, used to open the tabs tray */
+"Menu.ShowTabs.Title" = "Ցուցադրել ներդիրները";
+
+/* Label for the button, displayed in the menu, used to translate the current page. */
+"Menu.TranslatePageAction.Title" = "Թարգմանել էջը";
+
+/* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
+"Menu.ViewDekstopSiteAction.Title" = "Դեսքթոփ կայքի հարցում";
+
+/* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
+"Menu.ViewMobileSiteAction.Title" = "Բջջային կայքի հարցում";
+

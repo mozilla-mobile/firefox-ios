@@ -1,0 +1,63 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "क्या आप सुनिश्चित हैं?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "रद्द करें";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "खोज मिटाएं";
+
+/* Copy password text selection menu item */
+"Copy" = "कॉपी करें";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "%@ पर बनाया गया";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "मिटाएं";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "सभी अचयनित करें";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "खोज विधि दर्ज करें";
+
+/* Hide password text selection menu item */
+"Hide" = "छिपाएं";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "लॉगिन स्थाई रूप से हटा दिए जाएंगे।";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "सभी जुड़े हुए उपकरणों से लॉगिन हटा दिए जाएंगे।";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "संशोधित %@";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "कोई लॉगिन नहीं मिला";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "खोलें और भरें";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "पासवर्ड";
+
+/* Reveal password text selection menu item */
+"Reveal" = "दिखाएं";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "ढूंढें";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "इनपुट क्षेत्र खोजें";
+
+/* Label for the button used to select all logins. */
+"Select All" = "सभी चुनें";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "उपयोगकर्ता नाम";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "वेबसाइट";
+

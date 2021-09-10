@@ -1,0 +1,12 @@
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Button" = "Mont d’an arventennoù";
+
+/* Description for small card shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Description" = "Lakaat da zigeriñ e Firefox en un doare emgefreek liammoù al lec’hiennoù, posteloù, ha kemennadennoù.";
+
+/* Title for small card shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Title" = "Cheñch ho merdeer dre ziouer";
+
+/* Menu option for setting Firefox as default browser. */
+"Settings.DefaultBrowserMenuItem" = "Lakaat evel merdeer dre ziouer";
+

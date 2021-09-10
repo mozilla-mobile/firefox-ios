@@ -1,0 +1,18 @@
+/* Settings item for clearing browsing history */
+"Browsing History" = "Istoric de navigare";
+
+/* Settings item for clearing the cache */
+"Cache" = "Cache";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Cookie-uri";
+
+/* Settings item for deleting downloaded files */
+"Downloaded Files" = "Fișiere descărcate";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Date offline ale site-urilor web";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Date de autentificare salvate";
+

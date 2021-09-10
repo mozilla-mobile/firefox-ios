@@ -1,0 +1,12 @@
+/* The name of the folder that contains desktop bookmarks in the menu. This should match bookmarks.folder.menu.label on Android. */
+"Bookmarks Menu" = "منوی نشانک‌ها";
+
+/* The name of the folder that contains desktop bookmarks in the toolbar. This should match bookmarks.folder.toolbar.label on Android. */
+"Bookmarks Toolbar" = "نوار ابزار نشانک‌ها";
+
+/* The title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android. */
+"Mobile Bookmarks" = "نشانک‌های همراه";
+
+/* The name of the folder that contains unsorted desktop bookmarks. This should match bookmarks.folder.unfiled.label on Android. */
+"Unsorted Bookmarks" = "نشانک‌های مرتب نشده";
+

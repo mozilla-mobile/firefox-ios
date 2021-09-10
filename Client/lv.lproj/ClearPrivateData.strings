@@ -1,0 +1,18 @@
+/* Settings item for clearing browsing history */
+"Browsing History" = "Pārlūkošanas vēsturi";
+
+/* Settings item for clearing the cache */
+"Cache" = "Kešatmiņu";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Sīkdatnes";
+
+/* Settings item for deleting downloaded files */
+"Downloaded Files" = "Lejupielādētie faili";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Lapu saglabātos datus";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Saglabātās paroles";
+

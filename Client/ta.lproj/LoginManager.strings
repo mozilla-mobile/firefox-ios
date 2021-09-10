@@ -1,0 +1,63 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "உறுதியாக?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "ரத்து";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "தேடலைத் துடை";
+
+/* Copy password text selection menu item */
+"Copy" = "நகலெடு";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "%@ உருவாக்கியது";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "அழி";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "தேர்வு நீக்கு";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "தேடல் முறைமைக்கு மாறு";
+
+/* Hide password text selection menu item */
+"Hide" = "மறை";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "உள்நுழைவுகள் நிரந்தரமாக நீக்கப்படும்.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "இணைக்கப்பட்ட சாதனங்கள் அனைத்திலிருந்தும் உள்நுழைவுகள் நிரந்தரமாக நீக்கப்படும்.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "%@ அன்று மாற்றப்பட்டது";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "உள்நுழைவுகள் ஏதுமில்லை";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "திற & நிரப்பு";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "கடவுச்சொல்";
+
+/* Reveal password text selection menu item */
+"Reveal" = "வெளிப்படுத்து";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "தேடு";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "உள்ளீடு பலத்தை தேடு";
+
+/* Label for the button used to select all logins. */
+"Select All" = "அனைத்தையும் தேர்";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "பயனர்பெயர்";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "வலைத்தளம்";
+

@@ -1,0 +1,18 @@
+/* Settings item for clearing browsing history */
+"Browsing History" = "Istoric de navegacion";
+
+/* Settings item for clearing the cache */
+"Cache" = "Escondedor";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Cookies";
+
+/* Settings item for deleting downloaded files */
+"Downloaded Files" = "Fichièrs telecargats";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Donadas fòra connexion";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Identificants salvats";
+

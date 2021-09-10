@@ -1,0 +1,75 @@
+/* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
+"Menu.AddBookmarkAction.Title" = "Marcar aquesta pagina";
+
+/* Label for the button, displayed in the menu, used to add a page to the reading list. */
+"Menu.AddToReadingList.Title" = "Apondre a la lista de lectura";
+
+/* Label for the button, displayed in the menu, used to close all tabs currently open. */
+"Menu.CloseAllTabsAction.Title" = "Tampar totes los onglets";
+
+/* Label for the button, displayed in the menu, used to copy the page url to the clipboard. */
+"Menu.CopyAddress.Title" = "Copiar l’adreça";
+
+/* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
+"Menu.FindInPageAction.Title" = "Recercar dins la pagina";
+
+/* Label for the button, displayed in the menu, used to open the Library */
+"Menu.Library.Title" = "Vòstra bibliotèca";
+
+/* Label for the button, displayed in the menu, used to open a new private tab. */
+"Menu.NewPrivateTabAction.Title" = "Dobrir en navegacion privada";
+
+/* Label for the button, displayed in the menu, used to open a new tab */
+"Menu.NewTabAction.Title" = "Dobrir un onglet novèl";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Bookmarks home panel. Please keep as short as possible, <15 chars of space available. */
+"Menu.OpenBookmarksAction.AccessibilityLabel.v2" = "Marcapaginas";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Downloads home panel. Please keep as short as possible, <15 chars of space available. */
+"Menu.OpenDownloadsAction.AccessibilityLabel.v2" = "Telecargaments";
+
+/* Accessibility label for the button, displayed in the menu, used to open the History home panel. Please keep as short as possible, <15 chars of space available. */
+"Menu.OpenHistoryAction.AccessibilityLabel.v2" = "Istoric";
+
+/* Label for the button, displayed in the menu, used to navigate to the home page. */
+"Menu.OpenHomePageAction.Title" = "Acuèlh";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. Please keep as short as possible, <15 chars of space available. */
+"Menu.OpenReadingListAction.AccessibilityLabel.v2" = "Lista de lectura";
+
+/* Label for the button, displayed in the menu, used to open the Settings menu. */
+"Menu.OpenSettingsAction.Title" = "Paramètres";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Synced Tabs home panel. Please keep as short as possible, <15 chars of space available. */
+"Menu.OpenSyncedTabsAction.AccessibilityLabel.v2" = "Onglets sincronizats";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Top Sites home panel. */
+"Menu.OpenTopSitesAction.AccessibilityLabel" = "Mai visitats";
+
+/* Label for the button, displayed in the menu, used to show the html page source */
+"Menu.PageSourceAction.Title" = "Veire lo còdi font";
+
+/* Label for the button, displayed in the menu, used to delete an existing bookmark for the current website. */
+"Menu.RemoveBookmarkAction.Title" = "Suprimir lo marcapagina";
+
+/* Label for the button, displayed in the menu, used to open the QR code scanner. */
+"Menu.ScanQRCodeAction.Title" = "Escanerizar un còdi QR";
+
+/* Label for the button, displayed in Firefox Home, used to see all Library panels. */
+"Menu.SeeAllAction.Title" = "O mostrar tot";
+
+/* Label for the button, displayed in the menu, used to open the share dialog. */
+"Menu.SharePageAction.Title" = "Partejar la pagina amb…";
+
+/* Label for the button, displayed in the menu, used to open the tabs tray */
+"Menu.ShowTabs.Title" = "Mostrar los onglets";
+
+/* Label for the button, displayed in the menu, used to translate the current page. */
+"Menu.TranslatePageAction.Title" = "Traduire la pagina";
+
+/* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
+"Menu.ViewDekstopSiteAction.Title" = "Veire version ordenador";
+
+/* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
+"Menu.ViewMobileSiteAction.Title" = "Veire version mobil";
+

@@ -1,0 +1,12 @@
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Button" = "برو به تنظیمات";
+
+/* Description for small card shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Description" = "پیوندهای وب سایت ها ، ایمیل ها و پیام ها را تنظیم کنید تا به طور خودکار در Firefox باز شوند.";
+
+/* Title for small card shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Title" = "مرورگر یش‌فرض خود تغییر دهید";
+
+/* Menu option for setting Firefox as default browser. */
+"Settings.DefaultBrowserMenuItem" = "تبدیل به مرورگر پیش‌فرض";
+

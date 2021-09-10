@@ -1,0 +1,63 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Ești sigur?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Renunță";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Șterge căutarea";
+
+/* Copy password text selection menu item */
+"Copy" = "Copiază";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "Creată %@";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Șterge";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Deselectează toate";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Intră în modul de căutare";
+
+/* Hide password text selection menu item */
+"Hide" = "Ascunde";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Autentificările vor fi eliminate definitiv.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Autentificările vor fi eliminate de pe toate dispozitivele conectate.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "Modificată %@";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Nicio autentificare găsită";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Deschide și completează";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Parolă";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Dezvăluie";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Caută";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Câmp de introducere a căutării";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Selectează tot";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Nume de utilizator";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "Site web";
+

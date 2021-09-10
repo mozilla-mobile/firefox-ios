@@ -1,0 +1,45 @@
+/* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
+"Menu.AddBookmarkAction.Title" = "यस पृष्ठमा पुस्तकचिनो लगाउनुहोस्";
+
+/* Label for the button, displayed in the menu, used to add a page to the reading list. */
+"Menu.AddToReadingList.Title" = "पढ्ने सूचीमा थप्नुहोस्";
+
+/* Label for the button, displayed in the menu, used to close all tabs currently open. */
+"Menu.CloseAllTabsAction.Title" = "सबै ट्याब बन्द गर्नुहोस्";
+
+/* Label for the button, displayed in the menu, used to copy the page url to the clipboard. */
+"Menu.CopyAddress.Title" = "ठेगाना प्रतिलिपि गर्नुहोस्";
+
+/* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
+"Menu.FindInPageAction.Title" = "पृष्ठमा खोज्नुहोस्";
+
+/* Label for the button, displayed in the menu, used to open a new private tab. */
+"Menu.NewPrivateTabAction.Title" = "नयाँ निजि ट्याब खोल्नुहोस्";
+
+/* Label for the button, displayed in the menu, used to open a new tab */
+"Menu.NewTabAction.Title" = "नयाँ ट्याब खोल्नुहोस्";
+
+/* Label for the button, displayed in the menu, used to open the Settings menu. */
+"Menu.OpenSettingsAction.Title" = "सेटिङ्गहरू";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Top Sites home panel. */
+"Menu.OpenTopSitesAction.AccessibilityLabel" = "शिर्ष साइटहरू";
+
+/* Label for the button, displayed in the menu, used to delete an existing bookmark for the current website. */
+"Menu.RemoveBookmarkAction.Title" = "पुस्तकचिनो हटाउनुहोस्";
+
+/* Label for the button, displayed in the menu, used to open the QR code scanner. */
+"Menu.ScanQRCodeAction.Title" = "QR कोड स्क्यान गर्नुहोस्";
+
+/* Label for the button, displayed in the menu, used to open the share dialog. */
+"Menu.SharePageAction.Title" = "सँग पृष्ठ साझा गर्नुहोस्…";
+
+/* Label for the button, displayed in the menu, used to open the tabs tray */
+"Menu.ShowTabs.Title" = "ट्याबहरू देखाउनुहोस्‌";
+
+/* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
+"Menu.ViewDekstopSiteAction.Title" = "डेस्कटप साइट अनुरोध गर्नुहोस्";
+
+/* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
+"Menu.ViewMobileSiteAction.Title" = "मोबाइल साइट अनुरोध गर्नुहोस्";
+

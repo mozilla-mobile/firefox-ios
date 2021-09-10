@@ -1,0 +1,51 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "ಖಚಿತವೆ?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "ರದ್ದು ಮಾಡು";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "ಹುಡುಕನ್ನು ಅಳಿಸು";
+
+/* Copy password text selection menu item */
+"Copy" = "ನಕಲಿಸು";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "ಅಳಿಸು";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "ಎಲ್ಲಾ ಆಯ್ಕೆಯನ್ನು ರದ್ದು ಮಾಡು";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "ಹುಡುಕಾಟ ಸ್ಥಿತಿ ನಮೂದಿಸಿ";
+
+/* Hide password text selection menu item */
+"Hide" = "ಅಡಗಿಸು";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "ಲಾಗಿನ್‍ಗಳು ಕಂಡುಬರಲಿಲ್ಲ";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "ತೆರೆ & ತುಂಬು";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "ಗುಪ್ತಪದ";
+
+/* Reveal password text selection menu item */
+"Reveal" = "ಬಹಿರಂಗಪಡಿಸು";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "ಹುಡುಕು";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "ಇನ್ಪುಟ್ ಫೀಲ್ಡ್ ಅನ್ನು ಹುಡುಕಿ";
+
+/* Label for the button used to select all logins. */
+"Select All" = "ಎಲ್ಲವನ್ನೂ ಆರಿಸು";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "ಬಳಕೆದಾರ ಹೆಸರು";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "ಜಾಲತಾಣ";
+

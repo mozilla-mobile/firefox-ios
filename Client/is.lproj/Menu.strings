@@ -1,0 +1,75 @@
+/* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
+"Menu.AddBookmarkAction.Title" = "Bæta við bókamerki";
+
+/* Label for the button, displayed in the menu, used to add a page to the reading list. */
+"Menu.AddToReadingList.Title" = "Bæta við leslista";
+
+/* Label for the button, displayed in the menu, used to close all tabs currently open. */
+"Menu.CloseAllTabsAction.Title" = "Loka öllum flipum";
+
+/* Label for the button, displayed in the menu, used to copy the page url to the clipboard. */
+"Menu.CopyAddress.Title" = "Afrita vistfang";
+
+/* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
+"Menu.FindInPageAction.Title" = "Finna á síðu";
+
+/* Label for the button, displayed in the menu, used to open the Library */
+"Menu.Library.Title" = "Bókasafnið þitt";
+
+/* Label for the button, displayed in the menu, used to open a new private tab. */
+"Menu.NewPrivateTabAction.Title" = "Nýr einkaflipi";
+
+/* Label for the button, displayed in the menu, used to open a new tab */
+"Menu.NewTabAction.Title" = "Nýr flipi";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Bookmarks home panel. Please keep as short as possible, <15 chars of space available. */
+"Menu.OpenBookmarksAction.AccessibilityLabel.v2" = "Bókamerki";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Downloads home panel. Please keep as short as possible, <15 chars of space available. */
+"Menu.OpenDownloadsAction.AccessibilityLabel.v2" = "Niðurhal";
+
+/* Accessibility label for the button, displayed in the menu, used to open the History home panel. Please keep as short as possible, <15 chars of space available. */
+"Menu.OpenHistoryAction.AccessibilityLabel.v2" = "Ferill";
+
+/* Label for the button, displayed in the menu, used to navigate to the home page. */
+"Menu.OpenHomePageAction.Title" = "Heim";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. Please keep as short as possible, <15 chars of space available. */
+"Menu.OpenReadingListAction.AccessibilityLabel.v2" = "Lestrarlisti";
+
+/* Label for the button, displayed in the menu, used to open the Settings menu. */
+"Menu.OpenSettingsAction.Title" = "Stillingar";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Synced Tabs home panel. Please keep as short as possible, <15 chars of space available. */
+"Menu.OpenSyncedTabsAction.AccessibilityLabel.v2" = "Samstilltir flipar";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Top Sites home panel. */
+"Menu.OpenTopSitesAction.AccessibilityLabel" = "Vinsælustu vefsvæðin";
+
+/* Label for the button, displayed in the menu, used to show the html page source */
+"Menu.PageSourceAction.Title" = "Sýna frumkóða síðu";
+
+/* Label for the button, displayed in the menu, used to delete an existing bookmark for the current website. */
+"Menu.RemoveBookmarkAction.Title" = "Fjarlægja bókamerki";
+
+/* Label for the button, displayed in the menu, used to open the QR code scanner. */
+"Menu.ScanQRCodeAction.Title" = "Skanna QR kóða";
+
+/* Label for the button, displayed in Firefox Home, used to see all Library panels. */
+"Menu.SeeAllAction.Title" = "Birta allt";
+
+/* Label for the button, displayed in the menu, used to open the share dialog. */
+"Menu.SharePageAction.Title" = "Deila síðu með…";
+
+/* Label for the button, displayed in the menu, used to open the tabs tray */
+"Menu.ShowTabs.Title" = "Sýna flipa";
+
+/* Label for the button, displayed in the menu, used to translate the current page. */
+"Menu.TranslatePageAction.Title" = "Þýða síðu";
+
+/* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
+"Menu.ViewDekstopSiteAction.Title" = "Fá venjulega síðu";
+
+/* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
+"Menu.ViewMobileSiteAction.Title" = "Biðja um síðu fyrir snjalltæki";
+

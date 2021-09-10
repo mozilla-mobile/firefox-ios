@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "Bitti";
+
+/* Text selection menu item */
+"Find in Page" = "Sayfada bul";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "Sonraki sayfa içi sonuç";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "Önceki sayfa içi sonuç";
+

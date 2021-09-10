@@ -1,0 +1,9 @@
+/* Label for search engine buttons. The argument corresponds to the name of the search engine. */
+"%@ search" = "Búsqueda de %@";
+
+/* Label for search settings button. */
+"Search Settings" = "Configuración de búsqueda";
+
+/* Accessibility label for image of default search engine displayed left to the actual search suggestions from the engine. The parameter substituted for \"%@\" is the name of the search engine. E.g.: Search suggestions from Google */
+"Search suggestions from %@" = "Sugerencias de búsqueda de %@";
+
