@@ -187,6 +187,13 @@ class Tab: NSObject {
         }
         return false
     }
+    
+    var isSecureConnection: Bool {
+        let secure = webView?.hasOnlySecureContent ?? false
+        guard let profile = self.browserViewController?.profile,
+              let origin = webView?.url?.originForCertificate else { return secure }
+        return secure && (!profile.certStore.hasAddedCertificate(forOrigin: origin))
+    }
 
     var mimeType: String?
     var isEditing: Bool = false

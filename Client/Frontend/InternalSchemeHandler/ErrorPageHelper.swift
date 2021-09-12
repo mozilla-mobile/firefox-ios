@@ -299,8 +299,7 @@ extension ErrorPageHelper: TabContentScript {
             UIApplication.shared.open(originalURL, options: [:])
         case MessageCertVisitOnce:
             if let cert = certFromErrorURL(errorURL),
-                let host = originalURL.host {
-                let origin = "\(host):\(originalURL.port ?? 443)"
+                let origin = originalURL.originForCertificate {
                 certStore?.addCertificate(cert, forOrigin: origin)
                 message.webView?.replaceLocation(with: originalURL)
                 // webview.reload will not change the error URL back to the original URL

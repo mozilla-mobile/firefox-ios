@@ -385,7 +385,7 @@ extension TabLocationView: TabEventHandler {
 
         var lockImage: UIImage
         let imageID = ThemeManager.instance.currentName == .dark ? "lock_blocked_dark" : "lock_blocked"
-        if !(tab.webView?.hasOnlySecureContent ?? false) {
+        if !(tab.isSecureConnection) {
             lockImage = UIImage(imageLiteralResourceName: imageID)
 
         } else {

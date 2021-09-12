@@ -136,6 +136,13 @@ extension URL {
         return nil
     }
 
+    public var originForCertificate: String? {
+        if let host = self.host {
+            return "\(host):\(port ?? 443)"
+        }
+        return nil
+    }
+
     public var origin: String? {
         guard isWebPage(includeDataURIs: false), let hostPort = self.hostPort, let scheme = scheme else {
             return nil

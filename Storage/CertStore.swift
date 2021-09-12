@@ -23,6 +23,13 @@ open class CertStore {
         return keys.contains(key)
     }
 
+    open func hasAddedCertificate(forOrigin origin: String) -> Bool {
+        return keys.first(where: { key in
+            let subs = key.split(separator: "/")
+            return subs.count > 0 ? (subs[0] == origin) : false
+        }) != nil
+    }
+
     fileprivate func keyForData(_ data: Data, origin: String) -> String {
         return "\(origin)/\(data.sha256.hexEncodedString)"
     }
