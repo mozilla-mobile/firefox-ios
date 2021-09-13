@@ -12,24 +12,28 @@ enum GroupedTabSection: Int, CaseIterable {
 }
 
 protocol GroupedTabsDelegate {
-    func toggleGroupedTabSection(hasExpanded: Bool)
     func didSelectGroupedTab(tab: Tab?)
-    func didTapRecentlyClosed()
+    func closeTab(tab: Tab)
 }
 
 struct GroupedTabCellUX {
     static let headerAndRowHeight: CGFloat = 45
 }
 
-class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UITableViewDelegate {
+protocol GroupedTabCellDelegate {
+    func closeGroupTab(tab: Tab)
+    func selectGroupTab(tab: Tab)
+}
+
+class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UITableViewDelegate, GroupedTabsDelegate {
 //    var groupedTabsViewModel: InactiveTabViewModel?
+    var delegate: GroupedTabCellDelegate?
     var tabGroups: [String: [Tab]]?
     static let Identifier = "GroupedTabCellIdentifier"
     let GroupedTabsTableIdentifier = "GroupedTabsTableIdentifier"
     let GroupedTabsHeaderIdentifier = "GroupedTabsHeaderIdentifier"
     let GroupedTabCellIdentifier = "GroupedTabCellIdentifier"
     var hasExpanded = true
-    var delegate: GroupedTabsDelegate?
     static let defaultCellHeight: CGFloat = 300
     // Views
     lazy var tableView: UITableView = {
@@ -86,6 +90,7 @@ class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UI
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: GroupedTabCellIdentifier, for: indexPath) as! GroupedTabContainerCell
+        cell.delegate = self
         cell.tabs = tabGroups?.map { $0.value }[indexPath.item] // groupedTabsViewModel?.tabGroups?.map { $0.value }[indexPath.item]
         cell.titleLabel.text = tabGroups?.map { $0.key }[indexPath.item] ?? "" //groupedTabsViewModel?.tabGroups?.map { $0.key }[indexPath.item] ?? ""
         cell.backgroundColor = .clear
@@ -128,9 +133,27 @@ class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UI
         self.tableView.backgroundColor = .clear
         tableView.reloadData()
     }
+    
+    // Mark: Grouped Tabs Delegate
+    
+    func didSelectGroupedTab(tab: Tab?) {
+        print("didSelectGroupedTab Grouped \(String(describing: tab?.tabUUID))")
+        if let tab = tab {
+            delegate?.selectGroupTab(tab: tab)
+        }
+    }
+    
+    func closeTab(tab: Tab) {
+        print("closeTab Grouped \(tab.tabUUID)")
+        delegate?.closeGroupTab(tab: tab)
+    }
 }
 
-class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, TabCellDelegate {
+    
+    // Delegate
+    var delegate: GroupedTabsDelegate?
+    
     // Views
     var selectedView: UIView = {
         let view = UIView()
@@ -266,6 +289,9 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
 
     @objc func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print(indexPath.row)
+        if let tab = tabs?[indexPath.item] {
+            delegate?.didSelectGroupedTab(tab: tab)
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -275,7 +301,14 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: singleTabCellIdentifier, for: indexPath)
         guard let tabCell = cell as? TabCell, let tab = tabs?[indexPath.item] else { return cell }
+        tabCell.delegate = self
         tabCell.configureWith(tab: tab, is: false)
         return tabCell
+    }
+    
+    func tabCellDidClose(_ cell: TabCell) {
+        if let indexPath = collectionView.indexPath(for: cell), let tab = tabs?[indexPath.item] {
+            delegate?.closeTab(tab: tab)
+        }
     }
 }

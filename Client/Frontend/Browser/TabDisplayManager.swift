@@ -321,7 +321,6 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
 
             self.tabManager.removeTabAndUpdateSelectedIndex(tab)
         }
-
     }
 
     private func recordEventAndBreadcrumb(object: TelemetryWrapper.EventObject, method: TelemetryWrapper.EventMethod) {
@@ -377,6 +376,7 @@ extension TabDisplayManager: UICollectionViewDataSource {
         case .groupedTabs:
             if let groupedCell = collectionView.dequeueReusableCell(withReuseIdentifier: GroupedTabCell.Identifier, for: indexPath) as? GroupedTabCell {
 //                groupedCell.groupedTabsViewModel = inactiveViewModel
+                groupedCell.delegate = self
                 groupedCell.tabGroups = self.tabGroups
                 groupedCell.hasExpanded = true
                 groupedCell.tableView.reloadData()
@@ -402,6 +402,27 @@ extension TabDisplayManager: UICollectionViewDataSource {
 //        if !shouldEnableInactiveTabs { return 1 }
         if tabDisplayType == .TopTabTray { return 1 }
         return  TabDisplaySection.allCases.count
+    }
+}
+
+extension TabDisplayManager: GroupedTabCellDelegate {
+    
+    func closeGroupTab(tab: Tab) {
+        if self.isPrivate == false, filteredTabs.count == 1 {
+            self.tabManager.removeTabs([tab])
+            self.tabManager.selectTab(self.tabManager.addTab())
+            return
+        }
+
+        self.tabManager.removeTabAndUpdateSelectedIndex(tab)
+        refreshStore()
+    }
+    
+    func selectGroupTab(tab: Tab) {
+        if let tabTray = tabDisplayer as? GridTabViewController {
+            tabManager.selectTab(tab)
+            tabTray.dismissTabTray()
+        }
     }
 }
 
@@ -652,7 +673,7 @@ extension TabDisplayManager: TabManagerDelegate {
         
         updateWith(animationType: type) { [weak self] in
             guard let removed = self?.dataStore.remove(tab) else { return }
-            self?.collectionView.deleteItems(at: [IndexPath(row: removed, section: 0)])
+            self?.collectionView.deleteItems(at: [IndexPath(row: removed, section: TabDisplaySection.regularTabs.rawValue)])
         }
     }
 
