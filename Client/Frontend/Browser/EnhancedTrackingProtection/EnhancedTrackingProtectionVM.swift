@@ -23,7 +23,7 @@ class EnhancedTrackingProtectionMenuVM {
     }
 
     var connectionStatusString: String {
-        return connectionSecure ? .ProtectionStatusSheetConnectionSecure : .ProtectionStatusSheetConnectionInsecure
+        return connectionSecure ? .ProtectionStatusSecure : .ProtectionStatusNotSecure
     }
 
     var connectionStatusImage: UIImage {

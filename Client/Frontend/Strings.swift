@@ -658,7 +658,7 @@ extension Strings {
     public static let TPPageMenuNoTrackersBlocked = MZLocalizedString("Menu.TrackingProtection.NoTrackersBlockedTitle", value: "No trackers known to Firefox were detected on this page.", comment: "Message in menu when no trackers blocked.")
     public static let TPPageMenuBlockedTitle = MZLocalizedString("Menu.TrackingProtection.BlockedTitle", value: "Blocked", comment: "Title on tracking protection menu for blocked items.")
 
-    public static let TPDetailsVerifiedBy = MZLocalizedString("Menu.TrackingProtection.Details.Verifier", value: "Verified by %@", comment: "String to let users know the site verifier")
+    public static let TPDetailsVerifiedBy = MZLocalizedString("Menu.TrackingProtection.Details.Verifier", value: "Verified by %@", comment: "String to let users know the site verifier, where the placeholder represents the SSL certificate signer.")
 
     // Category Titles
     public static let TPCryptominersBlocked = MZLocalizedString("Menu.TrackingProtectionCryptominersBlocked.Title", value: "Cryptominers", comment: "The title that shows the number of cryptomining scripts blocked")
@@ -1305,7 +1305,7 @@ extension String {
     public static let ClearableOfflineData = MZLocalizedString("Offline Website Data", tableName: "ClearPrivateData", comment: "Settings item for clearing website data")
     public static let ClearableCookies = MZLocalizedString("Cookies", tableName: "ClearPrivateData", comment: "Settings item for clearing cookies")
     public static let ClearableDownloads = MZLocalizedString("Downloaded Files", tableName: "ClearPrivateData", comment: "Settings item for deleting downloaded files")
-    public static let ClearableSpotlight = MZLocalizedString("Spotlight Index", tableName: "ClearPrivateData", comment: "Settings item for deleting the iOS search index of browsed webpages")
+    public static let ClearableSpotlight = MZLocalizedString("Spotlight Index", tableName: "ClearPrivateData", comment: "A settings item that allows a user to use Apple's \"Spotlight Search\" in Data Management's Website Data option to search for and select an item to delete.")
 }
 
 // MARK: - SearchEngine Picker
@@ -1412,6 +1412,8 @@ extension String {
 
 // MARK: - v36 Strings
 extension String {
-    public static let ProtectionStatusSheetConnectionSecure = MZLocalizedString("ProtectionStatusSheet.SecureConnection", value: "Connection is secure", comment: "value for label to indicate user is on a secure https connection")
-    public static let ProtectionStatusSheetConnectionInsecure = MZLocalizedString("ProtectionStatusSheet.InsecureConnection", value: "Connection is not secure", comment: "value for label to indicate user is on an unencrypted website")
+    public static let ProtectionStatusSheetConnectionSecure = MZLocalizedString("ProtectionStatusSheet.SecureConnection", value: "Secure Connection", comment: "value for label to indicate user is on a secure https connection")
+    public static let ProtectionStatusSheetConnectionInsecure = MZLocalizedString("ProtectionStatusSheet.InsecureConnection", value: "Insecure Connection", comment: "value for label to indicate user is on an unencrypted website")
+    public static let ProtectionStatusSecure = MZLocalizedString("Protection.Status.Secure", value: "Connection is secure", comment: "This is the value for a label that indicates if a user is on a secure https connection.")
+    public static let ProtectionStatusNotSecure = MZLocalizedString("Protection.Status.NotSecure", value: "Connection is not secure", comment: "This is the value for a label that indicates if a user is on an unencrypted website.")
 }
