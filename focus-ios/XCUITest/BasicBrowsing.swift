@@ -47,6 +47,10 @@ class BasicBrowsing: BaseTestCase {
     func testNavigationToolbar() {
         loadWebPage("example.com")
         waitForWebPageLoad()
+        waitForExistence(app.textFields["URLBar.urlText"])
+        app.textFields["URLBar.urlText"].tap()
+        app.buttons["icon clear"].tap()
+
         loadWebPage("mozilla.org")
         waitForWebPageLoad()
 

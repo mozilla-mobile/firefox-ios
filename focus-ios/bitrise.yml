@@ -191,16 +191,16 @@ workflows:
             # Check if the build goes to refresh branch then
             # check if it is a scheduled or regular build
             # to select the testPlan to run
-
-            if [[ $BITRISEIO_GIT_BRANCH_DEST == refresh ]] || [[ $BITRISE_GIT_BRANCH == refresh ]]
+            
+            if [[ $BITRISE_GIT_MESSAGE == Schedule* ]]
             then
-                echo "PR for refresh branch"
-                envman add --key TEST_PLAN_NAME --value SmokeTestRefresh
+                echo "Scheduled build, running Full Functional Tests"
+                envman add --key TEST_PLAN_NAME --value FullFunctionalTests
             else
-                if [[ $BITRISE_GIT_MESSAGE == Schedule* ]]
+                if [[ $BITRISEIO_GIT_BRANCH_DEST == refresh ]] || [[ $BITRISE_GIT_BRANCH == refresh ]]
                 then
-                    echo "Scheduled build, running Full Functional Tests"
-                    envman add --key TEST_PLAN_NAME --value FullFunctionalTests
+                    echo "PR for refresh branch"
+                    envman add --key TEST_PLAN_NAME --value SmokeTestRefresh
                 else
                     echo "Regular build, running Smoke Test"
                     envman add --key TEST_PLAN_NAME --value SmokeTest
@@ -262,15 +262,15 @@ workflows:
             # check if it is a scheduled or regular build
             # to select the testPlan to run
 
-            if [[ $BITRISEIO_GIT_BRANCH_DEST == refresh ]]
+            if [[ $BITRISE_GIT_MESSAGE == Schedule* ]]
             then
-                echo "PR for refresh branch"
-                envman add --key TEST_PLAN_NAME --value SmokeTestRefresh
+                echo "Scheduled build, running Full Functional Tests"
+                envman add --key TEST_PLAN_NAME --value FullFunctionalTests
             else
-                if [[ $BITRISE_GIT_MESSAGE == Schedule* ]]
+                if [[ $BITRISEIO_GIT_BRANCH_DEST == refresh ]] || [[ $BITRISE_GIT_BRANCH == refresh ]]
                 then
-                    echo "Scheduled build, running Full Functional Tests"
-                    envman add --key TEST_PLAN_NAME --value FullFunctionalTests
+                    echo "PR for refresh branch"
+                    envman add --key TEST_PLAN_NAME --value SmokeTestRefresh
                 else
                     echo "Regular build, running Smoke Test"
                     envman add --key TEST_PLAN_NAME --value SmokeTest
