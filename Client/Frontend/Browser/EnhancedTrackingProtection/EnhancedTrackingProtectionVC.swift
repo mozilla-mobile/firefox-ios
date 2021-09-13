@@ -279,7 +279,8 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
             toggleContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             toggleContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             toggleContainer.topAnchor.constraint(equalTo: connectionView.bottomAnchor, constant: 32),
-            toggleContainer.heightAnchor.constraint(equalToConstant: 92),
+            toggleContainer.heightAnchor.constraint(greaterThanOrEqualToConstant: 92),
+            toggleContainer.heightAnchor.constraint(lessThanOrEqualToConstant: 106),
 
             toggleView.leadingAnchor.constraint(equalTo: toggleContainer.leadingAnchor, constant: ETPMenuUX.UX.gutterDistance),
             toggleView.trailingAnchor.constraint(equalTo: toggleContainer.trailingAnchor, constant: -ETPMenuUX.UX.gutterDistance),
@@ -287,12 +288,13 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
             toggleView.heightAnchor.constraint(greaterThanOrEqualToConstant: ETPMenuUX.UX.viewHeight),
 
             toggleLabel.leadingAnchor.constraint(equalTo: toggleView.leadingAnchor, constant: ETPMenuUX.UX.gutterDistance),
-            toggleLabel.trailingAnchor.constraint(equalTo: toggleSwitch.leadingAnchor, constant: ETPMenuUX.UX.gutterDistance),
-            toggleLabel.centerYAnchor.constraint(equalTo: toggleView.centerYAnchor),
+            toggleLabel.trailingAnchor.constraint(equalTo: toggleSwitch.leadingAnchor, constant: -ETPMenuUX.UX.gutterDistance),
             toggleLabel.topAnchor.constraint(equalTo: toggleView.topAnchor, constant: 11),
             toggleLabel.bottomAnchor.constraint(equalTo: toggleView.bottomAnchor, constant: -11),
 
             toggleSwitch.centerYAnchor.constraint(equalTo: toggleView.centerYAnchor),
+            toggleSwitch.widthAnchor.constraint(equalToConstant: 51),
+            toggleSwitch.heightAnchor.constraint(equalToConstant: 31),
             toggleSwitch.trailingAnchor.constraint(equalTo: toggleView.trailingAnchor, constant: -ETPMenuUX.UX.gutterDistance),
 
             toggleStatusLabel.leadingAnchor.constraint(equalTo: toggleLabel.leadingAnchor),
