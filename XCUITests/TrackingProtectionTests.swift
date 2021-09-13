@@ -73,7 +73,7 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.openURL(differentWebsite)
         waitUntilPageLoad()
         navigator.goto(TrackingProtectionContextMenuDetails)
-        waitForExistence(app.staticTexts["Insecure Connection"], timeout: 5)
+        waitForExistence(app.staticTexts["Connection is not secure"], timeout: 5)
         let switchValue = app.switches.firstMatch.value!
         XCTAssertEqual(switchValue as! String, "1")
 

@@ -962,6 +962,9 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         screenState.tap(app.buttons["TabLocationView.trackingProtectionButton"], to: TrackingProtectionContextMenuDetails)
 
+        screenState.tap(app.buttons["TabToolbar.homeButton"], forAction: Action.GoToHomePage) { userState in
+        }
+
         makeToolBarAvailable(screenState)
         let link = app.webViews.element(boundBy: 0).links.element(boundBy: 0)
         let image = app.webViews.element(boundBy: 0).images.element(boundBy: 0)
@@ -1077,9 +1080,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         screenState.tap(app.tables.cells["menu-NightMode"], forAction: Action.ToggleNightMode, transitionTo: BrowserTabMenu) { userState in
             userState.nightMode = !userState.nightMode
-        }
-
-        screenState.tap(app.tables.cells["menu-Home"], forAction: Action.GoToHomePage) { userState in
         }
 
         screenState.tap(app.tables.cells["whatsnew"], forAction: Action.OpenWhatsNewPage) { userState in

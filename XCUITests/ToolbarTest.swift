@@ -43,7 +43,7 @@ class ToolbarTests: BaseTestCase {
         XCTAssertEqual(valueMozilla, urlValueLong)
         XCTAssertTrue(app.buttons["URLBarView.backButton"].isEnabled)
         XCTAssertFalse(app.buttons["Forward"].isEnabled)
-        XCTAssertTrue(app.buttons["Reload"].isEnabled)
+        XCTAssertTrue(app.buttons["TabLocationView.reloadButton"].isEnabled)
 
         navigator.openURL(website2)
         waitUntilPageLoad()
