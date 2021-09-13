@@ -56,11 +56,11 @@ class HomePageSettingsUITests: BaseTestCase {
 
         // Check that it is actually set by opening a different website and going to Home
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
-        navigator.goto(BrowserTabMenu)
+        waitUntilPageLoad()
 
         //Now check open home page should load the previously saved home page
-        let homePageMenuItem = app.cells["menu-Home"]
-        waitForExistence(homePageMenuItem)
+        let homePageMenuItem = app.buttons["TabToolbar.homeButton"]
+        waitForExistence(homePageMenuItem, timeout: 5)
         homePageMenuItem.tap()
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: "example")
@@ -89,6 +89,10 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
         enterWebPageAsHomepage(text: websiteUrl1)
+        navigator.goto(SettingsScreen)
+        navigator.goto(NewTabScreen)
+        navigator.goto(BrowserTab)
+        waitUntilPageLoad()
         navigator.performAction(Action.GoToHomePage)
         waitForExistence(app.textFields["url"], timeout: 3)
 
