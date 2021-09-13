@@ -168,7 +168,6 @@ class Tab: NSObject {
         didSet {
             if let _url = url, let internalUrl = InternalURL(_url), internalUrl.isAuthorized {
                 url = URL(string: internalUrl.stripAuthorization)
-                print("URLLLLL - SET \(url)")
             }
         }
     }
@@ -310,14 +309,6 @@ class Tab: NSObject {
     func updateHisotryMetadataKey(url: String, searchTerm: String, referralUrl: String) {
         self.tabHistoryMetadatakey = HistoryMetadataKey(url: url, searchTerm: searchTerm, referrerUrl: referralUrl)
     }
-    
-    func temp() {
-        let temp = self.browserViewController?.profile.places.getSearchTermMetaData().uponQueue(.main) { [weak self] result in
-            if let val = result.successValue {
-                print("updateTimerAndObserving - result \(val)")
-            }
-        }
-    }
 
     func updateTimerAndObserving(state: TabGroupTimerState, searchTerm: String? = nil, searchProviderUrl: URL? = nil, nextUrl: String = "") {
         switch state {
@@ -347,7 +338,6 @@ class Tab: NSObject {
             if tabGroupsTimerHelper.isPaused {
                 tabGroupsTimerHelper.startOrResume()
             }
-            temp()
             tabHistoryCurrentState = state
         case .tabSwitched:
             if let key = tabHistoryMetadatakey {
@@ -595,7 +585,6 @@ class Tab: NSObject {
             if let url = request.url, url.isFileURL, request.isPrivileged {
                 return webView.loadFileURL(url, allowingReadAccessTo: url)
             }
-
             return webView.load(request)
         }
         return nil

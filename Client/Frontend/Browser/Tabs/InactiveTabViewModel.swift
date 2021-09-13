@@ -70,22 +70,8 @@ class InactiveTabViewModel {
     var inactiveTabs = [Tab]()
     var activeTabs = [Tab]()
     var recentlyClosedTabs = [Tab]()
-    var historyViewModel = HistoryMetaDataViewModel()
-//    var tabGroups: [String: [Tab]]?
     var urlGroups: [String: [URL]]?
-    
-//    var filteredActiveTabs = [Tab]()
 
-//    func updateTabMeta(profile: Profile, activeTabs: [Tab], completion: @escaping ([String: [Tab]]?, _ filteredTabs: [Tab]) -> Void) {
-//        TabGroupsManager.getTabGroups(profile: profile, tabs: activeTabs) { tabGroups, filteredActiveTabs  in
-//            self.tabGroups = tabGroups
-//            self.filteredActiveTabs = filteredActiveTabs
-//            completion(tabGroups, filteredActiveTabs)
-////            let groupedTabs: [Tab] = self.tabGroups!.values.flatMap { $0 }
-////            self.activeTabs = self.activeTabs.filter { return !groupedTabs.contains($0) }
-//        }
-//    }
-    
     func updateInactiveTabs(with selectedTab: Tab?, tabs: [Tab]) {
         self.tabs = tabs
         self.selectedTab = selectedTab
@@ -114,7 +100,7 @@ class InactiveTabViewModel {
         let currentDate = Date()
         let noon = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: currentDate) ?? Date()
         let day4_Old = Calendar.current.date(byAdding: .day, value: -4, to: noon) ?? Date()
-        
+
         for tab in tabs {
             let tabTimeStamp = tab.lastExecutedTime ?? tab.sessionData?.lastUsedTime ?? tab.firstCreatedTime ?? 0
             let tabDate = Date.fromTimestamp(tabTimeStamp)
@@ -123,7 +109,7 @@ class InactiveTabViewModel {
                 activeTabs.append(tab)
             }
         }
-        
+
         return activeTabs
     }
 

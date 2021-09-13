@@ -1039,7 +1039,6 @@ class BrowserViewController: UIViewController {
         case .URL:
             // Special case for "about:blank" popups, if the webView.url is nil, keep the tab url as "about:blank"
             if tab.url?.absoluteString == "about:blank" && webView.url == nil {
-                print(webView.url?.origin)
                 break
             }
 
@@ -1047,11 +1046,7 @@ class BrowserViewController: UIViewController {
             // the same origin as the current URL. Otherwise, do nothing and wait for
             // didCommitNavigation to confirm the page load.
             if tab.url?.origin == webView.url?.origin {
-                
-//                if tab == tabManager.selectedTab, tab.url?.absoluteString != webView.url?.absoluteString {
-//                    tab.updateTimerAndObserving(state: .tabNavigatedToDifferentUrl)
-//                }
-                
+
                 tab.url = webView.url
 
                 if tab === tabManager.selectedTab && !tab.restoring {
@@ -1269,7 +1264,6 @@ class BrowserViewController: UIViewController {
     func navigateInTab(tab: Tab, to navigation: WKNavigation? = nil, webViewStatus: WebViewUpdateStatus) {
         tabManager.expireSnackbars()
 
-//        let previousUrl = tab.url?.absoluteString
         guard let webView = tab.webView else {
             print("Cannot navigate in tab without a webView")
             return
@@ -1285,10 +1279,6 @@ class BrowserViewController: UIViewController {
                 tab.readabilityResult = nil
                 webView.evaluateJavascriptInDefaultContentWorld("\(ReaderModeNamespace).checkReadability()")
             }
-            
-//            if previousUrl != url.absoluteString {
-//                tab.updateTimerAndObserving(state: .tabNavigatedToDifferentUrl)
-//            }
             
             TabEvent.post(.didChangeURL(url), for: tab)
         }

@@ -45,18 +45,12 @@ class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UI
         tableView.sectionHeaderHeight = 0
         tableView.sectionFooterHeight = 0
         tableView.tableHeaderView = UIView(frame: CGRect(origin: .zero, size: CGSize(width: 0, height: CGFloat.leastNormalMagnitude)))
-//        tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         tableView.isScrollEnabled = false
         tableView.dataSource = self
         tableView.delegate = self
         tableView.separatorStyle = .none
         return tableView
     }()
-
-    convenience init(viewModel: InactiveTabViewModel) {
-        self.init()
-//        groupedTabsViewModel = viewModel
-    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)

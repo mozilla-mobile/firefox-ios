@@ -628,11 +628,7 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
             let width = collectionView.frame.size.width
             if let keys = tabDisplayManager.tabGroups?.keys, keys.count > 0 {
                 let height: CGFloat = GroupedTabCell.defaultCellHeight * CGFloat(tabDisplayManager.tabGroups?.keys.count ?? 0)
-//                if UIDevice.current.userInterfaceIdiom == .pad {
-//                    return CGSize(width: Int(collectionView.frame.size.width/2), height: 100)
-//                } else {
                     return CGSize(width: width >= 0 ? Int(width) : 0, height: Int(height))
-//                }
             } else {
                 return CGSize(width: 0, height: 0)
             }
