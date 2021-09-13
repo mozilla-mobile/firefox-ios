@@ -3,7 +3,6 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import SnapKit
 import Shared
 import Account
 
@@ -18,35 +17,41 @@ enum FxASignInParentType {
 /// ViewController handling Sign In through QR Code or Email address
 class FirefoxAccountSignInViewController: UIViewController {
     
-    // MARK: Closures
+    // MARK: - Properties
+    
     var shouldReload: (() -> Void)?
     
-    // MARK: Class Variable Definitions
-    lazy var qrSignInLabel: UILabel = {
-        let label = UILabel()
+    private let profile: Profile
+    private var deepLinkParams: FxALaunchParams?
+    
+    /// This variable is used to track parent page that launched this sign in VC.
+    /// telemetryObject deduced from parentType initializer is sent with telemetry events on button click
+    private let telemetryObject: TelemetryWrapper.EventObject
+    
+    /// Dismissal style for FxAWebViewController
+    /// Changes based on whether or not this VC is launched from the app menu or settings
+    private let fxaDismissStyle: DismissType
+    
+    // UI
+    let qrSignInLabel: UILabel = .build { label in
         label.textAlignment = .center
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.text = Strings.FxASignin_Subtitle
         label.font = DynamicFontHelper().LargeSizeHeavyFontAS
-        return label
-    }()
-    
-    lazy var pairImageView: UIImageView = {
-        let imageView = UIImageView()
+        label.textColor = .label
+    }
+    let pairImageView: UIImageView = .build { imageView in
         imageView.image = UIImage(named: "qr-scan")
         imageView.contentMode = .scaleAspectFit
-        return imageView
-    }()
-    
-    lazy var instructionsLabel: UILabel = {
-        let label = UILabel()
+    }
+    let instructionsLabel: UILabel = .build { label in
         label.textAlignment = .center
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-
+        label.textColor = .label
+        
         let placeholder = "firefox.com/pair"
-
         RustFirefoxAccounts.shared.accountManager.uponQueue(.main) { manager in
             manager.getPairingAuthorityURL { result in
                 guard let url = try? result.get(), let host = url.host else { return }
@@ -55,12 +60,8 @@ class FirefoxAccountSignInViewController: UIViewController {
                 label.attributedText = msg.attributedText(boldString: shortUrl, font: DynamicFontHelper().MediumSizeRegularWeightAS)
             }
         }
-
-        return label
-    }()
-    
-    lazy var scanButton: UIButton = {
-        let button = UIButton()
+    }
+    let scanButton: UIButton = .build { button in
         button.backgroundColor = UIColor.Photon.Blue50
         button.layer.cornerRadius = 8
         button.setImage(UIImage(named: "qr-code-icon-white")?.tinted(withColor: .white), for: .normal)
@@ -71,11 +72,8 @@ class FirefoxAccountSignInViewController: UIViewController {
         button.titleLabel?.font = DynamicFontHelper().MediumSizeBoldFontAS
         button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
         button.addTarget(self, action: #selector(scanbuttonTapped), for: .touchUpInside)
-        return button
-    }()
-    
-    lazy var emailButton: UIButton = {
-        let button = UIButton()
+    }
+    let emailButton: UIButton = .build { button in
         button.backgroundColor = .white
         button.setTitleColor(UIColor.Photon.Blue50, for: .normal)
         button.layer.borderColor = UIColor.Photon.Grey30.cgColor
@@ -85,22 +83,9 @@ class FirefoxAccountSignInViewController: UIViewController {
         button.accessibilityIdentifier = "EmailSignIn.button"
         button.addTarget(self, action: #selector(emailLoginTapped), for: .touchUpInside)
         button.titleLabel?.font = DynamicFontHelper().MediumSizeBoldFontAS
-        return button
-    }()
-            
-    private let profile: Profile
-    
-    /// This variable is used to track parent page that launched this sign in VC.
-    /// telemetryObject deduced from parentType initializer is sent with telemetry events on button click
-    private let telemetryObject: TelemetryWrapper.EventObject
-    
-    /// Dismissal style for FxAWebViewController
-    /// Changes based on whether or not this VC is launched from the app menu or settings
-    private let fxaDismissStyle: DismissType
+    }
 
-    private var deepLinkParams: FxALaunchParams?
-
-    // MARK: Init() and viewDidLoad()
+    // MARK: - Inits
     
     /// - Parameters:
     ///   - profile: User Profile info
@@ -131,62 +116,46 @@ class FirefoxAccountSignInViewController: UIViewController {
         fatalError("Must init FirefoxAccountSignInVC with custom initializer including Profile and ParentType parameters")
     }
     
+    // MARK: - Lifecycle methods
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        
+        view.backgroundColor = .systemBackground
         title = Strings.FxASignin_Title
         accessibilityLabel = "FxASingin.navBar"
-        addSubviews()
-        addViewConstraints()
-        handleDarkMode()
+        
+        setupLayout()
     }
     
-    // MARK: Subview Layout Functions
+    // MARK: - Helpers
     
-    func addSubviews() {
-        view.addSubview(qrSignInLabel)
-        view.addSubview(pairImageView)
-        view.addSubview(instructionsLabel)
-        view.addSubview(scanButton)
-        view.addSubview(emailButton)
-    }
-    
-    func addViewConstraints() {
-        qrSignInLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.snp_topMargin).offset(50)
-            make.centerX.equalToSuperview()
-            make.width.equalToSuperview()
-        }
-        pairImageView.snp.makeConstraints { make in
-            make.top.equalTo(qrSignInLabel.snp_bottomMargin)
-            make.height.equalToSuperview().multipliedBy(0.3)
-            make.centerX.equalToSuperview()
-            make.width.equalToSuperview()
-        }
-        instructionsLabel.snp.makeConstraints { make in
-            make.top.equalTo(pairImageView.snp_bottomMargin)
-            make.centerX.equalToSuperview()
-            make.width.equalToSuperview().multipliedBy(0.85)
-        }
-        scanButton.snp.makeConstraints { make in
-            make.top.equalTo(instructionsLabel.snp_bottomMargin).offset(40)
-            make.centerX.equalToSuperview()
-            make.width.equalTo(327)
-            make.height.equalTo(44)
-        }
-        emailButton.snp.makeConstraints { make in
-            make.top.equalTo(scanButton.snp_bottomMargin).offset(20)
-            make.centerX.equalToSuperview()
-            make.width.equalTo(327)
-            make.height.equalTo(44)
-        }
-    }
-    
-    func handleDarkMode() {
-        [qrSignInLabel, instructionsLabel].forEach {
-            // UI is not currently themeable, enforce black
-            $0.textColor = .black
-        }
+    private func setupLayout() {
+        view.addSubviews(qrSignInLabel, pairImageView, instructionsLabel, scanButton, emailButton)
+        
+        NSLayoutConstraint.activate([
+            qrSignInLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
+            qrSignInLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            pairImageView.topAnchor.constraint(equalTo: qrSignInLabel.bottomAnchor),
+            pairImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            pairImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.3),
+            pairImageView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            
+            instructionsLabel.topAnchor.constraint(equalTo: pairImageView.bottomAnchor),
+            instructionsLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            instructionsLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.85),
+            
+            scanButton.topAnchor.constraint(equalTo: instructionsLabel.bottomAnchor, constant: 30),
+            scanButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            scanButton.widthAnchor.constraint(equalToConstant: 328),
+            scanButton.heightAnchor.constraint(equalToConstant: 44),
+            
+            emailButton.topAnchor.constraint(equalTo: scanButton.bottomAnchor, constant: 10),
+            emailButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emailButton.widthAnchor.constraint(equalToConstant: 328),
+            emailButton.heightAnchor.constraint(equalToConstant: 44)
+        ])
     }
     
     // MARK: Button Tap Functions

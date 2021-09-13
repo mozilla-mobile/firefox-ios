@@ -78,7 +78,22 @@ enum NavigationPath {
     case closePrivateTabs
 
     init?(url: URL) {
-        let urlString = url.absoluteString
+        /*
+         Force the URL's scheme to lowercase to ensure the code below can cope with URLs like the following from an external source. E.g Notes.app
+         
+         Https://www.apple.com
+         */
+        func sanitizedURL(for unsanitized: URL) -> URL {
+            guard var components = URLComponents(url: unsanitized, resolvingAgainstBaseURL: true),
+                  let scheme = components.scheme, !scheme.isEmpty else {
+                return unsanitized
+            }
+            
+            components.scheme = scheme.lowercased()
+            return components.url ?? unsanitized
+        }
+        
+        let url = sanitizedURL(for: url)
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
             return nil
         }
@@ -92,21 +107,26 @@ enum NavigationPath {
         guard let scheme = components.scheme, urlSchemes.contains(scheme) else {
             return nil
         }
-
-        if urlString.starts(with: "\(scheme)://deep-link"), let deepURL = components.valueForQuery("url"), let link = DeepLink(urlString: deepURL.lowercased()) {
-            self = .deepLink(link)
-        } else if urlString.starts(with: "\(scheme)://fxa-signin"), components.valueForQuery("signin") != nil {
-            self = .fxa(params: FxALaunchParams(query: url.getQuery()))
-        } else if urlString.starts(with: "\(scheme)://open-url") {
-            self = .openUrlFromComponents(components: components)
-        } else if let widgetKitNavPath = NavigationPath.handleWidgetKitQuery(urlString: urlString, scheme: scheme, components: components) {
-            self = widgetKitNavPath
-        } else if urlString.starts(with: "\(scheme)://open-text") {
-            let text = components.valueForQuery("text")
-            self = .text(text ?? "")
-        } else if urlString.starts(with: "\(scheme)://glean") {
-            self = .glean(url: url)
-        } else if urlString.starts(with: "http:") ||  urlString.starts(with: "https:") {
+        
+        let isOurScheme = [URL.mozPublicScheme, URL.mozInternalScheme].contains(scheme)
+        if isOurScheme, let host = components.host?.lowercased(), !host.isEmpty {
+            if host == "deep-link", let deepURL = components.valueForQuery("url"), let link = DeepLink(urlString: deepURL.lowercased()) {
+                self = .deepLink(link)
+            } else if host == "fxa-signin", components.valueForQuery("signin") != nil {
+                self = .fxa(params: FxALaunchParams(query: url.getQuery()))
+            } else if host == "open-url" {
+                self = .openUrlFromComponents(components: components)
+            } else if let widgetKitNavPath = NavigationPath.handleWidgetKitQuery(components: components) {
+                self = widgetKitNavPath
+            } else if host == "open-text" {
+                let text = components.valueForQuery("text")
+                self = .text(text ?? "")
+            } else if host == "glean" {
+                self = .glean(url: url)
+            } else {
+                return nil
+            }
+        } else if ["http", "https"].contains(scheme) {
             TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)
             // Use the last browsing mode the user was in
             let isPrivate = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
@@ -147,38 +167,43 @@ enum NavigationPath {
         }
     }
 
-    private static func handleWidgetKitQuery(urlString: String, scheme: String, components: URLComponents) -> NavigationPath? {
-        if urlString.starts(with: "\(scheme)://widget-medium-topsites-open-url") {
+    private static func handleWidgetKitQuery(components: URLComponents) -> NavigationPath? {
+        guard let host = components.host?.lowercased(), !host.isEmpty else {
+            return nil
+        }
+        switch host {
+        case "widget-medium-topsites-open-url":
             // Widget Top sites - open url
             TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumTopSitesWidget)
             return .openUrlFromComponents(components: components)
-        } else if urlString.starts(with: "\(scheme)://widget-small-quicklink-open-url") {
+        case "widget-small-quicklink-open-url":
             // Widget Quick links - small - open url private or regular
             TelemetryWrapper.recordEvent(category: .action, method: .open, object: .smallQuickActionSearch)
             return .openUrlFromComponents(components: components)
-        } else if urlString.starts(with: "\(scheme)://widget-medium-quicklink-open-url") {
+        case "widget-medium-quicklink-open-url":
             // Widget Quick Actions - medium - open url private or regular
             let isPrivate = Bool(components.valueForQuery("private") ?? "") ?? UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
             TelemetryWrapper.recordEvent(category: .action, method: .open, object: isPrivate ? .mediumQuickActionPrivateSearch : .mediumQuickActionSearch)
             return .openUrlFromComponents(components: components)
-        } else if urlString.starts(with: "\(scheme)://widget-small-quicklink-open-copied") || urlString.starts(with: "\(scheme)://widget-medium-quicklink-open-copied") {
+        case "widget-small-quicklink-open-copied", "widget-medium-quicklink-open-copied":
             // Widget Quick links - medium - open copied url
             TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumQuickActionCopiedLink)
             return .openCopiedUrl()
-        } else if urlString.starts(with: "\(scheme)://widget-small-quicklink-close-private-tabs") || urlString.starts(with: "\(scheme)://widget-medium-quicklink-close-private-tabs"){
+        case "widget-small-quicklink-close-private-tabs", "widget-medium-quicklink-close-private-tabs":
             // Widget Quick links - medium - close private tabs
             TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumQuickActionClosePrivate)
             return .closePrivateTabs
-        } else if urlString.starts(with: "\(scheme)://widget-tabs-medium-open-url") {
+        case "widget-tabs-medium-open-url":
             // Widget Tabs Quick View - medium
             TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumTabsOpenUrl)
             return .openWidgetUrl(components: components)
-        } else if urlString.starts(with: "\(scheme)://widget-tabs-large-open-url") {
+        case "widget-tabs-large-open-url":
             // Widget Tabs Quick View - large
             TelemetryWrapper.recordEvent(category: .action, method: .open, object: .largeTabsOpenUrl)
             return .openWidgetUrl(components: components)
+        default:
+            return nil
         }
-        return nil
     }
     
     private static func openUrlFromComponents(components: URLComponents) -> NavigationPath {

@@ -134,10 +134,10 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         // Enable Strict ETP
         navigator.goto(TrackingProtectionSettings)
         // Check the warning alert
-         app.cells["Settings.TrackingProtectionOption.BlockListStrict"].tap()
+        app.cells["Settings.TrackingProtectionOption.BlockListStrict"].tap()
 
-         snapshot("TrackingProtectionStrictWarning-01")
-         app.alerts.buttons.firstMatch.tap()
+        snapshot("TrackingProtectionStrictWarning-01")
+        app.alerts.buttons.firstMatch.tap()
 
         // Website without blocked elements
         navigator.openURL(loremIpsumURL)
@@ -147,8 +147,9 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         snapshot("TrackingProtectionEnabledPerSite-01")
 
         // Disable the toggle so that TP is off
-        app.cells["tp.add-to-safelist"].tap()
         snapshot("TrackingProtectionDisabledPerSite-02")
+        app.switches.firstMatch.tap()
+        snapshot("TrackingProtectionDisabledPerSite-03")
     }
 
     func testSettingsETP() {

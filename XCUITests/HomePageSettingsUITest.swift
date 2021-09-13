@@ -56,37 +56,15 @@ class HomePageSettingsUITests: BaseTestCase {
 
         // Check that it is actually set by opening a different website and going to Home
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
-        navigator.goto(BrowserTabMenu)
+        waitUntilPageLoad()
 
         //Now check open home page should load the previously saved home page
-        let homePageMenuItem = app.cells["menu-Home"]
-        waitForExistence(homePageMenuItem)
+        let homePageMenuItem = app.buttons["TabToolbar.homeButton"]
+        waitForExistence(homePageMenuItem, timeout: 5)
         homePageMenuItem.tap()
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: "example")
     }
-
-    /* Test disabled until bug 1510243 is fixed
-    func testTypingBadURL() {
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
-        navigator.goto(HomeSettings)
-        // Enter an invalid Url
-        enterWebPageAsHomepage(text: invalidUrl)
-        navigator.goto(SettingsScreen)
-        // Check that it is not saved
-        navigator.goto(HomeSettings)
-        waitForExistence(app.textFields["HomePageSettingTextField"])
-        let valueAfter = app.textFields["HomePageSettingTextField"].value
-        XCTAssertEqual("Enter a webpage", valueAfter as! String)
-
-        // There is no option to go to Home, instead the website open has the option to be set as HomePageSettings
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
-        waitUntilPageLoad()
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
-        navigator.goto(BrowserTabMenu)
-        let homePageMenuItem = app.tables["Context Menu"].cells["Open Homepage"]
-        XCTAssertFalse(homePageMenuItem.exists)
-    }*/
 
     func testClipboard() {
         navigator.performAction(Action.CloseURLBarOpen)
@@ -104,30 +82,6 @@ class HomePageSettingsUITests: BaseTestCase {
         XCTAssertEqual(value, websiteUrl1)
     }
 
-    // Test disabled until bug 1510243 is fixed/clarified
-    /*
-    func testDisabledClipboard() {
-        // Type an incorrect URL and copy it
-        navigator.goto(URLBarOpen)
-        app.textFields["address"].typeText(invalidUrl)
-        app.textFields["address"].press(forDuration: 5)
-        app.menuItems["Select All"].tap()
-        app.menuItems["Copy"].tap()
-        waitForExistence(app.buttons["goBack"])
-        app.buttons["goBack"].tap()
-
-        // Go to HomePage settings and check that it is not possible to copy it into the set webpage field
-        navigator.nowAt(BrowserTab)
-        navigator.goto(HomeSettings)
-        waitForExistence(app.staticTexts["Use Copied Link"])
-
-        // Check that nothing is copied in the Set webpage field
-        app.cells["Use Copied Link"].tap()
-        let value = app.textFields["HomePageSettingTextField"].value
-
-        XCTAssertEqual("Enter a webpage", value as! String)
-    }*/
-
     func testSetFirefoxHomeAsHome() {
         // Start by setting to History since FF Home is default
         navigator.performAction(Action.CloseURLBarOpen)
@@ -135,6 +89,10 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
         enterWebPageAsHomepage(text: websiteUrl1)
+        navigator.goto(SettingsScreen)
+        navigator.goto(NewTabScreen)
+        navigator.goto(BrowserTab)
+        waitUntilPageLoad()
         navigator.performAction(Action.GoToHomePage)
         waitForExistence(app.textFields["url"], timeout: 3)
 

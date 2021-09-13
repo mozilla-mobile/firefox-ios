@@ -68,7 +68,6 @@ class BrowserViewController: UIViewController {
     var searchLoader: SearchLoader?
     let alertStackView = UIStackView() // All content that appears above the footer should be added to this view. (Find In Page/SnackBars)
     var findInPageBar: FindInPageBar?
-    private var newTabUserResearch: NewTabUserResearch?
     var chronTabsUserResearch: ChronTabsUserResearch?
     lazy var mailtoLinkHandler = MailtoLinkHandler()
     var urlFromAnotherApp: UrlToOpenModel?
@@ -133,7 +132,7 @@ class BrowserViewController: UIViewController {
     weak var pendingDownloadWebView: WKWebView?
 
     let downloadQueue = DownloadQueue()
-    var isCmdClickForNewTab = false
+    var isOnlyCmdPressed = false
 
     fileprivate var shouldShowIntroScreen: Bool { profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil }
 
@@ -237,7 +236,6 @@ class BrowserViewController: UIViewController {
     func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator? = nil) {
         let showToolbar = shouldShowFooterForTraitCollection(newCollection)
         let showTopTabs = shouldShowTopTabsForTraitCollection(newCollection)
-        let shouldShowNewTabButton = false
         
         urlBar.topTabsIsShowing = showTopTabs
         urlBar.setShowToolbar(!showToolbar)
@@ -253,15 +251,7 @@ class BrowserViewController: UIViewController {
             toolbar?.applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
             toolbar?.applyTheme()
             toolbar?.addNewTabButton.isHidden = true
-            // This is for showing (+) add tab middle button with A/B test where we need to update both toolbar and url bar when (+) button is enabled.
-            // Urlbar already has reader mode state but we still need to refresh it so that if reader mode is available we don't accidently show reload or stop button in url bar
-            if shouldShowNewTabButton {
-                toolbar?.updateMiddleButtonState(.newTab)
-                let state = urlBar.locationView.readerModeState
-                urlBar.updateReaderModeState(state)
-            } else {
-                toolbar?.updateMiddleButtonState(currentMiddleButtonState ?? .search)
-            }
+            toolbar?.updateMiddleButtonState(currentMiddleButtonState ?? .search)
             updateTabCountUsingTabManager(self.tabManager)
         }
 
@@ -472,10 +462,7 @@ class BrowserViewController: UIViewController {
         }
 
         NotificationCenter.default.addObserver(self, selector: #selector(self.appMenuBadgeUpdate), name: .FirefoxAccountStateChange, object: nil)
-        
-        // Setup New Tab user research for A/B testing
-        newTabUserResearch = NewTabUserResearch()
-        urlBar.newTabUserResearch = newTabUserResearch
+
         // Setup chron tabs A/B test
         chronTabsUserResearch = ChronTabsUserResearch()
         searchTelemetry = SearchTelemetry()
@@ -830,7 +817,6 @@ class BrowserViewController: UIViewController {
 
             } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
                 hideFirefoxHome()
-                urlBar.locationView.reloadButton.reloadButtonState = .disabled
             }
             
         } else if isAboutHomeURL {
@@ -987,24 +973,40 @@ class BrowserViewController: UIViewController {
     }
     
     func setupMiddleButtonStatus(isLoading: Bool) {
-        let shouldShowNewTabButton = false
-        
+        // Setting the default state to search to account for no tab or starting page tab
+        // `state` will be modified later if needed
+        var state: MiddleButtonState = .search
+
         // No tab
         guard let tab = tabManager.selectedTab else {
-            navigationToolbar.updateMiddleButtonState(.search)
-            currentMiddleButtonState = .search
+            urlBar.locationView.reloadButton.reloadButtonState = .disabled
+            navigationToolbar.updateMiddleButtonState(state)
+            currentMiddleButtonState = state
             return
         }
         
         // Tab with starting page
         if tab.isURLStartingPage {
-            navigationToolbar.updateMiddleButtonState(.search)
-            currentMiddleButtonState = .search
+            urlBar.locationView.reloadButton.reloadButtonState = .disabled
+            navigationToolbar.updateMiddleButtonState(state)
+            currentMiddleButtonState = state
             return
         }
-        
-        let state: MiddleButtonState = shouldShowNewTabButton ? .newTab : (isLoading ? .stop : .reload)
+
+        if isLoading {
+            state = .stop
+        } else {
+            if UIDevice.current.userInterfaceIdiom == .phone {
+                state = .home
+
+            } else {
+                state = .reload
+            }
+        }
         navigationToolbar.updateMiddleButtonState(state)
+        if toolbar != nil {
+            urlBar.locationView.reloadButton.reloadButtonState = isLoading ? .stop : .reload
+        }
         currentMiddleButtonState = state
     }
 
@@ -1103,7 +1105,7 @@ class BrowserViewController: UIViewController {
             tab.updateTimerAndObserving(state: .tabNavigatedToDifferentUrl, nextUrl: displayUrl.absoluteString)
         }
         urlBar.currentURL = tab.url?.displayURL
-        urlBar.locationView.showLockIcon(forSecureContent: tab.webView?.hasOnlySecureContent ?? false)
+        urlBar.locationView.tabDidChangeContentBlocking(tab)
         let isPage = tab.url?.displayURL?.isWebPage() ?? false
         navigationToolbar.updatePageStatus(isPage)
     }
@@ -1271,7 +1273,7 @@ class BrowserViewController: UIViewController {
 
         if let url = webView.url {
             if tab === tabManager.selectedTab {
-                urlBar.locationView.showLockIcon(forSecureContent: webView.hasOnlySecureContent)
+                urlBar.locationView.tabDidChangeContentBlocking(tab)
             }
 
             if (!InternalURL.isValid(url: url) || url.isReaderModeURL), !url.isFileURL {
@@ -1555,6 +1557,17 @@ extension BrowserViewController: LibraryPanelDelegate {
             }
         })
         self.show(toast: toast)
+    }
+}
+
+extension BrowserViewController: RecentlyClosedPanelDelegate {
+    func openRecentlyClosedSiteInSameTab(_ url: URL) {
+        tabTrayOpenRecentlyClosedTab(url)
+        libraryDrawerViewController?.close()
+    }
+    
+    func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
+        tabManager.selectTab(tabManager.addTab(URLRequest(url: url)))
     }
 }
 
@@ -2147,20 +2160,24 @@ extension BrowserViewController: ContextMenuHelperDelegate {
         }
     }
     
-    //Support for CMD+ Click on link to open in a new tab
-     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-         super.pressesBegan(presses, with: event)
-         if #available(iOS 13.4, *) {
-             guard let key = presses.first?.key, (key.keyCode == .keyboardLeftGUI || key.keyCode == .keyboardRightGUI) else { return } //GUI buttons = CMD buttons on ipad/mac
-             self.isCmdClickForNewTab = true
-         }
+    override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        // Temporary solution to support CMD + Click to open an unselected new tab
+        if #available(iOS 13.4, *) {
+            if let event = event, event.allPresses.count > 1 {
+                isOnlyCmdPressed = false
+            } else if let key = presses.first?.key, (key.keyCode == .keyboardLeftGUI || key.keyCode == .keyboardRightGUI) { // GUI equates to CMD key on physical keyboard
+                isOnlyCmdPressed = true
+            }
+        }
+        
+        super.pressesBegan(presses, with: event)
     }
     
     override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
         super.pressesEnded(presses, with: event)
         if #available(iOS 13.4, *) {
             guard let key = presses.first?.key, (key.keyCode == .keyboardLeftGUI || key.keyCode == .keyboardRightGUI) else { return }
-            self.isCmdClickForNewTab = false
+            isOnlyCmdPressed = false
         }
     }
 }

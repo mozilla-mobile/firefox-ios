@@ -57,4 +57,6 @@ extension Notification.Name {
     public static let FileDidDownload = Notification.Name("FileDidDownload")
 
     public static let DisplayThemeChanged = Notification.Name("DisplayThemeChanged")
+
+    public static let TabClosed = Notification.Name("TabClosed")
 }

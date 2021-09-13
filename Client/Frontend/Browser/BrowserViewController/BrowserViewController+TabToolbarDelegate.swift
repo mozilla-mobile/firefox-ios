@@ -5,7 +5,38 @@
 import Shared
 
 extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
+    func tabToolbarDidPressHome(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        let page = NewTabAccessors.getHomePage(self.profile.prefs)
+        if page == .homePage, let homePageURL = HomeButtonHomePageAccessors.getHomePage(self.profile.prefs) {
+            tabManager.selectedTab?.loadRequest(PrivilegedRequest(url: homePageURL) as URLRequest)
+        } else if let homePanelURL = page.url {
+            tabManager.selectedTab?.loadRequest(PrivilegedRequest(url: homePanelURL) as URLRequest)
+        }
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .home)
+    }
+
     func tabToolbarDidPressLibrary(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+    }
+    
+    func tabToolbarDidPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        tabManager.selectedTab?.reload()
+    }
+    
+    func tabToolbarDidLongPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        guard let tab = tabManager.selectedTab else { return }
+        
+        let urlActions = self.getRefreshLongPressMenu(for: tab)
+        guard !urlActions.isEmpty else { return }
+        
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred()
+        let shouldSuppress = UIDevice.current.userInterfaceIdiom != .pad
+        
+        presentSheetWith(actions: [urlActions], on: self, from: button, suppressPopover: shouldSuppress)
+    }
+    
+    func tabToolbarDidPressStop(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        tabManager.selectedTab?.stop()
     }
     
     func tabToolbarDidPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -16,28 +47,6 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
         showBackForwardList()
-    }
-
-    func tabToolbarDidPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        tabManager.selectedTab?.reload()
-    }
-
-    func tabToolbarDidLongPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        guard let tab = tabManager.selectedTab else {
-            return
-        }
-        let urlActions = self.getRefreshLongPressMenu(for: tab)
-        guard !urlActions.isEmpty else {
-            return
-        }
-        let generator = UIImpactFeedbackGenerator(style: .heavy)
-        generator.impactOccurred()
-        let shouldSuppress = UIDevice.current.userInterfaceIdiom != .pad
-        presentSheetWith(actions: [urlActions], on: self, from: button, suppressPopover: shouldSuppress)
-    }
-
-    func tabToolbarDidPressStop(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        tabManager.selectedTab?.stop()
     }
 
     func tabToolbarDidPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -103,10 +112,9 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             }
         }
         
-        let section0 = getHomeAction(vcDelegate: self)
-        var section1 = getLibraryActions(vcDelegate: self)
-        var section2 = getOtherPanelActions(vcDelegate: self)
-        let section3 = getSettingsAction(vcDelegate: self)
+        let section0 = getLibraryActions(vcDelegate: self)
+        var section1 = getOtherPanelActions(vcDelegate: self)
+        let section2 = getSettingsAction(vcDelegate: self)
         
         let optionalActions = [viewLogins, syncAction].compactMap { $0 }
         if !optionalActions.isEmpty {
@@ -114,10 +122,10 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         }
         
         if let whatsNewAction = whatsNewAction {
-            section2.append(whatsNewAction)
+            section1.append(whatsNewAction)
         }
         
-        actions.append(contentsOf: [section0, section1, section2, section3])
+        actions.append(contentsOf: [section0, section1, section2])
 
         presentSheetWith(actions: actions, on: self, from: button)
     }

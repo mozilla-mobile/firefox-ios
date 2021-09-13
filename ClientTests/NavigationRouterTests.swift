@@ -11,10 +11,7 @@ import XCTest
 class NavigationRouterTests: XCTestCase {
 
     var appScheme: String {
-        let urlTypes = Bundle.main.object(forInfoDictionaryKey: "CFBundleURLTypes") as! [AnyObject]
-        let urlType = urlTypes.first as! [String : AnyObject]
-        let urlSchemes = urlType["CFBundleURLSchemes"] as! [String]
-        return urlSchemes.first!
+        return URL.mozInternalScheme
     }
 
     func testOpenURLScheme() {
@@ -52,4 +49,20 @@ class NavigationRouterTests: XCTestCase {
         XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://fxa-signin?user=foo&email=bar")!), nil)
     }
 
+    func testCaseInsensitivity() {
+        XCTAssertEqual(NavigationPath(url: URL(string: "HtTp://www.apple.com")!), NavigationPath.url(webURL: URL(string: "http://www.apple.com")!, isPrivate: false))
+        XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme.uppercased())://Deep-Link?url=/settings/newTab")!), NavigationPath.deepLink(DeepLink.settings(.newtab)))
+    }
+    
+    func testHostDoesntSpill() {
+        // i.e ensure we check the entire host for our schemes, not just that they have the host as a prefix
+        XCTAssertEqual(NavigationPath(url: URL(string: "http://glean.mywindows.com")!), NavigationPath.url(webURL: URL(string: "http://glean.mywindows.com")!, isPrivate: false))
+        
+        XCTAssertNil(NavigationPath(url: URL(string: "\(appScheme)://glean.mywindows.com")!))
+        XCTAssertNil(NavigationPath(url: URL(string: "\(appScheme)://deep-links-are-fun?url=/settings/newTab/")!))
+
+        // http[s] URLs stay as NavigationPath.url, even if their non-scheme components would match another type of NavigationPath
+        XCTAssertEqual(NavigationPath(url: URL(string: "https://deep-link?url=/settings/newTab")!), NavigationPath.url(webURL: URL(string: "https://deep-link?url=/settings/newTab")!, isPrivate: false))
+
+    }
 }

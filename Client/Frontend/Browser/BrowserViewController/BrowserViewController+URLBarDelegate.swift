@@ -144,12 +144,11 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
 
         // Wait for both the bookmark status and the pinned status
         deferredBookmarkStatus.both(deferredPinnedTopSiteStatus).uponQueue(.main) {
-            let shouldShowNewTabButton = false
             let isBookmarked = $0.successValue ?? false
             let isPinned = $1.successValue ?? false
             let pageActions = self.getTabActions(tab: tab, buttonView: button, presentShareMenu: actionMenuPresenter,
                                                  findInPage: findInPageAction, reportSiteIssue: reportSiteIssue, presentableVC: self, isBookmarked: isBookmarked,
-                                                 isPinned: isPinned, shouldShowNewTabButton: shouldShowNewTabButton, success: successCallback)
+                                                 isPinned: isPinned, success: successCallback)
             self.presentSheetWith(actions: pageActions, on: self, from: button)
         }
     }
@@ -167,11 +166,38 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
 
     func urlBarDidTapShield(_ urlBar: URLBarView) {
         if let tab = self.tabManager.selectedTab {
-            let trackingProtectionMenu = self.getTrackingSubMenu(for: tab)
-            let title = String.localizedStringWithFormat(Strings.TPPageMenuTitle, tab.url?.host ?? "")
+            let etpViewModel = EnhancedTrackingProtectionMenuVM(tab: tab, profile: profile, tabManager: tabManager)
+            etpViewModel.onOpenSettingsTapped = {
+                let settingsTableViewController = AppSettingsTableViewController()
+                settingsTableViewController.profile = self.profile
+                settingsTableViewController.tabManager = self.tabManager
+                settingsTableViewController.settingsDelegate = self
+                settingsTableViewController.showContentBlockerSetting = true
+
+                let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
+                controller.presentingModalViewControllerDelegate = self
+
+                // Wait to present VC in an async dispatch queue to prevent a case where dismissal
+                // of this popover on iPad seems to block the presentation of the modal VC.
+                DispatchQueue.main.async {
+                    self.present(controller, animated: true, completion: nil)
+                }
+            }
+
+            let etpVC = EnhancedTrackingProtectionMenuVC(viewModel: etpViewModel)
+            if UIDevice.current.userInterfaceIdiom == .phone {
+                etpVC.modalPresentationStyle = .custom
+                etpVC.transitioningDelegate = self
+            } else {
+                etpVC.asPopover = true
+                etpVC.modalPresentationStyle = .popover
+                etpVC.popoverPresentationController?.sourceView = urlBar.locationView.trackingProtectionButton
+                etpVC.popoverPresentationController?.permittedArrowDirections = .up
+                etpVC.popoverPresentationController?.delegate = self
+            }
+
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
-            let shouldSuppress = UIDevice.current.userInterfaceIdiom != .pad
-            self.presentSheetWith(title: title, actions: trackingProtectionMenu, on: self, from: urlBar, suppressPopover: shouldSuppress)
+            self.present(etpVC, animated: true, completion: nil)
         }
     }
 
@@ -377,5 +403,14 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
 
     func urlBarDidBeginDragInteraction(_ urlBar: URLBarView) {
         dismissVisibleMenus()
+    }
+}
+
+extension BrowserViewController: UIViewControllerTransitioningDelegate {
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        let globalETPStatus = FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs)
+        return SlideOverPresentationController(presentedViewController: presented,
+                                               presenting: presenting,
+                                               withGlobalETPStatus: globalETPStatus)
     }
 }

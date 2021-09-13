@@ -33,5 +33,7 @@
 	</dict>
 	<key>MozInternalURLScheme</key>
 	<string>$(MOZ_INTERNAL_URL_SCHEME)</string>
+	<key>MozPublicURLScheme</key>
+	<string>$(MOZ_PUBLIC_URL_SCHEME)</string>
 </dict>
 </plist>

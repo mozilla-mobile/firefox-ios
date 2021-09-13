@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-import SnapKit
 import Storage
 import Shared
 import XCGLogger
@@ -69,55 +68,48 @@ class ReadingListTableViewCell: UITableViewCell, Themeable {
         }
     }
 
-    let readStatusImageView: UIImageView!
-    let titleLabel: UILabel!
-    let hostnameLabel: UILabel!
+    let readStatusImageView: UIImageView = .build { imageView in
+        imageView.contentMode = .scaleAspectFit
+    }
+    let titleLabel: UILabel = .build { label in 
+        label.numberOfLines = 2
+        label.font = DynamicFontHelper.defaultHelper.DeviceFont
+    }
+    let hostnameLabel: UILabel = .build { label in
+        label.numberOfLines = 1
+        label.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
+    }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        readStatusImageView = UIImageView()
-        titleLabel = UILabel()
-        hostnameLabel = UILabel()
-
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
+        setupLayout()
+    }
+    
+    private func setupLayout() {
         backgroundColor = UIColor.clear
-
         separatorInset = UIEdgeInsets(top: 0, left: 48, bottom: 0, right: 0)
         layoutMargins = .zero
         preservesSuperviewLayoutMargins = false
 
-        contentView.addSubview(readStatusImageView)
-        readStatusImageView.contentMode = .scaleAspectFit
-        readStatusImageView.snp.makeConstraints { (make) -> Void in
-            make.width.equalTo(ReadingListTableViewCellUX.ReadIndicatorWidth)
-            make.height.equalTo(ReadingListTableViewCellUX.ReadIndicatorHeight)
-            make.centerY.equalTo(self.contentView)
-            make.leading.equalTo(self.contentView).offset(ReadingListTableViewCellUX.ReadIndicatorLeftOffset)
-        }
-
-        contentView.addSubview(titleLabel)
-        contentView.addSubview(hostnameLabel)
-
-        titleLabel.numberOfLines = 2
-        titleLabel.snp.makeConstraints { (make) -> Void in
-            make.top.equalTo(self.contentView).offset(ReadingListTableViewCellUX.TitleLabelTopOffset)
-            make.leading.equalTo(self.contentView).offset(ReadingListTableViewCellUX.TitleLabelLeftOffset)
-            make.trailing.equalTo(self.contentView).offset(ReadingListTableViewCellUX.TitleLabelRightOffset) // TODO Not clear from ux spec
-            make.bottom.lessThanOrEqualTo(hostnameLabel.snp.top).priority(1000)
-        }
-
-        hostnameLabel.numberOfLines = 1
-        hostnameLabel.snp.makeConstraints { (make) -> Void in
-            make.bottom.equalTo(self.contentView).offset(-ReadingListTableViewCellUX.HostnameLabelBottomOffset)
-            make.leading.trailing.equalTo(self.titleLabel)
-        }
+        contentView.addSubviews(readStatusImageView, titleLabel, hostnameLabel)
+        NSLayoutConstraint.activate([
+            readStatusImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: CGFloat(ReadingListTableViewCellUX.ReadIndicatorLeftOffset)),
+            readStatusImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            readStatusImageView.widthAnchor.constraint(equalToConstant: CGFloat(ReadingListTableViewCellUX.ReadIndicatorWidth)),
+            readStatusImageView.heightAnchor.constraint(equalToConstant: CGFloat(ReadingListTableViewCellUX.ReadIndicatorHeight)),
+            
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: CGFloat(ReadingListTableViewCellUX.TitleLabelTopOffset)),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: CGFloat(ReadingListTableViewCellUX.TitleLabelLeftOffset)),
+            titleLabel.bottomAnchor.constraint(equalTo: hostnameLabel.topAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: CGFloat(ReadingListTableViewCellUX.TitleLabelRightOffset)),
+            
+            hostnameLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            hostnameLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: CGFloat(-ReadingListTableViewCellUX.HostnameLabelBottomOffset)),
+            hostnameLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor)
+        ])
 
         applyTheme()
-    }
-
-    func setupDynamicFonts() {
-        titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFont
-        hostnameLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
     }
 
     func applyTheme() {
@@ -128,7 +120,6 @@ class ReadingListTableViewCell: UITableViewCell, Themeable {
     override func prepareForReuse() {
         super.prepareForReuse()
         applyTheme()
-        setupDynamicFonts()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -241,7 +232,7 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
 
             if records?.count == 0 {
                 tableView.isScrollEnabled = false
-                tableView.tableHeaderView = createEmptyStateOverview()
+                tableView.tableHeaderView = emptyStateView
             } else {
                 if prevNumberOfRecords == 0 {
                     tableView.isScrollEnabled = true
@@ -250,64 +241,55 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
             self.tableView.reloadData()
         }
     }
-
-    fileprivate func createEmptyStateOverview() -> UIView {
-        let overlayView = UIView(frame: tableView.bounds)
-
-        let welcomeLabel = UILabel()
-        overlayView.addSubview(welcomeLabel)
-        welcomeLabel.text = .ReaderPanelWelcome
-        welcomeLabel.textAlignment = .center
-        welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallBold
-        welcomeLabel.adjustsFontSizeToFitWidth = true
-        welcomeLabel.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset(UIDevice.current.orientation.isLandscape ? 16 : 150)
-            make.width.equalTo(ReadingListPanelUX.WelcomeScreenItemWidth + ReadingListPanelUX.WelcomeScreenCircleSpacer + ReadingListPanelUX.WelcomeScreenCircleWidth)
+    
+    private lazy var emptyStateView: UIView = .build { view in
+        let welcomeLabel: UILabel = .build { label in
+            label.text = .ReaderPanelWelcome
+            label.textAlignment = .center
+            label.font = DynamicFontHelper.defaultHelper.DeviceFontSmallBold
+            label.adjustsFontSizeToFitWidth = true
+            label.textColor = .label
         }
-
-        let readerModeLabel = UILabel()
-        overlayView.addSubview(readerModeLabel)
-        readerModeLabel.text = .ReaderPanelReadingModeDescription
-        readerModeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
-        readerModeLabel.numberOfLines = 0
-        readerModeLabel.snp.makeConstraints { make in
-            make.top.equalTo(welcomeLabel.snp.bottom).offset(ReadingListPanelUX.WelcomeScreenPadding)
-            make.leading.equalTo(welcomeLabel.snp.leading)
-            make.width.equalTo(ReadingListPanelUX.WelcomeScreenItemWidth)
+        let readerModeLabel: UILabel = .build { label in
+            label.text = .ReaderPanelReadingModeDescription
+            label.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
+            label.numberOfLines = 0
+            label.textColor = .label
         }
-
-        let readerModeImageView = UIImageView(image: UIImage(named: "ReaderModeCircle"))
-        overlayView.addSubview(readerModeImageView)
-        readerModeImageView.snp.makeConstraints { make in
-            make.centerY.equalTo(readerModeLabel)
-            make.trailing.equalTo(welcomeLabel.snp.trailing)
+        let readerModeImageView: UIImageView = .build { imageView in
+            imageView.image = UIImage(named: "ReaderModeCircle")
         }
-
-        let readingListLabel = UILabel()
-        overlayView.addSubview(readingListLabel)
-        readingListLabel.text = .ReaderPanelReadingListDescription
-        readingListLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
-        readingListLabel.numberOfLines = 0
-        readingListLabel.snp.makeConstraints { make in
-            make.top.equalTo(readerModeLabel.snp.bottom).offset(ReadingListPanelUX.WelcomeScreenPadding)
-            make.leading.equalTo(welcomeLabel.snp.leading)
-            make.width.equalTo(ReadingListPanelUX.WelcomeScreenItemWidth)
-
+        let readingListLabel: UILabel = .build { label in
+            label.text = .ReaderPanelReadingListDescription
+            label.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
+            label.numberOfLines = 0
+            label.textColor = .label
         }
-
-        let readingListImageView = UIImageView(image: UIImage(named: "AddToReadingListCircle"))
-        overlayView.addSubview(readingListImageView)
-        readingListImageView.snp.makeConstraints { make in
-            make.centerY.equalTo(readingListLabel)
-            make.trailing.equalTo(welcomeLabel.snp.trailing)
+        let readingListImageView: UIImageView = .build { imageView in
+            imageView.image = UIImage(named: "AddToReadingListCircle")
         }
-
-        [welcomeLabel, readerModeLabel, readingListLabel].forEach {
-            $0.textColor = UIColor.theme.homePanel.welcomeScreenText
-        }
-
-        return overlayView
+        
+        view.addSubviews(welcomeLabel, readerModeLabel, readerModeImageView, readingListLabel, readingListImageView)
+        
+        NSLayoutConstraint.activate([
+            welcomeLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: CGFloat(UIDevice.current.userInterfaceIdiom == .pad ? 212 : 48)),
+            welcomeLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: CGFloat(UIDevice.current.orientation.isLandscape ? 16 : 150)),
+            welcomeLabel.widthAnchor.constraint(equalToConstant: CGFloat(ReadingListPanelUX.WelcomeScreenItemWidth + ReadingListPanelUX.WelcomeScreenCircleSpacer + ReadingListPanelUX.WelcomeScreenCircleWidth)),
+            
+            readerModeLabel.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: CGFloat(ReadingListPanelUX.WelcomeScreenPadding)),
+            readerModeLabel.leadingAnchor.constraint(equalTo: welcomeLabel.leadingAnchor),
+            readerModeLabel.widthAnchor.constraint(equalToConstant: CGFloat(ReadingListPanelUX.WelcomeScreenItemWidth)),
+            
+            readerModeImageView.centerYAnchor.constraint(equalTo: readerModeLabel.centerYAnchor),
+            readerModeImageView.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor),
+            
+            readingListLabel.topAnchor.constraint(equalTo: readerModeLabel.bottomAnchor, constant: CGFloat(ReadingListPanelUX.WelcomeScreenPadding)),
+            readingListLabel.leadingAnchor.constraint(equalTo: welcomeLabel.leadingAnchor),
+            readingListLabel.widthAnchor.constraint(equalToConstant: CGFloat(ReadingListPanelUX.WelcomeScreenItemWidth)),
+            
+            readingListImageView.centerYAnchor.constraint(equalTo: readingListLabel.centerYAnchor),
+            readingListImageView.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor)
+        ])
     }
 
     @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {

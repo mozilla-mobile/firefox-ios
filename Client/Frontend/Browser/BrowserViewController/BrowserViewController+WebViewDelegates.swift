@@ -575,10 +575,10 @@ extension BrowserViewController: WKNavigationDelegate {
             tab.mimeType = response.mimeType
         }
         
-        if isCmdClickForNewTab {
+        if isOnlyCmdPressed {
             guard let url = webView.url, let isPrivate = self.tabManager.selectedTab?.isPrivate else { return }
             homePanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate)
-            self.isCmdClickForNewTab = false
+            isOnlyCmdPressed = false
             decisionHandler(.cancel)
         }
 

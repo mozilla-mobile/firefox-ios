@@ -127,8 +127,8 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         // Workaround to be sure the snackbar dissapers
         waitUntilPageLoad()
-        waitForExistence(app.buttons["Reload"], timeout: 5)
-        app.buttons["Reload"].tap()
+        waitForExistence(app.buttons["TabLocationView.reloadButton"], timeout: 5)
+        app.buttons["TabLocationView.reloadButton"].tap()
         navigator.goto(PageOptionsMenu)
         navigator.goto(RequestMobileSite) // toggle off
         waitUntilPageLoad()
@@ -154,7 +154,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         // Workaround
-        app.buttons["Reload"].tap()
+        app.buttons["TabLocationView.reloadButton"].tap()
         navigator.goto(PageOptionsMenu)
         navigator.goto(RequestDesktopSite)
         waitUntilPageLoad()

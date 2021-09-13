@@ -10,14 +10,13 @@ class TabToolbarHelperTests: XCTestCase {
     var subject: TabToolbarHelper!
     var mockToolbar: MockTabToolbar!
 
-    let refreshButtonImage = UIImage.templateImageNamed("nav-refresh")
     let backButtonImage = UIImage.templateImageNamed("nav-back")
     let forwardButtonImage = UIImage.templateImageNamed("nav-forward")
     let menuButtonImage = UIImage.templateImageNamed("nav-menu")
     let libraryButtonImage = UIImage.templateImageNamed("menu-library")
-    let stopButtonImage = UIImage.templateImageNamed("nav-stop")
     let searchButtonImage = UIImage.templateImageNamed("search")
     let ImageNewTab = UIImage.templateImageNamed("nav-add")
+    let ImageHome = UIImage.templateImageNamed("menu-Home")
     
     override func setUp() {
         super.setUp()
@@ -26,29 +25,18 @@ class TabToolbarHelperTests: XCTestCase {
     }
 
     func testSetsInitialImages() {
-        XCTAssertEqual(mockToolbar.multiStateButton.image(for: .normal), refreshButtonImage)
         XCTAssertEqual(mockToolbar.backButton.image(for: .normal), backButtonImage)
         XCTAssertEqual(mockToolbar.forwardButton.image(for: .normal), forwardButtonImage)
-    }
-
-    func testStopStateImages() {
-        subject.setMiddleButtonState(.stop)
-        XCTAssertEqual(mockToolbar.multiStateButton.image(for: .normal), stopButtonImage)
-    }
-
-    func testReloadStateImages() {
-        subject.setMiddleButtonState(.reload)
-        XCTAssertEqual(mockToolbar.multiStateButton.image(for: .normal), refreshButtonImage)
     }
 
     func testSearchStateImages() {
         subject.setMiddleButtonState(.search)
         XCTAssertEqual(mockToolbar.multiStateButton.image(for: .normal), searchButtonImage)
     }
-
-    func testNewTabStateImages() {
-        subject.setMiddleButtonState(.newTab)
-        XCTAssertEqual(mockToolbar.multiStateButton.image(for: .normal), ImageNewTab)
+    
+    func testTapHome() {
+        subject.setMiddleButtonState(.home)
+        XCTAssertEqual(mockToolbar.multiStateButton.image(for: .normal), ImageHome)
     }
 }
 
@@ -88,6 +76,9 @@ class MockTabToolbar: TabToolbarProtocol {
     
     var _addNewTabButton = MockToolbarButton()
     var addNewTabButton: ToolbarButton { get { _addNewTabButton } }
+    
+    var _homeButton = MockToolbarButton()
+    var homeButton: ToolbarButton { get { _homeButton } }
     
     var _appMenuButton = MockToolbarButton()
     var appMenuButton: ToolbarButton { get { _appMenuButton } }

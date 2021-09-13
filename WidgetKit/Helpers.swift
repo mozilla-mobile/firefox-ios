@@ -5,12 +5,10 @@
 import Foundation
 import SwiftUI
 import UIKit
+import Shared
 
 var scheme: String {
-    guard let string = Bundle.main.object(forInfoDictionaryKey: "MozInternalURLScheme") as? String else {
-        return "firefox"
-    }
-    return string
+    return URL.mozInternalScheme
 }
 
 func linkToContainingApp(_ urlSuffix: String = "", query: String) -> URL {

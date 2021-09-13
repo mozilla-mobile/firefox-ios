@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import SnapKit
 import Shared
 import SwiftKeychainWrapper
 
@@ -27,11 +26,15 @@ class PasscodeEntryViewController: BasePasscodeViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = .AuthenticationEnterPasscodeTitle
+        passcodePane.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(passcodePane)
-        passcodePane.snp.makeConstraints { make in
-            make.bottom.left.right.equalTo(self.view)
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-        }
+
+        NSLayoutConstraint.activate([
+            passcodePane.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            passcodePane.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            passcodePane.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            passcodePane.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
     }
 
     override func viewWillAppear(_ animated: Bool) {

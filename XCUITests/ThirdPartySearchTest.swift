@@ -104,9 +104,11 @@ class ThirdPartySearchTest: BaseTestCase {
         waitForExistence(app.buttons["customEngineSaveButton"], timeout: 3)
         app.buttons["customEngineSaveButton"].tap()
         // Workaround for iOS14 need to wait for those elements and tap again
-        if #available(iOS 14.0, *) {
-            waitForExistence(app.navigationBars["Add Search Engine"], timeout: 3)
-            app.navigationBars["Add Search Engine"].buttons["Save"].tap()
+        if !iPad() {
+            if #available(iOS 14.0, *) {
+                waitForExistence(app.navigationBars["Add Search Engine"], timeout: 3)
+                app.navigationBars["Add Search Engine"].buttons["Save"].tap()
+            }
         }
     }
 
