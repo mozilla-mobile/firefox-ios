@@ -148,13 +148,6 @@ public class RustPlaces {
             Sentry.shared.sendWithStacktrace(message: "Error encountered while migrating bookmarks from BrowserDB", tag: SentryTag.rustPlaces, severity: .error, description: err.localizedDescription)
         }
     }
-    
-    public func getSearchTermMetaData() -> Deferred<Maybe<[HistoryMetadata]?>> {
-        return withReader { connection in
-            let lastTwoWeek = Int64(Date().lastTwoWeek.timeIntervalSince1970)
-            return try connection.getHistoryMetadataSince(since: lastTwoWeek)
-        }
-    }
 
     public func getBookmarksTree(rootGUID: GUID, recursive: Bool) -> Deferred<Maybe<BookmarkNode?>> {
         return withReader { connection in
@@ -251,11 +244,11 @@ public class RustPlaces {
         }
     }
     
-    public func recordHistoryMetaData(key: HistoryMetadataKey, observation: HistoryMetadataObservation) -> Deferred<Maybe<Void>> {
-        return withWriter { connection in
-            return try connection.noteHistoryMetadataObservation(key: key, observation: observation)
-        }
-    }
+//    public func recordHistoryMetaData(key: HistoryMetadataKey, observation: HistoryMetadataObservation) -> Deferred<Maybe<Void>> {
+//        return withWriter { connection in
+//            return try connection.noteHistoryMetadataObservation(key: key, observation: observation)
+//        }
+//    }
 
     @discardableResult
     public func createBookmark(parentGUID: GUID, url: String, title: String?, position: UInt32? = nil) -> Deferred<Maybe<GUID>> {

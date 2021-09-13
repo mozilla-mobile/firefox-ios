@@ -14,15 +14,17 @@ class TabGroupsManager {
     ///   - urlList: List of urls we want to make the groups from
     ///   - completion: completion handler that contains [Search Term: [URL]]  dictionary and filterd URLs list that has URLs  that are not part of a group
     static func getURLGroups(profile: Profile, urlList: [URL], completion: @escaping ([String: [URL]]?, _ filteredUrls: [URL]) -> Void) {
-        profile.places.getSearchTermMetaData().uponQueue(.main) { result in
+        
+        let lastTwoWeek = Int64(Date().lastTwoWeek.timeIntervalSince1970)
+        profile.places.getHistoryMetadataSince(since: lastTwoWeek).uponQueue(.main) { result in
             guard let val = result.successValue else { return completion(nil, [URL]()) }
             
-            let searchTerms = Set(val!.map({ return $0.key.searchTerm }))
+            let searchTerms = Set(val.map({ return $0.key.searchTerm }))
             var searchTermMetaDataGroup : [String: [HistoryMetadata]] = [:]
             
             // 1. Build serch term metadata group
             for term in searchTerms {
-                let elements = val!.filter({ $0.key.searchTerm == term })
+                let elements = val.filter({ $0.key.searchTerm == term })
                 searchTermMetaDataGroup[term!] = elements
             }
             
@@ -75,15 +77,17 @@ class TabGroupsManager {
     ///   - urlList: List of tabs we want to make the groups from
     ///   - completion: completion handler that contains [Search Term: [Tab]]  dictionary and filterdTabs list that has Tab which are not part of a group
     static func getTabGroups(profile: Profile, tabs: [Tab], completion: @escaping ([String: [Tab]]?, _ filteredTabs: [Tab]) -> Void) {
-        profile.places.getSearchTermMetaData().uponQueue(.main) { result in
+        
+        let lastTwoWeek = Int64(Date().lastTwoWeek.timeIntervalSince1970)
+        profile.places.getHistoryMetadataSince(since: lastTwoWeek).uponQueue(.main) { result in
             guard let val = result.successValue else { return completion(nil, [Tab]()) }
             
-            let searchTerms = Set(val!.map({ return $0.key.searchTerm }))
+            let searchTerms = Set(val.map({ return $0.key.searchTerm }))
             var searchTermMetaDataGroup : [String: [HistoryMetadata]] = [:]
             
             // 1. Build serch term metadata group
             for term in searchTerms {
-                let elements = val!.filter({ $0.key.searchTerm == term })
+                let elements = val.filter({ $0.key.searchTerm == term })
                 searchTermMetaDataGroup[term!] = elements
             }
             

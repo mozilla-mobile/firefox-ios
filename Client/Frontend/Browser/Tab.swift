@@ -302,7 +302,7 @@ class Tab: NSObject {
     
     func updateObservationForKey(key: HistoryMetadataKey, observation: HistoryMetadataObservation) {
         if let profile = self.browserViewController?.profile {
-            profile.places.recordHistoryMetaData(key: key, observation: observation)
+            profile.places.noteHistoryMetadataObservation(key: key, observation: observation)
         }
     }
  
