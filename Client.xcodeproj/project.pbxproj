@@ -668,6 +668,7 @@
 		D8EFFA0C1FF5B1FA001D3A09 /* NavigationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EFFA0B1FF5B1FA001D3A09 /* NavigationRouter.swift */; };
 		D8EFFA261FF702A8001D3A09 /* NavigationRouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EFFA251FF702A8001D3A09 /* NavigationRouterTests.swift */; };
 		D8FDEB57220CFE970069A582 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FDEB55220CFE970069A582 /* UIImage+ImageEffects.m */; };
+		D980063D26D8308700321BC1 /* RustPlacesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D980063C26D8308700321BC1 /* RustPlacesTests.swift */; };
 		DA3A4FE9254A781A00C4A9C9 /* TabTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3A4FE8254A781A00C4A9C9 /* TabTableViewHeader.swift */; };
 		DA52E1DA25F5961F0092204C /* TabTrayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA52E1D925F5961F0092204C /* TabTrayViewController.swift */; };
 		DA9FD88324E213B500168D1E /* QuickLinkSelection.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = DA9FD88124E213B400168D1E /* QuickLinkSelection.intentdefinition */; };
@@ -3643,6 +3644,7 @@
 		D92C447BAC390645A5061244 /* eu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eu; path = eu.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		D9604BC8B5E8CB81EBD47D70 /* gu-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "gu-IN"; path = "gu-IN.lproj/3DTouchActions.strings"; sourceTree = "<group>"; };
 		D9734BA0AFE3A551D08B05C2 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/Shared.strings; sourceTree = "<group>"; };
+		D980063C26D8308700321BC1 /* RustPlacesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RustPlacesTests.swift; sourceTree = "<group>"; };
 		D9BF406EAD510AF4EC9FD9B2 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		DA2240A6BF2630FC0A8A0B8F /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/ClearPrivateDataConfirm.strings"; sourceTree = "<group>"; };
 		DA3A4FE8254A781A00C4A9C9 /* TabTableViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTableViewHeader.swift; sourceTree = "<group>"; };
@@ -4726,6 +4728,7 @@
 				2FCAE27A1ABB533A00877008 /* TestSQLiteRemoteClientsAndTabs.swift */,
 				D32CACEC1AE04DA1000658EB /* TestSwiftData.swift */,
 				2FCAE22B1ABB51F800877008 /* Supporting Files */,
+				D980063C26D8308700321BC1 /* RustPlacesTests.swift */,
 			);
 			path = StorageTests;
 			sourceTree = "<group>";
@@ -7741,6 +7744,7 @@
 				7BF5A1EE1B429B3100EA9DD8 /* SyncCommandsTests.swift in Sources */,
 				287AC8661AF4776D00101515 /* TestSQLiteHistory.swift in Sources */,
 				D8BA178E206D47460023AC00 /* DeferredTestUtils.swift in Sources */,
+				D980063D26D8308700321BC1 /* RustPlacesTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
