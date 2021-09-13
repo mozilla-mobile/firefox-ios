@@ -390,9 +390,17 @@ class URLBar: UIView {
         shieldIcon.snp.removeConstraints()
         addShieldConstraints()
         
-        leftBarViewLayoutGuide.snp.makeConstraints { (make) in
-            make.leading.equalTo( toolset.forwardButton.snp.trailing).offset(UIConstants.layout.urlBarToolsetOffset)
+        if isIPadRegularDimensions {
+            leftBarViewLayoutGuide.snp.makeConstraints { (make) in
+                make.leading.equalTo( toolset.forwardButton.snp.trailing).offset(UIConstants.layout.urlBarToolsetOffset)
+            }
+        } else {
+            leftBarViewLayoutGuide.snp.makeConstraints { make in
+                make.leading.equalTo(safeAreaLayoutGuide).offset(UIConstants.layout.urlBarMargin)
+            }
+            
         }
+        
         
         rightBarViewLayoutGuide.snp.makeConstraints { (make) in
             if  isIPadRegularDimensions {
@@ -601,19 +609,20 @@ class URLBar: UIView {
         switch state {
         case .default:
             showLeftBar = false
-            compressBar = false
+            compressBar = isIPadRegularDimensions ? false : true
             showBackgroundView = true
 
             shieldIcon.animateHidden(false, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
             cancelButton.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
-
+            
             setTextToURL()
             deactivate()
             borderColor = .foundation
             backgroundColor = .foundation
+            
         case .browsing:
             showLeftBar = shouldShowToolset ? true : false
-            compressBar = false
+            compressBar = isIPadRegularDimensions ? false : true
             showBackgroundView = false
 
             shieldIcon.animateHidden(false, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
@@ -629,7 +638,7 @@ class URLBar: UIView {
             }
  
         case .editing:
-            showLeftBar = true
+            showLeftBar = !shouldShowToolset && isIPadRegularDimensions ? false : true
             compressBar = isIPadRegularDimensions ? false : true
             showBackgroundView = true
             
@@ -639,7 +648,11 @@ class URLBar: UIView {
                 }
                 editingURLTextConstrains.forEach{$0.activate()}
                 toolset.stopReloadButton.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
-                
+            }
+            if !isIPadRegularDimensions {
+                leftBarViewLayoutGuide.snp.makeConstraints { make in
+                    make.leading.equalTo(safeAreaLayoutGuide).offset(UIConstants.layout.urlBarMargin)
+                }
             }
             
             shieldIcon.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)

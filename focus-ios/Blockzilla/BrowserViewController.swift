@@ -462,7 +462,8 @@ class BrowserViewController: UIViewController {
                 make.centerX.equalToSuperview()
                 make.bottom.equalTo(urlBarContainer)
             } else {
-                make.leading.trailing.bottom.equalTo(urlBarContainer)
+                make.bottom.equalTo(urlBarContainer)
+                make.leading.trailing.equalToSuperview()
             }
         }
     }
