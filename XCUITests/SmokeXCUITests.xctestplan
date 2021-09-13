@@ -86,6 +86,7 @@
         "HistoryTests\/testOpenSyncDevices()",
         "HistoryTests\/testPrivateClosedSiteDoesNotAppearOnRecentlyClosed()",
         "HistoryTests\/testRecentlyClosedOptionAvailable()",
+        "HomeButtonTests",
         "HomePageSettingsUITests",
         "IntegrationTests",
         "LibraryTestsIpad",

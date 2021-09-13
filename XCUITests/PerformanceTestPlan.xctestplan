@@ -33,6 +33,7 @@
         "FirstRunTourTests",
         "FxScreenGraphTests",
         "HistoryTests",
+        "HomeButtonTests",
         "HomePageSettingsUITests",
         "IntegrationTests",
         "IpadOnlyTestCase",

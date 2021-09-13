@@ -57,6 +57,7 @@
         "FirstRunTourTests",
         "FxScreenGraphTests",
         "HistoryTests",
+        "HomeButtonTests",
         "HomePageSettingsUITests",
         "IpadOnlyTestCase",
         "IphoneOnlyTestCase",
