@@ -76,7 +76,11 @@
 		C817A35722CE73B4002529FF /* Deferred.swift in Sources */ = {isa = PBXBuildFile; fileRef = C817A35322CE73B4002529FF /* Deferred.swift */; };
 		C817A35822CE73B4002529FF /* ReadWriteLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C817A35522CE73B4002529FF /* ReadWriteLock.swift */; };
 		C817A35922CE73B4002529FF /* LockProtected.swift in Sources */ = {isa = PBXBuildFile; fileRef = C817A35622CE73B4002529FF /* LockProtected.swift */; };
+		C82D143026EF62BE007B275C /* TipsPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82D142F26EF62BE007B275C /* TipsPageViewController.swift */; };
+		C82D143226EF634E007B275C /* TipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82D143126EF634E007B275C /* TipViewController.swift */; };
+		C82D143426EF644E007B275C /* UIViewController+Child.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82D143326EF644E007B275C /* UIViewController+Child.swift */; };
 		C8415DB326E9FA38008BAAA2 /* UIApplication+Orientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8415DB226E9FA38008BAAA2 /* UIApplication+Orientation.swift */; };
+		C88A5D3B26EF9245009A135D /* ShareTrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C88A5D3A26EF9245009A135D /* ShareTrackersViewController.swift */; };
 		C8A9FE0A26E7A63F00A9C72B /* UserDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A9FE0926E7A5B900A9C72B /* UserDefault.swift */; };
 		D025F225218B64D600B262D8 /* SearchEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D025F224218B64D600B262D8 /* SearchEngineTests.swift */; };
 		D0967A811EC50002009D937F /* TelemetryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0967A801EC50002009D937F /* TelemetryIntegration.swift */; };
@@ -131,7 +135,7 @@
 		D3E2C96B1DA3069000DEBE3D /* URIFixup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E2C96A1DA3069000DEBE3D /* URIFixup.swift */; };
 		D3E2C96D1DA3077400DEBE3D /* CharacterSetExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E2C96C1DA3077400DEBE3D /* CharacterSetExtensions.swift */; };
 		D3E2C96F1DA3093D00DEBE3D /* BrowserToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E2C96E1DA3093D00DEBE3D /* BrowserToolbar.swift */; };
-		D3E3CA7D1DA827AD0079C94B /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E3CA7C1DA827AD0079C94B /* HomeView.swift */; };
+		D3E3CA7D1DA827AD0079C94B /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E3CA7C1DA827AD0079C94B /* HomeViewController.swift */; };
 		D3E54FCF1DEFAE80003E1AFF /* OpenSearchParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E54FCE1DEFAE80003E1AFF /* OpenSearchParser.swift */; };
 		D3E54FD11DEFB063003E1AFF /* SearchEngineManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E54FD01DEFB063003E1AFF /* SearchEngineManager.swift */; };
 		D3E54FD51DEFB25B003E1AFF /* SearchPlugins in Resources */ = {isa = PBXBuildFile; fileRef = D3E54FD41DEFB25B003E1AFF /* SearchPlugins */; };
@@ -578,7 +582,11 @@
 		C817A35422CE73B4002529FF /* Deferred.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Deferred.h; sourceTree = "<group>"; };
 		C817A35522CE73B4002529FF /* ReadWriteLock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadWriteLock.swift; sourceTree = "<group>"; };
 		C817A35622CE73B4002529FF /* LockProtected.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockProtected.swift; sourceTree = "<group>"; };
+		C82D142F26EF62BE007B275C /* TipsPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsPageViewController.swift; sourceTree = "<group>"; };
+		C82D143126EF634E007B275C /* TipViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipViewController.swift; sourceTree = "<group>"; };
+		C82D143326EF644E007B275C /* UIViewController+Child.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Child.swift"; sourceTree = "<group>"; };
 		C8415DB226E9FA38008BAAA2 /* UIApplication+Orientation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIApplication+Orientation.swift"; sourceTree = "<group>"; };
+		C88A5D3A26EF9245009A135D /* ShareTrackersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareTrackersViewController.swift; sourceTree = "<group>"; };
 		C8A9FE0926E7A5B900A9C72B /* UserDefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefault.swift; sourceTree = "<group>"; };
 		D025F224218B64D600B262D8 /* SearchEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineTests.swift; sourceTree = "<group>"; };
 		D0967A801EC50002009D937F /* TelemetryIntegration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TelemetryIntegration.swift; sourceTree = "<group>"; };
@@ -629,7 +637,7 @@
 		D3E2C96A1DA3069000DEBE3D /* URIFixup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URIFixup.swift; sourceTree = "<group>"; };
 		D3E2C96C1DA3077400DEBE3D /* CharacterSetExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CharacterSetExtensions.swift; sourceTree = "<group>"; };
 		D3E2C96E1DA3093D00DEBE3D /* BrowserToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserToolbar.swift; sourceTree = "<group>"; };
-		D3E3CA7C1DA827AD0079C94B /* HomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		D3E3CA7C1DA827AD0079C94B /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		D3E3CA801DA83FAF0079C94B /* Focus.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Focus.entitlements; sourceTree = "<group>"; };
 		D3E3CA811DA83FAF0079C94B /* FocusEnterprise.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = FocusEnterprise.entitlements; sourceTree = "<group>"; };
 		D3E54FCE1DEFAE80003E1AFF /* OpenSearchParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenSearchParser.swift; sourceTree = "<group>"; };
@@ -1228,6 +1236,10 @@
 		E4BF2DCA1BACE8CA00DA9D68 = {
 			isa = PBXGroup;
 			children = (
+				C82D142F26EF62BE007B275C /* TipsPageViewController.swift */,
+				C88A5D3A26EF9245009A135D /* ShareTrackersViewController.swift */,
+				C82D143326EF644E007B275C /* UIViewController+Child.swift */,
+				C82D143126EF634E007B275C /* TipViewController.swift */,
 				D43A61BD26B4627100814232 /* SmokeTestRefresh.xctestplan */,
 				D4341F802669342A00294A15 /* FullFunctionalTests.xctestplan */,
 				D47940D92664E15D00C286BB /* SmokeTest.xctestplan */,
@@ -1308,7 +1320,7 @@
 				D3DA77841DC2C307009C114E /* ErrorPage.swift */,
 				D30AEEBA1DE4CB1B0096A2E7 /* FileManagerExtensions.swift */,
 				D3561B2A1DB5925100A5EEAF /* GradientBackgroundView.swift */,
-				D3E3CA7C1DA827AD0079C94B /* HomeView.swift */,
+				D3E3CA7C1DA827AD0079C94B /* HomeViewController.swift */,
 				84EF9F96269489980000E361 /* TipsPageControl.swift */,
 				161D90302108085F00C2A74A /* HomeViewToolbar.swift */,
 				D3E2C9681DA3024800DEBE3D /* InsetButton.swift */,
@@ -1922,6 +1934,7 @@
 				D3426B031DBAE3800016DA5A /* URLBarContainer.swift in Sources */,
 				2696EB04211F540600F0C73F /* SearchHistoryUtils.swift in Sources */,
 				D3426AED1DB846310016DA5A /* DomainCompletion.swift in Sources */,
+				C82D143226EF634E007B275C /* TipViewController.swift in Sources */,
 				D3E251FB1DAF0668005918DC /* AppInfo.swift in Sources */,
 				31421EB12176492A0015F48B /* TitleActivityItemProvider.swift in Sources */,
 				E4BF2E111BAD8AC500DA9D68 /* Settings.swift in Sources */,
@@ -1950,6 +1963,7 @@
 				30DFF98021810BF20055707C /* SearchSuggestClient.swift in Sources */,
 				16D7169C2114EF76000C8A66 /* BlockerToggle.swift in Sources */,
 				C817A35822CE73B4002529FF /* ReadWriteLock.swift in Sources */,
+				C82D143426EF644E007B275C /* UIViewController+Child.swift in Sources */,
 				F7B3E49D2165C32B00118785 /* SearchSuggestionsPromptView.swift in Sources */,
 				D33E9B241E1D93DD00A39A44 /* RequestHandler.swift in Sources */,
 				D3426AF61DB84E7A0016DA5A /* SearchEngine.swift in Sources */,
@@ -1974,12 +1988,13 @@
 				D3E54FD11DEFB063003E1AFF /* SearchEngineManager.swift in Sources */,
 				D392881D1BC5CF180016A9A0 /* UIColorExtensions.swift in Sources */,
 				EB84F96F209380CE00BA6739 /* URLExtensions.swift in Sources */,
-				D3E3CA7D1DA827AD0079C94B /* HomeView.swift in Sources */,
+				D3E3CA7D1DA827AD0079C94B /* HomeViewController.swift in Sources */,
 				D8E0152C1FB4136E00CA3B9F /* AddSearchEngineViewController.swift in Sources */,
 				D3E251EB1DAD714C005918DC /* SafariInstructionsViewController.swift in Sources */,
 				16D7169E2114F00E000C8A66 /* TrackingProtectionViewController.swift in Sources */,
 				C80F901C26C554B800F5112B /* PhotonActionSheetCell.swift in Sources */,
 				D35A0E021E26C94F00297884 /* ClosedRangeExtensions.swift in Sources */,
+				C88A5D3B26EF9245009A135D /* ShareTrackersViewController.swift in Sources */,
 				D3E2C8FA1D9F170200DEBE3D /* LocalContentBlocker.swift in Sources */,
 				C817A35722CE73B4002529FF /* Deferred.swift in Sources */,
 				D35C11471E04AADA005FFFEF /* AppConfig.swift in Sources */,
@@ -1998,6 +2013,7 @@
 				84D6F8E226C656610006D634 /* UITableViewCellExtensions.swift in Sources */,
 				D3E251EA1DAD714C005918DC /* InstructionsView.swift in Sources */,
 				D3561B2B1DB5925100A5EEAF /* GradientBackgroundView.swift in Sources */,
+				C82D143026EF62BE007B275C /* TipsPageViewController.swift in Sources */,
 				C8415DB326E9FA38008BAAA2 /* UIApplication+Orientation.swift in Sources */,
 				D3E2C96D1DA3077400DEBE3D /* CharacterSetExtensions.swift in Sources */,
 				D3E2C96F1DA3093D00DEBE3D /* BrowserToolbar.swift in Sources */,

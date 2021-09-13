@@ -97,13 +97,12 @@ class TipManager {
         return tips
     }
     
-    private var availableTips: [Tip] {
+    var availableTips: [Tip] {
         guard shouldShowTips() else { return [] }
         guard Settings.getToggle(.showHomeScreenTips) else { return [] }
         return tips.filter { $0.canShow() }
     }
     private let laContext = LAContext()
-    var currentTip: Tip?
 
     private init() { }
 
@@ -196,26 +195,18 @@ class TipManager {
         return NSLocale.current.languageCode == "en" && !AppInfo.isKlar
     }
     
-    func getNextTip() -> Tip? {
-        if let id = currentTip?.identifier {
-            if let index = availableTips.firstIndex(where: {$0.identifier == id}) {
-                currentTip = index == availableTips.count - 1 ? availableTips[0] : availableTips[index + 1]
-                if let currentTip = currentTip {
-                    return currentTip
-                }
+    func getTip(after: Tip) -> Tip? {
+        if let index = availableTips.firstIndex(where: { $0.identifier == after.identifier }) {
+                let after = index == availableTips.count - 1 ? availableTips[0] : availableTips[index + 1]
+                return after
             }
-        }
         return nil
     }
     
-    func getPreviousTip() -> Tip? {
-        if let id = currentTip?.identifier {
-            if let index = availableTips.firstIndex(where: {$0.identifier == id}) {
-                currentTip = index == 0 ? availableTips.last : availableTips[index - 1]
-                if let currentTip = currentTip {
-                    return currentTip
-                }
-            }
+    func getTip(before: Tip) -> Tip? {
+        if let index = availableTips.firstIndex(where: { $0.identifier == before.identifier }) {
+            let before = index == 0 ? availableTips.last : availableTips[index - 1]
+            return before
         }
         return nil
     }
@@ -224,11 +215,9 @@ class TipManager {
         availableTips.count
     }
     
-    func currentTipIndex() -> Int {
-        if let id = currentTip?.identifier {
-            if let index = availableTips.firstIndex(where: {$0.identifier == id}) {
-                return index
-            }
+    func currentIndex(for tip: Tip) -> Int {
+        if let index = availableTips.firstIndex(where: { $0.identifier == tip.identifier }) {
+            return index
         }
         return 0
     }

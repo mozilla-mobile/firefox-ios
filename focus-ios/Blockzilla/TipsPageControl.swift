@@ -14,6 +14,7 @@ class TipsPageControl: UIView {
     
     var numberOfPages: Int = 0 {
         didSet {
+            removeDots()
             addDots()
         }
     }
@@ -40,6 +41,11 @@ class TipsPageControl: UIView {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func removeDots() {
+        stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        dotsArray.removeAll()
     }
     
     private func addDots() {
