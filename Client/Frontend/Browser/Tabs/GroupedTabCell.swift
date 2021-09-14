@@ -275,9 +275,7 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let cellWidth = floor((collectionView.bounds.width - GridTabTrayControllerUX.Margin * CGFloat(numberOfColumns + 1)) / CGFloat(numberOfColumns))
         let isIpad = UIDevice.current.userInterfaceIdiom == .pad
-        let orientation = UIDevice.current.orientation
-        let isPortrait = (orientation == .portrait || orientation == .portraitUpsideDown)
-        let padding = isIpad && isPortrait ? 75 : (isIpad && !isPortrait) ? 105 : 10
+        let padding = isIpad && !UIWindow.isLandscape ? 75 : (isIpad && UIWindow.isLandscape) ? 105 : 10
         return CGSize(width: Int(cellWidth) - padding, height: 185)
     }
 

@@ -90,8 +90,8 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     private var inactiveNimbusExperimentStatus: Bool = false
     var shouldEnableGroupedTabs: Bool {
         guard featureFlags.isFeatureActive(.groupedTabs) else { return false }
+        return true
     }
-    
     var shouldEnableInactiveTabs: Bool {
         guard featureFlags.isFeatureActive(.inactiveTabs) else { return false }
         return inactiveNimbusExperimentStatus ? inactiveNimbusExperimentStatus : profile.prefs.boolForKey(PrefsKeys.KeyEnableInactiveTabs) ?? false
