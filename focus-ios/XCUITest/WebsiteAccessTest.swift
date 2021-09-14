@@ -8,6 +8,7 @@ class WebsiteAccessTests: BaseTestCase {
     // Smoketest
     func testVisitWebsite() {
         // Check initial page
+        dismissURLBarFocused()
         checkForHomeScreen()
 
         // Enter 'mozilla' on the search field
@@ -30,6 +31,7 @@ class WebsiteAccessTests: BaseTestCase {
         app.buttons["URLBar.deleteButton"].firstMatch.tap()
 
         // Check it is on the initial page
+        dismissURLBarFocused()
         checkForHomeScreen()
     }
 

@@ -57,10 +57,10 @@ class HomeViewController: UIViewController {
         }
 
         tipView.snp.makeConstraints { make in
-            make.bottom.equalTo(toolbar.snp.top).offset(-6)
+            make.bottom.equalTo(toolbar.snp.top).offset(-UIConstants.layout.tipViewBottomOffset)
             make.leading.trailing.equalToSuperview()
             make.centerX.equalToSuperview()
-            make.height.equalTo(75)
+            make.height.equalTo(UIConstants.layout.tipViewHeight)
         }
 
         toolbar.snp.makeConstraints { make in
@@ -126,6 +126,30 @@ class HomeViewController: UIViewController {
             break
         }
     }
+    
+    func updateUI(urlBarIsActive: Bool) {
+        tipsViewController.showPageController(urlBarIsActive)
+        toolbar.isHidden = urlBarIsActive
+        
+        tipView.snp.remakeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.centerX.equalToSuperview()
+            make.height.equalTo(UIConstants.layout.tipViewHeight)
+            
+            if urlBarIsActive {
+                make.bottom.equalToSuperview()
+            } else {
+                make.bottom.equalTo(toolbar.snp.top).offset(-UIConstants.layout.tipViewBottomOffset)
+            }
+        }
+        
+        if UIScreen.main.bounds.height ==  UIConstants.layout.iPhoneSEHeight {
+            textLogo.snp.updateConstraints{ make in
+                make.top.equalTo(self.view.snp.centerY).offset(urlBarIsActive ?  UIConstants.layout.textLogoOffsetSmallDevice : UIConstants.layout.textLogoOffset)
+            }
+        }
+    }
+
 
     private func didTap(tip: TipManager.Tip) {
         delegate?.didTapTip(tip)

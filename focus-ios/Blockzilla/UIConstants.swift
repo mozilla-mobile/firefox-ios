@@ -218,7 +218,11 @@ struct UIConstants {
         static let urlBarToolsetOffset: CGFloat = 60
         static let urlBarIPadToolsetOffset: CGFloat = 110
         static let textLogoOffset: CGFloat = -10 - browserToolbarHeight / 2
+        static let textLogoOffsetSmallDevice: CGFloat = 10 - browserToolbarHeight / 4
         static let textLogoMargin: CGFloat = 44
+        static let tipDescriptionMargin: CGFloat = 12
+        static let tipViewHeight: CGFloat = 75
+        static let tipViewBottomOffset: CGFloat = 6
         static let urlBarButtonImageSize: CGFloat = 20
         static let urlBarButtonTargetSize: CGFloat = 40
         static let settingsTextPadding: CGFloat = 10
@@ -302,6 +306,7 @@ struct UIConstants {
         static let shortcutsBackgroundHeightIPad: CGFloat = 176
         static let shortcutsBackgroundWidthIPad: CGFloat = 676
         static let smallestSplitViewMaxWidthLimit: CGFloat = UIScreen.main.bounds.width * 0.45
+        static let iPhoneSEHeight: CGFloat = 568
     }
 
     struct strings {

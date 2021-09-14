@@ -54,6 +54,10 @@ class TipsPageViewController: UIViewController {
         }
         
     }
+    
+    func showPageController(_ urlBarIsActive: Bool) {
+        (pageController.view.subviews.first { $0 is UIPageControl } as? UIPageControl)?.isHidden = urlBarIsActive
+    }
 }
 
 extension TipsPageViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {

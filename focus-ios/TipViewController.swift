@@ -15,6 +15,7 @@ class TipViewController: UIViewController {
         let label = SmartLabel()
         label.textColor = .accent
         label.font = UIConstants.fonts.shareTrackerStatsLabel
+        label.textAlignment = .center
         label.numberOfLines = 0
         label.minimumScaleFactor = UIConstants.layout.homeViewLabelMinimumScale
         return label
@@ -47,7 +48,8 @@ class TipViewController: UIViewController {
         tipDescriptionLabel.text = tip.description
         
         tipDescriptionLabel.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
+            make.leading.equalTo(view).offset(UIConstants.layout.tipDescriptionMargin)
+            make.trailing.equalTo(view).inset(UIConstants.layout.tipDescriptionMargin)
             make.bottom.equalToSuperview()
         }
 
