@@ -4,7 +4,6 @@
 
 import Foundation
 import Shared
-import MozillaAppServices
 
 enum InstallType: String, Codable {
     case fresh
@@ -37,7 +36,6 @@ enum InstallType: String, Codable {
 
 // Data Model
 struct DefaultBrowserOnboardingModel {
-    var titleImage: UIImage
     var titleText: String
     var descriptionText: [String]
     var imageText: String
@@ -47,40 +45,13 @@ class DefaultBrowserOnboardingViewModel {
     //  Internal vars
     var model: DefaultBrowserOnboardingModel?
     var goToSettings: (() -> Void)?
-    private let experiments: NimbusApi
-    
-    private(set) lazy var displayTitleImage = !(experiments.withVariables(featureId: .onboardingDefaultBrowser).getBool("should-hide-title-image") ?? false)
 
-    init(experiments: NimbusApi = Experiments.shared) {
-        self.experiments = experiments
+    init() {
         setupUpdateModel()
-    }
-
-    private func getCorrectImage() -> UIImage {
-        let layoutDirection = UIApplication.shared.userInterfaceLayoutDirection
-        switch ThemeManager.instance.currentName {
-        case .dark:
-            if layoutDirection == .leftToRight {
-                return UIImage(named: "Dark-LTR")!
-            } else {
-                return UIImage(named: "Dark-RTL")!
-            }
-        case .normal:
-            if layoutDirection == .leftToRight {
-                return UIImage(named: "Light-LTR")!
-            } else {
-                return UIImage(named: "Light-RTL")!
-            }
-        }
     }
     
     private func setupUpdateModel() {
-        model = DefaultBrowserOnboardingModel(titleImage: getCorrectImage(), titleText: String.DefaultBrowserCardTitle, descriptionText: [String.DefaultBrowserCardDescription, String.DefaultBrowserOnboardingDescriptionStep1, String.DefaultBrowserOnboardingDescriptionStep2, String.DefaultBrowserOnboardingDescriptionStep3], imageText: String.DefaultBrowserOnboardingScreenshot)
-    }
-    
-    // Used for theme changes
-    func refreshModelImage() {
-        model?.titleImage = getCorrectImage()
+        model = DefaultBrowserOnboardingModel(titleText: String.DefaultBrowserCardTitle, descriptionText: [String.DefaultBrowserCardDescription, String.DefaultBrowserOnboardingDescriptionStep1, String.DefaultBrowserOnboardingDescriptionStep2, String.DefaultBrowserOnboardingDescriptionStep3], imageText: String.DefaultBrowserOnboardingScreenshot)
     }
     
     static func shouldShowDefaultBrowserOnboarding(userPrefs: Prefs) -> Bool {
