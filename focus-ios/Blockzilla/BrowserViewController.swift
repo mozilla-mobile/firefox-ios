@@ -938,7 +938,7 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBar(_ urlBar: URLBar, didEnterText text: String) {
         let trimmedText = text.trimmingCharacters(in: .whitespaces)
-        let isOnHomeView = homeViewController != nil
+        let isOnHomeView = !urlBar.inBrowsingMode
         let shouldShowShortcuts = trimmedText.isEmpty && shortcutManager.numberOfShortcuts != 0
         shortcutsContainer.isHidden = !shouldShowShortcuts
         shortcutsBackground.isHidden = isOnHomeView ? true : !shouldShowShortcuts
