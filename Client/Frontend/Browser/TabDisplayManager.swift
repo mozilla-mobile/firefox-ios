@@ -98,6 +98,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         
         return inactiveNimbusExperimentStatus ? inactiveNimbusExperimentStatus : profile.prefs.boolForKey(PrefsKeys.KeyEnableInactiveTabs) ?? false
     }
+    
     var filteredTabs = [Tab]()
     var tabGroups: [String: [Tab]]?
 
@@ -168,6 +169,12 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     /// Even when we have inactive tabs enabled try to call `tabsToDisplay`
     /// `tabsToDisplay` will make sure to get the correct set ot tabs and also check if feature is enabled
     private func getTabsAndUpdateInactiveState(completion: @escaping ([String: [Tab]]?, [Tab]) -> Void) {
+        let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
+        guard tabDisplayType == .TabGrid else {
+            self.filteredTabs = allTabs
+            completion(nil, allTabs)
+            return
+        }
         guard shouldEnableInactiveTabs else {
             if !self.isPrivate && shouldEnableGroupedTabs {
                 TabGroupsManager.getTabGroups(profile: profile, tabs: tabManager.normalTabs) { tabGroups, filteredActiveTabs  in
@@ -177,12 +184,11 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
                 }
             } else {
                 self.tabGroups = nil
-                self.filteredTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
-                completion(nil, self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs)
+                self.filteredTabs = allTabs
+                completion(nil, allTabs)
             }
             return
         }
-        let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         guard allTabs.count > 0, let inactiveViewModel = inactiveViewModel else {
             self.tabGroups = nil
             self.filteredTabs = [Tab]()
@@ -323,7 +329,9 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
 
 extension TabDisplayManager: UICollectionViewDataSource {
     @objc func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if tabDisplayType == .TopTabTray { return dataStore.count }
+        if tabDisplayType == .TopTabTray {
+            return dataStore.count + (tabGroups?.count ?? 0)
+        }
         switch TabDisplaySection(rawValue: section) {
         case .groupedTabs:
             return shouldEnableGroupedTabs ? 1 : 0
@@ -338,8 +346,8 @@ extension TabDisplayManager: UICollectionViewDataSource {
 
     @objc func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         var cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.tabReuseIdentifer, for: indexPath)
-        guard let tab = dataStore.at(indexPath.row) else { return cell }
         if tabDisplayType == .TopTabTray {
+            guard let tab = dataStore.at(indexPath.row) else { return cell }
             cell = tabDisplayer?.cellFactory(for: cell, using: tab) ?? cell
             return cell
         }
@@ -354,6 +362,7 @@ extension TabDisplayManager: UICollectionViewDataSource {
                 cell = groupedCell
             }
         case .regularTabs:
+            guard let tab = dataStore.at(indexPath.row) else { return cell }
             cell = tabDisplayer?.cellFactory(for: cell, using: tab) ?? cell
         case .inactiveTabs:
             if let inactiveCell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabCell.Identifier, for: indexPath) as? InactiveTabCell {
@@ -628,7 +637,8 @@ extension TabDisplayManager: TabManagerDelegate {
                 }
             }
             self.dataStore.insert(tab, at: indexToPlaceTab)
-            self.collectionView.insertItems(at: [IndexPath(row: indexToPlaceTab, section: 1)])
+            let section = self.tabDisplayType == .TopTabTray ? 0 : TabDisplaySection.regularTabs.rawValue
+            self.collectionView.insertItems(at: [IndexPath(row: indexToPlaceTab, section: section)])
             
         }
     }
@@ -643,7 +653,8 @@ extension TabDisplayManager: TabManagerDelegate {
         
         updateWith(animationType: type) { [weak self] in
             guard let removed = self?.dataStore.remove(tab) else { return }
-            self?.collectionView.deleteItems(at: [IndexPath(row: removed, section: TabDisplaySection.regularTabs.rawValue)])
+            let section = self?.tabDisplayType == .TopTabTray ? 0 : TabDisplaySection.regularTabs.rawValue
+            self?.collectionView.deleteItems(at: [IndexPath(row: removed, section: section)])
         }
     }
 

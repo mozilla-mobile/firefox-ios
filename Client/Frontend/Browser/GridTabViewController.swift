@@ -633,6 +633,7 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
                 return CGSize(width: 0, height: 0)
             }
         case .regularTabs, .none:
+            guard tabDisplayManager.filteredTabs.count > 0 else { return CGSize(width: 0, height: 0) }
             return CGSize(width: cellWidth, height: self.cellHeightForCurrentDevice())
         case .inactiveTabs:
             if tabDisplayManager.isPrivate { return CGSize(width: 0, height: 0) }

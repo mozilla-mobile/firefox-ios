@@ -26,7 +26,6 @@ protocol GroupedTabCellDelegate {
 }
 
 class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UITableViewDelegate, GroupedTabsDelegate {
-//    var groupedTabsViewModel: InactiveTabViewModel?
     var delegate: GroupedTabCellDelegate?
     var tabGroups: [String: [Tab]]?
     static let Identifier = "GroupedTabCellIdentifier"

@@ -35,7 +35,8 @@ class TabGroupsManager {
             outerUrlLoop: for url in urlList {
                 innerMetadataLoop: for (searchTerm, historyMetaList) in searchTermMetaDataGroup {
                     if historyMetaList.contains(where: { metadata in
-                        metadata.key.url == url.absoluteString
+                        let absoluteUrl = url.absoluteString
+                        return metadata.key.url == absoluteUrl || metadata.key.referrerUrl == absoluteUrl
                     }) {
                         urlInGroups.append(url)
                         if urlGroupData[searchTerm] == nil {
@@ -98,7 +99,8 @@ class TabGroupsManager {
             outerTabLoop: for tab in tabs {
                 innerMetadataLoop: for (searchTerm, historyMetaList) in searchTermMetaDataGroup {
                     if historyMetaList.contains(where: { metadata in
-                        metadata.key.url == tab.lastKnownUrl?.absoluteString
+                        let tabUrl = tab.lastKnownUrl?.absoluteString
+                        return metadata.key.url == tabUrl || metadata.key.referrerUrl == tabUrl
                     }) {
                         tabInGroups.append(tab)
                         if tabGroupData[searchTerm] == nil {
