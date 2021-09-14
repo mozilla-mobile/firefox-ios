@@ -27,10 +27,15 @@ class URIFixup {
         }
 
         // If there's no scheme, we're going to prepend "http://". First,
-        // make sure there's at least two "." in the host. This means
+        // make sure there's at least one "." in the host. This means
         // we'll allow single-word searches (e.g., "foo") at the expense
         // of breaking single-word hosts without a scheme (e.g., "localhost").
-        if trimmed.components(separatedBy: ".").count <= 2 {
+        if trimmed.range(of: ".") == nil {
+            return nil
+        }
+
+        // For number like "123.45", we'd rather not fixup as "123.0.0.45"
+        if Double(trimmed) != nil {
             return nil
         }
 

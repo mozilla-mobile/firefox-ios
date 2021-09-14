@@ -38,6 +38,8 @@ class SearchTests: XCTestCase {
         checkInvalidURL("foo bar")
         checkInvalidURL("mozilla. org")
         checkInvalidURL("123")
+        checkInvalidURL("123.45")
+        checkInvalidURL("-9.0")
         checkInvalidURL("a/b")
         checkInvalidURL("创业咖啡")
         checkInvalidURL("创业咖啡 中国")
