@@ -197,7 +197,7 @@ private class AboutHeaderView: UIView {
 
     private lazy var versionNumber: UILabel = {
         let label = SmartLabel()
-        label.text = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
+        label.text = "\(AppInfo.shortVersion) (\(AppInfo.buildNumber)) / \(UIDevice.current.systemName) \(UIDevice.current.systemVersion)"
         label.font = UIConstants.fonts.aboutText
         label.textColor = UIConstants.colors.defaultFont.withAlphaComponent(0.5)
         return label
