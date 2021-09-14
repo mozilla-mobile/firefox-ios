@@ -65,7 +65,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
             toggle.addTarget(self, action: #selector(defaultToggleSwitched(_:)), for: .valueChanged)
             toggle.accessibilityIdentifier = "toggleAutocompleteSwitch"
             toggle.isOn = Settings.getToggle(.enableDomainAutocomplete)
-            toggle.onTintColor = .accentButton
+            toggle.onTintColor = .accent
             cell.accessoryView = PaddedSwitch(switchView: toggle)
 
         } else {
@@ -77,7 +77,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
                 toggle.addTarget(self, action: #selector(customToggleSwitched(_:)), for: .valueChanged)
                 toggle.accessibilityIdentifier = "toggleCustomAutocompleteSwitch"
                 toggle.isOn = Settings.getToggle(.enableCustomDomainAutocomplete)
-                toggle.onTintColor = .accentButton
+                toggle.onTintColor = .accent
                 cell.accessoryView = PaddedSwitch(switchView: toggle)
             } else {
                 cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "newDomainCell")
@@ -107,7 +107,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
         switch section {
         case 0:
             let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
-            let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor: UIColor.accentButton])
+            let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor: UIColor.accent])
             let subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.autocompleteTopSitesDesc, AppInfo.productName), attributes: [.foregroundColor: UIConstants.colors.settingsDetailLabel])
             let space = NSAttributedString(string: " ", attributes: [:])
             subtitle.append(space)
@@ -125,7 +125,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
             return cell
         case 1:
             let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
-            let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor: UIColor.accentButton])
+            let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor: UIColor.accent])
             let subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.autocompleteManageSitesDesc, AppInfo.productName), attributes: [.foregroundColor: UIConstants.colors.settingsDetailLabel])
             let space = NSAttributedString(string: " ", attributes: [:])
             subtitle.append(space)

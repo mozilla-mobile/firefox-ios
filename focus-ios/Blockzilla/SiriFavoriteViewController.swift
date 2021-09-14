@@ -86,7 +86,7 @@ class SiriFavoriteViewController: UIViewController {
         }
 
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: UIConstants.strings.cancel, style: .plain, target: self, action: #selector(SiriFavoriteViewController.cancelTapped))
-        self.navigationItem.leftBarButtonItem?.tintColor = .accentButton
+        self.navigationItem.leftBarButtonItem?.tintColor = .accent
     }
 
     private func setUpEditUI() {
@@ -135,7 +135,7 @@ class SiriFavoriteViewController: UIViewController {
         let doneButton = UIBarButtonItem(title: UIConstants.strings.Done, style: .done, target: self, action: #selector(SiriFavoriteViewController.doneTapped))
         nextButton.accessibilityIdentifier = "doneButton"
         self.navigationItem.rightBarButtonItem = addedToSiri ? doneButton : nextButton
-        self.navigationItem.rightBarButtonItem?.tintColor = .accentButton
+        self.navigationItem.rightBarButtonItem?.tintColor = .accent
     }
 
     @objc func cancelTapped() {

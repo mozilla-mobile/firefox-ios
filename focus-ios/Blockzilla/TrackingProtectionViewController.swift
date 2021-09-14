@@ -48,7 +48,7 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
         
         if !isOpenedFromSetting {
             let doneButton = UIBarButtonItem(title: UIConstants.strings.done, style: .plain, target: self, action: #selector(doneTapped))
-            doneButton.tintColor = .accentButton
+            doneButton.tintColor = .accent
             navigationItem.rightBarButtonItem = doneButton
             self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for:.default)
             self.navigationController?.navigationBar.shadowImage = UIImage()
@@ -203,7 +203,8 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
         if section == 1 {
             let footer = UITableViewCell(style: .subtitle, reuseIdentifier: "trackingProtectionStatusFooter")
             footer.textLabel?.text = trackingProtectionEnabled ? UIConstants.strings.trackingProtectionOn : UIConstants.strings.trackingProtectionOff
-            footer.textLabel?.textColor = .primaryText.withAlphaComponent(0.6)
+            footer.textLabel?.textColor = .secondaryDark.withAlphaComponent(0.6)
+            footer.textLabel?.font = UIConstants.fonts.tableSectionHeader
             footer.textLabel?.numberOfLines = 0
             return footer
         }
@@ -260,7 +261,7 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
     private func settingsCell() -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "trackingSettingsCell")
         cell.textLabel?.text = UIConstants.strings.trackingProtectionMoreSettings
-        cell.textLabel?.textColor = .accentButton
+        cell.textLabel?.textColor = .accent
         cell.backgroundColor = .secondaryBackground
         cell.selectionStyle = .none
         
@@ -277,10 +278,11 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
         textLabel.numberOfLines = 0
         
         let text = NSMutableAttributedString(string: String(format: UIConstants.strings.trackersDescriptionLabel2, AppInfo.productName), attributes: [.foregroundColor: UIColor.primaryText, .font: UIConstants.fonts.trackingProtectionHeader])
-        let learnMore = NSAttributedString(string: UIConstants.strings.trackingProtectionLearnMore, attributes: [.foregroundColor: UIColor.accentButton, .font: UIConstants.fonts.trackingProtectionHeader])
+        let learnMore = NSAttributedString(string: UIConstants.strings.trackingProtectionLearnMore, attributes: [.foregroundColor: UIColor.accent, .font: UIConstants.fonts.trackingProtectionHeader])
         let space = NSAttributedString(string: "\n", attributes: [:])
         text.append(space)
         text.append(learnMore)
+        text.append(space)
         textLabel.attributedText = text
         
         textLabel.backgroundColor = .primaryBackground
@@ -295,7 +297,8 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
     private func trackersHeader() -> UITableViewCell {
         let header = UITableViewCell(style: .subtitle, reuseIdentifier: "trackersHeader")
         header.textLabel?.text = UIConstants.strings.trackersHeader.uppercased()
-        header.textLabel?.textColor = .primaryText.withAlphaComponent(0.6)
+        header.textLabel?.textColor = .secondaryDark.withAlphaComponent(0.6)
+        header.textLabel?.font = UIConstants.fonts.tableSectionHeader
         header.textLabel?.numberOfLines = 0
         
         return header

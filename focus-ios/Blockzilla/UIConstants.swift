@@ -159,7 +159,7 @@ struct UIConstants {
 		static let promptTitle = UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.bold)
 		static let promptMessage = UIFont.systemFont(ofSize: 15)
         static let promptButton = UIFont.systemFont(ofSize: 17, weight: .medium)
-        static let trackingProtectionHeader = UIFont.systemFont(ofSize: 15)
+        static let trackingProtectionHeader = UIFont.systemFont(ofSize: 15, weight: .regular)
         static let trackingProtectionStatsText = UIFont.systemFont(ofSize: 15)
         static let trackingProtectionStatsDetail = UIFont.systemFont(ofSize: 20)
     }

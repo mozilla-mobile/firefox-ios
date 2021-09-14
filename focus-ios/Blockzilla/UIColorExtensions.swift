@@ -15,7 +15,6 @@ extension UIColor {
     
     static let above = UIColor(named: "Above")!
     static let accent = UIColor(named: "Accent")!
-    static let accentButton = UIColor(named: "AccentButton")!
     static let cfrFirst = UIColor(named: "CfrFirst")!
     static let cfrSecond = UIColor(named: "CfrSecond")!
     static let divider = UIColor(named: "Divider")!
@@ -33,6 +32,7 @@ extension UIColor {
     static let searchGradientFourth = UIColor(named: "SearchGradientFourth")!
     static let searchSeparator = UIColor(named: "SearchSeparator")!
     static let secondaryBackground = UIColor(named: "SecondaryBackground")!
+    static let secondaryDark = UIColor(named: "SecondaryDark")!
     static let secondaryText = UIColor(named: "SecondaryText")!
     static let secondayButton = UIColor(named: "SecondayButton")!
     static let warning = UIColor(named: "Warning")!

@@ -265,8 +265,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         navigationBar.titleTextAttributes = [.foregroundColor: UIColor.primaryText]
 
         let backButton = UIButton(type: .custom)
-        backButton.setImage(UIImage(named: "icon_cancel")?.withTintColor(.accentButton), for: .normal)
-        backButton.tintColor = .accentButton
+        backButton.setImage(UIImage(named: "icon_cancel")?.withTintColor(.accent), for: .normal)
+        backButton.tintColor = .accent
         backButton.setTitle(" " + UIConstants.strings.browserBack, for: .normal)
         backButton.setTitleColor(backButton.tintColor, for: .normal)
         backButton.addTarget(self, action: #selector(dismissSettings), for: .touchUpInside)
@@ -276,12 +276,12 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
         highlightsButton = UIBarButtonItem(title: UIConstants.strings.whatsNewTitle, style: .plain, target: self, action: #selector(whatsNewClicked))
         highlightsButton?.image = UIImage(named: "highlight")
-        highlightsButton?.tintColor = .accentButton
+        highlightsButton?.tintColor = .accent
         highlightsButton?.accessibilityIdentifier = "SettingsViewController.whatsNewButton"
         navigationItem.rightBarButtonItem = highlightsButton
 
         if whatsNew.shouldShowWhatsNew() {
-            highlightsButton?.tintColor = .accentButton
+            highlightsButton?.tintColor = .accent
         }
 
         view.addSubview(tableView)
@@ -302,7 +302,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         for (sectionIndex, toggleArray) in toggles {
             for (cellIndex, blockerToggle) in toggleArray {
                 let toggle = blockerToggle.toggle
-                toggle.onTintColor = .accentButton
+                toggle.onTintColor = .accent
                 toggle.tintColor = .darkGray
                 toggle.addTarget(self, action: #selector(toggleSwitched(_:)), for: .valueChanged)
                 toggle.isOn = Settings.getToggle(blockerToggle.setting)
@@ -520,8 +520,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
             cell.backgroundColor = .primaryBackground
             cell.textLabel?.numberOfLines = 0
-            cell.textLabel?.textColor = .secondaryText.withAlphaComponent(0.6)
-            cell.textLabel?.font = .systemFont(ofSize: 13)
+            cell.textLabel?.textColor = .secondaryDark.withAlphaComponent(0.6)
+            cell.textLabel?.font = UIConstants.fonts.tableSectionHeader //.systemFont(ofSize: 13)
             cell.textLabel?.text = text
             
             if section == 1 || section == 2 {
@@ -529,6 +529,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 let tapGesture = UITapGestureRecognizer(target: self, action: selector)
                 cell.detailTextLabel?.text = UIConstants.strings.learnMore
                 cell.detailTextLabel?.textColor = .accent
+                cell.textLabel?.font = UIConstants.fonts.tableSectionHeader
                 cell.addGestureRecognizer(tapGesture)
             }
             return cell
