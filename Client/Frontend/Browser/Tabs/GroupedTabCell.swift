@@ -198,6 +198,12 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        guard let flowlayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
+        flowlayout.invalidateLayout()
+    }
     
     func initialViewSetup() {
         self.selectionStyle = .default
@@ -221,8 +227,8 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
         
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(25)
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
+            make.leading.equalToSuperview().offset(12)
+            make.trailing.equalToSuperview().inset(12)
             make.bottom.equalToSuperview()
         }
         
@@ -234,13 +240,13 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
         if theme == .dark {
             self.backgroundColor = UIColor.Photon.Grey80
             self.titleLabel.textColor = .white
-            collectionView.layer.borderColor = UIColor.Photon.DarkGrey40.cgColor
+            collectionView.layer.borderColor = UIColor.Photon.DarkGrey50.cgColor
             collectionView.layer.backgroundColor = UIColor.Photon.DarkGrey40.cgColor
         } else {
             self.backgroundColor = .white
             self.titleLabel.textColor = .black
-            collectionView.layer.borderColor = UIColor.Photon.LightGrey30.cgColor
-            collectionView.layer.backgroundColor = UIColor.Photon.LightGrey05.cgColor
+            collectionView.layer.borderColor = UIColor.Photon.LightGrey50.cgColor
+            collectionView.layer.backgroundColor = UIColor.Photon.LightGrey50.cgColor
         }
     }
     
@@ -268,7 +274,10 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
 
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let cellWidth = floor((collectionView.bounds.width - GridTabTrayControllerUX.Margin * CGFloat(numberOfColumns + 1)) / CGFloat(numberOfColumns))
-        let padding = 10
+        let isIpad = UIDevice.current.userInterfaceIdiom == .pad
+        let orientation = UIDevice.current.orientation
+        let isPortrait = (orientation == .portrait || orientation == .portraitUpsideDown)
+        let padding = isIpad && isPortrait ? 75 : (isIpad && !isPortrait) ? 105 : 10
         return CGSize(width: Int(cellWidth) - padding, height: 185)
     }
 

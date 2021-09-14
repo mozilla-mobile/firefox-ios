@@ -90,12 +90,10 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     private var inactiveNimbusExperimentStatus: Bool = false
     var shouldEnableGroupedTabs: Bool {
         guard featureFlags.isFeatureActive(.groupedTabs) else { return false }
-        return inactiveNimbusExperimentStatus ? inactiveNimbusExperimentStatus : profile.prefs.boolForKey(PrefsKeys.KeyEnableInactiveTabs) ?? false
     }
     
     var shouldEnableInactiveTabs: Bool {
         guard featureFlags.isFeatureActive(.inactiveTabs) else { return false }
-        
         return inactiveNimbusExperimentStatus ? inactiveNimbusExperimentStatus : profile.prefs.boolForKey(PrefsKeys.KeyEnableInactiveTabs) ?? false
     }
     
@@ -206,6 +204,12 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         selectedTab?.lastExecutedTime = Date.now()
         inactiveViewModel.updateInactiveTabs(with: tabManager.selectedTab, tabs: allTabs)
         TabGroupsManager.getTabGroups(profile: profile, tabs: tabManager.normalTabs) { tabGroups, filteredActiveTabs  in
+            guard self.shouldEnableGroupedTabs else {
+                self.tabGroups = nil
+                self.filteredTabs = allTabs
+                completion(tabGroups, allTabs)
+                return
+            }
             self.tabGroups = tabGroups
             self.filteredTabs = filteredActiveTabs
             completion(tabGroups, filteredActiveTabs)
@@ -639,7 +643,6 @@ extension TabDisplayManager: TabManagerDelegate {
             self.dataStore.insert(tab, at: indexToPlaceTab)
             let section = self.tabDisplayType == .TopTabTray ? 0 : TabDisplaySection.regularTabs.rawValue
             self.collectionView.insertItems(at: [IndexPath(row: indexToPlaceTab, section: section)])
-            
         }
     }
 

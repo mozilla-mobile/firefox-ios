@@ -70,7 +70,7 @@ class FeatureFlagsManager {
         let inactiveTabs = FlaggableFeature(withID: .inactiveTabs, and: profile, enabledFor: [.developer])
         features[.inactiveTabs] = inactiveTabs
         
-        let groupedTabs = FlaggableFeature(withID: .groupedTabs, and: profile, enabledFor: [.developer])
+        let groupedTabs = FlaggableFeature(withID: .groupedTabs, and: profile, enabledFor: [])
         features[.groupedTabs] = groupedTabs
 
         let jumpBackIn = FlaggableFeature(withID: .jumpBackIn, and: profile, enabledFor: [.beta, .developer])
