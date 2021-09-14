@@ -109,8 +109,7 @@ class SearchProviderTest: BaseTestCase {
 		urlbarUrltextTextField.tap()
 		urlbarUrltextTextField.typeText(searchWord)
         app.buttons["SearchSuggestionsPromptView.enableButton"].tap()
-        print(app.debugDescription)
-        app.buttons["OverlayView.searchButton"].tap()
+        app.buttons["OverlayView.searchButton"].firstMatch.tap()
         waitForWebPageLoad()
 
         urlbarUrltextTextField.tap()
