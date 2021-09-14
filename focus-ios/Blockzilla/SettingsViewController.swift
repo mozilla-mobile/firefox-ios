@@ -36,61 +36,33 @@ class SettingsTableViewCell: UITableViewCell {
 }
 
 class SettingsTableViewAccessoryCell: SettingsTableViewCell {
-    private let newLabel = SmartLabel()
-    let accessoryLabel = SmartLabel()
-    private let spacerView = UIView()
-
-    var accessoryLabelText: String? {
-        get { return accessoryLabel.text }
+    var labelText: String? {
+        get { return textLabel?.text }
         set {
-            accessoryLabel.text = newValue
-            accessoryLabel.sizeToFit()
+            textLabel?.text = newValue
         }
     }
-
-    var labelText: String? {
-        get { return newLabel.text }
+    
+    var accessoryLabelText: String? {
+        get { return detailTextLabel?.text }
         set {
-            newLabel.text = newValue
-            newLabel.sizeToFit()
+            detailTextLabel?.text = newValue
         }
     }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupDynamicFont(forLabels: [newLabel, accessoryLabel], addObserver: true)
 
-        newLabel.numberOfLines = 0
-        newLabel.lineBreakMode = .byWordWrapping
+        textLabel?.numberOfLines = 0
+        textLabel?.lineBreakMode = .byWordWrapping
+        
+        detailTextLabel?.numberOfLines = 0
+        detailTextLabel?.lineBreakMode = .byWordWrapping
 
-        contentView.addSubview(accessoryLabel)
-        contentView.addSubview(newLabel)
-        contentView.addSubview(spacerView)
+        selectionStyle = .none
 
-        newLabel.textColor = UIConstants.colors.settingsTextLabel
-        accessoryLabel.textColor = UIConstants.colors.settingsDetailLabel
-        accessoryType = .disclosureIndicator
-
-        accessoryLabel.setContentHuggingPriority(.required, for: .horizontal)
-        accessoryLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
-        accessoryLabel.snp.makeConstraints { make in
-            make.trailing.centerY.equalToSuperview()
-        }
-
-        newLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        newLabel.setContentCompressionResistancePriority(.required, for: .vertical)
-
-        spacerView.snp.makeConstraints { make in
-            make.top.bottom.leading.equalToSuperview()
-            make.width.equalTo(UIConstants.layout.settingsFirstTitleOffset)
-        }
-
-        newLabel.snp.makeConstraints { make in
-            make.leading.equalTo(spacerView.snp.trailing).offset(3)
-            make.top.equalToSuperview().offset(11)
-            make.bottom.equalToSuperview().offset(-11)
-            make.trailing.equalTo(accessoryLabel.snp.leading).offset(-10)
-        }
+        accessoryView = UIImageView(image: UIImage(systemName: "chevron.right"))
+        tintColor = .secondaryText.withAlphaComponent(0.3)
 
     }
 
@@ -410,10 +382,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         switch sections[indexPath.section] {
         case .privacy:
             if indexPath.row == 0 {
-                let trackingCell = SettingsTableViewAccessoryCell(style: .subtitle, reuseIdentifier: "trackingCell")
-                trackingCell.textLabel?.text = String(format: UIConstants.strings.trackingProtectionLabel)
+                let trackingCell = SettingsTableViewAccessoryCell(style: .value1, reuseIdentifier: "trackingCell")
+                trackingCell.labelText = String(format: UIConstants.strings.trackingProtectionLabel)
                 trackingCell.accessibilityIdentifier = "settingsViewController.trackingCell"
-                trackingCell.accessoryType = .disclosureIndicator
                 trackingCell.accessoryLabelText = Settings.getToggle(.trackingProtection) ?
                     UIConstants.strings.settingsTrackingProtectionOn :
                     UIConstants.strings.settingsTrackingProtectionOff
@@ -426,7 +397,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
         case .search:
             if indexPath.row < 2 {
-                guard let searchCell = tableView.dequeueReusableCell(withIdentifier: "accessoryCell") as? SettingsTableViewAccessoryCell else { fatalError("Accessory cells do not exist") }
+                let searchCell = SettingsTableViewAccessoryCell(style: .value1, reuseIdentifier: "accessoryCell")
                 let autocompleteLabel = Settings.getToggle(.enableDomainAutocomplete) || Settings.getToggle(.enableCustomDomainAutocomplete) ? UIConstants.strings.autocompleteCustomEnabled : UIConstants.strings.autocompleteCustomDisabled
                 let labels : (label: String, accessoryLabel: String, identifier: String) = indexPath.row == 0 ?
                     (UIConstants.strings.settingsSearchLabel, searchEngineManager.activeEngine.name, "SettingsViewController.searchCell")
@@ -439,24 +410,24 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
             }
         case .siri:
-            guard #available(iOS 12.0, *), let siriCell = tableView.dequeueReusableCell(withIdentifier: "accessoryCell") as? SettingsTableViewAccessoryCell else { fatalError("No accessory cells") }
+            let siriCell = SettingsTableViewAccessoryCell(style: .value1, reuseIdentifier: "accessoryCell")
             if indexPath.row == 0 {
                 siriCell.labelText = UIConstants.strings.eraseSiri
                 siriCell.accessibilityIdentifier = "settingsViewController.siriEraseCell"
                 SiriShortcuts().hasAddedActivity(type: .erase) { (result: Bool) in
-                    siriCell.accessoryLabel.text = result ? UIConstants.strings.Edit : UIConstants.strings.addToSiri
+                    siriCell.accessoryLabelText = result ? UIConstants.strings.Edit : UIConstants.strings.addToSiri
                 }
             } else if indexPath.row == 1 {
                 siriCell.labelText = UIConstants.strings.eraseAndOpenSiri
                 siriCell.accessibilityIdentifier = "settingsViewController.siriEraseAndOpenCell"
                 SiriShortcuts().hasAddedActivity(type: .eraseAndOpen) { (result: Bool) in
-                    siriCell.accessoryLabel.text = result ? UIConstants.strings.Edit : UIConstants.strings.addToSiri
+                    siriCell.accessoryLabelText = result ? UIConstants.strings.Edit : UIConstants.strings.addToSiri
                 }
             } else {
                 siriCell.labelText = UIConstants.strings.openUrlSiri
                 siriCell.accessibilityIdentifier = "settingsViewController.siriOpenURLCell"
                 SiriShortcuts().hasAddedActivity(type: .openURL) { (result: Bool) in
-                    siriCell.accessoryLabel.text = result ? UIConstants.strings.Edit : UIConstants.strings.add
+                    siriCell.accessoryLabelText = result ? UIConstants.strings.Edit : UIConstants.strings.add
                 }
             }
             cell = siriCell
@@ -508,10 +479,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     func numberOfSections(in tableView: UITableView) -> Int {
         return sections.count
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 44
     }
 
     private func heightForLabel(_ label: UILabel, width: CGFloat, text: String) -> CGFloat {
