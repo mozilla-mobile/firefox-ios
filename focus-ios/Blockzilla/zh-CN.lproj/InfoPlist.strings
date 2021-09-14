@@ -1,17 +1,17 @@
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "此权限让您可以拍摄和上传照片。";
+"NSCameraUsageDescription" = "让您可以拍摄和上传照片。";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "让您可以解锁应用。";
 
 /* Privacy - Location When In Use Usage Description */
-"NSLocationWhenInUseUsageDescription" = "您访问的网站可能请求您的位置。";
+"NSLocationWhenInUseUsageDescription" = "您访问的网站可能会要求提供位置信息。";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "此权限让您可以拍摄和上传视频。";
+"NSMicrophoneUsageDescription" = "让您可以拍摄和上传视频。";
 
 /* Privacy - Photo Library Additions Usage Description */
-"NSPhotoLibraryAddUsageDescription" = "此权限让您可以保存和上传照片。";
+"NSPhotoLibraryAddUsageDescription" = "让您可以保存和上传照片。";
 
 /* This is the menu item that appears when you long press the Focus icon on the phone home screen. */
 "UIApplicationShortcutItemTitle.EraseAndOpen" = "清除并打开";

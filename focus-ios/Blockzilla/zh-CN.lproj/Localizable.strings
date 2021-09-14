@@ -545,10 +545,10 @@
 "trackingProtection.socialTrackerLabel" = "社交跟踪器";
 
 /* Text for the status off from Tracking Protection. */
-"trackingProtection.statusOff" = "对此会话已关闭保护";
+"trackingProtection.statusOff" = "已关闭此会话的跟踪保护";
 
 /* Text for the status on from Tracking Protection. */
-"trackingProtection.statusOn" = "对此会话已开启保护";
+"trackingProtection.statusOn" = "已开启此会话的跟踪保护";
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "禁用至您关闭 %@ 或按“清除”。";
