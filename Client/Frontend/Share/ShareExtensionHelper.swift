@@ -31,7 +31,8 @@ class ShareExtensionHelper: NSObject {
         printInfo.outputType = .general
         activityItems.append(printInfo)
 
-        if let tab = selectedTab {
+        // when tab is not loaded (webView != nil) don't show print activity
+        if let tab = selectedTab, tab.webView != nil {
             activityItems.append(TabPrintPageRenderer(tab: tab))
         }
 
