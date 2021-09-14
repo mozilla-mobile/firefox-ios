@@ -1412,8 +1412,6 @@ extension String {
 
 // MARK: - v36 Strings
 extension String {
-    public static let ProtectionStatusSheetConnectionSecure = MZLocalizedString("ProtectionStatusSheet.SecureConnection", value: "Secure Connection", comment: "value for label to indicate user is on a secure https connection")
-    public static let ProtectionStatusSheetConnectionInsecure = MZLocalizedString("ProtectionStatusSheet.InsecureConnection", value: "Insecure Connection", comment: "value for label to indicate user is on an unencrypted website")
-    public static let ProtectionStatusSecure = MZLocalizedString("Protection.Status.Secure", value: "Connection is secure", comment: "This is the value for a label that indicates if a user is on a secure https connection.")
-    public static let ProtectionStatusNotSecure = MZLocalizedString("Protection.Status.NotSecure", value: "Connection is not secure", comment: "This is the value for a label that indicates if a user is on an unencrypted website.")
+    public static let ProtectionStatusSecure = MZLocalizedString("ProtectionStatus.Secure", value: "Connection is secure", comment: "This is the value for a label that indicates if a user is on a secure https connection.")
+    public static let ProtectionStatusNotSecure = MZLocalizedString("ProtectionStatus.NotSecure", value: "Connection is not secure", comment: "This is the value for a label that indicates if a user is on an unencrypted website.")
 }
