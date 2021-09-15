@@ -59,6 +59,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     var numberOfColumns: Int {
         return tabLayoutDelegate.numberOfColumns
     }
+
     init(tabManager: TabManager, profile: Profile, tabTrayDelegate: TabTrayDelegate? = nil) {
         self.tabManager = tabManager
         self.profile = profile
@@ -286,7 +287,7 @@ extension GridTabViewController: TabDisplayer {
 
     func cellFactory(for cell: UICollectionViewCell, using tab: Tab) -> UICollectionViewCell {
         guard let tabCell = cell as? TabCell else { return cell }
-        tabCell.animator.delegate = self
+        tabCell.animator?.delegate = self
         tabCell.delegate = self
         let selected = tab == tabManager.selectedTab
         tabCell.configureWith(tab: tab, is: selected)
@@ -305,7 +306,7 @@ extension GridTabViewController {
     }
 
     func closeTabsForCurrentTray() {
-        let tabs = self.tabDisplayManager.dataStore.compactMap { $0 }
+        let tabs = self.tabDisplayManager.tabsInAllGroups ?? [Tab]() + self.tabDisplayManager.filteredTabs
         let maxTabs = 100
         if tabs.count >= maxTabs {
             self.tabManager.removeTabsAndAddNormalTab(tabs)
@@ -752,7 +753,7 @@ class TabCell: UICollectionViewCell {
     }()
 
     var title = UIVisualEffectView(effect: UIBlurEffect(style: UIColor.theme.tabTray.tabTitleBlur))
-    var animator: SwipeAnimator!
+    var animator: SwipeAnimator?
 
     weak var delegate: TabCellDelegate?
 
@@ -880,7 +881,7 @@ class TabCell: UICollectionViewCell {
         default:
             return false
         }
-        animator.close(right: right)
+        animator?.close(right: right)
         return true
     }
 

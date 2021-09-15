@@ -28,6 +28,7 @@ protocol GroupedTabCellDelegate {
 class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UITableViewDelegate, GroupedTabsDelegate {
     var delegate: GroupedTabCellDelegate?
     var tabGroups: [String: [Tab]]?
+    var selectedTab: Tab? = nil
     static let Identifier = "GroupedTabCellIdentifier"
     let GroupedTabsTableIdentifier = "GroupedTabsTableIdentifier"
     let GroupedTabsHeaderIdentifier = "GroupedTabsHeaderIdentifier"
@@ -74,7 +75,7 @@ class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UI
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tabGroups?.keys.count ?? 0 //groupedTabsViewModel?.tabGroups?.keys.count ?? 0
+        return tabGroups?.keys.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -84,8 +85,11 @@ class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UI
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: GroupedTabCellIdentifier, for: indexPath) as! GroupedTabContainerCell
         cell.delegate = self
-        cell.tabs = tabGroups?.map { $0.value }[indexPath.item] // groupedTabsViewModel?.tabGroups?.map { $0.value }[indexPath.item]
-        cell.titleLabel.text = tabGroups?.map { $0.key }[indexPath.item] ?? "" //groupedTabsViewModel?.tabGroups?.map { $0.key }[indexPath.item] ?? ""
+        cell.tabs = tabGroups?.map { $0.value }[indexPath.item]
+        cell.titleLabel.text = tabGroups?.map { $0.key }[indexPath.item] ?? ""
+        cell.collectionView.reloadData()
+        cell.selectedTab = selectedTab
+        if let selectedTab = selectedTab { cell.focusTab(tab: selectedTab) }
         cell.backgroundColor = .clear
         cell.accessoryView = nil
         return cell
@@ -121,6 +125,16 @@ class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UI
         return tab.url?.domainURL
     }
 
+    func scrollToSelectedGroup() {
+        if let searchTerm = selectedTab?.tabAssociatedSearchTerm {
+            if let index = tabGroups?.map({ $0.key }).firstIndex(where: { t in
+                t == searchTerm
+            }) {
+                tableView.scrollToRow(at: IndexPath(row: index , section: 0) , at: .bottom , animated: true)
+            }
+        }
+    }
+    
     func applyTheme() {
         self.backgroundColor = .clear
         self.tableView.backgroundColor = .clear
@@ -130,14 +144,12 @@ class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UI
     // Mark: Grouped Tabs Delegate
     
     func didSelectGroupedTab(tab: Tab?) {
-        print("didSelectGroupedTab Grouped \(String(describing: tab?.tabUUID))")
         if let tab = tab {
             delegate?.selectGroupTab(tab: tab)
         }
     }
     
     func closeTab(tab: Tab) {
-        print("closeTab Grouped \(tab.tabUUID)")
         delegate?.closeGroupTab(tab: tab)
     }
 }
@@ -169,10 +181,13 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
 
     let singleTabCellIdentifier = "singleTabCellIdentifier"
     var tabs: [Tab]? = nil
+    var selectedTab: Tab? = nil
     var searchGroupName: String = ""
-    
+   
     lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: TopTabsViewLayout())
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .horizontal
+        let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
         collectionView.register(TabCell.self, forCellWithReuseIdentifier: singleTabCellIdentifier)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
@@ -233,6 +248,13 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
         }
         
         applyTheme()
+    }
+    
+    func focusTab(tab: Tab) {
+        if let tabs = tabs, let index = tabs.firstIndex(of: tab) {
+            let indexPath = IndexPath(item: index, section: 0)
+            self.collectionView.scrollToItem(at: indexPath, at: [.centeredHorizontally, .centeredVertically], animated: true)
+        }
     }
     
     func applyTheme() {
@@ -302,7 +324,8 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: singleTabCellIdentifier, for: indexPath)
         guard let tabCell = cell as? TabCell, let tab = tabs?[indexPath.item] else { return cell }
         tabCell.delegate = self
-        tabCell.configureWith(tab: tab, is: false)
+        tabCell.configureWith(tab: tab, is: selectedTab == tab)
+        tabCell.animator = nil
         return tabCell
     }
     
