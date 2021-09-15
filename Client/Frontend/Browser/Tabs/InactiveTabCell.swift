@@ -54,7 +54,6 @@ class InactiveTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, U
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubviews(tableView)
-        addSubviews(tableView)
         setupConstraints()
         applyTheme()
     }

@@ -7,7 +7,14 @@ import Shared
 import WebKit
 import MozillaAppServices
 
-struct SearchProviderModel {
+public enum BasicSearchProvider: String {
+    case google
+    case duckduckgo
+    case yahoo
+    case bing
+}
+
+public struct SearchProviderModel {
     typealias Predicate = (String) -> Bool
     let name: String
     let regexp: String
@@ -17,6 +24,59 @@ struct SearchProviderModel {
     let followOnParams: [String]
     let extraAdServersRegexps: [String]
     
+    public static let searchProviderList = [
+        SearchProviderModel(
+            name: BasicSearchProvider.google.rawValue,
+            regexp: #"^https:\/\/www\.google\.(?:.+)\/search"#,
+            queryParam: "q",
+            codeParam: "client",
+            codePrefixes: ["firefox"],
+            followOnParams: ["oq", "ved", "ei"],
+            extraAdServersRegexps: [
+                #"^https?:\/\/www\.google(?:adservices)?\.com\/(?:pagead\/)?aclk"#,
+                #"^(http|https):\/\/clickserve.dartsearch.net\/link\/"#
+            ]
+        ),
+        SearchProviderModel(
+            name: BasicSearchProvider.duckduckgo.rawValue,
+            regexp: #"^https:\/\/duckduckgo\.com\/"#,
+            queryParam: "q",
+            codeParam: "t",
+            codePrefixes: ["f"],
+            followOnParams: [],
+            extraAdServersRegexps: [
+                #"^https:\/\/duckduckgo.com\/y\.js"#,
+                #"^https:\/\/www\.amazon\.(?:[a-z.]{2,24}).*(?:tag=duckduckgo-)"#
+            ]
+        ),
+        // Note: Yahoo shows ads from bing and google
+        SearchProviderModel(
+            name: BasicSearchProvider.yahoo.rawValue,
+            regexp: #"^https:\/\/(?:.*)search\.yahoo\.com\/search"#,
+            queryParam: "p",
+            codeParam: "",
+            codePrefixes: [],
+            followOnParams: [],
+            extraAdServersRegexps: [#"^(http|https):\/\/clickserve.dartsearch.net\/link\/"#,
+                                    #"^https:\/\/www\.bing\.com\/acli?c?k"#,
+                                    #"^https:\/\/www\.bing\.com\/fd\/ls\/GLinkPingPost\.aspx.*acli?c?k"#]
+        ),
+        SearchProviderModel(
+            name: BasicSearchProvider.bing.rawValue,
+            regexp: #"^https:\/\/www\.bing\.com\/search"#,
+            queryParam: "q",
+            codeParam: "pc",
+            codePrefixes: ["MOZ", "MZ"],
+            followOnParams: ["oq"],
+            extraAdServersRegexps: [
+                #"^https:\/\/www\.bing\.com\/acli?c?k"#,
+                #"^https:\/\/www\.bing\.com\/fd\/ls\/GLinkPingPost\.aspx.*acli?c?k"#
+            ]
+        ),
+    ]
+}
+
+extension SearchProviderModel {
     func listAdUrls(urls: [String]) -> [String] {
         let predicates: [Predicate] = extraAdServersRegexps.map { regex in
             return { url in
@@ -37,56 +97,6 @@ struct SearchProviderModel {
 }
 
 class AdsTelemetryHelper: TabContentScript {
-    let searchProviderList = [
-        SearchProviderModel(
-            name: "google",
-            regexp: #"^https:\/\/www\.google\.(?:.+)\/search"#,
-            queryParam: "q",
-            codeParam: "client",
-            codePrefixes: ["firefox"],
-            followOnParams: ["oq", "ved", "ei"],
-            extraAdServersRegexps: [
-                #"^https?:\/\/www\.google(?:adservices)?\.com\/(?:pagead\/)?aclk"#,
-                #"^(http|https):\/\/clickserve.dartsearch.net\/link\/"#
-            ]
-        ),
-        SearchProviderModel(
-            name: "duckduckgo",
-            regexp: #"^https:\/\/duckduckgo\.com\/"#,
-            queryParam: "q",
-            codeParam: "t",
-            codePrefixes: ["f"],
-            followOnParams: [],
-            extraAdServersRegexps: [
-                #"^https:\/\/duckduckgo.com\/y\.js"#,
-                #"^https:\/\/www\.amazon\.(?:[a-z.]{2,24}).*(?:tag=duckduckgo-)"#
-            ]
-        ),
-        // Note: Yahoo shows ads from bing and google
-        SearchProviderModel(
-            name: "yahoo",
-            regexp: #"^https:\/\/(?:.*)search\.yahoo\.com\/search"#,
-            queryParam: "p",
-            codeParam: "",
-            codePrefixes: [],
-            followOnParams: [],
-            extraAdServersRegexps: [#"^(http|https):\/\/clickserve.dartsearch.net\/link\/"#,
-                                    #"^https:\/\/www\.bing\.com\/acli?c?k"#,
-                                    #"^https:\/\/www\.bing\.com\/fd\/ls\/GLinkPingPost\.aspx.*acli?c?k"#]
-        ),
-        SearchProviderModel(
-            name: "bing",
-            regexp: #"^https:\/\/www\.bing\.com\/search"#,
-            queryParam: "q",
-            codeParam: "pc",
-            codePrefixes: ["MOZ", "MZ"],
-            followOnParams: ["oq"],
-            extraAdServersRegexps: [
-                #"^https:\/\/www\.bing\.com\/acli?c?k"#,
-                #"^https:\/\/www\.bing\.com\/fd\/ls\/GLinkPingPost\.aspx.*acli?c?k"#
-            ]
-        ),
-    ]
     
     fileprivate weak var tab: Tab?
 
@@ -117,7 +127,7 @@ class AdsTelemetryHelper: TabContentScript {
     
     private func getProviderForMessage(message: WKScriptMessage) -> SearchProviderModel? {
         guard let body = message.body as? [String : Any], let url = body["url"] as? String else { return nil }
-        for provider in searchProviderList {
+        for provider in SearchProviderModel.searchProviderList {
             guard url.range(of: provider.regexp, options: .regularExpression) != nil else { continue }
             return provider
         }

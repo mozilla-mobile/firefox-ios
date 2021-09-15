@@ -109,11 +109,28 @@ extension Date {
     public func toRFC822String() -> String {
         return rfc822DateFormatter.string(from: self)
     }
+    
+    public static func difference(recent: Date, previous: Date) -> (month: Int?, day: Int?, hour: Int?, minute: Int?, second: Int?) {
+        let day = Calendar.current.dateComponents([.day], from: previous, to: recent).day
+        let month = Calendar.current.dateComponents([.month], from: previous, to: recent).month
+        let hour = Calendar.current.dateComponents([.hour], from: previous, to: recent).hour
+        let minute = Calendar.current.dateComponents([.minute], from: previous, to: recent).minute
+        let second = Calendar.current.dateComponents([.second], from: previous, to: recent).second
+
+        return (month: month, day: day, hour: hour, minute: minute, second: second)
+    }
+    
+    static func - (lhs: Date, rhs: Date) -> TimeInterval {
+        return lhs.timeIntervalSinceReferenceDate - rhs.timeIntervalSinceReferenceDate
+    }
 }
 
 extension Date {
     public static var yesterday: Date { return Date().dayBefore }
     public static var tomorrow: Date { return Date().dayAfter }
+    public var lastTwoWeek: Date {
+        return Calendar.current.date(byAdding: .day, value: -14, to: noon) ?? Date()
+    }
     public var lastWeek: Date {
         return Calendar.current.date(byAdding: .day, value: -8, to: noon) ?? Date()
     }
