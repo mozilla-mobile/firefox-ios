@@ -60,7 +60,7 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
         tableView.delegate = self
         tableView.dataSource = self
         tableView.backgroundColor = .primaryBackground
-        tableView.separatorColor = .searchSeparator.withAlphaComponent(0.65)
+        tableView.separatorStyle = .none
         tableView.tableFooterView = UIView()
         view.addSubview(tableView)
 
@@ -175,7 +175,9 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
         case 1:
             return trackingProtectionCell()
         case 2:
-            return trackingProtectionEnabled ? trackersCell(index: indexPath.row) : settingsCell()
+            let cell = trackingProtectionEnabled ? trackersCell(index: indexPath.row) : settingsCell()
+            cell.addSeparator(tableView: tableView, indexPath: indexPath, leadingOffset: UIConstants.layout.cellSeparatorLeadingOffset)
+            return cell
         case 3:
             return settingsCell()
         default:

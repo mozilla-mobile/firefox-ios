@@ -294,7 +294,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.delegate = self
         tableView.backgroundColor = .primaryBackground
         tableView.layoutMargins = UIEdgeInsets.zero
-        tableView.separatorColor = .searchSeparator.withAlphaComponent(0.65)
+        tableView.separatorStyle = .none
         tableView.allowsSelection = true
         tableView.estimatedRowHeight = 44
 
@@ -465,6 +465,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         cell.textLabel?.setupShrinkage()
         cell.detailTextLabel?.setupShrinkage()
 
+        
+        cell.addSeparator(tableView: tableView, indexPath: indexPath, leadingOffset: UIConstants.layout.cellSeparatorLeadingOffset)
+        
         return cell
     }
     

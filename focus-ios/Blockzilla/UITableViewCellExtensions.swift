@@ -29,7 +29,7 @@ extension UITableViewCell {
         self.layer.mask = maskLayer
     }
     
-    func addSeparator(tableView: UITableView, indexPath: IndexPath) {
+    func addSeparator(tableView: UITableView, indexPath: IndexPath, leadingOffset: CGFloat = 0) {
         if indexPath.row != tableView.numberOfRows(inSection: indexPath.section) - 1 {
             let separator = UIView()
             separator.backgroundColor = .searchSeparator.withAlphaComponent(0.65)
@@ -37,7 +37,8 @@ extension UITableViewCell {
             self.addSubview(separator)
             separator.snp.makeConstraints { make in
                 make.height.equalTo(0.5)
-                make.leading.trailing.bottom.equalToSuperview()
+                make.leading.equalToSuperview().offset(leadingOffset)
+                make.trailing.bottom.equalToSuperview()
             }
         }
     }

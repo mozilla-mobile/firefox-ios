@@ -167,6 +167,7 @@ struct UIConstants {
     struct layout {
         static let browserToolbarDisabledOpacity: CGFloat = 0.4
         static let browserToolbarHeight: CGFloat = 44
+        static let cellSeparatorLeadingOffset: CGFloat = 14
         static let deleteAnimationDuration: TimeInterval = 0.25
         static let alphaToZeroDeleteAnimationDuration: TimeInterval = deleteAnimationDuration * (2 / 3)
         static let displayKeyboardDeleteAnimationDuration: TimeInterval = deleteAnimationDuration * (1 / 3)
