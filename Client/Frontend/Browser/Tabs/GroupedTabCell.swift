@@ -7,17 +7,9 @@ import SnapKit
 import UIKit
 import Shared
 
-enum GroupedTabSection: Int, CaseIterable {
-    case grouped
-}
-
 protocol GroupedTabsDelegate {
     func didSelectGroupedTab(tab: Tab?)
     func closeTab(tab: Tab)
-}
-
-struct GroupedTabCellUX {
-    static let headerAndRowHeight: CGFloat = 45
 }
 
 protocol GroupedTabCellDelegate {

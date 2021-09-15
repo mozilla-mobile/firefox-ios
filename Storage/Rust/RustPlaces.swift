@@ -243,12 +243,7 @@ public class RustPlaces {
             return try connection.createSeparator(parentGUID: parentGUID, position: position)
         }
     }
-    
-//    public func recordHistoryMetaData(key: HistoryMetadataKey, observation: HistoryMetadataObservation) -> Deferred<Maybe<Void>> {
-//        return withWriter { connection in
-//            return try connection.noteHistoryMetadataObservation(key: key, observation: observation)
-//        }
-//    }
+
 
     @discardableResult
     public func createBookmark(parentGUID: GUID, url: String, title: String?, position: UInt32? = nil) -> Deferred<Maybe<GUID>> {

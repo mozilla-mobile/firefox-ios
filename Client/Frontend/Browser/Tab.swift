@@ -89,10 +89,9 @@ class Tab: NSObject {
     // Tab Groups
     var tabGroupsTimerHelper = StopWatchTimer()
     var tabGroupTimerState: TabGroupTimerState = .none
-    var tabAssociatedSearchTerm: String = "" // Search term that a user initially used on this tab
+    var tabAssociatedSearchTerm: String = ""
     var tabAssociatedSearchUrl: String = ""
     var tabHistoryMetadatakey: HistoryMetadataKey?
-    var tabHistoryMetadatakeyWithRefferal: HistoryMetadataKey?
     var tabHistoryCurrentState: TabGroupTimerState = .none
     
     // PageMetadata is derived from the page content itself, and as such lags behind the
