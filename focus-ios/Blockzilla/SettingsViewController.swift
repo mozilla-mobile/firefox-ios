@@ -327,6 +327,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             shouldScrollToSiri = false
         }
     }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        tableView.reloadData()
+    }
 
     @objc private func applicationDidBecomeActive() {
         // On iOS 9, we detect the blocker status by loading an invisible SafariViewController
