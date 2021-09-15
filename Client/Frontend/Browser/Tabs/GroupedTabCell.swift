@@ -101,7 +101,7 @@ class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UI
         hasExpanded = !hasExpanded
         tableView.reloadData()
     }
-    
+
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return CGFloat.leastNormalMagnitude
     }
