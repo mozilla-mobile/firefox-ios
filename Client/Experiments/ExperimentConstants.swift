@@ -12,7 +12,6 @@ import Foundation
 ///
 enum NimbusFeatureId: String {
     case nimbusValidation = "nimbus-validation"
-    case onboardingDefaultBrowser = "onboarding-default-browser"
     case inactiveTabs = "inactiveTabs"
     case search = "search"
 }
@@ -24,7 +23,6 @@ enum NimbusExperimentBranch {
     static let a2 = "a2"
     static let control = "control"
     static let treatment = "treatment"
-    static let defaultBrowserTreatment = "defaultBrowserTreatment"
 
     enum InactiveTab {
         static let control = "inactiveTabControl"
