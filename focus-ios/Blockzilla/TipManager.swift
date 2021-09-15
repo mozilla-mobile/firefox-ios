@@ -97,11 +97,12 @@ class TipManager {
         return tips
     }
     
-    var availableTips: [Tip] {
-        guard shouldShowTips() else { return [] }
+    private var availableTips: [Tip] {
+        guard canShowTips else { return [] }
         guard Settings.getToggle(.showHomeScreenTips) else { return [] }
         return tips.filter { $0.canShow() }
     }
+    
     private let laContext = LAContext()
 
     private init() { }
@@ -154,7 +155,7 @@ class TipManager {
         description: UIConstants.strings.siriFavoriteTipDescription,
         identifier: TipKey.siriFavoriteTip,
         action: .showSettings(destination: .siri),
-        canShow: { TipManager.siriFavoriteTip && self.isiOS12() }
+        canShow: { TipManager.siriFavoriteTip && self.isiOS12 }
     )
 
     private lazy var siriEraseTip = Tip(
@@ -162,7 +163,7 @@ class TipManager {
         description: UIConstants.strings.siriEraseTipDescription,
         identifier: TipKey.siriEraseTip,
         action: .showSettings(destination: .siriFavorite),
-        canShow: { TipManager.siriEraseTip && self.isiOS12() }
+        canShow: { TipManager.siriEraseTip && self.isiOS12 }
     )
 
     /// Return a string representing the trackers tip. It will include the current number of trackers blocked, formatted as a decimal.
@@ -182,18 +183,14 @@ class TipManager {
         )
     }
 
-    func fetchTip() -> Tip? {
-        return availableTips.first
-    }
+    func fetchFirstTip() -> Tip? { availableTips.first }
     
-    private func isiOS12() -> Bool {
+    private var isiOS12: Bool {
         guard #available(iOS 12.0, *) else { return false }
         return true
     }
 
-    func shouldShowTips() -> Bool {
-        return NSLocale.current.languageCode == "en" && !AppInfo.isKlar
-    }
+    var canShowTips: Bool { NSLocale.current.languageCode == "en" && !AppInfo.isKlar }
     
     func getTip(after: Tip) -> Tip? {
         if let index = availableTips.firstIndex(where: { $0.identifier == after.identifier }) {
@@ -211,9 +208,7 @@ class TipManager {
         return nil
     }
     
-    func numberOfTips() -> Int {
-        availableTips.count
-    }
+    var numberOfTips: Int { availableTips.count }
     
     func currentIndex(for tip: Tip) -> Int {
         if let index = availableTips.firstIndex(where: { $0.identifier == tip.identifier }) {

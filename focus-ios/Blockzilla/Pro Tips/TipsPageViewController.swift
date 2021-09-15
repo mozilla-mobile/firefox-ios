@@ -1,3 +1,7 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
 import UIKit
 
 class TipsPageViewController: UIViewController {
@@ -44,7 +48,7 @@ class TipsPageViewController: UIViewController {
         
         switch state {
         case .showTips:
-            guard let initialVC = tipManager.fetchTip().map({ TipViewController(tip: $0, tipTapped: tipTapped) }) else { return }
+            guard let initialVC = tipManager.fetchFirstTip().map({ TipViewController(tip: $0, tipTapped: tipTapped) }) else { return }
             install(pageController, on: self.view)
             self.pageController.setViewControllers([initialVC], direction: .forward, animated: true, completion: nil)
             
@@ -72,7 +76,7 @@ extension TipsPageViewController: UIPageViewControllerDataSource, UIPageViewCont
     }
     
     func presentationCount(for pageViewController: UIPageViewController) -> Int {
-        return self.tipManager.numberOfTips()
+        return self.tipManager.numberOfTips
     }
     
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {

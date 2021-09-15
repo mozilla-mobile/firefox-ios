@@ -1145,6 +1145,24 @@
 			path = Deferred;
 			sourceTree = "<group>";
 		};
+		C88A5D3D26F0999E009A135D /* Pro Tips */ = {
+			isa = PBXGroup;
+			children = (
+				C82D142F26EF62BE007B275C /* TipsPageViewController.swift */,
+				C82D143126EF634E007B275C /* TipViewController.swift */,
+				C88A5D3A26EF9245009A135D /* ShareTrackersViewController.swift */,
+			);
+			path = "Pro Tips";
+			sourceTree = "<group>";
+		};
+		C88A5D3E26F099B5009A135D /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				C82D143326EF644E007B275C /* UIViewController+Child.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		D33A1A391BC476D40003D929 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
@@ -1236,10 +1254,6 @@
 		E4BF2DCA1BACE8CA00DA9D68 = {
 			isa = PBXGroup;
 			children = (
-				C82D142F26EF62BE007B275C /* TipsPageViewController.swift */,
-				C88A5D3A26EF9245009A135D /* ShareTrackersViewController.swift */,
-				C82D143326EF644E007B275C /* UIViewController+Child.swift */,
-				C82D143126EF634E007B275C /* TipViewController.swift */,
 				D43A61BD26B4627100814232 /* SmokeTestRefresh.xctestplan */,
 				D4341F802669342A00294A15 /* FullFunctionalTests.xctestplan */,
 				D47940D92664E15D00C286BB /* SmokeTest.xctestplan */,
@@ -1289,6 +1303,8 @@
 				B3AFC2B91F7C0B66001AEF38 /* Modules */,
 				B31DAAC71F7D87E800A11A74 /* Lib */,
 				D3E54FD41DEFB25B003E1AFF /* SearchPlugins */,
+				C88A5D3D26F0999E009A135D /* Pro Tips */,
+				C88A5D3E26F099B5009A135D /* Extensions */,
 				D3DA778B1DC2C60E009C114E /* errorPage.html */,
 				E4BF2DE21BACE8CA00DA9D68 /* Info.plist */,
 				D3C047BC1DCBD8ED00402FFB /* SearchEngines.plist */,
