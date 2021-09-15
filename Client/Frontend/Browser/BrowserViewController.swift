@@ -1041,7 +1041,6 @@ class BrowserViewController: UIViewController {
         case .URL:
             // Special case for "about:blank" popups, if the webView.url is nil, keep the tab url as "about:blank"
             if tab.url?.absoluteString == "about:blank" && webView.url == nil {
-                print(webView.url?.origin)
                 break
             }
 
@@ -1049,6 +1048,7 @@ class BrowserViewController: UIViewController {
             // the same origin as the current URL. Otherwise, do nothing and wait for
             // didCommitNavigation to confirm the page load.
             if tab.url?.origin == webView.url?.origin {
+
                 tab.url = webView.url
 
                 if tab === tabManager.selectedTab && !tab.restoring {
@@ -1101,6 +1101,9 @@ class BrowserViewController: UIViewController {
     /// Updates the URL bar text and button states.
     /// Call this whenever the page URL changes.
     fileprivate func updateURLBarDisplayURL(_ tab: Tab) {
+        if tab == tabManager.selectedTab, let displayUrl = tab.url?.displayURL, urlBar.currentURL != displayUrl {
+            tab.updateTimerAndObserving(state: .tabNavigatedToDifferentUrl, nextUrl: displayUrl.absoluteString)
+        }
         urlBar.currentURL = tab.url?.displayURL
         urlBar.locationView.tabDidChangeContentBlocking(tab)
         let isPage = tab.url?.displayURL?.isWebPage() ?? false
@@ -1174,6 +1177,7 @@ class BrowserViewController: UIViewController {
         popToBVC()
         openURLInNewTab(nil, isPrivate: isPrivate)
         let freshTab = tabManager.selectedTab
+        freshTab?.updateTimerAndObserving(state: .newTab)
         if focusLocationField {
             focusLocationTextField(forTab: freshTab, setSearchText: searchText)
         }
@@ -1277,7 +1281,7 @@ class BrowserViewController: UIViewController {
                 tab.readabilityResult = nil
                 webView.evaluateJavascriptInDefaultContentWorld("\(ReaderModeNamespace).checkReadability()")
             }
-
+            
             TabEvent.post(.didChangeURL(url), for: tab)
         }
         
@@ -1604,8 +1608,9 @@ extension BrowserViewController: HomePanelDelegate {
 }
 
 extension BrowserViewController: SearchViewControllerDelegate {
-    func searchViewController(_ searchViewController: SearchViewController, didSelectURL url: URL) {
+    func searchViewController(_ searchViewController: SearchViewController, didSelectURL url: URL, searchTerm: String?) {
         guard let tab = tabManager.selectedTab else { return }
+        tab.updateTimerAndObserving(state: .navSearchLoaded, searchTerm: searchTerm, searchProviderUrl: url, nextUrl: "")
         searchTelemetry?.shouldSetUrlTypeSearch = true
         finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: tab)
     }

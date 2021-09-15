@@ -277,6 +277,7 @@
 		43446CEA2412066500F5C643 /* UIViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43446CE92412066500F5C643 /* UIViewControllerExtension.swift */; };
 		43446CF02412DDBE00F5C643 /* UpdateCoverSheetViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43446CEF2412DDBE00F5C643 /* UpdateCoverSheetViewModelTests.swift */; };
 		43446CF32412F9FF00F5C643 /* ETPCoverSheetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43446CF22412F9FF00F5C643 /* ETPCoverSheetTests.swift */; };
+		4345441D26D2E52600D5EEAA /* TabGroupsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4345441C26D2E52600D5EEAA /* TabGroupsManager.swift */; };
 		434E733725EED32E006D3BDE /* BrowserViewController+URLBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434E733625EED32E006D3BDE /* BrowserViewController+URLBarDelegate.swift */; };
 		435222C125882E3800FCA5B6 /* WidgetKitTopSiteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435222C025882E3800FCA5B6 /* WidgetKitTopSiteModel.swift */; };
 		435222C225882E3800FCA5B6 /* WidgetKitTopSiteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435222C025882E3800FCA5B6 /* WidgetKitTopSiteModel.swift */; };
@@ -295,6 +296,7 @@
 		4392FB34252EC4CE00AD3D23 /* SessionRestoreHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC4869C2195F58300CDA48D /* SessionRestoreHandler.swift */; };
 		4392FB48252EC50400AD3D23 /* InternalSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC486982195F46A00CDA48D /* InternalSchemeHandler.swift */; };
 		4392FB5C252EC51E00AD3D23 /* PrivilegedRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31CF65B1CC1959A001D0BD0 /* PrivilegedRequest.swift */; };
+		439B008B26E6CE2300DFAF14 /* GroupedTabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439B008A26E6CE2100DFAF14 /* GroupedTabCell.swift */; };
 		43A5643823CD1E1C00B6857D /* UpdateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A5643523CD1E1B00B6857D /* UpdateViewController.swift */; };
 		43A5643923CD1E1C00B6857D /* Update.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43A5643623CD1E1B00B6857D /* Update.xcassets */; };
 		43AB6FA225DC53D30016B015 /* GoogleTopSiteHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AB6F9C25DC53D20016B015 /* GoogleTopSiteHelper.swift */; };
@@ -1948,6 +1950,7 @@
 		43446CE92412066500F5C643 /* UIViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UIViewControllerExtension.swift; path = Extensions/UIViewControllerExtension.swift; sourceTree = "<group>"; };
 		43446CEF2412DDBE00F5C643 /* UpdateCoverSheetViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateCoverSheetViewModelTests.swift; sourceTree = "<group>"; };
 		43446CF22412F9FF00F5C643 /* ETPCoverSheetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ETPCoverSheetTests.swift; sourceTree = "<group>"; };
+		4345441C26D2E52600D5EEAA /* TabGroupsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsManager.swift; sourceTree = "<group>"; };
 		434E733625EED32E006D3BDE /* BrowserViewController+URLBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+URLBarDelegate.swift"; sourceTree = "<group>"; };
 		435222C025882E3800FCA5B6 /* WidgetKitTopSiteModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetKitTopSiteModel.swift; sourceTree = "<group>"; };
 		435D660223D793DF0046EFA2 /* UpdateModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateModel.swift; sourceTree = "<group>"; };
@@ -1963,6 +1966,7 @@
 		437A9B692681257F00FB41C1 /* InactiveTabViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InactiveTabViewModel.swift; sourceTree = "<group>"; };
 		43904ED28118BAD713896491 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
 		4390F7FE246DAFBE00570811 /* FirefoxColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxColors.swift; sourceTree = "<group>"; };
+		439B008A26E6CE2100DFAF14 /* GroupedTabCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedTabCell.swift; sourceTree = "<group>"; };
 		43A5643523CD1E1B00B6857D /* UpdateViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateViewController.swift; sourceTree = "<group>"; };
 		43A5643623CD1E1B00B6857D /* Update.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Update.xcassets; sourceTree = "<group>"; };
 		43AB6F9C25DC53D20016B015 /* GoogleTopSiteHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleTopSiteHelper.swift; sourceTree = "<group>"; };
@@ -4439,7 +4443,9 @@
 				C81AC6B526160091007800C5 /* TabTrayViewModel.swift */,
 				2FDE87FD1ABB3817005317B1 /* RemoteTabsPanel.swift */,
 				437A9B672681256800FB41C1 /* InactiveTabCell.swift */,
+				439B008A26E6CE2100DFAF14 /* GroupedTabCell.swift */,
 				437A9B692681257F00FB41C1 /* InactiveTabViewModel.swift */,
+				4345441C26D2E52600D5EEAA /* TabGroupsManager.swift */,
 			);
 			path = Tabs;
 			sourceTree = "<group>";
@@ -8127,6 +8133,7 @@
 				43DDB97624099F200058A068 /* ETPViewModel.swift in Sources */,
 				C4F3B29A1CFCF93A00966259 /* ButtonToast.swift in Sources */,
 				23F8D70C255B0412003B605D /* ChronTabsUserResearch.swift in Sources */,
+				4345441D26D2E52600D5EEAA /* TabGroupsManager.swift in Sources */,
 				EBA3B2D02268F40C00728BDB /* SyncMenuButton.swift in Sources */,
 				D31A0FC71A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */,
 				435D7CC5246209AA0043ACB9 /* IntroViewController.swift in Sources */,
@@ -8248,6 +8255,7 @@
 				7B844E3D1BBDDB9D00E733A2 /* ChevronView.swift in Sources */,
 				43A5643823CD1E1C00B6857D /* UpdateViewController.swift in Sources */,
 				437A9B682681256800FB41C1 /* InactiveTabCell.swift in Sources */,
+				439B008B26E6CE2300DFAF14 /* GroupedTabCell.swift in Sources */,
 				E4C358551AF144BA00299F7E /* FSReadingList.m in Sources */,
 				9609F4CA26B57CE800F81493 /* CalendarExtensions.swift in Sources */,
 				E692E3291C46E62D009D1240 /* AuthenticationSettingsViewController.swift in Sources */,

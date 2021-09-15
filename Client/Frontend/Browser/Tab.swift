@@ -49,6 +49,15 @@ struct TabState {
     var favicon: Favicon?
 }
 
+enum TabGroupTimerState {
+    case navSearchLoaded
+    case tabNavigatedToDifferentUrl
+    case tabSwitched
+    case tabSelected
+    case newTab
+    case none
+}
+
 enum TabUrlType: String {
     case regular
     case search
@@ -74,7 +83,17 @@ class Tab: NSObject {
     var tabState: TabState {
         return TabState(isPrivate: _isPrivate, url: url, title: displayTitle, favicon: displayFavicon)
     }
-
+    
+    var timerPerWebsite: [String: StopWatchTimer] = [:]
+    
+    // Tab Groups
+    var tabGroupsTimerHelper = StopWatchTimer()
+    var tabGroupTimerState: TabGroupTimerState = .none
+    var tabAssociatedSearchTerm: String = ""
+    var tabAssociatedSearchUrl: String = ""
+    var tabHistoryMetadatakey: HistoryMetadataKey?
+    var tabHistoryCurrentState: TabGroupTimerState = .none
+    
     // PageMetadata is derived from the page content itself, and as such lags behind the
     // rest of the tab.
     var pageMetadata: PageMetadata?
@@ -279,6 +298,57 @@ class Tab: NSObject {
 
         TelemetryWrapper.recordEvent(category: .action, method: .add, object: .tab, value: isPrivate ? .privateTab : .normalTab)
     }
+    
+    func updateObservationForKey(key: HistoryMetadataKey, observation: HistoryMetadataObservation) {
+        if let profile = self.browserViewController?.profile {
+            profile.places.noteHistoryMetadataObservation(key: key, observation: observation)
+        }
+    }
+ 
+    func updateHisotryMetadataKey(url: String, searchTerm: String, referralUrl: String) {
+        self.tabHistoryMetadatakey = HistoryMetadataKey(url: url, searchTerm: searchTerm, referrerUrl: referralUrl)
+    }
+
+    func updateTimerAndObserving(state: TabGroupTimerState, searchTerm: String? = nil, searchProviderUrl: URL? = nil, nextUrl: String = "") {
+        switch state {
+        case .navSearchLoaded:
+            tabGroupsTimerHelper.startOrResume()
+            tabAssociatedSearchUrl = searchProviderUrl?.absoluteString ?? ""
+            tabAssociatedSearchTerm = searchTerm ?? ""
+            if let searchUrl = searchProviderUrl {
+                self.tabHistoryMetadatakey = HistoryMetadataKey(url: searchUrl.absoluteString, searchTerm: searchTerm, referrerUrl: nextUrl)
+            }
+            tabHistoryCurrentState = state
+        case .newTab:
+            tabGroupsTimerHelper.resetTimer()
+            tabGroupsTimerHelper.startOrResume()
+            tabHistoryCurrentState = state
+        case .tabNavigatedToDifferentUrl:
+            let newKey = HistoryMetadataKey(url: tabAssociatedSearchUrl, searchTerm: tabAssociatedSearchTerm, referrerUrl: nextUrl)
+            if let oldKey = self.tabHistoryMetadatakey, oldKey.referrerUrl != nextUrl {
+                let observation = HistoryMetadataObservation(titleObservation: nil, viewTimeObservation: tabGroupsTimerHelper.elpasedTime, documentTypeObservation: nil)
+                updateObservationForKey(key: oldKey, observation: observation)
+            }
+            self.tabHistoryMetadatakey = newKey
+            tabGroupsTimerHelper.resetTimer()
+            tabGroupsTimerHelper.startOrResume()
+            tabHistoryCurrentState = state
+        case .tabSelected:
+            if tabGroupsTimerHelper.isPaused {
+                tabGroupsTimerHelper.startOrResume()
+            }
+            tabHistoryCurrentState = state
+        case .tabSwitched:
+            if let key = tabHistoryMetadatakey {
+                let observation = HistoryMetadataObservation(titleObservation: nil, viewTimeObservation: tabGroupsTimerHelper.elpasedTime, documentTypeObservation: nil)
+                updateObservationForKey(key: key, observation: observation)
+            }
+            tabGroupsTimerHelper.pauseOrStop()
+            tabHistoryCurrentState = state
+        case .none:
+            tabHistoryCurrentState = state
+        }
+    }
 
     class func toRemoteTab(_ tab: Tab) -> RemoteTab? {
         if tab.isPrivate {
@@ -444,6 +514,15 @@ class Tab: NSObject {
 
     var displayTitle: String {
         if let title = webView?.title, !title.isEmpty {
+            if let key = tabHistoryMetadatakey {
+                if tabHistoryCurrentState == .navSearchLoaded {
+                    let observation = HistoryMetadataObservation(titleObservation: title, viewTimeObservation: nil, documentTypeObservation: nil)
+                    updateObservationForKey(key: key, observation: observation)
+                } else if tabHistoryCurrentState == .tabNavigatedToDifferentUrl {
+                    let observation = HistoryMetadataObservation(titleObservation: title, viewTimeObservation: nil, documentTypeObservation: nil)
+                    updateObservationForKey(key: key, observation: observation)
+                }
+            }
             return title
         }
 

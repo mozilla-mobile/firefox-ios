@@ -17,6 +17,7 @@ extension FeatureFlagsProtocol {
 enum FeatureFlagName: String, CaseIterable {
     case chronologicalTabs
     case inactiveTabs
+    case groupedTabs
     case jumpBackIn
     case nimbus
     case recentlySaved
@@ -68,6 +69,9 @@ class FeatureFlagsManager {
 
         let inactiveTabs = FlaggableFeature(withID: .inactiveTabs, and: profile, enabledFor: [.developer])
         features[.inactiveTabs] = inactiveTabs
+        
+        let groupedTabs = FlaggableFeature(withID: .groupedTabs, and: profile, enabledFor: [.beta, .developer])
+        features[.groupedTabs] = groupedTabs
 
         let jumpBackIn = FlaggableFeature(withID: .jumpBackIn, and: profile, enabledFor: [.beta, .developer])
         features[.jumpBackIn] = jumpBackIn
