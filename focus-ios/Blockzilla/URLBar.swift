@@ -46,12 +46,16 @@ class URLBar: UIView {
     let progressBar = GradientProgressBar(progressViewStyle: .bar)
     var inBrowsingMode: Bool = false {
         didSet {
-            updateBarState()
+            DispatchQueue.main.async {
+                self.updateBarState()
+            }
         }
     }
     private(set) var isEditing = false {
         didSet {
-            updateBarState()
+            DispatchQueue.main.async {
+                self.updateBarState()
+            }
         }
     }
     var shouldPresent = false
