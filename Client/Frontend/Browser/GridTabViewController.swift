@@ -59,7 +59,6 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     var numberOfColumns: Int {
         return tabLayoutDelegate.numberOfColumns
     }
-
     init(tabManager: TabManager, profile: Profile, tabTrayDelegate: TabTrayDelegate? = nil) {
         self.tabManager = tabManager
         self.profile = profile
@@ -67,7 +66,6 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         super.init(nibName: nil, bundle: nil)
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.register(TabCell.self, forCellWithReuseIdentifier: TabCell.Identifier)
-        collectionView.register(GroupedTabCell.self, forCellWithReuseIdentifier: GroupedTabCell.Identifier)
         collectionView.register(InactiveTabCell.self, forCellWithReuseIdentifier: InactiveTabCell.Identifier)
         tabDisplayManager = TabDisplayManager(collectionView: self.collectionView, tabManager: self.tabManager, tabDisplayer: self, reuseID: TabCell.Identifier, tabDisplayType: .TabGrid, profile: profile)
         collectionView.dataSource = tabDisplayManager
@@ -287,7 +285,7 @@ extension GridTabViewController: TabDisplayer {
 
     func cellFactory(for cell: UICollectionViewCell, using tab: Tab) -> UICollectionViewCell {
         guard let tabCell = cell as? TabCell else { return cell }
-        tabCell.animator?.delegate = self
+        tabCell.animator.delegate = self
         tabCell.delegate = self
         let selected = tab == tabManager.selectedTab
         tabCell.configureWith(tab: tab, is: selected)
@@ -306,7 +304,7 @@ extension GridTabViewController {
     }
 
     func closeTabsForCurrentTray() {
-        let tabs = self.tabDisplayManager.tabsInAllGroups ?? [Tab]() + self.tabDisplayManager.filteredTabs
+        let tabs = self.tabDisplayManager.dataStore.compactMap { $0 }
         let maxTabs = 100
         if tabs.count >= maxTabs {
             self.tabManager.removeTabsAndAddNormalTab(tabs)
@@ -407,7 +405,7 @@ extension GridTabViewController: UIScrollViewAccessibilityDelegate {
 
         let firstTab = indexPaths.first!.row + 1
         let lastTab = indexPaths.last!.row + 1
-        let tabCount = collectionView.numberOfItems(inSection: 1)
+        let tabCount = collectionView.numberOfItems(inSection: 0)
 
         if firstTab == lastTab {
             let format: String = .TabTrayVisibleTabRangeAccessibilityHint
@@ -625,16 +623,7 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let cellWidth = floor((collectionView.bounds.width - GridTabTrayControllerUX.Margin * CGFloat(numberOfColumns + 1)) / CGFloat(numberOfColumns))
         switch TabDisplaySection(rawValue: indexPath.section) {
-        case .groupedTabs:
-            let width = collectionView.frame.size.width
-            if let keys = tabDisplayManager.tabGroups?.keys, keys.count > 0 {
-                let height: CGFloat = GroupedTabCell.defaultCellHeight * CGFloat(tabDisplayManager.tabGroups?.keys.count ?? 0)
-                    return CGSize(width: width >= 0 ? Int(width) : 0, height: Int(height))
-            } else {
-                return CGSize(width: 0, height: 0)
-            }
         case .regularTabs, .none:
-            guard tabDisplayManager.filteredTabs.count > 0 else { return CGSize(width: 0, height: 0) }
             return CGSize(width: cellWidth, height: self.cellHeightForCurrentDevice())
         case .inactiveTabs:
             if tabDisplayManager.isPrivate { return CGSize(width: 0, height: 0) }
@@ -753,7 +742,7 @@ class TabCell: UICollectionViewCell {
     }()
 
     var title = UIVisualEffectView(effect: UIBlurEffect(style: UIColor.theme.tabTray.tabTitleBlur))
-    var animator: SwipeAnimator?
+    var animator: SwipeAnimator!
 
     weak var delegate: TabCellDelegate?
 
@@ -881,7 +870,7 @@ class TabCell: UICollectionViewCell {
         default:
             return false
         }
-        animator?.close(right: right)
+        animator.close(right: right)
         return true
     }
 

@@ -63,8 +63,6 @@ struct FlaggableFeature {
             return PrefsKeys.ChronTabsPrefKey
         case .inactiveTabs:
             return PrefsKeys.KeyEnableInactiveTabs
-        case .groupedTabs:
-            return PrefsKeys.KeyEnableGroupedTabs
         case .jumpBackIn:
             return PrefsKeys.jumpBackInSectionEnabled
         case .recentlySaved:

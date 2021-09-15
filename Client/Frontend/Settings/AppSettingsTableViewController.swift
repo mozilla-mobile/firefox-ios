@@ -146,7 +146,6 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 ToggleRecentlySavedSection(settings: self),
                 ToggleStartAtHome(settings: self),
                 ToggleInactiveTabs(settings: self),
-                ToggleGroupedTabs(settings: self),
                 ExperimentsSettings(settings: self)
             ])]
 
