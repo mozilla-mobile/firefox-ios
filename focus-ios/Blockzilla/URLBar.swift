@@ -672,7 +672,9 @@ class URLBar: UIView {
             self.urlBarBorderView.backgroundColor = borderColor
         }, completion: { finished in
             if finished {
-                self.displayClearButton(shouldDisplay: self.isEditing)
+                if let isEmpty = self.urlText.text?.isEmpty {
+                    self.displayClearButton(shouldDisplay: !isEmpty)
+                }
             }
         })
     }
