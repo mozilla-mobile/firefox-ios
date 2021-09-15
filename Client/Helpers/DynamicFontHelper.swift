@@ -205,4 +205,10 @@ class DynamicFontHelper: NSObject {
         let notification = Notification(name: .DynamicFontChanged, object: nil)
         NotificationCenter.default.post(notification)
     }
+    
+    /// Return a font with the minimum size.
+    func preferredFont(withTextStyle textStyle: UIFont.TextStyle, maxSize: CGFloat) -> UIFont {
+        let fontDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: textStyle)
+        return UIFont(descriptor: fontDescriptor, size: min(fontDescriptor.pointSize, maxSize))
+    }
 }
