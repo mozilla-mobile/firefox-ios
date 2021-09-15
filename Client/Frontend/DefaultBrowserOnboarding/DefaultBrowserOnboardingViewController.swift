@@ -10,14 +10,18 @@ import Shared
     
  |----------------|
  |              X |
+ |                |
+ |     Image      |
+ |    [Centre]    | (Top View)
+ |                |
  |Title Multiline |
- |                | (Top View)
+ |                |
  |Description     |
  |Multiline       |
  |                |
- |                |
- |                |
  |----------------|
+ |                |
+ |                |
  |    [Button]    | (Bottom View)
  |----------------|
  
@@ -69,7 +73,19 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         button.tintColor = .secondaryLabel
         button.addTarget(self, action: #selector(self?.dismissAnimated), for: .touchUpInside)
     }
+    private lazy var topImageView: UIImageView = .build { [weak self] imageView in
+        imageView.image = self?.viewModel.model?.titleImage
+        imageView.contentMode = .scaleAspectFit
+        imageView.clipsToBounds = true
+    }
     private let textView: UIView = .build { view in }
+    private lazy var imageText: UILabel = .build { [weak self] label in
+        label.text = self?.viewModel.model?.imageText
+        label.font = .systemFont(ofSize: 18)
+        label.textAlignment = .left
+        label.numberOfLines = 1
+        label.adjustsFontSizeToFitWidth = true
+    }
     private lazy var titleLabel: UILabel = .build { [weak self] label in
         guard let self = self else { return }
         label.text = self.viewModel.model?.titleText
@@ -80,45 +96,40 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     private lazy var descriptionText: UILabel = .build { [weak self] label in
         guard let self = self else { return }
         label.text = self.viewModel.model?.descriptionText[0]
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, maxSize: 28)
+        label.font = UIFont.systemFont(ofSize: self.descriptionFontSize)
         label.textAlignment = .left
-        label.numberOfLines = 5
-        label.adjustsFontSizeToFitWidth = true
+        label.numberOfLines = 4
     }
     private lazy var descriptionLabel1: UILabel = .build() { [weak self] label in
         guard let self = self else { return }
         label.text = self.viewModel.model?.descriptionText[1]
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, maxSize: 36)
+        label.font = UIFont.systemFont(ofSize: self.descriptionFontSize)
         label.textAlignment = .left
         label.numberOfLines = 0
-        label.adjustsFontSizeToFitWidth = true
     }
     private lazy var descriptionLabel2: UILabel = .build { [weak self] label in
         guard let self = self else { return }
         label.text = self.viewModel.model?.descriptionText[2]
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, maxSize: 36)
+        label.font = UIFont.systemFont(ofSize: self.descriptionFontSize)
         label.textAlignment = .left
         label.numberOfLines = 0
-        label.adjustsFontSizeToFitWidth = true
     }
     private lazy var descriptionLabel3: UILabel = .build { [weak self] label in
         guard let self = self else { return }
         label.text = self.viewModel.model?.descriptionText[3]
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, maxSize: 36)
+        label.font = UIFont.systemFont(ofSize: self.descriptionFontSize)
         label.textAlignment = .left
         label.numberOfLines = 0
-        label.adjustsFontSizeToFitWidth = true
     }
     private lazy var goToSettingsButton: UIButton = .build { [weak self] button in
         guard let self = self else { return }
         button.setTitle(Strings.CoverSheetETPSettingsButton, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: self.descriptionFontSize)
         button.layer.cornerRadius = UpdateViewControllerUX.StartBrowsingButton.cornerRadius
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UpdateViewControllerUX.StartBrowsingButton.colour
         button.accessibilityIdentifier = "DefaultBrowserCard.goToSettingsButton"
         button.addTarget(self, action: #selector(self.goToSettings), for: .touchUpInside)
-        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .title3, maxSize: 40)
-        button.titleLabel?.adjustsFontSizeToFitWidth = true
     }
     
     // Used to set the part of text in center 
@@ -160,7 +171,11 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     
     func initialViewSetup() {
         updateTheme()
-
+        
+        // Initialize
+        if viewModel.displayTitleImage {
+            view.addSubviews(topImageView, imageText)
+        }
         view.addSubview(closeButton)
         textView.addSubview(containerView)
         containerView.addSubviews(titleLabel, descriptionText, descriptionLabel1, descriptionLabel2, descriptionLabel3)
@@ -178,15 +193,29 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     }
     
     private func setupView() {
+        if viewModel.displayTitleImage {
+            NSLayoutConstraint.activate([
+                topImageView.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: 10),
+                topImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                topImageView.heightAnchor.constraint(equalToConstant: 200),
+                topImageView.widthAnchor.constraint(equalToConstant: 340),
+                
+                imageText.topAnchor.constraint(equalTo: topImageView.topAnchor, constant: 121),
+                imageText.leadingAnchor.constraint(equalTo: topImageView.leadingAnchor, constant: 20),
+                imageText.trailingAnchor.constraint(equalTo: topImageView.trailingAnchor, constant: -80)
+            ])
+        }
         
         let textOffset = screenSize.height > 668 ? DBOnboardingUX.textOffset : DBOnboardingUX.textOffsetSmall
+        let offset = viewModel.displayTitleImage ? textOffset : 10
 
         NSLayoutConstraint.activate([
             closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 10),
             closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             closeButton.heightAnchor.constraint(equalToConstant: 44),
             
-            textView.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: 10),
+            viewModel.displayTitleImage ? textView.topAnchor.constraint(equalTo: topImageView.bottomAnchor) :
+                textView.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: CGFloat(offset)),
             textView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 36),
             textView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -36),
             textView.bottomAnchor.constraint(equalTo: goToSettingsButton.topAnchor),
@@ -248,12 +277,15 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
   
     // Theme
     @objc func updateTheme() {
-        view.backgroundColor = .systemBackground
-        titleLabel.textColor = fxTextThemeColour
-        descriptionText.textColor = fxTextThemeColour
-        descriptionLabel1.textColor = fxTextThemeColour
-        descriptionLabel2.textColor = fxTextThemeColour
-        descriptionLabel3.textColor = fxTextThemeColour
+        self.view.backgroundColor = fxBackgroundThemeColour
+        self.imageText.textColor = fxTextThemeColour
+        self.titleLabel.textColor = fxTextThemeColour
+        self.descriptionText.textColor = fxTextThemeColour
+        self.descriptionLabel1.textColor = fxTextThemeColour
+        self.descriptionLabel2.textColor = fxTextThemeColour
+        self.descriptionLabel3.textColor = fxTextThemeColour
+        viewModel.refreshModelImage()
+        self.topImageView.image = viewModel.model?.titleImage
     }
     
     deinit {
