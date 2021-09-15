@@ -306,7 +306,7 @@ extension GridTabViewController {
     func closeTabsForCurrentTray() {
         let tabs = self.tabDisplayManager.dataStore.compactMap { $0 }
         let maxTabs = 100
-        if tabs.count >= maxTabs {
+        if tabs.count >= maxTabs || tabs.first?.isPrivate ?? false {
             self.tabManager.removeTabsAndAddNormalTab(tabs)
         } else {
             self.tabManager.removeTabsWithToast(tabs)
