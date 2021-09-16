@@ -757,7 +757,7 @@ class BrowserViewController: UIViewController {
                 self.hideToolbars()
             }
 
-            self.browserToolbar.animateHidden(self.homeViewController != nil || self.showsToolsetInURLBar, duration: coordinator.transitionDuration, completion: {
+            self.browserToolbar.animateHidden(!self.urlBar.inBrowsingMode || self.showsToolsetInURLBar, duration: coordinator.transitionDuration, completion: {
                 self.updateViewConstraints()
             })
         })
