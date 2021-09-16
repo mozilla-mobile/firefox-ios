@@ -176,7 +176,15 @@ async def download_log(client, build_slug, artifacts_directory):
     suffix = f"builds/{build_slug}/log"
     url = BITRISE_URL_TEMPLATE.format(suffix=suffix)
 
-    response = await do_http_request_json(client, url)
+    while True:
+        response = await do_http_request_json(client, url)
+        if response["is_archived"] == True:
+            log.info("Log is now ready")
+            break
+        else:
+            log.info("Log is still running. Waiting another minute...")
+            await asyncio.sleep(60)
+
     download_url = response["expiring_raw_log_url"]
     if download_url:
         await download_file(download_url, os.path.join(artifacts_directory, "bitrise.log"))
