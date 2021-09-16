@@ -1444,3 +1444,35 @@ browser_search:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-02-09"
+
+installed_mozilla_products:
+  klar:
+    type: boolean
+    lifetime: application
+    description: |
+       If Klar is installed on the users's device.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/9089
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9090
+    data_sensitivity:
+      - technical
+      - interaction
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-09-01"
+  focus:
+    type: boolean
+    lifetime: application
+    description: |
+       If Focus is installed on the users's device.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/9089
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9090
+    data_sensitivity:
+      - technical
+      - interaction
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-09-01"
