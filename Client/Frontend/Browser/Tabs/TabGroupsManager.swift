@@ -141,6 +141,7 @@ class TabGroupsManager {
 class StopWatchTimer {
     private var timer: Timer?
     var isPaused = true
+    // Recored in seconds
     var elpasedTime: Int32 = 0
     
     func startOrResume() {
