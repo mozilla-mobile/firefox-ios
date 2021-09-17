@@ -734,10 +734,8 @@ class BrowserViewController: UIViewController {
     }
 
     func openOverylay(text: String) {
-        ensureBrowsingMode()
-        showToolbars()
         urlBar.activateTextField()
-        urlBar.fillUrlBarWithString(text: text)
+        urlBar.fillUrlBar(text: text)
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -1707,12 +1705,3 @@ protocol WhatsNewDelegate {
     func shouldShowWhatsNew() -> Bool
     func didShowWhatsNew()
 }
-
-extension WhatsNewDelegate {
-    //Temporarily disable what's new button
-    
-    var shouldEnableWhatsNewButton: Bool {
-        return false
-    }
-}
-
