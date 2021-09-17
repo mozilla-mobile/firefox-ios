@@ -533,13 +533,6 @@ class Tab: NSObject {
                 let observation = HistoryMetadataObservation(titleObservation: title, viewTimeObservation: nil, documentTypeObservation: nil)
                 updateObservationForKey(key: key, observation: observation)
             }
-//            if let key = tabGroupData.tabHistoryMetadatakey,
-//               tabGroupData.tabHistoryCurrentState == .navSearchLoaded ||
-//                tabGroupData.tabHistoryCurrentState == .tabNavigatedToDifferentUrl ||
-//               tabGroupData.tabHistoryCurrentState == .openInNewTab {
-//                let observation = HistoryMetadataObservation(titleObservation: title, viewTimeObservation: nil, documentTypeObservation: nil)
-//                updateObservationForKey(key: key, observation: observation)
-//            }
             return title
         }
 
