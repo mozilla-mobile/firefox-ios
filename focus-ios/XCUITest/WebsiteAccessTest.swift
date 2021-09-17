@@ -8,7 +8,6 @@ class WebsiteAccessTests: BaseTestCase {
     // Smoketest
     func testVisitWebsite() {
         // Check initial page
-        dismissURLBarFocused()
         checkForHomeScreen()
 
         // Enter 'mozilla' on the search field

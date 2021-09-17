@@ -11,10 +11,8 @@ class SettingAppearanceTest: BaseTestCase {
     // Smoketest
     // Check for the basic appearance of the Settings Menu
     func testCheckSetting() {
-        dismissURLBarFocused()
-
         // Navigate to Settings
-        waitForExistence(app.buttons["Settings"])
+        waitForExistence(app.buttons["Settings"], timeout: 5)
         app.buttons["Settings"].tap()
 
         let settingsButton = app.cells["Settings"]
@@ -223,9 +221,8 @@ class SettingAppearanceTest: BaseTestCase {
 
     // Smoktest
     func testSafariIntegration() {
-        dismissURLBarFocused()
         // Navigate to Settings
-        waitForExistence(app.buttons["Settings"])
+        waitForExistence(app.buttons["Settings"], timeout: 5)
         app.buttons["Settings"].tap()
 
         let settingsButton = app.cells["Settings"]

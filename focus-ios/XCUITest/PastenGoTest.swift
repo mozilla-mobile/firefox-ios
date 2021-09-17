@@ -62,6 +62,7 @@ class PastenGoTest: BaseTestCase {
         // Tap url bar to show context menu
         let searchOrEnterAddressTextField = app.textFields["URLBar.urlText"]
         searchOrEnterAddressTextField.tap()
+        searchOrEnterAddressTextField.tap()
         waitForExistence(app.menuItems["Paste"], timeout: 10)
         XCTAssertTrue(app.menuItems["Paste & Go"].isEnabled)
 
