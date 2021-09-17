@@ -10,6 +10,7 @@ class TipViewController: UIViewController {
         let label = SmartLabel()
         label.textColor = UIConstants.colors.defaultFont
         label.font = UIConstants.fonts.shareTrackerStatsLabel
+        label.textAlignment = .center
         label.numberOfLines = 0
         label.minimumScaleFactor = UIConstants.layout.homeViewLabelMinimumScale
         return label
@@ -40,27 +41,27 @@ class TipViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+                
         view.addSubview(tipTitleLabel)
         view.addSubview(tipDescriptionLabel)
         
-        tipDescriptionLabel.isUserInteractionEnabled = true
-        let tap = UITapGestureRecognizer(target: self, action: #selector(tapTip))
-        tipDescriptionLabel.addGestureRecognizer(tap)
-
         tipTitleLabel.text = tip.title
         tipDescriptionLabel.text = tip.description
-        
-        tipDescriptionLabel.snp.makeConstraints { make in
-            make.leading.equalTo(view).offset(UIConstants.layout.tipDescriptionMargin)
-            make.trailing.equalTo(view).inset(UIConstants.layout.tipDescriptionMargin)
-            make.bottom.equalToSuperview()
-        }
 
         tipTitleLabel.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.bottom.equalTo(tipDescriptionLabel.snp.top)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalTo(self.view.snp.centerY)
         }
+
+        tipDescriptionLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.top.equalTo(self.view.snp.centerY)
+        }
+
+        self.view.isUserInteractionEnabled = true
+        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapTip)))
     }
     
     @objc private func tapTip() {
