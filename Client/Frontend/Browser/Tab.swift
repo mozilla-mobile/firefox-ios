@@ -49,16 +49,7 @@ struct TabState {
     var favicon: Favicon?
 }
 
-struct TabGroupData: Codable {
-    var tabGroupTimerState: TabGroupTimerState = .none
-    var tabAssociatedSearchTerm: String = ""
-    var tabAssociatedSearchUrl: String = ""
-    var tabAssociatedNextUrl: String = ""
-    var tabHistoryMetadatakey: HistoryMetadataKey?
-    var tabHistoryCurrentState: TabGroupTimerState = .none
-}
-
-enum TabGroupTimerState: String, Codable {
+public enum TabGroupTimerState: String, Codable {
     case navSearchLoaded
     case tabNavigatedToDifferentUrl
     case tabSwitched
@@ -97,7 +88,8 @@ class Tab: NSObject {
     var timerPerWebsite: [String: StopWatchTimer] = [:]
     
     // Tab Groups
-    var tabGroupData: TabGroupData = TabGroupData(tabGroupTimerState: .none, tabAssociatedSearchTerm: "", tabAssociatedSearchUrl: "", tabAssociatedNextUrl: "", tabHistoryMetadatakey: nil, tabHistoryCurrentState: .none)
+    var tabGroupData: TabGroupData = TabGroupData(searchTerm: "", searchUrl: "", nextReferralUrl: "", tabHistoryCurrentState: TabGroupTimerState.none.rawValue , tabGroupTimerState: TabGroupTimerState.none.rawValue)
+    
     var tabGroupsTimerHelper = StopWatchTimer()
     var shouldResetTabGroupData: Bool = false
     
@@ -112,7 +104,7 @@ class Tab: NSObject {
     // Setting defualt page as topsites
     var newTabPageType: NewTabPage = .topSites
     var tabUUID: String = UUID().uuidString
-    private var screenshotUUIDString: String? //UUID().uuidString
+    private var screenshotUUIDString: String?
     
     var screenshotUUID: UUID? {
         get {
@@ -311,10 +303,6 @@ class Tab: NSObject {
             _ = profile.places.noteHistoryMetadataObservation(key: key, observation: observation)
         }
     }
- 
-    func updateHisotryMetadataKey(url: String, searchTerm: String, referralUrl: String) {
-        tabGroupData.tabHistoryMetadatakey = HistoryMetadataKey(url: url, searchTerm: searchTerm, referrerUrl: referralUrl)
-    }
 
     func updateTimerAndObserving(state: TabGroupTimerState, searchTerm: String? = nil, searchProviderUrl: String? = nil, nextUrl: String = "") {
         switch state {
@@ -323,47 +311,43 @@ class Tab: NSObject {
             tabGroupsTimerHelper.startOrResume()
             tabGroupData.tabAssociatedSearchUrl = searchProviderUrl ?? ""
             tabGroupData.tabAssociatedSearchTerm = searchTerm ?? ""
-            if let searchUrl = searchProviderUrl {
-                tabGroupData.tabHistoryMetadatakey = HistoryMetadataKey(url: searchUrl, searchTerm: searchTerm, referrerUrl: nextUrl)
-            }
-            tabGroupData.tabHistoryCurrentState = state
+            tabGroupData.tabAssociatedNextUrl = nextUrl
+            tabGroupData.tabHistoryCurrentState = state.rawValue
         case .newTab:
             shouldResetTabGroupData = false
             tabGroupsTimerHelper.resetTimer()
             tabGroupsTimerHelper.startOrResume()
-            tabGroupData.tabHistoryCurrentState = state
+            tabGroupData.tabHistoryCurrentState = state.rawValue
         case .tabNavigatedToDifferentUrl:
             if !tabGroupData.tabAssociatedNextUrl.isEmpty && tabGroupData.tabAssociatedSearchUrl.isEmpty || shouldResetTabGroupData {
                 // reset tab group
-                tabGroupData = TabGroupData(tabGroupTimerState: .none, tabAssociatedSearchTerm: "", tabAssociatedSearchUrl: "", tabAssociatedNextUrl: "", tabHistoryMetadatakey: nil, tabHistoryCurrentState: .none)
+                tabGroupData = TabGroupData(searchTerm: "", searchUrl: "", nextReferralUrl: "", tabHistoryCurrentState: TabGroupTimerState.none.rawValue , tabGroupTimerState: TabGroupTimerState.none.rawValue)
                 shouldResetTabGroupData = true
             } else if tabGroupData.tabAssociatedNextUrl.isEmpty {
-                tabGroupData.tabAssociatedNextUrl = nextUrl
-                let newKey = HistoryMetadataKey(url: tabGroupData.tabAssociatedSearchUrl, searchTerm: tabGroupData.tabAssociatedSearchTerm, referrerUrl: tabGroupData.tabAssociatedNextUrl)
-                if let oldKey = tabGroupData.tabHistoryMetadatakey, oldKey.referrerUrl != nextUrl {
-                    let observation = HistoryMetadataObservation(titleObservation: nil, viewTimeObservation: tabGroupsTimerHelper.elpasedTime, documentTypeObservation: nil)
-                    updateObservationForKey(key: oldKey, observation: observation)
+                let key = tabGroupData.tabHistoryMetadatakey()
+                if key.referrerUrl != nextUrl {
+                    let observation = HistoryMetadataObservation(titleObservation: nil, viewTimeObservation: tabGroupsTimerHelper.elapsedTime, documentTypeObservation: nil)
+                    updateObservationForKey(key: key, observation: observation)
+                    tabGroupData.tabAssociatedNextUrl = nextUrl
                 }
-                tabGroupData.tabHistoryMetadatakey = newKey
                 tabGroupsTimerHelper.resetTimer()
                 tabGroupsTimerHelper.startOrResume()
-                tabGroupData.tabHistoryCurrentState = state
+                tabGroupData.tabHistoryCurrentState = state.rawValue
             }
         case .tabSelected:
             if !shouldResetTabGroupData {
                 if tabGroupsTimerHelper.isPaused {
                     tabGroupsTimerHelper.startOrResume()
                 }
-                tabGroupData.tabHistoryCurrentState = state
+                tabGroupData.tabHistoryCurrentState = state.rawValue
             }
         case .tabSwitched:
             if !shouldResetTabGroupData {
-                if let key = tabGroupData.tabHistoryMetadatakey {
-                    let observation = HistoryMetadataObservation(titleObservation: nil, viewTimeObservation: tabGroupsTimerHelper.elpasedTime, documentTypeObservation: nil)
-                    updateObservationForKey(key: key, observation: observation)
-                }
+                let key = tabGroupData.tabHistoryMetadatakey()
+                let observation = HistoryMetadataObservation(titleObservation: nil, viewTimeObservation: tabGroupsTimerHelper.elapsedTime, documentTypeObservation: nil)
+                updateObservationForKey(key: key, observation: observation)
                 tabGroupsTimerHelper.pauseOrStop()
-                tabGroupData.tabHistoryCurrentState = state
+                tabGroupData.tabHistoryCurrentState = state.rawValue
             }
         case .openInNewTab:
             shouldResetTabGroupData = false
@@ -371,11 +355,10 @@ class Tab: NSObject {
                 tabGroupData.tabAssociatedSearchUrl = searchUrl
                 tabGroupData.tabAssociatedSearchTerm = searchTerm ?? ""
                 tabGroupData.tabAssociatedNextUrl = nextUrl
-                tabGroupData.tabHistoryMetadatakey = HistoryMetadataKey(url: searchUrl, searchTerm: searchTerm, referrerUrl: nextUrl)
             }
-            tabGroupData.tabHistoryCurrentState = state
+            tabGroupData.tabHistoryCurrentState = state.rawValue
         case .none:
-            tabGroupData.tabHistoryCurrentState = state
+            tabGroupData.tabHistoryCurrentState = state.rawValue
         }
     }
 
@@ -543,13 +526,20 @@ class Tab: NSObject {
 
     var displayTitle: String {
         if let title = webView?.title, !title.isEmpty {
-            if let key = tabGroupData.tabHistoryMetadatakey,
-               tabGroupData.tabHistoryCurrentState == .navSearchLoaded ||
-                tabGroupData.tabHistoryCurrentState == .tabNavigatedToDifferentUrl ||
-               tabGroupData.tabHistoryCurrentState == .openInNewTab {
+            let key = tabGroupData.tabHistoryMetadatakey()
+            if tabGroupData.tabHistoryCurrentState == TabGroupTimerState.navSearchLoaded.rawValue ||
+                tabGroupData.tabHistoryCurrentState == TabGroupTimerState.tabNavigatedToDifferentUrl.rawValue ||
+                tabGroupData.tabHistoryCurrentState == TabGroupTimerState.openInNewTab.rawValue {
                 let observation = HistoryMetadataObservation(titleObservation: title, viewTimeObservation: nil, documentTypeObservation: nil)
                 updateObservationForKey(key: key, observation: observation)
             }
+//            if let key = tabGroupData.tabHistoryMetadatakey,
+//               tabGroupData.tabHistoryCurrentState == .navSearchLoaded ||
+//                tabGroupData.tabHistoryCurrentState == .tabNavigatedToDifferentUrl ||
+//               tabGroupData.tabHistoryCurrentState == .openInNewTab {
+//                let observation = HistoryMetadataObservation(titleObservation: title, viewTimeObservation: nil, documentTypeObservation: nil)
+//                updateObservationForKey(key: key, observation: observation)
+//            }
             return title
         }
 
