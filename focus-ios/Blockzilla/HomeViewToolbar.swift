@@ -7,6 +7,18 @@ import UIKit
 class HomeViewToolbar: UIView {
     let toolset = BrowserToolset()
     private let stackView = UIStackView()
+    
+    var isIPadRegularDimensions: Bool = false {
+        didSet {
+            guard UIDevice.current.userInterfaceIdiom == .pad else { return }
+            
+            if isIPadRegularDimensions {
+                toolset.contextMenuButton.removeFromSuperview()
+            } else {
+                stackView.addArrangedSubview(toolset.contextMenuButton)
+            }
+        }
+    }
 
     init() {
         super.init(frame: CGRect.zero)
