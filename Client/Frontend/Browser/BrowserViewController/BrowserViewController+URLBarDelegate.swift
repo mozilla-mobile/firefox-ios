@@ -173,7 +173,7 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
                 settingsTableViewController.profile = self.profile
                 settingsTableViewController.tabManager = self.tabManager
                 settingsTableViewController.settingsDelegate = self
-                settingsTableViewController.showContentBlockerSetting = true
+                settingsTableViewController.deeplinkTo = .contentBlocker
 
                 let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
                 controller.presentingModalViewControllerDelegate = self

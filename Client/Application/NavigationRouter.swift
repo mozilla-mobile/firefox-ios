@@ -26,6 +26,7 @@ enum SettingsPage: String {
     case general = "general"
     case newtab = "newtab"
     case homepage = "homepage"
+    case tabs = "tabs"
     case mailto = "mailto"
     case search = "search"
     case clearPrivateData = "clear-private-data"
@@ -303,6 +304,9 @@ enum NavigationPath {
         case .homepage:
             let viewController = HomePageSettingViewController(prefs: baseSettingsVC.profile.prefs)
             viewController.profile = profile
+            controller.pushViewController(viewController, animated: true)
+        case .tabs:
+            let viewController = TabsSettingsViewController()
             controller.pushViewController(viewController, animated: true)
         case .mailto:
             let viewController = OpenWithSettingsViewController(prefs: profile.prefs)

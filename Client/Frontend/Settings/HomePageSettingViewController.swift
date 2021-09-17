@@ -24,6 +24,15 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
     }
 
     override func generateSettings() -> [SettingSection] {
+
+        let customizeFirefoxHomeSection = customizeFirefoxSettingSection()
+        let customizeHomePageSection = customizeHomeSettingSection()
+
+        return [customizeFirefoxHomeSection, customizeHomePageSection]
+    }
+
+    private func customizeHomeSettingSection() -> SettingSection {
+
         // The Home button and the New Tab page can be set independently
         self.currentNewTabChoice = NewTabAccessors.getHomePage(self.prefs)
         self.hasHomePage = HomeButtonHomePageAccessors.getHomePage(self.prefs) != nil
@@ -44,9 +53,14 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
         })
         showWebPage.textField.textAlignment = .natural
 
-        let section = SettingSection(title: NSAttributedString(string: Strings.NewTabSectionName), footerTitle: NSAttributedString(string: Strings.NewTabSectionNameFooter), children: [showTopSites, showWebPage])
+        return SettingSection(title: NSAttributedString(string: Strings.NewTabSectionName),
+                              footerTitle: NSAttributedString(string: Strings.NewTabSectionNameFooter),
+                              children: [showTopSites, showWebPage])
+    }
 
-        let topsitesSection = SettingSection(title: NSAttributedString(string: Strings.SettingsTopSitesCustomizeTitle), footerTitle: NSAttributedString(string: Strings.SettingsTopSitesCustomizeFooter), children: [TopSitesSettings(settings: self)])
+    private func customizeFirefoxSettingSection() -> SettingSection {
+
+        var sectionItems = [Setting]()
 
         let isPocketEnabledDefault = Pocket.IslocaleSupported(Locale.current.identifier)
         let pocketSetting = BoolSetting(prefs: profile.prefs, prefKey: PrefsKeys.ASPocketStoriesVisible, defaultValue: isPocketEnabledDefault, attributedTitleText: NSAttributedString(string: Strings.SettingsNewTabPocket))
@@ -101,6 +115,30 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
                                      children: [afterFourHoursOption, alwaysOption, neverOption])
 
         return section
+
+        let pocketSetting = BoolSetting(prefs: profile.prefs,
+                                        prefKey: PrefsKeys.ASPocketStoriesVisible,
+                                        defaultValue: isPocketEnabledDefault,
+                                        attributedTitleText: NSAttributedString(string: .SettingsCustomizeHomePocket))
+
+        let jumpBackInSetting = BoolSetting(with: .jumpBackIn,
+                                            titleText: NSAttributedString(string: .SettingsCustomizeHomeJumpBackIn))
+
+        let recentlySavedSetting = BoolSetting(with: .recentlySaved,
+                                               titleText: NSAttributedString(string: .SettingsCustomizeHomeRecentlySaved))
+
+//        let recentlyVisitedSetting = BoolSetting(with: .recentlyVisited,
+//                                                 titleText: NSAttributedString(string: .FirefoxHomeJumpBackInSectionTitle))
+
+
+        sectionItems.append(TopSitesSettings(settings: self))
+        sectionItems.append(jumpBackInSetting)
+        sectionItems.append(recentlySavedSetting)
+//        sectionItems.append(recentlyVisitedSetting)
+        sectionItems.append(pocketSetting)
+
+        return SettingSection(title: NSAttributedString(string: Strings.SettingsTopSitesCustomizeTitle),
+                              children: sectionItems)
     }
 
     override func viewDidDisappear(_ animated: Bool) {

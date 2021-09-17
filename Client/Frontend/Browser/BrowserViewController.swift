@@ -1610,6 +1610,18 @@ extension BrowserViewController: HomePanelDelegate {
     func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab? = nil) {
         showTabTray(withFocusOnUnselectedTab: tabToFocus)
     }
+
+    func homePanelDidRequestToCustomizeHomeSettings() {
+        let settingsTableViewController = AppSettingsTableViewController()
+        settingsTableViewController.profile = self.profile
+        settingsTableViewController.tabManager = self.tabManager
+        settingsTableViewController.settingsDelegate = self
+        settingsTableViewController.deeplinkTo = .customizeHomepage
+
+        let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
+        controller.presentingModalViewControllerDelegate = self
+        self.present(controller, animated: true, completion: nil)
+    }
 }
 
 extension BrowserViewController: SearchViewControllerDelegate {

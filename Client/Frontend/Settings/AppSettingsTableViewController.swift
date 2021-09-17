@@ -5,9 +5,14 @@
 import UIKit
 import Shared
 
+enum AppSettingsDeeplinkOption {
+    case contentBlocker
+    case customizeHomepage
+}
+
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
 class AppSettingsTableViewController: SettingsTableViewController {
-    var showContentBlockerSetting = false
+    var deeplinkTo: AppSettingsDeeplinkOption?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,14 +34,26 @@ class AppSettingsTableViewController: SettingsTableViewController {
         // display name, etc.
         ////profile.rustAccount.refreshProfile()
 
-        if showContentBlockerSetting {
-            let viewController = ContentBlockerSettingViewController(prefs: profile.prefs)
-            viewController.profile = profile
+        checkForDeeplinkSetting()
+    }
+
+    private func checkForDeeplinkSetting() {
+        guard let deeplink = deeplinkTo else { return }
+        var viewController: SettingsTableViewController
+
+        switch deeplink {
+        case .contentBlocker:
+            viewController = ContentBlockerSettingViewController(prefs: profile.prefs)
             viewController.tabManager = tabManager
-            navigationController?.pushViewController(viewController, animated: false)
-            // Add a done button from this view
-            viewController.navigationItem.rightBarButtonItem = navigationItem.rightBarButtonItem
+
+        case .customizeHomepage:
+            viewController = HomePageSettingViewController(prefs: profile.prefs)
         }
+
+        viewController.profile = profile
+        navigationController?.pushViewController(viewController, animated: false)
+        // Add a done button from this view
+        viewController.navigationItem.rightBarButtonItem = navigationItem.rightBarButtonItem
     }
 
     override func generateSettings() -> [SettingSection] {
@@ -47,6 +64,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
             SearchSetting(settings: self),
             NewTabPageSetting(settings: self),
             HomeSetting(settings: self),
+            TabsSetting(),
             OpenWithSetting(settings: self),
             ThemeSetting(settings: self),
             BoolSetting(prefs: prefs, prefKey: PrefsKeys.KeyBlockPopups, defaultValue: true,
@@ -146,8 +164,6 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 ToggleRecentlySavedSection(settings: self),
                 TogglePullToRefresh(settings: self),
                 ToggleStartAtHome(settings: self),
-                ToggleInactiveTabs(settings: self),
-                ToggleGroupedTabs(settings: self),
                 ExperimentsSettings(settings: self)
             ])]
 
