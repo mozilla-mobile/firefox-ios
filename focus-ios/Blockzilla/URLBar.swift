@@ -317,7 +317,8 @@ class URLBar: UIView {
         addShieldConstraints()
 
         cancelButton.snp.makeConstraints { make in
-            make.top.bottom.leading.trailing.equalTo(leftBarViewLayoutGuide)
+            make.leading.trailing.equalTo(leftBarViewLayoutGuide)
+            make.top.bottom.equalToSuperview()
         }
 
         textAndLockContainer.snp.makeConstraints { make in
@@ -395,8 +396,8 @@ class URLBar: UIView {
         addShieldConstraints()
         
         if isIPadRegularDimensions {
-            leftBarViewLayoutGuide.snp.makeConstraints { (make) in
-                make.leading.equalTo( toolset.forwardButton.snp.trailing).offset(UIConstants.layout.urlBarToolsetOffset)
+            leftBarViewLayoutGuide.snp.remakeConstraints { (make) in
+                make.leading.equalTo(toolset.forwardButton.snp.trailing).offset(UIConstants.layout.urlBarToolsetOffset)
             }
         } else {
             leftBarViewLayoutGuide.snp.makeConstraints { make in
