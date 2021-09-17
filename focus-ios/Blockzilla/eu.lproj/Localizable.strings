@@ -34,14 +34,14 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Erabili Safariren hedapen gisa:";
 
-/* (No Comment) */
-"About.screenTitle" = "Honi buruz";
-
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
 "About.title" = "%@(r)i buruz";
 
 /* Label on About screen */
 "About.topLabel" = "%@(e)k agintea ematen dizu.";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "Ireki %@ aplikazioan";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "Autentifikatu %@ aplikaziora itzultzeko";
@@ -121,6 +121,9 @@
 /* Copy URL button in URL long press menu */
 "Browser.copyAddressLabel" = "Kopiatu helbidea";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URLa arbelera kopiatu da";
+
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Kopiatu";
 
@@ -142,8 +145,29 @@
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Gelditu";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Hautatu helbide-barra";
+
 /* Label on button to cancel edits */
 "Cancel" = "Utzi";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "Kopiatu duzun lotura: %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "Kopiatu irudia";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "Kopiatu lotura";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "Kopiatu duzun lotura:";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "Gorde irudia";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "Partekatu lotura";
 
 /* Label on button to complete edits */
 "Done" = "Eginda";
@@ -162,6 +186,9 @@
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "Ireki";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ aplikazioak %2$@ ireki nahi du";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "Deitu";
@@ -226,6 +253,15 @@
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
 
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "Honekin kameraren karretean gorde ditzakezu irudiak";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "Ireki ezarpenak";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "\"%@\" aplikazioak zure argazkietarako sarbidea nahi du";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "Mahaigaineko gunea";
 
@@ -259,6 +295,30 @@
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "Erakutsi bilaketa-iradokizunak?";
 
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "URLen osatze automatikoa";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Bestelako jarraipen-elementuak blokeatzean zenbait bideo eta web orri apur litezke.";
+
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "Helbide-barran idazten duzuna bilaketa-motorrera bidaliko du %@(e)k.";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "%@ denontzat eskaini eta hobetzeko beharrezkoa dena soilik biltzen ahalegintzen da Mozilla.";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "Argibide gehiago.";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "Baloratu %@";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "SAFARI INTEGRAZIOA";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Ezarpenak";
+
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Gehitu beste bilaketa-motor bat";
 
@@ -286,38 +346,11 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Erabili beharreko bilaketa-katea";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Adibidea: adibidea.eus/search/?q=%s";
+
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Itsatsi edo idatzi bilaketa-katea. Beharrezkoa bada, ordezkatu bilaketa-terminoa ondorengoarekin: %s.";
-
-/* Title for the URL Autocomplete row */
-"Settings.autocompleteSection" = "URLen osatze automatikoa";
-
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Bestelako jarraipen-elementuak blokeatzean zenbait bideo eta web orri apur litezke.";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Ez, eskerrik asko";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Ulertzen dut";
-
-/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSearchSuggestion" = "Helbide-barran idazten duzuna bilaketa-motorrera bidaliko du %@(e)k.";
-
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSendUsageData" = "%@ denontzat eskaini eta hobetzeko beharrezkoa dena soilik biltzen ahalegintzen da Mozilla.";
-
-/* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.learnMore" = "Argibide gehiago.";
-
-/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
-"Settings.rate" = "Baloratu %@";
-
-/* Label for Safari integration section */
-"Settings.safariTitle" = "SAFARI INTEGRAZIOA";
-
-/* Title for settings screen */
-"Settings.screenTitle" = "Ezarpenak";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Bilaketa-motorra";
@@ -344,31 +377,7 @@
 "Settings.sectionSecurity" = "SEGURTASUNA";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Blokeatu publizitatearen jarraipena";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Zenbait iragarkik guneen bisiten jarraipena egiten dute, iragarkietan klik egiteko beharrik gabe ere";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Blokeatu analitiken jarraipena";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Sakatzea edo korritzea bezalako jarduerak bildu, analizatu eta neurtzeko erabiltzen da";
-
-/* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Blokeatu webeko letra-tipoak";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Blokeatu bestelako edukien jarraipena";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Gaituz gero, zenbait orrik espero gabeko portaera izan lezakete";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Blokeatu sare sozialetako jarraipena";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Guneetan txertatuta zure bisiten jarraipena egin eta partekatzeko botoien tankerako eginbideak bistaratzeko";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Erabili Face ID aplikazioa desblokeatzeko";
@@ -394,23 +403,23 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Touch ID erabilita %@ aplikazioa desblokea daiteke aplikazioak dagoeneko URL bat irekita badu";
 
-/* URL for the learn more of the send usage data toggle */
-"Settings.usageData" = "usage-data";
-
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Nobedadeak";
 
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "SIRI LASTERBIDEAK";
 
+/* Text for a share button */
+"share" = "Partekatu";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Kopiatu helbidea";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Bilatu orrian";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Eskuratu Firefox";
-
-/* Text for the share menu option when a user wants to open a page in Focus. */
-"ShareMenu.OpenInFocus" = "Ireki %@ aplikazioan";
 
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "Orri-ekintzak";
@@ -457,84 +466,6 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "Ireki beharreko URLa";
 
-/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
-"URL.addToAutocompleteLabel" = "Gehitu automatikoki osatzeko lotura";
-
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "Utzi";
-
-/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
-"URL.contextMenu" = "Itsatsi eta joan";
-
-/* Erase button in the URL bar */
-"URL.eraseButtonLabel" = "EZABATU";
-
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "Zure nabigatze-historia ezabatu egin da.";
-
-/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
-"URL.findOnPageLabel" = "Bilatu orrian: %@";
-
-/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
-"URL.paste" = "Itsatsi";
-
-/* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "Idatzi bilaketa edo helbidea";
-
-/* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "Bilatu %@";
-
-/* Text for the URL bar showing the number of trackers blocked on a webpage. */
-"URL.trackersBlockedLabel" = "Blokeatutako elementuak";
-
-/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
-"actionSheet.openIn" = "Ireki %@ aplikazioan";
-
-/* Toast displayed after a URL has been copied to the clipboard */
-"browser.copyAddressToast" = "URLa arbelera kopiatu da";
-
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
-"browserShortcutDescription.selectLocationBar" = "Hautatu helbide-barra";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "Kopiatu duzun lotura: %@";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "Kopiatu irudia";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "Kopiatu lotura";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "Kopiatu duzun lotura:";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "Gorde irudia";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "Partekatu lotura";
-
-/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
-"externalAppLinkWithAppName.messageTitle" = "%1$@ aplikazioak %2$@ ireki nahi du";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "Honekin kameraren karretean gorde ditzakezu irudiak";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "Ireki ezarpenak";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "\"%@\" aplikazioak zure argazkietarako sarbidea nahi du";
-
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Adibidea: adibidea.eus/search/?q=%s";
-
-/* Text for a share button */
-"share" = "Partekatu";
-
-/* Text for the share menu when a user wants to copy a URL. */
-"shareMenu.copyAddress" = "Kopiatu helbidea";
-
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Erabili Touch ID %@ aplikaziora itzultzeko";
 
@@ -565,9 +496,30 @@
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Desgaitu %@ itxi edo EZABATU sakatu arte.";
 
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Jarraipenaren babesa";
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "Gehitu automatikoki osatzeko lotura";
 
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Aukeratu %@(e)k iragarki, estatistika, sare sozial edo bestelako jarraipen-elementuak blokeatzen dituen.";
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "Utzi";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Itsatsi eta joan";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "EZABATU";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Bilatu orrian: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Itsatsi";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Idatzi bilaketa edo helbidea";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Bilatu %@";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "Blokeatutako elementuak";
 

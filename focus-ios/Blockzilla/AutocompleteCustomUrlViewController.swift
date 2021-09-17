@@ -8,7 +8,7 @@ import Telemetry
 
 class AutocompleteCustomUrlViewController: UIViewController {
     private let emptyStateView = UIView()
-    private let tableView = UITableView(frame: .zero, style: .grouped)
+    private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     private var addDomainCell: UITableViewCell?
 
     private let customAutocompleteSource: CustomAutocompleteSource
@@ -26,7 +26,7 @@ class AutocompleteCustomUrlViewController: UIViewController {
         let label = SmartLabel()
         label.text = UIConstants.strings.autocompleteEmptyState
         label.font = UIConstants.fonts.settingsDescriptionText
-        label.textColor = UIConstants.colors.settingsTextLabel
+        label.textColor = .primaryText
         label.textAlignment = .center
         emptyStateView.addSubview(label)
         tableView.backgroundView = emptyStateView
@@ -38,7 +38,8 @@ class AutocompleteCustomUrlViewController: UIViewController {
         }
 
         tableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.bottom.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(UIConstants.layout.settingsItemInset)
         }
     }
 
@@ -47,13 +48,13 @@ class AutocompleteCustomUrlViewController: UIViewController {
     }
 
     override func viewDidLoad() {
-        view.backgroundColor = UIConstants.colors.background
+        view.backgroundColor = .primaryBackground
 
         title = UIConstants.strings.autocompleteManageSitesLabel
 
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.backgroundColor = UIConstants.colors.background
+        tableView.backgroundColor = .primaryBackground
         tableView.layoutMargins = UIEdgeInsets.zero
         tableView.separatorColor = UIConstants.colors.settingsSeparator
     }
@@ -95,7 +96,7 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell = UITableViewCell()
-        cell.backgroundColor = UIConstants.colors.background
+        cell.backgroundColor = .primaryBackground
         return cell
     }
 
@@ -108,7 +109,7 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
             cell.accessibilityIdentifier = "addCustomDomainCell"
 
             let backgroundColorView = UIView()
-            backgroundColorView.backgroundColor = UIConstants.colors.cellSelected
+            backgroundColorView.backgroundColor = .secondaryBackground
 
             cell.selectedBackgroundView = backgroundColorView
             addDomainCell = cell
@@ -119,11 +120,16 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
             cell.accessibilityIdentifier = domains[indexPath.row]
         }
 
-        cell.backgroundColor = UIConstants.colors.cellBackground
-        cell.textLabel?.textColor = UIConstants.colors.settingsTextLabel
+        cell.backgroundColor = .secondaryBackground
+        cell.textLabel?.textColor = .primaryText
         cell.layoutMargins = UIEdgeInsets.zero
 
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath)
+    {
+        cell.roundedCorners(tableView: tableView, indexPath: indexPath)
     }
 
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

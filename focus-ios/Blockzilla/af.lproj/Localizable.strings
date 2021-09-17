@@ -31,9 +31,6 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Gebruik dit as ’n uitbreiding vir Safari:";
 
-/* (No Comment) */
-"About.screenTitle" = "Aangaande";
-
 /* Label on About screen */
 "About.topLabel" = "%@ plaas mens in beheer.";
 
@@ -115,12 +112,6 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Die blokkering van ander inhoudspeurders kan sommige video’s en webbladsye breek.";
 
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Nee, dankie";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Ek verstaan";
-
 /* Title for settings screen */
 "Settings.screenTitle" = "Instellings";
 
@@ -137,19 +128,7 @@
 "Settings.sectionPrivacy" = "PRIVAATHEID";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Blokkeer advertensie­speurders";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Blokkeer analise­speurders";
-
-/* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Blokkeer webfonte";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Blokkeer ander inhoud­speurders";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Blokkeer sosiale speurders";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Kan sommige video's en webbladsye breek";
@@ -162,9 +141,6 @@
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "VEE UIT";
-
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "U blaaigeskiedenis is uitgevee.";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Soek, of tik adres in";

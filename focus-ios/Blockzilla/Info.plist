@@ -15,7 +15,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>8.1.3</string>
+	<string>9000</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -68,15 +68,13 @@
 		<key>openUrl</key>
 		<string>org.mozilla.ios.Klar.openUrl</string>
 	</dict>
-	<key>SentryDSN</key>
-	<string>$(SENTRY_DSN)</string>
 	<key>UIApplicationShortcutItems</key>
 	<array>
 		<dict>
 			<key>UIApplicationShortcutItemIconFile</key>
 			<string>erase_quick_action</string>
 			<key>UIApplicationShortcutItemTitle</key>
-			<string>Erase and Open</string>
+			<string>UIApplicationShortcutItemTitle.EraseAndOpen</string>
 			<key>UIApplicationShortcutItemType</key>
 			<string>$(PRODUCT_BUNDLE_IDENTIFIER).EraseAndOpen</string>
 		</dict>

@@ -31,9 +31,6 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Úsáid mar eisínteacht Safari é:";
 
-/* (No Comment) */
-"About.screenTitle" = "Maidir leis";
-
 /* Label on About screen */
 "About.topLabel" = "Cuireann %@ tusa i gceannas.";
 
@@ -115,12 +112,6 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Má chuireann tú cosc ar lorgairí ábhair eile, seans go mbrisfidh sé físeáin agus leathanaigh Ghréasáin áirithe.";
 
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Cealaigh";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Tuigim, cuir coisc mar sin féin";
-
 /* Title for settings screen */
 "Settings.screenTitle" = "Socruithe";
 
@@ -137,19 +128,7 @@
 "Settings.sectionPrivacy" = "PRÍOBHÁIDEACHAS";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Cuir cosc ar lorgairí fógraíochta";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Cuir cosc ar lorgairí anailísíochta";
-
-/* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Cuir cosc ar chlónna Gréasáin";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Cuir cosc ar lorgairí ábhair eile";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Cuir cosc ar lorgairí sóisialta";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Seans go mbrisfidh seo físeáin agus leathanaigh Ghréasáin áirithe";
@@ -168,9 +147,6 @@
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "BÁNAIGH";
-
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "Bánaíodh do stair bhrabhsála.";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Cuardach nó seoladh Gréasáin";

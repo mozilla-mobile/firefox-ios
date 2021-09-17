@@ -133,7 +133,7 @@ class WebViewController: UIViewController, WebController {
         } else {
             reload() // Reload the current URL. We cannot use loadRequest in this case because it seems to leverage caching.
         }
-        UserDefaults.standard.set(false, forKey: TipManager.TipKey.requestDesktopTip)
+        TipManager.requestDesktopTip = false
     }
 
     func stop() { browserView.stopLoading() }
@@ -145,7 +145,7 @@ class WebViewController: UIViewController, WebController {
         browserView = WKWebView(frame: .zero, configuration: wvConfig)
 
         browserView.allowsBackForwardNavigationGestures = true
-        browserView.allowsLinkPreview = false
+        browserView.allowsLinkPreview = true
         browserView.scrollView.clipsToBounds = false
         browserView.scrollView.delegate = self
         browserView.navigationDelegate = self

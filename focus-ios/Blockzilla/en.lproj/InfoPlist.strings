@@ -13,3 +13,6 @@
 /* (No Comment) */
 "NSPhotoLibraryAddUsageDescription" = "This lets you save and upload photos.";
 
+/* This is the menu item that appears when you long press the Focus icon on the phone home screen. */
+"UIApplicationShortcutItemTitle.EraseAndOpen" = "Erase and Open";
+

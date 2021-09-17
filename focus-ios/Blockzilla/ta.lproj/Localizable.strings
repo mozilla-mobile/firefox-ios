@@ -34,14 +34,14 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "சப்பாரி நீட்சியாகப் பயன்படுத்து:";
 
-/* (No Comment) */
-"About.screenTitle" = "பற்றி";
-
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
 "About.title" = "%@ பற்றி";
 
 /* Label on About screen */
 "About.topLabel" = "%@ உங்களை கட்டுப்பாட்டில் வைக்கும்.";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "%@ திறக்கவும்";
 
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "தனிபயன் URL சேர்";
@@ -91,6 +91,9 @@
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "செயல்படுத்தப்பட்டது";
 
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "என் தளங்கள்";
+
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "புதிய அமர்வு";
 
@@ -99,6 +102,9 @@
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "பின்செல்";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "முகவரியை நகலெடு";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "நகலெடு";
@@ -121,8 +127,26 @@
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "நிறுத்து";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "இருப்பிடப் பட்டையைத் தேர்ந்தெடு";
+
 /* Label on button to cancel edits */
 "Cancel" = "ரத்து";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "நீங்கள் நகலெடுத்த இணைப்பு: %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "படத்தை நகலெடு";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "இணைப்பைப் படியெடு";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "படத்தைச் சேமி";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "தொடுப்பைப் பகிர்";
 
 /* Label on button to complete edits */
 "Done" = "முடிந்தது";
@@ -141,6 +165,9 @@
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "திற";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ %2$@ செயலியில் திறக்க விரும்புகிறது";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "அழை";
@@ -190,6 +217,9 @@
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "உலாவு. அகற்று. திரும்பச்செய்.";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "மூடு";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "ரத்து";
 
@@ -201,6 +231,15 @@
 
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "சப்பாரி";
+
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "இது கருவியினுள் படத்தைச் சேமிக்க அனுமதிக்கிறது";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "அமைவுகளைத் திற";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "“%@” உங்கள் படங்களை அணுக விரும்புகிறது";
 
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "கணினி பக்கத்தைக் கேள்";
@@ -219,6 +258,30 @@
 
 /* Save button label */
 "Save" = "சேமி";
+
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "இல்லை";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "ஆம்";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "URL தானியங்கு நிரப்பு";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "மற்ற உள்ளடக்க தடமறிதல்களைத் தடுப்பதால் சில காணொளிகள் மற்றும் வலைப்பக்கங்கள் முறியலாம்.";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "அனைவருக்கும் %@ வழங்கவும் மேம்படுத்தவும் தேவையானதை மட்டும் சேகரிக்க மொசில்லா உறுதிபூண்டுள்ளது.";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "மேலும் அறிய.";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "%@ உலாவியை மதிப்பிடு";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "அமைவுகள்";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "+ மற்றொரு தேடு பொறியைச் சேர்";
@@ -247,32 +310,11 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "பயன்படுத்த வேண்டிய தேடல் தொடர்";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "எகா: searchengineexample.com/search/?q=%s";
+
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "தேடல் தொடரை ஒட்டு அல்லது உள்ளிடு. தேவைப்படின், தேடல் தொடரை பதிலிடு: %s.";
-
-/* Title for the URL Autocomplete row */
-"Settings.autocompleteSection" = "URL தானியங்கு நிரப்பு";
-
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "மற்ற உள்ளடக்க தடமறிதல்களைத் தடுப்பதால் சில காணொளிகள் மற்றும் வலைப்பக்கங்கள் முறியலாம்.";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "இல்லை, நன்றி";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "எனக்கு புரிந்தது";
-
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSendUsageData" = "அனைவருக்கும் %@ வழங்கவும் மேம்படுத்தவும் தேவையானதை மட்டும் சேகரிக்க மொசில்லா உறுதிபூண்டுள்ளது.";
-
-/* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.learnMore" = "மேலும் அறிய.";
-
-/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
-"Settings.rate" = "%@ உலாவியை மதிப்பிடு";
-
-/* Title for settings screen */
-"Settings.screenTitle" = "அமைவுகள்";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "தேடுபொறி";
@@ -296,31 +338,7 @@
 "Settings.sectionSecurity" = "பாதுகாப்பு";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "விளம்பர பின்தொடரிகளைத் தடு";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "சில விளம்பரங்கள், நீங்கள் அதனை சொடுக்காவிட்டாலும் தள பார்வைகளைப் பின்தொடரும்";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "பகுப்பாய்வு பின்தொடரிகளைத் தடு";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "தட்டல், உருட்டுதல் போன்ற செயல்களைச் சேகரிக்கும், ஆய்வுசெய்யும் அளவிடும்";
-
-/* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "இணைய எழுத்துருக்களைத் தடு";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "பிற உள்ளடக்க பின்தொடரலை தடு";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "செயற்படுத்துவது சில பக்கங்கள் எதிர்பாராமல் தவறாகச் செயல்பட காரணமாகலாம்";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "சமூக பின்தொடரலை தடு";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "உங்கள் பார்வைகளைப் பின்தொடரவும் பகிர்தல் பொத்தான் போன்றவற்றைக் காட்டவும் தளத்தில் உட்பொதியப்பட்டிருக்கும்";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "செயலின் தடைநீக்க முக அடையாளத்தைப் பாவி";
@@ -346,80 +364,17 @@
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "புதியவைகள்";
 
+/* Text for a share button */
+"share" = "பகிர்";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "பக்கத்தில் கண்டுபிடி";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "பயர்பாக்ஸ் செயலியைப் பெறுக";
 
-/* Text for the share menu option when a user wants to open a page in Focus. */
-"ShareMenu.OpenInFocus" = "%@ திறக்கவும்";
-
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "கணினி பக்கத்தைக் கேள்";
-
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "ரத்து";
-
-/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
-"URL.contextMenu" = "ஒட்டிச் செல்";
-
-/* Erase button in the URL bar */
-"URL.eraseButtonLabel" = "அகற்று";
-
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "உங்கள் உலாவல் வரலாறு அழிக்கப்பட்டது.";
-
-/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
-"URL.findOnPageLabel" = "பக்கத்தில் கண்டுபிடி: %@";
-
-/* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "தேடு அல்லது முகவரியை இடு";
-
-/* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "%@ சொல்லைத் தேடு";
-
-/* Text for the URL bar showing the number of trackers blocked on a webpage. */
-"URL.trackersBlockedLabel" = "பின்தொடரி";
-
-/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
-"actionSheet.openIn" = "%@ திறக்கவும்";
-
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
-"browserShortcutDescription.selectLocationBar" = "இருப்பிடப் பட்டையைத் தேர்ந்தெடு";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "நீங்கள் நகலெடுத்த இணைப்பு: %@";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "படத்தை நகலெடு";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "இணைப்பைப் படியெடு";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "படத்தைச் சேமி";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "தொடுப்பைப் பகிர்";
-
-/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
-"externalAppLinkWithAppName.messageTitle" = "%1$@ %2$@ செயலியில் திறக்க விரும்புகிறது";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "இது கருவியினுள் படத்தைச் சேமிக்க அனுமதிக்கிறது";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "அமைவுகளைத் திற";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "“%@” உங்கள் படங்களை அணுக விரும்புகிறது";
-
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "எகா: searchengineexample.com/search/?q=%s";
-
-/* Text for a share button */
-"share" = "பகிர்";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "%@ செயலிக்கு திரும்ப தொடு அடையாளத்தைப் பயன்படுத்துக";
@@ -445,9 +400,24 @@
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "%@ உலாவியை மூடும் வரையில் அல்லது அழி என்பதைத் தட்டும் வரையில் முடக்கவும்.";
 
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "தடமறியல் பாதுகாப்பு";
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "ரத்து";
 
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Choose whether %@ விளம்பரங்கள், பகுப்பாய்வு, சமூக, மற்றும் பிற பின்தொடரிகளைத் தடுக்கிறதா என்பதைத் தேர்ந்தெடுக்கவும்.";
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "ஒட்டிச் செல்";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "அகற்று";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "பக்கத்தில் கண்டுபிடி: %@";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "தேடு அல்லது முகவரியை இடு";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "%@ சொல்லைத் தேடு";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "பின்தொடரி";
 

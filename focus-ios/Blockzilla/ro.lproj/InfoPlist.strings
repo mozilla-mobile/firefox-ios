@@ -1,14 +1,15 @@
-/* (No Comment) */
+/* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Acest lucru îți permite să realizezi și să încarci fotografii.";
 
-/* (No Comment) */
+/* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Acest lucru îți permite să deblochezi aplicația.";
 
-/* (No Comment) */
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Site-urile web pe care le vizitezi îți pot solicita locația.";
 
-/* (No Comment) */
+/* Privacy - Microphone Usage Description */
 "NSMicrophoneUsageDescription" = "Acest lucru îți permite să realizezi și să încarci videoclipuri.";
 
-/* (No Comment) */
+/* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Acest lucru îți permite să salvezi și să încarci fotografii.";
+

@@ -2,7 +2,7 @@
 "Intro.Slides.History.Description" = "只要輕鬆一點，就能清除這次上網的所有瀏覽紀錄、儲存密碼、Cookie 等資料。";
 
 /* Title for the third  panel 'History' in the First Run tour. */
-"Intro.Slides.History.Title" = "瀏覽紀錄就是紀錄";
+"Intro.Slides.History.Title" = "您的紀錄就是您的紀錄";
 
 /* Button to go to the next card in Focus onboarding. */
 "Intro.Slides.Next.Button" = "下一步";

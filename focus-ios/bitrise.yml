@@ -24,7 +24,7 @@ workflows:
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@4: {}
+    - git-clone@6: {}
     - certificate-and-profile-installer@1: {}
     - script@1:
         inputs:
@@ -123,7 +123,7 @@ workflows:
         - scheme: Focus
         - team_id: 43AQ936H96
         - export_method: app-store
-        title: Build Focus
+        title: "Build Focus (Refresh)"
     - deploy-to-itunesconnect-application-loader@1:
         inputs:
         - connection: 'off'
@@ -133,7 +133,7 @@ workflows:
         inputs:
         - scheme: Klar
         - export_method: app-store
-        title: Build Klar
+        title: "Build Klar (Refresh)"
     - deploy-to-itunesconnect-application-loader@1:
         inputs:
         - connection: 'off'
@@ -176,7 +176,7 @@ workflows:
 
   runFocus:
     steps:
-    - git-clone@4: {}
+    - git-clone@6: {}
     - cache-pull@2: {}
     - certificate-and-profile-installer@1: {}
     - script@1:
@@ -191,16 +191,16 @@ workflows:
             # Check if the build goes to refresh branch then
             # check if it is a scheduled or regular build
             # to select the testPlan to run
-
-            if [[ $BITRISEIO_GIT_BRANCH_DEST == refresh ]] || [[ $BITRISE_GIT_BRANCH == refresh ]]
+            
+            if [[ $BITRISE_GIT_MESSAGE == Schedule* ]]
             then
-                echo "PR for refresh branch"
-                envman add --key TEST_PLAN_NAME --value SmokeTestRefresh
+                echo "Scheduled build, running Full Functional Tests"
+                envman add --key TEST_PLAN_NAME --value FullFunctionalTests
             else
-                if [[ $BITRISE_GIT_MESSAGE == Schedule* ]]
+                if [[ $BITRISEIO_GIT_BRANCH_DEST == refresh ]] || [[ $BITRISE_GIT_BRANCH == refresh ]]
                 then
-                    echo "Scheduled build, running Full Functional Tests"
-                    envman add --key TEST_PLAN_NAME --value FullFunctionalTests
+                    echo "PR for refresh branch"
+                    envman add --key TEST_PLAN_NAME --value SmokeTestRefresh
                 else
                     echo "Regular build, running Smoke Test"
                     envman add --key TEST_PLAN_NAME --value SmokeTest
@@ -238,7 +238,6 @@ workflows:
         inputs:
         - channel: "#focus-ios-alerts"
         - message: "The build run the testPlan: $TEST_PLAN_NAME"
-        - messageOnError: "The build run the testPlan: $TEST_PLAN_NAME"
         - webhook_url: "$SLACK_WEBHOOK"
     meta:
       bitrise.io:
@@ -247,7 +246,7 @@ workflows:
 
   runKlar:
     steps:
-    - git-clone@4: {}
+    - git-clone@6: {}
     - cache-pull@2: {}
     - certificate-and-profile-installer@1: {}
     - script@1:
@@ -263,15 +262,15 @@ workflows:
             # check if it is a scheduled or regular build
             # to select the testPlan to run
 
-            if [[ $BITRISEIO_GIT_BRANCH_DEST == refresh ]]
+            if [[ $BITRISE_GIT_MESSAGE == Schedule* ]]
             then
-                echo "PR for refresh branch"
-                envman add --key TEST_PLAN_NAME --value SmokeTestRefresh
+                echo "Scheduled build, running Full Functional Tests"
+                envman add --key TEST_PLAN_NAME --value FullFunctionalTests
             else
-                if [[ $BITRISE_GIT_MESSAGE == Schedule* ]]
+                if [[ $BITRISEIO_GIT_BRANCH_DEST == refresh ]] || [[ $BITRISE_GIT_BRANCH == refresh ]]
                 then
-                    echo "Scheduled build, running Full Functional Tests"
-                    envman add --key TEST_PLAN_NAME --value FullFunctionalTests
+                    echo "PR for refresh branch"
+                    envman add --key TEST_PLAN_NAME --value SmokeTestRefresh
                 else
                     echo "Regular build, running Smoke Test"
                     envman add --key TEST_PLAN_NAME --value SmokeTest
@@ -308,58 +307,6 @@ workflows:
         inputs:
         - channel: "#focus-ios-alerts"
         - message: "The build run the testPlan: $TEST_PLAN_NAME"
-        - messageOnError: "The build run the testPlan: $TEST_PLAN_NAME"
-        - webhook_url: "$SLACK_WEBHOOK"
-    meta:
-      bitrise.io:
-        stack: osx-xcode-12.5.x
-        machine_type_id: g2.8core
-
-  runFocus-iPad:
-    steps:
-    - activate-ssh-key@4:
-        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@4: {}
-    - cache-pull@2: {}
-    - certificate-and-profile-installer@1: {}
-    - script@1:
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            ./checkout.sh
-        title: ContentBlockerGen
-    - script@1:
-        title: Set Default Web Browser Entitlement
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            set -x
-            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Focus.entitlements
-            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Klar.entitlements
-    - xcode-build-for-simulator@0:
-        inputs:
-        - configuration: FocusDebug
-        - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
-        - scheme: Focus
-    - xcode-test@2:
-        inputs:
-        - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
-            CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan FullFunctionalTests
-        - scheme: Focus
-        - simulator_device: iPad Air (4th generation)
-    - xcode-test@2:
-        inputs:
-        - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
-            CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan SmokeTest
-        - scheme: Focus
-        - simulator_device: iPad Air (4th generation)
-    - deploy-to-bitrise-io@1: {}
-    - slack@3:
-        run_if: ".IsBuildFailed"
-        inputs:
-        - channel: "#focus-ios-alerts"
-        - message: "The build run the Full and Smoke tests for iPad"
-        - messageOnError: "The build run the Full and Smoke tests iPad"
         - webhook_url: "$SLACK_WEBHOOK"
     meta:
       bitrise.io:
@@ -435,7 +382,7 @@ workflows:
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@4: {}
+    - git-clone@6: {}
     - cache-pull@2: {}
     - certificate-and-profile-installer@1: {}
     - script@1:
@@ -469,7 +416,6 @@ workflows:
         inputs:
         - deploy_path: l10n-screenshots/en-US/en-US
         - is_compress: 'true'
-    - cache-push@2.3: {}
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x

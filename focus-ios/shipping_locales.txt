@@ -8,12 +8,14 @@ bn
 br
 bs
 ca
+co
 cs
 cy
 da
 de
 dsb
 el
+en-GB
 en-US
 eo
 es-AR

@@ -27,11 +27,21 @@ class SearchProviderTest: BaseTestCase {
         waitForWebPageLoad()
 
         app.buttons["URLBar.deleteButton"].tap()
+        if !iPad() {
+            waitForExistence(app.buttons["URLBar.cancelButton"], timeout: 5)
+            app.buttons["URLBar.cancelButton"].tap()
+        }
         checkForHomeScreen()
 	}
 
     func testAddRemoveCustomSearchProvider() {
-        app.buttons["Settings"].tap()
+        dismissURLBarFocused()
+        waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
+
+        // Set search engine to Google
+        app.buttons["HomeView.settingsButton"].tap()
+        app.tables.cells["icon_settings"].tap()
+        waitForExistence(app.tables.cells["SettingsViewController.searchCell"])
         app.tables.cells["SettingsViewController.searchCell"].tap()
         app.tables.cells["addSearchEngine"].tap()
         app.textFields["nameInput"].tap()
@@ -61,7 +71,12 @@ class SearchProviderTest: BaseTestCase {
     }
 
     func testPreventionOfRemovingDefaultSearchProvider() {
-        app.buttons["Settings"].tap()
+        dismissURLBarFocused()
+        waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
+        // Set search engine to Google
+        app.buttons["HomeView.settingsButton"].tap()
+        app.tables.cells["icon_settings"].tap()
+        waitForExistence(app.tables.cells["SettingsViewController.searchCell"], timeout: 5)
         let defaultEngineName = app.tables.cells["SettingsViewController.searchCell"].staticTexts.element(boundBy: 1).label
         app.tables.cells["SettingsViewController.searchCell"].tap()
 
@@ -75,7 +90,11 @@ class SearchProviderTest: BaseTestCase {
     }
 
 	private func changeSearchProvider(provider: String) {
-		app.buttons["Settings"].tap()
+        dismissURLBarFocused()
+        waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
+        // Set search engine to Google
+        app.buttons["HomeView.settingsButton"].tap()
+        app.tables.cells["icon_settings"].tap()
         waitForExistence(app.tables.cells["SettingsViewController.searchCell"], timeout: 5)
 		app.tables.cells["SettingsViewController.searchCell"].tap()
         waitForExistence(app.tables.staticTexts[provider], timeout: 5)
@@ -85,13 +104,12 @@ class SearchProviderTest: BaseTestCase {
 	}
 
 	private func doSearch(searchWord: String, provider: String) {
-		let searchForText = "Search for " + searchWord
-        let urlbarUrltextTextField = app.textFields["URLBar.urlText"]
+		let urlbarUrltextTextField = app.textFields["URLBar.urlText"]
         let cancelButton = app.buttons["URLBar.cancelButton"]
 		urlbarUrltextTextField.tap()
 		urlbarUrltextTextField.typeText(searchWord)
-		waitForExistence(app.buttons[searchForText])
-		app.buttons[searchForText].tap()
+        app.buttons["SearchSuggestionsPromptView.enableButton"].tap()
+        app.buttons["OverlayView.searchButton"].firstMatch.tap()
         waitForWebPageLoad()
 
         urlbarUrltextTextField.tap()
@@ -111,16 +129,14 @@ class SearchProviderTest: BaseTestCase {
 				waitForValueContains(urlbarUrltextTextField, value: "wikipedia.org")
             case "Amazon.com":
 				waitForValueContains(urlbarUrltextTextField, value: "amazon.com")
-                if !iPad() {
-                waitForValueContains(app.webViews.textFields["Search Amazon"],
+                waitForValueContains(app.webViews.textFields.element(boundBy: 0),
                     value: searchWord)
-                }
 
 			default:
 				XCTFail("Invalid Search Provider")
 		}
-
-        cancelButton.tap()
+        if !iPad() {
+            cancelButton.tap()
+        }
 	}
-
 }

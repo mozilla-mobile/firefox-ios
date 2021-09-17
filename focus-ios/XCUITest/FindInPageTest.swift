@@ -9,8 +9,7 @@ class FindInPageTest: BaseTestCase {
         // Navigate to website
         loadWebPage("https://www.example.com")
         waitForWebPageLoad()
-        
-        let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
+
         // Activate the find in page bar
         app.textFields["Search or enter address"].tap()
         app.textFields["Search or enter address"].typeText("domain")
@@ -35,12 +34,13 @@ class FindInPageTest: BaseTestCase {
     func testActivityMenuFindInPageAction() {
         // Navigate to website
         loadWebPage("https://www.example.com")
-        waitForExistence(app.buttons["URLBar.pageActionsButton"])
-        app.buttons["URLBar.pageActionsButton"].tap()
+        waitForWebPageLoad()
+
+        waitForExistence(app.buttons["HomeView.settingsButton"])
+        app.buttons["HomeView.settingsButton"].tap()
+        app.tables.cells["icon_searchfor"].tap()
 
         // Activate find in page activity item and search for a keyword
-        waitForHittable(app.cells["Find in Page"])
-        app.cells["Find in Page"].tap()
         app.typeText("Domain")
 
         // Try all functions of find in page bar

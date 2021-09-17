@@ -62,22 +62,23 @@ class PastenGoTest: BaseTestCase {
         // Tap url bar to show context menu
         let searchOrEnterAddressTextField = app.textFields["URLBar.urlText"]
         searchOrEnterAddressTextField.tap()
-        waitForExistence(app.menuItems["Paste"], timeout: 3)
+        searchOrEnterAddressTextField.tap()
+        waitForExistence(app.menuItems["Paste"], timeout: 10)
         XCTAssertTrue(app.menuItems["Paste & Go"].isEnabled)
 
         // Select paste and go, and verify it goes to the correct place
         app.menuItems["Paste & Go"].tap()
 
         // Check the correct site is reached
-        waitForValueContains(searchOrEnterAddressTextField, value: "www.mozilla.org")
-        app.buttons["URLBar.deleteButton"].tap()
-        waitForExistence(app.staticTexts["Your browsing history has been erased."])
+        waitForValueContains(searchOrEnterAddressTextField, value: "mozilla.org")
+        app.buttons["URLBar.deleteButton"].firstMatch.tap()
+        waitForExistence(app.staticTexts["Browsing history cleared"])
 
         clipboard = "1(*&)(*%@@$^%^12345)"
         UIPasteboard.general.string = clipboard
         searchOrEnterAddressTextField.tap()
         waitForExistence(app.menuItems["Paste"], timeout: 5)
         app.menuItems["Paste"].tap()
-        waitForExistence(app.buttons["Search for " + clipboard], timeout: 5)
+        waitForValueContains(app.textFields["URLBar.urlText"], value: "1(*&)(*%@@$^%^12345)")
     }
 }

@@ -1,14 +1,15 @@
-/* (No Comment) */
+/* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Gant se e c'hallit kemer ha pellgas luc'hskeudennoù.";
 
-/* (No Comment) */
+/* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Gant se e c'hallit dibrennañ an arload.";
 
-/* (No Comment) */
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Lec'hiennoù web a weladennit a c'hall azgoulenn ho lec'hiadur.";
 
-/* (No Comment) */
+/* Privacy - Microphone Usage Description */
 "NSMicrophoneUsageDescription" = "Gant se e c'hallit kemer ha pellgas videoioù.";
 
-/* (No Comment) */
+/* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Gant se e c'hallit enrollañ ha pellgas skeudennoù.";
+

@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ आपको नियंत्रण में रखता है.";
 
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "%@ में खोलें";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "%@ पर वापस जाने के लिए प्रमाणीकृत करें";
 
@@ -118,6 +121,9 @@
 /* Copy URL button in URL long press menu */
 "Browser.copyAddressLabel" = "पता कॉपी करें";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "क्लिपबोर्ड पर यूआरएल की प्रतिलिपि बनाई गई";
+
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "प्रतिलिपि लें";
 
@@ -139,8 +145,29 @@
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "रोकें";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "स्थान पट्टी का चयन करें";
+
 /* Label on button to cancel edits */
 "Cancel" = "रद्द करें";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "लिंक जो आपने कॉपी किया: %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "चित्र कॉपी करें";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "लिंक कॉपी करें";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "लिंक जो आपने कॉपी किया:";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "चित्र सहेजें";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "लिंक साझा करें";
 
 /* Label on button to complete edits */
 "Done" = "संपन्न";
@@ -159,6 +186,9 @@
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "खोलें";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ %2$@ को खोलना चाहता है";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "कॉल करें";
@@ -223,6 +253,15 @@
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
 
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "यह आपको अपने कैमरा रोल में चित्रों को सहेजने की अनुमति देता है";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "सेटिंग्स खोलें";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "“%@” आपकी तस्वीरें एक्सेस करना चाहता है";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "डेस्कटॉप साइट का अनुरोध करें";
 
@@ -253,6 +292,33 @@
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "खोज सुझाव दिखाएँ?";
 
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "URL स्वत: पूर्ण";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "अन्य सामग्री ट्रैकर्स को अवरुद्ध करना कुछ वीडियो और वेब पृष्ठों को नुकसान पहुंचा सकता है.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "नहीं, धन्यवाद";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "मैं समझता हूँ";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla मात्र वही एकत्रित करने का प्रयास करता है जिसकी हमें %@ को बेहतर बनाने और सबको उपलब्ध कराने के लिए आवश्यकता है.";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "और जानें.";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "%@ का मूल्यांकन करें";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "सफारी इंटीग्रेशन";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "सेटिंग्स";
+
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "एक और खोज इंजन जोड़ें";
 
@@ -280,35 +346,11 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "उपयोग के लिए खोज स्ट्रिंग";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "उदाहरण: searchengineexample.com/search/?q=%s";
+
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "खोज स्ट्रिंग पेस्ट करें या दर्ज करें. यदि ज़रूरी हो, तो खोज शब्द को %s से बदलें.";
-
-/* Title for the URL Autocomplete row */
-"Settings.autocompleteSection" = "URL स्वत: पूर्ण";
-
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "अन्य सामग्री ट्रैकर्स को अवरुद्ध करना कुछ वीडियो और वेब पृष्ठों को नुकसान पहुंचा सकता है.";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "नहीं, धन्यवाद";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "मैं समझता हूँ";
-
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSendUsageData" = "Mozilla मात्र वही एकत्रित करने का प्रयास करता है जिसकी हमें %@ को बेहतर बनाने और सबको उपलब्ध कराने के लिए आवश्यकता है.";
-
-/* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.learnMore" = "और जानें.";
-
-/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
-"Settings.rate" = "%@ का मूल्यांकन करें";
-
-/* Label for Safari integration section */
-"Settings.safariTitle" = "सफारी इंटीग्रेशन";
-
-/* Title for settings screen */
-"Settings.screenTitle" = "सेटिंग्स";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "खोज इंजन";
@@ -394,6 +436,12 @@
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "SIRI शॉर्टकट";
 
+/* Text for a share button */
+"share" = "साझा करें";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "पता कॉपी करें";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "पृष्ठ में ढूँढें";
 
@@ -445,84 +493,6 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "खोलने के लिए यूआरएल";
 
-/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
-"URL.addToAutocompleteLabel" = "स्वतः पूर्णता हेतु लिंक जोड़ें";
-
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "रद्द करें";
-
-/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
-"URL.contextMenu" = "चिपकाएँ और बढ़ें";
-
-/* Erase button in the URL bar */
-"URL.eraseButtonLabel" = "मिटाएँ";
-
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "आपका ब्राउज़िंग इतिहास मिटा दिया गया है.";
-
-/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
-"URL.findOnPageLabel" = "पृष्ठ में ढूँढें: %@";
-
-/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
-"URL.paste" = "चिपकाएँ";
-
-/* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "खोजें या पता प्रविष्ट करें";
-
-/* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "%@ के लिए खोजें";
-
-/* Text for the URL bar showing the number of trackers blocked on a webpage. */
-"URL.trackersBlockedLabel" = "ट्रैकर्स अवरुद्ध";
-
-/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
-"actionSheet.openIn" = "%@ में खोलें";
-
-/* Toast displayed after a URL has been copied to the clipboard */
-"browser.copyAddressToast" = "क्लिपबोर्ड पर यूआरएल की प्रतिलिपि बनाई गई";
-
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
-"browserShortcutDescription.selectLocationBar" = "स्थान पट्टी का चयन करें";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "लिंक जो आपने कॉपी किया: %@";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "चित्र कॉपी करें";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "लिंक कॉपी करें";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "लिंक जो आपने कॉपी किया:";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "चित्र सहेजें";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "लिंक साझा करें";
-
-/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
-"externalAppLinkWithAppName.messageTitle" = "%1$@ %2$@ को खोलना चाहता है";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "यह आपको अपने कैमरा रोल में चित्रों को सहेजने की अनुमति देता है";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "सेटिंग्स खोलें";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "“%@” आपकी तस्वीरें एक्सेस करना चाहता है";
-
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "उदाहरण: searchengineexample.com/search/?q=%s";
-
-/* Text for a share button */
-"share" = "साझा करें";
-
-/* Text for the share menu when a user wants to copy a URL. */
-"shareMenu.copyAddress" = "पता कॉपी करें";
-
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "%@ पर वापस जाने के लिए टच आईडी का प्रयोग करें";
 
@@ -555,4 +525,34 @@
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.trackerDescriptionLabel" = "चुनें कि क्या %@ विज्ञापनों, विश्लेषणों, सामाजिक, और अन्य ट्रैकर्स को अवरुद्ध करे.";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "स्वतः पूर्णता हेतु लिंक जोड़ें";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "रद्द करें";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "चिपकाएँ और बढ़ें";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "मिटाएँ";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "आपका ब्राउज़िंग इतिहास मिटा दिया गया है.";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "पृष्ठ में ढूँढें: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "चिपकाएँ";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "खोजें या पता प्रविष्ट करें";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "%@ के लिए खोजें";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "ट्रैकर्स अवरुद्ध";
 

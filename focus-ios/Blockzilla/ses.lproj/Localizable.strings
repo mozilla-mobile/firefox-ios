@@ -31,9 +31,6 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "A ka goy sanda Safari dobuyan:";
 
-/* (No Comment) */
-"About.screenTitle" = "A ga";
-
 /* Label on About screen */
 "About.topLabel" = "%@ ka war noo juwaloo.";
 
@@ -115,12 +112,6 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Gundekuna tana ganakey gagayyan ga hin widewo nda interneti moo fooyaŋ kayri.";
 
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Kalaa, naŋ yaada";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Ay ga faham";
-
 /* Title for settings screen */
 "Settings.screenTitle" = "Kayandiyaney";
 
@@ -137,19 +128,7 @@
 "Settings.sectionPrivacy" = "SUTURA";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Feeyan ganakey gagay";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Korošiyan ganakey gagay";
-
-/* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Interneti šigira gagay";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Gundekuna tana ganakey gagay";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Jamaa ganakey gagay";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Ga hin ka widewo nda interneti moo fooyaŋ kayri";
@@ -162,9 +141,6 @@
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "TUUSU";
-
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "War naaruyan taarikoo n' ka tuusandi.";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Ceeci wala aderesu dam";

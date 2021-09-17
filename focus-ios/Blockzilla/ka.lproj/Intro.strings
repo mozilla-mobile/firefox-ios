@@ -1,5 +1,5 @@
 /* Description for the 'History' panel in the First Run tour. */
-"Intro.Slides.History.Description" = "წაშალეთ თქვენი დათვალიერების ისტორია, პაროლები და ა.შ. ნებისმიერ დროს, მხოლოდ ერთი შეხებით.";
+"Intro.Slides.History.Description" = "გაასუფთავეთ მონახულებული გვერდები, პაროლები და ა.შ. ნებისმიერ დროს, მხოლოდ ერთი შეხებით.";
 
 /* Title for the third  panel 'History' in the First Run tour. */
 "Intro.Slides.History.Title" = "თქვენი ისტორია უკვე ისტორიის საკუთრებაა";

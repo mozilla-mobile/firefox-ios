@@ -26,7 +26,7 @@
 "About.rowRights" = "Vaše práva";
 
 /* Label on About screen */
-"About.safariBullet1" = "Blokujte sledovací prvky pro vylepšení soukromí";
+"About.safariBullet1" = "Blokujte sledovací prvky pro zvýšení soukromí";
 
 /* Label on About screen */
 "About.safariBullet2" = "Blokujte webové fonty pro zmenšení velikosti stránky";
@@ -34,14 +34,23 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Používejte ho jako rozšíření Safari:";
 
-/* (No Comment) */
-"About.screenTitle" = "O aplikaci";
-
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
 "About.title" = "O aplikaci %@";
 
 /* Label on About screen */
 "About.topLabel" = "%@ vám dává kontrolu.";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "Otevřít v aplikaci %@";
+
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "Ok";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "Při přidávání lístku do aplikace Wallet nastala chyba. Zkuste to prosím znovu později.";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "Přidání lístku selhalo";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "Ověření pro návrat do aplikace %@";
@@ -121,6 +130,9 @@
 /* Copy URL button in URL long press menu */
 "Browser.copyAddressLabel" = "Zkopírovat adresu";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL adresa zkopírována do schránky";
+
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Kopírovat";
 
@@ -142,8 +154,29 @@
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Zastavit";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Zvolit adresní řádek";
+
 /* Label on button to cancel edits */
 "Cancel" = "Zrušit";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "Zkopírovaný odkaz: %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "Kopírovat obrázek";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "Zkopírovat odkaz";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "Zkopírovaný odkaz:";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "Uložit obrázek";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "Sdílet odkaz";
 
 /* Label on button to complete edits */
 "Done" = "Hotovo";
@@ -162,6 +195,9 @@
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "Otevřít";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ chce otevřít %2$@";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "Volat";
@@ -226,6 +262,15 @@
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
 
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "Toto vám dovolí ukládat obrázky do složky fotografií";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "Otevřít Nastavení";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "„%@“ žádá o přístup k vašim fotkám";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "Verze stránky pro počítač";
 
@@ -259,6 +304,36 @@
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "Povolit našeptávání?";
 
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "Automatické doplňování URL adres";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Blokování ostatních sledovacích prvků může rozbít některá videa a webové stránky.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "Zrušit";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes2" = "Blokovat sledovací obsah";
+
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "%@ bude odesílat text zadávaný to adresního řádku vyhledávači.";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla sbírá jenom ty informace, které potřebuje pro další vylepšování aplikace %@.";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "Zjistit více.";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "Hodnocení %@";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "INTEGRACE SE SAFARI";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Nastavení";
+
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Přidat další vyhledávač";
 
@@ -286,38 +361,11 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Řetězec používaný pro vyhledávání";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Příklad: vyhledavac.example.com/search/?q=%s";
+
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Vložte nebo zadejte výraz k vyhledání. Pokud je to nutné, nahraďte hledaný výraz za: %s.";
-
-/* Title for the URL Autocomplete row */
-"Settings.autocompleteSection" = "Automatické doplňování URL adres";
-
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Blokování ostatních sledovacích prvků může rozbít některá videa a webové stránky.";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Ne, děkuji";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Rozumím";
-
-/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSearchSuggestion" = "%@ bude odesílat text zadávaný to adresního řádku vyhledávači.";
-
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSendUsageData" = "Mozilla sbírá jenom ty informace, které potřebuje pro další vylepšování aplikace %@.";
-
-/* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.learnMore" = "Zjistit více.";
-
-/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
-"Settings.rate" = "Hodnocení %@";
-
-/* Label for Safari integration section */
-"Settings.safariTitle" = "INTEGRACE SE SAFARI";
-
-/* Title for settings screen */
-"Settings.screenTitle" = "Nastavení";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Vyhledávač";
@@ -343,32 +391,20 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "ZABEZPEČENÍ";
 
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Blokovat sledující reklamy";
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "Reklama";
 
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Některé reklamy sledují návštěvy stránek i v případě, že na reklamy nekliknete";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Blokovat analytické prvky";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Slouží k shromažďování, analýze a měření aktivit jako je klepnutí nebo posouvání";
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "Analytika";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Blokovat webové fonty";
 
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Blokovat ostatní sledovací prvky";
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "Obsah";
 
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Zapnutí může způsobit, že se některé stránky budou chovat neočekávaně";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Blokovat sledovací prvky sociálních sítí";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Vloženo do stránek pro sledování vašich návštěv a zobrazování funkcí jako tlačítka pro sdílení";
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "Sociální sítě";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Použít Face ID pro odemčení aplikace";
@@ -394,8 +430,11 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Pokud je otevřena nějaká stránka, pro odemčení bude %@ potřeba Touch ID";
 
-/* URL for the learn more of the send usage data toggle */
-"Settings.usageData" = "usage-data";
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "Vypnuto";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "Zapnuto";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Co je nového";
@@ -403,17 +442,26 @@
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "ZKRATKY PRO SIRI";
 
+/* Text for a share button */
+"share" = "Sdílet";
+
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "Přidat zkratku";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Zkopírovat adresu";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Najít na stránce";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Získat Firefox";
 
-/* Text for the share menu option when a user wants to open a page in Focus. */
-"ShareMenu.OpenInFocus" = "Otevřít v aplikaci %@";
-
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "Akce stránky";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "Odebrat ze zkratek";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Verze stránky pro počítač";
@@ -432,6 +480,9 @@
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Sdílet stránku s...";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "Odebrat ze zkratek";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Přidat";
@@ -457,84 +508,6 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "Otevřít URL";
 
-/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
-"URL.addToAutocompleteLabel" = "Přidat tuto stránku mezi našeptávané";
-
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "Zrušit";
-
-/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
-"URL.contextMenu" = "Vložit a přejít";
-
-/* Erase button in the URL bar */
-"URL.eraseButtonLabel" = "VYMAZAT";
-
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "Vaše historie prohlížení byla vymazána.";
-
-/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
-"URL.findOnPageLabel" = "Najít na stránce: %@";
-
-/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
-"URL.paste" = "Vložit";
-
-/* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "Zadejte adresu nebo dotaz pro vyhledávač";
-
-/* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "Vyhledat %@";
-
-/* Text for the URL bar showing the number of trackers blocked on a webpage. */
-"URL.trackersBlockedLabel" = "Zablokováno sledovacích prvků";
-
-/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
-"actionSheet.openIn" = "Otevřít v aplikaci %@";
-
-/* Toast displayed after a URL has been copied to the clipboard */
-"browser.copyAddressToast" = "URL adresa zkopírována do schránky";
-
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
-"browserShortcutDescription.selectLocationBar" = "Zvolit adresní řádek";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "Zkopírovaný odkaz: %@";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "Kopírovat obrázek";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "Zkopírovat odkaz";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "Zkopírovaný odkaz:";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "Uložit obrázek";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "Sdílet odkaz";
-
-/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
-"externalAppLinkWithAppName.messageTitle" = "%1$@ chce otevřít %2$@";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "Toto vám dovolí ukládat obrázky do složky fotografií";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "Otevřít Nastavení";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "„%@“ žádá o přístup k vašim fotkám";
-
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Příklad: vyhledavac.example.com/search/?q=%s";
-
-/* Text for a share button */
-"share" = "Sdílet";
-
-/* Text for the share menu when a user wants to copy a URL. */
-"shareMenu.copyAddress" = "Zkopírovat adresu";
-
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Pro návrat do aplikace %@ použijte Touch ID";
 
@@ -543,6 +516,12 @@
 
 /* label for analytic trackers. */
 "trackingProtection.analyticTrackerLabel" = "Sledující analytické nástroje";
+
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "Spojení není zabezpečené";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "Zabezpečené spojení";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Sledující obsah";
@@ -559,15 +538,60 @@
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Zjistit více";
 
+/* Text for the button that closes the Shield Data and opens the regular Settings screen. */
+"trackingProtection.moreSettings" = "Další nastavení";
+
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Sledující soc. sítě";
+
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "Ochrana je v této relaci vypnuta";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "Ochrana je v této relaci zapnuta";
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Zakázat, dokud nezavřete aplikaci %@ nebo nekliknete na VYMAZAT.";
 
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Ochrana proti sledování";
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "Rozšířená ochrana proti sledování";
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Zvolte, zda má %@ blokovat reklamy, analytické prvky, sociální sítě a jiné sledovací prvky.";
+"trackingProtection.trackerDescriptionLabel2" = "%@ vás chrání před nejběžnějšími sledovacími prvky, které sbírají informace o tom, co děláte na internetu.";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "Sledovací prvky blokovány od %@";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "Blokované sledovací prvky a skripty";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "Přidat tuto stránku mezi našeptávané";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "Zrušit";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Vložit a přejít";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "VYMAZAT";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "Historie prohlížení vymazána";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Najít na stránce: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Vložit";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Zadejte adresu nebo dotaz pro vyhledávač";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Vyhledat %@";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "Zablokováno sledovacích prvků";
 

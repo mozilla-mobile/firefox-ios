@@ -34,14 +34,23 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Оны Safari кеңейтуі ретінде қолданыңыз:";
 
-/* (No Comment) */
-"About.screenTitle" = "Осы туралы";
-
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
 "About.title" = "%@ туралы";
 
 /* Label on About screen */
 "About.topLabel" = "%@ басқаруды қолыңызға береді.";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "%@ көмегімен ашу";
+
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "OК";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "Парольді Wallet-ке қосу кезінде қате орын алды. Кейінірек қайталап көріңіз.";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "Парольді қосу сәтсіз аяқталды";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "%@ ішіне оралу үшін аутентификация";
@@ -121,6 +130,9 @@
 /* Copy URL button in URL long press menu */
 "Browser.copyAddressLabel" = "Адресін көшіріп алу";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL алмасу буферіне көшірілді";
+
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Көшіріп алу";
 
@@ -142,8 +154,29 @@
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Тоқтату";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Орналасу жолағын таңдау";
+
 /* Label on button to cancel edits */
 "Cancel" = "Бас тарту";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "Сіз көшіріп алған сілтеме: %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "Суретті көшіріп алу";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "Сілтемені көшіріп алу";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "Сіз көшіріп алған сілтеме:";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "Суретті сақтау";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "Сілтемемен бөлісу";
 
 /* Label on button to complete edits */
 "Done" = "Дайын";
@@ -162,6 +195,9 @@
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "Ашу";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ %2$@ ашқысы келеді";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "Қоңырау";
@@ -226,6 +262,15 @@
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
 
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "Бұл арқылы сіз суретті Фототаспаға сақтай аласыз";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "Баптаулары ашу";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "\"%@\" суреттеріңізге қатынағысы келеді";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "Сайттың толық нұсқасы";
 
@@ -259,6 +304,36 @@
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "Іздеу ұсыныстарын көрсету керек пе?";
 
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "URL автотолықтыру";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Басқа трекерлерді блоктау кейбір видео және веб парақтарының жұмысына кері әсерін тигізуі мүмкін.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "Бас тарту";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes2" = "Мазмұндық трекерлерді блоктау";
+
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "%@ сіз адрестік жолақта терген нәрсені сіздің іздеу жүйеңізге жіберетін болады.";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla тек %@ әркім үшін ұсыну және жақсарту мақсатында керек деректерді жинауға тырысады.";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "Көбірек білу.";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "%@ бағалау";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "SAFARI-МЕН ИНТЕГРАЦИЯ";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Баптаулар";
+
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Басқа іздеу жүйесін қосу";
 
@@ -286,38 +361,11 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Қолданылатын іздеу жолы";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Мысалы: searchengineexample.com/search/?q=%s";
+
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Іздеу жолын кірістіріңіз немесе енгізіңіз. Керек болса, іздеу ұғымын келесімен алмастырыңыз: %s.";
-
-/* Title for the URL Autocomplete row */
-"Settings.autocompleteSection" = "URL автотолықтыру";
-
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Басқа трекерлерді блоктау кейбір видео және веб парақтарының жұмысына кері әсерін тигізуі мүмкін.";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Жоқ, рахмет";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Мен түсінемін";
-
-/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSearchSuggestion" = "%@ сіз адрестік жолақта терген нәрсені сіздің іздеу жүйеңізге жіберетін болады.";
-
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSendUsageData" = "Mozilla тек %@ әркім үшін ұсыну және жақсарту мақсатында керек деректерді жинауға тырысады.";
-
-/* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.learnMore" = "Көбірек білу.";
-
-/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
-"Settings.rate" = "%@ бағалау";
-
-/* Label for Safari integration section */
-"Settings.safariTitle" = "SAFARI-МЕН ИНТЕГРАЦИЯ";
-
-/* Title for settings screen */
-"Settings.screenTitle" = "Баптаулар";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Іздеу жүйесі";
@@ -343,32 +391,20 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "ҚАУІПСІЗДІК";
 
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Жарнама трекерлерін блоктау";
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "Жарнама";
 
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Кейбір жарналамалар сайт шолуды бақылайды, жарнамаларға шертпесеңіз де";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Аналитикалық трекерлерді блоктау";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Шерту және айналдыру әрекеттерін жинау, зерттеу және өлшеуге пайдаланылады";
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "Аналитика";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Веб қаріптерін блоктау";
 
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Басқа құрама трекерлерін блоктау";
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "Мазмұн";
 
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Бұны іске қосу кейбір сайттардың мінез-құлығын күтпегендей өзгертеді";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Әлеуметтік желілер трекерлерін блоктау";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Шолуыңызды бақылау және бөлісу батырмалары сияқты мүмкіндіктерді көрсету мақсатымен сайттарға ендірілген";
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "Әлеуметтік";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Қолданбаны босату үшін Face ID қолданыңыз";
@@ -394,8 +430,11 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Touch ID %@ бұғаттауын URL қолданбана ашық тұрған кезде босата алады";
 
-/* URL for the learn more of the send usage data toggle */
-"Settings.usageData" = "қолданылуы туралы деректер";
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "Сөндірулі";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "Іске қосулы";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Не жаңалық";
@@ -403,17 +442,26 @@
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "SIRI ЖАРЛЫҚТАРЫ";
 
+/* Text for a share button */
+"share" = "Бөлісу";
+
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "Жарлықтарға қосу";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Адресін көшіріп алу";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Беттен табу";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Firefox қолданбасын алу";
 
-/* Text for the share menu option when a user wants to open a page in Focus. */
-"ShareMenu.OpenInFocus" = "%@ көмегімен ашу";
-
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "Бет әрекеттері";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "Жарлықтардан өшіру";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Сайттың толық нұсқасы";
@@ -432,6 +480,9 @@
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Бетті көмегімен бөлісу...";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "Жарлықтардан өшіру";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Қосу";
@@ -457,84 +508,6 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "Ашу үшін URL";
 
-/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
-"URL.addToAutocompleteLabel" = "Автотолықтыру үшін сілтемені қосу";
-
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "Бас тарту";
-
-/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
-"URL.contextMenu" = "Кірістіру және өту";
-
-/* Erase button in the URL bar */
-"URL.eraseButtonLabel" = "ӨШІРУ";
-
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "Сіздің шолу тарихыңыз өшірілді.";
-
-/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
-"URL.findOnPageLabel" = "Беттен табу: %@";
-
-/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
-"URL.paste" = "Кірістіру";
-
-/* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "Іздеу немесе адрес";
-
-/* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "%@ дегенді іздеу";
-
-/* Text for the URL bar showing the number of trackers blocked on a webpage. */
-"URL.trackersBlockedLabel" = "Блокталған трекерлер";
-
-/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
-"actionSheet.openIn" = "%@ көмегімен ашу";
-
-/* Toast displayed after a URL has been copied to the clipboard */
-"browser.copyAddressToast" = "URL алмасу буферіне көшірілді";
-
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
-"browserShortcutDescription.selectLocationBar" = "Орналасу жолағын таңдау";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "Сіз көшіріп алған сілтеме: %@";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "Суретті көшіріп алу";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "Сілтемені көшіріп алу";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "Сіз көшіріп алған сілтеме:";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "Суретті сақтау";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "Сілтемемен бөлісу";
-
-/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
-"externalAppLinkWithAppName.messageTitle" = "%1$@ %2$@ ашқысы келеді";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "Бұл арқылы сіз суретті Фототаспаға сақтай аласыз";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "Баптаулары ашу";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "\"%@\" суреттеріңізге қатынағысы келеді";
-
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Мысалы: searchengineexample.com/search/?q=%s";
-
-/* Text for a share button */
-"share" = "Бөлісу";
-
-/* Text for the share menu when a user wants to copy a URL. */
-"shareMenu.copyAddress" = "Адресін көшіріп алу";
-
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "%@ оралу үшін Touch ID қолданыңыз";
 
@@ -543,6 +516,12 @@
 
 /* label for analytic trackers. */
 "trackingProtection.analyticTrackerLabel" = "Аналитикалық трекерлер";
+
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "Байланыс қауіпсіз емес";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "Байланыс қауіпсіз";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Мазмұндық трекерлер";
@@ -559,15 +538,60 @@
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Көбірек білу";
 
+/* Text for the button that closes the Shield Data and opens the regular Settings screen. */
+"trackingProtection.moreSettings" = "Көбірек баптаулар";
+
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Әлеуметтік трекерлер";
+
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "Бұл сессия үшін қорғаныс СӨНДІРІЛГЕН";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "Бұл сессия үшін қорғаныс ІСКЕ ҚОСЫЛҒАН";
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "%@ жабу немесе ӨШІРУ шертуге дейін сөндіру.";
 
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Бақылаудан қорғаныс";
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "Бақылаудан кеңейтілген қорғаныс";
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "%@ жарнама, аналитика, әлеуметтік және т.б. трекерлерді блоктау керектігін таңдаңыз.";
+"trackingProtection.trackerDescriptionLabel2" = "Деректеріңізді тек өзіңіз үшін қалдырыңыз. %@ желіде сіздің соңыңыздан еретін ең кең тараған трекерлердің көбінен қорғайды.";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "%@ бастап, бұғатталған трекер саны";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "Бұғаттау үшін трекерлер және скрипттер";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "Автотолықтыру үшін сілтемені қосу";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "Бас тарту";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Кірістіру және өту";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "ӨШІРУ";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "Шолу тарихы тазартылды";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Беттен табу: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Кірістіру";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Іздеу немесе адрес";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "%@ дегенді іздеу";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "Блокталған трекерлер";
 

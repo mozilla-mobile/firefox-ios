@@ -13,29 +13,32 @@ protocol SearchSuggestionsPromptViewDelegate: class {
 class SearchSuggestionsPromptView: UIView {
     weak var delegate: SearchSuggestionsPromptViewDelegate?
     static let respondedToSearchSuggestionsPrompt = "SearchSuggestionPrompt"
-    private let buttonBorderMiddle = UIView()
-    private let buttonBorderTop = UIView()
     private let disableButton = InsetButton()
     private let enableButton = InsetButton()
     private let promptContainer = UIView()
     private let promptMessage = UILabel()
     private let promptTitle = UILabel()
+    
+    var isIpadView: Bool = false {
+        didSet {
+            updateUI(isIpadView)
+        }
+    }
+    var shouldShowFindInPage: Bool = false {
+        didSet {
+            if shouldShowFindInPage{
+                promptContainer.layer.maskedCorners = isIpadView ? [.layerMaxXMinYCorner, .layerMinXMinYCorner] : []
+            }
+        }
+    }
 
     init() {
         super.init(frame: CGRect.zero)
-        promptContainer.backgroundColor = UIConstants.Photon.Ink80.withAlphaComponent(0.9)
-        promptContainer.layer.cornerRadius = UIConstants.layout.searchSuggestionsPromptCornerRadius
         addSubview(promptContainer)
-
-        promptContainer.snp.makeConstraints { make in
-            make.top.equalTo(self).offset(UIConstants.layout.promptContainerOffset).priority(.medium)
-            make.bottom.equalTo(self).offset(-UIConstants.layout.promptContainerOffset).priority(.medium)
-            make.leading.equalTo(self).offset(UIConstants.layout.promptContainerPadding)
-            make.trailing.equalTo(self).offset(-UIConstants.layout.promptContainerPadding)
-        }
-
+        updateUI(isIpadView)
+        
         promptTitle.text = UIConstants.strings.searchSuggestionsPromptTitle
-        promptTitle.textColor = UIConstants.Photon.Grey10
+        promptTitle.textColor = .primaryText
         promptTitle.font = UIConstants.fonts.promptTitle
         promptTitle.textAlignment = NSTextAlignment.center
         promptTitle.numberOfLines = 0
@@ -49,7 +52,7 @@ class SearchSuggestionsPromptView: UIView {
         }
 
         promptMessage.text = String(format: UIConstants.strings.searchSuggestionsPromptMessage, AppInfo.productName)
-        promptMessage.textColor = UIConstants.Photon.Grey10
+        promptMessage.textColor = .primaryText
         promptMessage.font = UIConstants.fonts.promptMessage
         promptMessage.textAlignment = NSTextAlignment.center
         promptMessage.numberOfLines = 0
@@ -62,57 +65,67 @@ class SearchSuggestionsPromptView: UIView {
             make.trailing.equalTo(promptContainer).offset(-UIConstants.layout.promptMessagePadding)
         }
 
-        buttonBorderTop.backgroundColor = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
-        addSubview(buttonBorderTop)
-
-        buttonBorderTop.snp.makeConstraints { make in
-            make.top.equalTo(promptMessage.snp.bottom).offset(UIConstants.layout.buttonBorderTopOffset).priority(.medium)
-            make.leading.trailing.equalTo(promptContainer)
-            make.height.equalTo(UIConstants.layout.buttonBorderTopHeight).priority(.medium)
-        }
-
-        buttonBorderMiddle.backgroundColor = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
-        addSubview(buttonBorderMiddle)
-
-        buttonBorderMiddle.snp.makeConstraints { make in
-            make.top.equalTo(buttonBorderTop.snp.bottom).priority(.medium)
-            make.bottom.equalTo(promptContainer).priority(.medium)
-            make.width.equalTo(UIConstants.layout.buttonBorderMiddleWidth)
-            make.height.equalTo(UIConstants.layout.buttonBorderMiddleHeight).priority(.medium)
-            make.centerX.equalTo(self)
-        }
-
         disableButton.accessibilityIdentifier = "SearchSuggestionsPromptView.disableButton"
         disableButton.setTitle(UIConstants.strings.searchSuggestionsPromptDisable, for: .normal)
-        disableButton.titleLabel?.font = UIConstants.fonts.disableButton
-        disableButton.layer.cornerRadius = UIConstants.layout.searchSuggestionsPromptButtonRadius
+        disableButton.titleLabel?.font = UIConstants.fonts.promptButton
+        disableButton.titleLabel?.textColor = .primaryText
+        disableButton.backgroundColor = .primaryDark.withAlphaComponent(0.36)
+        disableButton.layer.cornerRadius = UIConstants.layout.promptButtonHeight / 2
         disableButton.addTarget(self, action: #selector(didPressDisable), for: .touchUpInside)
         addSubview(disableButton)
 
         disableButton.snp.makeConstraints { make in
-            make.top.equalTo(buttonBorderTop.snp.bottom)
-            make.bottom.leading.equalTo(promptContainer)
-            make.trailing.equalTo(buttonBorderMiddle.snp.leading)
+            make.top.equalTo(promptMessage.snp.bottom).offset(UIConstants.layout.promptButtonTopOffset)
+            make.width.equalTo(UIConstants.layout.promptButtonWidth)
+            make.height.equalTo(UIConstants.layout.promptButtonHeight)
+            make.bottom.equalTo(promptContainer).inset(UIConstants.layout.promptButtonBottomInset)
+            make.trailing.equalTo(promptContainer.snp.centerX).offset(-UIConstants.layout.promptButtonCenterOffset)
         }
 
         enableButton.accessibilityIdentifier = "SearchSuggestionsPromptView.enableButton"
         enableButton.setTitle(UIConstants.strings.searchSuggestionsPromptEnable, for: .normal)
-        enableButton.titleLabel?.font = UIConstants.fonts.enableButton
-        enableButton.layer.cornerRadius = UIConstants.layout.searchSuggestionsPromptButtonRadius
+        enableButton.titleLabel?.font = UIConstants.fonts.promptButton
+        enableButton.titleLabel?.textColor = .primaryText
+        enableButton.backgroundColor = .primaryDark.withAlphaComponent(0.36)
+        enableButton.layer.cornerRadius = UIConstants.layout.promptButtonHeight / 2
         enableButton.addTarget(self, action: #selector(didPressEnable), for: .touchUpInside)
         addSubview(enableButton)
 
         enableButton.snp.makeConstraints { make in
-            make.top.equalTo(buttonBorderTop.snp.bottom)
-            make.bottom.trailing.equalTo(promptContainer)
-            make.leading.equalTo(buttonBorderMiddle.snp.trailing)
+            make.top.equalTo(promptMessage.snp.bottom).offset(UIConstants.layout.promptButtonTopOffset)
+            make.width.equalTo(UIConstants.layout.promptButtonWidth)
+            make.height.equalTo(UIConstants.layout.promptButtonHeight)
+            make.bottom.equalTo(promptContainer).inset(UIConstants.layout.promptButtonBottomInset)
+            make.leading.equalTo(promptContainer.snp.centerX).offset(UIConstants.layout.promptButtonCenterOffset)
         }
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
+    private func updateUI(_ isIpadView: Bool) {
+        promptContainer.backgroundColor = isIpadView ? .primaryBackground.withAlphaComponent(0.95) : .foundation
+        if isIpadView {
+            promptContainer.layer.cornerRadius = UIConstants.layout.suggestionViewCornerRadius
+            promptContainer.clipsToBounds = true
+        } else {
+            promptContainer.layer.cornerRadius = 0
+        }
+        promptContainer.snp.remakeConstraints { make in
+            make.top.equalTo(self).priority(.medium)
+            make.bottom.equalTo(self).priority(.medium)
+            if isIpadView {
+                make.width.equalTo(self).multipliedBy(UIConstants.layout.suggestionViewWidthMultiplier)
+                make.centerX.equalTo(self)
+                make.height.equalTo(UIScreen.main.bounds.height * UIConstants.layout.suggestionViewHeightMultiplier)
+            } else {
+                make.leading.equalTo(self)
+                make.trailing.equalTo(self)
+            }
+        }
+    }
+    
     @objc private func didPressDisable() {
         delegate?.searchSuggestionsPromptView(self, didEnable: false)
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.searchSuggestionsOff)

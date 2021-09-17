@@ -20,24 +20,26 @@ class WebsiteAccessTests: BaseTestCase {
         searchOrEnterAddressTextField.tap()
         searchOrEnterAddressTextField.typeText("mozilla")
         waitForValueContains(label, value: "mozilla.org/")
-        waitForExistence(app.buttons["Search for mozilla"])
 
-        // BB CI seems to hang intermittently where http to https redirection occurs.
         // Providing straight URL to avoid the error - and use internal website
         app.buttons["icon clear"].tap()
         loadWebPage("https://www.example.com")
         waitForValueContains(label, value: "www.example.com")
 
         // Erase the history
-        app.buttons["URLBar.deleteButton"].tap()
+        app.buttons["URLBar.deleteButton"].firstMatch.tap()
 
         // Check it is on the initial page
+        dismissURLBarFocused()
         checkForHomeScreen()
     }
 
     func testDisableAutocomplete() {
+        dismissURLBarFocused()
+        app.buttons["HomeView.settingsButton"].tap()
+        app.tables.cells["icon_settings"].tap()
         // Disable Autocomplete
-        app.buttons["Settings"].tap()
+        waitForExistence(app.tables.cells["SettingsViewController.autocompleteCell"])
         app.tables.cells["SettingsViewController.autocompleteCell"].tap()
         waitForExistence(app.tables.switches["toggleAutocompleteSwitch"])
         var toggle = app.tables.switches["toggleAutocompleteSwitch"]
@@ -58,6 +60,8 @@ class WebsiteAccessTests: BaseTestCase {
 
         // Enable autocomplete
         app.buttons["Settings"].tap()
+        app.tables.cells["icon_settings"].tap()
+        waitForExistence(app.tables.cells["SettingsViewController.autocompleteCell"])
         app.tables.cells["SettingsViewController.autocompleteCell"].tap()
         toggle = app.tables.switches["toggleAutocompleteSwitch"]
         toggle.tap()
@@ -73,8 +77,11 @@ class WebsiteAccessTests: BaseTestCase {
     }
 
     func testAutocompleteCustomDomain() {
-        // Add Custom Domain
+        dismissURLBarFocused()
         app.buttons["HomeView.settingsButton"].tap()
+        app.tables.cells["icon_settings"].tap()
+        waitForExistence(app.tables.cells["SettingsViewController.autocompleteCell"])
+        // Add Custom Domain
         app.tables.cells["SettingsViewController.autocompleteCell"].tap()
         app.tables.cells["customURLS"].tap()
         app.tables.cells["addCustomDomainCell"].tap()
@@ -98,6 +105,8 @@ class WebsiteAccessTests: BaseTestCase {
         // Remove the custom domain
         app.buttons["URLBar.cancelButton"].tap()
         app.buttons["Settings"].tap()
+        app.tables.cells["icon_settings"].tap()
+        waitForExistence(app.tables.cells["SettingsViewController.autocompleteCell"])
         app.tables.cells["SettingsViewController.autocompleteCell"].tap()
         app.tables.cells["customURLS"].tap()
         app.navigationBars.buttons["editButton"].tap()

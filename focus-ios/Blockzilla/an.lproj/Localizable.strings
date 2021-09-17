@@ -34,11 +34,11 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Usar-lo como una extensión de Safari";
 
-/* (No Comment) */
-"About.screenTitle" = "Quanto a";
-
 /* Label on About screen */
 "About.topLabel" = "%@ te mete en contral.";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "Ubrir en %@";
 
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "Anyader URL personalizada";
@@ -106,8 +106,26 @@
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Aturar";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Seleccionar barra d'adrezas";
+
 /* Label on button to cancel edits */
 "Cancel" = "Cancelar";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "Lo vinclo que has copiau: %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "Copiar la imachen";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "Copiar vinclo";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "Alzar la imachen";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "Compartir lo vinclo";
 
 /* Label on button to complete edits */
 "Done" = "Feito";
@@ -126,6 +144,9 @@
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "Ubrir";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ quiere ubrir %2$@";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "Gritar";
@@ -178,6 +199,15 @@
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
 
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "Esto te permite d'alzar la imachen en a tuya pelicula";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "Ubrir Achustes";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "A %@ le fería goyo d'acceder a las tuyas fotos";
+
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Toca Safari, selecciona astí Blocadors de Conteniu";
 
@@ -192,6 +222,21 @@
 
 /* Save button label */
 "Save" = "Alzar";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "Autocompletar URL";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Blocar atros trazadors de contenius puede fer que no s'amuestren bien bells videos u pachinas web.";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla s'esfuerza per replegar nomás lo necesario pa fornir y amillorar %@ pa totz.";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "Saber-ne mas.";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Achustes";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Anyader belatro motor de busqueda";
@@ -220,29 +265,11 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Cadena de busqueda a emplegar";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Eixemplo: motordeixemplo.com/search/?q=%s";
+
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Apega u escribe la cadena de busqueda. Si cal, substituye lo termen de busqueda per: %s.";
-
-/* Title for the URL Autocomplete row */
-"Settings.autocompleteSection" = "Autocompletar URL";
-
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Blocar atros trazadors de contenius puede fer que no s'amuestren bien bells videos u pachinas web.";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "No, gracias";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Comprendo";
-
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSendUsageData" = "Mozilla s'esfuerza per replegar nomás lo necesario pa fornir y amillorar %@ pa totz.";
-
-/* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.learnMore" = "Saber-ne mas.";
-
-/* Title for settings screen */
-"Settings.screenTitle" = "Achustes";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Motors de busca";
@@ -263,31 +290,7 @@
 "Settings.sectionPrivacy" = "PRIVACIDAT";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Blocar los trazadors publicitarios";
-
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Bells anuncios fan seguimiento d'as visitas alo puesto, mesmo si no fas clic en os anuncios";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Bloca los trazadors analiticos";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Usaus pa replegar, analisar y medir actividatz como toques a la pantalla y desplazamientos de pantalles";
-
-/* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Blocar fuents de Web";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Bloca los trazadors d'atro conteniu";
-
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Activar esta opción puede provocar problemas en bellas pachinas";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Bloca los trazadors socials";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Incrustaus en puestos web pa trazar las tuyas visitas y amostrar funcionalidatz coo los botons de compartición";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Puede privar que se veigan bien bells videos y pachinas web";
@@ -303,66 +306,6 @@
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Obtener lo Firefox";
-
-/* Text for the share menu option when a user wants to open a page in Focus. */
-"ShareMenu.OpenInFocus" = "Ubrir en %@";
-
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "Cancelar";
-
-/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
-"URL.contextMenu" = "Apegar-lo y ir-ie";
-
-/* Erase button in the URL bar */
-"URL.eraseButtonLabel" = "BORRAR";
-
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "S'ha borrau lo suyo historial de navegación.";
-
-/* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "Termen a mirar u adreza";
-
-/* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "Mirar %@";
-
-/* Text for the URL bar showing the number of trackers blocked on a webpage. */
-"URL.trackersBlockedLabel" = "Trazadors blocaus";
-
-/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
-"actionSheet.openIn" = "Ubrir en %@";
-
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
-"browserShortcutDescription.selectLocationBar" = "Seleccionar barra d'adrezas";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "Lo vinclo que has copiau: %@";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "Copiar la imachen";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "Copiar vinclo";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "Alzar la imachen";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "Compartir lo vinclo";
-
-/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
-"externalAppLinkWithAppName.messageTitle" = "%1$@ quiere ubrir %2$@";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "Esto te permite d'alzar la imachen en a tuya pelicula";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "Ubrir Achustes";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "A %@ le fería goyo d'acceder a las tuyas fotos";
-
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Eixemplo: motordeixemplo.com/search/?q=%s";
 
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Trazadors publicitarios";
@@ -385,9 +328,21 @@
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Desactivar dica que zarres %@ u toques BORRAR.";
 
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Protección contra o seguimiento";
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "Cancelar";
 
-/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Trigar si %@ bloca trazadors publicitarios, analiticos, socials u atros.";
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Apegar-lo y ir-ie";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "BORRAR";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Termen a mirar u adreza";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Mirar %@";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "Trazadors blocaus";
 

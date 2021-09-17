@@ -1,14 +1,15 @@
-/* (No Comment) */
+/* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Kjo ju lejon të bëni dhe ngarkoni foto.";
 
-/* (No Comment) */
+/* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Kjo ju lejon të shkyçni aplikacionin.";
 
-/* (No Comment) */
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Sajtet që vizitoni mund të kërkojmë të dinë vendndodhjen tuaj.";
 
-/* (No Comment) */
+/* Privacy - Microphone Usage Description */
 "NSMicrophoneUsageDescription" = "Kjo ju lejon të xhironi dhe ngarkoni video.";
 
-/* (No Comment) */
+/* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Kjo ju lejon të ruani dhe ngarkoni foto.";
+

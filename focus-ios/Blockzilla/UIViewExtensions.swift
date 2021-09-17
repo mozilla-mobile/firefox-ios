@@ -53,4 +53,24 @@ extension UIView {
         let data = NSKeyedArchiver.archivedData(withRootObject: self)
         return NSKeyedUnarchiver.unarchiveObject(with: data) as! UIView
     }
+    
+    func applyGradient(colors: [UIColor])
+    {
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = colors.map { $0.cgColor }
+        gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+        gradientLayer.endPoint = CGPoint(x: 1, y: 0)
+        gradientLayer.frame = self.bounds
+        self.layer.insertSublayer(gradientLayer, at: 0)
+    }
+    
+    func removeGradient() {
+        if let  buttonSublayers = self.layer.sublayers {
+            for layer in buttonSublayers {
+                if layer is CAGradientLayer {
+                    layer.removeFromSuperlayer()
+                }
+            }
+        }
+    }
 }

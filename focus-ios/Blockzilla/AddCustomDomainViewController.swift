@@ -4,6 +4,7 @@
 
 import UIKit
 import Telemetry
+import Glean
 
 protocol AddCustomDomainViewControllerDelegate: class {
     func addCustomDomainViewControllerDidFinish(_ viewController: AddCustomDomainViewController)
@@ -27,6 +28,7 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
 
     override func viewDidLoad() {
         title = UIConstants.strings.autocompleteAddCustomUrl
+        navigationController?.navigationBar.tintColor = .accent
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: UIConstants.strings.cancel, style: .plain, target: self, action: #selector(AddCustomDomainViewController.cancelTapped))
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: UIConstants.strings.save, style: .done, target: self, action: #selector(AddCustomDomainViewController.doneTapped))
         self.navigationItem.rightBarButtonItem?.accessibilityIdentifier = "saveButton"
@@ -35,45 +37,47 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
     }
 
     private func setupUI() {
-        view.backgroundColor = UIConstants.colors.background
+        view.backgroundColor = .primaryBackground
 
         inputLabel.text = UIConstants.strings.autocompleteAddCustomUrlLabel
         inputLabel.font = UIConstants.fonts.settingsInputLabel
-        inputLabel.textColor = UIConstants.colors.settingsTextLabel
+        inputLabel.textColor = .primaryText
         view.addSubview(inputLabel)
 
-        textInput.backgroundColor = UIConstants.colors.cellBackground
+        textInput.backgroundColor = .secondaryBackground
         textInput.keyboardType = .URL
         textInput.autocapitalizationType = .none
         textInput.autocorrectionType = .no
         textInput.returnKeyType = .done
-        textInput.textColor = UIColor.white
+        textInput.textColor = .primaryText
         textInput.delegate = self
         textInput.attributedPlaceholder = NSAttributedString(string: UIConstants.strings.autocompleteAddCustomUrlPlaceholder, attributes: [.foregroundColor: UIConstants.colors.inputPlaceholder])
         textInput.accessibilityIdentifier = "urlInput"
+        textInput.layer.cornerRadius = UIConstants.layout.settingsCellCornerRadius
+        textInput.tintColor = .accent
         textInput.becomeFirstResponder()
         view.addSubview(textInput)
 
         inputDescription.text = UIConstants.strings.autocompleteAddCustomUrlExample
-        inputDescription.textColor = UIConstants.colors.settingsTextLabel
+        inputDescription.textColor = .primaryText
         inputDescription.font = UIConstants.fonts.settingsDescriptionText
         view.addSubview(inputDescription)
 
         inputLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(40)
             make.trailing.equalToSuperview()
-            make.leading.equalToSuperview().offset(10)
+            make.leading.equalToSuperview().offset(UIConstants.layout.settingsItemOffset)
         }
 
         textInput.snp.makeConstraints { make in
             make.height.equalTo(44)
-            make.leading.trailing.equalToSuperview()
             make.top.equalTo(inputLabel.snp.bottom).offset(10)
+            make.leading.trailing.equalToSuperview().inset(UIConstants.layout.settingsItemInset)
         }
 
         inputDescription.snp.makeConstraints { make in
             make.top.equalTo(textInput.snp.bottom).offset(10)
-            make.leading.equalToSuperview().offset(10)
+            make.leading.equalToSuperview().offset(UIConstants.layout.settingsItemOffset)
         }
     }
 
@@ -101,6 +105,7 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
             Toast(text: error.message).show()
         case .success:
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.customDomain)
+            GleanMetrics.SettingsScreen.autocompleteDomainAdded.add()
             Toast(text: UIConstants.strings.autocompleteCustomURLAdded).show()
             finish()
         }

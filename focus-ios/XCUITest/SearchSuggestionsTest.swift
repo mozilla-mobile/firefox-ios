@@ -35,8 +35,12 @@ class SearchSuggestionsPromptTest: BaseTestCase {
     }
 
     func checkToggleStartsOff() {
-        waitForExistence(app.buttons["Settings"], timeout: 10)
-        app.buttons["Settings"].tap()
+        dismissURLBarFocused()
+        waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
+        // Set search engine to Google
+        app.buttons["HomeView.settingsButton"].tap()
+        app.tables.cells["icon_settings"].tap()
+        waitForExistence(app.tables.cells["SettingsViewController.searchCell"])
         checkToggle(isOn: false)
     }
 
@@ -66,6 +70,8 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         // Check search suggestions toggle is ON
         waitForHittable(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
+        app.tables.cells["icon_settings"].tap()
+        waitForExistence(app.tables.cells["SettingsViewController.searchCell"])
         checkToggle(isOn: true)
     }
 
@@ -98,6 +104,8 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         // Check search suggestions toggle is OFF
         waitForHittable(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
+        app.tables.cells["icon_settings"].tap()
+        waitForExistence(app.tables.cells["SettingsViewController.searchCell"])
         checkToggle(isOn: false)
     }
 
@@ -145,8 +153,10 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         checkSuggestions()
 
         // Disable through settings
-        waitForHittable(app.buttons["HomeView.settingsButton"])
+        waitForExistence(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
+        app.tables.cells["icon_settings"].tap()
+        waitForExistence(app.tables.cells["SettingsViewController.searchCell"])
         app.tables.switches["BlockerToggle.enableSearchSuggestions"].tap()
         checkToggle(isOn: false)
 

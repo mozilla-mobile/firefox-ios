@@ -30,6 +30,7 @@
         "PastenGoTest\/testPastenGo()",
         "SettingAppearanceTest\/testCheckSetting()",
         "TrackingProtectionMenu\/testActiveProtectionSidebar()",
+        "TrackingProtectionMenu\/testProtectionSidebar()",
         "WebsiteAccessTests\/testVisitWebsite()"
       ],
       "target" : {

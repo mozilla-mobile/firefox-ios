@@ -2,20 +2,253 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 ---
-$schema: moz://mozilla.org/schemas/glean/metrics/1-0-0
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
 
 legacy.ids:
-   client_id:
-      type: uuid
-      lifetime: user
-      description: |
-        The client id from legacy telemetry.
-      send_in_pings:
-         - deletion-request
-      bugs:
-         - https://github.com/mozilla-mobile/firefox-ios/issues/7019
-      data_reviews:
-         - https://github.com/mozilla-mobile/focus-ios/pull/1741#issuecomment-705853690
-      notification_emails:
-         - firefox-ios@mozilla.com
-      expires: never
+  client_id:
+    type: uuid
+    lifetime: user
+    description: |
+      The client id from legacy telemetry.
+    send_in_pings:
+      - deletion-request
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/1740
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/1741#issuecomment-705853690
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+      - sarentz@mozilla.com
+    expires: never
+
+mozilla_products:
+  has_firefox_installed:
+    type: boolean
+    lifetime: application
+    description: |
+       If Firefox is installed on the users's device.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2227
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2284
+    data_sensitivity:
+      - technical
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2022-09-01"
+
+settings_screen:
+  autocomplete_domain_added:
+    type: counter
+    description: |
+      A counter that indicates how many times a user has added
+      a website to the autocomplete list.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2094
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2283
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2022-08-17"
+
+tracking_protection:
+  toolbar_shield_clicked:
+    type: counter
+    description: |
+      A counter that indicates how many times a user has opened
+      the tracking protection settings panel from the toolbar.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2093
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2265
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2022-08-17"
+
+  tracking_protection_changed:
+    type: event
+    description: |
+      The user has changed the setting for enhanced tracking protection.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2093
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2265
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2022-08-17"
+    extra_keys:
+      is_enabled:
+        description: The new setting for ETP, true for ON, false for OFF
+        type: boolean
+
+  has_ever_changed_etp:
+    type: boolean
+    description: |
+      The user has changed the setting for enhanced tracking protection
+      at least once.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2093
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2265
+    data_sensitivity:
+      - interaction
+    lifetime: user
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+      - sarentz@mozilla.com
+    expires: never
+
+  tracker_setting_changed:
+    type: event
+    description: |
+      The user has changed the advertising tracker protection state.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2093
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2265
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2022-08-17"
+    extra_keys:
+      source_of_change:
+        description: The source of interaction, "Panel" or "Settings"
+        type: string
+      tracker_changed:
+        description: |
+          The tracker changed, "Advertising", "Analytics", "Social", "Content"
+        type: string
+      is_enabled:
+        description: The new setting for tracker, true for ON, false for OFF
+        type: boolean
+
+  has_social_blocked:
+    type: boolean
+    description: |
+      The user has changed the setting for enhanced tracking protection
+      at least once.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2093
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2265
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2022-08-17"
+
+  has_advertising_blocked:
+    type: boolean
+    description: |
+      The user has changed the setting for enhanced tracking protection
+      at least once.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2093
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2265
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2022-08-17"
+
+  has_analytics_blocked:
+    type: boolean
+    description: |
+      The user has changed the setting for enhanced tracking protection
+      at least once.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2093
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2265
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2022-08-17"
+
+  has_content_blocked:
+    type: boolean
+    description: |
+      The user has changed the setting for enhanced tracking protection
+      at least once.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2093
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2265
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2022-08-17"
+
+shortcuts:
+  shortcuts_on_home_number:
+    type: quantity
+    description: |
+      The number of shortcuts the user has on home screen,
+      0, 1, 2, 3 or 4 (maximum)
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2092
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2232
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2022-08-20"
+    unit: shortcut(s)
+  shortcut_opened_counter:
+    type: counter
+    description: |
+      A counter that indicates how many times a user has opened
+      a website from a shortcut in the home screen.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2092
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2232
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2022-08-20"
+  shortcut_added_counter:
+    type: counter
+    description: |
+      A counter that indicates how many times a user has added
+      a website to shortcuts.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2092
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2232
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2022-08-20"
+  shortcut_removed_counter:
+    type: labeled_counter
+    description: |
+      A counter that indicates how many times a user has removed
+      a website from shortcuts.
+      It also indicates the screen it was removed from, home or browser.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2092
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2232
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2022-08-20"
+    labels:
+      - removed_from_browser_menu
+      - removed_from_home_screen

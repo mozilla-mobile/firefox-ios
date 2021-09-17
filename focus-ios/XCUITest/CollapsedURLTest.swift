@@ -6,26 +6,26 @@ import XCTest
 
 class CollapsedURLTest: BaseTestCase {
     func testCheckCollapsedURL() {
-        let app = XCUIApplication()
+        // Test do not apply to iPad
+        if !iPad() {
+            // Visit a page that scrolls
+            loadWebPage("https://news.ycombinator.com") //
 
-        // Visit a page that scrolls
-        loadWebPage("https://news.ycombinator.com") //
+            // Wait for the website to load
+            waitForExistence(app.webViews.otherElements["Hacker News"])
+            app.swipeUp()
+            app.swipeUp()
+            let collapsedTruncatedurltextTextView = app.textViews["Collapsed.truncatedUrlText"]
+            waitForExistence(collapsedTruncatedurltextTextView)
 
-        // Wait for the website to load
-        waitForExistence(app.webViews.otherElements["Hacker News"])
-        let webView = app.webViews.children(matching: .other).element
-        app.swipeUp()
-        app.swipeUp()
-        let collapsedTruncatedurltextTextView = app.textViews["Collapsed.truncatedUrlText"]
-        waitForExistence(collapsedTruncatedurltextTextView)
+            XCTAssertTrue(collapsedTruncatedurltextTextView.isHittable)
+            XCTAssertEqual(collapsedTruncatedurltextTextView.value as? String, "news.ycombinator.com")
 
-        XCTAssertTrue(collapsedTruncatedurltextTextView.isHittable)
-        XCTAssertEqual(collapsedTruncatedurltextTextView.value as? String, "news.ycombinator.com")
-
-        // After swiping down, the collapsed URL should not be displayed
-        app.swipeDown()
-        app.swipeDown()
-        waitForNoExistence(collapsedTruncatedurltextTextView)
-        XCTAssertFalse(collapsedTruncatedurltextTextView.exists)
+            // After swiping down, the collapsed URL should not be displayed
+            app.swipeDown()
+            app.swipeDown()
+            waitForNoExistence(collapsedTruncatedurltextTextView)
+            XCTAssertFalse(collapsedTruncatedurltextTextView.exists)
+        }
     }
 }

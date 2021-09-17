@@ -1,14 +1,15 @@
-/* (No Comment) */
+/* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Ovo vam omogućava slikanje i otpremanje fotografija.";
 
-/* (No Comment) */
+/* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Ovo vam dopušta da otključate aplikaciju.";
 
-/* (No Comment) */
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Web stranice koje posjećujete mogu zahtjevati vašu lokaciju.";
 
-/* (No Comment) */
+/* Privacy - Microphone Usage Description */
 "NSMicrophoneUsageDescription" = "Ovo vam omogućava snimanje i otpremanje videa.";
 
-/* (No Comment) */
+/* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Ovo vam omogućava da sačuvate i otpremite fotografije.";
+

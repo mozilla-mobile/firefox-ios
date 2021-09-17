@@ -1,0 +1,6 @@
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "Turpināt";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "Izlaist";
+

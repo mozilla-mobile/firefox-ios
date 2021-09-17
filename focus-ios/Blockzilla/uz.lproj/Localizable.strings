@@ -31,9 +31,6 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Undan Safari kengaytmasi sifatida foydalaning:";
 
-/* (No Comment) */
-"About.screenTitle" = "Dastur haqida";
-
 /* Label on About screen */
 "About.topLabel" = "%@ boshqarish imkonini sizga beradi.";
 
@@ -115,12 +112,6 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Kuzatuvchilarning boshqa kontentlarini bloklasangiz, ba’zi video va veb-sahifalar ishlamay qolishi mumkin.";
 
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Rahmat, kerak emas";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Tushundim";
-
 /* Title for settings screen */
 "Settings.screenTitle" = "Sozlamalar";
 
@@ -137,19 +128,7 @@
 "Settings.sectionPrivacy" = "MAXFIYLIK";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Kuzatuvchilarning reklamalarini bloklash";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Kuzatuvchilarning tashxislarini bloklash";
-
-/* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Veb-shriftlarni bloklash";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Kuzatuvchilarnin boshqa kontentlarini bloklash";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Ijtimoiy kuzatuvchilarni bloklash";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Ba’zi video va veb sahifalarning ishlashiga halaqit berishi mumkin";
@@ -162,9 +141,6 @@
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "TOZALASH";
-
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "Kirilgan saytlar haqidagi ma’lumot tozalandi.";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Izlang yoki manzilni kiriting";

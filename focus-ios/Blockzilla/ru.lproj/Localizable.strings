@@ -34,14 +34,23 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Используйте его как расширение Safari:";
 
-/* (No Comment) */
-"About.screenTitle" = "О программе";
-
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
 "About.title" = "О %@";
 
 /* Label on About screen */
 "About.topLabel" = "%@ передаёт контроль в ваши руки.";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "Открыть в %@";
+
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "Ок";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "При добавлении пароля в Wallet произошла ошибка. Пожалуйста, попробуйте снова.";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "Не удалось добавить пароль";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "Аутентифицируйтесь для возврата в %@";
@@ -110,7 +119,7 @@
 "Autocomplete.topSites" = "Топ сайтов";
 
 /* Create a new session after failing a biometric check */
-"BiometricPrompt.newSession" = "Новая сессия";
+"BiometricPrompt.newSession" = "Новый сеанс";
 
 /* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
 "BiometricPrompt.reason" = "Блокируйте %@, при открытии его заново, чтобы предотвратить доступ посторонних.";
@@ -120,6 +129,9 @@
 
 /* Copy URL button in URL long press menu */
 "Browser.copyAddressLabel" = "Копировать адрес";
+
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL скопирован в буфер обмена";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Копировать";
@@ -142,8 +154,29 @@
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Остановить";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Выбрать адресную строку";
+
 /* Label on button to cancel edits */
 "Cancel" = "Отмена";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "Вы скопировали ссылку: %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "Копировать изображение";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "Копировать ссылку";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "Вы скопировали ссылку:";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "Сохранить изображение";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "Поделиться ссылкой";
 
 /* Label on button to complete edits */
 "Done" = "Готово";
@@ -162,6 +195,9 @@
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "Открыть";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ хочет открыть %2$@";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "Позвонить";
@@ -226,8 +262,17 @@
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
 
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "Это позволит вам сохранять изображения в вашу «Фотопленку»";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "Открыть Параметры";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "“%@” хотел бы получить доступ к вашим Фото";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
-"Request Desktop Site" = "Запросить полную версию сайта";
+"Request Desktop Site" = "Версия для ПК";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Нажмите Safari, затем выберите Правила блокирования контента";
@@ -259,6 +304,36 @@
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "Показывать поисковые предложения?";
 
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "URL-адрес автодополнения";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Блокирование других трекеров содержимого может нарушить работу некоторых видео и веб-страниц.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "Отмена";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes2" = "Блокировать трекеры содержимого";
+
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "%@ будет отправлять в поисковую систему то, что вы вводите в адресной строке.";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla обязуется собирать только ту информацию, которая необходима для работы %@ и его улучшения в будущем.";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "Подробнее.";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "Оценить %@";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "ИНТЕГРАЦИЯ С SAFARI";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Параметры";
+
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Добавить другую поисковую систему";
 
@@ -286,38 +361,11 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Строка поискового запроса";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Пример: searchengineexample.com/search/?q=%s";
+
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Вставьте или введите строку поискового запроса. При необходимости, замените поисковый термин на %s.";
-
-/* Title for the URL Autocomplete row */
-"Settings.autocompleteSection" = "URL-адрес автодополнения";
-
-/* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Блокирование других трекеров содержимого может нарушить работу некоторых видео и веб-страниц.";
-
-/* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Нет, спасибо";
-
-/* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Я понимаю";
-
-/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSearchSuggestion" = "%@ будет отправлять в поисковую систему то, что вы вводите в адресной строке.";
-
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSendUsageData" = "Mozilla обязуется собирать только ту информацию, которая необходима для работы %@ и его улучшения в будущем.";
-
-/* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.learnMore" = "Подробнее.";
-
-/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
-"Settings.rate" = "Оценить %@";
-
-/* Label for Safari integration section */
-"Settings.safariTitle" = "ИНТЕГРАЦИЯ С SAFARI";
-
-/* Title for settings screen */
-"Settings.screenTitle" = "Параметры";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Поисковая система";
@@ -343,32 +391,20 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "БЕЗОПАСНОСТЬ";
 
-/* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Блокировать трекеры рекламы";
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "Реклама";
 
-/* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Некоторая реклама отслеживает посещения сайтов, даже если вы на неё не нажимали";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Блокировать трекеры аналитики";
-
-/* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Используются для сбора, анализа и измерения активности, например, нажатий и скроллинга";
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "Аналитика";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Блокировать веб-шрифты";
 
-/* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Блокировать другие трекеры содержимого";
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "Содержимое";
 
-/* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Включение этой функции может вызвать непредсказуемое поведение некоторых страниц";
-
-/* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Блокировать социальные трекеры";
-
-/* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Вставляются на сайты, чтобы отслеживать ваши посещения и внедрять дополнительную функциональность, например, кнопку «Поделиться»";
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "Социальные сети";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Использовать Face ID для разблокировки приложения";
@@ -394,8 +430,11 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Touch ID будет блокировать %@, если в нём открыта какая-либо страница";
 
-/* URL for the learn more of the send usage data toggle */
-"Settings.usageData" = "данные об использовании";
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "Отключено";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "Включено";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Что нового";
@@ -403,20 +442,29 @@
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "БЫСТРЫЕ КОМАНДЫ SIRI";
 
+/* Text for a share button */
+"share" = "Поделиться";
+
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "Добавить в ярлыки";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Копировать адрес";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Найти на странице";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Загрузить Firefox";
 
-/* Text for the share menu option when a user wants to open a page in Focus. */
-"ShareMenu.OpenInFocus" = "Открыть в %@";
-
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "Действия на странице";
 
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "Удалить из ярлыков";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
-"ShareMenu.RequestDesktop" = "Запросить полную версию сайта";
+"ShareMenu.RequestDesktop" = "Версия для ПК";
 
 /* Text for the share menu option when a user wants to reload the site as a mobile device */
 "ShareMenu.RequestMobile" = "Запросить мобильную версию сайта";
@@ -432,6 +480,9 @@
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Поделиться через...";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "Удалить из ярлыков";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Добавить";
@@ -457,84 +508,6 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "URL для открытия";
 
-/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
-"URL.addToAutocompleteLabel" = "Добавить ссылку для автодополнения";
-
-/* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "Отмена";
-
-/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
-"URL.contextMenu" = "Вставить и перейти";
-
-/* Erase button in the URL bar */
-"URL.eraseButtonLabel" = "СТЕРЕТЬ";
-
-/* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "Ваша история посещения сайтов была стёрта.";
-
-/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
-"URL.findOnPageLabel" = "Найти на странице: %@";
-
-/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
-"URL.paste" = "Вставить";
-
-/* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "Поиск или адрес";
-
-/* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "Поиск %@";
-
-/* Text for the URL bar showing the number of trackers blocked on a webpage. */
-"URL.trackersBlockedLabel" = "Трекеров заблокировано";
-
-/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
-"actionSheet.openIn" = "Открыть в %@";
-
-/* Toast displayed after a URL has been copied to the clipboard */
-"browser.copyAddressToast" = "URL скопирован в буфер обмена";
-
-/* Label to display in the Discoverability overlay for keyboard shortcuts */
-"browserShortcutDescription.selectLocationBar" = "Выбрать адресную строку";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "Вы скопировали ссылку: %@";
-
-/* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "Копировать изображение";
-
-/* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "Копировать ссылку";
-
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "Вы скопировали ссылку:";
-
-/* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "Сохранить изображение";
-
-/* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "Поделиться ссылкой";
-
-/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
-"externalAppLinkWithAppName.messageTitle" = "%1$@ хочет открыть %2$@";
-
-/* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "Это позволит вам сохранять изображения в вашу «Фотопленку»";
-
-/* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "Открыть Параметры";
-
-/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "“%@” хотел бы получить доступ к вашим Фото";
-
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Пример: searchengineexample.com/search/?q=%s";
-
-/* Text for a share button */
-"share" = "Поделиться";
-
-/* Text for the share menu when a user wants to copy a URL. */
-"shareMenu.copyAddress" = "Копировать адрес";
-
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Используйте Touch ID для возврата в %@";
 
@@ -543,6 +516,12 @@
 
 /* label for analytic trackers. */
 "trackingProtection.analyticTrackerLabel" = "Трекеры аналитики";
+
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "Соединение не защищено";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "Соединение защищено";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Трекеры содержимого";
@@ -559,15 +538,60 @@
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Подробнее";
 
+/* Text for the button that closes the Shield Data and opens the regular Settings screen. */
+"trackingProtection.moreSettings" = "Все настройки";
+
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Социальные трекеры";
+
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "Защита для этой сессии отключена";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "Защита для этой сессии включена";
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Отключить, пока вы не закроете %@ или нажмёте СТЕРЕТЬ.";
 
-/* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Защита от отслеживания";
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "Улучшенная защита от отслеживания";
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Выберите, будет ли %@ блокировать рекламные, аналитические, социальные и другие трекеры.";
+"trackingProtection.trackerDescriptionLabel2" = "Храните свои данные при себе. %@ защитит вас от многих наиболее известных трекеров, которые следят за вашим поведением в Интернете.";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "Заблокировано трекеров, начиная с %@";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "Блокируемые трекеры и скрипты";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "Добавить ссылку для автодополнения";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "Отмена";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Вставить и перейти";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "СТЕРЕТЬ";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "История веб-сёрфинга удалена";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Найти на странице: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Вставить";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Поиск или адрес";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Поиск %@";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "Трекеров заблокировано";
 
