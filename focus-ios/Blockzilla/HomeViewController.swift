@@ -59,7 +59,6 @@ class HomeViewController: UIViewController {
         tipView.snp.makeConstraints { make in
             make.bottom.equalTo(toolbar.snp.top).offset(-UIConstants.layout.tipViewBottomOffset)
             make.leading.trailing.equalToSuperview()
-            make.centerX.equalToSuperview()
             make.height.equalTo(UIConstants.layout.tipViewHeight)
         }
 
@@ -95,18 +94,36 @@ class HomeViewController: UIViewController {
 
     @objc private func rotated() {
         if UIApplication.shared.orientation?.isLandscape == true {
-            hideTextLogo()
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                // On iPad in landscape we only show the tips.
+                hideTextLogo()
+                showTips()
+            } else {
+                // On iPhone in landscape we show neither.
+                hideTextLogo()
+                hideTips()
+            }
         } else {
+            // In portrait on any form factor we show both.
             showTextLogo()
+            showTips()
         }
     }
-
+    
     private func hideTextLogo() {
         textLogo.isHidden = true
     }
 
     private func showTextLogo() {
         textLogo.isHidden = false
+    }
+
+    private func hideTips() {
+        tipsViewController.view.isHidden = true
+    }
+
+    private func showTips() {
+        tipsViewController.view.isHidden = false
     }
 
     func showTextTip(_ tip: TipManager.Tip) {
@@ -128,21 +145,20 @@ class HomeViewController: UIViewController {
     }
     
     func updateUI(urlBarIsActive: Bool) {
-        tipsViewController.showPageController(urlBarIsActive)
         toolbar.isHidden = urlBarIsActive
-        
+
         tipView.snp.remakeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.centerX.equalToSuperview()
             make.height.equalTo(UIConstants.layout.tipViewHeight)
-            
+
             if urlBarIsActive {
                 make.bottom.equalToSuperview()
             } else {
                 make.bottom.equalTo(toolbar.snp.top).offset(-UIConstants.layout.tipViewBottomOffset)
             }
         }
-        
+
         if UIScreen.main.bounds.height ==  UIConstants.layout.iPhoneSEHeight {
             textLogo.snp.updateConstraints{ make in
                 make.top.equalTo(self.view.snp.centerY).offset(urlBarIsActive ?  UIConstants.layout.textLogoOffsetSmallDevice : UIConstants.layout.textLogoOffset)
