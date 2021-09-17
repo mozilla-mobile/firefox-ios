@@ -32,6 +32,7 @@ class SearchTests: XCTestCase {
         checkValidURL("foo.bar", afterFixup: "http://foo.bar")
         checkValidURL(" foo.bar ", afterFixup: "http://foo.bar")
         checkValidURL("1.2.3", afterFixup: "http://1.2.3")
+        checkValidURL("iconic.sydney", afterFixup: "http://iconic.sydney")
 
         // Check invalid URLs. These are passed along to the default search engine.
         checkInvalidURL("foobar")
@@ -45,7 +46,11 @@ class SearchTests: XCTestCase {
         checkInvalidURL("about:")
         checkInvalidURL("javascript:")
         checkInvalidURL("ftp:")
-        
+        checkInvalidURL("127.1")
+        checkInvalidURL("999.")
+        checkInvalidURL("-.05")
+        checkInvalidURL("+2.1.0")
+        checkInvalidURL("apple.iphone") // suffix not in Public Suffix List
     }
 
     func testURIFixupPunyCode() {

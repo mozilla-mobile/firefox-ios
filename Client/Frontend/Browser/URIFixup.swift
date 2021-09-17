@@ -38,6 +38,19 @@ class URIFixup {
             return nil
         }
 
+        // If entry is a valid floating point number, don't fixup
+        if Double(trimmed) != nil {
+            return nil
+        }
+
+        // If entry doesn't have a valid ending in Public Suffix List
+        // and it's not all digits and dot, stop fix up.
+        if !trimmed.trimmingCharacters(in: CharacterSet(charactersIn: "0123456789.")).isEmpty,
+           let maybeUrl = URL(string: "http://\(trimmed)"),
+           maybeUrl.publicSuffix == nil {
+            return nil
+        }
+
         // If there is a ".", prepend "http://" and try again. Since this
         // is strictly an "http://" URL, we also require a host.
         if let url = punycodedURL("http://\(escaped)"), url.host != nil {
