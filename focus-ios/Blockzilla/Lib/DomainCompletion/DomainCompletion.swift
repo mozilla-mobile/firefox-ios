@@ -132,6 +132,9 @@ class DomainCompletion: AutocompleteTextFieldCompletionSource {
             let matchedDomain = domainWithDotPrefix[range...]
 
             if matchedDomain.contains(".") {
+                if matchedDomain.contains("/") {
+                    return String(matchedDomain)
+                }
                 return matchedDomain + "/"
             }
         }
