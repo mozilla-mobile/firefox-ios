@@ -307,7 +307,7 @@ class URLBarView: UIView {
         }
         
         addNewTabButton.snp.makeConstraints { make in
-            make.trailing.equalTo(self.homeButton.snp.leading)
+            make.trailing.equalTo(self.tabsButton.snp.leading)
             make.centerY.equalTo(self)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
