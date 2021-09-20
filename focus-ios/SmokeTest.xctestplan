@@ -1,7 +1,7 @@
 {
   "configurations" : [
     {
-      "id" : "5FECB575-C027-4993-A9D8-785E2A06CCB8",
+      "id" : "7F02ED3B-5CF8-409D-8257-E00D35DD0E09",
       "name" : "Configuration 1",
       "options" : {
 
@@ -19,7 +19,7 @@
         "CopyTest",
         "DragAndDropTest",
         "FindInPageTest",
-        "OpenInFocusTest",
+        "OpenInFocusTest\/testOpenViaSafari()",
         "PastenGoTest\/testClipboard()",
         "QuickAddAutocompleteURLTest",
         "RequestDesktopTest",
@@ -39,13 +39,6 @@
         "containerPath" : "container:Blockzilla.xcodeproj",
         "identifier" : "0BA39A821DD2B8E4005F970A",
         "name" : "XCUITest"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:Blockzilla.xcodeproj",
-        "identifier" : "D8E0155B1FCF409F00CA3B9F",
-        "name" : "ClientTests"
       }
     }
   ],
