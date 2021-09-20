@@ -120,7 +120,7 @@ class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITab
             let cell = UITableViewCell(style: .default, reuseIdentifier: engine.image == nil ? "empty-image-cell" : nil)
             cell.textLabel?.text = engine.name
             cell.textLabel?.textColor = UIConstants.colors.settingsTextLabel
-            cell.imageView?.image = engine.image?.createScaled(size: CGSize(width: 24, height: 24))
+            cell.imageView?.image = engine.image?.createScaled(targetSize: 24)
             cell.selectedBackgroundView = getBackgroundView()
             cell.backgroundColor = .secondaryBackground
             cell.accessibilityIdentifier = engine.name
