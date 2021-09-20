@@ -203,6 +203,10 @@ class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITab
         let engine = engines[indexPath.row]
         return engine != searchEngineManager.activeEngine
     }
+    
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return indexPath.section == 1 ? .none : .delete
+    }
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {

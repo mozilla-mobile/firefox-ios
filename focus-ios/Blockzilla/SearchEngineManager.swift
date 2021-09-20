@@ -48,11 +48,11 @@ class SearchEngineManager {
     }
 
     func hasDisabledDefaultEngine() -> Bool {
-        return getDisabledDefaultEngineNames().count > 0
+        return readCustomEngines().count > 0
     }
 
     func restoreDisabledDefaultEngines() {
-        prefs.removeObject(forKey: SearchEngineManager.prefKeyDisabledEngines)
+        prefs.removeObject(forKey: SearchEngineManager.prefKeyCustomEngines)
         loadEngines()
     }
 
