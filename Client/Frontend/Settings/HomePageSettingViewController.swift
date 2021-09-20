@@ -9,7 +9,8 @@ class HomePageSettingViewController: SettingsTableViewController {
 
     /* variables for checkmark settings */
     let prefs: Prefs
-    var currentChoice: NewTabPage!
+    var currentNewTabChoice: NewTabPage!
+    var currentStartAtHomeChoice: StartAtHomeSetting!
     var hasHomePage = false
     init(prefs: Prefs) {
         self.prefs = prefs
@@ -24,21 +25,21 @@ class HomePageSettingViewController: SettingsTableViewController {
 
     override func generateSettings() -> [SettingSection] {
         // The Home button and the New Tab page can be set independently
-        self.currentChoice = NewTabAccessors.getHomePage(self.prefs)
+        self.currentNewTabChoice = NewTabAccessors.getHomePage(self.prefs)
         self.hasHomePage = HomeButtonHomePageAccessors.getHomePage(self.prefs) != nil
 
         let onFinished = {
-            self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
+            self.prefs.setString(self.currentNewTabChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
             self.tableView.reloadData()
         }
 
-        let showTopSites = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabTopSites), subtitle: nil, accessibilityIdentifier: "HomeAsFirefoxHome", isChecked: {return self.currentChoice == NewTabPage.topSites}, onChecked: {
-            self.currentChoice = NewTabPage.topSites
+        let showTopSites = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabTopSites), subtitle: nil, accessibilityIdentifier: "HomeAsFirefoxHome", isChecked: {return self.currentNewTabChoice == NewTabPage.topSites}, onChecked: {
+            self.currentNewTabChoice = NewTabPage.topSites
             onFinished()
         })
         let showWebPage = WebPageSetting(prefs: prefs, prefKey: PrefsKeys.HomeButtonHomePageURL, defaultValue: nil, placeholder: Strings.CustomNewPageURL, accessibilityIdentifier: "HomeAsCustomURL", isChecked: {return !showTopSites.isChecked()}, settingDidChange: { (string) in
-            self.currentChoice = NewTabPage.homePage
-            self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
+            self.currentNewTabChoice = NewTabPage.homePage
+            self.prefs.setString(self.currentNewTabChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
             self.tableView.reloadData()
         })
         showWebPage.textField.textAlignment = .natural
@@ -58,23 +59,40 @@ class HomePageSettingViewController: SettingsTableViewController {
 
     private func setupStartAtHomeSection() -> SettingSection {
         let onFinished = {
-            self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
-            self.tableView.reloadData()
+//            self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
+            print("I Got checked!")
+//            self.tableView.reloadData()
         }
 
-        let showTopSites = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabTopSites), subtitle: nil, accessibilityIdentifier: "HomeAsFirefoxHome", isChecked: {return self.currentChoice == NewTabPage.topSites}, onChecked: {
-            self.currentChoice = NewTabPage.topSites
+        let afterFourHoursOption = CheckmarkSetting(title: NSAttributedString(string: .SettingsCustomizeHomeStartAtHomeAfterFourHours),
+                                                    subtitle: nil,
+                                                    accessibilityIdentifier: "StartAtHomeAfterFourHours",
+                                                    isChecked: { return self.currentStartAtHomeChoice == .afterFourHours },
+                                                    onChecked: {
+            self.currentStartAtHomeChoice = .afterFourHours
             onFinished()
         })
-        let showWebPage = WebPageSetting(prefs: prefs, prefKey: PrefsKeys.HomeButtonHomePageURL, defaultValue: nil, placeholder: Strings.CustomNewPageURL, accessibilityIdentifier: "HomeAsCustomURL", isChecked: {return !showTopSites.isChecked()}, settingDidChange: { (string) in
-            self.currentChoice = NewTabPage.homePage
-            self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
-            self.tableView.reloadData()
+
+        let alwaysOption = CheckmarkSetting(title: NSAttributedString(string: .SettingsCustomizeHomeStartAtHomeAlways),
+                                            subtitle: nil,
+                                            accessibilityIdentifier: "StartAtHomeAlways",
+                                            isChecked: { return self.currentStartAtHomeChoice == .always },
+                                            onChecked: {
+            self.currentStartAtHomeChoice = .always
+            onFinished()
         })
-        showWebPage.textField.textAlignment = .natural
+
+        let neverOption = CheckmarkSetting(title: NSAttributedString(string: .SettingsCustomizeHomeStartAtHomeNever),
+                                           subtitle: nil,
+                                           accessibilityIdentifier: "StartAtHomeNever",
+                                           isChecked: { return self.currentStartAtHomeChoice == .always },
+                                           onChecked: {
+            self.currentStartAtHomeChoice = .always
+            onFinished()
+        })
 
         let section = SettingSection(title: NSAttributedString(string: .SettingsCustomizeHomeStartAtHomeSectionTitle),
-                                     children: [showTopSites, showWebPage])
+                                     children: [afterFourHoursOption, alwaysOption, neverOption])
 
         return section
     }
