@@ -7,6 +7,8 @@ import XCTest
 class WebsiteAccessTests: BaseTestCase {
     // Smoketest
     func testVisitWebsite() {
+        dismissURLBarFocused()
+        
         // Check initial page
         checkForHomeScreen()
 

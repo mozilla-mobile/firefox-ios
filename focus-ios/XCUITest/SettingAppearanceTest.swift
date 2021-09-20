@@ -11,6 +11,8 @@ class SettingAppearanceTest: BaseTestCase {
     // Smoketest
     // Check for the basic appearance of the Settings Menu
     func testCheckSetting() {
+        dismissURLBarFocused()
+        
         // Navigate to Settings
         waitForExistence(app.buttons["Settings"], timeout: 5)
         app.buttons["Settings"].tap()
@@ -219,8 +221,10 @@ class SettingAppearanceTest: BaseTestCase {
         XCTAssertFalse(app.tables.cells["mozilla.org"].exists)
     }
 
-    // Smoktest
+    // Smoketest
     func testSafariIntegration() {
+        dismissURLBarFocused()
+        
         // Navigate to Settings
         waitForExistence(app.buttons["Settings"], timeout: 5)
         app.buttons["Settings"].tap()
