@@ -1840,7 +1840,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "bash $PWD/bin/sdk_generator.sh -m $SRCROOT/Documentation\n";
+			shellScript = "bash $PWD/bin/sdk_generator.sh\n";
 		};
 		F84AFE711DE77ACC005C4DD1 /* Run Script (Copy Wordmark) */ = {
 			isa = PBXShellScriptBuildPhase;
