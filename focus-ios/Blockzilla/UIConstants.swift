@@ -308,6 +308,7 @@ struct UIConstants {
         static let shortcutsBackgroundWidthIPad: CGFloat = 676
         static let smallestSplitViewMaxWidthLimit: CGFloat = UIScreen.main.bounds.width * 0.45
         static let iPhoneSEHeight: CGFloat = 568
+        static let searchSuggestionsArrowButtonWidth: CGFloat = 30
     }
 
     struct strings {

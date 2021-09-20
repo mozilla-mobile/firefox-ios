@@ -166,7 +166,7 @@ class OverlayView: UIView {
             }
             
             self.arrowButtons[i - 1].snp.remakeConstraints { make in
-                make.height.width.equalTo(30)
+                make.height.width.equalTo(UIConstants.layout.searchSuggestionsArrowButtonWidth)
                 make.trailing.equalTo(searchButtonGroup[i].snp.trailing).inset(12)
                 make.centerY.equalTo(searchButtonGroup[i])
             }
@@ -247,9 +247,9 @@ class OverlayView: UIView {
         let padding = UIConstants.layout.searchButtonInset
         button.imageEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
         if UIView.userInterfaceLayoutDirection(for: button.semanticContentAttribute) == .rightToLeft {
-            button.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding * 2)
+            button.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding + UIConstants.layout.searchSuggestionsArrowButtonWidth, bottom: padding, right: padding * 2)
         } else {
-            button.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding * 2, bottom: padding, right: padding)
+            button.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding * 2, bottom: padding, right: UIConstants.layout.searchSuggestionsArrowButtonWidth + padding)
         }
     }
 
