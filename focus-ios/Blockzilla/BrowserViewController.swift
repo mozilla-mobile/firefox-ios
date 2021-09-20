@@ -1419,7 +1419,7 @@ extension BrowserViewController: OverlayViewDelegate {
     }
     
     func overlayView(_ overlayView: OverlayView, didTapArrowText text: String) {
-        urlBar.fillUrlBar(text: text)
+        urlBar.fillUrlBar(text: text + " ")
         searchSuggestClient.getSuggestions(text) { [weak self] suggestions, error in
             if error == nil, let suggestions = suggestions {
                 self?.overlayView.setSearchQuery(suggestions: suggestions, hideFindInPage: true, hideAddToComplete: true)
