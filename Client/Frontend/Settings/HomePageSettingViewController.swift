@@ -5,12 +5,12 @@
 import Foundation
 import Shared
 
-class HomePageSettingViewController: SettingsTableViewController {
+class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsProtocol {
 
     /* variables for checkmark settings */
     let prefs: Prefs
     var currentNewTabChoice: NewTabPage!
-    var currentStartAtHomeChoice: StartAtHomeSetting!
+    var currentStartAtHomeSetting: StartAtHomeSetting!
     var hasHomePage = false
     init(prefs: Prefs) {
         self.prefs = prefs
@@ -52,43 +52,49 @@ class HomePageSettingViewController: SettingsTableViewController {
         let pocketSetting = BoolSetting(prefs: profile.prefs, prefKey: PrefsKeys.ASPocketStoriesVisible, defaultValue: isPocketEnabledDefault, attributedTitleText: NSAttributedString(string: Strings.SettingsNewTabPocket))
         let pocketSection = SettingSection(title: NSAttributedString(string: Strings.SettingsNewTabASTitle), footerTitle: NSAttributedString(string: Strings.SettingsNewTabPocketFooter), children: [pocketSetting])
 
-        let startAtHomeSection = setupStartAtHomeSection()
+        // TODO: StartAtHome settings only show for English locale until we get translations.
+        let supportedLocales = ["en_US", "en_GB", "en_ZA", "en_CA"]
+        guard supportedLocales.contains(Locale.current.identifier),
+              let startAtHomeSection = setupStartAtHomeSection()
+        else { return [section, topsitesSection, pocketSection] }
 
         return [section, topsitesSection, pocketSection, startAtHomeSection]
     }
 
-    private func setupStartAtHomeSection() -> SettingSection {
-        let onFinished = {
-//            self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
-            print("I Got checked!")
-//            self.tableView.reloadData()
+    private func setupStartAtHomeSection() -> SettingSection? {
+        guard let startAtHomeSetting: StartAtHomeSetting = featureFlags.featureOption(.startAtHome) else { return nil }
+        currentStartAtHomeSetting = startAtHomeSetting
+
+        let onOptionSelected: ((Bool, StartAtHomeSetting) -> Void) = { state, option in
+            self.featureFlags.set(.startAtHome, to: state, with: option)
+            self.tableView.reloadData()
         }
 
         let afterFourHoursOption = CheckmarkSetting(title: NSAttributedString(string: .SettingsCustomizeHomeStartAtHomeAfterFourHours),
                                                     subtitle: nil,
                                                     accessibilityIdentifier: "StartAtHomeAfterFourHours",
-                                                    isChecked: { return self.currentStartAtHomeChoice == .afterFourHours },
+                                                    isChecked: { return self.currentStartAtHomeSetting == .afterFourHours },
                                                     onChecked: {
-            self.currentStartAtHomeChoice = .afterFourHours
-            onFinished()
+                                                        self.currentStartAtHomeSetting = .afterFourHours
+                                                        onOptionSelected(true, .afterFourHours)
         })
 
         let alwaysOption = CheckmarkSetting(title: NSAttributedString(string: .SettingsCustomizeHomeStartAtHomeAlways),
                                             subtitle: nil,
                                             accessibilityIdentifier: "StartAtHomeAlways",
-                                            isChecked: { return self.currentStartAtHomeChoice == .always },
+                                            isChecked: { return self.currentStartAtHomeSetting == .always },
                                             onChecked: {
-            self.currentStartAtHomeChoice = .always
-            onFinished()
+                                                self.currentStartAtHomeSetting = .always
+                                                onOptionSelected(true, .always)
         })
 
         let neverOption = CheckmarkSetting(title: NSAttributedString(string: .SettingsCustomizeHomeStartAtHomeNever),
                                            subtitle: nil,
                                            accessibilityIdentifier: "StartAtHomeNever",
-                                           isChecked: { return self.currentStartAtHomeChoice == .always },
+                                           isChecked: { return self.currentStartAtHomeSetting == .never },
                                            onChecked: {
-            self.currentStartAtHomeChoice = .always
-            onFinished()
+                                            self.currentStartAtHomeSetting = .never
+                                            onOptionSelected(false, .never)
         })
 
         let section = SettingSection(title: NSAttributedString(string: .SettingsCustomizeHomeStartAtHomeSectionTitle),

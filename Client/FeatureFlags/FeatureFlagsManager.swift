@@ -49,9 +49,26 @@ class FeatureFlagsManager {
     private var profile: Profile!
     private var features: [FeatureFlagName: FlaggableFeature] = [:]
 
+    /// Used as the main way to find out whether a feature is active or not.
     public func isFeatureActive(_ featureID: FeatureFlagName) -> Bool {
         guard let feature = features[featureID] else { return false }
         return feature.isActive
+    }
+
+    /// Main interface for accessing feature options.
+    ///
+    /// Function must have context when called: `let foo: Type = featureOption(.example)`
+    /// Any feature with an option attached must be listed, and further converted into
+    /// it's appropriate type in the switch statement.
+    public func featureOption<T>(_ featureID: FeatureFlagName) -> T? {
+        guard let feature = features[featureID],
+              let featureOption = feature.featureOptions
+        else { return nil }
+
+        switch featureID {
+        case .startAtHome: return StartAtHomeSetting(rawValue: featureOption) as? T
+        default: return nil
+        }
     }
 
     /// Retrieves a feature key for any specific feature, if it has one.
@@ -59,8 +76,25 @@ class FeatureFlagsManager {
         return features[featureID]?.featureKey()
     }
 
+    /// Main interface for setting a feature's state and options. Options are enums of
+    /// `FlaggableFeatureOptions` type and also conform to Int.
+    public func set<T:FlaggableFeatureOptions>(_ featureID: FeatureFlagName, to state: Bool, with option: T? = nil) {
+        var optionAsInt: Int?
+
+        switch featureID {
+        case .startAtHome:
+            if let option = option as? StartAtHomeSetting { optionAsInt = option.rawValue }
+        default:
+            optionAsInt = nil
+        }
+
+        features[featureID]?.setFeatureTo(state, with: optionAsInt)
+    }
+
     /// Toggles the feature on/off, depending on its current status AND whether or not it is
     /// a feature that can be saved to disk. For more information, see `FlaggableFeature`
+    /// Should only be used with a feature that has no options. Otherwise, the option will not
+    /// not change, while the feature will be toggled.
     public func toggle(_ featureID: FeatureFlagName) {
         features[featureID]?.toggle()
     }
@@ -70,32 +104,32 @@ class FeatureFlagsManager {
     public func setupFeatures(with profile: Profile) {
         features.removeAll()
 
-        let chronTabs = FlaggableFeature(withID: .chronologicalTabs, and: profile, enabledFor: [.developer])
+        let chronTabs = FlaggableFeature(withID: .chronologicalTabs, and: profile, enabledFor: [.developer], withDefaultFeatureOption: nil)
         features[.chronologicalTabs] = chronTabs
 
-        let inactiveTabs = FlaggableFeature(withID: .inactiveTabs, and: profile, enabledFor: [.developer])
+        let inactiveTabs = FlaggableFeature(withID: .inactiveTabs, and: profile, enabledFor: [.developer], withDefaultFeatureOption: nil)
         features[.inactiveTabs] = inactiveTabs
-        
-        let groupedTabs = FlaggableFeature(withID: .groupedTabs, and: profile, enabledFor: [.beta, .developer])
+
+        let groupedTabs = FlaggableFeature(withID: .groupedTabs, and: profile, enabledFor: [.beta, .developer], withDefaultFeatureOption: nil)
         features[.groupedTabs] = groupedTabs
 
-        let jumpBackIn = FlaggableFeature(withID: .jumpBackIn, and: profile, enabledFor: [.beta, .developer])
+        let jumpBackIn = FlaggableFeature(withID: .jumpBackIn, and: profile, enabledFor: [.beta, .developer], withDefaultFeatureOption: nil)
         features[.jumpBackIn] = jumpBackIn
 
         /// Use the Nimbus experimentation platform. If this is `true` then
         /// `Experiments.shared` provides access to Nimbus. If false, it is a dummy object.
-        let nimbus = FlaggableFeature(withID: .nimbus, and: profile, enabledFor: [.release, .beta, .developer])
+        let nimbus = FlaggableFeature(withID: .nimbus, and: profile, enabledFor: [.release, .beta, .developer], withDefaultFeatureOption: nil)
         features[.nimbus] = nimbus
-        
+
         let pullToRefresh = FlaggableFeature(withID: .pullToRefresh, and: profile, enabledFor: [.release ,.beta, .developer])
         features[.pullToRefresh] = pullToRefresh
 
-        let recentlySaved = FlaggableFeature(withID: .recentlySaved, and: profile, enabledFor: [.beta, .developer])
+        let recentlySaved = FlaggableFeature(withID: .recentlySaved, and: profile, enabledFor: [.beta, .developer], withDefaultFeatureOption: nil)
         features[.recentlySaved] = recentlySaved
 
-        let shakeToRestore = FlaggableFeature(withID: .shakeToRestore, and: profile, enabledFor: [.beta, .developer, .other])
+        let shakeToRestore = FlaggableFeature(withID: .shakeToRestore, and: profile, enabledFor: [.beta, .developer, .other], withDefaultFeatureOption: nil)
         features[.shakeToRestore] = shakeToRestore
-        
+
         let startAtHome = FlaggableFeature(withID: .startAtHome, and: profile, enabledFor: [])
         features[.startAtHome] = startAtHome
     }

@@ -11,7 +11,7 @@ import XCGLogger
 /// as static.
 
 // This HomePagePref is only used when setting the HomePage on the newTab and not setting a custom URL for the Home button.
-class NewTabHomePageAccessors {
+class NewTabHomePageAccessors: FeatureFlagsProtocol {
 
     static func getHomePage(_ prefs: Prefs) -> URL? {
         let string = prefs.stringForKey(HomePageConstants.NewTabCustomUrlPrefKey) ?? getDefaultHomePageString(prefs)

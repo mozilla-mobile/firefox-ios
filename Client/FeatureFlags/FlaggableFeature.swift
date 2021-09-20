@@ -5,6 +5,7 @@
 import Shared
 
 struct FlaggableFeature {
+
     // MARK: - Variables
     private let profile: Profile
     private let buildChannels: [AppBuildChannel]
@@ -40,10 +41,49 @@ struct FlaggableFeature {
         }
     }
 
-    init(withID featureID: FeatureFlagName, and profile: Profile, enabledFor channels: [AppBuildChannel]) {
+    /// Returns the feature option represented as an Int. The `FeatureFlagManager` will
+    /// convert it to the appropriate type.
+    var featureOptions: Int? {
+        if let optionsKey = featureOptionsKey, let existingOption = profile.prefs.intForKey(optionsKey) {
+            return Int(existingOption)
+        }
+
+        return nil
+    }
+
+    private var featureOptionsKey: String? {
+        guard let baseKey = featureKey() else { return nil }
+        return baseKey + "Options"
+    }
+
+    // MARK: - Initializers
+    init(withID featureID: FeatureFlagName, and profile: Profile, enabledFor channels: [AppBuildChannel], withDefaultFeatureOption option: Int?) {
         self.featureID = featureID
         self.profile = profile
         self.buildChannels = channels
+        if let option = option {
+            updateFeatureOption(option)
+        }
+    }
+
+    // MARK: - Functions
+    
+    /// Allows fine grain control over a feature, by allowing to directly set the state to ON
+    /// or OFF, and also set the features option as an Int
+    public func setFeatureTo(_ state: Bool, with option: Int? = nil) {
+        updateFeatureStateTo(state)
+        updateFeatureOption(option)
+    }
+
+    private func updateFeatureStateTo(_ state: Bool) {
+        guard let featureKey = featureKey() else { return }
+        profile.prefs.setBool(state, forKey: featureKey)
+    }
+
+    private func updateFeatureOption(_ option: Int?) {
+        guard let option = option, let optionsKey = featureOptionsKey else { return }
+        let optionState = Int32(option)
+        profile.prefs.setInt(optionState, forKey: optionsKey)
     }
 
     /// Toggles a feature On or Off, and saves the status to UserDefaults.
@@ -53,8 +93,7 @@ struct FlaggableFeature {
     /// feature cannot be turned on/off and its state can only be set when initialized,
     /// based on build channel.
     public func toggle() {
-        guard let key = featureKey() else { return }
-        profile.prefs.setBool(!isActive, forKey: key)
+        updateFeatureStateTo(!isActive)
     }
 
     public func featureKey() -> String? {

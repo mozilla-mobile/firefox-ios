@@ -34,12 +34,27 @@ class TabManagerStore: FeatureFlagsProtocol {
     var shouldOpenHome: Bool {
         let isColdLaunch = NSUserDefaultsPrefs(prefix: "profile").boolForKey("isColdLaunch")
         guard let coldLaunch = isColdLaunch, featureFlags.isFeatureActive(.startAtHome) else { return false }
-        
+        guard let setting: StartAtHomeSetting = featureFlags.featureOption(.startAtHome) else { return false }
+
         let lastActiveTimestamp = UserDefaults.standard.object(forKey: "LastActiveTimestamp") as? Date ?? Date()
         let dateComponents = Calendar.current.dateComponents([.hour], from: lastActiveTimestamp, to: Date())
-        let hours = dateComponents.hour ?? 0
-        
-        return hours > 4 || coldLaunch
+
+        // Measure in hours
+        var timeSinceLastActivity: Int
+        var timeToOpenNewHome: Int
+        switch setting {
+        case .afterFourHours:
+            timeSinceLastActivity = dateComponents.hour ?? 0
+            timeToOpenNewHome = 4
+
+        case .always:
+            timeSinceLastActivity = dateComponents.second ?? 0
+            timeToOpenNewHome = 0
+
+        case .never: return false // should never get here, but the switch must be exhaustive
+        }
+
+        return timeSinceLastActivity > timeToOpenNewHome || coldLaunch
     }
 
     var hasTabsToRestoreAtStartup: Bool {
