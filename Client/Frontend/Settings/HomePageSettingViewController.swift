@@ -50,7 +50,33 @@ class HomePageSettingViewController: SettingsTableViewController {
         let isPocketEnabledDefault = Pocket.IslocaleSupported(Locale.current.identifier)
         let pocketSetting = BoolSetting(prefs: profile.prefs, prefKey: PrefsKeys.ASPocketStoriesVisible, defaultValue: isPocketEnabledDefault, attributedTitleText: NSAttributedString(string: Strings.SettingsNewTabPocket))
         let pocketSection = SettingSection(title: NSAttributedString(string: Strings.SettingsNewTabASTitle), footerTitle: NSAttributedString(string: Strings.SettingsNewTabPocketFooter), children: [pocketSetting])
-        return [section, topsitesSection, pocketSection]
+
+        let startAtHomeSection = setupStartAtHomeSection()
+
+        return [section, topsitesSection, pocketSection, startAtHomeSection]
+    }
+
+    private func setupStartAtHomeSection() -> SettingSection {
+        let onFinished = {
+            self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
+            self.tableView.reloadData()
+        }
+
+        let showTopSites = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabTopSites), subtitle: nil, accessibilityIdentifier: "HomeAsFirefoxHome", isChecked: {return self.currentChoice == NewTabPage.topSites}, onChecked: {
+            self.currentChoice = NewTabPage.topSites
+            onFinished()
+        })
+        let showWebPage = WebPageSetting(prefs: prefs, prefKey: PrefsKeys.HomeButtonHomePageURL, defaultValue: nil, placeholder: Strings.CustomNewPageURL, accessibilityIdentifier: "HomeAsCustomURL", isChecked: {return !showTopSites.isChecked()}, settingDidChange: { (string) in
+            self.currentChoice = NewTabPage.homePage
+            self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
+            self.tableView.reloadData()
+        })
+        showWebPage.textField.textAlignment = .natural
+
+        let section = SettingSection(title: NSAttributedString(string: .SettingsCustomizeHomeStartAtHomeSectionTitle),
+                                     children: [showTopSites, showWebPage])
+
+        return section
     }
 
     override func viewDidDisappear(_ animated: Bool) {

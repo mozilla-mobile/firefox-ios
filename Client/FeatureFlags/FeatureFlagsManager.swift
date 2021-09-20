@@ -54,6 +54,11 @@ class FeatureFlagsManager {
         return feature.isActive
     }
 
+    /// Retrieves a feature key for any specific feature, if it has one.
+    public func featureKey(for featureID: FeatureFlagName) -> String? {
+        return features[featureID]?.featureKey()
+    }
+
     /// Toggles the feature on/off, depending on its current status AND whether or not it is
     /// a feature that can be saved to disk. For more information, see `FlaggableFeature`
     public func toggle(_ featureID: FeatureFlagName) {

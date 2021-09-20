@@ -57,7 +57,7 @@ struct FlaggableFeature {
         profile.prefs.setBool(!isActive, forKey: key)
     }
 
-    private func featureKey() -> String? {
+    public func featureKey() -> String? {
         switch featureID {
         case .chronologicalTabs:
             return PrefsKeys.ChronTabsPrefKey
