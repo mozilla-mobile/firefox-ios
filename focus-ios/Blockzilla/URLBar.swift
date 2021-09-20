@@ -183,7 +183,7 @@ class URLBar: UIView {
         urlBarBorderView.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
         addSubview(urlBarBorderView)
 
-        urlBarBackgroundView.backgroundColor = .secondayButton
+        urlBarBackgroundView.backgroundColor = .locationBar
         urlBarBackgroundView.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
         urlBarBackgroundView.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
         urlBarBackgroundView.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)

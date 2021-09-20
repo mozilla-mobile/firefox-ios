@@ -16,7 +16,8 @@ class Toast {
             return
         }
 
-        let toast = GradientBackgroundView(colors: [UIColor.cfrFirst.cgColor, UIColor.cfrSecond.cgColor])
+        let toast = UIView()
+        toast.backgroundColor = .locationBar
         toast.alpha = 0
         toast.layer.cornerRadius = UIConstants.layout.toastMessageHeight / 2
         window.addSubview(toast)
