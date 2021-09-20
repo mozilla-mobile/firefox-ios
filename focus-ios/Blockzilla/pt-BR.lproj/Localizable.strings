@@ -131,7 +131,7 @@
 "Browser.copyAddressLabel" = "Copiar endereço";
 
 /* Toast displayed after a URL has been copied to the clipboard */
-"browser.copyAddressToast" = "URL copiado para a área de transferência";
+"browser.copyAddressToast" = "URL copiada para área de transferência";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Copiar";

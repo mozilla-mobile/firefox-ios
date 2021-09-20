@@ -485,7 +485,7 @@
 "ShortcutView.RemoveFromShortcuts" = "Ta bort från genvägar";
 
 /* Button to add a favorite URL to Siri. */
-"Siri.add" = "Lägg till";
+"Siri.add" = "Lägg till i Siri";
 
 /* Button to add a specified shortcut option to Siri. */
 "Siri.addTo" = "Lägg till i Siri";
