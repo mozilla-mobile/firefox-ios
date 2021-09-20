@@ -148,6 +148,7 @@
         "SyncUITests\/testSyncUIFromBrowserTabMenu()",
         "SyncUITests\/testTypeOnGivenFields()",
         "SyncUITests\/testUIFromSettings()",
+        "TabCounterTests",
         "ThirdPartySearchTest",
         "ToolbarTests",
         "TopTabsTest\/testAddTabFromContext()",
