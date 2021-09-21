@@ -82,12 +82,14 @@ class ShortcutView: UIView {
         }
     }
     
-    @objc private func didLongPress() {
-        let feedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
-        feedbackGenerator.prepare()
-        if let shortcut = self.shortcut {
-            CHHapticEngine.capabilitiesForHardware().supportsHaptics ? feedbackGenerator.impactOccurred() : AudioServicesPlaySystemSound(1519)
-            delegate?.shortcutLongPressed(shortcut: shortcut, shortcutView: self)
+    @objc private func didLongPress(sender: UILongPressGestureRecognizer) {
+        if sender.state == .began {
+            let feedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
+            feedbackGenerator.prepare()
+            if let shortcut = self.shortcut {
+                CHHapticEngine.capabilitiesForHardware().supportsHaptics ? feedbackGenerator.impactOccurred() : AudioServicesPlaySystemSound(1519)
+                delegate?.shortcutLongPressed(shortcut: shortcut, shortcutView: self)
+            }
         }
     }
 }
