@@ -264,6 +264,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
     func applicationWillResignActive(_ application: UIApplication) {
         toggleSplashView(hide: false)
         browserViewController.exitFullScreenVideo()
+        browserViewController.dismissActionSheet()
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
