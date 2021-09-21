@@ -467,7 +467,7 @@
 "ShareMenu.RequestDesktop" = "სრული საიტის მოთხოვნა";
 
 /* Text for the share menu option when a user wants to reload the site as a mobile device */
-"ShareMenu.RequestMobile" = "საიტი მობილურისთვის";
+"ShareMenu.RequestMobile" = "მობილურის საიტი";
 
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Chrome-ში გახსნა";
@@ -542,7 +542,7 @@
 "trackingProtection.moreSettings" = "დამატებითი პარამეტრები";
 
 /* label for social trackers. */
-"trackingProtection.socialTrackerLabel" = "სოც. ქსელის მეთვალყურე";
+"trackingProtection.socialTrackerLabel" = "სოცქსელის მეთვალყურე";
 
 /* Text for the status off from Tracking Protection. */
 "trackingProtection.statusOff" = "დაცვა ამჟამად გამორთულია";
