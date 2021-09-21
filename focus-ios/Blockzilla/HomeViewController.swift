@@ -144,7 +144,7 @@ class HomeViewController: UIViewController {
         }
     }
     
-    func updateUI(urlBarIsActive: Bool) {
+    func updateUI(urlBarIsActive: Bool, isBrowsing: Bool = false) {
         toolbar.isHidden = urlBarIsActive
 
         tipView.snp.remakeConstraints { make in
@@ -152,6 +152,9 @@ class HomeViewController: UIViewController {
             make.centerX.equalToSuperview()
             make.height.equalTo(UIConstants.layout.tipViewHeight)
 
+            if isBrowsing {
+                make.height.equalTo(0)
+            }
             if urlBarIsActive {
                 make.bottom.equalToSuperview()
             } else {

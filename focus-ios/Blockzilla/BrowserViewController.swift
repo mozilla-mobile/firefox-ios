@@ -1054,7 +1054,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidFocus(_ urlBar: URLBar) {
-        let isOnHomeView = homeViewController != nil
+        let isOnHomeView = !urlBar.inBrowsingMode
         overlayView.present(isOnHomeView: isOnHomeView)
         toggleURLBarBackground(isBright: false)
     }
@@ -1063,7 +1063,7 @@ extension BrowserViewController: URLBarDelegate {
         let shouldShowShortcuts = shortcutManager.numberOfShortcuts != 0
         shortcutsContainer.isHidden = !shouldShowShortcuts
         shortcutsBackground.isHidden = !shouldShowShortcuts || !urlBar.inBrowsingMode
-        homeViewController.updateUI(urlBarIsActive: true)
+        homeViewController.updateUI(urlBarIsActive: true, isBrowsing: urlBar.inBrowsingMode)
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {
             self.urlBarContainer.alpha = 1
             self.updateFindInPageVisibility(visible: false)
