@@ -309,6 +309,7 @@ extension TelemetryWrapper {
         case setting = "setting"
         case tab = "tab"
         case tabTray = "tab-tray"
+        case groupedTab = "grouped-tab"
         case trackingProtectionStatistics = "tracking-protection-statistics"
         case trackingProtectionSafelist = "tracking-protection-safelist"
         case trackingProtectionMenu = "tracking-protection-menu"
@@ -434,12 +435,24 @@ extension TelemetryWrapper {
         case inactiveTabCollapse = "inactivetab-collapse"
         case openRecentlyClosedList = "openRecentlyClosedList"
         case openRecentlyClosedTab = "openRecentlyClosedTab"
+        case tabGroupWithExtras = "tabGroupWithExtras"
+        case closeGroupedTab = "recordCloseGroupedTab"
     }
     
-    public enum EventExtraKey: String {
+    public enum EventExtraKey: String, CustomStringConvertible {
         case topSitePosition = "tilePosition"
         case topSiteTileType = "tileType"
         case pocketTilePosition = "pocketTilePosition"
+        
+        // Grouped Tab
+        case groupsWithTwoTabsOnly = "groupsWithTwoTabsOnly"
+        case groupsWithTwoMoreTab = "groupsWithTwoMoreTab"
+        case totalNumberOfGroups = "totalNumOfGroups"
+        case averageTabsInAllGroups = "averageTabsInAllGroups"
+        case totalTabsInAllGroups = "totalTabsInAllGroups"
+        var description: String {
+            return self.rawValue
+        }
     }
 
     public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue? = nil, extras: [String: Any]? = nil) {
@@ -645,6 +658,13 @@ extension TelemetryWrapper {
         case (.action, .tap, .inactiveTabTray, EventValue.openRecentlyClosedTab.rawValue, _):
             GleanMetrics.InactiveTabsTray.openRecentlyClosedTab.add()
             
+        // Tab Groups
+        case (.action, .view, .tabTray, EventValue.tabGroupWithExtras.rawValue, let extras):
+           let groupedTabExtras = GleanMetrics.Tabs.GroupedTabExtra.init(averageTabsInAllGroups: extras?["\(EventExtraKey.averageTabsInAllGroups)"] as? Int32, groupsTwoTabsOnly: extras?["\(EventExtraKey.groupsWithTwoTabsOnly)"] as? Int32, groupsWithMoreThanTwoTab: extras?["\(EventExtraKey.groupsWithTwoMoreTab)"] as? Int32, totalNumOfGroups: extras?["\(EventExtraKey.totalNumberOfGroups)"] as? Int32, totalTabsInAllGroups: extras?["\(EventExtraKey.totalTabsInAllGroups)"] as? Int32)
+            GleanMetrics.Tabs.groupedTab.record(groupedTabExtras)
+        case (.action, .tap, .groupedTab, EventValue.closeGroupedTab.rawValue, _):
+            GleanMetrics.InactiveTabsTray.openRecentlyClosedTab.add()
+    
         // Firefox Homepage
         case (.action, .tap, .firefoxHomepage, EventValue.yourLibrarySection.rawValue, let extras):
             if let panel = extras?[EventObject.libraryPanel.rawValue] as? String {

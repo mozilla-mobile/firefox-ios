@@ -150,6 +150,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
             tabsToDisplay.forEach {
                 self.dataStore.insert($0)
             }
+            self.recordGroupedTabTelemetry()
             self.collectionView.reloadData()
         }
     }
@@ -313,12 +314,6 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         }
     }
 
-    private func recordEventAndBreadcrumb(object: TelemetryWrapper.EventObject, method: TelemetryWrapper.EventMethod) {
-        let isTabTray = tabDisplayer as? GridTabViewController != nil
-        let eventValue = isTabTray ? TelemetryWrapper.EventValue.tabTray : TelemetryWrapper.EventValue.topTabs
-        TelemetryWrapper.recordEvent(category: .action, method: method, object: object, value: eventValue)
-    }
-
     // When using 'Close All', hide all the tabs so they don't animate their deletion individually
     func hideDisplayedTabs( completion: @escaping () -> Void) {
         let cells = collectionView.visibleCells
@@ -336,6 +331,29 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
                             completion()
                         })
     }
+    
+    private func recordEventAndBreadcrumb(object: TelemetryWrapper.EventObject, method: TelemetryWrapper.EventMethod) {
+        let isTabTray = tabDisplayer as? GridTabViewController != nil
+        let eventValue = isTabTray ? TelemetryWrapper.EventValue.tabTray : TelemetryWrapper.EventValue.topTabs
+        TelemetryWrapper.recordEvent(category: .action, method: method, object: object, value: eventValue)
+    }
+    
+    func recordGroupedTabTelemetry() {
+        if shouldEnableGroupedTabs, !isPrivate, let tabGroups = tabGroups, tabGroups.count > 0 {
+            let groupWithTwoTabs = tabGroups.filter { $0.value.count == 2 }.count
+            let groupsWithTwoMoreTab = tabGroups.filter { $0.value.count > 2 }.count
+            let tabsInAllGroup = tabsInAllGroups?.count ?? 0
+            let averageTabsInAllGroups = ceil(Double(tabsInAllGroup / tabGroups.count))
+            let groupTabExtras: [String: Int32] = [
+                "\(TelemetryWrapper.EventExtraKey.groupsWithTwoTabsOnly)": Int32(groupWithTwoTabs),
+                "\(TelemetryWrapper.EventExtraKey.groupsWithTwoMoreTab)": Int32(groupsWithTwoMoreTab),
+                "\(TelemetryWrapper.EventExtraKey.totalNumberOfGroups)": Int32(tabGroups.count),
+                "\(TelemetryWrapper.EventExtraKey.averageTabsInAllGroups)": Int32(averageTabsInAllGroups),
+                "\(TelemetryWrapper.EventExtraKey.totalTabsInAllGroups)": Int32(tabsInAllGroup),
+            ]
+            TelemetryWrapper.recordEvent(category: .action, method: .view, object: .tabTray, value: .tabGroupWithExtras, extras: groupTabExtras)
+        }
+    }
 }
 
 extension TabDisplayManager: UICollectionViewDataSource {
@@ -345,7 +363,7 @@ extension TabDisplayManager: UICollectionViewDataSource {
         }
         switch TabDisplaySection(rawValue: section) {
         case .groupedTabs:
-            return shouldEnableGroupedTabs ? 1 : 0
+            return shouldEnableGroupedTabs ? (isPrivate ? 0 : 1) : 0
         case .regularTabs:
             return dataStore.count
         case .inactiveTabs:
