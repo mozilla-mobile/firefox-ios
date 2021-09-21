@@ -43,12 +43,18 @@ struct FlaggableFeature {
 
     /// Returns the feature option represented as an Int. The `FeatureFlagManager` will
     /// convert it to the appropriate type.
-    var featureOptions: Int? {
-        if let optionsKey = featureOptionsKey, let existingOption = profile.prefs.intForKey(optionsKey) {
-            return Int(existingOption)
+    var featureOptions: String? {
+        if let optionsKey = featureOptionsKey, let existingOption = profile.prefs.stringForKey(optionsKey) {
+            return existingOption
         }
 
-        return nil
+        // Feature option defaults
+        switch featureID {
+        case .startAtHome:
+            return StartAtHomeSetting.afterFourHours.rawValue
+        default:
+            return nil
+        }
     }
 
     private var featureOptionsKey: String? {
@@ -57,20 +63,17 @@ struct FlaggableFeature {
     }
 
     // MARK: - Initializers
-    init(withID featureID: FeatureFlagName, and profile: Profile, enabledFor channels: [AppBuildChannel], withDefaultFeatureOption option: Int?) {
+    init(withID featureID: FeatureFlagName, and profile: Profile, enabledFor channels: [AppBuildChannel]) {
         self.featureID = featureID
         self.profile = profile
         self.buildChannels = channels
-        if let option = option {
-            updateFeatureOption(option)
-        }
     }
 
     // MARK: - Functions
     
     /// Allows fine grain control over a feature, by allowing to directly set the state to ON
     /// or OFF, and also set the features option as an Int
-    public func setFeatureTo(_ state: Bool, with option: Int? = nil) {
+    public func setFeatureTo(_ state: Bool, with option: String? = nil) {
         updateFeatureStateTo(state)
         updateFeatureOption(option)
     }
@@ -80,10 +83,9 @@ struct FlaggableFeature {
         profile.prefs.setBool(state, forKey: featureKey)
     }
 
-    private func updateFeatureOption(_ option: Int?) {
+    private func updateFeatureOption(_ option: String?) {
         guard let option = option, let optionsKey = featureOptionsKey else { return }
-        let optionState = Int32(option)
-        profile.prefs.setInt(optionState, forKey: optionsKey)
+        profile.prefs.setString(option, forKey: optionsKey)
     }
 
     /// Toggles a feature On or Off, and saves the status to UserDefaults.

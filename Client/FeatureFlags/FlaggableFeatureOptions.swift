@@ -9,12 +9,12 @@
 import Foundation
 
 /// This file contains enums that serve as options for flaggable features.
-/// Each should be set as an enum whose first value is the default setting for that feature
-/// Furthermore, each enum should conform to Int type and the FlaggableFeatureOptions protocol.
+/// Each should be set as an enum and should conform to String type and
+/// the FlaggableFeatureOptions protocol.
 
 protocol FlaggableFeatureOptions { }
 
-enum StartAtHomeSetting: Int, FlaggableFeatureOptions {
+enum StartAtHomeSetting: String, FlaggableFeatureOptions {
     case afterFourHours
     case always
     case never
