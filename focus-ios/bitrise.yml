@@ -171,7 +171,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
-        machine_type_id: standard
+        machine_type_id: g2.4core
 
 
   runFocus:
@@ -407,7 +407,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.5.x
-        machine_type_id: standard
+        machine_type_id: g2.4core
   L10nBuild:
     steps:
     - activate-ssh-key@4:
