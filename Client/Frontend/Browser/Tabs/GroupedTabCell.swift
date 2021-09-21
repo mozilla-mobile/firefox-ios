@@ -142,6 +142,7 @@ class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UI
     }
     
     func closeTab(tab: Tab) {
+        TelemetryWrapper.recordEvent(category: .action, method: .view, object: .groupedTab, value: .closeGroupedTab, extras: nil)
         delegate?.closeGroupTab(tab: tab)
     }
 }
