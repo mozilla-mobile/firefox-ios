@@ -170,10 +170,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         } else if host == "open-text" || isHttpScheme {
             let text = unescape(string: query["text"]) ?? ""
 
+            // If we are active then we can ask the BVC to open the new tab right away.
+            // Otherwise, we remember the URL and we open it in applicationDidBecomeActive.
             if application.applicationState == .active {
-                // If we are active then we can ask the BVC to open the new tab right away.
-                // Otherwise, we remember the URL and we open it in applicationDidBecomeActive.
-                browserViewController.openOverylay(text: text)
+                if let fixedUrl = URIFixup.getURL(entry: text) {
+                    browserViewController.submit(url: fixedUrl)
+                } else {
+                    browserViewController.submit(text: text)
+                }
             } else {
                 queuedString = text
             }
@@ -285,7 +289,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         } else if let text = queuedString {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.openedFromExtension, object: TelemetryEventObject.app)
 
-            browserViewController.openOverylay(text: text)
+            browserViewController.ensureBrowsingMode()
+            browserViewController.deactivateUrlBarOnHomeView()
+            browserViewController.dismissSettings()
+            browserViewController.dismissActionSheet()
+
+            if let fixedUrl = URIFixup.getURL(entry: text) {
+                browserViewController.submit(url: fixedUrl)
+            } else {
+                browserViewController.submit(text: text)
+            }
+
             queuedString = nil
         }
 
