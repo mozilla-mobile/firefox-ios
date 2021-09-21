@@ -28,7 +28,13 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
         let customizeFirefoxHomeSection = customizeFirefoxSettingSection()
         let customizeHomePageSection = customizeHomeSettingSection()
 
-        return [customizeFirefoxHomeSection, customizeHomePageSection]
+        // TODO: StartAtHome settings only show for English locale until we get translations.
+        let supportedLocales = ["en_US", "en_GB", "en_ZA", "en_CA"]
+        guard supportedLocales.contains(Locale.current.identifier),
+              let startAtHomeSection = setupStartAtHomeSection()
+        else { return [customizeFirefoxHomeSection, customizeHomePageSection] }
+
+        return [customizeFirefoxHomeSection, customizeHomePageSection, startAtHomeSection]
     }
 
     private func customizeHomeSettingSection() -> SettingSection {
@@ -63,16 +69,29 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
         var sectionItems = [Setting]()
 
         let isPocketEnabledDefault = Pocket.IslocaleSupported(Locale.current.identifier)
-        let pocketSetting = BoolSetting(prefs: profile.prefs, prefKey: PrefsKeys.ASPocketStoriesVisible, defaultValue: isPocketEnabledDefault, attributedTitleText: NSAttributedString(string: Strings.SettingsNewTabPocket))
-        let pocketSection = SettingSection(title: NSAttributedString(string: Strings.SettingsNewTabASTitle), footerTitle: NSAttributedString(string: Strings.SettingsNewTabPocketFooter), children: [pocketSetting])
+        let pocketSetting = BoolSetting(prefs: profile.prefs,
+                                        prefKey: PrefsKeys.ASPocketStoriesVisible,
+                                        defaultValue: isPocketEnabledDefault,
+                                        attributedTitleText: NSAttributedString(string: .SettingsCustomizeHomePocket))
 
-        // TODO: StartAtHome settings only show for English locale until we get translations.
-        let supportedLocales = ["en_US", "en_GB", "en_ZA", "en_CA"]
-        guard supportedLocales.contains(Locale.current.identifier),
-              let startAtHomeSection = setupStartAtHomeSection()
-        else { return [section, topsitesSection, pocketSection] }
+        let jumpBackInSetting = BoolSetting(with: .jumpBackIn,
+                                            titleText: NSAttributedString(string: .SettingsCustomizeHomeJumpBackIn))
 
-        return [section, topsitesSection, pocketSection, startAtHomeSection]
+        let recentlySavedSetting = BoolSetting(with: .recentlySaved,
+                                               titleText: NSAttributedString(string: .SettingsCustomizeHomeRecentlySaved))
+
+//        let recentlyVisitedSetting = BoolSetting(with: .recentlyVisited,
+//                                                 titleText: NSAttributedString(string: .FirefoxHomeJumpBackInSectionTitle))
+
+
+        sectionItems.append(TopSitesSettings(settings: self))
+        sectionItems.append(jumpBackInSetting)
+        sectionItems.append(recentlySavedSetting)
+//        sectionItems.append(recentlyVisitedSetting)
+        sectionItems.append(pocketSetting)
+
+        return SettingSection(title: NSAttributedString(string: Strings.SettingsTopSitesCustomizeTitle),
+                              children: sectionItems)
     }
 
     private func setupStartAtHomeSection() -> SettingSection? {

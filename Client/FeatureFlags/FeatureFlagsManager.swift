@@ -98,11 +98,6 @@ class FeatureFlagsManager {
         features[featureID]?.setFeatureTo(state, with: optionAsString)
     }
 
-    /// Retrieves a feature key for any specific feature, if it has one.
-    public func featureKey(for featureID: FeatureFlagName) -> String? {
-        return features[featureID]?.featureKey()
-    }
-
     /// Sets up features with default channel availablility. For ease of use, please add
     /// new features alphabetically.
     public func setupFeatures(with profile: Profile) {
