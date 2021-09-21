@@ -340,7 +340,7 @@ class URLBar: UIView {
         }
 
         urlText.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
+            make.centerY.equalToSuperview()
             make.leading.equalTo(shieldIcon.snp.trailing).offset(5)
 
             showLeftBarViewConstraints.append(make.left.equalToSuperview().constraint)
