@@ -192,6 +192,10 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     
     var hasRecentBookmarks = false
     var hasReadingListitems = false
+    var currentTab: Tab? {
+        let tabManager = BrowserViewController.foregroundBVC().tabManager
+        return tabManager.selectedTab
+    }
     var isRecentlySavedSectionEnabled: Bool {
         guard featureFlags.isFeatureActive(.recentlySaved) else { return false }
 
@@ -216,8 +220,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         collectionView.translatesAutoresizingMaskIntoConstraints = false
 
         collectionView?.addGestureRecognizer(longPressRecognizer)
-        collectionView?.addGestureRecognizer(tapGestureRecognizer)
-
+        currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false ? collectionView?.addGestureRecognizer(tapGestureRecognizer) : nil
+        
         let refreshEvents: [Notification.Name] = [.DynamicFontChanged, .HomePanelPrefsChanged, .DisplayThemeChanged]
         refreshEvents.forEach { NotificationCenter.default.addObserver(self, selector: #selector(reload), name: $0, object: nil) }
     }
@@ -321,7 +325,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     }
     
     override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode()
+        currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false ? BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode() : nil
     }
     
     @objc func dismissOverlayMode() {
