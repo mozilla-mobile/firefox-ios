@@ -14,6 +14,8 @@ import Foundation
 
 protocol FlaggableFeatureOptions { }
 
+enum NoOption: FlaggableFeatureOptions {}
+
 enum StartAtHomeSetting: String, FlaggableFeatureOptions {
     case afterFourHours
     case always

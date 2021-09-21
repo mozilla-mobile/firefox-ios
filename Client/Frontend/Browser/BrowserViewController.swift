@@ -372,6 +372,11 @@ class BrowserViewController: UIViewController {
 
         // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
         scrollController.showToolbars(animated: false)
+        shouldOpenHome()
+    }
+
+    private func shouldOpenHome() {
+        
     }
 
     override func viewDidLoad() {

@@ -559,7 +559,8 @@ class ToggleChronTabs: HiddenSetting, FeatureFlagsProtocol {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        featureFlags.toggle(.chronologicalTabs)
+        let currentStatus = featureFlags.isFeatureActive(.chronologicalTabs)
+        featureFlags.set(.chronologicalTabs, to: !currentStatus)
         updateCell(navigationController)
     }
 
@@ -578,7 +579,8 @@ class ToggleJumpBackInSection: HiddenSetting, FeatureFlagsProtocol {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        featureFlags.toggle(.jumpBackIn)
+        let currentStatus = featureFlags.isFeatureActive(.jumpBackIn)
+        featureFlags.set(.jumpBackIn, to: !currentStatus)
         updateCell(navigationController)
     }
 
@@ -616,7 +618,8 @@ class ToggleRecentlySavedSection: HiddenSetting, FeatureFlagsProtocol {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        featureFlags.toggle(.recentlySaved)
+        let currentStatus = featureFlags.isFeatureActive(.recentlySaved)
+        featureFlags.set(.recentlySaved, to: !currentStatus)
         updateCell(navigationController)
     }
 
@@ -635,7 +638,8 @@ class ToggleInactiveTabs: HiddenSetting, FeatureFlagsProtocol {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        featureFlags.toggle(.inactiveTabs)
+        let currentStatus = featureFlags.isFeatureActive(.inactiveTabs)
+        featureFlags.set(.inactiveTabs, to: !currentStatus)
         InactiveTabModel.hasRunInactiveTabFeatureBefore = false
         updateCell(navigationController)
     }
@@ -655,26 +659,8 @@ class ToggleGroupedTabs: HiddenSetting, FeatureFlagsProtocol {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        featureFlags.toggle(.groupedTabs)
-        updateCell(navigationController)
-    }
-
-    func updateCell(_ navigationController: UINavigationController?) {
-        let controller = navigationController?.topViewController
-        let tableView = (controller as? AppSettingsTableViewController)?.tableView
-        tableView?.reloadData()
-    }
-}
-
-class ToggleStartAtHome: HiddenSetting, FeatureFlagsProtocol {
-    override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureActive(.startAtHome) ? "OFF" : "ON"
-        return NSAttributedString(string: "Debug: Toggle Start at Home: \(toNewStatus)",
-                                  attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        featureFlags.toggle(.startAtHome)
+        let currentStatus = featureFlags.isFeatureActive(.groupedTabs)
+        featureFlags.set(.groupedTabs, to: !currentStatus)
         updateCell(navigationController)
     }
 

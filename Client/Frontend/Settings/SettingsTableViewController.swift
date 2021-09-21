@@ -235,7 +235,7 @@ class BoolSetting: Setting, FeatureFlagsProtocol {
     @objc func switchValueChanged(_ control: UISwitch) {
         if let featureFlagName = featureFlagName {
             guard let key = featureFlags.featureKey(for: featureFlagName) else { return }
-            featureFlags.toggle(featureFlagName)
+            featureFlags.set(featureFlagName, to: control.isOn)
             settingDidChange?(control.isOn)
             TelemetryWrapper.recordEvent(category: .action, method: .change, object: .setting, extras: ["pref": key as Any, "to": control.isOn])
 

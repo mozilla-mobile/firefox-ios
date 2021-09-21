@@ -88,16 +88,6 @@ struct FlaggableFeature {
         profile.prefs.setString(option, forKey: optionsKey)
     }
 
-    /// Toggles a feature On or Off, and saves the status to UserDefaults.
-    ///
-    /// Not all features are user togglable. If there exists no feature key - as defined
-    /// in the `featureKey()` function - with which to write to UserDefaults, then the
-    /// feature cannot be turned on/off and its state can only be set when initialized,
-    /// based on build channel.
-    public func toggle() {
-        updateFeatureStateTo(!isActive)
-    }
-
     public func featureKey() -> String? {
         switch featureID {
         case .chronologicalTabs:

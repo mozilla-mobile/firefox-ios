@@ -76,27 +76,26 @@ class FeatureFlagsManager {
         return features[featureID]?.featureKey()
     }
 
+
+    /// Main interface for setting a feature's state without options
+    public func set(_ featureID: FeatureFlagName, to state: Bool) {
+        let nilItem: NoOption? = nil
+        set(featureID, to: state, with: nilItem)
+    }
+
     /// Main interface for setting a feature's state and options. Options are enums of
     /// `FlaggableFeatureOptions` type and also conform to Int.
-    public func set<T:FlaggableFeatureOptions>(_ featureID: FeatureFlagName, to state: Bool, with option: T? = nil) {
-        var optionAsInt: String?
+    public func set<T:FlaggableFeatureOptions>(_ featureID: FeatureFlagName, to state: Bool, with option: T?) {
+        var optionAsString: String?
 
         switch featureID {
         case .startAtHome:
-            if let option = option as? StartAtHomeSetting { optionAsInt = option.rawValue }
+            if let option = option as? StartAtHomeSetting { optionAsString = option.rawValue }
         default:
-            optionAsInt = nil
+            optionAsString = nil
         }
 
-        features[featureID]?.setFeatureTo(state, with: optionAsInt)
-    }
-
-    /// Toggles the feature on/off, depending on its current status AND whether or not it is
-    /// a feature that can be saved to disk. For more information, see `FlaggableFeature`
-    /// Should only be used with a feature that has no options. Otherwise, the option will not
-    /// not change, while the feature will be toggled.
-    public func toggle(_ featureID: FeatureFlagName) {
-        features[featureID]?.toggle()
+        features[featureID]?.setFeatureTo(state, with: optionAsString)
     }
 
     /// Sets up features with default channel availablility. For ease of use, please add

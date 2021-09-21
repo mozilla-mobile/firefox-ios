@@ -30,16 +30,15 @@ class TabManagerStore: FeatureFlagsProtocol {
     var isRestoringTabs: Bool {
         return lockedForReading
     }
-    
+
     var shouldOpenHome: Bool {
         let isColdLaunch = NSUserDefaultsPrefs(prefix: "profile").boolForKey("isColdLaunch")
         guard let coldLaunch = isColdLaunch, featureFlags.isFeatureActive(.startAtHome) else { return false }
         guard let setting: StartAtHomeSetting = featureFlags.featureOption(.startAtHome) else { return false }
 
         let lastActiveTimestamp = UserDefaults.standard.object(forKey: "LastActiveTimestamp") as? Date ?? Date()
-        let dateComponents = Calendar.current.dateComponents([.hour], from: lastActiveTimestamp, to: Date())
+        let dateComponents = Calendar.current.dateComponents([.hour, .minute, .second], from: lastActiveTimestamp, to: Date())
 
-        // Measure in hours
         var timeSinceLastActivity: Int
         var timeToOpenNewHome: Int
         switch setting {
@@ -48,13 +47,14 @@ class TabManagerStore: FeatureFlagsProtocol {
             timeToOpenNewHome = 4
 
         case .always:
+            // ROUX: this needs to be MINUTES. Currently seconds for testing
             timeSinceLastActivity = dateComponents.second ?? 0
-            timeToOpenNewHome = 0
+            timeToOpenNewHome = 5
 
         case .never: return false // should never get here, but the switch must be exhaustive
         }
 
-        return timeSinceLastActivity > timeToOpenNewHome || coldLaunch
+        return timeSinceLastActivity >= timeToOpenNewHome || coldLaunch
     }
 
     var hasTabsToRestoreAtStartup: Bool {
@@ -85,7 +85,7 @@ class TabManagerStore: FeatureFlagsProtocol {
                 }
             }
         }
-        
+
         // Clean up any screenshots that are no longer associated with a tab.
         _ = imageStore?.clearExcluding(savedUUIDs)
         return savedTabs.isEmpty ? nil : savedTabs
@@ -96,7 +96,7 @@ class TabManagerStore: FeatureFlagsProtocol {
             imageStore?.put(uuidString, image: screenshot)
         }
     }
-    
+
     // Async write of the tab state. In most cases, code doesn't care about performing an operation
     // after this completes. Deferred completion is called always, regardless of Data.write return value.
     // Write failures (i.e. due to read locks) are considered inconsequential, as preserveTabs will be called frequently.
@@ -116,14 +116,14 @@ class TabManagerStore: FeatureFlagsProtocol {
 
         archiver.encode(savedTabs, forKey: "tabs")
         archiver.finishEncoding()
-        
+
         let simpleTabs = SimpleTab.convertToSimpleTabs(savedTabs)
-        
+
 
         let result = Success()
         writeOperation = DispatchWorkItem {
             let written = tabStateData.write(toFile: path, atomically: true)
-            
+
             SimpleTab.saveSimpleTab(tabs: simpleTabs)
             // Ignore write failure (could be restoring).
             log.debug("PreserveTabs write ok: \(written), bytes: \(tabStateData.length)")
@@ -156,10 +156,11 @@ class TabManagerStore: FeatureFlagsProtocol {
         }
 
         var tabToSelect: Tab?
+
         var fxHomeTab: Tab?
         var customHomeTab: Tab?
         let wasLastSessionPrivate = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
-        
+
         for savedTab in savedTabs {
             // Provide an empty request to prevent a new tab from loading the home screen
             var tab = tabManager.addTab(flushToDisk: false, zombie: true, isPrivate: savedTab.isPrivate)
@@ -167,24 +168,31 @@ class TabManagerStore: FeatureFlagsProtocol {
             if savedTab.isSelected {
                 tabToSelect = tab
             }
-            
+
             // select Home Tab for correct previous private / regular session
             if tab.isPrivate == wasLastSessionPrivate {
                 fxHomeTab = tab.isFxHomeTab ? tab : nil
             }
-            
+
             customHomeTab = tab.isCustomHomeTab ? tab : nil
         }
 
         if tabToSelect == nil {
             tabToSelect = tabManager.tabs.first(where: { $0.isPrivate == false })
         }
-        
+
+        return tabToSelect
+    }
+
+    func shouldOpenHomeWith(tabManager: TabManager) -> Tab? {
+        var fxHomeTab: Tab?
+        var customHomeTab: Tab?
+
         if shouldOpenHome {
             let page = NewTabAccessors.getHomePage(prefs)
             let customUrl = HomeButtonHomePageAccessors.getHomePage(prefs)
             let homeUrl = URL(string: "internal://local/about/home")
-            
+
             if page == .homePage, let customUrl = customUrl {
                 return customHomeTab ?? tabManager.addTab(URLRequest(url: customUrl))
             } else if page == .topSites, let homeUrl = homeUrl {
@@ -193,12 +201,9 @@ class TabManagerStore: FeatureFlagsProtocol {
                 home.url = homeUrl
                 return home
             }
-            else {
-                tabToSelect = tabManager.addTab()
-            }
         }
-        
-        return tabToSelect
+
+        return tabManager.selectedTab
     }
 
     func clearArchive() {

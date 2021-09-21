@@ -54,7 +54,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
            ]
 
         generalSettings.insert(SiriPageSetting(settings: self), at: 5)
-        
+
 
         let accountChinaSyncSetting: [Setting]
         if !AppInfo.isChinaEdition {
@@ -77,13 +77,13 @@ class AppSettingsTableViewController: SettingsTableViewController {
                         titleText: Strings.SettingsShowLinkPreviewsTitle,
                         statusText: Strings.SettingsShowLinkPreviewsStatus)
         ]
-        
+
         if #available(iOS 14.0, *) {
             settings += [
                 SettingSection(footerTitle: NSAttributedString(string: String.DefaultBrowserCardDescription), children: [DefaultBrowserSetting()])
             ]
         }
-        
+
         let accountSectionTitle = NSAttributedString(string: Strings.FxAFirefoxAccount)
 
         let footerText = !profile.hasAccount() ? NSAttributedString(string: Strings.FxASyncUsageDetails) : nil
