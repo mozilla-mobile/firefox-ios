@@ -8,7 +8,7 @@ class UserAgentTest: BaseTestCase {
 
     func testSignInWithGoogle() {
         loadWebPage("https://getpocket.com/")
-        let btn = app.links["Sign up with Google"]
+        let btn = app.links["Sign up with Google"].firstMatch
         waitForExistence(btn)
         btn.tap()
         waitForWebPageLoad()

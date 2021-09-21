@@ -20,14 +20,17 @@ class AsianLocaleTest: BaseTestCase {
 		// Enter 'mozilla' on the search field
 		search(searchWord: "모질라")
         app.buttons["URLBar.deleteButton"].tap()
+        dismissURLBarFocused()
         checkForHomeScreen()
 
 		search(searchWord: "モジラ")
         app.buttons["URLBar.deleteButton"].tap()
+        dismissURLBarFocused()
         checkForHomeScreen()
 
 		search(searchWord: "因特網")
         app.buttons["URLBar.deleteButton"].tap()
+        dismissURLBarFocused()
         checkForHomeScreen()
 	}
 
