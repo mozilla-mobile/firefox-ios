@@ -14,7 +14,7 @@ struct PhotonActionSheetUX {
     static let BorderColor = UIConstants.Photon.Grey30
     static let CornerRadius: CGFloat = 10
     static let SiteImageViewSize = 52
-    static let IconSize: CGFloat = 24
+    static let IconSize = CGSize(width: 24, height: 24)
     static let SiteHeaderName  = "PhotonActionSheetSiteHeaderView"
     static let TitleHeaderName = "PhotonActionSheetTitleHeaderView"
     static let CloseButtonHeight: CGFloat  = 56

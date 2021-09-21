@@ -17,7 +17,7 @@ struct PhotonActionSheetCellUX {
     static let CellSideOffset = 20
     static let TitleLabelOffset = 10
     static let CellTopBottomOffset = 12
-    static let StatusIconSize: CGFloat = 24
+    static let StatusIconSize = 24
     static let SelectedOverlayColor = UIColor(rgb: 0x5D5F79)
     static let CornerRadius: CGFloat = 3
 }
@@ -140,7 +140,7 @@ class PhotonActionSheetCell: UITableViewCell {
         selectionStyle = .none
         
         if let iconName = action.iconString, let image = UIImage(named: iconName) {
-            statusIcon.image = image.createScaled(targetSize: PhotonActionSheetUX.IconSize)
+            statusIcon.image = image.createScaled(size: PhotonActionSheetUX.IconSize)
             if statusIcon.superview == nil {
                 if action.iconAlignment == .right {
                     stackView.addArrangedSubview(statusIcon)
