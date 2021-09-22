@@ -7,14 +7,17 @@ import Foundation
 class FirefoxHomeJumpBackInViewModel {
 
     // MARK: - Properties
+    var options = [Any]()
     var jumpableTabs = [Tab]()
     private var recentTabs = [Tab]()
 
     var layoutVariables: JumpBackInLayoutVariables
     var tabManager: TabManager
+    var profile: Profile
 
     init() {
         self.tabManager = BrowserViewController.foregroundBVC().tabManager
+        self.profile = BrowserViewController.foregroundBVC().profile
         self.layoutVariables = JumpBackInLayoutVariables(columns: 1, scrollDirection: .vertical, maxItemsToDisplay: 2)
     }
 
@@ -51,5 +54,8 @@ class FirefoxHomeJumpBackInViewModel {
     private func configureData() {
         recentTabs.removeAll()
         recentTabs = tabManager.recentlyAccessedNormalTabs
+        let _ = TabGroupsManager.getTabGroups(profile: profile, tabs: recentTabs) { groups, tabs in
+            print("RAWRGABLARGH")
+        }
     }
 }
