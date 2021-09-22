@@ -83,13 +83,18 @@ class FxHomeJumpBackInCollectionCell: UICollectionViewCell {
 extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         viewModel.updateDataAnd(layoutVariables)
-        return viewModel.jumpableTabs.count
+        return viewModel.jumpList.itemsToDisplay
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: JumpBackInCell.cellIdentifier, for: indexPath) as! JumpBackInCell
 
-        if let item = viewModel.jumpableTabs[safe: indexPath.row] {
+        if indexPath.row == viewModel.jumpList.itemsToDisplay - 1, let group = viewModel.jumpList.groups {
+
+            fatalError("ON NOES!")
+
+        } else {
+            let item = viewModel.jumpList.tabs[indexPath.row]
             let itemURL = item.url?.absoluteString ?? ""
             let site = Site(url: itemURL, title: item.displayTitle)
 
@@ -109,7 +114,11 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
 
 extension FxHomeJumpBackInCollectionCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let tab = viewModel.jumpableTabs[safe: indexPath.row] {
+        if indexPath.row == viewModel.jumpList.itemsToDisplay - 1, let group = viewModel.jumpList.groups {
+            fatalError("ON NOES!")
+
+        } else {
+            let tab = viewModel.jumpList.tabs[indexPath.row]
             viewModel.switchTo(tab)
         }
     }
@@ -155,6 +164,7 @@ private struct JumpBackInCellUX {
     static let heroImageDimension: CGFloat = 24
 }
 
+// MARK: - JumpBackInCell
 /// A cell used in FxHomeScreen's Jump Back In section.
 class JumpBackInCell: UICollectionViewCell {
 

@@ -4,12 +4,33 @@
 
 import Foundation
 
-class FirefoxHomeJumpBackInViewModel {
+fileprivate MaximumNumberOfGroups: Bool = 1
+
+struct JumpList {
+    let groups: [String: [Tab]]?
+    let tabs: [Tab]
+    var itemsToDisplay: Int {
+        get {
+            var count = 0
+
+            // This should only be one, but, implementing it like thing in case
+            // product wants to include more groups in JumpBackIn in the future,
+            // we don't really have to touch this code
+            if let groupCount = groups?.count {
+                count += groupCount
+            }
+
+            count += tabs.count
+
+            return count
+        }
+    }
+}
+
+class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
 
     // MARK: - Properties
-    var options = [Any]()
-    var jumpableTabs = [Tab]()
-    private var recentTabs = [Tab]()
+    var jumpList = JumpList(groups: nil, tabs: [Tab]())
 
     var layoutVariables: JumpBackInLayoutVariables
     var tabManager: TabManager
@@ -23,7 +44,7 @@ class FirefoxHomeJumpBackInViewModel {
 
     public func updateDataAnd(_ layoutVariables: JumpBackInLayoutVariables) {
         self.layoutVariables = layoutVariables
-        loadItems()
+        updateJumpListData()
     }
 
     public func switchTo(_ tab: Tab) {
@@ -34,28 +55,50 @@ class FirefoxHomeJumpBackInViewModel {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .firefoxHomepage, value: .jumpBackInSectionTabOpened)
     }
 
-    // In the future, we may add `currentlyPlayingMedia` tabs to the Jump Back In section.
-    // Here, we consolidate all sources into one array. Additional logic will be required
-    // to determine which tabs to show when multiple tab sources will be put together.
-    private func loadItems() {
-        configureData()
-        var items = [Tab]()
-
-        items.append(contentsOf: recentTabs)
-
-        jumpableTabs.removeAll()
-
-        for tab in items {
-            jumpableTabs.append(tab)
-            if jumpableTabs.count >= layoutVariables.maxItemsToDisplay { break }
+    private func updateJumpListData() {
+        if featureFlags.isFeatureActive(.groupedTabs) {
+            TabGroupsManager.getTabGroups(profile: profile,
+                                          tabs: tabManager.recentlyAccessedNormalTabs) { groups, filteredActiveTabs in
+                self.jumpList = self.createJumpList(from: filteredActiveTabs, and: groups)
+            }
+        } else {
+            self.jumpList = createJumpList(from: tabManager.recentlyAccessedNormalTabs)
         }
     }
 
-    private func configureData() {
-        recentTabs.removeAll()
-        recentTabs = tabManager.recentlyAccessedNormalTabs
-        let _ = TabGroupsManager.getTabGroups(profile: profile, tabs: recentTabs) { groups, tabs in
-            print("RAWRGABLARGH")
+    private func createJumpList(from tabs: [Tab], and groups: [String: [Tab]]? = nil) -> JumpList {
+        let recentGroup = filter(groups: groups)
+        let groupCount = recentGroup != nil ? 1 : 0
+        let recentTabs = filter(tabs: tabs, usingGroupCount: groupCount)
+
+        return JumpList(groups: recentGroup, tabs: recentTabs)
+    }
+
+    private func filter(groups: [String: [Tab]]?) -> [String: [Tab]]? {
+        var recentGroup: [String: [Tab]]? = nil
+
+        if let groups = groups {
+            for group in groups {
+
+            }
+            // use Maximum number of groups
+            print(groups)
+            recentGroup = nil
         }
+
+        return recentGroup
+    }
+
+    private func filter(tabs: [Tab], usingGroupCount groupCount: Int) -> [Tab] {
+        var recentTabs = [Tab]()
+        let maxItemCount = layoutVariables.maxItemsToDisplay - groupCount
+
+        for tab in tabs {
+            recentTabs.append(tab)
+            // We are only showing one group in Jump Back in, so adjust count accordingly
+            if recentTabs.count == maxItemCount { break }
+        }
+
+        return recentTabs
     }
 }
