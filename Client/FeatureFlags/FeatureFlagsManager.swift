@@ -20,6 +20,7 @@ enum FeatureFlagName: String, CaseIterable {
     case groupedTabs
     case jumpBackIn
     case nimbus
+    case pullToRefresh
     case recentlySaved
     case shakeToRestore
     case startAtHome
@@ -80,6 +81,9 @@ class FeatureFlagsManager {
         /// `Experiments.shared` provides access to Nimbus. If false, it is a dummy object.
         let nimbus = FlaggableFeature(withID: .nimbus, and: profile, enabledFor: [.release, .beta, .developer])
         features[.nimbus] = nimbus
+        
+        let pullToRefresh = FlaggableFeature(withID: .pullToRefresh, and: profile, enabledFor: [.beta, .developer])
+        features[.pullToRefresh] = pullToRefresh
 
         let recentlySaved = FlaggableFeature(withID: .recentlySaved, and: profile, enabledFor: [.beta, .developer])
         features[.recentlySaved] = recentlySaved
