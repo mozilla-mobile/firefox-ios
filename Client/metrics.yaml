@@ -1220,6 +1220,18 @@ tabs:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-01-01"
+  pull_to_refresh:
+    type: counter
+    description: |
+      Record the number of times a user pulls down
+      on a page to reload.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3166
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9136
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-01-01"
 
 # Theme metrics
 theme:
