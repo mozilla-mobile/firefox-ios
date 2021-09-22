@@ -24,8 +24,10 @@ class TabGroupsManager {
             
             // 1. Build serch term metadata group
             for term in searchTerms {
-                let elements = val.filter({ $0.key.searchTerm == term })
-                searchTermMetaDataGroup[term!] = elements
+                if let term = term {
+                    let elements = val.filter({ $0.key.searchTerm == term })
+                    searchTermMetaDataGroup[term] = elements
+                }
             }
             
             var urlGroupData: [String: [URL]] = [:]
@@ -88,8 +90,10 @@ class TabGroupsManager {
             
             // 1. Build serch term metadata group
             for term in searchTerms {
-                let elements = val.filter({ $0.key.searchTerm == term })
-                searchTermMetaDataGroup[term!] = elements
+                if let term = term {
+                    let elements = val.filter({ $0.key.searchTerm == term })
+                    searchTermMetaDataGroup[term] = elements
+                }
             }
             
             var tabGroupData: [String: [Tab]] = [:]
