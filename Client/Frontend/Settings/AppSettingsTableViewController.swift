@@ -144,6 +144,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 ToggleChronTabs(settings: self),
                 ToggleJumpBackInSection(settings: self),
                 ToggleRecentlySavedSection(settings: self),
+                TogglePullToRefresh(settings: self),
                 ToggleStartAtHome(settings: self),
                 ToggleInactiveTabs(settings: self),
                 ToggleGroupedTabs(settings: self),

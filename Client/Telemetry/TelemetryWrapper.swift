@@ -280,6 +280,7 @@ extension TelemetryWrapper {
         case foreground = "foreground"
         case open = "open"
         case press = "press"
+        case pull = "pull"
         case scan = "scan"
         case share = "share"
         case tap = "tap"
@@ -386,6 +387,7 @@ extension TelemetryWrapper {
         case recentlySavedBookmarkImpressions = "recently-saved-bookmark-impressions"
         case recentlySavedReadingItemImpressions = "recently-saved-reading-items-impressions"
         case inactiveTabTray = "inactiveTabTray"
+        case reload = "reload"
     }
 
     public enum EventValue: String {
@@ -511,6 +513,8 @@ extension TelemetryWrapper {
             GleanMetrics.Tabs.openTabTray.record()
         case (.action, .close, .tabTray, _, _):
             GleanMetrics.Tabs.closeTabTray.record()
+        case(.action, .pull, .reload, _, _):
+            GleanMetrics.Tabs.pullToRefresh.add()
         // Settings Menu
         case (.action, .open, .settingsMenuSetAsDefaultBrowser, _, _):
             GleanMetrics.SettingsMenu.setAsDefaultBrowserPressed.add()

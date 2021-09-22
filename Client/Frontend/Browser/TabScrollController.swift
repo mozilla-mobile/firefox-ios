@@ -7,7 +7,7 @@ import SnapKit
 
 private let ToolbarBaseAnimationDuration: CGFloat = 0.2
 
-class TabScrollingController: NSObject {
+class TabScrollingController: NSObject, FeatureFlagsProtocol {
     enum ScrollDirection {
         case up
         case down
@@ -28,6 +28,7 @@ class TabScrollingController: NSObject {
         didSet {
             self.scrollView?.addGestureRecognizer(panGesture)
             scrollView?.delegate = self
+            featureFlags.isFeatureActive(.pullToRefresh) ? configureRefreshControl() : nil
         }
     }
 
@@ -84,6 +85,17 @@ class TabScrollingController: NSObject {
 
     override init() {
         super.init()
+    }
+    
+    private func configureRefreshControl() {
+        scrollView?.refreshControl = UIRefreshControl()
+        scrollView?.refreshControl?.addTarget(self, action: #selector(reload), for: .valueChanged)
+    }
+    
+    @objc private func reload() {
+        guard let tab = tab else { return }
+        tab.reloadPage()
+        TelemetryWrapper.recordEvent(category: .action, method: .pull, object: .reload)
     }
 
     func showToolbars(animated: Bool, completion: ((_ finished: Bool) -> Void)? = nil) {

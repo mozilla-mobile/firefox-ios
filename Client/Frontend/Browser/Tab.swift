@@ -610,7 +610,12 @@ class Tab: NSObject {
             restore(webView)
         }
     }
-
+    
+    @objc func reloadPage() {
+        reload()
+        self.webView?.scrollView.refreshControl?.endRefreshing()
+    }
+    
     func addContentScript(_ helper: TabContentScript, name: String) {
         contentScriptManager.addContentScript(helper, name: name, forTab: self)
     }
