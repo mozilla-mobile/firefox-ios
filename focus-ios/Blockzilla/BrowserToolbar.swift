@@ -9,28 +9,25 @@ class BrowserToolbar: UIView {
     let toolset = BrowserToolset()
     private let backgroundLoading = GradientBackgroundView()
     private let backgroundDark = UIView()
-    private let backgroundBright = GradientBackgroundView(alpha: 0.2, background: UIConstants.colors.background)
+    private let backgroundBright = UIView()
     private let stackView = UIStackView()
 
     init() {
         super.init(frame: CGRect.zero)
 
         let background = UIView()
-        background.backgroundColor = UIConstants.colors.background
+        background.backgroundColor = .foundation
         addSubview(background)
 
         addSubview(backgroundLoading)
         addSubview(backgroundDark)
 
-        backgroundDark.backgroundColor = UIConstants.colors.background
+        backgroundDark.backgroundColor = .foundation
+        backgroundBright.backgroundColor = .foundation
 
         backgroundBright.isHidden = true
         backgroundBright.alpha = 0
         background.addSubview(backgroundBright)
-
-        let borderView = UIView()
-        borderView.backgroundColor = UIConstants.Photon.Grey70
-        addSubview(borderView)
 
         stackView.distribution = .fillEqually
 
@@ -40,11 +37,6 @@ class BrowserToolbar: UIView {
         stackView.addArrangedSubview(toolset.contextMenuButton)
         addSubview(stackView)
 
-        borderView.snp.makeConstraints { make in
-            make.top.leading.trailing.equalTo(self)
-            make.height.equalTo(1)
-        }
-
         stackView.snp.makeConstraints { make in
             make.top.right.left.equalTo(self)
             make.height.equalTo(UIConstants.layout.browserToolbarHeight)
@@ -52,8 +44,7 @@ class BrowserToolbar: UIView {
         }
 
         background.snp.makeConstraints { make in
-            make.top.equalTo(borderView.snp.bottom)
-            make.leading.trailing.bottom.equalTo(self)
+            make.top.leading.trailing.bottom.equalTo(self)
         }
 
         backgroundDark.snp.makeConstraints { make in
