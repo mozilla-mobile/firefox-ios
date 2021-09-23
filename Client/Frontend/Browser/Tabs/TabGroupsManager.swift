@@ -21,11 +21,13 @@ class TabGroupsManager {
     ///
     /// - Parameters:
     ///   - profile: The user's `Profile` info
-    ///   - items: List of items we want to make the groups from. This is a generic type and currently only supports `Tab` TODO: and `URL`
+    ///   - items: List of items we want to make the groups from. This is a generic type and currently only supports `Tab` and `URL`
     ///   - ordering: Order in which we want to return groups, `.orderedAscending` or `.orderedDescending`. `.orderedSame` is also possible, but will return the exact order of the group that was provided. Note: this does not affect the groups' items, which will alway return in ascending order.
     ///   - completion: completion handler that contains `[ASGroup<T>]`  dictionary and a filteredItems list, `[T]`, which is comprised of items from the original input that are not part of a group.
     static func getGroups<T: Equatable>(with profile: Profile, from items: [T], using ordering: ComparisonResult, completion: @escaping ([ASGroup<T>]?, _ filteredItems: [T]) -> Void) {
-        guard (items is [Tab] || items is [URL]) else { return completion(nil, [T]()) }
+//        ROUX TODO: when URL support is added, fix check
+//        guard (items is [Tab] || items is [URL]) else { return completion(nil, [T]()) }
+        guard (items is [Tab]) else { return completion(nil, [T]()) }
 
         let lastTwoWeek = Int64(Date().lastTwoWeek.timeIntervalSince1970)
         profile.places.getHistoryMetadataSince(since: lastTwoWeek).uponQueue(.main) { result in
