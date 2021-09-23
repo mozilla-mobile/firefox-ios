@@ -4,7 +4,7 @@
 
 import Foundation
 
-fileprivate MaximumNumberOfGroups: Bool = 1
+fileprivate let MaximumNumberOfGroups: Int = 1
 
 struct JumpList {
     let groups: [String: [Tab]]?
