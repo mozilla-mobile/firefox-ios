@@ -82,7 +82,7 @@ class FeatureFlagsManager {
         let nimbus = FlaggableFeature(withID: .nimbus, and: profile, enabledFor: [.release, .beta, .developer])
         features[.nimbus] = nimbus
         
-        let pullToRefresh = FlaggableFeature(withID: .pullToRefresh, and: profile, enabledFor: [.beta, .developer])
+        let pullToRefresh = FlaggableFeature(withID: .pullToRefresh, and: profile, enabledFor: [.release ,.beta, .developer])
         features[.pullToRefresh] = pullToRefresh
 
         let recentlySaved = FlaggableFeature(withID: .recentlySaved, and: profile, enabledFor: [.beta, .developer])
