@@ -997,12 +997,6 @@
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "ਪਰਦੇਦਾਰੀ ਦੀ ਨੀਤੀ";
 
-/* value for label to indicate user is on an unencrypted website */
-"ProtectionStatusSheet.InsecureConnection" = "ਨਾ-ਸੁਰੱਖਿਅਤ ਕਨੈਕਸ਼ਨ";
-
-/* value for label to indicate user is on a secure ssl connection */
-"ProtectionStatusSheet.SecureConnection" = "ਸੁਰੱਖਿਅਤ ਕਨੈਕਸ਼ਨ";
-
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "ਤੁਰੰਤ-ਖੋਜ ਇੰਜਣ";
 

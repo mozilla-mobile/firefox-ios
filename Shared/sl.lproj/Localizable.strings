@@ -40,6 +40,9 @@
 /* The description of a highlight if it is a site the user has visited */
 "ActivityStream.Highlights.Visited" = "Obiskano";
 
+/* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
+"ActivityStream.JumpBackIn.SectionTitle" = "Skoči nazaj";
+
 /* A string used to signify the start of the Recently Saved section in Home Screen. */
 "ActivityStream.Library.Title" = "Nedavno shranjeno";
 
@@ -547,6 +550,9 @@
 /* Title for the Synced Tabs Cell in the History Panel */
 "HistoryPanel.SyncedTabsCell.Title" = "Sihnronizirane naprave";
 
+/* Accessibility label for the tab toolbar indicating the Home button. */
+"Home" = "Domov";
+
 /* Button cancelling changes setting the home page for the first time. */
 "HomePage.Set.Dialog.Cancel" = "Prekliči";
 
@@ -649,6 +655,9 @@
 /* Toggle logins syncing setting */
 "Logins" = "Prijave";
 
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title" = "Vzemite gesla s seboj";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Spremenjeno";
 
@@ -691,6 +700,12 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Filter";
 
+/* Label shown when there are no logins to list */
+"LoginsList.NoLoginsFound.Description" = "Tukaj se bodo prikazale shranjene prijave. Če ste prijave shranili v Firefox na drugi napravi, se prijavite v Firefox Račun.";
+
+/* Label shown when there are no logins saved */
+"LoginsList.NoLoginsFound.Title" = "Ni prijav";
+
 /* Label that appears after the search if there are no logins matching the search */
 "LoginsList.NoMatchingResult.Subtitle" = "Ni rezultatov, ki bi ustrezali vašemu iskanju.";
 
@@ -702,6 +717,9 @@
 
 /* Placeholder text for search field */
 "LoginsList.Search.Placeholder" = "Iskanje prijav";
+
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "Izberite geslo, ki ga želite izpolniti";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "SHRANJENE PRIJAVE";
@@ -815,6 +833,9 @@
 
 /* Title on tracking protection menu for blocked items. */
 "Menu.TrackingProtection.BlockedTitle" = "Zavrnjeno";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"Menu.TrackingProtection.Details.Verifier" = "Overil %@";
 
 /* Message in menu when no trackers blocked. */
 "Menu.TrackingProtection.NoTrackersBlockedTitle" = "Firefox na strani ni zaznal znanih sledilcev.";
@@ -985,11 +1006,11 @@
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Politika zasebnosti";
 
-/* value for label to indicate user is on an unencrypted website */
-"ProtectionStatusSheet.InsecureConnection" = "Povezava ni varna";
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "Povezava ni varna";
 
-/* value for label to indicate user is on a secure ssl connection */
-"ProtectionStatusSheet.SecureConnection" = "Varna povezava";
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "Povezava je varna";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Hitri iskalniki";

@@ -44,7 +44,7 @@
 "Menu.OpenHomePageAction.Title" = "მთავარი";
 
 /* Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. Please keep as short as possible, <15 chars of space available. */
-"Menu.OpenReadingListAction.AccessibilityLabel.v2" = "წასაკითხი სია";
+"Menu.OpenReadingListAction.AccessibilityLabel.v2" = "წასაკითხი";
 
 /* Label for the button, displayed in the menu, used to open the Settings menu. */
 "Menu.OpenSettingsAction.Title" = "პარამეტრები";
@@ -86,5 +86,5 @@
 "Menu.ViewDekstopSiteAction.Title" = "სრული საიტი";
 
 /* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
-"Menu.ViewMobileSiteAction.Title" = "საიტი მობილურისთვის";
+"Menu.ViewMobileSiteAction.Title" = "მობილურის საიტი";
 
