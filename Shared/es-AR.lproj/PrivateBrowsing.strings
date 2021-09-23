@@ -2,7 +2,7 @@
 "Close Private Tabs" = "Cerrar pestañas privadas";
 
 /* Context menu option for opening a link in a new private tab */
-"ContextMenu.OpenInNewPrivateTabButtonTitle" = "Abrir en Nueva pestaña privada";
+"ContextMenu.OpenInNewPrivateTabButtonTitle" = "Abrir en nueva pestaña privada";
 
 /* Description text displayed when there are no open tabs while in private mode */
 "Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox no recordará tu historial ni tus cookies, pero se guardarán los nuevos marcadores.";

@@ -550,6 +550,9 @@
 /* Title for the Synced Tabs Cell in the History Panel */
 "HistoryPanel.SyncedTabsCell.Title" = "Синхронизируемые устройства";
 
+/* Accessibility label for the tab toolbar indicating the Home button. */
+"Home" = "Домой";
+
 /* Button cancelling changes setting the home page for the first time. */
 "HomePage.Set.Dialog.Cancel" = "Отмена";
 
@@ -700,6 +703,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "Здесь будут отображаться сохранённые логины. Если вы сохранили свои логины в Firefox на другом устройстве, войдите в свой Аккаунт Firefox.";
 
+/* Label shown when there are no logins saved */
+"LoginsList.NoLoginsFound.Title" = "Логины не найдены";
+
 /* Label that appears after the search if there are no logins matching the search */
 "LoginsList.NoMatchingResult.Subtitle" = "Результатов, подходящих под ваш запрос, не найдено";
 
@@ -827,6 +833,9 @@
 
 /* Title on tracking protection menu for blocked items. */
 "Menu.TrackingProtection.BlockedTitle" = "Заблокировано";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"Menu.TrackingProtection.Details.Verifier" = "Подтверждено: %@";
 
 /* Message in menu when no trackers blocked. */
 "Menu.TrackingProtection.NoTrackersBlockedTitle" = "На этой странице не обнаружено ни одного известного Firefox трекера.";
@@ -997,11 +1006,11 @@
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Политика приватности";
 
-/* value for label to indicate user is on an unencrypted website */
-"ProtectionStatusSheet.InsecureConnection" = "Незащищённое соединение";
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "Соединение не защищено";
 
-/* value for label to indicate user is on a secure ssl connection */
-"ProtectionStatusSheet.SecureConnection" = "Защищённое соединение";
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "Соединение защищено";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Системы быстрого поиска";

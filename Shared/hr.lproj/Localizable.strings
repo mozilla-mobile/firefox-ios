@@ -550,6 +550,9 @@
 /* Title for the Synced Tabs Cell in the History Panel */
 "HistoryPanel.SyncedTabsCell.Title" = "Sinkronizirani uređaji";
 
+/* Accessibility label for the tab toolbar indicating the Home button. */
+"Home" = "Početna";
+
 /* Button cancelling changes setting the home page for the first time. */
 "HomePage.Set.Dialog.Cancel" = "Odustani";
 
@@ -700,6 +703,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "Ovdje će se prikazati spremljene prijave. Ako su tvoje prijave na Firefox spremljene na jednom drugom uređaju, prijavi se na tvoj Firefox račun.";
 
+/* Label shown when there are no logins saved */
+"LoginsList.NoLoginsFound.Title" = "Nema prijava";
+
 /* Label that appears after the search if there are no logins matching the search */
 "LoginsList.NoMatchingResult.Subtitle" = "Nema rezultata koji odgovaraju tvojoj pretrazi.";
 
@@ -827,6 +833,9 @@
 
 /* Title on tracking protection menu for blocked items. */
 "Menu.TrackingProtection.BlockedTitle" = "Blokirano";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"Menu.TrackingProtection.Details.Verifier" = "Potvrđuje %@";
 
 /* Message in menu when no trackers blocked. */
 "Menu.TrackingProtection.NoTrackersBlockedTitle" = "Na ovoj stranici nisu otkriveni programi za praćenje koji su poznati Firefoxu.";
@@ -997,11 +1006,11 @@
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Politika privatnosti";
 
-/* value for label to indicate user is on an unencrypted website */
-"ProtectionStatusSheet.InsecureConnection" = "Nesigurna veza";
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "Veza nije sigurna";
 
-/* value for label to indicate user is on a secure ssl connection */
-"ProtectionStatusSheet.SecureConnection" = "Sigurna veza";
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "Veza je sigurna";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Tražilice za brzo pretraživanje";
