@@ -136,6 +136,14 @@ extension BrowserViewController: WKUIDelegate {
                     }
                 }
                 let tab = self.tabManager.addTab(URLRequest(url: rURL as URL), afterTab: currentTab, isPrivate: isPrivate)
+                
+                // Record Observation for Search Term Groups
+                let searchTerm = currentTab.tabGroupData.tabAssociatedSearchTerm
+                let searchUrl = currentTab.tabGroupData.tabAssociatedSearchUrl
+                if !searchTerm.isEmpty, !searchUrl.isEmpty {
+                    tab.updateTimerAndObserving(state: .openInNewTab, searchTerm: searchTerm, searchProviderUrl: searchUrl, nextUrl: tab.url?.absoluteString ?? "")
+                }
+                
                 guard !self.topTabsVisible else {
                     return
                 }

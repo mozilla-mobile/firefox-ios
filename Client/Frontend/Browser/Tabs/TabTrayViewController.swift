@@ -165,6 +165,7 @@ class TabTrayViewController: UIViewController {
         viewSetup()
         applyTheme()
         setupNotifications()
+        updatePrivateUIState()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -195,6 +196,10 @@ class TabTrayViewController: UIViewController {
         }
 
         showPanel(viewModel.tabTrayView)
+    }
+    
+    func updatePrivateUIState() {
+        UserDefaults.standard.set(viewModel.tabManager.selectedTab?.isPrivate ?? false, forKey: "wasLastSessionPrivate")
     }
 
     fileprivate func iPadViewSetup() {
@@ -260,6 +265,7 @@ class TabTrayViewController: UIViewController {
         }
         updateToolbarItems(forSyncTabs: viewModel.profile.hasSyncableAccount())
         viewModel.tabTrayView.didTogglePrivateMode(privateMode)
+        updatePrivateUIState()
     }
 
     fileprivate func showPanel(_ panel: UIViewController) {

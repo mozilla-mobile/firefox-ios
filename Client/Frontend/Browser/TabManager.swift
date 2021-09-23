@@ -551,6 +551,12 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         storeChanges()
     }
     
+    func removeTabsWithoutToast(_ tabs: [Tab]) {
+        for tab in tabs {
+            self.removeTab(tab, flushToDisk: false, notify: true)
+        }
+    }
+    
     func removeTabsWithToast(_ tabs: [Tab]) {
         recentlyClosedForUndo = normalTabs.compactMap {
             SavedTab(tab: $0, isSelected: selectedTab === $0)

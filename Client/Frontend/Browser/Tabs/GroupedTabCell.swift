@@ -118,7 +118,7 @@ class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UI
     }
 
     func scrollToSelectedGroup() {
-        if let searchTerm = selectedTab?.tabAssociatedSearchTerm {
+        if let searchTerm = selectedTab?.tabGroupData.tabAssociatedSearchTerm {
             if let index = tabGroups?.map({ $0.key }).firstIndex(where: { t in
                 t == searchTerm
             }) {
@@ -142,6 +142,7 @@ class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UI
     }
     
     func closeTab(tab: Tab) {
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .groupedTab, value: .closeGroupedTab, extras: nil)
         delegate?.closeGroupTab(tab: tab)
     }
 }
@@ -290,7 +291,8 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
         let cellWidth = floor((collectionView.bounds.width - GridTabTrayControllerUX.Margin * CGFloat(numberOfColumns + 1)) / CGFloat(numberOfColumns))
         let isIpad = UIDevice.current.userInterfaceIdiom == .pad
         let padding = isIpad && !UIWindow.isLandscape ? 75 : (isIpad && UIWindow.isLandscape) ? 105 : 10
-        return CGSize(width: Int(cellWidth) - padding, height: 185)
+        let width = (Int(cellWidth) - padding) >= 0 ? Int(cellWidth) - padding : 0
+        return CGSize(width: width, height: 185)
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
