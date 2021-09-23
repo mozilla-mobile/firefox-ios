@@ -1159,6 +1159,13 @@ extension BrowserViewController: URLBarDelegate {
             
             actions.append(actionItems)
             actions.append(shareItems)
+        } else {
+            let helpItem = PhotonActionSheetItem(title: UIConstants.strings.aboutRowHelp, iconString: "icon_help") { [weak self] _ in
+                guard let self = self else { return }
+                self.submit(text: "https://support.mozilla.org/en-US/products/focus-firefox/Focus-ios")
+            }
+            
+            actions.append([helpItem])
         }
         
         let settingsItem = PhotonActionSheetItem(title: UIConstants.strings.settingsTitle, iconString: "icon_settings") { [weak self] _ in
