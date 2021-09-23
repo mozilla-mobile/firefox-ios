@@ -6,6 +6,12 @@ import Foundation
 import Shared
 import MozillaAppServices
 
+struct ASGroup<T> {
+    let searchTerm: String
+    let groupedItems: [T]
+    let timestamp: Timestamp
+}
+
 class TabGroupsManager {
 
     // Create URL groups from metadata
@@ -83,61 +89,92 @@ class TabGroupsManager {
         
         let lastTwoWeek = Int64(Date().lastTwoWeek.timeIntervalSince1970)
         profile.places.getHistoryMetadataSince(since: lastTwoWeek).uponQueue(.main) { result in
-            guard let val = result.successValue else { return completion(nil, [Tab]()) }
+            guard let historyMetadata = result.successValue else { return completion(nil, [Tab]()) }
             
-            let searchTerms = Set(val.map({ return $0.key.searchTerm }))
-            var searchTermMetaDataGroup : [String: [HistoryMetadata]] = [:]
-            
-            // 1. Build serch term metadata group
-            for term in searchTerms {
-                if let term = term {
-                    let elements = val.filter({ $0.key.searchTerm == term })
-                    searchTermMetaDataGroup[term] = elements
-                }
-            }
-            
-            var tabGroupData: [String: [Tab]] = [:]
-            var tabInGroups: [Tab] = [Tab]()
-            
-            // 2. Build tab groups that corresponds to search term
-            outerTabLoop: for tab in tabs {
-                innerMetadataLoop: for (searchTerm, historyMetaList) in searchTermMetaDataGroup {
-                    if historyMetaList.contains(where: { metadata in
-                        let tabUrl = tab.lastKnownUrl?.absoluteString
-                        return metadata.key.url == tabUrl || metadata.key.referrerUrl == tabUrl
-                    }) {
-                        tabInGroups.append(tab)
-                        if tabGroupData[searchTerm] == nil {
-                            tabGroupData[searchTerm] = [tab]
-                        } else {
-                            tabGroupData[searchTerm]?.append(tab)
-                        }
-                        break innerMetadataLoop
-                    }
-                }
-            }
-            
-            // 3. Tab groups should have at least 2 tabs per search term so we remove smaller groups
-            let filteredGroupData = tabGroupData.filter { tabGroup in
-                let t = tabGroup.value
-                if t.count > 1 {
-                    return true
-                } else {
-                    if let onlyTab = t.first, let index = tabInGroups.firstIndex(of: onlyTab) {
-                        tabInGroups.remove(at: index)
-                    }
-                    return false
-                }
-            }
-            
-            // 4. Filter the tabs so it doesn't include same tabs as tab groups
-            let filteredTabs = tabs.filter { tab in
-                !tabInGroups.contains(tab)
-            }
-            
-            // 5. filteredGroupData contains groups of only 2 or more tabs and filtered have tabs that are not part of a group
-            completion(filteredGroupData, filteredTabs)
+            let searchTermMetaDataGroup = buildMetadataGroups(from: historyMetadata)
+            let (tabGroupData, tabInGroups) = buildTabGroups(from: tabs, and: searchTermMetaDataGroup)
+            let (filteredGroups, filteredTabs) = filter(tabs: tabInGroups, from: tabGroupData, and: tabs)
+
+            completion(filteredGroups, filteredTabs)
         }
+    }
+
+    /// Builds metadata groups using the provided metadata from ApplicationServices
+    /// - Parameter ASMetadata: An array of `HistoryMetadata` used for splitting groups
+    /// - Returns: A dictionary whose keys are search terms used for grouping
+    private static func buildMetadataGroups(from ASMetadata: [HistoryMetadata]) -> [String: [HistoryMetadata]] {
+
+        let searchTerms = Set(ASMetadata.map({ return $0.key.searchTerm }))
+        var searchTermMetaDataGroup : [String: [HistoryMetadata]] = [:]
+
+        for term in searchTerms {
+            if let term = term {
+                let elements = ASMetadata.filter({ $0.key.searchTerm == term })
+                searchTermMetaDataGroup[term] = elements
+            }
+        }
+
+        return searchTermMetaDataGroup
+    }
+
+    private static func buildTabGroups(from tabs: [Tab], and searchTermMetadata: [String: [HistoryMetadata]]) -> (tabGroupData: [String: [Tab]], tabsInGroups: [Tab]) {
+        var tabGroupData: [String: [Tab]] = [:]
+        var tabInGroups: [Tab] = [Tab]()
+
+        outerTabLoop: for tab in tabs {
+            innerMetadataLoop: for (searchTerm, historyMetaList) in searchTermMetadata {
+                if historyMetaList.contains(where: { metadata in
+                    let tabUrl = tab.lastKnownUrl?.absoluteString
+                    return metadata.key.url == tabUrl || metadata.key.referrerUrl == tabUrl
+                }) {
+                    tabInGroups.append(tab)
+                    if tabGroupData[searchTerm] == nil {
+                        tabGroupData[searchTerm] = [tab]
+                    } else {
+                        tabGroupData[searchTerm]?.append(tab)
+                    }
+                    break innerMetadataLoop
+                }
+            }
+        }
+
+        return (tabGroupData, tabInGroups)
+    }
+
+    private static func filter(tabs tabsInGroups: [Tab], from tabGroups: [String: [Tab]], and originalTabs: [Tab]) -> (filteredGroups: [String: [Tab]], filteredTabs: [Tab]) {
+        let (filteredGroups, tabInGroups) = filterSingleTabGroups(from: tabGroups, and: tabsInGroups)
+        let ungroupedTabs = filterDuplicate(tabsInGroups: tabsInGroups, from: originalTabs)
+
+        return (filteredGroups, ungroupedTabs)
+    }
+
+    private static func filterSingleTabGroups(from tabGroups: [String: [Tab]], and tabsInGroups: [Tab]) -> (tabGroupData: [String: [Tab]], tabsInGroups: [Tab]) {
+        var tabsInGroups = tabsInGroups
+
+        // 3. Tab groups should have at least 2 tabs per search term so we remove smaller groups
+        let filteredGroupData = tabGroups.filter { tabGroup in
+            let t = tabGroup.value
+            if t.count > 1 {
+                return true
+            } else {
+                if let onlyTab = t.first, let index = tabsInGroups.firstIndex(of: onlyTab) {
+                    tabsInGroups.remove(at: index)
+                }
+                return false
+            }
+        }
+
+        return (filteredGroupData, tabsInGroups)
+    }
+
+    private static func filterDuplicate(tabsInGroups: [Tab], from tabs: [Tab]) -> [Tab] {
+        // 4. Filter the tabs so it doesn't include same tabs as tab groups
+        return tabs.filter { tab in !tabsInGroups.contains(tab) }
+
+    }
+
+    private static func stepFive() {
+
     }
 }
 
