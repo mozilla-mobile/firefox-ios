@@ -101,6 +101,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         // This background agrees with the web page background.
         // Keeping the background constant prevents a pop of mismatched color.
         view.backgroundColor = interstitialBackgroundColor
+        navigationController?.navigationBar.tintColor = .accent
 
         self.webView = makeWebView()
         view.addSubview(webView)
