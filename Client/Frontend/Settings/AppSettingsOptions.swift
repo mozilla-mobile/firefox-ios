@@ -551,18 +551,6 @@ class ExperimentsSettings: HiddenSetting {
     }
 }
 
-///Note: We have disabed it until we find best way to test newTabToolbarButton
-//class ToggleNewTabToolbarButton: HiddenSetting {
-//    override var title: NSAttributedString? {
-//        return NSAttributedString(string: "Debug: Toggle new tab toolbar button", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-//    }
-//
-//    override func onClick(_ navigationController: UINavigationController?) {
-//        let currentValue = settings.profile.prefs.boolForKey(PrefsKeys.ShowNewTabToolbarButton) ?? false
-//        settings.profile.prefs.setBool(!currentValue, forKey: PrefsKeys.ShowNewTabToolbarButton)
-//    }
-//}
-
 class ToggleChronTabs: HiddenSetting, FeatureFlagsProtocol {
     override var title: NSAttributedString? {
         let toNewStatus = featureFlags.isFeatureActive(.chronologicalTabs) ? "OFF" : "ON"
@@ -661,7 +649,7 @@ class ToggleInactiveTabs: HiddenSetting, FeatureFlagsProtocol {
 
 class ToggleGroupedTabs: HiddenSetting, FeatureFlagsProtocol {
     override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureActive(.groupedTabs) ? "OFF" : "ON"
+        let toNewStatus = featureFlags.isFeatureActive(.groupedTabs) ? "ON" : "OFF"
         return NSAttributedString(string: "Toggle grouped tabs: \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }

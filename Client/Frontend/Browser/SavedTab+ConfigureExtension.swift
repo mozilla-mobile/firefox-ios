@@ -28,7 +28,7 @@ extension SavedTab {
             }
         }
         
-        self.init(screenshotUUID: tab.screenshotUUID, isSelected: isSelected, title: tab.title ?? tab.lastTitle, isPrivate: tab.isPrivate, faviconURL: tab.displayFavicon?.url, url: tab.url, sessionData: sessionData, uuid: tab.tabUUID, createdAt: tab.firstCreatedTime)
+        self.init(screenshotUUID: tab.screenshotUUID, isSelected: isSelected, title: tab.title ?? tab.lastTitle, isPrivate: tab.isPrivate, faviconURL: tab.displayFavicon?.url, url: tab.url, sessionData: sessionData, uuid: tab.tabUUID, tabGroupData: tab.tabGroupData, createdAt: tab.firstCreatedTime)
     }
     
     func configureSavedTabUsing(_ tab: Tab, imageStore: DiskImageStore? = nil) -> Tab {
@@ -55,6 +55,7 @@ extension SavedTab {
         tab.sessionData = sessionData
         tab.lastTitle = title
         tab.tabUUID = UUID ?? ""
+        tab.tabGroupData = tabGroupData ?? tab.tabGroupData
         tab.screenshotUUID = screenshotUUID
         tab.firstCreatedTime = createdAt ?? sessionData?.lastUsedTime ?? Date.now()
         return tab

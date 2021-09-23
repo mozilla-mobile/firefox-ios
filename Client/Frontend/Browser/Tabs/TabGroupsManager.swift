@@ -24,8 +24,10 @@ class TabGroupsManager {
             
             // 1. Build serch term metadata group
             for term in searchTerms {
-                let elements = val.filter({ $0.key.searchTerm == term })
-                searchTermMetaDataGroup[term!] = elements
+                if let term = term {
+                    let elements = val.filter({ $0.key.searchTerm == term })
+                    searchTermMetaDataGroup[term] = elements
+                }
             }
             
             var urlGroupData: [String: [URL]] = [:]
@@ -88,8 +90,10 @@ class TabGroupsManager {
             
             // 1. Build serch term metadata group
             for term in searchTerms {
-                let elements = val.filter({ $0.key.searchTerm == term })
-                searchTermMetaDataGroup[term!] = elements
+                if let term = term {
+                    let elements = val.filter({ $0.key.searchTerm == term })
+                    searchTermMetaDataGroup[term] = elements
+                }
             }
             
             var tabGroupData: [String: [Tab]] = [:]
@@ -141,14 +145,15 @@ class TabGroupsManager {
 class StopWatchTimer {
     private var timer: Timer?
     var isPaused = true
-    var elpasedTime: Int32 = 0
+    // Recored in seconds
+    var elapsedTime: Int32 = 0
     
     func startOrResume() {
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(incrementValue), userInfo: nil, repeats: true)
     }
     
     @objc func incrementValue() {
-        elpasedTime += 1
+        elapsedTime += 1
     }
     
     func pauseOrStop() {
@@ -156,7 +161,7 @@ class StopWatchTimer {
     }
     
     func resetTimer() {
-        elpasedTime = 0
+        elapsedTime = 0
         timer = nil
     }
 }

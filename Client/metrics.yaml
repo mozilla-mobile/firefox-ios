@@ -1232,6 +1232,49 @@ tabs:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-01-01"
+  grouped_tab:
+    type: event
+    description: |
+      Recorded when a user opens the tab tray with grouped tab
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-2906
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9134
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    extra_keys:
+      total_num_of_groups:
+        description:
+          Total number of groups in tab tray
+        type: quantity
+      groups_two_tabs_only:
+        description:
+          Total number of groups with only 2 tabs
+        type: quantity
+      groups_with_more_than_two_tab:
+        description:
+          Total number of groups with more than 2 tabs
+        type: quantity
+      average_tabs_in_all_groups:
+        description:
+          Average number of tabs in all groups
+        type: quantity
+      total_tabs_in_all_groups:
+        description:
+          Total number of tabs in all groups
+        type: quantity
+    expires: "2022-03-20"
+  grouped_tab_closed:
+    type: event
+    description: |
+      Recorded when a user closes the tab in a group
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-2906
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9134
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-03-20"
 
 # Theme metrics
 theme:
