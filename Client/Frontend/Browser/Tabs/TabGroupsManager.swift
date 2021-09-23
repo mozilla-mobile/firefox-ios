@@ -9,91 +9,96 @@ import MozillaAppServices
 struct ASGroup<T> {
     let searchTerm: String
     let groupedItems: [T]
-    let timestamp: Timestamp
+    let timestamp: Timestamp? = nil
 }
 
 class TabGroupsManager {
 
+    // TODO: Because we've introduced generics in the with the `ASGroup` object, we should
+    // adapt this function to a `getGroups` function. leaving commented code as a guide for
+    // when doing that work.
     // Create URL groups from metadata
     /// - Parameters:
     ///   - profile: User Profile info
     ///   - urlList: List of urls we want to make the groups from
     ///   - completion: completion handler that contains [Search Term: [URL]]  dictionary and filterd URLs list that has URLs  that are not part of a group
-    static func getURLGroups(profile: Profile, urlList: [URL], completion: @escaping ([String: [URL]]?, _ filteredUrls: [URL]) -> Void) {
-        
-        let lastTwoWeek = Int64(Date().lastTwoWeek.timeIntervalSince1970)
-        profile.places.getHistoryMetadataSince(since: lastTwoWeek).uponQueue(.main) { result in
-            guard let val = result.successValue else { return completion(nil, [URL]()) }
-            
-            let searchTerms = Set(val.map({ return $0.key.searchTerm }))
-            var searchTermMetaDataGroup : [String: [HistoryMetadata]] = [:]
-            
-            // 1. Build serch term metadata group
-            for term in searchTerms {
-                if let term = term {
-                    let elements = val.filter({ $0.key.searchTerm == term })
-                    searchTermMetaDataGroup[term] = elements
-                }
-            }
-            
-            var urlGroupData: [String: [URL]] = [:]
-            var urlInGroups: [URL] = [URL]()
-            
-            // 2. Build url groups that corresponds to search term
-            outerUrlLoop: for url in urlList {
-                innerMetadataLoop: for (searchTerm, historyMetaList) in searchTermMetaDataGroup {
-                    if historyMetaList.contains(where: { metadata in
-                        let absoluteUrl = url.absoluteString
-                        return metadata.key.url == absoluteUrl || metadata.key.referrerUrl == absoluteUrl
-                    }) {
-                        urlInGroups.append(url)
-                        if urlGroupData[searchTerm] == nil {
-                            urlGroupData[searchTerm] = [url]
-                        } else {
-                            urlGroupData[searchTerm]?.append(url)
-                        }
-                        break innerMetadataLoop
-                    }
-                }
-            }
-            
-            // 3. Url groups should have at least 2 url per search term so we remove smaller groups
-            let filteredGroupData = urlGroupData.filter { urlGroup in
-                let t = urlGroup.value
-                if t.count > 1 {
-                    return true
-                } else {
-                    if let onlyUrl = t.first, let index = urlInGroups.firstIndex(of: onlyUrl) {
-                        urlInGroups.remove(at: index)
-                    }
-                    return false
-                }
-            }
-            
-            // 4. Filter the url list so it doesn't include same url as url groups
-            let filteredUrls = urlList.filter { url in
-                !urlInGroups.contains(url)
-            }
-            
-            // 5. filteredGroupData contains groups of only 2 or more urls and filtered have urls that are not part of a group
-            completion(filteredGroupData, filteredUrls)
-        }
-    }
-    
+//    static func getURLGroups(profile: Profile, urlList: [URL], completion: @escaping ([String: [URL]]?, _ filteredUrls: [URL]) -> Void) {
+//
+//        let lastTwoWeek = Int64(Date().lastTwoWeek.timeIntervalSince1970)
+//        profile.places.getHistoryMetadataSince(since: lastTwoWeek).uponQueue(.main) { result in
+//            guard let val = result.successValue else { return completion(nil, [URL]()) }
+//
+//            let searchTerms = Set(val.map({ return $0.key.searchTerm }))
+//            var searchTermMetaDataGroup : [String: [HistoryMetadata]] = [:]
+//
+//            // 1. Build serch term metadata group
+//            for term in searchTerms {
+//                if let term = term {
+//                    let elements = val.filter({ $0.key.searchTerm == term })
+//                    searchTermMetaDataGroup[term] = elements
+//                }
+//            }
+//
+//            var urlGroupData: [String: [URL]] = [:]
+//            var urlInGroups: [URL] = [URL]()
+//
+//            // 2. Build url groups that corresponds to search term
+//            outerUrlLoop: for url in urlList {
+//                innerMetadataLoop: for (searchTerm, historyMetaList) in searchTermMetaDataGroup {
+//                    if historyMetaList.contains(where: { metadata in
+//                        let absoluteUrl = url.absoluteString
+//                        return metadata.key.url == absoluteUrl || metadata.key.referrerUrl == absoluteUrl
+//                    }) {
+//                        urlInGroups.append(url)
+//                        if urlGroupData[searchTerm] == nil {
+//                            urlGroupData[searchTerm] = [url]
+//                        } else {
+//                            urlGroupData[searchTerm]?.append(url)
+//                        }
+//                        break innerMetadataLoop
+//                    }
+//                }
+//            }
+//
+//            // 3. Url groups should have at least 2 url per search term so we remove smaller groups
+//            let filteredGroupData = urlGroupData.filter { urlGroup in
+//                let t = urlGroup.value
+//                if t.count > 1 {
+//                    return true
+//                } else {
+//                    if let onlyUrl = t.first, let index = urlInGroups.firstIndex(of: onlyUrl) {
+//                        urlInGroups.remove(at: index)
+//                    }
+//                    return false
+//                }
+//            }
+//
+//            // 4. Filter the url list so it doesn't include same url as url groups
+//            let filteredUrls = urlList.filter { url in
+//                !urlInGroups.contains(url)
+//            }
+//
+//            // 5. filteredGroupData contains groups of only 2 or more urls and filtered have urls that are not part of a group
+//            completion(filteredGroupData, filteredUrls)
+//        }
+//    }
+
     // Create Tab groups from metadata
     /// - Parameters:
     ///   - profile: User Profile info
-    ///   - urlList: List of tabs we want to make the groups from
-    ///   - completion: completion handler that contains [Search Term: [Tab]]  dictionary and filterdTabs list that has Tab which are not part of a group
-    static func getTabGroups(profile: Profile, tabs: [Tab], completion: @escaping ([String: [Tab]]?, _ filteredTabs: [Tab]) -> Void) {
-        
+    ///   - tabs: List of tabs we want to make the groups from
+    ///   - order: Order in which we want to return groups, does not affect returned tabs
+    ///   - completion: completion handler that contains `[ASGroup<Tab>]`  dictionary and filterdTabs list that has `[Tab]` which are not part of a group
+    static func getGroups(profile: Profile, tabs: [Tab], order: ComparisonResult = .orderedAscending, completion: @escaping ([ASGroup<Tab>]?, _ filteredTabs: [Tab]) -> Void) {
+
         let lastTwoWeek = Int64(Date().lastTwoWeek.timeIntervalSince1970)
         profile.places.getHistoryMetadataSince(since: lastTwoWeek).uponQueue(.main) { result in
             guard let historyMetadata = result.successValue else { return completion(nil, [Tab]()) }
             
             let searchTermMetaDataGroup = buildMetadataGroups(from: historyMetadata)
             let (tabGroupData, tabInGroups) = buildTabGroups(from: tabs, and: searchTermMetaDataGroup)
-            let (filteredGroups, filteredTabs) = filter(tabs: tabInGroups, from: tabGroupData, and: tabs)
+            let (filteredGroupData, filteredTabs) = filter(tabs: tabInGroups, from: tabGroupData, and: tabs)
+            let filteredGroups = createGroups(from: filteredGroupData)
 
             completion(filteredGroups, filteredTabs)
         }
@@ -142,7 +147,7 @@ class TabGroupsManager {
     }
 
     private static func filter(tabs tabsInGroups: [Tab], from tabGroups: [String: [Tab]], and originalTabs: [Tab]) -> (filteredGroups: [String: [Tab]], filteredTabs: [Tab]) {
-        let (filteredGroups, tabInGroups) = filterSingleTabGroups(from: tabGroups, and: tabsInGroups)
+        let (filteredGroups, tabsInGroups) = filterSingleTabGroups(from: tabGroups, and: tabsInGroups)
         let ungroupedTabs = filterDuplicate(tabsInGroups: tabsInGroups, from: originalTabs)
 
         return (filteredGroups, ungroupedTabs)
@@ -167,15 +172,17 @@ class TabGroupsManager {
         return (filteredGroupData, tabsInGroups)
     }
 
+
     private static func filterDuplicate(tabsInGroups: [Tab], from tabs: [Tab]) -> [Tab] {
         // 4. Filter the tabs so it doesn't include same tabs as tab groups
         return tabs.filter { tab in !tabsInGroups.contains(tab) }
 
     }
 
-    private static func stepFive() {
-
+    private static func createGroups(from filteredGroups: [String: [Tab]]) -> [ASGroup<Tab>] {
+        return filteredGroups.map() { return ASGroup<Tab>(searchTerm: $0.key, groupedItems: $0.value) }
     }
+
 }
 
 

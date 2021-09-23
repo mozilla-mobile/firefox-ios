@@ -630,8 +630,8 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
         switch TabDisplaySection(rawValue: indexPath.section) {
         case .groupedTabs:
             let width = collectionView.frame.size.width
-            if let keys = tabDisplayManager.tabGroups?.keys, keys.count > 0 {
-                let height: CGFloat = GroupedTabCell.defaultCellHeight * CGFloat(tabDisplayManager.tabGroups?.keys.count ?? 0)
+            if let groups = tabDisplayManager.tabGroups, groups.count > 0 {
+                let height: CGFloat = GroupedTabCell.defaultCellHeight * CGFloat(tabDisplayManager.tabGroups?.count ?? 0)
                     return CGSize(width: width >= 0 ? Int(width) : 0, height: Int(height))
             } else {
                 return CGSize(width: 0, height: 0)

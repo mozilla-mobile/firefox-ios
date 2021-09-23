@@ -96,9 +96,9 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     }
     
     var filteredTabs = [Tab]()
-    var tabGroups: [String: [Tab]]?
+    var tabGroups: [ASGroup<Tab>]?
     var tabsInAllGroups: [Tab]? {
-        (tabGroups?.map{$0.value}.flatMap{$0})
+        (tabGroups?.map{$0.groupedItems}.flatMap{$0})
     }
 
     private(set) var isPrivate = false
@@ -168,7 +168,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     /// This is a helper method to update inactive tab state and should not be called directly
     /// Even when we have inactive tabs enabled try to call `tabsToDisplay`
     /// `tabsToDisplay` will make sure to get the correct set ot tabs and also check if feature is enabled
-    private func getTabsAndUpdateInactiveState(completion: @escaping ([String: [Tab]]?, [Tab]) -> Void) {
+    private func getTabsAndUpdateInactiveState(completion: @escaping ([ASGroup<Tab>]?, [Tab]) -> Void) {
         let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         guard !self.isPrivate else {
             self.tabGroups = nil
@@ -183,7 +183,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         }
         guard shouldEnableInactiveTabs else {
             if !self.isPrivate && shouldEnableGroupedTabs {
-                TabGroupsManager.getTabGroups(profile: profile, tabs: tabManager.normalTabs) { tabGroups, filteredActiveTabs  in
+                TabGroupsManager.getGroups(profile: profile, tabs: tabManager.normalTabs) { tabGroups, filteredActiveTabs  in
                     self.tabGroups = tabGroups
                     self.filteredTabs = filteredActiveTabs
                     completion(tabGroups, filteredActiveTabs)
@@ -211,7 +211,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         // Make sure selected tab has latest time
         selectedTab?.lastExecutedTime = Date.now()
         inactiveViewModel.updateInactiveTabs(with: tabManager.selectedTab, tabs: allTabs)
-        TabGroupsManager.getTabGroups(profile: profile, tabs: tabManager.normalTabs) { tabGroups, filteredActiveTabs  in
+        TabGroupsManager.getGroups(profile: profile, tabs: tabManager.normalTabs) { tabGroups, filteredActiveTabs  in
             guard self.shouldEnableGroupedTabs else {
                 self.tabGroups = nil
                 self.filteredTabs = allTabs
@@ -340,8 +340,8 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     
     func recordGroupedTabTelemetry() {
         if shouldEnableGroupedTabs, !isPrivate, let tabGroups = tabGroups, tabGroups.count > 0 {
-            let groupWithTwoTabs = tabGroups.filter { $0.value.count == 2 }.count
-            let groupsWithTwoMoreTab = tabGroups.filter { $0.value.count > 2 }.count
+            let groupWithTwoTabs = tabGroups.filter { $0.groupedItems.count == 2 }.count
+            let groupsWithTwoMoreTab = tabGroups.filter { $0.groupedItems.count > 2 }.count
             let tabsInAllGroup = tabsInAllGroups?.count ?? 0
             let averageTabsInAllGroups = ceil(Double(tabsInAllGroup / tabGroups.count))
             let groupTabExtras: [String: Int32] = [
