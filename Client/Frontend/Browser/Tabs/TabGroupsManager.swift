@@ -17,13 +17,19 @@ class TabGroupsManager {
     /// Create item groups from metadata.
     ///
     /// This function take a type `T` generic, and creates groups based on metadata available
-    /// from Application Services. As such, always be aware to provide the type when calling.
+    /// from Application Services.
     ///
     /// - Parameters:
     ///   - profile: The user's `Profile` info
-    ///   - items: List of items we want to make the groups from. This is a generic type and currently only supports `Tab` and `URL`
-    ///   - ordering: Order in which we want to return groups, `.orderedAscending` or `.orderedDescending`. `.orderedSame` is also possible, but will return the exact order of the group that was provided. Note: this does not affect the groups' items, which will alway return in ascending order.
-    ///   - completion: completion handler that contains `[ASGroup<T>]`  dictionary and a filteredItems list, `[T]`, which is comprised of items from the original input that are not part of a group.
+    ///   - items: List of items we want to make the groups from. This is a generic type and
+    ///   currently only supports `Tab` and `URL`
+    ///   - ordering: Order in which we want to return groups, `.orderedAscending` or
+    ///   `.orderedDescending`. `.orderedSame` is also possible, but will return the exact
+    ///   order of the group that was provided. Note: this does not affect the groups' items,
+    ///   which will alway return in ascending order.
+    ///   - completion: completion handler that contains `[ASGroup<T>]`  dictionary and a
+    ///   filteredItems list, `[T]`, which is comprised of items from the original input
+    ///   that are not part of a group.
     static func getGroups<T: Equatable>(with profile: Profile, from items: [T], using ordering: ComparisonResult, completion: @escaping ([ASGroup<T>]?, _ filteredItems: [T]) -> Void) {
 //        ROUX TODO: when URL support is added, fix check
 //        guard (items is [Tab] || items is [URL]) else { return completion(nil, [T]()) }
@@ -157,7 +163,8 @@ class TabGroupsManager {
     }
 
 
-    /// Removes duplicate items from the original item list; specifically, any items in groups are removed.
+    /// Removes duplicate items from the original item list; specifically, any items in
+    /// groups are removed.
     ///
     /// - Parameters:
     ///   - itemsInGroups: Items that are present in groups
@@ -205,7 +212,10 @@ class TabGroupsManager {
     ///
     /// - Parameters:
     ///   - groups: An `ASGroup` of type `T`
-    ///   - order: Generally, this would be either `.orderedAscending` or `.orderedDescending` depending on what order we want to get the group. `.orderedSame` is possible as well, but it just returns the exact same groups as the function was passed with no changes.
+    ///   - order: Generally, this would be either `.orderedAscending` or `.orderedDescending`
+    ///   depending on what order we want to get the group. `.orderedSame` is possible
+    ///   as well, but it just returns the exact same groups as the function was passed
+    ///   with no changes.
     /// - Returns: The passed in group, sorted according to its `ASGroup<T>.timestamp` property
     private static func order<T: Equatable>(groups: [ASGroup<T>], using order: ComparisonResult) -> [ASGroup<T>] {
         switch order { case .orderedAscending:
