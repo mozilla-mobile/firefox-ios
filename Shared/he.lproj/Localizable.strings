@@ -544,6 +544,9 @@
 /* Title for the Synced Tabs Cell in the History Panel */
 "HistoryPanel.SyncedTabsCell.Title" = "מכשירים מסונכרנים";
 
+/* Accessibility label for the tab toolbar indicating the Home button. */
+"Home" = "בית";
+
 /* Button cancelling changes setting the home page for the first time. */
 "HomePage.Set.Dialog.Cancel" = "ביטול";
 
@@ -694,6 +697,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "כניסות שמורות תופענה כאן. גאם שמרת את הכניסות שלך ב־Firefox על מכשיר אחר, יש להתחבר לחשבון ה־Firefox שלך.";
 
+/* Label shown when there are no logins saved */
+"LoginsList.NoLoginsFound.Title" = "לא נמצאו כניסות";
+
 /* Label that appears after the search if there are no logins matching the search */
 "LoginsList.NoMatchingResult.Subtitle" = "אין תוצאות התואמות לחיפוש שלך.";
 
@@ -815,6 +821,9 @@
 
 /* Title on tracking protection menu for blocked items. */
 "Menu.TrackingProtection.BlockedTitle" = "חסומים";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"Menu.TrackingProtection.Details.Verifier" = "אומת על־ידי %@";
 
 /* Message in menu when no trackers blocked. */
 "Menu.TrackingProtection.NoTrackersBlockedTitle" = "לא זוהו רכיבי מעקב המוכרים ל־Firefox בדף זה.";
@@ -967,11 +976,11 @@
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "מדיניות פרטיות";
 
-/* value for label to indicate user is on an unencrypted website */
-"ProtectionStatusSheet.InsecureConnection" = "חיבור לא מאובטח";
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "החיבור אינו מאובטח";
 
-/* value for label to indicate user is on a secure ssl connection */
-"ProtectionStatusSheet.SecureConnection" = "חיבור מאובטח";
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "החיבור מאובטח";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "מנועי חיפוש מהירים";

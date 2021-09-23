@@ -446,7 +446,7 @@
 "fxa.signin.create-account-pt-2" = "შექმენით Firefox-ანგარიში.";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "გახსენით კომპიუტერში Firefox და იხილეთ firefox.com/pair";
+"fxa.signin.qr-link-instruction" = "გახსენით კომპიუტერში Firefox და იხილეთ გვერდი firefox.com/pair";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "მზადაა წასაკითხად";
@@ -549,6 +549,9 @@
 
 /* Title for the Synced Tabs Cell in the History Panel */
 "HistoryPanel.SyncedTabsCell.Title" = "დასინქრონებული მოწყობილობები";
+
+/* Accessibility label for the tab toolbar indicating the Home button. */
+"Home" = "საწყისი გვერდი";
 
 /* Button cancelling changes setting the home page for the first time. */
 "HomePage.Set.Dialog.Cancel" = "გაუქმება";
@@ -700,6 +703,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "შენახული ანგარიშები აქ გამოჩნდება. თუ სხვა მოწყობილობის Firefox-ზე ინახავთ, შედით თქვენი Firefox-ანგარიშით.";
 
+/* Label shown when there are no logins saved */
+"LoginsList.NoLoginsFound.Title" = "მონაცემები ვერ მოიძებნა";
+
 /* Label that appears after the search if there are no logins matching the search */
 "LoginsList.NoMatchingResult.Subtitle" = "ძიების შესაბამისი შედეგები ვერ მოიძებნა.";
 
@@ -763,10 +769,10 @@
 "Menu.EnhancedTrackingProtectionOn.Title" = "თვალთვალისგან გაძლიერებული დაცვა ჩართულია ამ საიტზე.";
 
 /* Description for having standard ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox ზღუდავს საიტთაშორის, სოც. ქსელის, კრიპტო, ამომცნობ და მეთვალყურე შიგთავსს.";
+"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox ზღუდავს საიტთაშორის, სოცქსელის, კრიპტო, ამომცნობ და მეთვალყურე შიგთავსს.";
 
 /* Description for having strict ETP protection with ITP offered in iOS14+ */
-"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox ზღუდავს საიტთაშორის, სოც. ქსელის, კრიპტო, ამომცნობ და მეთვალყურე შიგთავსს.";
+"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox ზღუდავს საიტთაშორის, სოცქსელის, კრიპტო, ამომცნობ და მეთვალყურე შიგთავსს.";
 
 /* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
 "Menu.History.Label" = "ისტორია";
@@ -828,6 +834,9 @@
 /* Title on tracking protection menu for blocked items. */
 "Menu.TrackingProtection.BlockedTitle" = "შეიზღუდა";
 
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"Menu.TrackingProtection.Details.Verifier" = "დამმოწმებელია %@";
+
 /* Message in menu when no trackers blocked. */
 "Menu.TrackingProtection.NoTrackersBlockedTitle" = "ამ გვერდზე მეთვალყურეები, რომელთაც Firefox ცნობს, არ აღმოჩენილა.";
 
@@ -841,7 +850,7 @@
 "Menu.TrackingProtectionBlockedContent.Title" = "თვალის მდევნელი შიგთავსი";
 
 /* The title that shows the number of social URLs blocked */
-"Menu.TrackingProtectionBlockedSocial.Title" = "სოც. ქსელის მეთვალყურეები";
+"Menu.TrackingProtectionBlockedSocial.Title" = "სოცქსელის მეთვალყურეები";
 
 /* Description of the Tracking protection menu when TP is blocking parts of the page */
 "Menu.TrackingProtectionBlocking.Description" = "Firefox ზღუდავს საიტის იმ ნაწილებს, რომლებსაც თქვენს მოქმედებებზე თვალყურის დევნება შეუძლია.";
@@ -997,11 +1006,11 @@
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "პირადულობის დებულება";
 
-/* value for label to indicate user is on an unencrypted website */
-"ProtectionStatusSheet.InsecureConnection" = "დაუცველი კავშირი";
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "კავშირი დაუცველია";
 
-/* value for label to indicate user is on a secure ssl connection */
-"ProtectionStatusSheet.SecureConnection" = "დაცული კავშირი";
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "კავშირი დაცულია";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "სწრაფი ძიების სისტემები";
@@ -1536,7 +1545,7 @@
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "საიტის სათანადო მუშაობისთვის, ზოგიერთი მეთვალყურე დაიშვება.";
 
 /* Description for strict level tracker protection */
-"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "შეიზღუდება მეტი მეთვალყურე, რეკლამა, ამომხტომი. გვერდები სწრაფად ჩაიტვირთება, თუმცა შეიძლება გაუმართავად იმუშაოს.";
+"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "შეიზღუდება მეტი მეთვალყურე, რეკლამა, ამომხტომი. გვერდები სწრაფად ჩაიტვირთება, თუმცა შესაძლოა, გაუმართავად იმუშაოს.";
 
 /* Title for tracking protection options section where level can be selected. */
 "Settings.TrackingProtection.ProtectionLevelTitle" = "დაცვის დონე";

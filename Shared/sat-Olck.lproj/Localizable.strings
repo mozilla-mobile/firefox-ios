@@ -228,7 +228,7 @@
 "ContextMenu.CopyLinkButtonTitle" = "ᱞᱤᱸᱠ ᱱᱚᱠᱚᱞ ᱢᱮ";
 
 /* Context menu item for downloading a link URL */
-"ContextMenu.DownloadLinkButtonTitle" = "ᱚᱛᱩᱨ ᱟᱲᱜᱚ ᱞᱤᱸᱠ";
+"ContextMenu.DownloadLinkButtonTitle" = "ᱰᱟᱩᱱᱞᱚᱰ ᱞᱤᱝᱠ";
 
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "ᱱᱟᱶᱟ ᱴᱮᱵ ᱨᱮ ᱠᱷᱩᱞᱟᱹᱭ ᱢᱮ";
@@ -293,7 +293,7 @@
 "Done" = "ᱦᱩᱭᱮᱱᱟ";
 
 /* Panel accessibility label */
-"Downloads" = "ᱰᱟᱩᱱᱞᱳᱰ";
+"Downloads" = "ᱰᱟᱩᱱᱞᱚᱰ ᱠᱚ";
 
 /* The label of the button the user will press to start downloading a file */
 "Downloads.Alert.DownloadNow" = "ᱱᱤᱛᱚᱜ ᱚᱛᱩᱨ ᱟᱲᱜᱩᱤ ᱢᱮ";
@@ -679,6 +679,12 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "ᱪᱷᱟᱹᱱᱤ";
 
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "ᱵᱟᱹᱰᱨᱟᱹ";
+
+/* Placeholder text for search field */
+"LoginsList.Search.Placeholder" = "ᱞᱚᱜᱤᱱ ᱠᱚ ᱥᱮᱸᱫᱽᱨᱟᱭ ᱢᱮ";
+
 /* Title for the list of logins */
 "LoginsList.Title" = "ᱵᱚᱞᱚ ᱠᱚ ᱥᱟᱸᱪᱟᱣ";
 
@@ -705,11 +711,17 @@
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "ᱯᱟᱰᱦᱟᱣ ᱞᱤᱥᱴᱤ ᱨᱮ ᱥᱮᱞᱮᱫᱮᱱᱟ";
 
+/* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
+"Menu.Bookmarks.Label" = "ᱵᱩᱠᱢᱟᱨᱠᱥ";
+
 /* The title for the button that lets you copy the url from the location bar. */
 "Menu.Copy.Title" = "ᱴᱷᱤᱠᱚᱱᱟ ᱱᱚᱠᱚᱞ ᱢᱮ";
 
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "ᱨᱮᱴᱚᱯ ᱵᱳᱨᱰ ᱨᱮ URL ᱱᱚᱠᱚᱞᱮᱱᱟ";
+
+/* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
+"Menu.Downloads.Label" = "ᱰᱟᱩᱱᱞᱚᱰᱥ";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtectionOff.Title" = "ᱱᱚᱶᱟ ᱥᱟᱭᱤᱴ ᱞᱟᱹᱜᱤᱛ ᱵᱟᱲᱦᱟᱣᱟᱠᱟᱱ ᱯᱟᱸᱡᱟ ᱨᱚᱯᱷᱟ ᱵᱚᱸᱫᱚ ᱢᱮᱱᱟ-ᱟ";
@@ -723,23 +735,44 @@
 /* Description for having strict ETP protection with ITP offered in iOS14+ */
 "Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "ᱠᱨᱚᱥ ᱼᱥᱟᱭᱤᱴ ᱯᱟᱧᱡᱟ ᱫᱟᱱᱟᱲ ᱠᱚ, ᱥᱟᱸᱣᱛᱟ ᱯᱟᱧᱡᱟ ᱫᱟᱱᱟᱲ ᱠᱚ,ᱠᱨᱭᱯᱴᱚᱢᱟᱭᱱᱟᱹᱨ ᱠᱚ, ᱠᱟᱹᱴᱩᱵᱪᱷᱟᱯᱟ ᱠᱚ ᱟᱨ ᱯᱟᱧᱡᱟ ᱫᱟᱱᱟᱲ ᱡᱤᱱᱤᱥ ᱠᱚ Firefox ᱮᱥᱮᱫ ᱛᱮᱦᱮᱱ ᱟᱭ.";
 
+/* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
+"Menu.History.Label" = "ᱱᱟᱜᱟᱢ";
+
 /* Label for the button displayed in the menu used to stop the reload of the webpage */
 "Menu.Library.StopReload" = "ᱛᱤᱸᱜᱩᱤ ᱢᱮ";
+
+/* Label for the button, displayed in the menu, takes you to screen to manage account when pressed. First argument is the display name for the current account */
+"Menu.ManageAccount.Label" = "%@ ᱠᱷᱟᱛᱟ ᱢᱮᱱᱮᱡᱽ ᱢᱮ";
+
+/* Label for the button, displayed in the menu, turns off night mode. */
+"Menu.NightModeTurnOff.Label2" = "ᱧᱩᱛ ᱢᱳᱰ ᱵᱚᱱᱫᱚᱭ ᱢᱮ";
 
 /* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label" = "ᱱᱤᱸᱫᱚ ᱚᱵᱥᱛᱟ ᱦᱩᱭ ᱦᱚᱪᱚᱜ ᱢᱮ";
 
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label2" = "ᱧᱩᱛ ᱢᱳᱰ ᱮᱢ ᱪᱷᱚᱭ ᱢᱮ";
+
 /* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
 "Menu.NoImageModeBlockImages.Label" = "ᱪᱤᱛᱟᱹᱨ ᱠᱚ ᱟᱴᱠᱟᱣ ᱢᱮ";
 
+/* Label for the button, displayed in the menu, shows images on the webpage when pressed. */
+"Menu.NoImageModeShowImages.Label" = "ᱪᱤᱛᱟᱹᱨ ᱫᱮᱠᱷᱟᱣ ᱢᱮ";
+
 /* Label for title in page action menu. */
 "Menu.PageActions.Title" = "ᱥᱟᱦᱟᱴᱟ ᱠᱚᱢᱤ ᱠᱚ";
+
+/* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
+"Menu.Passwords.Label" = "ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ ᱠᱚ";
 
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "ᱞᱟᱴᱷᱟᱭ ᱢᱮ";
 
 /* The title for the button that lets you paste and go to a URL */
 "Menu.PasteAndGo.Title" = "ᱞᱟᱴᱷᱟᱭ ᱢᱮ ᱟᱨ ᱪᱟᱞᱟᱜ ᱢᱮ";
+
+/* Label for the button, displayed in the menu, takes you to to Reading List screen when pressed. */
+"Menu.ReadingList.Label" = "ᱯᱟᱲᱦᱟᱣ ᱞᱤᱥᱴᱤ";
 
 /* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
 "Menu.ReloadWithoutTrackingProtection.Title" = "ᱯᱟᱸᱡᱟ ᱨᱚᱯᱷᱟ ᱵᱮᱜᱚᱨ ᱞᱟᱫᱤ ᱫᱚᱦᱲᱟᱣ ᱢᱮ";
@@ -752,6 +785,9 @@
 
 /* Toast displayed to the user after removing the item from the Top Sites. */
 "Menu.RemovePin.Confirm" = "ᱪᱮᱛᱟᱱ ᱨᱤᱱ ᱥᱟᱭᱤᱴ ᱠᱷᱚᱱ ᱚᱰᱚᱠ ᱠᱮᱫ ᱠᱚᱣᱟ";
+
+/* Toast displayed to the user after removing the item to the Shortcuts. */
+"Menu.RemovePin.Confirm2" = "ᱠᱷᱟᱴᱚᱢᱟᱪᱷᱟ ᱠᱷᱚᱱ ᱚᱪᱚᱜᱽ ᱢᱮ";
 
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "ᱴᱮᱵ ᱠᱩᱞ ᱦᱩᱭᱮᱱᱟ";

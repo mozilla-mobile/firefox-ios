@@ -113,7 +113,7 @@
 "TodayWidget.SearchInPrivateTabLabelV2" = "Tìm kiếm trong thẻ riêng tư";
 
 /* Description for top sites widget to add Firefox top sites shotcuts to home screen */
-"TodayWidget.TopSitesGalleryDescription" = "Thêm phím tắt cho các trang web thường xuyên và truy cập gần đây.";
+"TodayWidget.TopSitesGalleryDescription" = "Thêm phím tắt cho các trang web thường xuyên và đã xem gần đây.";
 
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitle" = "Trang web hàng đầu";

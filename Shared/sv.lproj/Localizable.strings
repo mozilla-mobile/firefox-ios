@@ -550,6 +550,9 @@
 /* Title for the Synced Tabs Cell in the History Panel */
 "HistoryPanel.SyncedTabsCell.Title" = "Synkade enheter";
 
+/* Accessibility label for the tab toolbar indicating the Home button. */
+"Home" = "Hem";
+
 /* Button cancelling changes setting the home page for the first time. */
 "HomePage.Set.Dialog.Cancel" = "Avbryt";
 
@@ -700,6 +703,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "Sparade inloggningar visas här. Om du har sparat dina inloggningar på Firefox på en annan enhet loggar du in på ditt Firefox-konto.";
 
+/* Label shown when there are no logins saved */
+"LoginsList.NoLoginsFound.Title" = "Inga inloggningar hittades";
+
 /* Label that appears after the search if there are no logins matching the search */
 "LoginsList.NoMatchingResult.Subtitle" = "Det finns inga resultat som matchar din sökning.";
 
@@ -828,6 +834,9 @@
 /* Title on tracking protection menu for blocked items. */
 "Menu.TrackingProtection.BlockedTitle" = "Blockerad";
 
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"Menu.TrackingProtection.Details.Verifier" = "Verifierad av: %@";
+
 /* Message in menu when no trackers blocked. */
 "Menu.TrackingProtection.NoTrackersBlockedTitle" = "Inga kända spårare för Firefox upptäcktes på den här sidan.";
 
@@ -950,7 +959,7 @@
 "Oops! Firefox crashed" = "Hoppsan! Firefox kraschade";
 
 /* See http://mzl.la/1LXbDOL */
-"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Öppna artiklar i läsvyn genom att trycka på bokikonen när den visas i namnfältet.";
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Öppna artiklar i läsvyn genom att trycka på bokikonen när den visas i adressfältet.";
 
 /* See http://mzl.la/1G7uHo7 */
 "Open Settings" = "Öppna Inställningar";
@@ -997,11 +1006,11 @@
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Integritetspolicy";
 
-/* value for label to indicate user is on an unencrypted website */
-"ProtectionStatusSheet.InsecureConnection" = "Osäker anslutning";
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "Anslutningen är inte säker";
 
-/* value for label to indicate user is on a secure ssl connection */
-"ProtectionStatusSheet.SecureConnection" = "Säker anslutning";
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "Anslutningen är säker";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Snabbsökmotorer";
@@ -1458,7 +1467,7 @@
 "Settings.ShowLinkPreviews.Title" = "Visa länkförhandsvisning";
 
 /* Setting to show Logins & Passwords quick access in the application menu */
-"Settings.ShowLoginsInAppMenu.Title" = "Visa i programmenyn";
+"Settings.ShowLoginsInAppMenu.Title" = "Visa i appmenyer";
 
 /* The description of the open new tab siri shortcut */
 "Settings.Siri.OpenTabShortcut" = "Öppna ny flik";

@@ -40,6 +40,12 @@
 /* The description of a highlight if it is a site the user has visited */
 "ActivityStream.Highlights.Visited" = "Gweladennet";
 
+/* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
+"ActivityStream.JumpBackIn.SectionTitle" = "Distreiñ";
+
+/* A string used to signify the start of the Recently Saved section in Home Screen. */
+"ActivityStream.Library.Title" = "Enrollet da ziwezhañ";
+
 /* Section title label for recently bookmarked websites */
 "ActivityStream.NewRecentBookmarks.Title" = "Sinedoù nevez";
 
@@ -57,6 +63,9 @@
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Gweladennet da ziwezhañ";
+
+/* Section title for the Recently Saved section. This shows websites that have had a save action. Right now it is just bookmarks but it could be used for other things like the reading list in the future. */
+"ActivityStream.RecentlySaved.SectionTitle" = "Enrollet da ziwezhañ";
 
 /* This button will open the library showing all the users bookmarks */
 "ActivityStream.RecentlySaved.ShowAll" = "Diskouez pep tra";
@@ -541,6 +550,9 @@
 /* Title for the Synced Tabs Cell in the History Panel */
 "HistoryPanel.SyncedTabsCell.Title" = "Trevnadoù goubredet";
 
+/* Accessibility label for the tab toolbar indicating the Home button. */
+"Home" = "Degemer";
+
 /* Button cancelling changes setting the home page for the first time. */
 "HomePage.Set.Dialog.Cancel" = "Nullañ";
 
@@ -643,6 +655,9 @@
 /* Toggle logins syncing setting */
 "Logins" = "Titouroù kennaskañ";
 
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title" = "Kemerit ho kerioù-tremen e pep lec’h";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Kemmet";
 
@@ -684,6 +699,27 @@
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Sil";
+
+/* Label shown when there are no logins to list */
+"LoginsList.NoLoginsFound.Description" = "An anaouderien enrollet a vo diskouezet amañ. M'ho peus enrollet oc'h anaouderien evit Firefox en un drevnad all, kennaskit ouzh ho kont Firefox.";
+
+/* Label shown when there are no logins saved */
+"LoginsList.NoLoginsFound.Title" = "Anaouder ebet kavet";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "N’eus disoc’h ebet a glot gant ho klask.";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "Anaouder ebet o kenglotañ";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "Nullañ";
+
+/* Placeholder text for search field */
+"LoginsList.Search.Placeholder" = "Klask titouroù kennaskañ";
+
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "Dibabit ur ger-tremen da leuniañ";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "TITOUROÙ KENNASKAÑ ENROLLET";
@@ -797,6 +833,9 @@
 
 /* Title on tracking protection menu for blocked items. */
 "Menu.TrackingProtection.BlockedTitle" = "Stanket";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"Menu.TrackingProtection.Details.Verifier" = "Gwiriet gant %@";
 
 /* Message in menu when no trackers blocked. */
 "Menu.TrackingProtection.NoTrackersBlockedTitle" = "N’eus bet kavet heulier ebet anavezet gant Firefox war ar bajenn-mañ.";
@@ -966,6 +1005,12 @@
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Reolenn a-fet buhez prevez";
+
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "N'eo ket diarvar ar c'hennask";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "Kennask suraet";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Kefluskerioù klask-prim";
@@ -1197,6 +1242,9 @@
 
 /* Title displayed in header of the setting panel. */
 "Settings.ClearPrivateData.Title" = "Skarzhañ ar roadennoù prevez";
+
+/* Button in Data Management that clears private data for the selected items. Parameter is the number of items to be cleared */
+"Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "Skarzhañ an elfennoù: %1$@";
 
 /* Copy app version alert shown in settings. */
 "Settings.CopyAppVersion.Title" = "Eilet er golver";
@@ -1559,6 +1607,9 @@
 /* Description of the confirmation dialog shown when a user tries to clear their private data. */
 "Settings.WebsiteData.ConfirmPrompt" = "An obererezh-mañ a ziverko ho holl roadennoù lec’hienn. N’hallo ket bezañ disc’hraet.";
 
+/* Description of the confirmation dialog shown when a user tries to clear some of their private data. */
+"Settings.WebsiteData.SelectedConfirmPrompt" = "An obererezh-mañ a ziverko an elfennoù diuzet. N’hallo ket bezañ disc’hraet.";
+
 /* Title displayed in header of the Data Management panel. */
 "Settings.WebsiteData.Title" = "Roadennoù lec’hienn";
 
@@ -1695,6 +1746,9 @@
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "Ivinell diuzet bremañ.";
 
+/* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
+"TabTray.InactiveTabs.SectionTitle" = "Ivinelloù dizoberiant";
+
 /* The section header for tabs opened last week */
 "TabTray.LastWeek.Header" = "Ar sizhun dremenet";
 
@@ -1712,6 +1766,12 @@
 
 /* The title for the tab tray in private mode */
 "TabTray.PrivateTitle" = "Ivinelloù prevez";
+
+/* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
+"TabTray.RecentlyClosed.Description" = "An ivinelloù a zo hegerz amañ e-pad 30 deiz. Goude e vo serret an ivinelloù ent emgefreek.";
+
+/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
+"TabTray.RecentlyClosed.SectionTitle" = "Serret da ziwezhañ";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "Prevez";

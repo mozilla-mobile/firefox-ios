@@ -550,6 +550,9 @@
 /* Title for the Synced Tabs Cell in the History Panel */
 "HistoryPanel.SyncedTabsCell.Title" = "已同步设备";
 
+/* Accessibility label for the tab toolbar indicating the Home button. */
+"Home" = "主页";
+
 /* Button cancelling changes setting the home page for the first time. */
 "HomePage.Set.Dialog.Cancel" = "取消";
 
@@ -700,6 +703,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "保存的登录信息将显示于此处。若您在其他设备保存过登录信息，请登录您的 Firefox 账户。";
 
+/* Label shown when there are no logins saved */
+"LoginsList.NoLoginsFound.Title" = "未找到登录信息";
+
 /* Label that appears after the search if there are no logins matching the search */
 "LoginsList.NoMatchingResult.Subtitle" = "没有符合您搜索条件的结果。";
 
@@ -757,10 +763,10 @@
 "Menu.Downloads.Label" = "下载";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOff.Title" = "已关闭对此网站的增强型跟踪保护。";
+"Menu.EnhancedTrackingProtectionOff.Title" = "已关闭此网站的增强型跟踪保护。";
 
 /* A switch to enable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOn.Title" = "已开启对此网站的增强型跟踪保护。";
+"Menu.EnhancedTrackingProtectionOn.Title" = "已开启此网站的增强型跟踪保护。";
 
 /* Description for having standard ETP protection with ITP offered in iOS14+ */
 "Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox 可拦截跨网站跟踪器、社交跟踪器、加密货币挖矿程序和数字指纹跟踪程序。";
@@ -828,6 +834,9 @@
 /* Title on tracking protection menu for blocked items. */
 "Menu.TrackingProtection.BlockedTitle" = "已拦截";
 
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"Menu.TrackingProtection.Details.Verifier" = "验证者：%@";
+
 /* Message in menu when no trackers blocked. */
 "Menu.TrackingProtection.NoTrackersBlockedTitle" = "此页面上未检测到 Firefox 已知的跟踪器。";
 
@@ -874,19 +883,19 @@
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "社交网站会在其他网站放置跟踪器，以勾勒您的精准画像。拦截这些跟踪器，可減少您被社交媒体公司看到浏览内容。";
 
 /* The button that disabled TP for a site. */
-"Menu.TrackingProtectionDisable1.Title" = "对此网站禁用";
+"Menu.TrackingProtectionDisable1.Title" = "在此网站禁用";
 
 /* The confirmation toast once tracking protection has been disabled */
-"Menu.TrackingProtectionDisabled.Title" = "已关闭对此网站的跟踪保护。";
+"Menu.TrackingProtectionDisabled.Title" = "已关闭此网站的跟踪保护。";
 
 /* A button to enable tracking protection inside the menu. */
 "Menu.TrackingProtectionEnable.Title" = "启用跟踪保护";
 
 /* A button to enable tracking protection inside the menu. */
-"Menu.TrackingProtectionEnable1.Title" = "对此网站启用";
+"Menu.TrackingProtectionEnable1.Title" = "在此网站启用";
 
 /* The confirmation toast once tracking protection has been enabled */
-"Menu.TrackingProtectionEnabled.Title" = "已开启对此网站的跟踪保护。";
+"Menu.TrackingProtectionEnabled.Title" = "已开启此网站的跟踪保护。";
 
 /* The title that shows the number of fingerprinting scripts blocked */
 "Menu.TrackingProtectionFingerprintersBlocked.Title" = "数字指纹跟踪程序";
@@ -997,11 +1006,11 @@
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "隐私政策";
 
-/* value for label to indicate user is on an unencrypted website */
-"ProtectionStatusSheet.InsecureConnection" = "不安全连接";
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "连接不安全";
 
-/* value for label to indicate user is on a secure ssl connection */
-"ProtectionStatusSheet.SecureConnection" = "安全连接";
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "连接安全";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "快速搜索引擎";
@@ -1503,7 +1512,7 @@
 "Settings.TrackingProtection.Alert.Button" = "好，知道了";
 
 /* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "若网站无法正常工作，请点按地址栏中的“盾牌”，关闭对此网站的增强型跟踪保护。";
+"Settings.TrackingProtection.Alert.Description" = "若网站无法正常工作，请点按地址栏中的“盾牌”，关闭该网站的增强型跟踪保护。";
 
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "注意！";
@@ -1530,7 +1539,7 @@
 "Settings.TrackingProtection.ProtectionCellFooter" = "减少定向广告，并阻止广告商跟踪您的浏览。";
 
 /* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "若网站无法正常工作，请点按地址栏中的“盾牌”，关闭对此网站的增强型跟踪保护。";
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "若网站无法正常工作，请点按地址栏中的“盾牌”，关闭该网站的增强型跟踪保护。";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "允许部分广告跟踪行为，同时让网站功能保持正常。";

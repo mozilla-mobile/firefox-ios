@@ -249,7 +249,7 @@
 "ContextMenu.OpenInNewTabButtonTitle" = "Aperir in un nove scheda";
 
 /* Context menu item for opening a link in a new private tab */
-"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "Aperir le ligamine in un nove scheda anonyme";
+"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "Aperir le ligamine in un nove scheda private";
 
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenLinkInNewTabButtonTitle" = "Aperir le ligamine in un nove scheda";
@@ -550,6 +550,9 @@
 /* Title for the Synced Tabs Cell in the History Panel */
 "HistoryPanel.SyncedTabsCell.Title" = "Apparatos synchronisate";
 
+/* Accessibility label for the tab toolbar indicating the Home button. */
+"Home" = "Initio";
+
 /* Button cancelling changes setting the home page for the first time. */
 "HomePage.Set.Dialog.Cancel" = "Cancellar";
 
@@ -647,10 +650,10 @@
 "Loading content…" = "Cargante le contento…";
 
 /* Authentication prompt log in button */
-"Log in" = "Authenticar se";
+"Log in" = "Aperir session";
 
 /* Toggle logins syncing setting */
-"Logins" = "Authenticationes";
+"Logins" = "Credentiales";
 
 /* Label displaying welcome view title */
 "Logins.WelcomeView.Title" = "Porta tu contrasignos sempre con te";
@@ -659,7 +662,7 @@
 "LoginsDetailView.LoginModified" = "Modificate";
 
 /* Title for the login detail view */
-"LoginsDetailView.LoginTitle" = "Authentication";
+"LoginsDetailView.LoginTitle" = "Credential";
 
 /* Button to not save the user's password */
 "LoginsHelper.DontSave.Button" = "Non salvar";
@@ -668,7 +671,7 @@
 "LoginsHelper.DontUpdate.Button" = "Non actualisar";
 
 /* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptSaveLogin.Title" = "Salvar le authentication %1$@ pro %2$@?";
+"LoginsHelper.PromptSaveLogin.Title" = "Salvar le credential %1$@ pro %2$@?";
 
 /* Prompt for saving a password with no username. The parameter is the hostname of the site. */
 "LoginsHelper.PromptSavePassword.Title" = "Salvar le contrasigno pro %@?";
@@ -677,16 +680,16 @@
 "LoginsHelper.PromptUpdateLogin.Title.OneArg" = "Actualisar le credentiales pro %2$@?";
 
 /* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "Actualisar le credentiales %1$@ pro %2$@?";
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "Actualisar le credential %1$@ pro %2$@?";
 
 /* Button to save the user's password */
-"LoginsHelper.SaveLogin.Button" = "Salvar le authentication";
+"LoginsHelper.SaveLogin.Button" = "Salvar credential";
 
 /* Button to update the user's password */
 "LoginsHelper.Update.Button" = "Actualisar";
 
 /* For filtering the login list, search only the login names */
-"LoginsList.LoginsListFilterLogin" = "Authentication";
+"LoginsList.LoginsListFilterLogin" = "Credential";
 
 /* For filtering the login list, search both website and login names. */
 "LoginsList.LoginsListFilterSearchAll" = "Toto";
@@ -698,7 +701,10 @@
 "LoginsList.LoginsListSearchPlaceholder" = "Filtro";
 
 /* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "Le credentiales salvate apparera hic. Si tu ha salvate tu credentiales in Firefox sur un altere apparato, authentica te in tu Firefox Account.";
+"LoginsList.NoLoginsFound.Description" = "Le credentiales salvate apparera hic. Si tu ha salvate tu credentiales in Firefox sur un altere apparato, aperi session in tu Conto de Firefox.";
+
+/* Label shown when there are no logins saved */
+"LoginsList.NoLoginsFound.Title" = "Nulle credentiales trovate";
 
 /* Label that appears after the search if there are no logins matching the search */
 "LoginsList.NoMatchingResult.Subtitle" = "Le recerca non ha producite resultatos.";
@@ -828,6 +834,9 @@
 /* Title on tracking protection menu for blocked items. */
 "Menu.TrackingProtection.BlockedTitle" = "Blocate";
 
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"Menu.TrackingProtection.Details.Verifier" = "Verificate per %@";
+
 /* Message in menu when no trackers blocked. */
 "Menu.TrackingProtection.NoTrackersBlockedTitle" = "Nulle traciator cognoscite per Firefox ha essite detegite sur iste pagina.";
 
@@ -847,7 +856,7 @@
 "Menu.TrackingProtectionBlocking.Description" = "Firefox bloca partes del pagina que pote traciar tu navigation.";
 
 /* The description of the Tracking Protection menu item when tracking is enabled */
-"Menu.TrackingProtectionBlockingDisabled.Description" = "Blocar le traciatores online";
+"Menu.TrackingProtectionBlockingDisabled.Description" = "Blocar traciatores in linea";
 
 /* The title that shows the number of cross-site cookies blocked */
 "Menu.TrackingProtectionCrossSiteCookies.Title" = "Cookies de traciamento inter sitos";
@@ -997,11 +1006,11 @@
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Politica de confidentialitate";
 
-/* value for label to indicate user is on an unencrypted website */
-"ProtectionStatusSheet.InsecureConnection" = "Connexion non secur";
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "Le connexion non es secur";
 
-/* value for label to indicate user is on a secure ssl connection */
-"ProtectionStatusSheet.SecureConnection" = "Connexion secur";
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "Connexion secur";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Motores de recerca rapide";
@@ -1157,13 +1166,13 @@
 "SendTo.NotSignedIn.Message" = "Per favor aperi Firefox, va al parametros e accede pro continuar.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "Tu non es authenticate a tu conto Firefox.";
+"SendTo.NotSignedIn.Title" = "Tu non ha aperite session in tu conto Firefox.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Inviar";
 
 /* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
-"SendTo.SignIn.Button" = "Authentica te a Firefox";
+"SendTo.SignIn.Button" = "Aperir session in Firefox";
 
 /* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
 "SentTab_TabArrivingNotification_NoDevice_body" = "Nove scheda arrivate de altere apparato.";
@@ -1756,7 +1765,7 @@
 "TabTray.OpenSelectedTab.KeyCodeTitle" = "Aperir le scheda seligite";
 
 /* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "Schedas anonyme";
+"TabTray.PrivateTitle" = "Schedas private";
 
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Le schedas es disponibile hic durante 30 dies. Post ille tempore, le schedas se claudera automaticamente.";
@@ -1765,7 +1774,7 @@
 "TabTray.RecentlyClosed.SectionTitle" = "Recentemente claudite";
 
 /* The title on the button to look at private tabs. */
-"TabTray.SegmentedControlTitles.PrivateTabs" = "Anonyme";
+"TabTray.SegmentedControlTitles.PrivateTabs" = "Private";
 
 /* The title on the button to look at synced tabs. */
 "TabTray.SegmentedControlTitles.SyncedTabs" = "Synchronisate";

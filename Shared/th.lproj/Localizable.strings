@@ -550,6 +550,9 @@
 /* Title for the Synced Tabs Cell in the History Panel */
 "HistoryPanel.SyncedTabsCell.Title" = "อุปกรณ์ที่ซิงค์";
 
+/* Accessibility label for the tab toolbar indicating the Home button. */
+"Home" = "หน้าแรก";
+
 /* Button cancelling changes setting the home page for the first time. */
 "HomePage.Set.Dialog.Cancel" = "ยกเลิก";
 
@@ -652,6 +655,9 @@
 /* Toggle logins syncing setting */
 "Logins" = "การเข้าสู่ระบบ";
 
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title" = "นำรหัสผ่านของคุณไปทุกที่";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "เปลี่ยนแปลงเมื่อ";
 
@@ -693,6 +699,27 @@
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "ตัวกรอง";
+
+/* Label shown when there are no logins to list */
+"LoginsList.NoLoginsFound.Description" = "การเข้าสู่ระบบที่บันทึกไว้จะแสดงที่นี่ หากคุณบันทึกการเข้าสู่ระบบลงใน Firefox บนอุปกรณ์อื่น ให้ลงชื่อเข้าใช้บัญชี Firefox ของคุณ";
+
+/* Label shown when there are no logins saved */
+"LoginsList.NoLoginsFound.Title" = "ไม่พบการเข้าสู่ระบบ";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "ไม่มีผลลัพธ์ที่ตรงกับการค้นหาของคุณ";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "ไม่มีการเข้าสู่ระบบที่ตรงกัน";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "ยกเลิก";
+
+/* Placeholder text for search field */
+"LoginsList.Search.Placeholder" = "ค้นหาการเข้าสู่ระบบ";
+
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "เลือกรหัสผ่านที่จะเติม";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "การเข้าสู่ระบบที่บันทึกไว้";
@@ -806,6 +833,9 @@
 
 /* Title on tracking protection menu for blocked items. */
 "Menu.TrackingProtection.BlockedTitle" = "ปิดกั้น";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"Menu.TrackingProtection.Details.Verifier" = "ยืนยันโดย %@";
 
 /* Message in menu when no trackers blocked. */
 "Menu.TrackingProtection.NoTrackersBlockedTitle" = "ไม่มีตัวติดตามที่ Firefox รู้จักถูกตรวจพบที่หน้านี้";
@@ -975,6 +1005,12 @@
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "นโยบายความเป็นส่วนตัว";
+
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "การเชื่อมต่อไม่ปลอดภัย";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "การเชื่อมต่อปลอดภัย";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "เครื่องมือค้นหาด่วน";
@@ -1733,6 +1769,9 @@
 
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "แท็บจะปรากฏที่นี่เป็นเวลา 30 วัน หลังจากนั้น แท็บต่าง ๆ จะถูกปิดโดยอัตโนมัติ";
+
+/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
+"TabTray.RecentlyClosed.SectionTitle" = "เพิ่งปิดล่าสุด";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "ส่วนตัว";

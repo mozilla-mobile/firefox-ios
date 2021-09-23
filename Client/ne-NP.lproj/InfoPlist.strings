@@ -1,10 +1,13 @@
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "यसले तपाईँलाई तस्विर लिन र अपलोड गर्न दिन्छ।";
 
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Firefox लाई तपाइँको सुरक्षित लगइनहरु लाई पहुँच गर्न फेस आईडी चाहिन्छ। ";
+
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
-"NSLocationWhenInUseUsageDescription" = "तपाईँले भ्रमण गर्ने वेबसाइटले तपाईँको स्थान अनुरोध गर्न सक्छ।";
+"NSLocationWhenInUseUsageDescription" = "तपाईंले भ्रमण गर्ने वेबसाइटहरूले तपाईंको स्थान अनुरोध गर्न सक्दछन् ।";
 
 /* Privacy - Microphone Usage Description */
 "NSMicrophoneUsageDescription" = "यसले तपाईँलाई भिडियो सङ्ग्रह गर्न र अपलोड गर्न दिन्छ।";

@@ -35,7 +35,7 @@
 "Modified %@" = "Modificado %@";
 
 /* Label displayed when no logins are found after searching. */
-"No logins found" = "No se encontraron ingresos";
+"No logins found" = "No se encontraron inicios de sesión";
 
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "Abrir y completar";

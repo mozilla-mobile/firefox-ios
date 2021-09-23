@@ -997,12 +997,6 @@
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Pribatutasun-politika";
 
-/* value for label to indicate user is on an unencrypted website */
-"ProtectionStatusSheet.InsecureConnection" = "Konexio ez-segurua";
-
-/* value for label to indicate user is on a secure ssl connection */
-"ProtectionStatusSheet.SecureConnection" = "Konexio segurua";
-
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Bilaketa bizkorreko motorrak";
 

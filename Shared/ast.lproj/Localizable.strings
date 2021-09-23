@@ -16,6 +16,9 @@
 /* About settings section title */
 "About" = "Tocante a";
 
+/* The title for the pinning a shortcut action */
+"ActivityStream.ContextMenu.AddToShortcuts" = "Amestar a Atayos";
+
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite" = "Fixar en Sitios Principales";
 
@@ -81,6 +84,9 @@
 
 /* Toggle bookmarks syncing setting */
 "Bookmarks" = "Marcadores";
+
+/* The button on the snackbar to edit a bookmark after adding it. */
+"Bookmarks.Edit.Button" = "Editar";
 
 /* The label to show the location of the folder where the bookmark is located */
 "Bookmarks.Folder.Label" = "Carpeta";
@@ -150,6 +156,15 @@
 
 /* The label text in the Button Toast for switching to a fresh New Tab. */
 "ContextMenu.ButtonToast.NewTabOpened.LabelText" = "Abrióse una llingüeta nueva";
+
+/* Context menu item for copying an image to the clipboard */
+"ContextMenu.CopyImageButtonTitle" = "Copiar la imaxe";
+
+/* Context menu item for copying an image URL to the clipboard */
+"ContextMenu.CopyImageLinkButtonTitle" = "Copiar l'enllaz de la imaxe";
+
+/* Context menu item for copying a link URL to the clipboard */
+"ContextMenu.CopyLinkButtonTitle" = "Copiar l'enllaz";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "Nun pudo amestase la páxina a la llista de llectura.";
@@ -504,6 +519,9 @@
 /* Toggle logins syncing setting */
 "Logins" = "Anicios de sesión";
 
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title" = "Lleva les contraseñes contigo";
+
 /* Button to not save the user's password */
 "LoginsHelper.DontSave.Button" = "Nun guardar";
 
@@ -527,6 +545,15 @@
 
 /* For filtering the login list, search only the website names */
 "LoginsList.LoginsListFilterWebsite" = "Sitiu web";
+
+/* Placeholder test for search box in logins list view. */
+"LoginsList.LoginsListSearchPlaceholder" = "Peñerar";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "Nun hai resultaos que concasen cola busca.";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "Encaboxar";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "ANICIOS DE SESIÓN GUARDAOS";
@@ -720,6 +747,12 @@
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Política de privacidá";
+
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "La conexón nun ye segura";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "La conexón ye segura";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Motores de busca rápida";
@@ -931,6 +964,9 @@
 /* Title of the alert when prompting the user asking to disconnect. */
 "Settings.Disconnect.Title" = "¿Desconectase de Sync?";
 
+/* Display (theme) settings switch subtitle, explaining the title 'Manually'. */
+"Settings.DisplayTheme.Manual.SwitchSubtitle" = "Escueyi qué estilu quies";
+
 /* Option choice in display theme settings for dark theme */
 "Settings.DisplayTheme.OptionDark" = "Escuridá";
 
@@ -1075,6 +1111,9 @@
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Unviar datos d'usu";
+
+/* Setting to show Logins & Passwords quick access in the application menu */
+"Settings.ShowLoginsInAppMenu.Title" = "Amosar nel menú d'aplicaciones";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Atayos de Siri";

@@ -16,8 +16,17 @@
 /* About settings section title */
 "About" = "बारेमा";
 
+/* The title for the pinning a shortcut action */
+"ActivityStream.ContextMenu.AddToShortcuts" = "सर्टकटहरु मा थप्नुहोस्";
+
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite" = "शीर्ष साइटहरुमा पिन गर्नुहोस्";
+
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite2" = "पिन गर्नुहोस्";
+
+/* The title for removing a shortcut action */
+"ActivityStream.ContextMenu.RemoveFromShortcuts" = "सर्टकटहरु बाट हटाउनुहोस्";
 
 /* The title for removing a pinned topsite action */
 "ActivityStream.ContextMenu.RemovePinTopsite" = "पिन गरिएको साइट हटाउनुहोस्";
@@ -28,11 +37,20 @@
 /* The description of a highlight if it is a site the user has visited */
 "ActivityStream.Highlights.Visited" = "भ्रमण गरिएको";
 
+/* Section title label for recently bookmarked websites */
+"ActivityStream.NewRecentBookmarks.Title" = "भर्खरका बुकमार्कहरू";
+
 /* The link that shows more Pocket trending stories */
 "ActivityStream.Pocket.MoreLink" = "थप अरु";
 
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle" = "Pocketमा ट्रेन्डिङ्ग भएका";
+
 /* The description of a Pocket Story */
 "ActivityStream.Pocket.Trending" = "प्रचलनमा रहेको";
+
+/* Section title label for recently visited websites */
+"ActivityStream.RecentHistory.Title" = "भर्खर भ्रमण गरिएको";
 
 /* Section title label for Top Sites */
 "ActivityStream.TopSites.SectionTitle" = "मुख्य साइटहरू";

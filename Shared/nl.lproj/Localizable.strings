@@ -550,6 +550,9 @@
 /* Title for the Synced Tabs Cell in the History Panel */
 "HistoryPanel.SyncedTabsCell.Title" = "Gesynchroniseerde apparaten";
 
+/* Accessibility label for the tab toolbar indicating the Home button. */
+"Home" = "Home";
+
 /* Button cancelling changes setting the home page for the first time. */
 "HomePage.Set.Dialog.Cancel" = "Annuleren";
 
@@ -700,6 +703,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "Opgeslagen aanmeldingen worden hier getoond. Als u uw aanmeldingen bij Firefox op een ander apparaat hebt opgeslagen, meld u dan aan bij uw Firefox-account.";
 
+/* Label shown when there are no logins saved */
+"LoginsList.NoLoginsFound.Title" = "Geen aanmeldingen gevonden";
+
 /* Label that appears after the search if there are no logins matching the search */
 "LoginsList.NoMatchingResult.Subtitle" = "Uw zoekopdracht heeft geen resultaten opgeleverd.";
 
@@ -827,6 +833,9 @@
 
 /* Title on tracking protection menu for blocked items. */
 "Menu.TrackingProtection.BlockedTitle" = "Geblokkeerd";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"Menu.TrackingProtection.Details.Verifier" = "Geverifieerd door %@";
 
 /* Message in menu when no trackers blocked. */
 "Menu.TrackingProtection.NoTrackersBlockedTitle" = "Op deze pagina zijn geen bij Firefox bekende trackers aangetroffen.";
@@ -997,11 +1006,11 @@
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Privacybeleid";
 
-/* value for label to indicate user is on an unencrypted website */
-"ProtectionStatusSheet.InsecureConnection" = "Niet-beveiligde verbinding";
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "Verbinding is niet beveiligd";
 
-/* value for label to indicate user is on a secure ssl connection */
-"ProtectionStatusSheet.SecureConnection" = "Beveiligde verbinding";
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "Verbinding is beveiligd";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Snelzoekmachines";

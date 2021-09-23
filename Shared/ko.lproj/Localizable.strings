@@ -550,6 +550,9 @@
 /* Title for the Synced Tabs Cell in the History Panel */
 "HistoryPanel.SyncedTabsCell.Title" = "동기화된 기기";
 
+/* Accessibility label for the tab toolbar indicating the Home button. */
+"Home" = "홈";
+
 /* Button cancelling changes setting the home page for the first time. */
 "HomePage.Set.Dialog.Cancel" = "취소";
 
@@ -652,6 +655,9 @@
 /* Toggle logins syncing setting */
 "Logins" = "로그인";
 
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title" = "어디에서나 비밀번호를 사용하세요";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "수정됨";
 
@@ -693,6 +699,27 @@
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "필터";
+
+/* Label shown when there are no logins to list */
+"LoginsList.NoLoginsFound.Description" = "저장된 로그인이 여기에 보여집니다. 다른 기기의 Firefox에서 로그인을 저장했다면 Firefox 계정에 로그인 하세요.";
+
+/* Label shown when there are no logins saved */
+"LoginsList.NoLoginsFound.Title" = "로그인을 찾을 수 없음";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "검색어와 일치하는 결과가 없습니다.";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "일치하는 로그인 없음";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "취소";
+
+/* Placeholder text for search field */
+"LoginsList.Search.Placeholder" = "로그인 검색";
+
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "채울 비밀번호를 선택하세요";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "저장된 로그인";
@@ -806,6 +833,9 @@
 
 /* Title on tracking protection menu for blocked items. */
 "Menu.TrackingProtection.BlockedTitle" = "차단됨";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"Menu.TrackingProtection.Details.Verifier" = "인증 기관: %@";
 
 /* Message in menu when no trackers blocked. */
 "Menu.TrackingProtection.NoTrackersBlockedTitle" = "이 페이지에서 Firefox에 알려진 추적기가 탐지되지 않았습니다.";
@@ -975,6 +1005,12 @@
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "개인정보 보호정책";
+
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "연결이 안전하지 않음";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "연결이 안전함";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "빠른 검색 엔진";
@@ -1733,6 +1769,9 @@
 
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "탭은 여기에 30일 동안 유지됩니다. 그 이후에는 자동으로 닫힙니다.";
+
+/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
+"TabTray.RecentlyClosed.SectionTitle" = "최근 닫음";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "사생활 보호 탭";
