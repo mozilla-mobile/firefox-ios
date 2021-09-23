@@ -329,7 +329,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        tableView.reloadData()
+        DispatchQueue.main.async { [weak self] in
+            self?.tableView.reloadData()
+        }
     }
 
     @objc private func applicationDidBecomeActive() {
