@@ -183,7 +183,9 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         }
         guard shouldEnableInactiveTabs else {
             if !self.isPrivate && shouldEnableGroupedTabs {
-                TabGroupsManager.getGroups(profile: profile, tabs: tabManager.normalTabs) { tabGroups, filteredActiveTabs  in
+                TabGroupsManager.getGroups(with: profile,
+                                           from: tabManager.normalTabs,
+                                           using: .orderedAscending) { tabGroups, filteredActiveTabs  in
                     self.tabGroups = tabGroups
                     self.filteredTabs = filteredActiveTabs
                     completion(tabGroups, filteredActiveTabs)
@@ -211,13 +213,17 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         // Make sure selected tab has latest time
         selectedTab?.lastExecutedTime = Date.now()
         inactiveViewModel.updateInactiveTabs(with: tabManager.selectedTab, tabs: allTabs)
-        TabGroupsManager.getGroups(profile: profile, tabs: tabManager.normalTabs) { tabGroups, filteredActiveTabs  in
+        TabGroupsManager.getGroups(with: profile,
+                                   from: tabManager.normalTabs,
+                                   using: .orderedAscending) { tabGroups, filteredActiveTabs  in
+
             guard self.shouldEnableGroupedTabs else {
                 self.tabGroups = nil
                 self.filteredTabs = allTabs
                 completion(tabGroups, allTabs)
                 return
             }
+            
             self.tabGroups = tabGroups
             self.filteredTabs = filteredActiveTabs
             completion(tabGroups, filteredActiveTabs)
