@@ -5,6 +5,7 @@
 import Foundation
 import WebKit
 import Shared
+import MozillaAppServices
 
 class SavedTab: NSObject, NSCoding {
     var isSelected: Bool
@@ -15,6 +16,7 @@ class SavedTab: NSObject, NSCoding {
     var screenshotUUID: UUID?
     var faviconURL: String?
     var UUID: String?
+    var tabGroupData: TabGroupData?
     var createdAt: Timestamp?
     
     var jsonDictionary: [String: AnyObject] {
@@ -30,7 +32,8 @@ class SavedTab: NSObject, NSCoding {
             "screenshotUUID": uuid as AnyObject,
             "url": url as AnyObject,
             "UUID": self.UUID as AnyObject,
-            "createdAt": self.createdAt as AnyObject
+            "tabGroupData": self.tabGroupData as AnyObject,
+            "createdAt": self.createdAt as AnyObject,
         ]
         
         if let sessionDataInfo = self.sessionData?.jsonDictionary {
@@ -40,7 +43,7 @@ class SavedTab: NSObject, NSCoding {
         return json
     }
     
-    init?(screenshotUUID: UUID?, isSelected: Bool, title: String?, isPrivate: Bool, faviconURL: String?, url: URL?, sessionData: SessionData?, uuid: String, createdAt: Timestamp?) {
+    init?(screenshotUUID: UUID?, isSelected: Bool, title: String?, isPrivate: Bool, faviconURL: String?, url: URL?, sessionData: SessionData?, uuid: String, tabGroupData: TabGroupData?, createdAt: Timestamp?) {
 
         self.screenshotUUID = screenshotUUID
         self.isSelected = isSelected
@@ -50,6 +53,7 @@ class SavedTab: NSObject, NSCoding {
         self.url = url
         self.sessionData = sessionData
         self.UUID = uuid
+        self.tabGroupData = tabGroupData
         self.createdAt = createdAt
         
         super.init()
@@ -64,6 +68,7 @@ class SavedTab: NSObject, NSCoding {
         self.faviconURL = coder.decodeObject(forKey: "faviconURL") as? String
         self.url = coder.decodeObject(forKey: "url") as? URL
         self.UUID = coder.decodeObject(forKey: "UUID") as? String
+        self.tabGroupData = coder.decodeObject(forKey: "tabGroupData") as? TabGroupData
         self.createdAt = coder.decodeObject(forKey: "createdAt") as? Timestamp
     }
     
@@ -76,6 +81,58 @@ class SavedTab: NSObject, NSCoding {
         coder.encode(faviconURL, forKey: "faviconURL")
         coder.encode(url, forKey: "url")
         coder.encode(UUID, forKey: "UUID")
+        coder.encode(tabGroupData, forKey: "tabGroupData")
         coder.encode(createdAt, forKey: "createdAt")
+    }
+}
+
+public class TabGroupData: NSObject, NSCoding {
+    var tabAssociatedSearchTerm: String = ""
+    var tabAssociatedSearchUrl: String = ""
+    var tabAssociatedNextUrl: String = ""
+    var tabHistoryCurrentState = ""
+    var tabGroupTimerState = ""
+    
+    // Checks if there is any search term data
+    func isEmpty() -> Bool {
+        return tabAssociatedSearchTerm.isEmpty && tabAssociatedSearchUrl.isEmpty && tabAssociatedNextUrl.isEmpty
+    }
+    
+    func tabHistoryMetadatakey() -> HistoryMetadataKey {
+        return HistoryMetadataKey(url: tabAssociatedSearchUrl, searchTerm: tabAssociatedSearchTerm, referrerUrl: tabAssociatedNextUrl)
+    }
+    
+    var jsonDictionary: [String: Any] {
+        return [
+            "tabAssociatedSearchTerm": String(self.tabAssociatedSearchTerm),
+            "tabAssociatedSearchUrl": String(self.tabAssociatedSearchUrl),
+            "tabAssociatedNextUrl": String(self.tabAssociatedNextUrl),
+            "tabHistoryCurrentState": String(self.tabHistoryCurrentState),
+            "tabGroupTimerState": String(self.tabGroupTimerState),
+        ]
+    }
+
+    init(searchTerm: String, searchUrl: String, nextReferralUrl: String, tabHistoryCurrentState: String, tabGroupTimerState: String) {
+        self.tabAssociatedSearchTerm = searchTerm
+        self.tabAssociatedSearchUrl = searchUrl
+        self.tabAssociatedNextUrl = nextReferralUrl
+        self.tabHistoryCurrentState = tabHistoryCurrentState
+        self.tabGroupTimerState = tabGroupTimerState
+    }
+
+    required public init?(coder: NSCoder) {
+        self.tabAssociatedSearchTerm = coder.decodeObject(forKey: "tabAssociatedSearchTerm") as? String ?? ""
+        self.tabAssociatedSearchUrl = coder.decodeObject(forKey: "tabAssociatedSearchUrl") as? String ?? ""
+        self.tabAssociatedNextUrl = coder.decodeObject(forKey: "tabAssociatedNextUrl") as? String ?? ""
+        self.tabHistoryCurrentState = coder.decodeObject(forKey: "tabHistoryCurrentState") as? String ?? ""
+        self.tabGroupTimerState = coder.decodeObject(forKey: "tabGroupTimerState") as? String ?? ""
+    }
+
+    public func encode(with coder: NSCoder) {
+        coder.encode(tabAssociatedSearchTerm, forKey: "tabAssociatedSearchTerm")
+        coder.encode(tabAssociatedSearchUrl, forKey: "tabAssociatedSearchUrl")
+        coder.encode(tabAssociatedNextUrl, forKey: "tabAssociatedNextUrl")
+        coder.encode(tabHistoryCurrentState, forKey: "tabHistoryCurrentState")
+        coder.encode(tabGroupTimerState, forKey: "tabGroupTimerState")
     }
 }

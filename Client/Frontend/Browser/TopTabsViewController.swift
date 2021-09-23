@@ -160,6 +160,11 @@ class TopTabsViewController: UIViewController {
 
         updateTabCount(topTabDisplayManager.dataStore.count, animated: false)
     }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        UserDefaults.standard.set(tabManager.selectedTab?.isPrivate ?? false, forKey: "wasLastSessionPrivate")
+    }
 
     func switchForegroundStatus(isInForeground reveal: Bool) {
         // Called when the app leaves the foreground to make sure no information is inadvertently revealed

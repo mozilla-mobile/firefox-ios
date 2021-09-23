@@ -143,6 +143,7 @@ class TabManagerStore: FeatureFlagsProtocol {
         var tabToSelect: Tab?
         var fxHomeTab: Tab?
         var customHomeTab: Tab?
+        let wasLastSessionPrivate = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
         
         for savedTab in savedTabs {
             // Provide an empty request to prevent a new tab from loading the home screen
@@ -152,7 +153,11 @@ class TabManagerStore: FeatureFlagsProtocol {
                 tabToSelect = tab
             }
             
-            fxHomeTab = tab.isFxHomeTab ? tab : nil
+            // select Home Tab for correct previous private / regular session
+            if tab.isPrivate == wasLastSessionPrivate {
+                fxHomeTab = tab.isFxHomeTab ? tab : nil
+            }
+            
             customHomeTab = tab.isCustomHomeTab ? tab : nil
         }
 
