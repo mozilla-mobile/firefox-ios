@@ -22,6 +22,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     private var nameInput = UITextField()
     private var templateInput = UITextView()
     private var templatePlaceholderLabel = UITextView()
+    private var container = UIView()
 
     init(delegate: AddSearchEngineDelegate, searchEngineManager: SearchEngineManager) {
         self.delegate = delegate
@@ -45,8 +46,6 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
 
     private func setupUI() {
         view.backgroundColor = .primaryBackground
-
-        let container = UIView()
         view.addSubview(container)
 
         let nameLabel = SmartLabel()
@@ -117,8 +116,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         container.addSubview(exampleLabel)
 
         container.snp.makeConstraints { (make) in
-            make.width.equalToSuperview()
-            make.height.equalToSuperview()
+            make.leading.trailing.height.equalToSuperview()
         }
 
         nameLabel.snp.makeConstraints { (make) in
@@ -161,6 +159,29 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
             make.leading.equalToSuperview().offset(leftMargin)
             make.trailing.equalToSuperview().offset(-leftMargin)
         }
+    }
+    
+    override func viewSafeAreaInsetsDidChange() {
+        updateContainerConstraints()
+    }
+    
+    private func updateContainerConstraints() {
+        container.snp.updateConstraints { make in
+            switch (UIDevice.current.userInterfaceIdiom, UIDevice.current.orientation) {
+            case (.phone, .landscapeLeft):
+                make.leading.equalTo(view).offset(self.view.safeAreaInsets.left)
+                make.trailing.equalTo(view)
+            case (.phone, .landscapeRight):
+                make.leading.equalTo(view)
+                make.trailing.equalTo(view).inset(self.view.safeAreaInsets.right)
+            default:
+                make.leading.trailing.equalTo(view)
+            }
+            
+        }
+    }
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        updateContainerConstraints()
     }
 
     @objc func learnMoreTapped() {

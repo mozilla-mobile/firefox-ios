@@ -78,6 +78,25 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
             toggle.isOn = Settings.getToggle(blockerToggle.setting)
         }
     }
+    
+    override func viewWillLayoutSubviews() {
+        updateHorizontalConstraintsForTableView()
+    }
+    
+    private func updateHorizontalConstraintsForTableView() {
+        tableView.snp.updateConstraints { make in
+            switch (UIDevice.current.userInterfaceIdiom, UIDevice.current.orientation) {
+            case (.phone, .landscapeLeft):
+                make.leading.equalTo(view).offset(view.safeAreaInsets.left)
+                make.trailing.equalTo(view).inset(UIConstants.layout.trackingProtectionTableInset)
+            case (.phone, .landscapeRight):
+                make.leading.equalTo(view).inset(UIConstants.layout.trackingProtectionTableInset)
+                make.trailing.equalTo(view).inset(view.safeAreaInsets.right)
+            default:
+                make.leading.trailing.equalTo(view).inset(UIConstants.layout.trackingProtectionTableInset)
+            }
+        }
+    }
 
     @objc private func doneTapped() {
         self.dismiss(animated: true, completion: nil)
@@ -94,7 +113,9 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        tableView.reloadData()
+        DispatchQueue.main.async { [weak self] in
+            self?.tableView.reloadData()
+        }
     }
     
     private func showSettings() {
