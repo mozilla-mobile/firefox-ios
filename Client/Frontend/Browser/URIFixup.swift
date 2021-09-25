@@ -26,15 +26,34 @@ class URIFixup {
             return url
         }
 
+        // Add exception of `localhost` to copy default desktop FF setting:
+        // "browser.fixup.domainwhitelist.localhost" = true;
+        if URL(string: "http://\(trimmed)")?.host?.caseInsensitivelyEqual(to: "localhost") ?? false {
+            return URL(string: "http://\(trimmed)");
+        }
+
         // If there's no scheme, we're going to prepend "http://". First,
         // make sure there's at least one "." in the host. This means
         // we'll allow single-word searches (e.g., "foo") at the expense
-        // of breaking single-word hosts without a scheme (e.g., "localhost").
+        // of breaking single-word hosts without a scheme.
         if trimmed.range(of: ".") == nil {
             return nil
         }
 
         if trimmed.range(of: " ") != nil {
+            return nil
+        }
+
+        // If entry is a valid floating point number, don't fixup
+        if Double(trimmed) != nil {
+            return nil
+        }
+
+        // If entry doesn't have a valid ending in Public Suffix List
+        // and it's not all digits and dot, stop fix up.
+        if !trimmed.trimmingCharacters(in: CharacterSet(charactersIn: "0123456789.")).isEmpty,
+           let maybeUrl = URL(string: "http://\(trimmed.lowercased())"),
+           maybeUrl.publicSuffix == nil {
             return nil
         }
 
