@@ -92,7 +92,7 @@ class PageControl: UIView {
             return
         }
 
-        guard let buttonIndex = buttonSubviews.index(of: sender) else {
+        guard let buttonIndex = buttonSubviews.firstIndex(of: sender) else {
             return
         }
 
@@ -230,7 +230,7 @@ class ScrollViewController: UIPageViewController, PageControlDelegate {
             dataSource?.pageViewController(self, viewControllerAfter: currentViewController):
             dataSource?.pageViewController(self, viewControllerBefore: currentViewController) else { return }
 
-        guard let newIndex = orderedViewControllers.index(of: nextViewController) else { return }
+        guard let newIndex = orderedViewControllers.firstIndex(of: nextViewController) else { return }
         let direction: UIPageViewController.NavigationDirection = isIncrement ? .forward : .reverse
 
         setViewControllers([nextViewController], direction: direction, animated: true, completion: nil)
@@ -382,7 +382,7 @@ class ScrollViewController: UIPageViewController, PageControlDelegate {
 extension ScrollViewController: UIPageViewControllerDelegate {
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         if let firstViewController = viewControllers?.first,
-            let index = orderedViewControllers.index(of: firstViewController) {
+            let index = orderedViewControllers.firstIndex(of: firstViewController) {
             scrollViewControllerDelegate?.scrollViewController(scrollViewController: self, didUpdatePageIndex: index)
         }
     }
@@ -390,7 +390,7 @@ extension ScrollViewController: UIPageViewControllerDelegate {
 
 extension ScrollViewController: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        guard let viewControllerIndex = orderedViewControllers.index(of: viewController) else {
+        guard let viewControllerIndex = orderedViewControllers.firstIndex(of: viewController) else {
             return nil
         }
 
@@ -408,7 +408,7 @@ extension ScrollViewController: UIPageViewControllerDataSource {
     }
 
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        guard let viewControllerIndex = orderedViewControllers.index(of: viewController) else {
+        guard let viewControllerIndex = orderedViewControllers.firstIndex(of: viewController) else {
             return nil
         }
 

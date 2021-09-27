@@ -197,7 +197,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     private var toggles = [Int: [Int: BlockerToggle]]()
 
     private func getSectionIndex(_ section: Section) -> Int? {
-        return Section.getSections().index(where: { $0 == section })
+        return Section.getSections().firstIndex(where: { $0 == section })
     }
 
     private func initializeToggles() {

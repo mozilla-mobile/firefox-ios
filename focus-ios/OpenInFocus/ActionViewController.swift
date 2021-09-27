@@ -115,7 +115,7 @@ class ActionViewController: SLComposeServiceViewController {
         super.viewDidAppear(animated)
     }
 
-    override func willMove(toParentViewController parent: UIViewController?) {
+    override func willMove(toParent parent: UIViewController?) {
         view.alpha = 0
     }
 }

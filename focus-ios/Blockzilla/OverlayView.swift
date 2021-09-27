@@ -439,7 +439,7 @@ class OverlayView: UIView {
     }
     
     @objc private func didPressArrowButton(sender: UIButton) {
-        if let index = arrowButtons.index(of: sender) {
+        if let index = arrowButtons.firstIndex(of: sender) {
             delegate?.overlayView(self, didTapArrowText: searchSuggestions[index + 1])
         }
     }

@@ -48,7 +48,7 @@ class AppInfo {
     /// Return the application's major version. It will only handle versions like `9000` or `38.1` or `38.1.1`. It
     /// will crash if the `shortVersion` is missing or malformed. (Which is a fatal packaging error.)
     static var majorVersion: Int {
-        guard let dotIndex = shortVersion.index(of: ".") else {
+        guard let dotIndex = shortVersion.firstIndex(of: ".") else {
             return Int(shortVersion)!
         }
         return Int(String(shortVersion.prefix(upTo: dotIndex)))!
