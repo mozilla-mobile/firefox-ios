@@ -119,11 +119,11 @@ workflows:
             npm run build
   4_A_xcode_build_and_test_Fennec:
     steps:
-    - git::https://github.com/bitrise-steplib/steps-xcode-build-for-test.git@export-fix:
+    - xcode-build-for-simulator@0.11:
         inputs:
-        - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
         - scheme: Fennec
-    - xcode-test@2:
+        - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+    - xcode-test@3.1:
         inputs:
         - scheme: Fennec
         - simulator_device: iPhone 8
@@ -137,11 +137,11 @@ workflows:
         - webhook_url: "$WEBHOOK_SLACK_TOKEN"
   4_B_xcode_build_and_test_Fennec_Enterprise_XCUITests:
     steps:
-    - git::https://github.com/bitrise-steplib/steps-xcode-build-for-test.git@export-fix:
+    - xcode-build-for-simulator@0.11:
         inputs:
         - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO -testPlan Fennec_Enterprise_XCUITests
         - scheme: Fennec_Enterprise_XCUITests
-    - xcode-test@2:
+    - xcode-test@3.1:
         inputs:
         - scheme: Fennec_Enterprise_XCUITests
         - simulator_device: "$IOS_DEVICE"
