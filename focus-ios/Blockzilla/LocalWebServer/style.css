@@ -1,6 +1,6 @@
 body, html {
-    background: #202340;
-    color: #E1E5EA;
+    background: #1C1C1E;
+    color: #FBFBFE;
     font: -apple-system-body;
     font-size: 14px;
     margin-left: 16px;
@@ -8,6 +8,6 @@ body, html {
 }
 
 a {
-    color: #0A9AF4;
+    color: #FF4AA2;
     text-decoration: none;
 }
