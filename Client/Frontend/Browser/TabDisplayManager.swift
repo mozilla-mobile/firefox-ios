@@ -164,10 +164,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
             }
         }
     }
-    
-    /// This is a helper method to update inactive tab state and should not be called directly
-    /// Even when we have inactive tabs enabled try to call `tabsToDisplay`
-    /// `tabsToDisplay` will make sure to get the correct set ot tabs and also check if feature is enabled
+
     private func getTabsAndUpdateInactiveState(completion: @escaping ([String: [Tab]]?, [Tab]) -> Void) {
         let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         guard !self.isPrivate else {
@@ -228,6 +225,20 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
             self.tabManager.removeTabs(recentlyClosedTabs, shouldNotify: true)
             self.tabManager.selectTab(selectedTab)
         }
+    }
+    
+    private func groupNameForTab(tab: Tab) -> String? {
+        guard let groupName = tabGroups?.first(where: { $0.value.contains(tab) })?.key else { return nil }
+        return groupName
+    }
+    
+    func indexOfGroupTab(tab: Tab) -> (groupName: String, indexOfTabInGroup: Int)? {
+        guard let key = groupNameForTab(tab: tab), let group = tabGroups?[key], let indexOfTabInGroup = group.firstIndex(of: tab) else { return nil }
+        return (key, indexOfTabInGroup)
+    }
+    
+    func indexOfRegularTab(tab: Tab) -> Int? {
+        return filteredTabs.firstIndex(of: tab)
     }
     
     func togglePrivateMode(isOn: Bool, createTabOnEmptyPrivateMode: Bool) {
@@ -504,7 +515,8 @@ extension TabDisplayManager: UICollectionViewDragDelegate {
     // until the user's finger moves. This problem is mitigated by checking the collectionView for activated long press gesture recognizers.
     func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         
-        guard TabDisplaySection(rawValue: indexPath.section) != .inactiveTabs else { return [] }
+        let section = TabDisplaySection(rawValue: indexPath.section)
+        guard section != .inactiveTabs, section != .groupedTabs else { return [] }
         guard let tab = dataStore.at(indexPath.item) else { return [] }
 
         // Get the tab's current URL. If it is `nil`, check the `sessionData` since
@@ -562,17 +574,20 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
         _ = dataStore.remove(tab)
         dataStore.insert(tab, at: destinationIndexPath.item)
 
-        let start = IndexPath(row: sourceIndex, section: 0)
-        let end = IndexPath(row: destinationIndexPath.item, section: 0)
+        let start = IndexPath(row: sourceIndex, section: TabDisplaySection.regularTabs.rawValue)
+        let end = IndexPath(row: destinationIndexPath.item, section: TabDisplaySection.regularTabs.rawValue)
         updateWith(animationType: .moveTab) { [weak self] in
             self?.collectionView.moveItem(at: start, to: end)
         }
     }
 
     func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
-        guard let indexPath = destinationIndexPath, TabDisplaySection(rawValue: indexPath.section) != .inactiveTabs else { return UICollectionViewDropProposal(operation: .forbidden) }
+        let forbiddenOperation = UICollectionViewDropProposal(operation: .forbidden)
+        guard let indexPath = destinationIndexPath else { return forbiddenOperation }
+        let section = TabDisplaySection(rawValue: indexPath.section)
+        guard section != .inactiveTabs, section != .groupedTabs else { return forbiddenOperation }
         guard let localDragSession = session.localDragSession, let item = localDragSession.items.first, let _ = item.localObject as? Tab else {
-            return UICollectionViewDropProposal(operation: .forbidden)
+            return forbiddenOperation
         }
 
         return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
