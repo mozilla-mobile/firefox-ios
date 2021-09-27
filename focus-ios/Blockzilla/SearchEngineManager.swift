@@ -48,11 +48,11 @@ class SearchEngineManager {
     }
 
     func hasDisabledDefaultEngine() -> Bool {
-        return readCustomEngines().count > 0
+        return getDisabledDefaultEngineNames().count > 0
     }
 
     func restoreDisabledDefaultEngines() {
-        prefs.removeObject(forKey: SearchEngineManager.prefKeyCustomEngines)
+        prefs.removeObject(forKey: SearchEngineManager.prefKeyDisabledEngines)
         loadEngines()
     }
 
@@ -145,19 +145,28 @@ class SearchEngineManager {
     }
 
     private func readCustomEngines() -> [SearchEngine] {
-        if let archiveData = prefs.value(forKey: SearchEngineManager.prefKeyCustomEngines) as? NSData {
-            let archivedCustomEngines = NSKeyedUnarchiver.unarchiveObject(with: archiveData as Data)
-            let customEngines = archivedCustomEngines as? [SearchEngine] ?? [SearchEngine]()
-            return customEngines.map { engine in
-                engine.isCustom = true
-                return engine
+        do {
+            if let archiveData = prefs.value(forKey: SearchEngineManager.prefKeyCustomEngines) as? NSData {
+                let archivedCustomEngines = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(archiveData as Data)
+                let customEngines = archivedCustomEngines as? [SearchEngine] ?? [SearchEngine]()
+                return customEngines.map { engine in
+                    engine.isCustom = true
+                    return engine
+                }
             }
+        }
+        catch {
+            print(error)
         }
         return [SearchEngine]()
     }
 
     private func saveCustomEngines(customEngines: [SearchEngine]) {
-        prefs.set(NSKeyedArchiver.archivedData(withRootObject: customEngines), forKey: SearchEngineManager.prefKeyCustomEngines)
+        do {
+            try prefs.set(NSKeyedArchiver.archivedData(withRootObject: customEngines, requiringSecureCoding: false), forKey: SearchEngineManager.prefKeyCustomEngines)
+        } catch {
+            print(error)
+        }
     }
 
     private func getDisabledDefaultEngineNames() -> [String] {
