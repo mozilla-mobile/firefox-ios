@@ -44,7 +44,11 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
     }
     
     override func prepareInterfaceForExtensionConfiguration() {
-        self.presenter?.extensionConfigurationRequested()
+        if LAContext().canEvaluatePolicy(.deviceOwnerAuthentication, error: nil) {
+            self.presenter?.extensionConfigurationRequested()
+        } else {
+            self.presenter?.showPasscodeRequirement()
+        }
     }
     
     /*
@@ -54,7 +58,7 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
      */
     
     override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-        if false { // LAContext().canEvaluatePolicy(.deviceOwnerAuthentication, error: nil) {
+        if LAContext().canEvaluatePolicy(.deviceOwnerAuthentication, error: nil) {
             self.presenter?.credentialList(for: serviceIdentifiers)
         } else {
             self.presenter?.showPasscodeRequirement()
@@ -71,7 +75,7 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
      */
     
     override func provideCredentialWithoutUserInteraction(for credentialIdentity: ASPasswordCredentialIdentity) {
-        if false { // LAContext().canEvaluatePolicy(.deviceOwnerAuthentication, error: nil) {
+        if LAContext().canEvaluatePolicy(.deviceOwnerAuthentication, error: nil) {
             self.presenter?.credentialProvisionRequested(for: credentialIdentity)
         } else {
             self.extensionContext.cancelRequest(withError: ASExtensionError(.userInteractionRequired))
