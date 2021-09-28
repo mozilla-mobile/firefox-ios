@@ -253,8 +253,7 @@ extension LoginDetailViewController: UITableViewDelegate {
         cell.becomeFirstResponder()
 
         let menu = UIMenuController.shared
-        menu.setTargetRect(cell.frame, in: self.tableView)
-        menu.setMenuVisible(true, animated: true)
+        menu.showMenu(from: self.tableView, rect: cell.frame)
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
