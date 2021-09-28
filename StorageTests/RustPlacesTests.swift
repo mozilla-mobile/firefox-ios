@@ -39,27 +39,30 @@ class RustPlacesTests: XCTestCase {
         XCTAssertTrue(places.noteHistoryMetadataObservation(
             key: metadataKey1,
             observation: HistoryMetadataObservation(
-                titleObservation: "Mozilla Test",
-                viewTimeObservation: nil,
-                documentTypeObservation: nil
+                url: metadataKey1.url,
+                viewTime: nil,
+                documentType: nil,
+                title: "Mozilla Test"
             )
         ).value.isSuccess)
         
         XCTAssertTrue(places.noteHistoryMetadataObservation(
             key: metadataKey1,
             observation: HistoryMetadataObservation(
-                titleObservation: nil,
-                viewTimeObservation: 1,
-                documentTypeObservation: nil
+                url: metadataKey1.url,
+                viewTime: 1,
+                documentType: nil,
+                title: nil
             )
         ).value.isSuccess)
         
         XCTAssertTrue(places.noteHistoryMetadataObservation(
             key: metadataKey1,
             observation: HistoryMetadataObservation(
-                titleObservation: nil,
-                viewTimeObservation: nil,
-                documentTypeObservation: .regular
+                url: metadataKey1.url,
+                viewTime: nil,
+                documentType: .regular,
+                title: nil
             )
         ).value.isSuccess)
         
@@ -75,9 +78,10 @@ class RustPlacesTests: XCTestCase {
         XCTAssertTrue(places.noteHistoryMetadataObservation(
             key: metadataKey1,
             observation: HistoryMetadataObservation(
-                titleObservation: nil,
-                viewTimeObservation: 11,
-                documentTypeObservation: nil
+                url: metadataKey1.url,
+                viewTime: 11,
+                documentType: nil,
+                title: nil
             )
         ).value.isSuccess)
         
@@ -88,9 +92,10 @@ class RustPlacesTests: XCTestCase {
         XCTAssertTrue(places.noteHistoryMetadataObservation(
             key: metadataKey1,
             observation: HistoryMetadataObservation(
-                titleObservation: nil,
-                viewTimeObservation: 3,
-                documentTypeObservation: nil
+                url: metadataKey1.url,
+                viewTime: 3,
+                documentType: nil,
+                title: nil
             )
         ).value.isSuccess)
         
@@ -102,9 +107,10 @@ class RustPlacesTests: XCTestCase {
         XCTAssertTrue(places.noteHistoryMetadataObservation(
             key: metadataKey1,
             observation: HistoryMetadataObservation(
-                titleObservation: nil,
-                viewTimeObservation: nil,
-                documentTypeObservation: .media
+                url: metadataKey1.url,
+                viewTime: nil,
+                documentType: .media,
+                title: nil
             )
         ).value.isSuccess)
         
@@ -116,9 +122,10 @@ class RustPlacesTests: XCTestCase {
         XCTAssertTrue(places.noteHistoryMetadataObservation(
             key: metadataKey1,
             observation: HistoryMetadataObservation(
-                titleObservation: "New title",
-                viewTimeObservation: nil,
-                documentTypeObservation: nil
+                url: metadataKey1.url,
+                viewTime: nil,
+                documentType: nil,
+                title: "New title"
             )
         ).value.isSuccess)
         singleItemRead = places.getHistoryMetadataSince(since: 0).value
@@ -130,18 +137,20 @@ class RustPlacesTests: XCTestCase {
         XCTAssertTrue(places.noteHistoryMetadataObservation(
             key: metadataKey2,
             observation: HistoryMetadataObservation(
-                titleObservation: "Another Mozilla",
-                viewTimeObservation: nil,
-                documentTypeObservation: nil
+                url: metadataKey2.url,
+                viewTime: nil,
+                documentType: nil,
+                title: "Another Mozilla"
             )
         ).value.isSuccess)
 
         XCTAssertTrue(places.noteHistoryMetadataObservation(
             key: metadataKey2,
             observation: HistoryMetadataObservation(
-                titleObservation: nil,
-                viewTimeObservation: nil,
-                documentTypeObservation: .regular
+                url: metadataKey2.url,
+                viewTime: nil,
+                documentType: .regular,
+                title: nil
             )
         ).value.isSuccess)
         
@@ -159,9 +168,10 @@ class RustPlacesTests: XCTestCase {
         XCTAssertTrue(places.noteHistoryMetadataObservation(
             key: metadataKey2,
             observation: HistoryMetadataObservation(
-                titleObservation: nil,
-                viewTimeObservation: 25,
-                documentTypeObservation: nil
+                url: metadataKey2.url,
+                viewTime: 25,
+                documentType: nil,
+                title: nil
             )
         ).value.isSuccess)
         multipleItemsRead = places.getHistoryMetadataSince(since: 0).value
@@ -186,14 +196,15 @@ class RustPlacesTests: XCTestCase {
         XCTAssertTrue(places.noteHistoryMetadataObservation(
             key: metadataKey3,
             observation: HistoryMetadataObservation(
-                titleObservation: "Скачать Фаерфокс",
-                viewTimeObservation: nil,
-                documentTypeObservation: nil
+                url: metadataKey3.url,
+                viewTime: nil,
+                documentType: nil,
+                title: "Скачать Фаерфокс"
             )
         ).value.isSuccess)
         queryResults = places.queryHistoryMetadata(query: "firefox", limit: 10).value
         XCTAssertEqual(queryResults.successValue!.count, 1)
-        XCTAssertEqual(queryResults.successValue![0].key.url, "https://www.firefox.ru/download")
+        XCTAssertEqual(queryResults.successValue![0].url, "https://www.firefox.ru/download")
         XCTAssertEqual(queryResults.successValue![0].title, "Скачать Фаерфокс")
         
         // Able to query by search term.
@@ -201,14 +212,15 @@ class RustPlacesTests: XCTestCase {
         XCTAssertTrue(places.noteHistoryMetadataObservation(
             key: metadataKey4,
             observation: HistoryMetadataObservation(
-                titleObservation: nil,
-                viewTimeObservation: 1337,
-                documentTypeObservation: nil
+                url: metadataKey4.url,
+                viewTime: 1337,
+                documentType: nil,
+                title: nil
             )
         ).value.isSuccess)
         queryResults = places.queryHistoryMetadata(query: "sample", limit: 10).value
         XCTAssertEqual(queryResults.successValue!.count, 1)
-        XCTAssertEqual(queryResults.successValue![0].key.url, "https://www.example.com/")
+        XCTAssertEqual(queryResults.successValue![0].url, "https://www.example.com/")
         
         // Able to delete.
         queryResults = places.getHistoryMetadataSince(since: 0).value
