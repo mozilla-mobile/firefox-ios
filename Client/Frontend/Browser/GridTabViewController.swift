@@ -808,7 +808,7 @@ class TabCell: UICollectionViewCell {
         }
 
         screenshotView.snp.makeConstraints { make in
-            make.top.equalTo(titleText.snp.bottom)
+            make.top.equalToSuperview()
             make.left.right.equalTo(backgroundHolder)
             make.bottom.equalTo(backgroundHolder.snp.bottom)
         }
