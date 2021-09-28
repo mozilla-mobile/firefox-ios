@@ -27,7 +27,6 @@ class CredentialProviderPresenter {
         if self.profile.logins.reopenIfClosed() != nil {
             cancel(with: .failed)
         } else if let id = credentialIdentity.recordIdentifier {
-            
             profile.logins.get(id: id).upon { [weak self] result in
                 switch result {
                 case .failure:
@@ -89,10 +88,6 @@ class CredentialProviderPresenter {
 
 private extension CredentialProviderPresenter {
     func cancel(with errorCode: ASExtensionError.Code) {
-        let error = NSError(domain: ASExtensionErrorDomain,
-                            code: errorCode.rawValue,
-                            userInfo: nil)
-        
-        self.view?.extensionContext.cancelRequest(withError: error)
+        self.view?.extensionContext.cancelRequest(withError: ASExtensionError(errorCode))
     }
 }

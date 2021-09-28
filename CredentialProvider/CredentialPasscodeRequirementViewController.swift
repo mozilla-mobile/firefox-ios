@@ -6,7 +6,7 @@ import UIKit
 import LocalAuthentication
 
 protocol CredentialPasscodeRequirementViewControllerDelegate {
-    func credentialPasscodeRequirementViewControllerDidCancel() // TODO DidDismiss
+    func credentialPasscodeRequirementViewControllerDidDismiss()
 }
 
 class CredentialPasscodeRequirementViewController: UIViewController {
@@ -35,31 +35,6 @@ class CredentialPasscodeRequirementViewController: UIViewController {
         label.layer.cornerRadius = 8
         return label
     }()
-    
-    lazy private var activityIndicator: UIActivityIndicatorView = {
-        let loadingIndicator = UIActivityIndicatorView()
-        loadingIndicator.style = .large
-        return loadingIndicator
-    }()
-    
-    lazy private var cancelButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Cancel", for: .normal)
-        button.addTarget(self, action: #selector(self.cancelButtonTapped(_:)), for: .touchUpInside)
-        return button
-    }()
-    
-    lazy private var proceedButton: UIButton = {
-        let button = UIButton(type: .custom)
-        button.backgroundColor = UIColor.Photon.Blue50
-        button.layer.cornerRadius = 8
-        let imageWidth = button.imageView?.frame.width ?? 0.0
-        button.setTitle("Turn on AutoFill", for: .normal)
-        button.titleLabel?.font = DynamicFontHelper().MediumSizeBoldFontAS
-        button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
-        button.addTarget(self, action: #selector(proceedButtonTapped), for: .touchUpInside)
-        return button
-    }()
 
     lazy private var bottomCancelButton: UIButton = {
         let button = UIButton(type: .custom)
@@ -86,28 +61,20 @@ class CredentialPasscodeRequirementViewController: UIViewController {
         view.backgroundColor = UIColor.CredentialProvider.welcomeScreenBackgroundColor
         addSubviews()
         addViewConstraints()
-        
-        cancelButton.isHidden = true
-        proceedButton.isHidden = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        activityIndicator.startAnimating()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        activityIndicator.stopAnimating()
     }
     
     func addSubviews() {
         view.addSubview(logoImageView)
         view.addSubview(taglineLabel)
         view.addSubview(warningLabel)
-        //view.addSubview(activityIndicator)
-        view.addSubview(cancelButton)
-        view.addSubview(proceedButton)
         view.addSubview(bottomCancelButton)
     }
     
@@ -127,23 +94,6 @@ class CredentialPasscodeRequirementViewController: UIViewController {
             make.centerX.equalToSuperview()
             make.width.equalTo(344)
         }
-        
-//        activityIndicator.snp.makeConstraints { make in
-//            make.top.equalTo(taglineLabel.snp_bottomMargin).offset(20)
-//            make.centerX.equalToSuperview()
-//        }
-        
-        cancelButton.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(10)
-            make.trailing.equalToSuperview().inset(20)
-        }
-        
-        proceedButton.snp.makeConstraints { make in
-            make.bottom.equalTo(self.view.snp.bottomMargin).inset(10)
-            make.height.equalTo(44)
-            make.left.equalToSuperview().inset(20)
-            make.right.equalToSuperview().inset(20)
-        }
 
         bottomCancelButton.snp.makeConstraints { make in
             make.bottom.equalTo(self.view.snp.bottomMargin).inset(10)
@@ -153,11 +103,7 @@ class CredentialPasscodeRequirementViewController: UIViewController {
         }
     }
     
-    @objc func proceedButtonTapped(_ sender: UIButton) {
-        delegate?.credentialPasscodeRequirementViewControllerDidCancel()
-    }
-
     @objc func cancelButtonTapped(_ sender: UIButton) {
-        delegate?.credentialPasscodeRequirementViewControllerDidCancel()
+        delegate?.credentialPasscodeRequirementViewControllerDidDismiss()
     }
 }
