@@ -6,7 +6,7 @@ import Foundation
 
 extension UIWindow {
     static var keyWindow: UIWindow? {
-        UIApplication.shared.windows.first(where: { $0.isKeyWindow })
+        UIApplication.shared.windows.first(where: \.isKeyWindow)
     }
     static var isLandscape: Bool {
         interfaceOrientation?
