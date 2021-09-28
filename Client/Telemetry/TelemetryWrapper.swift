@@ -103,7 +103,7 @@ class TelemetryWrapper {
             let searchEngines = SearchEngines(prefs: profile.prefs, files: profile.files)
             settings["defaultSearchEngine"] = searchEngines.defaultEngine.engineID ?? "custom"
 
-            if let windowBounds = UIApplication.shared.keyWindow?.bounds {
+            if let windowBounds = UIWindow.keyWindow?.bounds {
                 settings["windowWidth"] = String(describing: windowBounds.width)
                 settings["windowHeight"] = String(describing: windowBounds.height)
             }

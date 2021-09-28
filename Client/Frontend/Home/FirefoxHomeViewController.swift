@@ -537,7 +537,7 @@ extension FirefoxHomeViewController {
                 currentTraits = UITraitCollection(horizontalSizeClass: .compact)
             }
             var insets = FirefoxHomeUX.sectionInsetsForSizeClass[currentTraits.horizontalSizeClass]
-            let window = UIApplication.shared.keyWindow
+            let window = UIWindow.keyWindow
             let safeAreaInsets = window?.safeAreaInsets.left ?? 0
             insets += FirefoxHomeUX.MinimumInsets + safeAreaInsets
             return insets
