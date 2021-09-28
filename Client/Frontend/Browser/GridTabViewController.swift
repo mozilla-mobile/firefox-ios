@@ -726,7 +726,7 @@ class TabCell: UICollectionViewCell {
     static let Identifier = "TabCellIdentifier"
     static let BorderWidth: CGFloat = 3
 
-    let backgroundHolder: UIView = {
+    lazy var backgroundHolder: UIView = {
         let view = UIView()
         view.layer.cornerRadius = GridTabTrayControllerUX.CornerRadius
         view.clipsToBounds = true
@@ -734,16 +734,15 @@ class TabCell: UICollectionViewCell {
         return view
     }()
 
-    let screenshotView: UIImageViewAligned = {
-        let view = UIImageViewAligned()
+    lazy var screenshotView: UIImageView = {
+        let view = UIImageView()
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
         view.isUserInteractionEnabled = false
-        view.alignLeft = true
-        view.alignTop = true
         view.backgroundColor = UIColor.theme.tabTray.screenshotBackground
         return view
     }()
+    
 
     let titleText: UILabel = {
         let label = UILabel()
@@ -787,6 +786,11 @@ class TabCell: UICollectionViewCell {
         self.closeButton.addTarget(self, action: #selector(close), for: .touchUpInside)
 
         contentView.addSubview(backgroundHolder)
+
+        backgroundHolder.snp.makeConstraints { make in
+            make.edges.equalTo(contentView)
+        }
+        
         backgroundHolder.addSubview(self.screenshotView)
 
         self.accessibilityCustomActions = [
@@ -819,6 +823,12 @@ class TabCell: UICollectionViewCell {
             make.size.equalTo(GridTabTrayControllerUX.CloseButtonSize)
             make.centerY.trailing.equalTo(title.contentView)
         }
+
+        screenshotView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.left.right.equalTo(backgroundHolder)
+            make.bottom.equalTo(backgroundHolder.snp.bottom)
+        }
     }
 
     func setTabSelected(_ isPrivate: Bool) {
@@ -839,10 +849,6 @@ class TabCell: UICollectionViewCell {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-
-        backgroundHolder.frame = CGRect(x: margin, y: margin, width: frame.width, height: frame.height)
-        screenshotView.frame = CGRect(size: backgroundHolder.frame.size)
-
         let shadowPath = CGRect(width: layer.frame.width + (TabCell.BorderWidth * 2), height: layer.frame.height + (TabCell.BorderWidth * 2))
         layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: GridTabTrayControllerUX.CornerRadius+TabCell.BorderWidth).cgPath
     }
