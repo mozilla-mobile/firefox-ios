@@ -4,15 +4,14 @@
 
 import Foundation
 import Shared
-import SwiftyJSON
 
 /*
  This only makes sense if you look at the structure of List.json
 */
 class DefaultSearchPrefs {
     fileprivate let defaultSearchList: [String]
-    fileprivate let locales: JSON
-    fileprivate let regionOverrides: JSON
+    fileprivate let locales: [String: Any]
+    fileprivate let regionOverrides: [String: Any]
     fileprivate let globalDefaultEngine: String
 
     public init?(with filePath: URL) {
@@ -20,13 +19,19 @@ class DefaultSearchPrefs {
             assertionFailure("Search list not found. Check bundle")
             return nil
         }
-        let json = JSON(parseJSON: searchManifest)
+        guard let data = searchManifest.data(using: .utf8),
+              let json = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [String: Any] else {
+            assertionFailure("Could not serialised")
+            return nil
+        }
+
         // Split up the JSON into useful parts
-        locales = json["locales"]
-        regionOverrides = json["regionOverrides"]
+        locales = json["locales"] as! [String : Any]
+        regionOverrides = json["regionOverrides"] as! [String : Any]
         // These are the fallback defaults
-        guard let searchList = json["default"]["visibleDefaultEngines"].array?.compactMap({ $0.string }),
-            let engine = json["default"]["searchDefault"].string else {
+        guard let defaultDict = json["default"] as? [String: Any],
+              let searchList = defaultDict["visibleDefaultEngines"] as? [String],
+              let engine = defaultDict["searchDefault"] as? String else {
                 assertionFailure("Defaults are not set up correctly in List.json")
                 return nil
         }
@@ -39,16 +44,30 @@ class DefaultSearchPrefs {
      Each langauge in the locales list has a default list of engines and then a region override list.
      */
     open func visibleDefaultEngines(for possibileLocales: [String], and region: String) -> [String] {
-        let engineList = possibileLocales.compactMap({ locales[$0].dictionary }).compactMap({ (localDict) -> [JSON]? in
-            return localDict[region]?["visibleDefaultEngines"].array ?? localDict["default"]?["visibleDefaultEngines"].array
-        }).last?.compactMap({ $0.string })
+        let engineList = possibileLocales
+            .compactMap {
+                locales[$0] as? [String: Any]
+            }
+            .compactMap { localDict -> [String]? in
+                let visibleDefaultEngines = "visibleDefaultEngines"
+                
+                if let inner = localDict[region] as? [String: Any],
+                   let array = inner[visibleDefaultEngines] as? [String] {
+                    return array
+                } else {
+                    let inner = localDict["default"] as? [String: Any]
+                    let array = inner?[visibleDefaultEngines] as? [String]
+                    return array
+                }
+            }
+            .last
 
         // If the engineList is empty then go ahead and use the default
         var usersEngineList = engineList ?? defaultSearchList
 
         // Overrides for specfic regions.
-        if let overrides = regionOverrides[region].dictionary {
-            usersEngineList = usersEngineList.map({ overrides[$0]?.string ?? $0 })
+        if let overrides = regionOverrides[region] as? [String: Any] {
+            usersEngineList = usersEngineList.map({ overrides[$0] as? String ?? $0 })
         }
         return usersEngineList
     }
@@ -59,8 +78,14 @@ class DefaultSearchPrefs {
      Create a list of these and return the last one. The globalDefault acts as the fallback in case the list is empty.
      */
     open func searchDefault(for possibileLocales: [String], and region: String) -> String {
-        return possibileLocales.compactMap({ locales[$0].dictionary }).reduce(globalDefaultEngine) { (defaultEngine, localeJSON) -> String in
-            return localeJSON[region]?["searchDefault"].string ?? defaultEngine
+        return possibileLocales
+            .compactMap {
+                locales[$0] as? [String: Any]
+            }
+            .reduce(globalDefaultEngine) {
+                (defaultEngine, localeJSON) -> String in
+                let inner = localeJSON[region] as? [String: Any]
+                return inner?["searchDefault"] as? String ?? defaultEngine
         }
     }
 }
