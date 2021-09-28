@@ -9,12 +9,12 @@ extension GridTabViewController {
     override var keyCommands: [UIKeyCommand]? {
         let toggleText = tabDisplayManager.isPrivate ? Strings.SwitchToNonPBMKeyCodeTitle: Strings.SwitchToPBMKeyCodeTitle
         let commands = [
-            UIKeyCommand(input: "`", modifierFlags: .command, action: #selector(didTogglePrivateModeKeyCommand), discoverabilityTitle: toggleText),
+            UIKeyCommand(action: #selector(didTogglePrivateModeKeyCommand), input: "`", modifierFlags: .command,  discoverabilityTitle: toggleText),
             UIKeyCommand(input: "w", modifierFlags: .command, action: #selector(didCloseTabKeyCommand)),
-            UIKeyCommand(input: "w", modifierFlags: [.command, .shift], action: #selector(didCloseAllTabsKeyCommand), discoverabilityTitle: Strings.CloseAllTabsFromTabTrayKeyCodeTitle),
+            UIKeyCommand(action: #selector(didCloseAllTabsKeyCommand), input: "w", modifierFlags: [.command, .shift],  discoverabilityTitle: Strings.CloseAllTabsFromTabTrayKeyCodeTitle),
             UIKeyCommand(input: "\\", modifierFlags: [.command, .shift], action: #selector(didEnterTabKeyCommand)),
             UIKeyCommand(input: "\t", modifierFlags: [.command, .alternate], action: #selector(didEnterTabKeyCommand)),
-            UIKeyCommand(input: "t", modifierFlags: .command, action: #selector(didOpenNewTabKeyCommand), discoverabilityTitle: Strings.OpenNewTabFromTabTrayKeyCodeTitle),
+            UIKeyCommand(action: #selector(didOpenNewTabKeyCommand), input: "t", modifierFlags: .command, discoverabilityTitle: Strings.OpenNewTabFromTabTrayKeyCodeTitle),
             UIKeyCommand(input: UIKeyCommand.inputDownArrow, modifierFlags: [], action: #selector(didChangeSelectedTabKeyCommand(sender:))),
             UIKeyCommand(input: UIKeyCommand.inputUpArrow, modifierFlags: [], action: #selector(didChangeSelectedTabKeyCommand(sender:))),
         ]
