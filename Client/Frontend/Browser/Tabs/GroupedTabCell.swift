@@ -222,12 +222,12 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
         bringSubviewToFront(containerView)
         
         containerView.snp.makeConstraints { make in
-            make.height.equalTo(230)
+            make.height.equalTo(233)
             make.edges.equalToSuperview()
         }
         
         titleLabel.snp.makeConstraints { make in
-            make.height.equalTo(20)
+            make.height.equalTo(23)
             make.top.equalToSuperview().offset(30)
             make.leading.equalTo(self.safeArea.leading).inset(20)
             make.centerX.equalToSuperview()
@@ -292,7 +292,7 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
         let isIpad = UIDevice.current.userInterfaceIdiom == .pad
         let padding = isIpad && !UIWindow.isLandscape ? 75 : (isIpad && UIWindow.isLandscape) ? 105 : 10
         let width = (Int(cellWidth) - padding) >= 0 ? Int(cellWidth) - padding : 0
-        return CGSize(width: width, height: 185)
+        return CGSize(width: width, height: 188)
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {

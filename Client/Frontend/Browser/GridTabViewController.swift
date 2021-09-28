@@ -100,16 +100,33 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     }
     
     func focusTab() {
-        guard let currentTab = tabManager.selectedTab, let index = self.tabDisplayManager.dataStore.index(of: currentTab) else { return }
-        let indexPath = IndexPath(item: index, section: 0)
-        guard var rect = self.collectionView.layoutAttributesForItem(at: indexPath)?.frame else { return }
-        if index >= self.tabDisplayManager.dataStore.count - 2 {
+        guard let selectedTab = tabManager.selectedTab else { return }
+
+        // scroll to group
+        if let tabGroup = tabDisplayManager.tabGroups, tabGroup.count > 0, let tabIndex = tabDisplayManager.indexOfGroupTab(tab: selectedTab) {
+            let groupName = tabIndex.groupName            
+            let indexOfTabGroup: Int = Array(tabGroup.keys).firstIndex(of: groupName) ?? 0
+            let offSet =  Int(GroupedTabCell.defaultCellHeight) * indexOfTabGroup
+            let rect = CGRect(origin: CGPoint(x: 0, y: offSet), size: CGSize(width:  self.collectionView.frame.width, height: self.collectionView.frame.height))
             DispatchQueue.main.async {
-                rect.origin.y += 10
                 self.collectionView.scrollRectToVisible(rect, animated: false)
+
             }
-        } else {
-            self.collectionView.scrollToItem(at: indexPath, at: [.centeredVertically, .centeredHorizontally] , animated: false)
+            return
+        }
+
+        // scroll to regular tab
+        if let indexOfRegularTab = tabDisplayManager.indexOfRegularTab(tab: selectedTab) {
+            let indexPath = IndexPath(item: indexOfRegularTab, section: TabDisplaySection.regularTabs.rawValue)
+            guard var rect = self.collectionView.layoutAttributesForItem(at: indexPath)?.frame else { return }
+            if indexOfRegularTab >= self.tabDisplayManager.dataStore.count - 2 {
+                DispatchQueue.main.async {
+                    rect.origin.y += 10
+                    self.collectionView.scrollRectToVisible(rect, animated: false)
+                }
+            } else {
+                self.collectionView.scrollToItem(at: indexPath, at: [.centeredVertically, .centeredHorizontally] , animated: false)
+            }
         }
     }
 
