@@ -69,9 +69,30 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
     }
 }
 
-extension CredentialProviderViewController: CredentialProviderViewProtocol {
+extension CredentialProviderViewController: CredentialProviderViewProtocol, CredentialWelcomeViewControllerDelegate {
+    func credentialWelcomeViewControllerDidCancel() {
+        self.currentViewController?.dismiss(animated: false) {
+            let error = NSError(domain: ASExtensionErrorDomain, code: ASExtensionError.Code.userCanceled.rawValue, userInfo: nil)
+            self.extensionContext.cancelRequest(withError: error) // ASExtensionError(.userCanceled)
+        }
+    }
+    
+    func credentialWelcomeViewControllerDidProceed() {
+        self.currentViewController?.dismiss(animated: false) {
+            if self.presenter?.profile.logins.reopenIfClosed() != nil {
+                self.extensionContext.cancelRequest(withError: ASExtensionError(.failed))
+                return
+            }
+
+            self.presenter?.profile.syncCredentialIdentities().upon { result in
+                self.extensionContext.completeExtensionConfigurationRequest()
+            }
+        }
+    }
+
     func showWelcome() {
         let welcomeVC = CredentialWelcomeViewController()
+        welcomeVC.delegate = self
         self.currentViewController = welcomeVC
     }
     

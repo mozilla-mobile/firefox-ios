@@ -885,6 +885,7 @@
 		EBFDB790211C83A5005CCA2F /* BrowserViewController+FindInPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFDB787211C83A5005CCA2F /* BrowserViewController+FindInPage.swift */; };
 		F35B8D2B1D6380EA008E3D61 /* SessionRestore.html in Resources */ = {isa = PBXBuildFile; fileRef = F35B8D2A1D6380EA008E3D61 /* SessionRestore.html */; };
 		F35B8D2D1D6383E9008E3D61 /* SessionRestoreHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F35B8D2C1D6383E9008E3D61 /* SessionRestoreHelper.swift */; };
+		F80DF73F27034F6400E4C37D /* DynamicFontHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075531E37F6FC006961AC /* DynamicFontHelper.swift */; };
 		F8324A072649A188007E4BFA /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8324A062649A188007E4BFA /* AuthenticationServices.framework */; };
 		F8324A0A2649A188007E4BFA /* CredentialProviderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8324A092649A188007E4BFA /* CredentialProviderViewController.swift */; };
 		F8324A122649A188007E4BFA /* CredentialProvider.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = F8324A052649A188007E4BFA /* CredentialProvider.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -7937,6 +7938,7 @@
 				F8324A0A2649A188007E4BFA /* CredentialProviderViewController.swift in Sources */,
 				C87DF9B2267246AA0097E707 /* AppAuthenticator.swift in Sources */,
 				60CE80C12667780D004026C7 /* CredentialListPresenter.swift in Sources */,
+				F80DF73F27034F6400E4C37D /* DynamicFontHelper.swift in Sources */,
 				6025B111267B6EE100F59F6B /* CredentialWelcomeViewController.swift in Sources */,
 				C87DF962267246730097E707 /* photon-colors.swift in Sources */,
 				6025B10A267B6BB300F59F6B /* SelectPasswordCell.swift in Sources */,
