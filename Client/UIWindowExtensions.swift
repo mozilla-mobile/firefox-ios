@@ -5,13 +5,18 @@
 import Foundation
 
 extension UIWindow {
-    
+    static var keyWindow: UIWindow? {
+        UIApplication.shared.windows.first(where: { $0.isKeyWindow })
+    }
     static var isLandscape: Bool {
-        return UIApplication.shared.windows
-            .first?
-            .windowScene?
-            .interfaceOrientation
+        interfaceOrientation?
             .isLandscape ?? false
     }
-    
+    static var isPortrait: Bool {
+        interfaceOrientation?
+            .isPortrait ?? false
+    }
+    static var interfaceOrientation: UIInterfaceOrientation? {
+        keyWindow?.windowScene?.interfaceOrientation
+    }
 }
