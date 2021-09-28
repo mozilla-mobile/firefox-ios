@@ -80,6 +80,7 @@
         "SettingsTest",
         "SiteLoadTest",
         "SyncUITests",
+        "TabCounterTests",
         "TabTraySearchTabsTests",
         "ThirdPartySearchTest",
         "ToolbarTests",
