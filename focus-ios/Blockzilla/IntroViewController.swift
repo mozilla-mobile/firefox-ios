@@ -428,7 +428,7 @@ extension ScrollViewController: UIPageViewControllerDataSource {
     }
 }
 
-protocol ScrollViewControllerDelegate: class {
+protocol ScrollViewControllerDelegate: AnyObject {
     func scrollViewController(scrollViewController: ScrollViewController, didUpdatePageCount count: Int)
     func scrollViewController(scrollViewController: ScrollViewController, didUpdatePageIndex index: Int)
     func scrollViewController(scrollViewController: ScrollViewController, didDismissSlideDeck bool: Bool)

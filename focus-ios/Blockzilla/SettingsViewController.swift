@@ -176,6 +176,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             case .faceID: self = .faceID(status)
             case .touchID: self = .touchID(status)
             case .none: self = .none
+            @unknown default: self = .none
             }
         }
     }
@@ -492,7 +493,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     private func heightForLabel(_ label: UILabel, width: CGFloat, text: String) -> CGFloat {
         let size = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
-        let attrs: [NSAttributedString.Key: Any] = [.font: label.font]
+        let attrs: [NSAttributedString.Key: Any] = [.font: label.font as Any]
         let boundingRect = NSString(string: text).boundingRect(with: size, options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: attrs, context: nil)
         return boundingRect.height
     }

@@ -57,7 +57,7 @@ class ActionViewController: SLComposeServiceViewController {
         // Look for the first URL the host application is sharing.
         // If there isn't a URL grab the first text item
         for item: NSExtensionItem in inputItems {
-            let attachments: [NSItemProvider] = (item.attachments as? [NSItemProvider]) ?? []
+            let attachments: [NSItemProvider] = item.attachments ?? []
             for attachment in attachments {
                 if urlProvider == nil && attachment.isUrl {
                     urlProvider = attachment

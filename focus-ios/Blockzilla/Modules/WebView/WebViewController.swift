@@ -23,7 +23,7 @@ protocol WebController {
     func load(_ request: URLRequest)
 }
 
-protocol WebControllerDelegate: class {
+protocol WebControllerDelegate: AnyObject {
     func webControllerDidStartProvisionalNavigation(_ controller: WebController)
     func webControllerDidStartNavigation(_ controller: WebController)
     func webControllerDidFinishNavigation(_ controller: WebController)

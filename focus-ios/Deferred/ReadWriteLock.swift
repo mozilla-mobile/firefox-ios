@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol ReadWriteLock: class {
+public protocol ReadWriteLock: AnyObject {
     func withReadLock<T>(block: () -> T) -> T
     func withWriteLock<T>(block: () -> T) -> T
 }

@@ -6,7 +6,7 @@ import UIKit
 import Telemetry
 import Glean
 
-protocol AddCustomDomainViewControllerDelegate: class {
+protocol AddCustomDomainViewControllerDelegate: AnyObject {
     func addCustomDomainViewControllerDidFinish(_ viewController: AddCustomDomainViewController)
 }
 

@@ -6,7 +6,7 @@ import UIKit
 import Telemetry
 import SnapKit
 
-protocol HomeViewDelegate: class {
+protocol HomeViewDelegate: AnyObject {
     func shareTrackerStatsButtonTapped(_ sender: UIButton)
     func didTapTip(_ tip: TipManager.Tip)
 }

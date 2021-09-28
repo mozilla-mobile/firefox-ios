@@ -68,7 +68,7 @@ public struct PhotonActionSheetItem {
     }
 }
 
-protocol PhotonActionSheetDelegate: class {
+protocol PhotonActionSheetDelegate: AnyObject {
     func photonActionSheetDidDismiss()
     func photonActionSheetDidToggleProtection(enabled: Bool)
 }

@@ -153,7 +153,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
 }
 
-private protocol AboutHeaderViewDelegate: class {
+private protocol AboutHeaderViewDelegate: AnyObject {
     func aboutHeaderViewDidPressLearnMore(_ aboutHeaderView: AboutHeaderView)
 }
 

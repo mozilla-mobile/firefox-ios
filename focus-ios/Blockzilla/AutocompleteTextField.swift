@@ -4,11 +4,11 @@
 
 import UIKit
 
-public protocol AutocompleteTextFieldCompletionSource: class {
+public protocol AutocompleteTextFieldCompletionSource: AnyObject {
     func autocompleteTextFieldCompletionSource(_ autocompleteTextField: AutocompleteTextField, forText text: String) -> String?
 }
 
-@objc public protocol AutocompleteTextFieldDelegate: class {
+@objc public protocol AutocompleteTextFieldDelegate: AnyObject {
     @objc optional func autocompleteTextFieldShouldBeginEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool
     @objc optional func autocompleteTextFieldShouldEndEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool
     @objc optional func autocompleteTextFieldShouldReturn(_ autocompleteTextField: AutocompleteTextField) -> Bool

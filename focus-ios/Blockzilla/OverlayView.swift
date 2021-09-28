@@ -6,7 +6,7 @@ import UIKit
 import SnapKit
 import Telemetry
 
-protocol OverlayViewDelegate: class {
+protocol OverlayViewDelegate: AnyObject {
     func overlayViewDidTouchEmptyArea(_ overlayView: OverlayView)
     func overlayViewDidPressSettings(_ overlayView: OverlayView)
     func overlayView(_ overlayView: OverlayView, didSearchForQuery query: String)

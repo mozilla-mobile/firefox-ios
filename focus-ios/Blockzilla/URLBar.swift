@@ -6,7 +6,7 @@ import UIKit
 import SnapKit
 import Telemetry
 
-protocol URLBarDelegate: class {
+protocol URLBarDelegate: AnyObject {
     func urlBar(_ urlBar: URLBar, didEnterText text: String)
     func urlBar(_ urlBar: URLBar, didSubmitText text: String)
     func urlBar(_ urlBar: URLBar, didAddCustomURL url: URL)
@@ -143,7 +143,7 @@ class URLBar: UIView {
         singleTap.numberOfTapsRequired = 1
         textAndLockContainer.addGestureRecognizer(singleTap)
 
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(urlBarDidLongPress))
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(displayURLContextMenu))
         textAndLockContainer.addGestureRecognizer(longPress)
 
         let dragInteraction = UIDragInteraction(delegate: self)
@@ -432,14 +432,6 @@ class URLBar: UIView {
         urlText.endEditing(true)
     }
 
-    @objc private func displayURLContextMenu(sender: UILongPressGestureRecognizer) {
-        if sender.state == .began {
-            self.becomeFirstResponder()
-            UIMenuController.shared.setTargetRect(self.bounds, in: self)
-            UIMenuController.shared.setMenuVisible(true, animated: true)
-        }
-    }
-
     @objc func addCustomURL() {
         guard let url = self.url else { return }
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.quickAddCustomDomainButton)
@@ -608,7 +600,6 @@ class URLBar: UIView {
         self.layoutIfNeeded()
 
         let borderColor: UIColor
-        let backgroundColor: UIColor
         let showBackgroundView: Bool
 
         switch state {
@@ -743,7 +734,7 @@ class URLBar: UIView {
         delegate?.urlBarDidTapShield(self)
     }
 
-    @objc func urlBarDidLongPress(sender: UILongPressGestureRecognizer) {
+    @objc private func displayURLContextMenu(sender: UILongPressGestureRecognizer) {
         if sender.state == .began {
             delegate?.urlBarDidLongPress(self)
             UIMenuController.shared.showMenu(from: self, rect: self.bounds)

@@ -6,7 +6,7 @@ import UIKit
 import SnapKit
 import Telemetry
 
-protocol SearchSuggestionsPromptViewDelegate: class {
+protocol SearchSuggestionsPromptViewDelegate: AnyObject {
     func searchSuggestionsPromptView(_ searchSuggestionsPromptView: SearchSuggestionsPromptView, didEnable: Bool)
 }
 

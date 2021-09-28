@@ -8,7 +8,7 @@ struct Shortcut: Equatable, Codable {
     var url: URL
 }
 
-protocol ShortcutsManagerDelegate: class {
+protocol ShortcutsManagerDelegate: AnyObject {
     func shortcutsUpdated()
 }
 

@@ -53,8 +53,6 @@
 		745DC5DD1F39221100661635 /* ActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745DC5DC1F39221100661635 /* ActionViewController.swift */; };
 		745DC5E41F39221100661635 /* ShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 745DC5DA1F39221100661635 /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7460BD671F58B1B10096B745 /* GradientProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7460BD661F58B1B10096B745 /* GradientProgressBar.swift */; };
-		746BD9241F758FDA00BE8DB9 /* Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746BD9231F758FDA00BE8DB9 /* Bytes.swift */; };
-		746BD9261F75C43C00BE8DB9 /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746BD9251F75C43C00BE8DB9 /* DataExtensions.swift */; };
 		746BD9281F75C45A00BE8DB9 /* DictionaryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746BD9271F75C45A00BE8DB9 /* DictionaryExtensions.swift */; };
 		747ADA181FC38EFC00970132 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747ADA171FC38EFC00970132 /* IntroViewController.swift */; };
 		74F94FF21FD9CA070047E629 /* Intro.strings in Resources */ = {isa = PBXBuildFile; fileRef = 74F94FF41FD9CA070047E629 /* Intro.strings */; };
@@ -463,8 +461,6 @@
 		745DC5DC1F39221100661635 /* ActionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionViewController.swift; sourceTree = "<group>"; };
 		745DC5E11F39221100661635 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7460BD661F58B1B10096B745 /* GradientProgressBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientProgressBar.swift; sourceTree = "<group>"; };
-		746BD9231F758FDA00BE8DB9 /* Bytes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bytes.swift; sourceTree = "<group>"; };
-		746BD9251F75C43C00BE8DB9 /* DataExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensions.swift; sourceTree = "<group>"; };
 		746BD9271F75C45A00BE8DB9 /* DictionaryExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryExtensions.swift; sourceTree = "<group>"; };
 		747ADA171FC38EFC00970132 /* IntroViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
 		74CC0ADA1FAD28DB00972A78 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1169,7 +1165,6 @@
 				D3E251FA1DAF0668005918DC /* AppInfo.swift */,
 				E4BF2E101BAD8AC500DA9D68 /* Settings.swift */,
 				D3E251F81DAF064B005918DC /* Utils.swift */,
-				746BD9231F758FDA00BE8DB9 /* Bytes.swift */,
 			);
 			name = Shared;
 			sourceTree = "<group>";
@@ -1383,7 +1378,6 @@
 				16ABCD2821406D5500CABBF4 /* Intents.strings */,
 				E40AFC761DDDE96D00DA5651 /* InfoPlist.strings */,
 				D343DCC41C44356500D7EEE8 /* Localizable.strings */,
-				746BD9251F75C43C00BE8DB9 /* DataExtensions.swift */,
 				746BD9271F75C45A00BE8DB9 /* DictionaryExtensions.swift */,
 				D8E0152B1FB4136E00CA3B9F /* AddSearchEngineViewController.swift */,
 				2696EB03211F540600F0C73F /* SearchHistoryUtils.swift */,
@@ -1964,7 +1958,6 @@
 				845174A826CD2C7100510113 /* ShortcutView.swift in Sources */,
 				D5ABA3D91FCC846800D5C060 /* AddCustomDomainViewController.swift in Sources */,
 				D3426AEB1DB7F8AA0016DA5A /* OverlayView.swift in Sources */,
-				746BD9241F758FDA00BE8DB9 /* Bytes.swift in Sources */,
 				D5D2F02B252FA6AE00761DC8 /* Metrics.swift in Sources */,
 				16180DBB212F563800AFE3C2 /* Intents.intentdefinition in Sources */,
 				16D465B12127891000FEC226 /* SiriFavoriteViewController.swift in Sources */,
@@ -1982,7 +1975,6 @@
 				F7B3E49D2165C32B00118785 /* SearchSuggestionsPromptView.swift in Sources */,
 				D33E9B241E1D93DD00A39A44 /* RequestHandler.swift in Sources */,
 				D3426AF61DB84E7A0016DA5A /* SearchEngine.swift in Sources */,
-				746BD9261F75C43C00BE8DB9 /* DataExtensions.swift in Sources */,
 				B3CD41C91FD1027000AEBD58 /* InsetTextField.swift in Sources */,
 				D30179071BC6CB19009AD388 /* BlockerEnabledDetector.swift in Sources */,
 				B3481A551FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift in Sources */,

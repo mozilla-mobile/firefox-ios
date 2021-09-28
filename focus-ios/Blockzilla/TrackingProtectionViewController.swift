@@ -8,7 +8,7 @@ import UIKit
 import Telemetry
 import Glean
 
-protocol TrackingProtectionDelegate: class {
+protocol TrackingProtectionDelegate: AnyObject {
     func trackingProtectionDidToggleProtection(enabled: Bool)
 }
 

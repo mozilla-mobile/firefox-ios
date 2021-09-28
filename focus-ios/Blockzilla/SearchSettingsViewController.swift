@@ -5,7 +5,7 @@
 import UIKit
 import Telemetry
 
-protocol SearchSettingsViewControllerDelegate: class {
+protocol SearchSettingsViewControllerDelegate: AnyObject {
     func searchSettingsViewController(_ searchSettingsViewController: SearchSettingsViewController, didSelectEngine engine: SearchEngine)
 }
 

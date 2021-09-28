@@ -272,7 +272,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     func showIndicator(_ shouldShow: Bool) {
         guard shouldShow else { self.navigationItem.rightBarButtonItem = self.saveButton; return }
 
-        let indicatorView = UIActivityIndicatorView(style: .white)
+        let indicatorView = UIActivityIndicatorView(style: .medium)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: indicatorView)
         indicatorView.startAnimating()
     }
