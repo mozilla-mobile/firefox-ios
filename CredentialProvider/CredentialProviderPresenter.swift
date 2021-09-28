@@ -18,7 +18,11 @@ class CredentialProviderPresenter {
     func extensionConfigurationRequested() {
         view?.showWelcome()
     }
-    
+        
+    func showPasscodeRequirement() {
+        view?.showPasscodeRequirement()
+    }
+
     func credentialProvisionRequested(for credentialIdentity: ASPasswordCredentialIdentity) {
         if self.profile.logins.reopenIfClosed() != nil {
             cancel(with: .failed)

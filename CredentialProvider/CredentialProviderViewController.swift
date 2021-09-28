@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import AuthenticationServices
+import LocalAuthentication
 
 import Shared
 import Storage
@@ -12,6 +13,7 @@ protocol CredentialProviderViewProtocol: AnyObject, AlertControllerView {
     var extensionContext: ASCredentialProviderExtensionContext { get }
 
     func showWelcome()
+    func showPasscodeRequirement()
     func show(itemList: [(ASPasswordCredentialIdentity, ASPasswordCredential)])
 }
 
@@ -52,7 +54,11 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
      */
     
     override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-        self.presenter?.credentialList(for: serviceIdentifiers)
+        if false { // LAContext().canEvaluatePolicy(.deviceOwnerAuthentication, error: nil) {
+            self.presenter?.credentialList(for: serviceIdentifiers)
+        } else {
+            self.presenter?.showPasscodeRequirement()
+        }
     }
     
     /*
@@ -65,15 +71,43 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
      */
     
     override func provideCredentialWithoutUserInteraction(for credentialIdentity: ASPasswordCredentialIdentity) {
-        self.presenter?.credentialProvisionRequested(for: credentialIdentity)
+        if false { // LAContext().canEvaluatePolicy(.deviceOwnerAuthentication, error: nil) {
+            self.presenter?.credentialProvisionRequested(for: credentialIdentity)
+        } else {
+            self.extensionContext.cancelRequest(withError: ASExtensionError(.userInteractionRequired))
+        }
+    }
+    
+    override func prepareInterfaceToProvideCredential(for credentialIdentity: ASPasswordCredentialIdentity) {
+        self.presenter?.showPasscodeRequirement()
     }
 }
 
-extension CredentialProviderViewController: CredentialProviderViewProtocol, CredentialWelcomeViewControllerDelegate {
+extension CredentialProviderViewController: CredentialProviderViewProtocol {
+    func showWelcome() {
+        let welcomeVC = CredentialWelcomeViewController()
+        welcomeVC.delegate = self
+        self.currentViewController = welcomeVC
+    }
+    
+    func showPasscodeRequirement() {
+        let vc = CredentialPasscodeRequirementViewController()
+        vc.delegate = self
+        self.currentViewController = vc
+    }
+
+    func show(itemList: [(ASPasswordCredentialIdentity, ASPasswordCredential)]) {
+        let credentialListVC = CredentialListViewController()
+        credentialListVC.dataSource = itemList
+        self.currentViewController = UINavigationController(rootViewController: credentialListVC)
+    }
+}
+
+extension CredentialProviderViewController: CredentialWelcomeViewControllerDelegate {
     func credentialWelcomeViewControllerDidCancel() {
         self.currentViewController?.dismiss(animated: false) {
             let error = NSError(domain: ASExtensionErrorDomain, code: ASExtensionError.Code.userCanceled.rawValue, userInfo: nil)
-            self.extensionContext.cancelRequest(withError: error) // ASExtensionError(.userCanceled)
+            self.extensionContext.cancelRequest(withError: error) // This does not actually work - the extension is still selected
         }
     }
     
@@ -89,16 +123,13 @@ extension CredentialProviderViewController: CredentialProviderViewProtocol, Cred
             }
         }
     }
+}
 
-    func showWelcome() {
-        let welcomeVC = CredentialWelcomeViewController()
-        welcomeVC.delegate = self
-        self.currentViewController = welcomeVC
-    }
-    
-    func show(itemList: [(ASPasswordCredentialIdentity, ASPasswordCredential)]) {
-        let credentialListVC = CredentialListViewController()
-        credentialListVC.dataSource = itemList
-        self.currentViewController = UINavigationController(rootViewController: credentialListVC)
+extension CredentialProviderViewController: CredentialPasscodeRequirementViewControllerDelegate {
+    func credentialPasscodeRequirementViewControllerDidCancel() {
+        self.currentViewController?.dismiss(animated: false) {
+            let error = NSError(domain: ASExtensionErrorDomain, code: ASExtensionError.Code.userCanceled.rawValue, userInfo: nil)
+            self.extensionContext.cancelRequest(withError: error)
+        }
     }
 }
