@@ -63,7 +63,7 @@ class BrowserViewController: UIViewController {
 
     private var homeViewContainer = UIView()
 
-    private var showsToolsetInURLBar = false {
+    fileprivate var showsToolsetInURLBar = false {
         didSet {
             if showsToolsetInURLBar {
                 browserBottomConstraint.deactivate()
@@ -1207,7 +1207,7 @@ extension BrowserViewController: PhotonActionSheetDelegate {
         
         actionSheet.delegate = self
         
-        if let popoverVC = actionSheet.popoverPresentationController, actionSheet.modalPresentationStyle == .popover {
+        if let popoverVC = actionSheet.popoverPresentationController {
             popoverVC.delegate = self
             popoverVC.sourceView = sender
             popoverVC.permittedArrowDirections = .any
@@ -1715,9 +1715,14 @@ extension BrowserViewController: KeyboardHelperDelegate {
 }
 
 extension BrowserViewController: UIPopoverPresentationControllerDelegate {
-
     func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
         darkView.isHidden = true
+    }
+    
+    func popoverPresentationController(_ popoverPresentationController: UIPopoverPresentationController, willRepositionPopoverTo rect: UnsafeMutablePointer<CGRect>, in view: AutoreleasingUnsafeMutablePointer<UIView>) {
+        guard urlBar.inBrowsingMode else { return }
+        guard popoverPresentationController.presentedViewController is PhotonActionSheet  else { return }
+        view.pointee = self.showsToolsetInURLBar ? urlBar.contextMenuButton : browserToolbar.contextMenuButton
     }
 }
 

@@ -11,6 +11,8 @@ class BrowserToolbar: UIView {
     private let backgroundDark = UIView()
     private let backgroundBright = UIView()
     private let stackView = UIStackView()
+    
+    public var contextMenuButton: InsetButton { toolset.contextMenuButton }
 
     init() {
         super.init(frame: CGRect.zero)

@@ -59,6 +59,8 @@ class URLBar: UIView {
         }
     }
     var shouldPresent = false
+    
+    public var contextMenuButton: InsetButton { toolset.contextMenuButton }
 
     private let leftBarViewLayoutGuide = UILayoutGuide()
     private let rightBarViewLayoutGuide = UILayoutGuide()
