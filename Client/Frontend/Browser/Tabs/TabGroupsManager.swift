@@ -19,13 +19,13 @@ class TabGroupsManager {
         profile.places.getHistoryMetadataSince(since: lastTwoWeek).uponQueue(.main) { result in
             guard let val = result.successValue else { return completion(nil, [URL]()) }
             
-            let searchTerms = Set(val.map({ return $0.key.searchTerm }))
+            let searchTerms = Set(val.map({ return $0.searchTerm }))
             var searchTermMetaDataGroup : [String: [HistoryMetadata]] = [:]
             
             // 1. Build serch term metadata group
             for term in searchTerms {
                 if let term = term {
-                    let elements = val.filter({ $0.key.searchTerm == term })
+                    let elements = val.filter({ $0.searchTerm == term })
                     searchTermMetaDataGroup[term] = elements
                 }
             }
@@ -38,7 +38,7 @@ class TabGroupsManager {
                 innerMetadataLoop: for (searchTerm, historyMetaList) in searchTermMetaDataGroup {
                     if historyMetaList.contains(where: { metadata in
                         let absoluteUrl = url.absoluteString
-                        return metadata.key.url == absoluteUrl || metadata.key.referrerUrl == absoluteUrl
+                        return metadata.url == absoluteUrl || metadata.referrerUrl == absoluteUrl
                     }) {
                         urlInGroups.append(url)
                         if urlGroupData[searchTerm] == nil {
@@ -85,13 +85,13 @@ class TabGroupsManager {
         profile.places.getHistoryMetadataSince(since: lastTwoWeek).uponQueue(.main) { result in
             guard let val = result.successValue else { return completion(nil, [Tab]()) }
             
-            let searchTerms = Set(val.map({ return $0.key.searchTerm }))
+            let searchTerms = Set(val.map({ return $0.searchTerm }))
             var searchTermMetaDataGroup : [String: [HistoryMetadata]] = [:]
             
             // 1. Build serch term metadata group
             for term in searchTerms {
                 if let term = term {
-                    let elements = val.filter({ $0.key.searchTerm == term })
+                    let elements = val.filter({ $0.searchTerm == term })
                     searchTermMetaDataGroup[term] = elements
                 }
             }
@@ -104,7 +104,7 @@ class TabGroupsManager {
                 innerMetadataLoop: for (searchTerm, historyMetaList) in searchTermMetaDataGroup {
                     if historyMetaList.contains(where: { metadata in
                         let tabUrl = tab.lastKnownUrl?.absoluteString
-                        return metadata.key.url == tabUrl || metadata.key.referrerUrl == tabUrl
+                        return metadata.url == tabUrl || metadata.referrerUrl == tabUrl
                     }) {
                         tabInGroups.append(tab)
                         if tabGroupData[searchTerm] == nil {

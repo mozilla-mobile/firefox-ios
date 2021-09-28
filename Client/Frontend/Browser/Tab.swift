@@ -326,7 +326,7 @@ class Tab: NSObject {
             } else if tabGroupData.tabAssociatedNextUrl.isEmpty {
                 let key = tabGroupData.tabHistoryMetadatakey()
                 if key.referrerUrl != nextUrl {
-                    let observation = HistoryMetadataObservation(titleObservation: nil, viewTimeObservation: tabGroupsTimerHelper.elapsedTime, documentTypeObservation: nil)
+                    let observation = HistoryMetadataObservation(url: key.url, referrerUrl: key.referrerUrl, searchTerm: key.searchTerm, viewTime: tabGroupsTimerHelper.elapsedTime, documentType: nil, title: nil)
                     updateObservationForKey(key: key, observation: observation)
                     tabGroupData.tabAssociatedNextUrl = nextUrl
                 }
@@ -344,7 +344,7 @@ class Tab: NSObject {
         case .tabSwitched:
             if !shouldResetTabGroupData {
                 let key = tabGroupData.tabHistoryMetadatakey()
-                let observation = HistoryMetadataObservation(titleObservation: nil, viewTimeObservation: tabGroupsTimerHelper.elapsedTime, documentTypeObservation: nil)
+                let observation = HistoryMetadataObservation(url: key.url, referrerUrl: key.referrerUrl, searchTerm: key.searchTerm, viewTime: tabGroupsTimerHelper.elapsedTime, documentType: nil, title: nil)
                 updateObservationForKey(key: key, observation: observation)
                 tabGroupsTimerHelper.pauseOrStop()
                 tabGroupData.tabHistoryCurrentState = state.rawValue
@@ -530,7 +530,7 @@ class Tab: NSObject {
             if tabGroupData.tabHistoryCurrentState == TabGroupTimerState.navSearchLoaded.rawValue ||
                 tabGroupData.tabHistoryCurrentState == TabGroupTimerState.tabNavigatedToDifferentUrl.rawValue ||
                 tabGroupData.tabHistoryCurrentState == TabGroupTimerState.openInNewTab.rawValue {
-                let observation = HistoryMetadataObservation(titleObservation: title, viewTimeObservation: nil, documentTypeObservation: nil)
+                let observation = HistoryMetadataObservation(url: key.url, referrerUrl: key.referrerUrl, searchTerm: key.searchTerm, viewTime: nil, documentType: nil, title: title)
                 updateObservationForKey(key: key, observation: observation)
             }
             return title
