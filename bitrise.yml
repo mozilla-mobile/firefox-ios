@@ -88,23 +88,6 @@ workflows:
             cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
   3_provisioning_and_npm_installation:
     steps:
-    - script@1:
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            set -e
-            set -x
-
-            cd Client.xcodeproj
-            sed -i '' 's/"Fennec Development"/"Bitrise Firefox iOS Dev"/' project.pbxproj
-            sed -i '' 's/Fennec Today Development/Bitrise Firefox iOS Dev - Fennec Today/' project.pbxproj
-            sed -i '' 's/Fennec ShareTo Development/Bitrise Firefox iOS Dev - Share To/' project.pbxproj
-            sed -i '' 's/Fennec WidgetKit Development/Bitrise Firefox iOS Dev - WidgetKit/' project.pbxproj
-            sed -i '' 's/"XCUITests"/"Bitrise Firefox iOS Dev - XCUI Tests"/' project.pbxproj
-            sed -i '' 's/Fennec NotificationService Development/Bitrise Firefox iOS Dev - Notification Service/' project.pbxproj
-            sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = "iPhone Distribution"/' project.pbxproj
-            cd -
-        title: Set provisioning to Bitrise in xcodeproj
     - script@1.1:
         title: NPM install and build
         inputs:
@@ -808,4 +791,4 @@ trigger_map:
 - push_branch: v38.0
   workflow: xcode12-release-and-beta-nocache
 - pull_request_target_branch: main
-  workflow: RunAllXCUITests
+  workflow: RunUnitTests
