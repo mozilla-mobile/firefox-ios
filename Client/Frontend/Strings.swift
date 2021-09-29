@@ -1440,7 +1440,22 @@ extension String {
     public static let SettingsCustomizeTabsInactiveTabs = MZLocalizedString("Settings.Tabs.CustomizeTabsSection.InactiveTabs", value: "Inactive Tabs", comment: "Option in settings to toggle Inactive Tabs in the settings menu")
     public static let SettingsCustomizeTabsTabGroups = MZLocalizedString("Settings.Tabs.CustomizeTabsSection.TabGroups", value: "Tab Groups", comment: "Option in settings to toggle Tab Groups in the settings menu")
 
-    //
+    // Home screen
     public static let RecentlyVisitedRemoveButtonTitle = MZLocalizedString("ActivityStream.RecentlyVisited.RemoveButton.Title", value: "Remove", comment: "Option in Recently VIsited section to remove an item from the section.")
-}
 
+    // Onboarding
+    public static let OnboardingWhatsNewTitle = MZLocalizedString("Onboarding.WhatsNew.Title", value: "What’s New in Firefox", comment: "Title for the new onboarding card")
+    public static let OnboardingWhatsNewGeneralDescription = MZLocalizedString("Onboarding.WhatsNew.Description", value: "It’s now easier to pick up where you left off.", comment: "General description that appears under the title for what the card is about.")
+    public static let OnboardingWhatsNewPersonalizedHomeTitle = MZLocalizedString("Onboarding.WhatsNew.Title", value: "Personalized Firefox Homepage", comment: "Title for an item on the card")
+    public static let OnboardingWhatsNewPersonalizedHomeDescription = MZLocalizedString("Onboarding.WhatsNew.PersonalizedHome.Description", value: "Jump to your open tabs, bookmarks, and browsing history.", comment: "Item Description")
+    public static let OnboardingWhatsNewTabGroupsTitle = MZLocalizedString("Onboarding.WhatsNew.TabGroups.Title", value: "Tidier Tab Groups", comment: "Title for an item on the card")
+    public static let OnboardingWhatsNewTabGroupsDescription = MZLocalizedString("Onboarding.WhatsNew.TabGroups.Description", value: "Pages from the same search get grouped together.", comment: "Item Description")
+    public static let OnboardingWhatsNewRecentSearchesTitle = MZLocalizedString("Onboarding.WhatsNew.RecentSearches.Title", value: "Recent Searches", comment: "Title for an item on the card")
+    public static let OnboardingWhatsNewRecentSearchesDescription = MZLocalizedString("Onboarding.WhatsNew.RecentSearches.Description", value: "Revisit your latest searches from your homepage.", comment: "Item Description")
+    public static let OnboardingWhatsNewRecentButtonTitle = MZLocalizedString("Onboarding.WhatsNew.Button.Title", value: "Start Browsing", comment: "Title for the button used to get back to browsing on Firefox")
+
+    // ContextualHints
+    public static let ContextualHintsPersonalizedHome = MZLocalizedString("ContextualHints.Homepage.PersonalizedHome", value: "Your personalized Firefox homepage now makes it easier to pick up where you left off. Find your recent tabs, bookmarks, and search results.", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature.")
+    public static let ContextualHintsInactiveTabs = MZLocalizedString("ContextualHints.TabTray.InactiveTabs", value: "Tabs you haven’t viewed for two weeks get moved here. Turn off in settings", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature.")
+
+}
