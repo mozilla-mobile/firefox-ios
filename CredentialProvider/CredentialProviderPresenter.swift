@@ -29,7 +29,7 @@ class CredentialProviderPresenter {
         if self.profile.logins.reopenIfClosed() != nil {
             cancel(with: .failed)
         } else if let id = credentialIdentity.recordIdentifier {
-            profile.logins.get(id: id).upon { [weak self] result in
+            profile.logins.getLogin(id: id).upon { [weak self] result in
                 switch result {
                 case .failure:
                     self?.cancel(with: .failed)
@@ -49,7 +49,7 @@ class CredentialProviderPresenter {
     if self.profile.logins.reopenIfClosed() != nil {
             cancel(with: .failed)
         } else {
-            profile.logins.list().upon {[weak self] result in
+            profile.logins.listLogins().upon {[weak self] result in
                 switch result {
                 case .failure:
                     self?.cancel(with: .failed)
