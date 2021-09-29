@@ -14,6 +14,13 @@ struct ASGroup<T> {
 
 class TabGroupsManager {
 
+    public static func getURLGroups(with profile: Profile, from urls: [URL], using ordering: ComparisonResult, completion: @escaping ([ASGroup<URL>]?, _ filteredItems: [URL]) -> Void) {
+        getGroups(with: profile, from: urls, using: ordering, completion: completion)
+    }
+
+    public static func getTabGroups(with profile: Profile, from tabs: [Tab], using ordering: ComparisonResult, completion: @escaping ([ASGroup<Tab>]?, _ filteredItems: [Tab]) -> Void) {
+        getGroups(with: profile, from: tabs, using: ordering, completion: completion)
+    }
 
     /// Create item groups from metadata.
     ///
@@ -31,7 +38,7 @@ class TabGroupsManager {
     ///   - completion: completion handler that contains `[ASGroup<T>]`  dictionary and a
     ///   filteredItems list, `[T]`, which is comprised of items from the original input
     ///   that are not part of a group.
-    static func getGroups<T: Equatable>(with profile: Profile, from items: [T], using ordering: ComparisonResult, completion: @escaping ([ASGroup<T>]?, _ filteredItems: [T]) -> Void) {
+    private static func getGroups<T: Equatable>(with profile: Profile, from items: [T], using ordering: ComparisonResult, completion: @escaping ([ASGroup<T>]?, _ filteredItems: [T]) -> Void) {
 //        ROUX TODO: when URL support is added, fix check
 //        guard (items is [Tab] || items is [URL]) else { return completion(nil, [T]()) }
         guard (items is [Tab]) else { return completion(nil, [T]()) }
