@@ -1458,4 +1458,8 @@ extension String {
     public static let ContextualHintsPersonalizedHome = MZLocalizedString("ContextualHints.Homepage.PersonalizedHome", value: "Your personalized Firefox homepage now makes it easier to pick up where you left off. Find your recent tabs, bookmarks, and search results.", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature.")
     public static let ContextualHintsInactiveTabs = MZLocalizedString("ContextualHints.TabTray.InactiveTabs", value: "Tabs you haven’t viewed for two weeks get moved here. Turn off in settings", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature.")
 
+    // Inactive tabs auto-close prompt
+    public static let InactiveTabsAutoClosePromptTitle = MZLocalizedString("InactiveTabs.TabTray.AutoClosePrompt.Title", value: "Auto-close after one month?", comment: "Title of the Auto Close prompt")
+    public static let InactiveTabsAutoClosePromptContent = MZLocalizedString("InactiveTabs.TabTray.AutoClosePrompt.Content", value: "Firefox will close tabs you haven’t viewed over the past month.", comment: "Describes what happens if you elect to turn on this option.")
+    public static let InactiveTabsAutoClosePromptButton = MZLocalizedString("InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle", value: "Turn on Auto Close", comment: "Button the user must tap in order to turn on the Auto close feature in Inactive Tabs")
 }
