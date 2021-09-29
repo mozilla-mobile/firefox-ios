@@ -409,6 +409,10 @@ class BrowserViewController: UIViewController {
         urlBar.dismissTextField()
     }
     
+    public func deactivateUrlBar() {
+        urlBar.dismiss()
+    }
+    
     public func dismissSettings() {
         if self.presentedViewController?.children.first is SettingsViewController {
             self.presentedViewController?.children.first?.dismiss(animated: true, completion: nil)

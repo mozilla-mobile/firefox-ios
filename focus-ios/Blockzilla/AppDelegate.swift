@@ -315,6 +315,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             queuedString = nil
         }
 
+        browserViewController.deactivateUrlBar()
+        
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
