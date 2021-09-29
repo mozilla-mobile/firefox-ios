@@ -14,6 +14,7 @@ pull_request_rules:
       - label!=Do Not Land
     actions:
       queue:
+        name: default
         method: merge
       label:
         remove:
@@ -27,6 +28,7 @@ pull_request_rules:
       - label!=do not land
     actions:
       queue:
+        name: default
         method: squash
       label:
         remove:
