@@ -60,6 +60,7 @@
         "HistoryTests\/testClearPrivateDataButtonDisabled()",
         "HistoryTests\/testDeleteHistoryEntryBySwiping()",
         "HomePageSettingsTest",
+        "HomePageSettingsUITests\/testJumpBackIn()",
         "HomePageUITest",
         "IntegrationTests",
         "IntegrationTests\/testFxASyncBookmark()",

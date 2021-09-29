@@ -188,4 +188,24 @@ class HomePageSettingsUITests: BaseTestCase {
         let numberOfTopSites = app.collectionViews.cells["TopSitesCell"].cells.matching(identifier: "TopSite").count
         XCTAssertEqual(numberOfTopSites, numberOfExpectedTopSites)
     }
+
+    func testJumpBackIn() {
+        navigator.openURL(path(forTestPage: exampleUrl))
+        waitUntilPageLoad()
+        navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(NewTabScreen)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        waitForExistence(app.buttons["jumpBackInSectionMoreButton"], timeout: 5)
+        // Swipe up needed to see the content below the Jump Back In section
+        app.buttons["jumpBackInSectionMoreButton"].swipeUp()
+        XCTAssertTrue(app.cells.collectionViews.staticTexts["Example Domain"].exists)
+        // Swipe down to be able to click on Show all option
+        app.buttons["More"].swipeDown()
+        waitForExistence(app.buttons["jumpBackInSectionMoreButton"], timeout: 5)
+        app.buttons["jumpBackInSectionMoreButton"].tap()
+        // Tab tray is open with recently open tab
+        waitForExistence(app.cells.staticTexts["Example Domain"], timeout: 3)
+    }
 }
