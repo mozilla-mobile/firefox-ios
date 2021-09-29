@@ -119,9 +119,7 @@ class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UI
 
     func scrollToSelectedGroup() {
         if let searchTerm = selectedTab?.tabGroupData.tabAssociatedSearchTerm {
-            if let index = tabGroups?.map({ $0.key }).firstIndex(where: { t in
-                t == searchTerm
-            }) {
+            if let index = tabGroups?.firstIndex(where: { $0.searchTerm == searchTerm}) {
                 tableView.scrollToRow(at: IndexPath(row: index , section: 0) , at: .bottom , animated: true)
             }
         }

@@ -238,8 +238,10 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     }
     
     func indexOfGroupTab(tab: Tab) -> (groupName: String, indexOfTabInGroup: Int)? {
-        guard let key = groupNameForTab(tab: tab), let group = tabGroups?[key], let indexOfTabInGroup = group.firstIndex(of: tab) else { return nil }
-        return (key, indexOfTabInGroup)
+        guard let searchTerm = groupNameForTab(tab: tab),
+              let group = tabGroups?.first(where: { $0.searchTerm == searchTerm }),
+              let indexOfTabInGroup = group.groupedItems.firstIndex(of: tab) else { return nil }
+        return (searchTerm, indexOfTabInGroup)
     }
     
     func indexOfRegularTab(tab: Tab) -> Int? {
