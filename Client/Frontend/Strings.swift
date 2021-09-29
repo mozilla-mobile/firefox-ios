@@ -567,7 +567,7 @@ extension Strings {
     public static let AppMenuScanQRCodeTitleString = MZLocalizedString("Menu.ScanQRCodeAction.Title", tableName: "Menu", value: "Scan QR Code", comment: "Label for the button, displayed in the menu, used to open the QR code scanner.")
     public static let AppMenuSettingsTitleString = MZLocalizedString("Menu.OpenSettingsAction.Title", tableName: "Menu", value: "Settings", comment: "Label for the button, displayed in the menu, used to open the Settings menu.")
     public static let AppMenuCloseAllTabsTitleString = MZLocalizedString("Menu.CloseAllTabsAction.Title", tableName: "Menu", value: "Close All Tabs", comment: "Label for the button, displayed in the menu, used to close all tabs currently open.")
-    public static let AppMenuOpenHomePageTitleString = MZLocalizedString("Menu.OpenHomePageAction.Title", tableName: "Menu", value: "Home", comment: "Label for the button, displayed in the menu, used to navigate to the home page.")
+    public static let AppMenuOpenHomePageTitleString = MZLocalizedString("SettingsMenu.OpenHomePageAction.Title", tableName: "Menu", value: "Homepage", comment: "Label for the button, displayed in the menu, used to navigate to the home page.")
     public static let AppMenuTopSitesTitleString = MZLocalizedString("Menu.OpenTopSitesAction.AccessibilityLabel", tableName: "Menu", value: "Top Sites", comment: "Accessibility label for the button, displayed in the menu, used to open the Top Sites home panel.")
     public static let AppMenuBookmarksTitleString = MZLocalizedString("Menu.OpenBookmarksAction.AccessibilityLabel.v2", tableName: "Menu", value: "Bookmarks", comment: "Accessibility label for the button, displayed in the menu, used to open the Bookmarks home panel. Please keep as short as possible, <15 chars of space available.")
     public static let AppMenuReadingListTitleString = MZLocalizedString("Menu.OpenReadingListAction.AccessibilityLabel.v2", tableName: "Menu", value: "Reading List", comment: "Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. Please keep as short as possible, <15 chars of space available.")
@@ -1419,20 +1419,23 @@ extension String {
 // MARK: - v39 Strings
 extension String {
     //Customizing strings for the Start at Home feature is settings
-    public static let SettingsCustomizeHomeStartAtHomeSectionTitle = MZLocalizedString("Settings.Home.Option.StartAtHome.Title", value: "Start on home", comment: "Option in settings to set start at home feature timing")
-    public static let SettingsCustomizeHomeStartAtHomeAfterFourHours = MZLocalizedString("Settings.Home.Option.StartAtHome.AfterFourHours", value: "After four hours", comment: "Option in settings to set start at home feature timing to After four hours")
-    public static let SettingsCustomizeHomeStartAtHomeAlways = MZLocalizedString("Settings.Home.Option.StartAtHome.Always", value: "Always", comment: "Option in settings to set start at home feature timing to Always")
-    public static let SettingsCustomizeHomeStartAtHomeNever = MZLocalizedString("Settings.Home.Option.StartAtHome.Never", value: "Never", comment: "Option in settings to turn off start at home feature ")
+    public static let SettingsCustomizeHomeStartAtHomeSectionTitle = MZLocalizedString("Settings.Home.Option.StartAtHome.Title", value: "Opening screen", comment: "Option in settings to set start at home feature timing")
+    public static let SettingsCustomizeHomeStartAtHomeAfterFourHours = MZLocalizedString("Settings.Home.Option.StartAtHome.AfterFourHours", value: "Homepage after four hours of inactivity", comment: "Option in settings to set start at home feature timing to After four hours")
+    public static let SettingsCustomizeHomeStartAtHomeAlways = MZLocalizedString("Settings.Home.Option.StartAtHome.Always", value: "Homepage", comment: "Option in settings to set start at home feature timing to always open homepage")
+    public static let SettingsCustomizeHomeStartAtHomeNever = MZLocalizedString("Settings.Home.Option.StartAtHome.Never", value: "Last tab", comment: "Option in settings to turn off start at home feature ")
+    public static let SettingsCustomizeHomeStartAtHomeDescritpion = MZLocalizedString("Settings.Home.Option.StartAtHome.Description", value: "Choose what you see when you return to Firefox.", comment: "Description below the settings section describing what the section is for.")
 
-    public static let FirefoxHomeCustomizeHomeButtonTitle = MZLocalizedString("FirefoxHome.CustomizeHomeButton.Title", value: "Customize Home", comment: "Button at bottom of homepage that allows users to go straight to Settings option where they can customize the Firefox Home page")
+    public static let FirefoxHomeCustomizeHomeButtonTitle = MZLocalizedString("FirefoxHome.CustomizeHomeButton.Title", value: "Customize Homepage", comment: "Button at bottom of homepage that allows users to go straight to Settings option where they can customize the Firefox Home page")
 
     // Customize homepage options
+    public static let SettingsCustomizeHomeTitle = MZLocalizedString("Settings.Home.Option.Title", value: "Firefox Homepage", comment: "The title of the Firefox Homepage settings section")
     public static let SettingsCustomizeHomeJumpBackIn = MZLocalizedString("Settings.Home.Option.JumpBackIn", value: "Jump Back In", comment: "Option in settings to toggle Jump Back In section on homepage")
     public static let SettingsCustomizeHomeRecentlyVisited = MZLocalizedString("Settings.Home.Option.RecentlyVisited", value: "Recently Visited", comment: "Option in settings to toggle Recently Visited section on homepage")
     public static let SettingsCustomizeHomeRecentlySaved = MZLocalizedString("Settings.Home.Option.RecentlySaved", value: "Recently Saved", comment: "Option in settings to toggle Recently Saved section on homepage")
     public static let SettingsCustomizeHomeRecentSearches = MZLocalizedString("Settings.Home.Option.RecentSearches", value: "Recent Searches", comment: "Option in settings to toggle Recent Searches section on homepage")
     public static let SettingsCustomizeHomeShortcuts = MZLocalizedString("Settings.Home.Option.Shortcuts", value: "Shortcuts", comment: "Option in settings to toggle Shortcuts section on homepage")
     public static let SettingsCustomizeHomePocket = MZLocalizedString("Settings.Home.Option.Pocket", value: "Recommended by Pocket", comment: "Option in settings to turn on off pocket recommendations")
+    public static let SettingsCustomizeHomeDescritpion = MZLocalizedString("Settings.Home.Option.Description", value: "Choose content you see on the on Firefox homepage.", comment: "Description below the settings section describing what the section is for.")
 
     // Tabs options
     public static let SettingsCustomizeTabsTitle = MZLocalizedString("Settings.Tabs.Title", value: "Tabs", comment: "Title for the Tabs section customization option in Settings menu")
@@ -1456,10 +1459,13 @@ extension String {
 
     // ContextualHints
     public static let ContextualHintsPersonalizedHome = MZLocalizedString("ContextualHints.Homepage.PersonalizedHome", value: "Your personalized Firefox homepage now makes it easier to pick up where you left off. Find your recent tabs, bookmarks, and search results.", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature.")
-    public static let ContextualHintsInactiveTabs = MZLocalizedString("ContextualHints.TabTray.InactiveTabs", value: "Tabs you haven’t viewed for two weeks get moved here. Turn off in settings", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature.")
+    public static let ContextualHintsInactiveTabsBody = MZLocalizedString("ContextualHints.TabTray.InactiveTabs", value: "Tabs you haven’t viewed for two weeks get moved here.", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature.")
+    public static let ContextualHintsInactiveTabsAction = MZLocalizedString("ContextualHints.TabTray.InactiveTabs", value: "Turn off in settings", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one is the action for the inactive tabs contextual popup")
 
     // Inactive tabs auto-close prompt
     public static let InactiveTabsAutoClosePromptTitle = MZLocalizedString("InactiveTabs.TabTray.AutoClosePrompt.Title", value: "Auto-close after one month?", comment: "Title of the Auto Close prompt")
     public static let InactiveTabsAutoClosePromptContent = MZLocalizedString("InactiveTabs.TabTray.AutoClosePrompt.Content", value: "Firefox will close tabs you haven’t viewed over the past month.", comment: "Describes what happens if you elect to turn on this option.")
     public static let InactiveTabsAutoClosePromptButton = MZLocalizedString("InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle", value: "Turn on Auto Close", comment: "Button the user must tap in order to turn on the Auto close feature in Inactive Tabs")
+
+    public static let InactiveTabsCloseAllInactiveTabsButton = MZLocalizedString("InactiveTabs.TabTray.CloseButtonTitle", value: "Close All Inactive Tabs", comment: "Button the user must tap in order to close all inactive tabs.")
 }
