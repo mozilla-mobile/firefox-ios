@@ -1552,7 +1552,7 @@ extension BrowserViewController: WebControllerDelegate {
     func webController(_ controller: WebController, didUpdateEstimatedProgress estimatedProgress: Double) {
         // Don't update progress if the home view is visible. This prevents the centered URL bar
         // from catching the global progress events.
-        guard homeViewController == nil else { return }
+        guard urlBar.inBrowsingMode else { return }
 
         urlBar.progressBar.alpha = 1
         urlBar.progressBar.isHidden = false
