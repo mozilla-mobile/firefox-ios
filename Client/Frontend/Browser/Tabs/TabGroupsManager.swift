@@ -14,68 +14,6 @@ struct ASGroup<T> {
 
 class TabGroupsManager {
 
-    // Leaving this for reference for when we need to add URL to group functionality.
-    // Context switching makes me forget and this is a not super simple piece of code.
-    //    static func getURLGroups(profile: Profile, urlList: [URL], completion: @escaping ([String: [URL]]?, _ filteredUrls: [URL]) -> Void) {
-    //
-    //        let lastTwoWeek = Int64(Date().lastTwoWeek.timeIntervalSince1970)
-    //        profile.places.getHistoryMetadataSince(since: lastTwoWeek).uponQueue(.main) { result in
-    //            guard let val = result.successValue else { return completion(nil, [URL]()) }
-    //
-    //            let searchTerms = Set(val.map({ return $0.searchTerm }))
-    //            var searchTermMetaDataGroup : [String: [HistoryMetadata]] = [:]
-    //
-    //            // 1. Build serch term metadata group
-    //            for term in searchTerms {
-    //                if let term = term {
-    //                    let elements = val.filter({ $0.searchTerm == term })
-    //                    searchTermMetaDataGroup[term] = elements
-    //                }
-    //            }
-    //
-    //            var urlGroupData: [String: [URL]] = [:]
-    //            var urlInGroups: [URL] = [URL]()
-    //
-    //            // 2. Build url groups that corresponds to search term
-    //            outerUrlLoop: for url in urlList {
-    //                innerMetadataLoop: for (searchTerm, historyMetaList) in searchTermMetaDataGroup {
-    //                    if historyMetaList.contains(where: { metadata in
-    //                        let absoluteUrl = url.absoluteString
-    //                        return metadata.url == absoluteUrl || metadata.referrerUrl == absoluteUrl
-    //                    }) {
-    //                        urlInGroups.append(url)
-    //                        if urlGroupData[searchTerm] == nil {
-    //                            urlGroupData[searchTerm] = [url]
-    //                        } else {
-    //                            urlGroupData[searchTerm]?.append(url)
-    //                        }
-    //                        break innerMetadataLoop
-    //                    }
-    //                }
-    //            }
-    //
-    //            // 3. Url groups should have at least 2 url per search term so we remove smaller groups
-    //            let filteredGroupData = urlGroupData.filter { urlGroup in
-    //                let t = urlGroup.value
-    //                if t.count > 1 {
-    //                    return true
-    //                } else {
-    //                    if let onlyUrl = t.first, let index = urlInGroups.firstIndex(of: onlyUrl) {
-    //                        urlInGroups.remove(at: index)
-    //                    }
-    //                    return false
-    //                }
-    //            }
-    //
-    //            // 4. Filter the url list so it doesn't include same url as url groups
-    //            let filteredUrls = urlList.filter { url in
-    //                !urlInGroups.contains(url)
-    //            }
-    //
-    //            // 5. filteredGroupData contains groups of only 2 or more urls and filtered have urls that are not part of a group
-    //            completion(filteredGroupData, filteredUrls)
-    //        }
-    //    }
 
     /// Create item groups from metadata.
     ///
