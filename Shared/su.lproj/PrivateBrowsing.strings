@@ -5,7 +5,7 @@
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "Buka dina Tab Nyamuni Anyar";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox moal nginget jujutan jeung kuki anjeun, anu diteundeun ukur markah anyar.";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox moal nginget jujutan jeung réréméh anjeun, anu diteundeun ukur markah anyar.";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "Lenyepan";
