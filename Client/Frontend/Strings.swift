@@ -1468,4 +1468,6 @@ extension String {
     public static let InactiveTabsAutoClosePromptButton = MZLocalizedString("InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle", value: "Turn on Auto Close", comment: "Button the user must tap in order to turn on the Auto close feature in Inactive Tabs")
 
     public static let InactiveTabsCloseAllInactiveTabsButton = MZLocalizedString("InactiveTabs.TabTray.CloseButtonTitle", value: "Close All Inactive Tabs", comment: "Button the user must tap in order to close all inactive tabs.")
+
+    public static let TabTrayOtherTabsLabelTitle = MZLocalizedString("TabTray.OtherTabs.Title", value: "Other tabs", comment: "Title for the section containing non-grouped tabs")
 }
