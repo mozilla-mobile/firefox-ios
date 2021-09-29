@@ -88,23 +88,6 @@ workflows:
             cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
   3_provisioning_and_npm_installation:
     steps:
-    - script@1:
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            set -e
-            set -x
-
-            cd Client.xcodeproj
-            sed -i '' 's/"Fennec Development"/"Bitrise Firefox iOS Dev"/' project.pbxproj
-            sed -i '' 's/Fennec Today Development/Bitrise Firefox iOS Dev - Fennec Today/' project.pbxproj
-            sed -i '' 's/Fennec ShareTo Development/Bitrise Firefox iOS Dev - Share To/' project.pbxproj
-            sed -i '' 's/Fennec WidgetKit Development/Bitrise Firefox iOS Dev - WidgetKit/' project.pbxproj
-            sed -i '' 's/"XCUITests"/"Bitrise Firefox iOS Dev - XCUI Tests"/' project.pbxproj
-            sed -i '' 's/Fennec NotificationService Development/Bitrise Firefox iOS Dev - Notification Service/' project.pbxproj
-            sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = "iPhone Distribution"/' project.pbxproj
-            cd -
-        title: Set provisioning to Bitrise in xcodeproj
     - script@1.1:
         title: NPM install and build
         inputs:
@@ -139,11 +122,12 @@ workflows:
     steps:
     - xcode-build-for-simulator@0.11:
         inputs:
-        - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO -testPlan Fennec_Enterprise_XCUITests
+        - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
         - scheme: Fennec_Enterprise_XCUITests
     - xcode-test@3.1:
         inputs:
         - scheme: Fennec_Enterprise_XCUITests
+        - xcodebuild_test_options: "-testPlan SmokeXCUITests"
         - simulator_device: "$IOS_DEVICE"
   NewXcodeVersions:
     steps:
@@ -267,7 +251,7 @@ workflows:
 
             npm install
             npm run build
-    - git::https://github.com/bitrise-steplib/steps-xcode-build-for-test.git@export-fix:
+    - xcode-build-for-simulator@0.11:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
         inputs:
         - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
@@ -301,7 +285,7 @@ workflows:
         - 5_deploy_and_slack
   RunSmokeXCUITestsiPad:
     steps:
-    - git::https://github.com/bitrise-steplib/steps-xcode-build-for-test.git@export-fix:
+    - xcode-build-for-simulator@0.11:
         inputs:
         - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
             -testPlan SmokeXCUITests
@@ -325,7 +309,7 @@ workflows:
         - 5_deploy_and_slack
   RunUITests:
     steps:
-    - git::https://github.com/bitrise-steplib/steps-xcode-build-for-test.git@export-fix:
+    - xcode-build-for-simulator@0.11:
         inputs:
         - configuration: Release
         - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
