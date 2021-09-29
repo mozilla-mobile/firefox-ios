@@ -1415,3 +1415,32 @@ extension String {
     public static let ProtectionStatusSecure = MZLocalizedString("ProtectionStatus.Secure", value: "Connection is secure", comment: "This is the value for a label that indicates if a user is on a secure https connection.")
     public static let ProtectionStatusNotSecure = MZLocalizedString("ProtectionStatus.NotSecure", value: "Connection is not secure", comment: "This is the value for a label that indicates if a user is on an unencrypted website.")
 }
+
+// MARK: - v39 Strings
+extension String {
+    //Customizing strings for the Start at Home feature is settings
+    public static let SettingsCustomizeHomeStartAtHomeSectionTitle = MZLocalizedString("Settings.Home.Option.StartAtHome.Title", value: "Start on home", comment: "Option in settings to set start at home feature timing")
+    public static let SettingsCustomizeHomeStartAtHomeAfterFourHours = MZLocalizedString("Settings.Home.Option.StartAtHome.AfterFourHours", value: "After four hours", comment: "Option in settings to set start at home feature timing to After four hours")
+    public static let SettingsCustomizeHomeStartAtHomeAlways = MZLocalizedString("Settings.Home.Option.StartAtHome.Always", value: "Always", comment: "Option in settings to set start at home feature timing to Always")
+    public static let SettingsCustomizeHomeStartAtHomeNever = MZLocalizedString("Settings.Home.Option.StartAtHome.Never", value: "Never", comment: "Option in settings to turn off start at home feature ")
+
+    public static let FirefoxHomeCustomizeHomeButtonTitle = MZLocalizedString("FirefoxHome.CustomizeHomeButton.Title", value: "Customize Home", comment: "Button at bottom of homepage that allows users to go straight to Settings option where they can customize the Firefox Home page")
+
+    // Customize homepage options
+    public static let SettingsCustomizeHomeJumpBackIn = MZLocalizedString("Settings.Home.Option.JumpBackIn", value: "Jump Back In", comment: "Option in settings to toggle Jump Back In section on homepage")
+    public static let SettingsCustomizeHomeRecentlyVisited = MZLocalizedString("Settings.Home.Option.RecentlyVisited", value: "Recently Visited", comment: "Option in settings to toggle Recently Visited section on homepage")
+    public static let SettingsCustomizeHomeRecentlySaved = MZLocalizedString("Settings.Home.Option.RecentlySaved", value: "Recently Saved", comment: "Option in settings to toggle Recently Saved section on homepage")
+    public static let SettingsCustomizeHomeRecentSearches = MZLocalizedString("Settings.Home.Option.RecentSearches", value: "Recent Searches", comment: "Option in settings to toggle Recent Searches section on homepage")
+    public static let SettingsCustomizeHomeShortcuts = MZLocalizedString("Settings.Home.Option.Shortcuts", value: "Shortcuts", comment: "Option in settings to toggle Shortcuts section on homepage")
+    public static let SettingsCustomizeHomePocket = MZLocalizedString("Settings.Home.Option.Pocket", value: "Recommended by Pocket", comment: "Option in settings to turn on off pocket recommendations")
+
+    // Tabs options
+    public static let SettingsCustomizeTabsTitle = MZLocalizedString("Settings.Tabs.Title", value: "Tabs", comment: "Title for the Tabs section customization option in Settings menu")
+    public static let SettingsCustomizeTabsSectionTitle = MZLocalizedString("Settings.Tabs.CustomizeTabsSection.Title", value: "Customize Tab Tray", comment: "Title for the Tabs Tray section customization option in Settings/Tabs menu")
+    public static let SettingsCustomizeTabsInactiveTabs = MZLocalizedString("Settings.Tabs.CustomizeTabsSection.InactiveTabs", value: "Inactive Tabs", comment: "Option in settings to toggle Inactive Tabs in the settings menu")
+    public static let SettingsCustomizeTabsTabGroups = MZLocalizedString("Settings.Tabs.CustomizeTabsSection.TabGroups", value: "Tab Groups", comment: "Option in settings to toggle Tab Groups in the settings menu")
+
+    //
+    public static let RecentlyVisitedRemoveButtonTitle = MZLocalizedString("ActivityStream.RecentlyVisited.RemoveButton.Title", value: "Remove", comment: "Option in Recently VIsited section to remove an item from the section.")
+}
+
