@@ -1419,7 +1419,7 @@ extension String {
 // MARK: - v39 Strings
 extension String {
     //Customizing strings for the Start at Home feature is settings
-    public static let SettingsCustomizeHomeStartAtHomeSectionTitle = MZLocalizedString("Settings.Home.Option.StartAtHome.Title", value: "Opening screen", comment: "Option in settings to set start at home feature timing")
+    public static let SettingsCustomizeHomeStartAtHomeSectionTitle = MZLocalizedString("Settings.Home.Option.StartAtHome.Title", value: "Opening screen", comment: "Title for section in settings to configure opening home screen")
     public static let SettingsCustomizeHomeStartAtHomeAfterFourHours = MZLocalizedString("Settings.Home.Option.StartAtHome.AfterFourHours", value: "Homepage after four hours of inactivity", comment: "Option in settings to set start at home feature timing to After four hours")
     public static let SettingsCustomizeHomeStartAtHomeAlways = MZLocalizedString("Settings.Home.Option.StartAtHome.Always", value: "Homepage", comment: "Option in settings to set start at home feature timing to always open homepage")
     public static let SettingsCustomizeHomeStartAtHomeNever = MZLocalizedString("Settings.Home.Option.StartAtHome.Never", value: "Last tab", comment: "Option in settings to turn off start at home feature ")
