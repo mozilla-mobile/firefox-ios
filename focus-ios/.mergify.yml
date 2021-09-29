@@ -15,9 +15,6 @@ pull_request_rules:
     actions:
       merge:
         method: merge
-      label:
-        remove:
-          - "Needs Landing"
   - name: Needs landing - Squash
     conditions:
       - label=Needs Landing (Squash)
@@ -28,6 +25,3 @@ pull_request_rules:
     actions:
       merge:
         method: squash
-      label:
-        remove:
-          - "Needs Landing (Squash)"
