@@ -1415,6 +1415,9 @@
 /* Option in settings to turn on off pocket recommendations First argument is the pocket brand name */
 "Settings.NewTab.Option.RecommendedByPocket" = "Priporoča %@";
 
+/* Descriptoin for the option in settings to turn on off pocket recommendations. First argument is the pocket brand name, second argument is the pocket product name. */
+"Settings.NewTab.Option.RecommendedByPocketDescription" = "Izjemna vsebina, ki jo izbira %1$@, del družine %2$@";
+
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "Nov zavihek";
 
