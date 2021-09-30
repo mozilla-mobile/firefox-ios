@@ -81,15 +81,13 @@ class BaseTestCase: XCTestCase {
         }
 
     func search(searchWord: String, waitForLoadToFinish: Bool = true) {
-        let app = XCUIApplication()
-
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
 
         UIPasteboard.general.string = searchWord
 
         // Must press this way in order to support iPhone 5s
         searchOrEnterAddressTextField.tap()
-        searchOrEnterAddressTextField.coordinate(withNormalizedOffset: CGVector.zero).withOffset(CGVector(dx: 10, dy: 0)).press(forDuration: 1.5)
+        searchOrEnterAddressTextField.press(forDuration: 1)
         waitForExistence(app.menuItems["Paste & Go"])
         app.menuItems["Paste & Go"].tap()
 

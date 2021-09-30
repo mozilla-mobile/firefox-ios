@@ -23,10 +23,10 @@ class BasicBrowsing: BaseTestCase {
         ShareButton.tap()
 
         // Launch external app
-        let RemindersApp = app.cells["Reminders"]
+        let RemindersApp = app.collectionViews.scrollViews.cells.element(boundBy: 0)
         waitForExistence( RemindersApp)
         RemindersApp.tap()
-        waitForExistence( app.buttons["Add"])
+        waitForExistence(app.buttons["Add"])
         XCTAssertTrue(app.buttons["Add"].exists)
     }
     
