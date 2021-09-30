@@ -5,7 +5,7 @@ pull_request_rules:
     actions:
         comment:
           message: This pull request has conflicts when rebasing. Can you please fix it @{{author}}? 🙏
-  - name: Needs landing - Merge
+  - name: Needs landing - Rebase
     conditions:
       - label=Needs Landing
       - "#approved-reviews-by>=1"
@@ -14,7 +14,8 @@ pull_request_rules:
       - label!=Do Not Land
     actions:
       merge:
-        method: merge
+        method: rebase
+        strict: smart
   - name: Needs landing - Squash
     conditions:
       - label=Needs Landing (Squash)
@@ -25,3 +26,4 @@ pull_request_rules:
     actions:
       merge:
         method: squash
+        strict: smart
