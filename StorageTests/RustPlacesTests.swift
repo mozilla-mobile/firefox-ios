@@ -222,9 +222,22 @@ class RustPlacesTests: XCTestCase {
         XCTAssertEqual(queryResults.successValue!.count, 1)
         XCTAssertEqual(queryResults.successValue![0].url, "https://www.example.com/")
         
-        // Able to delete.
+        // Able to query highlights.
+        let highlights = places.getHighlights(weights: HistoryHighlightWeights(viewTime: 1.0, frequency: 1.0), limit: 10).value
+        XCTAssertEqual(highlights.successValue!.count, 4)
+
+        // Deletions.
         queryResults = places.getHistoryMetadataSince(since: 0).value
         XCTAssertEqual(queryResults.successValue!.count, 4)
+
+        // Able to delete individual metadata items by key.
+        XCTAssertTrue(places.deleteHistoryMetadata(key: metadataKey4).value.isSuccess)
+        queryResults = places.getHistoryMetadataSince(since: 0).value
+        XCTAssertEqual(queryResults.successValue!.count, 3)
+
+        // Able to delete since.
+        queryResults = places.getHistoryMetadataSince(since: 0).value
+        XCTAssertEqual(queryResults.successValue!.count, 3)
         XCTAssertTrue(places.deleteHistoryMetadataOlderThan(olderThan: INT64_MAX).value.isSuccess)
         queryResults = places.getHistoryMetadataSince(since: 0).value
         XCTAssertEqual(queryResults.successValue!.count, 0)

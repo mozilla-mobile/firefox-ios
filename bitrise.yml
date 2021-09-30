@@ -299,7 +299,7 @@ workflows:
     description: This Workflow is to run SmokeTest on iPad simulator device
     meta:
       bitrise.io:
-        stack: osx-xcode-12.5.x
+        stack: osx-xcode-13.0.x
         machine_type_id: g2.4core
     before_run:
         - 1_git_clone_and_post_clone
@@ -323,7 +323,7 @@ workflows:
         is_always_run: true
     meta:
       bitrise.io:
-        stack: osx-xcode-12.5.x
+        stack: osx-xcode-13.0.x
         machine_type_id: g2.4core
     before_run:
     - 1_git_clone_and_post_clone
@@ -464,7 +464,7 @@ workflows:
       This Workflow is to run L10n tests in one locale and then share the bundle with the rest of the builds
     meta:
       bitrise.io:
-        stack: osx-xcode-12.5.x
+        stack: osx-xcode-13.0.x
         machine_type_id: g2.4core
 
   L10nScreenshotsTests:
@@ -543,7 +543,7 @@ workflows:
       This Workflow is to run L10n tests for all locales
     meta:
       bitrise.io:
-        stack: osx-xcode-12.5.x
+        stack: osx-xcode-13.0.x
         machine_type_id: g2.4core
 
   RunUnitTests:
@@ -559,7 +559,7 @@ workflows:
       in master
     meta:
       bitrise.io:
-        stack: osx-xcode-12.5.x
+        stack: osx-xcode-13.0.x
         machine_type_id: g2.4core
     before_run:
     - 1_git_clone_and_post_clone
@@ -585,7 +585,7 @@ workflows:
     description: This Workflow is to run tests UI TESTS
     meta:
       bitrise.io:
-        stack: osx-xcode-12.5.x
+        stack: osx-xcode-13.0.x
         machine_type_id: g2.4core
 
   xcode12-release-and-beta-nocache:
@@ -774,7 +774,7 @@ workflows:
       This step is to build, archive and upload Firefox Release and Beta
     meta:
       bitrise.io:
-        stack: osx-xcode-12.5.x
+        stack: osx-xcode-13.0.x
         machine_type_id: g2.4core
 
 app:
