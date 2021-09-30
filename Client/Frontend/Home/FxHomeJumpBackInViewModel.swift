@@ -41,7 +41,14 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
         updateJumpListData()
     }
 
-    public func switchTo(_ tab: Tab) {
+    public func switchTo(group: ASGroup<Tab>) {
+        if BrowserViewController.foregroundBVC().urlBar.inOverlayMode {
+            BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode()
+        }
+//        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .firefoxHomepage, value: .jumpBackInSectionTabOpened)
+    }
+
+    public func switchTo(tab: Tab) {
         if BrowserViewController.foregroundBVC().urlBar.inOverlayMode {
             BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode()
         }

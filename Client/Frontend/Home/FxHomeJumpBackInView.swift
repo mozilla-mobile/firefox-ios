@@ -90,13 +90,11 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: JumpBackInCell.cellIdentifier, for: indexPath) as! JumpBackInCell
 
         if indexPath.row == (viewModel.jumpList.itemsToDisplay - 1),
-           let group = viewModel.jumpList.group,
-           let groupCount = group.groupedItems.count {
+           let group = viewModel.jumpList.group {
 
             cell.itemTitle.text = group.searchTerm.localizedCapitalized
-            cell.itemDetails.text = "\(groupCount)"
-            // TODO: Determine source string here, if from synced tabs. Simply update `cell.itemDetails.text`
-            fatalError("ON NOES!")
+            cell.itemDetails.text = String(format: .FirefoxHomeJumpBackInSectionGroupSiteCount, group.groupedItems.count)
+            cell.heroImage.image = UIImage(imageLiteralResourceName: "recently_closed").withRenderingMode(.alwaysTemplate)
 
         } else {
             let item = viewModel.jumpList.tabs[indexPath.row]
@@ -110,7 +108,6 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
             })
 
             cell.itemTitle.text = site.title
-            // TODO: Determine source string here, if from synced tabs. Simply update `cell.itemDetails.text`
         }
 
         return cell
@@ -121,11 +118,11 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.row == viewModel.jumpList.itemsToDisplay - 1,
            let group = viewModel.jumpList.group {
-            fatalError("ON NOES!")
+            viewModel.switchTo(group: group)
 
         } else {
             let tab = viewModel.jumpList.tabs[indexPath.row]
-            viewModel.switchTo(tab)
+            viewModel.switchTo(tab: tab)
         }
     }
 }
@@ -263,5 +260,6 @@ extension JumpBackInCell: Themeable {
     func applyTheme() {
         contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
         itemDetails.textColor = UIColor.theme.homePanel.activityStreamCellDescription
+        heroImage.tintColor = UIColor.theme.homePanel.jumpbackInGroupIconColour
     }
 }
