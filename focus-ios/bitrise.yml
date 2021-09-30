@@ -34,7 +34,7 @@ workflows:
         title: ContentBlockerGen
     meta:
       bitrise.io:
-        stack: osx-xcode-12.5.x
+        stack: osx-xcode-13.0.x
 
 
   set-project-version:
@@ -61,7 +61,7 @@ workflows:
         title: Set OpenInFocus version numbers
     meta:
       bitrise.io:
-        stack: osx-xcode-12.5.x
+        stack: osx-xcode-13.0.x
     before_run: []
 
 
@@ -77,7 +77,7 @@ workflows:
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Klar.entitlements
     meta:
       bitrise.io:
-        stack: osx-xcode-12.5.x
+        stack: osx-xcode-13.0.x
     before_run: []
 
 
@@ -107,7 +107,7 @@ workflows:
         - itunescon_user: "$APPLE_ACCOUNT_ID"
     meta:
       bitrise.io:
-        stack: osx-xcode-12.5.x
+        stack: osx-xcode-13.0.x
         machine_type_id: g2.8core
     before_run:
       - clone-and-build-dependencies
@@ -141,7 +141,7 @@ workflows:
         - itunescon_user: "$APPLE_ACCOUNT_ID"
     meta:
       bitrise.io:
-        stack: osx-xcode-12.5.x
+        stack: osx-xcode-13.0.x
         machine_type_id: g2.8core
     before_run:
       - clone-and-build-dependencies
@@ -341,7 +341,7 @@ workflows:
     - deploy-to-bitrise-io@1: {}
     meta:
       bitrise.io:
-        stack: osx-xcode-12.5.x
+        stack: osx-xcode-13.0.x
         machine_type_id: g2.8core
   L10nScreenshotsTests:
     steps:
@@ -406,7 +406,7 @@ workflows:
         - deploy_path: artifacts/
     meta:
       bitrise.io:
-        stack: osx-xcode-12.5.x
+        stack: osx-xcode-13.0.x
         machine_type_id: g2.4core
   L10nBuild:
     steps:
@@ -448,7 +448,7 @@ workflows:
         - is_compress: 'true'
     meta:
       bitrise.io:
-        stack: osx-xcode-12.5.x
+        stack: osx-xcode-13.0.x
         machine_type_id: g2.4core
 
 app:
