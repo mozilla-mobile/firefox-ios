@@ -57,8 +57,9 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
 
     private func updateJumpListData() {
         if featureFlags.isFeatureActive(.groupedTabs) {
-            TabGroupsManager.getTabGroups(profile: profile,
-                                          tabs: tabManager.recentlyAccessedNormalTabs) { groups, filteredActiveTabs in
+            TabGroupsManager.getTabGroups(with: profile,
+                                          from: tabManager.recentlyAccessedNormalTabs,
+                                          using: .orderedDescending) { groups, filteredActiveTabs in
                 self.jumpList = self.createJumpList(from: filteredActiveTabs, and: groups)
             }
         } else {
@@ -66,7 +67,7 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
         }
     }
 
-    private func createJumpList(from tabs: [Tab], and groups: [String: [Tab]]? = nil) -> JumpList {
+    private func createJumpList(from tabs: [Tab], and groups: [ASGroup<Tab>]? = nil) -> JumpList {
         let recentGroup = filter(groups: groups)
         let groupCount = recentGroup != nil ? 1 : 0
         let recentTabs = filter(tabs: tabs, usingGroupCount: groupCount)
