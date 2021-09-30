@@ -96,9 +96,9 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     }
     
     var filteredTabs = [Tab]()
-    var tabGroups: [String: [Tab]]?
+    var tabGroups: [ASGroup<Tab>]?
     var tabsInAllGroups: [Tab]? {
-        (tabGroups?.map{$0.value}.flatMap{$0})
+        (tabGroups?.map{$0.groupedItems}.flatMap{$0})
     }
 
     private(set) var isPrivate = false
@@ -165,7 +165,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         }
     }
 
-    private func getTabsAndUpdateInactiveState(completion: @escaping ([String: [Tab]]?, [Tab]) -> Void) {
+    private func getTabsAndUpdateInactiveState(completion: @escaping ([ASGroup<Tab>]?, [Tab]) -> Void) {
         let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         guard !self.isPrivate else {
             self.tabGroups = nil
@@ -180,7 +180,9 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         }
         guard shouldEnableInactiveTabs else {
             if !self.isPrivate && shouldEnableGroupedTabs {
-                TabGroupsManager.getTabGroups(profile: profile, tabs: tabManager.normalTabs) { tabGroups, filteredActiveTabs  in
+                TabGroupsManager.getTabGroups(with: profile,
+                                              from: tabManager.normalTabs,
+                                              using: .orderedAscending) { tabGroups, filteredActiveTabs  in
                     self.tabGroups = tabGroups
                     self.filteredTabs = filteredActiveTabs
                     completion(tabGroups, filteredActiveTabs)
@@ -208,13 +210,16 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         // Make sure selected tab has latest time
         selectedTab?.lastExecutedTime = Date.now()
         inactiveViewModel.updateInactiveTabs(with: tabManager.selectedTab, tabs: allTabs)
-        TabGroupsManager.getTabGroups(profile: profile, tabs: tabManager.normalTabs) { tabGroups, filteredActiveTabs  in
+        TabGroupsManager.getTabGroups(with: profile,
+                                      from: tabManager.normalTabs,
+                                      using: .orderedAscending) { tabGroups, filteredActiveTabs  in
             guard self.shouldEnableGroupedTabs else {
                 self.tabGroups = nil
                 self.filteredTabs = allTabs
                 completion(tabGroups, allTabs)
                 return
             }
+
             self.tabGroups = tabGroups
             self.filteredTabs = filteredActiveTabs
             completion(tabGroups, filteredActiveTabs)
@@ -228,13 +233,15 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     }
     
     private func groupNameForTab(tab: Tab) -> String? {
-        guard let groupName = tabGroups?.first(where: { $0.value.contains(tab) })?.key else { return nil }
+        guard let groupName = tabGroups?.first(where: { $0.groupedItems.contains(tab) })?.searchTerm else { return nil }
         return groupName
     }
     
     func indexOfGroupTab(tab: Tab) -> (groupName: String, indexOfTabInGroup: Int)? {
-        guard let key = groupNameForTab(tab: tab), let group = tabGroups?[key], let indexOfTabInGroup = group.firstIndex(of: tab) else { return nil }
-        return (key, indexOfTabInGroup)
+        guard let searchTerm = groupNameForTab(tab: tab),
+              let group = tabGroups?.first(where: { $0.searchTerm == searchTerm }),
+              let indexOfTabInGroup = group.groupedItems.firstIndex(of: tab) else { return nil }
+        return (searchTerm, indexOfTabInGroup)
     }
     
     func indexOfRegularTab(tab: Tab) -> Int? {
@@ -351,8 +358,8 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     
     func recordGroupedTabTelemetry() {
         if shouldEnableGroupedTabs, !isPrivate, let tabGroups = tabGroups, tabGroups.count > 0 {
-            let groupWithTwoTabs = tabGroups.filter { $0.value.count == 2 }.count
-            let groupsWithTwoMoreTab = tabGroups.filter { $0.value.count > 2 }.count
+            let groupWithTwoTabs = tabGroups.filter { $0.groupedItems.count == 2 }.count
+            let groupsWithTwoMoreTab = tabGroups.filter { $0.groupedItems.count > 2 }.count
             let tabsInAllGroup = tabsInAllGroups?.count ?? 0
             let averageTabsInAllGroups = ceil(Double(tabsInAllGroup / tabGroups.count))
             let groupTabExtras: [String: Int32] = [
