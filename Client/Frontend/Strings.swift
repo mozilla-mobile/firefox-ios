@@ -1471,5 +1471,5 @@ extension String {
 
     public static let TabTrayOtherTabsLabelTitle = MZLocalizedString("TabTray.OtherTabs.Title", value: "Other tabs", comment: "In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs")
 
-    public static let FirefoxHomeJumpBackInSectionGroupSiteCount = MZLocalizedString("ActivityStream.JumpBackIn.TabGroup.SiteCount", value: "%d sites", comment: "On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists, underneath the search term for the tab group, there will be a subtitle with how many tabs (or sites) are in that group. The placeholder is for a number. It will read '5 sites' or similar.")
+    public static let FirefoxHomeJumpBackInSectionGroupSiteCount = MZLocalizedString("ActivityStream.JumpBackIn.TabGroup.SiteCount", value: "Sites: %d", comment: "On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists, underneath the search term for the tab group, there will be a subtitle with how many tabs (or sites) are in that group. The placeholder is for a number. It will read '5 sites' or similar.")
 }
