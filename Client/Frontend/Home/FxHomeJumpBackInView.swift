@@ -89,8 +89,13 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: JumpBackInCell.cellIdentifier, for: indexPath) as! JumpBackInCell
 
-        if indexPath.row == viewModel.jumpList.itemsToDisplay - 1, let group = viewModel.jumpList.groups {
+        if indexPath.row == (viewModel.jumpList.itemsToDisplay - 1),
+           let group = viewModel.jumpList.group,
+           let groupCount = group.groupedItems.count {
 
+            cell.itemTitle.text = group.searchTerm.localizedCapitalized
+            cell.itemDetails.text = "\(groupCount)"
+            // TODO: Determine source string here, if from synced tabs. Simply update `cell.itemDetails.text`
             fatalError("ON NOES!")
 
         } else {
@@ -114,7 +119,8 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
 
 extension FxHomeJumpBackInCollectionCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.row == viewModel.jumpList.itemsToDisplay - 1, let group = viewModel.jumpList.groups {
+        if indexPath.row == viewModel.jumpList.itemsToDisplay - 1,
+           let group = viewModel.jumpList.group {
             fatalError("ON NOES!")
 
         } else {

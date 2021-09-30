@@ -27,8 +27,8 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
     var jumpList = JumpList(group: nil, tabs: [Tab]())
 
     var layoutVariables: JumpBackInLayoutVariables
-    var tabManager: TabManager
-    var profile: Profile
+    private var tabManager: TabManager
+    private var profile: Profile
 
     init() {
         self.tabManager = BrowserViewController.foregroundBVC().tabManager
