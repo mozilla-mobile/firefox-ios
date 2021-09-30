@@ -13,3 +13,6 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Gant se e c'hallit enrollañ ha pellgas skeudennoù.";
 
+/* This is the menu item that appears when you long press the Focus icon on the phone home screen. */
+"UIApplicationShortcutItemTitle.EraseAndOpen" = "Dilemel ha digeriñ";
+

@@ -233,7 +233,7 @@
 "FirstRun.lastSlide.buttonLabel" = "De accordo!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Bloca automaticamente le traciatores online durante que tu naviga. Pois elimina per un tocco le paginas visitate, recercas, cookies e contrasignos de tu apparato.";
+"FirstRun.messageLabelDescription" = "Bloca automaticamente le traciatores in linea durante que tu naviga. Pois elimina con un tocco le paginas visitate, recercas, cookies e contrasignos de tu apparato.";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Naviga sin sentir te observate.";
@@ -557,7 +557,7 @@
 "trackingProtection.toggleLabel2" = "Protection antitraciamento reinfortiate";
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel2" = "Mantene tu datos pro te mesme. %@ te protege contra multe del plus commun traciatores que seque lo que tu face online.";
+"trackingProtection.trackerDescriptionLabel2" = "Mantene tu datos pro te mesme. %@ te protege contra le major parte de traciatores commun que seque tu activitates in linea.";
 
 /* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
 "trackingProtection.trackersBlockedLabel" = "Traciatores blocate desde %@";

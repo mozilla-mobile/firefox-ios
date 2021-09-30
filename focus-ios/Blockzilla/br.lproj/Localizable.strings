@@ -43,6 +43,15 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Digeriñ e %@";
 
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "Mat eo";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "Ur fazi a zo degouezhet en ur ouzhpennañ ar bilhed da Wallet. Klaskit en-dro diwezhatoc’h.";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "C'hwitet eo bet ouzhpennañ ar bilhed";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "Dilesait da zistreiñ da %@";
 
@@ -301,6 +310,12 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Stankañ heulierien endalc'hadoù all a c'hall mirout videoioù ha pajennadoù web da vont en-dro en un doare dereat.";
 
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "Nullañ";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes2" = "Stankañ endalc'had an heulierien";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ a gaso ar pezh a vizskrivit er varrenn chomlec'hioù d'ho lusker enklask.";
 
@@ -376,8 +391,20 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "DIOGELROEZ";
 
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "Bruderezh";
+
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "Statistikoù";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Stankañ an nodrezhoù web";
+
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "Endalc'had";
+
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "Sokial";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Implijit Face ID evit dibrennañ an arload";
@@ -403,6 +430,12 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Touch ID a c'hall dibrennañ %@ m'eo digoret un URL en arload endeo";
 
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "Diweredekaet";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "Gweredekaet";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Petra nevez";
 
@@ -411,6 +444,9 @@
 
 /* Text for a share button */
 "share" = "Rannañ";
+
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "Ouzhpennañ d'ar berradennoù";
 
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "Eilañ ar chomlec'h";
@@ -423,6 +459,9 @@
 
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "Obererezhioù ar bajenn";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "Lemel diouzh ar berradennoù";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Goulenn al lec'hienn evit an urzhiataerioù";
@@ -441,6 +480,9 @@
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Rannañ ar bajenn gant...";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "Lemel diouzh ar berradennoù";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Bruderezh";
@@ -475,6 +517,12 @@
 /* label for analytic trackers. */
 "trackingProtection.analyticTrackerLabel" = "Heulieroù digejañ";
 
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "N'eo ket diarvar ar c'hennask";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "Kennask suraet";
+
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Heulieroù endalc'had";
 
@@ -490,11 +538,32 @@
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Gouzout hiroc'h";
 
+/* Text for the button that closes the Shield Data and opens the regular Settings screen. */
+"trackingProtection.moreSettings" = "Muioc'h a arventennoù";
+
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Heulieroù kevredadel";
 
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "DIWEREDEKAET eo ar gwarezioù evit an dalc'h-mañ";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "GWEREDEKAET eo ar gwarezioù evit an dalc'h-mañ";
+
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Diweredekaat betek ma vo serret %@ pe stoket DILEMEL.";
+
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "Gwarez heuliañ araoket";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel2" = "Mirit ho roadennoù ganeoc'h. %@ ho kwarez a-enep lodenn vrasañ an heulierien a sell ar pezh a rit enlinenn.";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "Heulierien stanket abaoe %@";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "Heulierien ha skriptoù da stankañ";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Ouzhpennañ un ere d'al leuniadur emgefreek";
@@ -507,6 +576,9 @@
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "DIVERKAÑ";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "Roll istor ar merdeiñ skarzhet";
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Kavout er bajennad: %@";
