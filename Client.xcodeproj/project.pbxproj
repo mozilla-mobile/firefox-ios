@@ -388,6 +388,8 @@
 		9609F4CA26B57CE800F81493 /* CalendarExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9609F4C926B57CE800F81493 /* CalendarExtensions.swift */; };
 		962F394A2672D57A006BDA2A /* RecentItemsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962F39492672D57A006BDA2A /* RecentItemsHelper.swift */; };
 		966206CD2698DE1E005C0A55 /* FirefoxHomeRecentlySavedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966206CC2698DE1E005C0A55 /* FirefoxHomeRecentlySavedViewModel.swift */; };
+		9699F77326F39E5100C5FA47 /* SiteImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9699F77226F39E5100C5FA47 /* SiteImageHelper.swift */; };
+		96D95016270238500079D39D /* Throttler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D95015270238500079D39D /* Throttler.swift */; };
 		96F627002669B0D100C82340 /* FxHomeRecentlySavedCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F626FF2669B0D100C82340 /* FxHomeRecentlySavedCollectionCell.swift */; };
 		A83E5AB71C1D993D0026D912 /* UIPasteboardExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E5AB61C1D993D0026D912 /* UIPasteboardExtensions.swift */; };
 		A83E5B1A1C1DA8BF0026D912 /* image.gif in Resources */ = {isa = PBXBuildFile; fileRef = A83E5B181C1DA8BF0026D912 /* image.gif */; };
@@ -2619,8 +2621,10 @@
 		966206CC2698DE1E005C0A55 /* FirefoxHomeRecentlySavedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxHomeRecentlySavedViewModel.swift; sourceTree = "<group>"; };
 		967E47FAA3AD30920D37AF79 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		968545D0846EC3C9425305FC /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = "he.lproj/Default Browser.strings"; sourceTree = "<group>"; };
+		9699F77226F39E5100C5FA47 /* SiteImageHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteImageHelper.swift; sourceTree = "<group>"; };
 		96A542EFBF40CDFE9AA24E2D /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
 		96B14F71BAAD012EA8852135 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/LoginManager.strings"; sourceTree = "<group>"; };
+		96D95015270238500079D39D /* Throttler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Throttler.swift; sourceTree = "<group>"; };
 		96F626FF2669B0D100C82340 /* FxHomeRecentlySavedCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxHomeRecentlySavedCollectionCell.swift; sourceTree = "<group>"; };
 		970E49B0AC65FFFA0E81DE43 /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
 		971941E1A9BBC06723E127ED /* my */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = my; path = my.lproj/Storage.strings; sourceTree = "<group>"; };
@@ -4807,6 +4811,7 @@
 				39F819C51FD70F5D009E31E4 /* TabEventHandlers.swift */,
 				39A359E31BFCCE94006B9E87 /* UserActivityHandler.swift */,
 				962F39492672D57A006BDA2A /* RecentItemsHelper.swift */,
+				9699F77226F39E5100C5FA47 /* SiteImageHelper.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -5776,6 +5781,7 @@
 				E65075561E37F714006961AC /* FaviconFetcher.swift */,
 				1DF4266D251BC46D0086386A /* FaviconFetcher+Non-Bundled.swift */,
 				D5D052EE2645ACBF00759F85 /* View.swift */,
+				96D95015270238500079D39D /* Throttler.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -7993,6 +7999,7 @@
 				EB9A179C20E69A7F00B12184 /* DarkTheme.swift in Sources */,
 				DA52E1DA25F5961F0092204C /* TabTrayViewController.swift in Sources */,
 				EB1C84BF212EFFBF001489DF /* BrowserViewController+ReaderMode.swift in Sources */,
+				96D95016270238500079D39D /* Throttler.swift in Sources */,
 				EBA3B2CD2268F27500728BDB /* PhotonActionSheetWidgets.swift in Sources */,
 				D3C3696E1CC6B78800348A61 /* LocalRequestHelper.swift in Sources */,
 				E4B423DD1ABA0318007E66C8 /* ReaderModeHandlers.swift in Sources */,
@@ -8210,6 +8217,7 @@
 				A93067E81D0FE18E00C49C6E /* NightModeHelper.swift in Sources */,
 				3B39EDCB1E16E1AA00EF029F /* CustomSearchViewController.swift in Sources */,
 				E65075571E37F714006961AC /* FaviconFetcher.swift in Sources */,
+				9699F77326F39E5100C5FA47 /* SiteImageHelper.swift in Sources */,
 				048B4C8024A53EEB001B56E8 /* ImageButtonWithLabel.swift in Sources */,
 				D863C8F21F68BFC20058D95F /* GradientProgressBar.swift in Sources */,
 				C8445A14264428DC00B83F53 /* LibraryPanelViewState.swift in Sources */,
