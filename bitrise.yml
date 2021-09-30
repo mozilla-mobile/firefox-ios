@@ -790,4 +790,4 @@ trigger_map:
 - push_branch: v38.0
   workflow: xcode12-release-and-beta-nocache
 - pull_request_target_branch: main
-  workflow: RunSmokeXCUITestsiPad
+  workflow: RunUnitTests

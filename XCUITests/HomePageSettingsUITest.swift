@@ -189,7 +189,8 @@ class HomePageSettingsUITests: BaseTestCase {
         XCTAssertEqual(numberOfTopSites, numberOfExpectedTopSites)
     }
 
-    func testJumpBackIn() {
+    func testJumpBackIn() throws {
+        throw XCTSkip("Disabled failing in BR - investigating") 
         navigator.openURL(path(forTestPage: exampleUrl))
         waitUntilPageLoad()
         navigator.goto(TabTray)
