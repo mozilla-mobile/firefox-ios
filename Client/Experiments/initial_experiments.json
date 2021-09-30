@@ -1,78 +1,5 @@
 {
     "data": [{
-            "slug": "feature-text-variables-validation-ios",
-            "appId": "org.mozilla.ios.Fennec",
-            "appName": "firefox_ios",
-            "channel": "nightly",
-            "branches": [{
-                    "slug": "control",
-                    "ratio": 100,
-                    "feature": {
-                        "value": {},
-                        "enabled": true,
-                        "featureId": "nimbus-validation"
-                    }
-                },
-                {
-                    "slug": "fancy-settings",
-                    "ratio": 0,
-                    "feature": {
-                        "value": {
-                            "settings-title": "Fancy Settings"
-                        },
-                        "enabled": true,
-                        "featureId": "nimbus-validation"
-                    }
-                },
-                {
-                    "slug": "smiley",
-                    "ratio": 0,
-                    "feature": {
-                        "value": {
-                            "settings-title-punctuation": "\uD83D\uDE03"
-                        },
-                        "enabled": true,
-                        "featureId": "nimbus-validation"
-                    }
-                },
-                {
-                    "slug": "bundle-localized-text",
-                    "ratio": 0,
-                    "feature": {
-                        "value": {
-                            "settings-title": "Settings.General.SectionName"
-                        },
-                        "enabled": true,
-                        "featureId": "nimbus-validation"
-                    }
-                }
-            ],
-            "outcomes": [],
-            "arguments": {},
-            "probeSets": [],
-            "startDate": null,
-            "targeting": "true",
-            "featureIds": [
-                "nimbus-validation"
-            ],
-            "application": "org.mozilla.ios.Fennec",
-            "bucketConfig": {
-                "count": 0,
-                "start": 0,
-                "total": 10000,
-                "namespace": "nimbus-validation-2",
-                "randomizationUnit": "nimbus_id"
-            },
-            "schemaVersion": "1.5.0",
-            "userFacingName": "Nimbus Text Variables Validation",
-            "referenceBranch": "control",
-            "proposedDuration": 14,
-            "isEnrollmentPaused": false,
-            "proposedEnrollment": 7,
-            "userFacingDescription": "Demonstration experiment to make trivial visible changes to text in Settings",
-            "last_modified": 1621443780172
-        },
-        {
             "slug": "ios-search-full-text",
             "appId": "org.mozilla.ios.Fennec",
             "appName": "firefox_ios",
@@ -192,6 +119,98 @@
             "proposedEnrollment": 7,
             "userFacingDescription": "Does making full-text available to spotlight or open tabs drive CDOU?",
             "last_modified": 1621443780172
-        }
+        },
+        {
+                "slug": "mr2-homescreen-experiment",
+                "appId": "org.mozilla.ios.Fennec",
+                "appName": "firefox_ios",
+                "channel": "nightly",
+                "branches": [
+                    {
+                        "slug": "control",
+                        "ratio": 0,
+                        "feature": {
+                            "value": {},
+                            "enabled": true,
+                            "featureId": "homescreen"
+                        }
+                    },
+                    {
+                        "slug": "no-mr2",
+                        "ratio": 0,
+                        "feature": {
+                            "value": {
+                                "sections-enabled": {
+                                    "topSites": true,
+                                    "jumpBackIn": false,
+                                    "recentlySaved": false,
+                                    "pocket": false,
+                                    "libraryShortcuts": true
+                                }
+                             },
+                            "enabled": true,
+                            "featureId": "homescreen"
+                        }
+                    },
+                    {
+                        "slug": "full-mr2",
+                        "ratio": 100,
+                        "feature": {
+                            "value": {
+                                "sections-enabled": {
+                                    "topSites": true,
+                                    "jumpBackIn": true,
+                                    "recentlySaved": true,
+                                    "pocket": true,
+                                    "libraryShortcuts": true
+                                }
+                             },
+                            "enabled": true,
+                            "featureId": "homescreen"
+                        }
+                    },
+                    {
+                        "slug": "distraction-free",
+                        "ratio": 0,
+                        "feature": {
+                            "value": {
+                                "sections-enabled": {
+                                    "topSites": false,
+                                    "jumpBackIn": false,
+                                    "recentlySaved": false,
+                                    "pocket": false,
+                                    "libraryShortcuts": false
+                                }
+                             },
+                            "enabled": true,
+                            "featureId": "homescreen"
+                        }
+                    }
+                ],
+                "outcomes": [],
+                "arguments": {},
+                "probeSets": [],
+                "startDate": null,
+                "targeting": "true",
+                "featureIds": [
+                    "homescreen"
+                ],
+                "application": "org.mozilla.firefox_beta",
+                "bucketConfig": {
+                    "count": 10000,
+                    "start": 0,
+                    "total": 10000,
+                    "namespace": "nimbus-validation-2",
+                    "randomizationUnit": "nimbus_id"
+                },
+                "schemaVersion": "1.5.0",
+                "userFacingName": "Home screen sections test",
+                "referenceBranch": "control",
+                "proposedDuration": 14,
+                "isEnrollmentPaused": false,
+                "proposedEnrollment": 7,
+                "userFacingDescription": "Experiment to test the home screen configurations",
+                "last_modified": 1621443780172
+            }
     ]
 }

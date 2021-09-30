@@ -14,6 +14,7 @@ enum NimbusFeatureId: String {
     case nimbusValidation = "nimbus-validation"
     case inactiveTabs = "inactiveTabs"
     case search = "search"
+    case homescreen = "homescreen"
 }
 
 /// A set of common branch ids used in experiments. Branch ids can be application/experiment specific, so

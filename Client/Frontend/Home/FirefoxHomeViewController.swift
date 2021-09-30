@@ -154,6 +154,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     fileprivate let profile: Profile
     fileprivate let pocketAPI = Pocket()
     fileprivate let flowLayout = UICollectionViewFlowLayout()
+    fileprivate let experiments: NimbusApi
     fileprivate var hasSentPocketSectionEvent = false
     fileprivate var hasSentJumpBackInSectionEvent = false
     var recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel()
@@ -188,25 +189,47 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
 
     var pocketStories: [PocketStory] = []
 
-    var isYourLibrarySectionEnabled: Bool { UIDevice.current.userInterfaceIdiom != .pad }
-    
+    var isYourLibrarySectionEnabled: Bool {
+        UIDevice.current.userInterfaceIdiom != .pad &&
+            homescreen.sectionsEnabled[.libraryShortcuts] == true
+    }
+
+    var isPocketSectionEnabled: Bool {
+        profile.prefs.boolForKey(PrefsKeys.ASPocketStoriesVisible) ??
+            (Pocket.IslocaleSupported(Locale.current.identifier) &&
+                homescreen.sectionsEnabled[.pocket] == true)
+    }
+
     var hasRecentBookmarks = false
     var hasReadingListitems = false
     var currentTab: Tab? {
         let tabManager = BrowserViewController.foregroundBVC().tabManager
         return tabManager.selectedTab
     }
+
+    lazy var homescreen = experiments.withVariables(featureId: .homescreen, sendExposureEvent: false) {
+        Homescreen(variables: $0)
+    }
+
     var isRecentlySavedSectionEnabled: Bool {
-        guard featureFlags.isFeatureActive(.recentlySaved) else { return false }
+        guard featureFlags.isFeatureActive(.recentlySaved),
+              homescreen.sectionsEnabled[.recentlySaved] == true
+        else { return false }
 
         return hasRecentBookmarks || hasReadingListitems
     }
 
+    var isTopSitesSectionEnabled: Bool {
+        homescreen.sectionsEnabled[.topSites] == true
+    }
+
     var isJumpBackInSectionEnabled: Bool {
         get {
-            guard featureFlags.isFeatureActive(.jumpBackIn) else { return false }
-            let tabManager = BrowserViewController.foregroundBVC().tabManager
+            guard featureFlags.isFeatureActive(.jumpBackIn),
+                  homescreen.sectionsEnabled[.jumpBackIn] == true
+            else { return false }
 
+            let tabManager = BrowserViewController.foregroundBVC().tabManager
             return !(tabManager.selectedTab?.isPrivate ?? false)
                 && !tabManager.recentlyAccessedNormalTabs.isEmpty
         }
@@ -214,6 +237,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
 
     init(profile: Profile, experiments: NimbusApi = Experiments.shared) {
         self.profile = profile
+        self.experiments = experiments
         super.init(collectionViewLayout: flowLayout)
         collectionView?.delegate = self
         collectionView?.dataSource = self
@@ -268,6 +292,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     }
 
     override func viewDidAppear(_ animated: Bool) {
+        experiments.recordExposureEvent(featureId: .homescreen)
         super.viewDidAppear(animated)
     }
 
@@ -611,7 +636,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
         case .pocket:
             return pocketStories.isEmpty ? .zero : Section(section).headerHeight
         case .topSites:
-            return Section(section).headerHeight
+            return isTopSitesSectionEnabled ? Section(section).headerHeight : .zero
         case .libraryShortcuts:
             return isYourLibrarySectionEnabled ? Section(section).headerHeight : .zero
         case .jumpBackIn:
@@ -659,7 +684,7 @@ extension FirefoxHomeViewController {
         
         switch Section(section) {
         case .topSites:
-            return topSitesManager.content.isEmpty ? 0 : 1
+            return isTopSitesSectionEnabled && !topSitesManager.content.isEmpty ? 1 : 0
         case .pocket:
             // There should always be a full row of pocket stories (numItems) otherwise don't show them
             return pocketStories.count
@@ -819,8 +844,8 @@ extension FirefoxHomeViewController: DataObserverDelegate {
     }
 
     func getPocketSites() -> Success {
-        let showPocket = (profile.prefs.boolForKey(PrefsKeys.ASPocketStoriesVisible) ?? Pocket.IslocaleSupported(Locale.current.identifier))
-        guard showPocket else {
+
+        guard isPocketSectionEnabled else {
             self.pocketStories = []
             return succeed()
         }
