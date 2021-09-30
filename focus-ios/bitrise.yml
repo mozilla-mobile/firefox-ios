@@ -7,14 +7,10 @@ project_type: ios
 trigger_map:
 - push_branch: main
   workflow: runParallelTests
-- push_branch: v8.1.7
-  workflow: release
 - pull_request_source_branch: "*"
   workflow: runParallelTests
 - tag: "*"
   workflow: release
-- push_branch: refresh
-  workflow: refresh_release
 
 
 workflows:
@@ -115,40 +111,6 @@ workflows:
       - set-default-browser-entitlement
 
 
-  refresh_release:
-    steps:
-    - certificate-and-profile-installer@1: {}
-    - xcode-archive@3:
-        inputs:
-        - scheme: Focus
-        - team_id: 43AQ936H96
-        - export_method: app-store
-        title: "Build Focus (Refresh)"
-    - deploy-to-itunesconnect-application-loader@1:
-        inputs:
-        - connection: 'off'
-        - app_password: "$APPLE_ACCOUNT_PW"
-        - itunescon_user: "$APPLE_ACCOUNT_ID"
-    - xcode-archive@3:
-        inputs:
-        - scheme: Klar
-        - export_method: app-store
-        title: "Build Klar (Refresh)"
-    - deploy-to-itunesconnect-application-loader@1:
-        inputs:
-        - connection: 'off'
-        - app_password: "$APPLE_ACCOUNT_PW"
-        - itunescon_user: "$APPLE_ACCOUNT_ID"
-    meta:
-      bitrise.io:
-        stack: osx-xcode-13.0.x
-        machine_type_id: g2.8core
-    before_run:
-      - clone-and-build-dependencies
-      - set-project-version
-      - set-default-browser-entitlement
-
-
   runParallelTests:
     steps:
     - activate-ssh-key@4:
@@ -188,8 +150,7 @@ workflows:
             # debug log
             set -x
 
-            # Check if the build goes to refresh branch then
-            # check if it is a scheduled or regular build
+            # Check if it is a scheduled or regular build
             # to select the testPlan to run
             
             if [[ $BITRISE_GIT_MESSAGE == Schedule* ]]
@@ -252,8 +213,7 @@ workflows:
             # debug log
             set -x
 
-            # Check if the build goes to refresh branch then
-            # check if it is a scheduled or regular build
+            # Check if it is a scheduled or regular build
             # to select the testPlan to run
 
             if [[ $BITRISE_GIT_MESSAGE == Schedule* ]]
