@@ -550,6 +550,9 @@
 /* Title for the Synced Tabs Cell in the History Panel */
 "HistoryPanel.SyncedTabsCell.Title" = "Համաժամեցված սարքեր";
 
+/* Accessibility label for the tab toolbar indicating the Home button. */
+"Home" = "Տուն";
+
 /* Button cancelling changes setting the home page for the first time. */
 "HomePage.Set.Dialog.Cancel" = "Չեղարկել";
 
@@ -700,6 +703,12 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "Պահված մուտքագրումները կցուցադրվեն այստեղ: Եթե Firefox-ում մուտքագրումները պահել եք այլ սարքում, ապա մուտք գործեք ձեր Firefox հաշիվ:";
 
+/* Label shown when there are no logins saved */
+"LoginsList.NoLoginsFound.Title" = "Մուտքագրումներ չկան";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "Որոնման հետ համընկնում չկա։";
+
 /* Label displayed when a user searches and no matches can be found against the search query */
 "LoginsList.NoMatchingResult.Title" = "Համապատասխան մուտքագրում չկա";
 
@@ -824,6 +833,9 @@
 
 /* Title on tracking protection menu for blocked items. */
 "Menu.TrackingProtection.BlockedTitle" = "Արգելափակված է";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"Menu.TrackingProtection.Details.Verifier" = "Հաստատել է %S-ի կողմից";
 
 /* Message in menu when no trackers blocked. */
 "Menu.TrackingProtection.NoTrackersBlockedTitle" = "Firefox-ը այս էջում հայտնի հետագծիչներ չի հայտնաբերել։";
@@ -993,6 +1005,12 @@
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Գաղտնիության Դրույթներ";
+
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "Կապակցումն անվտանգ չէ";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "Կապակցումը ապահով է";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Որոգ որոնման որոնիչներ";

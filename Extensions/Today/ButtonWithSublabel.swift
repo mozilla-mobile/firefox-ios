@@ -5,7 +5,7 @@
 import UIKit
 
 class ButtonWithSublabel: UIButton {
-    lazy var subtitleLabel = UILabel()
+    lazy var subLabel = UILabel()
     lazy var label = UILabel()
 
     required init?(coder aDecoder: NSCoder) {
@@ -25,7 +25,7 @@ class ButtonWithSublabel: UIButton {
         let buttonImage = self.imageView!
         self.titleLabel?.removeFromSuperview()
         addSubview(self.label)
-        addSubview(self.subtitleLabel)
+        addSubview(self.subLabel)
         buttonImage.adjustsImageSizeForAccessibilityContentSizeCategory = true
         buttonImage.contentMode = .scaleAspectFit
         
@@ -40,8 +40,8 @@ class ButtonWithSublabel: UIButton {
         self.label.numberOfLines = 2
         self.label.lineBreakMode = .byWordWrapping
         label.sizeToFit()
-        self.subtitleLabel.lineBreakMode = .byTruncatingTail
-        self.subtitleLabel.snp.makeConstraints { make in
+        self.subLabel.lineBreakMode = .byTruncatingTail
+        self.subLabel.snp.makeConstraints { make in
             make.bottom.equalTo(self).inset(10)
             make.top.equalTo(self.label.snp.bottom)
             make.leading.trailing.equalTo(self.label)

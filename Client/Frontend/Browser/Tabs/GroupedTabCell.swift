@@ -19,7 +19,7 @@ protocol GroupedTabCellDelegate {
 
 class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UITableViewDelegate, GroupedTabsDelegate {
     var delegate: GroupedTabCellDelegate?
-    var tabGroups: [String: [Tab]]?
+    var tabGroups: [ASGroup<Tab>]?
     var selectedTab: Tab? = nil
     static let Identifier = "GroupedTabCellIdentifier"
     let GroupedTabsTableIdentifier = "GroupedTabsTableIdentifier"
@@ -67,7 +67,7 @@ class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UI
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tabGroups?.keys.count ?? 0
+        return tabGroups?.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -77,8 +77,8 @@ class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UI
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: GroupedTabCellIdentifier, for: indexPath) as! GroupedTabContainerCell
         cell.delegate = self
-        cell.tabs = tabGroups?.map { $0.value }[indexPath.item]
-        cell.titleLabel.text = tabGroups?.map { $0.key }[indexPath.item] ?? ""
+        cell.tabs = tabGroups?.map { $0.groupedItems }[indexPath.item]
+        cell.titleLabel.text = tabGroups?.map { $0.searchTerm }[indexPath.item] ?? ""
         cell.collectionView.reloadData()
         cell.selectedTab = selectedTab
         if let selectedTab = selectedTab { cell.focusTab(tab: selectedTab) }
@@ -119,9 +119,7 @@ class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UI
 
     func scrollToSelectedGroup() {
         if let searchTerm = selectedTab?.tabGroupData.tabAssociatedSearchTerm {
-            if let index = tabGroups?.map({ $0.key }).firstIndex(where: { t in
-                t == searchTerm
-            }) {
+            if let index = tabGroups?.firstIndex(where: { $0.searchTerm == searchTerm}) {
                 tableView.scrollToRow(at: IndexPath(row: index , section: 0) , at: .bottom , animated: true)
             }
         }
@@ -222,12 +220,12 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
         bringSubviewToFront(containerView)
         
         containerView.snp.makeConstraints { make in
-            make.height.equalTo(230)
+            make.height.equalTo(233)
             make.edges.equalToSuperview()
         }
         
         titleLabel.snp.makeConstraints { make in
-            make.height.equalTo(20)
+            make.height.equalTo(23)
             make.top.equalToSuperview().offset(30)
             make.leading.equalTo(self.safeArea.leading).inset(20)
             make.centerX.equalToSuperview()
@@ -292,7 +290,7 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
         let isIpad = UIDevice.current.userInterfaceIdiom == .pad
         let padding = isIpad && !UIWindow.isLandscape ? 75 : (isIpad && UIWindow.isLandscape) ? 105 : 10
         let width = (Int(cellWidth) - padding) >= 0 ? Int(cellWidth) - padding : 0
-        return CGSize(width: width, height: 185)
+        return CGSize(width: width, height: 188)
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {

@@ -6,7 +6,6 @@
 
 #import "FSReadingList.h"
 
-#import "ThirdParty/UIImageViewAligned/UIImageViewAligned.h"
 #import "ThirdParty/Apple/UIImage+ImageEffects.h"
 
 #import "Shared-Bridging-Header.h"
