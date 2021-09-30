@@ -773,7 +773,6 @@ class BrowserViewController: UIViewController {
             }
         })
         view.setNeedsUpdateConstraints()
-        urlBar.locationView.reloadButton.reloadButtonState = .disabled
     }
 
     fileprivate func hideFirefoxHome() {
