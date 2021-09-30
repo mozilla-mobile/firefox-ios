@@ -7,19 +7,13 @@ import Foundation
 fileprivate let MaximumNumberOfGroups: Int = 1
 
 struct JumpList {
-    let groups: [String: [Tab]]?
+    let group: ASGroup<Tab>?
     let tabs: [Tab]
     var itemsToDisplay: Int {
         get {
             var count = 0
 
-            // This should only be one, but, implementing it like thing in case
-            // product wants to include more groups in JumpBackIn in the future,
-            // we don't really have to touch this code
-            if let groupCount = groups?.count {
-                count += groupCount
-            }
-
+            count += group != nil ? 1 : 0
             count += tabs.count
 
             return count
@@ -30,7 +24,7 @@ struct JumpList {
 class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
 
     // MARK: - Properties
-    var jumpList = JumpList(groups: nil, tabs: [Tab]())
+    var jumpList = JumpList(group: nil, tabs: [Tab]())
 
     var layoutVariables: JumpBackInLayoutVariables
     var tabManager: TabManager
@@ -68,26 +62,11 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
     }
 
     private func createJumpList(from tabs: [Tab], and groups: [ASGroup<Tab>]? = nil) -> JumpList {
-        let recentGroup = filter(groups: groups)
+        let recentGroup = groups?.first
         let groupCount = recentGroup != nil ? 1 : 0
         let recentTabs = filter(tabs: tabs, usingGroupCount: groupCount)
 
-        return JumpList(groups: recentGroup, tabs: recentTabs)
-    }
-
-    private func filter(groups: [String: [Tab]]?) -> [String: [Tab]]? {
-        var recentGroup: [String: [Tab]]? = nil
-
-        if let groups = groups {
-            for group in groups {
-
-            }
-            // use Maximum number of groups
-            print(groups)
-            recentGroup = nil
-        }
-
-        return recentGroup
+        return JumpList(group: recentGroup, tabs: recentTabs)
     }
 
     private func filter(tabs: [Tab], usingGroupCount groupCount: Int) -> [Tab] {
