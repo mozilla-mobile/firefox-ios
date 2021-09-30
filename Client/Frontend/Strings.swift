@@ -1435,7 +1435,7 @@ extension String {
     public static let SettingsCustomizeHomeRecentSearches = MZLocalizedString("Settings.Home.Option.RecentSearches", value: "Recent Searches", comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recent Searches section on the Firefox homepage on or off")
     public static let SettingsCustomizeHomeShortcuts = MZLocalizedString("Settings.Home.Option.Shortcuts", value: "Shortcuts", comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off")
     public static let SettingsCustomizeHomePocket = MZLocalizedString("Settings.Home.Option.Pocket", value: "Recommended by Pocket", comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off")
-    public static let SettingsCustomizeHomeDescritpion = MZLocalizedString("Settings.Home.Option.Description", value: "Choose content you see on the on Firefox homepage.", comment: "In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for.")
+    public static let SettingsCustomizeHomeDescritpion = MZLocalizedString("Settings.Home.Option.Description", value: "Choose content you see on the Firefox homepage.", comment: "In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for.")
 
     // Tabs options
     public static let SettingsCustomizeTabsTitle = MZLocalizedString("Settings.Tabs.Title", value: "Tabs", comment: "In the settings menu, this is the title for the Tabs customization section option")
@@ -1470,4 +1470,6 @@ extension String {
     public static let InactiveTabsCloseAllInactiveTabsButton = MZLocalizedString("InactiveTabs.TabTray.CloseButtonTitle", value: "Close All Inactive Tabs", comment: "In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs.")
 
     public static let TabTrayOtherTabsLabelTitle = MZLocalizedString("TabTray.OtherTabs.Title", value: "Other tabs", comment: "In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs")
+
+    public static let FirefoxHomeJumpBackInSectionGroupSiteCount = MZLocalizedString("ActivityStream.JumpBackIn.TabGroup.SiteCount", value: "%d sites", comment: "On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists, underneath the search term for the tab group, there will be a subtitle with how many tabs (or sites) are in that group. The placeholder is for a number. It will read '5 sites' or similar.")
 }
