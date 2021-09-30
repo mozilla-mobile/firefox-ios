@@ -39,7 +39,7 @@ struct Homescreen {
             case .topSites: return true
             case .jumpBackIn: return false
             case .recentlySaved: return false
-            case .pocket: return false
+            case .pocket: return true
             case .libraryShortcuts: return true
             }
         }
