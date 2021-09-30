@@ -6,137 +6,232 @@ import Foundation
 import Shared
 import MozillaAppServices
 
+struct ASGroup<T> {
+    let searchTerm: String
+    let groupedItems: [T]
+    let timestamp: Timestamp
+}
+
 class TabGroupsManager {
 
-    // Create URL groups from metadata
+    public static func getURLGroups(with profile: Profile, from urls: [URL], using ordering: ComparisonResult, completion: @escaping ([ASGroup<URL>]?, _ filteredItems: [URL]) -> Void) {
+        getGroups(with: profile, from: urls, using: ordering, completion: completion)
+    }
+
+    public static func getTabGroups(with profile: Profile, from tabs: [Tab], using ordering: ComparisonResult, completion: @escaping ([ASGroup<Tab>]?, _ filteredItems: [Tab]) -> Void) {
+        getGroups(with: profile, from: tabs, using: ordering, completion: completion)
+    }
+
+    /// Create item groups from metadata.
+    ///
+    /// This function take a type `T` generic, and creates groups based on metadata available
+    /// from Application Services.
+    ///
     /// - Parameters:
-    ///   - profile: User Profile info
-    ///   - urlList: List of urls we want to make the groups from
-    ///   - completion: completion handler that contains [Search Term: [URL]]  dictionary and filterd URLs list that has URLs  that are not part of a group
-    static func getURLGroups(profile: Profile, urlList: [URL], completion: @escaping ([String: [URL]]?, _ filteredUrls: [URL]) -> Void) {
-        
+    ///   - profile: The user's `Profile` info
+    ///   - items: List of items we want to make the groups from. This is a generic type and
+    ///   currently only supports `Tab` and `URL`
+    ///   - ordering: Order in which we want to return groups, `.orderedAscending` or
+    ///   `.orderedDescending`. `.orderedSame` is also possible, but will return the exact
+    ///   order of the group that was provided. Note: this does not affect the groups' items,
+    ///   which will alway return in ascending order.
+    ///   - completion: completion handler that contains `[ASGroup<T>]`  dictionary and a
+    ///   filteredItems list, `[T]`, which is comprised of items from the original input
+    ///   that are not part of a group.
+    private static func getGroups<T: Equatable>(with profile: Profile, from items: [T], using ordering: ComparisonResult, completion: @escaping ([ASGroup<T>]?, _ filteredItems: [T]) -> Void) {
+//        ROUX TODO: when URL support is added, fix check
+//        guard (items is [Tab] || items is [URL]) else { return completion(nil, [T]()) }
+        guard (items is [Tab]) else { return completion(nil, [T]()) }
+
         let lastTwoWeek = Int64(Date().lastTwoWeek.timeIntervalSince1970)
         profile.places.getHistoryMetadataSince(since: lastTwoWeek).uponQueue(.main) { result in
-            guard let val = result.successValue else { return completion(nil, [URL]()) }
-            
-            let searchTerms = Set(val.map({ return $0.searchTerm }))
-            var searchTermMetaDataGroup : [String: [HistoryMetadata]] = [:]
-            
-            // 1. Build serch term metadata group
-            for term in searchTerms {
-                if let term = term {
-                    let elements = val.filter({ $0.searchTerm == term })
-                    searchTermMetaDataGroup[term] = elements
-                }
-            }
-            
-            var urlGroupData: [String: [URL]] = [:]
-            var urlInGroups: [URL] = [URL]()
-            
-            // 2. Build url groups that corresponds to search term
-            outerUrlLoop: for url in urlList {
-                innerMetadataLoop: for (searchTerm, historyMetaList) in searchTermMetaDataGroup {
-                    if historyMetaList.contains(where: { metadata in
-                        let absoluteUrl = url.absoluteString
-                        return metadata.url == absoluteUrl || metadata.referrerUrl == absoluteUrl
-                    }) {
-                        urlInGroups.append(url)
-                        if urlGroupData[searchTerm] == nil {
-                            urlGroupData[searchTerm] = [url]
-                        } else {
-                            urlGroupData[searchTerm]?.append(url)
-                        }
-                        break innerMetadataLoop
-                    }
-                }
-            }
-            
-            // 3. Url groups should have at least 2 url per search term so we remove smaller groups
-            let filteredGroupData = urlGroupData.filter { urlGroup in
-                let t = urlGroup.value
-                if t.count > 1 {
-                    return true
-                } else {
-                    if let onlyUrl = t.first, let index = urlInGroups.firstIndex(of: onlyUrl) {
-                        urlInGroups.remove(at: index)
-                    }
-                    return false
-                }
-            }
-            
-            // 4. Filter the url list so it doesn't include same url as url groups
-            let filteredUrls = urlList.filter { url in
-                !urlInGroups.contains(url)
-            }
-            
-            // 5. filteredGroupData contains groups of only 2 or more urls and filtered have urls that are not part of a group
-            completion(filteredGroupData, filteredUrls)
+            guard let historyMetadata = result.successValue else { return completion(nil, [T]()) }
+
+            let searchTermMetaDataGroup = buildMetadataGroups(from: historyMetadata)
+            let (groupDictionary, ungroupedTabs) = createGroupDictionaryAndSoloItems(from: items, and: searchTermMetaDataGroup)
+            let filteredGroups = createGroups(from: groupDictionary)
+            let orderedGroups = order(groups: filteredGroups, using: ordering)
+
+            completion(orderedGroups, ungroupedTabs)
         }
     }
-    
-    // Create Tab groups from metadata
+
+    /// Builds metadata groups using the provided metadata from ApplicationServices
+    ///
+    /// - Parameter ASMetadata: An array of `HistoryMetadata` used for splitting groups
+    /// - Returns: A dictionary whose keys are search terms used for grouping
+    private static func buildMetadataGroups(from ASMetadata: [HistoryMetadata]) -> [String: [HistoryMetadata]] {
+
+        let searchTerms = Set(ASMetadata.map({ return $0.searchTerm }))
+        var searchTermMetaDataGroup : [String: [HistoryMetadata]] = [:]
+
+        for term in searchTerms {
+            if let term = term {
+                let elements = ASMetadata.filter({ $0.searchTerm == term })
+                searchTermMetaDataGroup[term] = elements
+            }
+        }
+
+        return searchTermMetaDataGroup
+    }
+
+    /// Creates filtered dicionary of items from an array of provided items, grouped by
+    /// relevant search term, based on the provided search term metadata.
+    ///
     /// - Parameters:
-    ///   - profile: User Profile info
-    ///   - urlList: List of tabs we want to make the groups from
-    ///   - completion: completion handler that contains [Search Term: [Tab]]  dictionary and filterdTabs list that has Tab which are not part of a group
-    static func getTabGroups(profile: Profile, tabs: [Tab], completion: @escaping ([String: [Tab]]?, _ filteredTabs: [Tab]) -> Void) {
-        
-        let lastTwoWeek = Int64(Date().lastTwoWeek.timeIntervalSince1970)
-        profile.places.getHistoryMetadataSince(since: lastTwoWeek).uponQueue(.main) { result in
-            guard let val = result.successValue else { return completion(nil, [Tab]()) }
-            
-            let searchTerms = Set(val.map({ return $0.searchTerm }))
-            var searchTermMetaDataGroup : [String: [HistoryMetadata]] = [:]
-            
-            // 1. Build serch term metadata group
-            for term in searchTerms {
-                if let term = term {
-                    let elements = val.filter({ $0.searchTerm == term })
-                    searchTermMetaDataGroup[term] = elements
-                }
-            }
-            
-            var tabGroupData: [String: [Tab]] = [:]
-            var tabInGroups: [Tab] = [Tab]()
-            
-            // 2. Build tab groups that corresponds to search term
-            outerTabLoop: for tab in tabs {
-                innerMetadataLoop: for (searchTerm, historyMetaList) in searchTermMetaDataGroup {
-                    if historyMetaList.contains(where: { metadata in
-                        let tabUrl = tab.lastKnownUrl?.absoluteString
-                        return metadata.url == tabUrl || metadata.referrerUrl == tabUrl
-                    }) {
-                        tabInGroups.append(tab)
-                        if tabGroupData[searchTerm] == nil {
-                            tabGroupData[searchTerm] = [tab]
-                        } else {
-                            tabGroupData[searchTerm]?.append(tab)
-                        }
-                        break innerMetadataLoop
+    ///   - items: The original list of items contaning metadata upon which to sort
+    ///   - searchTermMetadata: Application Serivces provided metadata
+    /// - Returns: A tuple with a filtered dictionary of groups and a tracking array
+    private static func createGroupDictionaryAndSoloItems<T: Equatable>(from items: [T], and searchTermMetadata: [String: [HistoryMetadata]]) -> (itemGroupData: [String: [T]], itemsInGroups: [T]) {
+
+        let (groupedItems, itemsInGroups) = buildItemGroups(from: items, and: searchTermMetadata)
+        let (filteredGroupData, filtereditems) = filter(items: itemsInGroups, from: groupedItems, and: items)
+
+        return (filteredGroupData, filtereditems)
+    }
+
+    /// Creates a dictionary of items, grouped by relevant search term, using the provided,
+    /// search term data from Application Services.
+    ///
+    /// - Parameters:
+    ///   - items: The original list of items containing metadata upon which to sort
+    ///   - searchTermMetadata: AS search term metadata
+    /// - Returns: A tuple with the group dictionary and a tracking array
+    private static func buildItemGroups<T: Equatable>(from items: [T], and searchTermMetadata: [String: [HistoryMetadata]]) -> (itemGroupData: [String: [T]], itemsInGroups: [T]) {
+        var itemGroupData: [String: [T]] = [:]
+        var itemsInGroups: [T] = [T]()
+
+        outeritemLoop: for item in items {
+            innerMetadataLoop: for (searchTerm, historyMetaList) in searchTermMetadata {
+                if historyMetaList.contains(where: { metadata in
+                    var stringURL: String = ""
+                    if let item = item as? URL {
+                        stringURL = item.absoluteString
+
+                    } else if let item = item as? Tab, let url = item.lastKnownUrl?.absoluteString {
+                        stringURL = url
                     }
-                }
-            }
-            
-            // 3. Tab groups should have at least 2 tabs per search term so we remove smaller groups
-            let filteredGroupData = tabGroupData.filter { tabGroup in
-                let t = tabGroup.value
-                if t.count > 1 {
-                    return true
-                } else {
-                    if let onlyTab = t.first, let index = tabInGroups.firstIndex(of: onlyTab) {
-                        tabInGroups.remove(at: index)
+
+                    return metadata.url == stringURL || metadata.referrerUrl == stringURL
+
+                }) {
+                    itemsInGroups.append(item)
+                    if itemGroupData[searchTerm] == nil {
+                        itemGroupData[searchTerm] = [item]
+                    } else {
+                        itemGroupData[searchTerm]?.append(item)
                     }
-                    return false
+                    break innerMetadataLoop
                 }
             }
-            
-            // 4. Filter the tabs so it doesn't include same tabs as tab groups
-            let filteredTabs = tabs.filter { tab in
-                !tabInGroups.contains(tab)
+        }
+
+        return (itemGroupData, itemsInGroups)
+    }
+
+    /// Parses the original array and the group dictionary and removes duplicate items,
+    /// so no items in groups appear outside of groups, and also ensure that there are no
+    /// groups containing a single item.
+    ///
+    /// - Parameters:
+    ///   - itemsInGroups: Tracking array for items that are currently in groups
+    ///   - itemGroups: Dictionary of grouped items according to search terms
+    ///   - originalItems: Original array of items provided
+    /// - Returns: A tuple containing all filtered groups and item
+    private static func filter<T: Equatable>(items itemsInGroups: [T], from itemGroups: [String: [T]], and originalItems: [T]) -> (filteredGroups: [String: [T]], filteredItems: [T]) {
+        let (filteredGroups, itemsInGroups) = filterSingleItemGroups(from: itemGroups, and: itemsInGroups)
+        let ungroupedItems = filterDuplicate(itemsInGroups: itemsInGroups, from: originalItems)
+
+        return (filteredGroups, ungroupedItems)
+    }
+
+    /// Removes any groups containing a single item.
+    ///
+    /// - Parameters:
+    ///   - itemGroups: Groups dictionary to check for groups containing a single item
+    ///   - itemsInGroups: Array to keep track of any items that are currently in groups
+    /// - Returns: A tuple containing groups that have two or more items, and a tracking array.
+    private static func filterSingleItemGroups<T: Equatable>(from itemGroups: [String: [T]], and itemsInGroups: [T]) -> (itemGroupData: [String: [T]], itemsInGroups: [T]) {
+        var itemsInGroups = itemsInGroups
+
+        // 3. Tab groups should have at least 2 tabs per search term so we remove smaller groups
+        let filteredGroupData = itemGroups.filter { itemGroup in
+            let t = itemGroup.value
+            if t.count > 1 {
+                return true
+            } else {
+                if let onlyItem = t.first, let index = itemsInGroups.firstIndex(of: onlyItem) {
+                    itemsInGroups.remove(at: index)
+                }
+                return false
             }
-            
-            // 5. filteredGroupData contains groups of only 2 or more tabs and filtered have tabs that are not part of a group
-            completion(filteredGroupData, filteredTabs)
+        }
+
+        return (filteredGroupData, itemsInGroups)
+    }
+
+
+    /// Removes duplicate items from the original item list; specifically, any items in
+    /// groups are removed.
+    ///
+    /// - Parameters:
+    ///   - itemsInGroups: Items that are present in groups
+    ///   - items: The original items that were provided
+    /// - Returns: A filtered array of the original items, containing no items present in groups
+    private static func filterDuplicate<T: Equatable>(itemsInGroups: [T], from items: [T]) -> [T] {
+        // 4. Filter the tabs so it doesn't include same tabs as tab groups
+        return items.filter { item in !itemsInGroups.contains(item) }
+
+    }
+
+    /// Takes a dictionary and creates ASGroups from it.
+    ///
+    /// - Parameter groupDictionary: Dictionary that is to be processed
+    /// - Returns: An array of `ASGroup<T>`
+    private static func createGroups<T: Equatable>(from groupDictionary: [String: [T]]) -> [ASGroup<T>] {
+        return groupDictionary.map() {
+                let orderedItems = orderItemsIn(group: $0.value)
+                var timestamp: Timestamp = 0
+                if let lastItem = orderedItems.last, let tab = lastItem as? Tab {
+                    timestamp = tab.lastExecutedTime ?? tab.sessionData?.lastUsedTime ?? tab.firstCreatedTime ?? 0
+                }
+
+                return ASGroup<T>(searchTerm: $0.key.capitalized, groupedItems: orderedItems, timestamp: timestamp)
+        }
+    }
+
+    /// Orders items in a group, chronologically, in an asecending order
+    ///
+    /// - Parameter group: A group in which items must be sorted
+    /// - Returns: The items in the group, sorted chronologically, in ascending order
+    private static func orderItemsIn<T: Equatable>(group: [T]) -> [T] {
+        return group.sorted {
+            if let firstTab = $0 as? Tab, let secondTab = $1 as? Tab {
+                let firstTabTimestamp = firstTab.lastExecutedTime ?? firstTab.sessionData?.lastUsedTime ?? firstTab.firstCreatedTime ?? 0
+                let secondTabTimestamp = secondTab.lastExecutedTime ?? secondTab.sessionData?.lastUsedTime ?? secondTab.firstCreatedTime ?? 0
+                return firstTabTimestamp < secondTabTimestamp
+            } else {
+                fatalError("Error: We should never pass a type \(T.self) to this function.")
+            }
+        }
+    }
+
+    /// Orders ASGroups based on their timestamp, according to the desired order.
+    ///
+    /// - Parameters:
+    ///   - groups: An `ASGroup` of type `T`
+    ///   - order: Generally, this would be either `.orderedAscending` or `.orderedDescending`
+    ///   depending on what order we want to get the group. `.orderedSame` is possible
+    ///   as well, but it just returns the exact same groups as the function was passed
+    ///   with no changes.
+    /// - Returns: The passed in group, sorted according to its `ASGroup<T>.timestamp` property
+    private static func order<T: Equatable>(groups: [ASGroup<T>], using order: ComparisonResult) -> [ASGroup<T>] {
+        switch order { case .orderedAscending:
+            return groups.sorted { $0.timestamp < $1.timestamp }
+        case .orderedDescending:
+            return groups.sorted { $0.timestamp > $1.timestamp }
+        case .orderedSame:
+            return groups
         }
     }
 }
@@ -147,19 +242,19 @@ class StopWatchTimer {
     var isPaused = true
     // Recored in seconds
     var elapsedTime: Int32 = 0
-    
+
     func startOrResume() {
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(incrementValue), userInfo: nil, repeats: true)
     }
-    
+
     @objc func incrementValue() {
         elapsedTime += 1
     }
-    
+
     func pauseOrStop() {
         timer?.invalidate()
     }
-    
+
     func resetTimer() {
         elapsedTime = 0
         timer = nil

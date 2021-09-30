@@ -103,9 +103,9 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         guard let selectedTab = tabManager.selectedTab else { return }
 
         // scroll to group
-        if let tabGroup = tabDisplayManager.tabGroups, tabGroup.count > 0, let tabIndex = tabDisplayManager.indexOfGroupTab(tab: selectedTab) {
+        if let tabGroups = tabDisplayManager.tabGroups, tabGroups.count > 0, let tabIndex = tabDisplayManager.indexOfGroupTab(tab: selectedTab) {
             let groupName = tabIndex.groupName            
-            let indexOfTabGroup: Int = Array(tabGroup.keys).firstIndex(of: groupName) ?? 0
+            let indexOfTabGroup: Int = tabGroups.firstIndex(where: { $0.searchTerm == groupName }) ?? 0
             let offSet =  Int(GroupedTabCell.defaultCellHeight) * indexOfTabGroup
             let rect = CGRect(origin: CGPoint(x: 0, y: offSet), size: CGSize(width:  self.collectionView.frame.width, height: self.collectionView.frame.height))
             DispatchQueue.main.async {
@@ -647,8 +647,8 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
         switch TabDisplaySection(rawValue: indexPath.section) {
         case .groupedTabs:
             let width = collectionView.frame.size.width
-            if let keys = tabDisplayManager.tabGroups?.keys, keys.count > 0 {
-                let height: CGFloat = GroupedTabCell.defaultCellHeight * CGFloat(tabDisplayManager.tabGroups?.keys.count ?? 0)
+            if let groupCount = tabDisplayManager.tabGroups?.count, groupCount > 0 {
+                let height: CGFloat = GroupedTabCell.defaultCellHeight * CGFloat(groupCount)
                     return CGSize(width: width >= 0 ? Int(width) : 0, height: Int(height))
             } else {
                 return CGSize(width: 0, height: 0)
