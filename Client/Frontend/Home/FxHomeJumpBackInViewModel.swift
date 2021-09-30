@@ -45,7 +45,8 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
         if BrowserViewController.foregroundBVC().urlBar.inOverlayMode {
             BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode()
         }
-//        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .firefoxHomepage, value: .jumpBackInSectionTabOpened)
+        // TODO: Open tab tray and focus group
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .firefoxHomepage, value: .jumpBackInSectionGroupOpened)
     }
 
     public func switchTo(tab: Tab) {
