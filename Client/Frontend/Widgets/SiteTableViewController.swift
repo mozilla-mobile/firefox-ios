@@ -117,12 +117,10 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         super.viewDidLoad()
 
         view.addSubview(tableView)
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
+        tableView.snp.makeConstraints { make in
+            make.edges.equalTo(self.view)
+            return
+        }
     }
 
     deinit {
