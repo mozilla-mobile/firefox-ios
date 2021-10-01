@@ -550,6 +550,9 @@
 /* Title for the Synced Tabs Cell in the History Panel */
 "HistoryPanel.SyncedTabsCell.Title" = "ਸਿੰਕ ਕੀਤੇ ਡਿਵਾਈਸ";
 
+/* Accessibility label for the tab toolbar indicating the Home button. */
+"Home" = "ਘਰ";
+
 /* Button cancelling changes setting the home page for the first time. */
 "HomePage.Set.Dialog.Cancel" = "ਰੱਦ ਕਰੋ";
 
@@ -700,6 +703,9 @@
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "ਸੰਭਾਲੇ ਹੋਏ ਲਾਗਇਨ ਇੱਥੇ ਵੇਖਾਏ ਜਾਣਗੇ। ਜੇ ਤੁਸੀਂ ਆਪਣੇ ਲਾਗਇਨ ਵੱਖਰੇ ਡਿਵਾਈਸ ਉੱਤੇ Firefox ਵਿੱਚ ਸੰਭਾਲੇ ਹਨ ਤਾਂ ਆਪਣੇ Firefox ਖਾਤੇ ਵਿੱਚ ਸਾਈਨ ਇਨ ਕਰੋ।";
 
+/* Label shown when there are no logins saved */
+"LoginsList.NoLoginsFound.Title" = "ਕੋਈ ਲਾਗਇਨ ਨਹੀਂ ਲੱਭਿਆ";
+
 /* Label that appears after the search if there are no logins matching the search */
 "LoginsList.NoMatchingResult.Subtitle" = "ਤੁਹਾਡੀ ਖੋਜ ਨਾਲ ਮਿਲਦਾ ਕੋਈ ਨਤੀਜਾ ਨਹੀਂ ਹੈ।";
 
@@ -827,6 +833,9 @@
 
 /* Title on tracking protection menu for blocked items. */
 "Menu.TrackingProtection.BlockedTitle" = "ਪਾਬੰਦੀ ਲਗਾਈ";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"Menu.TrackingProtection.Details.Verifier" = "%@ ਵਲੋਂ ਤਸਦੀਕ ਕੀਤਾ";
 
 /* Message in menu when no trackers blocked. */
 "Menu.TrackingProtection.NoTrackersBlockedTitle" = "Firefox ਵਲੋਂ ਜਾਣੇ ਕੋਈ ਵੀ ਟਰੈਕਰ ਇਸ ਸਫੇ ਉੱਤੇ ਖੋਜੇ ਨਹੀਂ ਗਏ ਹਨ।";
@@ -996,6 +1005,12 @@
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "ਪਰਦੇਦਾਰੀ ਦੀ ਨੀਤੀ";
+
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "ਕਨੈਕਸ਼ਨ ਸੁਰੱਖਿਅਤ ਨਹੀਂ ਹੈ";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "ਕਨੈਕਸ਼ਨ ਸੁਰੱਖਿਅਤ ਹੈ";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "ਤੁਰੰਤ-ਖੋਜ ਇੰਜਣ";
