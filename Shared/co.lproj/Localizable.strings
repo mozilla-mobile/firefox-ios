@@ -5,10 +5,10 @@
 "+" = "+";
 
 /* Authentication prompt message with no realm. Parameter is the hostname of the site */
-"A username and password are being requested by %@." = "U situ %@ richiede un nome d’utilizatore è una parolla d’entrata.";
+"A username and password are being requested by %@." = "U situ %@ richiede un nome d’utilizatore è una parolla d’intesa.";
 
 /* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
-"A username and password are being requested by %@. The site says: %@" = "U situ %1$@ richiede un nome d’utilizatore è una parolla d’entrata. U situ indicheghja : %2$@";
+"A username and password are being requested by %@. The site says: %@" = "U situ %1$@ richiede un nome d’utilizatore è una parolla d’intesa. U situ indicheghja : %2$@";
 
 /* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
 "Aa" = "Aa";
@@ -180,7 +180,7 @@
 "BreachAlerts.BreachDate" = "Sta fughjita di dati hè accaduta u";
 
 /* Description of what a breach is */
-"BreachAlerts.Description" = "Parolle d’entrata sò state palisate o arrubate dapoi l’ultima mudificazione di a vostra parolla d’entrata. Per prutege stu contu, cunnittetevi à u situ è mudificate a vostra parolla d’entrata";
+"BreachAlerts.Description" = "Parolle d’intesa sò state palisate o arrubate dapoi l’ultima mudificazione di a vostra parolla d’intesa. Per prutege stu contu, cunnittetevi à u situ è mudificate a vostra parolla d’intesa.";
 
 /* Link to monitor.firefox.com to learn more about breached passwords */
 "BreachAlerts.LearnMoreButton" = "Sapene di più";
@@ -359,7 +359,7 @@
 "DownloadsPanel.Share.Title" = "Sparte";
 
 /* Text message in the settings table view */
-"Enter your password to connect" = "Scrivite a vostra parolla d’entrata per cunnettesi";
+"Enter your password to connect" = "Scrivite a vostra parolla d’intesa per cunnettesi";
 
 /* Label for button to perform advanced actions on the error page */
 "ErrorPages.Advanced.Button" = "Espertu";
@@ -461,7 +461,7 @@
 "FxA.SignIntoSync" = "Cunnettesi à Sync";
 
 /* Label explaining what sync does */
-"FxA.SyncExplain" = "Ritruvate e vostre unghjette, l’indette è e parolle d’entrata da i vostri altri apparechji.";
+"FxA.SyncExplain" = "Ritruvate e vostre unghjette, l’indette è e parolle d’intesa da i vostri altri apparechji.";
 
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "Sincrunizà avà";
@@ -656,7 +656,7 @@
 "Logins" = "Identificazioni di cunnessione";
 
 /* Label displaying welcome view title */
-"Logins.WelcomeView.Title" = "Purtatevi e vostre parolle d’entrata dapertuttu";
+"Logins.WelcomeView.Title" = "Purtatevi e vostre parolle d’intesa dapertuttu";
 
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Mudificatu";
@@ -674,7 +674,7 @@
 "LoginsHelper.PromptSaveLogin.Title" = "Arregistrà l’identificazione di cunnessione %1$@ per %2$@ ?";
 
 /* Prompt for saving a password with no username. The parameter is the hostname of the site. */
-"LoginsHelper.PromptSavePassword.Title" = "Arregistrà a parolla d’entrata per %@ ?";
+"LoginsHelper.PromptSavePassword.Title" = "Arregistrà a parolla d’intesa per %@ ?";
 
 /* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
 "LoginsHelper.PromptUpdateLogin.Title.OneArg" = "Mudificà l’identificazione di cunnessione per %@ ?";
@@ -719,7 +719,7 @@
 "LoginsList.Search.Placeholder" = "Ricercà identificazioni di cunnessione";
 
 /* Label displaying select a password to fill instruction */
-"LoginsList.SelectPassword.Title" = "Selezziunate una parolla d’entrata à riempie";
+"LoginsList.SelectPassword.Title" = "Selezziunate una parolla d’intesa à riempie";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "IDENTIFICAZIONI DI CUNNESSIONE ARREGISTRATE";
@@ -802,7 +802,7 @@
 "Menu.PageActions.Title" = "Azzioni per a pagina";
 
 /* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
-"Menu.Passwords.Label" = "Parolle d’entrata";
+"Menu.Passwords.Label" = "Parolle d’intesa";
 
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "Incullà";
@@ -980,7 +980,7 @@
 "Panel Chooser" = "Selettore di pannellu";
 
 /* Password textbox in Authentication prompt */
-"Password" = "Parolla d’entrata";
+"Password" = "Parolla d’intesa";
 
 /* Error message shown in the remote tabs panel */
 "PasswordAutoFill.NoPasswordsFoundTitle" = "Ùn avete alcuna identificazione di cunnessione sincrunizata cù u vostru contu Firefox";
@@ -1362,7 +1362,7 @@
 "Settings.HomePage.UseDefault.Button" = "Impiegà a pagina predefinita";
 
 /* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
-"Settings.LoginsAndPasswordsTitle" = "Identificazioni è parolle d’entrata";
+"Settings.LoginsAndPasswordsTitle" = "Identificazioni è parolle d’intesa";
 
 /* Label used to set a custom url as the new tab option (homepage). */
 "Settings.NewTab.CustomURL" = "Indirizzu persunalizatu";
@@ -1464,7 +1464,7 @@
 "Settings.ShowLinkPreviews.Status" = "Durante un appoghju longu nant’à i liami";
 
 /* Title of setting to enable link previews when long-pressing links. */
-"Settings.ShowLinkPreviews.Title" = "Affissà l’avvistu di i liami";
+"Settings.ShowLinkPreviews.Title" = "Affissà a fighjulata di i liami";
 
 /* Setting to show Logins & Passwords quick access in the application menu */
 "Settings.ShowLoginsInAppMenu.Title" = "Affissà in u listinu di l’appiecazione";
@@ -1521,7 +1521,7 @@
 "Settings.TrackingProtection.BlockListsHeader" = "Pudete sceglie chì lista Firefox deve impiegà per bluccà l’elementi web chì ponu spiunà a vostra navigazione.";
 
 /* Explanation of basic mode. */
-"Settings.TrackingProtection.Info.BasicTitle" = "Equilibratu trà a prutezzione è a prestazione.";
+"Settings.TrackingProtection.Info.BasicTitle" = "Equilibratu trà a prutezzione è a perfurmenza.";
 
 /* The Title on info view which shows a list of all blocked websites */
 "Settings.TrackingProtection.Info.BlocksTitle" = "BLUCCATU";
@@ -1666,10 +1666,10 @@
 "SwitchToPBM.KeyCodeTitle" = "Modu di navigazione privata";
 
 /* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, bookmarks, passwords and more." = "Sincrunizà e vostre unghjette, indette, parolle d’entrata è ancu di più.";
+"Sync your tabs, bookmarks, passwords and more." = "Sincrunizà e vostre unghjette, indette, parolle d’intesa è ancu di più.";
 
 /* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, passwords and more." = "Sincrunizà e vostre unghjette, parolle d’entrata è ancu di più.";
+"Sync your tabs, passwords and more." = "Sincrunizà e vostre unghjette, parolle d’intesa è ancu di più.";
 
 /* Message displayed when the user syncs for the first time */
 "Sync.FirstTimeMessage.Label" = "A prima sincrunizazione pò durà qualchì mumentu";
@@ -1858,7 +1858,7 @@
 "unread" = "Micca lettu";
 
 /* Text message in the settings table view */
-"Upgrade Firefox to connect" = "Ci vole à mudernizà Firefox per cunnettesi";
+"Upgrade Firefox to connect" = "Ci vole à attualizzà Firefox per cunnettesi";
 
 /* Debug option */
 "Use stage servers" = "Impiegà i servitori di simulazione";
