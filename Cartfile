@@ -13,4 +13,4 @@ github "mozilla-mobile/MappaMundi"          "master"
 github "mozilla-services/shavar-prod-lists" "89.0"
 
 # Use release version of application-services
-github "mozilla/application-services"      "v85.2.0"
+github "mozilla/application-services"      "v85.3.0"
