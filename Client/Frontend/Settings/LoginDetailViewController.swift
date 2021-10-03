@@ -107,30 +107,6 @@ class LoginDetailViewController: SensitiveViewController {
         // but since we don't use the tableView's editing flag for editing we handle this ourselves.
         KeyboardHelper.defaultHelper.addDelegate(self)
     }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        // The following hacks are to prevent the default cell seperators from displaying. We want to
-        // hide the default seperator for the website/last modified cells since the last modified cell
-        // draws its own separators. The last item in the list draws its seperator full width.
-
-        // Prevent seperators from showing by pushing them off screen by the width of the cell
-        let itemsToHideSeperators: [InfoItem] = [.passwordItem, .lastModifiedSeparator]
-        itemsToHideSeperators.forEach { item in
-            let cell = tableView.cellForRow(at: IndexPath(row: item.rawValue, section: 0))
-            cell?.separatorInset = UIEdgeInsets(top: 0, left: cell?.bounds.width ?? 0, bottom: 0, right: 0)
-        }
-
-        // Rows to display full width seperator
-        let itemsToShowFullWidthSeperator: [InfoItem] = [.deleteItem]
-        itemsToShowFullWidthSeperator.forEach { item in
-            let cell = tableView.cellForRow(at: IndexPath(row: item.rawValue, section: 0))
-            cell?.separatorInset = .zero
-            cell?.layoutMargins = .zero
-            cell?.preservesSuperviewLayoutMargins = false
-        }
-    }
 }
 
 // MARK: - UITableViewDataSource
@@ -177,6 +153,7 @@ extension LoginDetailViewController: UITableViewDataSource {
             loginCell.descriptionLabel.returnKeyType = .default
             loginCell.displayDescriptionAsPassword = true
             loginCell.isEditingFieldData = isEditingFieldData
+            setCellSeparatorHidden(loginCell)
             passwordField = loginCell.descriptionLabel
             passwordField?.accessibilityIdentifier = "passwordField"
             return loginCell
@@ -205,6 +182,7 @@ extension LoginDetailViewController: UITableViewDataSource {
             cell.detailTextLabel?.numberOfLines = 2
             cell.detailTextLabel?.textAlignment = .center
             cell.backgroundColor = view.backgroundColor
+            setCellSeparatorHidden(cell)
             return cell
 
         case .deleteItem:
@@ -214,6 +192,7 @@ extension LoginDetailViewController: UITableViewDataSource {
             deleteCell.textLabel?.textColor = UIColor.theme.general.destructiveRed
             deleteCell.accessibilityTraits = UIAccessibilityTraits.button
             deleteCell.backgroundColor = UIColor.theme.tableView.rowBackground
+            setCellSeparatorFullWidth(deleteCell)
             return deleteCell
         }
     }
@@ -223,6 +202,17 @@ extension LoginDetailViewController: UITableViewDataSource {
         loginCell.selectionStyle = .none
         loginCell.delegate = self
         return loginCell
+    }
+    
+    fileprivate func setCellSeparatorHidden(_ cell: UITableViewCell) {
+        // Prevent seperator from showing by pushing it off screen by the width of the cell
+        cell.separatorInset = UIEdgeInsets(top: 0, left: cell.bounds.width, bottom: 0, right: 0)
+    }
+    
+    fileprivate func setCellSeparatorFullWidth(_ cell: UITableViewCell) {
+        cell.separatorInset = .zero
+        cell.layoutMargins = .zero
+        cell.preservesSuperviewLayoutMargins = false
     }
 
     fileprivate func wrapFooter(_ footer: UITableViewHeaderFooterView, withCellFromTableView tableView: UITableView, atIndexPath indexPath: IndexPath) -> UITableViewCell {
