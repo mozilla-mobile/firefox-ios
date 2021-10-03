@@ -163,7 +163,7 @@ extension LoginDetailViewController: UITableViewDataSource {
             loginCell.descriptionLabel.returnKeyType = .default
             loginCell.displayDescriptionAsPassword = true
             loginCell.isEditingFieldData = isEditingFieldData
-            loginCell.separatorInset = .zero
+            setCellSeparatorHidden(loginCell)
             passwordField = loginCell.descriptionLabel
             passwordField?.accessibilityIdentifier = "passwordField"
             return loginCell
@@ -192,7 +192,7 @@ extension LoginDetailViewController: UITableViewDataSource {
             cell.detailTextLabel?.numberOfLines = 2
             cell.detailTextLabel?.textAlignment = .center
             cell.backgroundColor = view.backgroundColor
-            cell.separatorInset = .zero
+            setCellSeparatorHidden(cell)
             return cell
 
         case .deleteItem:
@@ -202,7 +202,7 @@ extension LoginDetailViewController: UITableViewDataSource {
             deleteCell.textLabel?.textColor = UIColor.theme.general.destructiveRed
             deleteCell.accessibilityTraits = UIAccessibilityTraits.button
             deleteCell.backgroundColor = UIColor.theme.tableView.rowBackground
-            deleteCell.separatorInset = .zero
+            setCellSeparatorFullWidth(deleteCell)
             return deleteCell
         }
     }
@@ -212,6 +212,17 @@ extension LoginDetailViewController: UITableViewDataSource {
         loginCell.selectionStyle = .none
         loginCell.delegate = self
         return loginCell
+    }
+
+    fileprivate func setCellSeparatorHidden(_ cell: UITableViewCell) {
+        // Prevent seperator from showing by pushing it off screen by the width of the cell
+        cell.separatorInset = UIEdgeInsets(top: 0, left: cell.bounds.width, bottom: 0, right: 0)
+    }
+
+    fileprivate func setCellSeparatorFullWidth(_ cell: UITableViewCell) {
+        cell.separatorInset = .zero
+        cell.layoutMargins = .zero
+        cell.preservesSuperviewLayoutMargins = false
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
