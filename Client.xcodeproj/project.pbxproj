@@ -3120,6 +3120,7 @@
 		C8A012F026AB07D70096A7A7 /* FxHomeJumpBackInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxHomeJumpBackInViewModel.swift; sourceTree = "<group>"; };
 		C8A74FF69C3971EDBE73157F /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C8B34CBE911A7211E314D870 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
+		C8C4764F2708F5050049DE01 /* Documentation.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = Documentation.docc; sourceTree = "<group>"; };
 		C8CE389A265E71E00009B09E /* CredentialListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CredentialListViewController.swift; sourceTree = "<group>"; };
 		C8CE38B1265E71FE0009B09E /* EmptyPlaceholderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyPlaceholderCell.swift; sourceTree = "<group>"; };
 		C8CE38B3265E71FE0009B09E /* ItemListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemListCell.swift; sourceTree = "<group>"; };
@@ -6057,6 +6058,7 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
+				C8C4764F2708F5050049DE01 /* Documentation.docc */,
 				4F50486E25ACF98A0090EFF2 /* SmokeXCUITests.xctestplan */,
 				D4C794812565A13700FB7E86 /* SyncIntegrationTestPlan.xctestplan */,
 				D4C792B625651FAE00FB7E86 /* Fennec_Enterprise_XCUITests.xctestplan */,
