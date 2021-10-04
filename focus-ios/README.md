@@ -19,14 +19,14 @@ We also tag recommended bugs for contributions with [help wanted](https://github
 Main Branch
 ----------------
 
-This branch works with Xcode 12.5.1 and supports iOS 11.4+.
+This branch works with Xcode 13 and supports iOS 13.0 and newer.
 
 Pull requests should be submitted with `main` as the base branch.
 
 Build Instructions
 ------------------
 
-1. Install Xcode 12.5 [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
+1. Install Xcode 13 [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
 2. Clone the repository:
 
   ```shell
