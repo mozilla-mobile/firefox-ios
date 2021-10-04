@@ -30,6 +30,8 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
     private var tabManager: TabManager
     private var profile: Profile
 
+    var onTapGroup: ((Tab) -> Void)?
+
     init() {
         self.tabManager = BrowserViewController.foregroundBVC().tabManager
         self.profile = BrowserViewController.foregroundBVC().profile
@@ -45,7 +47,10 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
         if BrowserViewController.foregroundBVC().urlBar.inOverlayMode {
             BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode()
         }
-        // TODO: Open tab tray and focus group
+        guard let firstTab = group.groupedItems.first else { return }
+
+        onTapGroup?(firstTab)
+
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .firefoxHomepage, value: .jumpBackInSectionGroupOpened)
     }
 

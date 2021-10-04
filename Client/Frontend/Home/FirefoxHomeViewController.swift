@@ -86,7 +86,7 @@ protocol HomePanelDelegate: AnyObject {
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
     func homePanel(didSelectURL url: URL, visitType: VisitType, isGoogleTopSite: Bool)
     func homePanelDidRequestToOpenLibrary(panel: LibraryPanelType)
-    func homePanelDidRequestToOpenTabTray()
+    func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab?)
 }
 
 protocol HomePanel: Themeable {
@@ -761,6 +761,11 @@ extension FirefoxHomeViewController {
     private func configureJumpBackInCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let jumpBackInCell = cell as! FxHomeJumpBackInCollectionCell
         jumpBackInCell.profile = profile
+
+        jumpBackInViewModel.onTapGroup = { [weak self] tab in
+            self?.homePanelDelegate?.homePanelDidRequestToOpenTabTray(withFocusedTab: tab)
+        }
+
         jumpBackInCell.viewModel = jumpBackInViewModel
         jumpBackInCell.collectionView.reloadData()
         jumpBackInCell.setNeedsLayout()
@@ -971,7 +976,7 @@ extension FirefoxHomeViewController {
                                          object: .firefoxHomepage,
                                          value: .jumpBackInSectionShowAll)
         }
-        homePanelDelegate?.homePanelDidRequestToOpenTabTray()
+        homePanelDelegate?.homePanelDidRequestToOpenTabTray(withFocusedTab: nil)
     }
 
     @objc func openBookmarks(_ sender: UIButton) {
