@@ -30,7 +30,7 @@ fileprivate class CenteredDetailCell: ThemedTableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         var f = detailTextLabel?.frame ?? CGRect()
-        f.center = frame.center
+        f.center = CGPoint(x: frame.center.x - safeAreaInsets.right, y: frame.center.y)
         detailTextLabel?.frame = f
     }
 }
