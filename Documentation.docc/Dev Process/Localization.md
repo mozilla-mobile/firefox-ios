@@ -15,7 +15,7 @@ These are the steps to take for localization. Setup, requirements, and more deta
 7. Make a PR to `master` in `firefox-l10n` from your fork
 8. After comments are addressed, admin will merge
 9. Wait for translations to come in and be notified
-10. Pull master from `firefoxios-l10n'
+10. Pull master from `firefoxios-l10n`
 11. In your string branch on the `firefox-ios` repo, do an import
 12. Make a PR to `main`
 
