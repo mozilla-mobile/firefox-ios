@@ -43,6 +43,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     var webViewContainerBackdrop: UIView!
     var collectionView: UICollectionView!
     var recentlyClosedTabsPanel: RecentlyClosedTabsPanel?
+    var tabToFocus: Tab? = nil
     
     fileprivate lazy var emptyPrivateTabsView: EmptyPrivateTabsView = {
         let emptyView = EmptyPrivateTabsView()
@@ -60,10 +61,11 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         return tabLayoutDelegate.numberOfColumns
     }
 
-    init(tabManager: TabManager, profile: Profile, tabTrayDelegate: TabTrayDelegate? = nil) {
+    init(tabManager: TabManager, profile: Profile, tabTrayDelegate: TabTrayDelegate? = nil, tabToFocus: Tab? = nil) {
         self.tabManager = tabManager
         self.profile = profile
         self.delegate = tabTrayDelegate
+        self.tabToFocus = tabToFocus
         super.init(nibName: nil, bundle: nil)
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.register(TabCell.self, forCellWithReuseIdentifier: TabCell.Identifier)
@@ -102,6 +104,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     func focusItem() {
         if let tabGroups = tabDisplayManager.tabGroups, tabGroups.count > 0 {
             focusGroup(from: tabGroups)
+
         } else {
             focusTab()
         }
