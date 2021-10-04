@@ -127,7 +127,7 @@ workflows:
     - xcode-test@3.1:
         inputs:
         - scheme: Fennec_Enterprise_XCUITests
-        - xcodebuild_test_options: "-testPlan SmokeXCUITests"
+        - xcodebuild_test_options: "-testPlan Fennec_Enterprise_XCUITests"
         - simulator_device: "$IOS_DEVICE"
   NewXcodeVersions:
     steps:
@@ -288,7 +288,6 @@ workflows:
     - xcode-build-for-simulator@0.11:
         inputs:
         - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
-            -testPlan SmokeXCUITests
         - scheme: Fennec_Enterprise_XCUITests
     - xcode-test@2.4:
         inputs:
