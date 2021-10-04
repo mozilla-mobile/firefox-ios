@@ -43,6 +43,10 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     var webViewContainerBackdrop: UIView!
     var collectionView: UICollectionView!
     var recentlyClosedTabsPanel: RecentlyClosedTabsPanel?
+
+    // This is an optional variable used if we wish to focus a tab that is not the
+    // currently selected tab. This allows us to force the scroll behaviour to move
+    // whereever we need to focus the user's attention.
     var tabToFocus: Tab? = nil
     
     fileprivate lazy var emptyPrivateTabsView: EmptyPrivateTabsView = {
@@ -101,6 +105,13 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         flowlayout.invalidateLayout()
     }
 
+    /// The main interface for scrolling to an item, whether that is a group or an individual tab
+    ///
+    /// This method checks for the existence of a tab to focus on other than the seleceted tab,
+    /// and then, focuses on that tab. The byproduct is that if the tab is in a group, the
+    /// user would then be looking at the group. Generally, if focusing on a group and
+    /// NOT the selected tab, it is advised to pass in the first tab of that group as
+    /// the `tabToFocus` in the initializer
     func focusItem() {
         guard let selectedTab = tabManager.selectedTab else { return }
         if tabToFocus == nil { tabToFocus = selectedTab }
