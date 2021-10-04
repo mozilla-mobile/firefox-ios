@@ -102,48 +102,33 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     }
 
     func focusItem() {
-        if let tabGroups = tabDisplayManager.tabGroups, tabGroups.count > 0 {
-            focusGroup(from: tabGroups)
+        guard let selectedTab = tabManager.selectedTab else { return }
+        if tabToFocus == nil { tabToFocus = selectedTab }
+        guard let tabToFocus = tabToFocus else { return }
+
+        if let tabGroups = tabDisplayManager.tabGroups,
+           tabGroups.count > 0,
+           tabGroups.contains(where: { $0.groupedItems.contains(where: { $0 == tabToFocus }) }) {
+            focusGroup(from: tabGroups, with: tabToFocus)
 
         } else {
-            focusTab()
+            focusTab(tabToFocus)
         }
     }
 
-    // scroll to group
-    func focusGroup(from tabGroups: [ASGroup<Tab>], with searchTerm: String? = nil) {
-
-        // Scroll to group with search term (ie. Jump Back In)
-        if let searchTerm = searchTerm {
-            let indexOfTabGroup: Int = tabGroups.firstIndex(where: { $0.searchTerm == searchTerm }) ?? 0
-            scrollTo(groupIndex: indexOfTabGroup)
-
-            return
-
-        // Scroll to group with selected tab
-        } else if let selectedTab = tabManager.selectedTab,
-            let tabIndex = tabDisplayManager.indexOfGroupTab(tab: selectedTab) {
-
+    func focusGroup(from tabGroups: [ASGroup<Tab>], with tabToFocus: Tab) {
+        if let tabIndex = tabDisplayManager.indexOfGroupTab(tab: tabToFocus) {
             let groupName = tabIndex.groupName
-            let indexOfTabGroup: Int = tabGroups.firstIndex(where: { $0.searchTerm == groupName }) ?? 0
-            scrollTo(groupIndex: indexOfTabGroup)
-
-            return
+            let groupIndex: Int = tabGroups.firstIndex(where: { $0.searchTerm == groupName }) ?? 0
+            let offSet = Int(GroupedTabCell.defaultCellHeight) * groupIndex
+            let rect = CGRect(origin: CGPoint(x: 0, y: offSet), size: CGSize(width:  self.collectionView.frame.width, height: self.collectionView.frame.height))
+            DispatchQueue.main.async {
+                self.collectionView.scrollRectToVisible(rect, animated: false)
+            }
         }
     }
 
-    private func scrollTo(groupIndex: Int) {
-        let offSet = Int(GroupedTabCell.defaultCellHeight) * groupIndex
-        let rect = CGRect(origin: CGPoint(x: 0, y: offSet), size: CGSize(width:  self.collectionView.frame.width, height: self.collectionView.frame.height))
-        DispatchQueue.main.async {
-            self.collectionView.scrollRectToVisible(rect, animated: false)
-        }
-    }
-
-    func focusTab() {
-        guard let selectedTab = tabManager.selectedTab else { return }
-
-        // scroll to regular tab
+    func focusTab(_ selectedTab: Tab) {
         if let indexOfRegularTab = tabDisplayManager.indexOfRegularTab(tab: selectedTab) {
             let indexPath = IndexPath(item: indexOfRegularTab, section: TabDisplaySection.regularTabs.rawValue)
             guard var rect = self.collectionView.layoutAttributesForItem(at: indexPath)?.frame else { return }
