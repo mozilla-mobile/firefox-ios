@@ -793,9 +793,9 @@ class URLBar: UIView {
         self.layoutIfNeeded()
     }
 
-    func updateTrackingProtectionBadge(trackingStatus: TrackingProtectionStatus) {
-        shieldIcon.updateState(trackingStatus: trackingStatus)
-        collapsedTrackingProtectionBadge.updateState(trackingStatus: trackingStatus)
+    func updateTrackingProtectionBadge(trackingStatus: TrackingProtectionStatus, secureConnection: Bool) {
+        shieldIcon.updateState(trackingStatus: trackingStatus, secureConnection: secureConnection)
+        collapsedTrackingProtectionBadge.updateState(trackingStatus: trackingStatus, secureConnection: secureConnection)
     }
 }
 
@@ -926,6 +926,7 @@ private class URLTextField: AutocompleteTextField {
 class TrackingProtectionBadge: UIView {
     let trackingProtectionOff = UIImageView(image: #imageLiteral(resourceName: "tracking_protection_off").imageFlippedForRightToLeftLayoutDirection())
     let trackingProtectionOn = UIImageView(image: #imageLiteral(resourceName: "tracking_protection").imageFlippedForRightToLeftLayoutDirection())
+    let connectionNotSecure = UIImageView(image: #imageLiteral(resourceName: "connection_not_secure").imageFlippedForRightToLeftLayoutDirection())
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -935,11 +936,14 @@ class TrackingProtectionBadge: UIView {
 
     func setupViews() {
         trackingProtectionOff.alpha = 0
+        connectionNotSecure.alpha = 0
         trackingProtectionOn.contentMode = .scaleAspectFit
         trackingProtectionOff.contentMode = .scaleAspectFit
+        connectionNotSecure.contentMode = .scaleAspectFit
 
         addSubview(trackingProtectionOff)
         addSubview(trackingProtectionOn)
+        addSubview(connectionNotSecure)
 
         trackingProtectionOn.setContentHuggingPriority(.required, for: .horizontal)
         trackingProtectionOn.snp.makeConstraints { make in
@@ -952,20 +956,34 @@ class TrackingProtectionBadge: UIView {
             make.centerX.centerY.equalToSuperview()
             make.width.equalTo(UIConstants.layout.urlBarButtonImageSize)
         }
+        
+        connectionNotSecure.setContentHuggingPriority(.required, for: .horizontal)
+        connectionNotSecure.snp.makeConstraints { make in
+            make.centerX.centerY.equalToSuperview()
+            make.width.equalTo(UIConstants.layout.urlBarButtonImageSize)
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func updateState(trackingStatus: TrackingProtectionStatus) {
+    func updateState(trackingStatus: TrackingProtectionStatus, secureConnection: Bool) {
+        guard secureConnection else {
+            trackingProtectionOn.alpha = 0
+            trackingProtectionOff.alpha = 0
+            connectionNotSecure.alpha = 1
+            return
+        }
         switch trackingStatus {
         case .on:
             trackingProtectionOff.alpha = 0
             trackingProtectionOn.alpha = 1
+            connectionNotSecure.alpha = 0
         default:
             trackingProtectionOff.alpha = 1
             trackingProtectionOn.alpha = 0
+            connectionNotSecure.alpha = 0
         }
     }
 }
@@ -978,6 +996,7 @@ class CollapsedTrackingProtectionBadge: TrackingProtectionBadge {
     override func setupViews() {
         addSubview(trackingProtectionOff)
         addSubview(trackingProtectionOn)
+        addSubview(connectionNotSecure)
 
         trackingProtectionOn.snp.makeConstraints { make in
             make.leading.centerY.equalTo(self)
@@ -988,16 +1007,29 @@ class CollapsedTrackingProtectionBadge: TrackingProtectionBadge {
             make.leading.centerY.equalTo(self)
             make.width.height.equalTo(UIConstants.layout.trackingProtectionHeight)
         }
+        
+        connectionNotSecure.snp.makeConstraints { make in
+            make.leading.centerY.equalTo(self)
+            make.width.height.equalTo(UIConstants.layout.trackingProtectionHeight)
+        }
     }
 
-    override func updateState(trackingStatus: TrackingProtectionStatus) {
+    override func updateState(trackingStatus: TrackingProtectionStatus, secureConnection: Bool) {
+        guard secureConnection else {
+            trackingProtectionOn.alpha = 0
+            trackingProtectionOff.alpha = 0
+            connectionNotSecure.alpha = 1
+            return
+        }
         switch trackingStatus {
         case .on:
             trackingProtectionOff.alpha = 0
             trackingProtectionOn.alpha = 1
+            connectionNotSecure.alpha = 0
         default:
             trackingProtectionOff.alpha = 1
             trackingProtectionOn.alpha = 0
+            connectionNotSecure.alpha = 0
         }
     }
 

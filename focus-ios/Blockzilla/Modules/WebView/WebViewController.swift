@@ -89,6 +89,10 @@ class WebViewController: UIViewController, WebController {
     var userAgentString: String? {
         return self.userAgent?.getUserAgent()
     }
+    
+    var connectionIsSecure: Bool {
+        return browserView.hasOnlySecureContent
+    }
 
     var printFormatter: UIPrintFormatter { return browserView.viewPrintFormatter() }
     var scrollView: UIScrollView { return browserView.scrollView }
