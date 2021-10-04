@@ -545,9 +545,10 @@ class BrowserViewController: UIViewController {
                     }
 
                     self.view.layoutIfNeeded()
-                    self.findInPageBar?.becomeFirstResponder()
                 }
             }
+            
+            self.findInPageBar?.becomeFirstResponder()
         } else if let findInPageBar = self.findInPageBar {
             findInPageBar.endEditing(true)
             webViewController.evaluate("__firefox__.findDone()", completion: nil)
@@ -848,6 +849,10 @@ class BrowserViewController: UIViewController {
     @objc private func goForward() {
         webViewController.goForward()
     }
+    
+    @objc private func showFindInPage() {
+        self.updateFindInPageVisibility(visible: true)
+    }
 
     private func toggleURLBarBackground(isBright: Bool) {
         if urlBar.isEditing {
@@ -892,6 +897,12 @@ class BrowserViewController: UIViewController {
                              image: nil,
                              action: #selector(BrowserViewController.goForward),
                              input: "]",
+                             modifierFlags: .command,
+                             propertyList: nil),
+                UIKeyCommand(title: UIConstants.strings.shareMenuFindInPage,
+                             image: nil,
+                             action: #selector(BrowserViewController.showFindInPage),
+                             input: "f",
                              modifierFlags: .command,
                              propertyList: nil),
         ]
