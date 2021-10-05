@@ -941,9 +941,17 @@ class LoginsSetting: Setting {
             UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
             self.delegate?.settingsOpenURLInNewTab(url)
         }
-        LoginListViewController.create(authenticateInNavigationController: navController, profile: profile, settingsDelegate: BrowserViewController.foregroundBVC(), webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
-            guard let loginsVC = loginsVC else { return }
-            navController.pushViewController(loginsVC, animated: true)
+        
+        if AppAuthenticator.canAuthenticateDeviceOwner() {
+            LoginListViewController.create(authenticateInNavigationController: navController, profile: profile, settingsDelegate: BrowserViewController.foregroundBVC(), webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
+                guard let loginsVC = loginsVC else { return }
+                navController.pushViewController(loginsVC, animated: true)
+            }
+        } else {
+            let viewController = DevicePasscodeRequiredViewController()
+            viewController.profile = profile
+            viewController.tabManager = tabManager
+            navigationController?.pushViewController(viewController, animated: true)
         }
     }
 }
