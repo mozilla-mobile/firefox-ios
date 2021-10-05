@@ -316,6 +316,9 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes2" = "Blokovat sledovací obsah";
 
+/* Dark theme option in settings menu */
+"Settings.darkTheme" = "Tmavý";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ bude odesílat text zadávaný to adresního řádku vyhledávači.";
 
@@ -324,6 +327,12 @@
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Zjistit více.";
+
+/* Light theme option in settings menu */
+"Settings.lightTheme" = "Světlý";
+
+/* Manual value for theme section in settings menu */
+"Settings.manualTheme" = "Ručně";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "Hodnocení %@";
@@ -391,6 +400,15 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "ZABEZPEČENÍ";
 
+/* System value for theme section in settings menu */
+"Settings.systemTheme" = "Podle systému";
+
+/* Theme section in settings menu */
+"Settings.theme" = "Vzhled";
+
+/* Header for manual theme section in settings menu */
+"Settings.themePicker" = "Výběr vzhledu";
+
 /* Label for the checkbox to toggle Advertising trackers */
 "Settings.toggleBlockAds2" = "Reklama";
 
@@ -435,6 +453,9 @@
 
 /* Status on for tracking protection in settings screen */
 "Settings.trackingProtectionOn" = "Zapnuto";
+
+/* Value for theme toggle in settings menu */
+"Settings.useSystemTheme" = "Použít motiv vzhledu podle systému";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Co je nového";

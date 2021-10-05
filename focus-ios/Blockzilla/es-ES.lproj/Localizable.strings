@@ -316,6 +316,9 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes2" = "Bloquear rastreadores de contenido";
 
+/* Dark theme option in settings menu */
+"Settings.darkTheme" = "Oscuro";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ enviará a tu buscador lo que escribas en la barra de direcciones.";
 
@@ -324,6 +327,12 @@
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Descubre más.";
+
+/* Light theme option in settings menu */
+"Settings.lightTheme" = "Claro";
+
+/* Manual value for theme section in settings menu */
+"Settings.manualTheme" = "Manual";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "Valorar %@";
@@ -391,6 +400,15 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "SEGURIDAD";
 
+/* System value for theme section in settings menu */
+"Settings.systemTheme" = "Tema del sistema";
+
+/* Theme section in settings menu */
+"Settings.theme" = "Tema";
+
+/* Header for manual theme section in settings menu */
+"Settings.themePicker" = "Selector de tema";
+
 /* Label for the checkbox to toggle Advertising trackers */
 "Settings.toggleBlockAds2" = "Publicidad";
 
@@ -435,6 +453,9 @@
 
 /* Status on for tracking protection in settings screen */
 "Settings.trackingProtectionOn" = "Sí";
+
+/* Value for theme toggle in settings menu */
+"Settings.useSystemTheme" = "Usar el modo claro / oscuro del sistema";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Novedades";

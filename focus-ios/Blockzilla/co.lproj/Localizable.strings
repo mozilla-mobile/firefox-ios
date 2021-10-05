@@ -233,7 +233,7 @@
 "FirstRun.lastSlide.buttonLabel" = "Iè, aghju capitu !";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Bluccate autumaticamente i perseguitatori quandu vo navigate. Tandu, picchichjate nant’à u buttone Squassà per squassà e pagine visitate, e ricerche, i canistrelli è e parolle d’entrata da u vostru apparechju.";
+"FirstRun.messageLabelDescription" = "Bluccate autumaticamente i perseguitatori quandu vo navigate. Tandu, picchichjate nant’à u buttone Squassà per squassà e pagine visitate, e ricerche, i canistrelli è e parolle d’intesa da u vostru apparechju.";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Navigate cum’è s’è nisunu vi fighjava.";
@@ -383,7 +383,7 @@
 "Settings.sectionMozilla" = "MOZILLA";
 
 /* Section label for performance toggles */
-"Settings.sectionPerformance" = "PRESTAZIONI";
+"Settings.sectionPerformance" = "PERFURMENZE";
 
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "CUNFIDENZIALITÀ";

@@ -316,6 +316,9 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes2" = "Blokuoti turinio stebėjimo elementus";
 
+/* Dark theme option in settings menu */
+"Settings.darkTheme" = "Tamsus";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "„%@“ perduos jūsų ieškyklei tai, ką rašote adreso lauke.";
 
@@ -324,6 +327,12 @@
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Sužinoti daugiau.";
+
+/* Light theme option in settings menu */
+"Settings.lightTheme" = "Šviesus";
+
+/* Manual value for theme section in settings menu */
+"Settings.manualTheme" = "Pasirinktinis";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "Įvertinti „%@“";
@@ -391,6 +400,15 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "SAUGA";
 
+/* System value for theme section in settings menu */
+"Settings.systemTheme" = "Sistemos grafinis apvalkalas";
+
+/* Theme section in settings menu */
+"Settings.theme" = "Grafinis apvalkalas";
+
+/* Header for manual theme section in settings menu */
+"Settings.themePicker" = "Grafinio apvalkalo pasirinkimas";
+
 /* Label for the checkbox to toggle Advertising trackers */
 "Settings.toggleBlockAds2" = "Reklaminiai";
 
@@ -435,6 +453,9 @@
 
 /* Status on for tracking protection in settings screen */
 "Settings.trackingProtectionOn" = "Įjungta";
+
+/* Value for theme toggle in settings menu */
+"Settings.useSystemTheme" = "Naudoti sistemos šviesią/tamsią veikseną";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Kas naujo";
