@@ -424,6 +424,7 @@ extension TelemetryWrapper {
         case yourLibrarySection = "your-library-section"
         case jumpBackInSectionShowAll = "jump-back-in-section-show-all"
         case jumpBackInSectionTabOpened = "jump-back-in-section-tab-opened"
+        case jumpBackInSectionGroupOpened = "jump-back-in-section-group-opened"
         case recentlySavedSectionShowAll = "recently-saved-section-show-all"
         case recentlySavedBookmarkItemAction = "recently-saved-bookmark-item-action"
         case recentlySavedBookmarkItemView = "recently-saved-bookmark-item-view"
@@ -700,6 +701,8 @@ extension TelemetryWrapper {
             GleanMetrics.FirefoxHomePage.jumpBackInSectionView.add()
         case (.action, .tap, .firefoxHomepage, EventValue.jumpBackInSectionTabOpened.rawValue, _):
             GleanMetrics.FirefoxHomePage.jumpBackInTabOpened.add()
+        case (.action, .tap, .firefoxHomepage, EventValue.jumpBackInSectionGroupOpened.rawValue, _):
+            GleanMetrics.FirefoxHomePage.jumpBackInGroupOpened.add()
 
         default:
             let msg = "Uninstrumented metric recorded: \(category), \(method), \(object), \(value), \(String(describing: extras))"

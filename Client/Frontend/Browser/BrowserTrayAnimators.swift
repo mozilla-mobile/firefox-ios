@@ -134,7 +134,7 @@ private extension BrowserToTrayAnimator {
 
         // Force subview layout on the collection view so we can calculate the correct end frame for the animation
         tabTray.view.layoutIfNeeded()
-        tabTray.focusTab()
+        tabTray.focusItem()
 
         // Build a tab cell that we will use to animate the scaling of the browser to the tab
         let expandedFrame = calculateExpandedCellFrameFromBVC(bvc)

@@ -139,8 +139,8 @@ class TabTrayViewController: UIViewController {
     var onViewDismissed: (() -> Void)? = nil
 
     // Initializers
-    init(tabTrayDelegate: TabTrayDelegate? = nil, profile: Profile, showChronTabs: Bool = false) {
-        self.viewModel = TabTrayViewModel(tabTrayDelegate: tabTrayDelegate, profile: profile, showChronTabs: showChronTabs)
+    init(tabTrayDelegate: TabTrayDelegate? = nil, profile: Profile, showChronTabs: Bool = false, tabToFocus: Tab? = nil) {
+        self.viewModel = TabTrayViewModel(tabTrayDelegate: tabTrayDelegate, profile: profile, showChronTabs: showChronTabs, tabToFocus: tabToFocus)
 
         super.init(nibName: nil, bundle: nil)
     }

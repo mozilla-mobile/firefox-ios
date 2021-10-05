@@ -83,13 +83,21 @@ class FxHomeJumpBackInCollectionCell: UICollectionViewCell {
 extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         viewModel.updateDataAnd(layoutVariables)
-        return viewModel.jumpableTabs.count
+        return viewModel.jumpList.itemsToDisplay
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: JumpBackInCell.cellIdentifier, for: indexPath) as! JumpBackInCell
 
-        if let item = viewModel.jumpableTabs[safe: indexPath.row] {
+        if indexPath.row == (viewModel.jumpList.itemsToDisplay - 1),
+           let group = viewModel.jumpList.group {
+
+            cell.itemTitle.text = group.searchTerm.localizedCapitalized
+            cell.itemDetails.text = String(format: .FirefoxHomeJumpBackInSectionGroupSiteCount, group.groupedItems.count)
+            cell.heroImage.image = UIImage(imageLiteralResourceName: "recently_closed").withRenderingMode(.alwaysTemplate)
+
+        } else {
+            let item = viewModel.jumpList.tabs[indexPath.row]
             let itemURL = item.url?.absoluteString ?? ""
             let site = Site(url: itemURL, title: item.displayTitle)
 
@@ -100,7 +108,6 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
             })
 
             cell.itemTitle.text = site.title
-            // TODO: Determine source string here, if from synced tabs. Simply update `cell.itemDetails.text`
         }
 
         return cell
@@ -109,8 +116,13 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
 
 extension FxHomeJumpBackInCollectionCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let tab = viewModel.jumpableTabs[safe: indexPath.row] {
-            viewModel.switchTo(tab)
+        if indexPath.row == viewModel.jumpList.itemsToDisplay - 1,
+           let group = viewModel.jumpList.group {
+            viewModel.switchTo(group: group)
+
+        } else {
+            let tab = viewModel.jumpList.tabs[indexPath.row]
+            viewModel.switchTo(tab: tab)
         }
     }
 }
@@ -155,6 +167,7 @@ private struct JumpBackInCellUX {
     static let heroImageDimension: CGFloat = 24
 }
 
+// MARK: - JumpBackInCell
 /// A cell used in FxHomeScreen's Jump Back In section.
 class JumpBackInCell: UICollectionViewCell {
 
@@ -247,5 +260,6 @@ extension JumpBackInCell: Themeable {
     func applyTheme() {
         contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
         itemDetails.textColor = UIColor.theme.homePanel.activityStreamCellDescription
+        heroImage.tintColor = UIColor.theme.homePanel.jumpbackInGroupIconColour
     }
 }

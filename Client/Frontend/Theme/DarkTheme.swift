@@ -125,6 +125,7 @@ fileprivate class DarkHomePanelColor: HomePanelColor {
     override var shortcutShadowOpacity: Float { return 0.5 }
     
     override var recentlySavedBookmarkCellBackground: UIColor { return UIColor.Photon.DarkGrey30 }
+    override var jumpbackInGroupIconColour: UIColor { return UIColor.white } 
 
     override var downloadedFileIcon: UIColor { return UIColor.Photon.Grey30 }
 
