@@ -43,6 +43,11 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     var webViewContainerBackdrop: UIView!
     var collectionView: UICollectionView!
     var recentlyClosedTabsPanel: RecentlyClosedTabsPanel?
+
+    // This is an optional variable used if we wish to focus a tab that is not the
+    // currently selected tab. This allows us to force the scroll behaviour to move
+    // whereever we need to focus the user's attention.
+    var tabToFocus: Tab? = nil
     
     fileprivate lazy var emptyPrivateTabsView: EmptyPrivateTabsView = {
         let emptyView = EmptyPrivateTabsView()
@@ -60,10 +65,11 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         return tabLayoutDelegate.numberOfColumns
     }
 
-    init(tabManager: TabManager, profile: Profile, tabTrayDelegate: TabTrayDelegate? = nil) {
+    init(tabManager: TabManager, profile: Profile, tabTrayDelegate: TabTrayDelegate? = nil, tabToFocus: Tab? = nil) {
         self.tabManager = tabManager
         self.profile = profile
         self.delegate = tabTrayDelegate
+        self.tabToFocus = tabToFocus
         super.init(nibName: nil, bundle: nil)
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.register(TabCell.self, forCellWithReuseIdentifier: TabCell.Identifier)
@@ -79,7 +85,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.view.layoutIfNeeded()
-        focusTab()
+        focusItem()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -98,24 +104,42 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         guard let flowlayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
         flowlayout.invalidateLayout()
     }
-    
-    func focusTab() {
-        guard let selectedTab = tabManager.selectedTab else { return }
 
-        // scroll to group
-        if let tabGroups = tabDisplayManager.tabGroups, tabGroups.count > 0, let tabIndex = tabDisplayManager.indexOfGroupTab(tab: selectedTab) {
-            let groupName = tabIndex.groupName            
-            let indexOfTabGroup: Int = tabGroups.firstIndex(where: { $0.searchTerm == groupName }) ?? 0
-            let offSet =  Int(GroupedTabCell.defaultCellHeight) * indexOfTabGroup
+    /// The main interface for scrolling to an item, whether that is a group or an individual tab
+    ///
+    /// This method checks for the existence of a tab to focus on other than the seleceted tab,
+    /// and then, focuses on that tab. The byproduct is that if the tab is in a group, the
+    /// user would then be looking at the group. Generally, if focusing on a group and
+    /// NOT the selected tab, it is advised to pass in the first tab of that group as
+    /// the `tabToFocus` in the initializer
+    func focusItem() {
+        guard let selectedTab = tabManager.selectedTab else { return }
+        if tabToFocus == nil { tabToFocus = selectedTab }
+        guard let tabToFocus = tabToFocus else { return }
+
+        if let tabGroups = tabDisplayManager.tabGroups,
+           tabGroups.count > 0,
+           tabGroups.contains(where: { $0.groupedItems.contains(where: { $0 == tabToFocus }) }) {
+            focusGroup(from: tabGroups, with: tabToFocus)
+
+        } else {
+            focusTab(tabToFocus)
+        }
+    }
+
+    func focusGroup(from tabGroups: [ASGroup<Tab>], with tabToFocus: Tab) {
+        if let tabIndex = tabDisplayManager.indexOfGroupTab(tab: tabToFocus) {
+            let groupName = tabIndex.groupName
+            let groupIndex: Int = tabGroups.firstIndex(where: { $0.searchTerm == groupName }) ?? 0
+            let offSet = Int(GroupedTabCell.defaultCellHeight) * groupIndex
             let rect = CGRect(origin: CGPoint(x: 0, y: offSet), size: CGSize(width:  self.collectionView.frame.width, height: self.collectionView.frame.height))
             DispatchQueue.main.async {
                 self.collectionView.scrollRectToVisible(rect, animated: false)
-
             }
-            return
         }
+    }
 
-        // scroll to regular tab
+    func focusTab(_ selectedTab: Tab) {
         if let indexOfRegularTab = tabDisplayManager.indexOfRegularTab(tab: selectedTab) {
             let indexPath = IndexPath(item: indexOfRegularTab, section: TabDisplaySection.regularTabs.rawValue)
             guard var rect = self.collectionView.layoutAttributesForItem(at: indexPath)?.frame else { return }
@@ -299,7 +323,7 @@ extension GridTabViewController: TabManagerDelegate {
 extension GridTabViewController: TabDisplayer {
 
     func focusSelectedTab() {
-        self.focusTab()
+        self.focusItem()
     }
 
     func cellFactory(for cell: UICollectionViewCell, using tab: Tab) -> UICollectionViewCell {

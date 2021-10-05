@@ -86,7 +86,7 @@ protocol HomePanelDelegate: AnyObject {
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
     func homePanel(didSelectURL url: URL, visitType: VisitType, isGoogleTopSite: Bool)
     func homePanelDidRequestToOpenLibrary(panel: LibraryPanelType)
-    func homePanelDidRequestToOpenTabTray()
+    func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab?)
 }
 
 protocol HomePanel: Themeable {
@@ -560,7 +560,9 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                 view.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.pocket
                 return view
             case .jumpBackIn:
-                if !hasSentJumpBackInSectionEvent && isJumpBackInSectionEnabled && !jumpBackInViewModel.jumpableTabs.isEmpty {
+                if !hasSentJumpBackInSectionEvent
+                    && isJumpBackInSectionEnabled
+                    && !(jumpBackInViewModel.jumpList.itemsToDisplay == 0) {
                     TelemetryWrapper.recordEvent(category: .action, method: .view, object: .jumpBackInImpressions, value: nil, extras: nil)
                     hasSentJumpBackInSectionEvent = true
                 }
@@ -616,11 +618,11 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
             return cellSize
         case .jumpBackIn:
             if jumpBackInViewModel.layoutVariables.scrollDirection == .horizontal {
-                if jumpBackInViewModel.jumpableTabs.count > 2 {
+                if jumpBackInViewModel.jumpList.itemsToDisplay > 2 {
                     cellSize.height *= 2
                 }
             } else if jumpBackInViewModel.layoutVariables.scrollDirection == .vertical {
-                cellSize.height *= CGFloat(jumpBackInViewModel.jumpableTabs.count)
+                cellSize.height *= CGFloat(jumpBackInViewModel.jumpList.itemsToDisplay)
             }
             return cellSize
         case .pocket:
@@ -759,6 +761,11 @@ extension FirefoxHomeViewController {
     private func configureJumpBackInCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let jumpBackInCell = cell as! FxHomeJumpBackInCollectionCell
         jumpBackInCell.profile = profile
+
+        jumpBackInViewModel.onTapGroup = { [weak self] tab in
+            self?.homePanelDelegate?.homePanelDidRequestToOpenTabTray(withFocusedTab: tab)
+        }
+
         jumpBackInCell.viewModel = jumpBackInViewModel
         jumpBackInCell.collectionView.reloadData()
         jumpBackInCell.setNeedsLayout()
@@ -969,7 +976,7 @@ extension FirefoxHomeViewController {
                                          object: .firefoxHomepage,
                                          value: .jumpBackInSectionShowAll)
         }
-        homePanelDelegate?.homePanelDidRequestToOpenTabTray()
+        homePanelDelegate?.homePanelDidRequestToOpenTabTray(withFocusedTab: nil)
     }
 
     @objc func openBookmarks(_ sender: UIButton) {
