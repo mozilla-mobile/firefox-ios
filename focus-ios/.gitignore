@@ -47,3 +47,8 @@ export-locales-env
 # Glean
 .venv/
 Blockzilla/Generated
+
+import-strings.log
+export-strings.log
+
+shavar-prod-lists
