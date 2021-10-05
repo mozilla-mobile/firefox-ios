@@ -227,13 +227,11 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         guard !self.isPrivate else {
             self.tabGroups = nil
             self.filteredTabs = allTabs
-//            saveRegularOrderedTabs(tabs: filteredTabs)
             completion(nil, allTabs)
             return
         }
         guard tabDisplayType == .TabGrid else {
             self.filteredTabs = allTabs
-//            saveRegularOrderedTabs(tabs: filteredTabs)
             completion(nil, allTabs)
             return
         }
@@ -244,28 +242,24 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
                                               using: .orderedAscending) { tabGroups, filteredActiveTabs  in
                     self.tabGroups = tabGroups
                     self.filteredTabs = filteredActiveTabs
-//                    self.saveRegularOrderedTabs(tabs: self.filteredTabs)
                     completion(tabGroups, filteredActiveTabs)
                 }
                 return
             }
             self.tabGroups = nil
             self.filteredTabs = allTabs
-//            saveRegularOrderedTabs(tabs: filteredTabs)
             completion(nil, allTabs)
             return
         }
         guard allTabs.count > 0, let inactiveViewModel = inactiveViewModel else {
             self.tabGroups = nil
             self.filteredTabs = [Tab]()
-//            saveRegularOrderedTabs(tabs: filteredTabs)
             completion(nil, [Tab]())
             return
         }
         guard allTabs.count > 1 else {
             self.tabGroups = nil
             self.filteredTabs = allTabs
-//            saveRegularOrderedTabs(tabs: filteredTabs)
             completion(nil, allTabs)
             return
         }
@@ -279,14 +273,12 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
             guard self.shouldEnableGroupedTabs else {
                 self.tabGroups = nil
                 self.filteredTabs = allTabs
-//                self.saveRegularOrderedTabs(tabs: self.filteredTabs)
                 completion(tabGroups, allTabs)
                 return
             }
 
             self.tabGroups = tabGroups
             self.filteredTabs = filteredActiveTabs
-//            self.saveRegularOrderedTabs(tabs: self.filteredTabs)
             completion(tabGroups, filteredActiveTabs)
         }
         self.isInactiveViewExpanded = inactiveViewModel.inactiveTabs.count > 0
@@ -652,12 +644,9 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
         
         dataStore.removeAll()
         
-        for t in filteredTabs {
-            dataStore.insert(t)
+        filteredTabs.forEach {
+            dataStore.insert($0)
         }
-
-//        _ = dataStore.remove(tab)
-//        dataStore.insert(tab, at: destinationIndexPath.item)
 
         let section = tabDisplayType == .TopTabTray ? 0 : TabDisplaySection.regularTabs.rawValue
         let start = IndexPath(row: sourceIndex, section: section)
