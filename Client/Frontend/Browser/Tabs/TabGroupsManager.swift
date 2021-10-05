@@ -12,6 +12,39 @@ struct ASGroup<T> {
     let timestamp: Timestamp
 }
 
+fileprivate let userDefaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
+
+// Contains UUIDs for tab
+struct TabDisplayOrder: Codable {
+//    var searchGroupOrder: [String] = []
+    var regularTabUUID: [String] = []
+
+    static func decode() -> TabDisplayOrder? {
+        if let tabDisplayOrder = userDefaults.object(forKey: PrefsKeys.KeyTabDisplayOrder) as? Data {
+            do {
+                let jsonDecoder = JSONDecoder()
+                let order = try jsonDecoder.decode(TabDisplayOrder.self, from: tabDisplayOrder)
+                return order
+            }
+            catch {
+                print("Error occured")
+            }
+        }
+        return nil
+    }
+    
+    static func encode(tabDisplayOrder: TabDisplayOrder) {
+        guard !tabDisplayOrder.regularTabUUID.isEmpty else {
+            userDefaults.removeObject(forKey: PrefsKeys.KeyTabDisplayOrder)
+            return
+        }
+        let encoder = JSONEncoder()
+        if let encoded = try? encoder.encode(tabDisplayOrder) {
+            userDefaults.set(encoded, forKey: PrefsKeys.KeyTabDisplayOrder)
+        }
+    }
+}
+
 class TabGroupsManager {
 
     public static func getURLGroups(with profile: Profile, from urls: [URL], using ordering: ComparisonResult, completion: @escaping ([ASGroup<URL>]?, _ filteredItems: [URL]) -> Void) {

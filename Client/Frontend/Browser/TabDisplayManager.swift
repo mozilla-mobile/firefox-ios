@@ -95,7 +95,59 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         return inactiveNimbusExperimentStatus ? inactiveNimbusExperimentStatus : profile.prefs.boolForKey(PrefsKeys.KeyEnableInactiveTabs) ?? false
     }
     
-    var filteredTabs = [Tab]()
+    lazy var filteredTabs = [Tab]()
+    var tabDisplayOrder: TabDisplayOrder = TabDisplayOrder()
+    var orderedTabs: [Tab] {
+        
+        return filteredTabs
+    }
+    
+    
+    func getRegularOrderedTabs() -> [Tab]? {
+        // Get current order
+        let tabDisplayOrderDecoded = TabDisplayOrder.decode()
+        if tabDisplayOrderDecoded == nil { return nil }
+        var decodedTabUUID = tabDisplayOrderDecoded!.regularTabUUID
+        guard decodedTabUUID.count > 0 else { return nil }
+        let tempFilteredTabs: [Tab] = filteredTabs.map { $0 }
+        var filteredTabUUIDs: [String] = filteredTabs.map { $0.tabUUID }
+        var tempFilteredTabs2: [Tab] = []
+        
+        // Remove uuids that are not required
+        decodedTabUUID = decodedTabUUID.filter({ str in
+            let shouldAdd = filteredTabUUIDs.contains(str)
+            filteredTabUUIDs.removeAll{ $0 == str }
+            return shouldAdd
+        })
+        
+        // Add any new uuids
+//        let tempFilteredArray = filteredTabUUIDs.filter { decodedTabUUID.contains($0) }
+        decodedTabUUID.append(contentsOf: filteredTabUUIDs)
+        
+        // Finally get the list of tabs corresponding to the uuids
+        decodedTabUUID.forEach { tabUUID in
+            if let tabIndex = tempFilteredTabs.firstIndex (where: { t in
+                t.tabUUID == tabUUID
+            }) {
+                tempFilteredTabs2.append(tempFilteredTabs[tabIndex])
+            }
+        }
+        
+        return tempFilteredTabs2.count > 0 ? tempFilteredTabs2 : nil
+    }
+    
+    func shouldSaveOrderedTabs() -> Bool {
+        guard let currentSavedTabs = getRegularOrderedTabs() else { return true }
+        guard (Set(currentSavedTabs) == Set(filteredTabs)) else { return true }
+        return false
+    }
+    
+    func saveRegularOrderedTabs(tabs: [Tab]) {
+        let uuids: [String] = tabs.map{ $0.tabUUID }
+        tabDisplayOrder.regularTabUUID = uuids
+        TabDisplayOrder.encode(tabDisplayOrder: tabDisplayOrder)
+    }
+    
     var tabGroups: [ASGroup<Tab>]?
     var tabsInAllGroups: [Tab]? {
         (tabGroups?.map{$0.groupedItems}.flatMap{$0})
@@ -147,7 +199,12 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         register(self, forTabEvents: .didLoadFavicon, .didChangeURL)
         self.dataStore.removeAll()
         getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
-            tabsToDisplay.forEach {
+            guard tabsToDisplay.count > 0 else { return }
+            let orderedRegularTabs = self.getRegularOrderedTabs() ?? tabsToDisplay
+            if self.getRegularOrderedTabs() == nil {
+                self.saveRegularOrderedTabs(tabs: tabsToDisplay)
+            }
+            orderedRegularTabs.forEach {
                 self.dataStore.insert($0)
             }
             self.recordGroupedTabTelemetry()
@@ -170,11 +227,13 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         guard !self.isPrivate else {
             self.tabGroups = nil
             self.filteredTabs = allTabs
+//            saveRegularOrderedTabs(tabs: filteredTabs)
             completion(nil, allTabs)
             return
         }
         guard tabDisplayType == .TabGrid else {
             self.filteredTabs = allTabs
+//            saveRegularOrderedTabs(tabs: filteredTabs)
             completion(nil, allTabs)
             return
         }
@@ -185,24 +244,28 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
                                               using: .orderedAscending) { tabGroups, filteredActiveTabs  in
                     self.tabGroups = tabGroups
                     self.filteredTabs = filteredActiveTabs
+//                    self.saveRegularOrderedTabs(tabs: self.filteredTabs)
                     completion(tabGroups, filteredActiveTabs)
                 }
                 return
             }
             self.tabGroups = nil
             self.filteredTabs = allTabs
+//            saveRegularOrderedTabs(tabs: filteredTabs)
             completion(nil, allTabs)
             return
         }
         guard allTabs.count > 0, let inactiveViewModel = inactiveViewModel else {
             self.tabGroups = nil
             self.filteredTabs = [Tab]()
+//            saveRegularOrderedTabs(tabs: filteredTabs)
             completion(nil, [Tab]())
             return
         }
         guard allTabs.count > 1 else {
             self.tabGroups = nil
             self.filteredTabs = allTabs
+//            saveRegularOrderedTabs(tabs: filteredTabs)
             completion(nil, allTabs)
             return
         }
@@ -216,12 +279,14 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
             guard self.shouldEnableGroupedTabs else {
                 self.tabGroups = nil
                 self.filteredTabs = allTabs
+//                self.saveRegularOrderedTabs(tabs: self.filteredTabs)
                 completion(tabGroups, allTabs)
                 return
             }
 
             self.tabGroups = tabGroups
             self.filteredTabs = filteredActiveTabs
+//            self.saveRegularOrderedTabs(tabs: self.filteredTabs)
             completion(tabGroups, filteredActiveTabs)
         }
         self.isInactiveViewExpanded = inactiveViewModel.inactiveTabs.count > 0
@@ -523,7 +588,7 @@ extension TabDisplayManager: UICollectionViewDragDelegate {
     func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         
         let section = TabDisplaySection(rawValue: indexPath.section)
-        guard section != .inactiveTabs, section != .groupedTabs else { return [] }
+        guard tabDisplayType == .TopTabTray || section == .regularTabs else { return [] }
         guard let tab = dataStore.at(indexPath.item) else { return [] }
 
         // Get the tab's current URL. If it is `nil`, check the `sessionData` since
@@ -578,11 +643,25 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
 
         self.tabManager.moveTab(isPrivate: self.isPrivate, fromIndex: sourceIndex, toIndex: destinationIndexPath.item)
 
-        _ = dataStore.remove(tab)
-        dataStore.insert(tab, at: destinationIndexPath.item)
+        if let indexToRemove = filteredTabs.firstIndex(of: tab) {
+            filteredTabs.remove(at: indexToRemove)
+        }
+        
+        filteredTabs.insert(tab, at: destinationIndexPath.item)
+        saveRegularOrderedTabs(tabs: filteredTabs)
+        
+        dataStore.removeAll()
+        
+        for t in filteredTabs {
+            dataStore.insert(t)
+        }
 
-        let start = IndexPath(row: sourceIndex, section: TabDisplaySection.regularTabs.rawValue)
-        let end = IndexPath(row: destinationIndexPath.item, section: TabDisplaySection.regularTabs.rawValue)
+//        _ = dataStore.remove(tab)
+//        dataStore.insert(tab, at: destinationIndexPath.item)
+
+        let section = tabDisplayType == .TopTabTray ? 0 : TabDisplaySection.regularTabs.rawValue
+        let start = IndexPath(row: sourceIndex, section: section)
+        let end = IndexPath(row: destinationIndexPath.item, section: section)
         updateWith(animationType: .moveTab) { [weak self] in
             self?.collectionView.moveItem(at: start, to: end)
         }
@@ -592,7 +671,7 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
         let forbiddenOperation = UICollectionViewDropProposal(operation: .forbidden)
         guard let indexPath = destinationIndexPath else { return forbiddenOperation }
         let section = TabDisplaySection(rawValue: indexPath.section)
-        guard section != .inactiveTabs, section != .groupedTabs else { return forbiddenOperation }
+        guard tabDisplayType == .TopTabTray || section == .regularTabs else { return forbiddenOperation }
         guard let localDragSession = session.localDragSession, let item = localDragSession.items.first, let _ = item.localObject as? Tab else {
             return forbiddenOperation
         }

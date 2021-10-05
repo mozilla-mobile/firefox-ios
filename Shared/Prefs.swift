@@ -64,6 +64,7 @@ public struct PrefsKeys {
     public static let KeyInactiveTabsModel = "KeyInactiveTabsModel"
     public static let KeyInactiveTabsFirstTimeRun = "KeyInactiveTabsFirstTimeRun"
     public static let KeyEnableGroupedTabs = "KeyEnableGroupedTabs"
+    public static let KeyTabDisplayOrder = "KeyTabDisplayOrder"
     
     // Widgetkit Key
     public static let WidgetKitSimpleTabKey = "WidgetKitSimpleTabKey"
