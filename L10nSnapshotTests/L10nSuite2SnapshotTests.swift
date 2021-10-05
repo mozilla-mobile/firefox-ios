@@ -37,6 +37,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testURLBar() {
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         navigator.goto(URLBarOpen)
         snapshot("URLBar-01")
 
@@ -78,6 +79,8 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testPageMenuOnWebPage() {
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        app.buttons["urlBar-cancel"].tap()
         navigator.goto(BrowserTab)
         waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         waitForExistence(app.buttons["TabLocationView.pageOptionsButton"], timeout: 15)
@@ -87,7 +90,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testFxASignInPage() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 10)
         app.buttons["urlBar-cancel"].tap()
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
         navigator.nowAt(NewTabScreen)

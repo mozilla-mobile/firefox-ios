@@ -20,7 +20,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
     func testIntro() {
         var num = 1
-        waitForExistence(app.buttons["nextOnboardingButton"])
+        waitForExistence(app.buttons["nextOnboardingButton"], timeout: 5)
         navigator.nowAt(Intro_Welcome)
         allIntroPages.forEach { screenName in
             navigator.goto(screenName)
@@ -58,6 +58,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testWebViewAuthenticationDialog() {
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 10)
         navigator.openURL("https://jigsaw.w3.org/HTTP/Basic/", waitForLoading: false)
         waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         navigator.goto(BasicAuthDialog)
@@ -79,7 +80,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testTopSitesMenu() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 10)
         app.buttons["urlBar-cancel"].tap()
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
         navigator.nowAt(NewTabScreen)
@@ -176,7 +177,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
     func testSetDefaultBrowser() {
         if #available(iOS 14, *) {
-            waitForExistence(app.buttons["Home.learnMoreDefaultBrowserbutton"], timeout: 5)
+            waitForExistence(app.buttons["Home.learnMoreDefaultBrowserbutton"], timeout: 10)
             app.buttons["Home.learnMoreDefaultBrowserbutton"].tap()
             waitForExistence(app.buttons["DefaultBrowserCard.goToSettingsButton"], timeout: 5)
             snapshot("HomeDefaultBrowserLearnMore")
@@ -184,7 +185,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testMenuOnTopSites() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 10)
         app.buttons["urlBar-cancel"].tap()
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
         navigator.nowAt(NewTabScreen)
@@ -194,7 +195,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
     func testSettings() {
         let table = app.tables.element(boundBy: 0)
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 10)
         app.buttons["urlBar-cancel"].tap()
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
         navigator.nowAt(NewTabScreen)

@@ -283,6 +283,10 @@ workflows:
         - 3_provisioning_and_npm_installation
         - 4_B_xcode_build_and_test_Fennec_Enterprise_XCUITests
         - 5_deploy_and_slack
+    meta:
+      bitrise.io:
+        stack: osx-xcode-13.0.x
+        machine_type_id: g2.4core
   RunSmokeXCUITestsiPad:
     steps:
     - xcode-build-for-simulator@0.11:
