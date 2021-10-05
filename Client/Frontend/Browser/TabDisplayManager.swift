@@ -121,7 +121,6 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         })
         
         // Add any new uuids
-//        let tempFilteredArray = filteredTabUUIDs.filter { decodedTabUUID.contains($0) }
         decodedTabUUID.append(contentsOf: filteredTabUUIDs)
         
         // Finally get the list of tabs corresponding to the uuids

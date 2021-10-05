@@ -175,11 +175,6 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         applyTheme()
         notificationSetup()
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-//        tabDisplayManager.saveRegularOrderedTabs()
-    }
 
     private func notificationSetup() {
         NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActiveNotification), name: UIApplication.willResignActiveNotification, object: nil)

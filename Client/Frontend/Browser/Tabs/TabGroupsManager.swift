@@ -12,35 +12,35 @@ struct ASGroup<T> {
     let timestamp: Timestamp
 }
 
-fileprivate let userDefaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
-
-// Contains UUIDs for tab
+// Regular tab order persistence for TabDisplayManager
 struct TabDisplayOrder: Codable {
-//    var searchGroupOrder: [String] = []
+    static let defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
     var regularTabUUID: [String] = []
+}
 
+extension TabDisplayOrder {
     static func decode() -> TabDisplayOrder? {
-        if let tabDisplayOrder = userDefaults.object(forKey: PrefsKeys.KeyTabDisplayOrder) as? Data {
+        if let tabDisplayOrder = TabDisplayOrder.defaults.object(forKey: PrefsKeys.KeyTabDisplayOrder) as? Data {
             do {
                 let jsonDecoder = JSONDecoder()
                 let order = try jsonDecoder.decode(TabDisplayOrder.self, from: tabDisplayOrder)
                 return order
             }
-            catch {
-                print("Error occured")
+            catch let error as NSError {
+                Sentry.shared.send(message: "Error: Unable to decode tab display order", tag: SentryTag.tabDisplayManager, severity: .error, description: error.debugDescription)
             }
         }
         return nil
     }
     
-    static func encode(tabDisplayOrder: TabDisplayOrder) {
-        guard !tabDisplayOrder.regularTabUUID.isEmpty else {
-            userDefaults.removeObject(forKey: PrefsKeys.KeyTabDisplayOrder)
+    static func encode(tabDisplayOrder: TabDisplayOrder?) {
+        guard let tabDisplayOrder = tabDisplayOrder, !tabDisplayOrder.regularTabUUID.isEmpty else {
+            TabDisplayOrder.defaults.removeObject(forKey: PrefsKeys.KeyTabDisplayOrder)
             return
         }
         let encoder = JSONEncoder()
         if let encoded = try? encoder.encode(tabDisplayOrder) {
-            userDefaults.set(encoded, forKey: PrefsKeys.KeyTabDisplayOrder)
+            TabDisplayOrder.defaults.set(encoded, forKey: PrefsKeys.KeyTabDisplayOrder)
         }
     }
 }
