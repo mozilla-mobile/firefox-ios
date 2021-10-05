@@ -1602,8 +1602,8 @@ extension BrowserViewController: HomePanelDelegate {
         self.show(toast: toast)
     }
 
-    func homePanelDidRequestToOpenTabTray() {
-        showTabTray()
+    func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab? = nil) {
+        showTabTray(withFocusOnUnselectedTab: tabToFocus)
     }
 }
 

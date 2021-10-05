@@ -44,6 +44,8 @@ class AuthenticationTest: BaseTestCase {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         navigator.performAction(Action.CloseURLBarOpen)        
         navigator.nowAt(NewTabScreen)
+        navigator.goto(SettingsScreen)
+        app.cells["Search"].swipeUp()
         navigator.performAction(Action.SetPasscode)
         navigator.goto(SettingsScreen)
         navigator.performAction(Action.UnlockLoginsSettings)
