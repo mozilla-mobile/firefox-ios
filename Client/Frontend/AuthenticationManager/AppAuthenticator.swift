@@ -18,21 +18,26 @@ class AppAuthenticator {
         //  That's usually not what you want.
         let context = LAContext()
         
-        context.localizedFallbackTitle = .AuthenticationEnterPasscode // TODO SMA iOS Settings has "Enter iPhone passcode to view saved passwords"
+        context.localizedFallbackTitle = .AuthenticationEnterPasscode
         
         // First check if we have the needed hardware support.
         var error: NSError?
         if context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) {
-            // TODO SMA iOS Settings has "Touch ID to view saved passwords"
             context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: .AuthenticationLoginsTouchReason) { success, error in
                 if success {
-                    completion(.success(()))
+                    DispatchQueue.main.async {
+                        completion(.success(()))
+                    }
                 } else {
-                    completion(.failure(.failedAutentication(message: error?.localizedDescription ?? "Failed to authenticate")))
+                    DispatchQueue.main.async {
+                        completion(.failure(.failedAutentication(message: error?.localizedDescription ?? "Failed to authenticate")))
+                    }
                 }
             }
         } else {
-            completion(.failure(.failedEvaluation(message: error?.localizedDescription ?? "Can't evaluate policy")))
+            DispatchQueue.main.async {
+                completion(.failure(.failedEvaluation(message: error?.localizedDescription ?? "Can't evaluate policy")))
+            }
         }
     }
 }

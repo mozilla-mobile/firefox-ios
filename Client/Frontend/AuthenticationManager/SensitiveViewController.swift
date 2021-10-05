@@ -31,50 +31,28 @@ class SensitiveViewController: UIViewController {
     }
 
     @objc func checkIfUserRequiresValidation() {
-// TODO SMA This needs to just use deviceAuthentication. This is called the app goes to the foreground when one of the Login views is active.
         guard authState != .presenting else {
             return
         }
 
         presentedViewController?.dismiss(animated: false, completion: nil)
         
-        
-        
-//        guard let authInfo = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo(), authInfo.requiresValidation() else {
-//            removeBackgroundedBlur()
-//            return
-//        }
-//
-//        promptingForTouchID = true
-//        AppAuthenticator.presentAuthenticationUsingInfo(authInfo,
-//            touchIDReason: .AuthenticationLoginsTouchReason,
-//            success: {
-//                self.promptingForTouchID = false
-//                self.authState = .notAuthenticating
-//                self.removeBackgroundedBlur()
-//            },
-//            cancel: {
-//                self.promptingForTouchID = false
-//                self.authState = .notAuthenticating
-//                self.navigationController?.dismiss(animated: true, completion: nil)
-//                self.dismiss(animated: true)
-//            },
-//            fallback: {
-//                self.promptingForTouchID = false
-//                AppAuthenticator.presentPasscodeAuthentication(self.navigationController).uponQueue(.main) { isOk in
-//                    if isOk {
-//                        self.removeBackgroundedBlur()
-//                        self.navigationController?.dismiss(animated: true, completion: nil)
-//                        self.authState = .notAuthenticating
-//                    } else {
-//                        self.navigationController?.dismiss(animated: true, completion: nil)
-//                        self.dismiss(animated: true)
-//                        self.authState = .notAuthenticating
-//                    }
-//                }
-//            }
-//        )
+        promptingForTouchID = true
 
+        AppAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
+            switch result {
+                case .success():
+                    self.promptingForTouchID = false
+                    self.authState = .notAuthenticating
+                    self.removeBackgroundedBlur()
+                case .failure(let error):
+                    self.promptingForTouchID = false
+                    self.authState = .notAuthenticating
+                    print("MOO Error \(error)")
+                    self.navigationController?.dismiss(animated: true, completion: nil)
+                    self.dismiss(animated: true)
+            }
+        }
         authState = .presenting
     }
 

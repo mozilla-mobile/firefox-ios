@@ -66,30 +66,15 @@ class LoginListViewController: SensitiveViewController {
                 deferred.fill(nil)
             }
         }
-
-        fillDeferred(ok: true)
         
-// TODO SMA This is where we should authenticate the user. Code below should be replaced with a regular call to authenticate.
-
-//        guard let authInfo = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo(), authInfo.requiresValidation() else {
-//            fillDeferred(ok: true)
-//            return deferred
-//        }
-//
-//        AppAuthenticator.presentAuthenticationUsingInfo(authInfo, touchIDReason: .AuthenticationLoginsTouchReason, success: {
-//            fillDeferred(ok: true)
-//        }, cancel: {
-//            fillDeferred(ok: false)
-//        }, fallback: {
-//            AppAuthenticator.presentPasscodeAuthentication(navigationController).uponQueue(.main) { isOk in
-//                if isOk {
-//                    // In the success case of the passcode dialog, it requires explicit dismissal to continue
-//                    navigationController.dismiss(animated: true)
-//                }
-//
-//                fillDeferred(ok: isOk)
-//            }
-//        })
+        AppAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
+            switch result {
+                case .success():
+                    fillDeferred(ok: true)
+                case .failure(_):
+                    fillDeferred(ok: false)
+            }
+        }
 
         return deferred
     }
