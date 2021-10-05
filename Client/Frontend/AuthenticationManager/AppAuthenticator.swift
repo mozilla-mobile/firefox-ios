@@ -2,9 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
-import Shared
-import SwiftKeychainWrapper
 import LocalAuthentication
 
 class AppAuthenticator {
@@ -21,15 +18,13 @@ class AppAuthenticator {
         //  That's usually not what you want.
         let context = LAContext()
         
-        context.localizedFallbackTitle = .AuthenticationEnterPasscode
+        context.localizedFallbackTitle = .AuthenticationEnterPasscode // TODO SMA iOS Settings has "Enter iPhone passcode to view saved passwords"
         
         // First check if we have the needed hardware support.
         var error: NSError?
         if context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) {
-            
-            let reason: String = .AuthenticationLoginsTouchReason
-            context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: reason ) { success, error in
-                
+            // TODO SMA iOS Settings has "Touch ID to view saved passwords"
+            context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: .AuthenticationLoginsTouchReason) { success, error in
                 if success {
                     completion(.success(()))
                 } else {
@@ -39,56 +34,5 @@ class AppAuthenticator {
         } else {
             completion(.failure(.failedEvaluation(message: error?.localizedDescription ?? "Can't evaluate policy")))
         }
-    }
-    
-    static func presentAuthenticationUsingInfo(_ authenticationInfo: AuthenticationKeychainInfo, touchIDReason: String, success: (() -> Void)?, cancel: (() -> Void)?, fallback: (() -> Void)?) {
-        if authenticationInfo.useTouchID {
-            let localAuthContext = LAContext()
-            localAuthContext.localizedFallbackTitle = .AuthenticationEnterPasscode
-            localAuthContext.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: touchIDReason) { didSucceed, error in
-                if didSucceed {
-                    // Update our authentication info's last validation timestamp so we don't ask again based
-                    // on the set required interval
-                    authenticationInfo.recordValidation()
-                    KeychainWrapper.sharedAppContainerKeychain.setAuthenticationInfo(authenticationInfo)
-                    DispatchQueue.main.async {
-                        success?()
-                    }
-                    return
-                }
-
-                guard let authError = error else {
-                    return
-                }
-
-                DispatchQueue.main.async {
-                    switch Int32(authError._code) {
-                    case kLAErrorUserFallback,
-                         kLAErrorBiometryNotEnrolled,
-                         kLAErrorBiometryNotAvailable,
-                         kLAErrorBiometryLockout:
-                        fallback?()
-                    case kLAErrorUserCancel:
-                        cancel?()
-                    default:
-                        cancel?()
-                    }
-                }
-            }
-        } else {
-            fallback?()
-        }
-    }
-    
-    static func presentPasscodeAuthentication(_ presentingNavController: UINavigationController?) -> Deferred<Bool> {
-        let deferred = Deferred<Bool>()
-        let passcodeVC = PasscodeEntryViewController(passcodeCompletion: { isOk in
-            deferred.fill(isOk)
-        })
-
-        let navController = UINavigationController(rootViewController: passcodeVC)
-        navController.modalPresentationStyle = .formSheet
-        presentingNavController?.present(navController, animated: true, completion: nil)
-        return deferred
     }
 }

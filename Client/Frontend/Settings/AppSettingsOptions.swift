@@ -948,40 +948,6 @@ class LoginsSetting: Setting {
     }
 }
 
-class TouchIDPasscodeSetting: Setting {
-    let profile: Profile
-    var tabManager: TabManager!
-
-    override var accessoryView: UIImageView? { return disclosureIndicator }
-
-    override var accessibilityIdentifier: String? { return "TouchIDPasscode" }
-
-    init(settings: SettingsTableViewController, delegate: SettingsDelegate? = nil) {
-        self.profile = settings.profile
-        self.tabManager = settings.tabManager
-        let localAuthContext = LAContext()
-
-        let title: String
-        if localAuthContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
-            if localAuthContext.biometryType == .faceID {
-                title = .AuthenticationFaceIDPasscodeSetting
-            } else {
-                title = .AuthenticationTouchIDPasscodeSetting
-            }
-        } else {
-            title = .AuthenticationPasscode
-        }
-        super.init(title: NSAttributedString(string: title, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]),
-                   delegate: delegate)
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = AuthenticationSettingsViewController()
-        viewController.profile = profile
-        navigationController?.pushViewController(viewController, animated: true)
-    }
-}
-
 class ContentBlockerSetting: Setting {
     let profile: Profile
     var tabManager: TabManager!
