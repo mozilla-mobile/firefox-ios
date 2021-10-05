@@ -793,9 +793,9 @@ class URLBar: UIView {
         self.layoutIfNeeded()
     }
 
-    func updateTrackingProtectionBadge(trackingStatus: TrackingProtectionStatus, secureConnection: Bool) {
-        shieldIcon.updateState(trackingStatus: trackingStatus, secureConnection: secureConnection)
-        collapsedTrackingProtectionBadge.updateState(trackingStatus: trackingStatus, secureConnection: secureConnection)
+    func updateTrackingProtectionBadge(trackingStatus: TrackingProtectionStatus, shouldDisplayShieldIcon: Bool) {
+        shieldIcon.updateState(trackingStatus: trackingStatus, shouldDisplayShieldIcon: shouldDisplayShieldIcon)
+        collapsedTrackingProtectionBadge.updateState(trackingStatus: trackingStatus, shouldDisplayShieldIcon: shouldDisplayShieldIcon)
     }
 }
 
@@ -968,8 +968,8 @@ class TrackingProtectionBadge: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func updateState(trackingStatus: TrackingProtectionStatus, secureConnection: Bool) {
-        guard secureConnection else {
+    func updateState(trackingStatus: TrackingProtectionStatus, shouldDisplayShieldIcon: Bool) {
+        guard shouldDisplayShieldIcon else {
             trackingProtectionOn.alpha = 0
             trackingProtectionOff.alpha = 0
             connectionNotSecure.alpha = 1
@@ -1014,8 +1014,8 @@ class CollapsedTrackingProtectionBadge: TrackingProtectionBadge {
         }
     }
 
-    override func updateState(trackingStatus: TrackingProtectionStatus, secureConnection: Bool) {
-        guard secureConnection else {
+    override func updateState(trackingStatus: TrackingProtectionStatus, shouldDisplayShieldIcon: Bool) {
+        guard shouldDisplayShieldIcon else {
             trackingProtectionOn.alpha = 0
             trackingProtectionOff.alpha = 0
             connectionNotSecure.alpha = 1

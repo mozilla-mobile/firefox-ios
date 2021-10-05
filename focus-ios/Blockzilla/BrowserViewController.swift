@@ -57,7 +57,7 @@ class BrowserViewController: UIViewController {
 
     private var trackingProtectionStatus: TrackingProtectionStatus = .on(TPPageStats()) {
         didSet {
-            urlBar.updateTrackingProtectionBadge(trackingStatus: trackingProtectionStatus, secureConnection: self.webViewController.connectionIsSecure)
+            urlBar.updateTrackingProtectionBadge(trackingStatus: trackingProtectionStatus, shouldDisplayShieldIcon:  urlBar.inBrowsingMode ? self.webViewController.connectionIsSecure : true )
         }
     }
 
