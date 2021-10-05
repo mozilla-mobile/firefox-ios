@@ -104,41 +104,38 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     lazy var filteredTabs = [Tab]()
     var tabDisplayOrder: TabDisplayOrder = TabDisplayOrder()
     var orderedTabs: [Tab] {
-        
         return filteredTabs
     }
-    
-    
+
     func getRegularOrderedTabs() -> [Tab]? {
         // Get current order
-        let tabDisplayOrderDecoded = TabDisplayOrder.decode()
-        if tabDisplayOrderDecoded == nil { return nil }
-        var decodedTabUUID = tabDisplayOrderDecoded!.regularTabUUID
+        guard let tabDisplayOrderDecoded = TabDisplayOrder.decode() else { return nil }
+        var decodedTabUUID = tabDisplayOrderDecoded.regularTabUUID
         guard decodedTabUUID.count > 0 else { return nil }
-        let tempFilteredTabs: [Tab] = filteredTabs.map { $0 }
+        let filteredTabCopy: [Tab] = filteredTabs.map { $0 }
         var filteredTabUUIDs: [String] = filteredTabs.map { $0.tabUUID }
-        var tempFilteredTabs2: [Tab] = []
+        var regularOrderedTabs: [Tab] = []
         
-        // Remove uuids that are not required
-        decodedTabUUID = decodedTabUUID.filter({ str in
-            let shouldAdd = filteredTabUUIDs.contains(str)
-            filteredTabUUIDs.removeAll{ $0 == str }
+        // Remove any stale uuid from tab display order
+        decodedTabUUID = decodedTabUUID.filter({ uuid in
+            let shouldAdd = filteredTabUUIDs.contains(uuid)
+            filteredTabUUIDs.removeAll{ $0 == uuid }
             return shouldAdd
         })
         
-        // Add any new uuids
+        // Add missing uuid to tab display order from filtered tab
         decodedTabUUID.append(contentsOf: filteredTabUUIDs)
         
-        // Finally get the list of tabs corresponding to the uuids
+        // Get list of tabs corresponding to the uuids from tab display order
         decodedTabUUID.forEach { tabUUID in
-            if let tabIndex = tempFilteredTabs.firstIndex (where: { t in
+            if let tabIndex = filteredTabCopy.firstIndex (where: { t in
                 t.tabUUID == tabUUID
             }) {
-                tempFilteredTabs2.append(tempFilteredTabs[tabIndex])
+                regularOrderedTabs.append(filteredTabCopy[tabIndex])
             }
         }
         
-        return tempFilteredTabs2.count > 0 ? tempFilteredTabs2 : nil
+        return regularOrderedTabs.count > 0 ? regularOrderedTabs : nil
     }
     
     func shouldSaveOrderedTabs() -> Bool {
@@ -147,7 +144,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         return false
     }
     
-    func saveRegularOrderedTabs(tabs: [Tab]) {
+    func saveRegularOrderedTabs(from tabs: [Tab]) {
         let uuids: [String] = tabs.map{ $0.tabUUID }
         tabDisplayOrder.regularTabUUID = uuids
         TabDisplayOrder.encode(tabDisplayOrder: tabDisplayOrder)
@@ -207,7 +204,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
             guard tabsToDisplay.count > 0 else { return }
             let orderedRegularTabs = self.getRegularOrderedTabs() ?? tabsToDisplay
             if self.getRegularOrderedTabs() == nil {
-                self.saveRegularOrderedTabs(tabs: tabsToDisplay)
+                self.saveRegularOrderedTabs(from: tabsToDisplay)
             }
             orderedRegularTabs.forEach {
                 self.dataStore.insert($0)
@@ -645,7 +642,7 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
         }
         
         filteredTabs.insert(tab, at: destinationIndexPath.item)
-        saveRegularOrderedTabs(tabs: filteredTabs)
+        saveRegularOrderedTabs(from: filteredTabs)
         
         dataStore.removeAll()
         
