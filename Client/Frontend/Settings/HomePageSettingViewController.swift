@@ -28,11 +28,9 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
         let customizeFirefoxHomeSection = customizeFirefoxSettingSection()
         let customizeHomePageSection = customizeHomeSettingSection()
 
-        // TODO: StartAtHome settings only show for English locale until we get translations.
-        let supportedLocales = ["en_US", "en_GB", "en_ZA", "en_CA"]
-        guard supportedLocales.contains(Locale.current.identifier),
-              let startAtHomeSection = setupStartAtHomeSection()
-        else { return [customizeFirefoxHomeSection, customizeHomePageSection] }
+        guard let startAtHomeSection = setupStartAtHomeSection() else {
+            return [customizeFirefoxHomeSection, customizeHomePageSection]
+        }
 
         return [customizeFirefoxHomeSection, customizeHomePageSection, startAtHomeSection]
     }
@@ -95,6 +93,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
     }
 
     private func setupStartAtHomeSection() -> SettingSection? {
+        guard featureFlags.isFeatureActive(.startAtHome) else { return nil }
         guard let startAtHomeSetting: StartAtHomeSetting = featureFlags.featureOption(.startAtHome) else { return nil }
         currentStartAtHomeSetting = startAtHomeSetting
 
@@ -134,30 +133,6 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
                                      children: [afterFourHoursOption, alwaysOption, neverOption])
 
         return section
-
-        let pocketSetting = BoolSetting(prefs: profile.prefs,
-                                        prefKey: PrefsKeys.ASPocketStoriesVisible,
-                                        defaultValue: isPocketEnabledDefault,
-                                        attributedTitleText: NSAttributedString(string: .SettingsCustomizeHomePocket))
-
-        let jumpBackInSetting = BoolSetting(with: .jumpBackIn,
-                                            titleText: NSAttributedString(string: .SettingsCustomizeHomeJumpBackIn))
-
-        let recentlySavedSetting = BoolSetting(with: .recentlySaved,
-                                               titleText: NSAttributedString(string: .SettingsCustomizeHomeRecentlySaved))
-
-//        let recentlyVisitedSetting = BoolSetting(with: .recentlyVisited,
-//                                                 titleText: NSAttributedString(string: .FirefoxHomeJumpBackInSectionTitle))
-
-
-        sectionItems.append(TopSitesSettings(settings: self))
-        sectionItems.append(jumpBackInSetting)
-        sectionItems.append(recentlySavedSetting)
-//        sectionItems.append(recentlyVisitedSetting)
-        sectionItems.append(pocketSetting)
-
-        return SettingSection(title: NSAttributedString(string: Strings.SettingsTopSitesCustomizeTitle),
-                              children: sectionItems)
     }
 
     override func viewDidDisappear(_ animated: Bool) {

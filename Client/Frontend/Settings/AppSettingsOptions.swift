@@ -554,7 +554,7 @@ class ExperimentsSettings: HiddenSetting {
 class ToggleChronTabs: HiddenSetting, FeatureFlagsProtocol {
     override var title: NSAttributedString? {
         let toNewStatus = featureFlags.isFeatureActive(.chronologicalTabs) ? "OFF" : "ON"
-        return NSAttributedString(string: "Debug: Toggle chronological tabs \(toNewStatus)",
+        return NSAttributedString(string: "Toggle chronological tabs \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
@@ -574,7 +574,7 @@ class ToggleChronTabs: HiddenSetting, FeatureFlagsProtocol {
 class ToggleJumpBackInSection: HiddenSetting, FeatureFlagsProtocol {
     override var title: NSAttributedString? {
         let toNewStatus = featureFlags.isFeatureActive(.jumpBackIn) ? "OFF" : "ON"
-        return NSAttributedString(string: "Debug: Toggle Jump Back In section \(toNewStatus)",
+        return NSAttributedString(string: "Toggle Jump Back In section \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
@@ -594,7 +594,7 @@ class ToggleJumpBackInSection: HiddenSetting, FeatureFlagsProtocol {
 class TogglePullToRefresh: HiddenSetting, FeatureFlagsProtocol {
     override var title: NSAttributedString? {
         let toNewStatus = featureFlags.isFeatureActive(.pullToRefresh) ? "OFF" : "ON"
-        return NSAttributedString(string: "Debug: Toggle Pull to Refresh \(toNewStatus)",
+        return NSAttributedString(string: "Toggle Pull to Refresh \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
@@ -614,7 +614,7 @@ class TogglePullToRefresh: HiddenSetting, FeatureFlagsProtocol {
 class ToggleRecentlySavedSection: HiddenSetting, FeatureFlagsProtocol {
     override var title: NSAttributedString? {
         let toNewStatus = featureFlags.isFeatureActive(.recentlySaved) ? "OFF" : "ON"
-        return NSAttributedString(string: "Debug: Toggle Recently Saved Section \(toNewStatus)",
+        return NSAttributedString(string: "Toggle Recently Saved Section \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
@@ -634,7 +634,7 @@ class ToggleRecentlySavedSection: HiddenSetting, FeatureFlagsProtocol {
 class ToggleInactiveTabs: HiddenSetting, FeatureFlagsProtocol {
     override var title: NSAttributedString? {
         let toNewStatus = featureFlags.isFeatureActive(.inactiveTabs) ? "OFF" : "ON"
-        return NSAttributedString(string: "Toggle inactive tabs: \(toNewStatus)",
+        return NSAttributedString(string: "Toggle inactive tabs \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
@@ -654,8 +654,8 @@ class ToggleInactiveTabs: HiddenSetting, FeatureFlagsProtocol {
 
 class ToggleGroupedTabs: HiddenSetting, FeatureFlagsProtocol {
     override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureActive(.groupedTabs) ? "ON" : "OFF"
-        return NSAttributedString(string: "Toggle grouped tabs: \(toNewStatus)",
+        let toNewStatus = featureFlags.isFeatureActive(.groupedTabs) ? "OFF" : "ON"
+        return NSAttributedString(string: "Toggle grouped tabs \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
