@@ -599,7 +599,8 @@ class TogglePullToRefresh: HiddenSetting, FeatureFlagsProtocol {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        featureFlags.toggle(.pullToRefresh)
+        let currentStatus = featureFlags.isFeatureActive(.pullToRefresh)
+        featureFlags.set(.pullToRefresh, to: !currentStatus)
         updateCell(navigationController)
     }
 

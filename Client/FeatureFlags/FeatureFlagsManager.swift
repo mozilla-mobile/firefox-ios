@@ -103,33 +103,51 @@ class FeatureFlagsManager {
     public func setupFeatures(with profile: Profile) {
         features.removeAll()
 
-        let chronTabs = FlaggableFeature(withID: .chronologicalTabs, and: profile, enabledFor: [.developer])
+        let chronTabs = FlaggableFeature(withID: .chronologicalTabs,
+                                         and: profile,
+                                         enabledFor: [.developer])
         features[.chronologicalTabs] = chronTabs
 
-        let inactiveTabs = FlaggableFeature(withID: .inactiveTabs, and: profile, enabledFor: [.developer])
+        let inactiveTabs = FlaggableFeature(withID: .inactiveTabs,
+                                            and: profile,
+                                            enabledFor: [.developer])
         features[.inactiveTabs] = inactiveTabs
 
-        let groupedTabs = FlaggableFeature(withID: .groupedTabs, and: profile, enabledFor: [.beta, .developer])
+        let groupedTabs = FlaggableFeature(withID: .groupedTabs,
+                                           and: profile,
+                                           enabledFor: [.beta, .developer])
         features[.groupedTabs] = groupedTabs
 
-        let jumpBackIn = FlaggableFeature(withID: .jumpBackIn, and: profile, enabledFor: [.beta, .developer])
+        let jumpBackIn = FlaggableFeature(withID: .jumpBackIn,
+                                          and: profile,
+                                          enabledFor: [.beta, .developer])
         features[.jumpBackIn] = jumpBackIn
 
         /// Use the Nimbus experimentation platform. If this is `true` then
         /// `Experiments.shared` provides access to Nimbus. If false, it is a dummy object.
-        let nimbus = FlaggableFeature(withID: .nimbus, and: profile, enabledFor: [.release, .beta, .developer])
+        let nimbus = FlaggableFeature(withID: .nimbus,
+                                      and: profile,
+                                      enabledFor: [.release, .beta, .developer])
         features[.nimbus] = nimbus
 
-        let pullToRefresh = FlaggableFeature(withID: .pullToRefresh, and: profile, enabledFor: [.release ,.beta, .developer])
+        let pullToRefresh = FlaggableFeature(withID: .pullToRefresh,
+                                             and: profile,
+                                             enabledFor: [.release ,.beta, .developer])
         features[.pullToRefresh] = pullToRefresh
 
-        let recentlySaved = FlaggableFeature(withID: .recentlySaved, and: profile, enabledFor: [.beta, .developer])
+        let recentlySaved = FlaggableFeature(withID: .recentlySaved,
+                                             and: profile,
+                                             enabledFor: [.beta, .developer])
         features[.recentlySaved] = recentlySaved
 
-        let shakeToRestore = FlaggableFeature(withID: .shakeToRestore, and: profile, enabledFor: [.beta, .developer, .other])
+        let shakeToRestore = FlaggableFeature(withID: .shakeToRestore,
+                                              and: profile,
+                                              enabledFor: [.beta, .developer, .other])
         features[.shakeToRestore] = shakeToRestore
 
-        let startAtHome = FlaggableFeature(withID: .startAtHome, and: profile, enabledFor: [])
+        let startAtHome = FlaggableFeature(withID: .startAtHome,
+                                           and: profile,
+                                           enabledFor: [])
         features[.startAtHome] = startAtHome
     }
 }
