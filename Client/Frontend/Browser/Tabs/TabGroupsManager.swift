@@ -12,39 +12,6 @@ struct ASGroup<T> {
     let timestamp: Timestamp
 }
 
-// Regular tab order persistence for TabDisplayManager
-struct TabDisplayOrder: Codable {
-    static let defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
-    var regularTabUUID: [String] = []
-}
-
-extension TabDisplayOrder {
-    static func decode() -> TabDisplayOrder? {
-        if let tabDisplayOrder = TabDisplayOrder.defaults.object(forKey: PrefsKeys.KeyTabDisplayOrder) as? Data {
-            do {
-                let jsonDecoder = JSONDecoder()
-                let order = try jsonDecoder.decode(TabDisplayOrder.self, from: tabDisplayOrder)
-                return order
-            }
-            catch let error as NSError {
-                Sentry.shared.send(message: "Error: Unable to decode tab display order", tag: SentryTag.tabDisplayManager, severity: .error, description: error.debugDescription)
-            }
-        }
-        return nil
-    }
-    
-    static func encode(tabDisplayOrder: TabDisplayOrder?) {
-        guard let tabDisplayOrder = tabDisplayOrder, !tabDisplayOrder.regularTabUUID.isEmpty else {
-            TabDisplayOrder.defaults.removeObject(forKey: PrefsKeys.KeyTabDisplayOrder)
-            return
-        }
-        let encoder = JSONEncoder()
-        if let encoded = try? encoder.encode(tabDisplayOrder) {
-            TabDisplayOrder.defaults.set(encoded, forKey: PrefsKeys.KeyTabDisplayOrder)
-        }
-    }
-}
-
 class TabGroupsManager {
 
     public static func getURLGroups(with profile: Profile, from urls: [URL], using ordering: ComparisonResult, completion: @escaping ([ASGroup<URL>]?, _ filteredItems: [URL]) -> Void) {

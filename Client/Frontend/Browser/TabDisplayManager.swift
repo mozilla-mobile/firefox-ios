@@ -72,6 +72,12 @@ enum TabDisplayType {
     case TopTabTray
 }
 
+// Regular tab order persistence for TabDisplayManager
+struct TabDisplayOrder: Codable {
+    static let defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
+    var regularTabUUID: [String] = []
+}
+
 class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     var performingChainedOperations = false
     var inactiveViewModel: InactiveTabViewModel?
@@ -826,5 +832,32 @@ extension TabDisplayManager: TabManagerDelegate {
 
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
         cancelDragAndGestures()
+    }
+}
+
+extension TabDisplayOrder {
+    static func decode() -> TabDisplayOrder? {
+        if let tabDisplayOrder = TabDisplayOrder.defaults.object(forKey: PrefsKeys.KeyTabDisplayOrder) as? Data {
+            do {
+                let jsonDecoder = JSONDecoder()
+                let order = try jsonDecoder.decode(TabDisplayOrder.self, from: tabDisplayOrder)
+                return order
+            }
+            catch let error as NSError {
+                Sentry.shared.send(message: "Error: Unable to decode tab display order", tag: SentryTag.tabDisplayManager, severity: .error, description: error.debugDescription)
+            }
+        }
+        return nil
+    }
+    
+    static func encode(tabDisplayOrder: TabDisplayOrder?) {
+        guard let tabDisplayOrder = tabDisplayOrder, !tabDisplayOrder.regularTabUUID.isEmpty else {
+            TabDisplayOrder.defaults.removeObject(forKey: PrefsKeys.KeyTabDisplayOrder)
+            return
+        }
+        let encoder = JSONEncoder()
+        if let encoded = try? encoder.encode(tabDisplayOrder) {
+            TabDisplayOrder.defaults.set(encoded, forKey: PrefsKeys.KeyTabDisplayOrder)
+        }
     }
 }
