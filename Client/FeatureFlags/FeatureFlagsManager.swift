@@ -52,7 +52,7 @@ class FeatureFlagsManager {
     /// Used as the main way to find out whether a feature is active or not.
     public func isFeatureActive(_ featureID: FeatureFlagName) -> Bool {
         guard let feature = features[featureID] else { return false }
-        return feature.isActive
+        return feature.isActiveForBuild
     }
 
     /// Main interface for accessing feature options.
@@ -62,7 +62,7 @@ class FeatureFlagsManager {
     /// it's appropriate type in the switch statement.
     public func featureOption<T>(_ featureID: FeatureFlagName) -> T? {
         guard let feature = features[featureID],
-              let featureOption = feature.featureOptions
+              let featureOption = feature.userPreferenceSetTo
         else { return nil }
 
         switch featureID {
@@ -95,7 +95,7 @@ class FeatureFlagsManager {
             optionAsString = nil
         }
 
-        features[featureID]?.setFeatureTo(state, with: optionAsString)
+        features[featureID]?.setUserPrefsForFeatureTo(state, with: optionAsString)
     }
 
     /// Sets up features with default channel availablility. For ease of use, please add

@@ -12,7 +12,7 @@ struct FlaggableFeature {
 
     var featureID: FeatureFlagName
 
-    /// Returns whether or not the feature is active.
+    /// Returns whether or not the feature is active for the build.
     ///
     /// This variable returns a `Bool` based on a priority queue.
     ///
@@ -24,7 +24,7 @@ struct FlaggableFeature {
     /// 2. If there is no setting written to the disk, then every feature
     /// has an underlying default state for each build channel (Release,
     /// Beta, Developer) and that value will be returned.
-    var isActive: Bool {
+    var isActiveForBuild: Bool {
         if let key = featureKey(), let existingPref = profile.prefs.boolForKey(key) {
             return existingPref
 
@@ -43,7 +43,7 @@ struct FlaggableFeature {
 
     /// Returns the feature option represented as an Int. The `FeatureFlagManager` will
     /// convert it to the appropriate type.
-    var featureOptions: String? {
+    var userPreferenceSetTo: String? {
         if let optionsKey = featureOptionsKey, let existingOption = profile.prefs.stringForKey(optionsKey) {
             return existingOption
         }
@@ -53,13 +53,13 @@ struct FlaggableFeature {
         case .startAtHome:
             return StartAtHomeSetting.afterFourHours.rawValue
         default:
-            return nil
+            return UserFeaturePreference.enabled
         }
     }
 
     private var featureOptionsKey: String? {
         guard let baseKey = featureKey() else { return nil }
-        return baseKey + "Options"
+        return baseKey + "UserPreferences"
     }
 
     // MARK: - Initializers
@@ -73,19 +73,16 @@ struct FlaggableFeature {
     
     /// Allows fine grain control over a feature, by allowing to directly set the state to ON
     /// or OFF, and also set the features option as an Int
-    public func setFeatureTo(_ state: Bool, with option: String? = nil) {
-        updateFeatureStateTo(state)
-        updateFeatureOption(option)
-    }
-
-    private func updateFeatureStateTo(_ state: Bool) {
-        guard let featureKey = featureKey() else { return }
-        profile.prefs.setBool(state, forKey: featureKey)
-    }
-
-    private func updateFeatureOption(_ option: String?) {
+    public func setUserPrefsForFeatureTo(_ option: String) {
         guard let option = option, let optionsKey = featureOptionsKey else { return }
         profile.prefs.setString(option, forKey: optionsKey)
+    }
+
+    /// Allows fine grain control over a feature, by allowing to directly set the state to ON
+    /// or OFF, and also set the features option as an Int
+    public func toggleBuildFeatureTo(_ state: Bool) {
+        guard let featureKey = featureKey() else { return }
+        profile.prefs.setBool(state, forKey: featureKey)
     }
 
     public func featureKey() -> String? {
