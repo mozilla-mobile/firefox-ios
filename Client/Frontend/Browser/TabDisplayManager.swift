@@ -72,6 +72,12 @@ enum TabDisplayType {
     case TopTabTray
 }
 
+// Regular tab order persistence for TabDisplayManager
+struct TabDisplayOrder: Codable {
+    static let defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
+    var regularTabUUID: [String] = []
+}
+
 class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     var performingChainedOperations = false
     var inactiveViewModel: InactiveTabViewModel?
@@ -95,7 +101,49 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         return inactiveNimbusExperimentStatus ? inactiveNimbusExperimentStatus : profile.prefs.boolForKey(PrefsKeys.KeyEnableInactiveTabs) ?? false
     }
     
-    var filteredTabs = [Tab]()
+    lazy var filteredTabs = [Tab]()
+    var tabDisplayOrder: TabDisplayOrder = TabDisplayOrder()
+    var orderedTabs: [Tab] {
+        return filteredTabs
+    }
+
+    func getRegularOrderedTabs() -> [Tab]? {
+        // Get current order
+        guard let tabDisplayOrderDecoded = TabDisplayOrder.decode() else { return nil }
+        var decodedTabUUID = tabDisplayOrderDecoded.regularTabUUID
+        guard decodedTabUUID.count > 0 else { return nil }
+        let filteredTabCopy: [Tab] = filteredTabs.map { $0 }
+        var filteredTabUUIDs: [String] = filteredTabs.map { $0.tabUUID }
+        var regularOrderedTabs: [Tab] = []
+        
+        // Remove any stale uuid from tab display order
+        decodedTabUUID = decodedTabUUID.filter({ uuid in
+            let shouldAdd = filteredTabUUIDs.contains(uuid)
+            filteredTabUUIDs.removeAll{ $0 == uuid }
+            return shouldAdd
+        })
+        
+        // Add missing uuid to tab display order from filtered tab
+        decodedTabUUID.append(contentsOf: filteredTabUUIDs)
+        
+        // Get list of tabs corresponding to the uuids from tab display order
+        decodedTabUUID.forEach { tabUUID in
+            if let tabIndex = filteredTabCopy.firstIndex (where: { t in
+                t.tabUUID == tabUUID
+            }) {
+                regularOrderedTabs.append(filteredTabCopy[tabIndex])
+            }
+        }
+        
+        return regularOrderedTabs.count > 0 ? regularOrderedTabs : nil
+    }
+
+    func saveRegularOrderedTabs(from tabs: [Tab]) {
+        let uuids: [String] = tabs.map{ $0.tabUUID }
+        tabDisplayOrder.regularTabUUID = uuids
+        TabDisplayOrder.encode(tabDisplayOrder: tabDisplayOrder)
+    }
+    
     var tabGroups: [ASGroup<Tab>]?
     var tabsInAllGroups: [Tab]? {
         (tabGroups?.map{$0.groupedItems}.flatMap{$0})
@@ -147,7 +195,12 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         register(self, forTabEvents: .didLoadFavicon, .didChangeURL)
         self.dataStore.removeAll()
         getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
-            tabsToDisplay.forEach {
+            guard tabsToDisplay.count > 0 else { return }
+            let orderedRegularTabs = tabDisplayType == .TopTabTray ? tabsToDisplay : self.getRegularOrderedTabs() ?? tabsToDisplay
+            if self.getRegularOrderedTabs() == nil {
+                self.saveRegularOrderedTabs(from: tabsToDisplay)
+            }
+            orderedRegularTabs.forEach {
                 self.dataStore.insert($0)
             }
             self.recordGroupedTabTelemetry()
@@ -523,7 +576,7 @@ extension TabDisplayManager: UICollectionViewDragDelegate {
     func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         
         let section = TabDisplaySection(rawValue: indexPath.section)
-        guard section != .inactiveTabs, section != .groupedTabs else { return [] }
+        guard tabDisplayType == .TopTabTray || section == .regularTabs else { return [] }
         guard let tab = dataStore.at(indexPath.item) else { return [] }
 
         // Get the tab's current URL. If it is `nil`, check the `sessionData` since
@@ -578,11 +631,25 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
 
         self.tabManager.moveTab(isPrivate: self.isPrivate, fromIndex: sourceIndex, toIndex: destinationIndexPath.item)
 
-        _ = dataStore.remove(tab)
-        dataStore.insert(tab, at: destinationIndexPath.item)
+        if let indexToRemove = filteredTabs.firstIndex(of: tab) {
+            filteredTabs.remove(at: indexToRemove)
+        }
+        
+        filteredTabs.insert(tab, at: destinationIndexPath.item)
 
-        let start = IndexPath(row: sourceIndex, section: TabDisplaySection.regularTabs.rawValue)
-        let end = IndexPath(row: destinationIndexPath.item, section: TabDisplaySection.regularTabs.rawValue)
+        if tabDisplayType == .TabGrid {
+            saveRegularOrderedTabs(from: filteredTabs)
+        }
+
+        dataStore.removeAll()
+        
+        filteredTabs.forEach {
+            dataStore.insert($0)
+        }
+
+        let section = tabDisplayType == .TopTabTray ? 0 : TabDisplaySection.regularTabs.rawValue
+        let start = IndexPath(row: sourceIndex, section: section)
+        let end = IndexPath(row: destinationIndexPath.item, section: section)
         updateWith(animationType: .moveTab) { [weak self] in
             self?.collectionView.moveItem(at: start, to: end)
         }
@@ -592,7 +659,7 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
         let forbiddenOperation = UICollectionViewDropProposal(operation: .forbidden)
         guard let indexPath = destinationIndexPath else { return forbiddenOperation }
         let section = TabDisplaySection(rawValue: indexPath.section)
-        guard section != .inactiveTabs, section != .groupedTabs else { return forbiddenOperation }
+        guard tabDisplayType == .TopTabTray || section == .regularTabs else { return forbiddenOperation }
         guard let localDragSession = session.localDragSession, let item = localDragSession.items.first, let _ = item.localObject as? Tab else {
             return forbiddenOperation
         }
@@ -759,5 +826,32 @@ extension TabDisplayManager: TabManagerDelegate {
 
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
         cancelDragAndGestures()
+    }
+}
+
+extension TabDisplayOrder {
+    static func decode() -> TabDisplayOrder? {
+        if let tabDisplayOrder = TabDisplayOrder.defaults.object(forKey: PrefsKeys.KeyTabDisplayOrder) as? Data {
+            do {
+                let jsonDecoder = JSONDecoder()
+                let order = try jsonDecoder.decode(TabDisplayOrder.self, from: tabDisplayOrder)
+                return order
+            }
+            catch let error as NSError {
+                Sentry.shared.send(message: "Error: Unable to decode tab display order", tag: SentryTag.tabDisplayManager, severity: .error, description: error.debugDescription)
+            }
+        }
+        return nil
+    }
+    
+    static func encode(tabDisplayOrder: TabDisplayOrder?) {
+        guard let tabDisplayOrder = tabDisplayOrder, !tabDisplayOrder.regularTabUUID.isEmpty else {
+            TabDisplayOrder.defaults.removeObject(forKey: PrefsKeys.KeyTabDisplayOrder)
+            return
+        }
+        let encoder = JSONEncoder()
+        if let encoded = try? encoder.encode(tabDisplayOrder) {
+            TabDisplayOrder.defaults.set(encoded, forKey: PrefsKeys.KeyTabDisplayOrder)
+        }
     }
 }
