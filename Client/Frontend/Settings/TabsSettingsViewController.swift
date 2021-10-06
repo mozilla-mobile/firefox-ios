@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-class TabsSettingsViewController: SettingsTableViewController {
+class TabsSettingsViewController: SettingsTableViewController, FeatureFlagsProtocol {
 
     init() {
         super.init(style: .grouped)
@@ -29,8 +29,13 @@ class TabsSettingsViewController: SettingsTableViewController {
                                            titleText: NSAttributedString(string: .SettingsCustomizeTabsTabGroups))
 
 
-        sectionItems.append(inactiveTabsSetting)
-        sectionItems.append(tabGroupsSetting)
+        if featureFlags.isFeatureActive(.inactiveTabs) {
+            sectionItems.append(inactiveTabsSetting)
+        }
+
+        if featureFlags.isFeatureActive(.groupedTabs) {
+            sectionItems.append(tabGroupsSetting)
+        }
 
         return [SettingSection(title: NSAttributedString(string: .SettingsCustomizeTabsSectionTitle),
                                children: sectionItems)]

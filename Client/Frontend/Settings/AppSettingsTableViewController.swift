@@ -11,7 +11,7 @@ enum AppSettingsDeeplinkOption {
 }
 
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
-class AppSettingsTableViewController: SettingsTableViewController {
+class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsProtocol {
     var deeplinkTo: AppSettingsDeeplinkOption?
 
     override func viewDidLoad() {
@@ -64,7 +64,6 @@ class AppSettingsTableViewController: SettingsTableViewController {
             SearchSetting(settings: self),
             NewTabPageSetting(settings: self),
             HomeSetting(settings: self),
-            TabsSetting(),
             OpenWithSetting(settings: self),
             ThemeSetting(settings: self),
             BoolSetting(prefs: prefs, prefKey: PrefsKeys.KeyBlockPopups, defaultValue: true,
@@ -73,6 +72,9 @@ class AppSettingsTableViewController: SettingsTableViewController {
 
         generalSettings.insert(SiriPageSetting(settings: self), at: 5)
 
+        if featureFlags.isFeatureActive(.groupedTabs) || featureFlags.isFeatureActive(.inactiveTabs) {
+            generalSettings.insert(TabsSetting(), at: 3)
+        }
 
         let accountChinaSyncSetting: [Setting]
         if !AppInfo.isChinaEdition {

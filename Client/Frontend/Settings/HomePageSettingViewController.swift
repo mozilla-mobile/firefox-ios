@@ -89,6 +89,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
         sectionItems.append(pocketSetting)
 
         return SettingSection(title: NSAttributedString(string: Strings.SettingsTopSitesCustomizeTitle),
+                              footerTitle: NSAttributedString(string: .SettingsCustomizeHomeDescritpion),
                               children: sectionItems)
     }
 

@@ -1052,6 +1052,10 @@ extension FirefoxHomeViewController {
 
     @objc func openCustomizeHomeSettings() {
         homePanelDelegate?.homePanelDidRequestToCustomizeHomeSettings()
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .firefoxHomepage,
+                                     value: .customizeHomepageButton)
     }
 }
 
