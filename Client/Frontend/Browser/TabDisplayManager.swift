@@ -137,13 +137,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         
         return regularOrderedTabs.count > 0 ? regularOrderedTabs : nil
     }
-    
-    func shouldSaveOrderedTabs() -> Bool {
-        guard let currentSavedTabs = getRegularOrderedTabs() else { return true }
-        guard (Set(currentSavedTabs) == Set(filteredTabs)) else { return true }
-        return false
-    }
-    
+
     func saveRegularOrderedTabs(from tabs: [Tab]) {
         let uuids: [String] = tabs.map{ $0.tabUUID }
         tabDisplayOrder.regularTabUUID = uuids
@@ -202,7 +196,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         self.dataStore.removeAll()
         getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
             guard tabsToDisplay.count > 0 else { return }
-            let orderedRegularTabs = self.getRegularOrderedTabs() ?? tabsToDisplay
+            let orderedRegularTabs = tabDisplayType == .TopTabTray ? tabsToDisplay : self.getRegularOrderedTabs() ?? tabsToDisplay
             if self.getRegularOrderedTabs() == nil {
                 self.saveRegularOrderedTabs(from: tabsToDisplay)
             }
@@ -642,8 +636,11 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
         }
         
         filteredTabs.insert(tab, at: destinationIndexPath.item)
-        saveRegularOrderedTabs(from: filteredTabs)
-        
+
+        if tabDisplayType == .TabGrid {
+            saveRegularOrderedTabs(from: filteredTabs)
+        }
+
         dataStore.removeAll()
         
         filteredTabs.forEach {
