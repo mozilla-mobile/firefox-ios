@@ -56,9 +56,11 @@ public struct PrefsKeys {
     public static let AppExtensionTelemetryOpenUrl = "AppExtensionTelemetryOpenUrl"
     public static let AppExtensionTelemetryEventArray = "AppExtensionTelemetryEvents"
     public static let KeyBlockPopups = "blockPopups"
-    public static let recentlySavedSectionEnabled = "recentlySavedSectionEnabled"
-    public static let jumpBackInSectionEnabled = "jumpBackInSectionEnabled"
-    
+    public static let RecentlySavedSectionEnabled = "recentlySavedSectionEnabled"
+    public static let JumpBackInSectionEnabled = "jumpBackInSectionEnabled"
+    public static let LibraryShortcutsEnabled = "libraryShortcutsSectionEnabled"
+    public static let TopSitesSectionEnabled = "topSitesSectionEnabled"
+
     // Tabs Tray
     public static let KeyEnableInactiveTabs = "KeyInactiveTabs"
     public static let KeyInactiveTabsModel = "KeyInactiveTabsModel"

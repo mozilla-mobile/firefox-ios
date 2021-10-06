@@ -559,8 +559,7 @@ class ToggleChronTabs: HiddenSetting, FeatureFlagsProtocol {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let currentStatus = featureFlags.isFeatureActiveForBuild(.chronologicalTabs)
-        featureFlags.set(.chronologicalTabs, to: !currentStatus)
+        featureFlags.toggleBuildFeature(.chronologicalTabs)
         updateCell(navigationController)
     }
 
@@ -579,8 +578,7 @@ class ToggleJumpBackInSection: HiddenSetting, FeatureFlagsProtocol {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let currentStatus = featureFlags.isFeatureActiveForBuild(.jumpBackIn)
-        featureFlags.set(.jumpBackIn, to: !currentStatus)
+        featureFlags.toggleBuildFeature(.jumpBackIn)
         updateCell(navigationController)
     }
 
@@ -599,8 +597,7 @@ class TogglePullToRefresh: HiddenSetting, FeatureFlagsProtocol {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let currentStatus = featureFlags.isFeatureActiveForBuild(.pullToRefresh)
-        featureFlags.set(.pullToRefresh, to: !currentStatus)
+        featureFlags.toggleBuildFeature(.pullToRefresh)
         updateCell(navigationController)
     }
 
@@ -619,8 +616,7 @@ class ToggleRecentlySavedSection: HiddenSetting, FeatureFlagsProtocol {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let currentStatus = featureFlags.isFeatureActiveForBuild(.recentlySaved)
-        featureFlags.set(.recentlySaved, to: !currentStatus)
+        featureFlags.toggleBuildFeature(.recentlySaved)
         updateCell(navigationController)
     }
 
@@ -639,8 +635,7 @@ class ToggleInactiveTabs: HiddenSetting, FeatureFlagsProtocol {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let currentStatus = featureFlags.isFeatureActiveForBuild(.inactiveTabs)
-        featureFlags.set(.inactiveTabs, to: !currentStatus)
+        featureFlags.toggleBuildFeature(.inactiveTabs)
         InactiveTabModel.hasRunInactiveTabFeatureBefore = false
         updateCell(navigationController)
     }
@@ -660,8 +655,7 @@ class ToggleGroupedTabs: HiddenSetting, FeatureFlagsProtocol {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let currentStatus = featureFlags.isFeatureActiveForBuild(.groupedTabs)
-        featureFlags.set(.groupedTabs, to: !currentStatus)
+        featureFlags.toggleBuildFeature(.groupedTabs)
         updateCell(navigationController)
     }
 

@@ -52,9 +52,47 @@ struct FlaggableFeature {
         switch featureID {
         case .startAtHome:
             return StartAtHomeSetting.afterFourHours.rawValue
+        case .jumpBackIn, .libraryShortcuts, .pocket, .recentlySaved, .topSites:
+            return checkNimbusHomepageFeatures()?.rawValue ?? UserFeaturePreference.disabled.rawValue
         default:
-            return UserFeaturePreference.enabled
+            return UserFeaturePreference.disabled.rawValue
         }
+    }
+
+    private func checkNimbusHomepageFeatures() -> UserFeaturePreference? {
+        var homePageExperiments = Experiments.shared.withVariables(featureId: .homescreen,
+                                                                   sendExposureEvent: false) {
+            Homescreen(variables: $0)
+        }
+
+        var sectionID: Homescreen.SectionId? = nil
+
+        switch featureID {
+        case .jumpBackIn:
+            sectionID = .jumpBackIn
+        case .libraryShortcuts:
+            sectionID = .libraryShortcuts
+        case .recentlySaved:
+            sectionID = .recentlySaved
+        case .pocket:
+            sectionID = .pocket
+        case .topSites:
+            sectionID = .topSites
+        default: break
+        }
+
+        if let sectionID = sectionID,
+           let homePageFeature = homePageExperiments.sectionsEnabled[sectionID] {
+            
+            switch homePageFeature {
+            case true:
+                return UserFeaturePreference.enabled
+            case false:
+                return UserFeaturePreference.disabled
+            }
+        }
+
+        return nil
     }
 
     private var featureOptionsKey: String? {
@@ -74,15 +112,23 @@ struct FlaggableFeature {
     /// Allows fine grain control over a feature, by allowing to directly set the state to ON
     /// or OFF, and also set the features option as an Int
     public func setUserPrefsForFeatureTo(_ option: String) {
-        guard let option = option, let optionsKey = featureOptionsKey else { return }
+        guard !option.isEmpty,
+              let optionsKey = featureOptionsKey
+        else { return }
+        
         profile.prefs.setString(option, forKey: optionsKey)
     }
 
-    /// Allows fine grain control over a feature, by allowing to directly set the state to ON
-    /// or OFF, and also set the features option as an Int
-    public func toggleBuildFeatureTo(_ state: Bool) {
+    /// Toggles a feature On or Off, and saves the status to UserDefaults.
+    ///
+    /// Not all features are user togglable. If there exists no feature key - as defined
+    /// in the `featureKey()` function - with which to write to UserDefaults, then the
+    /// feature cannot be turned on/off and its state can only be set when initialized,
+    /// based on build channel. Furthermore, this controls build availability, and
+    /// does not reflect user preferences.
+    public func toggleBuildFeature() {
         guard let featureKey = featureKey() else { return }
-        profile.prefs.setBool(state, forKey: featureKey)
+        profile.prefs.setBool(!isActiveForBuild, forKey: featureKey)
     }
 
     public func featureKey() -> String? {
@@ -94,15 +140,20 @@ struct FlaggableFeature {
         case .groupedTabs:
             return PrefsKeys.KeyEnableGroupedTabs
         case .jumpBackIn:
-            return PrefsKeys.jumpBackInSectionEnabled
+            return PrefsKeys.JumpBackInSectionEnabled
+        case .libraryShortcuts:
+            return PrefsKeys.LibraryShortcutsEnabled
+        case .pocket:
+            return PrefsKeys.ASPocketStoriesVisible
         case .pullToRefresh:
             return PrefsKeys.PullToRefresh
         case .recentlySaved:
-            return PrefsKeys.recentlySavedSectionEnabled
+            return PrefsKeys.RecentlySavedSectionEnabled
         case .startAtHome:
             return PrefsKeys.StartAtHome
-        default:
-            return nil
+        case .topSites:
+            return PrefsKeys.TopSitesSectionEnabled
+        default: return nil
         }
     }
 }

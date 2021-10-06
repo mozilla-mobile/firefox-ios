@@ -19,11 +19,14 @@ enum FeatureFlagName: String, CaseIterable {
     case inactiveTabs
     case groupedTabs
     case jumpBackIn
+    case libraryShortcuts
     case nimbus
+    case pocket
     case pullToRefresh
     case recentlySaved
     case shakeToRestore
     case startAtHome
+    case topSites
 }
 
 /// Manages feature flags for the application.
@@ -60,14 +63,14 @@ class FeatureFlagsManager {
     /// Function must have context when called: `let foo: Type = featureOption(.example)`
     /// Any feature with an option attached must be listed, and further converted into
     /// it's appropriate type in the switch statement.
-    public func featureOption<T>(_ featureID: FeatureFlagName) -> T? {
+    public func getUserPreferenceFor<T>(_ featureID: FeatureFlagName) -> T? {
         guard let feature = features[featureID],
-              let featureOption = feature.userPreferenceSetTo
+              let userSetting = feature.userPreferenceSetTo
         else { return nil }
 
         switch featureID {
-        case .startAtHome: return StartAtHomeSetting(rawValue: featureOption) as? T
-        default: return nil
+        case .startAtHome: return StartAtHomeSetting(rawValue: userSetting) as? T
+        default: return UserFeaturePreference(rawValue: userSetting) as? T
         }
     }
 
@@ -76,31 +79,32 @@ class FeatureFlagsManager {
         return features[featureID]?.featureKey()
     }
 
-
-    /// Main interface for setting a feature's state without options
-    public func set(_ featureID: FeatureFlagName, to state: Bool) {
-        let nilItem: NoOption? = nil
-        set(featureID, to: state, with: nilItem)
+    public func toggleBuildFeature(_ featureID: FeatureFlagName) {
+        features[featureID]?.toggleBuildFeature()
     }
 
     /// Main interface for setting a feature's state and options. Options are enums of
     /// `FlaggableFeatureOptions` type and also conform to Int.
-    public func set<T:FlaggableFeatureOptions>(_ featureID: FeatureFlagName, to state: Bool, with option: T?) {
-        var optionAsString: String?
+    public func setUserPreferenceFor<T:FlaggableFeatureOptions>(_ featureID: FeatureFlagName, to option: T) {
 
         switch featureID {
         case .startAtHome:
-            if let option = option as? StartAtHomeSetting { optionAsString = option.rawValue }
+            if let option = option as? StartAtHomeSetting {
+                features[featureID]?.setUserPrefsForFeatureTo(option.rawValue)
+            }
         default:
-            optionAsString = nil
+            if let option = option as? UserFeaturePreference {
+                features[featureID]?.setUserPrefsForFeatureTo(option.rawValue)
+            }
         }
-
-        features[featureID]?.setUserPrefsForFeatureTo(state, with: optionAsString)
     }
 
     /// Sets up features with default channel availablility. For ease of use, please add
     /// new features alphabetically.
-    public func setupFeatures(with profile: Profile) {
+    ///
+    /// This should ONLY be called when instatiating the feature flag system,
+    /// and never again.
+    public func initializeFeatures(with profile: Profile) {
         features.removeAll()
 
         let chronTabs = FlaggableFeature(withID: .chronologicalTabs,
@@ -123,12 +127,23 @@ class FeatureFlagsManager {
                                           enabledFor: [.beta, .developer])
         features[.jumpBackIn] = jumpBackIn
 
+        let libraryShortcuts = FlaggableFeature(withID: .libraryShortcuts,
+                                      and: profile,
+                                      enabledFor: [.release, .beta, .developer])
+        features[.libraryShortcuts] = libraryShortcuts
+
         /// Use the Nimbus experimentation platform. If this is `true` then
         /// `Experiments.shared` provides access to Nimbus. If false, it is a dummy object.
         let nimbus = FlaggableFeature(withID: .nimbus,
                                       and: profile,
                                       enabledFor: [.release, .beta, .developer])
         features[.nimbus] = nimbus
+
+        let pocket = FlaggableFeature(withID: .pocket,
+                                      and: profile,
+                                      enabledFor: [.release, .beta, .developer])
+        features[.pocket] = pocket
+
 
         let pullToRefresh = FlaggableFeature(withID: .pullToRefresh,
                                              and: profile,
@@ -149,5 +164,11 @@ class FeatureFlagsManager {
                                            and: profile,
                                            enabledFor: [])
         features[.startAtHome] = startAtHome
+
+        let topSites = FlaggableFeature(withID: .topSites,
+                                      and: profile,
+                                      enabledFor: [.release, .beta, .developer])
+        features[.topSites] = topSites
+
     }
 }

@@ -14,16 +14,14 @@ import Foundation
 
 protocol FlaggableFeatureOptions { }
 
-enum UserFeaturePreferenceDisabled: String, FlaggableFeatureOptions {
+enum StartAtHomeSetting: String, FlaggableFeatureOptions {
+    case afterFourHours
+    case always
     case disabled
 }
 
-enum StartAtHomeSetting: String, UserFeaturePreferenceDisabled, FlaggableFeatureOptions {
-    case afterFourHours
-    case always
-}
 
-
-enum UserFeaturePreference: String, UserFeaturePreferenceDisabled, FlaggableFeatureOptions {
+enum UserFeaturePreference: String, FlaggableFeatureOptions {
     case enabled
+    case disabled
 }

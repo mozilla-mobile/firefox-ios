@@ -228,7 +228,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     var isJumpBackInSectionEnabled: Bool {
         get {
             guard featureFlags.isFeatureActiveForBuild(.jumpBackIn),
-                  homescreen.sectionsEnabled[.jumpBackIn] == true
+                  homescreen.sectionsEnabled[.topSites] == true,
+                  featureFlags.getUserPreferenceFor(.jumpBackIn) == UserFeaturePreference.enabled
             else { return false }
 
             let tabManager = BrowserViewController.foregroundBVC().tabManager

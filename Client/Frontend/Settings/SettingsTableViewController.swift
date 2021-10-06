@@ -233,23 +233,28 @@ class BoolSetting: Setting, FeatureFlagsProtocol {
     }
 
     @objc func switchValueChanged(_ control: UISwitch) {
+        writeBool(control)
+        settingDidChange?(control.isOn)
+
         if let featureFlagName = featureFlagName {
             guard let key = featureFlags.featureKey(for: featureFlagName) else { return }
-            featureFlags.set(featureFlagName, to: control.isOn)
-            settingDidChange?(control.isOn)
-            TelemetryWrapper.recordEvent(category: .action, method: .change, object: .setting, extras: ["pref": key as Any, "to": control.isOn])
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .change,
+                                         object: .setting,
+                                         extras: ["pref": key as Any, "to": control.isOn])
 
         } else {
-            writeBool(control)
-            settingDidChange?(control.isOn)
-            TelemetryWrapper.recordEvent(category: .action, method: .change, object: .setting, extras: ["pref": prefKey as Any, "to": control.isOn])
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .change,
+                                         object: .setting,
+                                         extras: ["pref": prefKey as Any, "to": control.isOn])
         }
     }
 
     // These methods allow a subclass to control how the pref is saved
     func displayBool(_ control: UISwitch) {
         if let featureFlagName = featureFlagName {
-            control.isOn = featureFlags.isFeatureActiveForBuild(featureFlagName)
+            control.isOn = featureFlags.getUserPreferenceFor(featureFlagName) == UserFeaturePreference.enabled
 
         } else {
             guard let key = prefKey, let defaultValue = defaultValue else {
@@ -260,10 +265,16 @@ class BoolSetting: Setting, FeatureFlagsProtocol {
     }
 
     func writeBool(_ control: UISwitch) {
-        guard let key = prefKey else {
-            return
+        if let featureFlagName = featureFlagName {
+            let controlState = control.isOn ? UserFeaturePreference.enabled : UserFeaturePreference.disabled
+            featureFlags.setUserPreferenceFor(featureFlagName,
+                                              to: controlState)
+        } else {
+            guard let key = prefKey else {
+                return
+            }
+            prefs?.setBool(control.isOn, forKey: key)
         }
-        prefs?.setBool(control.isOn, forKey: key)
     }
 }
 
