@@ -28,14 +28,15 @@ class DismissableNavigationViewController: UINavigationController, OnViewDismiss
 }
 
 extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
-    func showTabTray() {
+    func showTabTray(withFocusOnUnselectedTab tabToFocus: Tab? = nil) {
         Sentry.shared.clearBreadcrumbs()
 
         updateFindInPageVisibility(visible: false)
 
         self.tabTrayViewController = TabTrayViewController(tabTrayDelegate: self,
-                                                          profile: profile,
-                                                          showChronTabs: shouldShowChronTabs())
+                                                           profile: profile,
+                                                           showChronTabs: shouldShowChronTabs(),
+                                                           tabToFocus: tabToFocus)
         
         tabTrayViewController?.openInNewTab = { url, isPrivate in
             let tab = self.tabManager.addTab(URLRequest(url: url), afterTab: self.tabManager.selectedTab, isPrivate: isPrivate)

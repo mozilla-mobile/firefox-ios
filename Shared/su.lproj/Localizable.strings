@@ -901,7 +901,7 @@
 "Menu.TrackingProtectionFingerprintersBlocked.Title" = "Fingerprinter";
 
 /* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "Kuki Palacak Loka-Loka anu Dipeungpeuk";
+"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "Réréméh Palacak Meuntas-Loka anu Dipeungpeuk";
 
 /* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
 "Menu.TrackingProtectionListTitle.Cryptominers" = "Palacak Sidik anu Dipeungpeuk";

@@ -147,6 +147,7 @@ extension AddCredentialViewController: UITableViewDataSource {
             websiteField = loginCell.descriptionLabel
             loginCell.placeholder = "https://www.example.com"
             websiteField?.accessibilityIdentifier = "websiteField"
+            websiteField?.keyboardType = .URL
             loginCell.isEditingFieldData = true
             return loginCell
         }

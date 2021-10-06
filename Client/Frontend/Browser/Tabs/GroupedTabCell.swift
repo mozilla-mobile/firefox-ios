@@ -19,7 +19,7 @@ protocol GroupedTabCellDelegate {
 
 class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UITableViewDelegate, GroupedTabsDelegate {
     var delegate: GroupedTabCellDelegate?
-    var tabGroups: [String: [Tab]]?
+    var tabGroups: [ASGroup<Tab>]?
     var selectedTab: Tab? = nil
     static let Identifier = "GroupedTabCellIdentifier"
     let GroupedTabsTableIdentifier = "GroupedTabsTableIdentifier"
@@ -67,7 +67,7 @@ class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UI
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tabGroups?.keys.count ?? 0
+        return tabGroups?.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -77,8 +77,8 @@ class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UI
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: GroupedTabCellIdentifier, for: indexPath) as! GroupedTabContainerCell
         cell.delegate = self
-        cell.tabs = tabGroups?.map { $0.value }[indexPath.item]
-        cell.titleLabel.text = tabGroups?.map { $0.key }[indexPath.item] ?? ""
+        cell.tabs = tabGroups?.map { $0.groupedItems }[indexPath.item]
+        cell.titleLabel.text = tabGroups?.map { $0.searchTerm }[indexPath.item] ?? ""
         cell.collectionView.reloadData()
         cell.selectedTab = selectedTab
         if let selectedTab = selectedTab { cell.focusTab(tab: selectedTab) }
@@ -119,9 +119,7 @@ class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UI
 
     func scrollToSelectedGroup() {
         if let searchTerm = selectedTab?.tabGroupData.tabAssociatedSearchTerm {
-            if let index = tabGroups?.map({ $0.key }).firstIndex(where: { t in
-                t == searchTerm
-            }) {
+            if let index = tabGroups?.firstIndex(where: { $0.searchTerm == searchTerm}) {
                 tableView.scrollToRow(at: IndexPath(row: index , section: 0) , at: .bottom , animated: true)
             }
         }
