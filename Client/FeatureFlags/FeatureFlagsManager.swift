@@ -37,7 +37,7 @@ enum FeatureFlagName: String, CaseIterable {
 /// in the `PrefsKeys` struct, and then also add it to the `FlaggableFeature.featureKey`
 /// function to allow the flag status to be changed.
 /// 4. Add the `FeatureFlagsProtocol` protocol to the class you wish to use the feature
-/// flag in, and access the required flag using `featureFlags.isFeatureActive`.
+/// flag in, and access the required flag using `featureFlags.isFeatureActiveForBuild`.
 class FeatureFlagsManager {
 
     /// This Singleton should only be accessed directly in places where the
@@ -50,7 +50,7 @@ class FeatureFlagsManager {
     private var features: [FeatureFlagName: FlaggableFeature] = [:]
 
     /// Used as the main way to find out whether a feature is active or not.
-    public func isFeatureActive(_ featureID: FeatureFlagName) -> Bool {
+    public func isFeatureActiveForBuild(_ featureID: FeatureFlagName) -> Bool {
         guard let feature = features[featureID] else { return false }
         return feature.isActiveForBuild
     }

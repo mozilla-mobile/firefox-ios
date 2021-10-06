@@ -94,7 +94,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
     }
 
     private func setupStartAtHomeSection() -> SettingSection? {
-        guard featureFlags.isFeatureActive(.startAtHome) else { return nil }
+        guard featureFlags.isFeatureActiveForBuild(.startAtHome) else { return nil }
         guard let startAtHomeSetting: StartAtHomeSetting = featureFlags.featureOption(.startAtHome) else { return nil }
         currentStartAtHomeSetting = startAtHomeSetting
 

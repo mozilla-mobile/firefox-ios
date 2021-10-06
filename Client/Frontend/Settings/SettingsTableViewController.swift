@@ -249,7 +249,7 @@ class BoolSetting: Setting, FeatureFlagsProtocol {
     // These methods allow a subclass to control how the pref is saved
     func displayBool(_ control: UISwitch) {
         if let featureFlagName = featureFlagName {
-            control.isOn = featureFlags.isFeatureActive(featureFlagName)
+            control.isOn = featureFlags.isFeatureActiveForBuild(featureFlagName)
 
         } else {
             guard let key = prefKey, let defaultValue = defaultValue else {

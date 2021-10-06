@@ -214,7 +214,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     }
 
     var isRecentlySavedSectionEnabled: Bool {
-        guard featureFlags.isFeatureActive(.recentlySaved),
+        guard featureFlags.isFeatureActiveForBuild(.recentlySaved),
               homescreen.sectionsEnabled[.recentlySaved] == true
         else { return false }
 
@@ -227,7 +227,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
 
     var isJumpBackInSectionEnabled: Bool {
         get {
-            guard featureFlags.isFeatureActive(.jumpBackIn),
+            guard featureFlags.isFeatureActiveForBuild(.jumpBackIn),
                   homescreen.sectionsEnabled[.jumpBackIn] == true
             else { return false }
 

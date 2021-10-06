@@ -28,7 +28,7 @@ class TabScrollingController: NSObject, FeatureFlagsProtocol {
         didSet {
             self.scrollView?.addGestureRecognizer(panGesture)
             scrollView?.delegate = self
-            featureFlags.isFeatureActive(.pullToRefresh) ? configureRefreshControl() : nil
+            featureFlags.isFeatureActiveForBuild(.pullToRefresh) ? configureRefreshControl() : nil
         }
     }
 

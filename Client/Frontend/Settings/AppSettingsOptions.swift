@@ -553,13 +553,13 @@ class ExperimentsSettings: HiddenSetting {
 
 class ToggleChronTabs: HiddenSetting, FeatureFlagsProtocol {
     override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureActive(.chronologicalTabs) ? "OFF" : "ON"
+        let toNewStatus = featureFlags.isFeatureActiveForBuild(.chronologicalTabs) ? "OFF" : "ON"
         return NSAttributedString(string: "Toggle chronological tabs \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let currentStatus = featureFlags.isFeatureActive(.chronologicalTabs)
+        let currentStatus = featureFlags.isFeatureActiveForBuild(.chronologicalTabs)
         featureFlags.set(.chronologicalTabs, to: !currentStatus)
         updateCell(navigationController)
     }
@@ -573,13 +573,13 @@ class ToggleChronTabs: HiddenSetting, FeatureFlagsProtocol {
 
 class ToggleJumpBackInSection: HiddenSetting, FeatureFlagsProtocol {
     override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureActive(.jumpBackIn) ? "OFF" : "ON"
+        let toNewStatus = featureFlags.isFeatureActiveForBuild(.jumpBackIn) ? "OFF" : "ON"
         return NSAttributedString(string: "Toggle Jump Back In section \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let currentStatus = featureFlags.isFeatureActive(.jumpBackIn)
+        let currentStatus = featureFlags.isFeatureActiveForBuild(.jumpBackIn)
         featureFlags.set(.jumpBackIn, to: !currentStatus)
         updateCell(navigationController)
     }
@@ -593,13 +593,13 @@ class ToggleJumpBackInSection: HiddenSetting, FeatureFlagsProtocol {
 
 class TogglePullToRefresh: HiddenSetting, FeatureFlagsProtocol {
     override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureActive(.pullToRefresh) ? "OFF" : "ON"
+        let toNewStatus = featureFlags.isFeatureActiveForBuild(.pullToRefresh) ? "OFF" : "ON"
         return NSAttributedString(string: "Toggle Pull to Refresh \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let currentStatus = featureFlags.isFeatureActive(.pullToRefresh)
+        let currentStatus = featureFlags.isFeatureActiveForBuild(.pullToRefresh)
         featureFlags.set(.pullToRefresh, to: !currentStatus)
         updateCell(navigationController)
     }
@@ -613,13 +613,13 @@ class TogglePullToRefresh: HiddenSetting, FeatureFlagsProtocol {
 
 class ToggleRecentlySavedSection: HiddenSetting, FeatureFlagsProtocol {
     override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureActive(.recentlySaved) ? "OFF" : "ON"
+        let toNewStatus = featureFlags.isFeatureActiveForBuild(.recentlySaved) ? "OFF" : "ON"
         return NSAttributedString(string: "Toggle Recently Saved Section \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let currentStatus = featureFlags.isFeatureActive(.recentlySaved)
+        let currentStatus = featureFlags.isFeatureActiveForBuild(.recentlySaved)
         featureFlags.set(.recentlySaved, to: !currentStatus)
         updateCell(navigationController)
     }
@@ -633,13 +633,13 @@ class ToggleRecentlySavedSection: HiddenSetting, FeatureFlagsProtocol {
 
 class ToggleInactiveTabs: HiddenSetting, FeatureFlagsProtocol {
     override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureActive(.inactiveTabs) ? "OFF" : "ON"
+        let toNewStatus = featureFlags.isFeatureActiveForBuild(.inactiveTabs) ? "OFF" : "ON"
         return NSAttributedString(string: "Toggle inactive tabs \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let currentStatus = featureFlags.isFeatureActive(.inactiveTabs)
+        let currentStatus = featureFlags.isFeatureActiveForBuild(.inactiveTabs)
         featureFlags.set(.inactiveTabs, to: !currentStatus)
         InactiveTabModel.hasRunInactiveTabFeatureBefore = false
         updateCell(navigationController)
@@ -654,13 +654,13 @@ class ToggleInactiveTabs: HiddenSetting, FeatureFlagsProtocol {
 
 class ToggleGroupedTabs: HiddenSetting, FeatureFlagsProtocol {
     override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureActive(.groupedTabs) ? "OFF" : "ON"
+        let toNewStatus = featureFlags.isFeatureActiveForBuild(.groupedTabs) ? "OFF" : "ON"
         return NSAttributedString(string: "Toggle grouped tabs \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let currentStatus = featureFlags.isFeatureActive(.groupedTabs)
+        let currentStatus = featureFlags.isFeatureActiveForBuild(.groupedTabs)
         featureFlags.set(.groupedTabs, to: !currentStatus)
         updateCell(navigationController)
     }

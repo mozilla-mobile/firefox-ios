@@ -29,11 +29,11 @@ class TabsSettingsViewController: SettingsTableViewController, FeatureFlagsProto
                                            titleText: NSAttributedString(string: .SettingsCustomizeTabsTabGroups))
 
 
-        if featureFlags.isFeatureActive(.inactiveTabs) {
+        if featureFlags.isFeatureActiveForBuild(.inactiveTabs) {
             sectionItems.append(inactiveTabsSetting)
         }
 
-        if featureFlags.isFeatureActive(.groupedTabs) {
+        if featureFlags.isFeatureActiveForBuild(.groupedTabs) {
             sectionItems.append(tabGroupsSetting)
         }
 

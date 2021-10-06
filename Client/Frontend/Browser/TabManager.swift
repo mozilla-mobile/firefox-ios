@@ -116,7 +116,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         assert(Thread.isMainThread)
         var eligibleTabs: [Tab]
 
-        if featureFlags.isFeatureActive(.inactiveTabs) {
+        if featureFlags.isFeatureActiveForBuild(.inactiveTabs) {
             eligibleTabs = InactiveTabViewModel.getActiveEligibleTabsFrom(normalTabs, profile: profile)
         } else {
             eligibleTabs = normalTabs

@@ -89,7 +89,7 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
                 shouldShowChronTabs = chronDebugValue!
             // Respect build channel based settings
             } else if chronDebugValue == nil {
-                if featureFlags.isFeatureActive(.chronologicalTabs) {
+                if featureFlags.isFeatureActiveForBuild(.chronologicalTabs) {
                     shouldShowChronTabs = true
                 } else {
                     // Respect LP value

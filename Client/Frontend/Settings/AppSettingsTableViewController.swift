@@ -72,7 +72,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
 
         generalSettings.insert(SiriPageSetting(settings: self), at: 5)
 
-        if featureFlags.isFeatureActive(.groupedTabs) || featureFlags.isFeatureActive(.inactiveTabs) {
+        if featureFlags.isFeatureActiveForBuild(.groupedTabs) || featureFlags.isFeatureActiveForBuild(.inactiveTabs) {
             generalSettings.insert(TabsSetting(), at: 3)
         }
 

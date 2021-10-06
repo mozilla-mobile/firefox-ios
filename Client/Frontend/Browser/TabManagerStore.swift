@@ -33,7 +33,7 @@ class TabManagerStore: FeatureFlagsProtocol {
 
     var shouldOpenHome: Bool {
         let isColdLaunch = NSUserDefaultsPrefs(prefix: "profile").boolForKey("isColdLaunch")
-        guard let coldLaunch = isColdLaunch, featureFlags.isFeatureActive(.startAtHome) else { return false }
+        guard let coldLaunch = isColdLaunch, featureFlags.isFeatureActiveForBuild(.startAtHome) else { return false }
         guard let setting: StartAtHomeSetting = featureFlags.featureOption(.startAtHome) else { return false }
 
         let lastActiveTimestamp = UserDefaults.standard.object(forKey: "LastActiveTimestamp") as? Date ?? Date()
