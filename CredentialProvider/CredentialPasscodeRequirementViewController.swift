@@ -4,6 +4,7 @@
 
 import UIKit
 import LocalAuthentication
+import Shared
 
 protocol CredentialPasscodeRequirementViewControllerDelegate {
     func credentialPasscodeRequirementViewControllerDidDismiss()
@@ -26,8 +27,8 @@ class CredentialPasscodeRequirementViewController: UIViewController {
     
     lazy private var warningLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 17)
-        label.text = "\nAutoFill with Firefox can only be used on devices that have a passcode set.\n"
+        label.font = DynamicFontHelper().MediumSizeRegularWeightAS
+        label.text = .LoginsPasscodeRequirementWarning
         label.numberOfLines = 0
         label.textAlignment = .center
         label.backgroundColor = UIColor.Photon.Red10
@@ -41,21 +42,13 @@ class CredentialPasscodeRequirementViewController: UIViewController {
         button.backgroundColor = .systemRed
         button.layer.cornerRadius = 8
         let imageWidth = button.imageView?.frame.width ?? 0.0
-        button.setTitle("Cancel", for: .normal)
+        button.setTitle(Strings.CancelString, for: .normal)
         button.titleLabel?.font = DynamicFontHelper().MediumSizeBoldFontAS
         button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
         button.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         return button
     }()
-    
-    init() {
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.CredentialProvider.welcomeScreenBackgroundColor
@@ -81,7 +74,7 @@ class CredentialPasscodeRequirementViewController: UIViewController {
     func addViewConstraints() {
         logoImageView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview().multipliedBy(0.9)
+            make.centerY.equalToSuperview().multipliedBy(0.66)
         }
         
         taglineLabel.snp.makeConstraints { make in

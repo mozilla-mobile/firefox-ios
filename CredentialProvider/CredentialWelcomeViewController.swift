@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import Shared
 
 protocol CredentialWelcomeViewControllerDelegate {
     func credentialWelcomeViewControllerDidCancel()
@@ -32,7 +33,7 @@ class CredentialWelcomeViewController: UIViewController {
     
     lazy private var cancelButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Cancel", for: .normal)
+        button.setTitle(Strings.CancelString, for: .normal)
         button.addTarget(self, action: #selector(self.cancelButtonTapped(_:)), for: .touchUpInside)
         return button
     }()
@@ -42,20 +43,12 @@ class CredentialWelcomeViewController: UIViewController {
         button.backgroundColor = UIColor.Photon.Blue50
         button.layer.cornerRadius = 8
         let imageWidth = button.imageView?.frame.width ?? 0.0
-        button.setTitle("Turn on AutoFill", for: .normal)
+        button.setTitle(String.LoginsWelcomeTurnOnAutoFillButtonTitle, for: .normal)
         button.titleLabel?.font = DynamicFontHelper().MediumSizeBoldFontAS
         button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
         button.addTarget(self, action: #selector(proceedButtonTapped), for: .touchUpInside)
         return button
     }()
-    
-    init() {
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -84,7 +77,7 @@ class CredentialWelcomeViewController: UIViewController {
     func addViewConstraints() {
         logoImageView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview().multipliedBy(0.9)
+            make.centerY.equalToSuperview().multipliedBy(0.66)
         }
         
         taglineLabel.snp.makeConstraints { make in
