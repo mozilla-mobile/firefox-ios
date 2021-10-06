@@ -146,6 +146,9 @@ class WebViewController: UIViewController, WebController {
         let wvConfig = WKWebViewConfiguration()
         wvConfig.websiteDataStore = WKWebsiteDataStore.nonPersistent()
         wvConfig.allowsInlineMediaPlayback = true
+        if #available(iOS 15.0, *) {
+            wvConfig.upgradeKnownHostsToHTTPS = true
+        }
         browserView = WKWebView(frame: .zero, configuration: wvConfig)
 
         browserView.allowsBackForwardNavigationGestures = true
