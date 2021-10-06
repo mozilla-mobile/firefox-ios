@@ -17,6 +17,7 @@ public enum SentryTag: String {
     case tabManager = "TabManager"
     case bookmarks = "Bookmarks"
     case nimbus = "Nimbus"
+    case tabDisplayManager = "TabDisplayManager"
 }
 
 public class Sentry {
