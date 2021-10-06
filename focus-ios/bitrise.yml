@@ -61,6 +61,23 @@ workflows:
     before_run: []
 
 
+  configure-nimbus:
+    steps:
+    - script@1:
+        title: Configure Nimbus
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            /usr/libexec/PlistBuddy -c "Add :NimbusServerURL string ${NIMBUS_SERVER_URL}" Blockzilla/Info.plist
+            /usr/libexec/PlistBuddy -c "Add :NimbusAppName string ${NIMBUS_APP_NAME}" Blockzilla/Info.plist
+            /usr/libexec/PlistBuddy -c "Add :NimbusAppChannel string ${NIMBUS_APP_CHANNEL}" Blockzilla/Info.plist
+    meta:
+      bitrise.io:
+        stack: osx-xcode-13.0.x
+    before_run: []
+
+
   set-default-browser-entitlement:
     steps:
     - script@1:
@@ -109,6 +126,7 @@ workflows:
       - clone-and-build-dependencies
       - set-project-version
       - set-default-browser-entitlement
+      - configure-nimbus
 
 
   runParallelTests:
