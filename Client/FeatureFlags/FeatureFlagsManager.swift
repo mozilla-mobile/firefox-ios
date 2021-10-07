@@ -19,14 +19,12 @@ enum FeatureFlagName: String, CaseIterable {
     case inactiveTabs
     case groupedTabs
     case jumpBackIn
-    case libraryShortcuts
     case nimbus
     case pocket
     case pullToRefresh
     case recentlySaved
     case shakeToRestore
     case startAtHome
-    case topSites
 }
 
 /// Manages feature flags for the application.
@@ -127,11 +125,6 @@ class FeatureFlagsManager {
                                           enabledFor: [.beta, .developer])
         features[.jumpBackIn] = jumpBackIn
 
-        let libraryShortcuts = FlaggableFeature(withID: .libraryShortcuts,
-                                      and: profile,
-                                      enabledFor: [.release, .beta, .developer])
-        features[.libraryShortcuts] = libraryShortcuts
-
         /// Use the Nimbus experimentation platform. If this is `true` then
         /// `Experiments.shared` provides access to Nimbus. If false, it is a dummy object.
         let nimbus = FlaggableFeature(withID: .nimbus,
@@ -164,11 +157,5 @@ class FeatureFlagsManager {
                                            and: profile,
                                            enabledFor: [])
         features[.startAtHome] = startAtHome
-
-        let topSites = FlaggableFeature(withID: .topSites,
-                                      and: profile,
-                                      enabledFor: [.release, .beta, .developer])
-        features[.topSites] = topSites
-
     }
 }

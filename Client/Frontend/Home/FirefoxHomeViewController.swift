@@ -190,18 +190,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     }
 
     var pocketStories: [PocketStory] = []
-
-    var isYourLibrarySectionEnabled: Bool {
-        UIDevice.current.userInterfaceIdiom != .pad &&
-            homescreen.sectionsEnabled[.libraryShortcuts] == true
-    }
-
-    var isPocketSectionEnabled: Bool {
-        profile.prefs.boolForKey(PrefsKeys.ASPocketStoriesVisible) ??
-            (Pocket.IslocaleSupported(Locale.current.identifier) &&
-                homescreen.sectionsEnabled[.pocket] == true)
-    }
-
     var hasRecentBookmarks = false
     var hasReadingListitems = false
     var currentTab: Tab? {
@@ -213,16 +201,14 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         Homescreen(variables: $0)
     }
 
-    var isRecentlySavedSectionEnabled: Bool {
-        guard featureFlags.isFeatureActiveForBuild(.recentlySaved),
-              homescreen.sectionsEnabled[.recentlySaved] == true
-        else { return false }
-
-        return hasRecentBookmarks || hasReadingListitems
-    }
-
+    // MARK: - Section availability variables
     var isTopSitesSectionEnabled: Bool {
         homescreen.sectionsEnabled[.topSites] == true
+    }
+
+    var isYourLibrarySectionEnabled: Bool {
+        UIDevice.current.userInterfaceIdiom != .pad &&
+            homescreen.sectionsEnabled[.libraryShortcuts] == true
     }
 
     var isJumpBackInSectionEnabled: Bool {
@@ -238,6 +224,28 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         }
     }
 
+    var isRecentlySavedSectionEnabled: Bool {
+        guard featureFlags.isFeatureActiveForBuild(.recentlySaved),
+              homescreen.sectionsEnabled[.recentlySaved] == true,
+              featureFlags.getUserPreferenceFor(.recentlySaved) == UserFeaturePreference.enabled
+        else { return false }
+
+        return hasRecentBookmarks || hasReadingListitems
+    }
+
+    var isPocketSectionEnabled: Bool {
+        guard featureFlags.isFeatureActiveForBuild(.recentlySaved) else { return false }
+        guard let userPocketPref: UserFeaturePreference = featureFlags.getUserPreferenceFor(.pocket) else {
+            return (Pocket.IslocaleSupported(Locale.current.identifier)
+                    && homescreen.sectionsEnabled[.pocket] == true)
+        }
+
+        return (userPocketPref == UserFeaturePreference.enabled
+                && Pocket.IslocaleSupported(Locale.current.identifier)
+                && homescreen.sectionsEnabled[.pocket] == true)
+    }
+
+    // MARK: - Initializers
     init(profile: Profile, experiments: NimbusApi = Experiments.shared) {
         self.profile = profile
         self.experiments = experiments
@@ -257,6 +265,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 

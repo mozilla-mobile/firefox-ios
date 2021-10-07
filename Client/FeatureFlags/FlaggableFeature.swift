@@ -3,6 +3,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Shared
+import MozillaAppServices
+import UIKit
 
 struct FlaggableFeature {
 
@@ -52,47 +54,45 @@ struct FlaggableFeature {
         switch featureID {
         case .startAtHome:
             return StartAtHomeSetting.afterFourHours.rawValue
-        case .jumpBackIn, .libraryShortcuts, .pocket, .recentlySaved, .topSites:
-            return checkNimbusHomepageFeatures()?.rawValue ?? UserFeaturePreference.disabled.rawValue
+        case .jumpBackIn, .pocket, .recentlySaved:
+            return checkNimbusHomepageFeatures(for: sectionID(from: featureID)).rawValue
         default:
             return UserFeaturePreference.disabled.rawValue
         }
     }
 
-    private func checkNimbusHomepageFeatures() -> UserFeaturePreference? {
-        var homePageExperiments = Experiments.shared.withVariables(featureId: .homescreen,
-                                                                   sendExposureEvent: false) {
+    private func checkNimbusHomepageFeatures(for sectionID: Homescreen.SectionId?, from experiments: NimbusApi = Experiments.shared) -> UserFeaturePreference {
+        guard let sectionID = sectionID else { return UserFeaturePreference.disabled }
+
+        var homePageExperiments = experiments.withVariables(featureId: .homescreen,
+                                                            sendExposureEvent: false) {
             Homescreen(variables: $0)
         }
 
-        var sectionID: Homescreen.SectionId? = nil
-
-        switch featureID {
-        case .jumpBackIn:
-            sectionID = .jumpBackIn
-        case .libraryShortcuts:
-            sectionID = .libraryShortcuts
-        case .recentlySaved:
-            sectionID = .recentlySaved
-        case .pocket:
-            sectionID = .pocket
-        case .topSites:
-            sectionID = .topSites
-        default: break
-        }
-
-        if let sectionID = sectionID,
-           let homePageFeature = homePageExperiments.sectionsEnabled[sectionID] {
-            
-            switch homePageFeature {
-            case true:
-                return UserFeaturePreference.enabled
-            case false:
+        if let sectionIsEnabled = homePageExperiments.sectionsEnabled[sectionID], sectionIsEnabled {
+            // For pocket's default value, we also need to check the locale being supported.
+            // Here, we want to make sure the section is enabled && locale is supported before
+            // we would return that pocket is enabled
+            if sectionID == .pocket && !Pocket.IslocaleSupported(Locale.current.identifier) {
                 return UserFeaturePreference.disabled
             }
+            return UserFeaturePreference.enabled
         }
 
-        return nil
+        return UserFeaturePreference.disabled
+    }
+
+    private func sectionID(from featureID: FeatureFlagName) -> Homescreen.SectionId? {
+        switch featureID {
+        case .jumpBackIn:
+            return .jumpBackIn
+        case .recentlySaved:
+            return .recentlySaved
+        case .pocket:
+            return .pocket
+        default:
+            return nil
+        }
     }
 
     private var featureOptionsKey: String? {
@@ -141,8 +141,6 @@ struct FlaggableFeature {
             return PrefsKeys.KeyEnableGroupedTabs
         case .jumpBackIn:
             return PrefsKeys.JumpBackInSectionEnabled
-        case .libraryShortcuts:
-            return PrefsKeys.LibraryShortcutsEnabled
         case .pocket:
             return PrefsKeys.ASPocketStoriesVisible
         case .pullToRefresh:
@@ -151,8 +149,6 @@ struct FlaggableFeature {
             return PrefsKeys.RecentlySavedSectionEnabled
         case .startAtHome:
             return PrefsKeys.StartAtHome
-        case .topSites:
-            return PrefsKeys.TopSitesSectionEnabled
         default: return nil
         }
     }
