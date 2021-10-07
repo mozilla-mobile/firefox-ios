@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "SwiftKeychainWrapper",
+        "repositoryURL": "https://github.com/jrendel/SwiftKeychainWrapper",
+        "state": {
+          "branch": null,
+          "revision": "185a3165346a03767101c4f62e9a545a0fe0530f",
+          "version": "4.0.1"
+        }
+      },
+      {
+        "package": "Telemetry",
+        "repositoryURL": "https://github.com/mozilla-mobile/telemetry-ios",
+        "state": {
+          "branch": null,
+          "revision": "68f2d813320c9fda2fb4aee4548c64293500200a",
+          "version": "2.0.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

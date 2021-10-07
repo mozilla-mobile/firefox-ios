@@ -49,6 +49,14 @@
 		0BF1B7E31AC60DEA00A7B407 /* InsetButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF1B7E21AC60DEA00A7B407 /* InsetButton.swift */; };
 		0BF42D4F1A7CD09600889E28 /* TestFavicons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF42D4E1A7CD09600889E28 /* TestFavicons.swift */; };
 		0BF8F8DA1AEFF1C900E90BC2 /* noTitle.html in Resources */ = {isa = PBXBuildFile; fileRef = 0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */; };
+		1B3D99F1270E89D0006E1264 /* Telemetry in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3D99F0270E89D0006E1264 /* Telemetry */; };
+		1B3D99F8270E8CF8006E1264 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3D99F7270E8CF8006E1264 /* SwiftKeychainWrapper */; };
+		1B3D9A0A270E90C6006E1264 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3D9A09270E90C6006E1264 /* SwiftKeychainWrapper */; };
+		1B3D9A12270E941E006E1264 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3D9A11270E941E006E1264 /* SwiftKeychainWrapper */; };
+		1B3D9A16270E944E006E1264 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3D9A15270E944E006E1264 /* SwiftKeychainWrapper */; };
+		1B3D9A1A270E9466006E1264 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3D9A19270E9466006E1264 /* SwiftKeychainWrapper */; };
+		1B3D9A1B270E95FB006E1264 /* AppAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65D89171C8647420006EA35 /* AppAuthenticator.swift */; };
+		1B3D9A1D270E96E4006E1264 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3D9A1C270E96E4006E1264 /* SwiftKeychainWrapper */; };
 		1D06AE6624FEE4D5000B092B /* TopSitesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D06AE6524FEE4D5000B092B /* TopSitesProvider.swift */; };
 		1D06AE6A24FEE8D6000B092B /* TabProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D06AE6924FEE8D6000B092B /* TabProvider.swift */; };
 		1D0BA05C24F46A0400D731B5 /* TopSitesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D0BA05B24F46A0400D731B5 /* TopSitesManager.swift */; };
@@ -861,7 +869,6 @@
 		EBA1CC1E214AB8FD009E6B06 /* StorageTestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 289A4C121C4EB90600A460E3 /* StorageTestUtils.swift */; };
 		EBA31D7B1F79990C0055463D /* SyncTelemetryEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA31D7A1F79990C0055463D /* SyncTelemetryEvents.swift */; };
 		EBA31D7D1F79996E0055463D /* SyncTelemetryUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA31D7C1F79996E0055463D /* SyncTelemetryUtils.swift */; };
-		EBA31D861F799BE20055463D /* Telemetry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBA31D7E1F799BE20055463D /* Telemetry.framework */; };
 		EBA3B2C32268F16300728BDB /* PhotonActionSheetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA3B2C22268F16300728BDB /* PhotonActionSheetCell.swift */; };
 		EBA3B2CD2268F27500728BDB /* PhotonActionSheetWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA3B2CC2268F27500728BDB /* PhotonActionSheetWidgets.swift */; };
 		EBA3B2D02268F40C00728BDB /* SyncMenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA3B2CF2268F40C00728BDB /* SyncMenuButton.swift */; };
@@ -4203,6 +4210,7 @@
 			files = (
 				C820439A2523DC4500740B71 /* libStorage.a in Frameworks */,
 				D09A0CDC1FAA24CC009A0273 /* libAccount.a in Frameworks */,
+				1B3D9A12270E941E006E1264 /* SwiftKeychainWrapper in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4219,6 +4227,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1B3D99F8270E8CF8006E1264 /* SwiftKeychainWrapper in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4236,6 +4245,7 @@
 				4357697525B733CC0017B210 /* MozillaAppServices.framework in Frameworks */,
 				E6231C011B90A44F005ABB0D /* libz.tbd in Frameworks */,
 				E4B3348A1BBF23F9004E2BFF /* AdSupport.framework in Frameworks */,
+				1B3D99F1270E89D0006E1264 /* Telemetry in Frameworks */,
 				3BA9A0231D2C208C00BD418C /* Fuzi.framework in Frameworks */,
 				7BA4A9471C4CED900091D032 /* GCDWebServers.framework in Frameworks */,
 				0B8E0FF41A932BD500161DC3 /* ImageIO.framework in Frameworks */,
@@ -4245,7 +4255,7 @@
 				7B604F9B1C4950F2006EEEC3 /* SDWebImage.framework in Frameworks */,
 				7B604FA21C495268006EEEC3 /* SnapKit.framework in Frameworks */,
 				3B4988CE1E42B01800A12FDA /* SwiftyJSON.framework in Frameworks */,
-				EBA31D861F799BE20055463D /* Telemetry.framework in Frameworks */,
+				1B3D9A1D270E96E4006E1264 /* SwiftKeychainWrapper in Frameworks */,
 				7B604FBB1C495D8A006EEEC3 /* XCGLogger.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4299,6 +4309,7 @@
 			files = (
 				C82043AE2523DC8B00740B71 /* Sync.framework in Frameworks */,
 				C877039725222FE6006E38EB /* Shared.framework in Frameworks */,
+				1B3D9A0A270E90C6006E1264 /* SwiftKeychainWrapper in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4370,6 +4381,7 @@
 			files = (
 				F8324A072649A188007E4BFA /* AuthenticationServices.framework in Frameworks */,
 				F8324AF62649B540007E4BFA /* Shared.framework in Frameworks */,
+				1B3D9A1A270E9466006E1264 /* SwiftKeychainWrapper in Frameworks */,
 				F8324AFA2649B540007E4BFA /* Sync.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4388,6 +4400,7 @@
 			files = (
 				C82043AF2523DC9600740B71 /* Sync.framework in Frameworks */,
 				C877039625222FDC006E38EB /* Shared.framework in Frameworks */,
+				1B3D9A16270E944E006E1264 /* SwiftKeychainWrapper in Frameworks */,
 				3BA9A0321D2C2C0500BD418C /* Fuzi.framework in Frameworks */,
 				0B75AEA91AC20FB20015E5DC /* ImageIO.framework in Frameworks */,
 				7B604F9D1C495143006EEEC3 /* SDWebImage.framework in Frameworks */,
@@ -6449,10 +6462,14 @@
 			buildRules = (
 			);
 			dependencies = (
+				1B3D9A10270E9416006E1264 /* PBXTargetDependency */,
 				2F77F6B91ABCAF0700484F3A /* PBXTargetDependency */,
 				2F11EE501ABCAE910083902D /* PBXTargetDependency */,
 			);
 			name = Sync;
+			packageProductDependencies = (
+				1B3D9A11270E941E006E1264 /* SwiftKeychainWrapper */,
+			);
 			productName = Sync;
 			productReference = 2827315E1ABC9BE600AA1954 /* Sync.framework */;
 			productType = "com.apple.product-type.framework";
@@ -6488,8 +6505,12 @@
 			buildRules = (
 			);
 			dependencies = (
+				1B3D99F6270E8CDE006E1264 /* PBXTargetDependency */,
 			);
 			name = Shared;
+			packageProductDependencies = (
+				1B3D99F7270E8CF8006E1264 /* SwiftKeychainWrapper */,
+			);
 			productName = Shared;
 			productReference = 288A2D861AB8B3260023ABC3 /* Shared.framework */;
 			productType = "com.apple.product-type.framework";
@@ -6597,10 +6618,14 @@
 			buildRules = (
 			);
 			dependencies = (
+				1B3D9A08270E90C2006E1264 /* PBXTargetDependency */,
 				C82043D82523DDC000740B71 /* PBXTargetDependency */,
 				D0EA58171FA836D200D03ED1 /* PBXTargetDependency */,
 			);
 			name = NotificationService;
+			packageProductDependencies = (
+				1B3D9A09270E90C6006E1264 /* SwiftKeychainWrapper */,
+			);
 			productName = NotificationService;
 			productReference = 397848DB1ED86605004C0C0B /* NotificationService.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -6766,10 +6791,14 @@
 			buildRules = (
 			);
 			dependencies = (
+				1B3D9A18270E9462006E1264 /* PBXTargetDependency */,
 				F8324AF92649B540007E4BFA /* PBXTargetDependency */,
 				F8324AFD2649B540007E4BFA /* PBXTargetDependency */,
 			);
 			name = CredentialProvider;
+			packageProductDependencies = (
+				1B3D9A19270E9466006E1264 /* SwiftKeychainWrapper */,
+			);
 			productName = CredentialProvider;
 			productReference = F8324A052649A188007E4BFA /* CredentialProvider.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -6791,6 +6820,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				1B3D9A1F270E9715006E1264 /* PBXTargetDependency */,
 				C82043712523DBEB00740B71 /* PBXTargetDependency */,
 				288A2D9C1AB8B3260023ABC3 /* PBXTargetDependency */,
 				397848E11ED86605004C0C0B /* PBXTargetDependency */,
@@ -6800,6 +6830,10 @@
 				F8324A112649A188007E4BFA /* PBXTargetDependency */,
 			);
 			name = Client;
+			packageProductDependencies = (
+				1B3D99F0270E89D0006E1264 /* Telemetry */,
+				1B3D9A1C270E96E4006E1264 /* SwiftKeychainWrapper */,
+			);
 			productName = Client;
 			productReference = F84B21BE1A090F8100AAB793 /* Client.app */;
 			productType = "com.apple.product-type.application";
@@ -6835,10 +6869,14 @@
 			buildRules = (
 			);
 			dependencies = (
+				1B3D9A14270E9442006E1264 /* PBXTargetDependency */,
 				D09A0CF11FAA2C7E009A0273 /* PBXTargetDependency */,
 				D09A0CF31FAA2C81009A0273 /* PBXTargetDependency */,
 			);
 			name = ShareTo;
+			packageProductDependencies = (
+				1B3D9A15270E944E006E1264 /* SwiftKeychainWrapper */,
+			);
 			productName = ShareToFirefox;
 			productReference = F84B22491A0920C600AAB793 /* ShareTo.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -7113,6 +7151,10 @@
 				gd,
 			);
 			mainGroup = F84B21B51A090F8100AAB793;
+			packageReferences = (
+				1B3D99EF270E89D0006E1264 /* XCRemoteSwiftPackageReference "telemetry-ios" */,
+				1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */,
+			);
 			productRefGroup = F84B21BF1A090F8100AAB793 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -7444,11 +7486,9 @@
 				"$(SRCROOT)/Carthage/Build/iOS/XCGLogger.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/GCDWebServers.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/OnePasswordExtension.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/SwiftKeychainWrapper.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Fuzi.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftyJSON.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Sentry.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/Telemetry.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftProtobuf.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/MozillaAppServices.framework",
 			);
@@ -7457,7 +7497,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
+			shellScript = "/usr/local/Homebrew/bin/carthage copy-frameworks\n";
 		};
 		CDF3D3002461D92F00A93748 /* Glean SDK Generator Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -7507,7 +7547,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"${INCLUDE_SETTINGS_BUNDLE}\" = \"YES\" ]\nthen\n    cp -r \"${PROJECT_DIR}/${TARGET_NAME}/Application/Settings.bundle\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app\"\nfi";
+			shellScript = "if [ \"${INCLUDE_SETTINGS_BUNDLE}\" = \"YES\" ]\nthen\n    cp -r \"${PROJECT_DIR}/${TARGET_NAME}/Application/Settings.bundle\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app\"\nfi\n";
 		};
 		E6EC6EFC1E5354E20067985D /* Copy Carthage Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -8430,6 +8470,30 @@
 			isa = PBXTargetDependency;
 			target = 047F9B2624E1FE1C00CD7DF7 /* WidgetKitExtension */;
 			targetProxy = 047F9B3024E1FE1F00CD7DF7 /* PBXContainerItemProxy */;
+		};
+		1B3D99F6270E8CDE006E1264 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 1B3D99F5270E8CDE006E1264 /* SwiftKeychainWrapper */;
+		};
+		1B3D9A08270E90C2006E1264 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 1B3D9A07270E90C2006E1264 /* SwiftKeychainWrapper */;
+		};
+		1B3D9A10270E9416006E1264 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 1B3D9A0F270E9416006E1264 /* SwiftKeychainWrapper */;
+		};
+		1B3D9A14270E9442006E1264 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 1B3D9A13270E9442006E1264 /* SwiftKeychainWrapper */;
+		};
+		1B3D9A18270E9462006E1264 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 1B3D9A17270E9462006E1264 /* SwiftKeychainWrapper */;
+		};
+		1B3D9A1F270E9715006E1264 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 1B3D9A1E270E9715006E1264 /* SwiftKeychainWrapper */;
 		};
 		2827316B1ABC9BE700AA1954 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -12392,6 +12456,93 @@
 			defaultConfigurationName = Fennec;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		1B3D99EF270E89D0006E1264 /* XCRemoteSwiftPackageReference "telemetry-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mozilla-mobile/telemetry-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+		1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jrendel/SwiftKeychainWrapper";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		1B3D99F0270E89D0006E1264 /* Telemetry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B3D99EF270E89D0006E1264 /* XCRemoteSwiftPackageReference "telemetry-ios" */;
+			productName = Telemetry;
+		};
+		1B3D99F5270E8CDE006E1264 /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
+		1B3D99F7270E8CF8006E1264 /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
+		1B3D9A07270E90C2006E1264 /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
+		1B3D9A09270E90C6006E1264 /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
+		1B3D9A0F270E9416006E1264 /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
+		1B3D9A11270E941E006E1264 /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
+		1B3D9A13270E9442006E1264 /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
+		1B3D9A15270E944E006E1264 /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
+		1B3D9A17270E9462006E1264 /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
+		1B3D9A19270E9466006E1264 /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
+		1B3D9A1C270E96E4006E1264 /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
+		1B3D9A1E270E9715006E1264 /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F84B21B61A090F8100AAB793 /* Project object */;
 }
