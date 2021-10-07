@@ -212,17 +212,15 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     }
 
     var isJumpBackInSectionEnabled: Bool {
-        get {
-            guard featureFlags.isFeatureActiveForBuild(.jumpBackIn),
-                  homescreen.sectionsEnabled[.topSites] == true,
-                  featureFlags.getUserPreferenceFor(.jumpBackIn) == UserFeaturePreference.enabled
-            else { return false }
+        guard featureFlags.isFeatureActiveForBuild(.jumpBackIn),
+              homescreen.sectionsEnabled[.topSites] == true,
+              featureFlags.getUserPreferenceFor(.jumpBackIn) == UserFeaturePreference.enabled
+        else { return false }
 
-            let tabManager = BrowserViewController.foregroundBVC().tabManager
-            return !(tabManager.selectedTab?.isPrivate ?? false)
-                && !tabManager.recentlyAccessedNormalTabs.isEmpty
-        }
-    }
+        let tabManager = BrowserViewController.foregroundBVC().tabManager
+        return !(tabManager.selectedTab?.isPrivate ?? false)
+            && !tabManager.recentlyAccessedNormalTabs.isEmpty
+}
 
     var isRecentlySavedSectionEnabled: Bool {
         guard featureFlags.isFeatureActiveForBuild(.recentlySaved),
@@ -234,7 +232,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     }
 
     var isPocketSectionEnabled: Bool {
-        // For Pocket, the user preference check returns a user preference if it exists in,
+        // For Pocket, the user preference check returns a user preference if it exists in
         // UserDefaults, and, if it does not, it will return a default preference based on
         // a (nimbus pocket section enabled && Pocket.isLocaleSupported) check
         guard featureFlags.isFeatureActiveForBuild(.pocket),

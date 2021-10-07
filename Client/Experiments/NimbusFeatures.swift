@@ -37,8 +37,8 @@ struct Homescreen {
         var defaultValue: Bool {
             switch self {
             case .topSites: return true
-            case .jumpBackIn: return true
-            case .recentlySaved: return true
+            case .jumpBackIn: return false
+            case .recentlySaved: return false
             case .pocket: return true
             case .libraryShortcuts: return true
             }
