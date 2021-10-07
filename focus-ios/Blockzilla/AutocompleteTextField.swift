@@ -46,6 +46,15 @@ open class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
     public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         lastReplacement = string
+
+        // Fixes: https://github.com/mozilla-mobile/focus-ios/issues/2192
+        // When swipe-typing + completionRange is present, and deletion causes
+        // incorrect internal text value. So we call deleteDackward() here.
+        if let completionRange = completionRange, string.isEmpty,
+           NSIntersectionRange(range, completionRange).length > 0 {
+            self.deleteBackward()
+            return false
+        }
         return true
     }
 
@@ -135,7 +144,9 @@ open class AutocompleteTextField: UITextField, UITextFieldDelegate {
         // Prevents the hard crash when you select all and start a new query
         guard let count = text?.count, count > 1 else { return }
 
-        text = (text as NSString?)?.replacingCharacters(in: completionRange, with: "")
+        if count >= completionRange.location + completionRange.length {
+            text = (text as NSString?)?.replacingCharacters(in: completionRange, with: "")
+        }
     }
 
     private func setCompletion(_ completion: String) {
