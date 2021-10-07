@@ -739,6 +739,8 @@ class URLBar: UIView {
     @objc private func displayURLContextMenu(sender: UILongPressGestureRecognizer) {
         if sender.state == .began {
             delegate?.urlBarDidLongPress(self)
+            self.isUserInteractionEnabled = true
+            self.becomeFirstResponder()
             UIMenuController.shared.showMenu(from: self, rect: self.bounds)
         }
     }
