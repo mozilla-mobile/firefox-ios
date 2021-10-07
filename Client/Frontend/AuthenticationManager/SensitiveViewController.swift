@@ -7,22 +7,35 @@ import SnapKit
 import Shared
 
 class SensitiveViewController: UIViewController {
-    private var backgroundedBlur: UIVisualEffectView?
-    private var isAuthenticated: Bool = false
+    private var blurredOverlay: UIImageView?
+    
+    private var isAuthenticating = false
+//    private var isAuthenticated = false TODO SMA I don't think this is needed anymore.
 
     private var willEnterForegroundNotificationObserver: NSObjectProtocol?
     private var didEnterBackgroundNotificationObserver: NSObjectProtocol?
     
-    override func viewDidLoad() {
-        willEnterForegroundNotificationObserver = NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main) { [unowned self] notification in
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        willEnterForegroundNotificationObserver = NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main) { [self] notification in
+//            if isAuthenticating {
+//                return
+//            }
+            
             if !self.isAuthenticated {
+                self.isAuthenticated = false
+//                self.isAuthenticating = true
+                
                 AppAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
                     switch result {
                         case .success():
-                            self.isAuthenticated = true
-                            self.removeBackgroundedBlur()
+//                            self.isAuthenticated = true
+                            self.isAuthenticating = false
+                            self.removedBlurredOverlay()
                         case .failure(_):
                             self.isAuthenticated = false
+//                            self.isAuthenticating = false
                             self.navigationController?.dismiss(animated: true, completion: nil)
                             self.dismiss(animated: true)
                     }
@@ -30,16 +43,20 @@ class SensitiveViewController: UIViewController {
             }
         }
 
-        didEnterBackgroundNotificationObserver = NotificationCenter.default.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main) { [unowned self] notification in
+        didEnterBackgroundNotificationObserver = NotificationCenter.default.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main) { [self] notification in
+            self.isAuthenticating = false
             self.isAuthenticated = false
-            self.blurContents()
+            self.installBlurredOverlay()
         }
     }
     
-    deinit {
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
         if let observer = willEnterForegroundNotificationObserver {
             NotificationCenter.default.removeObserver(observer)
         }
+        
         if let observer = didEnterBackgroundNotificationObserver {
             NotificationCenter.default.removeObserver(observer)
         }
@@ -47,17 +64,21 @@ class SensitiveViewController: UIViewController {
 }
 
 extension SensitiveViewController {
-    private func blurContents() {
-        if backgroundedBlur == nil {
-            backgroundedBlur = UIVisualEffectView(effect: UIBlurEffect(style: .extraLight))
-            view.addSubview(backgroundedBlur!)
-            backgroundedBlur!.snp.makeConstraints { $0.edges.equalTo(self.view) }
-            view.layoutIfNeeded()
+    private func installBlurredOverlay() {
+        if self.blurredOverlay == nil {
+            if let snapshot = view.screenshot() {
+                let blurredSnapshot = snapshot.applyBlur(withRadius: 10, blurType: BOXFILTER, tintColor: UIColor(white: 1, alpha: 0.3), saturationDeltaFactor: 1.8, maskImage: nil)
+                let blurredOverlay = UIImageView(image: blurredSnapshot)
+                self.blurredOverlay = blurredOverlay
+                view.addSubview(blurredOverlay)
+                blurredOverlay.snp.makeConstraints { $0.edges.equalTo(self.view) }
+                view.layoutIfNeeded()
+            }
         }
     }
 
-    private func removeBackgroundedBlur() {
-        backgroundedBlur?.removeFromSuperview()
-        backgroundedBlur = nil
+    private func removedBlurredOverlay() {
+        self.blurredOverlay?.removeFromSuperview()
+        self.blurredOverlay = nil
     }
 }
