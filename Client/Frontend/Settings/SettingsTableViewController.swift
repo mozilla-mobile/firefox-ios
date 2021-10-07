@@ -203,8 +203,8 @@ class BoolSetting: Setting, FeatureFlagsProtocol {
         self.init(prefs: prefs, prefKey: prefKey, defaultValue: defaultValue, attributedTitleText: NSAttributedString(string: titleText, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]), attributedStatusText: statusTextAttributedString, settingDidChange: settingDidChange)
     }
 
-    convenience init(with featureFlagID: FeatureFlagName, titleText: NSAttributedString, and defaultValue: Bool? = nil) {
-        self.init(prefs: nil, defaultValue: defaultValue, attributedTitleText: titleText, featureFlagName: featureFlagID)
+    convenience init(with featureFlagID: FeatureFlagName, titleText: NSAttributedString) {
+        self.init(prefs: nil, defaultValue: nil, attributedTitleText: titleText, featureFlagName: featureFlagID)
     }
 
     override var status: NSAttributedString? {

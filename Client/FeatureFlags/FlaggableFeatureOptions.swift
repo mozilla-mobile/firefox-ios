@@ -11,17 +11,15 @@ import Foundation
 /// This file contains enums that serve as options for flaggable features.
 /// Each should be set as an enum and should conform to String type and
 /// the FlaggableFeatureOptions protocol.
-
 protocol FlaggableFeatureOptions { }
+
+enum UserFeaturePreference: String, FlaggableFeatureOptions {
+    case enabled
+    case disabled
+}
 
 enum StartAtHomeSetting: String, FlaggableFeatureOptions {
     case afterFourHours
     case always
-    case disabled
-}
-
-
-enum UserFeaturePreference: String, FlaggableFeatureOptions {
-    case enabled
     case disabled
 }

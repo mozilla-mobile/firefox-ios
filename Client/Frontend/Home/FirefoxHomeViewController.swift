@@ -234,15 +234,14 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     }
 
     var isPocketSectionEnabled: Bool {
-        guard featureFlags.isFeatureActiveForBuild(.recentlySaved) else { return false }
-        guard let userPocketPref: UserFeaturePreference = featureFlags.getUserPreferenceFor(.pocket) else {
-            return (Pocket.IslocaleSupported(Locale.current.identifier)
-                    && homescreen.sectionsEnabled[.pocket] == true)
-        }
+        // For Pocket, the user preference check returns a user preference if it exists in,
+        // UserDefaults, and, if it does not, it will return a default preference based on
+        // a (nimbus pocket section enabled && Pocket.isLocaleSupported) check
+        guard featureFlags.isFeatureActiveForBuild(.pocket),
+              featureFlags.getUserPreferenceFor(.pocket) == UserFeaturePreference.enabled
+        else { return false }
 
-        return (userPocketPref == UserFeaturePreference.enabled
-                && Pocket.IslocaleSupported(Locale.current.identifier)
-                && homescreen.sectionsEnabled[.pocket] == true)
+        return true
     }
 
     // MARK: - Initializers

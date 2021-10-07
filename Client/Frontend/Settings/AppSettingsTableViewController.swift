@@ -162,11 +162,8 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
                 ChangeToChinaSetting(settings: self),
                 ShowEtpCoverSheet(settings: self),
                 ToggleChronTabs(settings: self),
-                ToggleJumpBackInSection(settings: self),
-                ToggleRecentlySavedSection(settings: self),
                 TogglePullToRefresh(settings: self),
                 ToggleInactiveTabs(settings: self),
-                ToggleGroupedTabs(settings: self),
                 ExperimentsSettings(settings: self)
             ])]
 

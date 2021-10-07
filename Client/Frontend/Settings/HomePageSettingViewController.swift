@@ -66,15 +66,8 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
 
         var sectionItems = [Setting]()
 
-        let isPocketEnabledDefault = Pocket.IslocaleSupported(Locale.current.identifier)
         let pocketSetting = BoolSetting(with: .pocket,
-                                        titleText: NSAttributedString(string: .SettingsCustomizeHomePocket),
-                                        and: isPocketEnabledDefault)
-
-//        let pocketSetting = BoolSetting(prefs: profile.prefs,
-//                                        prefKey: PrefsKeys.ASPocketStoriesVisible,
-//                                        defaultValue: isPocketEnabledDefault,
-//                                        attributedTitleText: NSAttributedString(string: .SettingsCustomizeHomePocket))
+                                        titleText: NSAttributedString(string: .SettingsCustomizeHomePocket))
 
         let jumpBackInSetting = BoolSetting(with: .jumpBackIn,
                                             titleText: NSAttributedString(string: .SettingsCustomizeHomeJumpBackIn))

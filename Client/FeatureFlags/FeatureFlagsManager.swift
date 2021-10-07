@@ -4,6 +4,7 @@
 
 import Shared
 
+// MARK: - Protocol
 protocol FeatureFlagsProtocol { }
 
 extension FeatureFlagsProtocol {
@@ -12,6 +13,7 @@ extension FeatureFlagsProtocol {
     }
 }
 
+// MARK: - FeatureFlagName
 /// An enum describing the featureID of all features, historical, avalable, or in development.
 /// Please add new features alphabetically.
 enum FeatureFlagName: String, CaseIterable {
@@ -32,7 +34,7 @@ enum FeatureFlagName: String, CaseIterable {
 /// To add a new feature flag, you must do four things:
 ///
 /// 1. Add a name in the `FeatureFlagName` enum
-/// 2. Add a new `FlaggableFeature` in the `FeatureFlagManager.setupFeatures` and add it
+/// 2. Add a new `FlaggableFeature` in the ``FeatureFlagManager.initializeFeatures`` and add it
 /// to the `features` dictionary using its key.
 /// 3. Optional: If the feature is meant to be togglable, add a key for the feature
 /// in the `PrefsKeys` struct, and then also add it to the `FlaggableFeature.featureKey`
@@ -47,13 +49,27 @@ class FeatureFlagsManager {
     /// `featureFlags` variable.
     static let shared = FeatureFlagsManager()
 
+    // MARK: - Variables
+
     private var profile: Profile!
     private var features: [FeatureFlagName: FlaggableFeature] = [:]
 
-    /// Used as the main way to find out whether a feature is active or not.
+    // MARK: - Public methods
+
+    /// Used as the main way to find out whether a feature is active or not,
+    /// specifically for the build.
     public func isFeatureActiveForBuild(_ featureID: FeatureFlagName) -> Bool {
         guard let feature = features[featureID] else { return false }
-        return feature.isActiveForBuild
+        return feature.isActiveForBuild()
+    }
+
+    public func toggleBuildFeature(_ featureID: FeatureFlagName) {
+        features[featureID]?.toggleBuildFeature()
+    }
+
+    /// Retrieves a feature key for any specific feature, if it has one.
+    public func featureKey(for featureID: FeatureFlagName) -> String? {
+        return features[featureID]?.featureOptionsKey
     }
 
     /// Main interface for accessing feature options.
@@ -63,22 +79,13 @@ class FeatureFlagsManager {
     /// it's appropriate type in the switch statement.
     public func getUserPreferenceFor<T>(_ featureID: FeatureFlagName) -> T? {
         guard let feature = features[featureID],
-              let userSetting = feature.userPreferenceSetTo
+              let userSetting = feature.getUserPreference()
         else { return nil }
 
         switch featureID {
         case .startAtHome: return StartAtHomeSetting(rawValue: userSetting) as? T
         default: return UserFeaturePreference(rawValue: userSetting) as? T
         }
-    }
-
-    /// Retrieves a feature key for any specific feature, if it has one.
-    public func featureKey(for featureID: FeatureFlagName) -> String? {
-        return features[featureID]?.featureKey()
-    }
-
-    public func toggleBuildFeature(_ featureID: FeatureFlagName) {
-        features[featureID]?.toggleBuildFeature()
     }
 
     /// Main interface for setting a feature's state and options. Options are enums of
@@ -88,11 +95,11 @@ class FeatureFlagsManager {
         switch featureID {
         case .startAtHome:
             if let option = option as? StartAtHomeSetting {
-                features[featureID]?.setUserPrefsForFeatureTo(option.rawValue)
+                features[featureID]?.setUserPreferenceFor(option.rawValue)
             }
         default:
             if let option = option as? UserFeaturePreference {
-                features[featureID]?.setUserPrefsForFeatureTo(option.rawValue)
+                features[featureID]?.setUserPreferenceFor(option.rawValue)
             }
         }
     }
