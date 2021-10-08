@@ -66,7 +66,7 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
         if featureFlags.isFeatureActiveForBuild(.groupedTabs),
            featureFlags.userPreferenceFor(.groupedTabs) == UserFeaturePreference.enabled {
             let recentTabs = tabManager.recentlyAccessedNormalTabs
-            SearchGroupsManager.getTabGroups(with: profile,
+            SearchTermGroupsManager.getTabGroups(with: profile,
                                           from: recentTabs,
                                           using: .orderedDescending) { groups, _ in
                 self.jumpList = self.createJumpList(from: recentTabs, and: groups)

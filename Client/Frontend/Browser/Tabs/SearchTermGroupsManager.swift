@@ -12,7 +12,7 @@ struct ASGroup<T> {
     let timestamp: Timestamp
 }
 
-class SearchGroupsManager {
+class SearchTermGroupsManager {
 
     public static func getURLGroups(with profile: Profile, from urls: [URL], using ordering: ComparisonResult, completion: @escaping ([ASGroup<URL>]?, _ filteredItems: [URL]) -> Void) {
         getGroups(with: profile, from: urls, using: ordering, completion: completion)
