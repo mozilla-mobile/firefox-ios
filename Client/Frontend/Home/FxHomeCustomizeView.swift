@@ -32,7 +32,7 @@ class FxHomeCustomizeHomeView: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - UISetup
+    // MARK: - UI Setup
     func setupView() {
         contentView.backgroundColor = .clear
         contentView.addSubview(goToSettingsButton)

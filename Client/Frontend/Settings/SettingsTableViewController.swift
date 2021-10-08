@@ -255,7 +255,6 @@ class BoolSetting: Setting, FeatureFlagsProtocol {
     func displayBool(_ control: UISwitch) {
         if let featureFlagName = featureFlagName {
             control.isOn = featureFlags.getUserPreferenceFor(featureFlagName) == UserFeaturePreference.enabled
-
         } else {
             guard let key = prefKey, let defaultValue = defaultValue else {
                 return
