@@ -524,16 +524,16 @@ class SentryIDSetting: HiddenSetting {
 
 class ShowEtpCoverSheet: HiddenSetting {
     let profile: Profile
-    
+
     override var title: NSAttributedString? {
         return NSAttributedString(string: "Debug: ETP Cover Sheet On", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
-    
+
     override init(settings: SettingsTableViewController) {
         self.profile = settings.profile
         super.init(settings: settings)
     }
-    
+
     override func onClick(_ navigationController: UINavigationController?) {
         BrowserViewController.foregroundBVC().hasTriedToPresentETPAlready = false
         // ETP is shown when user opens app for 3rd time on clean install.
@@ -553,32 +553,13 @@ class ExperimentsSettings: HiddenSetting {
 
 class ToggleChronTabs: HiddenSetting, FeatureFlagsProtocol {
     override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureActive(.chronologicalTabs) ? "OFF" : "ON"
-        return NSAttributedString(string: "Debug: Toggle chronological tabs \(toNewStatus)",
+        let toNewStatus = featureFlags.isFeatureActiveForBuild(.chronologicalTabs) ? "OFF" : "ON"
+        return NSAttributedString(string: "Toggle chronological tabs \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        featureFlags.toggle(.chronologicalTabs)
-        updateCell(navigationController)
-    }
-
-    func updateCell(_ navigationController: UINavigationController?) {
-        let controller = navigationController?.topViewController
-        let tableView = (controller as? AppSettingsTableViewController)?.tableView
-        tableView?.reloadData()
-    }
-}
-
-class ToggleJumpBackInSection: HiddenSetting, FeatureFlagsProtocol {
-    override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureActive(.jumpBackIn) ? "OFF" : "ON"
-        return NSAttributedString(string: "Debug: Toggle Jump Back In section \(toNewStatus)",
-                                  attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        featureFlags.toggle(.jumpBackIn)
+        featureFlags.toggleBuildFeature(.chronologicalTabs)
         updateCell(navigationController)
     }
 
@@ -591,32 +572,13 @@ class ToggleJumpBackInSection: HiddenSetting, FeatureFlagsProtocol {
 
 class TogglePullToRefresh: HiddenSetting, FeatureFlagsProtocol {
     override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureActive(.pullToRefresh) ? "OFF" : "ON"
-        return NSAttributedString(string: "Debug: Toggle Pull to Refresh \(toNewStatus)",
+        let toNewStatus = featureFlags.isFeatureActiveForBuild(.pullToRefresh) ? "OFF" : "ON"
+        return NSAttributedString(string: "Toggle Pull to Refresh \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        featureFlags.toggle(.pullToRefresh)
-        updateCell(navigationController)
-    }
-
-    func updateCell(_ navigationController: UINavigationController?) {
-        let controller = navigationController?.topViewController
-        let tableView = (controller as? AppSettingsTableViewController)?.tableView
-        tableView?.reloadData()
-    }
-}
-
-class ToggleRecentlySavedSection: HiddenSetting, FeatureFlagsProtocol {
-    override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureActive(.recentlySaved) ? "OFF" : "ON"
-        return NSAttributedString(string: "Debug: Toggle Recently Saved Section \(toNewStatus)",
-                                  attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        featureFlags.toggle(.recentlySaved)
+        featureFlags.toggleBuildFeature(.pullToRefresh)
         updateCell(navigationController)
     }
 
@@ -629,52 +591,14 @@ class ToggleRecentlySavedSection: HiddenSetting, FeatureFlagsProtocol {
 
 class ToggleInactiveTabs: HiddenSetting, FeatureFlagsProtocol {
     override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureActive(.inactiveTabs) ? "OFF" : "ON"
-        return NSAttributedString(string: "Toggle inactive tabs: \(toNewStatus)",
+        let toNewStatus = featureFlags.isFeatureActiveForBuild(.inactiveTabs) ? "OFF" : "ON"
+        return NSAttributedString(string: "Toggle inactive tabs \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        featureFlags.toggle(.inactiveTabs)
+        featureFlags.toggleBuildFeature(.inactiveTabs)
         InactiveTabModel.hasRunInactiveTabFeatureBefore = false
-        updateCell(navigationController)
-    }
-
-    func updateCell(_ navigationController: UINavigationController?) {
-        let controller = navigationController?.topViewController
-        let tableView = (controller as? AppSettingsTableViewController)?.tableView
-        tableView?.reloadData()
-    }
-}
-
-class ToggleGroupedTabs: HiddenSetting, FeatureFlagsProtocol {
-    override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureActive(.groupedTabs) ? "ON" : "OFF"
-        return NSAttributedString(string: "Toggle grouped tabs: \(toNewStatus)",
-                                  attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        featureFlags.toggle(.groupedTabs)
-        updateCell(navigationController)
-    }
-
-    func updateCell(_ navigationController: UINavigationController?) {
-        let controller = navigationController?.topViewController
-        let tableView = (controller as? AppSettingsTableViewController)?.tableView
-        tableView?.reloadData()
-    }
-}
-
-class ToggleStartAtHome: HiddenSetting, FeatureFlagsProtocol {
-    override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureActive(.startAtHome) ? "OFF" : "ON"
-        return NSAttributedString(string: "Debug: Toggle Start at Home: \(toNewStatus)",
-                                  attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        featureFlags.toggle(.startAtHome)
         updateCell(navigationController)
     }
 
@@ -699,11 +623,11 @@ class VersionSetting: Setting {
     override var title: NSAttributedString? {
         return NSAttributedString(string: "\(AppName.longName) \(VersionSetting.appVersion) (\(VersionSetting.appBuildNumber))", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
-    
+
     public static var appVersion: String {
         return Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
     }
-    
+
     public static var appBuildNumber: String {
         return Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String
     }
@@ -736,7 +660,7 @@ class VersionSetting: Setting {
             }
         }
     }
-    
+
     func getSelectedCell(by navigationController: UINavigationController?) -> UITableViewCell? {
         let controller = navigationController?.topViewController
         let tableView = (controller as? AppSettingsTableViewController)?.tableView
@@ -859,7 +783,7 @@ class StudiesToggleSetting: BoolSetting {
         override var url: URL? {
             return SupportUtils.URLForTopic("ios-studies")
         }
-    
+
         override func onClick(_ navigationController: UINavigationController?) {
             setUpAndPushSettingsContentViewController(navigationController, self.url)
         }
@@ -921,7 +845,7 @@ class LoginsSetting: Setting {
         self.tabManager = settings.tabManager
         self.navigationController = settings.navigationController
         self.settings = settings as? AppSettingsTableViewController
-        
+
         super.init(title: NSAttributedString(string: Strings.LoginsAndPasswordsTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]),
                    delegate: delegate)
     }
@@ -934,7 +858,7 @@ class LoginsSetting: Setting {
 
     override func onClick(_: UINavigationController?) {
         deselectRow()
-        
+
         guard let navController = navigationController else { return }
         let navigationHandler: ((_ url: URL?) -> Void) = { url in
             guard let url = url else { return }
@@ -1137,7 +1061,7 @@ class HomeSetting: Setting {
     override var accessoryView: UIImageView {
         getDisclosureIndicator()
     }
-    
+
     override var accessibilityIdentifier: String? { return "Home" }
 
     override var status: NSAttributedString {
@@ -1155,6 +1079,22 @@ class HomeSetting: Setting {
     override func onClick(_ navigationController: UINavigationController?) {
         let viewController = HomePageSettingViewController(prefs: profile.prefs)
         viewController.profile = profile
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+}
+
+class TabsSetting: Setting {
+
+    override var accessoryView: UIImageView? { return disclosureIndicator }
+
+    override var accessibilityIdentifier: String? { return "TabsSetting" }
+
+    init() {
+        super.init(title: NSAttributedString(string: .SettingsCustomizeTabsTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        let viewController = TabsSettingsViewController()
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
@@ -1280,4 +1220,3 @@ class ThemeSetting: Setting {
         navigationController?.pushViewController(ThemeSettingsController(), animated: true)
     }
 }
-

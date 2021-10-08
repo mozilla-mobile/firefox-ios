@@ -28,7 +28,7 @@ class TabScrollingController: NSObject, FeatureFlagsProtocol {
         didSet {
             self.scrollView?.addGestureRecognizer(panGesture)
             scrollView?.delegate = self
-            featureFlags.isFeatureActive(.pullToRefresh) ? configureRefreshControl() : nil
+            featureFlags.isFeatureActiveForBuild(.pullToRefresh) ? configureRefreshControl() : nil
         }
     }
 
@@ -86,12 +86,12 @@ class TabScrollingController: NSObject, FeatureFlagsProtocol {
     override init() {
         super.init()
     }
-    
+
     private func configureRefreshControl() {
         scrollView?.refreshControl = UIRefreshControl()
         scrollView?.refreshControl?.addTarget(self, action: #selector(reload), for: .valueChanged)
     }
-    
+
     @objc private func reload() {
         guard let tab = tab else { return }
         tab.reloadPage()
@@ -342,3 +342,4 @@ extension TabScrollingController: UIScrollViewDelegate {
         return true
     }
 }
+

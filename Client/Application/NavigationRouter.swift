@@ -80,7 +80,7 @@ enum NavigationPath {
     init?(url: URL) {
         /*
          Force the URL's scheme to lowercase to ensure the code below can cope with URLs like the following from an external source. E.g Notes.app
-         
+
          Https://www.apple.com
          */
         func sanitizedURL(for unsanitized: URL) -> URL {
@@ -88,11 +88,11 @@ enum NavigationPath {
                   let scheme = components.scheme, !scheme.isEmpty else {
                 return unsanitized
             }
-            
+
             components.scheme = scheme.lowercased()
             return components.url ?? unsanitized
         }
-        
+
         let url = sanitizedURL(for: url)
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
             return nil
@@ -107,7 +107,7 @@ enum NavigationPath {
         guard let scheme = components.scheme, urlSchemes.contains(scheme) else {
             return nil
         }
-        
+
         let isOurScheme = [URL.mozPublicScheme, URL.mozInternalScheme].contains(scheme)
         if isOurScheme, let host = components.host?.lowercased(), !host.isEmpty {
             if host == "deep-link", let deepURL = components.valueForQuery("url"), let link = DeepLink(urlString: deepURL.lowercased()) {
@@ -205,7 +205,7 @@ enum NavigationPath {
             return nil
         }
     }
-    
+
     private static func openUrlFromComponents(components: URLComponents) -> NavigationPath {
         let url = components.valueForQuery("url")?.asURL
         // Unless the `open-url` URL specifies a `private` parameter,
@@ -213,7 +213,7 @@ enum NavigationPath {
         let isPrivate = Bool(components.valueForQuery("private") ?? "") ?? UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
         return .url(webURL: url, isPrivate: isPrivate)
     }
-    
+
     private static func openCopiedUrl() -> NavigationPath {
         if !UIPasteboard.general.hasURLs {
             let searchText = UIPasteboard.general.string ?? ""
@@ -223,7 +223,7 @@ enum NavigationPath {
         let isPrivate = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
         return .url(webURL: url, isPrivate: isPrivate)
     }
-    
+
     private static func openWidgetUrl(components: URLComponents) -> NavigationPath {
         let tabs = SimpleTab.getSimpleTabs()
         guard let uuid = components.valueForQuery("uuid"), !tabs.isEmpty else {
@@ -232,7 +232,7 @@ enum NavigationPath {
         let tab = tabs[uuid]
         return .widgetUrl(webURL: tab?.url, uuid: uuid)
     }
-    
+
     private static func handleFxA(params: FxALaunchParams, with bvc: BrowserViewController) {
         bvc.presentSignInViewController(params)
     }
@@ -268,7 +268,7 @@ enum NavigationPath {
             bvc.openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
         }
     }
-    
+
     private static func handleWidgetURL(url: URL?, uuid: String, with bvc: BrowserViewController) {
         if let newURL = url {
             bvc.switchToTabForURLOrOpen(newURL, uuid: uuid, isPrivate: false)
@@ -324,7 +324,7 @@ enum NavigationPath {
             controller.pushViewController(ThemeSettingsController(), animated: true)
         }
     }
-    
+
     private static func handleDefaultBrowser(path: DefaultBrowserPath) {
         switch path {
         case .systemSettings:
@@ -362,3 +362,4 @@ func == (lhs: DeepLink, rhs: DeepLink) -> Bool {
         return false
     }
 }
+

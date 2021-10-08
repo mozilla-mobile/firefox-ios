@@ -39,7 +39,7 @@ public struct PrefsKeys {
     public static let KeySecondRun = "SecondRun"
     public static let StartAtHome = "startAtHome"
     public static let PullToRefresh = "pullToRefresh"
-    
+
     // Activity Stream
     public static let KeyTopSitesCacheIsValid = "topSitesCacheIsValid"
     public static let KeyTopSitesCacheSize = "topSitesCacheSize"
@@ -56,16 +56,16 @@ public struct PrefsKeys {
     public static let AppExtensionTelemetryOpenUrl = "AppExtensionTelemetryOpenUrl"
     public static let AppExtensionTelemetryEventArray = "AppExtensionTelemetryEvents"
     public static let KeyBlockPopups = "blockPopups"
-    public static let recentlySavedSectionEnabled = "recentlySavedSectionEnabled"
-    public static let jumpBackInSectionEnabled = "jumpBackInSectionEnabled"
-    
+    public static let RecentlySavedSectionEnabled = "recentlySavedSectionEnabled"
+    public static let JumpBackInSectionEnabled = "jumpBackInSectionEnabled"
+
     // Tabs Tray
     public static let KeyEnableInactiveTabs = "KeyInactiveTabs"
     public static let KeyInactiveTabsModel = "KeyInactiveTabsModel"
     public static let KeyInactiveTabsFirstTimeRun = "KeyInactiveTabsFirstTimeRun"
     public static let KeyEnableGroupedTabs = "KeyEnableGroupedTabs"
     public static let KeyTabDisplayOrder = "KeyTabDisplayOrder"
-    
+
     // Widgetkit Key
     public static let WidgetKitSimpleTabKey = "WidgetKitSimpleTabKey"
     public static let WidgetKitSimpleTopTab = "WidgetKitSimpleTopTab"
