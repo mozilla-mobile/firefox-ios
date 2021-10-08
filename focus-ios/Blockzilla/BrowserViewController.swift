@@ -1131,15 +1131,22 @@ extension BrowserViewController: URLBarDelegate {
         case .off:
             Settings.set(false, forToggle: .trackingProtection)
         }
-    
-        let trackingProtectionViewController = TrackingProtectionViewController()
         
+        let state: TrackingProtectionState = urlBar.inBrowsingMode
+        ? .browsing(status: SecureConnectionStatus(
+            url: webViewController.url!,
+            isSecureConnection: webViewController.connectionIsSecure))
+        : .homescreen
+        
+        let trackingProtectionViewController = TrackingProtectionViewController(state: state)
         trackingProtectionViewController.delegate = self
-        
-        let trackingNavController = UINavigationController(rootViewController: trackingProtectionViewController)
-        trackingNavController.modalPresentationStyle = .formSheet
-
-        modalDelegate.presentModal(viewController: trackingNavController, animated: true)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            trackingProtectionViewController.modalPresentationStyle = .popover
+            trackingProtectionViewController.popoverPresentationController?.sourceView = urlBar.shieldIcon
+            modalDelegate.presentModal(viewController: trackingProtectionViewController, animated: true)
+        } else {
+            modalDelegate.presentSheet(viewController: trackingProtectionViewController)
+        }
     }
 
     func urlBarDidLongPress(_ urlBar: URLBar) { }

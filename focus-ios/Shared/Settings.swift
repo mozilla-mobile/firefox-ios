@@ -4,7 +4,7 @@
 
 import Foundation
 
-enum SettingsToggle: String {
+enum SettingsToggle: String, Equatable {
     case trackingProtection = "TrackingProtection"
     case biometricLogin = "BiometricLogin"
     case blockAds = "BlockAds"
@@ -18,6 +18,25 @@ enum SettingsToggle: String {
     case enableDomainAutocomplete = "enableDomainAutocomplete"
     case enableCustomDomainAutocomplete = "enableCustomDomainAutocomplete"
     case enableSearchSuggestions = "enableSearchSuggestions"
+}
+
+extension SettingsToggle {
+    var trackerChanged: String {
+        switch self {
+        case .trackingProtection:
+            return ""
+        case .blockAds:
+            return "Advertising"
+        case .blockAnalytics:
+            return "Analytics"
+        case .blockSocial:
+            return "Social"
+        case .blockOther:
+            return "Content"
+        default:
+            return ""
+        }
+    }
 }
 
 struct Settings {

@@ -17,19 +17,15 @@ class TrackingProtectionMenu: BaseTestCase {
         // Open the tracking protection sidebar
         app.otherElements["URLBar.trackingProtectionIcon"].tap()
 
-        // Wait for the sidebar to open
-        waitForExistence(app.navigationBars["Tracking Protection"])
-
         // Disable tracking protection
         waitForExistence(app.switches["BlockerToggle.TrackingProtection"])
         app.switches["BlockerToggle.TrackingProtection"].tap()
 
         // Reopen the tracking protection sidebar
-        app.buttons["Done"].tap()
+        app.buttons["closeSheetButton"].tap()
         app.otherElements["URLBar.trackingProtectionIcon"].tap()
 
         // Wait for the sidebar to open
-        waitForExistence(app.navigationBars["Tracking Protection"])
         let switchValue = app.switches["BlockerToggle.TrackingProtection"].value!
         XCTAssertEqual(switchValue as! String, "0")
     }

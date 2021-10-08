@@ -14,7 +14,7 @@ class TrackingProtectionSettings: BaseTestCase {
         app.buttons["HomeView.settingsButton"].tap()
         app.tables.cells["icon_settings"].tap()
 
-        waitForExistence(app.tables.cells["settingsViewController.trackingCell"])
+        waitForExistence(app.tables.cells["settingsViewController.trackingCell"], timeout: 10)
         app.tables.cells["settingsViewController.trackingCell"].tap()
 
         waitForExistence(app.navigationBars["Tracking Protection"])
@@ -28,8 +28,5 @@ class TrackingProtectionSettings: BaseTestCase {
         XCTAssertEqual(switchAnalyticsValue as! String, "1")
         XCTAssertEqual(switchSocialValue as! String, "1")
         XCTAssertEqual(switchOtherValue as! String, "0")
-
-        app.staticTexts["More Settings"].tap()
-        waitForExistence(app.navigationBars["Settings"])
     }
 }

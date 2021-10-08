@@ -486,10 +486,19 @@ extension AppDelegate {
     func presentModal(viewController: UIViewController, animated: Bool) {
         window?.rootViewController?.present(viewController, animated: animated, completion: nil)
     }
+    
+    func presentSheet(viewController: UIViewController) {
+        let vc = SheetModalViewController(containerViewController: viewController)
+        vc.modalPresentationStyle = .overCurrentContext
+        // keep false
+        // modal animation will be handled in VC itself
+        window?.rootViewController?.present(vc, animated: false)
+    }
 }
 
 protocol ModalDelegate {
     func presentModal(viewController: UIViewController, animated: Bool)
+    func presentSheet(viewController: UIViewController)
 }
 
 extension UINavigationController {

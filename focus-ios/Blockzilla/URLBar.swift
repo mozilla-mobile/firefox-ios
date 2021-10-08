@@ -926,9 +926,9 @@ private class URLTextField: AutocompleteTextField {
 }
 
 class TrackingProtectionBadge: UIView {
-    let trackingProtectionOff = UIImageView(image: #imageLiteral(resourceName: "tracking_protection_off").imageFlippedForRightToLeftLayoutDirection())
-    let trackingProtectionOn = UIImageView(image: #imageLiteral(resourceName: "tracking_protection").imageFlippedForRightToLeftLayoutDirection())
-    let connectionNotSecure = UIImageView(image: #imageLiteral(resourceName: "connection_not_secure").imageFlippedForRightToLeftLayoutDirection())
+    let trackingProtectionOff = UIImageView(image: .trackingProtectionOff.imageFlippedForRightToLeftLayoutDirection())
+    let trackingProtectionOn = UIImageView(image: .trackingProtectionOn.imageFlippedForRightToLeftLayoutDirection())
+    let connectionNotSecure = UIImageView(image: .connectionNotSecure.imageFlippedForRightToLeftLayoutDirection())
 
     override init(frame: CGRect) {
         super.init(frame: frame)

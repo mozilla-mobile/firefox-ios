@@ -30,7 +30,6 @@
 		16ABCD2621406D5500CABBF4 /* Intents.strings in Resources */ = {isa = PBXBuildFile; fileRef = 16ABCD2821406D5500CABBF4 /* Intents.strings */; };
 		16D465B12127891000FEC226 /* SiriFavoriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D465B02127891000FEC226 /* SiriFavoriteViewController.swift */; };
 		16D7169C2114EF76000C8A66 /* BlockerToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D7169B2114EF72000C8A66 /* BlockerToggle.swift */; };
-		16D7169E2114F00E000C8A66 /* TrackingProtectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D7169D2114F00E000C8A66 /* TrackingProtectionViewController.swift */; };
 		16D716A5211503CD000C8A66 /* PageActionSheetItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D716A4211503CD000C8A66 /* PageActionSheetItems.swift */; };
 		1B6C69922706A9410070935C /* Nimbus in Frameworks */ = {isa = PBXBuildFile; productRef = 1B6C69912706A9410070935C /* Nimbus */; };
 		1B6C69942706A9410070935C /* RustLog in Frameworks */ = {isa = PBXBuildFile; productRef = 1B6C69932706A9410070935C /* RustLog */; };
@@ -80,6 +79,24 @@
 		C82D143026EF62BE007B275C /* TipsPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82D142F26EF62BE007B275C /* TipsPageViewController.swift */; };
 		C82D143226EF634E007B275C /* TipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82D143126EF634E007B275C /* TipViewController.swift */; };
 		C82D143426EF644E007B275C /* UIViewController+Child.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82D143326EF644E007B275C /* UIViewController+Child.swift */; };
+		C8337DE22710893700093D42 /* UIImage+AppImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DE12710893700093D42 /* UIImage+AppImages.swift */; };
+		C8337DF42710898800093D42 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DE42710898800093D42 /* ImageLoader.swift */; };
+		C8337DF52710898800093D42 /* ToggleItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DE62710898800093D42 /* ToggleItem.swift */; };
+		C8337DF62710898800093D42 /* TrackingProtectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DE72710898800093D42 /* TrackingProtectionState.swift */; };
+		C8337DF72710898800093D42 /* SecureConnectionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DE82710898800093D42 /* SecureConnectionStatus.swift */; };
+		C8337DF82710898800093D42 /* TrackingProtectionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DE92710898800093D42 /* TrackingProtectionDelegate.swift */; };
+		C8337DF92710898800093D42 /* TrackingProtectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DEA2710898800093D42 /* TrackingProtectionViewController.swift */; };
+		C8337DFA2710898800093D42 /* SubtitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DEC2710898800093D42 /* SubtitleCell.swift */; };
+		C8337DFB2710898800093D42 /* TrackingHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DED2710898800093D42 /* TrackingHeaderView.swift */; };
+		C8337DFC2710898800093D42 /* AsyncImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DEE2710898800093D42 /* AsyncImageView.swift */; };
+		C8337DFD2710898800093D42 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DEF2710898800093D42 /* ImageCell.swift */; };
+		C8337DFE2710898800093D42 /* SwitchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DF02710898800093D42 /* SwitchTableViewCell.swift */; };
+		C8337DFF2710898800093D42 /* SheetModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DF22710898800093D42 /* SheetModalViewController.swift */; };
+		C8337E002710898800093D42 /* SheetMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DF32710898800093D42 /* SheetMetrics.swift */; };
+		C8337E05271089C200093D42 /* SectionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337E02271089C200093D42 /* SectionItem.swift */; };
+		C8337E06271089C200093D42 /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337E03271089C200093D42 /* Section.swift */; };
+		C8337E07271089C200093D42 /* DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337E04271089C200093D42 /* DataSource.swift */; };
+		C8337E09271089EF00093D42 /* UITableView+Dequeue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337E08271089EF00093D42 /* UITableView+Dequeue.swift */; };
 		C8415DB326E9FA38008BAAA2 /* UIApplication+Orientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8415DB226E9FA38008BAAA2 /* UIApplication+Orientation.swift */; };
 		C88A5D3B26EF9245009A135D /* ShareTrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C88A5D3A26EF9245009A135D /* ShareTrackersViewController.swift */; };
 		C8A9FE0A26E7A63F00A9C72B /* UserDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A9FE0926E7A5B900A9C72B /* UserDefault.swift */; };
@@ -370,7 +387,6 @@
 		16ABCD7021406DAF00CABBF4 /* gu-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "gu-IN"; path = "gu-IN.lproj/Intents.strings"; sourceTree = "<group>"; };
 		16D465B02127891000FEC226 /* SiriFavoriteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiriFavoriteViewController.swift; sourceTree = "<group>"; };
 		16D7169B2114EF72000C8A66 /* BlockerToggle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockerToggle.swift; sourceTree = "<group>"; };
-		16D7169D2114F00E000C8A66 /* TrackingProtectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingProtectionViewController.swift; sourceTree = "<group>"; };
 		16D716A4211503CD000C8A66 /* PageActionSheetItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageActionSheetItems.swift; sourceTree = "<group>"; };
 		1D051AC1857A0EEEBB833D15 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		1D199EF120D813D300CDF976 /* DragAndDropTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragAndDropTest.swift; sourceTree = "<group>"; };
@@ -582,6 +598,24 @@
 		C82D142F26EF62BE007B275C /* TipsPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsPageViewController.swift; sourceTree = "<group>"; };
 		C82D143126EF634E007B275C /* TipViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipViewController.swift; sourceTree = "<group>"; };
 		C82D143326EF644E007B275C /* UIViewController+Child.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Child.swift"; sourceTree = "<group>"; };
+		C8337DE12710893700093D42 /* UIImage+AppImages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+AppImages.swift"; sourceTree = "<group>"; };
+		C8337DE42710898800093D42 /* ImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
+		C8337DE62710898800093D42 /* ToggleItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToggleItem.swift; sourceTree = "<group>"; };
+		C8337DE72710898800093D42 /* TrackingProtectionState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingProtectionState.swift; sourceTree = "<group>"; };
+		C8337DE82710898800093D42 /* SecureConnectionStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecureConnectionStatus.swift; sourceTree = "<group>"; };
+		C8337DE92710898800093D42 /* TrackingProtectionDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingProtectionDelegate.swift; sourceTree = "<group>"; };
+		C8337DEA2710898800093D42 /* TrackingProtectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingProtectionViewController.swift; sourceTree = "<group>"; };
+		C8337DEC2710898800093D42 /* SubtitleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubtitleCell.swift; sourceTree = "<group>"; };
+		C8337DED2710898800093D42 /* TrackingHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingHeaderView.swift; sourceTree = "<group>"; };
+		C8337DEE2710898800093D42 /* AsyncImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncImageView.swift; sourceTree = "<group>"; };
+		C8337DEF2710898800093D42 /* ImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
+		C8337DF02710898800093D42 /* SwitchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchTableViewCell.swift; sourceTree = "<group>"; };
+		C8337DF22710898800093D42 /* SheetModalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetModalViewController.swift; sourceTree = "<group>"; };
+		C8337DF32710898800093D42 /* SheetMetrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetMetrics.swift; sourceTree = "<group>"; };
+		C8337E02271089C200093D42 /* SectionItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionItem.swift; sourceTree = "<group>"; };
+		C8337E03271089C200093D42 /* Section.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
+		C8337E04271089C200093D42 /* DataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSource.swift; sourceTree = "<group>"; };
+		C8337E08271089EF00093D42 /* UITableView+Dequeue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableView+Dequeue.swift"; sourceTree = "<group>"; };
 		C8415DB226E9FA38008BAAA2 /* UIApplication+Orientation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIApplication+Orientation.swift"; sourceTree = "<group>"; };
 		C88A5D3A26EF9245009A135D /* ShareTrackersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareTrackersViewController.swift; sourceTree = "<group>"; };
 		C8A9FE0926E7A5B900A9C72B /* UserDefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefault.swift; sourceTree = "<group>"; };
@@ -1142,6 +1176,61 @@
 			path = Deferred;
 			sourceTree = "<group>";
 		};
+		C8337DE32710898800093D42 /* Tracking Protection */ = {
+			isa = PBXGroup;
+			children = (
+				C8337DE42710898800093D42 /* ImageLoader.swift */,
+				C8337DE52710898800093D42 /* Model */,
+				C8337DE92710898800093D42 /* TrackingProtectionDelegate.swift */,
+				C8337DEA2710898800093D42 /* TrackingProtectionViewController.swift */,
+				C8337DEB2710898800093D42 /* Views */,
+				C8337DF12710898800093D42 /* Presentation */,
+			);
+			path = "Tracking Protection";
+			sourceTree = "<group>";
+		};
+		C8337DE52710898800093D42 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				C8337DE62710898800093D42 /* ToggleItem.swift */,
+				C8337DE72710898800093D42 /* TrackingProtectionState.swift */,
+				C8337DE82710898800093D42 /* SecureConnectionStatus.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		C8337DEB2710898800093D42 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C8337DEC2710898800093D42 /* SubtitleCell.swift */,
+				C8337DED2710898800093D42 /* TrackingHeaderView.swift */,
+				C8337DEE2710898800093D42 /* AsyncImageView.swift */,
+				C8337DEF2710898800093D42 /* ImageCell.swift */,
+				C8337DF02710898800093D42 /* SwitchTableViewCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		C8337DF12710898800093D42 /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				C8337DF22710898800093D42 /* SheetModalViewController.swift */,
+				C8337DF32710898800093D42 /* SheetMetrics.swift */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		C8337E01271089C200093D42 /* Declarative DataSource */ = {
+			isa = PBXGroup;
+			children = (
+				C8337E02271089C200093D42 /* SectionItem.swift */,
+				C8337E03271089C200093D42 /* Section.swift */,
+				C8337E04271089C200093D42 /* DataSource.swift */,
+			);
+			name = "Declarative DataSource";
+			path = "Blockzilla/Declarative DataSource";
+			sourceTree = SOURCE_ROOT;
+		};
 		C88A5D3D26F0999E009A135D /* Pro Tips */ = {
 			isa = PBXGroup;
 			children = (
@@ -1155,6 +1244,8 @@
 		C88A5D3E26F099B5009A135D /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				C8337E08271089EF00093D42 /* UITableView+Dequeue.swift */,
+				C8337DE12710893700093D42 /* UIImage+AppImages.swift */,
 				C82D143326EF644E007B275C /* UIViewController+Child.swift */,
 			);
 			path = Extensions;
@@ -1299,6 +1390,8 @@
 				D3E54FD41DEFB25B003E1AFF /* SearchPlugins */,
 				C88A5D3D26F0999E009A135D /* Pro Tips */,
 				C88A5D3E26F099B5009A135D /* Extensions */,
+				C8337E01271089C200093D42 /* Declarative DataSource */,
+				C8337DE32710898800093D42 /* Tracking Protection */,
 				D3DA778B1DC2C60E009C114E /* errorPage.html */,
 				E4BF2DE21BACE8CA00DA9D68 /* Info.plist */,
 				D3C047BC1DCBD8ED00402FFB /* SearchEngines.plist */,
@@ -1361,7 +1454,6 @@
 				845174A526CD0C2500510113 /* ShortcutsManager.swift */,
 				845174A726CD2C7100510113 /* ShortcutView.swift */,
 				D30DF93D1DC1634F0064736C /* Toast.swift */,
-				16D7169D2114F00E000C8A66 /* TrackingProtectionViewController.swift */,
 				D392881C1BC5CF180016A9A0 /* UIColorExtensions.swift */,
 				D392887E1BC5E47E0016A9A0 /* UIConstants.swift */,
 				D3E54FDD1DF0E0D6003E1AFF /* UIImageExtensions.swift */,
@@ -1936,9 +2028,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0967A811EC50002009D937F /* TelemetryIntegration.swift in Sources */,
+				C8337DE22710893700093D42 /* UIImage+AppImages.swift in Sources */,
+				C8337DF82710898800093D42 /* TrackingProtectionDelegate.swift in Sources */,
 				16837EA62135EFCC000424BB /* TipManager.swift in Sources */,
 				163BFFE62125EE260007CEBC /* SiriShortcuts.swift in Sources */,
 				16074B6D2114364C003B671F /* PhotonActionSheet.swift in Sources */,
+				C8337DF62710898800093D42 /* TrackingProtectionState.swift in Sources */,
 				B3CD41CE1FD1CDE300AEBD58 /* Result.swift in Sources */,
 				D3E2C8EA1D9F0E6200DEBE3D /* BrowserViewController.swift in Sources */,
 				C817A35922CE73B4002529FF /* LockProtected.swift in Sources */,
@@ -1949,19 +2044,24 @@
 				D3E251FB1DAF0668005918DC /* AppInfo.swift in Sources */,
 				31421EB12176492A0015F48B /* TitleActivityItemProvider.swift in Sources */,
 				E4BF2E111BAD8AC500DA9D68 /* Settings.swift in Sources */,
+				C8337E07271089C200093D42 /* DataSource.swift in Sources */,
 				C8A9FE0A26E7A63F00A9C72B /* UserDefault.swift in Sources */,
 				F88A4DF9270B455900100530 /* NimbusExtensions.swift in Sources */,
 				D3E54FDE1DF0E0D7003E1AFF /* UIImageExtensions.swift in Sources */,
 				16D716A5211503CD000C8A66 /* PageActionSheetItems.swift in Sources */,
+				C8337DFA2710898800093D42 /* SubtitleCell.swift in Sources */,
 				D597608C1F9FEFB300A2D212 /* TrackingProtection.swift in Sources */,
+				C8337DFD2710898800093D42 /* ImageCell.swift in Sources */,
 				D34E70351DA874AA00BABDCC /* StringExtensions.swift in Sources */,
 				D30179C31BCC6F65009AD388 /* AboutViewController.swift in Sources */,
 				B3AFC2BC1F7C0B9F001AEF38 /* WebViewController.swift in Sources */,
 				D5ABA3DA1FCC846800D5C060 /* AutocompleteSettingViewController.swift in Sources */,
 				845174A826CD2C7100510113 /* ShortcutView.swift in Sources */,
 				D5ABA3D91FCC846800D5C060 /* AddCustomDomainViewController.swift in Sources */,
+				C8337DFF2710898800093D42 /* SheetModalViewController.swift in Sources */,
 				D3426AEB1DB7F8AA0016DA5A /* OverlayView.swift in Sources */,
 				D5D2F02B252FA6AE00761DC8 /* Metrics.swift in Sources */,
+				C8337E05271089C200093D42 /* SectionItem.swift in Sources */,
 				16180DBB212F563800AFE3C2 /* Intents.intentdefinition in Sources */,
 				16D465B12127891000FEC226 /* SiriFavoriteViewController.swift in Sources */,
 				D3E54FCF1DEFAE80003E1AFF /* OpenSearchParser.swift in Sources */,
@@ -1971,19 +2071,24 @@
 				7460BD671F58B1B10096B745 /* GradientProgressBar.swift in Sources */,
 				D3E54FE01DF0E221003E1AFF /* SearchSettingsViewController.swift in Sources */,
 				30DFF98021810BF20055707C /* SearchSuggestClient.swift in Sources */,
+				C8337E06271089C200093D42 /* Section.swift in Sources */,
 				16D7169C2114EF76000C8A66 /* BlockerToggle.swift in Sources */,
 				C817A35822CE73B4002529FF /* ReadWriteLock.swift in Sources */,
 				C82D143426EF644E007B275C /* UIViewController+Child.swift in Sources */,
+				C8337DF92710898800093D42 /* TrackingProtectionViewController.swift in Sources */,
 				F7B3E49D2165C32B00118785 /* SearchSuggestionsPromptView.swift in Sources */,
 				D33E9B241E1D93DD00A39A44 /* RequestHandler.swift in Sources */,
+				C8337DFE2710898800093D42 /* SwitchTableViewCell.swift in Sources */,
 				D3426AF61DB84E7A0016DA5A /* SearchEngine.swift in Sources */,
 				B3CD41C91FD1027000AEBD58 /* InsetTextField.swift in Sources */,
 				D30179071BC6CB19009AD388 /* BlockerEnabledDetector.swift in Sources */,
 				B3481A551FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift in Sources */,
+				C8337DFB2710898800093D42 /* TrackingHeaderView.swift in Sources */,
 				161D90312108085F00C2A74A /* HomeViewToolbar.swift in Sources */,
 				EBE44F4E20ADDF6A005AFEA6 /* SmartLabel.swift in Sources */,
 				E4BF2DD71BACE8CA00DA9D68 /* AppDelegate.swift in Sources */,
 				D3E2C9691DA3024800DEBE3D /* InsetButton.swift in Sources */,
+				C8337DF52710898800093D42 /* ToggleItem.swift in Sources */,
 				F7FF8B5B2194084000CCA80F /* UIDeviceExtensions.swift in Sources */,
 				F805722F1DBEE504004339C1 /* WebCacheUtils.swift in Sources */,
 				1D3BEDFB20C5E76B0019B722 /* FindInPageBar.swift in Sources */,
@@ -2000,7 +2105,6 @@
 				D3E3CA7D1DA827AD0079C94B /* HomeViewController.swift in Sources */,
 				D8E0152C1FB4136E00CA3B9F /* AddSearchEngineViewController.swift in Sources */,
 				D3E251EB1DAD714C005918DC /* SafariInstructionsViewController.swift in Sources */,
-				16D7169E2114F00E000C8A66 /* TrackingProtectionViewController.swift in Sources */,
 				C80F901C26C554B800F5112B /* PhotonActionSheetCell.swift in Sources */,
 				D35A0E021E26C94F00297884 /* ClosedRangeExtensions.swift in Sources */,
 				C88A5D3B26EF9245009A135D /* ShareTrackersViewController.swift in Sources */,
@@ -2011,9 +2115,13 @@
 				746BD9281F75C45A00BE8DB9 /* DictionaryExtensions.swift in Sources */,
 				E40AFB141DC939FF00DA5651 /* SupportUtils.swift in Sources */,
 				D392887F1BC5E47E0016A9A0 /* UIConstants.swift in Sources */,
+				C8337E002710898800093D42 /* SheetMetrics.swift in Sources */,
 				D3E251F91DAF064B005918DC /* Utils.swift in Sources */,
+				C8337E09271089EF00093D42 /* UITableView+Dequeue.swift in Sources */,
 				D32F71D31BCEF67C006D44FC /* UIViewExtensions.swift in Sources */,
 				F81DF84F2653477F00C83C61 /* AutocompleteTextField.swift in Sources */,
+				C8337DF72710898800093D42 /* SecureConnectionStatus.swift in Sources */,
+				C8337DFC2710898800093D42 /* AsyncImageView.swift in Sources */,
 				D3E2C96B1DA3069000DEBE3D /* URIFixup.swift in Sources */,
 				D3DA77851DC2C307009C114E /* ErrorPage.swift in Sources */,
 				845174A626CD0C2500510113 /* ShortcutsManager.swift in Sources */,
@@ -2023,6 +2131,7 @@
 				D3E251EA1DAD714C005918DC /* InstructionsView.swift in Sources */,
 				D3561B2B1DB5925100A5EEAF /* GradientBackgroundView.swift in Sources */,
 				C82D143026EF62BE007B275C /* TipsPageViewController.swift in Sources */,
+				C8337DF42710898800093D42 /* ImageLoader.swift in Sources */,
 				C8415DB326E9FA38008BAAA2 /* UIApplication+Orientation.swift in Sources */,
 				D3E2C96D1DA3077400DEBE3D /* CharacterSetExtensions.swift in Sources */,
 				D3E2C96F1DA3093D00DEBE3D /* BrowserToolbar.swift in Sources */,
