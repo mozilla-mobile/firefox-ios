@@ -21,7 +21,7 @@ class CredentialWelcomeViewController: UIViewController {
     
     lazy private var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "AutoFill Firefox Passwords"
+        label.text = .LoginsWelcomeViewTitle2
         label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         label.numberOfLines = 0
         label.textAlignment = .center
@@ -30,7 +30,7 @@ class CredentialWelcomeViewController: UIViewController {
     
     lazy private var taglineLabel: UILabel = {
         let label = UILabel()
-        label.text = .LoginsWelcomeViewTitle
+        label.text = .LoginsWelcomeViewTagline
         label.font = UIFont.systemFont(ofSize: 20)
         label.numberOfLines = 0
         label.textAlignment = .center
