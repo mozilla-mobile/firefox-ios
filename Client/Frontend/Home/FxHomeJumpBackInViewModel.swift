@@ -63,7 +63,7 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
     }
 
     private func updateJumpListData() {
-        if featureFlags.isFeatureActive(.groupedTabs) {
+        if featureFlags.isFeatureActiveForBuild(.groupedTabs) {
             let recentTabs = tabManager.recentlyAccessedNormalTabs
             TabGroupsManager.getTabGroups(with: profile,
                                           from: recentTabs,
@@ -96,3 +96,4 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
         return recentTabs
     }
 }
+

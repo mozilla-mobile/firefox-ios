@@ -85,7 +85,7 @@ class TelemetryWrapper {
             self.crashedLastLaunch = false
 
             outputDict["settings"] = settings
-            
+
             let delegate = UIApplication.shared.delegate as? AppDelegate
 
             outputDict["openTabCount"] = delegate?.tabManager.count ?? 0
@@ -146,7 +146,7 @@ class TelemetryWrapper {
         self.profile = profile
 
         setSyncDeviceId()
-        
+
         // Register an observer to record settings and other metrics that are more appropriate to
         // record on going to background rather than during initialization.
         NotificationCenter.default.addObserver(
@@ -156,7 +156,7 @@ class TelemetryWrapper {
             object: nil
         )
     }
-    
+
     // Sets hashed fxa sync device id for glean deletion ping
     func setSyncDeviceId() {
         guard let prefs = profile?.prefs else { return }
@@ -430,6 +430,7 @@ extension TelemetryWrapper {
         case recentlySavedBookmarkItemView = "recently-saved-bookmark-item-view"
         case recentlySavedReadingListView = "recently-saved-reading-list-view"
         case recentlySavedReadingListAction = "recently-saved-reading-list-action"
+        case customizeHomepageButton = "customize-homepage-button"
         case addBookmarkToast = "add-bookmark-toast"
         case openHomeFromAwesomebar = "open-home-from-awesomebar"
         case openHomeFromPhotonMenuButton = "open-home-from-photon-menu-button"
@@ -441,12 +442,12 @@ extension TelemetryWrapper {
         case tabGroupWithExtras = "tabGroupWithExtras"
         case closeGroupedTab = "recordCloseGroupedTab"
     }
-    
+
     public enum EventExtraKey: String, CustomStringConvertible {
         case topSitePosition = "tilePosition"
         case topSiteTileType = "tileType"
         case pocketTilePosition = "pocketTilePosition"
-        
+
         // Grouped Tab
         case groupsWithTwoTabsOnly = "groupsWithTwoTabsOnly"
         case groupsWithTwoMoreTab = "groupsWithTwoMoreTab"
@@ -662,14 +663,14 @@ extension TelemetryWrapper {
             GleanMetrics.InactiveTabsTray.openRecentlyClosedList.add()
         case (.action, .tap, .inactiveTabTray, EventValue.openRecentlyClosedTab.rawValue, _):
             GleanMetrics.InactiveTabsTray.openRecentlyClosedTab.add()
-            
+
         // Tab Groups
         case (.action, .view, .tabTray, EventValue.tabGroupWithExtras.rawValue, let extras):
            let groupedTabExtras = GleanMetrics.Tabs.GroupedTabExtra.init(averageTabsInAllGroups: extras?["\(EventExtraKey.averageTabsInAllGroups)"] as? Int32, groupsTwoTabsOnly: extras?["\(EventExtraKey.groupsWithTwoTabsOnly)"] as? Int32, groupsWithMoreThanTwoTab: extras?["\(EventExtraKey.groupsWithTwoMoreTab)"] as? Int32, totalNumOfGroups: extras?["\(EventExtraKey.totalNumberOfGroups)"] as? Int32, totalTabsInAllGroups: extras?["\(EventExtraKey.totalTabsInAllGroups)"] as? Int32)
             GleanMetrics.Tabs.groupedTab.record(groupedTabExtras)
         case (.action, .tap, .groupedTab, EventValue.closeGroupedTab.rawValue, _):
             GleanMetrics.InactiveTabsTray.openRecentlyClosedTab.add()
-    
+
         // Firefox Homepage
         case (.action, .tap, .firefoxHomepage, EventValue.yourLibrarySection.rawValue, let extras):
             if let panel = extras?[EventObject.libraryPanel.rawValue] as? String {
@@ -704,9 +705,13 @@ extension TelemetryWrapper {
         case (.action, .tap, .firefoxHomepage, EventValue.jumpBackInSectionGroupOpened.rawValue, _):
             GleanMetrics.FirefoxHomePage.jumpBackInGroupOpened.add()
 
+        case (.action, .tap, .firefoxHomepage, EventValue.customizeHomepageButton.rawValue, _):
+            GleanMetrics.FirefoxHomePage.customizeHomepageButton.add()
+
         default:
             let msg = "Uninstrumented metric recorded: \(category), \(method), \(object), \(value), \(String(describing: extras))"
             Sentry.shared.send(message: msg, severity: .debug)
         }
     }
 }
+

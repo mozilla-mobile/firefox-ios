@@ -13,13 +13,13 @@ protocol OnViewDismissable: AnyObject {
 class DismissableNavigationViewController: UINavigationController, OnViewDismissable {
     var onViewDismissed: (() -> Void)? = nil
     var onViewWillDisappear: (() -> Void)? = nil
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         onViewWillDisappear?()
         onViewWillDisappear = nil
     }
-    
+
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         onViewDismissed?()
@@ -37,7 +37,7 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
                                                            profile: profile,
                                                            showChronTabs: shouldShowChronTabs(),
                                                            tabToFocus: tabToFocus)
-        
+
         tabTrayViewController?.openInNewTab = { url, isPrivate in
             let tab = self.tabManager.addTab(URLRequest(url: url), afterTab: self.tabManager.selectedTab, isPrivate: isPrivate)
             // If we are showing toptabs a user can just use the top tab bar
@@ -53,21 +53,21 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
             })
             self.show(toast: toast)
         }
-        
+
         tabTrayViewController?.didSelectUrl = { url, visitType in
             guard let tab = self.tabManager.selectedTab else { return }
             self.finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
         }
-        
+
         guard self.tabTrayViewController != nil else { return }
-        
+
         let controller = DismissableNavigationViewController(rootViewController: tabTrayViewController!)
         controller.presentationController?.delegate = tabTrayViewController
         // If we're not using the system theme, override the view's style to match
         if !ThemeManager.instance.systemThemeIsOn {
             controller.overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
         }
-   
+
         self.present(controller, animated: true, completion: nil)
 
         if let tab = tabManager.selectedTab {
@@ -89,7 +89,7 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
                 shouldShowChronTabs = chronDebugValue!
             // Respect build channel based settings
             } else if chronDebugValue == nil {
-                if featureFlags.isFeatureActive(.chronologicalTabs) {
+                if featureFlags.isFeatureActiveForBuild(.chronologicalTabs) {
                     shouldShowChronTabs = true
                 } else {
                     // Respect LP value
@@ -123,7 +123,7 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
         let findInPageAction = {
             self.updateFindInPageVisibility(visible: true)
         }
-        
+
         let reportSiteIssue = {
             self.openURLInNewTab(SupportUtils.URLForReportSiteIssue(self.urlBar.currentURL?.absoluteString))
         }
@@ -173,7 +173,7 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
                 settingsTableViewController.profile = self.profile
                 settingsTableViewController.tabManager = self.tabManager
                 settingsTableViewController.settingsDelegate = self
-                settingsTableViewController.showContentBlockerSetting = true
+                settingsTableViewController.deeplinkTo = .contentBlocker
 
                 let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
                 controller.presentingModalViewControllerDelegate = self
@@ -288,7 +288,7 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
         let urlActions = self.getLongPressLocationBarActions(with: urlBar, webViewContainer: self.webViewContainer)
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
-        
+
         let shouldSuppress = UIDevice.current.userInterfaceIdiom != .pad
         self.presentSheetWith(actions: [urlActions], on: self, from: urlBar, suppressPopover: shouldSuppress)
     }
