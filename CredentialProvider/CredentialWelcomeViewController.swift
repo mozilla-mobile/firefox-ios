@@ -77,14 +77,16 @@ class CredentialWelcomeViewController: UIViewController {
         
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(logoImageView.snp_bottomMargin).offset(40)
-            make.left.right.equalToSuperview().inset(35)
             make.centerX.equalToSuperview()
+            make.width.equalToSuperview().inset(35).priority(.high)
+            make.width.lessThanOrEqualTo(440)
         }
         
         taglineLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp_bottomMargin).offset(20)
-            make.left.right.equalToSuperview().inset(35)
             make.centerX.equalToSuperview()
+            make.width.equalToSuperview().inset(35).priority(.high)
+            make.width.lessThanOrEqualTo(440)
         }
                 
         cancelButton.snp.makeConstraints { make in
@@ -93,10 +95,11 @@ class CredentialWelcomeViewController: UIViewController {
         }
         
         proceedButton.snp.makeConstraints { make in
-            make.bottom.equalTo(self.view.snp.bottomMargin).inset(10)
+            make.bottom.equalTo(self.view.snp.bottomMargin).inset(20)
             make.height.equalTo(44)
-            make.left.equalToSuperview().inset(20)
-            make.right.equalToSuperview().inset(20)
+            make.centerX.equalToSuperview()
+            make.width.equalToSuperview().inset(35).priority(.high)
+            make.width.lessThanOrEqualTo(360)
         }
     }
     
