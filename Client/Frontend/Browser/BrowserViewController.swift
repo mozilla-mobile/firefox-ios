@@ -817,6 +817,20 @@ class BrowserViewController: UIViewController {
 
             } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
                 hideFirefoxHome()
+                
+                if !url.isReaderModeURL {
+                    urlBar.updateReaderModeState(ReaderModeState.unavailable)
+                    hideReaderModeBar(animated: false)
+                } else if let readerMode = self.tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) as? ReaderMode {
+                    urlBar.updateReaderModeState(readerMode.state)
+                    switch readerMode.state {
+                    case .active, .available:
+                        showReaderModeBar(animated: false)
+                    case .unavailable:
+                        hideReaderModeBar(animated: false)
+                    }
+                }
+
             }
             
         } else if isAboutHomeURL {
