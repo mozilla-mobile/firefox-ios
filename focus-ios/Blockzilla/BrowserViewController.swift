@@ -18,7 +18,7 @@ class BrowserViewController: UIViewController {
     private let mainContainerView = UIView(frame: .zero)
     let darkView = UIView()
 
-    private let webViewController = WebViewController(userAgent: UserAgent.shared)
+    private let webViewController = WebViewController()
     private let webViewContainer = UIView()
 
     var modalDelegate: ModalDelegate?
@@ -1174,7 +1174,7 @@ extension BrowserViewController: URLBarDelegate {
             
             var actionItems = [items.findInPageItem]
             actionItems.append(
-                webViewController.userAgentString == UserAgent.desktopUserAgent()
+                webViewController.requestMobileSite
                     ? items.requestMobileItem
                     : items.requestDesktopItem
             )

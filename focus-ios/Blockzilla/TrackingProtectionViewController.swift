@@ -16,7 +16,6 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
     
     private let tableView = UITableView(frame: .zero, style: .grouped)
     private var modalDelegate: ModalDelegate?
-    private let webViewController = WebViewController(userAgent: UserAgent.shared)
     private var isOpenedFromSetting = false
     weak var delegate: TrackingProtectionDelegate?
     private var trackingProtectionEnabled: Bool {
