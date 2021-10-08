@@ -942,18 +942,8 @@ class LoginsSetting: Setting {
             self.delegate?.settingsOpenURLInNewTab(url)
         }
         
-        // TODO SMA Move somewhere?
-        func hasSeenLoginOnboarding() -> Bool {
-            return false
-        }
-        
         if AppAuthenticator.canAuthenticateDeviceOwner() {
-            if hasSeenLoginOnboarding() {
-                LoginListViewController.create(authenticateInNavigationController: navController, profile: profile, settingsDelegate: BrowserViewController.foregroundBVC(), webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
-                    guard let loginsVC = loginsVC else { return }
-                    navController.pushViewController(loginsVC, animated: true)
-                }
-            } else {
+            if LoginOnboarding.shouldShow() {
                 let loginOnboardingViewController = LoginOnboardingViewController(profile: profile, tabManager: tabManager)
                 
                 loginOnboardingViewController.doneHandler = {
@@ -972,6 +962,13 @@ class LoginsSetting: Setting {
                 }
                 
                 navigationController?.pushViewController(loginOnboardingViewController, animated: true)
+                
+                LoginOnboarding.setShown()
+            } else {
+                LoginListViewController.create(authenticateInNavigationController: navController, profile: profile, settingsDelegate: BrowserViewController.foregroundBVC(), webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
+                    guard let loginsVC = loginsVC else { return }
+                    navController.pushViewController(loginsVC, animated: true)
+                }
             }
         } else {
             let viewController = DevicePasscodeRequiredViewController()

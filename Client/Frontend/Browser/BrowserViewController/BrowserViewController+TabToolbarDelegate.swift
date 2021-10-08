@@ -103,22 +103,9 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
                     UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
                     self.openURLInNewTab(url)
                 }
-            
-                // TODO SMA Move somewhere?
-                func hasSeenLoginOnboarding() -> Bool {
-                    return false
-                }
-                
+                            
                 if AppAuthenticator.canAuthenticateDeviceOwner() {
-                    if hasSeenLoginOnboarding() {
-                        LoginListViewController.create(authenticateInNavigationController: navController, profile: self.profile, settingsDelegate: self, webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
-                            guard let loginsVC = loginsVC else { return }
-                            loginsVC.shownFromAppMenu = true
-                            let navController = ThemedNavigationController(rootViewController: loginsVC)
-                            self.present(navController, animated: true)
-                            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .logins)
-                        }
-                    } else {
+                    if LoginOnboarding.shouldShow() {
                         let loginOnboardingViewController = LoginOnboardingViewController(shownFromAppMenu: true)
                         loginOnboardingViewController.doneHandler = {
                             loginOnboardingViewController.dismiss(animated: true)
@@ -139,6 +126,16 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
                         
                         let navController = ThemedNavigationController(rootViewController: loginOnboardingViewController)
                         self.present(navController, animated: true)
+                        
+                        LoginOnboarding.setShown()
+                    } else {
+                        LoginListViewController.create(authenticateInNavigationController: navController, profile: self.profile, settingsDelegate: self, webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
+                            guard let loginsVC = loginsVC else { return }
+                            loginsVC.shownFromAppMenu = true
+                            let navController = ThemedNavigationController(rootViewController: loginsVC)
+                            self.present(navController, animated: true)
+                            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .logins)
+                        }
                     }
                 } else {
                     let navController = ThemedNavigationController(rootViewController: DevicePasscodeRequiredViewController(shownFromAppMenu: true))
