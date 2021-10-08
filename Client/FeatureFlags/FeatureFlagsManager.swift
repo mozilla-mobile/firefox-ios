@@ -77,7 +77,7 @@ class FeatureFlagsManager {
     /// Function must have context when called: `let foo: Type = featureOption(.example)`
     /// Any feature with an option attached must be listed, and further converted into
     /// it's appropriate type in the switch statement.
-    public func getUserPreferenceFor<T>(_ featureID: FeatureFlagName) -> T? {
+    public func userPreferenceFor<T>(_ featureID: FeatureFlagName) -> T? {
         guard let feature = features[featureID],
               let userSetting = feature.getUserPreference()
         else { return nil }
