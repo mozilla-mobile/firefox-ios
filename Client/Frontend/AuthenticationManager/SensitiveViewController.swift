@@ -8,10 +8,7 @@ import Shared
 
 class SensitiveViewController: UIViewController {
     private var blurredOverlay: UIImageView?
-    
-    private var isAuthenticating = false
-//    private var isAuthenticated = false TODO SMA I don't think this is needed anymore.
-
+    private var isAuthenticated = false
     private var willEnterForegroundNotificationObserver: NSObjectProtocol?
     private var didEnterBackgroundNotificationObserver: NSObjectProtocol?
     
@@ -19,23 +16,14 @@ class SensitiveViewController: UIViewController {
         super.viewWillAppear(animated)
 
         willEnterForegroundNotificationObserver = NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main) { [self] notification in
-//            if isAuthenticating {
-//                return
-//            }
-            
             if !self.isAuthenticated {
-                self.isAuthenticated = false
-//                self.isAuthenticating = true
-                
-                AppAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
+                AppAuthenticator.authenticateWithDeviceOwnerAuthentication { [self] result in
                     switch result {
                         case .success():
-//                            self.isAuthenticated = true
                             self.isAuthenticating = false
                             self.removedBlurredOverlay()
                         case .failure(_):
                             self.isAuthenticated = false
-//                            self.isAuthenticating = false
                             self.navigationController?.dismiss(animated: true, completion: nil)
                             self.dismiss(animated: true)
                     }
