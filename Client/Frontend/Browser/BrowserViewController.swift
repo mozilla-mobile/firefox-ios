@@ -818,10 +818,8 @@ class BrowserViewController: UIViewController {
             } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
                 hideFirefoxHome()
                 
-                if !url.isReaderModeURL {
-                    urlBar.updateReaderModeState(ReaderModeState.unavailable)
-                    hideReaderModeBar(animated: false)
-                } else if let readerMode = self.tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) as? ReaderMode {
+                // Reader-mode check is required to correctly display reader-mode and refresh button on urlbar
+                if let readerMode = self.tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) as? ReaderMode {
                     urlBar.updateReaderModeState(readerMode.state)
                     switch readerMode.state {
                     case .active, .available:
@@ -829,6 +827,9 @@ class BrowserViewController: UIViewController {
                     case .unavailable:
                         hideReaderModeBar(animated: false)
                     }
+                } else {
+                    urlBar.updateReaderModeState(ReaderModeState.unavailable)
+                    hideReaderModeBar(animated: false)
                 }
 
             }
