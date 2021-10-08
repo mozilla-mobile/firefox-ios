@@ -1399,7 +1399,7 @@ extension String {
     public static let LoginsListNoMatchingResultSubtitle = MZLocalizedString("LoginsList.NoMatchingResult.Subtitle", value: "There are no results matching your search.", comment: "Label that appears after the search if there are no logins matching the search")
     public static let LoginsListNoLoginsFoundTitle = MZLocalizedString("LoginsList.NoLoginsFound.Title", value: "No logins found", comment: "Label shown when there are no logins saved")
     public static let LoginsListNoLoginsFoundDescription = MZLocalizedString("LoginsList.NoLoginsFound.Description", value: "Saved logins will show up here. If you saved your logins to Firefox on a different device, sign in to your Firefox Account.", comment: "Label shown when there are no logins to list")
-    public static let LoginsPasscodeRequirementWarning = MZLocalizedString("Logins.PasscodeRequirement.Warning", value: "To use the autofill feature for Firefox, you must have a device passcode enabled.", comment: "Warning message shown when you try to enable or use native AutoFill without a device passcode setup")
+    public static let LoginsPasscodeRequirementWarning = MZLocalizedString("Logins.PasscodeRequirement.Warning", value: "To use the AutoFill feature for Firefox, you must have a device passcode enabled.", comment: "Warning message shown when you try to enable or use native AutoFill without a device passcode setup")
 }
 
 // MARK: - v35 Strings

@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import SnapKit
 import Shared
 
 protocol CredentialWelcomeViewControllerDelegate {
@@ -18,19 +19,24 @@ class CredentialWelcomeViewController: UIViewController {
         return logoImage
     }()
     
+    lazy private var titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "AutoFill Firefox Passwords"
+        label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        return label
+    }()
+    
     lazy private var taglineLabel: UILabel = {
         let label = UILabel()
         label.text = .LoginsWelcomeViewTitle
-        label.font = UIFont.systemFont(ofSize: 15)
+        label.font = UIFont.systemFont(ofSize: 20)
+        label.numberOfLines = 0
+        label.textAlignment = .center
         return label
     }()
-        
-    lazy private var activityIndicator: UIActivityIndicatorView = {
-        let loadingIndicator = UIActivityIndicatorView()
-        loadingIndicator.style = .large
-        return loadingIndicator
-    }()
-    
+
     lazy private var cancelButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle(Strings.CancelString, for: .normal)
@@ -42,10 +48,8 @@ class CredentialWelcomeViewController: UIViewController {
         let button = UIButton(type: .custom)
         button.backgroundColor = UIColor.Photon.Blue50
         button.layer.cornerRadius = 8
-        let imageWidth = button.imageView?.frame.width ?? 0.0
         button.setTitle(String.LoginsWelcomeTurnOnAutoFillButtonTitle, for: .normal)
-        button.titleLabel?.font = DynamicFontHelper().MediumSizeBoldFontAS
-        button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         button.addTarget(self, action: #selector(proceedButtonTapped), for: .touchUpInside)
         return button
     }()
@@ -56,19 +60,10 @@ class CredentialWelcomeViewController: UIViewController {
         addSubviews()
         addViewConstraints()
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        activityIndicator.startAnimating()
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        activityIndicator.stopAnimating()
-    }
-    
+        
     func addSubviews() {
         view.addSubview(logoImageView)
+        view.addSubview(titleLabel)
         view.addSubview(taglineLabel)
         view.addSubview(cancelButton)
         view.addSubview(proceedButton)
@@ -77,11 +72,18 @@ class CredentialWelcomeViewController: UIViewController {
     func addViewConstraints() {
         logoImageView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview().multipliedBy(0.66)
+            make.centerY.equalToSuperview().multipliedBy(0.4)
+        }
+        
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalTo(logoImageView.snp_bottomMargin).offset(40)
+            make.left.right.equalToSuperview().inset(35)
+            make.centerX.equalToSuperview()
         }
         
         taglineLabel.snp.makeConstraints { make in
-            make.top.equalTo(logoImageView.snp_bottomMargin).offset(30)
+            make.top.equalTo(titleLabel.snp_bottomMargin).offset(20)
+            make.left.right.equalToSuperview().inset(35)
             make.centerX.equalToSuperview()
         }
                 
