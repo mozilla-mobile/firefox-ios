@@ -20,7 +20,7 @@ class SensitiveViewController: UIViewController {
                 AppAuthenticator.authenticateWithDeviceOwnerAuthentication { [self] result in
                     switch result {
                         case .success():
-                            self.isAuthenticating = false
+                            self.isAuthenticated = false
                             self.removedBlurredOverlay()
                         case .failure(_):
                             self.isAuthenticated = false
@@ -32,7 +32,6 @@ class SensitiveViewController: UIViewController {
         }
 
         didEnterBackgroundNotificationObserver = NotificationCenter.default.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main) { [self] notification in
-            self.isAuthenticating = false
             self.isAuthenticated = false
             self.installBlurredOverlay()
         }

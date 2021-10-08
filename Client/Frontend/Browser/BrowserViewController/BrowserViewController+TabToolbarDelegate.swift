@@ -104,13 +104,41 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
                     self.openURLInNewTab(url)
                 }
             
+                // TODO SMA Move somewhere?
+                func hasSeenLoginOnboarding() -> Bool {
+                    return false
+                }
+                
                 if AppAuthenticator.canAuthenticateDeviceOwner() {
-                    LoginListViewController.create(authenticateInNavigationController: navController, profile: self.profile, settingsDelegate: self, webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
-                        guard let loginsVC = loginsVC else { return }
-                        loginsVC.shownFromAppMenu = true
-                        let navController = ThemedNavigationController(rootViewController: loginsVC)
+                    if hasSeenLoginOnboarding() {
+                        LoginListViewController.create(authenticateInNavigationController: navController, profile: self.profile, settingsDelegate: self, webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
+                            guard let loginsVC = loginsVC else { return }
+                            loginsVC.shownFromAppMenu = true
+                            let navController = ThemedNavigationController(rootViewController: loginsVC)
+                            self.present(navController, animated: true)
+                            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .logins)
+                        }
+                    } else {
+                        let loginOnboardingViewController = LoginOnboardingViewController(shownFromAppMenu: true)
+                        loginOnboardingViewController.doneHandler = {
+                            loginOnboardingViewController.dismiss(animated: true)
+                        }
+                        
+                        loginOnboardingViewController.proceedHandler = {
+                            loginOnboardingViewController.dismiss(animated: true) {
+                                // TODO SMA Not so nice to copy this. We can do better.
+                                LoginListViewController.create(authenticateInNavigationController: navController, profile: self.profile, settingsDelegate: self, webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
+                                    guard let loginsVC = loginsVC else { return }
+                                    loginsVC.shownFromAppMenu = true
+                                    let navController = ThemedNavigationController(rootViewController: loginsVC)
+                                    self.present(navController, animated: true)
+                                    TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .logins)
+                                }
+                            }
+                        }
+                        
+                        let navController = ThemedNavigationController(rootViewController: loginOnboardingViewController)
                         self.present(navController, animated: true)
-                        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .logins)
                     }
                 } else {
                     let navController = ThemedNavigationController(rootViewController: DevicePasscodeRequiredViewController(shownFromAppMenu: true))

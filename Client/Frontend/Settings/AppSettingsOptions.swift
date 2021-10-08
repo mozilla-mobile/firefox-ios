@@ -942,10 +942,34 @@ class LoginsSetting: Setting {
             self.delegate?.settingsOpenURLInNewTab(url)
         }
         
+        // TODO SMA Move somewhere?
+        func hasSeenLoginOnboarding() -> Bool {
+            return false
+        }
+        
         if AppAuthenticator.canAuthenticateDeviceOwner() {
-            LoginListViewController.create(authenticateInNavigationController: navController, profile: profile, settingsDelegate: BrowserViewController.foregroundBVC(), webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
-                guard let loginsVC = loginsVC else { return }
-                navController.pushViewController(loginsVC, animated: true)
+            if hasSeenLoginOnboarding() {
+                LoginListViewController.create(authenticateInNavigationController: navController, profile: profile, settingsDelegate: BrowserViewController.foregroundBVC(), webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
+                    guard let loginsVC = loginsVC else { return }
+                    navController.pushViewController(loginsVC, animated: true)
+                }
+            } else {
+                let loginOnboardingViewController = LoginOnboardingViewController(profile: profile, tabManager: tabManager)
+                
+                loginOnboardingViewController.doneHandler = {
+                    loginOnboardingViewController.dismiss(animated: true)
+                }
+                
+                loginOnboardingViewController.proceedHandler = {
+                    // TODO SMA Not so nice to copy this. We can do better.
+                    LoginListViewController.create(authenticateInNavigationController: navController, profile: self.profile, settingsDelegate: BrowserViewController.foregroundBVC(), webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
+                        guard let loginsVC = loginsVC else { return }
+                        navController.pushViewController(loginsVC, animated: true)
+                        navController.popViewController(animated: false)
+                    }
+                }
+                
+                navigationController?.pushViewController(loginOnboardingViewController, animated: true)
             }
         } else {
             let viewController = DevicePasscodeRequiredViewController()
