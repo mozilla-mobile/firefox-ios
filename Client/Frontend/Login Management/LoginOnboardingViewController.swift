@@ -54,10 +54,11 @@ class LoginOnboardingViewController: SettingsViewController {
         }
 
         button.snp.makeConstraints { make in
-            make.top.equalTo(label.snp_bottomMargin).offset(30)
+            make.bottom.equalTo(self.view.snp.bottomMargin).inset(20)
             make.height.equalTo(44)
-            make.left.equalToSuperview().inset(20)
-            make.right.equalToSuperview().inset(20)
+            make.centerX.equalToSuperview()
+            make.width.equalToSuperview().inset(35).priority(.high)
+            make.width.lessThanOrEqualTo(360)
          }
     }
     

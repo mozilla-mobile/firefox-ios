@@ -8,7 +8,7 @@ struct LoginOnboarding {
     static let HasSeenLoginOnboardingKey = "HasSeenLoginOnboarding"
     
     static func shouldShow() -> Bool {
-        return true // UserDefaults.standard.bool(forKey: HasSeenLoginOnboardingKey) == false
+        return UserDefaults.standard.bool(forKey: HasSeenLoginOnboardingKey) == false
     }
     
     static func setShown() {
