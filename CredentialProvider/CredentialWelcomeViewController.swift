@@ -61,7 +61,7 @@ class CredentialWelcomeViewController: UIViewController {
         addViewConstraints()
     }
         
-    func addSubviews() {
+    private func addSubviews() {
         view.addSubview(logoImageView)
         view.addSubview(titleLabel)
         view.addSubview(taglineLabel)
@@ -69,7 +69,7 @@ class CredentialWelcomeViewController: UIViewController {
         view.addSubview(proceedButton)
     }
     
-    func addViewConstraints() {
+    private func addViewConstraints() {
         logoImageView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview().multipliedBy(0.4)

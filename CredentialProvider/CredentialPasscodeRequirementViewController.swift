@@ -68,15 +68,7 @@ class CredentialPasscodeRequirementViewController: UIViewController {
         addViewConstraints()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-    }
-    
-    func addSubviews() {
+    private func addSubviews() {
         view.addSubview(logoImageView)
         view.addSubview(titleLabel)
         view.addSubview(taglineLabel)
@@ -84,7 +76,7 @@ class CredentialPasscodeRequirementViewController: UIViewController {
         view.addSubview(cancelButton)
     }
     
-    func addViewConstraints() {
+    private func addViewConstraints() {
         logoImageView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview().multipliedBy(0.4)
