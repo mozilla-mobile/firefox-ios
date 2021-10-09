@@ -891,6 +891,7 @@
 		F84B22541A0920C600AAB793 /* ShareTo.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = F84B22491A0920C600AAB793 /* ShareTo.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		F85C7EDD27109241004BDBA4 /* LoginOnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F85C7EDC27109241004BDBA4 /* LoginOnboardingViewController.swift */; };
 		F85C7EDF2710B4DD004BDBA4 /* LoginOnboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = F85C7EDE2710B4DD004BDBA4 /* LoginOnboarding.swift */; };
+		F85C7F0E2711C556004BDBA4 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F85C7F0D2711C555004BDBA4 /* SettingsViewController.swift */; };
 		F8708D2E1A0970B70051AB07 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F8708D251A0970990051AB07 /* Images.xcassets */; };
 		F8708D321A0970B70051AB07 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8708D291A0970990051AB07 /* ShareViewController.swift */; };
 		F886218C270CD3B8007F4562 /* DevicePasscodeRequiredViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F886218B270CD3B8007F4562 /* DevicePasscodeRequiredViewController.swift */; };
@@ -4083,6 +4084,7 @@
 		F84B22491A0920C600AAB793 /* ShareTo.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareTo.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		F85C7EDC27109241004BDBA4 /* LoginOnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginOnboardingViewController.swift; sourceTree = "<group>"; };
 		F85C7EDE2710B4DD004BDBA4 /* LoginOnboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginOnboarding.swift; sourceTree = "<group>"; };
+		F85C7F0D2711C555004BDBA4 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		F8624779990FC1A45BF201E5 /* anp */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = anp; path = anp.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		F8708D251A0970990051AB07 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		F8708D261A0970990051AB07 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -4608,6 +4610,7 @@
 				D04CD717215EBD85004FF5B0 /* SettingsLoadingView.swift */,
 				2F44FC711A9E840300FD20CC /* SettingsNavigationController.swift */,
 				2F44FCC41A9E85E900FD20CC /* SettingsTableViewController.swift */,
+				F85C7F0D2711C555004BDBA4 /* SettingsViewController.swift */,
 				D821E9052141B71C00452C55 /* SiriSettingsViewController.swift */,
 				CEFA977D1FAA6B490016F365 /* SyncContentSettingsViewController.swift */,
 				EB9A178D20E525DF00B12184 /* ThemeSettingsController.swift */,
@@ -8009,6 +8012,7 @@
 				D81E45131F82C56D004EFFBA /* NewTabContentSettingsViewController.swift in Sources */,
 				E4CD9E911A6897FB00318571 /* ReaderMode.swift in Sources */,
 				962F394A2672D57A006BDA2A /* RecentItemsHelper.swift in Sources */,
+				F85C7F0E2711C556004BDBA4 /* SettingsViewController.swift in Sources */,
 				74C027451B2A348C001B1E88 /* SessionData.swift in Sources */,
 				274A36CC239EB99400A21587 /* LibraryPanelContextMenu.swift in Sources */,
 				D314E7F71A37B98700426A76 /* TabToolbar.swift in Sources */,

@@ -6,7 +6,7 @@ import UIKit
 import Shared
 import SnapKit
 
-class LoginOnboardingViewController: SettingsTableViewController {
+class LoginOnboardingViewController: SettingsViewController {
     private var shownFromAppMenu: Bool = false
 
     private var label: UILabel!
@@ -16,9 +16,7 @@ class LoginOnboardingViewController: SettingsTableViewController {
     var proceedHandler: () -> Void = {}
 
     init(profile: Profile? = nil, tabManager: TabManager? = nil, shownFromAppMenu: Bool = false) {
-        super.init()
-        self.profile = profile
-        self.tabManager = tabManager
+        super.init(profile: profile, tabManager: tabManager)
         self.shownFromAppMenu = shownFromAppMenu
     }
 

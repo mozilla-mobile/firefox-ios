@@ -8,52 +8,66 @@ import SnapKit
 
 // SMA TODO Finalize layout & strings.
 
-class DevicePasscodeRequiredViewController: SettingsTableViewController {
+class DevicePasscodeRequiredViewController: SettingsViewController {
     private var shownFromAppMenu: Bool = false
     
-    private var label: UILabel!
-    private var button: UIButton!
+    private var warningTextView: UITextView!
+    private var learnMoreButton: UIButton!
     
-    init(shownFromAppMenu: Bool = false) {
-        super.init()
+    init(profile: Profile? = nil, tabManager: TabManager? = nil, shownFromAppMenu: Bool = false) {
+        super.init(profile: profile, tabManager: tabManager)
         self.shownFromAppMenu = shownFromAppMenu
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("not implemented")
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+                
         if shownFromAppMenu {
-            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))
+            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTapped))
         }
         
         self.title = Strings.LoginsAndPasswordsTitle
         
-        label = UILabel()
-        label.text = "To access your Logins & Passwords, your device must have a passcode set."
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        self.view.addSubview(label)
+        let warningTextView = UITextView()
+        warningTextView.font = UIFont.boldSystemFont(ofSize: 18)
+        warningTextView.text = "To use the Logins & Passwords feature for Firefox, you must have a device passcode enabled."
+        warningTextView.textAlignment = .center
+        warningTextView.backgroundColor = UIColor.Photon.Red05
+        warningTextView.clipsToBounds = true
+        warningTextView.layer.cornerRadius = 5
+        warningTextView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        warningTextView.isScrollEnabled = false
+        warningTextView.isUserInteractionEnabled = false
+        warningTextView.sizeToFit()
+        self.view.addSubview(warningTextView)
 
-        button = UIButton(type: .system)
-        button.setTitle("Learn More", for: .normal)
-        self.view.addSubview(button)
+        learnMoreButton = UIButton(type: .system)
+        learnMoreButton.setTitle("Learn More", for: .normal)
+        learnMoreButton.addTarget(self, action: #selector(learnMoreButtonTapped), for: .touchUpInside)
+        self.view.addSubview(learnMoreButton)
         
-        label.snp.makeConstraints { make in
+        warningTextView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(20)
             make.center.equalToSuperview()
        }
         
-        button.snp.makeConstraints { make in
+        learnMoreButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(label.snp.bottom).offset(10)
+            make.top.equalTo(warningTextView.snp.bottom).offset(10)
         }
     }
     
-    @objc func done() {
+    @objc func doneButtonTapped(_ sender: UIButton) {
         dismiss(animated: true)
+    }
+
+    @objc func learnMoreButtonTapped(_ sender: UIButton) {
+        let viewController = SettingsContentViewController()
+        viewController.url = SupportUtils.URLForTopic("logins-passwords-passcode-ios")
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }
