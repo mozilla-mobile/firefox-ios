@@ -338,6 +338,12 @@ public class RustLoginEncryptionKeys {
     public let loginsSaltKeychainKey = "sqlcipher.key.logins.salt"
     public let loginsUnlockKeychainKey = "sqlcipher.key.logins.db"
     public let loginPerFieldKeychainKey = "appservices.key.logins.perfield"
+    
+    // The old database salt and key will be stored in the two keychain keys below to allow
+    // for potential data restore
+    public let loginsPostMigrationSalt = "sqlcipher.key.logins.salt.post.migration"
+    public let loginsPostMigrationKey = "sqlcipher.key.logins.db.post.migration"
+    
     let keychain: KeychainWrapper = KeychainWrapper.sharedAppContainerKeychain
     let canaryPhraseKey = "canaryPhrase"
     let canaryPhrase = "a string for checking validity of the key"
@@ -377,7 +383,7 @@ public class RustLogins {
     let perFieldDatabasePath: String
 
     let queue: DispatchQueue
-    var storage: LoginStore?
+    var storage: LoginsStorage?
 
     private(set) var isOpen = false
 
@@ -394,7 +400,7 @@ public class RustLogins {
     private func open() -> NSError? {
         do {
             migrateSQLCipherDBIfNeeded()
-            storage = try LoginStore(path: self.perFieldDatabasePath)
+            storage = try LoginsStorage(databasePath: self.perFieldDatabasePath)
             isOpen = true
             return nil
         } catch let err as NSError {
@@ -458,7 +464,7 @@ public class RustLogins {
             }
 
             do {
-                try _ = self.storage?.sync(keyId: unlockInfo.kid, accessToken: unlockInfo.fxaAccessToken, syncKey: unlockInfo.syncKey, tokenserverUrl: unlockInfo.tokenserverURL, localEncryptionKey: unlockInfo.loginEncryptionKey)
+                try _ = self.storage?.sync(unlockInfo: unlockInfo)
                 deferred.fill(Maybe(success: ()))
             } catch let err as NSError {
                 if let loginsStoreError = err as? LoginsStoreError {
@@ -719,21 +725,26 @@ public class RustLogins {
         let rustKeys: RustLoginEncryptionKeys = RustLoginEncryptionKeys()
         let sqlCipherLoginsKey: String? = keychain.string(forKey: rustKeys.loginsUnlockKeychainKey)
         let sqlCipherLoginsSalt: String? = keychain.string(forKey: rustKeys.loginsSaltKeychainKey)
-        let key = try! self.getStoredKey()
+        let key = try! getStoredKey()
         
         // If the sqlcipher salt or key are missing don't migrate
         if ((sqlCipherLoginsKey ?? "").isEmpty || (sqlCipherLoginsSalt ?? "").isEmpty ) {
             return
         }
         
-        defer {
-            // Delete the old key and salt regardless of if the migration succeeded.  If
-            // it failed, it's just going to fail again next time.
-            keychain.removeObject(forKey: rustKeys.loginsUnlockKeychainKey, withAccessibility: .afterFirstUnlock)
-            keychain.removeObject(forKey: rustKeys.loginsSaltKeychainKey, withAccessibility: .afterFirstUnlock)
+        let migrationSucceeded = migrateLoginsWithMetrics(path: self.perFieldDatabasePath, newEncryptionKey: key, sqlcipherPath: self.sqlCipherDatabasePath, sqlcipherKey: sqlCipherLoginsKey!, salt: sqlCipherLoginsSalt!)
+        
+        // If the migration fails, move the old database file and store the old key and salt for
+        // potential data restore
+        if !migrationSucceeded {
+            RustShared.moveDatabaseFileToBackupLocation(databasePath: self.sqlCipherDatabasePath)
+            
+            keychain.set(sqlCipherLoginsSalt!, forKey: rustKeys.loginsPostMigrationSalt, withAccessibility: .afterFirstUnlock)
+            keychain.set(sqlCipherLoginsKey!, forKey: rustKeys.loginsPostMigrationKey, withAccessibility: .afterFirstUnlock)
         }
-        let metrics = try! migrateLogins(path: self.perFieldDatabasePath, newEncryptionKey: key, sqlcipherPath: sqlCipherDatabasePath, sqlcipherKey: sqlCipherLoginsKey!, salt: sqlCipherLoginsSalt)
-        // TODO: Report metrics via glean
+        
+        keychain.removeObject(forKey: rustKeys.loginsUnlockKeychainKey, withAccessibility: .afterFirstUnlock)
+        keychain.removeObject(forKey: rustKeys.loginsSaltKeychainKey, withAccessibility: .afterFirstUnlock)
     }
     
     public func getStoredKey() throws -> String {
