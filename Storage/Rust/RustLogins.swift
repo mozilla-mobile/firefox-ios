@@ -752,39 +752,40 @@ public class RustLogins {
         let key = rustKeys.keychain.string(forKey: rustKeys.loginPerFieldKeychainKey)
         let encryptedCanaryPhrase = rustKeys.keychain.string(forKey: rustKeys.canaryPhraseKey)
         
-        // We expected the key to be present, and it is.
-        if key != nil && encryptedCanaryPhrase != nil {
-            do {
-                let canaryIsValid = try checkCanary(canary: encryptedCanaryPhrase!, text: rustKeys.canaryPhrase, encryptionKey: key!)
-                if canaryIsValid {
-                    return key!
-                } else {
+        switch(key, encryptedCanaryPhrase) {
+            case (.some(key), .some(encryptedCanaryPhrase)):
+                // We expected the key to be present, and it is.
+                do {
+                    let canaryIsValid = try checkCanary(canary: encryptedCanaryPhrase!, text: rustKeys.canaryPhrase, encryptionKey: key!)
+                    if canaryIsValid {
+                        return key!
+                    } else {
+                        Sentry.shared.sendWithStacktrace(message: "Logins key was corrupted, new one generated", tag: SentryTag.rustLogins, severity: .warning)
+                        _ = self.wipeLocalEngine()
+                        return rustKeys.createAndStoreKey()
+                    }
+                } catch _ as NSError {
                     Sentry.shared.sendWithStacktrace(message: "Logins key was corrupted, new one generated", tag: SentryTag.rustLogins, severity: .warning)
-                    _ = self.wipeLocalEngine()
-                    return rustKeys.createAndStoreKey()
                 }
-            } catch _ as NSError {
-                Sentry.shared.sendWithStacktrace(message: "Logins key was corrupted, new one generated", tag: SentryTag.rustLogins, severity: .warning)
-            }
-        }
-        // The key is present, but we didn't expect it to be there.
-        else if key != nil && encryptedCanaryPhrase == nil {
-            Sentry.shared.sendWithStacktrace(message: "Logins key lost due to storage malfunction, new one generated", tag: SentryTag.rustLogins, severity: .warning)
-            _ = self.wipeLocalEngine()
-            return rustKeys.createAndStoreKey()
-        }
-        // We expected the key to be present, but it's gone missing on us.
-        else if key == nil && encryptedCanaryPhrase != nil {
-            Sentry.shared.sendWithStacktrace(message: "Logins key lost, new one generated", tag: SentryTag.rustLogins, severity: .warning)
-            _ = self.wipeLocalEngine()
-            return rustKeys.createAndStoreKey()
-        }
-        // We didn't expect the key to be present, and it's not (which is the case for first-time calls).
-        else if key == nil && encryptedCanaryPhrase == nil {
-            return rustKeys.createAndStoreKey()
+            case (.some(key), .none):
+                // The key is present, but we didn't expect it to be there.
+                Sentry.shared.sendWithStacktrace(message: "Logins key lost due to storage malfunction, new one generated", tag: SentryTag.rustLogins, severity: .warning)
+                _ = self.wipeLocalEngine()
+                return rustKeys.createAndStoreKey()
+            case (.none, .some(encryptedCanaryPhrase)):
+                // We expected the key to be present, but it's gone missing on us.
+                Sentry.shared.sendWithStacktrace(message: "Logins key lost, new one generated", tag: SentryTag.rustLogins, severity: .warning)
+                _ = self.wipeLocalEngine()
+                return rustKeys.createAndStoreKey()
+            case (.none, .none):
+                // We didn't expect the key to be present, and it's not (which is the case for first-time calls).
+                return rustKeys.createAndStoreKey()
+            default:
+                // If none of the above cases apply, we're in a state that shouldn't be possible but is disallowed nonetheless
+                throw LoginEncryptionKeyError.illegalState
         }
         
-        // If none of the above cases apply, we're in a state that shouldn't be possible but is disallowed nonetheless
+        // This must be declared again for Swift's sake even though the above switch statement handles all cases
         throw LoginEncryptionKeyError.illegalState
     }
 }
