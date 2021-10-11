@@ -21,8 +21,8 @@ enum SiteImageType: Int {
 /// A helper that'll fetch an image, and fallback to other image options if specified.
 class SiteImageHelper {
     
-    private static let cache = NSCache<NSString, UIImage>()
-    private let throttler = Throttler(seconds: 0.5)
+    static let cache = NSCache<NSString, UIImage>()
+    private let throttler = Throttler(seconds: 0.5, on: .main)
     private let profile: Profile
     
     init(profile: Profile) {
@@ -45,13 +45,17 @@ class SiteImageHelper {
             fetchHeroImage(for: site) { image, result in
                 guard let heroImage = image else { return }
                 didCompleteFetch = result ?? false
-                DispatchQueue.main.async { completion(heroImage) }
+                DispatchQueue.main.async { completion(heroImage)
+                    return
+                }
             }
         case .favicon:
             fetchFavicon(for: site) { image, result in
                 guard let favicon = image else { return }
                 didCompleteFetch = result ?? false
-                DispatchQueue.main.async { completion(favicon) }
+                DispatchQueue.main.async { completion(favicon)
+                    return
+                }
             }
         }
         
@@ -70,14 +74,13 @@ class SiteImageHelper {
         guard let url = URL(string: site.url) else { return }
         
         let heroImageCacheKey = NSString(string: site.url)
-        if let image = SiteImageHelper.cache.object(forKey: heroImageCacheKey) { completion(image, true) }
-
+        
         linkPresentationProvider.startFetchingMetadata(for: url) { metadata, error in
             guard let metadata = metadata, let imageProvider = metadata.imageProvider, error == nil else {
                 completion(nil, false)
                 return
             }
-
+            
             imageProvider.loadObject(ofClass: UIImage.self) { image, error in
                 guard error == nil, let image = image as? UIImage else {
                     completion(nil, false)
@@ -85,6 +88,7 @@ class SiteImageHelper {
                 }
                 SiteImageHelper.cache.setObject(image, forKey: heroImageCacheKey)
                 completion(image, true)
+                return
             }
         }
         
@@ -92,7 +96,6 @@ class SiteImageHelper {
     
     private func fetchFavicon(for site: Site, completion: @escaping (UIImage?, Bool?) -> ()) {
         let faviconCacheKey = NSString(string: site.url)
-        if let image = SiteImageHelper.cache.object(forKey: faviconCacheKey) { completion(image, true) }
         
         profile.favicons.getFaviconImage(forSite: site).uponQueue(.main, block: { result in
             guard let image = result.successValue else { return }
