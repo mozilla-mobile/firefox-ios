@@ -33,7 +33,7 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
         self.title = Strings.LoginsAndPasswordsTitle
         
         let warningTextView = UITextView()
-        warningTextView.font = UIFont.boldSystemFont(ofSize: 18)
+        warningTextView.font = DynamicFontHelper().DeviceFontExtraLarge
         warningTextView.text = Strings.LoginsDevicePasscodeRequiredMessage
         warningTextView.textAlignment = .center
         warningTextView.backgroundColor = UIColor.Photon.Red05

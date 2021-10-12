@@ -253,7 +253,7 @@ extension Strings {
     public static let LoginsDevicePasscodeRequiredLearnMoreButtonTitle = MZLocalizedString("Logins.DevicePasscodeRequired.LearnMoreButtonTitle", value: "Learn More", comment: "Title of the Learn More button that links to a support page about device passcode requirements.")
 
     // For the LoginOnboardingViewController
-    public static let LoginsOnboardingMessage = MZLocalizedString("Logins.Onboarding.Message", value: "Firefox now protects your Logins & Passwords with your device passcode or Touch ID.", comment: "Message shown when you enter Logins & Passwords for the first time.")
+    public static let LoginsOnboardingMessage = MZLocalizedString("Logins.Onboarding.Message", value: "Firefox now protects your Logins & Passwords with Face ID, Touch ID or your device passcode.", comment: "Message shown when you enter Logins & Passwords for the first time.")
     public static let LoginsOnboardingLearnMoreButtonTitle = MZLocalizedString("Logins.Onboarding.LearnMoreButtonTitle", value: "Learn More", comment: "Title of the Learn More button that links to a support page about device passcode requirements.")
     public static let LoginsOnboardingContinueButtonTitle = MZLocalizedString("Logins.Onboarding.ContinueButtonTitle", value: "Continue", comment: "Title of the Continue button.")
 }

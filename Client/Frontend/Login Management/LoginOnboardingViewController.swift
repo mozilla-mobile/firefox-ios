@@ -36,6 +36,7 @@ class LoginOnboardingViewController: SettingsViewController {
         
         label = UILabel()
         label.text = Strings.LoginsOnboardingMessage
+        label.font = DynamicFontHelper().DeviceFontExtraLarge
         label.textAlignment = .center
         label.numberOfLines = 0
         self.view.addSubview(label)
@@ -53,7 +54,7 @@ class LoginOnboardingViewController: SettingsViewController {
         continueButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
         continueButton.addTarget(self, action: #selector(proceedButtonTapped), for: .touchUpInside)
         self.view.addSubview(continueButton)
-                
+        
         label.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(20)
             make.center.equalToSuperview()
