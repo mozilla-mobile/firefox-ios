@@ -450,19 +450,6 @@ extension AppDelegate {
         // Enable networking.
         Viaduct.shared.useReqwestBackend()
 
-        var nimbusDbPath: String {
-            let profilePath = FileManager.default.containerURL(
-                forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier
-            )?
-            .appendingPathComponent("profile.profile")
-            .path
-            let dbPath = profilePath.flatMap {
-                URL(fileURLWithPath: $0).appendingPathComponent("nimbus.db").path
-            } ?? ""
-            
-            return dbPath
-        }
-
         let errorReporter: NimbusErrorReporter = { err in
             NSLog("NIMBUS ERROR: \(err)")
         }
@@ -472,7 +459,13 @@ extension AppDelegate {
                 NSLog("Nimbus not enabled: could not load settings from Info.plist")
                 return
             }
-            self.nimbusApi = try Nimbus.create(nimbusServerSettings, appSettings: nimbusAppSettings, dbPath: nimbusDbPath, resourceBundles: [], errorReporter: errorReporter)
+            
+            guard let databasePath = Nimbus.defaultDatabasePath() else {
+                NSLog("Nimbus not enabled: unable to determine database path")
+                return
+            }
+            
+            self.nimbusApi = try Nimbus.create(nimbusServerSettings, appSettings: nimbusAppSettings, dbPath: databasePath, resourceBundles: [], errorReporter: errorReporter)
             self.nimbusApi?.initialize()
             self.nimbusApi?.fetchExperiments()
         } catch {

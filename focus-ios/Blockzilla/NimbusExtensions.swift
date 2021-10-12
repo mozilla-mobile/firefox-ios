@@ -8,6 +8,8 @@ let NimbusServerURLKey = "NimbusServerURL"
 let NimbusAppNameKey = "NimbusAppName"
 let NimbusAppChannelKey = "NimbusAppChannel"
 
+let NimbusDefaultDatabaseName = "nimbus.db"
+
 extension NimbusServerSettings {
     /// Create a `NimbusServerSettings` struct by looking up the server URL in the `Info.plist`. If the value is missing
     /// from the `Info.plist`, or if it failes to parse as a valid URL, then `nil` is returned.
@@ -29,5 +31,17 @@ extension NimbusAppSettings {
             return nil
         }
         return NimbusAppSettings(appName: appName, channel: channel)
+    }
+}
+
+extension Nimbus {
+    /// Return the default path of the nimbus database. Which is stored in the application support directory and named `nimbus.db`.
+    /// - Returns: The path in a String or nil if the the support directory could not be found.
+    static func defaultDatabasePath() -> String? {
+        let paths = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)
+        if paths.count == 0 {
+            return nil
+        }
+        return paths[0].appendingPathComponent(NimbusDefaultDatabaseName).path
     }
 }
