@@ -34,7 +34,7 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
         
         let warningTextView = UITextView()
         warningTextView.font = UIFont.boldSystemFont(ofSize: 18)
-        warningTextView.text = "To use the Logins & Passwords feature for Firefox, you must have a device passcode enabled."
+        warningTextView.text = Strings.LoginsDevicePasscodeRequiredMessage
         warningTextView.textAlignment = .center
         warningTextView.backgroundColor = UIColor.Photon.Red05
         warningTextView.clipsToBounds = true
@@ -46,7 +46,7 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
         self.view.addSubview(warningTextView)
 
         learnMoreButton = UIButton(type: .system)
-        learnMoreButton.setTitle("Learn More", for: .normal)
+        learnMoreButton.setTitle(Strings.LoginsDevicePasscodeRequiredLearnMoreButtonTitle, for: .normal)
         learnMoreButton.addTarget(self, action: #selector(learnMoreButtonTapped), for: .touchUpInside)
         self.view.addSubview(learnMoreButton)
         

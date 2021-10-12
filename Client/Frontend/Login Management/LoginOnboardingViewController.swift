@@ -10,7 +10,8 @@ class LoginOnboardingViewController: SettingsViewController {
     private var shownFromAppMenu: Bool = false
 
     private var label: UILabel!
-    private var button: UIButton!
+    private var learnMoreButton: UIButton!
+    private var continueButton: UIButton!
     
     var doneHandler: () -> Void = {}
     var proceedHandler: () -> Void = {}
@@ -34,26 +35,36 @@ class LoginOnboardingViewController: SettingsViewController {
         self.title = Strings.LoginsAndPasswordsTitle
         
         label = UILabel()
-        label.text = "We have changed things. No more Firefox passcode, we now use your device FaceID, TouchID or Passcode." // TODO SMA
+        label.text = Strings.LoginsOnboardingMessage
         label.textAlignment = .center
         label.numberOfLines = 0
         self.view.addSubview(label)
 
-        button = UIButton(type: .custom)
-        button.backgroundColor = UIColor.Photon.Blue50
-        button.layer.cornerRadius = 8
-        button.setTitle("Continue", for: .normal) // TODO SMA String
-        button.titleLabel?.font = DynamicFontHelper().MediumSizeBoldFontAS
-        button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
-        button.addTarget(self, action: #selector(proceedButtonTapped), for: .touchUpInside)
-        self.view.addSubview(button)
-        
+        learnMoreButton = UIButton(type: .system)
+        learnMoreButton.setTitle(Strings.LoginsOnboardingLearnMoreButtonTitle, for: .normal)
+        learnMoreButton.addTarget(self, action: #selector(learnMoreButtonTapped), for: .touchUpInside)
+        self.view.addSubview(learnMoreButton)
+
+        continueButton = UIButton(type: .custom)
+        continueButton.backgroundColor = UIColor.Photon.Blue50
+        continueButton.layer.cornerRadius = 8
+        continueButton.setTitle(Strings.LoginsOnboardingContinueButtonTitle, for: .normal)
+        continueButton.titleLabel?.font = DynamicFontHelper().MediumSizeBoldFontAS
+        continueButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
+        continueButton.addTarget(self, action: #selector(proceedButtonTapped), for: .touchUpInside)
+        self.view.addSubview(continueButton)
+                
         label.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(20)
             make.center.equalToSuperview()
         }
+        
+        learnMoreButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(label.snp.bottom).offset(10)
+        }
 
-        button.snp.makeConstraints { make in
+        continueButton.snp.makeConstraints { make in
             make.bottom.equalTo(self.view.snp.bottomMargin).inset(20)
             make.height.equalTo(44)
             make.centerX.equalToSuperview()
@@ -65,7 +76,13 @@ class LoginOnboardingViewController: SettingsViewController {
     @objc func doneButtonTapped(_ sender: UIButton) {
         self.doneHandler()
     }
-    
+
+    @objc func learnMoreButtonTapped(_ sender: UIButton) {
+        let viewController = SettingsContentViewController()
+        viewController.url = SupportUtils.URLForTopic("logins-passwords-passcode-ios")
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+
     @objc func proceedButtonTapped(_ sender: UIButton) {
         self.proceedHandler()
     }

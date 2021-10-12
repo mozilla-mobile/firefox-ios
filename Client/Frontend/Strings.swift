@@ -247,6 +247,15 @@ extension Strings {
     public static let BreachAlertsBreachDate = MZLocalizedString("BreachAlerts.BreachDate", value: "This breach occurred on", comment: "Describes the date on which the breach occurred")
     public static let BreachAlertsDescription = MZLocalizedString("BreachAlerts.Description", value: "Passwords were leaked or stolen since you last changed your password. To protect this account, log in to the site and change your password.", comment: "Description of what a breach is")
     public static let BreachAlertsLink = MZLocalizedString("BreachAlerts.Link", value: "Go to", comment: "Leads to a link to the breached website")
+
+    // For the DevicePasscodeRequiredViewController
+    public static let LoginsDevicePasscodeRequiredMessage = MZLocalizedString("Logins.DevicePasscodeRequired.Message", value: "To use the Logins & Passwords feature for Firefox, you must have a device passcode enabled.", comment: "Message shown when you enter Logins & Passwords without having a device passcode set.")
+    public static let LoginsDevicePasscodeRequiredLearnMoreButtonTitle = MZLocalizedString("Logins.DevicePasscodeRequired.LearnMoreButtonTitle", value: "Learn More", comment: "Title of the Learn More button that links to a support page about device passcode requirements.")
+
+    // For the LoginOnboardingViewController
+    public static let LoginsOnboardingMessage = MZLocalizedString("Logins.Onboarding.Message", value: "Firefox now protects your Logins & Passwords with your device passcode or Touch ID.", comment: "Message shown when you enter Logins & Passwords for the first time.")
+    public static let LoginsOnboardingLearnMoreButtonTitle = MZLocalizedString("Logins.Onboarding.LearnMoreButtonTitle", value: "Learn More", comment: "Title of the Learn More button that links to a support page about device passcode requirements.")
+    public static let LoginsOnboardingContinueButtonTitle = MZLocalizedString("Logins.Onboarding.ContinueButtonTitle", value: "Continue", comment: "Title of the Continue button.")
 }
 
 // MARK: - Firefox Account
