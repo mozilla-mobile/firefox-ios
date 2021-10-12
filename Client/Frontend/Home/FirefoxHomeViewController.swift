@@ -329,6 +329,9 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
 
     override func viewDidAppear(_ animated: Bool) {
         experiments.recordExposureEvent(featureId: .homescreen)
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .view,
+                                     object: .firefoxHomepage, value: .navigatingToHome)
         super.viewDidAppear(animated)
     }
 

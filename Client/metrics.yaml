@@ -619,6 +619,21 @@ firefox_home_page:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-04-01"
+  firefox_homepage_view:
+    type: labeled_counter
+    description: |
+      The number of times a user is shown the Firefox Homepage
+    labels:
+      - navigating-to-home
+      - opened-new-tab
+      - search-screen
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3250
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9016
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-04-01"
 
 # Library
 library:
