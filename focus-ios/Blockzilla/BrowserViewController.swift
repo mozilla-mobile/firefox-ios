@@ -387,18 +387,14 @@ class BrowserViewController: UIViewController {
 
     // These functions are used to handle displaying and hiding the keyboard after the splash view is animated
     public func activateUrlBarOnHomeView() {
-        // Do not activate if we are showing a web page
-        if urlBar.inBrowsingMode {
+
+        // Do not activate if a modal is presented
+        if self.presentedViewController != nil {
             return
         }
 
-        // Do not activate if the settings are presented
-        if self.presentedViewController?.children.first is SettingsViewController {
-            return
-        }
-
-        // Do not activate if the home view is not displayed, nor the overlayView hidden
-        if !(homeViewController != nil || overlayView.isHidden) {
+        // Do not activate if we are showing a web page, nor the overlayView hidden
+        if !(urlBar.inBrowsingMode || overlayView.isHidden) {
             return
         }
 
@@ -407,10 +403,6 @@ class BrowserViewController: UIViewController {
 
     public func deactivateUrlBarOnHomeView() {
         urlBar.dismissTextField()
-    }
-    
-    public func deactivateUrlBar() {
-        urlBar.dismiss()
     }
     
     public func dismissSettings() {
