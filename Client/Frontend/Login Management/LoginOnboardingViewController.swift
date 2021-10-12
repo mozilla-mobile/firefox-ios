@@ -80,7 +80,7 @@ class LoginOnboardingViewController: SettingsViewController {
 
     @objc func learnMoreButtonTapped(_ sender: UIButton) {
         let viewController = SettingsContentViewController()
-        viewController.url = SupportUtils.URLForTopic("logins-passwords-passcode-ios")
+        viewController.url = SupportUtils.URLForTopic("firefox-ios-passcode")
         navigationController?.pushViewController(viewController, animated: true)
     }
 
