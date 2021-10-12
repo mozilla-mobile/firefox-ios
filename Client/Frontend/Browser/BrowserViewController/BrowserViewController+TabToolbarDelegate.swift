@@ -113,7 +113,6 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
                         
                         loginOnboardingViewController.proceedHandler = {
                             loginOnboardingViewController.dismiss(animated: true) {
-                                // TODO SMA Not so nice to copy this. We can do better.
                                 LoginListViewController.create(authenticateInNavigationController: navController, profile: self.profile, settingsDelegate: self, webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
                                     guard let loginsVC = loginsVC else { return }
                                     loginsVC.shownFromAppMenu = true
