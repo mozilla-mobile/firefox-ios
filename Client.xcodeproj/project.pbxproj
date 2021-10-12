@@ -890,7 +890,6 @@
 		F35B8D2D1D6383E9008E3D61 /* SessionRestoreHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F35B8D2C1D6383E9008E3D61 /* SessionRestoreHelper.swift */; };
 		F80DF73F27034F6400E4C37D /* DynamicFontHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075531E37F6FC006961AC /* DynamicFontHelper.swift */; };
 		F80DF7412703BC8E00E4C37D /* CredentialPasscodeRequirementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80DF7402703BC8E00E4C37D /* CredentialPasscodeRequirementViewController.swift */; };
-		F80DF7432703DB7E00E4C37D /* CredentialUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80DF7422703DB7E00E4C37D /* CredentialUtils.swift */; };
 		F8324A072649A188007E4BFA /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8324A062649A188007E4BFA /* AuthenticationServices.framework */; };
 		F8324A0A2649A188007E4BFA /* CredentialProviderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8324A092649A188007E4BFA /* CredentialProviderViewController.swift */; };
 		F8324A122649A188007E4BFA /* CredentialProvider.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = F8324A052649A188007E4BFA /* CredentialProvider.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -4087,7 +4086,6 @@
 		F7C743F899980D164068A607 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Shared.strings; sourceTree = "<group>"; };
 		F7F34246B52E8E307FEE81BD /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		F80DF7402703BC8E00E4C37D /* CredentialPasscodeRequirementViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialPasscodeRequirementViewController.swift; sourceTree = "<group>"; };
-		F80DF7422703DB7E00E4C37D /* CredentialUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialUtils.swift; sourceTree = "<group>"; };
 		F82F4AB9A3C09B181AB61F73 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Shared.strings"; sourceTree = "<group>"; };
 		F8324A052649A188007E4BFA /* CredentialProvider.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = CredentialProvider.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8324A062649A188007E4BFA /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
@@ -6045,7 +6043,6 @@
 				C8CE38B4265E71FE0009B09E /* Extensions */,
 				C874FC642661367900EBE86E /* MainInterface.storyboard */,
 				F8324A092649A188007E4BFA /* CredentialProviderViewController.swift */,
-				F80DF7422703DB7E00E4C37D /* CredentialUtils.swift */,
 				C874FB392660E8B900EBE86E /* CredentialProviderPresenter.swift */,
 				C8CE389A265E71E00009B09E /* CredentialListViewController.swift */,
 				60CE80C02667780C004026C7 /* CredentialListPresenter.swift */,
@@ -7945,7 +7942,6 @@
 				60CE80C12667780D004026C7 /* CredentialListPresenter.swift in Sources */,
 				F80DF73F27034F6400E4C37D /* DynamicFontHelper.swift in Sources */,
 				6025B111267B6EE100F59F6B /* CredentialWelcomeViewController.swift in Sources */,
-				F80DF7432703DB7E00E4C37D /* CredentialUtils.swift in Sources */,
 				C87DF962267246730097E707 /* photon-colors.swift in Sources */,
 				6025B10A267B6BB300F59F6B /* SelectPasswordCell.swift in Sources */,
 				F8324B122649B707007E4BFA /* Profile.swift in Sources */,

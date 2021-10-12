@@ -36,19 +36,13 @@ class CredentialPasscodeRequirementViewController: UIViewController {
         return label
     }()
 
-    lazy private var warningTextView: UITextView = {
-        let textView = UITextView()
-        textView.font = UIFont.boldSystemFont(ofSize: 18)
-        textView.text = .LoginsPasscodeRequirementWarning
-        textView.textAlignment = .center
-        textView.backgroundColor = UIColor.Photon.Red05
-        textView.clipsToBounds = true
-        textView.layer.cornerRadius = 5
-        textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        textView.isScrollEnabled = false
-        textView.isUserInteractionEnabled = false
-        textView.sizeToFit()
-        return textView
+    lazy private var warningLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 18)
+        label.text = .LoginsPasscodeRequirementWarning
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        return label
     }()
 
     lazy private var cancelButton: UIButton = {
@@ -56,7 +50,7 @@ class CredentialPasscodeRequirementViewController: UIViewController {
         button.backgroundColor = .systemRed
         button.layer.cornerRadius = 8
         button.setTitle(Strings.CancelString, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        button.titleLabel?.font = DynamicFontHelper().MediumSizeBoldFontAS
         button.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         return button
     }()
@@ -72,7 +66,7 @@ class CredentialPasscodeRequirementViewController: UIViewController {
         view.addSubview(logoImageView)
         view.addSubview(titleLabel)
         view.addSubview(taglineLabel)
-        view.addSubview(warningTextView)
+        view.addSubview(warningLabel)
         view.addSubview(cancelButton)
     }
     
@@ -96,7 +90,7 @@ class CredentialPasscodeRequirementViewController: UIViewController {
             make.width.lessThanOrEqualTo(440)
         }
 
-        warningTextView.snp.makeConstraints { make in
+        warningLabel.snp.makeConstraints { make in
             make.top.equalTo(taglineLabel.snp_bottomMargin).offset(40)
             make.centerX.equalToSuperview()
             make.width.equalToSuperview().inset(35).priority(.high)
