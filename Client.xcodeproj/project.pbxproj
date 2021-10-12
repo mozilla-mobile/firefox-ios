@@ -11951,7 +11951,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Firefox.CredentialProvider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = org.mozilla.ios.Firefox.CredentialProvider;
+				PROVISIONING_PROFILE_SPECIFIER = "Firefox.CredentialProvider 2021-10-12";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
