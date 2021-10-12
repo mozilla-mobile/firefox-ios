@@ -72,7 +72,6 @@ class CredentialListPresenter {
             passwordCredential = loginsData[index].1
         }
         view.credentialExtensionContext?.completeRequest(withSelectedCredential: passwordCredential, completionHandler: nil)
-        
     }
     
     func cancelRequest() {

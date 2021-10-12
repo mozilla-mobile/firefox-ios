@@ -6,13 +6,12 @@ import UIKit
 import SnapKit
 import Shared
 
-protocol CredentialWelcomeViewControllerDelegate {
-    func credentialWelcomeViewControllerDidCancel()
-    func credentialWelcomeViewControllerDidProceed()
+protocol CredentialPasscodeRequirementViewControllerDelegate {
+    func credentialPasscodeRequirementViewControllerDidDismiss()
 }
 
-class CredentialWelcomeViewController: UIViewController {
-    var delegate: CredentialWelcomeViewControllerDelegate?
+class CredentialPasscodeRequirementViewController: UIViewController {
+    var delegate: CredentialPasscodeRequirementViewControllerDelegate?
     
     lazy private var logoImageView: UIImageView = {
         let logoImage = UIImageView(image: UIImage(named: "logo-glyph"))
@@ -37,36 +36,38 @@ class CredentialWelcomeViewController: UIViewController {
         return label
     }()
 
+    lazy private var warningLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 18)
+        label.text = .LoginsPasscodeRequirementWarning
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        return label
+    }()
+
     lazy private var cancelButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle(Strings.CancelString, for: .normal)
-        button.addTarget(self, action: #selector(self.cancelButtonTapped(_:)), for: .touchUpInside)
-        return button
-    }()
-    
-    lazy private var proceedButton: UIButton = {
         let button = UIButton(type: .custom)
-        button.backgroundColor = UIColor.Photon.Blue50
+        button.backgroundColor = .systemRed
         button.layer.cornerRadius = 8
-        button.setTitle(String.LoginsWelcomeTurnOnAutoFillButtonTitle, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-        button.addTarget(self, action: #selector(proceedButtonTapped), for: .touchUpInside)
+        button.setTitle(Strings.CancelString, for: .normal)
+        button.titleLabel?.font = DynamicFontHelper().MediumSizeBoldFontAS
+        button.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         return button
     }()
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.CredentialProvider.welcomeScreenBackgroundColor
         addSubviews()
         addViewConstraints()
     }
-        
+    
     private func addSubviews() {
         view.addSubview(logoImageView)
         view.addSubview(titleLabel)
         view.addSubview(taglineLabel)
+        view.addSubview(warningLabel)
         view.addSubview(cancelButton)
-        view.addSubview(proceedButton)
     }
     
     private func addViewConstraints() {
@@ -88,13 +89,15 @@ class CredentialWelcomeViewController: UIViewController {
             make.width.equalToSuperview().inset(35).priority(.high)
             make.width.lessThanOrEqualTo(440)
         }
-                
-        cancelButton.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(10)
-            make.trailing.equalToSuperview().inset(20)
+
+        warningLabel.snp.makeConstraints { make in
+            make.top.equalTo(taglineLabel.snp_bottomMargin).offset(40)
+            make.centerX.equalToSuperview()
+            make.width.equalToSuperview().inset(35).priority(.high)
+            make.width.lessThanOrEqualTo(440)
         }
-        
-        proceedButton.snp.makeConstraints { make in
+
+        cancelButton.snp.makeConstraints { make in
             make.bottom.equalTo(self.view.snp.bottomMargin).inset(20)
             make.height.equalTo(44)
             make.centerX.equalToSuperview()
@@ -104,10 +107,6 @@ class CredentialWelcomeViewController: UIViewController {
     }
     
     @objc func cancelButtonTapped(_ sender: UIButton) {
-        delegate?.credentialWelcomeViewControllerDidCancel()
-    }
-
-    @objc func proceedButtonTapped(_ sender: UIButton) {
-        delegate?.credentialWelcomeViewControllerDidProceed()
+        delegate?.credentialPasscodeRequirementViewControllerDidDismiss()
     }
 }
