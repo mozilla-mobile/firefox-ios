@@ -91,4 +91,8 @@ class AppAuthenticator {
         presentingNavController?.present(navController, animated: true, completion: nil)
         return deferred
     }
+        
+    static func canAuthenticateDeviceOwner() -> Bool {
+        return LAContext().canEvaluatePolicy(.deviceOwnerAuthentication, error: nil)
+    }
 }
