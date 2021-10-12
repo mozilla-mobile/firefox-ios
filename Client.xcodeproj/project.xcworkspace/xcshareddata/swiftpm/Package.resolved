@@ -2,12 +2,48 @@
   "object": {
     "pins": [
       {
+        "package": "Glean",
+        "repositoryURL": "https://github.com/mozilla/glean-swift",
+        "state": {
+          "branch": null,
+          "revision": "1deff2d1fb8baeda8d4dfb46598c4222dbfe4e11",
+          "version": "41.1.1"
+        }
+      },
+      {
+        "package": "MozillaRustComponentsSwift",
+        "repositoryURL": "/Users/skhamis/moz/rust-components-swift",
+        "state": {
+          "branch": null,
+          "revision": "3d52231e704b6dbb5530e97698a3f2f31294c8b1",
+          "version": "0.0.6"
+        }
+      },
+      {
+        "package": "SwiftProtobuf",
+        "repositoryURL": "https://github.com/apple/swift-protobuf.git",
+        "state": {
+          "branch": null,
+          "revision": "7e2c5f3cbbeea68e004915e3a8961e20bd11d824",
+          "version": "1.18.0"
+        }
+      },
+      {
         "package": "SwiftKeychainWrapper",
         "repositoryURL": "https://github.com/jrendel/SwiftKeychainWrapper",
         "state": {
           "branch": null,
           "revision": "185a3165346a03767101c4f62e9a545a0fe0530f",
           "version": "4.0.1"
+        }
+      },
+      {
+        "package": "SwiftyJSON",
+        "repositoryURL": "https://github.com/SwiftyJSON/SwiftyJSON",
+        "state": {
+          "branch": null,
+          "revision": "b3dcd7dbd0d488e1a7077cb33b00f2083e382f07",
+          "version": "5.0.1"
         }
       },
       {

@@ -49,14 +49,28 @@
 		0BF1B7E31AC60DEA00A7B407 /* InsetButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF1B7E21AC60DEA00A7B407 /* InsetButton.swift */; };
 		0BF42D4F1A7CD09600889E28 /* TestFavicons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF42D4E1A7CD09600889E28 /* TestFavicons.swift */; };
 		0BF8F8DA1AEFF1C900E90BC2 /* noTitle.html in Resources */ = {isa = PBXBuildFile; fileRef = 0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */; };
+		1B308A632714C9BD001D6200 /* Logins in Frameworks */ = {isa = PBXBuildFile; productRef = 1B308A622714C9BD001D6200 /* Logins */; };
+		1B308A652714C9BD001D6200 /* Nimbus in Frameworks */ = {isa = PBXBuildFile; productRef = 1B308A642714C9BD001D6200 /* Nimbus */; };
+		1B308A692714C9BD001D6200 /* RustLog in Frameworks */ = {isa = PBXBuildFile; productRef = 1B308A682714C9BD001D6200 /* RustLog */; };
+		1B308A6B2714C9BD001D6200 /* Viaduct in Frameworks */ = {isa = PBXBuildFile; productRef = 1B308A6A2714C9BD001D6200 /* Viaduct */; };
+		1B308A9F2714F01E001D6200 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3D99F7270E8CF8006E1264 /* SwiftKeychainWrapper */; };
+		1B308AA02714F01E001D6200 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1BDA1F8627113817006B2FAB /* SwiftyJSON */; };
+		1B308AA12714F01E001D6200 /* SwiftProtobuf in Frameworks */ = {isa = PBXBuildFile; productRef = 1BDA1F8B271138A5006B2FAB /* SwiftProtobuf */; };
+		1B308AA527150122001D6200 /* Places in Frameworks */ = {isa = PBXBuildFile; productRef = 1B308AA427150122001D6200 /* Places */; };
+		1B308AA9271503EC001D6200 /* FxAClient in Frameworks */ = {isa = PBXBuildFile; productRef = 1B308AA8271503EC001D6200 /* FxAClient */; };
+		1B308AB727150CD7001D6200 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1B308AB627150CD7001D6200 /* SwiftyJSON */; };
+		1B308AB927150CDD001D6200 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B308AB827150CDD001D6200 /* SwiftKeychainWrapper */; };
 		1B3D99F1270E89D0006E1264 /* Telemetry in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3D99F0270E89D0006E1264 /* Telemetry */; };
-		1B3D99F8270E8CF8006E1264 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3D99F7270E8CF8006E1264 /* SwiftKeychainWrapper */; };
 		1B3D9A0A270E90C6006E1264 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3D9A09270E90C6006E1264 /* SwiftKeychainWrapper */; };
-		1B3D9A12270E941E006E1264 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3D9A11270E941E006E1264 /* SwiftKeychainWrapper */; };
 		1B3D9A16270E944E006E1264 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3D9A15270E944E006E1264 /* SwiftKeychainWrapper */; };
 		1B3D9A1A270E9466006E1264 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3D9A19270E9466006E1264 /* SwiftKeychainWrapper */; };
 		1B3D9A1B270E95FB006E1264 /* AppAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65D89171C8647420006EA35 /* AppAuthenticator.swift */; };
 		1B3D9A1D270E96E4006E1264 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3D9A1C270E96E4006E1264 /* SwiftKeychainWrapper */; };
+		1B8C9F6C27116C9000694199 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1B8C9F6B27116C9000694199 /* SwiftyJSON */; };
+		1BCDF1D5271521ED000F1B25 /* Logins in Frameworks */ = {isa = PBXBuildFile; productRef = 1BCDF1D4271521ED000F1B25 /* Logins */; };
+		1BCDF1D7271521F3000F1B25 /* Viaduct in Frameworks */ = {isa = PBXBuildFile; productRef = 1BCDF1D6271521F3000F1B25 /* Viaduct */; };
+		1BDA1F8527113788006B2FAB /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1BDA1F8427113788006B2FAB /* SwiftyJSON */; };
+		1BDA1F8A27113852006B2FAB /* SwiftProtobuf in Frameworks */ = {isa = PBXBuildFile; productRef = 1BDA1F8927113852006B2FAB /* SwiftProtobuf */; };
 		1D06AE6624FEE4D5000B092B /* TopSitesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D06AE6524FEE4D5000B092B /* TopSitesProvider.swift */; };
 		1D06AE6A24FEE8D6000B092B /* TabProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D06AE6924FEE8D6000B092B /* TabProvider.swift */; };
 		1D0BA05C24F46A0400D731B5 /* TopSitesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D0BA05B24F46A0400D731B5 /* TopSitesManager.swift */; };
@@ -246,7 +260,6 @@
 		3B39EDBA1E16E18900EF029F /* CustomSearchEnginesTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B39EDB91E16E18900EF029F /* CustomSearchEnginesTest.swift */; };
 		3B39EDCB1E16E1AA00EF029F /* CustomSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B39EDCA1E16E1AA00EF029F /* CustomSearchViewController.swift */; };
 		3B43E3D31D95C48D00BBA9DB /* StoragePerfTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B43E3D21D95C48D00BBA9DB /* StoragePerfTests.swift */; };
-		3B4988CE1E42B01800A12FDA /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B4988CD1E42B01800A12FDA /* SwiftyJSON.framework */; };
 		3B4AA24B1D8B8C4C00A2E008 /* ArrayExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B4AA24A1D8B8C4C00A2E008 /* ArrayExtensionTests.swift */; };
 		3B546EC01D95ECAE00BDBE36 /* ActivityStreamTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B546EBF1D95ECAE00BDBE36 /* ActivityStreamTest.swift */; };
 		3B61CD491F2A74EF00D38DE1 /* PocketFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B61CD481F2A74EF00D38DE1 /* PocketFeed.swift */; };
@@ -291,7 +304,6 @@
 		434E733725EED32E006D3BDE /* BrowserViewController+URLBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434E733625EED32E006D3BDE /* BrowserViewController+URLBarDelegate.swift */; };
 		435222C125882E3800FCA5B6 /* WidgetKitTopSiteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435222C025882E3800FCA5B6 /* WidgetKitTopSiteModel.swift */; };
 		435222C225882E3800FCA5B6 /* WidgetKitTopSiteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435222C025882E3800FCA5B6 /* WidgetKitTopSiteModel.swift */; };
-		4357697525B733CC0017B210 /* MozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBCF403C221CBC9A00B38F28 /* MozillaAppServices.framework */; };
 		435D660323D793DF0046EFA2 /* UpdateModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D660223D793DF0046EFA2 /* UpdateModel.swift */; };
 		435D660523D794B90046EFA2 /* UpdateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D660423D794B90046EFA2 /* UpdateViewModel.swift */; };
 		435D660723D7962C0046EFA2 /* UpdateCoverSheetTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D660623D7962C0046EFA2 /* UpdateCoverSheetTableViewCell.swift */; };
@@ -509,7 +521,6 @@
 		C8DFFE492294AAB600296DB1 /* NetworkUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DFFE482294AAB600296DB1 /* NetworkUtils.swift */; };
 		C8E18F1E222EDE4500E30E52 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8E18F1D222EDE4400E30E52 /* Accelerate.framework */; };
 		C8E18F20222EDED000E30E52 /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8E18F1F222EDED000E30E52 /* SafariServices.framework */; };
-		C8E18F22222EE11B00E30E52 /* MozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBCF403C221CBC9A00B38F28 /* MozillaAppServices.framework */; };
 		C8E2E80C23D20FB3005AACE6 /* Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E2E80823D20FB3005AACE6 /* Avatar.swift */; };
 		C8E2E80D23D20FB3005AACE6 /* RustFirefoxAccounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E2E80923D20FB3005AACE6 /* RustFirefoxAccounts.swift */; };
 		C8E2E80E23D20FD2005AACE6 /* FxAWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E2E80723D20FB3005AACE6 /* FxAWebViewController.swift */; };
@@ -890,7 +901,6 @@
 		EBC9D38722D4D56F0011D881 /* disconnect-block-cookies-content.json in Resources */ = {isa = PBXBuildFile; fileRef = EBC9D38322D4D56F0011D881 /* disconnect-block-cookies-content.json */; };
 		EBC9D38822D4D56F0011D881 /* disconnect-block-cookies-social.json in Resources */ = {isa = PBXBuildFile; fileRef = EBC9D38422D4D56F0011D881 /* disconnect-block-cookies-social.json */; };
 		EBC9D38922D4D56F0011D881 /* disconnect-block-cookies-advertising.json in Resources */ = {isa = PBXBuildFile; fileRef = EBC9D38522D4D56F0011D881 /* disconnect-block-cookies-advertising.json */; };
-		EBCF403B221CBC5B00B38F28 /* SwiftProtobuf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBCF403A221CBC5B00B38F28 /* SwiftProtobuf.framework */; };
 		EBE26B57220C959D00D1D99A /* BrowserViewController+TabToolbarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE26B4E220C959D00D1D99A /* BrowserViewController+TabToolbarDelegate.swift */; };
 		EBE7635820ADCB7600E27F2D /* SendTo.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EBE7634F20ADCB7500E27F2D /* SendTo.xcassets */; };
 		EBE7635920ADCB7600E27F2D /* SendTo.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EBE7634F20ADCB7500E27F2D /* SendTo.xcassets */; };
@@ -1880,7 +1890,6 @@
 		3B43E3D01D95C48D00BBA9DB /* StoragePerfTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StoragePerfTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B43E3D21D95C48D00BBA9DB /* StoragePerfTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoragePerfTests.swift; sourceTree = "<group>"; };
 		3B43E3D41D95C48D00BBA9DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3B4988CD1E42B01800A12FDA /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		3B4AA24A1D8B8C4C00A2E008 /* ArrayExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayExtensionTests.swift; sourceTree = "<group>"; };
 		3B546EBF1D95ECAE00BDBE36 /* ActivityStreamTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityStreamTest.swift; sourceTree = "<group>"; };
 		3B61CD481F2A74EF00D38DE1 /* PocketFeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketFeed.swift; sourceTree = "<group>"; };
@@ -2441,7 +2450,6 @@
 		7BA34E6CB59CF71C21C42BB3 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/FindInPage.strings"; sourceTree = "<group>"; };
 		7BA4A9451C4CED780091D032 /* GCDWebServers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GCDWebServers.framework; path = Carthage/Build/iOS/GCDWebServers.framework; sourceTree = "<group>"; };
 		7BA4A9491C4CEFC70091D032 /* OnePasswordExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OnePasswordExtension.framework; path = Carthage/Build/iOS/OnePasswordExtension.framework; sourceTree = "<group>"; };
-		7BA4A94B1C4CF03B0091D032 /* SwiftKeychainWrapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftKeychainWrapper.framework; path = Carthage/Build/iOS/SwiftKeychainWrapper.framework; sourceTree = "<group>"; };
 		7BA8D1C61BA037F500C8AE9E /* OpenInHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenInHelper.swift; sourceTree = "<group>"; };
 		7BB34A09A04DA7D6B5600019 /* ses */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ses; path = ses.lproj/Search.strings; sourceTree = "<group>"; };
 		7BBFEE731BB405D900A305AA /* TabManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabManagerTests.swift; sourceTree = "<group>"; };
@@ -4024,8 +4032,6 @@
 		EBC9D38322D4D56F0011D881 /* disconnect-block-cookies-content.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "disconnect-block-cookies-content.json"; sourceTree = "<group>"; };
 		EBC9D38422D4D56F0011D881 /* disconnect-block-cookies-social.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "disconnect-block-cookies-social.json"; sourceTree = "<group>"; };
 		EBC9D38522D4D56F0011D881 /* disconnect-block-cookies-advertising.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "disconnect-block-cookies-advertising.json"; sourceTree = "<group>"; };
-		EBCF403A221CBC5B00B38F28 /* SwiftProtobuf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftProtobuf.framework; path = Carthage/Build/iOS/SwiftProtobuf.framework; sourceTree = "<group>"; };
-		EBCF403C221CBC9A00B38F28 /* MozillaAppServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MozillaAppServices.framework; path = Carthage/Build/iOS/MozillaAppServices.framework; sourceTree = "<group>"; };
 		EBE26B4E220C959D00D1D99A /* BrowserViewController+TabToolbarDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+TabToolbarDelegate.swift"; sourceTree = "<group>"; };
 		EBE7634F20ADCB7500E27F2D /* SendTo.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = SendTo.xcassets; sourceTree = "<group>"; };
 		EBF47E6F1F7979DF00899189 /* TelemetryWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryWrapper.swift; sourceTree = "<group>"; };
@@ -4208,9 +4214,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BCDF1D5271521ED000F1B25 /* Logins in Frameworks */,
+				1B308AB727150CD7001D6200 /* SwiftyJSON in Frameworks */,
 				C820439A2523DC4500740B71 /* libStorage.a in Frameworks */,
+				1BCDF1D7271521F3000F1B25 /* Viaduct in Frameworks */,
+				1B308AB927150CDD001D6200 /* SwiftKeychainWrapper in Frameworks */,
 				D09A0CDC1FAA24CC009A0273 /* libAccount.a in Frameworks */,
-				1B3D9A12270E941E006E1264 /* SwiftKeychainWrapper in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4227,7 +4236,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1B3D99F8270E8CF8006E1264 /* SwiftKeychainWrapper in Frameworks */,
+				1B308AA02714F01E001D6200 /* SwiftyJSON in Frameworks */,
+				1B308A9F2714F01E001D6200 /* SwiftKeychainWrapper in Frameworks */,
+				1B308AA527150122001D6200 /* Places in Frameworks */,
+				1B308AA12714F01E001D6200 /* SwiftProtobuf in Frameworks */,
+				1B308AA9271503EC001D6200 /* FxAClient in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4237,14 +4250,16 @@
 			files = (
 				C82043852523DBF600740B71 /* Sync.framework in Frameworks */,
 				C877037A25222F30006E38EB /* Shared.framework in Frameworks */,
+				1BDA1F8527113788006B2FAB /* SwiftyJSON in Frameworks */,
 				C8E18F20222EDED000E30E52 /* SafariServices.framework in Frameworks */,
 				C8E18F1E222EDE4500E30E52 /* Accelerate.framework in Frameworks */,
 				F8324A7C2649A5A5007E4BFA /* AuthenticationServices.framework in Frameworks */,
 				E6231C051B90A472005ABB0D /* libxml2.2.tbd in Frameworks */,
-				EBCF403B221CBC5B00B38F28 /* SwiftProtobuf.framework in Frameworks */,
-				4357697525B733CC0017B210 /* MozillaAppServices.framework in Frameworks */,
 				E6231C011B90A44F005ABB0D /* libz.tbd in Frameworks */,
 				E4B3348A1BBF23F9004E2BFF /* AdSupport.framework in Frameworks */,
+				1B308A6B2714C9BD001D6200 /* Viaduct in Frameworks */,
+				1B308A652714C9BD001D6200 /* Nimbus in Frameworks */,
+				1BDA1F8A27113852006B2FAB /* SwiftProtobuf in Frameworks */,
 				1B3D99F1270E89D0006E1264 /* Telemetry in Frameworks */,
 				3BA9A0231D2C208C00BD418C /* Fuzi.framework in Frameworks */,
 				7BA4A9471C4CED900091D032 /* GCDWebServers.framework in Frameworks */,
@@ -4252,9 +4267,10 @@
 				7BA4A94A1C4CEFC70091D032 /* OnePasswordExtension.framework in Frameworks */,
 				DABDA4AD20DA0FB900FBB0BD /* ObjcExceptionBridging.framework in Frameworks */,
 				7B8A47F61D01D3B400C07734 /* PassKit.framework in Frameworks */,
+				1B308A632714C9BD001D6200 /* Logins in Frameworks */,
 				7B604F9B1C4950F2006EEEC3 /* SDWebImage.framework in Frameworks */,
 				7B604FA21C495268006EEEC3 /* SnapKit.framework in Frameworks */,
-				3B4988CE1E42B01800A12FDA /* SwiftyJSON.framework in Frameworks */,
+				1B308A692714C9BD001D6200 /* RustLog in Frameworks */,
 				1B3D9A1D270E96E4006E1264 /* SwiftKeychainWrapper in Frameworks */,
 				7B604FBB1C495D8A006EEEC3 /* XCGLogger.framework in Frameworks */,
 			);
@@ -4282,7 +4298,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C8E18F22222EE11B00E30E52 /* MozillaAppServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4399,6 +4414,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C82043AF2523DC9600740B71 /* Sync.framework in Frameworks */,
+				1B8C9F6C27116C9000694199 /* SwiftyJSON in Frameworks */,
 				C877039625222FDC006E38EB /* Shared.framework in Frameworks */,
 				1B3D9A16270E944E006E1264 /* SwiftKeychainWrapper in Frameworks */,
 				3BA9A0321D2C2C0500BD418C /* Fuzi.framework in Frameworks */,
@@ -5086,12 +5102,9 @@
 				D05434BF2257DE9900FDE4EF /* Leanplum.framework */,
 				C8E18F1F222EDED000E30E52 /* SafariServices.framework */,
 				C8E18F1D222EDE4400E30E52 /* Accelerate.framework */,
-				EBCF403C221CBC9A00B38F28 /* MozillaAppServices.framework */,
-				EBCF403A221CBC5B00B38F28 /* SwiftProtobuf.framework */,
 				392E18021FEC4D7B00EBA79C /* MappaMundi.framework */,
 				EBA31D7E1F799BE20055463D /* Telemetry.framework */,
 				E46175F21EBB73A10021AE8A /* Sentry.framework */,
-				3B4988CD1E42B01800A12FDA /* SwiftyJSON.framework */,
 				E6231C041B90A472005ABB0D /* libxml2.2.tbd */,
 				E6231C001B90A44F005ABB0D /* libz.tbd */,
 				0B21E8051E26CCB7000C8779 /* EarlGrey.framework */,
@@ -5100,7 +5113,6 @@
 				D36998881AD70A0A00650C6C /* IOKit.framework */,
 				3BA9A0221D2C208C00BD418C /* Fuzi.framework */,
 				7B8A47F51D01D3B400C07734 /* PassKit.framework */,
-				7BA4A94B1C4CF03B0091D032 /* SwiftKeychainWrapper.framework */,
 				7BA4A9491C4CEFC70091D032 /* OnePasswordExtension.framework */,
 				7BA4A9451C4CED780091D032 /* GCDWebServers.framework */,
 				7B604FBA1C495D8A006EEEC3 /* XCGLogger.framework */,
@@ -6462,13 +6474,15 @@
 			buildRules = (
 			);
 			dependencies = (
-				1B3D9A10270E9416006E1264 /* PBXTargetDependency */,
 				2F77F6B91ABCAF0700484F3A /* PBXTargetDependency */,
 				2F11EE501ABCAE910083902D /* PBXTargetDependency */,
 			);
 			name = Sync;
 			packageProductDependencies = (
-				1B3D9A11270E941E006E1264 /* SwiftKeychainWrapper */,
+				1B308AB627150CD7001D6200 /* SwiftyJSON */,
+				1B308AB827150CDD001D6200 /* SwiftKeychainWrapper */,
+				1BCDF1D4271521ED000F1B25 /* Logins */,
+				1BCDF1D6271521F3000F1B25 /* Viaduct */,
 			);
 			productName = Sync;
 			productReference = 2827315E1ABC9BE600AA1954 /* Sync.framework */;
@@ -6505,11 +6519,18 @@
 			buildRules = (
 			);
 			dependencies = (
+				1B308AA7271503E5001D6200 /* PBXTargetDependency */,
+				1B308AA32715011D001D6200 /* PBXTargetDependency */,
+				1BDA1F8E271138EB006B2FAB /* PBXTargetDependency */,
 				1B3D99F6270E8CDE006E1264 /* PBXTargetDependency */,
 			);
 			name = Shared;
 			packageProductDependencies = (
 				1B3D99F7270E8CF8006E1264 /* SwiftKeychainWrapper */,
+				1BDA1F8627113817006B2FAB /* SwiftyJSON */,
+				1BDA1F8B271138A5006B2FAB /* SwiftProtobuf */,
+				1B308AA427150122001D6200 /* Places */,
+				1B308AA8271503EC001D6200 /* FxAClient */,
 			);
 			productName = Shared;
 			productReference = 288A2D861AB8B3260023ABC3 /* Shared.framework */;
@@ -6566,6 +6587,8 @@
 				2FCAE23C1ABB520700877008 /* PBXTargetDependency */,
 			);
 			name = Storage;
+			packageProductDependencies = (
+			);
 			productName = Storage;
 			productReference = 2FCAE21A1ABB51F800877008 /* libStorage.a */;
 			productType = "com.apple.product-type.library.static";
@@ -6820,7 +6843,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				1B3D9A1F270E9715006E1264 /* PBXTargetDependency */,
 				C82043712523DBEB00740B71 /* PBXTargetDependency */,
 				288A2D9C1AB8B3260023ABC3 /* PBXTargetDependency */,
 				397848E11ED86605004C0C0B /* PBXTargetDependency */,
@@ -6833,6 +6855,12 @@
 			packageProductDependencies = (
 				1B3D99F0270E89D0006E1264 /* Telemetry */,
 				1B3D9A1C270E96E4006E1264 /* SwiftKeychainWrapper */,
+				1BDA1F8427113788006B2FAB /* SwiftyJSON */,
+				1BDA1F8927113852006B2FAB /* SwiftProtobuf */,
+				1B308A622714C9BD001D6200 /* Logins */,
+				1B308A642714C9BD001D6200 /* Nimbus */,
+				1B308A682714C9BD001D6200 /* RustLog */,
+				1B308A6A2714C9BD001D6200 /* Viaduct */,
 			);
 			productName = Client;
 			productReference = F84B21BE1A090F8100AAB793 /* Client.app */;
@@ -6876,6 +6904,7 @@
 			name = ShareTo;
 			packageProductDependencies = (
 				1B3D9A15270E944E006E1264 /* SwiftKeychainWrapper */,
+				1B8C9F6B27116C9000694199 /* SwiftyJSON */,
 			);
 			productName = ShareToFirefox;
 			productReference = F84B22491A0920C600AAB793 /* ShareTo.appex */;
@@ -7154,6 +7183,9 @@
 			packageReferences = (
 				1B3D99EF270E89D0006E1264 /* XCRemoteSwiftPackageReference "telemetry-ios" */,
 				1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */,
+				1BDA1F8327113788006B2FAB /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
+				1BDA1F8827113852006B2FAB /* XCRemoteSwiftPackageReference "swift-protobuf" */,
+				1B308A5F2714C9BD001D6200 /* XCRemoteSwiftPackageReference "rust-components-swift" */,
 			);
 			productRefGroup = F84B21BF1A090F8100AAB793 /* Products */;
 			projectDirPath = "";
@@ -7487,10 +7519,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/GCDWebServers.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/OnePasswordExtension.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Fuzi.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/SwiftyJSON.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Sentry.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/SwiftProtobuf.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/MozillaAppServices.framework",
 			);
 			name = "Copy Carthage Dependencies";
 			outputPaths = (
@@ -8471,6 +8500,14 @@
 			target = 047F9B2624E1FE1C00CD7DF7 /* WidgetKitExtension */;
 			targetProxy = 047F9B3024E1FE1F00CD7DF7 /* PBXContainerItemProxy */;
 		};
+		1B308AA32715011D001D6200 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 1B308AA22715011D001D6200 /* Places */;
+		};
+		1B308AA7271503E5001D6200 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 1B308AA6271503E5001D6200 /* FxAClient */;
+		};
 		1B3D99F6270E8CDE006E1264 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 1B3D99F5270E8CDE006E1264 /* SwiftKeychainWrapper */;
@@ -8478,10 +8515,6 @@
 		1B3D9A08270E90C2006E1264 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 1B3D9A07270E90C2006E1264 /* SwiftKeychainWrapper */;
-		};
-		1B3D9A10270E9416006E1264 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 1B3D9A0F270E9416006E1264 /* SwiftKeychainWrapper */;
 		};
 		1B3D9A14270E9442006E1264 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -8491,9 +8524,9 @@
 			isa = PBXTargetDependency;
 			productRef = 1B3D9A17270E9462006E1264 /* SwiftKeychainWrapper */;
 		};
-		1B3D9A1F270E9715006E1264 /* PBXTargetDependency */ = {
+		1BDA1F8E271138EB006B2FAB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			productRef = 1B3D9A1E270E9715006E1264 /* SwiftKeychainWrapper */;
+			productRef = 1BDA1F8D271138EB006B2FAB /* SwiftyJSON */;
 		};
 		2827316B1ABC9BE700AA1954 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -10882,7 +10915,7 @@
 				INFOPLIST_FILE = Storage/Info.plist;
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
-				VALIDATE_WORKSPACE = NO;
+				VALIDATE_WORKSPACE = YES;
 			};
 			name = Fennec;
 		};
@@ -11155,6 +11188,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E60961891B62B8C800DD640F /* Firefox.xcconfig */;
 			buildSettings = {
+				VALIDATE_WORKSPACE = YES;
 			};
 			name = Firefox;
 		};
@@ -11434,6 +11468,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E6DCC1ED1DCBB6AA00CEC4B7 /* Fennec.enterprise.xcconfig */;
 			buildSettings = {
+				VALIDATE_WORKSPACE = YES;
 			};
 			name = Fennec_Enterprise;
 		};
@@ -11682,6 +11717,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E6FCC43C1C40565200DF6113 /* FirefoxBeta.xcconfig */;
 			buildSettings = {
+				VALIDATE_WORKSPACE = YES;
 			};
 			name = FirefoxBeta;
 		};
@@ -12147,6 +12183,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E60961861B62B8A700DD640F /* Fennec.xcconfig */;
 			buildSettings = {
+				VALIDATE_WORKSPACE = YES;
 			};
 			name = Fennec;
 		};
@@ -12458,6 +12495,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		1B308A5F2714C9BD001D6200 /* XCRemoteSwiftPackageReference "rust-components-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "/Users/skhamis/moz/rust-components-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.0.6;
+			};
+		};
 		1B3D99EF270E89D0006E1264 /* XCRemoteSwiftPackageReference "telemetry-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mozilla-mobile/telemetry-ios";
@@ -12474,9 +12519,75 @@
 				minimumVersion = 4.0.0;
 			};
 		};
+		1BDA1F8327113788006B2FAB /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+		1BDA1F8827113852006B2FAB /* XCRemoteSwiftPackageReference "swift-protobuf" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-protobuf.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.18.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		1B308A622714C9BD001D6200 /* Logins */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B308A5F2714C9BD001D6200 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = Logins;
+		};
+		1B308A642714C9BD001D6200 /* Nimbus */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B308A5F2714C9BD001D6200 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = Nimbus;
+		};
+		1B308A682714C9BD001D6200 /* RustLog */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B308A5F2714C9BD001D6200 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = RustLog;
+		};
+		1B308A6A2714C9BD001D6200 /* Viaduct */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B308A5F2714C9BD001D6200 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = Viaduct;
+		};
+		1B308AA22715011D001D6200 /* Places */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B308A5F2714C9BD001D6200 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = Places;
+		};
+		1B308AA427150122001D6200 /* Places */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B308A5F2714C9BD001D6200 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = Places;
+		};
+		1B308AA6271503E5001D6200 /* FxAClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B308A5F2714C9BD001D6200 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = FxAClient;
+		};
+		1B308AA8271503EC001D6200 /* FxAClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B308A5F2714C9BD001D6200 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = FxAClient;
+		};
+		1B308AB627150CD7001D6200 /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1BDA1F8327113788006B2FAB /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
+		1B308AB827150CDD001D6200 /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
 		1B3D99F0270E89D0006E1264 /* Telemetry */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1B3D99EF270E89D0006E1264 /* XCRemoteSwiftPackageReference "telemetry-ios" */;
@@ -12498,16 +12609,6 @@
 			productName = SwiftKeychainWrapper;
 		};
 		1B3D9A09270E90C6006E1264 /* SwiftKeychainWrapper */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
-			productName = SwiftKeychainWrapper;
-		};
-		1B3D9A0F270E9416006E1264 /* SwiftKeychainWrapper */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
-			productName = SwiftKeychainWrapper;
-		};
-		1B3D9A11270E941E006E1264 /* SwiftKeychainWrapper */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
 			productName = SwiftKeychainWrapper;
@@ -12537,10 +12638,45 @@
 			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
 			productName = SwiftKeychainWrapper;
 		};
-		1B3D9A1E270E9715006E1264 /* SwiftKeychainWrapper */ = {
+		1B8C9F6B27116C9000694199 /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
-			productName = SwiftKeychainWrapper;
+			package = 1BDA1F8327113788006B2FAB /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
+		1BCDF1D4271521ED000F1B25 /* Logins */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B308A5F2714C9BD001D6200 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = Logins;
+		};
+		1BCDF1D6271521F3000F1B25 /* Viaduct */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B308A5F2714C9BD001D6200 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = Viaduct;
+		};
+		1BDA1F8427113788006B2FAB /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1BDA1F8327113788006B2FAB /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
+		1BDA1F8627113817006B2FAB /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1BDA1F8327113788006B2FAB /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
+		1BDA1F8927113852006B2FAB /* SwiftProtobuf */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1BDA1F8827113852006B2FAB /* XCRemoteSwiftPackageReference "swift-protobuf" */;
+			productName = SwiftProtobuf;
+		};
+		1BDA1F8B271138A5006B2FAB /* SwiftProtobuf */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1BDA1F8827113852006B2FAB /* XCRemoteSwiftPackageReference "swift-protobuf" */;
+			productName = SwiftProtobuf;
+		};
+		1BDA1F8D271138EB006B2FAB /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1BDA1F8327113788006B2FAB /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

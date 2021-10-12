@@ -6,6 +6,5 @@ github "kif-framework/KIF"                  "v3.7.11"
 github "mozilla-mobile/onepassword-app-extension"    "add-framework-support"
 github "DaveWoodCom/XCGLogger"              ~> 7.0
 github "cezheng/Fuzi"                       ~> 3.0
-github "SwiftyJSON/SwiftyJSON"              ~> 5.0
 github "mozilla-mobile/MappaMundi"          "master"
 github "mozilla-services/shavar-prod-lists" "89.0"

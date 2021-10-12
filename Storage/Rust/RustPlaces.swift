@@ -5,7 +5,8 @@
 import Foundation
 import Shared
 
-@_exported import MozillaAppServices
+//@_exported import MozillaAppServices
+@_exported import Places
 
 private let log = Logger.syncLogger
 
