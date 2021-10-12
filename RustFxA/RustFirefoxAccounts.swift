@@ -4,7 +4,6 @@
 
 import UIKit
 import Shared
-//import MozillaAppServices
 import FxAClient
 import Viaduct
 import SwiftKeychainWrapper

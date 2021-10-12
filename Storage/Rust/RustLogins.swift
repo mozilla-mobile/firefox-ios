@@ -6,7 +6,6 @@ import Foundation
 import Shared
 import SwiftKeychainWrapper
 
-//@_exported import MozillaAppServices
 @_exported import Logins
 @_exported import Sync15
 

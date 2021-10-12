@@ -7,7 +7,7 @@ import Shared
 import Account
 import SwiftKeychainWrapper
 import LocalAuthentication
-import MozillaAppServices
+import Glean
 
 // This file contains all of the settings available in the main settings screen of the app.
 

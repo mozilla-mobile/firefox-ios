@@ -49,10 +49,8 @@
 		0BF1B7E31AC60DEA00A7B407 /* InsetButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF1B7E21AC60DEA00A7B407 /* InsetButton.swift */; };
 		0BF42D4F1A7CD09600889E28 /* TestFavicons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF42D4E1A7CD09600889E28 /* TestFavicons.swift */; };
 		0BF8F8DA1AEFF1C900E90BC2 /* noTitle.html in Resources */ = {isa = PBXBuildFile; fileRef = 0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */; };
-		1B308A632714C9BD001D6200 /* Logins in Frameworks */ = {isa = PBXBuildFile; productRef = 1B308A622714C9BD001D6200 /* Logins */; };
 		1B308A652714C9BD001D6200 /* Nimbus in Frameworks */ = {isa = PBXBuildFile; productRef = 1B308A642714C9BD001D6200 /* Nimbus */; };
 		1B308A692714C9BD001D6200 /* RustLog in Frameworks */ = {isa = PBXBuildFile; productRef = 1B308A682714C9BD001D6200 /* RustLog */; };
-		1B308A6B2714C9BD001D6200 /* Viaduct in Frameworks */ = {isa = PBXBuildFile; productRef = 1B308A6A2714C9BD001D6200 /* Viaduct */; };
 		1B308A9F2714F01E001D6200 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3D99F7270E8CF8006E1264 /* SwiftKeychainWrapper */; };
 		1B308AA02714F01E001D6200 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1BDA1F8627113817006B2FAB /* SwiftyJSON */; };
 		1B308AA12714F01E001D6200 /* SwiftProtobuf in Frameworks */ = {isa = PBXBuildFile; productRef = 1BDA1F8B271138A5006B2FAB /* SwiftProtobuf */; };
@@ -67,10 +65,13 @@
 		1B3D9A1B270E95FB006E1264 /* AppAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65D89171C8647420006EA35 /* AppAuthenticator.swift */; };
 		1B3D9A1D270E96E4006E1264 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3D9A1C270E96E4006E1264 /* SwiftKeychainWrapper */; };
 		1B8C9F6C27116C9000694199 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1B8C9F6B27116C9000694199 /* SwiftyJSON */; };
-		1BCDF1D5271521ED000F1B25 /* Logins in Frameworks */ = {isa = PBXBuildFile; productRef = 1BCDF1D4271521ED000F1B25 /* Logins */; };
-		1BCDF1D7271521F3000F1B25 /* Viaduct in Frameworks */ = {isa = PBXBuildFile; productRef = 1BCDF1D6271521F3000F1B25 /* Viaduct */; };
 		1BDA1F8527113788006B2FAB /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1BDA1F8427113788006B2FAB /* SwiftyJSON */; };
 		1BDA1F8A27113852006B2FAB /* SwiftProtobuf in Frameworks */ = {isa = PBXBuildFile; productRef = 1BDA1F8927113852006B2FAB /* SwiftProtobuf */; };
+		1BE9EC99271616F000D729BB /* Logins in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9EC98271616F000D729BB /* Logins */; };
+		1BE9EC9D27161A0300D729BB /* Viaduct in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9EC9C27161A0300D729BB /* Viaduct */; };
+		1BE9ECA127161AB500D729BB /* RustLog in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECA027161AB500D729BB /* RustLog */; };
+		1BE9ECA527161AE400D729BB /* RustLog in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECA427161AE400D729BB /* RustLog */; };
+		1BE9ECA927161B4A00D729BB /* RustLog in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECA827161B4A00D729BB /* RustLog */; };
 		1D06AE6624FEE4D5000B092B /* TopSitesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D06AE6524FEE4D5000B092B /* TopSitesProvider.swift */; };
 		1D06AE6A24FEE8D6000B092B /* TabProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D06AE6924FEE8D6000B092B /* TabProvider.swift */; };
 		1D0BA05C24F46A0400D731B5 /* TopSitesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D0BA05B24F46A0400D731B5 /* TopSitesManager.swift */; };
@@ -4214,10 +4215,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1BCDF1D5271521ED000F1B25 /* Logins in Frameworks */,
 				1B308AB727150CD7001D6200 /* SwiftyJSON in Frameworks */,
 				C820439A2523DC4500740B71 /* libStorage.a in Frameworks */,
-				1BCDF1D7271521F3000F1B25 /* Viaduct in Frameworks */,
 				1B308AB927150CDD001D6200 /* SwiftKeychainWrapper in Frameworks */,
 				D09A0CDC1FAA24CC009A0273 /* libAccount.a in Frameworks */,
 			);
@@ -4236,9 +4235,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BE9EC99271616F000D729BB /* Logins in Frameworks */,
 				1B308AA02714F01E001D6200 /* SwiftyJSON in Frameworks */,
 				1B308A9F2714F01E001D6200 /* SwiftKeychainWrapper in Frameworks */,
 				1B308AA527150122001D6200 /* Places in Frameworks */,
+				1BE9EC9D27161A0300D729BB /* Viaduct in Frameworks */,
 				1B308AA12714F01E001D6200 /* SwiftProtobuf in Frameworks */,
 				1B308AA9271503EC001D6200 /* FxAClient in Frameworks */,
 			);
@@ -4257,7 +4258,6 @@
 				E6231C051B90A472005ABB0D /* libxml2.2.tbd in Frameworks */,
 				E6231C011B90A44F005ABB0D /* libz.tbd in Frameworks */,
 				E4B3348A1BBF23F9004E2BFF /* AdSupport.framework in Frameworks */,
-				1B308A6B2714C9BD001D6200 /* Viaduct in Frameworks */,
 				1B308A652714C9BD001D6200 /* Nimbus in Frameworks */,
 				1BDA1F8A27113852006B2FAB /* SwiftProtobuf in Frameworks */,
 				1B3D99F1270E89D0006E1264 /* Telemetry in Frameworks */,
@@ -4267,7 +4267,6 @@
 				7BA4A94A1C4CEFC70091D032 /* OnePasswordExtension.framework in Frameworks */,
 				DABDA4AD20DA0FB900FBB0BD /* ObjcExceptionBridging.framework in Frameworks */,
 				7B8A47F61D01D3B400C07734 /* PassKit.framework in Frameworks */,
-				1B308A632714C9BD001D6200 /* Logins in Frameworks */,
 				7B604F9B1C4950F2006EEEC3 /* SDWebImage.framework in Frameworks */,
 				7B604FA21C495268006EEEC3 /* SnapKit.framework in Frameworks */,
 				1B308A692714C9BD001D6200 /* RustLog in Frameworks */,
@@ -4325,6 +4324,7 @@
 				C82043AE2523DC8B00740B71 /* Sync.framework in Frameworks */,
 				C877039725222FE6006E38EB /* Shared.framework in Frameworks */,
 				1B3D9A0A270E90C6006E1264 /* SwiftKeychainWrapper in Frameworks */,
+				1BE9ECA527161AE400D729BB /* RustLog in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4395,6 +4395,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F8324A072649A188007E4BFA /* AuthenticationServices.framework in Frameworks */,
+				1BE9ECA927161B4A00D729BB /* RustLog in Frameworks */,
 				F8324AF62649B540007E4BFA /* Shared.framework in Frameworks */,
 				1B3D9A1A270E9466006E1264 /* SwiftKeychainWrapper in Frameworks */,
 				F8324AFA2649B540007E4BFA /* Sync.framework in Frameworks */,
@@ -4420,6 +4421,7 @@
 				3BA9A0321D2C2C0500BD418C /* Fuzi.framework in Frameworks */,
 				0B75AEA91AC20FB20015E5DC /* ImageIO.framework in Frameworks */,
 				7B604F9D1C495143006EEEC3 /* SDWebImage.framework in Frameworks */,
+				1BE9ECA127161AB500D729BB /* RustLog in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6481,8 +6483,6 @@
 			packageProductDependencies = (
 				1B308AB627150CD7001D6200 /* SwiftyJSON */,
 				1B308AB827150CDD001D6200 /* SwiftKeychainWrapper */,
-				1BCDF1D4271521ED000F1B25 /* Logins */,
-				1BCDF1D6271521F3000F1B25 /* Viaduct */,
 			);
 			productName = Sync;
 			productReference = 2827315E1ABC9BE600AA1954 /* Sync.framework */;
@@ -6519,6 +6519,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				1BE9EC9B271619FE00D729BB /* PBXTargetDependency */,
+				1BE9EC97271616EB00D729BB /* PBXTargetDependency */,
 				1B308AA7271503E5001D6200 /* PBXTargetDependency */,
 				1B308AA32715011D001D6200 /* PBXTargetDependency */,
 				1BDA1F8E271138EB006B2FAB /* PBXTargetDependency */,
@@ -6531,6 +6533,8 @@
 				1BDA1F8B271138A5006B2FAB /* SwiftProtobuf */,
 				1B308AA427150122001D6200 /* Places */,
 				1B308AA8271503EC001D6200 /* FxAClient */,
+				1BE9EC98271616F000D729BB /* Logins */,
+				1BE9EC9C27161A0300D729BB /* Viaduct */,
 			);
 			productName = Shared;
 			productReference = 288A2D861AB8B3260023ABC3 /* Shared.framework */;
@@ -6641,6 +6645,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				1BE9ECA327161AE000D729BB /* PBXTargetDependency */,
 				1B3D9A08270E90C2006E1264 /* PBXTargetDependency */,
 				C82043D82523DDC000740B71 /* PBXTargetDependency */,
 				D0EA58171FA836D200D03ED1 /* PBXTargetDependency */,
@@ -6648,6 +6653,7 @@
 			name = NotificationService;
 			packageProductDependencies = (
 				1B3D9A09270E90C6006E1264 /* SwiftKeychainWrapper */,
+				1BE9ECA427161AE400D729BB /* RustLog */,
 			);
 			productName = NotificationService;
 			productReference = 397848DB1ED86605004C0C0B /* NotificationService.appex */;
@@ -6814,6 +6820,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				1BE9ECA727161B4500D729BB /* PBXTargetDependency */,
 				1B3D9A18270E9462006E1264 /* PBXTargetDependency */,
 				F8324AF92649B540007E4BFA /* PBXTargetDependency */,
 				F8324AFD2649B540007E4BFA /* PBXTargetDependency */,
@@ -6821,6 +6828,7 @@
 			name = CredentialProvider;
 			packageProductDependencies = (
 				1B3D9A19270E9466006E1264 /* SwiftKeychainWrapper */,
+				1BE9ECA827161B4A00D729BB /* RustLog */,
 			);
 			productName = CredentialProvider;
 			productReference = F8324A052649A188007E4BFA /* CredentialProvider.appex */;
@@ -6857,10 +6865,8 @@
 				1B3D9A1C270E96E4006E1264 /* SwiftKeychainWrapper */,
 				1BDA1F8427113788006B2FAB /* SwiftyJSON */,
 				1BDA1F8927113852006B2FAB /* SwiftProtobuf */,
-				1B308A622714C9BD001D6200 /* Logins */,
 				1B308A642714C9BD001D6200 /* Nimbus */,
 				1B308A682714C9BD001D6200 /* RustLog */,
-				1B308A6A2714C9BD001D6200 /* Viaduct */,
 			);
 			productName = Client;
 			productReference = F84B21BE1A090F8100AAB793 /* Client.app */;
@@ -6897,6 +6903,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				1BE9EC9F27161AB000D729BB /* PBXTargetDependency */,
 				1B3D9A14270E9442006E1264 /* PBXTargetDependency */,
 				D09A0CF11FAA2C7E009A0273 /* PBXTargetDependency */,
 				D09A0CF31FAA2C81009A0273 /* PBXTargetDependency */,
@@ -6905,6 +6912,7 @@
 			packageProductDependencies = (
 				1B3D9A15270E944E006E1264 /* SwiftKeychainWrapper */,
 				1B8C9F6B27116C9000694199 /* SwiftyJSON */,
+				1BE9ECA027161AB500D729BB /* RustLog */,
 			);
 			productName = ShareToFirefox;
 			productReference = F84B22491A0920C600AAB793 /* ShareTo.appex */;
@@ -7546,7 +7554,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "rm -rf .venv; bash $SRCROOT/sdk_generator.sh -g MozillaAppServices\n";
+			shellScript = "#rm -rf .venv; bash $SRCROOT/sdk_generator.sh -g MozillaAppServices\n";
 		};
 		E4A69F612048AFEA00D9017B /* Copy Carthage Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -8527,6 +8535,26 @@
 		1BDA1F8E271138EB006B2FAB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 1BDA1F8D271138EB006B2FAB /* SwiftyJSON */;
+		};
+		1BE9EC97271616EB00D729BB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 1BE9EC96271616EB00D729BB /* Logins */;
+		};
+		1BE9EC9B271619FE00D729BB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 1BE9EC9A271619FE00D729BB /* Viaduct */;
+		};
+		1BE9EC9F27161AB000D729BB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 1BE9EC9E27161AB000D729BB /* RustLog */;
+		};
+		1BE9ECA327161AE000D729BB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 1BE9ECA227161AE000D729BB /* RustLog */;
+		};
+		1BE9ECA727161B4500D729BB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 1BE9ECA627161B4500D729BB /* RustLog */;
 		};
 		2827316B1ABC9BE700AA1954 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -12538,11 +12566,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		1B308A622714C9BD001D6200 /* Logins */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1B308A5F2714C9BD001D6200 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
-			productName = Logins;
-		};
 		1B308A642714C9BD001D6200 /* Nimbus */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1B308A5F2714C9BD001D6200 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
@@ -12552,11 +12575,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1B308A5F2714C9BD001D6200 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
 			productName = RustLog;
-		};
-		1B308A6A2714C9BD001D6200 /* Viaduct */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1B308A5F2714C9BD001D6200 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
-			productName = Viaduct;
 		};
 		1B308AA22715011D001D6200 /* Places */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -12643,16 +12661,6 @@
 			package = 1BDA1F8327113788006B2FAB /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
 			productName = SwiftyJSON;
 		};
-		1BCDF1D4271521ED000F1B25 /* Logins */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1B308A5F2714C9BD001D6200 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
-			productName = Logins;
-		};
-		1BCDF1D6271521F3000F1B25 /* Viaduct */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1B308A5F2714C9BD001D6200 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
-			productName = Viaduct;
-		};
 		1BDA1F8427113788006B2FAB /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1BDA1F8327113788006B2FAB /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
@@ -12677,6 +12685,56 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1BDA1F8327113788006B2FAB /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
 			productName = SwiftyJSON;
+		};
+		1BE9EC96271616EB00D729BB /* Logins */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B308A5F2714C9BD001D6200 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = Logins;
+		};
+		1BE9EC98271616F000D729BB /* Logins */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B308A5F2714C9BD001D6200 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = Logins;
+		};
+		1BE9EC9A271619FE00D729BB /* Viaduct */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B308A5F2714C9BD001D6200 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = Viaduct;
+		};
+		1BE9EC9C27161A0300D729BB /* Viaduct */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B308A5F2714C9BD001D6200 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = Viaduct;
+		};
+		1BE9EC9E27161AB000D729BB /* RustLog */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B308A5F2714C9BD001D6200 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = RustLog;
+		};
+		1BE9ECA027161AB500D729BB /* RustLog */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B308A5F2714C9BD001D6200 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = RustLog;
+		};
+		1BE9ECA227161AE000D729BB /* RustLog */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B308A5F2714C9BD001D6200 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = RustLog;
+		};
+		1BE9ECA427161AE400D729BB /* RustLog */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B308A5F2714C9BD001D6200 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = RustLog;
+		};
+		1BE9ECA627161B4500D729BB /* RustLog */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B308A5F2714C9BD001D6200 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = RustLog;
+		};
+		1BE9ECA827161B4A00D729BB /* RustLog */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B308A5F2714C9BD001D6200 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = RustLog;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

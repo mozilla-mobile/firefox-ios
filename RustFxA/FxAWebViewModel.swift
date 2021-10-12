@@ -5,7 +5,7 @@
 import WebKit
 import Foundation
 import Account
-import MozillaAppServices
+import FxAClient
 import Shared
 import SwiftKeychainWrapper
 

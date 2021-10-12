@@ -9,6 +9,7 @@ import XCGLogger
 import UserNotifications
 import Account
 import SwiftKeychainWrapper
+import FxAClient
 
 private let log = Logger.browserLogger
 

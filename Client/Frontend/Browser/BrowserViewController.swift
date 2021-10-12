@@ -14,7 +14,6 @@ import Account
 import MobileCoreServices
 import SDWebImage
 import Telemetry
-import MozillaAppServices
 import Sentry
 
 private let KVOs: [KVOConstants] = [

@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
-import MozillaAppServices
+import Nimbus
 import Shared
 import XCGLogger
 
