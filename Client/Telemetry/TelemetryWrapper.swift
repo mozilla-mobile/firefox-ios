@@ -434,6 +434,7 @@ extension TelemetryWrapper {
         case recentlySavedReadingListView = "recently-saved-reading-list-view"
         case recentlySavedReadingListAction = "recently-saved-reading-list-action"
         case customizeHomepageButton = "customize-homepage-button"
+        case fxHomepageOrigin = "firefox-homepage-origin"
         case navigatingToHome = "navigating-to-home"
         case openedNewTab = "opened-new-tab"
         case searchScreen = "search-screen"
@@ -453,7 +454,7 @@ extension TelemetryWrapper {
         case topSitePosition = "tilePosition"
         case topSiteTileType = "tileType"
         case pocketTilePosition = "pocketTilePosition"
-        case fxHomeFrom = "from"
+        case fxHomepageOrigin = "fxHomepageOrigin"
 
         // Grouped Tab
         case groupsWithTwoTabsOnly = "groupsWithTwoTabsOnly"
@@ -681,9 +682,11 @@ extension TelemetryWrapper {
             GleanMetrics.Tabs.groupedTabSearch.add()
             
         // Firefox Homepage
-        case (.action, .view, .firefoxHomepage, let origin, _):
-            print("ROUX - \(extras)")
-//            GleanMetrics.FirefoxHomePage.firefoxHomepageView[origin].add()
+        case (.action, .view, .firefoxHomepage, EventValue.fxHomepageOrigin.rawValue, let extras):
+            if let origin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
+//                GleanMetrics.FirefoxHomePage.firefoxHomepageView[origin].add()
+                print("ROUX - \(extras)")
+            }
         case (.action, .tap, .firefoxHomepage, EventValue.yourLibrarySection.rawValue, let extras):
             if let panel = extras?[EventObject.libraryPanel.rawValue] as? String {
                 GleanMetrics.FirefoxHomePage.yourLibrary[panel].add()
