@@ -454,6 +454,7 @@ extension TabDisplayManager: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if let _ = tabGroups {
             let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: GridTabTrayControllerUX.IndependentTabsHeaderIdentifier, for: indexPath) as! ASHeaderView
+            view.remakeConstraint(type: .otherGroupTabs)
             view.title = .TabTrayOtherTabsSectionHeader
             view.titleLabel.font = .systemFont(ofSize: GroupedTabCellProperties.CellUX.titleFontSize, weight: .semibold)
             view.moreButton.isHidden = true

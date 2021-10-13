@@ -24,7 +24,7 @@ struct GroupedTabCellProperties {
 protocol GroupedTabsDelegate {
     func didSelectGroupedTab(tab: Tab?)
     func closeTab(tab: Tab)
-    func performSearchOfGroupInNewTab()
+    func performSearchOfGroupInNewTab(searchTerm: String?)
 }
 
 protocol GroupedTabDelegate {
@@ -161,9 +161,9 @@ class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UI
         tabDisplayManagerDelegate?.closeGroupTab(tab: tab)
     }
     
-    func performSearchOfGroupInNewTab() {
-        guard let groupSearchTerm = tabGroups?.first?.searchTerm else { return }
-        tabDisplayManagerDelegate?.newSearchFromGroup(searchTerm: groupSearchTerm)
+    func performSearchOfGroupInNewTab(searchTerm: String?) {
+        guard let searchTerm = searchTerm else { return }
+        tabDisplayManagerDelegate?.newSearchFromGroup(searchTerm: searchTerm)
     }
 }
 
@@ -339,9 +339,9 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
             delegate?.didSelectGroupedTab(tab: tab)
         }
     }
-    
+
     @objc func handleSearchButtonTapped() {
-        delegate?.performSearchOfGroupInNewTab()
+        delegate?.performSearchOfGroupInNewTab(searchTerm: titleLabel.text)
     }
     
     @objc private func handleNotifications(_ notification: Notification) {
