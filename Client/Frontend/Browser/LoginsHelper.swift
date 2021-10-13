@@ -266,7 +266,8 @@ class LoginsHelper: TabContentScript {
                 "name": "RemoteLogins:loginsFound",
                 "logins": logins
             ]
-            let injectJavaScript = "window.__firefox__.logins.inject(\(dict.asString))"
+            guard let injected = dict.asString else { return }
+            let injectJavaScript = "window.__firefox__.logins.inject(\(injected))"
             self.tab?.webView?.evaluateJavascriptInDefaultContentWorld(injectJavaScript)
         }
     }

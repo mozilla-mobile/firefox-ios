@@ -444,7 +444,7 @@ class Tab: NSObject {
             jsonDict["history"] = urls as AnyObject?
             jsonDict["currentPage"] = currentPage as AnyObject?
             
-            guard let json = jsonDict.asString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
+            guard let json = jsonDict.asString?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
                 return
             }
 
