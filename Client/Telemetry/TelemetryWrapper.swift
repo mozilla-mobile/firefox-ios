@@ -685,7 +685,7 @@ extension TelemetryWrapper {
         case (.action, .view, .firefoxHomepage, EventValue.fxHomepageOrigin.rawValue, let extras):
             if let origin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
 //                GleanMetrics.FirefoxHomePage.firefoxHomepageView[origin].add()
-                print("ROUX - \(extras)")
+                print("ROUX - \(origin)")
             }
         case (.action, .tap, .firefoxHomepage, EventValue.yourLibrarySection.rawValue, let extras):
             if let panel = extras?[EventObject.libraryPanel.rawValue] as? String {

@@ -400,7 +400,7 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
 
     func urlBarDidLeaveOverlayMode(_ urlBar: URLBarView) {
         destroySearchController()
-        updateInContentHomePanel(tabManager.selectedTab?.url as URL?)
+        updateInContentHomePanel(tabManager.selectedTab?.url as URL?, from: .searchScreen)
     }
 
     func urlBarDidBeginDragInteraction(_ urlBar: URLBarView) {
