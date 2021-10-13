@@ -72,6 +72,11 @@
 		1BE9ECC02717663200D729BB /* Logins in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECBF2717663200D729BB /* Logins */; };
 		1BE9ECC22717663200D729BB /* Places in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECC12717663200D729BB /* Places */; };
 		1BE9ECC42717663200D729BB /* Viaduct in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECC32717663200D729BB /* Viaduct */; };
+		1BE9ECC827176F8B00D729BB /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECC727176F8B00D729BB /* SwiftKeychainWrapper */; };
+		1BE9ECCA27176FEA00D729BB /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECC927176FEA00D729BB /* SwiftyJSON */; };
+		1BE9ECCC2717704300D729BB /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECCB2717704300D729BB /* SwiftyJSON */; };
+		1BE9ECCE271770A600D729BB /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECCD271770A600D729BB /* SwiftyJSON */; };
+		1BE9ECD0271770AB00D729BB /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECCF271770AB00D729BB /* SwiftKeychainWrapper */; };
 		1D06AE6624FEE4D5000B092B /* TopSitesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D06AE6524FEE4D5000B092B /* TopSitesProvider.swift */; };
 		1D06AE6A24FEE8D6000B092B /* TabProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D06AE6924FEE8D6000B092B /* TabProvider.swift */; };
 		1D0BA05C24F46A0400D731B5 /* TopSitesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D0BA05B24F46A0400D731B5 /* TopSitesManager.swift */; };
@@ -4226,6 +4231,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BE9ECCC2717704300D729BB /* SwiftyJSON in Frameworks */,
 				7B604FC01C495FD1006EEEC3 /* XCGLogger.framework in Frameworks */,
 				28ECD9BF1BA1F19900D829DA /* libz.tbd in Frameworks */,
 			);
@@ -4304,6 +4310,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BE9ECCA27176FEA00D729BB /* SwiftyJSON in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4387,6 +4394,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BE9ECC827176F8B00D729BB /* SwiftKeychainWrapper in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4406,7 +4414,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BE9ECCE271770A600D729BB /* SwiftyJSON in Frameworks */,
 				E6231C081B90A71E005ABB0D /* libz.tbd in Frameworks */,
+				1BE9ECD0271770AB00D729BB /* SwiftKeychainWrapper in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6504,6 +6514,9 @@
 				2827316B1ABC9BE700AA1954 /* PBXTargetDependency */,
 			);
 			name = SyncTests;
+			packageProductDependencies = (
+				1BE9ECCB2717704300D729BB /* SwiftyJSON */,
+			);
 			productName = SyncTests;
 			productReference = 282731681ABC9BE700AA1954 /* SyncTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -6612,6 +6625,9 @@
 				2FCAE2291ABB51F800877008 /* PBXTargetDependency */,
 			);
 			name = StorageTests;
+			packageProductDependencies = (
+				1BE9ECC927176FEA00D729BB /* SwiftyJSON */,
+			);
 			productName = StorageTests;
 			productReference = 2FCAE2241ABB51F800877008 /* StorageTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -6801,10 +6817,14 @@
 			buildRules = (
 			);
 			dependencies = (
+				1BE9ECC627176F1800D729BB /* PBXTargetDependency */,
 				E6F965141B2F1CF20034B023 /* PBXTargetDependency */,
 				E6F9653A1B2F1D330034B023 /* PBXTargetDependency */,
 			);
 			name = SharedTests;
+			packageProductDependencies = (
+				1BE9ECC727176F8B00D729BB /* SwiftKeychainWrapper */,
+			);
 			productName = SharedTests;
 			productReference = E6F9650C1B2F1CF20034B023 /* SharedTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -6888,6 +6908,10 @@
 				F84B21D51A090F8100AAB793 /* PBXTargetDependency */,
 			);
 			name = ClientTests;
+			packageProductDependencies = (
+				1BE9ECCD271770A600D729BB /* SwiftyJSON */,
+				1BE9ECCF271770AB00D729BB /* SwiftKeychainWrapper */,
+			);
 			productName = ClientTests;
 			productReference = F84B21D31A090F8100AAB793 /* ClientTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -7534,7 +7558,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/Homebrew/bin/carthage copy-frameworks\n";
+			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
 		};
 		CDF3D3002461D92F00A93748 /* Glean SDK Generator Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -8555,6 +8579,10 @@
 		1BE9ECA727161B4500D729BB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 1BE9ECA627161B4500D729BB /* RustLog */;
+		};
+		1BE9ECC627176F1800D729BB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 1BE9ECC527176F1800D729BB /* SwiftKeychainWrapper */;
 		};
 		2827316B1ABC9BE700AA1954 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -12743,6 +12771,36 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1BE9ECAA271765C800D729BB /* XCRemoteSwiftPackageReference "rust-components-swift" */;
 			productName = Viaduct;
+		};
+		1BE9ECC527176F1800D729BB /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
+		1BE9ECC727176F8B00D729BB /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
+		1BE9ECC927176FEA00D729BB /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1BDA1F8327113788006B2FAB /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
+		1BE9ECCB2717704300D729BB /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1BDA1F8327113788006B2FAB /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
+		1BE9ECCD271770A600D729BB /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1BDA1F8327113788006B2FAB /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
+		1BE9ECCF271770AB00D729BB /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
