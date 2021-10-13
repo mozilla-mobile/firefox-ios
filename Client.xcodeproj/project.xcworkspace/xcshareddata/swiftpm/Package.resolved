@@ -12,11 +12,11 @@
       },
       {
         "package": "MozillaRustComponentsSwift",
-        "repositoryURL": "/Users/skhamis/moz/rust-components-swift",
+        "repositoryURL": "https://github.com/mozilla/rust-components-swift",
         "state": {
           "branch": null,
-          "revision": "3d52231e704b6dbb5530e97698a3f2f31294c8b1",
-          "version": "0.0.6"
+          "revision": "b530ffbff8f6768a4d63f24492f49b904f1d195f",
+          "version": "0.0.5"
         }
       },
       {
