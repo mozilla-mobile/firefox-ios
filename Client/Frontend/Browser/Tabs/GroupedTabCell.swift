@@ -18,7 +18,6 @@ struct GroupedTabCellProperties {
         static let showMoreAccessibilityId = "GroupedTabCell.ShowMoreButton"
         static let searchButtonAccessibilityId = "GroupTabCell.SearchButton"
     }
-    
 }
 
 protocol GroupedTabsDelegate {
