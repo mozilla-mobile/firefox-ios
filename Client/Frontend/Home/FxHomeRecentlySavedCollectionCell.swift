@@ -204,6 +204,7 @@ class RecentlySavedCell: UICollectionViewCell {
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = RecentlySavedCellUX.generalCornerRadius
+        imageView.backgroundColor = .systemBackground
     }
     let itemTitle: UILabel = .build { label in
         label.adjustsFontSizeToFitWidth = false

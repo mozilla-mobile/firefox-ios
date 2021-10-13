@@ -6,7 +6,7 @@ import UIKit
 import Storage
 
 struct JumpBackInCollectionCellUX {
-    static let cellHeight: CGFloat = 58
+    static let cellHeight: CGFloat = 112
     static let verticalCellSpacing: CGFloat = 8
     static let iPadHorizontalSpacing: CGFloat = 16
 }
@@ -20,15 +20,16 @@ struct JumpBackInLayoutVariables {
 class FxHomeJumpBackInCollectionCell: UICollectionViewCell {
 
     // MARK: - Properties
-    var profile: Profile?
+    var profile: Profile!
     var viewModel: FirefoxHomeJumpBackInViewModel!
+    lazy var siteImageHelper = SiteImageHelper(profile: profile)
 
     var layoutVariables: JumpBackInLayoutVariables {
         let horizontalVariables = JumpBackInLayoutVariables(columns: 2, scrollDirection: .horizontal, maxItemsToDisplay: 4)
         let verticalVariables = JumpBackInLayoutVariables(columns: 1, scrollDirection: .vertical, maxItemsToDisplay: 2)
 
         let deviceIsiPad = UIDevice.current.userInterfaceIdiom == .pad
-        let deviceIsInLandscapeMode = UIApplication.shared.statusBarOrientation.isLandscape
+        let deviceIsInLandscapeMode = UIWindow.isLandscape
         let horizontalSizeClassIsCompact = traitCollection.horizontalSizeClass == .compact
 
         if deviceIsiPad {
@@ -88,30 +89,61 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: JumpBackInCell.cellIdentifier, for: indexPath) as! JumpBackInCell
-
+        cell.heroImage.image = nil
+        cell.faviconImage.image = nil
+        
         if indexPath.row == (viewModel.jumpList.itemsToDisplay - 1),
            let group = viewModel.jumpList.group {
-
-            cell.itemTitle.text = group.searchTerm.localizedCapitalized
-            cell.itemDetails.text = String(format: .FirefoxHomeJumpBackInSectionGroupSiteCount, group.groupedItems.count)
-            cell.heroImage.image = UIImage(imageLiteralResourceName: "recently_closed").withRenderingMode(.alwaysTemplate)
-
+            configureCellForGroups(group: group, cell: cell)
         } else {
-            let item = viewModel.jumpList.tabs[indexPath.row]
-            let itemURL = item.url?.absoluteString ?? ""
-            let site = Site(url: itemURL, title: item.displayTitle)
-
-            profile?.favicons.getFaviconImage(forSite: site).uponQueue(.main, block: { result in
-                guard let image = result.successValue else { return }
-                cell.heroImage.image = image
-                cell.setNeedsLayout()
-            })
-
-            cell.itemTitle.text = site.title
+            configureCellForTab(item: viewModel.jumpList.tabs[indexPath.row], cell: cell)
         }
 
         return cell
     }
+    
+    private func configureCellForGroups(group: ASGroup<Tab>, cell: JumpBackInCell) {
+        let firstGroupItem = group.groupedItems.first
+        let site = Site(url: firstGroupItem?.lastKnownUrl?.absoluteString ?? "", title: firstGroupItem?.lastTitle ?? "")
+        let heroImageCacheKey = NSString(string: site.url)
+        
+        if let cachedImage = SiteImageHelper.cache.object(forKey: heroImageCacheKey) {
+            cell.heroImage.image = cachedImage
+        } else {
+            siteImageHelper.fetchImageFor(site: site, imageType: .heroImage, shouldFallback: true) { image in
+                cell.heroImage.image = image
+            }
+        }
+
+        cell.itemTitle.text = group.searchTerm.localizedCapitalized
+        cell.itemDetails.text = String(format: .FirefoxHomeJumpBackInSectionGroupSiteCount, group.groupedItems.count)
+        cell.faviconImage.image = UIImage(imageLiteralResourceName: "recently_closed")
+        cell.siteNameLabel.text = String.localizedStringWithFormat(.FirefoxHomeJumpBackInSectionGroupSiteCount, group.groupedItems.count)
+    }
+    
+    private func configureCellForTab(item: Tab, cell: JumpBackInCell) {
+        let itemURL = item.lastKnownUrl?.absoluteString ?? ""
+        let site = Site(url: itemURL, title: item.displayTitle)
+        
+        cell.itemTitle.text = site.title
+        cell.siteNameLabel.text = site.tileURL.shortDisplayString.capitalized
+        
+        profile.favicons.getFaviconImage(forSite: site).uponQueue(.main, block: { result in
+            guard let image = result.successValue else { return }
+            cell.faviconImage.image = image
+            cell.setNeedsLayout()
+        })
+        
+        let heroImageCacheKey = NSString(string: site.url)
+        if let cachedImage = SiteImageHelper.cache.object(forKey: heroImageCacheKey) {
+            cell.heroImage.image = cachedImage
+        } else {
+            siteImageHelper.fetchImageFor(site: site, imageType: .heroImage, shouldFallback: true) { image in
+                cell.heroImage.image = image
+            }
+        }
+    }
+    
 }
 
 extension FxHomeJumpBackInCollectionCell: UICollectionViewDelegate {
@@ -157,14 +189,16 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDelegateFlowLayout {
 }
 
 private struct JumpBackInCellUX {
-    static let generalCornerRadius: CGFloat = 4
+    static let generalCornerRadius: CGFloat = 12
     static let titleFontSize: CGFloat = 17
+    static let siteFontSize: CGFloat = 15
     static let detailsFontSize: CGFloat = 12
     static let labelsWrapperSpacing: CGFloat = 4
     static let stackViewSpacing: CGFloat = 8
     static let stackViewShadowRadius: CGFloat = 4
     static let stackViewShadowOffset: CGFloat = 2
-    static let heroImageDimension: CGFloat = 24
+    static let heroImageWidth: CGFloat = 108
+    static let heroImageHeight: CGFloat = 80
 }
 
 // MARK: - JumpBackInCell
@@ -176,28 +210,35 @@ class JumpBackInCell: UICollectionViewCell {
 
     // UI
     let heroImage: UIImageView = .build { imageView in
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = JumpBackInCellUX.generalCornerRadius
+        imageView.backgroundColor = .systemBackground
     }
 
     let itemTitle: UILabel = .build { label in
         label.adjustsFontSizeToFitWidth = false
         label.font = UIFont.systemFont(ofSize: JumpBackInCellUX.titleFontSize)
+        label.numberOfLines = 2
     }
 
     let itemDetails: UILabel = .build { label in
         label.adjustsFontSizeToFitWidth = false
         label.font = UIFont.systemFont(ofSize: JumpBackInCellUX.detailsFontSize)
     }
-
-    let stackView: UIStackView = .build { stackView in
-        stackView.axis = .vertical
-        stackView.alignment = .leading
-        stackView.distribution = .fillProportionally
-        stackView.spacing = 2
-        stackView.translatesAutoresizingMaskIntoConstraints = false
+    
+    let faviconImage: UIImageView = .build { imageView in
+        imageView.contentMode = .scaleAspectFit
+        imageView.clipsToBounds = true
+        imageView.layer.masksToBounds = true
+        imageView.layer.cornerRadius = JumpBackInCellUX.generalCornerRadius
+    }
+    
+    let siteNameLabel: UILabel = .build { label in
+        label.adjustsFontSizeToFitWidth = false
+        label.font = UIFont.systemFont(ofSize: JumpBackInCellUX.siteFontSize)
+        label.textColor = .label
     }
 
     // MARK: - Inits
@@ -226,24 +267,26 @@ class JumpBackInCell: UICollectionViewCell {
         contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         contentView.layer.shadowOpacity = 0.12
 
-        stackView.addArrangedSubview(itemTitle)
-        stackView.addArrangedSubview(itemDetails)
-        contentView.addSubview(heroImage)
-        contentView.addSubview(stackView)
+        contentView.addSubviews(heroImage, itemTitle, faviconImage, siteNameLabel)
 
         NSLayoutConstraint.activate([
             heroImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            heroImage.heightAnchor.constraint(equalToConstant: JumpBackInCellUX.heroImageDimension),
-            heroImage.widthAnchor.constraint(equalToConstant: JumpBackInCellUX.heroImageDimension),
+            heroImage.heightAnchor.constraint(equalToConstant: JumpBackInCellUX.heroImageHeight),
+            heroImage.widthAnchor.constraint(equalToConstant: JumpBackInCellUX.heroImageWidth),
             heroImage.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-
-            itemTitle.heightAnchor.constraint(equalToConstant: 22),
-            itemDetails.heightAnchor.constraint(lessThanOrEqualToConstant: 16),
-
-            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            stackView.leadingAnchor.constraint(equalTo: heroImage.trailingAnchor, constant: 12),
-            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
-            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
+            
+            itemTitle.topAnchor.constraint(equalTo: heroImage.topAnchor),
+            itemTitle.leadingAnchor.constraint(equalTo: heroImage.trailingAnchor, constant: 20),
+            itemTitle.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
+            
+            faviconImage.leadingAnchor.constraint(equalTo: heroImage.trailingAnchor, constant: 20),
+            faviconImage.bottomAnchor.constraint(equalTo: heroImage.bottomAnchor),
+            faviconImage.heightAnchor.constraint(equalToConstant: 24),
+            faviconImage.widthAnchor.constraint(equalToConstant: 24),
+            
+            siteNameLabel.leadingAnchor.constraint(equalTo: faviconImage.trailingAnchor, constant: 8),
+            siteNameLabel.centerYAnchor.constraint(equalTo: faviconImage.centerYAnchor),
+            siteNameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
         ])
     }
 

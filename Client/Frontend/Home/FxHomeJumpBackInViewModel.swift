@@ -29,6 +29,7 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
     var layoutVariables: JumpBackInLayoutVariables
     private var tabManager: TabManager
     private var profile: Profile
+    lazy var siteImageHelper = SiteImageHelper(profile: profile)
 
     var onTapGroup: ((Tab) -> Void)?
 
