@@ -21,8 +21,6 @@ struct GridTabTrayControllerUX {
     static let NumberOfColumnsWide = 3
     static let CompactNumberOfColumnsThin = 2
     static let MenuFixedWidth: CGFloat = 320
-    static let IndependentTabsHeaderIdentifier = "IndependentTabs"
-    static let filteredTabsAccessibilityIdentifier = "filteredTabs"
 }
 
 protocol TabTrayDelegate: AnyObject {
@@ -40,6 +38,8 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     weak var delegate: TabTrayDelegate?
     var tabDisplayManager: TabDisplayManager!
     var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TabCell.Identifier
+    static let independentTabsHeaderIdentifier = "IndependentTabs"
+    static let filteredTabsAccessibilityIdentifier = "filteredTabs"
     var otherBrowsingModeOffset = CGPoint.zero
     // Backdrop used for displaying greyed background for private tabs
     var webViewContainerBackdrop: UIView!
@@ -77,7 +77,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         collectionView.register(TabCell.self, forCellWithReuseIdentifier: TabCell.Identifier)
         collectionView.register(GroupedTabCell.self, forCellWithReuseIdentifier: GroupedTabCell.Identifier)
         collectionView.register(InactiveTabCell.self, forCellWithReuseIdentifier: InactiveTabCell.Identifier)
-        collectionView.register(ASHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: GridTabTrayControllerUX.IndependentTabsHeaderIdentifier)
+        collectionView.register(ASHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: GridTabViewController.independentTabsHeaderIdentifier)
         tabDisplayManager = TabDisplayManager(collectionView: self.collectionView, tabManager: self.tabManager, tabDisplayer: self, reuseID: TabCell.Identifier, tabDisplayType: .TabGrid, profile: profile)
         collectionView.dataSource = tabDisplayManager
         collectionView.delegate = tabLayoutDelegate
