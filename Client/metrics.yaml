@@ -1299,6 +1299,18 @@ tabs:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-03-20"
+  grouped_tab_search:
+    type: counter
+    description: |
+      This counts the number of times a user has tapped the search
+      icon for grouped tabs in the tab tray.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3141
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9267
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-03-20"
 
 # Theme metrics
 theme:

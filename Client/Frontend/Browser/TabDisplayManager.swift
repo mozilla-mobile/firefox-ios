@@ -450,6 +450,20 @@ extension TabDisplayManager: UICollectionViewDataSource {
             return 0
         }
     }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        if let _ = tabGroups {
+            let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: GridTabViewController.independentTabsHeaderIdentifier, for: indexPath) as! ASHeaderView
+            view.remakeConstraint(type: .otherGroupTabs)
+            view.title = .TabTrayOtherTabsSectionHeader
+            view.titleLabel.font = .systemFont(ofSize: GroupedTabCellProperties.CellUX.titleFontSize, weight: .semibold)
+            view.moreButton.isHidden = true
+            view.titleLabel.accessibilityIdentifier = GridTabViewController.filteredTabsAccessibilityIdentifier
+            
+            return view
+        }
+        return UICollectionReusableView()
+    }
 
     @objc func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         var cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.tabReuseIdentifer, for: indexPath)
@@ -462,7 +476,7 @@ extension TabDisplayManager: UICollectionViewDataSource {
         switch TabDisplaySection(rawValue: indexPath.section) {
         case .groupedTabs:
             if let groupedCell = collectionView.dequeueReusableCell(withReuseIdentifier: GroupedTabCell.Identifier, for: indexPath) as? GroupedTabCell {
-                groupedCell.delegate = self
+                groupedCell.tabDisplayManagerDelegate = self
                 groupedCell.tabGroups = self.tabGroups
                 groupedCell.hasExpanded = true
                 groupedCell.selectedTab = tabManager.selectedTab
@@ -493,8 +507,14 @@ extension TabDisplayManager: UICollectionViewDataSource {
     }
 }
 
-extension TabDisplayManager: GroupedTabCellDelegate {
-
+extension TabDisplayManager: GroupedTabDelegate {
+    
+    func newSearchFromGroup(searchTerm: String) {
+        let bvc = BrowserViewController.foregroundBVC()
+        bvc.openSearchNewTab(searchTerm)
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .groupedTabPerformSearch)
+    }
+    
     func closeGroupTab(tab: Tab) {
         if self.isPrivate == false, filteredTabs.count + (tabsInAllGroups?.count ?? 0) == 1 {
             self.tabManager.removeTabs([tab])

@@ -311,6 +311,7 @@ extension TelemetryWrapper {
         case tab = "tab"
         case tabTray = "tab-tray"
         case groupedTab = "grouped-tab"
+        case groupedTabPerformSearch = "grouped-tab-perform-search"
         case trackingProtectionStatistics = "tracking-protection-statistics"
         case trackingProtectionSafelist = "tracking-protection-safelist"
         case trackingProtectionMenu = "tracking-protection-menu"
@@ -670,7 +671,9 @@ extension TelemetryWrapper {
             GleanMetrics.Tabs.groupedTab.record(groupedTabExtras)
         case (.action, .tap, .groupedTab, EventValue.closeGroupedTab.rawValue, _):
             GleanMetrics.InactiveTabsTray.openRecentlyClosedTab.add()
-
+        case (.action, .tap, .groupedTabPerformSearch, _, _):
+            GleanMetrics.Tabs.groupedTabSearch.add()
+            
         // Firefox Homepage
         case (.action, .tap, .firefoxHomepage, EventValue.yourLibrarySection.rawValue, let extras):
             if let panel = extras?[EventObject.libraryPanel.rawValue] as? String {

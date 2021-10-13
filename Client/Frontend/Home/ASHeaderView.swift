@@ -11,8 +11,14 @@ public struct FirefoxHomeHeaderViewUX {
     static let sectionHeaderSize: CGFloat = 20
 }
 
+enum ASHeaderViewType {
+    case otherGroupTabs
+    case normal
+}
+
 class ASHeaderView: UICollectionReusableView {
     static let verticalInsets: CGFloat = 4
+    var sectionType: ASHeaderViewType = .normal
 
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
@@ -70,8 +76,14 @@ class ASHeaderView: UICollectionReusableView {
         titleLabel.snp.makeConstraints { make in
             make.leading.equalTo(self.safeArea.leading).inset(titleInsets)
             make.trailing.equalTo(moreButton.snp.leading).inset(-FirefoxHomeHeaderViewUX.TitleTopInset)
-            
             make.bottom.equalToSuperview().offset(-10)
+        }
+    }
+
+    func remakeConstraint(type: ASHeaderViewType) {
+        let inset = type == .otherGroupTabs ? 15 : titleInsets
+        titleLabel.snp.updateConstraints { update in
+            update.leading.equalTo(self.safeArea.leading).inset(inset)
         }
     }
 
