@@ -160,7 +160,8 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
 
         init(settings: SettingsTableViewController) {
             self.profile = settings.profile
-            super.init(title: NSAttributedString(string: Strings.ASTopSitesTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
+            super.init(title: NSAttributedString(string: .SettingsCustomizeHomeShortcuts,
+                                                 attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
         }
 
         override func onClick(_ navigationController: UINavigationController?) {
