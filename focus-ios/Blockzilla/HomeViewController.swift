@@ -57,7 +57,7 @@ class HomeViewController: UIViewController {
         }
 
         tipView.snp.makeConstraints { make in
-            make.bottom.equalTo(toolbar.snp.top).offset(-UIConstants.layout.tipViewBottomOffset)
+            make.bottom.equalTo(toolbar.snp.top).inset(UIConstants.layout.tipViewBottomOffset)
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(UIConstants.layout.tipViewHeight)
         }
@@ -158,7 +158,7 @@ class HomeViewController: UIViewController {
             if urlBarIsActive {
                 make.bottom.equalToSuperview()
             } else {
-                make.bottom.equalTo(toolbar.snp.top).offset(-UIConstants.layout.tipViewBottomOffset)
+                make.bottom.equalTo(toolbar.snp.top).inset(UIConstants.layout.tipViewBottomOffset)
             }
         }
 
