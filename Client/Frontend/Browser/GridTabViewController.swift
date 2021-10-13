@@ -38,6 +38,8 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     weak var delegate: TabTrayDelegate?
     var tabDisplayManager: TabDisplayManager!
     var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TabCell.Identifier
+    static let independentTabsHeaderIdentifier = "IndependentTabs"
+    static let filteredTabsAccessibilityIdentifier = "filteredTabs"
     var otherBrowsingModeOffset = CGPoint.zero
     // Backdrop used for displaying greyed background for private tabs
     var webViewContainerBackdrop: UIView!
@@ -75,6 +77,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         collectionView.register(TabCell.self, forCellWithReuseIdentifier: TabCell.Identifier)
         collectionView.register(GroupedTabCell.self, forCellWithReuseIdentifier: GroupedTabCell.Identifier)
         collectionView.register(InactiveTabCell.self, forCellWithReuseIdentifier: InactiveTabCell.Identifier)
+        collectionView.register(ASHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: GridTabViewController.independentTabsHeaderIdentifier)
         tabDisplayManager = TabDisplayManager(collectionView: self.collectionView, tabManager: self.tabManager, tabDisplayer: self, reuseID: TabCell.Identifier, tabDisplayType: .TabGrid, profile: profile)
         collectionView.dataSource = tabDisplayManager
         collectionView.delegate = tabLayoutDelegate
@@ -131,7 +134,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         if let tabIndex = tabDisplayManager.indexOfGroupTab(tab: tabToFocus) {
             let groupName = tabIndex.groupName
             let groupIndex: Int = tabGroups.firstIndex(where: { $0.searchTerm == groupName }) ?? 0
-            let offSet = Int(GroupedTabCell.defaultCellHeight) * groupIndex
+            let offSet = Int(GroupedTabCellProperties.CellUX.defaultCellHeight) * groupIndex
             let rect = CGRect(origin: CGPoint(x: 0, y: offSet), size: CGSize(width:  self.collectionView.frame.width, height: self.collectionView.frame.height))
             DispatchQueue.main.async {
                 self.collectionView.scrollRectToVisible(rect, animated: false)
@@ -623,6 +626,10 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
     var lastYOffset: CGFloat = 0
     var tabDisplayManager: TabDisplayManager
     
+    var sectionHeaderSize: CGSize {
+        CGSize(width: 50, height: 40)
+    }
+    
     enum ScrollDirection {
         case up
         case down
@@ -657,6 +664,19 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
             return GridTabTrayControllerUX.TextBoxHeight * 8
         }
     }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        switch TabDisplaySection(rawValue: section) {
+        case .regularTabs:
+            if let groups = tabDisplayManager.tabGroups, !groups.isEmpty {
+                return sectionHeaderSize
+            }
+        default: return .zero
+        }
+        
+        return .zero
+    }
+    
 
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
@@ -672,7 +692,7 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
         case .groupedTabs:
             let width = collectionView.frame.size.width
             if let groupCount = tabDisplayManager.tabGroups?.count, groupCount > 0 {
-                let height: CGFloat = GroupedTabCell.defaultCellHeight * CGFloat(groupCount)
+                let height: CGFloat = GroupedTabCellProperties.CellUX.defaultCellHeight * CGFloat(groupCount)
                     return CGSize(width: width >= 0 ? Int(width) : 0, height: Int(height))
             } else {
                 return CGSize(width: 0, height: 0)
