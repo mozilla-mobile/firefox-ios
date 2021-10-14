@@ -249,7 +249,7 @@ extension Strings {
     public static let BreachAlertsLink = MZLocalizedString("BreachAlerts.Link", value: "Go to", comment: "Leads to a link to the breached website")
 
     // For the DevicePasscodeRequiredViewController
-    public static let LoginsDevicePasscodeRequiredMessage = MZLocalizedString("Logins.DevicePasscodeRequired.Message", value: "To use the Logins & Passwords feature for Firefox, you must have a device passcode enabled.", comment: "Message shown when you enter Logins & Passwords without having a device passcode set.")
+    public static let LoginsDevicePasscodeRequiredMessage = MZLocalizedString("Logins.DevicePasscodeRequired.Message", value: "To save and autofill passwords, you must have Face ID, Touch ID, or a device passcode.", comment: "Message shown when you enter Logins & Passwords without having a device passcode set.")
     public static let LoginsDevicePasscodeRequiredLearnMoreButtonTitle = MZLocalizedString("Logins.DevicePasscodeRequired.LearnMoreButtonTitle", value: "Learn More", comment: "Title of the Learn More button that links to a support page about device passcode requirements.")
 
     // For the LoginOnboardingViewController

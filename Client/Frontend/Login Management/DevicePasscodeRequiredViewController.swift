@@ -27,7 +27,7 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
         super.viewDidLoad()
                 
         if shownFromAppMenu {
-            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTapped))
+            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(doneButtonTapped))
         }
         
         self.title = Strings.LoginsAndPasswordsTitle
@@ -36,10 +36,7 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
         warningTextView.font = DynamicFontHelper().DeviceFontExtraLarge
         warningTextView.text = Strings.LoginsDevicePasscodeRequiredMessage
         warningTextView.textAlignment = .center
-        warningTextView.backgroundColor = UIColor.Photon.Red05
         warningTextView.clipsToBounds = true
-        warningTextView.layer.cornerRadius = 5
-        warningTextView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         warningTextView.isScrollEnabled = false
         warningTextView.isUserInteractionEnabled = false
         warningTextView.sizeToFit()
@@ -48,6 +45,7 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
         learnMoreButton = UIButton(type: .system)
         learnMoreButton.setTitle(Strings.LoginsDevicePasscodeRequiredLearnMoreButtonTitle, for: .normal)
         learnMoreButton.addTarget(self, action: #selector(learnMoreButtonTapped), for: .touchUpInside)
+        learnMoreButton.titleLabel?.font = DynamicFontHelper().DeviceFontExtraLarge
         self.view.addSubview(learnMoreButton)
         
         warningTextView.snp.makeConstraints { make in
