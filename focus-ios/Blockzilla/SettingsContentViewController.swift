@@ -76,7 +76,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         self.interstitialSpinnerView.startAnimating()
     }
 
-    init(url: URL, backgroundColor: UIColor = .primaryBackground) {
+    init(url: URL, backgroundColor: UIColor = .systemBackground) {
         interstitialBackgroundColor = backgroundColor
         self.url = url
         super.init(nibName: nil, bundle: nil)

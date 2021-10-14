@@ -15,7 +15,7 @@ class SubtitleCell: UITableViewCell {
         detailTextLabel?.text = subtitle
         detailTextLabel?.textColor = .primaryText
         detailTextLabel?.font = UIConstants.fonts.trackingProtectionStatsDetail
-        backgroundColor = .secondaryBackground
+        backgroundColor = .secondarySystemBackground
         selectionStyle = .none
     }
     

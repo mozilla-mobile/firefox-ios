@@ -64,7 +64,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             let appearance = UINavigationBarAppearance()
             appearance.configureWithOpaqueBackground()
             appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.primaryText]
-            appearance.backgroundColor = .primaryBackground
+            appearance.backgroundColor = .systemBackground
             appearance.shadowColor = .clear
             UINavigationBar.appearance().standardAppearance = appearance
             UINavigationBar.appearance().scrollEdgeAppearance = appearance
@@ -88,14 +88,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         browserViewController.modalDelegate = self
         window?.rootViewController = browserViewController
         window?.makeKeyAndVisible()
+        window?.overrideUserInterfaceStyle = UserDefaults.standard.theme.userInterfaceStyle
 
         WebCacheUtils.reset()
 
         displaySplashAnimation()
         KeyboardHelper.defaultHelper.startObserving()
-
-        // Override default keyboard appearance
-        UITextField.appearance().keyboardAppearance = .dark
 
         let prefIntroDone = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone)
 

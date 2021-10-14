@@ -107,7 +107,6 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        overrideUserInterfaceStyle = .dark
         tableView.backgroundColor = .clear
         view.addGestureRecognizer(tapRecognizer)
         view.addSubview(tableView)

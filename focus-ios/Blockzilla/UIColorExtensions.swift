@@ -23,7 +23,6 @@ extension UIColor {
     static let gradientSecond = UIColor(named: "GradientSecond")!
     static let gradientThird = UIColor(named: "GradientThird")!
     static let locationBar = UIColor(named: "LocationBar")!
-    static let primaryBackground = UIColor(named: "PrimaryBackground")!
     static let primaryDark = UIColor(named: "PrimaryDark")!
     static let primaryText = UIColor(named: "PrimaryText")!
     static let scrim = UIColor(named: "Scrim")!
@@ -32,10 +31,9 @@ extension UIColor {
     static let searchGradientThird = UIColor(named: "SearchGradientThird")!
     static let searchGradientFourth = UIColor(named: "SearchGradientFourth")!
     static let searchSeparator = UIColor(named: "SearchSeparator")!
-    static let secondaryBackground = UIColor(named: "SecondaryBackground")!
     static let secondaryDark = UIColor(named: "SecondaryDark")!
     static let secondaryText = UIColor(named: "SecondaryText")!
-    static let secondayButton = UIColor(named: "SecondayButton")!
+    static let secondaryButton = UIColor(named: "SecondaryButton")!
     static let warning = UIColor(named: "Warning")!
     
     /**

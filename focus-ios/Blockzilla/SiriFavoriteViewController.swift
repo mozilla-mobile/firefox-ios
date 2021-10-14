@@ -37,14 +37,14 @@ class SiriFavoriteViewController: UIViewController {
         navigationController?.navigationBar.tintColor = .accent
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIConstants.colors.defaultFont]
         navigationController?.navigationBar.isTranslucent = false
-        view.backgroundColor = .primaryBackground
+        view.backgroundColor = .systemBackground
 
         inputLabel.text = UIConstants.strings.urlToOpen
         inputLabel.font = UIConstants.fonts.settingsInputLabel
         inputLabel.textColor = .primaryText
         view.addSubview(inputLabel)
 
-        textInput.backgroundColor = .secondaryBackground
+        textInput.backgroundColor = .secondarySystemBackground
         textInput.keyboardType = .URL
         textInput.autocapitalizationType = .none
         textInput.autocorrectionType = .no
@@ -90,7 +90,7 @@ class SiriFavoriteViewController: UIViewController {
     }
 
     private func setUpEditUI() {
-        editView.backgroundColor = .secondaryBackground
+        editView.backgroundColor = .secondarySystemBackground
         view.addSubview(editView)
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(SiriFavoriteViewController.editTapped))

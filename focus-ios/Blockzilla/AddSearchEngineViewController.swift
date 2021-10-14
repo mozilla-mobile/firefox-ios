@@ -47,7 +47,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     }
 
     private func setupUI() {
-        view.backgroundColor = .primaryBackground
+        view.backgroundColor = .systemBackground
         view.addSubview(scrollView)
 
         scrollView.snp.makeConstraints { (make) in
@@ -61,7 +61,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         container.addSubview(nameLabel)
 
         nameInput.attributedPlaceholder = NSAttributedString(string: UIConstants.strings.AddSearchEngineName, attributes: [.foregroundColor: UIColor.primaryText.withAlphaComponent(0.65)])
-        nameInput.backgroundColor = .secondaryBackground
+        nameInput.backgroundColor = .secondarySystemBackground
         nameInput.textColor = .primaryText
         nameInput.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: rowHeight))
         nameInput.leftViewMode = .always
@@ -73,10 +73,10 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         container.addSubview(nameInput)
 
         let templateContainer = UIView()
-        templateContainer.backgroundColor = .primaryBackground
+        templateContainer.backgroundColor = .systemBackground
         container.addSubview(templateContainer)
 
-        templatePlaceholderLabel.backgroundColor = .secondaryBackground
+        templatePlaceholderLabel.backgroundColor = .secondarySystemBackground
         templatePlaceholderLabel.textColor = .primaryText.withAlphaComponent(0.65)
         templatePlaceholderLabel.text = UIConstants.strings.AddSearchEngineTemplatePlaceholder
         templatePlaceholderLabel.font = UIConstants.fonts.addSearchEngineInput
@@ -88,11 +88,11 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
 
         let templateLabel = SmartLabel()
         templateLabel.text = UIConstants.strings.AddSearchEngineTemplate
-        templateLabel.textColor = UIConstants.colors.settingsTextLabel
+        templateLabel.textColor = .primaryText
         container.addSubview(templateLabel)
 
         templateInput.backgroundColor = .clear
-        templateInput.textColor = UIConstants.colors.settingsTextLabel
+        templateInput.textColor = .primaryText
         templateInput.keyboardType = .URL
         templateInput.font = UIConstants.fonts.addSearchEngineInput
         templateInput.accessibilityIdentifier = "templateInput"
@@ -106,7 +106,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
 
         let exampleLabel = SmartLabel()
         let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor: UIColor.accent])
-        let subtitle = NSMutableAttributedString(string: UIConstants.strings.AddSearchEngineTemplateExample, attributes: [.foregroundColor: UIConstants.colors.settingsDetailLabel])
+        let subtitle = NSMutableAttributedString(string: UIConstants.strings.AddSearchEngineTemplateExample, attributes: [.foregroundColor: UIColor.secondaryText])
         let space = NSAttributedString(string: " ", attributes: [:])
         subtitle.append(space)
         subtitle.append(learnMore)
@@ -279,18 +279,18 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
 
     func textViewDidBeginEditing(_ textView: UITextView) {
         templatePlaceholderLabel.isHidden = !textView.text.isEmpty
-        templateInput.backgroundColor = textView.text.isEmpty ? .clear : .secondaryBackground
+        templateInput.backgroundColor = textView.text.isEmpty ? .clear : .secondarySystemBackground
     }
 
     func textViewDidChange(_ textView: UITextView) {
         templatePlaceholderLabel.isHidden = !textView.text.isEmpty
-        templateInput.backgroundColor = textView.text.isEmpty ? .clear : .secondaryBackground
+        templateInput.backgroundColor = textView.text.isEmpty ? .clear : .secondarySystemBackground
         navigationItem.rightBarButtonItem?.isEnabled = !templateInput.text.isEmpty && !nameInput.text!.isEmpty
     }
 
     func textViewDidEndEditing(_ textView: UITextView) {
         templatePlaceholderLabel.isHidden = !textView.text.isEmpty
-        templateInput.backgroundColor = textView.text.isEmpty ? .clear : .secondaryBackground
+        templateInput.backgroundColor = textView.text.isEmpty ? .clear : .secondarySystemBackground
     }
 
     static func isValidTemplate(_ template: String) -> Bool {

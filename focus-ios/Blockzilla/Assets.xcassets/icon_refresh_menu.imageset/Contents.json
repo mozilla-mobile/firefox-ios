@@ -1,6 +1,16 @@
 {
   "images" : [
     {
+      "filename" : "Reload.pdf",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
       "filename" : "icon_refresh_menu.pdf",
       "idiom" : "universal"
     }

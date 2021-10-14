@@ -9,7 +9,7 @@ class SafariInstructionsViewController: UIViewController {
     private let disabledStateView = DisabledStateView()
 
     override func viewDidLoad() {
-        view.backgroundColor = .primaryBackground
+        view.backgroundColor = .systemBackground
         navigationController?.navigationBar.tintColor = .accent
         
         view.addSubview(disabledStateView)

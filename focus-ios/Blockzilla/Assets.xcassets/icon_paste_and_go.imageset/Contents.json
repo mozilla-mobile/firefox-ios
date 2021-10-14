@@ -1,6 +1,16 @@
 {
   "images" : [
     {
+      "filename" : "Paste.pdf",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
       "filename" : "icon_paste_and_go.pdf",
       "idiom" : "universal"
     }

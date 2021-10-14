@@ -37,14 +37,14 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
     }
 
     private func setupUI() {
-        view.backgroundColor = .primaryBackground
+        view.backgroundColor = .systemBackground
 
         inputLabel.text = UIConstants.strings.autocompleteAddCustomUrlLabel
         inputLabel.font = UIConstants.fonts.settingsInputLabel
         inputLabel.textColor = .primaryText
         view.addSubview(inputLabel)
 
-        textInput.backgroundColor = .secondaryBackground
+        textInput.backgroundColor = .secondarySystemBackground
         textInput.keyboardType = .URL
         textInput.autocapitalizationType = .none
         textInput.autocorrectionType = .no

@@ -1,6 +1,16 @@
 {
   "images" : [
     {
+      "filename" : "Back.pdf",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
       "filename" : "icon_back_active.pdf",
       "idiom" : "universal"
     }

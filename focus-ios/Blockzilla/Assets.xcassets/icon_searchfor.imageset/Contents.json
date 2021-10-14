@@ -1,6 +1,16 @@
 {
   "images" : [
     {
+      "filename" : "Search.pdf",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
       "filename" : "icon_searchfor.pdf",
       "idiom" : "universal"
     }

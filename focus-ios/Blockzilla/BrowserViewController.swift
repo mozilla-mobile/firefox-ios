@@ -104,7 +104,7 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func addShortcutsBackgroundConstraints() {
-        shortcutsBackground.backgroundColor = isIPadRegularDimensions ? .primaryBackground.withAlphaComponent(0.85) : .foundation
+        shortcutsBackground.backgroundColor = isIPadRegularDimensions ? .systemBackground.withAlphaComponent(0.85) : .foundation
         shortcutsBackground.layer.cornerRadius = isIPadRegularDimensions ? 10 : 0
         
         if isIPadRegularDimensions {

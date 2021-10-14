@@ -1,6 +1,16 @@
 {
   "images" : [
     {
+      "filename" : "Shield.pdf",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
       "filename" : "tracking_protection.pdf",
       "idiom" : "universal"
     }

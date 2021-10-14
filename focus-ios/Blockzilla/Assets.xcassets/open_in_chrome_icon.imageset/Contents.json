@@ -1,6 +1,16 @@
 {
   "images" : [
     {
+      "filename" : "Chrome.pdf",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
       "filename" : "open_in_chrome_icon.pdf",
       "idiom" : "universal"
     }

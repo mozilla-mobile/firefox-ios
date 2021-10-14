@@ -48,13 +48,13 @@ class AutocompleteCustomUrlViewController: UIViewController {
     }
 
     override func viewDidLoad() {
-        view.backgroundColor = .primaryBackground
+        view.backgroundColor = .systemBackground
 
         title = UIConstants.strings.autocompleteManageSitesLabel
 
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.backgroundColor = .primaryBackground
+        tableView.backgroundColor = .systemBackground
         tableView.layoutMargins = UIEdgeInsets.zero
         tableView.separatorColor = UIConstants.colors.settingsSeparator
     }
@@ -96,7 +96,7 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell = UITableViewCell()
-        cell.backgroundColor = .primaryBackground
+        cell.backgroundColor = .systemBackground
         return cell
     }
 
@@ -109,7 +109,7 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
             cell.accessibilityIdentifier = "addCustomDomainCell"
 
             let backgroundColorView = UIView()
-            backgroundColorView.backgroundColor = .secondaryBackground
+            backgroundColorView.backgroundColor = .secondarySystemBackground
 
             cell.selectedBackgroundView = backgroundColorView
             addDomainCell = cell
@@ -120,7 +120,7 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
             cell.accessibilityIdentifier = domains[indexPath.row]
         }
 
-        cell.backgroundColor = .secondaryBackground
+        cell.backgroundColor = .secondarySystemBackground
         cell.textLabel?.textColor = .primaryText
         cell.layoutMargins = UIEdgeInsets.zero
 

@@ -30,7 +30,7 @@ class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITab
 
         navigationItem.title = UIConstants.strings.settingsSearchLabel
         navigationController?.navigationBar.tintColor = .accent
-        view.backgroundColor = .primaryBackground
+        view.backgroundColor = .systemBackground
         
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
@@ -51,7 +51,7 @@ class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITab
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {        
         if section == 0 {
             let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
-            cell.backgroundColor = .primaryBackground
+            cell.backgroundColor = .systemBackground
             cell.textLabel?.text = UIConstants.strings.InstalledSearchEngines
             cell.textLabel?.font = UIConstants.fonts.tableSectionHeader
             cell.textLabel?.textColor = UIConstants.colors.tableSectionHeader
@@ -89,8 +89,8 @@ class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITab
         if indexPath.item == engines.count {
             let cell = UITableViewCell(style: .default, reuseIdentifier: "addSearchEngine")
             cell.textLabel?.text = UIConstants.strings.AddSearchEngineButton
-            cell.textLabel?.textColor = UIConstants.colors.settingsTextLabel
-            cell.backgroundColor = .secondaryBackground
+            cell.textLabel?.textColor = .primaryText
+            cell.backgroundColor = .secondarySystemBackground
             cell.accessibilityIdentifier = "addSearchEngine"
             cell.selectedBackgroundView = getBackgroundView()
             return cell
@@ -100,12 +100,12 @@ class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITab
             cell.textLabel?.font = UIFont.systemFont(ofSize: 17)
             cell.textLabel?.numberOfLines = 0
             cell.textLabel?.lineBreakMode = .byWordWrapping
-            cell.backgroundColor = .secondaryBackground
+            cell.backgroundColor = .secondarySystemBackground
             cell.accessibilityIdentifier = "restoreDefaults"
             cell.selectedBackgroundView = getBackgroundView()
 
             if searchEngineManager.hasDisabledDefaultEngine() {
-                cell.textLabel?.textColor = UIConstants.colors.settingsTextLabel
+                cell.textLabel?.textColor = .primaryText
                 cell.selectionStyle = .default
                 cell.isUserInteractionEnabled = true
             } else {
@@ -119,10 +119,10 @@ class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITab
             let engine = engines[indexPath.item]
             let cell = UITableViewCell(style: .default, reuseIdentifier: engine.image == nil ? "empty-image-cell" : nil)
             cell.textLabel?.text = engine.name
-            cell.textLabel?.textColor = UIConstants.colors.settingsTextLabel
+            cell.textLabel?.textColor = .primaryText
             cell.imageView?.image = engine.image?.createScaled(size: CGSize(width: 24, height: 24))
             cell.selectedBackgroundView = getBackgroundView()
-            cell.backgroundColor = .secondaryBackground
+            cell.backgroundColor = .secondarySystemBackground
             cell.accessibilityIdentifier = engine.name
 
             if tableView.isEditing {
@@ -226,7 +226,7 @@ class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITab
 
     private func getBackgroundView(bgColor: UIColor = UIConstants.colors.cellSelected) -> UIView {
         let view = UIView()
-        view.backgroundColor = .secondaryBackground
+        view.backgroundColor = .secondarySystemBackground
         return view
     }
 }

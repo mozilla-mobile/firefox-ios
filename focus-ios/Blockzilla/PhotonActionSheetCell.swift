@@ -125,12 +125,12 @@ class PhotonActionSheetCell: UITableViewCell {
     
     func configure(with action: PhotonActionSheetItem) {
         titleLabel.text = action.title
-        titleLabel.textColor = self.tintColor
+        titleLabel.textColor = .primaryText
         titleLabel.textColor = action.accessory == .Text ? titleLabel.textColor.withAlphaComponent(0.6) : titleLabel.textColor
         titleLabel.numberOfLines = 0
         
         subtitleLabel.text = action.text
-        subtitleLabel.textColor = self.tintColor
+        subtitleLabel.textColor = .secondaryText
         subtitleLabel.isHidden = action.text == nil
         titleLabel.font  = action.bold ? UIConstants.fonts.actionMenuItemBold : UIConstants.fonts.actionMenuItem
         accessibilityIdentifier = action.iconString

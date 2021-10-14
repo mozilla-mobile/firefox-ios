@@ -1,6 +1,16 @@
 {
   "images" : [
     {
+      "filename" : "Share iOS.pdf",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
       "filename" : "icon_openwith_active.pdf",
       "idiom" : "universal"
     }
