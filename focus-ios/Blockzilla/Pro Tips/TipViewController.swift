@@ -35,11 +35,11 @@ class TipViewController: UIViewController {
     }()
     
     public let tip: TipManager.Tip
-    private let tipTapped: (TipManager.Tip) -> ()
+    private let tipTappedAction: (TipManager.Tip) -> ()
     
-    init(tip: TipManager.Tip, tipTapped: @escaping (TipManager.Tip) -> ()) {
+    init(tip: TipManager.Tip, tipTappedAction: @escaping (TipManager.Tip) -> ()) {
         self.tip = tip
-        self.tipTapped = tipTapped
+        self.tipTappedAction = tipTappedAction
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -63,6 +63,6 @@ class TipViewController: UIViewController {
     }
     
     @objc private func tapTip() {
-        tipTapped(tip)
+        tipTappedAction(tip)
     }
 }

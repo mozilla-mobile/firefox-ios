@@ -77,7 +77,7 @@ class HomeViewController: UIViewController {
     
     func refreshTipsDisplay() {
         if let tip = tipManager.fetchFirstTip() {
-            showTextTip(tip)
+            logTelemetry(for: tip)
             tipsViewController.setupPageController(with: .showTips)
         } else if tipManager.canShowTips {
             tipsViewController.setupPageController(
@@ -126,7 +126,7 @@ class HomeViewController: UIViewController {
         tipsViewController.view.isHidden = false
     }
 
-    func showTextTip(_ tip: TipManager.Tip) {
+    func logTelemetry(for tip: TipManager.Tip) {
 
         switch tip.identifier {
         case TipManager.TipKey.biometricTip:

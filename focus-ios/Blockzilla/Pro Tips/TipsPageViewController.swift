@@ -11,11 +11,12 @@ class TipsPageViewController: UIViewController {
     }
     
     private var emptyController: UIViewController?
+    private var currentPageController: UIPageViewController?
     
     private var tipManager: TipManager
-    private let tipTapped: (TipManager.Tip) -> ()
+    private let tipTappedAction: (TipManager.Tip) -> ()
     
-    private lazy var pageController: UIPageViewController = {
+    private func createPageController() -> UIPageViewController {
         let pageController = UIPageViewController(
             transitionStyle: .scroll,
             navigationOrientation: .horizontal,
@@ -25,11 +26,11 @@ class TipsPageViewController: UIViewController {
         pageController.delegate = self
         pageController.view.backgroundColor = .clear
         return pageController
-    }()
+    }
     
     init(tipManager: TipManager, tipTapped: @escaping (TipManager.Tip) -> ()) {
         self.tipManager = tipManager
-        self.tipTapped = tipTapped
+        self.tipTappedAction = tipTapped
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -43,14 +44,15 @@ class TipsPageViewController: UIViewController {
     }
     
     func setupPageController(with state: State) {
-        pageController.removeAsChild()
+        currentPageController?.removeAsChild()
         emptyController?.removeAsChild()
         
         switch state {
         case .showTips:
-            guard let initialVC = tipManager.fetchFirstTip().map({ TipViewController(tip: $0, tipTapped: tipTapped) }) else { return }
-            install(pageController, on: self.view)
-            self.pageController.setViewControllers([initialVC], direction: .forward, animated: true, completion: nil)
+            guard let initialVC = tipManager.fetchFirstTip().map({ TipViewController(tip: $0, tipTappedAction: tipTappedAction) }) else { return }
+            self.currentPageController = createPageController()
+            self.currentPageController.map { install($0, on: self.view) }
+            self.currentPageController?.setViewControllers([initialVC], direction: .forward, animated: true, completion: nil)
             
         case .showEmpty(let controller):
             emptyController = controller
@@ -63,12 +65,12 @@ class TipsPageViewController: UIViewController {
 extension TipsPageViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         let tip = (viewController as! TipViewController).tip
-        return tipManager.getTip(before: tip).map { TipViewController(tip: $0, tipTapped: tipTapped) }
+        return tipManager.getTip(before: tip).map { TipViewController(tip: $0, tipTappedAction: tipTappedAction) }
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         let tip = (viewController as! TipViewController).tip
-        return tipManager.getTip(after: tip).map { TipViewController(tip: $0, tipTapped: tipTapped) }
+        return tipManager.getTip(after: tip).map { TipViewController(tip: $0, tipTappedAction: tipTappedAction) }
     }
     
     func presentationCount(for pageViewController: UIPageViewController) -> Int {
