@@ -1,16 +1,6 @@
 {
   "images" : [
     {
-      "filename" : "Mobile.pdf",
-      "idiom" : "universal"
-    },
-    {
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "dark"
-        }
-      ],
       "filename" : "request_mobile_site_activity.pdf",
       "idiom" : "universal"
     }

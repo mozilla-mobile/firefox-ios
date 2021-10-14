@@ -1,16 +1,6 @@
 {
   "images" : [
     {
-      "filename" : "Forward.pdf",
-      "idiom" : "universal"
-    },
-    {
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "dark"
-        }
-      ],
       "filename" : "icon_forward_active.pdf",
       "idiom" : "universal"
     }

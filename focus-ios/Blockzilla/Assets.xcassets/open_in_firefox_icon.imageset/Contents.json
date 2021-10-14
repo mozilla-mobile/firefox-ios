@@ -1,16 +1,6 @@
 {
   "images" : [
     {
-      "filename" : "Mozilla.pdf",
-      "idiom" : "universal"
-    },
-    {
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "dark"
-        }
-      ],
       "filename" : "open_in_firefox_icon.pdf",
       "idiom" : "universal"
     }

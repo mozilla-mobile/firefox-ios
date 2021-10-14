@@ -1,16 +1,6 @@
 {
   "images" : [
     {
-      "filename" : "Preferences updated.pdf",
-      "idiom" : "universal"
-    },
-    {
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "dark"
-        }
-      ],
       "filename" : "preferences_updated.pdf",
       "idiom" : "universal"
     }

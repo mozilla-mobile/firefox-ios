@@ -1,16 +1,6 @@
 {
   "images" : [
     {
-      "filename" : "Add.pdf",
-      "idiom" : "universal"
-    },
-    {
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "dark"
-        }
-      ],
       "filename" : "icon_add_to_autocomplete.pdf",
       "idiom" : "universal"
     }

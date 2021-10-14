@@ -1,16 +1,6 @@
 {
   "images" : [
     {
-      "filename" : "Find Next.pdf",
-      "idiom" : "universal"
-    },
-    {
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "dark"
-        }
-      ],
       "filename" : "find_next.pdf",
       "idiom" : "universal"
     }

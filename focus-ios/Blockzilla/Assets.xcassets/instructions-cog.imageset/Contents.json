@@ -1,16 +1,6 @@
 {
   "images" : [
     {
-      "filename" : "Instructions.pdf",
-      "idiom" : "universal"
-    },
-    {
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "dark"
-        }
-      ],
       "filename" : "instructions-cog.pdf",
       "idiom" : "universal"
     }

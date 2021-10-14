@@ -1,16 +1,6 @@
 {
   "images" : [
     {
-      "filename" : "Delete.pdf",
-      "idiom" : "universal"
-    },
-    {
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "dark"
-        }
-      ],
       "filename" : "icon_delete.pdf",
       "idiom" : "universal"
     }

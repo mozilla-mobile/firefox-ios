@@ -1,16 +1,6 @@
 {
   "images" : [
     {
-      "filename" : "Lock.pdf",
-      "idiom" : "universal"
-    },
-    {
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "dark"
-        }
-      ],
       "filename" : "icon_https.pdf",
       "idiom" : "universal"
     }

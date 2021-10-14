@@ -1,16 +1,6 @@
 {
   "images" : [
     {
-      "filename" : "Menu.pdf",
-      "idiom" : "universal"
-    },
-    {
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "dark"
-        }
-      ],
       "filename" : "icon_hamburger_menu.pdf",
       "idiom" : "universal"
     }

@@ -1,16 +1,6 @@
 {
   "images" : [
     {
-      "filename" : "Instructions Safari.pdf",
-      "idiom" : "universal"
-    },
-    {
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "dark"
-        }
-      ],
       "filename" : "instructions-safari.pdf",
       "idiom" : "universal"
     }

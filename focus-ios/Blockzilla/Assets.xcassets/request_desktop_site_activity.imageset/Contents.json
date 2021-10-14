@@ -1,16 +1,6 @@
 {
   "images" : [
     {
-      "filename" : "Desktop.pdf",
-      "idiom" : "universal"
-    },
-    {
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "dark"
-        }
-      ],
       "filename" : "request_desktop_site_activity.pdf",
       "idiom" : "universal"
     }

@@ -1,16 +1,6 @@
 {
   "images" : [
     {
-      "filename" : "More.pdf",
-      "idiom" : "universal"
-    },
-    {
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "dark"
-        }
-      ],
       "filename" : "icon_page_action.pdf",
       "idiom" : "universal"
     }

@@ -1,16 +1,6 @@
 {
   "images" : [
     {
-      "filename" : "Safari.pdf",
-      "idiom" : "universal"
-    },
-    {
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "dark"
-        }
-      ],
       "filename" : "open_in_safari_icon.pdf",
       "idiom" : "universal"
     }
