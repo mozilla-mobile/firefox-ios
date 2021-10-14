@@ -29,7 +29,7 @@ class LoginOnboardingViewController: SettingsViewController {
         super.viewDidLoad()
         
         if shownFromAppMenu {
-            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTapped))
+            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(doneButtonTapped))
         }
         
         self.title = Strings.LoginsAndPasswordsTitle
@@ -44,6 +44,7 @@ class LoginOnboardingViewController: SettingsViewController {
         learnMoreButton = UIButton(type: .system)
         learnMoreButton.setTitle(Strings.LoginsOnboardingLearnMoreButtonTitle, for: .normal)
         learnMoreButton.addTarget(self, action: #selector(learnMoreButtonTapped), for: .touchUpInside)
+        learnMoreButton.titleLabel?.font = DynamicFontHelper().DeviceFontExtraLarge
         self.view.addSubview(learnMoreButton)
 
         continueButton = UIButton(type: .custom)
@@ -80,7 +81,7 @@ class LoginOnboardingViewController: SettingsViewController {
 
     @objc func learnMoreButtonTapped(_ sender: UIButton) {
         let viewController = SettingsContentViewController()
-        viewController.url = SupportUtils.URLForTopic("firefox-ios-passcode")
+        viewController.url = SupportUtils.URLForTopic("placeholder4")
         navigationController?.pushViewController(viewController, animated: true)
     }
 
