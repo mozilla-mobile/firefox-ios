@@ -347,6 +347,18 @@ extension BrowserViewController: WKNavigationDelegate {
         snackBar.addButton(cancel)
         tab.addSnackbar(snackBar)
     }
+    
+    func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
+        guard let url = webView.url, let tab = tabManager[webView] else {
+            return
+        }
+        print("---- didReceiveServerRedirect ----")
+        print("url ---- \(url)\ntab uuid ---- \(tab.tabUUID)")
+        tab.lastURLFromRedirect = url.absoluteString
+//        if !searchTerm.isEmpty, !searchUrl.isEmpty {
+//            tab.updateTimerAndObserving(state: .serverRedirect)
+//        }
+    }
 
     // This is the place where we decide what to do with a new navigation action. There are a number of special schemes
     // and http(s) urls that need to be handled in a different way. All the logic for that is inside this delegate
@@ -677,6 +689,13 @@ extension BrowserViewController: WKNavigationDelegate {
         tab.url = webView.url
         // When tab url changes after web content starts loading on the page
         // We notify the contect blocker change so that content blocker status can be correctly shown on beside the URL bar
+        let searchTerm = tab.tabGroupData.tabAssociatedSearchTerm
+        let searchUrl = tab.tabGroupData.tabAssociatedSearchUrl
+        let tabNextUrl = tab.tabGroupData.tabAssociatedNextUrl
+        if !searchTerm.isEmpty, !searchUrl.isEmpty, let nextUrl = webView.url?.absoluteString, !nextUrl.isEmpty, nextUrl != searchUrl, nextUrl != tabNextUrl {
+            tab.updateTimerAndObserving(state: .tabNavigatedToDifferentUrl, searchTerm: searchTerm, searchProviderUrl: searchUrl, nextUrl: nextUrl)
+        }
+
         tab.contentBlocker?.notifyContentBlockingChanged()
         self.scrollController.resetZoomState()
 
@@ -688,6 +707,13 @@ extension BrowserViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         if let tab = tabManager[webView] {
             navigateInTab(tab: tab, to: navigation, webViewStatus: .finishedNavigation)
+
+            let searchTerm = tab.tabGroupData.tabAssociatedSearchTerm
+            let searchUrl = tab.tabGroupData.tabAssociatedSearchUrl
+            let tabNextUrl = tab.tabGroupData.tabAssociatedNextUrl
+            if !searchTerm.isEmpty, !searchUrl.isEmpty, let nextUrl = webView.url?.absoluteString, !nextUrl.isEmpty, nextUrl != searchUrl, nextUrl != tabNextUrl {
+                tab.updateTimerAndObserving(state: .tabNavigatedToDifferentUrl, searchTerm: searchTerm, searchProviderUrl: searchUrl, nextUrl: nextUrl)
+            }
 
             // If this tab had previously crashed, wait 5 seconds before resetting
             // the consecutive crash counter. This allows a successful webpage load

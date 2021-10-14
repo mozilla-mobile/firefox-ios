@@ -56,6 +56,8 @@ public enum TabGroupTimerState: String, Codable {
     case tabSelected
     case newTab
     case openInNewTab
+    case finishedNavigationInTab
+    case serverRedirect
     case none
 }
 
@@ -323,7 +325,8 @@ class Tab: NSObject {
                 // reset tab group
                 tabGroupData = TabGroupData(searchTerm: "", searchUrl: "", nextReferralUrl: "", tabHistoryCurrentState: TabGroupTimerState.none.rawValue , tabGroupTimerState: TabGroupTimerState.none.rawValue)
                 shouldResetTabGroupData = true
-            } else if tabGroupData.tabAssociatedNextUrl.isEmpty {
+            // To also capture any server redirects we check if user spent less than 7 sec on the same website before moving to another one
+            } else if tabGroupData.tabAssociatedNextUrl.isEmpty || tabGroupsTimerHelper.elapsedTime < 7 {
                 let key = tabGroupData.tabHistoryMetadatakey()
                 if key.referrerUrl != nextUrl {
                     let observation = HistoryMetadataObservation(url: key.url, referrerUrl: key.referrerUrl, searchTerm: key.searchTerm, viewTime: tabGroupsTimerHelper.elapsedTime, documentType: nil, title: nil)
@@ -349,6 +352,14 @@ class Tab: NSObject {
                 tabGroupsTimerHelper.pauseOrStop()
                 tabGroupData.tabHistoryCurrentState = state.rawValue
             }
+        case .finishedNavigationInTab:
+//            if let searchUrl = searchProviderUrl {
+//                tabGroupData.tabAssociatedSearchUrl = searchUrl
+//                tabGroupData.tabAssociatedSearchTerm = searchTerm ?? ""
+//                tabGroupData.tabAssociatedNextUrl = nextUrl
+//            }
+//            print(displayTitle)
+            tabGroupData.tabHistoryCurrentState = state.rawValue
         case .openInNewTab:
             shouldResetTabGroupData = false
             if let searchUrl = searchProviderUrl {
@@ -357,6 +368,20 @@ class Tab: NSObject {
                 tabGroupData.tabAssociatedNextUrl = nextUrl
             }
             tabGroupData.tabHistoryCurrentState = state.rawValue
+            
+//            lastUpdatedObservationKeyUrl == key.url &&
+//                lastUpdatedObservationKeyReferrerUrl == key.referrerUrl &&
+//                    lastUpdatedObservationKeySearchTerm == key.searchTerm
+            
+        case .serverRedirect:
+            print("redirect")
+//            if lastURLFromRedirect != tabGroupData.tabAssociatedSearchUrl, lastURLFromRedirect != tabGroupData.tabAssociatedNextUrl {
+//                tabGroupData.tabAssociatedNextUrl = ""
+//            }
+//            tabAssociatedNextUrl = ""
+//            if !lastURLFromRedirect.isEmpty, lastURLFromRedirect != tabGroupData.tabAssociatedSearchUrl,  lastURLFromRedirect != tabGroupData.tabAssociatedSearchUrl {
+//                shouldSkipSearchHistoryUpdate = true
+//            }
         case .none:
             tabGroupData.tabHistoryCurrentState = state.rawValue
         }
@@ -523,19 +548,44 @@ class Tab: NSObject {
     var title: String? {
         return webView?.title
     }
-
+    
+    var lastUpdatedObservationKeyUrl: String?
+    var lastUpdatedObservationKeyReferrerUrl: String?
+    var lastUpdatedObservationKeySearchTerm: String?
+    var lastUpdatedKey: HistoryMetadataKey?
+    var lastURLFromRedirect: String = ""
+    var shouldSkipSearchHistoryUpdate = false
+    
     var displayTitle: String {
+//        if let title = webView?.title, !title.isEmpty {
+//            let key = tabGroupData.tabHistoryMetadatakey()
+//            if tabGroupData.tabHistoryCurrentState == TabGroupTimerState.navSearchLoaded.rawValue ||
+//                tabGroupData.tabHistoryCurrentState == TabGroupTimerState.tabNavigatedToDifferentUrl.rawValue ||
+//                tabGroupData.tabHistoryCurrentState == TabGroupTimerState.openInNewTab.rawValue {
+//                let observation = HistoryMetadataObservation(url: key.url, referrerUrl: key.referrerUrl, searchTerm: key.searchTerm, viewTime: nil, documentType: nil, title: title)
+//                updateObservationForKey(key: key, observation: observation)
+//            }
+//            return title
+//        }
+
         if let title = webView?.title, !title.isEmpty {
             let key = tabGroupData.tabHistoryMetadatakey()
-            if tabGroupData.tabHistoryCurrentState == TabGroupTimerState.navSearchLoaded.rawValue ||
+            if  lastUpdatedObservationKeyUrl == key.url &&
+                lastUpdatedObservationKeyReferrerUrl == key.referrerUrl &&
+                    lastUpdatedObservationKeySearchTerm == key.searchTerm {
+                return title
+            } else if tabGroupData.tabHistoryCurrentState == TabGroupTimerState.navSearchLoaded.rawValue ||
                 tabGroupData.tabHistoryCurrentState == TabGroupTimerState.tabNavigatedToDifferentUrl.rawValue ||
                 tabGroupData.tabHistoryCurrentState == TabGroupTimerState.openInNewTab.rawValue {
                 let observation = HistoryMetadataObservation(url: key.url, referrerUrl: key.referrerUrl, searchTerm: key.searchTerm, viewTime: nil, documentType: nil, title: title)
-                updateObservationForKey(key: key, observation: observation)
+                    updateObservationForKey(key: key, observation: observation)
+                lastUpdatedObservationKeyUrl = key.url
+                lastUpdatedObservationKeyReferrerUrl = key.referrerUrl
+                lastUpdatedObservationKeySearchTerm = key.searchTerm
             }
             return title
         }
-
+        
         // When picking a display title. Tabs with sessionData are pending a restore so show their old title.
         // To prevent flickering of the display title. If a tab is restoring make sure to use its lastTitle.
         if let url = self.url, InternalURL(url)?.isAboutHomeURL ?? false, sessionData == nil, !restoring {

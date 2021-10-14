@@ -107,13 +107,10 @@ class SearchTermGroupsManager {
                     var stringURL: String = ""
                     if let item = item as? URL {
                         stringURL = item.absoluteString
-
                     } else if let item = item as? Tab, let url = item.lastKnownUrl?.absoluteString {
                         stringURL = url
                     }
-
                     return metadata.url == stringURL || metadata.referrerUrl == stringURL
-
                 }) {
                     itemsInGroups.append(item)
                     if itemGroupData[searchTerm] == nil {
@@ -125,7 +122,10 @@ class SearchTermGroupsManager {
                 }
             }
         }
-
+        items.forEach {
+            print(($0 as? Tab)?.tabUUID)
+            print(($0 as? Tab)?.lastKnownUrl)
+        }
         return (itemGroupData, itemsInGroups)
     }
 
