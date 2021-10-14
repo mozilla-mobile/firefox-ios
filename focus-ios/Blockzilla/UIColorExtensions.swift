@@ -35,7 +35,7 @@ extension UIColor {
     static let secondaryBackground = UIColor(named: "SecondaryBackground")!
     static let secondaryDark = UIColor(named: "SecondaryDark")!
     static let secondaryText = UIColor(named: "SecondaryText")!
-    static let secondaryButton = UIColor(named: "SecondaryButton")!
+    static let secondayButton = UIColor(named: "SecondayButton")!
     static let warning = UIColor(named: "Warning")!
     
     /**

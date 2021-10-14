@@ -179,7 +179,7 @@ class URLBar: UIView {
 
         textAndLockContainer.addSubview(toolset.stopReloadButton)
 
-        urlBarBorderView.backgroundColor = .secondaryButton
+        urlBarBorderView.backgroundColor = .secondayButton
         urlBarBorderView.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
         urlBarBorderView.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
         urlBarBorderView.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
