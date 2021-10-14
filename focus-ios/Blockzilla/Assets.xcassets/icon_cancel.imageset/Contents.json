@@ -1,6 +1,16 @@
 {
   "images" : [
     {
+      "filename" : "Chevron left.pdf",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
       "filename" : "icon_cancel.pdf",
       "idiom" : "universal"
     }

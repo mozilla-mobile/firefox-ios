@@ -1,6 +1,16 @@
 {
   "images" : [
     {
+      "filename" : "Settings.pdf",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
       "filename" : "icon_settings.pdf",
       "idiom" : "universal"
     }

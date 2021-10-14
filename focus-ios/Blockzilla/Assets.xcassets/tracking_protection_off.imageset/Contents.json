@@ -1,6 +1,16 @@
 {
   "images" : [
     {
+      "filename" : "Shield blocked.pdf",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
       "filename" : "tracking_protection_off.pdf",
       "idiom" : "universal"
     }

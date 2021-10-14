@@ -1,6 +1,16 @@
 {
   "images" : [
     {
+      "filename" : "Append.pdf",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
       "filename" : "icon_go_to_suggestion.pdf",
       "idiom" : "universal"
     }
