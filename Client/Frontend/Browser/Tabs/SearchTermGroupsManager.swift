@@ -122,10 +122,6 @@ class SearchTermGroupsManager {
                 }
             }
         }
-        items.forEach {
-            print(($0 as? Tab)?.tabUUID)
-            print(($0 as? Tab)?.lastKnownUrl)
-        }
         return (itemGroupData, itemsInGroups)
     }
 
