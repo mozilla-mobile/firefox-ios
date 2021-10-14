@@ -347,18 +347,6 @@ extension BrowserViewController: WKNavigationDelegate {
         snackBar.addButton(cancel)
         tab.addSnackbar(snackBar)
     }
-    
-    func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
-        guard let url = webView.url, let tab = tabManager[webView] else {
-            return
-        }
-        print("---- didReceiveServerRedirect ----")
-        print("url ---- \(url)\ntab uuid ---- \(tab.tabUUID)")
-        tab.lastURLFromRedirect = url.absoluteString
-//        if !searchTerm.isEmpty, !searchUrl.isEmpty {
-//            tab.updateTimerAndObserving(state: .serverRedirect)
-//        }
-    }
 
     // This is the place where we decide what to do with a new navigation action. There are a number of special schemes
     // and http(s) urls that need to be handled in a different way. All the logic for that is inside this delegate
