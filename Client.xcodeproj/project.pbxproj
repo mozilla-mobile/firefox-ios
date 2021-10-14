@@ -7578,7 +7578,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "rm -rf .venv; bash $SRCROOT/sdk_generator.sh -g Glean\n";
+			shellScript = "rm -rf .venv; bash $PWD/bin/sdk_generator.sh -g Glean\n";
 		};
 		E4A69F612048AFEA00D9017B /* Copy Carthage Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;

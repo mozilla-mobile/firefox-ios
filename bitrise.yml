@@ -79,13 +79,6 @@ workflows:
             rm /tmp/tmp.xcconfig
             envman add --key XCODE_XCCONFIG_FILE --value ''
         title: Remove carthage lipo workaround
-    - script@1:
-        title: Copy glean sdk_generator
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash # fail if any commands fails set -e # debug log set -x
-            # Copy Glean script to source folder from # MozillaAppServices.framework as we need # this script to build iOS App
-            cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
   3_provisioning_and_npm_installation:
     steps:
     - script@1.1:
@@ -229,14 +222,6 @@ workflows:
             rm /tmp/tmp.xcconfig
             envman add --key XCODE_XCCONFIG_FILE --value ''
         title: Remove carthage lipo workaround
-    - script@1:
-        title: Copy glean sdk_generator
-        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash # fail if any commands fails set -e # debug log set -x
-            # Copy Glean script to source folder from # MozillaAppServices.framework as we need # this script to build iOS App
-            cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
     - script@1:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
         inputs:
@@ -428,19 +413,6 @@ workflows:
             rm /tmp/tmp.xcconfig
             envman add --key XCODE_XCCONFIG_FILE --value ''
         title: Remove carthage lip
-    - script@1:
-        title: Copy glean sdk_generator
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-            # Copy Glean script to source folder from
-            # MozillaAppServices.framework as we need
-            # this script to build iOS App
-            cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
     - script@1.1:
         title: NPM install and build
         inputs:
@@ -1018,18 +990,6 @@ workflows:
             rm /tmp/tmp.xcconfig
             envman add --key XCODE_XCCONFIG_FILE --value ''
         title: remove carthage lipo workaround
-    - script@1:
-        title: Move glean sdk_generator
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash # fail if any commands fails set -e # debug log set -x
-
-            # Move Glean script to source folder from
-            # MozillaAppServices.framework as we don't
-            # want to ship our app with Glean shell
-            # script inside A~S framework
-
-            mv Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
     - script@1:
         inputs:
         - content: |-
