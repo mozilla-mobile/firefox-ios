@@ -131,7 +131,7 @@ class WebViewController: UIViewController, WebController {
         let configuration = WKWebViewConfiguration()
         configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
         configuration.allowsInlineMediaPlayback = true
-        configuration.applicationNameForUserAgent = AppInfo.config.productName
+        configuration.applicationNameForUserAgent = "FxiOS/\(AppInfo.majorVersion) Safari/605.1.15 Version/13.1"
         if #available(iOS 15.0, *) {
             configuration.upgradeKnownHostsToHTTPS = true
         }
