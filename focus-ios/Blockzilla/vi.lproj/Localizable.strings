@@ -299,7 +299,7 @@
 "SearchSuggestions.promptEnable" = "Có";
 
 /* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
-"SearchSuggestions.promptMessage" = "Để nhận gợi ý, %@ cần gửi những gì bạn nhập vào thanh địa chỉ cho công cụ tìm kiếm.";
+"SearchSuggestions.promptMessage" = "Để nhận đề xuất, %@ cần gửi những gì bạn nhập vào thanh địa chỉ cho công cụ tìm kiếm.";
 
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "Hiển thị đề xuất tìm kiếm?";
@@ -380,7 +380,7 @@
 "Settings.searchLabel" = "Công cụ tìm kiếm";
 
 /* Label for the Search Suggestions toggle row */
-"Settings.searchSuggestions" = "Nhận gợi ý tìm kiếm";
+"Settings.searchSuggestions" = "Nhận đề xuất tìm kiếm";
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "TÌM KIẾM";

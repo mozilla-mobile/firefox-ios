@@ -29,7 +29,7 @@
 "About.safariBullet1" = "Блокуйте стеження для покращення приватності";
 
 /* Label on About screen */
-"About.safariBullet2" = "Блокуйте веб-шрифти для зменшення розміру сторінок";
+"About.safariBullet2" = "Блокуйте вебшрифти для зменшення розміру сторінок";
 
 /* Label on About screen */
 "About.safariBulletHeader" = "Використовуйте в якості розширення для Safari:";
@@ -308,7 +308,7 @@
 "Settings.autocompleteSection" = "Автозавершення URL";
 
 /* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Блокування інших елементів стеження може пошкодити деякі відео і веб-сторінки.";
+"Settings.blockOtherMessage" = "Блокування інших елементів стеження може пошкодити деякі відео і вебсторінки.";
 
 /* Button label for declining Content blocker alert */
 "Settings.blockOtherNo2" = "Скасувати";
@@ -416,7 +416,7 @@
 "Settings.toggleBlockAnalytics2" = "Аналітика";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Блокувати веб-шрифти";
+"Settings.toggleBlockFonts" = "Блокувати вебшрифти";
 
 /* Label for the checkbox to toggle Other trackers */
 "Settings.toggleBlockOther2" = "Вміст";
@@ -434,7 +434,7 @@
 "Settings.toggleHomeScreenTips" = "Показувати поради на головному екрані";
 
 /* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "Може пошкодити деякі відео і веб-сторінки";
+"Settings.toggleOtherSubtitle" = "Може пошкодити деякі відео і вебсторінки";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";

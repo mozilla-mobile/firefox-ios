@@ -37,6 +37,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Avaa sovelluksella %@";
 
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "OK";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "Lisää mukautettu osoite";
 
@@ -253,6 +256,9 @@
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "Näytetäänkö hakuehdotukset?";
 
+/* Dark theme option in settings menu */
+"Settings.darkTheme" = "Tumma";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ lähettää osoiteriville kirjoittamasi tiedot hakukoneelle.";
 
@@ -261,6 +267,9 @@
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Lue lisää.";
+
+/* Light theme option in settings menu */
+"Settings.lightTheme" = "Vaalea";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "Arvostele %@";
@@ -322,8 +331,26 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "TURVALLISUUS";
 
+/* System value for theme section in settings menu */
+"Settings.systemTheme" = "Järjestelmän teema";
+
+/* Theme section in settings menu */
+"Settings.theme" = "Teema";
+
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "Mainonta";
+
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "Analytiikka";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Estä verkkosivujen kirjasinlajit";
+
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "Sisältö";
+
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "Sosiaalinen";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Käytä Face ID:tä sovelluksen lukituksen avaamiseen";
@@ -342,6 +369,12 @@
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Avaa Touch ID:llä %@ jos URL on auki sovelluksessa";
+
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "Pois";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "Päällä";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Mitä uutta";
@@ -409,6 +442,12 @@
 /* label for analytic trackers. */
 "trackingProtection.analyticTrackerLabel" = "Analytiikkaseuraimet";
 
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "Yhteys ei ole suojattu";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "Yhteys on suojattu";
+
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Sisältöseuraimet";
 
@@ -421,8 +460,14 @@
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Lue lisää";
 
+/* Text for the button that closes the Shield Data and opens the regular Settings screen. */
+"trackingProtection.moreSettings" = "Lisää asetuksia";
+
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Sosiaaliset seuraimet";
+
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "Tehostettu seurannan suojaus";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Lisää linkki automaattisesti täydennettäväksi";

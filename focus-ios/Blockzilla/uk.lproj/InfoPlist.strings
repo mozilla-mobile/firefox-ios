@@ -5,7 +5,7 @@
 "NSFaceIDUsageDescription" = "Це дозволить вам блокувати програму.";
 
 /* Privacy - Location When In Use Usage Description */
-"NSLocationWhenInUseUsageDescription" = "Відвідувані вами веб-сайти можуть запитувати ваше розташування.";
+"NSLocationWhenInUseUsageDescription" = "Відвідувані вами вебсайти можуть запитувати ваше розташування.";
 
 /* Privacy - Microphone Usage Description */
 "NSMicrophoneUsageDescription" = "Це дозволяє вам знімати й вивантажувати відео.";
