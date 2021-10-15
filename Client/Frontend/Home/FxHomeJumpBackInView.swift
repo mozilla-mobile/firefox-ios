@@ -210,7 +210,7 @@ class JumpBackInCell: UICollectionViewCell {
 
     // UI
     let heroImage: UIImageView = .build { imageView in
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = JumpBackInCellUX.generalCornerRadius
