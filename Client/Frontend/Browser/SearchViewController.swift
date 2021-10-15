@@ -88,6 +88,10 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         self.tabManager = tabManager
         self.experimental = Experiments.shared.getVariables(featureId: .search).getVariables("awesome-bar")
         super.init(profile: profile)
+        
+        if #available(iOS 15.0, *) {
+            tableView.sectionHeaderTopPadding = 0
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
