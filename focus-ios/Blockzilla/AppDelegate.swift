@@ -5,9 +5,6 @@
 import UIKit
 import Telemetry
 import Glean
-import Viaduct
-import RustLog
-import Nimbus
 
 protocol AppSplashController {
     var splashView: UIView { get }
@@ -16,9 +13,7 @@ protocol AppSplashController {
 }
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashController {
-    var nimbusApi: NimbusApi?
-    
+class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashController {    
     static let prefIntroDone = "IntroDone"
     static let prefIntroVersion = 2
     static let prefWhatsNewDone = "WhatsNewDone"
@@ -432,43 +427,7 @@ extension AppDelegate {
     }
         
     func setupExperimentation() {
-        if !Settings.getToggle(.sendAnonymousUsageData) {
-            NSLog("Not setting up Nimbus because sendAnonymousUsageData is disabled") // TODO Remove
-            return
-        }
-        
-        // Hook up basic logging.
-        if !RustLog.shared.tryEnable({ (level, tag, message) -> Bool in
-            NSLog("[RUST][\(tag ?? "no-tag")] \(message)")
-            return true
-        }) {
-            NSLog("ERROR: Unable to enable logging from Rust")
-        }
-
-        // Enable networking.
-        Viaduct.shared.useReqwestBackend()
-
-        let errorReporter: NimbusErrorReporter = { err in
-            NSLog("NIMBUS ERROR: \(err)")
-        }
-        
-        do {
-            guard let nimbusServerSettings = NimbusServerSettings.createFromInfoDictionary(), let nimbusAppSettings = NimbusAppSettings.createFromInfoDictionary() else {
-                NSLog("Nimbus not enabled: could not load settings from Info.plist")
-                return
-            }
-            
-            guard let databasePath = Nimbus.defaultDatabasePath() else {
-                NSLog("Nimbus not enabled: unable to determine database path")
-                return
-            }
-            
-            self.nimbusApi = try Nimbus.create(nimbusServerSettings, appSettings: nimbusAppSettings, dbPath: databasePath, resourceBundles: [], errorReporter: errorReporter)
-            self.nimbusApi?.initialize()
-            self.nimbusApi?.fetchExperiments()
-        } catch {
-            NSLog("ERROR: Unable to create Nimbus: \(error)")
-        }
+        // TODO Temporarily removed because of https://github.com/mozilla-mobile/focus-ios/issues/2600
     }
 
     func presentModal(viewController: UIViewController, animated: Bool) {
