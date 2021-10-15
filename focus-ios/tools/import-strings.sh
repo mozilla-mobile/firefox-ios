@@ -31,13 +31,13 @@ if [ ! -d Blockzilla.xcodeproj ]; then
 fi
 
 echo "[*] Cloning mozilla-l10n/focusios-l10n"
-git clone git@github.com:mozilla-l10n/focusios-l10n.git
+git clone https://github.com/mozilla-l10n/focusios-l10n.git
 
 echo "\n\n[*] Building tools/Localizations"
 (cd tools/Localizations && swift build)
 
 echo "\n\n[*] Importing Strings - takes a minute. (output in import-strings.log)"
-tools/Localizations/.build/arm64-apple-macosx/debug/Localizations \
+tools/Localizations/.build/x86_64-apple-macosx/debug/Localizations \
   --import \
   --project-path "$PWD/Blockzilla.xcodeproj" \
   --l10n-project-path "$PWD/focusios-l10n" > import-strings.log 2>&1
