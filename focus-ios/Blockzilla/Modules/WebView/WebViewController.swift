@@ -131,7 +131,19 @@ class WebViewController: UIViewController, WebController {
         let configuration = WKWebViewConfiguration()
         configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
         configuration.allowsInlineMediaPlayback = true
-        configuration.applicationNameForUserAgent = "FxiOS/\(AppInfo.majorVersion) Safari/605.1.15 Version/13.1"
+        
+        // For consistency we set our user agent similar to Firefox iOS.
+        //
+        // Important to note that this UA change only applies when the webview is created initially or
+        // when people hit the erase session button. The UA is not changed when you change the width of
+        // Focus on iPad, which means there could be some edge cases right now.
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            configuration.applicationNameForUserAgent = "Version/13.1 Safari/605.1.15"
+        } else {
+            configuration.applicationNameForUserAgent = "FxiOS/\(AppInfo.majorVersion) Mobile/15E148 Version/15.0"
+        }
+                
         if #available(iOS 15.0, *) {
             configuration.upgradeKnownHostsToHTTPS = true
         }
