@@ -354,11 +354,6 @@ extension TabTrayViewController: Themeable {
      @objc func applyTheme() {
          overrideUserInterfaceStyle =  ThemeManager.instance.userInterfaceStyle
          view.backgroundColor = UIColor.theme.tabTray.background
-         navigationController?.navigationBar.barTintColor = UIColor.theme.tabTray.toolbar
-         navigationController?.navigationBar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
-         navigationController?.toolbar.barTintColor = UIColor.theme.tabTray.toolbar
-         navigationController?.toolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
-         navigationItem.rightBarButtonItem?.tintColor = UIColor.theme.tabTray.toolbarButtonTint
          navigationToolbar.barTintColor = UIColor.theme.tabTray.toolbar
          navigationToolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
          let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
@@ -368,7 +363,6 @@ extension TabTrayViewController: Themeable {
              navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
          }
          viewModel.syncedTabsController.applyTheme()
-         setNeedsStatusBarAppearanceUpdate()
      }
  }
 
