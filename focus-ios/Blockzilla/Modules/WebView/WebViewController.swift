@@ -220,6 +220,10 @@ class WebViewController: UIViewController, WebController {
         browserView.evaluateJavaScript(javascript, completionHandler: completion)
     }
 
+    func focus() {
+        browserView.becomeFirstResponder()
+    }
+
     override func viewDidLoad() {
         self.browserView.addObserver(self, forKeyPath: "URL", options: .new, context: nil)
     }
