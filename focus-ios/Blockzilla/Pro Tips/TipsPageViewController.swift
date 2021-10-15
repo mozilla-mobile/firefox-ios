@@ -54,6 +54,10 @@ class TipsPageViewController: UIViewController {
             self.currentPageController.map { install($0, on: self.view) }
             self.currentPageController?.setViewControllers([initialVC], direction: .forward, animated: true, completion: nil)
             
+            let pageControl = currentPageController?.view.subviews.first { $0 is UIPageControl } as? UIPageControl
+            pageControl?.pageIndicatorTintColor = .primaryText.withAlphaComponent(0.48)
+            pageControl?.currentPageIndicatorTintColor = .primaryText
+            
         case .showEmpty(let controller):
             emptyController = controller
             install(controller, on: self.view)

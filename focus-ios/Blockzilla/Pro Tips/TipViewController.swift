@@ -8,7 +8,7 @@ class TipViewController: UIViewController {
     
     private lazy var tipTitleLabel: UILabel = {
         let label = UILabel()
-        label.textColor = UIConstants.colors.defaultFont
+        label.textColor = .secondaryText
         label.font = UIConstants.fonts.shareTrackerStatsLabel
         label.textAlignment = .center
         label.numberOfLines = 0
