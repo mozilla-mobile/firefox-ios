@@ -63,8 +63,9 @@ class SnapshotTests: BaseTestCaseL10n {
 
     func test04ShareMenu() {
         app.textFields["URLBar.urlText"].tap()
-        app.textFields["URLBar.urlText"].typeText("bugzilla.mozilla.org\n")
-        waitForValueContains(app.textFields["URLBar.urlText"], value: "bugzilla.mozilla.org")
+        app.textFields["URLBar.urlText"].typeText("example.com\n")
+        waitForValueContains(app.textFields["URLBar.urlText"], value: "example")
+        waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
         app.buttons["HomeView.settingsButton"].tap()
         snapshot("WebsiteSettingsMenu")
         waitForExistence(app.cells["icon_shortcuts_add"])
@@ -86,21 +87,21 @@ class SnapshotTests: BaseTestCaseL10n {
         snapshot("15SafariIntegrationInstructions")
     }
 
-    func test06OpenMaps() {
-        app.textFields["URLBar.urlText"].tap()
-        app.textFields["URLBar.urlText"].typeText("maps.apple.com\n")
-        waitForValueContains(app.textFields["URLBar.urlText"], value: "maps.apple.com")
-        snapshot("16OpenMaps")
+    func test06Theme() {
+        dismissURLBarFocused()
+        app.buttons["HomeView.settingsButton"].tap()
+        app.tables.cells["icon_settings"].tap()
+        waitForExistence(app.cells["settingsViewController.themeCell"])
+        app.cells["settingsViewController.themeCell"].tap()
+        // Toggle the switch on-off to see the different menus
+        waitForExistence(app.cells["themeViewController.themetoogleCell"])
+        app.cells["themeViewController.themetoogleCell"].switches.element(boundBy: 0).tap()
+        snapshot("Settings-theme1")
+        app.cells["themeViewController.themetoogleCell"].switches.element(boundBy: 0).tap()
+        snapshot("Settings-theme2")
     }
 
-    func test07OpenAppStore() {
-        app.textFields["URLBar.urlText"].tap()
-        app.textFields["URLBar.urlText"].typeText("itunes.apple.com\n")
-        waitForValueContains(app.textFields["URLBar.urlText"], value: "itunes.apple.com")
-        snapshot("17OpenAppStore")
-    }
-
-    func test08PasteAndGo() {
+    func test07PasteAndGo() {
         // Inject a string into clipboard
         let clipboardString = "Hello world"
         UIPasteboard.general.string = clipboardString
@@ -135,27 +136,15 @@ class SnapshotTests: BaseTestCaseL10n {
 
     func test11WebsiteView() {
         app.textFields.firstMatch.tap()
-        app.textFields.firstMatch.typeText("bugzilla.mozilla.org")
+        app.textFields.firstMatch.typeText("example.com")
         snapshot("04SearchFor")
 
         app.typeText("\n")
-        waitForValueContains(app.textFields["URLBar.urlText"], value: "bugzilla.mozilla.org")
+        waitForValueContains(app.textFields["URLBar.urlText"], value: "example")
+        waitForExistence(app.buttons["URLBar.deleteButton"], timeout: 10)
         app.buttons["URLBar.deleteButton"].tap()
         snapshot("07YourBrowsingHistoryHasBeenErased")
     }
-
-//    func testPinUnpinMenus() {
-//        app.textFields["URLBar.urlText"].tap()
-//        app.textFields["URLBar.urlText"].typeText("example.com\n")
-//        waitForExistence(app.buttons["HomeView.settingsButton"])
-//        app.buttons["HomeView.settingsButton"].tap()
-//        waitForExistence(app.cells["icon_shortcuts_add"])
-//        app.tables.cells["icon_shortcuts_add"].tap()
-//        snapshot("Pin-site-menu")
-//        app.buttons["HomeView.settingsButton"].tap()
-//        waitForExistence(app.cells["icon_shortcuts_remove"])
-//        snapshot("Unpin-site-menu")
-//    }
 
 //    Run it only for EN locales for now
 //    func test13HomePageTipsCarrousel() {
