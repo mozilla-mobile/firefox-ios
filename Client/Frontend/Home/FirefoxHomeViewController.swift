@@ -153,6 +153,7 @@ extension HomePanelContextMenu {
 class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureFlagsProtocol {
     weak var homePanelDelegate: HomePanelDelegate?
     weak var libraryPanelDelegate: LibraryPanelDelegate?
+    var hasPresentedContextualHint = false
     fileprivate let profile: Profile
     fileprivate let pocketAPI = Pocket()
     fileprivate let flowLayout = UICollectionViewFlowLayout()
@@ -161,21 +162,27 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     fileprivate var hasSentJumpBackInSectionEvent = false
     var recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel()
     var jumpBackInViewModel = FirefoxHomeJumpBackInViewModel()
-
+    fileprivate var overlayStatus = false
     fileprivate lazy var topSitesManager: ASHorizontalScrollCellManager = {
         let manager = ASHorizontalScrollCellManager()
         return manager
     }()
+    
+    var contextualHintViewController = ContextualHintViewController()
+    
+    lazy var overlayView: UIView = .build { [weak self] overlayView in
+        overlayView.backgroundColor = UIColor.Photon.Grey90A10
+        overlayView.isHidden = true
+    }
 
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
-
+    
     private var tapGestureRecognizer: UITapGestureRecognizer {
         let dismissOverlay = UITapGestureRecognizer(target: self, action: #selector(dismissOverlayMode))
         dismissOverlay.name = FxHomeDevStrings.GestureRecognizers.dismissOverlay
         dismissOverlay.cancelsTouchesInView = false
-
         return dismissOverlay
     }
 
@@ -270,6 +277,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         self.collectionView?.register(ASHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header")
         collectionView?.keyboardDismissMode = .onDrag
         collectionView?.backgroundColor = .clear
+        self.view.addSubviews(overlayView)
 
         if #available(iOS 14.0, *), !UserDefaults.standard.bool(forKey: "DidDismissDefaultBrowserCard") {
             self.view.addSubview(defaultBrowserCard)
@@ -282,13 +290,21 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
                 collectionView.topAnchor.constraint(equalTo: defaultBrowserCard.bottomAnchor),
                 collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
                 collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-                collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+                collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             ])
 
             defaultBrowserCard.dismissClosure = {
                 self.dismissDefaultBrowserCard()
             }
         }
+        
+        NSLayoutConstraint.activate([
+            overlayView.topAnchor.constraint(equalTo: view.topAnchor),
+            overlayView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            overlayView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            overlayView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+
         self.view.backgroundColor = UIColor.theme.homePanel.topSitesBackground
         self.profile.panelDataObservers.activityStream.delegate = self
 
@@ -316,11 +332,19 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
             if let _ = self.presentedViewController as? PhotonActionSheet {
                 self.presentedViewController?.dismiss(animated: true, completion: nil)
             }
+
             self.collectionViewLayout.invalidateLayout()
             self.collectionView?.reloadData()
         }, completion: { _ in
+//            if !UserDefaults.standard.bool(forKey: PrefsKeys.ContextualHintJumpBackinKey) && self.hasPresentedContextualHint {
+//                self.contextualHintViewController.dismiss(animated: false, completion: nil)
+//                self.hasPresentedContextualHint = false
+//                self.contextualHintViewController = ContextualHintViewController()
+//            }
+            
             // Workaround: label positions are not correct without additional reload
             self.collectionView?.reloadData()
+
         })
     }
 
@@ -408,7 +432,54 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         }
 
     }
+    
+    func presentContextualHint(for sourceView: UIView, forcePresent: Bool = false) -> Bool {
+        guard !UserDefaults.standard.bool(forKey: PrefsKeys.ContextualHintJumpBackinKey) || forcePresent else {
+            if !overlayView.isHidden { overlayView.isHidden = true }
+            return false
+        }
+        
+        let contentSize = CGSize(width: 325, height: 150)
+        contextualHintViewController.preferredContentSize = contentSize
+        contextualHintViewController.modalPresentationStyle = .popover
+        if let popoverPresentationController = contextualHintViewController.popoverPresentationController {
+            popoverPresentationController.sourceView = sourceView
+            popoverPresentationController.sourceRect = sourceView.bounds
+            popoverPresentationController.permittedArrowDirections = .down
+            popoverPresentationController.delegate = self
+        }
 
+        contextualHintViewController.closeButtonPressed = { [weak self] in
+            self?.hasPresentedContextualHint = false
+            self?.overlayView.isHidden = true
+        }
+        
+        contextualHintViewController.onViewDismissed = { [weak self] in
+            UserDefaults.standard.set(true, forKey: PrefsKeys.ContextualHintJumpBackinKey)
+            self?.overlayView.isHidden = true
+//            self?.hasPresentedContextualHint = false
+        }
+
+        present(contextualHintViewController, animated: true, completion: nil)
+        return true
+    }
+    
+//    func presentPopover(from view: UIViewController, cell: UICollectionViewCell, indexPath: IndexPath) {
+//        let controller = ContextualHintViewController()
+//        controller.modalPresentationStyle = .popover
+//        var rect = cell.convert(cell.contentView.frame, to: collectionView)
+//        rect = collectionView.convert(rect, to: self.view)
+//
+//        if let popoverPresentationController = controller.popoverPresentationController {
+//            popoverPresentationController.sourceView = self.view
+//            popoverPresentationController.sourceRect = rect
+//            popoverPresentationController.permittedArrowDirections = .down
+//            popoverPresentationController.delegate = self
+//        }
+//
+//        present(controller, animated: true, completion: nil)
+//        resignFirstResponder()
+//    }
 }
 
 // MARK: -  Section Management
@@ -585,6 +656,36 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                 view.moreButton.addTarget(self, action: #selector(openTabTray), for: .touchUpInside)
                 view.moreButton.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.MoreButtons.jumpBackIn
                 view.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.jumpBackIn
+                let attributes = collectionView.layoutAttributesForItem(at: indexPath)
+                
+                
+                if let frame = attributes?.frame, view.convert(frame, from: collectionView).height > 1 {
+                    if hasPresentedContextualHint {
+                        contextualHintViewController.dismiss(animated: false) {
+                            
+                            self.contextualHintViewController = ContextualHintViewController()
+                            _ = self.presentContextualHint(for: view.titleLabel, forcePresent: true)
+                            self.overlayView.isHidden = false
+                        }
+//                        contextualHintViewController.dismiss(animated: false, completion: nil)
+                        
+                    } else if presentContextualHint(for: view.titleLabel) {
+                        hasPresentedContextualHint = true
+                        overlayView.isHidden = false
+                    }
+                    
+                }
+                
+//                let frame = attributes?.frame, !hasPresentedContextualHint && view.convert(frame, from: collectionView).height > 1 {
+//
+//                    if hasPresentedContextualHint {
+//                        contextualHintViewController.dismiss(animated: false, completion: nil)
+//                        presentContextualHint(for: view.titleLabel, forcePresent: true)
+//                    } else if presentContextualHint(for: view.titleLabel) {
+//                        hasPresentedContextualHint = true
+//                        overlayView.isHidden = false
+//                    }
+//                }
                 return view
             case .recentlySaved:
                 view.moreButton.isHidden = false
@@ -1195,5 +1296,17 @@ extension FirefoxHomeViewController: UIPopoverPresentationControllerDelegate {
     // This is used by the Share UIActivityViewController action sheet on iPad
     func popoverPresentationController(_ popoverPresentationController: UIPopoverPresentationController, willRepositionPopoverTo rect: UnsafeMutablePointer<CGRect>, in view: AutoreleasingUnsafeMutablePointer<UIView>) {
         popoverPresentationController.presentedViewController.dismiss(animated: false, completion: nil)
+    }
+    
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return .none
+    }
+    
+    func prepareForPopoverPresentation(_ popoverPresentationController: UIPopoverPresentationController) {
+        print("RECT ------> POPOVER PRESENTED")
+    }
+
+    func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
+        return false
     }
 }

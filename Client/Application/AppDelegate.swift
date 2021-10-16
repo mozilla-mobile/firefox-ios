@@ -613,7 +613,8 @@ extension UIApplication {
 extension AppDelegate {
     /// ref: https://stackoverflow.com/questions/28938660/
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
-        return self.orientationLock
+        return .portrait
+//        return self.orientationLock
     }
 
     struct AppUtility {

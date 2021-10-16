@@ -809,14 +809,23 @@ class BrowserViewController: UIViewController {
                         viewcontroller.onViewDismissed = { [weak self] in
                             let shouldEnterOverlay = self?.tabManager.selectedTab?.url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
                             if shouldEnterOverlay {
-                                self?.urlBar.enterOverlayMode(nil, pasted: false, search: false)
+                               
+                                if self?.firefoxHomeViewController?.overlayView.isHidden ?? true {
+                                    self?.urlBar.locationTextField?.resignFirstResponder()
+                                } else {
+                                    self?.urlBar.enterOverlayMode(nil, pasted: false, search: false)
+                                }
                             }
                         }
                     } else {
-                        self.urlBar.enterOverlayMode(nil, pasted: false, search: false)
+                        
+                        if firefoxHomeViewController?.overlayView.isHidden ?? true {
+                            self.urlBar.locationTextField?.resignFirstResponder()
+                        }else {
+                            self.urlBar.enterOverlayMode(nil, pasted: false, search: false)
+                        }
                     }
                 }
-
             } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
                 hideFirefoxHome()
                 
