@@ -15,7 +15,7 @@ private let log = Logger.browserLogger
 
 struct FirefoxHomeUX {
     static let highlightCellHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 200
-    static let jumpBackInCellHeight: CGFloat = 112
+    static let jumpBackInCellHeight: CGFloat = 120
     static let recentlySavedCellHeight: CGFloat = 136
     static let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 15)
     static let numberOfItemsPerRowForSizeClassIpad = UXSizeClasses(compact: 3, regular: 4, other: 2)
@@ -624,15 +624,6 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
             let layout = topSiteCell.collectionView.collectionViewLayout as! HorizontalFlowLayout
             let estimatedLayout = layout.calculateLayout(for: CGSize(width: cellSize.width, height: 0))
             return CGSize(width: cellSize.width, height: estimatedLayout.size.height)
-        case .recentlySaved:
-            if recentlySavedViewModel.recentItems.count > 8, UIDevice.current.userInterfaceIdiom == .pad {
-                cellSize.height *= 3
-                return cellSize
-            } else if recentlySavedViewModel.recentItems.count > 4, UIDevice.current.userInterfaceIdiom == .pad {
-                cellSize.height *= 2
-                return cellSize
-            }
-            return cellSize
         case .jumpBackIn:
             if jumpBackInViewModel.layoutVariables.scrollDirection == .horizontal {
                 if jumpBackInViewModel.jumpList.itemsToDisplay > 2 {
@@ -642,12 +633,10 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                 cellSize.height *= CGFloat(jumpBackInViewModel.jumpList.itemsToDisplay)
             }
             return cellSize
-        case .pocket:
-            return cellSize
         case .libraryShortcuts:
             let width = min(FirefoxHomeUX.LibraryShortcutsMaxWidth, cellSize.width)
             return CGSize(width: width, height: cellSize.height)
-        case .customizeHome:
+        case .customizeHome, .pocket, .recentlySaved:
             return cellSize
         }
     }

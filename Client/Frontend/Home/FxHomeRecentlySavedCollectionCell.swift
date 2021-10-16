@@ -44,7 +44,7 @@ class FxHomeRecentlySavedCollectionCell: UICollectionViewCell {
     // UI
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        UIDevice.current.userInterfaceIdiom != .pad ? layout.scrollDirection = .horizontal : nil
+        layout.scrollDirection = .horizontal
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -54,8 +54,6 @@ class FxHomeRecentlySavedCollectionCell: UICollectionViewCell {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(RecentlySavedCell.self, forCellWithReuseIdentifier: RecentlySavedCell.cellIdentifier)
-        
-        UIDevice.current.userInterfaceIdiom == .pad ? collectionView.isScrollEnabled = false : nil
         
         return collectionView
     }()
