@@ -11,7 +11,6 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     // MARK: - Properties
     
     var onViewDismissed: (() -> Void)? = nil
-    var closeButtonPressed: (() -> Void)? = nil
     
     // Orientation independent screen size
     private let screenSize = DeviceInfo.screenSizeOrientationIndependent()
@@ -116,7 +115,6 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     
     // Button Actions
     @objc private func dismissAnimated() {
-        closeButtonPressed?()
         self.dismiss(animated: true, completion: nil)
     }
 }

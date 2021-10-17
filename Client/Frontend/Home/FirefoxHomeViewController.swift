@@ -460,16 +460,12 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
             popoverPresentationController.permittedArrowDirections = .down
             popoverPresentationController.delegate = self
         }
-
-        contextualHintViewController.closeButtonPressed = { [weak self] in
-            self?.hasPresentedContextualHint = false
-        }
         
         contextualHintViewController.onViewDismissed = { [weak self] in
-            UserDefaults.standard.set(true, forKey: PrefsKeys.ContextualHintJumpBackinKey)
             self?.overlayView.isHidden = true
         }
 
+        UserDefaults.standard.set(true, forKey: PrefsKeys.ContextualHintJumpBackinKey)
         present(contextualHintViewController, animated: true, completion: nil)
     }
 
