@@ -165,7 +165,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     fileprivate var contextualSourceView = UIView()
     var recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel()
     var jumpBackInViewModel = FirefoxHomeJumpBackInViewModel()
-    fileprivate var overlayStatus = false
     fileprivate lazy var topSitesManager: ASHorizontalScrollCellManager = {
         let manager = ASHorizontalScrollCellManager()
         return manager
@@ -347,9 +346,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
             self.collectionViewLayout.invalidateLayout()
             self.collectionView?.reloadData()
         }, completion: { _ in
-            if !self.didRoate {
-                self.didRoate = true
-            }
+            if !self.didRoate { self.didRoate = true }
             // Workaround: label positions are not correct without additional reload
             self.collectionView?.reloadData()
 
@@ -474,10 +471,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         }
 
         present(contextualHintViewController, animated: true, completion: nil)
-    }
-    
-    func removeContextualHint() {
-        contextualHintViewController.removeFromParent()
     }
 
     func startTimer() {
@@ -669,6 +662,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                         timer?.invalidate()
                         if didRoate && hasPresentedContextualHint {
                             contextualSourceView = view.titleLabel
+                            didRoate = false
                         } else if !hasPresentedContextualHint && shouldPresentContextualHint() {
                             contextualSourceView = view.titleLabel
                             startTimer()
@@ -1294,7 +1288,7 @@ extension FirefoxHomeViewController: UIPopoverPresentationControllerDelegate {
     }
 
     func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
-        removeContextualHint()
+        contextualHintViewController.removeFromParent()
         hasPresentedContextualHint = false
         overlayView.isHidden = true
         return true
