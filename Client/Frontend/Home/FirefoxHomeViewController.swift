@@ -153,7 +153,7 @@ extension HomePanelContextMenu {
 class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureFlagsProtocol {
     weak var homePanelDelegate: HomePanelDelegate?
     weak var libraryPanelDelegate: LibraryPanelDelegate?
-    var hasPresentedContextualHint = false
+    fileprivate var hasPresentedContextualHint = false
     fileprivate var didRoate = false
     fileprivate let profile: Profile
     fileprivate let pocketAPI = Pocket()
@@ -450,7 +450,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         overlayView.isHidden = false
         hasPresentedContextualHint = true
         
-        let contentSize = CGSize(width: 325, height: 150)
+        let contentSize = CGSize(width: 325, height: contextualHintViewController.heightForDescriptionLabel)
         contextualHintViewController.preferredContentSize = contentSize
         contextualHintViewController.modalPresentationStyle = .popover
         

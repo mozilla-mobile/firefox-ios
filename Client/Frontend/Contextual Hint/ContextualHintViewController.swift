@@ -45,9 +45,13 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
         return gradient
     }()
 
+    var heightForDescriptionLabel: CGFloat {
+        descriptionText.heightForLabel(descriptionText, width: 185, text: descriptionText.text)
+    }
+    
     // Used to set the part of text in center
     private var containerView = UIView()
-    
+
     // MARK: - Inits
     
     init() {
@@ -97,7 +101,6 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     }
     
     private func setupView() {
-
         NSLayoutConstraint.activate([
             closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 5),
             closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15),
@@ -106,7 +109,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
             descriptionText.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
             descriptionText.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: CGFloat(18)),
             descriptionText.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: CGFloat(-30)),
-            descriptionText.heightAnchor.constraint(equalToConstant: 150),
+            descriptionText.heightAnchor.constraint(equalToConstant: heightForDescriptionLabel),
         ])
 
     }
