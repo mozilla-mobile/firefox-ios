@@ -75,7 +75,7 @@ class BrowserViewController: UIViewController {
     var currentMiddleButtonState: MiddleButtonState?
     fileprivate var customSearchBarButton: UIBarButtonItem?
     var updateState: TabUpdateState = .coldStart
-    
+
     // popover rotation handling
     var displayedPopoverController: UIViewController?
     var updateDisplayedPopoverProperties: (() -> Void)?
@@ -87,7 +87,7 @@ class BrowserViewController: UIViewController {
 
     weak var gridTabTrayController: GridTabViewController?
     weak var chronTabTrayController: ChronologicalTabsViewController?
-    var tabTrayViewController: TabTrayViewController? 
+    var tabTrayViewController: TabTrayViewController?
     let profile: Profile
     let tabManager: TabManager
 
@@ -236,7 +236,7 @@ class BrowserViewController: UIViewController {
     func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator? = nil) {
         let showToolbar = shouldShowFooterForTraitCollection(newCollection)
         let showTopTabs = shouldShowTopTabsForTraitCollection(newCollection)
-        
+
         urlBar.topTabsIsShowing = showTopTabs
         urlBar.setShowToolbar(!showToolbar)
         toolbar?.addNewTabButton.isHidden = showToolbar
@@ -372,6 +372,8 @@ class BrowserViewController: UIViewController {
 
         // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
         scrollController.showToolbars(animated: false)
+        // TODO: When implementing StartATHome, this might be a good place to call
+        // the feature when restoring not from a launch.
     }
 
     override func viewDidLoad() {
@@ -741,7 +743,7 @@ class BrowserViewController: UIViewController {
             // Firefox home page tracking i.e. being shown from awesomebar vs bottom right hamburger menu
             let trackingValue: TelemetryWrapper.EventValue = homePanelIsInline ? .openHomeFromPhotonMenuButton : .openHomeFromAwesomebar
             TelemetryWrapper.recordEvent(category: .action, method: .open, object: .firefoxHomepage, value: trackingValue, extras: nil)
-            
+
             let firefoxHomeViewController = FirefoxHomeViewController(profile: profile)
             firefoxHomeViewController.homePanelDelegate = self
             firefoxHomeViewController.libraryPanelDelegate = self
@@ -817,8 +819,23 @@ class BrowserViewController: UIViewController {
 
             } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
                 hideFirefoxHome()
+                
+                // Reader-mode check is required to correctly display reader-mode and refresh button on urlbar
+                if let readerMode = self.tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) as? ReaderMode {
+                    urlBar.updateReaderModeState(readerMode.state)
+                    switch readerMode.state {
+                    case .active, .available:
+                        showReaderModeBar(animated: false)
+                    case .unavailable:
+                        hideReaderModeBar(animated: false)
+                    }
+                } else {
+                    urlBar.updateReaderModeState(ReaderModeState.unavailable)
+                    hideReaderModeBar(animated: false)
+                }
+
             }
-            
+
         } else if isAboutHomeURL {
             showFirefoxHome(inline: false)
         }
@@ -971,7 +988,7 @@ class BrowserViewController: UIViewController {
         }
         return false
     }
-    
+
     func setupMiddleButtonStatus(isLoading: Bool) {
         // Setting the default state to search to account for no tab or starting page tab
         // `state` will be modified later if needed
@@ -984,7 +1001,7 @@ class BrowserViewController: UIViewController {
             currentMiddleButtonState = state
             return
         }
-        
+
         // Tab with starting page
         if tab.isURLStartingPage {
             urlBar.locationView.reloadButton.reloadButtonState = .disabled
@@ -1130,7 +1147,7 @@ class BrowserViewController: UIViewController {
             openURLInNewTab(url, isPrivate: isPrivate)
         }
     }
-    
+
     func switchToTabForURLOrOpen(_ url: URL, uuid: String,  isPrivate: Bool = false) {
         guard !isCrashAlertShowing else {
             urlFromAnotherApp = UrlToOpenModel(url: url, isPrivate: isPrivate)
@@ -1188,6 +1205,9 @@ class BrowserViewController: UIViewController {
         let engine = profile.searchEngines.defaultEngine
         if let searchURL = engine.searchURLForQuery(text) {
             openURLInNewTab(searchURL, isPrivate: isPrivate)
+            if let tab = tabManager.selectedTab {
+                tab.updateTimerAndObserving(state: .navSearchLoaded, searchTerm: text, searchProviderUrl: searchURL.absoluteString, nextUrl: "")
+            }
         } else {
             // We still don't have a valid URL, so something is broken. Give up.
             print("Error handling URL entry: \"\(text)\".")
@@ -1262,7 +1282,7 @@ class BrowserViewController: UIViewController {
         case url
         case finishedNavigation
     }
-    
+
     func navigateInTab(tab: Tab, to navigation: WKNavigation? = nil, webViewStatus: WebViewUpdateStatus) {
         tabManager.expireSnackbars()
 
@@ -1281,10 +1301,10 @@ class BrowserViewController: UIViewController {
                 tab.readabilityResult = nil
                 webView.evaluateJavascriptInDefaultContentWorld("\(ReaderModeNamespace).checkReadability()")
             }
-            
+
             TabEvent.post(.didChangeURL(url), for: tab)
         }
-        
+
         // Represents WebView observation or delegate update that called this function
         switch webViewStatus {
         case .title, .url, .finishedNavigation:
@@ -1295,7 +1315,7 @@ class BrowserViewController: UIViewController {
                 // This is kind of a hacky fix for Bug 1476637 to prevent webpages from focusing the
                 // touch-screen keyboard from the background even though they shouldn't be able to.
                 webView.resignFirstResponder()
-                
+
                 // We need a better way of identifying when webviews are finished rendering
                 // There are cases in which the page will still show a loading animation or nothing when the screenshot is being taken,
                 // depending on internet connection
@@ -1432,7 +1452,7 @@ extension BrowserViewController: TabDelegate {
 
         let adsHelper = AdsTelemetryHelper(tab: tab)
         tab.addContentScript(adsHelper, name: AdsTelemetryHelper.name())
-        
+
         let noImageModeHelper = NoImageModeHelper(tab: tab)
         tab.addContentScript(noImageModeHelper, name: NoImageModeHelper.name())
 
@@ -1565,7 +1585,7 @@ extension BrowserViewController: RecentlyClosedPanelDelegate {
         tabTrayOpenRecentlyClosedTab(url)
         libraryDrawerViewController?.close()
     }
-    
+
     func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
         tabManager.selectTab(tabManager.addTab(URLRequest(url: url)))
     }
@@ -1605,6 +1625,18 @@ extension BrowserViewController: HomePanelDelegate {
     func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab? = nil) {
         showTabTray(withFocusOnUnselectedTab: tabToFocus)
     }
+
+    func homePanelDidRequestToCustomizeHomeSettings() {
+        let settingsTableViewController = AppSettingsTableViewController()
+        settingsTableViewController.profile = self.profile
+        settingsTableViewController.tabManager = self.tabManager
+        settingsTableViewController.settingsDelegate = self
+        settingsTableViewController.deeplinkTo = .customizeHomepage
+
+        let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
+        controller.presentingModalViewControllerDelegate = self
+        self.present(controller, animated: true, completion: nil)
+    }
 }
 
 extension BrowserViewController: SearchViewControllerDelegate {
@@ -1614,14 +1646,14 @@ extension BrowserViewController: SearchViewControllerDelegate {
         searchTelemetry?.shouldSetUrlTypeSearch = true
         finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: tab)
     }
-    
+
     func searchViewController(_ searchViewController: SearchViewController, uuid: String) {
         urlBar.leaveOverlayMode(didCancel: true)
         if let tab = tabManager.getTabForUUID(uuid: uuid) {
             tabManager.selectTab(tab)
         }
     }
-    
+
     func presentSearchSettingsController() {
         let searchSettingsTableViewController = SearchSettingsTableViewController()
         searchSettingsTableViewController.model = self.profile.searchEngines
@@ -1639,7 +1671,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
     func searchViewController(_ searchViewController: SearchViewController, didHighlightText text: String, search: Bool) {
         self.urlBar.setLocation(text, search: search)
     }
-    
+
     func searchViewController(_ searchViewController: SearchViewController, didAppend text: String) {
         self.urlBar.setLocation(text, search: false)
     }
@@ -1789,7 +1821,7 @@ extension BrowserViewController: TabManagerDelegate {
         updateTabCountUsingTabManager(tabManager)
         openUrlAfterRestore()
     }
-    
+
     func openUrlAfterRestore() {
         guard let url = urlFromAnotherApp?.url else { return }
         openURLInNewTab(url, isPrivate: urlFromAnotherApp?.isPrivate ?? false)
@@ -1853,7 +1885,7 @@ extension BrowserViewController {
             showProperIntroVC()
         }
     }
-    
+
     func presentETPCoverSheetViewController(_ force: Bool = false) {
         guard !hasTriedToPresentETPAlready else {
             return
@@ -1889,7 +1921,7 @@ extension BrowserViewController {
         }
         present(etpCoverSheetViewController, animated: true, completion: nil)
     }
-    
+
     // Default browser onboarding
     func presentDBOnboardingViewController(_ force: Bool = false) {
         guard #available(iOS 14.0, *) else { return }
@@ -1915,13 +1947,13 @@ extension BrowserViewController {
 
         present(dBOnboardingViewController, animated: true, completion: nil)
     }
-    
+
     @discardableResult func presentUpdateViewController(_ force: Bool = false, animated: Bool = true) -> Bool {
         let cleanInstall = UpdateViewModel.isCleanInstall(userPrefs: profile.prefs)
         let coverSheetSupportedAppVersion = UpdateViewModel.coverSheetSupportedAppVersion
         if force || UpdateViewModel.shouldShowUpdateSheet(userPrefs: profile.prefs, isCleanInstall: cleanInstall, supportedAppVersions: coverSheetSupportedAppVersion) {
             let updateViewController = UpdateViewController()
-            
+
             updateViewController.viewModel.startBrowsing = {
                 updateViewController.dismiss(animated: true) {
                 if self.navigationController?.viewControllers.count ?? 0 > 1 {
@@ -1929,14 +1961,14 @@ extension BrowserViewController {
                     }
                 }
             }
-            
+
             if topTabsVisible {
                 updateViewController.preferredContentSize = CGSize(width: ViewControllerConsts.PreferredSize.UpdateViewController.width, height: ViewControllerConsts.PreferredSize.UpdateViewController.height)
                 updateViewController.modalPresentationStyle = .formSheet
             } else {
                 updateViewController.modalPresentationStyle = .fullScreen
             }
-            
+
             // On iPad we present it modally in a controller
             present(updateViewController, animated: animated) {
                 // On first run (and forced) open up the homepage in the background.
@@ -1947,10 +1979,10 @@ extension BrowserViewController {
 
             return true
         }
-        
+
         return false
     }
-    
+
     private func showProperIntroVC() {
         let introViewController = IntroViewController()
         introViewController.didFinishClosure = { controller, fxaLoginFlow in
@@ -1967,7 +1999,7 @@ extension BrowserViewController {
         }
         self.introVCPresentHelper(introViewController: introViewController)
     }
-    
+
     private func introVCPresentHelper(introViewController: UIViewController) {
         // On iPad we present it modally in a controller
         if topTabsVisible {
@@ -2159,7 +2191,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             self.displayedPopoverController = nil
         }
     }
-    
+
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
         // Temporary solution to support CMD + Click to open an unselected new tab
         if #available(iOS 13.4, *) {
@@ -2169,10 +2201,10 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 isOnlyCmdPressed = true
             }
         }
-        
+
         super.pressesBegan(presses, with: event)
     }
-    
+
     override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
         super.pressesEnded(presses, with: event)
         if #available(iOS 13.4, *) {
@@ -2230,7 +2262,7 @@ extension BrowserViewController: TabTrayDelegate {
         guard let tab = self.tabManager.selectedTab else { return }
         self.finishEditingAndSubmit(url, visitType: .recentlyClosed, forTab: tab)
     }
-    
+
     // This function animates and resets the tab chrome transforms when
     // the tab tray dismisses.
     func tabTrayDidDismiss(_ tabTray: GridTabViewController) {
@@ -2277,7 +2309,7 @@ extension BrowserViewController: Themeable {
             $0.applyTheme()
             urlBar.locationView.tabDidChangeContentBlocking($0)
         }
-        
+
         guard let contentScript = self.tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
         appyThemeForPreferences(profile.prefs, contentScript: contentScript)
     }
@@ -2347,7 +2379,7 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
 extension BrowserViewController {
 
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
-        if featureFlags.isFeatureActive(.shakeToRestore) {
+        if featureFlags.isFeatureActiveForBuild(.shakeToRestore) {
                 homePanelDidRequestToRestoreClosedTab(motion)
         }
     }
@@ -2380,3 +2412,4 @@ extension BrowserViewController {
         return (UIApplication.shared.delegate as! AppDelegate).browserViewController
     }
 }
+

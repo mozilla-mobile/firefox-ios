@@ -116,7 +116,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         assert(Thread.isMainThread)
         var eligibleTabs: [Tab]
 
-        if featureFlags.isFeatureActive(.inactiveTabs) {
+        if featureFlags.isFeatureActiveForBuild(.inactiveTabs) {
             eligibleTabs = InactiveTabViewModel.getActiveEligibleTabsFrom(normalTabs, profile: profile)
         } else {
             eligibleTabs = normalTabs
@@ -125,7 +125,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         eligibleTabs = eligibleTabs.filter { tab in
             if tab.lastKnownUrl == nil {
                 return false
-                
+
             } else if let lastKnownUrl = tab.lastKnownUrl {
                 if lastKnownUrl.absoluteString.hasPrefix("internal://") { return false }
                 return true
@@ -219,7 +219,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
 
         return nil
     }
-    
+
     func storeScreenshot(tab: Tab) {
         store.preserveScreenshot(forTab: tab)
     }
@@ -229,10 +229,10 @@ class TabManager: NSObject, FeatureFlagsProtocol {
     func selectTab(_ tab: Tab?, previous: Tab? = nil) {
         assert(Thread.isMainThread)
         let previous = previous ?? selectedTab
-        
+
         previous?.updateTimerAndObserving(state: .tabSwitched)
         tab?.updateTimerAndObserving(state: .tabSelected)
-        
+
         // Make sure to wipe the private tabs if the user has the pref turned on
         if shouldClearPrivateTabs(), !(tab?.isPrivate ?? false) {
             removeAllPrivateTabs()
@@ -260,7 +260,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         }
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .tab)
     }
-    
+
     func preserveTabs() {
         store.preserveTabs(tabs, selectedTab: selectedTab)
     }
@@ -298,7 +298,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         // Wait momentarily before selecting the new tab, otherwise the parent tab
         // may be unable to set `window.location` on the popup immediately after
         // calling `window.open("")`.
-        DispatchQueue.main.asyncAfter(deadline: .now() + delaySelectingNewPopupTab) { 
+        DispatchQueue.main.asyncAfter(deadline: .now() + delaySelectingNewPopupTab) {
             self.selectTab(popup)
         }
 
@@ -423,7 +423,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         tab.noImageMode = NoImageModeHelper.isActivated(profile.prefs)
 
         if flushToDisk {
-        	storeChanges()
+            storeChanges()
         }
     }
 
@@ -550,13 +550,13 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         }
         storeChanges()
     }
-    
+
     func removeTabsWithoutToast(_ tabs: [Tab]) {
         for tab in tabs {
             self.removeTab(tab, flushToDisk: false, notify: true)
         }
     }
-    
+
     func removeTabsWithToast(_ tabs: [Tab]) {
         recentlyClosedForUndo = normalTabs.compactMap {
             SavedTab(tab: $0, isSelected: selectedTab === $0)
@@ -628,7 +628,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         assert(Thread.isMainThread)
         return tabs.filter({ $0.webView?.url == url }).first
     }
-    
+
     func getTabForUUID(uuid: String) -> Tab? {
         assert(Thread.isMainThread)
         let filterdTabs = tabs.filter { tab -> Bool in
@@ -687,7 +687,7 @@ extension TabManager {
                 }
             }
         }
-        
+
         guard forced || count == 0, !AppConstants.IsRunningTest, !DebugSettingsBundleOptions.skipSessionRestore, store.hasTabsToRestoreAtStartup else {
             return
         }
@@ -699,7 +699,7 @@ extension TabManager {
         }
 
         selectTab(tabToSelect)
-        
+
         for delegate in self.delegates {
             delegate.get()?.tabManagerDidRestoreTabs(self)
         }
@@ -877,3 +877,4 @@ extension TabManager {
         store.clearArchive()
     }
 }
+

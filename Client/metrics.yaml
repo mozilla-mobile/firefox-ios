@@ -607,6 +607,18 @@ firefox_home_page:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-04-01"
+  customize_homepage_button:
+    type: counter
+    description: |
+      Counts the number of times a user taps to open the
+      settings menu to customize the Firefox Homepage
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3151
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9272
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-04-01"
 
 # Library
 library:
@@ -1284,6 +1296,18 @@ tabs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-2906
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9134
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-03-20"
+  grouped_tab_search:
+    type: counter
+    description: |
+      This counts the number of times a user has tapped the search
+      icon for grouped tabs in the tab tray.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3141
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9267
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-03-20"

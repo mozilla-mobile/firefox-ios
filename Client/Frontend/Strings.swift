@@ -1171,6 +1171,7 @@ extension String {
     public static let TabTrayCloseAccessibilityCustomAction = MZLocalizedString("Close", comment: "Accessibility label for action denoting closing a tab in tab list (tray)")
     public static let TabTraySwipeToCloseAccessibilityHint = MZLocalizedString("Swipe right or left with three fingers to close the tab.", comment: "Accessibility hint for tab tray's displayed tab.")
     public static let TabTrayCurrentlySelectedTabAccessibilityLabel = MZLocalizedString("TabTray.CurrentSelectedTab.A11Y", value: "Currently selected tab.", comment: "Accessibility label for the currently selected tab.")
+    public static let TabTrayOtherTabsSectionHeader = MZLocalizedString("TabTray.Header.FilteredTabs.SectionHeader", value: "Others", comment: "In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as \"Others\"")
 }
 
 // MARK: - URL Bar
@@ -1399,7 +1400,9 @@ extension String {
 
 // MARK: - Credential Provider
 extension String {
-    public static let LoginsWelcomeViewTitle = MZLocalizedString("Logins.WelcomeView.Title", value: "Take your passwords everywhere", comment: "Label displaying welcome view title")
+    public static let LoginsWelcomeViewTitle2 = MZLocalizedString("Logins.WelcomeView.Title", value: "AutoFill Firefox Passwords", comment: "Label displaying welcome view title")
+    public static let LoginsWelcomeViewTagline = MZLocalizedString("Logins.WelcomeView.Title", value: "Take your passwords everywhere", comment: "Label displaying welcome view tagline under the title")
+    public static let LoginsWelcomeTurnOnAutoFillButtonTitle = MZLocalizedString("Logins.WelcomeView.TurnOnAutoFill", value: "Turn on AutoFill", comment: "Title of the big blue button to enable AutoFill")
     public static let LoginsListSearchCancel = MZLocalizedString("LoginsList.Search.Cancel", value: "Cancel", comment: "Title for cancel button for user to stop searching for a particular login")
     public static let LoginsListSearchPlaceholder = MZLocalizedString("LoginsList.Search.Placeholder", value: "Search logins", comment: "Placeholder text for search field")
     public static let LoginsListSelectPasswordTitle = MZLocalizedString("LoginsList.SelectPassword.Title", value: "Select a password to fill", comment: "Label displaying select a password to fill instruction")
@@ -1407,6 +1410,7 @@ extension String {
     public static let LoginsListNoMatchingResultSubtitle = MZLocalizedString("LoginsList.NoMatchingResult.Subtitle", value: "There are no results matching your search.", comment: "Label that appears after the search if there are no logins matching the search")
     public static let LoginsListNoLoginsFoundTitle = MZLocalizedString("LoginsList.NoLoginsFound.Title", value: "No logins found", comment: "Label shown when there are no logins saved")
     public static let LoginsListNoLoginsFoundDescription = MZLocalizedString("LoginsList.NoLoginsFound.Description", value: "Saved logins will show up here. If you saved your logins to Firefox on a different device, sign in to your Firefox Account.", comment: "Label shown when there are no logins to list")
+    public static let LoginsPasscodeRequirementWarning = MZLocalizedString("Logins.PasscodeRequirement.Warning", value: "To use the AutoFill feature for Firefox, you must have a device passcode enabled.", comment: "Warning message shown when you try to enable or use native AutoFill without a device passcode setup")
 }
 
 // MARK: - v35 Strings

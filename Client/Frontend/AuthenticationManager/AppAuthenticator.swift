@@ -44,4 +44,8 @@ class AppAuthenticator {
     static func canAuthenticateDeviceOwner() -> Bool {
         return LAContext().canEvaluatePolicy(.deviceOwnerAuthentication, error: nil)
     }
+        
+    static func canAuthenticateDeviceOwner() -> Bool {
+        return LAContext().canEvaluatePolicy(.deviceOwnerAuthentication, error: nil)
+    }
 }

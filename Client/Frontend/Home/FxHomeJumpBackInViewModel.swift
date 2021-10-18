@@ -29,6 +29,7 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
     var layoutVariables: JumpBackInLayoutVariables
     private var tabManager: TabManager
     private var profile: Profile
+    lazy var siteImageHelper = SiteImageHelper(profile: profile)
 
     var onTapGroup: ((Tab) -> Void)?
 
@@ -63,9 +64,10 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
     }
 
     private func updateJumpListData() {
-        if featureFlags.isFeatureActive(.groupedTabs) {
+        if featureFlags.isFeatureActiveForBuild(.groupedTabs),
+           featureFlags.userPreferenceFor(.groupedTabs) == UserFeaturePreference.enabled {
             let recentTabs = tabManager.recentlyAccessedNormalTabs
-            TabGroupsManager.getTabGroups(with: profile,
+            SearchTermGroupsManager.getTabGroups(with: profile,
                                           from: recentTabs,
                                           using: .orderedDescending) { groups, _ in
                 self.jumpList = self.createJumpList(from: recentTabs, and: groups)
@@ -96,3 +98,4 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
         return recentTabs
     }
 }
+
