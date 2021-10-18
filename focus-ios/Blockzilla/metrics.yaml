@@ -21,6 +21,26 @@ legacy.ids:
       - sarentz@mozilla.com
     expires: never
 
+browser:
+  total_uri_count:
+    type: counter
+    description: |
+      Records count of URIs visited by the user in the current session,
+      including page reloads.
+      It does not include background page requests and URIs from embedded pages
+      but may be incremented without user interaction by website scripts
+      that programmatically redirect to a new location.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2447
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2623
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+      - sarentz@mozilla.com
+    expires: never
+
 mozilla_products:
   has_firefox_installed:
     type: boolean

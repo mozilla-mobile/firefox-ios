@@ -1536,6 +1536,7 @@ extension BrowserViewController: WebControllerDelegate {
         toggleURLBarBackground(isBright: !urlBar.isEditing)
         urlBar.progressBar.hideProgressBar()
         webViewController.focus()
+        GleanMetrics.Browser.totalUriCount.add()
     }
 
     func webControllerURLDidChange(_ controller: WebController, url: URL) {
