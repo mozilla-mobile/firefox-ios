@@ -172,7 +172,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         return manager
     }()
     
-    var contextualHintViewController = ContextualHintViewController()
+    var contextualHintViewController = ContextualHintViewController(hintType: .jumpBackIn)
     
     lazy var overlayView: UIView = .build { [weak self] overlayView in
         overlayView.backgroundColor = UIColor.Photon.Grey90A10
@@ -458,7 +458,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
             self?.homePanelDelegate?.homePanelDidDismissContextualHint(type: .jumpBackIn)
         }
 
-        contextualHintViewController.viewModel.markContextualHintPresented(profile: profile, type: .jumpBackIn)
+        contextualHintViewController.viewModel.markContextualHintPresented(profile: profile)
         homePanelDelegate?.homePanelDidPresentContextualHint(type: .jumpBackIn)
         present(contextualHintViewController, animated: true, completion: nil)
     }
@@ -653,7 +653,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                         if didRoate && hasPresentedContextualHint {
                             contextualSourceView = view.titleLabel
                             didRoate = false
-                        } else if !hasPresentedContextualHint && contextualHintViewController.viewModel.shouldPresentContextualHint(profile: profile, type: .jumpBackIn) {
+                        } else if !hasPresentedContextualHint && contextualHintViewController.viewModel.shouldPresentContextualHint(profile: profile) {
                             contextualSourceView = view.titleLabel
                             contextualHintPresentTimer()
                         }

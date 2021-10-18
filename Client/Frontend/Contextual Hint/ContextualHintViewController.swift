@@ -9,6 +9,8 @@ import Shared
 class ContextualHintViewController: UIViewController, OnViewDismissable {
     
     // MARK: - Public constants
+    
+    // Note: make sure to use convenience init to set the type of hint while initializing 
     let viewModel = ContextualHintViewModel()
     
     // MARK: - Properties
@@ -27,7 +29,6 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
 
     private lazy var descriptionText: UILabel = .build { [weak self] label in
         guard let self = self else { return }
-        label.text = String.ContextualHintsPersonalizedHome
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, maxSize: 28)
         label.textAlignment = .left
         label.numberOfLines = 0
@@ -58,6 +59,11 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     
     init() {
         super.init(nibName: nil, bundle: nil)
+    }
+    
+    convenience init(hintType: ContextualHintViewType) {
+        self.init()
+        viewModel.hintType = hintType
     }
     
     required init?(coder: NSCoder) {
@@ -103,6 +109,8 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     }
     
     private func setupView() {
+        descriptionText.text = viewModel.hintType?.descriptionForHint()
+        
         NSLayoutConstraint.activate([
             closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 5),
             closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15),

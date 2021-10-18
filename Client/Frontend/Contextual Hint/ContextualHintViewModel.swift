@@ -7,11 +7,26 @@ import Shared
 
 enum ContextualHintViewType {
     case jumpBackIn
+    
+    func descriptionForHint() -> String {
+        switch self {
+        case .jumpBackIn:
+            return String.ContextualHintsPersonalizedHome
+        }
+    }
 }
 
 class ContextualHintViewModel {
 
-    func shouldPresentContextualHint(profile: Profile, type: ContextualHintViewType) -> Bool {
+    var hintType: ContextualHintViewType?
+    
+    convenience init(hintType: ContextualHintViewType?) {
+        self.init()
+        self.hintType = hintType
+    }
+    
+    func shouldPresentContextualHint(profile: Profile) -> Bool {
+        guard let type = hintType else { return false }
         switch type {
         case .jumpBackIn:
             guard let contextualHintData = profile.prefs.boolForKey(PrefsKeys.ContextualHintJumpBackinKey) else {
@@ -21,7 +36,8 @@ class ContextualHintViewModel {
         }
     }
     
-    func markContextualHintPresented(profile: Profile, type: ContextualHintViewType) {
+    func markContextualHintPresented(profile: Profile) {
+        guard let type = hintType else { return }
         switch type {
         case .jumpBackIn:
             profile.prefs.setBool(false, forKey: PrefsKeys.ContextualHintJumpBackinKey)
