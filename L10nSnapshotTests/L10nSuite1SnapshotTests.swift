@@ -58,7 +58,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testWebViewAuthenticationDialog() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 10)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         navigator.openURL("https://jigsaw.w3.org/HTTP/Basic/", waitForLoading: false)
         waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         navigator.goto(BasicAuthDialog)
@@ -80,7 +80,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testTopSitesMenu() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 10)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         app.buttons["urlBar-cancel"].tap()
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
         navigator.nowAt(NewTabScreen)
@@ -90,7 +90,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         // Workaround since in some locales Top Sites are not shown right away
         navigator.goto(SettingsScreen)
         navigator.goto(HomePanel_TopSites)
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         navigator.goto(TopSitesPanelContextMenu)
         snapshot("TopSitesMenu-01")
     }
@@ -128,7 +128,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     }*/
 
     func testETPperSite() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         app.buttons["urlBar-cancel"].tap()
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
         navigator.nowAt(NewTabScreen)
@@ -154,7 +154,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testSettingsETP() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         app.buttons["urlBar-cancel"].tap()
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
         navigator.nowAt(NewTabScreen)
@@ -185,7 +185,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testMenuOnTopSites() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 10)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         app.buttons["urlBar-cancel"].tap()
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
         navigator.nowAt(NewTabScreen)
@@ -195,7 +195,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
     func testSettings() {
         let table = app.tables.element(boundBy: 0)
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 10)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         app.buttons["urlBar-cancel"].tap()
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
         navigator.nowAt(NewTabScreen)
@@ -213,7 +213,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testPrivateBrowsingTabsEmptyState() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         app.buttons["urlBar-cancel"].tap()
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
         navigator.nowAt(NewTabScreen)
