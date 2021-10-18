@@ -875,6 +875,9 @@ extension FirefoxHomeViewController: DataObserverDelegate {
     // Reloads both highlights and top sites data from their respective caches. Does not invalidate the cache.
     // See ActivityStreamDataObserver for invalidation logic.
     func reloadAll() {
+        // Overlay view is used by contextual hint and reloading the view while the hint is shown can cause the popover to flicker
+        guard overlayView.isHidden else { return }
+
         // If the pocket stories are not availible for the Locale the PocketAPI will return nil
         // So it is okay if the default here is true
 
