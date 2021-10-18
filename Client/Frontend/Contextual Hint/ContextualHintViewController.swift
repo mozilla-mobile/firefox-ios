@@ -49,7 +49,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     }()
 
     var heightForDescriptionLabel: CGFloat {
-        descriptionText.heightForLabel(descriptionText, width: 185, text: descriptionText.text)
+        descriptionText.heightForLabel(descriptionText, width: 185, text: viewModel.hintType?.descriptionForHint())
     }
     
     // Used to set the part of text in center
