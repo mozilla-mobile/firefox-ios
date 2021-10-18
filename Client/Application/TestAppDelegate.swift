@@ -86,7 +86,7 @@ class TestAppDelegate: AppDelegate {
         }
 
         // Don't show the Contextual hint for jump back in section.
-        if launchArguments.contains(launchArguments.SkipContextualHintJumpBackIn) {
+        if launchArguments.contains(LaunchArguments.SkipContextualHintJumpBackIn) {
             profile.prefs.setBool(true, forKey: PrefsKeys.ContextualHintJumpBackinKey)
         }
         
