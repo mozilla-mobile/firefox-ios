@@ -8,6 +8,9 @@ import Shared
 
 class ContextualHintViewController: UIViewController, OnViewDismissable {
     
+    // MARK: - Public constants
+    let viewModel = ContextualHintViewModel()
+    
     // MARK: - Properties
     
     var onViewDismissed: (() -> Void)? = nil

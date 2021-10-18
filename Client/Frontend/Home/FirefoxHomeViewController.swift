@@ -89,6 +89,7 @@ protocol HomePanelDelegate: AnyObject {
     func homePanelDidRequestToOpenLibrary(panel: LibraryPanelType)
     func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab?)
     func homePanelDidRequestToCustomizeHomeSettings()
+    func homePanelDidPresentContextualHint(type: ContextualHintViewType)
 }
 
 protocol HomePanel: Themeable {
@@ -438,13 +439,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
 
     }
 
-    func shouldPresentContextualHint() -> Bool {
-        guard let contextualHintData = profile.prefs.boolForKey(PrefsKeys.ContextualHintJumpBackinKey) else {
-            return true
-        }
-        return contextualHintData
-    }
-
     func presentContextualHint() {
         overlayView.isHidden = false
         hasPresentedContextualHint = true
@@ -464,11 +458,12 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
             self?.overlayView.isHidden = true
         }
 
-        profile.prefs.setBool(false, forKey: PrefsKeys.ContextualHintJumpBackinKey)
+        contextualHintViewController.viewModel.markContextualHintPresented(profile: profile, type: .jumpBackIn)
+        homePanelDelegate?.homePanelDidPresentContextualHint(type: .jumpBackIn)
         present(contextualHintViewController, animated: true, completion: nil)
     }
 
-    func startTimer() {
+    func contextualHintPresentTimer() {
         timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(presentContextualOverlay), userInfo: nil, repeats: false)
     }
     
@@ -658,9 +653,9 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                         if didRoate && hasPresentedContextualHint {
                             contextualSourceView = view.titleLabel
                             didRoate = false
-                        } else if !hasPresentedContextualHint && shouldPresentContextualHint() {
+                        } else if !hasPresentedContextualHint && contextualHintViewController.viewModel.shouldPresentContextualHint(profile: profile, type: .jumpBackIn) {
                             contextualSourceView = view.titleLabel
-                            startTimer()
+                            contextualHintPresentTimer()
                         }
                 }
                 return view

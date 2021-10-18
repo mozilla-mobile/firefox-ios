@@ -808,25 +808,12 @@ class BrowserViewController: UIViewController {
                     if let viewcontroller = presentedViewController as? OnViewDismissable {
                         viewcontroller.onViewDismissed = { [weak self] in
                             let shouldEnterOverlay = self?.tabManager.selectedTab?.url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
-                            
                             if shouldEnterOverlay {
-                                // Do not focus url bar when overlay for contextual view is shown
-                                if self?.firefoxHomeViewController?.overlayView.isHidden ?? true {
-                                    self?.urlBar.locationTextField?.resignFirstResponder()
-                                } else {
-                                    self?.urlBar.enterOverlayMode(nil, pasted: false, search: false)
-                                }
+                                self?.urlBar.enterOverlayMode(nil, pasted: false, search: false)
                             }
-                            
                         }
                     } else {
-                        
-                        if firefoxHomeViewController?.overlayView.isHidden ?? true {
-                            // Do not focus url bar when overlay for contextual view is shown
-                            self.urlBar.locationTextField?.resignFirstResponder()
-                        } else {
-                            self.urlBar.enterOverlayMode(nil, pasted: false, search: false)
-                        }
+                        self.urlBar.enterOverlayMode(nil, pasted: false, search: false)
                     }
                 }
             } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
@@ -1648,6 +1635,10 @@ extension BrowserViewController: HomePanelDelegate {
         let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
         controller.presentingModalViewControllerDelegate = self
         self.present(controller, animated: true, completion: nil)
+    }
+    
+    func homePanelDidPresentContextualHint(type: ContextualHintViewType) {
+        self.urlBar.locationTextField?.resignFirstResponder()
     }
 }
 
