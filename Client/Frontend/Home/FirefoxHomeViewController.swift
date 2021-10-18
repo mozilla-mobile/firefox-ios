@@ -455,7 +455,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         
         contextualHintViewController.onViewDismissed = { [weak self] in
             self?.overlayView.isHidden = true
-            homePanelDelegate?.homePanelDidDismissContextualHint(type: .jumpBackIn)
+            self?.homePanelDelegate?.homePanelDidDismissContextualHint(type: .jumpBackIn)
         }
 
         contextualHintViewController.viewModel.markContextualHintPresented(profile: profile, type: .jumpBackIn)
