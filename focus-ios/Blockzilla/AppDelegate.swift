@@ -424,6 +424,7 @@ extension AppDelegate {
         GleanMetrics.TrackingProtection.hasContentBlocked.set(Settings.getToggle(.blockOther))
         GleanMetrics.TrackingProtection.hasSocialBlocked.set(Settings.getToggle(.blockSocial))
         GleanMetrics.MozillaProducts.hasFirefoxInstalled.set(UIApplication.shared.canOpenURL(URL(string: "firefox://")!))
+        GleanMetrics.Preferences.userTheme.set(UserDefaults.standard.theme.telemetryValue)
     }
         
     func setupExperimentation() {

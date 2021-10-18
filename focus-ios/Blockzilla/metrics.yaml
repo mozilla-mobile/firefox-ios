@@ -252,3 +252,20 @@ shortcuts:
     labels:
       - removed_from_browser_menu
       - removed_from_home_screen
+
+preferences:
+  user_theme:
+    type: string
+    description: >
+      A string that indicates the theme.
+      Can be one of "Light", "Dark", or "Follow device".
+      Default is "Follow device".
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2496
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2621
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2022-10-01"

@@ -23,6 +23,19 @@ extension Theme {
     }
 }
 
+extension Theme {
+    var telemetryValue: String {
+        switch self {
+        case .device:
+            return "Follow device"
+        case .light:
+            return "Light"
+        case .dark:
+            return "Dark"
+        }
+    }
+}
+
 extension UserDefaults {
     var theme: Theme {
         get {
@@ -34,4 +47,3 @@ extension UserDefaults {
         }
     }
 }
-
