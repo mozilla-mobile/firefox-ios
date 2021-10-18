@@ -25,9 +25,9 @@ class IntegrationTests: BaseTestCase {
      let key = String(parts[1])
      if testWithDB.contains(key) {
      // for the current test name, add the db fixture used
-     launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.StageServer, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + historyDB]
+     launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.StageServer, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + historyDB, LaunchArguments.SkipContextualHintJumpBackIn]
      } else if testFxAChinaServer.contains(key) {
-        launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.FxAChinaServer, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet]
+        launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.FxAChinaServer, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.SkipContextualHintJumpBackIn]
      }
      super.setUp()
      }

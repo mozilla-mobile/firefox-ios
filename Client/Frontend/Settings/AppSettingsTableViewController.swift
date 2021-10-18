@@ -164,6 +164,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
                 ToggleChronTabs(settings: self),
                 TogglePullToRefresh(settings: self),
                 ToggleInactiveTabs(settings: self),
+                ResetJumpBackInContextualHint(settings: self),
                 ExperimentsSettings(settings: self)
             ])]
 

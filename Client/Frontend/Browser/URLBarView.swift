@@ -82,7 +82,7 @@ class URLBarView: UIView {
     var toolbarIsShowing = false
     var topTabsIsShowing = false
 
-    fileprivate var locationTextField: ToolbarTextField?
+    var locationTextField: ToolbarTextField?
 
     /// Overlay mode is the state where the lock/reader icons are hidden, the home panels are shown,
     /// and the Cancel button is visible (allowing the user to leave overlay mode). Overlay mode

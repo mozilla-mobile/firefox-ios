@@ -39,6 +39,9 @@ public struct PrefsKeys {
     public static let KeySecondRun = "SecondRun"
     public static let StartAtHome = "startAtHome"
     public static let PullToRefresh = "pullToRefresh"
+    
+    // Firefox contextual hint
+    public static let ContextualHintJumpBackinKey = "ContextualHintJumpBackin"
 
     // Activity Stream
     public static let KeyTopSitesCacheIsValid = "topSitesCacheIsValid"

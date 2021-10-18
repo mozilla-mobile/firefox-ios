@@ -13,7 +13,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         let parts = name.replacingOccurrences(of: "]", with: "").split(separator: " ")
                 let key = String(parts[1])
         if noSkipIntroTest.contains(key) {
-            args = [LaunchArguments.ClearProfile, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet]
+            args = [LaunchArguments.ClearProfile, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.SkipContextualHintJumpBackIn]
         }
         super.setUp()
     }
