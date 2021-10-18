@@ -12,7 +12,6 @@ class LoginManagerTests: KIFTestCase {
 
     override func setUp() {
         super.setUp()
-        PasscodeUtils.resetPasscode()
         webRoot = SimplePageServer.start()
         generateLogins()
         BrowserUtils.dismissFirstRunUI(tester())
@@ -21,7 +20,6 @@ class LoginManagerTests: KIFTestCase {
     override func tearDown() {
         super.tearDown()
         clearLogins()
-        PasscodeUtils.resetPasscode()
         tester().wait(forTimeInterval: 5)
         BrowserUtils.resetToAboutHomeKIF(tester())
     }
