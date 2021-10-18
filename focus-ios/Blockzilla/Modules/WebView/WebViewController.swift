@@ -300,17 +300,41 @@ extension WebViewController: WKNavigationDelegate {
         webView.load(errorPageData, mimeType: "", characterEncodingName: UIConstants.strings.encodingNameUTF8, baseURL: errorUrl)
     }
     
-    func webView(
-        _ webView: WKWebView,
-        decidePolicyFor navigationAction: WKNavigationAction,
-        preferences: WKWebpagePreferences,
-        decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -> Void) {
-            if let hostName = navigationAction.request.url?.host,
-               let preferredContentMode = contentModeForHost[hostName] {
-                preferences.preferredContentMode = preferredContentMode
-            }
-            decisionHandler(.allow, preferences)
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, preferences: WKWebpagePreferences, decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -> Void) {
+        // If the user has asked for a specific content mode for this host, use that.
+        if let hostName = navigationAction.request.url?.host, let preferredContentMode = contentModeForHost[hostName] {
+            preferences.preferredContentMode = preferredContentMode
         }
+        
+        let present: (UIViewController) -> Void = { self.present($0, animated: true, completion: nil) }
+
+        switch navigationAction.navigationType {
+            case .backForward:
+                let navigatingBack = webView.backForwardList.backList.filter { $0 == currentBackForwardItem }.count == 0
+                if navigatingBack {
+                    delegate?.webControllerDidNavigateBack(self)
+                } else {
+                    delegate?.webControllerDidNavigateForward(self)
+                }
+            case .reload:
+                delegate?.webControllerDidReload(self)
+            default:
+                break
+        }
+
+        currentBackForwardItem = webView.backForwardList.currentItem
+
+        // prevent Focus from opening universal links
+        // https://stackoverflow.com/questions/38450586/prevent-universal-links-from-opening-in-wkwebview-uiwebview
+        let allowDecision = WKNavigationActionPolicy(rawValue: WKNavigationActionPolicy.allow.rawValue + 2) ?? .allow
+
+        let decision: WKNavigationActionPolicy = RequestHandler().handle(request: navigationAction.request, alertCallback: present) ? allowDecision : .cancel
+        if navigationAction.navigationType == .linkActivated && browserView.url != navigationAction.request.url {
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.websiteLink)
+        }
+        
+        decisionHandler(decision, preferences)
+    }
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
         let response = navigationResponse.response
@@ -366,36 +390,6 @@ extension WebViewController: WKNavigationDelegate {
         }
 
         decisionHandler(.allow)
-    }
-
-    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        let present: (UIViewController) -> Void = { self.present($0, animated: true, completion: nil) }
-
-        switch navigationAction.navigationType {
-            case .backForward:
-                let navigatingBack = webView.backForwardList.backList.filter { $0 == currentBackForwardItem }.count == 0
-                if navigatingBack {
-                    delegate?.webControllerDidNavigateBack(self)
-                } else {
-                    delegate?.webControllerDidNavigateForward(self)
-                }
-            case .reload:
-                delegate?.webControllerDidReload(self)
-            default:
-                break
-        }
-
-        currentBackForwardItem = webView.backForwardList.currentItem
-
-        // prevent Focus from opening universal links
-        // https://stackoverflow.com/questions/38450586/prevent-universal-links-from-opening-in-wkwebview-uiwebview
-        let allowDecision = WKNavigationActionPolicy(rawValue: WKNavigationActionPolicy.allow.rawValue + 2) ?? .allow
-
-        let decision: WKNavigationActionPolicy = RequestHandler().handle(request: navigationAction.request, alertCallback: present) ? allowDecision : .cancel
-        if navigationAction.navigationType == .linkActivated && browserView.url != navigationAction.request.url {
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.websiteLink)
-        }
-        decisionHandler(decision)
     }
 
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
