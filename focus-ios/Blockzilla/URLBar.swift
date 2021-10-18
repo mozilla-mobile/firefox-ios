@@ -616,7 +616,7 @@ class URLBar: UIView {
             setTextToURL()
             deactivate()
             borderColor = .foundation
-            backgroundColor = .foundation
+            backgroundColor = .clear
             
         case .browsing:
             showLeftBar = shouldShowToolset ? true : false
@@ -628,7 +628,7 @@ class URLBar: UIView {
 
             setTextToURL()
             borderColor = .foundation
-            backgroundColor = .foundation
+            backgroundColor = .clear
 
             editingURLTextConstrains.forEach{$0.deactivate()}
             urlText.snp.makeConstraints{make in
@@ -657,7 +657,7 @@ class URLBar: UIView {
             cancelButton.animateHidden(isIPadRegularDimensions ? true : false, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
             toolset.contextMenuButton.isEnabled = true
             borderColor = .foundation
-            backgroundColor = .foundation
+            backgroundColor = .clear
         }
 
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {
