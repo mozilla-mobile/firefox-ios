@@ -20,7 +20,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
     func testIntro() {
         var num = 1
-        waitForExistence(app.buttons["nextOnboardingButton"], timeout: 5)
+        waitForExistence(app.buttons["nextOnboardingButton"], timeout: 15)
         navigator.nowAt(Intro_Welcome)
         allIntroPages.forEach { screenName in
             navigator.goto(screenName)
@@ -82,7 +82,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     func testTopSitesMenu() {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         app.buttons["urlBar-cancel"].tap()
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 15)
         navigator.nowAt(NewTabScreen)
         app.collectionViews.cells["TopSite"].firstMatch.swipeUp()
         snapshot("TopSitesMenu-00")
