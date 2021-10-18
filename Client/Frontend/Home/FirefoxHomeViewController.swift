@@ -90,6 +90,7 @@ protocol HomePanelDelegate: AnyObject {
     func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab?)
     func homePanelDidRequestToCustomizeHomeSettings()
     func homePanelDidPresentContextualHint(type: ContextualHintViewType)
+    func homePanelDidDismissContextualHint(type: ContextualHintViewType)
 }
 
 protocol HomePanel: Themeable {
@@ -456,6 +457,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         
         contextualHintViewController.onViewDismissed = { [weak self] in
             self?.overlayView.isHidden = true
+            homePanelDelegate?.homePanelDidDismissContextualHint(type: .jumpBackIn)
         }
 
         contextualHintViewController.viewModel.markContextualHintPresented(profile: profile, type: .jumpBackIn)
