@@ -609,6 +609,27 @@ class ToggleInactiveTabs: HiddenSetting, FeatureFlagsProtocol {
     }
 }
 
+
+class ResetJumpBackInContextualHint: HiddenSetting {
+    let profile: Profile
+
+    override var accessibilityIdentifier: String? { return "ResetJumpBackInContextualHint.Setting" }
+
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: "Reset: Jump back in contextual hint", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+
+
+    override init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+        super.init(settings: settings)
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        self.profile.prefs.removeObjectForKey(PrefsKeys.ContextualHintJumpBackinKey)
+    }
+}
+
 // Show the current version of Firefox
 class VersionSetting: Setting {
     unowned let settings: SettingsTableViewController

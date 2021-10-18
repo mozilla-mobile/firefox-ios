@@ -816,7 +816,6 @@ class BrowserViewController: UIViewController {
                         self.urlBar.enterOverlayMode(nil, pasted: false, search: false)
                     }
                 }
-
             } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
                 hideFirefoxHome()
                 
@@ -1636,6 +1635,14 @@ extension BrowserViewController: HomePanelDelegate {
         let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
         controller.presentingModalViewControllerDelegate = self
         self.present(controller, animated: true, completion: nil)
+    }
+    
+    func homePanelDidPresentContextualHint(type: ContextualHintViewType) {
+        self.urlBar.locationTextField?.resignFirstResponder()
+    }
+    
+    func homePanelDidDismissContextualHint(type: ContextualHintViewType) {
+        self.urlBar.locationTextField?.becomeFirstResponder()
     }
 }
 
