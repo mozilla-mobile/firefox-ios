@@ -272,6 +272,8 @@
 		43175DB826B87D2C00C41C31 /* AdsTelemetryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43175DB726B87D2C00C41C31 /* AdsTelemetryHelper.swift */; };
 		431C0CA925C890E500395CE4 /* DefaultBrowserOnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431C0CA825C890E500395CE4 /* DefaultBrowserOnboardingViewModel.swift */; };
 		431C0D1E25C9DC4D00395CE4 /* DefaultBrowserOnboardingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431C0D1D25C9DC4D00395CE4 /* DefaultBrowserOnboardingTests.swift */; };
+		4331A9BB27193DF0005E8080 /* ContextualHintViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4331A9BA27193DEF005E8080 /* ContextualHintViewController.swift */; };
+		4331A9BD271D267E005E8080 /* ContextualHintViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4331A9BC271D267E005E8080 /* ContextualHintViewModel.swift */; };
 		4334145724C6378B001541F3 /* IntroScreenWelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4334145624C6378B001541F3 /* IntroScreenWelcomeView.swift */; };
 		4336FAD2264B169000A6B076 /* WebcompatAllFramesAtDocumentStart.js in Resources */ = {isa = PBXBuildFile; fileRef = 4336FAD1264B169000A6B076 /* WebcompatAllFramesAtDocumentStart.js */; };
 		43446CE7240D9F3000F5C643 /* ETP.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43446CE5240D9F3000F5C643 /* ETP.xcassets */; };
@@ -1952,6 +1954,8 @@
 		43175DB726B87D2C00C41C31 /* AdsTelemetryHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdsTelemetryHelper.swift; sourceTree = "<group>"; };
 		431C0CA825C890E500395CE4 /* DefaultBrowserOnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultBrowserOnboardingViewModel.swift; sourceTree = "<group>"; };
 		431C0D1D25C9DC4D00395CE4 /* DefaultBrowserOnboardingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultBrowserOnboardingTests.swift; sourceTree = "<group>"; };
+		4331A9BA27193DEF005E8080 /* ContextualHintViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContextualHintViewController.swift; sourceTree = "<group>"; };
+		4331A9BC271D267E005E8080 /* ContextualHintViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextualHintViewModel.swift; sourceTree = "<group>"; };
 		4334145624C6378B001541F3 /* IntroScreenWelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroScreenWelcomeView.swift; sourceTree = "<group>"; };
 		4336FAD1264B169000A6B076 /* WebcompatAllFramesAtDocumentStart.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebcompatAllFramesAtDocumentStart.js; sourceTree = "<group>"; };
 		4336FAFA264B170F00A6B076 /* FullscreenHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = FullscreenHelper.js; sourceTree = "<group>"; };
@@ -4941,6 +4945,15 @@
 			path = DefaultBrowserOnboardingTests;
 			sourceTree = "<group>";
 		};
+		4331A9B927193DEF005E8080 /* Contextual Hint */ = {
+			isa = PBXGroup;
+			children = (
+				4331A9BA27193DEF005E8080 /* ContextualHintViewController.swift */,
+				4331A9BC271D267E005E8080 /* ContextualHintViewModel.swift */,
+			);
+			path = "Contextual Hint";
+			sourceTree = "<group>";
+		};
 		4336FAF9264B170F00A6B076 /* WebcompatAtDocumentStart */ = {
 			isa = PBXGroup;
 			children = (
@@ -6268,6 +6281,7 @@
 		F84B21F11A0910F600AAB793 /* Frontend */ = {
 			isa = PBXGroup;
 			children = (
+				4331A9B927193DEF005E8080 /* Contextual Hint */,
 				C87DF9DA267247190097E707 /* UIConstants+BottomInset.swift */,
 				23ED80FD25C899D700D0E9D5 /* DefaultBrowserOnboarding */,
 				43C5A0972555DF7300BA37AD /* BottomSheet */,
@@ -8127,6 +8141,7 @@
 				2F44FCC71A9E8CF500FD20CC /* SearchSettingsTableViewController.swift in Sources */,
 				C8417D222657F0600010B877 /* LibraryViewModel.swift in Sources */,
 				39A359E41BFCCE94006B9E87 /* UserActivityHandler.swift in Sources */,
+				4331A9BD271D267E005E8080 /* ContextualHintViewModel.swift in Sources */,
 				D88FDAAF1F4E2BA000FD9709 /* PhotonActionSheetAnimator.swift in Sources */,
 				C83432FE26BAD30D00ABAAA6 /* EnhancedTrackingProtectionDetailsVC.swift in Sources */,
 				E698FFDA1B4AADF40001F623 /* TabScrollController.swift in Sources */,
@@ -8198,6 +8213,7 @@
 				EBC4869D2195F58300CDA48D /* ErrorPageHelper.swift in Sources */,
 				C834330026BAD32800ABAAA6 /* EnhancedTrackingProtectionDetailsVM.swift in Sources */,
 				E660BDD91BB06521009AC090 /* TabsButton.swift in Sources */,
+				4331A9BB27193DF0005E8080 /* ContextualHintViewController.swift in Sources */,
 				39EF434E260A73950011E22E /* Experiments.swift in Sources */,
 				63306D3921103EAE00F25400 /* SavedTab.swift in Sources */,
 				2F44FCCB1A9E972E00FD20CC /* SearchEnginePicker.swift in Sources */,

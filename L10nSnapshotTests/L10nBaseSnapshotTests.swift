@@ -14,7 +14,7 @@ class L10nBaseSnapshotTests: XCTestCase {
     var navigator: MMNavigator<FxUserState>!
     var userState: FxUserState!
 
-    var args = [LaunchArguments.ClearProfile, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet,LaunchArguments.SkipIntro]
+    var args = [LaunchArguments.ClearProfile, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet,LaunchArguments.SkipIntro, LaunchArguments.SkipContextualHintJumpBackIn]
 
     override func setUp() {
         super.setUp()
