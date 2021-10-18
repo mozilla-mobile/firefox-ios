@@ -609,17 +609,24 @@ class ToggleInactiveTabs: HiddenSetting, FeatureFlagsProtocol {
     }
 }
 
+
 class ResetJumpBackInContextualHint: HiddenSetting {
+    let profile: Profile
+
+    override var accessibilityIdentifier: String? { return "ResetJumpBackInContextualHint.Setting" }
+
     override var title: NSAttributedString? {
         return NSAttributedString(string: "Reset: Jump back in contextual hint", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
+
+    override init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+        super.init(settings: settings)
+    }
+
     override func onClick(_ navigationController: UINavigationController?) {
-        if UserDefaults.standard.bool(forKey: PrefsKeys.ContextualHintJumpBackinKey) {
-            UserDefaults.standard.removeObject(forKey: PrefsKeys.ContextualHintJumpBackinKey)
-        } else {
-            UserDefaults.standard.set(false, forKey: PrefsKeys.ContextualHintJumpBackinKey)
-        }
+        self.profile.prefs.removeObjectForKey(PrefsKeys.ContextualHintJumpBackinKey)
     }
 }
 

@@ -437,13 +437,12 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         }
 
     }
-    
+
     func shouldPresentContextualHint() -> Bool {
-        guard !UserDefaults.standard.bool(forKey: PrefsKeys.ContextualHintJumpBackinKey) else {
-            if !overlayView.isHidden { overlayView.isHidden = true }
-            return false
+        guard let contextualHintData = profile.prefs.boolForKey(PrefsKeys.ContextualHintJumpBackinKey) else {
+            return true
         }
-        return true
+        return contextualHintData
     }
 
     func presentContextualHint() {
@@ -465,7 +464,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
             self?.overlayView.isHidden = true
         }
 
-        UserDefaults.standard.set(true, forKey: PrefsKeys.ContextualHintJumpBackinKey)
+        profile.prefs.setBool(false, forKey: PrefsKeys.ContextualHintJumpBackinKey)
         present(contextualHintViewController, animated: true, completion: nil)
     }
 
