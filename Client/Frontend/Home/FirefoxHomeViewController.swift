@@ -344,14 +344,12 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
             if let _ = self.presentedViewController as? PhotonActionSheet {
                 self.presentedViewController?.dismiss(animated: true, completion: nil)
             }
-
             self.collectionViewLayout.invalidateLayout()
             self.collectionView?.reloadData()
         }, completion: { _ in
             if !self.didRoate { self.didRoate = true }
             // Workaround: label positions are not correct without additional reload
             self.collectionView?.reloadData()
-
         })
     }
 
