@@ -101,8 +101,8 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
     func testHistoryTableContextMenu() {
         navigator.openURL(loremIpsumURL)
-        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
-        
+        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"], timeoutValue: 3)
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
         navigator.goto(HistoryPanelContextMenu)
         snapshot("HistoryTableContextMenu-01")
     }
