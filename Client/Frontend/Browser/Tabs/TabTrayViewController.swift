@@ -136,8 +136,6 @@ class TabTrayViewController: UIViewController {
         return .lightContent
     }
 
-    var onViewDismissed: (() -> Void)? = nil
-
     // Initializers
     init(tabTrayDelegate: TabTrayDelegate? = nil, profile: Profile, showChronTabs: Bool = false, tabToFocus: Tab? = nil) {
         self.viewModel = TabTrayViewModel(tabTrayDelegate: tabTrayDelegate, profile: profile, showChronTabs: showChronTabs, tabToFocus: tabToFocus)
@@ -147,12 +145,6 @@ class TabTrayViewController: UIViewController {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        onViewDismissed?()
-        onViewDismissed = nil
     }
 
     deinit {

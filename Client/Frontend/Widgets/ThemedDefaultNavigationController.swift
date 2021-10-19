@@ -4,7 +4,7 @@
 
 import UIKit
 
-class ThemedDefaultNavigationController: UINavigationController {
+class ThemedDefaultNavigationController: DismissableNavigationViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         applyTheme()
