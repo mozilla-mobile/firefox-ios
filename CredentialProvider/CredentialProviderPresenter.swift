@@ -6,6 +6,8 @@ import UIKit
 import AuthenticationServices
 import SwiftKeychainWrapper
 
+let CredentialProviderAuthenticationDelay = 0.25
+
 class CredentialProviderPresenter {
     weak var view: CredentialProviderViewProtocol?
     public let profile: Profile
@@ -72,15 +74,18 @@ class CredentialProviderPresenter {
     
 
     func credentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-        AppAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
-            switch result {
-            case .success:
-                // Move to the main thread because a state update triggers UI changes.
-                DispatchQueue.main.async { [unowned self] in
-                    self.showCredentialList(for: serviceIdentifiers)
+        // Force a short delay before we trigger authentication. See https://github.com/mozilla-mobile/firefox-ios/issues/9354
+        DispatchQueue.main.asyncAfter(deadline: .now() + CredentialProviderAuthenticationDelay) {
+            AppAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
+                switch result {
+                case .success:
+                    // Move to the main thread because a state update triggers UI changes.
+                    DispatchQueue.main.async { [unowned self] in
+                        self.showCredentialList(for: serviceIdentifiers)
+                    }
+                case .failure:
+                    self.cancel(with: .userCanceled)
                 }
-            case .failure:
-                self.cancel(with: .userCanceled)
             }
         }
     }
