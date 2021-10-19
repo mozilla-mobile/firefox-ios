@@ -128,7 +128,7 @@ class TabTrayViewController: UIViewController {
         let toolbar = UIToolbar()
         toolbar.delegate = self
         toolbar.setItems([UIBarButtonItem(customView: navigationMenu)], animated: false)
-
+        toolbar.isTranslucent = false
         return toolbar
     }()
 
@@ -186,9 +186,7 @@ class TabTrayViewController: UIViewController {
            let window = appWindow as UIWindow? {
             window.backgroundColor = .black
         }
-
-        navigationController?.navigationBar.shadowImage = UIImage()
-
+        
         if shouldUseiPadSetup {
             iPadViewSetup()
         } else {
