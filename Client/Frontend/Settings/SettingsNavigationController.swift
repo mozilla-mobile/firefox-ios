@@ -28,10 +28,22 @@ class ThemedNavigationController: DismissableNavigationViewController {
 }
 
 extension ThemedNavigationController: Themeable {
-    func applyTheme() {
-        navigationBar.barTintColor = UIColor.theme.tableView.headerBackground
+    private func setupNavigationBarAppearance() {
+        let standardAppearance = UINavigationBarAppearance()
+        standardAppearance.configureWithDefaultBackground()
+        standardAppearance.backgroundColor = UIColor.theme.tableView.headerBackground
+        standardAppearance.titleTextAttributes = [.foregroundColor: UIColor.theme.tableView.headerTextDark]
+        
+        navigationBar.standardAppearance = standardAppearance
+        navigationBar.compactAppearance = standardAppearance
+        navigationBar.scrollEdgeAppearance = standardAppearance
+        if #available(iOS 15.0, *) {
+            navigationBar.compactScrollEdgeAppearance = standardAppearance
+        }
         navigationBar.tintColor = UIColor.theme.general.controlTint
-        navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.headerTextDark]
+    }
+    func applyTheme() {
+        setupNavigationBarAppearance()
         setNeedsStatusBarAppearanceUpdate()
         viewControllers.forEach {
             ($0 as? Themeable)?.applyTheme()
