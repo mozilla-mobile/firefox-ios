@@ -276,6 +276,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         toggleSplashView(hide: false)
         browserViewController.exitFullScreenVideo()
         browserViewController.dismissActionSheet()
+        browserViewController.deactivateUrlBar()
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -314,6 +315,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
 
             queuedString = nil
         }
+    
+        browserViewController.activateUrlBarOnHomeView()
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
