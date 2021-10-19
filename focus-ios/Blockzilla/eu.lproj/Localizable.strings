@@ -43,6 +43,15 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Ireki %@ aplikazioan";
 
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "Ados";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "Errorera gertatu da txartela Wallet-era gehitzean. Saiatu berriro geroago.";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "Txartela gehitzeak huts egin du";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "Autentifikatu %@ aplikaziora itzultzeko";
 
@@ -301,6 +310,15 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Bestelako jarraipen-elementuak blokeatzean zenbait bideo eta web orri apur litezke.";
 
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "Utzi";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes2" = "Blokeatu edukiaren jarraipen-elementuak";
+
+/* Dark theme option in settings menu */
+"Settings.darkTheme" = "Iluna";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "Helbide-barran idazten duzuna bilaketa-motorrera bidaliko du %@(e)k.";
 
@@ -309,6 +327,12 @@
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Argibide gehiago.";
+
+/* Light theme option in settings menu */
+"Settings.lightTheme" = "Argia";
+
+/* Manual value for theme section in settings menu */
+"Settings.manualTheme" = "Eskuzkoa";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "Baloratu %@";
@@ -376,8 +400,29 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "SEGURTASUNA";
 
+/* System value for theme section in settings menu */
+"Settings.systemTheme" = "Sistemaren itxura";
+
+/* Theme section in settings menu */
+"Settings.theme" = "Itxura";
+
+/* Header for manual theme section in settings menu */
+"Settings.themePicker" = "Itxura hautatzekoa";
+
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "Iragarkiak";
+
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "Analitikak";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Blokeatu webeko letra-tipoak";
+
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "Edukia";
+
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "Sare sozialak";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Erabili Face ID aplikazioa desblokeatzeko";
@@ -403,6 +448,15 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Touch ID erabilita %@ aplikazioa desblokea daiteke aplikazioak dagoeneko URL bat irekita badu";
 
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "Desaktibatuta";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "Aktibatuta";
+
+/* Value for theme toggle in settings menu */
+"Settings.useSystemTheme" = "Erabili sistemaren argi/ilun modua";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Nobedadeak";
 
@@ -411,6 +465,9 @@
 
 /* Text for a share button */
 "share" = "Partekatu";
+
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "Gehitu lasterbideetara";
 
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "Kopiatu helbidea";
@@ -423,6 +480,9 @@
 
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "Orri-ekintzak";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "Kendu lasterbideetatik";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Mahaigaineko gunea";
@@ -441,6 +501,9 @@
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Partekatu orria honekin...";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "Kendu lasterbideetatik";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Gehitu";
@@ -475,6 +538,12 @@
 /* label for analytic trackers. */
 "trackingProtection.analyticTrackerLabel" = "Estatistiken jarraipen-elementuak";
 
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "Konexioa ez da segurua";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "Konexioa segurua da";
+
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Edukien jarraipen-elementuak";
 
@@ -490,11 +559,32 @@
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Argibide gehiago";
 
+/* Text for the button that closes the Shield Data and opens the regular Settings screen. */
+"trackingProtection.moreSettings" = "Ezarpen gehiago";
+
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Sare sozialetako jarraipen-elementuak";
 
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "Babesak inaktibo daude saio honetarako";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "Babesak aktibo daude saio honetarako";
+
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Desgaitu %@ itxi edo EZABATU sakatu arte.";
+
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "Jarraipenaren babes hobetua";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel2" = "Mantendu zure datuak zuretzat. Lineako zure jardueraren jarraipena egiten duten elementu ohikoenetatik babesten zaitu %@(e)k.";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "Blokeatutako jarraipen-elementuak %@ datatik";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "Blokeatu beharreko jarraipen-elementu eta scriptak";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Gehitu automatikoki osatzeko lotura";
@@ -507,6 +597,9 @@
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "EZABATU";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "Nabigazio-historia garbituta";
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Bilatu orrian: %@";

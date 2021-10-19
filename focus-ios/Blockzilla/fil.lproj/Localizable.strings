@@ -43,6 +43,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Buksan sa %@";
 
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "Ok";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "Patunayan na bumalik sa %@";
 
@@ -93,6 +96,9 @@
 
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Pinagana";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "Mga Site";
 
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Bagong Session";
@@ -268,17 +274,32 @@
 /* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
 "SearchEngine.addEngineError" = "Hindi iyon gumana. Subukang palitan ang termino sa paghahanap na may ganitong: %s.";
 
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "Hindi";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "Oo";
+
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "URL Autocomplete";
 
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Ang pag-block ng iba pang nilalaman ng trackers ay maaaring masira ang ilang mga video at mga pahina ng Web pages.";
 
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "i-Cancel";
+
+/* Dark theme option in settings menu */
+"Settings.darkTheme" = "Madilim";
+
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla ay nag susumikap na kolektahin lamang kung ano ang kailangan naming ibigay at pagbutihin ang %@ para sa lahat.";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Matuto ng higit pa.";
+
+/* Light theme option in settings menu */
+"Settings.lightTheme" = "Maliwanag";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "Rate %@";
@@ -343,8 +364,23 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "SECURITY";
 
+/* Theme section in settings menu */
+"Settings.theme" = "Tema";
+
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "Advertising";
+
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "Analytics";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Harangan ang Web fonts";
+
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "Nilalaman";
+
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "Social";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Gamitin ang Face ID upang i-unlock ang app";
@@ -367,6 +403,12 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Maaaring i-unlock ng Touch ID ang %@ kung bukas ang isang URL sa app";
 
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "Off";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "On";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Ano ang Bago";
 
@@ -375,6 +417,9 @@
 
 /* Text for a share button */
 "share" = "Ibahagi";
+
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "Idagdag sa Shortcuts";
 
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "Kopyahin ang Address";
@@ -387,6 +432,9 @@
 
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "Mga Pagkilos ng Pahina";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "Alisin sa Shortcuts";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Humiling ng Desktop Site";
