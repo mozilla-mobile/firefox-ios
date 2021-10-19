@@ -1056,9 +1056,6 @@ open class BrowserProfile: Profile {
                     }
 
                     let syncEngineStatsSession = SyncEngineStatsSession(collection: "logins")
-                    self?.profile.syncCredentialIdentities().upon { result in
-                        log.debug(result)
-                    }
                     return deferMaybe(SyncStatus.completed(syncEngineStatsSession))
                 })
             })
