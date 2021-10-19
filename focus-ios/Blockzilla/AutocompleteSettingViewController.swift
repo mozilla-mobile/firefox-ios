@@ -6,7 +6,17 @@ import UIKit
 import Telemetry
 
 class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    private let tableView = UITableView(frame: .zero, style: .grouped)
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView(frame: .zero, style: .insetGrouped)
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.backgroundColor = .systemBackground
+        tableView.separatorStyle = .singleLine
+        tableView.separatorColor = UIConstants.colors.settingsSeparator
+        tableView.allowsSelection = true
+        tableView.estimatedRowHeight = UITableView.automaticDimension
+        return tableView
+    }()
 
     convenience init() {
         self.init(nibName: nil, bundle: nil)
@@ -28,23 +38,8 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
         
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
-            make.top.bottom.equalTo(self.view)
-            make.leading.trailing.equalTo(self.view).inset(UIConstants.layout.settingsItemInset)
+            make.edges.equalToSuperview()
         }
-
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.backgroundColor = .systemBackground
-        tableView.layoutMargins = UIEdgeInsets.zero
-        tableView.separatorColor = UIConstants.colors.settingsSeparator
-    }
-
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-
-        let cell = UITableViewCell()
-        cell.textLabel?.text = " "
-        cell.backgroundColor = .systemBackground
-        return cell
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -106,48 +101,27 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         switch section {
         case 0:
-            let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
-            let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor: UIColor.accent])
-            let subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.autocompleteTopSitesDesc, AppInfo.productName), attributes: [.foregroundColor: UIColor.tertiaryLabel])
-            let space = NSAttributedString(string: " ", attributes: [:])
-            subtitle.append(space)
-            subtitle.append(learnMore)
-            cell.detailTextLabel?.attributedText = subtitle
-            cell.detailTextLabel?.numberOfLines = 0
-            cell.accessibilityIdentifier = "SettingsViewController.autocompleteLearnMore"
-            cell.selectionStyle = .none
-            cell.backgroundColor = .systemBackground
-            cell.layoutMargins = UIEdgeInsets.zero
-
+            let subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.autocompleteTopSitesDesc, AppInfo.productName), attributes: [.foregroundColor: UIConstants.colors.settingsDetailLabel])
+            let footer = ActionFooterView(frame: .zero)
+            footer.textLabel.attributedText = subtitle
+            footer.detailTextButton.setTitle(UIConstants.strings.learnMore, for: .normal)
+            footer.accessibilityIdentifier = "SettingsViewController.autocompleteLearnMore"
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(learnMoreDefaultTapped))
-            cell.addGestureRecognizer(tapGesture)
-
-            return cell
+            footer.detailTextButton.addGestureRecognizer(tapGesture)
+            return footer
+            
         case 1:
-            let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
-            let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor: UIColor.accent])
-            let subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.autocompleteManageSitesDesc, AppInfo.productName), attributes: [.foregroundColor: UIColor.tertiaryLabel])
-            let space = NSAttributedString(string: " ", attributes: [:])
-            subtitle.append(space)
-            subtitle.append(learnMore)
-            cell.detailTextLabel?.attributedText = subtitle
-            cell.detailTextLabel?.numberOfLines = 0
-            cell.accessibilityIdentifier = "SettingsViewController.customAutocompleteLearnMore"
-            cell.selectionStyle = .none
-            cell.backgroundColor = .systemBackground
-            cell.layoutMargins = UIEdgeInsets.zero
-
+            let subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.autocompleteManageSitesDesc, AppInfo.productName), attributes: [.foregroundColor: UIConstants.colors.settingsDetailLabel])
+            let footer = ActionFooterView(frame: .zero)
+            footer.textLabel.attributedText = subtitle
+            footer.detailTextButton.setTitle(UIConstants.strings.learnMore, for: .normal)
+            footer.accessibilityIdentifier = "SettingsViewController.customAutocompleteLearnMore"
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(learnMoreCustomapped))
-            cell.addGestureRecognizer(tapGesture)
-
-            return cell
+            footer.detailTextButton.addGestureRecognizer(tapGesture)
+            return footer
+            
         default: return nil
         }
-    }
-    
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath)
-    {
-        cell.roundedCorners(tableView: tableView, indexPath: indexPath)
     }
 
     @objc private func defaultToggleSwitched(_ sender: UISwitch) {

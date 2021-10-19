@@ -59,7 +59,6 @@
 		845174A826CD2C7100510113 /* ShortcutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845174A726CD2C7100510113 /* ShortcutView.swift */; };
 		846A23182668CC4500DB3C37 /* FullScreen.js in Resources */ = {isa = PBXBuildFile; fileRef = 846A23172668CC4500DB3C37 /* FullScreen.js */; };
 		8493C54B267B478B001686E9 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8493C54A267B478B001686E9 /* Colors.xcassets */; };
-		84D6F8E226C656610006D634 /* UITableViewCellExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D6F8E126C656610006D634 /* UITableViewCellExtensions.swift */; };
 		84EF9F97269489980000E361 /* TipsPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84EF9F96269489980000E361 /* TipsPageControl.swift */; };
 		A89766DA1F57DCA9008183C5 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		B3481A551FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3481A541FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift */; };
@@ -102,6 +101,7 @@
 		C89AA96F271720330089838F /* ThemeTableViewAccessoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C89AA96A271720330089838F /* ThemeTableViewAccessoryCell.swift */; };
 		C89AA970271720330089838F /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = C89AA96B271720330089838F /* Theme.swift */; };
 		C8A9FE0A26E7A63F00A9C72B /* UserDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A9FE0926E7A5B900A9C72B /* UserDefault.swift */; };
+		C8C74BF4271D5D310009CE5A /* ActionFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8C74BF3271D5D310009CE5A /* ActionFooterView.swift */; };
 		D025F225218B64D600B262D8 /* SearchEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D025F224218B64D600B262D8 /* SearchEngineTests.swift */; };
 		D0967A811EC50002009D937F /* TelemetryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0967A801EC50002009D937F /* TelemetryIntegration.swift */; };
 		D30179071BC6CB19009AD388 /* BlockerEnabledDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30179061BC6CB19009AD388 /* BlockerEnabledDetector.swift */; };
@@ -576,7 +576,6 @@
 		845174A726CD2C7100510113 /* ShortcutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutView.swift; sourceTree = "<group>"; };
 		846A23172668CC4500DB3C37 /* FullScreen.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = FullScreen.js; sourceTree = "<group>"; };
 		8493C54A267B478B001686E9 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
-		84D6F8E126C656610006D634 /* UITableViewCellExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITableViewCellExtensions.swift; sourceTree = "<group>"; };
 		84EF9F96269489980000E361 /* TipsPageControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsPageControl.swift; sourceTree = "<group>"; };
 		A89766D31F57DCA8008183C5 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		A89766D41F57DCA8008183C5 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
@@ -627,6 +626,7 @@
 		C89AA96A271720330089838F /* ThemeTableViewAccessoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeTableViewAccessoryCell.swift; sourceTree = "<group>"; };
 		C89AA96B271720330089838F /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		C8A9FE0926E7A5B900A9C72B /* UserDefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefault.swift; sourceTree = "<group>"; };
+		C8C74BF3271D5D310009CE5A /* ActionFooterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionFooterView.swift; sourceTree = "<group>"; };
 		D025F224218B64D600B262D8 /* SearchEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineTests.swift; sourceTree = "<group>"; };
 		D0967A801EC50002009D937F /* TelemetryIntegration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TelemetryIntegration.swift; sourceTree = "<group>"; };
 		D30179061BC6CB19009AD388 /* BlockerEnabledDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockerEnabledDetector.swift; sourceTree = "<group>"; };
@@ -1436,6 +1436,7 @@
 				D30179C21BCC6F65009AD388 /* AboutViewController.swift */,
 				74584E341FA1077000AF2582 /* SettingsContentViewController.swift */,
 				7460BD661F58B1B10096B745 /* GradientProgressBar.swift */,
+				C8C74BF3271D5D310009CE5A /* ActionFooterView.swift */,
 				D5ABA3D81FCC846800D5C060 /* AutocompleteSettingViewController.swift */,
 				E4BF2DD61BACE8CA00DA9D68 /* AppDelegate.swift */,
 				16180DBA212F563800AFE3C2 /* Intents.intentdefinition */,
@@ -1485,7 +1486,6 @@
 				D392887E1BC5E47E0016A9A0 /* UIConstants.swift */,
 				D3E54FDD1DF0E0D6003E1AFF /* UIImageExtensions.swift */,
 				D32F71D21BCEF67C006D44FC /* UIViewExtensions.swift */,
-				84D6F8E126C656610006D634 /* UITableViewCellExtensions.swift */,
 				EB84F96E209380CE00BA6739 /* URLExtensions.swift */,
 				D3E2C96A1DA3069000DEBE3D /* URIFixup.swift */,
 				D3E2C9601DA2F7C600DEBE3D /* URLBar.swift */,
@@ -2077,6 +2077,7 @@
 				D3E54FDE1DF0E0D7003E1AFF /* UIImageExtensions.swift in Sources */,
 				16D716A5211503CD000C8A66 /* PageActionSheetItems.swift in Sources */,
 				C8337DFA2710898800093D42 /* SubtitleCell.swift in Sources */,
+				C8C74BF4271D5D310009CE5A /* ActionFooterView.swift in Sources */,
 				D597608C1F9FEFB300A2D212 /* TrackingProtection.swift in Sources */,
 				C8337DFD2710898800093D42 /* ImageCell.swift in Sources */,
 				D34E70351DA874AA00BABDCC /* StringExtensions.swift in Sources */,
@@ -2156,7 +2157,6 @@
 				845174A626CD0C2500510113 /* ShortcutsManager.swift in Sources */,
 				D3426AE91DB7F4060016DA5A /* KeyboardHelper.swift in Sources */,
 				B3CD41CC1FD1CAF000AEBD58 /* PaddedSwitch.swift in Sources */,
-				84D6F8E226C656610006D634 /* UITableViewCellExtensions.swift in Sources */,
 				D3E251EA1DAD714C005918DC /* InstructionsView.swift in Sources */,
 				D3561B2B1DB5925100A5EEAF /* GradientBackgroundView.swift in Sources */,
 				C82D143026EF62BE007B275C /* TipsPageViewController.swift in Sources */,

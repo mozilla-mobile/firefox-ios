@@ -182,7 +182,8 @@ class TrackingProtectionViewController: UIViewController {
         tableView.delegate = profileDataSource
         tableView.dataSource = profileDataSource
         tableView.backgroundColor = .systemBackground
-        tableView.separatorStyle = .none
+        tableView.separatorStyle = .singleLine
+        tableView.separatorColor = .searchSeparator.withAlphaComponent(0.65)
         tableView.tableFooterView = UIView()
         tableView.register(SwitchTableViewCell.self)
         return tableView

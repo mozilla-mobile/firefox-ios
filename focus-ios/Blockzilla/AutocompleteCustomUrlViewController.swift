@@ -38,8 +38,7 @@ class AutocompleteCustomUrlViewController: UIViewController {
         }
 
         tableView.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
-            make.leading.trailing.equalToSuperview().inset(UIConstants.layout.settingsItemInset)
+            make.edges.equalToSuperview()
         }
     }
 
@@ -55,7 +54,6 @@ class AutocompleteCustomUrlViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.backgroundColor = .systemBackground
-        tableView.layoutMargins = UIEdgeInsets.zero
         tableView.separatorColor = UIConstants.colors.settingsSeparator
     }
 
@@ -122,14 +120,8 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
 
         cell.backgroundColor = .secondarySystemBackground
         cell.textLabel?.textColor = .primaryText
-        cell.layoutMargins = UIEdgeInsets.zero
 
         return cell
-    }
-    
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath)
-    {
-        cell.roundedCorners(tableView: tableView, indexPath: indexPath)
     }
 
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

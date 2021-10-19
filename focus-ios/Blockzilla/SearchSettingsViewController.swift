@@ -14,7 +14,17 @@ class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITab
 
     private let searchEngineManager: SearchEngineManager
     private var isInEditMode = false
-    private let tableView = UITableView(frame: .zero, style: .grouped)
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView(frame: .zero, style: .insetGrouped)
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.backgroundColor = .systemBackground
+        tableView.separatorStyle = .singleLine
+        tableView.separatorColor = UIConstants.colors.settingsSeparator
+        tableView.allowsSelection = true
+        tableView.estimatedRowHeight = UITableView.automaticDimension
+        return tableView
+    }()
 
     init(searchEngineManager: SearchEngineManager) {
         self.searchEngineManager = searchEngineManager
@@ -30,33 +40,21 @@ class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITab
 
         navigationItem.title = UIConstants.strings.settingsSearchLabel
         navigationController?.navigationBar.tintColor = .accent
-        view.backgroundColor = .systemBackground
         
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
-            make.top.bottom.equalTo(self.view)
-            make.leading.trailing.equalTo(self.view).inset(UIConstants.layout.settingsItemInset)
+            make.edges.equalToSuperview()
         }
         
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.backgroundColor = .clear
-        tableView.separatorColor = UIConstants.colors.settingsSeparator
         tableView.selectRow(at: IndexPath(row: 0, section: 1), animated: false, scrollPosition: .none)
         tableView.tableFooterView = UIView()
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: UIConstants.strings.Edit, style: .plain, target: self, action: #selector(SearchSettingsViewController.toggleEditing))
         navigationItem.rightBarButtonItem?.accessibilityIdentifier = "edit"
     }
-
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {        
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if section == 0 {
-            let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
-            cell.backgroundColor = .systemBackground
-            cell.textLabel?.text = UIConstants.strings.InstalledSearchEngines
-            cell.textLabel?.font = UIConstants.fonts.tableSectionHeader
-            cell.textLabel?.textColor = UIConstants.colors.tableSectionHeader
-            
-            return cell
+            return UIConstants.strings.InstalledSearchEngines
         } else {
             return nil
         }
@@ -156,11 +154,6 @@ class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITab
 
             return cell
         }
-    }
-    
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath)
-    {
-        cell.roundedCorners(tableView: tableView, indexPath: indexPath)
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

@@ -8,14 +8,13 @@ import UIKit
 class AboutViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, AboutHeaderViewDelegate {
 
     private lazy var tableView: UITableView = {
-        let tableView = UITableView(frame: .zero, style: .grouped)
+        let tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.dataSource = self
         tableView.delegate = self
         tableView.backgroundColor = .systemBackground
-        tableView.layoutMargins = UIEdgeInsets.zero
         tableView.estimatedRowHeight = 44
-        tableView.separatorStyle = .none
-
+        tableView.separatorStyle = .singleLine
+        tableView.separatorColor = UIConstants.colors.settingsSeparator
         // Don't show trailing rows.
         tableView.tableFooterView = UIView(frame: CGRect.zero)
         return tableView
@@ -37,8 +36,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
         view.backgroundColor = .systemBackground
 
         tableView.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
-            make.leading.trailing.equalToSuperview().inset(UIConstants.layout.settingsItemInset)
+            make.edges.equalToSuperview()
         }
     }
 
@@ -57,10 +55,6 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
 
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         configureCell(cell, forRowAt: indexPath)
-        indexPath.row == 1 ? cell.roundedCorners(tableView: tableView, indexPath: IndexPath(row: indexPath.row - 1, section: 0)) : cell.roundedCorners(tableView: tableView, indexPath: indexPath)
-        if indexPath.row != 0 {
-            cell.addSeparator(tableView: tableView, indexPath: indexPath)
-        }
     }
 
     private func configureCell(_ cell: UITableViewCell, forRowAt indexPath: IndexPath) {

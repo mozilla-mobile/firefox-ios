@@ -32,10 +32,10 @@ class ThemeViewController: UIViewController {
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.backgroundColor = .systemBackground
-        tableView.layoutMargins = UIEdgeInsets.zero
-        tableView.separatorStyle = .none
+        tableView.separatorStyle = .singleLine
+        tableView.separatorColor = UIConstants.colors.settingsSeparator
         tableView.allowsMultipleSelection = false
-        tableView.estimatedRowHeight = 44
+        tableView.estimatedRowHeight = UITableView.automaticDimension
         tableView.dataSource = self
         tableView.delegate = self
         return tableView
@@ -57,8 +57,7 @@ class ThemeViewController: UIViewController {
         
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
-            make.top.bottom.equalTo(self.view)
-            make.leading.trailing.equalTo(self.view).inset(UIConstants.layout.settingsItemInset)
+            make.edges.equalToSuperview()
         }
     }
     
@@ -98,7 +97,6 @@ class ThemeViewController: UIViewController {
         cell.detailTextLabel?.textColor = .secondaryText
         cell.textLabel?.setupShrinkage()
         cell.detailTextLabel?.setupShrinkage()
-        cell.addSeparator(tableView: tableView, indexPath: indexPath, leadingOffset: UIConstants.layout.cellSeparatorLeadingOffset)
         
         return cell
     }
@@ -121,10 +119,6 @@ extension ThemeViewController: UITableViewDataSource {
 
 extension ThemeViewController: UITableViewDelegate {
     
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cell.roundedCorners(tableView: tableView, indexPath: indexPath)
-    }
-   
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return  30
     }

@@ -52,18 +52,8 @@ class SettingsTableViewAccessoryCell: SettingsTableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-
-        textLabel?.numberOfLines = 0
-        textLabel?.lineBreakMode = .byWordWrapping
-        
-        detailTextLabel?.numberOfLines = 0
-        detailTextLabel?.lineBreakMode = .byWordWrapping
-
-        selectionStyle = .none
-
         accessoryView = UIImageView(image: UIImage(systemName: "chevron.right"))
         tintColor = .secondaryText.withAlphaComponent(0.3)
-
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -179,7 +169,17 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
 
-    private let tableView = UITableView(frame: .zero, style: .grouped)
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView(frame: .zero, style: .insetGrouped)
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.backgroundColor = .systemBackground
+        tableView.separatorStyle = .singleLine
+        tableView.separatorColor = UIConstants.colors.settingsSeparator
+        tableView.allowsSelection = true
+        tableView.estimatedRowHeight = UITableView.automaticDimension
+        return tableView
+    }()
 
     // Hold a strong reference to the block detector so it isn't deallocated
     // in the middle of its detection.
@@ -295,17 +295,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
-            make.top.bottom.equalTo(self.view)
-            make.leading.trailing.equalTo(self.view).inset(UIConstants.layout.settingsItemInset)
+            make.edges.equalToSuperview()
         }
-
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.backgroundColor = .systemBackground
-        tableView.layoutMargins = UIEdgeInsets.zero
-        tableView.separatorStyle = .none
-        tableView.allowsSelection = true
-        tableView.estimatedRowHeight = 44
 
         initializeToggles()
         for (sectionIndex, toggleArray) in toggles {
@@ -482,19 +473,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         cell.textLabel?.textColor = .primaryText
         cell.layoutMargins = UIEdgeInsets.zero
         cell.detailTextLabel?.textColor = .secondaryText
-
-        cell.textLabel?.setupShrinkage()
-        cell.detailTextLabel?.setupShrinkage()
-
-        
-        cell.addSeparator(tableView: tableView, indexPath: indexPath, leadingOffset: UIConstants.layout.cellSeparatorLeadingOffset)
         
         return cell
-    }
-    
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath)
-    {
-        cell.roundedCorners(tableView: tableView, indexPath: indexPath)
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -511,52 +491,23 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let boundingRect = NSString(string: text).boundingRect(with: size, options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: attrs, context: nil)
         return boundingRect.height
     }
-
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        var groupingOffset = UIConstants.layout.settingsDefaultTitleOffset
-
-        if sections[section] == .privacy {
-            groupingOffset = UIConstants.layout.settingsFirstTitleOffset
-        }
-
-        // Hack: We want the header view's margin to match the cells, so we create an empty
-        // cell with a blank space as text to layout the text label. From there, we can define
-        // constraints for our custom label based on the cell's label.
-        let cell = UITableViewCell()
-        cell.textLabel?.text = " "
-        cell.backgroundColor = .systemBackground
-
-        let label = SmartLabel()
-        label.text = sections[section].headerText
-        label.textColor = .secondaryText
-        label.font = UIConstants.fonts.tableSectionHeader
-        cell.contentView.addSubview(label)
-
-        label.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(cell.textLabel!)
-            make.centerY.equalTo(cell.textLabel!).offset(groupingOffset)
-        }
-        return cell
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return sections[section].headerText
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         if let text = toggles[section]?.first?.value.subtitle {
-            let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
-            cell.backgroundColor = .systemBackground
-            cell.textLabel?.numberOfLines = 0
-            cell.textLabel?.textColor = .tertiaryLabel
-            cell.textLabel?.font = UIConstants.fonts.tableSectionHeader
-            cell.textLabel?.text = text
-            
+            let footer = ActionFooterView(frame: .zero)
+            footer.textLabel.text = text
+
             if section == 1 || section == 2 {
                 let selector = toggles[section]?.first?.value.label == UIConstants.strings.labelSendAnonymousUsageData ? #selector(tappedLearnMoreFooter) : #selector(tappedLearnMoreSearchSuggestionsFooter)
                 let tapGesture = UITapGestureRecognizer(target: self, action: selector)
-                cell.detailTextLabel?.text = UIConstants.strings.learnMore
-                cell.detailTextLabel?.textColor = .accent
-                cell.textLabel?.font = UIConstants.fonts.tableSectionHeader
-                cell.addGestureRecognizer(tapGesture)
+                footer.detailTextButton.setTitle(UIConstants.strings.learnMore, for: .normal)
+                footer.detailTextButton.addGestureRecognizer(tapGesture)
             }
-            return cell
+            return footer
         } else {
             return nil
         }
