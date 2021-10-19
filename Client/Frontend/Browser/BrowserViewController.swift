@@ -1852,10 +1852,13 @@ extension BrowserViewController: TabManagerDelegate {
             return
         }
 
-        toast.showToast(viewController: self, delay: delay, duration: duration, makeConstraints: { make in
-            make.left.right.equalTo(self.view)
-            make.bottom.equalTo(self.alertStackView.snp.bottom)
-        })
+        toast.showToast(viewController: self, delay: delay, duration: duration) { make in
+            [
+                make.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+                make.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+                make.bottomAnchor.constraint(equalTo: self.alertStackView.bottomAnchor)
+            ]
+        }
     }
 
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {

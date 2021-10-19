@@ -3,11 +3,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Shared
-import SnapKit
 
 class ASLibraryCell: UICollectionViewCell, Themeable {
 
-    var mainView = UIStackView()
+    var mainView: UIStackView = .build()
 
     struct LibraryPanel {
         let title: String
@@ -26,9 +25,13 @@ class ASLibraryCell: UICollectionViewCell, Themeable {
         super.init(frame: frame)
         mainView.distribution = .equalCentering
         addSubview(mainView)
-        mainView.snp.makeConstraints { make in
-            make.edges.equalTo(self)
-        }
+
+        NSLayoutConstraint.activate([
+            mainView.topAnchor.constraint(equalTo: topAnchor),
+            mainView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            mainView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            mainView.trailingAnchor.constraint(equalTo: trailingAnchor)
+        ])
 
         [bookmarks, history, downloads, readingList].forEach { item in
             let view = LibraryShortcutView()

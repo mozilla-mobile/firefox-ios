@@ -85,16 +85,18 @@ class ThemeSettingsController: ThemedTableViewController {
         guard isAutoBrightnessOn && section == Section.lightDarkPicker.rawValue else { return nil }
 
         let footer = UIView()
-        let label = UILabel()
-        footer.addSubview(label)
-        label.text = Strings.DisplayThemeSectionFooter
-        label.numberOfLines = 0
-        label.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(4)
-            make.left.right.equalToSuperview().inset(16)
+        let label: UILabel = .build { label in
+            label.text = Strings.DisplayThemeSectionFooter
+            label.numberOfLines = 0
+            label.font = UIFont.systemFont(ofSize: UX.footerFontSize)
+            label.textColor = UIColor.theme.tableView.headerTextLight
         }
-        label.font = UIFont.systemFont(ofSize: UX.footerFontSize)
-        label.textColor = UIColor.theme.tableView.headerTextLight
+        footer.addSubview(label)
+        NSLayoutConstraint.activate([
+            label.topAnchor.constraint(equalTo: footer.topAnchor, constant: 4),
+            label.leadingAnchor.constraint(equalTo: footer.leadingAnchor, constant: 16),
+            label.trailingAnchor.constraint(equalTo: footer.trailingAnchor, constant: -16),
+        ])
         return footer
     }
 
@@ -145,19 +147,23 @@ class ThemeSettingsController: ThemedTableViewController {
     }
 
     private func makeSlider(parent: UIView) -> UISlider {
-        let slider = UISlider()
-        parent.addSubview(slider)
         let size = CGSize(width: UX.moonSunIconSize, height: UX.moonSunIconSize)
         let images = ["menu-NightMode", "themeBrightness"].map { name in
             UIImage(imageLiteralResourceName: name).createScaled(size).tinted(withColor: UIColor.theme.browser.tint)
         }
-        slider.minimumValueImage = images[0]
-        slider.maximumValueImage = images[1]
 
-        slider.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
-            make.left.right.equalToSuperview().inset(UX.sliderLeftRightInset)
+        let slider: UISlider = .build { slider in
+            slider.minimumValueImage = images[0]
+            slider.maximumValueImage = images[1]
         }
+        parent.addSubview(slider)
+
+        NSLayoutConstraint.activate([
+            slider.topAnchor.constraint(equalTo: parent.topAnchor),
+            slider.bottomAnchor.constraint(equalTo: parent.bottomAnchor),
+            slider.leadingAnchor.constraint(equalTo: parent.leadingAnchor, constant: UX.sliderLeftRightInset),
+            slider.trailingAnchor.constraint(equalTo: parent.trailingAnchor, constant: -UX.sliderLeftRightInset),
+        ])
         return slider
     }
 

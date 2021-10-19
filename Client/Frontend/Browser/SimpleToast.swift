@@ -21,21 +21,22 @@ struct SimpleToast {
         let toast = self.createView()
         toast.text = text
         bottomContainer.addSubview(toast)
-        toast.snp.makeConstraints { (make) in
-            make.width.equalTo(bottomContainer)
-            make.left.equalTo(bottomContainer)
-            make.height.equalTo(SimpleToastUX.ToastHeight)
-            make.bottom.equalTo(bottomContainer)
-        }
+        NSLayoutConstraint.activate([
+            toast.widthAnchor.constraint(equalTo: bottomContainer.widthAnchor),
+            toast.leadingAnchor.constraint(equalTo: bottomContainer.leadingAnchor),
+            toast.bottomAnchor.constraint(equalTo: bottomContainer.bottomAnchor),
+            toast.heightAnchor.constraint(equalToConstant: SimpleToastUX.ToastHeight),
+        ])
         animate(toast)
     }
 
     fileprivate func createView() -> UILabel {
-        let toast = UILabel()
-        toast.textColor = UIColor.Photon.White100
-        toast.backgroundColor = SimpleToastUX.ToastDefaultColor
-        toast.font = SimpleToastUX.ToastFont
-        toast.textAlignment = .center
+        let toast: UILabel = .build { label in
+            label.textColor = UIColor.Photon.White100
+            label.backgroundColor = SimpleToastUX.ToastDefaultColor
+            label.font = SimpleToastUX.ToastFont
+            label.textAlignment = .center
+        }
         return toast
     }
 
