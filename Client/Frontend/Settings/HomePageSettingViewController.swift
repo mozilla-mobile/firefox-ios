@@ -22,6 +22,24 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    lazy var homescreen = Experiments.shared.withVariables(featureId: .homescreen, sendExposureEvent: false) {
+        Homescreen(variables: $0)
+    }
+
+    var isJumpBackInSectionEnabled: Bool {
+        let isFeatureEnabled = featureFlags.isFeatureActiveForBuild(.jumpBackIn)
+        let isNimbusFeatureEnabled = homescreen.sectionsEnabled[.jumpBackIn] == true
+        guard isFeatureEnabled, isNimbusFeatureEnabled else { return false }
+        return true
+    }
+
+    var isRecentlySavedSectionEnabled: Bool {
+        let isFeatureEnabled = featureFlags.isFeatureActiveForBuild(.recentlySaved)
+        let isNimbusFeatureEnabled = homescreen.sectionsEnabled[.recentlySaved] == true
+        guard isFeatureEnabled, isNimbusFeatureEnabled else { return false }
+        return true
+    }
 
     override func generateSettings() -> [SettingSection] {
 
@@ -75,14 +93,16 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
         let recentlySavedSetting = BoolSetting(with: .recentlySaved,
                                                titleText: NSAttributedString(string: .SettingsCustomizeHomeRecentlySaved))
 
-//        let recentlyVisitedSetting = BoolSetting(with: .recentlyVisited,
-//                                                 titleText: NSAttributedString(string: .FirefoxHomeJumpBackInSectionTitle))
-
-
         sectionItems.append(TopSitesSettings(settings: self))
-        sectionItems.append(jumpBackInSetting)
-        sectionItems.append(recentlySavedSetting)
-//        sectionItems.append(recentlyVisitedSetting)
+
+        if isJumpBackInSectionEnabled {
+            sectionItems.append(jumpBackInSetting)
+        }
+
+        if isRecentlySavedSectionEnabled {
+            sectionItems.append(recentlySavedSetting)
+        }
+
         sectionItems.append(pocketSetting)
 
         return SettingSection(title: NSAttributedString(string: Strings.SettingsTopSitesCustomizeTitle),
