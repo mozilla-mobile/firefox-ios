@@ -244,7 +244,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
 
     private func displaySplashAnimation() {
         let splashView = self.splashView
-        splashView.backgroundColor = UIConstants.colors.background
+        splashView.backgroundColor = .launchScreenBackground
         window!.addSubview(splashView)
 
         let logoImage = UIImageView(image: AppInfo.config.wordmark)
