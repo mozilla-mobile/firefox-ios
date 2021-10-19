@@ -372,6 +372,12 @@ class BrowserViewController: UIViewController {
 
         // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
         scrollController.showToolbars(animated: false)
+
+        // Update lock icon without redrawing the whole locationView
+        if let tab = tabManager.selectedTab {
+            urlBar.locationView.tabDidChangeContentBlocking(tab)
+        }
+
         // TODO: When implementing StartATHome, this might be a good place to call
         // the feature when restoring not from a launch.
     }
