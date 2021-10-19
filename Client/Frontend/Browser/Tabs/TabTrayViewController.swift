@@ -128,15 +128,13 @@ class TabTrayViewController: UIViewController {
         let toolbar = UIToolbar()
         toolbar.delegate = self
         toolbar.setItems([UIBarButtonItem(customView: navigationMenu)], animated: false)
-
+        toolbar.isTranslucent = false
         return toolbar
     }()
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
-
-    var onViewDismissed: (() -> Void)? = nil
 
     // Initializers
     init(tabTrayDelegate: TabTrayDelegate? = nil, profile: Profile, showChronTabs: Bool = false, tabToFocus: Tab? = nil) {
@@ -147,12 +145,6 @@ class TabTrayViewController: UIViewController {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        onViewDismissed?()
-        onViewDismissed = nil
     }
 
     deinit {
@@ -186,9 +178,7 @@ class TabTrayViewController: UIViewController {
            let window = appWindow as UIWindow? {
             window.backgroundColor = .black
         }
-
-        navigationController?.navigationBar.shadowImage = UIImage()
-
+        
         if shouldUseiPadSetup {
             iPadViewSetup()
         } else {
@@ -354,11 +344,6 @@ extension TabTrayViewController: Themeable {
      @objc func applyTheme() {
          overrideUserInterfaceStyle =  ThemeManager.instance.userInterfaceStyle
          view.backgroundColor = UIColor.theme.tabTray.background
-         navigationController?.navigationBar.barTintColor = UIColor.theme.tabTray.toolbar
-         navigationController?.navigationBar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
-         navigationController?.toolbar.barTintColor = UIColor.theme.tabTray.toolbar
-         navigationController?.toolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
-         navigationItem.rightBarButtonItem?.tintColor = UIColor.theme.tabTray.toolbarButtonTint
          navigationToolbar.barTintColor = UIColor.theme.tabTray.toolbar
          navigationToolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
          let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
@@ -368,7 +353,6 @@ extension TabTrayViewController: Themeable {
              navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
          }
          viewModel.syncedTabsController.applyTheme()
-         setNeedsStatusBarAppearanceUpdate()
      }
  }
 
