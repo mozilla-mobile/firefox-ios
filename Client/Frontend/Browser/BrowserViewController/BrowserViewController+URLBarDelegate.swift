@@ -61,14 +61,14 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
 
         guard self.tabTrayViewController != nil else { return }
 
-        let controller = DismissableNavigationViewController(rootViewController: tabTrayViewController!)
-        controller.presentationController?.delegate = tabTrayViewController
+        let navigationController = ThemedDefaultNavigationController(rootViewController: tabTrayViewController!)
+        navigationController.presentationController?.delegate = tabTrayViewController
         // If we're not using the system theme, override the view's style to match
         if !ThemeManager.instance.systemThemeIsOn {
-            controller.overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
+            navigationController.overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
         }
 
-        self.present(controller, animated: true, completion: nil)
+        self.present(navigationController, animated: true, completion: nil)
 
         if let tab = tabManager.selectedTab {
             screenshotHelper.takeScreenshot(tab)
