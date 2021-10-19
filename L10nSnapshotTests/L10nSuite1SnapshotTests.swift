@@ -19,6 +19,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testIntro() {
+        sleep(3)
         var num = 1
         waitForExistence(app.buttons["nextOnboardingButton"], timeout: 15)
         navigator.nowAt(Intro_Welcome)
@@ -80,6 +81,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testTopSitesMenu() {
+        sleep(3)
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         app.buttons["urlBar-cancel"].tap()
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 15)
@@ -104,10 +106,11 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testBookmarksTableContextMenu() {
+        sleep(3)
         navigator.openURL(loremIpsumURL)
         // There is no other way the test work with the new Copied.. snackbar ahow on iOS14
         waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
-        waitForExistence(app.buttons["TabLocationView.pageOptionsButton"], timeout: 5)
+        waitForExistence(app.buttons["TabLocationView.pageOptionsButton"], timeout: 15)
         navigator.performAction(Action.Bookmark)
         navigator.createNewTab()
         app.buttons["urlBar-cancel"].tap()
@@ -177,9 +180,9 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
     func testSetDefaultBrowser() {
         if #available(iOS 14, *) {
-            waitForExistence(app.buttons["Home.learnMoreDefaultBrowserbutton"], timeout: 10)
+            waitForExistence(app.buttons["Home.learnMoreDefaultBrowserbutton"], timeout: 15)
             app.buttons["Home.learnMoreDefaultBrowserbutton"].tap()
-            waitForExistence(app.buttons["DefaultBrowserCard.goToSettingsButton"], timeout: 5)
+            waitForExistence(app.buttons["DefaultBrowserCard.goToSettingsButton"], timeout: 15)
             snapshot("HomeDefaultBrowserLearnMore")
         }
     }
