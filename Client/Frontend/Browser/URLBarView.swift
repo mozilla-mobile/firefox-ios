@@ -454,6 +454,10 @@ class URLBarView: UIView {
         locationView.readerModeState = state
         locationView.reloadButton.isHidden = false
     }
+    
+    func shouldHideReloadButton(_ isHidden: Bool) {
+        locationView.reloadButton.isHidden = isHidden
+    }
 
     func setAutocompleteSuggestion(_ suggestion: String?) {
         locationTextField?.setAutocompleteSuggestion(suggestion)
