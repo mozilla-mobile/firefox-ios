@@ -891,6 +891,7 @@
 		EBE7635920ADCB7600E27F2D /* SendTo.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EBE7634F20ADCB7500E27F2D /* SendTo.xcassets */; };
 		EBF47E701F7979DF00899189 /* TelemetryWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF47E6F1F7979DF00899189 /* TelemetryWrapper.swift */; };
 		EBFDB790211C83A5005CCA2F /* BrowserViewController+FindInPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFDB787211C83A5005CCA2F /* BrowserViewController+FindInPage.swift */; };
+		F018F84C2719AE8300B9A52D /* ThemedDefaultNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F018F84B2719AE8300B9A52D /* ThemedDefaultNavigationController.swift */; };
 		F35B8D2B1D6380EA008E3D61 /* SessionRestore.html in Resources */ = {isa = PBXBuildFile; fileRef = F35B8D2A1D6380EA008E3D61 /* SessionRestore.html */; };
 		F35B8D2D1D6383E9008E3D61 /* SessionRestoreHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F35B8D2C1D6383E9008E3D61 /* SessionRestoreHelper.swift */; };
 		F80DF73F27034F6400E4C37D /* DynamicFontHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075531E37F6FC006961AC /* DynamicFontHelper.swift */; };
@@ -4047,6 +4048,7 @@
 		EFE04EF99B075B44BC9471D9 /* br */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = br; path = br.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		EFE44E55AFFD127B71CA0D69 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		F013431EA44E12FB0FCFF807 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/Shared.strings; sourceTree = "<group>"; };
+		F018F84B2719AE8300B9A52D /* ThemedDefaultNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedDefaultNavigationController.swift; sourceTree = "<group>"; };
 		F0274B0C93DBD0B387D06FA0 /* rm */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = rm; path = rm.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		F056404C95CB2126721F3CC5 /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/ErrorPages.strings"; sourceTree = "<group>"; };
 		F0714CEBB2F56CE586DB6CF7 /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/FindInPage.strings; sourceTree = "<group>"; };
@@ -5491,6 +5493,7 @@
 				E663D5771BB341C4001EF30E /* ToggleButton.swift */,
 				59A68B1F857A8638598A63A0 /* TwoLineCellAndFooter.swift */,
 				23A50957253F782E008FEBD9 /* NewTabButton.swift */,
+				F018F84B2719AE8300B9A52D /* ThemedDefaultNavigationController.swift */,
 			);
 			path = Widgets;
 			sourceTree = "<group>";
@@ -8026,6 +8029,7 @@
 				274A36C9239EB94000A21587 /* LibraryPanelButton.swift in Sources */,
 				435D660523D794B90046EFA2 /* UpdateViewModel.swift in Sources */,
 				D0152245229855A8009DE753 /* OneLineCellAndFooter.swift in Sources */,
+				F018F84C2719AE8300B9A52D /* ThemedDefaultNavigationController.swift in Sources */,
 				D3B6923F1B9F9A58004B87A4 /* FindInPageHelper.swift in Sources */,
 				39EF4378260CF5A30011E22E /* AppDelegate+Experiments.swift in Sources */,
 				EB9A179C20E69A7F00B12184 /* DarkTheme.swift in Sources */,
