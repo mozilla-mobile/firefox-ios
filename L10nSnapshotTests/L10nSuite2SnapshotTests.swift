@@ -7,7 +7,7 @@ import XCTest
 class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
 
     func testPanelsEmptyState() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         app.buttons["urlBar-cancel"].tap()
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
         navigator.nowAt(NewTabScreen)
@@ -37,7 +37,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testURLBar() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         navigator.goto(URLBarOpen)
         snapshot("URLBar-01")
 
@@ -79,7 +79,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testPageMenuOnWebPage() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         app.buttons["urlBar-cancel"].tap()
         navigator.goto(BrowserTab)
         waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
@@ -90,7 +90,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testFxASignInPage() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 10)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         app.buttons["urlBar-cancel"].tap()
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
         navigator.nowAt(NewTabScreen)
@@ -109,7 +109,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testPasscodeSettings() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         app.buttons["urlBar-cancel"].tap()
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
         navigator.nowAt(NewTabScreen)
@@ -138,12 +138,14 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testLoginDetails() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         app.buttons["urlBar-cancel"].tap()
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
+        app.cells["SignInToSync"].swipeUp()
+        waitForExistence(app.cells["Logins"], timeout: 3)
         navigator.goto(LoginsSettings)
-        waitForExistence(app.tables["Login List"])
+        waitForExistence(app.tables["Login List"], timeout: 10)
         app.buttons.element(boundBy: 1).tap()
         waitForExistence(app.tables["Add Credential"], timeout: 3)
         snapshot("CreateLogin")
@@ -155,7 +157,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         app.keyboards.keys.element(boundBy: 3).tap()
         app.navigationBars["Client.AddCredentialView"].buttons.element(boundBy: 1).tap()
 
-        waitForExistence(app.tables["Login List"],timeout: 5)
+        waitForExistence(app.tables["Login List"],timeout: 15)
         snapshot("CreatedLoginView")
 
         app.tables["Login List"].cells.element(boundBy: 2).tap()
