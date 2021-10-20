@@ -6,14 +6,15 @@ import UIKit
 import Telemetry
 import SnapKit
 
-protocol HomeViewDelegate: AnyObject {
-    func shareTrackerStatsButtonTapped(_ sender: UIButton)
-    func didTapTip(_ tip: TipManager.Tip)
+protocol HomeViewControllerDelegate: AnyObject {
+    func homeViewControllerDidTapShareTrackers(_ controller: HomeViewController, sender: UIButton)
+    func homeViewControllerDidTapTip(_ controller: HomeViewController, tip: TipManager.Tip)
+    func homeViewControllerDidTouchEmptyArea(_ controller: HomeViewController)
 }
 
 class HomeViewController: UIViewController {
     
-    weak var delegate: HomeViewDelegate?
+    weak var delegate: HomeViewControllerDelegate?
     private let tipView = UIView()
     
     private lazy var textLogo: UIImageView = {
@@ -24,7 +25,11 @@ class HomeViewController: UIViewController {
     }()
     
     private let tipManager: TipManager
-    private lazy var tipsViewController = TipsPageViewController(tipManager: tipManager, tipTapped: didTap(tip:))
+    private lazy var tipsViewController = TipsPageViewController(
+        tipManager: tipManager,
+        tipTapped: didTap(tip:),
+        tapOutsideAction: dismissKeyboard
+    )
      
     public var tipViewTop: ConstraintItem { tipView.snp.top }
 
@@ -45,9 +50,9 @@ class HomeViewController: UIViewController {
         rotated()
         NotificationCenter.default.addObserver(self, selector: #selector(rotated), name: UIDevice.orientationDidChangeNotification, object: nil)
 
-        view.addSubview(textLogo)
-        view.addSubview(toolbar)
-        view.addSubview(tipView)
+        self.view.addSubview(textLogo)
+        self.view.addSubview(toolbar)
+        self.view.addSubview(tipView)
 
         textLogo.snp.makeConstraints { make in
             make.centerX.equalTo(self.view)
@@ -85,7 +90,8 @@ class HomeViewController: UIViewController {
                     controller: ShareTrackersViewController(
                         trackerTitle: tipManager.shareTrackersDescription(),
                         shareTap: { [weak self] sender in
-                            self?.delegate?.shareTrackerStatsButtonTapped(sender)
+                            guard let self = self else { return }
+                            self.delegate?.homeViewControllerDidTapShareTrackers(self, sender: sender)
                         }
                     )))
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.trackerStatsShareButton)
@@ -169,8 +175,11 @@ class HomeViewController: UIViewController {
         }
     }
 
-
     private func didTap(tip: TipManager.Tip) {
-        delegate?.didTapTip(tip)
+        delegate?.homeViewControllerDidTapTip(self, tip : tip)
+    }
+    
+    private func dismissKeyboard() {
+        delegate?.homeViewControllerDidTouchEmptyArea(self)
     }
 }

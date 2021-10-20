@@ -35,13 +35,18 @@ class TipViewController: UIViewController {
     }()
     
     public let tip: TipManager.Tip
-    private let tipTappedAction: (TipManager.Tip) -> ()
+    private let tipTappedAction: (TipManager.Tip) -> Void
+    private let tapOutsideAction: () -> Void
     
-    init(tip: TipManager.Tip, tipTappedAction: @escaping (TipManager.Tip) -> ()) {
-        self.tip = tip
-        self.tipTappedAction = tipTappedAction
-        super.init(nibName: nil, bundle: nil)
-    }
+    init(
+        tip: TipManager.Tip,
+        tipTappedAction: @escaping (TipManager.Tip) -> Void,
+        tapOutsideAction: @escaping () -> Void) {
+            self.tip = tip
+            self.tipTappedAction = tipTappedAction
+            self.tapOutsideAction = tapOutsideAction
+            super.init(nibName: nil, bundle: nil)
+        }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -51,6 +56,8 @@ class TipViewController: UIViewController {
         super.viewDidLoad()
                 
         view.addSubview(stackView)
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tapOutside))
+        view.addGestureRecognizer(tap)
         
         tipTitleLabel.text = tip.title
         tipDescriptionButton.setTitle(tip.description, for: .normal)
@@ -64,5 +71,9 @@ class TipViewController: UIViewController {
     
     @objc private func tapTip() {
         tipTappedAction(tip)
+    }
+    
+    @objc private func tapOutside() {
+        tapOutsideAction()
     }
 }

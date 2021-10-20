@@ -1362,9 +1362,12 @@ extension BrowserViewController: BrowserToolsetDelegate {
     }
 }
 
-extension BrowserViewController: HomeViewDelegate {
+extension BrowserViewController: HomeViewControllerDelegate {
+    func homeViewControllerDidTouchEmptyArea(_ controller: HomeViewController) {
+        urlBar.dismiss()
+    }
 
-    func shareTrackerStatsButtonTapped(_ sender: UIButton) {
+    func homeViewControllerDidTapShareTrackers(_ controller: HomeViewController, sender: UIButton) {
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.share, object: TelemetryEventObject.trackerStatsShareButton)
 
         let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
@@ -1390,7 +1393,7 @@ extension BrowserViewController: HomeViewDelegate {
         submit(url: url)
     }
 
-    func didTapTip(_ tip: TipManager.Tip) {
+    func homeViewControllerDidTapTip(_ controller: HomeViewController, tip: TipManager.Tip) {
         urlBar.dismiss()
         guard let action = tip.action else { return }
         switch action {
