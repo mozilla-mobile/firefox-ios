@@ -1580,7 +1580,7 @@ device:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/9374
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9376
     data_sensitivity:
       - technical
     notification_emails:
