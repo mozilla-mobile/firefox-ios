@@ -20,7 +20,6 @@ class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITab
         tableView.delegate = self
         tableView.backgroundColor = .systemBackground
         tableView.separatorStyle = .singleLine
-        tableView.separatorColor = UIConstants.colors.settingsSeparator
         tableView.allowsSelection = true
         tableView.estimatedRowHeight = UITableView.automaticDimension
         return tableView

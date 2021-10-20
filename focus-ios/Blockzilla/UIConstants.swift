@@ -35,12 +35,10 @@ struct UIConstants {
         static let navigationTitle = UIConstants.Photon.Grey10
         static let overlayBackground = UIColor(white: 0, alpha: 0.8)
         static let searchSuggestion = UIConstants.Photon.Grey10.withAlphaComponent(0.6)
-        static let settingsDetailLabel = UIConstants.Photon.Grey10.withAlphaComponent(0.6)
         static let settingsDisabled = UIColor(rgb: 0xB2B2B2)
         static let settingsLink = UIConstants.Photon.Magenta40
         static let settingsNavBar = UIConstants.Photon.Ink80.withAlphaComponent(0.9)
         static let settingsNavBorder = UIConstants.Photon.Grey10.withAlphaComponent(0.5)
-        static let settingsSeparator = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
         static let settingsTextLabel = UIConstants.Photon.Grey10
         static let siriTint = UIConstants.Photon.Magenta40
         static let tableSectionHeader = UIConstants.Photon.Grey10.withAlphaComponent(0.6)

@@ -183,7 +183,7 @@ class OverlayView: UIView {
             findInPageButton.layer.cornerRadius = UIConstants.layout.suggestionViewCornerRadius
             findInPageButton.clipsToBounds =  true
             findInPageButton.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
-            lastSeparator.backgroundColor = .searchSeparator.withAlphaComponent(0.65)
+            lastSeparator.backgroundColor = .systemGray
             topBorder.backgroundColor = .clear
             
         } else {
@@ -213,7 +213,7 @@ class OverlayView: UIView {
         
         if i != 0 {
             let separator = UIView()
-            separator.backgroundColor = .searchSeparator.withAlphaComponent(0.65)
+            separator.backgroundColor = .systemGray
             self.separatorGroup.append(separator)
             searchButton.addSubview(separator)
             

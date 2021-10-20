@@ -113,7 +113,7 @@ class SiriFavoriteViewController: UIViewController {
         }
 
         let topBorder = UIView()
-        topBorder.backgroundColor = UIConstants.colors.settingsSeparator
+        topBorder.backgroundColor = .systemGray
         editView.addSubview(topBorder)
         topBorder.snp.makeConstraints { make in
             make.height.equalTo(UIConstants.layout.separatorHeight)
@@ -121,7 +121,7 @@ class SiriFavoriteViewController: UIViewController {
         }
 
         let bottomBorder = UIView()
-        bottomBorder.backgroundColor = UIConstants.colors.settingsSeparator
+        bottomBorder.backgroundColor = .systemGray
         editView.addSubview(bottomBorder)
         bottomBorder.snp.makeConstraints { make in
             make.height.equalTo(UIConstants.layout.separatorHeight)

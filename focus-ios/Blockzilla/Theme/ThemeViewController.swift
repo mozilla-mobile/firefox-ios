@@ -33,7 +33,6 @@ class ThemeViewController: UIViewController {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.backgroundColor = .systemBackground
         tableView.separatorStyle = .singleLine
-        tableView.separatorColor = UIConstants.colors.settingsSeparator
         tableView.allowsMultipleSelection = false
         tableView.estimatedRowHeight = UITableView.automaticDimension
         tableView.dataSource = self

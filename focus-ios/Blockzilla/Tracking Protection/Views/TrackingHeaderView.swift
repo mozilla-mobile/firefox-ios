@@ -30,7 +30,7 @@ class TrackingHeaderView: UIView {
     
     private lazy var separator: UIView = {
         let view = UIView()
-        view.backgroundColor = .searchSeparator.withAlphaComponent(0.65)
+        view.backgroundColor = .systemGray
         return view
     }()
     

@@ -54,7 +54,6 @@ class AutocompleteCustomUrlViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.backgroundColor = .systemBackground
-        tableView.separatorColor = UIConstants.colors.settingsSeparator
     }
 
     override func viewWillAppear(_ animated: Bool) {

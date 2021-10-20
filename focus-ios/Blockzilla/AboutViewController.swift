@@ -14,7 +14,6 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
         tableView.backgroundColor = .systemBackground
         tableView.estimatedRowHeight = 44
         tableView.separatorStyle = .singleLine
-        tableView.separatorColor = UIConstants.colors.settingsSeparator
         // Don't show trailing rows.
         tableView.tableFooterView = UIView(frame: CGRect.zero)
         return tableView
