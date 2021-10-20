@@ -194,10 +194,10 @@ class URLBar: UIView {
         truncatedUrlText.alpha = 0
         truncatedUrlText.isUserInteractionEnabled = false
         truncatedUrlText.font = UIConstants.fonts.truncatedUrlText
-        truncatedUrlText.tintColor = UIConstants.colors.urlTextFont
+        truncatedUrlText.tintColor = .primaryText
+        truncatedUrlText.textColor = .primaryText
         truncatedUrlText.backgroundColor = UIColor.clear
         truncatedUrlText.contentMode = .bottom
-        truncatedUrlText.textColor = UIConstants.colors.urlTextFont
         truncatedUrlText.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .vertical)
         truncatedUrlText.isScrollEnabled = false
         truncatedUrlText.accessibilityIdentifier = "Collapsed.truncatedUrlText"
@@ -926,9 +926,9 @@ private class URLTextField: AutocompleteTextField {
 }
 
 class TrackingProtectionBadge: UIView {
-    let trackingProtectionOff = UIImageView(image: .trackingProtectionOff.imageFlippedForRightToLeftLayoutDirection())
-    let trackingProtectionOn = UIImageView(image: .trackingProtectionOn.imageFlippedForRightToLeftLayoutDirection())
-    let connectionNotSecure = UIImageView(image: .connectionNotSecure.imageFlippedForRightToLeftLayoutDirection())
+    let trackingProtectionOff = UIImageView(image: .trackingProtectionOff)
+    let trackingProtectionOn = UIImageView(image: .trackingProtectionOn)
+    let connectionNotSecure = UIImageView(image: .connectionNotSecure)
 
     override init(frame: CGRect) {
         super.init(frame: frame)

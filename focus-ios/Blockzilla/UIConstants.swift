@@ -46,7 +46,6 @@ struct UIConstants {
         static let toastText = UIColor.white
         static let toggleOff = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
         static let toggleOn = UIConstants.Photon.Magenta40
-        static let urlTextFont = UIConstants.Photon.Grey10
         static let urlTextHighlight = UIConstants.Photon.Magenta40
         static let urlTextPlaceholder = UIConstants.Photon.Grey10.withAlphaComponent(0.4)
         static let whatsNew = UIConstants.Photon.Teal50

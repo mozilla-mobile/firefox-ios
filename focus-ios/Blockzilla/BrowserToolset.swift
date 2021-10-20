@@ -24,32 +24,24 @@ class BrowserToolset {
     let contextMenuButton = InsetButton()
 
     init() {
-        backButton.tintColor = .primaryText
         backButton.setImage(#imageLiteral(resourceName: "icon_back_active"), for: .normal)
-        backButton.setImage(#imageLiteral(resourceName: "icon_back_active").alpha(0.4), for: .disabled)
         backButton.addTarget(self, action: #selector(didPressBack), for: .touchUpInside)
         backButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         backButton.accessibilityLabel = UIConstants.strings.browserBack
         backButton.isEnabled = false
 
-        forwardButton.tintColor = .primaryText
         forwardButton.setImage(#imageLiteral(resourceName: "icon_forward_active"), for: .normal)
-        forwardButton.setImage(#imageLiteral(resourceName: "icon_forward_active").alpha(UIConstants.layout.browserToolbarDisabledOpacity), for: .disabled)
         forwardButton.addTarget(self, action: #selector(didPressForward), for: .touchUpInside)
         forwardButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         forwardButton.accessibilityLabel = UIConstants.strings.browserForward
         forwardButton.isEnabled = false
 
-        stopReloadButton.tintColor = .primaryText
         stopReloadButton.setImage(#imageLiteral(resourceName: "icon_refresh_menu"), for: .normal)
-        stopReloadButton.setImage(#imageLiteral(resourceName: "icon_refresh_menu").alpha(UIConstants.layout.browserToolbarDisabledOpacity), for: .disabled)
         stopReloadButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         stopReloadButton.addTarget(self, action: #selector(didPressStopReload), for: .touchUpInside)
         stopReloadButton.accessibilityIdentifier = "BrowserToolset.stopReloadButton"
         
-        deleteButton.tintColor = .primaryText
         deleteButton.setImage(#imageLiteral(resourceName: "icon_delete"), for: .normal)
-        deleteButton.setImage(#imageLiteral(resourceName: "icon_delete").alpha(UIConstants.layout.browserToolbarDisabledOpacity), for: .disabled)
         deleteButton.addTarget(self, action: #selector(didPressDelete), for: .touchUpInside)
         deleteButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         deleteButton.accessibilityIdentifier = "URLBar.deleteButton"
