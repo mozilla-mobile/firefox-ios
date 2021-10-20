@@ -247,6 +247,15 @@ extension Strings {
     public static let BreachAlertsBreachDate = MZLocalizedString("BreachAlerts.BreachDate", value: "This breach occurred on", comment: "Describes the date on which the breach occurred")
     public static let BreachAlertsDescription = MZLocalizedString("BreachAlerts.Description", value: "Passwords were leaked or stolen since you last changed your password. To protect this account, log in to the site and change your password.", comment: "Description of what a breach is")
     public static let BreachAlertsLink = MZLocalizedString("BreachAlerts.Link", value: "Go to", comment: "Leads to a link to the breached website")
+
+    // For the DevicePasscodeRequiredViewController
+    public static let LoginsDevicePasscodeRequiredMessage = MZLocalizedString("Logins.DevicePasscodeRequired.Message", value: "To save and autofill logins and passwords, enable Face ID, Touch ID or a device passcode.", comment: "Message shown when you enter Logins & Passwords without having a device passcode set.")
+    public static let LoginsDevicePasscodeRequiredLearnMoreButtonTitle = MZLocalizedString("Logins.DevicePasscodeRequired.LearnMoreButtonTitle", value: "Learn More", comment: "Title of the Learn More button that links to a support page about device passcode requirements.")
+
+    // For the LoginOnboardingViewController
+    public static let LoginsOnboardingMessage = MZLocalizedString("Logins.Onboarding.Message", value: "Your logins and passwords are now protected by Face ID, Touch ID or a device passcode.", comment: "Message shown when you enter Logins & Passwords for the first time.")
+    public static let LoginsOnboardingLearnMoreButtonTitle = MZLocalizedString("Logins.Onboarding.LearnMoreButtonTitle", value: "Learn More", comment: "Title of the Learn More button that links to a support page about device passcode requirements.")
+    public static let LoginsOnboardingContinueButtonTitle = MZLocalizedString("Logins.Onboarding.ContinueButtonTitle", value: "Continue", comment: "Title of the Continue button.")
 }
 
 // MARK: - Firefox Account
@@ -1039,34 +1048,8 @@ extension String {
 
 // MARK: - Strings used in multiple areas within the Authentication Manager
 extension String {
-    public static let AuthenticationPasscode = MZLocalizedString("Passcode For Logins", tableName: "AuthenticationManager", comment: "Label for the Passcode item in Settings")
-    public static let AuthenticationTouchIDPasscodeSetting = MZLocalizedString("Touch ID & Passcode", tableName: "AuthenticationManager", comment: "Label for the Touch ID/Passcode item in Settings")
-    public static let AuthenticationFaceIDPasscodeSetting = MZLocalizedString("Face ID & Passcode", tableName: "AuthenticationManager", comment: "Label for the Face ID/Passcode item in Settings")
-    public static let AuthenticationRequirePasscode = MZLocalizedString("Require Passcode", tableName: "AuthenticationManager", comment: "Text displayed in the 'Interval' section, followed by the current interval setting, e.g. 'Immediately'")
-    public static let AuthenticationEnterAPasscode = MZLocalizedString("Enter a passcode", tableName: "AuthenticationManager", comment: "Text displayed above the input field when entering a new passcode")
-    public static let AuthenticationEnterPasscodeTitle = MZLocalizedString("Enter Passcode", tableName: "AuthenticationManager", comment: "Title of the dialog used to request the passcode")
     public static let AuthenticationEnterPasscode = MZLocalizedString("Enter passcode", tableName: "AuthenticationManager", comment: "Text displayed above the input field when changing the existing passcode")
-    public static let AuthenticationReenterPasscode = MZLocalizedString("Re-enter passcode", tableName: "AuthenticationManager", comment: "Text displayed above the input field when confirming a passcode")
-    public static let AuthenticationSetPasscode = MZLocalizedString("Set Passcode", tableName: "AuthenticationManager", comment: "Title of the dialog used to set a passcode")
-    public static let AuthenticationTurnOffPasscode = MZLocalizedString("Turn Passcode Off", tableName: "AuthenticationManager", comment: "Label used as a setting item to turn off passcode")
-    public static let AuthenticationTurnOnPasscode = MZLocalizedString("Turn Passcode On", tableName: "AuthenticationManager", comment: "Label used as a setting item to turn on passcode")
-    public static let AuthenticationChangePasscode = MZLocalizedString("Change Passcode", tableName: "AuthenticationManager", comment: "Label used as a setting item and title of the following screen to change the current passcode")
-    public static let AuthenticationEnterNewPasscode = MZLocalizedString("Enter a new passcode", tableName: "AuthenticationManager", comment: "Text displayed above the input field when changing the existing passcode")
-    public static let AuthenticationImmediately = MZLocalizedString("Immediately", tableName: "AuthenticationManager", comment: "'Immediately' interval item for selecting when to require passcode")
-    public static let AuthenticationOneMinute = MZLocalizedString("After 1 minute", tableName: "AuthenticationManager", comment: "'After 1 minute' interval item for selecting when to require passcode")
-    public static let AuthenticationFiveMinutes = MZLocalizedString("After 5 minutes", tableName: "AuthenticationManager", comment: "'After 5 minutes' interval item for selecting when to require passcode")
-    public static let AuthenticationTenMinutes = MZLocalizedString("After 10 minutes", tableName: "AuthenticationManager", comment: "'After 10 minutes' interval item for selecting when to require passcode")
-    public static let AuthenticationFifteenMinutes = MZLocalizedString("After 15 minutes", tableName: "AuthenticationManager", comment: "'After 15 minutes' interval item for selecting when to require passcode")
-    public static let AuthenticationOneHour = MZLocalizedString("After 1 hour", tableName: "AuthenticationManager", comment: "'After 1 hour' interval item for selecting when to require passcode")
     public static let AuthenticationLoginsTouchReason = MZLocalizedString("Use your fingerprint to access Logins now.", tableName: "AuthenticationManager", comment: "Touch ID prompt subtitle when accessing logins")
-    public static let AuthenticationRequirePasscodeTouchReason = MZLocalizedString("touchid.require.passcode.reason.label", tableName: "AuthenticationManager", value: "Use your fingerprint to access configuring your required passcode interval.", comment: "Touch ID prompt subtitle when accessing the require passcode setting")
-    public static let AuthenticationDisableTouchReason = MZLocalizedString("touchid.disable.reason.label", tableName: "AuthenticationManager", value: "Use your fingerprint to disable Touch ID.", comment: "Touch ID prompt subtitle when disabling Touch ID")
-    public static let AuthenticationWrongPasscodeError = MZLocalizedString("Incorrect passcode. Try again.", tableName: "AuthenticationManager", comment: "Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app")
-    public static let AuthenticationIncorrectAttemptsRemaining = MZLocalizedString("Incorrect passcode. Try again (Attempts remaining: %d).", tableName: "AuthenticationManager", comment: "Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining")
-    public static let AuthenticationMaximumAttemptsReached = MZLocalizedString("Maximum attempts reached. Please try again in an hour.", tableName: "AuthenticationManager", comment: "Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts.")
-    public static let AuthenticationMaximumAttemptsReachedNoTime = MZLocalizedString("Maximum attempts reached. Please try again later.", tableName: "AuthenticationManager", comment: "Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts.")
-    public static let AuthenticationMismatchPasscodeError = MZLocalizedString("Passcodes didn’t match. Try again.", tableName: "AuthenticationManager", comment: "Error message displayed to user when their confirming passcode doesn't match the first code.")
-    public static let AuthenticationUseNewPasscodeError = MZLocalizedString("New passcode must be different than existing code.", tableName: "AuthenticationManager", comment: "Error message displayed when user tries to enter the same passcode as their existing code when changing it.")
 }
 
 // MARK: - Authenticator strings

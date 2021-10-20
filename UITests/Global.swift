@@ -595,25 +595,6 @@ class DynamicFontUtils {
     }
 }
 
-class PasscodeUtils {
-    static func resetPasscode() {
-        KeychainWrapper.sharedAppContainerKeychain.setAuthenticationInfo(nil)
-    }
-
-    static func setPasscode(_ code: String, interval: PasscodeInterval) {
-        let info = AuthenticationKeychainInfo(passcode: code)
-        info.updateRequiredPasscodeInterval(interval)
-        KeychainWrapper.sharedAppContainerKeychain.setAuthenticationInfo(info)
-    }
-
-    static func enterPasscode(_ tester: KIFUITestActor, digits: String) {
-        tester.tapView(withAccessibilityLabel: String(digits[digits.startIndex]))
-        tester.tapView(withAccessibilityLabel: String(digits[digits.index(digits.startIndex, offsetBy: 1)]))
-        tester.tapView(withAccessibilityLabel: String(digits[digits.index(digits.startIndex, offsetBy: 2)]))
-        tester.tapView(withAccessibilityLabel: String(digits[digits.index(digits.startIndex, offsetBy: 3)]))
-    }
-}
-
 class HomePageUtils {
     static func navigateToHomePageSettings(_ tester: KIFUITestActor) {
         tester.waitForAnimationsToFinish()
