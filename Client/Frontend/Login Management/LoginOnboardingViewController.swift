@@ -9,9 +9,33 @@ import SnapKit
 class LoginOnboardingViewController: SettingsViewController {
     private var shownFromAppMenu: Bool = false
 
-    private var label: UILabel!
-    private var learnMoreButton: UIButton!
-    private var continueButton: UIButton!
+    private var onboardingMessageLabel: UILabel = {
+        let label = UILabel()
+        label.text = Strings.LoginsOnboardingMessage
+        label.font = DynamicFontHelper().DeviceFontExtraLarge
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    private var learnMoreButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle(Strings.LoginsOnboardingLearnMoreButtonTitle, for: .normal)
+        button.addTarget(self, action: #selector(learnMoreButtonTapped), for: .touchUpInside)
+        button.titleLabel?.font = DynamicFontHelper().DeviceFontExtraLarge
+        return button
+    }()
+    
+    private var continueButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.backgroundColor = UIColor.Photon.Blue50
+        button.layer.cornerRadius = 8
+        button.setTitle(Strings.LoginsOnboardingContinueButtonTitle, for: .normal)
+        button.titleLabel?.font = DynamicFontHelper().MediumSizeBoldFontAS
+        button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
+        button.addTarget(self, action: #selector(proceedButtonTapped), for: .touchUpInside)
+        return button
+    }()
     
     var doneHandler: () -> Void = {}
     var proceedHandler: () -> Void = {}
@@ -34,38 +58,19 @@ class LoginOnboardingViewController: SettingsViewController {
         
         self.title = Strings.LoginsAndPasswordsTitle
         
-        label = UILabel()
-        label.text = Strings.LoginsOnboardingMessage
-        label.font = DynamicFontHelper().DeviceFontExtraLarge
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        self.view.addSubview(label)
-
-        learnMoreButton = UIButton(type: .system)
-        learnMoreButton.setTitle(Strings.LoginsOnboardingLearnMoreButtonTitle, for: .normal)
-        learnMoreButton.addTarget(self, action: #selector(learnMoreButtonTapped), for: .touchUpInside)
-        learnMoreButton.titleLabel?.font = DynamicFontHelper().DeviceFontExtraLarge
-        self.view.addSubview(learnMoreButton)
-
-        continueButton = UIButton(type: .custom)
-        continueButton.backgroundColor = UIColor.Photon.Blue50
-        continueButton.layer.cornerRadius = 8
-        continueButton.setTitle(Strings.LoginsOnboardingContinueButtonTitle, for: .normal)
-        continueButton.titleLabel?.font = DynamicFontHelper().MediumSizeBoldFontAS
-        continueButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
-        continueButton.addTarget(self, action: #selector(proceedButtonTapped), for: .touchUpInside)
-        self.view.addSubview(continueButton)
-        
-        label.snp.makeConstraints { make in
+        self.view.addSubview(onboardingMessageLabel)
+        onboardingMessageLabel.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(20)
             make.center.equalToSuperview()
         }
         
+        self.view.addSubview(learnMoreButton)
         learnMoreButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(label.snp.bottom).offset(10)
+            make.top.equalTo(onboardingMessageLabel.snp.bottom).offset(20)
         }
 
+        self.view.addSubview(continueButton)
         continueButton.snp.makeConstraints { make in
             make.bottom.equalTo(self.view.snp.bottomMargin).inset(20)
             make.height.equalTo(44)

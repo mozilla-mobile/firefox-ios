@@ -11,8 +11,22 @@ import SnapKit
 class DevicePasscodeRequiredViewController: SettingsViewController {
     private var shownFromAppMenu: Bool = false
     
-    private var warningTextView: UITextView!
-    private var learnMoreButton: UIButton!
+    private var warningLabel: UILabel = {
+        let label = UILabel()
+        label.font = DynamicFontHelper().DeviceFontExtraLarge
+        label.text = Strings.LoginsDevicePasscodeRequiredMessage
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    private var learnMoreButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle(Strings.LoginsDevicePasscodeRequiredLearnMoreButtonTitle, for: .normal)
+        button.addTarget(self, action: #selector(learnMoreButtonTapped), for: .touchUpInside)
+        button.titleLabel?.font = DynamicFontHelper().DeviceFontExtraLarge
+        return button
+    }()
     
     init(profile: Profile? = nil, tabManager: TabManager? = nil, shownFromAppMenu: Bool = false) {
         super.init(profile: profile, tabManager: tabManager)
@@ -32,30 +46,16 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
         
         self.title = Strings.LoginsAndPasswordsTitle
         
-        let warningTextView = UITextView()
-        warningTextView.font = DynamicFontHelper().DeviceFontExtraLarge
-        warningTextView.text = Strings.LoginsDevicePasscodeRequiredMessage
-        warningTextView.textAlignment = .center
-        warningTextView.clipsToBounds = true
-        warningTextView.isScrollEnabled = false
-        warningTextView.isUserInteractionEnabled = false
-        warningTextView.sizeToFit()
-        self.view.addSubview(warningTextView)
-
-        learnMoreButton = UIButton(type: .system)
-        learnMoreButton.setTitle(Strings.LoginsDevicePasscodeRequiredLearnMoreButtonTitle, for: .normal)
-        learnMoreButton.addTarget(self, action: #selector(learnMoreButtonTapped), for: .touchUpInside)
-        learnMoreButton.titleLabel?.font = DynamicFontHelper().DeviceFontExtraLarge
-        self.view.addSubview(learnMoreButton)
-        
-        warningTextView.snp.makeConstraints { make in
+        self.view.addSubview(warningLabel)
+        warningLabel.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(20)
             make.center.equalToSuperview()
-       }
+        }
         
+        self.view.addSubview(learnMoreButton)
         learnMoreButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(warningTextView.snp.bottom).offset(10)
+            make.top.equalTo(warningLabel.snp.bottom).offset(20)
         }
     }
     
