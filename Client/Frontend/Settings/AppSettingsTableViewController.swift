@@ -121,7 +121,6 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
 
         var privacySettings = [Setting]()
         privacySettings.append(LoginsSetting(settings: self, delegate: settingsDelegate))
-        privacySettings.append(TouchIDPasscodeSetting(settings: self))
 
         privacySettings.append(ClearPrivateDataSetting(settings: self))
 

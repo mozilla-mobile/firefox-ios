@@ -886,44 +886,41 @@ class LoginsSetting: Setting {
             UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
             self.delegate?.settingsOpenURLInNewTab(url)
         }
-        LoginListViewController.create(authenticateInNavigationController: navController, profile: profile, settingsDelegate: BrowserViewController.foregroundBVC(), webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
-            guard let loginsVC = loginsVC else { return }
-            navController.pushViewController(loginsVC, animated: true)
-        }
-    }
-}
-
-class TouchIDPasscodeSetting: Setting {
-    let profile: Profile
-    var tabManager: TabManager!
-
-    override var accessoryView: UIImageView? { return disclosureIndicator }
-
-    override var accessibilityIdentifier: String? { return "TouchIDPasscode" }
-
-    init(settings: SettingsTableViewController, delegate: SettingsDelegate? = nil) {
-        self.profile = settings.profile
-        self.tabManager = settings.tabManager
-        let localAuthContext = LAContext()
-
-        let title: String
-        if localAuthContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
-            if localAuthContext.biometryType == .faceID {
-                title = .AuthenticationFaceIDPasscodeSetting
+        
+        if AppAuthenticator.canAuthenticateDeviceOwner() {
+            if LoginOnboarding.shouldShow() {
+                let loginOnboardingViewController = LoginOnboardingViewController(profile: profile, tabManager: tabManager)
+                
+                loginOnboardingViewController.doneHandler = {
+                    loginOnboardingViewController.dismiss(animated: true)
+                }
+                
+                loginOnboardingViewController.proceedHandler = {
+                    LoginListViewController.create(authenticateInNavigationController: navController, profile: self.profile, settingsDelegate: BrowserViewController.foregroundBVC(), webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
+                        guard let loginsVC = loginsVC else { return }
+                        navController.pushViewController(loginsVC, animated: true)
+                        // Remove the onboarding from the navigation stack so that we go straight back to settings
+                        navController.viewControllers.removeAll { viewController in
+                            viewController == loginOnboardingViewController
+                        }
+                    }
+                }
+                
+                navigationController?.pushViewController(loginOnboardingViewController, animated: true)
+                
+                LoginOnboarding.setShown()
             } else {
-                title = .AuthenticationTouchIDPasscodeSetting
+                LoginListViewController.create(authenticateInNavigationController: navController, profile: profile, settingsDelegate: BrowserViewController.foregroundBVC(), webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
+                    guard let loginsVC = loginsVC else { return }
+                    navController.pushViewController(loginsVC, animated: true)
+                }
             }
         } else {
-            title = .AuthenticationPasscode
+            let viewController = DevicePasscodeRequiredViewController()
+            viewController.profile = profile
+            viewController.tabManager = tabManager
+            navigationController?.pushViewController(viewController, animated: true)
         }
-        super.init(title: NSAttributedString(string: title, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]),
-                   delegate: delegate)
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = AuthenticationSettingsViewController()
-        viewController.profile = profile
-        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 

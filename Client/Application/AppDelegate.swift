@@ -139,7 +139,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             }
         }
 
-        self.updateAuthenticationInfo()
         SystemUtils.onFirstRun()
 
         RustFirefoxAccounts.startup(prefs: profile.prefs).uponQueue(.main) { _ in
@@ -435,22 +434,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         }
 
         profile?._shutdown()
-    }
-
-    func applicationWillEnterForeground(_ application: UIApplication) {
-        // The reason we need to call this method here instead of `applicationDidBecomeActive`
-        // is that this method is only invoked whenever the application is entering the foreground where as
-        // `applicationDidBecomeActive` will get called whenever the Touch ID authentication overlay disappears.
-        self.updateAuthenticationInfo()
-    }
-
-    fileprivate func updateAuthenticationInfo() {
-        if let authInfo = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo() {
-            if !LAContext().canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
-                authInfo.useTouchID = false
-                KeychainWrapper.sharedAppContainerKeychain.setAuthenticationInfo(authInfo)
-            }
-        }
     }
 
     fileprivate func setUpWebServer(_ profile: Profile) {
