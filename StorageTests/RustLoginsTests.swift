@@ -14,16 +14,26 @@ class RustLoginsTests: XCTestCase {
     
     override func setUp() {
         files = MockFiles()
-
-        let sqlCipherDatabasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("testlogins.db").path
-        try? files.remove("testlogins.db")
         
-        let databasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("testLoginsPerField.db").path
-        try? files.remove("testLoginsPerField.db")
+        if let rootDirectory = try? files.getAndEnsureDirectory() {
+            let sqlCipherDatabasePath = URL(fileURLWithPath: rootDirectory, isDirectory: true).appendingPathComponent("testlogins.db").path
+            try? files.remove("testlogins.db")
+            
+            let databasePath = URL(fileURLWithPath: rootDirectory, isDirectory: true).appendingPathComponent("testLoginsPerField.db").path
+            try? files.remove("testLoginsPerField.db")
 
-        encryptionKey = try! createKey()
-        logins = RustLogins(sqlCipherDatabasePath: sqlCipherDatabasePath, databasePath: databasePath)
-        _ = logins.reopenIfClosed()
+            if let key = try? createKey() {
+                encryptionKey = key
+            } else {
+                XCTFail("Encryption key wasn't created")
+            }
+            
+            logins = RustLogins(sqlCipherDatabasePath: sqlCipherDatabasePath, databasePath: databasePath)
+            _ = logins.reopenIfClosed()
+            
+        } else {
+            XCTFail("Could not retrieve root directory")
+        }
     }
 
     func addLogin() -> Deferred<Maybe<String>> {

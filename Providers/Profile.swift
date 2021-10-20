@@ -1011,6 +1011,10 @@ open class BrowserProfile: Profile {
         public class SyncUnlockGetURLError: MaybeErrorType {
             public var description = "Failed to get token server endpoint url."
         }
+        
+        public class EncryptionKeyError: MaybeErrorType {
+            public var description = "Failed to get stored key."
+        }
 
         fileprivate func syncUnlockInfo() -> Deferred<Maybe<SyncUnlockInfo>> {
             let d = Deferred<Maybe<SyncUnlockInfo>>()
@@ -1027,7 +1031,11 @@ open class BrowserProfile: Profile {
                             return
                         }
                         
-                        let encryptionKey = try! self.profile.logins.getStoredKey()
+                        guard let encryptionKey = try? self.profile.logins.getStoredKey() else {
+                            Sentry.shared.sendWithStacktrace(message: "Stored logins encryption could not be retrieved", tag: SentryTag.rustLogins, severity: .warning)
+                            d.fill(Maybe(failure: EncryptionKeyError()))
+                            return
+                        }
 
                         d.fill(Maybe(success: SyncUnlockInfo(kid: key.kid, fxaAccessToken: accessTokenInfo.token, syncKey: key.k, tokenserverURL: tokenServerEndpointURL.absoluteString, loginEncryptionKey: encryptionKey)))
                     }
