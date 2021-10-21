@@ -182,7 +182,7 @@
 "Done" = "Τέλος";
 
 /* Label on button to allow edits */
-"Edit" = "Επεξεργασία";
+"Edit" = "Αλλαγή";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Δοκιμή ξανά";

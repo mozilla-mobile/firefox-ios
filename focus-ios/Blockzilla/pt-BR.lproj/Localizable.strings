@@ -578,7 +578,7 @@
 "trackingProtection.toggleLabel2" = "Proteção aprimorada contra rastreamento";
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel2" = "Mantenha seus dados com você. O %@ te protege de muitos dos rastreadores mais comuns que tentam seguir o que você faz online.";
+"trackingProtection.trackerDescriptionLabel2" = "Defenda seus dados. O %@ te protege de muitos dos rastreadores mais comuns que tentam seguir o que você faz online.";
 
 /* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
 "trackingProtection.trackersBlockedLabel" = "Bloqueados desde %@";
