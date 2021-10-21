@@ -92,13 +92,13 @@ class ButtonToast: Toast {
             titleLabel.numberOfLines = 1 // if showing a description we cant wrap to the second line
             titleLabel.adjustsFontSizeToFitWidth = true
 
-            descriptionLabel = .build({ label in
+            descriptionLabel = .build { label in
                 label.textAlignment = textAlignment
                 label.textColor = UIColor.Photon.White100
                 label.font = ButtonToastUX.ToastDescriptionFont
                 label.text = descriptionText
                 label.lineBreakMode = .byTruncatingTail
-            })
+            }
 
             labelStackView.addArrangedSubview(descriptionLabel!)
         }
@@ -130,10 +130,6 @@ class ButtonToast: Toast {
         let paddedView = UIView()
         paddedView.translatesAutoresizingMaskIntoConstraints = false
         stackView.addArrangedSubview(paddedView)
-        paddedView.snp.makeConstraints { make in
-            make.top.equalTo(stackView.snp.top).offset(ButtonToastUX.ToastButtonPaddedView.TopOffset)
-            make.bottom.equalTo(stackView.snp.bottom).offset(ButtonToastUX.ToastButtonPaddedView.BottomOffset)
-        }
 
         let roundedButton = HighlightableButton()
         roundedButton.translatesAutoresizingMaskIntoConstraints = false
@@ -154,15 +150,13 @@ class ButtonToast: Toast {
             roundedButton.widthAnchor.constraint(equalToConstant: roundedButton.titleLabel!.intrinsicContentSize.width + 2 * ButtonToastUX.ToastButtonPadding),
             roundedButton.centerYAnchor.constraint(equalTo: paddedView.centerYAnchor),
             roundedButton.centerXAnchor.constraint(equalTo: paddedView.centerXAnchor),
-        ])
 
-        roundedButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(buttonPressed)))
-
-        NSLayoutConstraint.activate([
             paddedView.topAnchor.constraint(equalTo: stackView.topAnchor),
             paddedView.bottomAnchor.constraint(equalTo: stackView.bottomAnchor),
             paddedView.widthAnchor.constraint(equalTo: roundedButton.widthAnchor, constant: ButtonToastUX.ToastButtonPaddedView.WidthOffset)
         ])
+
+        roundedButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(buttonPressed)))
 
         paddedView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(buttonPressed)))
     }
@@ -170,8 +164,8 @@ class ButtonToast: Toast {
     override func showToast(viewController: UIViewController? = nil,
                             delay: DispatchTimeInterval = SimpleToastUX.ToastDelayBefore,
                             duration: DispatchTimeInterval? = SimpleToastUX.ToastDismissAfter,
-                            makeConstraints: @escaping (Toast) -> [NSLayoutConstraint]) {
-        super.showToast(viewController: viewController, delay: delay, duration: duration, makeConstraints: makeConstraints)
+                            updateConstraintsOn: @escaping (Toast) -> [NSLayoutConstraint]) {
+        super.showToast(viewController: viewController, delay: delay, duration: duration, updateConstraintsOn: updateConstraintsOn)
     }
 
     // MARK: - Button action

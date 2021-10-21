@@ -1852,11 +1852,11 @@ extension BrowserViewController: TabManagerDelegate {
             return
         }
 
-        toast.showToast(viewController: self, delay: delay, duration: duration) { make in
+        toast.showToast(viewController: self, delay: delay, duration: duration) { toast in
             [
-                make.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-                make.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-                make.bottomAnchor.constraint(equalTo: self.alertStackView.bottomAnchor)
+                toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+                toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+                toast.bottomAnchor.constraint(equalTo: self.alertStackView.bottomAnchor)
             ]
         }
     }

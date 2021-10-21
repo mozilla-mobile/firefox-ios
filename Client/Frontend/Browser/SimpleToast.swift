@@ -17,27 +17,23 @@ struct SimpleToastUX {
 }
 
 struct SimpleToast {
-    func showAlertWithText(_ text: String, bottomContainer: UIView) {
-        let toast = self.createView()
-        toast.text = text
-        bottomContainer.addSubview(toast)
-        NSLayoutConstraint.activate([
-            toast.widthAnchor.constraint(equalTo: bottomContainer.widthAnchor),
-            toast.leadingAnchor.constraint(equalTo: bottomContainer.leadingAnchor),
-            toast.bottomAnchor.constraint(equalTo: bottomContainer.bottomAnchor),
-            toast.heightAnchor.constraint(equalToConstant: SimpleToastUX.ToastHeight),
-        ])
-        animate(toast)
+    fileprivate let toastLabel: UILabel = .build { label in
+        label.textColor = UIColor.Photon.White100
+        label.backgroundColor = SimpleToastUX.ToastDefaultColor
+        label.font = SimpleToastUX.ToastFont
+        label.textAlignment = .center
     }
 
-    fileprivate func createView() -> UILabel {
-        let toast: UILabel = .build { label in
-            label.textColor = UIColor.Photon.White100
-            label.backgroundColor = SimpleToastUX.ToastDefaultColor
-            label.font = SimpleToastUX.ToastFont
-            label.textAlignment = .center
-        }
-        return toast
+    func showAlertWithText(_ text: String, bottomContainer: UIView) {
+        toastLabel.text = text
+        bottomContainer.addSubview(toastLabel)
+        NSLayoutConstraint.activate([
+            toastLabel.widthAnchor.constraint(equalTo: bottomContainer.widthAnchor),
+            toastLabel.leadingAnchor.constraint(equalTo: bottomContainer.leadingAnchor),
+            toastLabel.bottomAnchor.constraint(equalTo: bottomContainer.bottomAnchor),
+            toastLabel.heightAnchor.constraint(equalToConstant: SimpleToastUX.ToastHeight),
+        ])
+        animate(toastLabel)
     }
 
     fileprivate func dismiss(_ toast: UIView) {

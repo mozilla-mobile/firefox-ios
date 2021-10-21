@@ -41,10 +41,10 @@ class LoginListViewController: SensitiveViewController {
     var shownFromAppMenu: Bool = false
     var webpageNavigationHandler: ((_ url: URL?) -> Void)?
 
-    fileprivate lazy var selectionButton: UIButton = .build({ button in
+    fileprivate lazy var selectionButton: UIButton = .build { button in
         button.titleLabel?.font = LoginListViewModel.LoginListUX.selectionButtonFont
         button.addTarget(self, action: #selector(self.tappedSelectionButton), for: .touchUpInside)
-    })
+    }
 
     static func shouldShowAppMenuShortcut(forPrefs prefs: Prefs) -> Bool {
         // default to on
@@ -109,6 +109,10 @@ class LoginListViewController: SensitiveViewController {
         tableView.allowsMultipleSelectionDuringEditing = true
         tableView.delegate = self
         tableView.tableFooterView = UIView()
+
+        if #available(iOS 15.0, *) {
+             tableView.sectionHeaderTopPadding = 0
+         }
 
         // Setup the Search Controller
         searchController.searchBar.autocapitalizationType = .none

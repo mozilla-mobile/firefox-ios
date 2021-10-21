@@ -21,22 +21,22 @@ class ASHeaderView: UICollectionReusableView {
     var sectionType: ASHeaderViewType = .normal
     private var titleLeadingConstraint: NSLayoutConstraint?
 
-    lazy var titleLabel: UILabel = .build({ label in
+    lazy var titleLabel: UILabel = .build { label in
         label.text = self.title
         label.textColor = UIColor.theme.homePanel.activityStreamHeaderText
         label.font = UIFont.systemFont(ofSize: FirefoxHomeHeaderViewUX.sectionHeaderSize, weight: .bold)
         label.minimumScaleFactor = 0.6
         label.numberOfLines = 1
         label.adjustsFontSizeToFitWidth = true
-    })
+    }
 
-    lazy var moreButton: UIButton = .build({ button in
+    lazy var moreButton: UIButton = .build { button in
         button.isHidden = true
         button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
         button.contentHorizontalAlignment = .right
         button.setTitleColor(UIColor.theme.homePanel.activityStreamHeaderButton, for: .normal)
         button.setTitleColor(UIColor.Photon.Grey50, for: .highlighted)
-    })
+    }
 
     var title: String? {
         willSet(newTitle) {
@@ -69,13 +69,11 @@ class ASHeaderView: UICollectionReusableView {
         NSLayoutConstraint.activate([
             moreButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -6),
             moreButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -titleInsets),
-        ])
-        moreButton.setContentCompressionResistancePriority(.required, for: .horizontal)
 
-        NSLayoutConstraint.activate([
             titleLabel.trailingAnchor.constraint(equalTo: moreButton.leadingAnchor, constant: -FirefoxHomeHeaderViewUX.TitleTopInset),
             titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
         ])
+        moreButton.setContentCompressionResistancePriority(.required, for: .horizontal)
 
         titleLeadingConstraint = titleLabel.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: titleInsets)
         titleLeadingConstraint?.isActive = true

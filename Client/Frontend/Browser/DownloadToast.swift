@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
 import Shared
 import UIKit
 
@@ -12,9 +11,9 @@ struct DownloadToastUX {
 }
 
 class DownloadToast: Toast {
-    lazy var progressView: UIView = .build({ view in
+    lazy var progressView: UIView = .build { view in
         view.backgroundColor = DownloadToastUX.ToastProgressColor
-    })
+    }
 
     var percent: CGFloat = 0.0 {
         didSet {
@@ -155,16 +154,14 @@ class DownloadToast: Toast {
             progressView.leadingAnchor.constraint(equalTo: toastView.leadingAnchor),
             progressView.centerYAnchor.constraint(equalTo: toastView.centerYAnchor),
             progressView.heightAnchor.constraint(equalTo: toastView.heightAnchor),
-        ])
 
-        progressWidthConstraint = progressView.widthAnchor.constraint(equalToConstant: 0)
-        progressWidthConstraint?.isActive = true
-
-        NSLayoutConstraint.activate([
             horizontalStackView.centerXAnchor.constraint(equalTo: toastView.centerXAnchor),
             horizontalStackView.centerYAnchor.constraint(equalTo: toastView.centerYAnchor),
             horizontalStackView.widthAnchor.constraint(equalTo: toastView.widthAnchor, constant: -2 * ButtonToastUX.ToastPadding)
         ])
+
+        progressWidthConstraint = progressView.widthAnchor.constraint(equalToConstant: 0)
+        progressWidthConstraint?.isActive = true
 
         return toastView
     }

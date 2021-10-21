@@ -31,7 +31,7 @@ class Toast: UIView {
     func showToast(viewController: UIViewController? = nil,
                    delay: DispatchTimeInterval,
                    duration: DispatchTimeInterval?,
-                   makeConstraints: @escaping (Toast) -> [NSLayoutConstraint]) {
+                   updateConstraintsOn: @escaping (Toast) -> [NSLayoutConstraint]) {
         self.viewController = viewController
 
         translatesAutoresizingMaskIntoConstraints = false
@@ -40,7 +40,7 @@ class Toast: UIView {
             viewController?.view.addSubview(self)
             guard let _ = viewController else { return }
 
-            NSLayoutConstraint.activate(makeConstraints(self))
+            NSLayoutConstraint.activate(updateConstraintsOn(self))
             self.layoutIfNeeded()
 
             UIView.animate(withDuration: SimpleToastUX.ToastAnimationDuration, animations: {
