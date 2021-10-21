@@ -5,14 +5,6 @@
 import UIKit
 import Shared
 
-// TODO Move into its own file
-extension NSLayoutConstraint {
-    func priority(_ priority: UILayoutPriority) -> NSLayoutConstraint {
-        self.priority = priority
-        return self
-    }
-}
-
 class LoginOnboardingViewController: SettingsViewController {
     private var shownFromAppMenu: Bool = false
 
