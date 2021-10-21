@@ -5,7 +5,6 @@
 import UIKit
 
 extension NSLayoutConstraint {
-    
     /// Builder function that return a new NSLayoutConstraints with the priority set. This is useful  to inline constraint creation in a call to `NSLayoutConstraint.active()`.
     /// - Parameter priority: the priority to set
     /// - Returns: the same `NSLayoutConstraint` with the priority set
@@ -13,19 +12,37 @@ extension NSLayoutConstraint {
         self.priority = priority
         return self
     }
-    
-    /// Builder function that return a new NSLayoutConstraints with the multiplier set. This is useful  to inline constraint creation in a call to `NSLayoutConstraint.active()`.
-    /// - Parameter multiplier: the multiplier to set
-    /// - Returns: a new `NSLayoutContraint` instance
-    func multiplier(_ multiplier: CGFloat) -> NSLayoutConstraint {
+}
+
+extension NSLayoutAnchor where AnchorType == NSLayoutXAxisAnchor {
+    /// Similar to `constraint(equalTo:)` except that it also takes an optional multipllier, constant and priority. This makes it really easy to inline constraints in a call to `NSLayoutConstraint.activate()`.
+    func constraint(equalTo anchor: NSLayoutAnchor<AnchorType>, multiplier: CGFloat = 1.0, constant: CGFloat = 0.0, priority: UILayoutPriority = .required) -> NSLayoutConstraint {
+        let constraint = self.constraint(equalTo: anchor)
         return NSLayoutConstraint(
-            item: self.firstItem!,
-            attribute: self.firstAttribute,
-            relatedBy: self.relation,
-            toItem: self.secondItem,
-            attribute: self.secondAttribute,
+            item: constraint.firstItem!,
+            attribute: constraint.firstAttribute,
+            relatedBy: constraint.relation,
+            toItem: constraint.secondItem,
+            attribute: constraint.secondAttribute,
             multiplier: multiplier,
-            constant: self.constant
-        )
+            constant: constant
+        ).priority(priority)
     }
 }
+
+extension NSLayoutAnchor where AnchorType == NSLayoutYAxisAnchor {
+    /// Similar to `constraint(equalTo:)` except that it also takes an optional multipllier, constant and priority. This makes it really easy to inline constraints in a call to `NSLayoutConstraint.activate()`.
+    func constraint(equalTo anchor: NSLayoutAnchor<AnchorType>, multiplier: CGFloat = 1.0, constant: CGFloat = 0.0, priority: UILayoutPriority = .required) -> NSLayoutConstraint {
+        let constraint = self.constraint(equalTo: anchor)
+        return NSLayoutConstraint(
+            item: constraint.firstItem!,
+            attribute: constraint.firstAttribute,
+            relatedBy: constraint.relation,
+            toItem: constraint.secondItem,
+            attribute: constraint.secondAttribute,
+            multiplier: multiplier,
+            constant: constant
+        ).priority(priority)
+    }
+}
+

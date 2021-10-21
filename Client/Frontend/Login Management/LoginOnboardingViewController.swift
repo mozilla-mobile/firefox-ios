@@ -74,8 +74,8 @@ class LoginOnboardingViewController: SettingsViewController {
             continueButton.bottomAnchor.constraint(equalTo: self.view.layoutMarginsGuide.bottomAnchor, constant: -20),
             continueButton.heightAnchor.constraint(equalToConstant: 44),
             continueButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            continueButton.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 35).priority(.defaultHigh),
-            continueButton.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -35).priority(.defaultHigh),
+            continueButton.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 35, priority: .defaultHigh),
+            continueButton.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -35, priority: .defaultHigh),
             continueButton.widthAnchor.constraint(lessThanOrEqualToConstant: 360)
         ])
     }

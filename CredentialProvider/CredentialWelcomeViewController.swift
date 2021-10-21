@@ -70,25 +70,25 @@ class CredentialWelcomeViewController: UIViewController {
             cancelButton.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
 
             logoImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            logoImageView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).multiplier(0.4),
+            logoImageView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, multiplier: 0.4),
 
             titleLabel.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 40),
             titleLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 35).priority(.defaultHigh),
-            titleLabel.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -35).priority(.defaultHigh),
+            titleLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 35, priority: .defaultHigh),
+            titleLabel.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -35, priority: .defaultHigh),
             titleLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 440),
             
             taglineLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
             taglineLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            taglineLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 35).priority(.defaultHigh),
-            taglineLabel.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -35).priority(.defaultHigh),
+            taglineLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 35, priority: .defaultHigh),
+            taglineLabel.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -35, priority: .defaultHigh),
             taglineLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 440),
             
             proceedButton.bottomAnchor.constraint(equalTo: self.view.layoutMarginsGuide.bottomAnchor, constant: -20),
             proceedButton.heightAnchor.constraint(equalToConstant: 44),
             proceedButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            proceedButton.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 35).priority(.defaultHigh),
-            proceedButton.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -35).priority(.defaultHigh),
+            proceedButton.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 35, priority: .defaultHigh),
+            proceedButton.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -35, priority: .defaultHigh),
             proceedButton.widthAnchor.constraint(lessThanOrEqualToConstant: 360)
         ])
     }
