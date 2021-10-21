@@ -30,7 +30,6 @@ class SwitchTableViewCell: UITableViewCell {
         textLabel?.textColor = .primaryText
         textLabel?.numberOfLines = 0
         accessoryView = PaddedSwitch(switchView: toggle)
-        backgroundColor = .secondarySystemBackground
         selectionStyle = .none
     }
     

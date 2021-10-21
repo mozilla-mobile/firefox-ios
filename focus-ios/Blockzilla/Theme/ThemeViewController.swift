@@ -31,7 +31,6 @@ class ThemeViewController: UIViewController {
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
-        tableView.backgroundColor = .systemBackground
         tableView.separatorStyle = .singleLine
         tableView.allowsMultipleSelection = false
         tableView.estimatedRowHeight = UITableView.automaticDimension
@@ -52,7 +51,6 @@ class ThemeViewController: UIViewController {
     override func viewDidLoad() {
         title = UIConstants.strings.theme
         navigationController?.navigationBar.tintColor = .accent
-        view.backgroundColor = .systemBackground
         
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
@@ -90,7 +88,6 @@ class ThemeViewController: UIViewController {
             cell = themeCell
         }
         
-        cell.backgroundColor = .secondarySystemBackground
         cell.textLabel?.textColor = .primaryText
         cell.layoutMargins = UIEdgeInsets.zero
         cell.detailTextLabel?.textColor = .secondaryText

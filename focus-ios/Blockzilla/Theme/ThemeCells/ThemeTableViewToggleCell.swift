@@ -11,11 +11,9 @@ class ThemeTableViewToggleCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         let backgroundColorView = UIView()
-        backgroundColorView.backgroundColor = UIConstants.colors.cellSelected
         selectedBackgroundView = backgroundColorView
         textLabel?.numberOfLines = 0
         textLabel?.text = UIConstants.strings.useSystemTheme
-        backgroundColor = UIConstants.colors.cellBackground
         textLabel?.textColor = .primaryText
         layoutMargins = UIEdgeInsets.zero
         toggle.onTintColor = .accent
