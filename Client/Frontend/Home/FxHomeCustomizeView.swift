@@ -6,7 +6,6 @@ import Foundation
 
 fileprivate struct HomeViewUX {
     static let settingsButtonHeight: CGFloat = 36
-    static let settingsButtonWidth: CGFloat = 328
     static let settingsButtonTopAnchorSpace: CGFloat = 28
 }
 
@@ -38,7 +37,7 @@ class FxHomeCustomizeHomeView: UICollectionViewCell {
         contentView.addSubview(goToSettingsButton)
 
         NSLayoutConstraint.activate([
-            goToSettingsButton.widthAnchor.constraint(equalToConstant: HomeViewUX.settingsButtonWidth),
+            goToSettingsButton.widthAnchor.constraint(equalTo: contentView.widthAnchor),
             goToSettingsButton.heightAnchor.constraint(equalToConstant: HomeViewUX.settingsButtonHeight),
             goToSettingsButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: HomeViewUX.settingsButtonTopAnchorSpace),
             goToSettingsButton.centerXAnchor.constraint(equalTo: centerXAnchor)
