@@ -67,11 +67,11 @@ class CredentialWelcomeViewController: UIViewController {
 
         NSLayoutConstraint.activate([
             cancelButton.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 10),
-            logoImageView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).multiplier(0.4),
+            cancelButton.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
 
             logoImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            logoImageView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor), // TODO SMA Needs a 0.4 multiplier
-            
+            logoImageView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).multiplier(0.4),
+
             titleLabel.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 40),
             titleLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 35).priority(.defaultHigh),
