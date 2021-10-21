@@ -201,6 +201,9 @@ class HomePanelColor {
 
     var searchSuggestionPillBackground: UIColor { return UIColor.Photon.White100 }
     var searchSuggestionPillForeground: UIColor { return UIColor.Photon.Blue40 }
+    
+    var customizeHomepageButtonBackground: UIColor { return UIColor.Photon.LightGrey30 }
+    var customizeHomepageButtonText: UIColor { return UIColor.Photon.DarkGrey90 }
 }
 
 class SnackBarColor {

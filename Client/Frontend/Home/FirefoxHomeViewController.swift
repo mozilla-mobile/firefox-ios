@@ -24,7 +24,7 @@ struct FirefoxHomeUX {
     static let MinimumInsets: CGFloat = 15
     static let LibraryShortcutsHeight: CGFloat = 90
     static let LibraryShortcutsMaxWidth: CGFloat = 375
-    static let customizeHomeHeight: CGFloat = 144
+    static let customizeHomeHeight: CGFloat = 100
 }
 
 struct FxHomeAccessibilityIdentifiers {
