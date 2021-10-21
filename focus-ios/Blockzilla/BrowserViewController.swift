@@ -394,7 +394,7 @@ class BrowserViewController: UIViewController {
         }
 
         // Do not activate if we are showing a web page, nor the overlayView hidden
-        if !(urlBar.inBrowsingMode || overlayView.isHidden) {
+        if urlBar.inBrowsingMode {
             return
         }
 
@@ -406,7 +406,9 @@ class BrowserViewController: UIViewController {
     }
     
     public func deactivateUrlBar() {
-        urlBar.dismiss()
+        if urlBar.inBrowsingMode {
+            urlBar.dismiss()
+        }
     }
     
     public func dismissSettings() {
