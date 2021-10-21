@@ -273,16 +273,16 @@ workflows:
     description: This Workflow is to build the app using latest xcode available in Bitrise
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.4core
   RunAllXCUITests:
     steps: []
     after_run:
-        - 1_git_clone_and_post_clone
-        - 2_certificate_and_profile
-        - 3_provisioning_and_npm_installation
-        - 4_B_xcode_build_and_test_Fennec_Enterprise_XCUITests
-        - 5_deploy_and_slack
+    - 1_git_clone_and_post_clone
+    - 2_certificate_and_profile
+    - 3_provisioning_and_npm_installation
+    - 4_B_xcode_build_and_test_Fennec_Enterprise_XCUITests
+    - 5_deploy_and_slack
     meta:
       bitrise.io:
         stack: osx-xcode-13.0.x
@@ -305,18 +305,17 @@ workflows:
         stack: osx-xcode-13.0.x
         machine_type_id: g2.4core
     before_run:
-        - 1_git_clone_and_post_clone
-        - 2_certificate_and_profile
-        - 3_provisioning_and_npm_installation
+    - 1_git_clone_and_post_clone
+    - 2_certificate_and_profile
+    - 3_provisioning_and_npm_installation
     after_run:
-        - 5_deploy_and_slack
+    - 5_deploy_and_slack
   RunUITests:
     steps:
     - xcode-build-for-simulator@0.11:
         inputs:
         - configuration: Release
-        - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
-            -testPlan SmokeXCUITests
+        - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO -testPlan SmokeXCUITests
         - scheme: Fennec_Enterprise_XCUITests
         - xcodebuild_test_options: "-testPlan SmokeXCUITests"
     - xcode-test@2:
@@ -572,7 +571,7 @@ workflows:
     - 5_deploy_and_slack
     after_run:
     - RunSmokeXCUITests
-  
+
   RunSmokeXCUITests:
     steps:
     - cache-pull@2.1:
