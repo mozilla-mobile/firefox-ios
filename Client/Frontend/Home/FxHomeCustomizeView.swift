@@ -14,8 +14,6 @@ class FxHomeCustomizeHomeView: UICollectionViewCell {
     // MARK: - UI Elements
     let goToSettingsButton: UIButton = .build { button in
         button.setTitle(.FirefoxHomeCustomizeHomeButtonTitle, for: .normal)
-        button.backgroundColor = UIColor.Photon.LightGrey30
-        button.setTitleColor(UIColor.Photon.DarkGrey90, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 15, weight: .bold)
         button.layer.cornerRadius = 5
         button.accessibilityIdentifier = "FxHomeCustomizeHomeSettingButton"
@@ -25,10 +23,20 @@ class FxHomeCustomizeHomeView: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
+        applyTheme()
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(handleNotifications(_:)),
+                                               name: .DisplayThemeChanged,
+                                               object: nil)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 
     // MARK: - UI Setup
@@ -43,5 +51,21 @@ class FxHomeCustomizeHomeView: UICollectionViewCell {
             goToSettingsButton.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
     }
+    
+    // MARK: - Notifications
+    
+    @objc private func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        default: break
+        }
+    }
 }
 
+extension FxHomeCustomizeHomeView: Themeable {
+    func applyTheme() {
+        goToSettingsButton.backgroundColor = UIColor.theme.homePanel.customizeHomepageButtonBackground
+        goToSettingsButton.setTitleColor(UIColor.theme.homePanel.customizeHomepageButtonText, for: .normal)
+    }
+}
