@@ -10,6 +10,8 @@ class SettingsViewController: UIViewController {
     var profile: Profile!
     var tabManager: TabManager!
     
+    let theme = ThemeManager.instance
+
     init(profile: Profile? = nil, tabManager: TabManager? = nil) {
         super.init(nibName: nil, bundle: nil)
         self.profile = profile
@@ -22,6 +24,15 @@ class SettingsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .white
+        updateTheme()
+        NotificationCenter.default.addObserver(self, selector: #selector(updateTheme), name: .DisplayThemeChanged, object: nil)
+    }
+    
+    @objc func updateTheme() {
+        view.backgroundColor = theme.current.tableView.headerBackground
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 }
