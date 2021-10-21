@@ -29,7 +29,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
 
     lazy var closeButton: UIButton = {
         let button = UIButton()
-        button.setTitle(Strings.CloseButtonTitle, for: .normal)
+        button.setTitle(.CloseButtonTitle, for: .normal)
         button.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
         button.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontExtraLargeBold
@@ -44,7 +44,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         }
     }
 
-    init(site: Site, actions: [PhotonActionSheetItem], closeButtonTitle: String = Strings.CloseButtonTitle) {
+    init(site: Site, actions: [PhotonActionSheetItem], closeButtonTitle: String = .CloseButtonTitle) {
         self.site = site
         self.actions = [actions]
         self.style = .centered
@@ -52,7 +52,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         self.closeButton.setTitle(closeButtonTitle, for: .normal)
     }
 
-    init(title: String? = nil, actions: [[PhotonActionSheetItem]], closeButtonTitle: String = Strings.CloseButtonTitle, style presentationStyle: UIModalPresentationStyle? = nil) {
+    init(title: String? = nil, actions: [[PhotonActionSheetItem]], closeButtonTitle: String = .CloseButtonTitle, style presentationStyle: UIModalPresentationStyle? = nil) {
         self.actions = actions
         if let presentationStyle = presentationStyle {
             self.style = presentationStyle == .popover ? .popover : .bottom
