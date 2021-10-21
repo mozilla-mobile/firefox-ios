@@ -101,10 +101,7 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
             cell.textLabel?.text = UIConstants.strings.autocompleteAddCustomUrlWithPlus
             cell.accessoryType = .disclosureIndicator
             cell.accessibilityIdentifier = "addCustomDomainCell"
-
-            let backgroundColorView = UIView()
-
-            cell.selectedBackgroundView = backgroundColorView
+            cell.selectionStyle = .gray
             addDomainCell = cell
         } else {
             cell = UITableViewCell(style: .subtitle, reuseIdentifier: "domainCell")

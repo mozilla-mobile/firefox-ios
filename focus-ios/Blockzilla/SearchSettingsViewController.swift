@@ -87,7 +87,7 @@ class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITab
             cell.textLabel?.text = UIConstants.strings.AddSearchEngineButton
             cell.textLabel?.textColor = .primaryText
             cell.accessibilityIdentifier = "addSearchEngine"
-            cell.selectedBackgroundView = getBackgroundView()
+            cell.selectionStyle = .gray
             return cell
         } else if indexPath.section == 1 && indexPath.row == 0 {
             let cell = UITableViewCell(style: .default, reuseIdentifier: "restoreDefaultEngines")
@@ -96,11 +96,10 @@ class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITab
             cell.textLabel?.numberOfLines = 0
             cell.textLabel?.lineBreakMode = .byWordWrapping
             cell.accessibilityIdentifier = "restoreDefaults"
-            cell.selectedBackgroundView = getBackgroundView()
 
             if searchEngineManager.hasDisabledDefaultEngine() {
                 cell.textLabel?.textColor = .primaryText
-                cell.selectionStyle = .default
+                cell.selectionStyle = .gray
                 cell.isUserInteractionEnabled = true
             } else {
                 cell.textLabel?.textColor = UIConstants.colors.settingsDisabled
@@ -115,7 +114,7 @@ class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITab
             cell.textLabel?.text = engine.name
             cell.textLabel?.textColor = .primaryText
             cell.imageView?.image = engine.image?.createScaled(size: CGSize(width: 24, height: 24))
-            cell.selectedBackgroundView = getBackgroundView()
+            cell.selectionStyle = .gray
             cell.accessibilityIdentifier = engine.name
 
             if tableView.isEditing {

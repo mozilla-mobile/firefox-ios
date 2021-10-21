@@ -71,11 +71,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
 
         cell.backgroundColor = .secondarySystemGroupedBackground
-
-        let cellBG = UIView()
-        cellBG.backgroundColor = .secondarySystemGroupedBackground
-        cell.selectedBackgroundView = cellBG
-
+        cell.selectionStyle = .gray
         cell.textLabel?.textColor = .primaryText
         cell.layoutMargins = UIEdgeInsets.zero
     }

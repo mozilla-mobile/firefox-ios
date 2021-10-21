@@ -13,10 +13,7 @@ import Glean
 class SettingsTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-
-        let backgroundColorView = UIView()
-        backgroundColorView.backgroundColor = UIConstants.colors.cellSelected
-        selectedBackgroundView = backgroundColorView
+        selectionStyle = .gray
     }
 
     required init?(coder aDecoder: NSCoder) {
