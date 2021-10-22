@@ -20,12 +20,39 @@
         }
       },
       {
+        "package": "MozillaRustComponentsSwift",
+        "repositoryURL": "https://github.com/mozilla/rust-components-swift",
+        "state": {
+          "branch": null,
+          "revision": "0fde703848cc20fa9618c92611f6f9a4621cac54",
+          "version": "0.0.7"
+        }
+      },
+      {
         "package": "SnapKit",
         "repositoryURL": "https://github.com/SnapKit/SnapKit",
         "state": {
           "branch": null,
           "revision": "d458564516e5676af9c70b4f4b2a9178294f1bc6",
           "version": "5.0.1"
+        }
+      },
+      {
+        "package": "SwiftProtobuf",
+        "repositoryURL": "https://github.com/apple/swift-protobuf",
+        "state": {
+          "branch": null,
+          "revision": "7e2c5f3cbbeea68e004915e3a8961e20bd11d824",
+          "version": "1.18.0"
+        }
+      },
+      {
+        "package": "SwiftKeychainWrapper",
+        "repositoryURL": "https://github.com/jrendel/SwiftKeychainWrapper",
+        "state": {
+          "branch": null,
+          "revision": "185a3165346a03767101c4f62e9a545a0fe0530f",
+          "version": "4.0.1"
         }
       },
       {

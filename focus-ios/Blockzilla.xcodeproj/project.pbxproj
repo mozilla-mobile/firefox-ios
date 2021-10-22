@@ -31,6 +31,9 @@
 		16D465B12127891000FEC226 /* SiriFavoriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D465B02127891000FEC226 /* SiriFavoriteViewController.swift */; };
 		16D7169C2114EF76000C8A66 /* BlockerToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D7169B2114EF72000C8A66 /* BlockerToggle.swift */; };
 		16D716A5211503CD000C8A66 /* PageActionSheetItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D716A4211503CD000C8A66 /* PageActionSheetItems.swift */; };
+		1B56C58527221B1C00BB1152 /* Nimbus in Frameworks */ = {isa = PBXBuildFile; productRef = 1B56C58427221B1C00BB1152 /* Nimbus */; };
+		1B56C58727221B1C00BB1152 /* RustLog in Frameworks */ = {isa = PBXBuildFile; productRef = 1B56C58627221B1C00BB1152 /* RustLog */; };
+		1B56C58927221B1C00BB1152 /* Viaduct in Frameworks */ = {isa = PBXBuildFile; productRef = 1B56C58827221B1C00BB1152 /* Viaduct */; };
 		1D199EF220D813D300CDF976 /* DragAndDropTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D199EF120D813D300CDF976 /* DragAndDropTest.swift */; };
 		1D3BEDF920C5E6C70019B722 /* FindInPage.js in Resources */ = {isa = PBXBuildFile; fileRef = 1D3BEDF820C5E6C70019B722 /* FindInPage.js */; };
 		1D3BEDFB20C5E76B0019B722 /* FindInPageBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3BEDFA20C5E76A0019B722 /* FindInPageBar.swift */; };
@@ -204,7 +207,6 @@
 		F85F7A292655AD5800395515 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A282655AD5800395515 /* SnapKit */; };
 		F85F7A2B2655AD5800395515 /* Fuzi in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A2A2655AD5800395515 /* Fuzi */; };
 		F85F7A2F2655AD5800395515 /* Telemetry in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A2E2655AD5800395515 /* Telemetry */; };
-		F8AD602D2719BAB3002DD763 /* Glean in Frameworks */ = {isa = PBXBuildFile; productRef = F8AD602C2719BAB3002DD763 /* Glean */; };
 		F8DE0EC826CC887800A31419 /* SupportUtilsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DE0EC726CC887800A31419 /* SupportUtilsTest.swift */; };
 		F8DE0EC926CC88B200A31419 /* SupportUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40AFB131DC939FF00DA5651 /* SupportUtils.swift */; };
 		F8DE0ECA26CC88FF00A31419 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35C11461E04AADA005FFFEF /* AppConfig.swift */; };
@@ -1037,8 +1039,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F8AD602D2719BAB3002DD763 /* Glean in Frameworks */,
+				1B56C58527221B1C00BB1152 /* Nimbus in Frameworks */,
 				F85F7A292655AD5800395515 /* SnapKit in Frameworks */,
+				1B56C58727221B1C00BB1152 /* RustLog in Frameworks */,
+				1B56C58927221B1C00BB1152 /* Viaduct in Frameworks */,
 				F85F7A2F2655AD5800395515 /* Telemetry in Frameworks */,
 				F85F7A2B2655AD5800395515 /* Fuzi in Frameworks */,
 			);
@@ -1636,7 +1640,9 @@
 				F85F7A282655AD5800395515 /* SnapKit */,
 				F85F7A2A2655AD5800395515 /* Fuzi */,
 				F85F7A2E2655AD5800395515 /* Telemetry */,
-				F8AD602C2719BAB3002DD763 /* Glean */,
+				1B56C58427221B1C00BB1152 /* Nimbus */,
+				1B56C58627221B1C00BB1152 /* RustLog */,
+				1B56C58827221B1C00BB1152 /* Viaduct */,
 			);
 			productName = Blockzilla;
 			productReference = E4BF2DD31BACE8CA00DA9D68 /* Firefox Klar.app */;
@@ -1813,7 +1819,7 @@
 				F8324C2D264C807C007E4BFA /* XCRemoteSwiftPackageReference "SnapKit" */,
 				F8324CB8264DC8ED007E4BFA /* XCRemoteSwiftPackageReference "Fuzi" */,
 				F8324E0726556E45007E4BFA /* XCRemoteSwiftPackageReference "telemetry-ios" */,
-				F8AD602B2719BAB3002DD763 /* XCRemoteSwiftPackageReference "glean-swift" */,
+				1B56C58327221B1C00BB1152 /* XCRemoteSwiftPackageReference "rust-components-swift" */,
 			);
 			productRefGroup = E4BF2DD41BACE8CA00DA9D68 /* Products */;
 			projectDirPath = "";
@@ -5333,6 +5339,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		1B56C58327221B1C00BB1152 /* XCRemoteSwiftPackageReference "rust-components-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mozilla/rust-components-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.0.7;
+			};
+		};
 		F8324C2D264C807C007E4BFA /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit";
@@ -5357,17 +5371,24 @@
 				kind = branch;
 			};
 		};
-		F8AD602B2719BAB3002DD763 /* XCRemoteSwiftPackageReference "glean-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/mozilla/glean-swift";
-			requirement = {
-				kind = exactVersion;
-				version = 42.0.1;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		1B56C58427221B1C00BB1152 /* Nimbus */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B56C58327221B1C00BB1152 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = Nimbus;
+		};
+		1B56C58627221B1C00BB1152 /* RustLog */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B56C58327221B1C00BB1152 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = RustLog;
+		};
+		1B56C58827221B1C00BB1152 /* Viaduct */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B56C58327221B1C00BB1152 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = Viaduct;
+		};
 		F85F7A282655AD5800395515 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F8324C2D264C807C007E4BFA /* XCRemoteSwiftPackageReference "SnapKit" */;
@@ -5382,11 +5403,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F8324E0726556E45007E4BFA /* XCRemoteSwiftPackageReference "telemetry-ios" */;
 			productName = Telemetry;
-		};
-		F8AD602C2719BAB3002DD763 /* Glean */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F8AD602B2719BAB3002DD763 /* XCRemoteSwiftPackageReference "glean-swift" */;
-			productName = Glean;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
