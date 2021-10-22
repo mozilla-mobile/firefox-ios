@@ -12596,7 +12596,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.0.5;
+				minimumVersion = 0.0.7;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
