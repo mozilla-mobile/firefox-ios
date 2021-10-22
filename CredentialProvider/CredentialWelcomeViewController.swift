@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-import SnapKit
 import Shared
 
 protocol CredentialWelcomeViewControllerDelegate {
@@ -15,12 +14,14 @@ class CredentialWelcomeViewController: UIViewController {
     var delegate: CredentialWelcomeViewControllerDelegate?
     
     lazy private var logoImageView: UIImageView = {
-        let logoImage = UIImageView(image: UIImage(named: "logo-glyph"))
-        return logoImage
+        let image = UIImageView(image: UIImage(named: "logo-glyph"))
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
     }()
     
     lazy private var titleLabel: UILabel = {
         let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.text = .LoginsWelcomeViewTitle2
         label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         label.numberOfLines = 0
@@ -30,6 +31,7 @@ class CredentialWelcomeViewController: UIViewController {
     
     lazy private var taglineLabel: UILabel = {
         let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.text = .LoginsWelcomeViewTagline
         label.font = UIFont.systemFont(ofSize: 20)
         label.numberOfLines = 0
@@ -39,6 +41,7 @@ class CredentialWelcomeViewController: UIViewController {
 
     lazy private var cancelButton: UIButton = {
         let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle(Strings.CancelString, for: .normal)
         button.addTarget(self, action: #selector(self.cancelButtonTapped(_:)), for: .touchUpInside)
         return button
@@ -46,6 +49,7 @@ class CredentialWelcomeViewController: UIViewController {
     
     lazy private var proceedButton: UIButton = {
         let button = UIButton(type: .custom)
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = UIColor.Photon.Blue50
         button.layer.cornerRadius = 8
         button.setTitle(String.LoginsWelcomeTurnOnAutoFillButtonTitle, for: .normal)
@@ -56,51 +60,37 @@ class CredentialWelcomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         view.backgroundColor = UIColor.CredentialProvider.welcomeScreenBackgroundColor
-        addSubviews()
-        addViewConstraints()
-    }
-        
-    private func addSubviews() {
-        view.addSubview(logoImageView)
-        view.addSubview(titleLabel)
-        view.addSubview(taglineLabel)
-        view.addSubview(cancelButton)
-        view.addSubview(proceedButton)
-    }
-    
-    private func addViewConstraints() {
-        logoImageView.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview().multipliedBy(0.4)
-        }
-        
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(logoImageView.snp_bottomMargin).offset(40)
-            make.centerX.equalToSuperview()
-            make.width.equalToSuperview().inset(35).priority(.high)
-            make.width.lessThanOrEqualTo(440)
-        }
-        
-        taglineLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp_bottomMargin).offset(20)
-            make.centerX.equalToSuperview()
-            make.width.equalToSuperview().inset(35).priority(.high)
-            make.width.lessThanOrEqualTo(440)
-        }
-                
-        cancelButton.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(10)
-            make.trailing.equalToSuperview().inset(20)
-        }
-        
-        proceedButton.snp.makeConstraints { make in
-            make.bottom.equalTo(self.view.snp.bottomMargin).inset(20)
-            make.height.equalTo(44)
-            make.centerX.equalToSuperview()
-            make.width.equalToSuperview().inset(35).priority(.high)
-            make.width.lessThanOrEqualTo(360)
-        }
+
+        view.addSubviews(cancelButton, logoImageView, titleLabel, taglineLabel, proceedButton)
+
+        NSLayoutConstraint.activate([
+            cancelButton.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            cancelButton.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+
+            logoImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            logoImageView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, multiplier: 0.4),
+
+            titleLabel.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 40),
+            titleLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 35, priority: .defaultHigh),
+            titleLabel.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -35, priority: .defaultHigh),
+            titleLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 440),
+            
+            taglineLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
+            taglineLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            taglineLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 35, priority: .defaultHigh),
+            taglineLabel.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -35, priority: .defaultHigh),
+            taglineLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 440),
+            
+            proceedButton.bottomAnchor.constraint(equalTo: self.view.layoutMarginsGuide.bottomAnchor, constant: -20),
+            proceedButton.heightAnchor.constraint(equalToConstant: 44),
+            proceedButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            proceedButton.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 35, priority: .defaultHigh),
+            proceedButton.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -35, priority: .defaultHigh),
+            proceedButton.widthAnchor.constraint(lessThanOrEqualToConstant: 360)
+        ])
     }
     
     @objc func cancelButtonTapped(_ sender: UIButton) {
