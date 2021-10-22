@@ -150,6 +150,17 @@ class FindInPageBar: UIView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        guard let key = presses.first?.key else { return }
+        
+        switch key.keyCode {
+        case .keyboardEscape:
+            delegate?.findInPageDidPressClose(self)
+        default:
+            super.pressesBegan(presses, with: event)
+        }
+    }
 
     @discardableResult override func becomeFirstResponder() -> Bool {
         searchText.becomeFirstResponder()
