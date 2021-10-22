@@ -248,6 +248,8 @@ class TelemetryWrapper {
         // Installed Mozilla applications
         GleanMetrics.InstalledMozillaProducts.focus.set(UIApplication.shared.canOpenURL(URL(string: "firefox-focus://")!))
         GleanMetrics.InstalledMozillaProducts.klar.set(UIApplication.shared.canOpenURL(URL(string: "firefox-klar://")!))
+        // Device Authentication
+        GleanMetrics.Device.authentication.set(AppAuthenticator.canAuthenticateDeviceOwner())
     }
 
     @objc func uploadError(notification: NSNotification) {

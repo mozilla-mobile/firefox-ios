@@ -1567,3 +1567,22 @@ installed_mozilla_products:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-09-01"
+
+# Device specific metrics
+
+device:
+  authentication:
+    type: boolean
+    lifetime: application
+    description: |
+       True if the device support device owner authentication
+       with either biometrics or a passcode.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/9374
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9376
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-09-01"
