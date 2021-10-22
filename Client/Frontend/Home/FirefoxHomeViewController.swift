@@ -464,7 +464,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     }
 
     func contextualHintPresentTimer() {
-        timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(presentContextualOverlay), userInfo: nil, repeats: false)
+        timer = Timer.scheduledTimer(timeInterval: 1.25, target: self, selector: #selector(presentContextualOverlay), userInfo: nil, repeats: false)
     }
     
     @objc func presentContextualOverlay() {
