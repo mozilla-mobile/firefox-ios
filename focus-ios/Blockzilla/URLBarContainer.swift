@@ -6,6 +6,7 @@ import UIKit
 
 class URLBarContainer: UIView {
     private let backgroundEditing = UIView()
+    private let backgroundBrowsing = UIView()
     private let backgroundDark = UIView()
     private let backgroundBright = UIView()
 
@@ -14,6 +15,9 @@ class URLBarContainer: UIView {
 
         backgroundEditing.backgroundColor = .clear
         addSubview(backgroundEditing)
+        
+        backgroundBrowsing.backgroundColor = .foundation
+        addSubview(backgroundBrowsing)
 
         backgroundDark.backgroundColor = UIConstants.colors.background
         backgroundDark.isHidden = true
@@ -36,15 +40,20 @@ class URLBarContainer: UIView {
         backgroundEditing.snp.makeConstraints { make in
             make.edges.equalTo(self)
         }
+        
+        backgroundBrowsing.snp.makeConstraints { make in
+            make.edges.equalTo(self)
+        }
     }
 
     enum BarState {
         case bright
         case dark
         case editing
+        case browsing
     }
 
-    var barState: BarState = .editing {
+    var barState: BarState = .browsing {
         didSet {
             guard barState != oldValue else { return }
 
@@ -80,6 +89,8 @@ class URLBarContainer: UIView {
             return backgroundDark
         case .editing:
             return backgroundEditing
+        case .browsing:
+            return backgroundBrowsing
         }
     }
 }
