@@ -642,7 +642,7 @@ library:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-01-01"
 
-# Legacy IDs for deletion-request purposes
+# Legacy IDs for continuity and for deletion-request
 legacy.ids:
   client_id:
     type: uuid
