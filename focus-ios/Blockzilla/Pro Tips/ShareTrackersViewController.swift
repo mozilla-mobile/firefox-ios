@@ -21,7 +21,7 @@ class ShareTrackersViewController: UIViewController {
     private lazy var trackerStatsLabel: SmartLabel = {
         let trackerStatsLabel = SmartLabel()
         trackerStatsLabel.font = UIConstants.fonts.shareTrackerStatsLabel
-        trackerStatsLabel.textColor = UIConstants.colors.defaultFont
+        trackerStatsLabel.textColor = .secondaryText
         trackerStatsLabel.numberOfLines = 0
         trackerStatsLabel.minimumScaleFactor = UIConstants.layout.homeViewLabelMinimumScale
         trackerStatsLabel.setContentHuggingPriority(.required, for: .horizontal)
@@ -38,13 +38,13 @@ class ShareTrackersViewController: UIViewController {
     
     private lazy var trackerStatsShareButton: UIButton = {
         var button = UIButton()
-        button.setTitleColor(UIConstants.colors.defaultFont, for: .normal)
+        button.setTitleColor(.secondaryText, for: .normal)
         button.titleLabel?.font = UIConstants.fonts.shareTrackerStatsLabel
         button.titleLabel?.textAlignment = .center
         button.setTitle(UIConstants.strings.share, for: .normal)
         button.addTarget(self, action: #selector(shareTapped), for: .touchUpInside)
         button.titleLabel?.numberOfLines = 0
-        button.layer.borderColor = UIConstants.colors.defaultFont.cgColor
+        button.layer.borderColor = UIColor.secondaryText.cgColor
         button.layer.borderWidth = 1.0
         button.layer.cornerRadius = 4
         return button
