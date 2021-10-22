@@ -207,6 +207,8 @@
 		F85F7A292655AD5800395515 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A282655AD5800395515 /* SnapKit */; };
 		F85F7A2B2655AD5800395515 /* Fuzi in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A2A2655AD5800395515 /* Fuzi */; };
 		F85F7A2F2655AD5800395515 /* Telemetry in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A2E2655AD5800395515 /* Telemetry */; };
+		F8BC6A0727224B170026AB9F /* NimbusExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BC6A0627224B170026AB9F /* NimbusExtensions.swift */; };
+		F8BC6A0927224B890026AB9F /* NimbusWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BC6A0827224B890026AB9F /* NimbusWrapper.swift */; };
 		F8DE0EC826CC887800A31419 /* SupportUtilsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DE0EC726CC887800A31419 /* SupportUtilsTest.swift */; };
 		F8DE0EC926CC88B200A31419 /* SupportUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40AFB131DC939FF00DA5651 /* SupportUtils.swift */; };
 		F8DE0ECA26CC88FF00A31419 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35C11461E04AADA005FFFEF /* AppConfig.swift */; };
@@ -982,6 +984,8 @@
 		F8820C7C26E19B4E006AB3B8 /* co */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = co; path = co.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F8820C7D26E19B4E006AB3B8 /* co */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = co; path = co.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F8820C7E26E19B4E006AB3B8 /* co */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = co; path = co.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		F8BC6A0627224B170026AB9F /* NimbusExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusExtensions.swift; sourceTree = "<group>"; };
+		F8BC6A0827224B890026AB9F /* NimbusWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusWrapper.swift; sourceTree = "<group>"; };
 		F8CE542D26C169B3000A5F9C /* lv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lv; path = lv.lproj/Intro.strings; sourceTree = "<group>"; };
 		F8CE542E26C169B3000A5F9C /* lv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lv; path = lv.lproj/Intents.strings; sourceTree = "<group>"; };
 		F8CE542F26C169B4000A5F9C /* lv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lv; path = lv.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1498,6 +1502,8 @@
 				2696EB03211F540600F0C73F /* SearchHistoryUtils.swift */,
 				F7FF8B5A2194084000CCA80F /* UIDeviceExtensions.swift */,
 				24433100219DA46F00778D02 /* Debouncer.swift */,
+				F8BC6A0627224B170026AB9F /* NimbusExtensions.swift */,
+				F8BC6A0827224B890026AB9F /* NimbusWrapper.swift */,
 				D5D067FA252F945D00C35227 /* metrics.yaml */,
 			);
 			path = Blockzilla;
@@ -2112,6 +2118,7 @@
 				EBE44F4E20ADDF6A005AFEA6 /* SmartLabel.swift in Sources */,
 				E4BF2DD71BACE8CA00DA9D68 /* AppDelegate.swift in Sources */,
 				D3E2C9691DA3024800DEBE3D /* InsetButton.swift in Sources */,
+				F8BC6A0927224B890026AB9F /* NimbusWrapper.swift in Sources */,
 				C8337DF52710898800093D42 /* ToggleItem.swift in Sources */,
 				F7FF8B5B2194084000CCA80F /* UIDeviceExtensions.swift in Sources */,
 				F805722F1DBEE504004339C1 /* WebCacheUtils.swift in Sources */,
@@ -2155,6 +2162,7 @@
 				D3561B2B1DB5925100A5EEAF /* GradientBackgroundView.swift in Sources */,
 				C82D143026EF62BE007B275C /* TipsPageViewController.swift in Sources */,
 				C8337DF42710898800093D42 /* ImageLoader.swift in Sources */,
+				F8BC6A0727224B170026AB9F /* NimbusExtensions.swift in Sources */,
 				C8415DB326E9FA38008BAAA2 /* UIApplication+Orientation.swift in Sources */,
 				C89AA96F271720330089838F /* ThemeTableViewAccessoryCell.swift in Sources */,
 				D3E2C96D1DA3077400DEBE3D /* CharacterSetExtensions.swift in Sources */,

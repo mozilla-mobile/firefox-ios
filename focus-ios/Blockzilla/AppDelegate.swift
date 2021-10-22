@@ -431,7 +431,11 @@ extension AppDelegate {
     }
         
     func setupExperimentation() {
-        // TODO Temporarily removed because of https://github.com/mozilla-mobile/focus-ios/issues/2600
+        do {
+            try NimbusWrapper.shared.initialize(enabled: Settings.getToggle(.sendAnonymousUsageData))
+        } catch {
+            NSLog("Failed to setup experimentation: \(error)")
+        }
     }
 
     func presentModal(viewController: UIViewController, animated: Bool) {
