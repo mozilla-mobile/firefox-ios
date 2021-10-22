@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-import SnapKit
 import Shared
 
 protocol CredentialPasscodeRequirementViewControllerDelegate {
@@ -14,12 +13,14 @@ class CredentialPasscodeRequirementViewController: UIViewController {
     var delegate: CredentialPasscodeRequirementViewControllerDelegate?
     
     lazy private var logoImageView: UIImageView = {
-        let logoImage = UIImageView(image: UIImage(named: "logo-glyph"))
-        return logoImage
+        let image = UIImageView(image: UIImage(named: "logo-glyph"))
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
     }()
     
     lazy private var titleLabel: UILabel = {
         let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.text = .LoginsWelcomeViewTitle2
         label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         label.numberOfLines = 0
@@ -29,6 +30,7 @@ class CredentialPasscodeRequirementViewController: UIViewController {
     
     lazy private var taglineLabel: UILabel = {
         let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.text = .LoginsWelcomeViewTagline
         label.font = UIFont.systemFont(ofSize: 20)
         label.numberOfLines = 0
@@ -38,6 +40,7 @@ class CredentialPasscodeRequirementViewController: UIViewController {
 
     lazy private var warningLabel: UILabel = {
         let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 18)
         label.text = .LoginsPasscodeRequirementWarning
         label.textAlignment = .center
@@ -47,6 +50,7 @@ class CredentialPasscodeRequirementViewController: UIViewController {
 
     lazy private var cancelButton: UIButton = {
         let button = UIButton(type: .custom)
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .systemRed
         button.layer.cornerRadius = 8
         button.setTitle(Strings.CancelString, for: .normal)
@@ -57,55 +61,42 @@ class CredentialPasscodeRequirementViewController: UIViewController {
         
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         view.backgroundColor = UIColor.CredentialProvider.welcomeScreenBackgroundColor
-        addSubviews()
-        addViewConstraints()
-    }
-    
-    private func addSubviews() {
-        view.addSubview(logoImageView)
-        view.addSubview(titleLabel)
-        view.addSubview(taglineLabel)
-        view.addSubview(warningLabel)
-        view.addSubview(cancelButton)
-    }
-    
-    private func addViewConstraints() {
-        logoImageView.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview().multipliedBy(0.4)
-        }
         
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(logoImageView.snp_bottomMargin).offset(40)
-            make.centerX.equalToSuperview()
-            make.width.equalToSuperview().inset(35).priority(.high)
-            make.width.lessThanOrEqualTo(440)
-        }
+        view.addSubviews(logoImageView, titleLabel, taglineLabel, warningLabel, cancelButton)
         
-        taglineLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp_bottomMargin).offset(20)
-            make.centerX.equalToSuperview()
-            make.width.equalToSuperview().inset(35).priority(.high)
-            make.width.lessThanOrEqualTo(440)
-        }
+        NSLayoutConstraint.activate([
+            logoImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            logoImageView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, multiplier: 0.4),
+            
+            titleLabel.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 40),
+            titleLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 35, priority: .defaultHigh),
+            titleLabel.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -35, priority: .defaultHigh),
+            titleLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 440),
+            
+            taglineLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
+            taglineLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            taglineLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 35, priority: .defaultHigh),
+            taglineLabel.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -35, priority: .defaultHigh),
+            taglineLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 440),
+            
+            warningLabel.topAnchor.constraint(equalTo: taglineLabel.bottomAnchor, constant: 20),
+            warningLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            warningLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 35, priority: .defaultHigh),
+            warningLabel.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -35, priority: .defaultHigh),
+            warningLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 440),
 
-        warningLabel.snp.makeConstraints { make in
-            make.top.equalTo(taglineLabel.snp_bottomMargin).offset(40)
-            make.centerX.equalToSuperview()
-            make.width.equalToSuperview().inset(35).priority(.high)
-            make.width.lessThanOrEqualTo(440)
-        }
-
-        cancelButton.snp.makeConstraints { make in
-            make.bottom.equalTo(self.view.snp.bottomMargin).inset(20)
-            make.height.equalTo(44)
-            make.centerX.equalToSuperview()
-            make.width.equalToSuperview().inset(35).priority(.high)
-            make.width.lessThanOrEqualTo(360)
-        }
+            cancelButton.bottomAnchor.constraint(equalTo: self.view.layoutMarginsGuide.bottomAnchor, constant: -20),
+            cancelButton.heightAnchor.constraint(equalToConstant: 44),
+            cancelButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            cancelButton.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 35, priority: .defaultHigh),
+            cancelButton.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -35, priority: .defaultHigh),
+            cancelButton.widthAnchor.constraint(lessThanOrEqualToConstant: 360)
+        ])
     }
-    
+        
     @objc func cancelButtonTapped(_ sender: UIButton) {
         delegate?.credentialPasscodeRequirementViewControllerDidDismiss()
     }

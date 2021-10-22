@@ -4,13 +4,13 @@
 
 import UIKit
 import Shared
-import SnapKit
 
 class LoginOnboardingViewController: SettingsViewController {
     private var shownFromAppMenu: Bool = false
 
     private var onboardingMessageLabel: UILabel = {
         let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.text = Strings.LoginsOnboardingMessage
         label.font = DynamicFontHelper().DeviceFontExtraLarge
         label.textAlignment = .center
@@ -20,6 +20,7 @@ class LoginOnboardingViewController: SettingsViewController {
     
     private var learnMoreButton: UIButton = {
         let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle(Strings.LoginsOnboardingLearnMoreButtonTitle, for: .normal)
         button.addTarget(self, action: #selector(learnMoreButtonTapped), for: .touchUpInside)
         button.titleLabel?.font = DynamicFontHelper().DeviceFontExtraLarge
@@ -28,6 +29,7 @@ class LoginOnboardingViewController: SettingsViewController {
     
     private var continueButton: UIButton = {
         let button = UIButton(type: .custom)
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = UIColor.Photon.Blue50
         button.layer.cornerRadius = 8
         button.setTitle(Strings.LoginsOnboardingContinueButtonTitle, for: .normal)
@@ -58,26 +60,24 @@ class LoginOnboardingViewController: SettingsViewController {
         
         self.title = Strings.LoginsAndPasswordsTitle
         
-        self.view.addSubview(onboardingMessageLabel)
-        onboardingMessageLabel.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(20)
-            make.center.equalToSuperview()
-        }
+        self.view.addSubviews(onboardingMessageLabel, learnMoreButton, continueButton)
         
-        self.view.addSubview(learnMoreButton)
-        learnMoreButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalTo(onboardingMessageLabel.snp.bottom).offset(20)
-        }
-
-        self.view.addSubview(continueButton)
-        continueButton.snp.makeConstraints { make in
-            make.bottom.equalTo(self.view.snp.bottomMargin).inset(20)
-            make.height.equalTo(44)
-            make.centerX.equalToSuperview()
-            make.width.equalToSuperview().inset(35).priority(.high)
-            make.width.lessThanOrEqualTo(360)
-         }
+        NSLayoutConstraint.activate([
+            onboardingMessageLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            onboardingMessageLabel.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            onboardingMessageLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            onboardingMessageLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
+            
+            learnMoreButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            learnMoreButton.topAnchor.constraint(equalTo: onboardingMessageLabel.safeAreaLayoutGuide.bottomAnchor, constant: 20),
+            
+            continueButton.bottomAnchor.constraint(equalTo: self.view.layoutMarginsGuide.bottomAnchor, constant: -20),
+            continueButton.heightAnchor.constraint(equalToConstant: 44),
+            continueButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            continueButton.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 35, priority: .defaultHigh),
+            continueButton.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -35, priority: .defaultHigh),
+            continueButton.widthAnchor.constraint(lessThanOrEqualToConstant: 360)
+        ])
     }
     
     @objc func doneButtonTapped(_ sender: UIButton) {

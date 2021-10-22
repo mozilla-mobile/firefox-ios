@@ -899,6 +899,9 @@
 		F85C7EDF2710B4DD004BDBA4 /* LoginOnboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = F85C7EDE2710B4DD004BDBA4 /* LoginOnboarding.swift */; };
 		F85C7F0E2711C556004BDBA4 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F85C7F0D2711C555004BDBA4 /* SettingsViewController.swift */; };
 		F85C7F0F271DD154004BDBA4 /* AppAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65D89171C8647420006EA35 /* AppAuthenticator.swift */; };
+		F85C7F102721030C004BDBA4 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D052EE2645ACBF00759F85 /* View.swift */; };
+		F85C7F122721048E004BDBA4 /* Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F85C7F112721048E004BDBA4 /* Layout.swift */; };
+		F85C7F14272104E3004BDBA4 /* Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F85C7F112721048E004BDBA4 /* Layout.swift */; };
 		F8708D2E1A0970B70051AB07 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F8708D251A0970990051AB07 /* Images.xcassets */; };
 		F8708D321A0970B70051AB07 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8708D291A0970990051AB07 /* ShareViewController.swift */; };
 		F886218C270CD3B8007F4562 /* DevicePasscodeRequiredViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F886218B270CD3B8007F4562 /* DevicePasscodeRequiredViewController.swift */; };
@@ -4098,6 +4101,7 @@
 		F85C7EDC27109241004BDBA4 /* LoginOnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginOnboardingViewController.swift; sourceTree = "<group>"; };
 		F85C7EDE2710B4DD004BDBA4 /* LoginOnboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginOnboarding.swift; sourceTree = "<group>"; };
 		F85C7F0D2711C555004BDBA4 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		F85C7F112721048E004BDBA4 /* Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Layout.swift; sourceTree = "<group>"; };
 		F8624779990FC1A45BF201E5 /* anp */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = anp; path = anp.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		F8708D251A0970990051AB07 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		F8708D261A0970990051AB07 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -5797,6 +5801,7 @@
 				E65075561E37F714006961AC /* FaviconFetcher.swift */,
 				1DF4266D251BC46D0086386A /* FaviconFetcher+Non-Bundled.swift */,
 				D5D052EE2645ACBF00759F85 /* View.swift */,
+				F85C7F112721048E004BDBA4 /* Layout.swift */,
 				96D95015270238500079D39D /* Throttler.swift */,
 			);
 			path = Utils;
@@ -7939,6 +7944,7 @@
 				F8324B262649B76E007E4BFA /* SyncStatusResolver.swift in Sources */,
 				C87DF9C6267246BB0097E707 /* GeometryExtensions.swift in Sources */,
 				C87DF976267246830097E707 /* ThemeManager.swift in Sources */,
+				F85C7F102721030C004BDBA4 /* View.swift in Sources */,
 				C8CE38BD265E71FE0009B09E /* UIFontExtension.swift in Sources */,
 				F80DF74B270CB9CA00E4C37D /* AppAuthenticator.swift in Sources */,
 				F80DF7412703BC8E00E4C37D /* CredentialPasscodeRequirementViewController.swift in Sources */,
@@ -7950,6 +7956,7 @@
 				C87DF94E267246680097E707 /* Theme.swift in Sources */,
 				6025B109267B6BB300F59F6B /* NoSearchResultCell.swift in Sources */,
 				C8CE38BF265E71FE0009B09E /* UIImageExtension.swift in Sources */,
+				F85C7F14272104E3004BDBA4 /* Layout.swift in Sources */,
 				C87DF99E2672469C0097E707 /* ErrorToast.swift in Sources */,
 				C874FC2826612BFF00EBE86E /* AlertControllerView.swift in Sources */,
 				C87DF93A2672465C0097E707 /* UIConstants.swift in Sources */,
@@ -7993,6 +8000,7 @@
 				D0152245229855A8009DE753 /* OneLineCellAndFooter.swift in Sources */,
 				F018F84C2719AE8300B9A52D /* ThemedDefaultNavigationController.swift in Sources */,
 				D3B6923F1B9F9A58004B87A4 /* FindInPageHelper.swift in Sources */,
+				F85C7F122721048E004BDBA4 /* Layout.swift in Sources */,
 				39EF4378260CF5A30011E22E /* AppDelegate+Experiments.swift in Sources */,
 				EB9A179C20E69A7F00B12184 /* DarkTheme.swift in Sources */,
 				DA52E1DA25F5961F0092204C /* TabTrayViewController.swift in Sources */,

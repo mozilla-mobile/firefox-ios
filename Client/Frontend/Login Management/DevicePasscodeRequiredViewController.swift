@@ -4,15 +4,13 @@
 
 import UIKit
 import Shared
-import SnapKit
-
-// SMA TODO Finalize layout & strings.
 
 class DevicePasscodeRequiredViewController: SettingsViewController {
     private var shownFromAppMenu: Bool = false
     
     private var warningLabel: UILabel = {
         let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = DynamicFontHelper().DeviceFontExtraLarge
         label.text = Strings.LoginsDevicePasscodeRequiredMessage
         label.textAlignment = .center
@@ -22,6 +20,7 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
     
     private var learnMoreButton: UIButton = {
         let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle(Strings.LoginsDevicePasscodeRequiredLearnMoreButtonTitle, for: .normal)
         button.addTarget(self, action: #selector(learnMoreButtonTapped), for: .touchUpInside)
         button.titleLabel?.font = DynamicFontHelper().DeviceFontExtraLarge
@@ -46,17 +45,17 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
         
         self.title = Strings.LoginsAndPasswordsTitle
         
-        self.view.addSubview(warningLabel)
-        warningLabel.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(20)
-            make.center.equalToSuperview()
-        }
+        self.view.addSubviews(warningLabel, learnMoreButton)
         
-        self.view.addSubview(learnMoreButton)
-        learnMoreButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalTo(warningLabel.snp.bottom).offset(20)
-        }
+        NSLayoutConstraint.activate([
+            warningLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            warningLabel.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            warningLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            warningLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
+            
+            learnMoreButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            learnMoreButton.topAnchor.constraint(equalTo: warningLabel.safeAreaLayoutGuide.bottomAnchor, constant: 20)
+        ])
     }
     
     @objc func doneButtonTapped(_ sender: UIButton) {
