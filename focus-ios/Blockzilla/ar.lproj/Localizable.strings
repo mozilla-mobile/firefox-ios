@@ -43,6 +43,15 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "افتح في %@";
 
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "حسنا";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "حدث عُطل أثناء إضافة المرور إلى المحفظة. من فضلك أعِد المحاولة لاحقًا.";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "تعذّر إضافة المرور";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "أجرِ الاستيثاق للعودة إلى %@";
 
@@ -301,6 +310,15 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "حجب متعقبات المحتوى الأخرى قد يعطل بعض الڤديو و صفحات الوب.";
 
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "ألغِ";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes2" = "احجب متعقبات المحتوى";
+
+/* Dark theme option in settings menu */
+"Settings.darkTheme" = "داكنة";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "سيُرسل %@ ما تكتبه في شريط العنوان إلى محرك البحث الذي تُفضّله.";
 
@@ -309,6 +327,12 @@
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "اطّلع على المزيد.";
+
+/* Light theme option in settings menu */
+"Settings.lightTheme" = "فاتحة";
+
+/* Manual value for theme section in settings menu */
+"Settings.manualTheme" = "يدوي";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "قيِّم %@";
@@ -376,8 +400,29 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "الأمان";
 
+/* System value for theme section in settings menu */
+"Settings.systemTheme" = "سمة النظام";
+
+/* Theme section in settings menu */
+"Settings.theme" = "السمة";
+
+/* Header for manual theme section in settings menu */
+"Settings.themePicker" = "منتقي السمات";
+
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "الدعايات";
+
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "التحليلات";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "احجب خطوط الوب";
+
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "المحتوى";
+
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "التواصل الاجتماعي";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "استخدم معّرف الوجه لإلغاء قفل التطبيق";
@@ -403,6 +448,15 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "يمكن أن يُلغي معرّف اللمس قفل %@ إن كان ثمة مسار مفتوح في التطبيق بالفعل";
 
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "معطّل";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "مفعّل";
+
+/* Value for theme toggle in settings menu */
+"Settings.useSystemTheme" = "استعمل وضع النظام الفاتح/الداكن";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "ما الجديد";
 
@@ -411,6 +465,9 @@
 
 /* Text for a share button */
 "share" = "شارِك";
+
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "أضِف إلى الاختصارات";
 
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "انسخ العنوان";
@@ -423,6 +480,9 @@
 
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "إجراءات الصفحة";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "أزِل من الاختصارات";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "اطلب موقع سطح مكتب";
@@ -441,6 +501,9 @@
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "شارِك الصفحة مع…";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "أزِل من الاختصارات";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "أضِف";
@@ -475,6 +538,12 @@
 /* label for analytic trackers. */
 "trackingProtection.analyticTrackerLabel" = "متعقبات التحليل";
 
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "الاتصال غير آمن";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "الاتصال آمن";
+
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "متعقبات المحتوى";
 
@@ -490,11 +559,29 @@
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "اطّلع على المزيد";
 
+/* Text for the button that closes the Shield Data and opens the regular Settings screen. */
+"trackingProtection.moreSettings" = "إعدادات أكثر";
+
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "متعقبات المواقع الاجتماعية";
 
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "عُطّلت الحماية في هذه الجلسة";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "فُعّلت الحماية في هذه الجلسة";
+
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "عطّله حتى تُغلق %@ أو تنقر ERASE.";
+
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "الحماية الموسّعة من التعقب";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel2" = "لتعبّر الكاف في ”بياناتك“ عنك أنت. يحميك %@ من عديد من المتعقّبات المعروفة والتي تريد معرفة ما تفعله في المواقع.";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "المتعقّبات المحجوبة منذ %@";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "أضِف رابطا لإكماله تلقائيا";
@@ -507,6 +594,9 @@
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "امسح";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "مُسح تأريخ التصفح";
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "ابحث في الصفحة: %@";
