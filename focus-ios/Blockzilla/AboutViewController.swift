@@ -39,10 +39,6 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
 
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return UIStatusBarStyle.lightContent
-    }
-
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 4
     }

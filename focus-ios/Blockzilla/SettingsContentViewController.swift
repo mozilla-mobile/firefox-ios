@@ -91,10 +91,6 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         super.viewWillAppear(animated)
     }
 
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return UIStatusBarStyle.lightContent
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
