@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import SnapKit
+import UIKit
 
 // MARK: - Section Header View
 public struct FirefoxHomeHeaderViewUX {
@@ -19,27 +19,24 @@ enum ASHeaderViewType {
 class ASHeaderView: UICollectionReusableView {
     static let verticalInsets: CGFloat = 4
     var sectionType: ASHeaderViewType = .normal
+    private var titleLeadingConstraint: NSLayoutConstraint?
 
-    lazy var titleLabel: UILabel = {
-        let titleLabel = UILabel()
-        titleLabel.text = self.title
-        titleLabel.textColor = UIColor.theme.homePanel.activityStreamHeaderText
-        titleLabel.font = UIFont.systemFont(ofSize: FirefoxHomeHeaderViewUX.sectionHeaderSize, weight: .bold)
-        titleLabel.minimumScaleFactor = 0.6
-        titleLabel.numberOfLines = 1
-        titleLabel.adjustsFontSizeToFitWidth = true
-        return titleLabel
-    }()
+    lazy var titleLabel: UILabel = .build { label in
+        label.text = self.title
+        label.textColor = UIColor.theme.homePanel.activityStreamHeaderText
+        label.font = UIFont.systemFont(ofSize: FirefoxHomeHeaderViewUX.sectionHeaderSize, weight: .bold)
+        label.minimumScaleFactor = 0.6
+        label.numberOfLines = 1
+        label.adjustsFontSizeToFitWidth = true
+    }
 
-    lazy var moreButton: UIButton = {
-        let button = UIButton()
+    lazy var moreButton: UIButton = .build { button in
         button.isHidden = true
         button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
         button.contentHorizontalAlignment = .right
         button.setTitleColor(UIColor.theme.homePanel.activityStreamHeaderButton, for: .normal)
         button.setTitleColor(UIColor.Photon.Grey50, for: .highlighted)
-        return button
-    }()
+    }
 
     var title: String? {
         willSet(newTitle) {
@@ -68,23 +65,23 @@ class ASHeaderView: UICollectionReusableView {
         super.init(frame: frame)
         addSubview(titleLabel)
         addSubview(moreButton)
-        moreButton.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().offset(-6)
-            make.trailing.equalTo(self.safeArea.trailing).inset(titleInsets)
-        }
+
+        NSLayoutConstraint.activate([
+            moreButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -6),
+            moreButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -titleInsets),
+
+            titleLabel.trailingAnchor.constraint(equalTo: moreButton.leadingAnchor, constant: -FirefoxHomeHeaderViewUX.TitleTopInset),
+            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
+        ])
         moreButton.setContentCompressionResistancePriority(.required, for: .horizontal)
-        titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(self.safeArea.leading).inset(titleInsets)
-            make.trailing.equalTo(moreButton.snp.leading).inset(-FirefoxHomeHeaderViewUX.TitleTopInset)
-            make.bottom.equalToSuperview().offset(-10)
-        }
+
+        titleLeadingConstraint = titleLabel.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: titleInsets)
+        titleLeadingConstraint?.isActive = true
     }
 
     func remakeConstraint(type: ASHeaderViewType) {
         let inset = type == .otherGroupTabs ? 15 : titleInsets
-        titleLabel.snp.updateConstraints { update in
-            update.leading.equalTo(self.safeArea.leading).inset(inset)
-        }
+        titleLeadingConstraint?.constant = inset
     }
 
     required init?(coder aDecoder: NSCoder) {
