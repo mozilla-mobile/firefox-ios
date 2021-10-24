@@ -40,6 +40,9 @@
 /* Button to dismiss the 'Add Pass Failed' alert. */
 "AddPass.Error.Dismiss" = "OK";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "Tunnistaudu palataksesi %@iin";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "Lisää mukautettu osoite";
 
@@ -253,8 +256,17 @@
 /* Label for enable option on search suggestions prompt */
 "SearchSuggestions.promptEnable" = "Kyllä";
 
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "Saadaksesi ehdotuksia, %@in täytyy lähettää osoitepalkkiin kirjoittamasi teksti hakukoneelle.";
+
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "Näytetäänkö hakuehdotukset?";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "Osoitteen autom. täydennys";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Muiden sisältöseuraimien estäminen saattaa rikkoa joitain videoita ja verkkosivuja.";
 
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "Tumma";
@@ -312,6 +324,9 @@
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Hakukone";
+
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "Näytä hakuehdotukset";
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "HAKU";
@@ -436,6 +451,9 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "Avattava URL-osoite";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "Käytä Touch ID:tä palataksesi %@iin";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Mainosseuraimet";
 
@@ -456,6 +474,9 @@
 
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "Seurannan suojaus";
+
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "Tämän poistaminen käytöstä voi korjata joitain sivusto-ongelmia";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Lue lisää";
