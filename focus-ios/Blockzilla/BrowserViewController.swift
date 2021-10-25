@@ -28,7 +28,7 @@ class BrowserViewController: UIViewController {
     private var homeViewController: HomeViewController!
     private let overlayView = OverlayView()
     private let searchEngineManager = SearchEngineManager(prefs: UserDefaults.standard)
-    private let urlBarContainer = URLBarContainer()
+    private let urlBarContainer = UIView()
     private var urlBar: URLBar!
     private let requestHandler = RequestHandler()
     private let searchSuggestClient = SearchSuggestClient()
@@ -849,16 +849,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func toggleURLBarBackground(isBright: Bool) {
-        if urlBar.isEditing {
-            urlBarContainer.barState = .editing
-        }
-        if urlBar.inBrowsingMode {
-            urlBarContainer.barState = .browsing
-        } else if case .on = trackingProtectionStatus {
-            urlBarContainer.barState = .bright
-        } else {
-            urlBarContainer.barState = .dark
-        }
+        urlBarContainer.backgroundColor = urlBar.inBrowsingMode ? .foundation : .clear
     }
 
     private func toggleToolbarBackground() {

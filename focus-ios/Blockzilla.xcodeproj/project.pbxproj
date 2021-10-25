@@ -123,7 +123,6 @@
 		D3426AED1DB846310016DA5A /* DomainCompletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3426AEC1DB846310016DA5A /* DomainCompletion.swift */; };
 		D3426AEF1DB846BB0016DA5A /* topdomains.txt in Resources */ = {isa = PBXBuildFile; fileRef = D3426AEE1DB846BB0016DA5A /* topdomains.txt */; };
 		D3426AF61DB84E7A0016DA5A /* SearchEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3426AF51DB84E7A0016DA5A /* SearchEngine.swift */; };
-		D3426B031DBAE3800016DA5A /* URLBarContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3426B021DBAE3800016DA5A /* URLBarContainer.swift */; };
 		D343DCC21C44356500D7EEE8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D343DCC41C44356500D7EEE8 /* Localizable.strings */; };
 		D34E70351DA874AA00BABDCC /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34E70341DA874AA00BABDCC /* StringExtensions.swift */; };
 		D3561B2B1DB5925100A5EEAF /* GradientBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3561B2A1DB5925100A5EEAF /* GradientBackgroundView.swift */; };
@@ -646,7 +645,6 @@
 		D3426AEC1DB846310016DA5A /* DomainCompletion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DomainCompletion.swift; sourceTree = "<group>"; };
 		D3426AEE1DB846BB0016DA5A /* topdomains.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = topdomains.txt; sourceTree = "<group>"; };
 		D3426AF51DB84E7A0016DA5A /* SearchEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEngine.swift; sourceTree = "<group>"; };
-		D3426B021DBAE3800016DA5A /* URLBarContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLBarContainer.swift; sourceTree = "<group>"; };
 		D343DCC31C44356500D7EEE8 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D34E70341DA874AA00BABDCC /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		D3561B2A1DB5925100A5EEAF /* GradientBackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientBackgroundView.swift; sourceTree = "<group>"; };
@@ -1488,7 +1486,6 @@
 				EB84F96E209380CE00BA6739 /* URLExtensions.swift */,
 				D3E2C96A1DA3069000DEBE3D /* URIFixup.swift */,
 				D3E2C9601DA2F7C600DEBE3D /* URLBar.swift */,
-				D3426B021DBAE3800016DA5A /* URLBarContainer.swift */,
 				F805722E1DBEE504004339C1 /* WebCacheUtils.swift */,
 				D3426AEE1DB846BB0016DA5A /* topdomains.txt */,
 				E4BF2DDD1BACE8CA00DA9D68 /* Assets.xcassets */,
@@ -2064,7 +2061,6 @@
 				B3CD41CE1FD1CDE300AEBD58 /* Result.swift in Sources */,
 				D3E2C8EA1D9F0E6200DEBE3D /* BrowserViewController.swift in Sources */,
 				C817A35922CE73B4002529FF /* LockProtected.swift in Sources */,
-				D3426B031DBAE3800016DA5A /* URLBarContainer.swift in Sources */,
 				2696EB04211F540600F0C73F /* SearchHistoryUtils.swift in Sources */,
 				D3426AED1DB846310016DA5A /* DomainCompletion.swift in Sources */,
 				C82D143226EF634E007B275C /* TipViewController.swift in Sources */,
