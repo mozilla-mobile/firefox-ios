@@ -655,9 +655,6 @@
 /* Toggle logins syncing setting */
 "Logins" = "Մուտքագրումներ";
 
-/* Label displaying welcome view title */
-"Logins.WelcomeView.Title" = "Վերցրեք ձեր գաղտնաբառերը ամենուր";
-
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Փոփոխված";
 

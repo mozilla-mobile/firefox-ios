@@ -16,8 +16,14 @@
 /* About settings section title */
 "About" = "Tietoja";
 
+/* The title for the pinning a shortcut action */
+"ActivityStream.ContextMenu.AddToShortcuts" = "Lisää oikoteihin";
+
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite" = "Kiinnitä ykkössivustoihin";
+
+/* The title for removing a shortcut action */
+"ActivityStream.ContextMenu.RemoveFromShortcuts" = "Poista oikoteistä";
 
 /* The title for removing a pinned topsite action */
 "ActivityStream.ContextMenu.RemovePinTopsite" = "Poista kiinnitetty sivusto";
@@ -51,6 +57,9 @@
 
 /* This button will open the library showing all the users bookmarks */
 "ActivityStream.RecentlySaved.ShowAll" = "Näytä kaikki";
+
+/* Section title label for Shortcuts */
+"ActivityStream.Shortcuts.SectionTitle" = "Oikotiet";
 
 /* label showing how many rows of topsites are shown. %d represents a number */
 "ActivityStream.TopSites.RowCount" = "Rivejä: %d";
@@ -661,6 +670,9 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Suodata";
 
+/* Label shown when there are no logins saved */
+"LoginsList.NoLoginsFound.Title" = "Kirjautumistietoja ei löytynyt";
+
 /* Label that appears after the search if there are no logins matching the search */
 "LoginsList.NoMatchingResult.Subtitle" = "Hakuasi vastaavia tuloksia ei löytynyt.";
 
@@ -686,6 +698,9 @@
 
 /* Toast displayed to the user after adding the item to the Top Sites. */
 "Menu.AddPin.Confirm" = "Kiinnitetty ykkössivustoihin";
+
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"Menu.AddPin.Confirm2" = "Lisättiin oikoteihin";
 
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "Lisätty lukulistaan";
@@ -758,6 +773,9 @@
 
 /* Toast displayed to the user after removing the item from the Top Sites. */
 "Menu.RemovePin.Confirm" = "Poistettu ykkössivustoista";
+
+/* Toast displayed to the user after removing the item to the Shortcuts. */
+"Menu.RemovePin.Confirm2" = "Poistettiin oikoteistä";
 
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "Välilehti lähetetty";
@@ -1256,6 +1274,9 @@
 /* General settings section title */
 "Settings.General.SectionName" = "Yleiset";
 
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
+"Settings.Home.Option.Shortcuts" = "Oikotiet";
+
 /* Button in settings to clear the home page. */
 "Settings.HomePage.Clear.Button" = "Tyhjennä";
 
@@ -1628,6 +1649,9 @@
 
 /* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.CloseTab.KeyCodeTitle" = "Sulje valittu välilehti";
+
+/* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
+"TabTray.InactiveTabs.SectionTitle" = "Passiiviset välilehdet";
 
 /* The section header for tabs opened last week */
 "TabTray.LastWeek.Header" = "Viime viikolla";

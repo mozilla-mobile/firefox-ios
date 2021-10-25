@@ -88,3 +88,6 @@
 /* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
 "Menu.ViewMobileSiteAction.Title" = "请求移动版网站";
 
+/* Label for the button, displayed in the menu, used to navigate to the home page. */
+"SettingsMenu.OpenHomePageAction.Title" = "主页";
+

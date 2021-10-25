@@ -88,3 +88,6 @@
 /* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
 "Menu.ViewMobileSiteAction.Title" = "Zatraži stranicu za mobitele";
 
+/* Label for the button, displayed in the menu, used to navigate to the home page. */
+"SettingsMenu.OpenHomePageAction.Title" = "Početna stranica";
+

@@ -83,8 +83,11 @@
 "Menu.TranslatePageAction.Title" = "Traducer le pagina";
 
 /* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
-"Menu.ViewDekstopSiteAction.Title" = "Requirer le version scriptorio";
+"Menu.ViewDekstopSiteAction.Title" = "Requestar sito de scriptorio";
 
 /* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
-"Menu.ViewMobileSiteAction.Title" = "Requestar le sito mobile";
+"Menu.ViewMobileSiteAction.Title" = "Requestar sito mobile";
+
+/* Label for the button, displayed in the menu, used to navigate to the home page. */
+"SettingsMenu.OpenHomePageAction.Title" = "Pagina initial";
 

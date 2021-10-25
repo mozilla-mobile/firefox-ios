@@ -43,6 +43,12 @@
 /* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
 "ActivityStream.JumpBackIn.SectionTitle" = "Hop tilbage til";
 
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
+"ActivityStream.JumpBackIn.TabGroup.SiteCount" = "Faneblade: %d";
+
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists, the Tab Group item title will be 'Your search for \"video games\"'. The %@ sign is a placeholder for the actual search the user did. */
+"ActivityStream.JumpBackIn.TabGroup.Title" = "Din søgning efter \"%@\"";
+
 /* A string used to signify the start of the Recently Saved section in Home Screen. */
 "ActivityStream.Library.Title" = "Gemt for nylig";
 
@@ -69,6 +75,9 @@
 
 /* This button will open the library showing all the users bookmarks */
 "ActivityStream.RecentlySaved.ShowAll" = "Vis alle";
+
+/* When long pressing an item in the Recently Visited section, this is the title of the button that appears, letting the user know to remove that particular item from the menu. */
+"ActivityStream.RecentlyVisited.RemoveButton.Title" = "Fjern";
 
 /* Section title label for Shortcuts */
 "ActivityStream.Shortcuts.SectionTitle" = "Genveje";
@@ -260,6 +269,13 @@
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "Del link";
 
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
+"ContextualHints.Homepage.PersonalizedHome" = "Din personlige startside i Firefox gør det nu lettere at fortsætte, hvor du slap. Find dine seneste faneblade, bogmærker og søgeresultater.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup.
+   Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
+"ContextualHints.TabTray.InactiveTabs" = "Faneblade, du ikke har set i to uger, flyttes hertil.";
+
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "Kunne ikke føje side til læseliste.";
 
@@ -393,6 +409,9 @@
 
 /* Title for firefox about:home page in tab history list */
 "Firefox.HomePage.Title" = "Firefox startside";
+
+/* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
+"FirefoxHome.CustomizeHomeButton.Title" = "Tilpas startside";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Fremad";
@@ -622,6 +641,18 @@
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Vis forrige faneblad";
 
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string is for the button the user must tap in order to turn on the Auto close feature */
+"InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle" = "Slå automatisk lukning til";
+
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string describes what happens if you elect to turn on this option. */
+"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Firefox vil lukke faneblade, du ikke har set i løbet af den seneste måned.";
+
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This is the title of that Auto Close prompt */
+"InactiveTabs.TabTray.AutoClosePrompt.Title" = "Luk automatisk efter en måned?";
+
+/* In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs. */
+"InactiveTabs.TabTray.CloseButtonTitle" = "Luk alle inaktive faneblade";
+
 /* Accessibility label for button increasing font size in display settings of reader mode */
 "Increase text size" = "Forøg tekststørrelse";
 
@@ -654,9 +685,6 @@
 
 /* Toggle logins syncing setting */
 "Logins" = "Logins";
-
-/* Label displaying welcome view title */
-"Logins.WelcomeView.Title" = "Tag dine adgangskoder med overalt";
 
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Ændret";
@@ -954,6 +982,31 @@
 
 /* Restore Tabs Affirmative Action */
 "Okay" = "Ja";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
+"Onboarding.WhatsNew.Button.Title" = "Gå i gang";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is a general description that appears under the title for what the card is about. */
+"Onboarding.WhatsNew.Description" = "Det er blevet lettere at fortsætte, hvor du slap.";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is the description for the Jump Back In bullet point */
+"Onboarding.WhatsNew.PersonalizedHome.Description" = "Hop til dine åbne faneblade, bogmærker og browserhistorik.";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the descripion of the Recent Searches bullet point on the card */
+"Onboarding.WhatsNew.RecentSearches.Description" = "Besøg dine seneste søgninger igen fra din startside.";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the Recent Searches bullet point on the card */
+"Onboarding.WhatsNew.RecentSearches.Title" = "Seneste søgninger";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the description for the Tab Group bullet point on the card */
+"Onboarding.WhatsNew.TabGroups.Description" = "Sider fra den samme søgning grupperes.";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Tab Group bullet point on the card */
+"Onboarding.WhatsNew.TabGroups.Title" = "Bedre orden i fanebladsgrupper";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Jump Back In bullet point on the card
+   The title for the new onboarding card letting users know what is new in Firefox iOS */
+"Onboarding.WhatsNew.Title" = "Nyheder i Firefox";
 
 /* Title for prompt displayed to user after the app crashes */
 "Oops! Firefox crashed" = "Hov! Firefox gik ned";
@@ -1337,6 +1390,45 @@
 /* General settings section title */
 "Settings.General.SectionName" = "Generelt";
 
+/* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
+"Settings.Home.Option.Description" = "Vælg indhold, du vil se på startsiden i Firefox.";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
+"Settings.Home.Option.JumpBackIn" = "Hop tilbage til";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off */
+"Settings.Home.Option.Pocket" = "Anbefalet af Pocket";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Saved section on the Firefox homepage on or off */
+"Settings.Home.Option.RecentlySaved" = "Gemt for nylig";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Visited section on the Firfox homepage on or off */
+"Settings.Home.Option.RecentlyVisited" = "Besøgt for nylig";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recent Searches section on the Firefox homepage on or off */
+"Settings.Home.Option.RecentSearches" = "Seneste søgninger";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
+"Settings.Home.Option.Shortcuts" = "Genveje";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage after four hours of inactivity. */
+"Settings.Home.Option.StartAtHome.AfterFourHours" = "Startside efter fire timers inaktivitet";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage every time they open up Firefox */
+"Settings.Home.Option.StartAtHome.Always" = "Startside";
+
+/* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
+"Settings.Home.Option.StartAtHome.Description" = "Vælg, hvad der vises, når du vender tilbage til Firefox.";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
+"Settings.Home.Option.StartAtHome.Never" = "Seneste faneblad";
+
+/* Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage. */
+"Settings.Home.Option.StartAtHome.Title" = "Åbningsskærm";
+
+/* In the settings menu, this is the title of the Firefox Homepage customization settings section */
+"Settings.Home.Option.Title" = "Startsiden i Firefox";
+
 /* Button in settings to clear the home page. */
 "Settings.HomePage.Clear.Button" = "Ryd";
 
@@ -1507,6 +1599,18 @@
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Undersøgelser";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Inactive Tabs feature, a separate section of inactive tabs that appears in the Tab Tray, on or off */
+"Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "Inaktive faneblade";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
+"Settings.Tabs.CustomizeTabsSection.TabGroups" = "Fanebladsgrupper";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the Tabs Tray customization section. The tabs tray is accessed from firefox hompage */
+"Settings.Tabs.CustomizeTabsSection.Title" = "Tilpas fanebladsbakke";
+
+/* In the settings menu, this is the title for the Tabs customization section option */
+"Settings.Tabs.Title" = "Faneblade";
 
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Ok, forstået";
@@ -1763,6 +1867,9 @@
 
 /* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenSelectedTab.KeyCodeTitle" = "Åbn det valgte faneblad";
+
+/* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
+"TabTray.OtherTabs.Title" = "Andre faneblade";
 
 /* The title for the tab tray in private mode */
 "TabTray.PrivateTitle" = "Private faneblade";
