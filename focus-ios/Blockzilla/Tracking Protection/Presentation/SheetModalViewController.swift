@@ -9,7 +9,7 @@ class SheetModalViewController: UIViewController {
     
     private lazy var containerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .clear
+        view.backgroundColor = .systemGroupedBackground
         view.layer.cornerRadius = metrics.cornerRadius
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.translatesAutoresizingMaskIntoConstraints = false
