@@ -655,9 +655,6 @@
 /* Toggle logins syncing setting */
 "Logins" = "Innloggingar";
 
-/* Label displaying welcome view title */
-"Logins.WelcomeView.Title" = "Ta med deg passorda overalt";
-
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Endra";
 

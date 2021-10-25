@@ -43,6 +43,12 @@
 /* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
 "ActivityStream.JumpBackIn.SectionTitle" = "Назад до";
 
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
+"ActivityStream.JumpBackIn.TabGroup.SiteCount" = "Вкладки: %d";
+
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists, the Tab Group item title will be 'Your search for \"video games\"'. The %@ sign is a placeholder for the actual search the user did. */
+"ActivityStream.JumpBackIn.TabGroup.Title" = "Ваш пошук для \"%@\"";
+
 /* A string used to signify the start of the Recently Saved section in Home Screen. */
 "ActivityStream.Library.Title" = "Недавно збережені";
 
@@ -70,6 +76,9 @@
 /* This button will open the library showing all the users bookmarks */
 "ActivityStream.RecentlySaved.ShowAll" = "Показати всі";
 
+/* When long pressing an item in the Recently Visited section, this is the title of the button that appears, letting the user know to remove that particular item from the menu. */
+"ActivityStream.RecentlyVisited.RemoveButton.Title" = "Вилучити";
+
 /* Section title label for Shortcuts */
 "ActivityStream.Shortcuts.SectionTitle" = "Ярлики";
 
@@ -77,7 +86,7 @@
 "ActivityStream.TopSites.RowCount" = "Рядків: %d";
 
 /* The title for the setting page which lets you select the number of top site rows */
-"ActivityStream.TopSites.RowSettingFooter" = "Встановити рядки";
+"ActivityStream.TopSites.RowSettingFooter" = "Кількість рядків";
 
 /* Section title label for Top Sites */
 "ActivityStream.TopSites.SectionTitle" = "Популярні сайти";
@@ -243,7 +252,7 @@
 "ContextMenu.CopyLinkButtonTitle" = "Копіювати посилання";
 
 /* Context menu item for downloading a link URL */
-"ContextMenu.DownloadLinkButtonTitle" = "Посилання для завантаження";
+"ContextMenu.DownloadLinkButtonTitle" = "Завантажити посилання";
 
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "Відкрити в новій вкладці";
@@ -259,6 +268,13 @@
 
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "Поділитись посиланням";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
+"ContextualHints.Homepage.PersonalizedHome" = "Відтепер ваша персоналізована сторінка домівки Firefox полегшує продовження роботи з місця, де ви зупинилися. Знайдіть останні вкладки, закладки та результати пошуку.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup.
+   Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
+"ContextualHints.TabTray.InactiveTabs" = "Сюди переміщуються вкладки, які ви не переглядали впродовж двох тижнів.";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "Не вдалося додати сторінку до списку читання";
@@ -393,6 +409,9 @@
 
 /* Title for firefox about:home page in tab history list */
 "Firefox.HomePage.Title" = "Домівка Firefox";
+
+/* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
+"FirefoxHome.CustomizeHomeButton.Title" = "Налаштувати домівку";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Вперед";
@@ -622,6 +641,18 @@
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Показати попередню вкладку";
 
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string is for the button the user must tap in order to turn on the Auto close feature */
+"InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle" = "Увімкнути автоматичне закриття";
+
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string describes what happens if you elect to turn on this option. */
+"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Firefox закриватиме вкладки, які ви не переглядали впродовж останнього місяця.";
+
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This is the title of that Auto Close prompt */
+"InactiveTabs.TabTray.AutoClosePrompt.Title" = "Закрити через місяць автоматично?";
+
+/* In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs. */
+"InactiveTabs.TabTray.CloseButtonTitle" = "Закрити всі неактивні вкладки";
+
 /* Accessibility label for button increasing font size in display settings of reader mode */
 "Increase text size" = "Збільшити розмір шрифту";
 
@@ -654,9 +685,6 @@
 
 /* Toggle logins syncing setting */
 "Logins" = "Паролі";
-
-/* Label displaying welcome view title */
-"Logins.WelcomeView.Title" = "Отримайте свої паролі всюди";
 
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Змінено";
@@ -748,7 +776,7 @@
 "Menu.AddToReadingList.Confirm" = "Додано до списку читання";
 
 /* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
-"Menu.BackUpAndSync.Label" = "Резервне копіювання та синхронізація даних";
+"Menu.BackUpAndSync.Label" = "Резервне копіювання та синхронізація";
 
 /* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "Закладки";
@@ -955,6 +983,31 @@
 /* Restore Tabs Affirmative Action */
 "Okay" = "Гаразд";
 
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
+"Onboarding.WhatsNew.Button.Title" = "Почати перегляд";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is a general description that appears under the title for what the card is about. */
+"Onboarding.WhatsNew.Description" = "Тепер легше продовжити звідти, де ви зупинилися.";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is the description for the Jump Back In bullet point */
+"Onboarding.WhatsNew.PersonalizedHome.Description" = "Переходьте до відкритих вкладок, закладок та історії перегляду.";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the descripion of the Recent Searches bullet point on the card */
+"Onboarding.WhatsNew.RecentSearches.Description" = "Перегляньте останні пошукові запити зі своєї сторінки домівки.";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the Recent Searches bullet point on the card */
+"Onboarding.WhatsNew.RecentSearches.Title" = "Недавні пошуки";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the description for the Tab Group bullet point on the card */
+"Onboarding.WhatsNew.TabGroups.Description" = "Сторінки з одного пошукового запиту групуються разом.";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Tab Group bullet point on the card */
+"Onboarding.WhatsNew.TabGroups.Title" = "Охайніші групи вкладок";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Jump Back In bullet point on the card
+   The title for the new onboarding card letting users know what is new in Firefox iOS */
+"Onboarding.WhatsNew.Title" = "Що нового у Firefox";
+
 /* Title for prompt displayed to user after the app crashes */
 "Oops! Firefox crashed" = "Отакої! Стався збій Firefox";
 
@@ -1007,10 +1060,10 @@
 "Privacy Policy" = "Політика приватності";
 
 /* This is the value for a label that indicates if a user is on an unencrypted website. */
-"ProtectionStatus.NotSecure" = "З’єднання не захищене";
+"ProtectionStatus.NotSecure" = "Незахищене з’єднання";
 
 /* This is the value for a label that indicates if a user is on a secure https connection. */
-"ProtectionStatus.Secure" = "З’єднання захищене";
+"ProtectionStatus.Secure" = "Захищене з’єднання";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Швидкі засоби пошуку";
@@ -1337,6 +1390,45 @@
 /* General settings section title */
 "Settings.General.SectionName" = "Загальні";
 
+/* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
+"Settings.Home.Option.Description" = "Оберіть, що ви побачите на домівці Firefox.";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
+"Settings.Home.Option.JumpBackIn" = "Назад до";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off */
+"Settings.Home.Option.Pocket" = "Рекомендовано Pocket";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Saved section on the Firefox homepage on or off */
+"Settings.Home.Option.RecentlySaved" = "Недавно збережені";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Visited section on the Firfox homepage on or off */
+"Settings.Home.Option.RecentlyVisited" = "Недавно відвідані";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recent Searches section on the Firefox homepage on or off */
+"Settings.Home.Option.RecentSearches" = "Недавні пошуки";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
+"Settings.Home.Option.Shortcuts" = "Ярлики";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage after four hours of inactivity. */
+"Settings.Home.Option.StartAtHome.AfterFourHours" = "Домівка через чотири години бездіяльності";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage every time they open up Firefox */
+"Settings.Home.Option.StartAtHome.Always" = "Домівка";
+
+/* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
+"Settings.Home.Option.StartAtHome.Description" = "Оберіть, що показувати при поверненні в Firefox.";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
+"Settings.Home.Option.StartAtHome.Never" = "Остання вкладка";
+
+/* Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage. */
+"Settings.Home.Option.StartAtHome.Title" = "Початковий екран";
+
+/* In the settings menu, this is the title of the Firefox Homepage customization settings section */
+"Settings.Home.Option.Title" = "Домівка Firefox";
+
 /* Button in settings to clear the home page. */
 "Settings.HomePage.Clear.Button" = "Очистити";
 
@@ -1407,7 +1499,7 @@
 "Settings.NewTab.Option.Pocket" = "Популярне в Pocket";
 
 /* Footer caption for pocket settings */
-"Settings.NewTab.Option.PocketFooter" = "Чудові статті з усього Інтернету.";
+"Settings.NewTab.Option.PocketFooter" = "Чудові статті з усього Інтернету";
 
 /* Option in settings to show reading list when you open a new tab */
 "Settings.NewTab.Option.ReadingList" = "Показувати список читання";
@@ -1507,6 +1599,18 @@
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Дослідження";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Inactive Tabs feature, a separate section of inactive tabs that appears in the Tab Tray, on or off */
+"Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "Неактивні вкладки";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
+"Settings.Tabs.CustomizeTabsSection.TabGroups" = "Групи вкладок";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the Tabs Tray customization section. The tabs tray is accessed from firefox hompage */
+"Settings.Tabs.CustomizeTabsSection.Title" = "Налаштувати лоток вкладок";
+
+/* In the settings menu, this is the title for the Tabs customization section option */
+"Settings.Tabs.Title" = "Вкладки";
 
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Гаразд, зрозуміло";
@@ -1763,6 +1867,9 @@
 
 /* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenSelectedTab.KeyCodeTitle" = "Відкрити вибрану вкладку";
+
+/* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
+"TabTray.OtherTabs.Title" = "Інші вкладки";
 
 /* The title for the tab tray in private mode */
 "TabTray.PrivateTitle" = "Приватні вкладки";

@@ -167,13 +167,13 @@
 "ContextMenu.CopyLinkButtonTitle" = "Copiar l'enllaz";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
-"Could not add page to Reading list" = "Nun pudo amestase la páxina a la llista de llectura.";
+"Could not add page to Reading list" = "Nun se pudo amestar la páxina a la llista de llectura.";
 
 /* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
-"Could not add page to Reading List. Maybe it’s already there?" = "Nun pudo amestase la páxina a Llista de Llectura. Quiciabes yá tea ellí.";
+"Could not add page to Reading List. Maybe it’s already there?" = "Nun se pudo amestar la páxina a Llista de Llectura. Quiciabes yá tea ellí.";
 
 /* Error message that is shown in settings when there was a problem loading */
-"Could not load page." = "Nun pudo cargase la páxina.";
+"Could not load page." = "Nun se pudo cargar la páxina.";
 
 /* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
 "CoverSheet.v22.DarkMode.Description" = "Pa usuarios d'iOS 13, Firefox cambia pal estilu escuru cuando'l teléfonu tea nel mou escuridá. Pa camudar esti comportamientu, vete p'Axustes > Estilu.";
@@ -519,9 +519,6 @@
 /* Toggle logins syncing setting */
 "Logins" = "Anicios de sesión";
 
-/* Label displaying welcome view title */
-"Logins.WelcomeView.Title" = "Lleva les contraseñes contigo";
-
 /* Button to not save the user's password */
 "LoginsHelper.DontSave.Button" = "Nun guardar";
 
@@ -722,7 +719,7 @@
 "OpenURL.Error.Message" = "Firefox nun pue abrir la páxina porque tien una direición que nun ye válida.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
-"OpenURL.Error.Title" = "Nun pue abrise la páxina";
+"OpenURL.Error.Title" = "Nun se pue abrir la páxina";
 
 /* Accessibility label for the Page Options menu button */
 "Page Options Menu" = "Menú d'opciones de la páxina";
@@ -832,7 +829,7 @@
 "Search.ThirdPartyEngines.DuplicateErrorTitle" = "Falló";
 
 /* A title explaining that we failed to add a search engine */
-"Search.ThirdPartyEngines.FailedMessage" = "Nun pudo amestase'l fornidor de busques.";
+"Search.ThirdPartyEngines.FailedMessage" = "Nun se pudo amestar el fornidor de busques.";
 
 /* A title explaining that we failed to add a search engine */
 "Search.ThirdPartyEngines.FailedTitle" = "Falló";
@@ -875,7 +872,7 @@
 "SendTo.Error.OK.Button" = "Aceutar";
 
 /* Title of error prompt displayed when an invalid URL is shared. */
-"SendTo.Error.Title" = "L'enllaz que tentes de compartir nun pue compartise.";
+"SendTo.Error.Title" = "L'enllaz que tentes de compartir nun se pue compartir.";
 
 /* Error message shown in the remote tabs panel */
 "SendTo.NoDevicesFound.Message" = "Nun tienes más preseos conectaos a esta cuenta de Firefox disponible pa sincronizar.";
@@ -1200,7 +1197,7 @@
 "Settings.WebsiteData.ButtonShowMore" = "Amosar más";
 
 /* Description of the confirmation dialog shown when a user tries to clear their private data. */
-"Settings.WebsiteData.ConfirmPrompt" = "Esta aición va desaniciar tolos datos de los sitios web. Nun pue desfacese.";
+"Settings.WebsiteData.ConfirmPrompt" = "Esta aición va desaniciar tolos datos de los sitios web. Nun se pue desfacer.";
 
 /* Title displayed in header of the Data Management panel. */
 "Settings.WebsiteData.Title" = "Datos de sitios web";
@@ -1321,7 +1318,7 @@
 "TabTray.Yesterday.Header" = "Ayeri";
 
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
-"The page could not be displayed in Reader View." = "La páxina nun pudo amosase en Vista de Llectura.";
+"The page could not be displayed in Reader View." = "La páxina nun se pudo amosar en Vista de Llectura.";
 
 /* Error message in the remote tabs panel */
 "There was a problem accessing tabs from your other devices. Try again in a few moments." = "Hebo un problema al acceder a les llingüetes d'otros preseos de to. Volvi tentalo nun momentu.";

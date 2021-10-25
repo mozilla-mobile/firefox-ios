@@ -118,6 +118,9 @@
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitle" = "المواقع الأكثر زيارة";
 
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitleV2" = "اختصارات المواقع";
+
 /* Sub label for Top Sites widget */
 "TodayWidget.TopSitesSubLabel" = "‏Firefox - المواقع الأكثر زيارة";
 

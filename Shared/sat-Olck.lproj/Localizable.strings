@@ -655,9 +655,6 @@
 /* Toggle logins syncing setting */
 "Logins" = "ᱵᱚᱞᱚ ᱠᱚ";
 
-/* Label displaying welcome view title */
-"Logins.WelcomeView.Title" = "ᱟᱢᱟᱜ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱠᱚ ᱡᱚᱛᱚ ᱞᱮᱠᱟᱱ ᱡᱟᱭᱜᱟ ᱨᱮ ᱤᱫᱤ ᱢᱮ";
-
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "ᱵᱚᱫᱚᱞᱟᱠ";
 

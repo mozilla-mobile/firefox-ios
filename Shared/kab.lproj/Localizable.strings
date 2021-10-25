@@ -43,6 +43,12 @@
 /* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
 "ActivityStream.JumpBackIn.SectionTitle" = "Uɣal ɣer deffir";
 
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
+"ActivityStream.JumpBackIn.TabGroup.SiteCount" = "Accaren: %d";
+
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists, the Tab Group item title will be 'Your search for \"video games\"'. The %@ sign is a placeholder for the actual search the user did. */
+"ActivityStream.JumpBackIn.TabGroup.Title" = "Anadi-inek i \"%@\"";
+
 /* A string used to signify the start of the Recently Saved section in Home Screen. */
 "ActivityStream.Library.Title" = "Yettwasekles melmi kan";
 
@@ -69,6 +75,9 @@
 
 /* This button will open the library showing all the users bookmarks */
 "ActivityStream.RecentlySaved.ShowAll" = "Sken kullec";
+
+/* When long pressing an item in the Recently Visited section, this is the title of the button that appears, letting the user know to remove that particular item from the menu. */
+"ActivityStream.RecentlyVisited.RemoveButton.Title" = "kkes";
 
 /* Section title label for Shortcuts */
 "ActivityStream.Shortcuts.SectionTitle" = "Inegzumen";
@@ -260,6 +269,13 @@
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "Bḍu aseɣwen";
 
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
+"ContextualHints.Homepage.PersonalizedHome" = "Asebter-inek•inem n Firefox udmawan yettarra tura fessus ugar akemmel seg wanda akken i tḥebseḍ. Af accaren-ik•im n melmi kan, ticraḍ n yisebtar, d yigmaḍ n unadi.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup.
+   Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
+"ContextualHints.TabTray.InactiveTabs" = "Accaren ur tesneqdeḍ ara snat ledwaṛ ad ttusnekzen ɣer da.";
+
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "Ur yezmir ara ad yernu asebter ɣer tebdart n tɣuri";
 
@@ -393,6 +409,9 @@
 
 /* Title for firefox about:home page in tab history list */
 "Firefox.HomePage.Title" = "Asebter agejdan n Firefox";
+
+/* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
+"FirefoxHome.CustomizeHomeButton.Title" = "Sagen asebter agejdan";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Ɣer zdat";
@@ -622,6 +641,18 @@
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Sken iccer yezrin";
 
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string is for the button the user must tap in order to turn on the Auto close feature */
+"InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle" = "Rmed amdal awurman";
+
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string describes what happens if you elect to turn on this option. */
+"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Firefox ad imdel accaren ur tesneqdeḍ ara deg wayyur yezrin.";
+
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This is the title of that Auto Close prompt */
+"InactiveTabs.TabTray.AutoClosePrompt.Title" = "Amdal awurman seld yiwen wayyur?";
+
+/* In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs. */
+"InactiveTabs.TabTray.CloseButtonTitle" = "Mdel akk accaren irurmiden";
+
 /* Accessibility label for button increasing font size in display settings of reader mode */
 "Increase text size" = "Semɣer teɣzi n uḍris";
 
@@ -654,9 +685,6 @@
 
 /* Toggle logins syncing setting */
 "Logins" = "Inekcam";
-
-/* Label displaying welcome view title */
-"Logins.WelcomeView.Title" = "Awi awalen uffiren anda teddiḍ";
 
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Ittusnifel";
@@ -954,6 +982,15 @@
 
 /* Restore Tabs Affirmative Action */
 "Okay" = "Ih";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
+"Onboarding.WhatsNew.Button.Title" = "Bdu tunigin";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is the description for the Jump Back In bullet point */
+"Onboarding.WhatsNew.PersonalizedHome.Description" = "Ɛeddi ɣer waccaren yeldin, ticraḍ n yisebtar, d uzray n tunigin.";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the Recent Searches bullet point on the card */
+"Onboarding.WhatsNew.RecentSearches.Title" = "Inadiyen n melmi kan";
 
 /* Title for prompt displayed to user after the app crashes */
 "Oops! Firefox crashed" = "Ayhu! Firefox yeɣli";
@@ -1337,6 +1374,30 @@
 /* General settings section title */
 "Settings.General.SectionName" = "Amatu";
 
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
+"Settings.Home.Option.JumpBackIn" = "Uɣal ɣer deffir";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off */
+"Settings.Home.Option.Pocket" = "Awelleh si Pocket";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Saved section on the Firefox homepage on or off */
+"Settings.Home.Option.RecentlySaved" = "Yettwasekles melmi kan";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Visited section on the Firfox homepage on or off */
+"Settings.Home.Option.RecentlyVisited" = "Ttwarzan melmi kan";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recent Searches section on the Firefox homepage on or off */
+"Settings.Home.Option.RecentSearches" = "Inadiyen n melmi kan";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
+"Settings.Home.Option.Shortcuts" = "Inegzumen";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage every time they open up Firefox */
+"Settings.Home.Option.StartAtHome.Always" = "Asebter agejdan";
+
+/* In the settings menu, this is the title of the Firefox Homepage customization settings section */
+"Settings.Home.Option.Title" = "Asebter agejdan n Firefox";
+
 /* Button in settings to clear the home page. */
 "Settings.HomePage.Clear.Button" = "Sfeḍ";
 
@@ -1507,6 +1568,12 @@
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Leqraya";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Inactive Tabs feature, a separate section of inactive tabs that appears in the Tab Tray, on or off */
+"Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "Accaren arurmiden";
+
+/* In the settings menu, this is the title for the Tabs customization section option */
+"Settings.Tabs.Title" = "Iccaren";
 
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "IH, awi-t-id";

@@ -43,6 +43,12 @@
 /* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
 "ActivityStream.JumpBackIn.SectionTitle" = "กลับเข้าไป";
 
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
+"ActivityStream.JumpBackIn.TabGroup.SiteCount" = "แท็บ: %d";
+
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists, the Tab Group item title will be 'Your search for \"video games\"'. The %@ sign is a placeholder for the actual search the user did. */
+"ActivityStream.JumpBackIn.TabGroup.Title" = "การค้นหาของคุณสำหรับ \"%@\"";
+
 /* A string used to signify the start of the Recently Saved section in Home Screen. */
 "ActivityStream.Library.Title" = "บันทึกไว้ล่าสุด";
 
@@ -69,6 +75,9 @@
 
 /* This button will open the library showing all the users bookmarks */
 "ActivityStream.RecentlySaved.ShowAll" = "แสดงทั้งหมด";
+
+/* When long pressing an item in the Recently Visited section, this is the title of the button that appears, letting the user know to remove that particular item from the menu. */
+"ActivityStream.RecentlyVisited.RemoveButton.Title" = "ลบ";
 
 /* Section title label for Shortcuts */
 "ActivityStream.Shortcuts.SectionTitle" = "ทางลัด";
@@ -419,7 +428,7 @@
 "FxA.NoInternetConnection" = "ไม่มีการเชื่อมต่ออินเทอร์เน็ต";
 
 /* Button label to open Sync preferences */
-"FxA.OpenSyncPreferences" = "เปิดค่ากำหนด Sync";
+"FxA.OpenSyncPreferences" = "เปิดการตั้งค่า Sync";
 
 /* Instructions shown on qr code scanning view */
 "fxa.qr-scanning-view.instructions" = "สแกนรหัส QR ที่แสดงใน firefox.com/pair";
@@ -654,9 +663,6 @@
 
 /* Toggle logins syncing setting */
 "Logins" = "การเข้าสู่ระบบ";
-
-/* Label displaying welcome view title */
-"Logins.WelcomeView.Title" = "นำรหัสผ่านของคุณไปทุกที่";
 
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "เปลี่ยนแปลงเมื่อ";
@@ -954,6 +960,9 @@
 
 /* Restore Tabs Affirmative Action */
 "Okay" = "ตกลง";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
+"Onboarding.WhatsNew.Button.Title" = "เริ่มการเรียกดู";
 
 /* Title for prompt displayed to user after the app crashes */
 "Oops! Firefox crashed" = "อุปส์! Firefox เกิดข้อขัดข้อง";
@@ -1337,6 +1346,21 @@
 /* General settings section title */
 "Settings.General.SectionName" = "ทั่วไป";
 
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
+"Settings.Home.Option.JumpBackIn" = "กลับเข้าไป";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Saved section on the Firefox homepage on or off */
+"Settings.Home.Option.RecentlySaved" = "บันทึกไว้ล่าสุด";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Visited section on the Firfox homepage on or off */
+"Settings.Home.Option.RecentlyVisited" = "เยี่ยมชมล่าสุด";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage every time they open up Firefox */
+"Settings.Home.Option.StartAtHome.Always" = "หน้าแรก";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
+"Settings.Home.Option.StartAtHome.Never" = "แท็บสุดท้าย";
+
 /* Button in settings to clear the home page. */
 "Settings.HomePage.Clear.Button" = "ล้าง";
 
@@ -1507,6 +1531,9 @@
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "การศึกษา";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
+"Settings.Tabs.CustomizeTabsSection.TabGroups" = "กลุ่มแท็บ";
 
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "ตกลง เข้าใจแล้ว";

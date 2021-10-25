@@ -652,9 +652,6 @@
 /* Toggle logins syncing setting */
 "Logins" = "ການເຂົ້າສູ່ລະບົບ";
 
-/* Label displaying welcome view title */
-"Logins.WelcomeView.Title" = "ເອົາລະຫັດຜ່ານຂອງທ່ານໄປນຳທຸກບ່ອນ";
-
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "ດັດແກ້ແລ້ວ";
 

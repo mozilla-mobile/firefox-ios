@@ -43,6 +43,12 @@
 /* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
 "ActivityStream.JumpBackIn.SectionTitle" = "Itzuli zeudenera";
 
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
+"ActivityStream.JumpBackIn.TabGroup.SiteCount" = "Fitxak: %d";
+
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists, the Tab Group item title will be 'Your search for \"video games\"'. The %@ sign is a placeholder for the actual search the user did. */
+"ActivityStream.JumpBackIn.TabGroup.Title" = "Zure bilaketa: \"%@\"";
+
 /* A string used to signify the start of the Recently Saved section in Home Screen. */
 "ActivityStream.Library.Title" = "Gordetako azkenak";
 
@@ -69,6 +75,9 @@
 
 /* This button will open the library showing all the users bookmarks */
 "ActivityStream.RecentlySaved.ShowAll" = "Erakutsi denak";
+
+/* When long pressing an item in the Recently Visited section, this is the title of the button that appears, letting the user know to remove that particular item from the menu. */
+"ActivityStream.RecentlyVisited.RemoveButton.Title" = "Kendu";
 
 /* Section title label for Shortcuts */
 "ActivityStream.Shortcuts.SectionTitle" = "Lasterbideak";
@@ -260,6 +269,13 @@
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "Partekatu lotura";
 
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
+"ContextualHints.Homepage.PersonalizedHome" = "Errazagoa da utzitako lekutik jarraitzea Firefoxen pertsonalizatutako hasiera-orriarekin. Aurkitu zure azken fitxak, laster-markak eta bilaketa-emaitzak.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup.
+   Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
+"ContextualHints.TabTray.InactiveTabs" = "Azken bi asteetan ikusi ez dituzun fitxak hona eramaten dira.";
+
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "Ezin da orria irakurketa-zerrendan gehitu";
 
@@ -393,6 +409,9 @@
 
 /* Title for firefox about:home page in tab history list */
 "Firefox.HomePage.Title" = "Firefoxen hasiera-orria";
+
+/* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
+"FirefoxHome.CustomizeHomeButton.Title" = "Pertsonalizatu hasiera-orria";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Aurrera";
@@ -550,6 +569,9 @@
 /* Title for the Synced Tabs Cell in the History Panel */
 "HistoryPanel.SyncedTabsCell.Title" = "Sinkronizatutako gailuak";
 
+/* Accessibility label for the tab toolbar indicating the Home button. */
+"Home" = "Hasiera";
+
 /* Button cancelling changes setting the home page for the first time. */
 "HomePage.Set.Dialog.Cancel" = "Utzi";
 
@@ -619,6 +641,18 @@
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Erakutsi aurreko fitxa";
 
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string is for the button the user must tap in order to turn on the Auto close feature */
+"InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle" = "Aktibatu automatikoki ixtea";
+
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string describes what happens if you elect to turn on this option. */
+"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Azken hilabetean ikusi ez dituzun fitxak itxiko ditu Firefoxek.";
+
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This is the title of that Auto Close prompt */
+"InactiveTabs.TabTray.AutoClosePrompt.Title" = "Automatikoki itxi hilabete ondoren?";
+
+/* In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs. */
+"InactiveTabs.TabTray.CloseButtonTitle" = "Itxi fitxa inaktibo guztiak";
+
 /* Accessibility label for button increasing font size in display settings of reader mode */
 "Increase text size" = "Handiagotu testuaren tamaina";
 
@@ -651,9 +685,6 @@
 
 /* Toggle logins syncing setting */
 "Logins" = "Saio-hasierak";
-
-/* Label displaying welcome view title */
-"Logins.WelcomeView.Title" = "Eraman pasahitzak alboan";
 
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Aldatuta";
@@ -699,6 +730,9 @@
 
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "Gordetako saio-hasierak hemen agertuko dira. Beste gailu bateko Firefoxen saio-hasierak gorde badituzu, hasi saioa zure Firefox kontuan.";
+
+/* Label shown when there are no logins saved */
+"LoginsList.NoLoginsFound.Title" = "Ez da saio-hasierarik aurkitu";
 
 /* Label that appears after the search if there are no logins matching the search */
 "LoginsList.NoMatchingResult.Subtitle" = "Ez dago zure bilaketarekin bat datorren emaitzarik.";
@@ -828,6 +862,9 @@
 /* Title on tracking protection menu for blocked items. */
 "Menu.TrackingProtection.BlockedTitle" = "Blokeatuta";
 
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"Menu.TrackingProtection.Details.Verifier" = "Egiaztatzailea: %@";
+
 /* Message in menu when no trackers blocked. */
 "Menu.TrackingProtection.NoTrackersBlockedTitle" = "Ez da aurkitu Firefoxi ezagunak zaizkion jarraipen-elementurik orri honetan.";
 
@@ -946,6 +983,31 @@
 /* Restore Tabs Affirmative Action */
 "Okay" = "Ados";
 
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
+"Onboarding.WhatsNew.Button.Title" = "Hasi nabigatzen";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is a general description that appears under the title for what the card is about. */
+"Onboarding.WhatsNew.Description" = "Errazagoa da orain utzi zenuen tokitik jarraitzea.";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is the description for the Jump Back In bullet point */
+"Onboarding.WhatsNew.PersonalizedHome.Description" = "Saltatu irekitako zure fitxa, laster-marka eta nabigazio-historiara.";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the descripion of the Recent Searches bullet point on the card */
+"Onboarding.WhatsNew.RecentSearches.Description" = "Itzuli zure azken bilaketetara zure hasiera-orritik.";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the Recent Searches bullet point on the card */
+"Onboarding.WhatsNew.RecentSearches.Title" = "Azken bilaketak";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the description for the Tab Group bullet point on the card */
+"Onboarding.WhatsNew.TabGroups.Description" = "Bilaketa berdinetik datozen orriak taldekatu egiten dira.";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Tab Group bullet point on the card */
+"Onboarding.WhatsNew.TabGroups.Title" = "Fitxa multzo txukunagoak";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Jump Back In bullet point on the card
+   The title for the new onboarding card letting users know what is new in Firefox iOS */
+"Onboarding.WhatsNew.Title" = "Firefoxen berrikuntzak";
+
 /* Title for prompt displayed to user after the app crashes */
 "Oops! Firefox crashed" = "Ene! Firefoxek huts egin du";
 
@@ -996,6 +1058,12 @@
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Pribatutasun-politika";
+
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "Konexioa ez da segurua";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "Konexioa segurua da";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Bilaketa bizkorreko motorrak";
@@ -1322,6 +1390,45 @@
 /* General settings section title */
 "Settings.General.SectionName" = "Orokorra";
 
+/* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
+"Settings.Home.Option.Description" = "Aukeratu Firefoxen hasiera-orrian ikusiko duzun edukia.";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
+"Settings.Home.Option.JumpBackIn" = "Itzuli zeudenera";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off */
+"Settings.Home.Option.Pocket" = "Pocket-ek gomendatua";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Saved section on the Firefox homepage on or off */
+"Settings.Home.Option.RecentlySaved" = "Gordetako azkenak";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Visited section on the Firfox homepage on or off */
+"Settings.Home.Option.RecentlyVisited" = "Bisitatutako azkenak";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recent Searches section on the Firefox homepage on or off */
+"Settings.Home.Option.RecentSearches" = "Azken bilaketak";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
+"Settings.Home.Option.Shortcuts" = "Lasterbideak";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage after four hours of inactivity. */
+"Settings.Home.Option.StartAtHome.AfterFourHours" = "Hasiera-orria, lau orduz inaktibo egon ondoren";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage every time they open up Firefox */
+"Settings.Home.Option.StartAtHome.Always" = "Hasiera-orria";
+
+/* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
+"Settings.Home.Option.StartAtHome.Description" = "Aukeratu zer ikusi Firefoxera itzultzen zarenean.";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
+"Settings.Home.Option.StartAtHome.Never" = "Azken fitxa";
+
+/* Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage. */
+"Settings.Home.Option.StartAtHome.Title" = "Irekitze-pantaila";
+
+/* In the settings menu, this is the title of the Firefox Homepage customization settings section */
+"Settings.Home.Option.Title" = "Firefoxen hasiera-orria";
+
 /* Button in settings to clear the home page. */
 "Settings.HomePage.Clear.Button" = "Garbitu";
 
@@ -1492,6 +1599,18 @@
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Esperimentuak";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Inactive Tabs feature, a separate section of inactive tabs that appears in the Tab Tray, on or off */
+"Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "Fitxa inaktiboak";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
+"Settings.Tabs.CustomizeTabsSection.TabGroups" = "Fitxa multzoak";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the Tabs Tray customization section. The tabs tray is accessed from firefox hompage */
+"Settings.Tabs.CustomizeTabsSection.Title" = "Pertsonalizatu fitxen erretilua";
+
+/* In the settings menu, this is the title for the Tabs customization section option */
+"Settings.Tabs.Title" = "Fitxak";
 
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Ados, ulertuta";
@@ -1748,6 +1867,9 @@
 
 /* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenSelectedTab.KeyCodeTitle" = "Ireki hautatutako fitxa";
+
+/* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
+"TabTray.OtherTabs.Title" = "Beste fitxak";
 
 /* The title for the tab tray in private mode */
 "TabTray.PrivateTitle" = "Fitxa pribatuak";
