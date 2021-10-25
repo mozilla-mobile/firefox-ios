@@ -743,14 +743,14 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    func showFirefoxHome(inline: Bool, from origin: FxHomeOriginAction? = nil) {
+    func showFirefoxHome(inline: Bool) {
         homePanelIsInline = inline
         if self.firefoxHomeViewController == nil {
             // Firefox home page tracking i.e. being shown from awesomebar vs bottom right hamburger menu
             let trackingValue: TelemetryWrapper.EventValue = homePanelIsInline ? .openHomeFromPhotonMenuButton : .openHomeFromAwesomebar
             TelemetryWrapper.recordEvent(category: .action, method: .open, object: .firefoxHomepage, value: trackingValue, extras: nil)
 
-            let firefoxHomeViewController = FirefoxHomeViewController(profile: profile, from: origin)
+            let firefoxHomeViewController = FirefoxHomeViewController(profile: profile)
             firefoxHomeViewController.homePanelDelegate = self
             firefoxHomeViewController.libraryPanelDelegate = self
             self.firefoxHomeViewController = firefoxHomeViewController
@@ -798,7 +798,7 @@ class BrowserViewController: UIViewController {
         })
     }
 
-    func updateInContentHomePanel(_ url: URL?, focusUrlBar: Bool = false, from origin: TelemetryWrapper.EventValue) {
+    func updateInContentHomePanel(_ url: URL?, focusUrlBar: Bool = false) {
         let isAboutHomeURL = url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
         if !urlBar.inOverlayMode {
             guard let url = url else {
@@ -1102,7 +1102,7 @@ class BrowserViewController: UIViewController {
                 NotificationCenter.default.removeObserver(self, name: .DynamicFontChanged, object: nil)
             }
 
-            updateInContentHomePanel(url as URL, focusUrlBar: focusUrlBar, from: .navigatingToHome)
+            updateInContentHomePanel(url as URL, focusUrlBar: focusUrlBar)
         }
     }
 
@@ -1786,7 +1786,7 @@ extension BrowserViewController: TabManagerDelegate {
             topTabsDidChangeTab()
         }
 
-        updateInContentHomePanel(selected?.url as URL?, focusUrlBar: true, from: .openedNewTab)
+        updateInContentHomePanel(selected?.url as URL?, focusUrlBar: true)
 
         if let tab = selected, NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage {
             if tab.url == nil, !tab.restoring {

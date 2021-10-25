@@ -150,13 +150,6 @@ extension HomePanelContextMenu {
     }
 }
 
-enum FxHomeOriginAction {
-    case searchBarNoSearchContent
-    case searchBarWithSearchContent
-    case homeButton
-    case newTab
-}
-
 // MARK: - HomeVC
 
 class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureFlagsProtocol {
@@ -164,7 +157,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     fileprivate var hasPresentedContextualHint = false
     fileprivate var didRoate = false
-    fileprivate let originAction: FxHomeOriginAction?
     fileprivate let profile: Profile
     fileprivate let pocketAPI = Pocket()
     fileprivate let flowLayout = UICollectionViewFlowLayout()
@@ -175,16 +167,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     fileprivate var contextualSourceView = UIView()
     var recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel()
     var jumpBackInViewModel = FirefoxHomeJumpBackInViewModel()
-
-    private var fromOrigin: TelemetryWrapper.EventValue? {
-        switch originAction {
-        case .searchBarNoSearchContent: return .searchScreen
-        case .homeButton: return .navigatingToHome
-        case .newTab: return .openedNewTab
-        default:
-            return nil
-        }
-    }
 
     fileprivate lazy var topSitesManager: ASHorizontalScrollCellManager = {
         let manager = ASHorizontalScrollCellManager()
@@ -273,10 +255,9 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     }
 
     // MARK: - Initializers
-    init(profile: Profile, from origin: FxHomeOriginAction?, experiments: NimbusApi = Experiments.shared) {
+    init(profile: Profile, experiments: NimbusApi = Experiments.shared) {
         self.profile = profile
         self.experiments = experiments
-        self.originAction = origin
         super.init(collectionViewLayout: flowLayout)
         collectionView?.delegate = self
         collectionView?.dataSource = self
@@ -349,13 +330,10 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
 
     override func viewDidAppear(_ animated: Bool) {
         experiments.recordExposureEvent(featureId: .homescreen)
-        if let fromOrigin = fromOrigin {
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .view,
-                                         object: .firefoxHomepage,
-                                         value: .fxHomepageOrigin,
-                                         extras: [TelemetryWrapper.EventExtraKey.fxHomepageOrigin.rawValue: fromOrigin.rawValue])
-        }
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .view,
+                                     object: .firefoxHomepage,
+                                     value: .fxHomepageOrigin)
 
         super.viewDidAppear(animated)
     }

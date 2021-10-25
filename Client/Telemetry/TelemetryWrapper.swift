@@ -435,9 +435,6 @@ extension TelemetryWrapper {
         case recentlySavedReadingListAction = "recently-saved-reading-list-action"
         case customizeHomepageButton = "customize-homepage-button"
         case fxHomepageOrigin = "firefox-homepage-origin"
-        case navigatingToHome = "navigating-to-home"
-        case openedNewTab = "opened-new-tab"
-        case searchScreen = "search-screen"
         case addBookmarkToast = "add-bookmark-toast"
         case openHomeFromAwesomebar = "open-home-from-awesomebar"
         case openHomeFromPhotonMenuButton = "open-home-from-photon-menu-button"
@@ -682,11 +679,8 @@ extension TelemetryWrapper {
             GleanMetrics.Tabs.groupedTabSearch.add()
             
         // Firefox Homepage
-        case (.action, .view, .firefoxHomepage, EventValue.fxHomepageOrigin.rawValue, let extras):
-            if let origin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
-//                GleanMetrics.FirefoxHomePage.firefoxHomepageView[origin].add()
-                print("ROUX - \(origin)")
-            }
+        case (.action, .view, .firefoxHomepage, EventValue.fxHomepageOrigin.rawValue, _):
+            GleanMetrics.FirefoxHomePage.firefoxHomepageView.add()
         case (.action, .tap, .firefoxHomepage, EventValue.yourLibrarySection.rawValue, let extras):
             if let panel = extras?[EventObject.libraryPanel.rawValue] as? String {
                 GleanMetrics.FirefoxHomePage.yourLibrary[panel].add()
