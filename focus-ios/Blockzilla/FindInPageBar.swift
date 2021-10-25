@@ -12,12 +12,13 @@ protocol FindInPageBarDelegate: AnyObject {
 }
 
 private struct FindInPageUX {
+    static let BackgroundColor = UIColor.foundation
     static let ButtonColor = UIColor.white
-    static let MatchCountColor = UIConstants.Photon.Grey10.withAlphaComponent(0.6)
+    static let MatchCountColor = UIColor.primaryText.withAlphaComponent(0.6)
     static let MatchCountFont = UIConstants.fonts.searchButton
-    static let SearchTextColor = UIColor.white
+    static let SearchTextColor = UIColor.primaryText
     static let SearchTextFont = UIConstants.fonts.searchButton
-    static let TopBorderColor = UIConstants.Photon.Grey80
+    static let TopBorderColor = UIColor.divider
 }
 
 class FindInPageBar: UIView {
@@ -63,10 +64,11 @@ class FindInPageBar: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        backgroundColor = UIConstants.Photon.Grey70
+        backgroundColor = FindInPageUX.BackgroundColor
 
         searchText.addTarget(self, action: #selector(didTextChange), for: .editingChanged)
         searchText.textColor = FindInPageUX.SearchTextColor
+        searchText.tintColor = FindInPageUX.SearchTextColor
         searchText.font = FindInPageUX.SearchTextFont
         searchText.autocapitalizationType = .none
         searchText.autocorrectionType = .no
