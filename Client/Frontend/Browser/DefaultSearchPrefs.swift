@@ -44,7 +44,7 @@ class DefaultSearchPrefs {
      Each language in the locales list has a default list of engines and then a region override list.
      */
     open func visibleDefaultEngines(for possibleLocales: [String], and region: String) -> [String] {
-        let engineList = possibileLocales
+        let engineList = possibleLocales
             .compactMap {
                 locales[$0] as? [String: Any]
             }
