@@ -418,7 +418,8 @@ extension AppDelegate {
             GleanMetrics.LegacyIds.clientId.set(clientId)
         }
 
-        Glean.shared.initialize(uploadEnabled: Settings.getToggle(.sendAnonymousUsageData))
+        let channel = Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt" ? "testflight" : "release"
+        Glean.shared.initialize(uploadEnabled: Settings.getToggle(.sendAnonymousUsageData), configuration: Configuration(channel: channel))
         
         // Send "at startup" telemetry
         GleanMetrics.Shortcuts.shortcutsOnHomeNumber.set(Int64(ShortcutsManager.shared.numberOfShortcuts))
