@@ -77,7 +77,7 @@ class DefaultSearchPrefs {
      The list.json locales list contains searchDefaults for a few locales.
      Create a list of these and return the last one. The globalDefault acts as the fallback in case the list is empty.
      */
-    open func searchDefault(for possibileLocales: [String], and region: String) -> String {
+    open func searchDefault(for possibleLocales: [String], and region: String) -> String {
         return possibileLocales
             .compactMap {
                 locales[$0] as? [String: Any]
