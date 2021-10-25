@@ -65,7 +65,7 @@ class DefaultSearchPrefs {
         // If the engineList is empty then go ahead and use the default
         var usersEngineList = engineList ?? defaultSearchList
 
-        // Overrides for specfic regions.
+        // Overrides for specific regions.
         if let overrides = regionOverrides[region] as? [String: Any] {
             usersEngineList = usersEngineList.map({ overrides[$0] as? String ?? $0 })
         }
