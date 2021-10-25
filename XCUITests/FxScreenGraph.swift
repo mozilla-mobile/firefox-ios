@@ -910,7 +910,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             if isTablet {
                 userState.numTabs = Int(app.collectionViews["Top Tabs View"].cells.count)
             } else {
-                userState.numTabs = Int(app.tables.cells.count)
+                userState.numTabs = Int(app.collectionViews.element(boundBy: 1).cells.count)
             }
         }
     }
