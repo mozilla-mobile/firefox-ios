@@ -119,7 +119,7 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
 
         cell.itemTitle.text = group.searchTerm.localizedCapitalized
         cell.itemDetails.text = String(format: .FirefoxHomeJumpBackInSectionGroupSiteCount, group.groupedItems.count)
-        cell.faviconImage.image = UIImage(imageLiteralResourceName: "recently_closed").withTintColor(.label)
+        cell.faviconImage.image = UIImage(imageLiteralResourceName: "recently_closed").withRenderingMode(.alwaysTemplate)
         cell.siteNameLabel.text = String.localizedStringWithFormat(.FirefoxHomeJumpBackInSectionGroupSiteCount, group.groupedItems.count)
     }
     
@@ -263,6 +263,10 @@ class JumpBackInCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 
     // MARK: - Helpers
     private func setupObservers() {
@@ -309,9 +313,17 @@ class JumpBackInCell: UICollectionViewCell {
 }
 
 extension JumpBackInCell: Themeable {
+    
     func applyTheme() {
-        contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
-        itemDetails.textColor = UIColor.theme.homePanel.activityStreamCellDescription
-        heroImage.tintColor = UIColor.theme.homePanel.jumpbackInGroupIconColour
+        if ThemeManager.instance.currentName == .dark {
+            [itemTitle, siteNameLabel, itemDetails].forEach { $0.textColor = UIColor.Photon.LightGrey10 }
+            faviconImage.tintColor = UIColor.Photon.LightGrey10
+            contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
+        } else {
+            [itemTitle, siteNameLabel, itemDetails].forEach { $0.textColor = UIColor.Photon.DarkGrey90 }
+            faviconImage.tintColor = UIColor.Photon.DarkGrey90
+            contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
+        }
     }
+    
 }
