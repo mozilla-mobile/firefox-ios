@@ -174,12 +174,12 @@ class HomePageSettingsUITests: BaseTestCase {
         enterWebPageAsHomepage(text: websiteUrl1)
         waitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: "mozilla")
         navigator.goto(SettingsScreen)
-        XCTAssertEqual(app.tables.cells["Home"].label, "Home, Homepage")
+        XCTAssertEqual(app.tables.cells["Home"].label, "Homepage, Homepage")
         //Switch to FXHome and check label
         navigator.performAction(Action.SelectHomeAsFirefoxHomePage)
         navigator.nowAt(HomeSettings)
         navigator.goto(SettingsScreen)
-        XCTAssertEqual(app.tables.cells["Home"].label, "Home, Firefox Home")
+        XCTAssertEqual(app.tables.cells["Home"].label, "Homepage, Firefox Home")
     }
     //Function to check the number of top sites shown given a selected number of rows
     private func checkNumberOfExpectedTopSites(numberOfExpectedTopSites: Int) {

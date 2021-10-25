@@ -179,8 +179,8 @@ class ActivityStreamTest: BaseTestCase {
             waitForExistence(app.cells.staticTexts["Wikipedia"], timeout: 5)
             numTabsOpen = app.collectionViews.element(boundBy: 2).cells.count
         } else {
-            waitForExistence(app.cells.staticTexts["wikipedia.org"], timeout: 5)
-            numTabsOpen = app.tables.cells.count
+            waitForExistence(app.collectionViews.cells.staticTexts["Wikipedia"], timeout: 5)
+            numTabsOpen = app.collectionViews.element(boundBy: 1).cells.count
         }
         XCTAssertEqual(numTabsOpen, 2, "New tab not open")
     }
@@ -210,7 +210,7 @@ class ActivityStreamTest: BaseTestCase {
         if iPad() {
             waitForExistence(app.collectionViews.cells.staticTexts["Apple"], timeout: 5)
         } else {
-            waitForExistence(app.tables.cells.staticTexts["Apple"], timeout: 5)
+            waitForExistence(app.collectionViews.cells.staticTexts["Apple"], timeout: 5)
         }
         app.cells.staticTexts["Apple"].firstMatch.tap()
 
@@ -241,7 +241,7 @@ class ActivityStreamTest: BaseTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
 
         waitForExistence(app.cells.staticTexts[defaultTopSite["bookmarkLabel"]!])
-        var numTabsOpen = userState.numTabs
+        var numTabsOpen = app.collectionViews.element(boundBy: 0).cells.count
         if iPad() {
             navigator.goto(TabTray)
             numTabsOpen = app.collectionViews.element(boundBy: 1).cells.count
