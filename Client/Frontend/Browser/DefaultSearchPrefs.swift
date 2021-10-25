@@ -43,7 +43,7 @@ class DefaultSearchPrefs {
      Returns an array of the visibile engines. It overrides any of the returned engines from the regionOverrides list
      Each language in the locales list has a default list of engines and then a region override list.
      */
-    open func visibleDefaultEngines(for possibileLocales: [String], and region: String) -> [String] {
+    open func visibleDefaultEngines(for possibleLocales: [String], and region: String) -> [String] {
         let engineList = possibileLocales
             .compactMap {
                 locales[$0] as? [String: Any]
