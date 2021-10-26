@@ -107,7 +107,7 @@ public class DrawerViewController: UIViewController, Themeable {
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didRecognizeTapGesture))
         backgroundOverlayView.addGestureRecognizer(tapGestureRecognizer)
 
-        drawerView.backgroundColor = ThemeManager.instance.currentName == .dark ? UIColor.theme.tableView.rowBackground : UIColor.theme.tableView.headerBackground
+        drawerView.backgroundColor = LegacyThemeManager.instance.currentName == .dark ? UIColor.theme.tableView.rowBackground : UIColor.theme.tableView.headerBackground
         view.addSubview(drawerView)
 
         let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(didRecognizePanGesture))
@@ -148,7 +148,7 @@ public class DrawerViewController: UIViewController, Themeable {
     }
 
     public func applyTheme() {
-        drawerView.backgroundColor = ThemeManager.instance.currentName == .dark ? UIColor.theme.tableView.rowBackground : UIColor.theme.tableView.headerBackground
+        drawerView.backgroundColor = LegacyThemeManager.instance.currentName == .dark ? UIColor.theme.tableView.rowBackground : UIColor.theme.tableView.headerBackground
     }
 
     override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {

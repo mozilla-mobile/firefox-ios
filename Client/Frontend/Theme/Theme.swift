@@ -13,7 +13,7 @@ protocol PrivateModeUI {
 
 extension UIColor {
     static var theme: Theme {
-        return ThemeManager.instance.current
+        return LegacyThemeManager.instance.current
     }
 }
 

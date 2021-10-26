@@ -286,7 +286,7 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
     }
     
     private func applyTheme() {
-        if ThemeManager.instance.currentName == .normal {
+        if LegacyThemeManager.instance.currentName == .normal {
             collectionView.backgroundColor = UIColor.Photon.White100
         } else {
             collectionView.backgroundColor = UIColor.Photon.DarkGrey50

@@ -221,7 +221,7 @@ class BottomSheetViewController: UIViewController, Themeable {
     }
     
     func applyTheme() {
-        if ThemeManager.instance.currentName == .normal {
+        if LegacyThemeManager.instance.currentName == .normal {
             panView.backgroundColor = UIColor.Photon.Grey10
         } else {
             panView.backgroundColor = UIColor.Photon.Grey90

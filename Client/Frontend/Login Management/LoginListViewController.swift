@@ -169,7 +169,7 @@ class LoginListViewController: SensitiveViewController {
         selectionButton.setTitleColor(UIColor.theme.tableView.rowBackground, for: [])
         selectionButton.backgroundColor = UIColor.theme.general.highlightBlue
 
-        let isDarkTheme = ThemeManager.instance.currentName == .dark
+        let isDarkTheme = LegacyThemeManager.instance.currentName == .dark
         var searchTextField = searchController.searchBar.searchTextField
         
         // Theme the search text field (Dark / Light)

@@ -362,7 +362,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
                 cell.titleLabel.text = bookmarkFolder.title
             }
 
-            cell.leftImageView.image = ThemeManager.instance.currentName == .dark ? bookmarkFolderIconDark : bookmarkFolderIconNormal
+            cell.leftImageView.image = LegacyThemeManager.instance.currentName == .dark ? bookmarkFolderIconDark : bookmarkFolderIconNormal
             cell.leftImageView.contentMode = .center
             cell.accessoryType = .disclosureIndicator
             cell.editingAccessoryType = .disclosureIndicator

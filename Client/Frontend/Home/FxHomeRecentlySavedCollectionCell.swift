@@ -266,7 +266,7 @@ class RecentlySavedCell: UICollectionViewCell, Themeable {
     }
     
     func applyTheme() {
-        if ThemeManager.instance.currentName == .dark {
+        if LegacyThemeManager.instance.currentName == .dark {
             itemTitle.textColor = UIColor.Photon.LightGrey10
         } else {
             itemTitle.textColor = UIColor.Photon.DarkGrey90
