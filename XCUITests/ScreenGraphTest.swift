@@ -211,7 +211,7 @@ fileprivate func createTestGraph(for test: XCTestCase, with app: XCUIApplication
             userState.url = app.textFields["url"].value as? String
         }
 
-        screenState.tap(app.buttons["TabToolbar.menuButton"], to: BrowserTabMenu)
+        screenState.tap(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], to: BrowserTabMenu)
         screenState.tap(app.textFields["url"], to: URLBarOpen)
 
         screenState.gesture(forAction: TestActions.LoadURLByPasting, TestActions.LoadURL) { userState in
