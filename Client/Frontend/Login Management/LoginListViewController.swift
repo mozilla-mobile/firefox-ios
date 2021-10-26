@@ -170,7 +170,7 @@ class LoginListViewController: SensitiveViewController {
         selectionButton.backgroundColor = UIColor.theme.general.highlightBlue
 
         let isDarkTheme = ThemeManager.instance.currentName == .dark
-        var searchTextField = searchController.searchBar.searchTextField
+        let searchTextField = searchController.searchBar.searchTextField
         
         // Theme the search text field (Dark / Light)
         if isDarkTheme {
@@ -311,7 +311,7 @@ private extension LoginListViewController {
                     self.viewModel.loginAtIndexPath(indexPath)?.id
                 }
 
-                self.viewModel.profile.logins.delete(ids: guidsToDelete).uponQueue(.main) { _ in
+                self.viewModel.profile.logins.deleteLogins(ids: guidsToDelete).uponQueue(.main) { _ in
                     self.cancelSelection()
                     self.loadLogins()
                 }
