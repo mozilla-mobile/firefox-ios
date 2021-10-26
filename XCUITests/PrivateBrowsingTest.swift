@@ -67,13 +67,7 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.goto(TabTray)
         waitForExistence(app.cells.staticTexts[url1And3Label])
         let numPrivTabs = app.otherElements["Tabs Tray"].cells.count
-        if !iPad() {
-            // On iPhone the number of tabs is 2 because there is one default tab opened when switching to PB
-            XCTAssertEqual(numPrivTabs, 1, "The number of private tabs is not correct")
-        } else {
-            XCTAssertEqual(numPrivTabs, 1, "The number of private tabs is not correct")
-        }
-
+        XCTAssertEqual(numPrivTabs, 1, "The number of private tabs is not correct")
         // Go back to regular mode and check the total number of tabs
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
 
