@@ -162,7 +162,7 @@ extension LoginDetailViewController: UITableViewDataSource {
         case .usernameItem:
             let loginCell = cell(forIndexPath: indexPath)
             loginCell.highlightedLabelTitle = .LoginDetailUsername
-            loginCell.descriptionLabel.text = login.username
+            loginCell.descriptionLabel.text = login.decryptedUsername
             loginCell.descriptionLabel.keyboardType = .emailAddress
             loginCell.descriptionLabel.returnKeyType = .next
             loginCell.isEditingFieldData = isEditingFieldData
@@ -173,7 +173,7 @@ extension LoginDetailViewController: UITableViewDataSource {
         case .passwordItem:
             let loginCell = cell(forIndexPath: indexPath)
             loginCell.highlightedLabelTitle = .LoginDetailPassword
-            loginCell.descriptionLabel.text = login.password
+            loginCell.descriptionLabel.text = login.decryptedPassword
             loginCell.descriptionLabel.returnKeyType = .default
             loginCell.displayDescriptionAsPassword = true
             loginCell.isEditingFieldData = isEditingFieldData
@@ -319,7 +319,7 @@ extension LoginDetailViewController {
     func deleteLogin() {
         profile.logins.hasSyncedLogins().uponQueue(.main) { yes in
             self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
-                self.profile.logins.delete(id: self.login.id).uponQueue(.main) { _ in
+                self.profile.logins.deleteLogin(id: self.login.id).uponQueue(.main) { _ in
                     _ = self.navigationController?.popViewController(animated: true)
                 }
             }, hasSyncedLogins: yes.successValue ?? true)
@@ -330,7 +330,7 @@ extension LoginDetailViewController {
 
     func onProfileDidFinishSyncing() {
         // Reload details after syncing.
-        profile.logins.get(id: login.id).uponQueue(.main) { result in
+        profile.logins.getLogin(id: login.id).uponQueue(.main) { result in
             if let successValue = result.successValue, let syncedLogin = successValue {
                 self.login = syncedLogin
             }
@@ -355,25 +355,24 @@ extension LoginDetailViewController {
 
         // Only update if user made changes
         guard let username = usernameField?.text, let password = passwordField?.text else { return }
-        guard username != login.username || password != login.password else { return }
+        
+        guard username != login.decryptedUsername || password != login.decryptedPassword else { return }
 
-        let updatedLogin = Login(
-            id: login.id,
-            hostname: login.hostname,
-            password: password,
-            username: username,
-            httpRealm: login.httpRealm,
-            formSubmitUrl: login.formSubmitUrl,
-            usernameField: login.usernameField,
-            passwordField: login.passwordField,
-            timesUsed: login.timesUsed,
-            timeCreated: login.timeCreated,
-            timeLastUsed: login.timeLastUsed,
-            timePasswordChanged: login.timePasswordChanged
+        let updatedLogin = LoginEntry(
+            fromLoginEntryFlattened: LoginEntryFlattened(
+                id: login.id,
+                hostname: login.hostname,
+                password: password,
+                username: username,
+                httpRealm: login.httpRealm,
+                formSubmitUrl: login.formSubmitUrl,
+                usernameField: login.usernameField,
+                passwordField: login.passwordField
+            )
         )
 
-        if login.isValid.isSuccess {
-            _ = profile.logins.update(login: updatedLogin)
+        if updatedLogin.isValid.isSuccess {
+            _ = profile.logins.updateLogin(id: login.id, login: updatedLogin)
         }
     }
 }

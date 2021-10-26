@@ -199,7 +199,7 @@ extension LoginDetailTableViewCell: MenuHelperInterface {
 extension LoginDetailTableViewCell {
     func updateCellWithLogin(_ login: LoginRecord) {
         descriptionLabel.text = login.hostname
-        highlightedLabel.text = login.username
+        highlightedLabel.text = login.decryptedUsername
     }
 }
 

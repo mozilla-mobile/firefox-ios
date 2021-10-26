@@ -176,7 +176,7 @@ extension Profile {
 
     func updateCredentialIdentities() -> Deferred<Result<Void, Error>> {
         let deferred = Deferred<Result<Void, Error>>()
-        self.logins.list().upon { loginResult in
+        self.logins.listLogins().upon { loginResult in
             switch loginResult {
             case let .failure(error):
                 deferred.fill(.failure(error))
@@ -242,19 +242,6 @@ open class BrowserProfile: Profile {
     let db: BrowserDB
     let readingListDB: BrowserDB
     var syncManager: SyncManager!
-
-    private let loginsSaltKeychainKey = "sqlcipher.key.logins.salt"
-    private let loginsUnlockKeychainKey = "sqlcipher.key.logins.db"
-    private lazy var loginsKey: String = {
-        if let secret = keychain.string(forKey: loginsUnlockKeychainKey) {
-            return secret
-        }
-
-        let Length: UInt = 256
-        let secret = Bytes.generateRandomBytes(Length).base64EncodedString
-        keychain.set(secret, forKey: loginsUnlockKeychainKey, withAccessibility: .afterFirstUnlock)
-        return secret
-    }()
 
     var syncDelegate: SyncDelegate?
 
@@ -582,17 +569,10 @@ open class BrowserProfile: Profile {
     }
 
     lazy var logins: RustLogins = {
-        let databasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("logins.db").path
+        let sqlCipherDatabasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("logins.db").path
+        let databasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("loginsPerField.db").path
 
-        let salt: String
-        if let val = keychain.string(forKey: loginsSaltKeychainKey) {
-            salt = val
-        } else {
-            salt = RustLogins.setupPlaintextHeaderAndGetSalt(databasePath: databasePath, encryptionKey: loginsKey)
-            keychain.set(salt, forKey: loginsSaltKeychainKey, withAccessibility: .afterFirstUnlock)
-        }
-
-        return RustLogins(databasePath: databasePath, encryptionKey: loginsKey, salt: salt)
+        return RustLogins(sqlCipherDatabasePath: sqlCipherDatabasePath, databasePath: databasePath)
     }()
 
     func hasAccount() -> Bool {
@@ -617,17 +597,28 @@ open class BrowserProfile: Profile {
 
         // remove Account Metadata
         prefs.removeObjectForKey(PrefsKeys.KeyLastRemoteTabSyncTime)
-
+        
         // Save the keys that will be restored
-        let salt = keychain.string(forKey: loginsSaltKeychainKey)
-        let unlockKey = loginsKey
+        let rustLoginsKeys = RustLoginEncryptionKeys()
+        let perFieldKey = keychain.string(forKey: rustLoginsKeys.loginPerFieldKeychainKey)
+        let sqlCipherKey = keychain.string(forKey: rustLoginsKeys.loginsUnlockKeychainKey)
+        let sqlCipherSalt = keychain.string(forKey: rustLoginsKeys.loginPerFieldKeychainKey)
+        
         // Remove all items, removal is not key-by-key specific (due to the risk of failing to delete something), simply restore what is needed.
         keychain.removeAllKeys()
+        
         // Restore the keys that are still needed
-        if let salt = salt {
-            keychain.set(salt, forKey: loginsSaltKeychainKey, withAccessibility: .afterFirstUnlock)
+        if let sqlCipherKey = sqlCipherKey {
+            keychain.set(sqlCipherKey, forKey: rustLoginsKeys.loginsUnlockKeychainKey, withAccessibility: .afterFirstUnlock)
         }
-        keychain.set(unlockKey, forKey: loginsUnlockKeychainKey, withAccessibility: .afterFirstUnlock)
+        
+        if let sqlCipherSalt = sqlCipherSalt {
+            keychain.set(sqlCipherSalt, forKey: rustLoginsKeys.loginsSaltKeychainKey, withAccessibility: .afterFirstUnlock)
+        }
+        
+        if let perFieldKey = perFieldKey {
+            keychain.set(perFieldKey, forKey: rustLoginsKeys.loginPerFieldKeychainKey, withAccessibility: .afterFirstUnlock)
+        }
 
         // Tell any observers that our account has changed.
         NotificationCenter.default.post(name: .FirefoxAccountChanged, object: nil)
@@ -896,7 +887,7 @@ open class BrowserProfile: Profile {
             case "history":
                 return HistorySynchronizer.resetSynchronizerWithStorage(self.profile.history, basePrefs: self.prefsForSync, collection: "history")
             case "passwords":
-                return self.profile.logins.reset()
+                return self.profile.logins.resetSync()
             case "forms":
                 log.debug("Requested reset for forms, but this client doesn't sync them yet.")
                 return succeed()
@@ -923,7 +914,7 @@ open class BrowserProfile: Profile {
             let remove = [
                 profile.history.onRemovedAccount,
                 profile.remoteClientsAndTabs.onRemovedAccount,
-                profile.logins.reset,
+                profile.logins.resetSync,
                 profile.places.resetBookmarksMetadata,
             ]
 
@@ -1020,6 +1011,10 @@ open class BrowserProfile: Profile {
         public class SyncUnlockGetURLError: MaybeErrorType {
             public var description = "Failed to get token server endpoint url."
         }
+        
+        public class EncryptionKeyError: MaybeErrorType {
+            public var description = "Failed to get stored key."
+        }
 
         fileprivate func syncUnlockInfo() -> Deferred<Maybe<SyncUnlockInfo>> {
             let d = Deferred<Maybe<SyncUnlockInfo>>()
@@ -1035,8 +1030,14 @@ open class BrowserProfile: Profile {
                             d.fill(Maybe(failure: SyncUnlockGetURLError()))
                             return
                         }
+                        
+                        guard let encryptionKey = try? self.profile.logins.getStoredKey() else {
+                            Sentry.shared.sendWithStacktrace(message: "Stored logins encryption could not be retrieved", tag: SentryTag.rustLogins, severity: .warning)
+                            d.fill(Maybe(failure: EncryptionKeyError()))
+                            return
+                        }
 
-                        d.fill(Maybe(success: SyncUnlockInfo(kid: key.kid, fxaAccessToken: accessTokenInfo.token, syncKey: key.k, tokenserverURL: tokenServerEndpointURL.absoluteString)))
+                        d.fill(Maybe(success: SyncUnlockInfo(kid: key.kid, fxaAccessToken: accessTokenInfo.token, syncKey: key.k, tokenserverURL: tokenServerEndpointURL.absoluteString, loginEncryptionKey: encryptionKey)))
                     }
                 }
             }
@@ -1050,7 +1051,7 @@ open class BrowserProfile: Profile {
                     return deferMaybe(SyncStatus.notStarted(.unknown))
                 }
 
-                return self.profile.logins.sync(unlockInfo: syncUnlockInfo).bind({ [weak self] result in
+                return self.profile.logins.syncLogins(unlockInfo: syncUnlockInfo).bind({ [weak self] result in
                     guard result.isSuccess else {
                         return deferMaybe(SyncStatus.notStarted(.unknown))
                     }

@@ -11,7 +11,7 @@ private let log = Logger.browserLogger
 class Authenticator {
     fileprivate static let MaxAuthenticationAttempts = 3
 
-    static func handleAuthRequest(_ viewController: UIViewController, challenge: URLAuthenticationChallenge, loginsHelper: LoginsHelper?) -> Deferred<Maybe<LoginRecord>> {
+    static func handleAuthRequest(_ viewController: UIViewController, challenge: URLAuthenticationChallenge, loginsHelper: LoginsHelper?) -> Deferred<Maybe<LoginEntry>> {
         // If there have already been too many login attempts, we'll just fail.
         if challenge.previousFailureCount >= Authenticator.MaxAuthenticationAttempts {
             return deferMaybe(LoginRecordError(description: "Too many attempts to open site"))
@@ -23,7 +23,7 @@ class Authenticator {
         if let proposed = credential {
             if !(proposed.user?.isEmpty ?? true) {
                 if challenge.previousFailureCount == 0 {
-                    return deferMaybe(LoginRecord(credentials: proposed, protectionSpace: challenge.protectionSpace))
+                    return deferMaybe(LoginEntry(credentials: proposed, protectionSpace: challenge.protectionSpace))
                 }
             } else {
                 credential = nil
@@ -74,7 +74,7 @@ class Authenticator {
                     }
                     return nil
                 }
-                loginsProvider.delete(ids: malformedGUIDs).upon { _ in log.debug("Removed malformed logins.") }
+                loginsProvider.deleteLogins(ids: malformedGUIDs).upon { _ in log.debug("Removed malformed logins.") }
             }
 
             // Found a single entry but the schemes don't match. This is a result of a schemeless entry that we
@@ -83,9 +83,8 @@ class Authenticator {
             else if logins.count == 1 && logins[0].protectionSpace.`protocol` != challenge.protectionSpace.`protocol` {
                 let login = logins[0]
                 credentials = login.credentials
-                var new = LoginRecord(credentials: login.credentials, protectionSpace: challenge.protectionSpace)
-                new.id = login.id
-                return loginsProvider.update(login: new)
+                let new = LoginEntry(credentials: login.credentials, protectionSpace: challenge.protectionSpace)
+                return loginsProvider.updateLogin(id: login.id, login: new)
                     >>> { deferMaybe(credentials) }
             }
 
@@ -98,13 +97,13 @@ class Authenticator {
         }
     }
 
-    fileprivate static func promptForUsernamePassword(_ viewController: UIViewController, credentials: URLCredential?, protectionSpace: URLProtectionSpace, loginsHelper: LoginsHelper?) -> Deferred<Maybe<LoginRecord>> {
+    fileprivate static func promptForUsernamePassword(_ viewController: UIViewController, credentials: URLCredential?, protectionSpace: URLProtectionSpace, loginsHelper: LoginsHelper?) -> Deferred<Maybe<LoginEntry>> {
         if protectionSpace.host.isEmpty {
             print("Unable to show a password prompt without a hostname")
             return deferMaybe(LoginRecordError(description: "Unable to show a password prompt without a hostname"))
         }
 
-        let deferred = Deferred<Maybe<LoginRecord>>()
+        let deferred = Deferred<Maybe<LoginEntry>>()
         let alert: AlertController
         let title: String = .AuthenticatorPromptTitle
         if !(protectionSpace.realm?.isEmpty ?? true) {
@@ -122,7 +121,7 @@ class Authenticator {
             style: .default) { (action) -> Void in
                 guard let user = alert.textFields?[0].text, let pass = alert.textFields?[1].text else { deferred.fill(Maybe(failure: LoginRecordError(description: "Username and Password required"))); return }
 
-                let login = LoginRecord(credentials: URLCredential(user: user, password: pass, persistence: .forSession), protectionSpace: protectionSpace)
+                let login = LoginEntry(credentials: URLCredential(user: user, password: pass, persistence: .forSession), protectionSpace: protectionSpace)
                 deferred.fill(Maybe(success: login))
                 loginsHelper?.setCredentials(login)
         }

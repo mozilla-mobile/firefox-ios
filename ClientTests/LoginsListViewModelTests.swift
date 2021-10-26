@@ -6,6 +6,7 @@
 import Storage
 import Shared
 import XCTest
+import SwiftKeychainWrapper
 
 
 class LoginsListViewModelTests: XCTestCase {
@@ -22,22 +23,21 @@ class LoginsListViewModelTests: XCTestCase {
     }
 
     private func addLogins() {
-        _ = self.viewModel.profile.logins.wipeLocal()
+        _ = self.viewModel.profile.logins.wipeLocalEngine()
 
         for i in (0..<10) {
-            var login = LoginRecord(fromJSONDict: [
-                "hostname": "https://example\(i).com/",
+            let login = LoginEntry(fromJSONDict: [
+                "hostname": "https://example\(i).com",
                 "formSubmitUrl": "https://example.com",
                 "username": "username\(i)",
                 "password": "password\(i)"
             ])
-            login.httpRealm = nil
-            let addResult = self.viewModel.profile.logins.add(login: login)
+            let addResult = self.viewModel.profile.logins.addLogin(login: login)
             XCTAssertTrue(addResult.value.isSuccess)
             XCTAssertNotNil(addResult.value.successValue)
         }
 
-        let logins = self.viewModel.profile.logins.list().value
+        let logins = self.viewModel.profile.logins.listLogins().value
         XCTAssertTrue(logins.isSuccess)
         XCTAssertNotNil(logins.successValue)
     }
