@@ -21,7 +21,7 @@ struct ChronologicalTabsControllerUX {
     static let backgroundColor = UIColor.Photon.Grey10
 }
 
-class ChronologicalTabsViewController: UIViewController, Themeable, TabTrayViewDelegate {
+class ChronologicalTabsViewController: UIViewController,NotificationThemeable, TabTrayViewDelegate {
     weak var delegate: TabTrayDelegate?
     // View Model
     lazy var viewModel = TabTrayV2ViewModel(viewController: self)

@@ -190,7 +190,7 @@ private struct RecentlySavedCellUX {
 }
 
 /// A cell used in FxHomeScreen's Recently Saved section. It holds bookmarks and reading list items.
-class RecentlySavedCell: UICollectionViewCell, Themeable {
+class RecentlySavedCell: UICollectionViewCell,NotificationThemeable {
     
     // MARK: - Properties
     

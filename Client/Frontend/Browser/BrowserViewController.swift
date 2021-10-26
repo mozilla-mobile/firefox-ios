@@ -2291,16 +2291,16 @@ extension BrowserViewController: TabTrayDelegate {
 }
 
 // MARK: Browser Chrome Theming
-extension BrowserViewController: Themeable {
+extension BrowserViewController:NotificationThemeable {
     func applyTheme() {
         guard self.isViewLoaded else { return }
-        let ui: [Themeable?] = [urlBar, toolbar, readerModeBar, topTabsViewController, firefoxHomeViewController, searchController, libraryViewController, libraryDrawerViewController, chronTabTrayController]
+        let ui: [NotificationThemeable?] = [urlBar, toolbar, readerModeBar, topTabsViewController, firefoxHomeViewController, searchController, libraryViewController, libraryDrawerViewController, chronTabTrayController]
         ui.forEach { $0?.applyTheme() }
 
         statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor.theme.topTabs.background : urlBar.backgroundColor
         setNeedsStatusBarAppearanceUpdate()
 
-        (presentedViewController as? Themeable)?.applyTheme()
+        (presentedViewController as?NotificationThemeable)?.applyTheme()
 
         // Update the `background-color` of any blank webviews.
         let webViews = tabManager.tabs.compactMap({ $0.webView as? TabWebView })

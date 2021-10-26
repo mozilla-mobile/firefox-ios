@@ -164,7 +164,7 @@ class LoginListViewController: SensitiveViewController {
         tableView.backgroundColor = UIColor.theme.tableView.headerBackground
         tableView.reloadData()
 
-        (tableView.tableHeaderView as? Themeable)?.applyTheme()
+        (tableView.tableHeaderView as?NotificationThemeable)?.applyTheme()
 
         selectionButton.setTitleColor(UIColor.theme.tableView.rowBackground, for: [])
         selectionButton.backgroundColor = UIColor.theme.general.highlightBlue

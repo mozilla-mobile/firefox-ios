@@ -340,7 +340,7 @@ class TabTrayViewController: UIViewController {
     }
 }
 
-extension TabTrayViewController: Themeable {
+extension TabTrayViewController:NotificationThemeable {
      @objc func applyTheme() {
          overrideUserInterfaceStyle =  LegacyThemeManager.instance.userInterfaceStyle
          view.backgroundColor = UIColor.theme.tabTray.background

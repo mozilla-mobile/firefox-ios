@@ -15,7 +15,7 @@ enum OneLineTableViewCustomization {
     case inactiveCell
 }
 
-class OneLineTableViewCell: UITableViewCell, Themeable {
+class OneLineTableViewCell: UITableViewCell, NotificationThemeable {
     // Tableview cell items
     var selectedView: UIView = {
         let view = UIView()
@@ -143,7 +143,7 @@ class OneLineTableViewCell: UITableViewCell, Themeable {
     }
 }
 
-class OneLineFooterView: UITableViewHeaderFooterView, Themeable {
+class OneLineFooterView: UITableViewHeaderFooterView, NotificationThemeable {
     fileprivate let bordersHelper = ThemedHeaderFooterViewBordersHelper()
 
     var titleLabel: UILabel = {

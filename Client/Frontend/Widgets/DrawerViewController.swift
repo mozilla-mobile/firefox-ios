@@ -35,7 +35,7 @@ public class DrawerView: UIView {
     }
 }
 
-public class DrawerViewController: UIViewController, Themeable {
+public class DrawerViewController: UIViewController,NotificationThemeable {
     public let childViewController: UIViewController
 
     public let drawerView = DrawerView()

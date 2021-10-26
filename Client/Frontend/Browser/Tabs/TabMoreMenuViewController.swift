@@ -7,7 +7,7 @@ import Shared
 import SnapKit
 import UIKit
 
-class TabMoreMenuViewController: UIViewController, Themeable {
+class TabMoreMenuViewController: UIViewController,NotificationThemeable {
     weak var delegate: TabTrayDelegate?
     var chronTabsTrayDelegate: ChronologicalTabsDelegate?
     var bottomSheetDelegate: BottomSheetDelegate?

@@ -12,7 +12,7 @@ struct TwoLineCellUX {
 
 // TODO: Add support for accessibility for when text size changes
 
-class TwoLineImageOverlayCell: UITableViewCell, Themeable {
+class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable {
     // Tableview cell items
     var selectedView: UIView = {
         let view = UIView()
@@ -155,7 +155,7 @@ class TwoLineImageOverlayCell: UITableViewCell, Themeable {
 }
 
 
-class SimpleTwoLineCell: UITableViewCell, Themeable {
+class SimpleTwoLineCell: UITableViewCell, NotificationThemeable {
     // Tableview cell items
     var selectedView: UIView = {
         let view = UIView()
@@ -255,7 +255,7 @@ class SimpleTwoLineCell: UITableViewCell, Themeable {
 
 // TODO: Add support for accessibility for when text size changes
 
-class TwoLineHeaderFooterView: UITableViewHeaderFooterView, Themeable {
+class TwoLineHeaderFooterView: UITableViewHeaderFooterView, NotificationThemeable {
     fileprivate let bordersHelper = ThemedHeaderFooterViewBordersHelper()
     var leftImageView: UIImageView = {
         let imgView = UIImageView()

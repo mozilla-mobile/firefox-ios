@@ -4,6 +4,23 @@
 
 import UIKit
 
-//class ThemeManager {
-//    
-//}
+// MARK: - Protocol
+protocol Themeable { }
+
+extension Themeable {
+    var themeManager: ThemeManager { return ThemeManager.shared }
+}
+
+class ThemeManager {
+
+    static let shared = ThemeManager()
+
+    // If needed, we can easily check the system theme here.
+    var systemTheme: UIUserInterfaceStyle {
+        return UIScreen.main.traitCollection.userInterfaceStyle
+    }
+
+    var currentTheme: Theme {
+        return FxDefaultTheme()
+    }
+}

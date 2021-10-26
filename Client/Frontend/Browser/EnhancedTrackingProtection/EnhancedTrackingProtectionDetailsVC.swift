@@ -177,7 +177,7 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController {
 }
 
 // MARK: - Themable
-extension EnhancedTrackingProtectionDetailsVC: Themeable {
+extension EnhancedTrackingProtectionDetailsVC:NotificationThemeable {
     @objc func applyTheme() {
         overrideUserInterfaceStyle =  LegacyThemeManager.instance.userInterfaceStyle
         view.backgroundColor = UIColor.theme.etpMenu.background

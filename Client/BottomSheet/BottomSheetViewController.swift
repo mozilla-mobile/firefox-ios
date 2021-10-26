@@ -18,7 +18,7 @@ protocol BottomSheetDelegate {
     func showBottomToolbar()
 }
 
-class BottomSheetViewController: UIViewController, Themeable {
+class BottomSheetViewController: UIViewController,NotificationThemeable {
     // Delegate
     var delegate: BottomSheetDelegate?
     private var currentState: BottomSheetState = .none

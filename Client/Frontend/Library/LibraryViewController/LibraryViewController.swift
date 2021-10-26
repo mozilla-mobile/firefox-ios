@@ -476,10 +476,10 @@ class LibraryViewController: UIViewController {
 }
 
 // MARK: UIAppearance
-extension LibraryViewController: Themeable {
+extension LibraryViewController:NotificationThemeable {
     @objc func applyTheme() {
         viewModel.panelDescriptors.forEach { item in
-            (item.viewController as? Themeable)?.applyTheme()
+            (item.viewController as?NotificationThemeable)?.applyTheme()
         }        
         overrideUserInterfaceStyle = LegacyThemeManager.instance.userInterfaceStyle
 

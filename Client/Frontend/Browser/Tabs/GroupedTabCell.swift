@@ -32,7 +32,7 @@ protocol GroupedTabDelegate {
     func newSearchFromGroup(searchTerm: String)
 }
 
-class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UITableViewDelegate, GroupedTabsDelegate {
+class GroupedTabCell: UICollectionViewCell,NotificationThemeable, UITableViewDataSource, UITableViewDelegate, GroupedTabsDelegate {
     
     var tabDisplayManagerDelegate: GroupedTabDelegate?
     var tabGroups: [ASGroup<Tab>]?

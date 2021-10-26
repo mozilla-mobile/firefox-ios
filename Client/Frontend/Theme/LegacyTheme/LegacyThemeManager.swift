@@ -13,7 +13,7 @@ enum LegacyThemeManagerPrefs: String {
 class LegacyThemeManager {
     static let instance = LegacyThemeManager()
 
-    var current: Theme = themeFrom(name: UserDefaults.standard.string(forKey: LegacyThemeManagerPrefs.themeName.rawValue)) {
+    var current: LegacyTheme = themeFrom(name: UserDefaults.standard.string(forKey: LegacyThemeManagerPrefs.themeName.rawValue)) {
         didSet {
             UserDefaults.standard.set(current.name, forKey: LegacyThemeManagerPrefs.themeName.rawValue)
             NotificationCenter.default.post(name: .DisplayThemeChanged, object: nil)
@@ -86,7 +86,7 @@ class LegacyThemeManager {
     }
 }
 
-fileprivate func themeFrom(name: String?) -> Theme {
+fileprivate func themeFrom(name: String?) -> LegacyTheme {
     guard let name = name, let theme = BuiltinThemeName(rawValue: name) else { return NormalTheme() }
     switch theme {
     case .dark:

@@ -312,7 +312,7 @@ class JumpBackInCell: UICollectionViewCell {
     }
 }
 
-extension JumpBackInCell: Themeable {
+extension JumpBackInCell:NotificationThemeable {
     
     func applyTheme() {
         if LegacyThemeManager.instance.currentName == .dark {
