@@ -100,9 +100,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             case .search: return 3
             case .siri: return 3
             case .integration: return 1
-            case .mozilla:
-                // Show tips option should not be displayed for users that do not see tips
-                return TipManager.shared.canShowTips ? 3 : 2
+            case .mozilla: return 3
             }
         }
 
@@ -431,20 +429,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 }
             }
             cell = siriCell
-        case .mozilla where TipManager.shared.canShowTips:
+        case .mozilla:
             if indexPath.row == 0 {
                 cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
             } else if indexPath.row == 1 {
-                cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "aboutCell")
-                cell.textLabel?.text = String(format: UIConstants.strings.aboutTitle, AppInfo.productName)
-                cell.accessibilityIdentifier = "settingsViewController.about"
-            } else {
-                cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "ratingCell")
-                cell.textLabel?.text = String(format: UIConstants.strings.ratingSetting, AppInfo.productName)
-                cell.accessibilityIdentifier = "settingsViewController.rateFocus"
-            }
-        case .mozilla where !TipManager.shared.canShowTips:
-            if indexPath.row == 0 {
                 cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "aboutCell")
                 cell.textLabel?.text = String(format: UIConstants.strings.aboutTitle, AppInfo.productName)
                 cell.accessibilityIdentifier = "settingsViewController.about"
@@ -537,19 +525,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 let siriFavoriteVC = SiriFavoriteViewController()
                 navigationController?.pushViewController(siriFavoriteVC, animated: true)
             }
-        case .mozilla where TipManager.shared.canShowTips:
+        case .mozilla:
             if indexPath.row == 1 {
                 aboutClicked()
             } else if indexPath.row == 2 {
-                let appId = AppInfo.config.appId
-                if let reviewURL = URL(string: "https://itunes.apple.com/app/id\(appId)?action=write-review"), UIApplication.shared.canOpenURL(reviewURL) {
-                    UIApplication.shared.open(reviewURL, options: [:], completionHandler: nil)
-                }
-            }
-        case .mozilla where !TipManager.shared.canShowTips:
-            if indexPath.row == 0 {
-                aboutClicked()
-            } else if indexPath.row == 1 {
                 let appId = AppInfo.config.appId
                 if let reviewURL = URL(string: "https://itunes.apple.com/app/id\(appId)?action=write-review"), UIApplication.shared.canOpenURL(reviewURL) {
                     UIApplication.shared.open(reviewURL, options: [:], completionHandler: nil)

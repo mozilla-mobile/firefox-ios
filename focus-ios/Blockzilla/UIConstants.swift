@@ -544,25 +544,6 @@ struct UIConstants {
         static let requestMobileNotification = "Notification.requestMobile"
         static let findInPageNotification = "Notification.findInPage"
         
-        // Home Screen Tips
-        
-        static let releaseTipTitle = "Why yes, we do have a fresh new look!"
-        static let releaseTipDescription = "Read more about this and other updates to %@."
-        static let shortcutsTipTitle = "Create shortcuts to the sites you visit most:"
-        static let shortcutsTipDescription = "Select Add to Shortcuts from the %@ menu"
-        static let sitesNotWorkingTipTitle = "Site missing content or acting strange?"
-        static let sitesNotWorkingTipDescription = "Try turning off Tracking Protection"
-        static let biometricTipTitle = String(format: "Lock %@ when a site is open:", AppInfo.productName)
-        static let biometricTipFaceIdDescription = "Turn on Face ID"
-        static let biometricTipTouchIdDescription = "Turn on Touch ID"
-        static let requestDesktopTipTitle = "Want to see the full desktop version of a site?"
-        static let requestDesktopTipDescription = "Page Actions > Request Desktop Site"
-        static let siriFavoriteTipTitle = "“Siri, open my favorite site.”"
-        static let siriFavoriteTipDescription = "Add Siri shortcut"
-        static let siriEraseTipTitle = String(format: "“Siri, erase my %@ session.”", AppInfo.productName)
-        static let siriEraseTipDescription = "Add Siri shortcut"
-        static let shareTrackersTipTitle = String(format: "You browse. %@ blocks.", AppInfo.productName)
-        static let shareTrackersTipDescription = "%@ trackers blocked so far"
         static let encodingNameUTF8 = "utf-8"
         static let googleAmpURLPrefix = "https://www.google.com/amp/s/"
         static let truncateLeader = "..."

@@ -564,3 +564,54 @@
 
 /* This is the value for a label that indicates if a user is on a secure https connection. */
 "ProtectionStatus.Secure" = "Connection is secure";
+
+/* Text for a label that indicates the title for release tip. */
+"Tip.Release.Title" = "Why yes, we do have a fresh new look!";
+
+/* Text for a label that indicates the description for release tip. */
+"Tip.Release.Description" = "Read more about this and other updates to %@.";
+
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "Create shortcuts to the sites you visit most:";
+
+/* Text for a label that indicates the description for shortcuts tip. */
+"Tip.Shortcuts.Description" = "Select Add to Shortcuts from the %@ menu";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "Site missing content or acting strange?";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "Try turning off Tracking Protection";
+
+/* Text for a label that indicates the title for biometric tip. */
+"Tip.Biometric.Title" = "Lock %@ when a site is open:";
+
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "Turn on Face ID";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "Turn on Touch ID";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "Want to see the full desktop version of a site?";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "Page Actions > Request Desktop Site";
+
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "“Siri, open my favorite site.”";
+
+/* Text for a label that indicates the description for siri favorite tip. */
+"Tip.SiriFavorite.Description" = "Add Siri shortcut";
+
+/* Text for a label that indicates the title for siri erase tip. */
+"Tip.SiriErase.Title" = "“Siri, erase my %@ session.”";
+
+/* Text for a label that indicates the description for siri erase tip. */
+"Tip.SiriErase.Description" = "Add Siri shortcut";
+
+/* Text for a label that indicates the title for share trackers tip. */
+"Tip.ShareTrackers.Title" = "You browse. %@ blocks.";
+
+/* Text for a label that indicates the description for share trackers tip. */
+"Tip.ShareTrackers.Description" = "%@ trackers blocked so far";

@@ -84,7 +84,7 @@ class HomeViewController: UIViewController {
         if let tip = tipManager.fetchFirstTip() {
             logTelemetry(for: tip)
             tipsViewController.setupPageController(with: .showTips)
-        } else if tipManager.canShowTips {
+        } else {
             tipsViewController.setupPageController(
                 with: .showEmpty(
                     controller: ShareTrackersViewController(

@@ -1240,6 +1240,7 @@
 		C88A5D3D26F0999E009A135D /* Pro Tips */ = {
 			isa = PBXGroup;
 			children = (
+				16837EA52135EFCC000424BB /* TipManager.swift */,
 				C82D142F26EF62BE007B275C /* TipsPageViewController.swift */,
 				C82D143126EF634E007B275C /* TipViewController.swift */,
 				C88A5D3A26EF9245009A135D /* ShareTrackersViewController.swift */,
@@ -1475,7 +1476,6 @@
 				E40AFB131DC939FF00DA5651 /* SupportUtils.swift */,
 				D0967A801EC50002009D937F /* TelemetryIntegration.swift */,
 				31421EB02176492A0015F48B /* TitleActivityItemProvider.swift */,
-				16837EA52135EFCC000424BB /* TipManager.swift */,
 				845174A526CD0C2500510113 /* ShortcutsManager.swift */,
 				845174A726CD2C7100510113 /* ShortcutView.swift */,
 				D30DF93D1DC1634F0064736C /* Toast.swift */,

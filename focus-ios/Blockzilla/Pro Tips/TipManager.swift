@@ -98,7 +98,6 @@ class TipManager {
     }
     
     private var availableTips: [Tip] {
-        guard canShowTips else { return [] }
         guard Settings.getToggle(.showHomeScreenTips) else { return [] }
         return tips.filter { $0.canShow() }
     }
@@ -108,34 +107,34 @@ class TipManager {
     private init() { }
 
     private lazy var releaseTip = Tip(
-        title: String(format: UIConstants.strings.releaseTipTitle, AppInfo.config.productName),
-        description: String(format: UIConstants.strings.releaseTipDescription, AppInfo.config.productName),
+        title: String(format: .releaseTipTitle, AppInfo.config.productName),
+        description: String(format: .releaseTipDescription, AppInfo.config.productName),
         identifier: TipKey.releaseTip,
         action: .visit(topic: .whatsNew),
         canShow: { TipManager.releaseTip }
     )
     
     private lazy var shortcutsTip = Tip(
-        title: UIConstants.strings.shortcutsTipTitle,
-        description: String(format: UIConstants.strings.shortcutsTipDescription, AppInfo.config.productName),
+        title: .shortcutsTipTitle,
+        description: String(format: .shortcutsTipDescription, AppInfo.config.productName),
         identifier: TipKey.shortcutsTip,
         canShow: { TipManager.shortcutsTip }
     )
 
     private lazy var sitesNotWorkingTip = Tip(
-        title: UIConstants.strings.sitesNotWorkingTipTitle,
-        description: UIConstants.strings.sitesNotWorkingTipDescription,
+        title: .sitesNotWorkingTipTitle,
+        description: .sitesNotWorkingTipDescription,
         identifier: TipKey.sitesNotWorkingTip,
         canShow: { TipManager.sitesNotWorkingTip }
     )
 
     private lazy var biometricTip: Tip = {
-        let description = laContext.biometryType == .faceID
-            ? UIConstants.strings.biometricTipFaceIdDescription
-            : UIConstants.strings.biometricTipTouchIdDescription
+        let description: String = laContext.biometryType == .faceID
+            ? .biometricTipFaceIdDescription
+            : .biometricTipTouchIdDescription
         
         return Tip(
-            title: UIConstants.strings.biometricTipTitle,
+            title: String(format: .biometricTipTitle, AppInfo.productName),
             description: description,
             identifier: TipKey.biometricTip,
             action: .showSettings(destination: .biometric),
@@ -144,23 +143,23 @@ class TipManager {
     }()
 
     private lazy var requestDesktopTip = Tip(
-        title: UIConstants.strings.requestDesktopTipTitle,
-        description: UIConstants.strings.requestDesktopTipDescription,
+        title: .requestDesktopTipTitle,
+        description: .requestDesktopTipDescription,
         identifier: TipKey.requestDesktopTip,
         canShow: { TipManager.requestDesktopTip }
     )
 
     private lazy var siriFavoriteTip = Tip(
-        title: UIConstants.strings.siriFavoriteTipTitle,
-        description: UIConstants.strings.siriFavoriteTipDescription,
+        title: .siriFavoriteTipTitle,
+        description: .siriFavoriteTipDescription,
         identifier: TipKey.siriFavoriteTip,
         action: .showSettings(destination: .siri),
         canShow: { TipManager.siriFavoriteTip && self.isiOS12 }
     )
 
     private lazy var siriEraseTip = Tip(
-        title: UIConstants.strings.siriEraseTipTitle,
-        description: UIConstants.strings.siriEraseTipDescription,
+        title: String(format: .siriEraseTipTitle, AppInfo.productName),
+        description: .siriEraseTipDescription,
         identifier: TipKey.siriEraseTip,
         action: .showSettings(destination: .siriFavorite),
         canShow: { TipManager.siriEraseTip && self.isiOS12 }
@@ -171,12 +170,12 @@ class TipManager {
         let numberOfTrackersBlocked = NSNumber(integerLiteral: UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey))
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
-        return String(format: UIConstants.strings.shareTrackersTipDescription, formatter.string(from: numberOfTrackersBlocked) ?? "0")
+        return String(format: .shareTrackersTipDescription, formatter.string(from: numberOfTrackersBlocked) ?? "0")
     }
     
     private var shareTrackersTip: Tip {
         Tip(
-            title: UIConstants.strings.shareTrackersTipTitle,
+            title: String(format: .shareTrackersTipTitle, AppInfo.productName),
             description: shareTrackersDescription(),
             identifier: TipKey.shareTrackersTip,
             canShow: { UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey) >= 10 }
@@ -189,8 +188,6 @@ class TipManager {
         guard #available(iOS 12.0, *) else { return false }
         return true
     }
-
-    var canShowTips: Bool { NSLocale.current.languageCode == "en" && !AppInfo.isKlar }
     
     func getTip(after: Tip) -> Tip? {
         if let index = availableTips.firstIndex(where: { $0.identifier == after.identifier }) {
@@ -216,4 +213,27 @@ class TipManager {
         }
         return 0
     }
+}
+
+// MARK: - Home Screen Tips Strings
+
+fileprivate extension String {
+    
+    static let releaseTipTitle = NSLocalizedString("Tip.Release.Title", value: "Why yes, we do have a fresh new look!", comment: "Text for a label that indicates the title for release tip.")
+    static let releaseTipDescription = NSLocalizedString("Tip.Release.Description", value: "Read more about this and other updates to %@.", comment: "Text for a label that indicates the description for release tip.")
+    static let shortcutsTipTitle = NSLocalizedString("Tip.Shortcuts.Title", value: "Create shortcuts to the sites you visit most:", comment: "Text for a label that indicates the title for shortcuts tip.")
+    static let shortcutsTipDescription = NSLocalizedString("Tip.Shortcuts.Description", value: "Select Add to Shortcuts from the %@ menu", comment: "Text for a label that indicates the description for shortcuts tip.")
+    static let sitesNotWorkingTipTitle = NSLocalizedString("Tip.SitesNotWorking.Title", value: "Site missing content or acting strange?", comment: "Text for a label that indicates the title for sites not working tip.")
+    static let sitesNotWorkingTipDescription = NSLocalizedString("Tip.SitesNotWorking.Description", value: "Try turning off Tracking Protection", comment: "Text for a label that indicates the description for sites not working tip.")
+    static let biometricTipTitle = NSLocalizedString("Tip.Biometric.Title", value: "Lock %@ when a site is open:", comment: "Text for a label that indicates the title for biometric tip.")
+    static let biometricTipFaceIdDescription = NSLocalizedString("Tip.BiometricFaceId.Description", value: "Turn on Face ID", comment: "Text for a label that indicates the description for biometric Face ID tip.")
+    static let biometricTipTouchIdDescription = NSLocalizedString("Tip.BiometricTouchId.Description", value: "Turn on Touch ID", comment: "Text for a label that indicates the description for biometric Touch ID tip.")
+    static let requestDesktopTipTitle = NSLocalizedString("Tip.RequestDesktop.Title", value: "Want to see the full desktop version of a site?", comment: "Text for a label that indicates the title for request desktop tip.")
+    static let requestDesktopTipDescription = NSLocalizedString("Tip.RequestDesktop.Description", value: "Page Actions > Request Desktop Site", comment: "Text for a label that indicates the description for request desktop tip.")
+    static let siriFavoriteTipTitle = NSLocalizedString("Tip.SiriFavorite.Title", value: "“Siri, open my favorite site.”", comment: "Text for a label that indicates the title for siri favorite tip.")
+    static let siriFavoriteTipDescription = NSLocalizedString("Tip.SiriFavorite.Description", value: "Add Siri shortcut", comment: "Text for a label that indicates the description for siri favorite tip.")
+    static let siriEraseTipTitle = NSLocalizedString("Tip.SiriErase.Title", value: "“Siri, erase my %@ session.”", comment: "Text for a label that indicates the title for siri erase tip.")
+    static let siriEraseTipDescription = NSLocalizedString("Tip.SiriErase.Description", value: "Add Siri shortcut", comment: "Text for a label that indicates the description for siri erase tip.")
+    static let shareTrackersTipTitle = NSLocalizedString("Tip.ShareTrackers.Title", value: "You browse. %@ blocks.", comment: "Text for a label that indicates the title for share trackers tip.")
+    static let shareTrackersTipDescription = NSLocalizedString("Tip.ShareTrackers.Description", value: "%@ trackers blocked so far", comment: "Text for a label that indicates the description for share trackers tip.")
 }
