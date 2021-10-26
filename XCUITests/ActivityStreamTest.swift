@@ -90,7 +90,7 @@ class ActivityStreamTest: BaseTestCase {
     }*/
 
     func testTopSitesRemoveAllExceptPinnedClearPrivateData() {
-        waitForExistence(app.cells["TopSitesCell"].cells.element(boundBy: 0), timeout: 3)
+        waitForExistence(app.cells["TopSitesCell"].cells.element(boundBy: 0), timeout: 10)
         navigator.openURL("mozilla.org")
         waitUntilPageLoad()
         navigator.performAction(Action.PinToTopSitesPAM)
@@ -136,7 +136,7 @@ class ActivityStreamTest: BaseTestCase {
 
     func testTopSites4OpenInNewTab() {
         navigator.goto(HomePanelsScreen)
-        waitForExistence(TopSiteCellgroup.cells["apple"])
+        waitForExistence(TopSiteCellgroup.cells["apple"], timeout: 5)
         TopSiteCellgroup.cells["apple"].press(forDuration: 1)
         app.tables["Context Menu"].cells["Open in New Tab"].tap()
         // The new tab is open but curren screen is still Homescreen
@@ -144,7 +144,7 @@ class ActivityStreamTest: BaseTestCase {
 
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.goto(TabTray)
-        app.cells.staticTexts["Home"].firstMatch.tap()
+        app.cells.staticTexts["Homepage"].firstMatch.tap()
         waitForExistence(TopSiteCellgroup.cells["apple"])
         navigator.nowAt(HomePanelsScreen)
         navigator.performAction(Action.CloseURLBarOpen)
@@ -154,8 +154,8 @@ class ActivityStreamTest: BaseTestCase {
             waitForExistence(app.cells.staticTexts["Apple"])
             XCTAssertTrue(app.cells.staticTexts["Apple"].exists, "A new Tab has not been open")
         } else {
-            waitForExistence(app.cells.staticTexts["apple.com"])
-            XCTAssertTrue(app.cells.staticTexts["apple.com"].exists, "A new Tab has not been open")
+            waitForExistence(app.cells.staticTexts["Apple"])
+            XCTAssertTrue(app.cells.staticTexts["Apple"].exists, "A new Tab has not been open")
         }
     }
 
@@ -276,6 +276,8 @@ class ActivityStreamTest: BaseTestCase {
 
     func testContextMenuInLandscape() {
         XCUIDevice.shared.orientation = .landscapeLeft
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
 
         waitForExistence(TopSiteCellgroup.cells["apple"], timeout: 5)
         TopSiteCellgroup.cells["apple"].press(forDuration: 1)

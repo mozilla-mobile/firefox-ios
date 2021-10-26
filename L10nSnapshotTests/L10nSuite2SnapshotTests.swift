@@ -6,6 +6,8 @@ import XCTest
 
 class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
 
+    let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+
     func testPanelsEmptyState() {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         app.buttons["urlBar-cancel"].tap()
@@ -108,35 +110,6 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         }
     }
 
-    func testPasscodeSettings() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
-        app.buttons["urlBar-cancel"].tap()
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(PasscodeSettings)
-        app.tables.cells["TurnOnPasscode"].tap()
-        snapshot("SetPasscodeScreen-1-nopasscode")
-
-        // Type "111111 passcode"
-        typePasscode(n: 6, keyNumber: 2)
-        snapshot("SetPasscodeScreen-2-typepasscode")
-        // Type incorrect passcode "111112"
-        typePasscode(n: 5, keyNumber: 2)
-        // Type once inkey "2"
-        typePasscode(n: 1, keyNumber: 1)
-        snapshot("SetPasscodeScreen-3-passcodesmustmatch")
-
-        // Confitm passcode
-        typePasscode(n: 6, keyNumber: 2)
-        typePasscode(n: 6, keyNumber: 2)
-        snapshot("SetPasscodeScreen-3")
-
-        // Go to interval settings
-        app.tables.cells["PasscodeInterval"].tap()
-        typePasscode(n: 6, keyNumber: 2)
-        snapshot("PasscodeIntervalScreen-1")
-    }
-
     func testLoginDetails() {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         app.buttons["urlBar-cancel"].tap()
@@ -144,7 +117,12 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         navigator.goto(SettingsScreen)
         app.cells["SignInToSync"].swipeUp()
         waitForExistence(app.cells["Logins"], timeout: 3)
-        navigator.goto(LoginsSettings)
+        app.cells["Logins"].tap()
+
+        let passcodeInput = springboard.secureTextFields["Passcode field"]
+        passcodeInput.tap()
+        passcodeInput.typeText("foo\n")
+
         waitForExistence(app.tables["Login List"], timeout: 10)
         app.buttons.element(boundBy: 1).tap()
         waitForExistence(app.tables["Add Credential"], timeout: 3)

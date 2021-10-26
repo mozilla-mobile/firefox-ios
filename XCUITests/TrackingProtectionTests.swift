@@ -72,6 +72,7 @@ class TrackingProtectionTests: BaseTestCase {
     func testETPLockMenu() {
         navigator.openURL(differentWebsite)
         waitUntilPageLoad()
+        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"])
         navigator.goto(TrackingProtectionContextMenuDetails)
         waitForExistence(app.staticTexts["Connection is not secure"], timeout: 5)
         let switchValue = app.switches.firstMatch.value!

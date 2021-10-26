@@ -69,9 +69,6 @@ let allSettingsScreens = [
     NewTabSettings,
     OpenWithSettings,
     DisplaySettings,
-
-    LoginsSettings,
-    PasscodeSettings,
     ClearPrivateDataSettings,
     TrackingProtectionSettings,
 ]
@@ -590,7 +587,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(table.cells["OpenWith.Setting"], to: OpenWithSettings)
         screenState.tap(table.cells["DisplayThemeOption"], to: DisplaySettings)
         screenState.tap(table.cells["SiriSettings"], to: SiriSettings)
-        screenState.tap(table.cells["TouchIDPasscode"], to: PasscodeSettings)
         screenState.tap(table.cells["Logins"], to: LoginsSettings, if: "passcode == nil")
         screenState.tap(table.cells["Logins"], to: LockedLoginsSettings, if: "passcode != nil")
         screenState.tap(table.cells["ClearPrivateData"], to: ClearPrivateDataSettings)
@@ -910,7 +906,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             if isTablet {
                 userState.numTabs = Int(app.collectionViews["Top Tabs View"].cells.count)
             } else {
-                userState.numTabs = Int(app.collectionViews.element(boundBy: 1).cells.count)
+                userState.numTabs = Int(app.otherElements["Tabs Tray"].cells.count)
             }
         }
     }
