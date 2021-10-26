@@ -245,7 +245,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
 
     func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
         let cell  = tableView.cellForRow(at: indexPath)
-        cell?.contentView.backgroundColor = PhotonActionSheetCellUX.SelectedOverlayColor
+        cell?.contentView.backgroundColor = .systemGray4
     }
 
     func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
