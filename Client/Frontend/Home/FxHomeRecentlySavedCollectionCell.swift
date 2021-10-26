@@ -190,7 +190,7 @@ private struct RecentlySavedCellUX {
 }
 
 /// A cell used in FxHomeScreen's Recently Saved section. It holds bookmarks and reading list items.
-class RecentlySavedCell: UICollectionViewCell {
+class RecentlySavedCell: UICollectionViewCell, Themeable {
     
     // MARK: - Properties
     
@@ -216,10 +216,16 @@ class RecentlySavedCell: UICollectionViewCell {
         super.init(frame: .zero)
         
         setupLayout()
+        setupNotifications()
+        applyTheme()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     // MARK: - Helpers
@@ -244,6 +250,27 @@ class RecentlySavedCell: UICollectionViewCell {
             itemTitle.leadingAnchor.constraint(equalTo: heroImage.leadingAnchor),
             itemTitle.trailingAnchor.constraint(equalTo: heroImage.trailingAnchor, constant: -2)
         ])
+    }
+    
+    private func setupNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .DisplayThemeChanged, object: nil)
+    }
+    
+    @objc private func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        default:
+            break
+        }
+    }
+    
+    func applyTheme() {
+        if ThemeManager.instance.currentName == .dark {
+            itemTitle.textColor = UIColor.Photon.LightGrey10
+        } else {
+            itemTitle.textColor = UIColor.Photon.DarkGrey90
+        }
     }
     
 }

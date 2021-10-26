@@ -185,8 +185,6 @@ class HomePanelColor {
     
     var recentlySavedBookmarkCellBackground: UIColor { return .white}
 
-    var jumpbackInGroupIconColour: UIColor { return UIColor.Photon.DarkGrey90}
-
     var activityStreamHeaderText: UIColor { return UIColor.Photon.DarkGrey90 }
     var activityStreamHeaderButton: UIColor { return UIColor.Photon.Blue50 }
     var activityStreamCellTitle: UIColor { return UIColor.Photon.DarkGrey90 }
