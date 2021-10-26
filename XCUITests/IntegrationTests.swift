@@ -176,6 +176,13 @@ class IntegrationTests: BaseTestCase {
 
         // Check synced Logins
         navigator.nowAt(SettingsScreen)
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(LoginsSettings)
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        let passcodeInput = springboard.secureTextFields["Passcode field"]
+        passcodeInput.tap()
+        passcodeInput.typeText("foo\n")
+
         navigator.goto(LoginsSettings)
         waitForExistence(app.tables["Login List"], timeout: 5)
         XCTAssertTrue(app.tables.cells.staticTexts[loginEntry].exists, "The login saved on desktop is not synced")

@@ -52,7 +52,7 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.goto(TabTray)
 
         waitForExistence(app.cells.staticTexts[url2Label])
-        let numTabs = userState.numTabs
+        let numTabs = app.otherElements["Tabs Tray"].cells.count
         XCTAssertEqual(numTabs, 2, "The number of regular tabs is not correct")
 
         // Open one tab in private browsing and check the total number of tabs
@@ -66,20 +66,14 @@ class PrivateBrowsingTest: BaseTestCase {
         waitForTabsButton()
         navigator.goto(TabTray)
         waitForExistence(app.cells.staticTexts[url1And3Label])
-        let numPrivTabs = userState.numTabs
-        if !iPad() {
-            // On iPhone the number of tabs is 2 because there is one default tab opened when switching to PB
-            XCTAssertEqual(numPrivTabs, 2, "The number of private tabs is not correct")
-        } else {
-            XCTAssertEqual(numPrivTabs, 1, "The number of private tabs is not correct")
-        }
-
+        let numPrivTabs = app.otherElements["Tabs Tray"].cells.count
+        XCTAssertEqual(numPrivTabs, 1, "The number of private tabs is not correct")
         // Go back to regular mode and check the total number of tabs
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
 
         waitForExistence(app.cells.staticTexts[url2Label])
         waitForNoExistence(app.cells.staticTexts[url1And3Label])
-        let numRegularTabs = userState.numTabs
+        let numRegularTabs = app.otherElements["Tabs Tray"].cells.count
         XCTAssertEqual(numRegularTabs, 2, "The number of regular tabs is not correct")
     }
 
@@ -166,9 +160,8 @@ class PrivateBrowsingTest: BaseTestCase {
         // If no private tabs are open, there should be a initial screen with label Private Browsing
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
 
-        let numPrivTabsFirstTime = userState.numTabs
-        // With the chron tab implementation there is one tab by default
-        XCTAssertEqual(numPrivTabsFirstTime, 1, "The number of tabs is not correct, there should not be any private tab yet")
+        let numPrivTabsFirstTime = app.otherElements["Tabs Tray"].cells.count
+        XCTAssertEqual(numPrivTabsFirstTime, 0, "The number of tabs is not correct, there should not be any private tab yet")
 
         // If a private tab is open Private Browsing screen is not shown anymore
         navigator.goto(BrowserTab)
@@ -184,21 +177,16 @@ class PrivateBrowsingTest: BaseTestCase {
         waitForNoExistence(app.staticTexts["Private Browsing"])
         XCTAssertFalse(app.staticTexts["Private Browsing"].exists, "Private Browsing screen is shown")
         navigator.nowAt(TabTray)
-        let numPrivTabsOpen = userState.numTabs
-        if !iPad() {
-            // On iPhone the number of tabs is 2 because there is one default tab opened when switching to PB
-            XCTAssertEqual(numPrivTabsOpen, 2, "The number of private tabs is not correct")
-        } else {
-            XCTAssertEqual(numPrivTabsOpen, 1, "The number of private tabs is not correct")
-        }
+        let numPrivTabsOpen = app.otherElements["Tabs Tray"].cells.count
+        XCTAssertEqual(numPrivTabsOpen, 1, "The number of private tabs is not correct")
     }
 }
 
 fileprivate extension BaseTestCase {
     func checkOpenTabsBeforeClosingPrivateMode() {
         if !iPad() {
-            let numPrivTabs = app.tables.cells.count
-            XCTAssertEqual(numPrivTabs, 2, "The number of tabs is not correct, the private tab should not have been closed")
+            let numPrivTabs = app.otherElements["Tabs Tray"].cells.count
+            XCTAssertEqual(numPrivTabs, 1, "The number of tabs is not correct, the private tab should not have been closed")
         } else {
             let numPrivTabs = app.collectionViews["Top Tabs View"].cells.count
             XCTAssertEqual(numPrivTabs, 1, "The number of tabs is not correct, the private tab should not have been closed")
@@ -206,8 +194,8 @@ fileprivate extension BaseTestCase {
     }
 
     func checkOpenTabsAfterClosingPrivateMode() {
-        let numPrivTabsAfterClosing = userState.numTabs
-        XCTAssertEqual(numPrivTabsAfterClosing, 1, "The number of tabs is not correct, the private tab should have been closed")
+        let numPrivTabsAfterClosing = app.otherElements["Tabs Tray"].cells.count
+        XCTAssertEqual(numPrivTabsAfterClosing, 0, "The number of tabs is not correct, the private tab should have been closed")
     }
 
     func enableClosePrivateBrowsingOptionWhenLeaving() {

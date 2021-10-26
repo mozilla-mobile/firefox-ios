@@ -61,7 +61,7 @@ class TopTabsTest: BaseTestCase {
             waitUntilPageLoad()
             navigator.nowAt(BrowserTab)
             navigator.goto(TabTray)
-            waitForExistence(app.cells.staticTexts["IANA — IANA-managed Reserved Domains"])
+            waitForExistence(app.otherElements.cells.staticTexts["IANA-managed Reserved Domains"])
         }
     }
 
@@ -100,7 +100,7 @@ class TopTabsTest: BaseTestCase {
         if iPad() {
             app.cells.buttons["tab close"].tap()
         } else {
-            app.cells.buttons["closeTabButtonTabTray"].tap()
+            app.otherElements.cells.buttons["tab close"].tap()
         }
 
         // After removing only one tab it automatically goes to HomepanelView
@@ -328,7 +328,6 @@ fileprivate extension BaseTestCase {
         if iPad() {
             numTabsOpen = app.collectionViews.firstMatch.cells.count
         }
-        print(app.debugDescription)
         XCTAssertEqual(numTabsOpen, expectedNumberOfTabsOpen, "The number of tabs open is not correct")
     }
 
