@@ -9,7 +9,6 @@ import Telemetry
 class AutocompleteCustomUrlViewController: UIViewController {
     private let emptyStateView = UIView()
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
-    private var addDomainCell: UITableViewCell?
 
     private let customAutocompleteSource: CustomAutocompleteSource
     private var domains: [String] { return customAutocompleteSource.getSuggestions() }
@@ -64,7 +63,14 @@ class AutocompleteCustomUrlViewController: UIViewController {
         navigationItem.rightBarButtonItem?.title = tableView.isEditing ? UIConstants.strings.edit : UIConstants.strings.done
 
         tableView.setEditing(!tableView.isEditing, animated: true)
-        addDomainCell?.animateHidden(tableView.isEditing, duration: UIConstants.layout.autocompleteAnimationDuration)
+
+        // Remove adding custom URL section in edit mode
+        if tableView.isEditing {
+            tableView.deleteRows(at: [IndexPath(row: 0, section: 0)], with: .fade)
+        } else {
+            tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .fade)
+        }
+        
         navigationItem.setHidesBackButton(tableView.isEditing, animated: true)
         updateEmptyStateView()
         navigationItem.rightBarButtonItem?.isEnabled = tableView.isEditing || domains.count > 0
@@ -78,55 +84,76 @@ class AutocompleteCustomUrlViewController: UIViewController {
             tableView.backgroundView?.animateHidden(true, duration: UIConstants.layout.autocompleteAnimationDuration)
         }
     }
+    
+    enum Section: Int, CaseIterable {
+        case add
+        case list
+    }
 }
+
 
 extension AutocompleteCustomUrlViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        Section.allCases.count
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return domains.count + 1
-    }
-
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let cell = UITableViewCell()
-        return cell
+        Section(rawValue: section)
+            .map {
+                switch $0 {
+                case .add:
+                    return tableView.isEditing ? 0 : 1
+                case .list:
+                    return domains.count
+                }
+            }
+        ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell: UITableViewCell
-        if indexPath.row == domains.count {
-            cell = UITableViewCell(style: .subtitle, reuseIdentifier: "addCustomDomainCell")
-            cell.textLabel?.text = UIConstants.strings.autocompleteAddCustomUrlWithPlus
-            cell.accessoryType = .disclosureIndicator
-            cell.accessibilityIdentifier = "addCustomDomainCell"
-            cell.selectionStyle = .gray
-            addDomainCell = cell
-        } else {
-            cell = UITableViewCell(style: .subtitle, reuseIdentifier: "domainCell")
-            cell.selectionStyle = .none
-            cell.textLabel?.text = domains[indexPath.row]
-            cell.accessibilityIdentifier = domains[indexPath.row]
-        }
-
-        cell.textLabel?.textColor = .primaryText
-
-        return cell
+        Section(rawValue: indexPath.section)
+            .map {
+                var cell: UITableViewCell
+                switch $0 {
+                case .add:
+                    cell = UITableViewCell(style: .subtitle, reuseIdentifier: "addCustomDomainCell")
+                    cell.textLabel?.text = UIConstants.strings.autocompleteAddCustomUrlWithPlus
+                    cell.accessoryType = .disclosureIndicator
+                    cell.accessibilityIdentifier = "addCustomDomainCell"
+                    cell.selectionStyle = .gray
+                    
+                case .list:
+                    cell = UITableViewCell(style: .subtitle, reuseIdentifier: "domainCell")
+                    cell.selectionStyle = .none
+                    cell.textLabel?.text = domains[indexPath.row]
+                    cell.accessibilityIdentifier = domains[indexPath.row]
+                }
+                cell.textLabel?.textColor = .primaryText
+                return cell
+            }
+        ?? UITableViewCell()
     }
 
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return indexPath.row !=  domains.count
+        Section(rawValue: indexPath.section) != .add
+    }
+    
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        Section(rawValue: indexPath.section) != .add
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
-        if indexPath.row == domains.count {
+        if Section(rawValue: indexPath.section) == .add {
             let viewController = AddCustomDomainViewController(autocompleteSource: customAutocompleteSource)
             viewController.delegate = self
             self.navigationController?.pushViewController(viewController, animated: true)
         }
+    }
+    
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        tableView.isEditing ? .delete : .none
     }
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -147,15 +174,21 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
         navigationItem.rightBarButtonItem?.isEnabled = domains.count > 0
     }
 
-    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        return indexPath.row !=  domains.count
-    }
-
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         let itemToMove = domains[sourceIndexPath.row]
         _ = customAutocompleteSource.remove(at: sourceIndexPath.row)
         _ = customAutocompleteSource.add(suggestion: itemToMove, atIndex: destinationIndexPath.row)
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.customDomainReordered, object: TelemetryEventObject.customDomain)
+    }
+    
+    /// Disable moving rows between sections.
+    ///
+    func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
+        if sourceIndexPath.section != proposedDestinationIndexPath.section {
+            return sourceIndexPath
+        } else {
+            return proposedDestinationIndexPath
+        }
     }
 }
 
