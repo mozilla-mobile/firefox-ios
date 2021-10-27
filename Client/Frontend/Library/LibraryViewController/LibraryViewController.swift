@@ -154,7 +154,7 @@ class LibraryViewController: UIViewController {
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        ThemeManager.instance.statusBarStyle
+        LegacyThemeManager.instance.statusBarStyle
     }
 
     private func setupNotifications() {
@@ -476,12 +476,12 @@ class LibraryViewController: UIViewController {
 }
 
 // MARK: UIAppearance
-extension LibraryViewController: Themeable {
+extension LibraryViewController: NotificationThemeable {
     @objc func applyTheme() {
         viewModel.panelDescriptors.forEach { item in
-            (item.viewController as? Themeable)?.applyTheme()
+            (item.viewController as? NotificationThemeable)?.applyTheme()
         }        
-        overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
+        overrideUserInterfaceStyle = LegacyThemeManager.instance.userInterfaceStyle
 
         // There is an ANNOYING bar in the nav bar above the segment control. These are the
         // UIBarBackgroundShadowViews. We must set them to be clear images in order to
@@ -499,7 +499,7 @@ extension LibraryViewController: Themeable {
         navigationToolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
         navigationToolbar.isTranslucent = false
 
-        let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         if theme == .dark {
             navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         } else {

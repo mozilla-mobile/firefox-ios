@@ -16,7 +16,7 @@ class ThemedNavigationController: DismissableNavigationViewController {
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return topViewController?.preferredStatusBarStyle ?? ThemeManager.instance.statusBarStyle
+        return topViewController?.preferredStatusBarStyle ?? LegacyThemeManager.instance.statusBarStyle
     }
 
     override func viewDidLoad() {
@@ -27,7 +27,7 @@ class ThemedNavigationController: DismissableNavigationViewController {
     }
 }
 
-extension ThemedNavigationController: Themeable {
+extension ThemedNavigationController: NotificationThemeable {
     private func setupNavigationBarAppearance() {
         let standardAppearance = UINavigationBarAppearance()
         standardAppearance.configureWithDefaultBackground()
@@ -46,7 +46,7 @@ extension ThemedNavigationController: Themeable {
         setupNavigationBarAppearance()
         setNeedsStatusBarAppearanceUpdate()
         viewControllers.forEach {
-            ($0 as? Themeable)?.applyTheme()
+            ($0 as? NotificationThemeable)?.applyTheme()
         }
     }
 }

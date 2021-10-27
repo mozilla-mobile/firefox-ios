@@ -340,13 +340,13 @@ class TabTrayViewController: UIViewController {
     }
 }
 
-extension TabTrayViewController: Themeable {
+extension TabTrayViewController: NotificationThemeable {
      @objc func applyTheme() {
-         overrideUserInterfaceStyle =  ThemeManager.instance.userInterfaceStyle
+         overrideUserInterfaceStyle =  LegacyThemeManager.instance.userInterfaceStyle
          view.backgroundColor = UIColor.theme.tabTray.background
          navigationToolbar.barTintColor = UIColor.theme.tabTray.toolbar
          navigationToolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
-         let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
          if theme == .dark {
              navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
          } else {

@@ -29,11 +29,11 @@ class ThemeSettingsController: ThemedTableViewController {
     private let deviceBrightnessIndicatorColor = UIColor(white: 182/255, alpha: 1.0)
 
     var isAutoBrightnessOn: Bool {
-        return ThemeManager.instance.automaticBrightnessIsOn
+        return LegacyThemeManager.instance.automaticBrightnessIsOn
     }
 
     var isSystemThemeOn: Bool {
-        return ThemeManager.instance.systemThemeIsOn
+        return LegacyThemeManager.instance.systemThemeIsOn
     }
 
     private var shouldHideSystemThemeSection = false
@@ -58,8 +58,8 @@ class ThemeSettingsController: ThemedTableViewController {
     }
 
     @objc func brightnessChanged() {
-        guard ThemeManager.instance.automaticBrightnessIsOn else { return }
-        ThemeManager.instance.updateCurrentThemeBasedOnScreenBrightness()
+        guard LegacyThemeManager.instance.automaticBrightnessIsOn else { return }
+        LegacyThemeManager.instance.updateCurrentThemeBasedOnScreenBrightness()
         applyTheme()
     }
 
@@ -121,13 +121,13 @@ class ThemeSettingsController: ThemedTableViewController {
     }
 
     @objc func systemThemeSwitchValueChanged(control: UISwitch) {
-        ThemeManager.instance.systemThemeIsOn = control.isOn
+        LegacyThemeManager.instance.systemThemeIsOn = control.isOn
     
         let userInterfaceStyle = traitCollection.userInterfaceStyle
         if control.isOn {
-            ThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
-        } else if ThemeManager.instance.automaticBrightnessIsOn {
-            ThemeManager.instance.updateCurrentThemeBasedOnScreenBrightness()
+            LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
+        } else if LegacyThemeManager.instance.automaticBrightnessIsOn {
+            LegacyThemeManager.instance.updateCurrentThemeBasedOnScreenBrightness()
         }
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .setting, value: .systemThemeSwitch, extras: ["to": control.isOn])
 
@@ -142,7 +142,7 @@ class ThemeSettingsController: ThemedTableViewController {
             return
         }
 
-        ThemeManager.instance.automaticBrightnessValue = control.value
+        LegacyThemeManager.instance.automaticBrightnessValue = control.value
         brightnessChanged()
     }
 
@@ -182,7 +182,7 @@ class ThemeSettingsController: ThemedTableViewController {
             control.accessibilityIdentifier = "SystemThemeSwitchValue"
             control.onTintColor = UIColor.theme.tableView.controlTint
             control.addTarget(self, action: #selector(systemThemeSwitchValueChanged), for: .valueChanged)
-            control.isOn = ThemeManager.instance.systemThemeIsOn
+            control.isOn = LegacyThemeManager.instance.systemThemeIsOn
             cell.accessoryView = control
         case .automaticBrightness:
             if indexPath.row == 0 {
@@ -208,7 +208,7 @@ class ThemeSettingsController: ThemedTableViewController {
                 let deviceBrightnessIndicator = makeSlider(parent: cell.contentView)
                 let slider = makeSlider(parent: cell.contentView)
                 slider.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
-                slider.value = Float(ThemeManager.instance.automaticBrightnessValue)
+                slider.value = Float(LegacyThemeManager.instance.automaticBrightnessValue)
                 deviceBrightnessIndicator.value = Float(UIScreen.main.brightness)
                 deviceBrightnessIndicator.isUserInteractionEnabled = false
                 deviceBrightnessIndicator.minimumTrackTintColor = .clear
@@ -222,7 +222,7 @@ class ThemeSettingsController: ThemedTableViewController {
                     cell.textLabel?.text = Strings.DisplayThemeOptionDark
                 }
 
-                let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+                let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
                 if (indexPath.row == 0 && theme == .normal) ||
                     (indexPath.row == 1 && theme == .dark) {
                     cell.accessoryType = .checkmark
@@ -260,13 +260,13 @@ class ThemeSettingsController: ThemedTableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == Section.automaticBrightness.rawValue {
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
-            ThemeManager.instance.automaticBrightnessIsOn = indexPath.row != 0
+            LegacyThemeManager.instance.automaticBrightnessIsOn = indexPath.row != 0
             tableView.reloadSections(IndexSet(integer: Section.lightDarkPicker.rawValue), with: .automatic)
             tableView.reloadSections(IndexSet(integer: Section.automaticBrightness.rawValue), with: .none)
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .setting, value: indexPath.row == 0 ? .themeModeManually : .themeModeAutomatically)
         } else if indexPath.section == Section.lightDarkPicker.rawValue {
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
-            ThemeManager.instance.current = indexPath.row == 0 ? NormalTheme() : DarkTheme()
+            LegacyThemeManager.instance.current = indexPath.row == 0 ? NormalTheme() : DarkTheme()
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .setting, value: indexPath.row == 0 ? .themeLight : .themeDark)
         }
         applyTheme()

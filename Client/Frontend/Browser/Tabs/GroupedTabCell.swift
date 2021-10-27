@@ -32,7 +32,7 @@ protocol GroupedTabDelegate {
     func newSearchFromGroup(searchTerm: String)
 }
 
-class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UITableViewDelegate, GroupedTabsDelegate {
+class GroupedTabCell: UICollectionViewCell, NotificationThemeable, UITableViewDataSource, UITableViewDelegate, GroupedTabsDelegate {
     
     var tabDisplayManagerDelegate: GroupedTabDelegate?
     var tabGroups: [ASGroup<Tab>]?
@@ -286,7 +286,7 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
     }
     
     private func applyTheme() {
-        if ThemeManager.instance.currentName == .normal {
+        if LegacyThemeManager.instance.currentName == .normal {
             collectionView.backgroundColor = UIColor.Photon.White100
         } else {
             collectionView.backgroundColor = UIColor.Photon.DarkGrey50

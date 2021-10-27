@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 import UIKit
 
-protocol Themeable: AnyObject {
+protocol NotificationThemeable: AnyObject {
     func applyTheme()
 }
 
@@ -12,8 +12,8 @@ protocol PrivateModeUI {
 }
 
 extension UIColor {
-    static var theme: Theme {
-        return ThemeManager.instance.current
+    static var theme: LegacyTheme {
+        return LegacyThemeManager.instance.current
     }
 }
 
@@ -237,7 +237,7 @@ class RemoteTabTrayColor {
     var background: UIColor { return UIColor.white }
 }
 
-protocol Theme {
+protocol LegacyTheme {
     var name: String { get }
     var tableView: TableViewColor { get }
     var urlbar: URLBarColor { get }
@@ -258,7 +258,7 @@ protocol Theme {
     var remotePanel: RemoteTabTrayColor { get }
 }
 
-class NormalTheme: Theme {
+class NormalTheme: LegacyTheme {
     var name: String { return BuiltinThemeName.normal.rawValue }
     var tableView: TableViewColor { return TableViewColor() }
     var urlbar: URLBarColor { return URLBarColor() }

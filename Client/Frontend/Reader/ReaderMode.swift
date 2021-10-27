@@ -37,7 +37,7 @@ enum ReaderModeTheme: String {
         // Get current Firefox theme (Dark vs Normal)
         // Normal means light theme. This is the overall theme used
         // by Firefox iOS app
-        let appWideTheme = ThemeManager.instance.currentName
+        let appWideTheme = LegacyThemeManager.instance.currentName
         // We check for 3 basic themes we have Light / Dark / Sepia
         // Theme: Dark - app-wide dark overrides all
         if appWideTheme == .dark {

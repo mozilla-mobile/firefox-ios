@@ -63,7 +63,7 @@ class FxHomeCustomizeHomeView: UICollectionViewCell {
     }
 }
 
-extension FxHomeCustomizeHomeView: Themeable {
+extension FxHomeCustomizeHomeView: NotificationThemeable {
     func applyTheme() {
         goToSettingsButton.backgroundColor = UIColor.theme.homePanel.customizeHomepageButtonBackground
         goToSettingsButton.setTitleColor(UIColor.theme.homePanel.customizeHomepageButtonText, for: .normal)
