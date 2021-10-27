@@ -1,6 +1,16 @@
 {
   "images" : [
     {
+      "filename" : "close_button.pdf",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
       "filename" : "close-button.pdf",
       "idiom" : "universal"
     }

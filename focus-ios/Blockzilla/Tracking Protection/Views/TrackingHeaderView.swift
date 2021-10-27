@@ -13,7 +13,7 @@ class TrackingHeaderView: UIView {
     private lazy var domainLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.preferredFont(forTextStyle: .callout)
-        label.textColor = .secondaryLabel
+        label.textColor = .primaryText
         label.numberOfLines = 0
         label.setContentHuggingPriority(.required, for: .horizontal)
         label.setContentCompressionResistancePriority(.required, for: .horizontal)
