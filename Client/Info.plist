@@ -77,8 +77,6 @@
 	<string>$(MOZ_INTERNAL_URL_SCHEME)</string>
 	<key>MozPublicURLScheme</key>
 	<string>$(MOZ_PUBLIC_URL_SCHEME)</string>
-	<key>MozWhatsNewTopic</key>
-	<string>whats-new-ios-18</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
