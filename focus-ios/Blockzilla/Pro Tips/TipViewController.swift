@@ -60,6 +60,13 @@ class TipViewController: UIViewController {
         view.addGestureRecognizer(tap)
         
         tipTitleLabel.text = tip.title
+        
+        if let variables = NimbusWrapper.shared.nimbus?.getVariables(featureId: .nimbusValidation), variables.getBool("bold-tip-title") == true {
+            tipTitleLabel.font = UIConstants.fonts.shareTrackerStatsLabelBold
+        } else {
+            tipTitleLabel.font = UIConstants.fonts.shareTrackerStatsLabel
+        }
+        
         tipDescriptionButton.setTitle(tip.description, for: .normal)
         tipDescriptionButton.addTarget(self, action: #selector(tapTip), for: .touchUpInside)
 

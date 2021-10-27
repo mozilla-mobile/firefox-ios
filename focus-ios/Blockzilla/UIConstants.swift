@@ -146,6 +146,7 @@ struct UIConstants {
         static let settingsInputLabel = UIFont.systemFont(ofSize: 18)
         static let settingsDescriptionText = UIFont.systemFont(ofSize: 12)
         static let shareTrackerStatsLabel = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.light)
+        static let shareTrackerStatsLabelBold = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.bold)
         static let closeButtonTitle = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.bold)
         static let actionMenuItem = UIFont.systemFont(ofSize: 16)
         static let actionMenuTitle = UIFont.systemFont(ofSize: 12)

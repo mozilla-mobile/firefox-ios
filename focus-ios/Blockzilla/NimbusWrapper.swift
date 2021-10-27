@@ -8,6 +8,12 @@ import RustLog
 import Viaduct
 import Nimbus
 
+/// An application specific enum of app features that we are configuring with experiments.
+/// This is expected to grow and shrink across releases of the app.
+enum FeatureId: String {
+    case nimbusValidation = "nimbus-validation"
+}
+
 class NimbusWrapper {
     static let shared = NimbusWrapper()
     
