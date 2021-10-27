@@ -47,7 +47,7 @@ class NoImageModeTests: KIFTestCase {
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         tester().wait(forTimeInterval: 3)
         if BrowserUtils.iPad() {
-            tester().tapView(withAccessibilityIdentifier: "TabToolbar.menuButton")
+            tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.BottomToolbar.settingsMenuButton)
         } else {
             tester().tapView(withAccessibilityLabel: "Menu")
         }
@@ -57,7 +57,7 @@ class NoImageModeTests: KIFTestCase {
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         tester().wait(forTimeInterval: 3)
         if BrowserUtils.iPad() {
-            tester().tapView(withAccessibilityIdentifier: "TabToolbar.menuButton")
+            tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.BottomToolbar.settingsMenuButton)
         } else {
              tester().tapView(withAccessibilityLabel: "Menu")
         }

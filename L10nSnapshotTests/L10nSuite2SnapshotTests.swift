@@ -11,7 +11,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
     func testPanelsEmptyState() {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         app.buttons["urlBar-cancel"].tap()
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 10)
         navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_Bookmarks)
         snapshot("PanelsEmptyState-LibraryPanels.Bookmarks")
@@ -94,7 +94,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
     func testFxASignInPage() {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         app.buttons["urlBar-cancel"].tap()
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 10)
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
         waitForExistence(app.tables.cells["menu-sync"], timeout: 5)

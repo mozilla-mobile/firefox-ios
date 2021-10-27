@@ -130,7 +130,7 @@ open class TabToolbarHelper: NSObject {
         toolbar.appMenuButton.setImage(UIImage.templateImageNamed("nav-menu"), for: .normal)
         toolbar.appMenuButton.accessibilityLabel = Strings.AppMenuButtonAccessibilityLabel
         toolbar.appMenuButton.addTarget(self, action: #selector(didClickMenu), for: .touchUpInside)
-        toolbar.appMenuButton.accessibilityIdentifier = "TabToolbar.menuButton"
+        toolbar.appMenuButton.accessibilityIdentifier = AccessibilityIdentifiers.BottomToolbar.settingsMenuButton
 
         toolbar.homeButton.contentMode = .center
         toolbar.homeButton.setImage(UIImage.templateImageNamed("menu-Home"), for: .normal)
@@ -328,7 +328,7 @@ class TabToolbar: UIView {
         multiStateButton.accessibilityIdentifier = "TabToolbar.multiStateButton"
         tabsButton.accessibilityIdentifier = "TabToolbar.tabsButton"
         addNewTabButton.accessibilityIdentifier = "TabToolbar.addNewTabButton"
-        appMenuButton.accessibilityIdentifier = "TabToolbar.menuButton"
+        appMenuButton.accessibilityIdentifier = AccessibilityIdentifiers.BottomToolbar.settingsMenuButton
         accessibilityNavigationStyle = .combined
         accessibilityLabel = .TabToolbarNavigationToolbarAccessibilityLabel
     }

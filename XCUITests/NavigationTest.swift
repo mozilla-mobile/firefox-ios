@@ -375,7 +375,7 @@ class NavigationTest: BaseTestCase {
     func testVerifyBrowserTabMenu() {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         navigator.performAction(Action.CloseURLBarOpen)
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 5)
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
         waitForExistence(app.tables["Context Menu"])
