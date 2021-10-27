@@ -479,6 +479,7 @@
 		C87DF9C6267246BB0097E707 /* GeometryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650754D1E37F6AE006961AC /* GeometryExtensions.swift */; };
 		C87DF9DB267247190097E707 /* UIConstants+BottomInset.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87DF9DA267247190097E707 /* UIConstants+BottomInset.swift */; };
 		C893075D265501EE00A1DB2F /* CredentialAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C893075C265501EE00A1DB2F /* CredentialAssets.xcassets */; };
+		C8954A4C2729AD31001C7283 /* FxColours.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C8954A4B2729AD31001C7283 /* FxColours.xcassets */; };
 		C8A012F126AB07D70096A7A7 /* FxHomeJumpBackInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A012F026AB07D70096A7A7 /* FxHomeJumpBackInViewModel.swift */; };
 		C8CC4F8725253E79003FDE1F /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD46F3324A1606C001B3967 /* WidgetKit.framework */; };
 		C8CE389C265E71E00009B09E /* CredentialListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CE389A265E71E00009B09E /* CredentialListViewController.swift */; };
@@ -3125,6 +3126,7 @@
 		C87DF9DA267247190097E707 /* UIConstants+BottomInset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIConstants+BottomInset.swift"; sourceTree = "<group>"; };
 		C88847109E62D581C497BB8E /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/AuthenticationManager.strings"; sourceTree = "<group>"; };
 		C893075C265501EE00A1DB2F /* CredentialAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = CredentialAssets.xcassets; sourceTree = "<group>"; };
+		C8954A4B2729AD31001C7283 /* FxColours.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = FxColours.xcassets; sourceTree = "<group>"; };
 		C8A012F026AB07D70096A7A7 /* FxHomeJumpBackInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxHomeJumpBackInViewModel.swift; sourceTree = "<group>"; };
 		C8A74FF69C3971EDBE73157F /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C8B34CBE911A7211E314D870 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
@@ -6258,6 +6260,7 @@
 				D0E17FA7201F847600F1FCB5 /* FxASignIn.js */,
 				39A35AEC1C0662A3006B9E87 /* SpotlightHelper.js */,
 				D37524861C6E8B5A00A5F6C2 /* topdomains.txt */,
+				C8954A4B2729AD31001C7283 /* FxColours.xcassets */,
 				F84B21EF1A0910F600AAB793 /* Images.xcassets */,
 				E699220D1B94E3EF007C480D /* About */,
 				F84B22391A0914A300AAB793 /* Fonts */,
@@ -7340,6 +7343,7 @@
 				E4A961381AC06FA50069AD6F /* ReaderViewLoading.html in Resources */,
 				EBE7635820ADCB7600E27F2D /* SendTo.xcassets in Resources */,
 				E4ECCDAE1AB131770005E717 /* FiraSans-Medium.ttf in Resources */,
+				C8954A4C2729AD31001C7283 /* FxColours.xcassets in Resources */,
 				EBC9D38922D4D56F0011D881 /* disconnect-block-cookies-advertising.json in Resources */,
 				D0E17FB6201F847600F1FCB5 /* FxASignIn.js in Resources */,
 				E4424B3C1AC71FB400F44C38 /* FiraSans-Book.ttf in Resources */,
