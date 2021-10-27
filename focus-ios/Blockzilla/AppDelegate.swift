@@ -433,7 +433,8 @@ extension AppDelegate {
         
     func setupExperimentation() {
         do {
-            try NimbusWrapper.shared.initialize(enabled: Settings.getToggle(.sendAnonymousUsageData))
+            // Enable nimbus when both Send Usage Data and Studies are enabled in the settings.
+            try NimbusWrapper.shared.initialize(enabled: Settings.getToggle(.sendAnonymousUsageData) && Settings.getToggle(.studies))
         } catch {
             NSLog("Failed to setup experimentation: \(error)")
         }

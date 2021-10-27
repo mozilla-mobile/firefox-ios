@@ -88,7 +88,7 @@ class SettingsTableViewToggleCell: SettingsTableViewCell {
 
 class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     enum Section: String {
-        case general, privacy, usageData, search, siri, integration, mozilla
+        case general, privacy, usageData, studies, search, siri, integration, mozilla
 
         var numberOfRows: Int {
             switch self {
@@ -97,6 +97,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 if BiometryType(context: LAContext()).hasBiometry { return 3 }
                 return 2
             case .usageData: return 1
+            case .studies: return 1
             case .search: return 3
             case .siri: return 3
             case .integration: return 1
@@ -109,6 +110,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             case .general: return UIConstants.strings.general
             case .privacy: return UIConstants.strings.toggleSectionPrivacy
             case .usageData: return nil
+            case .studies: return nil
             case .search: return UIConstants.strings.settingsSearchTitle
             case .siri: return UIConstants.strings.siriShortcutsTitle
             case .integration: return UIConstants.strings.toggleSectionSafari
@@ -117,7 +119,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
 
         static func getSections() -> [Section] {
-            return [.general, .privacy, .usageData, .search, .siri, integration, .mozilla]
+            return [.general, .privacy, .usageData, .studies, .search, .siri, integration, .mozilla]
         }
     }
 
@@ -208,6 +210,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     private func initializeToggles() {
         let blockFontsToggle = BlockerToggle(label: UIConstants.strings.labelBlockFonts, setting: SettingsToggle.blockFonts)
+        let studiesSubtitle = String(format: UIConstants.strings.detailTextStudies, AppInfo.productName)
+        let studiesToggle = BlockerToggle(label: UIConstants.strings.labelStudies, setting: SettingsToggle.studies, subtitle: studiesSubtitle)
         let usageDataSubtitle = String(format: UIConstants.strings.detailTextSendUsageData, AppInfo.productName)
         let usageDataToggle = BlockerToggle(label: UIConstants.strings.labelSendAnonymousUsageData, setting: SettingsToggle.sendAnonymousUsageData, subtitle: usageDataSubtitle)
         let searchSuggestionSubtitle = String(format: UIConstants.strings.detailTextSearchSuggestion, AppInfo.productName)
@@ -224,6 +228,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         if let usageDataIndex = getSectionIndex(Section.usageData) {
             toggles[usageDataIndex] = [0: usageDataToggle]
+        }
+        if let studiesIndex = getSectionIndex(Section.studies) {
+            toggles[studiesIndex] = [0: studiesToggle]
         }
         if let searchIndex = getSectionIndex(Section.search) {
             toggles[searchIndex] = [2: searchSuggestionToggle]
@@ -393,6 +400,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             }
         case .usageData:
             cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
+        case .studies:
+            cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
         case .search:
             if indexPath.row < 2 {
                 let searchCell = SettingsTableViewAccessoryCell(style: .value1, reuseIdentifier: "accessoryCell")
@@ -429,6 +438,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 }
             }
             cell = siriCell
+        case .integration:
+            cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
         case .mozilla:
             if indexPath.row == 0 {
                 cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
@@ -441,8 +452,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell.textLabel?.text = String(format: UIConstants.strings.ratingSetting, AppInfo.productName)
                 cell.accessibilityIdentifier = "settingsViewController.rateFocus"
             }
-        default:
-            cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
         }
 
         cell.textLabel?.textColor = .primaryText
@@ -476,8 +485,16 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             let footer = ActionFooterView(frame: .zero)
             footer.textLabel.text = text
 
-            if section == 1 || section == 2 {
-                let selector = toggles[section]?.first?.value.label == UIConstants.strings.labelSendAnonymousUsageData ? #selector(tappedLearnMoreFooter) : #selector(tappedLearnMoreSearchSuggestionsFooter)
+            if section == getSectionIndex(.usageData) || section == getSectionIndex(.studies) || section == getSectionIndex(.search) {
+                var selector: Selector?
+                if section == getSectionIndex(.usageData) {
+                    selector = #selector(tappedLearnMoreFooter)
+                } else if section == getSectionIndex(.search) {
+                    selector =  #selector(tappedLearnMoreSearchSuggestionsFooter)
+                } else if section == getSectionIndex(.studies) {
+                    selector = #selector(tappedLearnMoreStudies)
+                }
+                
                 let tapGesture = UITapGestureRecognizer(target: self, action: selector)
                 footer.detailTextButton.setTitle(UIConstants.strings.learnMore, for: .normal)
                 footer.detailTextButton.addGestureRecognizer(tapGesture)
@@ -564,6 +581,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         tappedFooter(forSupportTopic: .searchSuggestions)
     }
 
+    @objc func tappedLearnMoreStudies(gestureRecognizer: UIGestureRecognizer) {
+        tappedFooter(forSupportTopic: .studies)
+    }
+    
     @objc private func dismissSettings() {
         self.dismiss(animated: true, completion: nil)
     }
@@ -591,8 +612,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             Utils.reloadSafariContentBlocker()
         }
 
-        // First check if the user changed the anonymous usage data setting and follow that choice right
-        // here. Otherwise it will be delayed until the application restarts.
+        // The following settings are special and need to be in effect immediately.
+        
         if toggle.setting == .sendAnonymousUsageData {
             Telemetry.default.configuration.isCollectionEnabled = sender.isOn
             Telemetry.default.configuration.isUploadEnabled = sender.isOn
@@ -600,6 +621,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             if !sender.isOn {
                 NimbusWrapper.shared.nimbus?.resetTelemetryIdentifiers()
             }
+        } else if toggle.setting == .studies {
+            NimbusWrapper.shared.nimbus?.globalUserParticipation = sender.isOn
         } else if toggle.setting == .biometricLogin {
             TipManager.biometricTip = false
         }

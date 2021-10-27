@@ -8,6 +8,7 @@ public enum SupportTopic: CaseIterable {
     case whatsNew
     case searchSuggestions
     case usageData
+    case studies
     case autofillDomain
     case trackingProtection
     case addSearchEngine
@@ -20,6 +21,8 @@ public enum SupportTopic: CaseIterable {
             return "search-suggestions-focus-ios"
         case .usageData:
             return "usage-data"
+        case .studies:
+            return "studies-focus-ios"
         case .autofillDomain:
             return "autofill-domain-ios"
         case .trackingProtection:
