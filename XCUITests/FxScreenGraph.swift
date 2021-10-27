@@ -335,7 +335,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             }
         }
         makeURLBarAvailable(screenState)
-        screenState.tap(app.buttons["TabToolbar.menuButton"], to: BrowserTabMenu)
+        screenState.tap(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], to: BrowserTabMenu)
 
         if isTablet {
             screenState.tap(app.buttons["Private Mode"], forAction: Action.TogglePrivateModeFromTabBarNewTab) { userState in
@@ -937,7 +937,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     func makeToolBarAvailable(_ screenState: MMScreenStateNode<FxUserState>) {
-        screenState.tap(app.buttons["TabToolbar.menuButton"], to: BrowserTabMenu)
+        screenState.tap(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], to: BrowserTabMenu)
         if isTablet {
             screenState.tap(app.buttons["TopTabsViewController.tabsButton"], to: TabTray)
         } else {
@@ -954,7 +954,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(BrowserTab) { screenState in
         makeURLBarAvailable(screenState)
         screenState.tap(app.buttons["TabLocationView.pageOptionsButton"], to: PageOptionsMenu)
-        screenState.tap(app.buttons["TabToolbar.menuButton"], to: BrowserTabMenu)
+        screenState.tap(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], to: BrowserTabMenu)
 
         screenState.tap(app.buttons["TabLocationView.trackingProtectionButton"], to: TrackingProtectionContextMenuDetails)
 
@@ -1142,7 +1142,7 @@ extension MMNavigator where T == FxUserState {
             self.goto(PageOptionsMenu)
             app.tables["Context Menu"].cells[view.rawValue].tap()
         } else if BrowserMenuOptions.contains(view) {
-            waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
+            waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 5)
             self.goto(BrowserTabMenu)
             app.tables["Context Menu"].cells[view.rawValue].tap()
         }

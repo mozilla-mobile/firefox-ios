@@ -71,7 +71,7 @@ class HistoryTests: BaseTestCase {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 5)
         //Clear private data from settings and confirm
         navigator.goto(ClearPrivateDataSettings)
         app.tables.cells["ClearPrivateData"].tap()
