@@ -109,6 +109,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         telemetry = TelemetryWrapper(profile: profile)
         NSUserDefaultsPrefs(prefix: "profile").setBool(true, forKey: "isColdLaunch")
         FeatureFlagsManager.shared.initializeFeatures(with: profile)
+        ThemeManager.shared.updateProfile(with: profile)
 
         // Start intialzing the Nimbus SDK. This should be done after Glean
         // has been started.
