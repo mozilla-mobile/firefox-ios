@@ -1188,7 +1188,7 @@ extension BrowserViewController: URLBarDelegate {
             if items.canOpenInChrome {
                 shareItems.append(items.openInChromeItem)
             }
-            shareItems.append(items.openInSafariItem)
+            shareItems.append(items.openInDefaultBrowserItem)
             
             actions.append(actionItems)
             actions.append(shareItems)

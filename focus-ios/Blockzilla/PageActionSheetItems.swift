@@ -71,7 +71,7 @@ class PageActionSheetItems {
         self.app.open(chromeURL, options: [:])
     }
 
-    lazy var openInSafariItem = PhotonActionSheetItem(title: UIConstants.strings.shareOpenInSafari, iconString: "open_in_safari_icon") { action in
+    lazy var openInDefaultBrowserItem = PhotonActionSheetItem(title: UIConstants.strings.shareOpenInDefaultBrowser, iconString: "open_in_safari_icon") { action in
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.menu, value: "default")
         self.app.open(self.url, options: [:])
     }
