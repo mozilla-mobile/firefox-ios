@@ -156,7 +156,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     weak var homePanelDelegate: HomePanelDelegate?
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     fileprivate var hasPresentedContextualHint = false
-    fileprivate var didRoate = false
+    fileprivate var didRotate = false
     fileprivate let profile: Profile
     fileprivate let pocketAPI = Pocket()
     fileprivate let flowLayout = UICollectionViewFlowLayout()
@@ -341,14 +341,14 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         coordinator.animate(alongsideTransition: {context in
-            //The AS context menu does not behave correctly. Dismiss it when rotating.
+            // The AS context menu does not behave correctly. Dismiss it when rotating.
             if let _ = self.presentedViewController as? PhotonActionSheet {
                 self.presentedViewController?.dismiss(animated: true, completion: nil)
             }
             self.collectionViewLayout.invalidateLayout()
             self.collectionView?.reloadData()
         }, completion: { _ in
-            if !self.didRoate { self.didRoate = true }
+            if !self.didRotate { self.didRotate = true }
             // Workaround: label positions are not correct without additional reload
             self.collectionView?.reloadData()
         })
@@ -651,9 +651,9 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                     if let frame = attributes?.frame, view.convert(frame, from: collectionView).height > 1 {
                         // Using a timer for the first presentation of contextual hint due to many reloads that happen on the collection view. Invalidating the timer prevents from showing contextual hint at the wrong position.
                         timer?.invalidate()
-                        if didRoate && hasPresentedContextualHint {
+                        if didRotate && hasPresentedContextualHint {
                             contextualSourceView = view.titleLabel
-                            didRoate = false
+                            didRotate = false
                         } else if !hasPresentedContextualHint && contextualHintViewController.viewModel.shouldPresentContextualHint(profile: profile) {
                             contextualSourceView = view.titleLabel
                             contextualHintPresentTimer()
