@@ -17,7 +17,7 @@ extension Themeable {
 ///
 /// IMPORTANT NOTE:
 /// The current functionality of `ThemeManager` is restricted to providing the default
-/// theme. The rest of the functionality, is a sketing out of how implementing user
+/// theme. The rest of the functionality, is a sketching out of how implementing user
 /// defined themes might work. It's a work in progress and needs not be touched until
 /// such a feature is actually added.
 final class ThemeManager {
@@ -52,7 +52,7 @@ final class ThemeManager {
 
     // MARK: - Public methods
 
-    /// This is `ThemeManager`s initializer, esentially, as we require the profile
+    /// This is `ThemeManager`s initializer, essentially, as we require the profile
     /// to save custom themes to disk.
     ///
     /// This should only be called in AppDelegate.
@@ -60,20 +60,26 @@ final class ThemeManager {
         self.profile = profile
     }
 
-    public func updateTheme(named name: String, with customTheme: CustomTheme) {
-        let keyName = "UserCustomThemeNamed\(name)"
+    // IMPORTANT NOTE:
+    // The methods below are not finished. They are sketches for how updating themes
+    // might work, should that feature be added.
 
-        do {
-            let jsonData = try JSONEncoder().encode(customTheme)
-            let jsonString = String(data: jsonData, encoding: .utf8)!
-            profile.prefs.setString(jsonString, forKey: keyName)
-
-        } catch {
-            print("Something's gone wrong saving a custom theme.")
-        }
-    }
+//    public func updateTheme(named name: String, with customTheme: CustomTheme) {
+//        let keyName = "UserCustomThemeNamed\(name)"
+//
+//        do {
+//            let jsonData = try JSONEncoder().encode(customTheme)
+//            let jsonString = String(data: jsonData, encoding: .utf8)!
+//            profile.prefs.setString(jsonString, forKey: keyName)
+//
+//        } catch {
+//            print("Something's gone wrong saving a custom theme.")
+//        }
+//    }
 
     // MARK: - Private methods
+
+    /// Retrieves a `Theme` saved by the user, or, if none exists, the default theme.
     private func getTheme(from theme: String) -> Theme? {
         if themeKey != defaultThemeKey,
            let customThemeData = profile.prefs.stringForKey(themeKey) {
