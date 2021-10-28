@@ -57,7 +57,7 @@ class BrowserViewController: UIViewController {
 
     private var trackingProtectionStatus: TrackingProtectionStatus = .on(TPPageStats()) {
         didSet {
-            urlBar.updateTrackingProtectionBadge(trackingStatus: trackingProtectionStatus, shouldDisplayShieldIcon:  urlBar.inBrowsingMode ? self.webViewController.connectionIsSecure : true )
+            updateLockIcon()
         }
     }
 
@@ -379,6 +379,10 @@ class BrowserViewController: UIViewController {
             background.image = #imageLiteral(resourceName: "background_iphone_portrait")
             
         }
+    }
+    
+    private func updateLockIcon() {
+        urlBar.updateTrackingProtectionBadge(trackingStatus: trackingProtectionStatus, shouldDisplayShieldIcon:  urlBar.inBrowsingMode ? self.webViewController.connectionIsSecure : true)
     }
 
     // These functions are used to handle displaying and hiding the keyboard after the splash view is animated
@@ -1526,6 +1530,9 @@ extension BrowserViewController: WebControllerDelegate {
         browserToolbar.color = .loading
         toggleURLBarBackground(isBright: false)
         updateURLBar()
+        if trackingProtectionStatus == .off {
+            updateLockIcon()
+        }
     }
 
     func webControllerDidFinishNavigation(_ controller: WebController) {
