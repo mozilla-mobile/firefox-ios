@@ -79,7 +79,7 @@ class EmptyPrivateTabsView: UIView {
     }
 }
 
-extension EmptyPrivateTabsView: Themeable {
+extension EmptyPrivateTabsView: NotificationThemeable {
     @objc func applyTheme() {
         titleLabel.textColor = UIColor.theme.tabTray.tabTitleText
         descriptionLabel.textColor = UIColor.theme.tabTray.tabTitleText

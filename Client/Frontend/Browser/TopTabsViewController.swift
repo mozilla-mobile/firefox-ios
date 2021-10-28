@@ -245,7 +245,7 @@ extension TopTabsViewController: TopTabCellDelegate {
     }
 }
 
-extension TopTabsViewController: Themeable, PrivateModeUI {
+extension TopTabsViewController: NotificationThemeable, PrivateModeUI {
     func applyUIMode(isPrivate: Bool) {
         topTabDisplayManager.togglePrivateMode(isOn: isPrivate, createTabOnEmptyPrivateMode: true)
 

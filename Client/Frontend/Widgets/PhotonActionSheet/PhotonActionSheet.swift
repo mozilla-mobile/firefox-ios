@@ -9,7 +9,7 @@ import Shared
 
 // This file is main table view used for the action sheet
 
-class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, Themeable {
+class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, NotificationThemeable {
     fileprivate(set) var actions: [[PhotonActionSheetItem]]
 
     private var site: Site?

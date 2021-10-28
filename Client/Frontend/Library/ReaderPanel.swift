@@ -44,7 +44,7 @@ private struct ReadingListPanelUX {
     static let WelcomeScreenCircleSpacer = 10
 }
 
-class ReadingListTableViewCell: UITableViewCell, Themeable {
+class ReadingListTableViewCell: UITableViewCell, NotificationThemeable {
     var title: String = "Example" {
         didSet {
             titleLabel.text = title
@@ -418,7 +418,7 @@ extension ReadingListPanel: UITableViewDragDelegate {
     }
 }
 
-extension ReadingListPanel: Themeable {
+extension ReadingListPanel: NotificationThemeable {
     func applyTheme() {
         tableView.separatorColor = UIColor.theme.tableView.separator
         view.backgroundColor = UIColor.theme.tableView.rowBackground

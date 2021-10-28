@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-class TopTabCell: UICollectionViewCell, Themeable {
+class TopTabCell: UICollectionViewCell, NotificationThemeable {
 
     static let Identifier = "TopTabCellIdentifier"
     static let ShadowOffsetSize: CGFloat = 2 //The shadow is used to hide the tab separator

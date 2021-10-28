@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 import UIKit
 
-class ThemedTableViewCell: UITableViewCell, Themeable {
+class ThemedTableViewCell: UITableViewCell, NotificationThemeable {
     var detailTextColor = UIColor.theme.tableView.disabledRowText
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -23,7 +23,7 @@ class ThemedTableViewCell: UITableViewCell, Themeable {
     }
 }
 
-class ThemedTableViewController: UITableViewController, Themeable {
+class ThemedTableViewController: UITableViewController, NotificationThemeable {
     override init(style: UITableView.Style = .grouped) {
         super.init(style: style)
     }
@@ -47,11 +47,11 @@ class ThemedTableViewController: UITableViewController, Themeable {
         tableView.backgroundColor = UIColor.theme.tableView.headerBackground
         tableView.reloadData()
 
-        (tableView.tableHeaderView as? Themeable)?.applyTheme()
+        (tableView.tableHeaderView as? NotificationThemeable)?.applyTheme()
     }
 }
 
-class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, Themeable {
+class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, NotificationThemeable {
     private struct UX {
         static let titleHorizontalPadding: CGFloat = 15
         static let titleVerticalPadding: CGFloat = 6
@@ -137,7 +137,7 @@ class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, Themeable
     }
 }
 
-class ThemedHeaderFooterViewBordersHelper: Themeable {
+class ThemedHeaderFooterViewBordersHelper: NotificationThemeable {
     enum BorderLocation {
         case top
         case bottom

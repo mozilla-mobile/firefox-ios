@@ -22,7 +22,7 @@ private struct SearchInputViewUX {
     func searchInputViewFinishedEditing(_ searchView: SearchInputView)
 }
 
-class SearchInputView: UIView, Themeable {
+class SearchInputView: UIView, NotificationThemeable {
 
     weak var delegate: SearchInputViewDelegate?
 

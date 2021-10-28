@@ -960,7 +960,7 @@ class TabCell: UICollectionViewCell {
     }
 }
 
-extension GridTabViewController: Themeable {
+extension GridTabViewController: NotificationThemeable {
 
     @objc func applyTheme() {
         webViewContainerBackdrop.backgroundColor = UIColor.Photon.Ink90

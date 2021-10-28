@@ -140,7 +140,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
     override func applyTheme() {
         super.applyTheme()
 
-        if let current = navigationController?.visibleViewController as? Themeable, current !== self {
+        if let current = navigationController?.visibleViewController as? NotificationThemeable, current !== self {
             current.applyTheme()
         }
     }
@@ -362,7 +362,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
                 cell.titleLabel.text = bookmarkFolder.title
             }
 
-            cell.leftImageView.image = ThemeManager.instance.currentName == .dark ? bookmarkFolderIconDark : bookmarkFolderIconNormal
+            cell.leftImageView.image = LegacyThemeManager.instance.currentName == .dark ? bookmarkFolderIconDark : bookmarkFolderIconNormal
             cell.leftImageView.contentMode = .center
             cell.accessoryType = .disclosureIndicator
             cell.editingAccessoryType = .disclosureIndicator

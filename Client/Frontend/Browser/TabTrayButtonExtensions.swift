@@ -4,7 +4,7 @@
 
 import UIKit
 
-class PrivateModeButton: ToggleButton, Themeable, PrivateModeUI {
+class PrivateModeButton: ToggleButton, NotificationThemeable, PrivateModeUI {
     var offTint = UIColor.black
     var onTint = UIColor.black
 

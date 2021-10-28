@@ -18,7 +18,7 @@ protocol BottomSheetDelegate {
     func showBottomToolbar()
 }
 
-class BottomSheetViewController: UIViewController, Themeable {
+class BottomSheetViewController: UIViewController, NotificationThemeable {
     // Delegate
     var delegate: BottomSheetDelegate?
     private var currentState: BottomSheetState = .none
@@ -221,7 +221,7 @@ class BottomSheetViewController: UIViewController, Themeable {
     }
     
     func applyTheme() {
-        if ThemeManager.instance.currentName == .normal {
+        if LegacyThemeManager.instance.currentName == .normal {
             panView.backgroundColor = UIColor.Photon.Grey10
         } else {
             panView.backgroundColor = UIColor.Photon.Grey90

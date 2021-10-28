@@ -16,7 +16,7 @@ protocol TabToolbarProtocol: AnyObject {
     var forwardButton: ToolbarButton { get }
     var backButton: ToolbarButton { get }
     var multiStateButton: ToolbarButton { get }
-    var actionButtons: [Themeable & UIButton] { get }
+    var actionButtons: [NotificationThemeable & UIButton] { get }
 
     func updateBackStatus(_ canGoBack: Bool)
     func updateForwardStatus(_ canGoForward: Bool)
@@ -85,7 +85,7 @@ open class TabToolbarHelper: NSObject {
     // Default state as reload
     var middleButtonState: MiddleButtonState = .home
 
-    fileprivate func setTheme(forButtons buttons: [Themeable]) {
+    fileprivate func setTheme(forButtons buttons: [NotificationThemeable]) {
         buttons.forEach { $0.applyTheme() }
     }
 
@@ -264,7 +264,7 @@ class ToolbarButton: UIButton {
     }
 }
 
-extension ToolbarButton: Themeable {
+extension ToolbarButton: NotificationThemeable {
     func applyTheme() {
         selectedTintColor = UIColor.theme.toolbarButton.selectedTint
         disabledTintColor = UIColor.theme.toolbarButton.disabledTint
@@ -284,7 +284,7 @@ class TabToolbar: UIView {
     let forwardButton = ToolbarButton()
     let backButton = ToolbarButton()
     let multiStateButton = ToolbarButton()
-    let actionButtons: [Themeable & UIButton]
+    let actionButtons: [NotificationThemeable & UIButton]
 
     fileprivate let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge", backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
     fileprivate let appMenuBadge = BadgeWithBackdrop(imageName: "menuBadge")
@@ -390,7 +390,7 @@ extension TabToolbar: TabToolbarProtocol {
     }
 }
 
-extension TabToolbar: Themeable, PrivateModeUI {
+extension TabToolbar: NotificationThemeable, PrivateModeUI {
     func applyTheme() {
         backgroundColor = UIColor.theme.browser.background
         helper?.setTheme(forButtons: actionButtons)

@@ -10,7 +10,7 @@ class SettingsViewController: UIViewController {
     var profile: Profile!
     var tabManager: TabManager!
     
-    let theme = ThemeManager.instance
+    let theme = LegacyThemeManager.instance
 
     init(profile: Profile? = nil, tabManager: TabManager? = nil) {
         super.init(nibName: nil, bundle: nil)

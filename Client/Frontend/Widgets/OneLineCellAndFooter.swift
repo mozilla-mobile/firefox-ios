@@ -15,7 +15,7 @@ enum OneLineTableViewCustomization {
     case inactiveCell
 }
 
-class OneLineTableViewCell: UITableViewCell, Themeable {
+class OneLineTableViewCell: UITableViewCell, NotificationThemeable {
     // Tableview cell items
     var selectedView: UIView = {
         let view = UIView()
@@ -124,7 +124,7 @@ class OneLineTableViewCell: UITableViewCell, Themeable {
     }
     
     func applyTheme() {
-        let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         selectedView.backgroundColor = UIColor.theme.tableView.selectedBackground
         if theme == .dark {
             self.backgroundColor = UIColor.Photon.Grey80
@@ -143,7 +143,7 @@ class OneLineTableViewCell: UITableViewCell, Themeable {
     }
 }
 
-class OneLineFooterView: UITableViewHeaderFooterView, Themeable {
+class OneLineFooterView: UITableViewHeaderFooterView, NotificationThemeable {
     fileprivate let bordersHelper = ThemedHeaderFooterViewBordersHelper()
 
     var titleLabel: UILabel = {
@@ -203,7 +203,7 @@ class OneLineFooterView: UITableViewHeaderFooterView, Themeable {
     }
 
     func applyTheme() {
-        let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         self.containerView.backgroundColor = UIColor.theme.tableView.selectedBackground
         self.titleLabel.textColor =  theme == .dark ? .white : .black
         bordersHelper.applyTheme()

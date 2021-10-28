@@ -21,7 +21,7 @@ struct ChronologicalTabsControllerUX {
     static let backgroundColor = UIColor.Photon.Grey10
 }
 
-class ChronologicalTabsViewController: UIViewController, Themeable, TabTrayViewDelegate {
+class ChronologicalTabsViewController: UIViewController, NotificationThemeable, TabTrayViewDelegate {
     weak var delegate: TabTrayDelegate?
     // View Model
     lazy var viewModel = TabTrayV2ViewModel(viewController: self)
@@ -104,8 +104,8 @@ class ChronologicalTabsViewController: UIViewController, Themeable, TabTrayViewD
     }
 
     func applyTheme() {
-        overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
-        bottomSheetVC?.overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
+        overrideUserInterfaceStyle = LegacyThemeManager.instance.userInterfaceStyle
+        bottomSheetVC?.overrideUserInterfaceStyle = LegacyThemeManager.instance.userInterfaceStyle
         tableView.backgroundColor = UIColor.systemGroupedBackground
         emptyPrivateTabsView.titleLabel.textColor = UIColor.label
         emptyPrivateTabsView.descriptionLabel.textColor = UIColor.secondaryLabel
@@ -124,7 +124,7 @@ class ChronologicalTabsViewController: UIViewController, Themeable, TabTrayViewD
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
-        if ThemeManager.instance.systemThemeIsOn {
+        if LegacyThemeManager.instance.systemThemeIsOn {
             tableView.reloadData()
         }
     }

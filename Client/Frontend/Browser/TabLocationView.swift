@@ -355,7 +355,7 @@ extension TabLocationView: AccessibilityActionsSource {
     }
 }
 
-extension TabLocationView: Themeable {
+extension TabLocationView: NotificationThemeable {
     func applyTheme() {
         urlTextField.textColor = UIColor.theme.textField.textAndTint
         readerModeButton.selectedTintColor = UIColor.theme.urlbar.readerModeButtonSelected
@@ -368,7 +368,7 @@ extension TabLocationView: Themeable {
 
         trackingProtectionButton.tintColor = pageOptionsButton.tintColor
 
-        let color = ThemeManager.instance.currentName == .dark ? UIColor(white: 0.3, alpha: 0.6): UIColor.theme.textField.background
+        let color = LegacyThemeManager.instance.currentName == .dark ? UIColor(white: 0.3, alpha: 0.6): UIColor.theme.textField.background
         menuBadge.badge.tintBackground(color: color)
     }
 }
@@ -384,7 +384,7 @@ extension TabLocationView: TabEventHandler {
         trackingProtectionButton.alpha = 1.0
 
         var lockImage: UIImage
-        let imageID = ThemeManager.instance.currentName == .dark ? "lock_blocked_dark" : "lock_blocked"
+        let imageID = LegacyThemeManager.instance.currentName == .dark ? "lock_blocked_dark" : "lock_blocked"
         if !(tab.webView?.hasOnlySecureContent ?? false) {
             lockImage = UIImage(imageLiteralResourceName: imageID)
 

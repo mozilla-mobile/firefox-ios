@@ -33,7 +33,7 @@ public struct ModernColor {
     }
 }
 
-struct Theme {
+struct ShareTheme {
     static let defaultBackground = ModernColor(dark: UIColor.Photon.Grey80, light: .white)
     static let doneLabelBackground = ModernColor(dark: UIColor.Photon.Blue40, light: UIColor.Photon.Blue40)
     static let separator = ModernColor(dark: UIColor.Photon.Grey10, light: UIColor.Photon.Grey30)

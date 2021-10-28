@@ -173,7 +173,7 @@ class URLBarView: UIView {
         return backButton
     }()
 
-    lazy var actionButtons: [Themeable & UIButton] = [self.tabsButton, self.homeButton, self.bookmarksButton, self.appMenuButton, self.addNewTabButton,  self.forwardButton, self.backButton, self.multiStateButton]
+    lazy var actionButtons: [NotificationThemeable & UIButton] = [self.tabsButton, self.homeButton, self.bookmarksButton, self.appMenuButton, self.addNewTabButton,  self.forwardButton, self.backButton, self.multiStateButton]
 
     var currentURL: URL? {
         get {
@@ -797,7 +797,7 @@ extension URLBarView {
 
 }
 
-extension URLBarView: Themeable {
+extension URLBarView: NotificationThemeable {
     func applyTheme() {
         locationView.applyTheme()
         locationTextField?.applyTheme()
@@ -904,7 +904,7 @@ class ToolbarTextField: AutocompleteTextField {
     }
 }
 
-extension ToolbarTextField: Themeable {
+extension ToolbarTextField: NotificationThemeable {
     func applyTheme() {
         backgroundColor = UIColor.theme.textField.backgroundInOverlay
         textColor = UIColor.theme.textField.textAndTint

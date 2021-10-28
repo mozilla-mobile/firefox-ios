@@ -36,7 +36,7 @@ protocol RemotePanelDelegate: AnyObject {
     func remotePanel(didSelectURL url: URL, visitType: VisitType)
 }
 
-class RemoteTabsPanel: UIViewController, Themeable {
+class RemoteTabsPanel: UIViewController, NotificationThemeable {
     var remotePanelDelegate: RemotePanelDelegate?
     var profile: Profile
     fileprivate lazy var tableViewController = RemoteTabsTableViewController()

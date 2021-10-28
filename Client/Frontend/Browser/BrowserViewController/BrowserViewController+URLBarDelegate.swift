@@ -64,8 +64,8 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
         let navigationController = ThemedDefaultNavigationController(rootViewController: tabTrayViewController!)
         navigationController.presentationController?.delegate = tabTrayViewController
         // If we're not using the system theme, override the view's style to match
-        if !ThemeManager.instance.systemThemeIsOn {
-            navigationController.overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
+        if !LegacyThemeManager.instance.systemThemeIsOn {
+            navigationController.overrideUserInterfaceStyle = LegacyThemeManager.instance.userInterfaceStyle
         }
 
         self.present(navigationController, animated: true, completion: nil)

@@ -425,9 +425,9 @@ extension EnhancedTrackingProtectionMenuVC: PresentingModalViewControllerDelegat
     }
 }
 
-extension EnhancedTrackingProtectionMenuVC: Themeable {
+extension EnhancedTrackingProtectionMenuVC: NotificationThemeable {
     @objc func applyTheme() {
-        overrideUserInterfaceStyle =  ThemeManager.instance.userInterfaceStyle
+        overrideUserInterfaceStyle =  LegacyThemeManager.instance.userInterfaceStyle
         view.backgroundColor = UIColor.theme.etpMenu.background
         connectionView.backgroundColor = UIColor.theme.etpMenu.sectionColor
         connectionImage.image = viewModel.connectionStatusImage

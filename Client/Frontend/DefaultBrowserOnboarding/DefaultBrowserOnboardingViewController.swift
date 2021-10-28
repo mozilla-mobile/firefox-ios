@@ -44,7 +44,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     var onViewDismissed: (() -> Void)? = nil
     // Public constants
     let viewModel = DefaultBrowserOnboardingViewModel()
-    let theme = ThemeManager.instance
+    let theme = LegacyThemeManager.instance
     // Private vars
     private var fxTextThemeColour: UIColor {
         // For dark theme we want to show light colours and for light we want to show dark colours

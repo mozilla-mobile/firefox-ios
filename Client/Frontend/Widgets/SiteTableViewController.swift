@@ -12,7 +12,7 @@ struct SiteTableViewControllerUX {
     static let HeaderTextMargin = CGFloat(16)
 }
 
-class SiteTableViewHeader: UITableViewHeaderFooterView, Themeable {
+class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable {
     let titleLabel: UILabel = .build { label in
         label.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBold
         label.textColor = UIColor.theme.tableView.headerTextDark
@@ -70,7 +70,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, Themeable {
  * Provides base shared functionality for site rows and headers.
  */
 @objcMembers
-class SiteTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, Themeable {
+class SiteTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NotificationThemeable {
     let CellIdentifier = "CellIdentifier"
     let OneLineCellIdentifier = "OneLineCellIdentifier"
     let HeaderIdentifier = "HeaderIdentifier"

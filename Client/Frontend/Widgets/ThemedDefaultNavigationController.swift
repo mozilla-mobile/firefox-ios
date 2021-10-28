@@ -11,7 +11,7 @@ class ThemedDefaultNavigationController: DismissableNavigationViewController {
     }
 }
 
-extension ThemedDefaultNavigationController: Themeable {
+extension ThemedDefaultNavigationController: NotificationThemeable {
     
     private func setupNavigationBarAppearance() {
         let standardAppearance = UINavigationBarAppearance()
@@ -50,6 +50,6 @@ extension ThemedDefaultNavigationController: Themeable {
         setupToolBarAppearance()
         
         setNeedsStatusBarAppearanceUpdate()
-        viewControllers.forEach { ($0 as? Themeable)?.applyTheme() }
+        viewControllers.forEach { ($0 as? NotificationThemeable)?.applyTheme() }
     }
 }

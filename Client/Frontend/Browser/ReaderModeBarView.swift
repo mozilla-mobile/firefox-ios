@@ -143,7 +143,7 @@ class ReaderModeBarView: UIView {
     }
 }
 
-extension ReaderModeBarView: Themeable {
+extension ReaderModeBarView: NotificationThemeable {
 
     func applyTheme() {
         backgroundColor = UIColor.theme.browser.background
