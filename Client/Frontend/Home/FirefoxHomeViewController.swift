@@ -167,13 +167,14 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     fileprivate var contextualSourceView = UIView()
     var recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel()
     var jumpBackInViewModel = FirefoxHomeJumpBackInViewModel()
+
     fileprivate lazy var topSitesManager: ASHorizontalScrollCellManager = {
         let manager = ASHorizontalScrollCellManager()
         return manager
     }()
-    
+
     var contextualHintViewController = ContextualHintViewController(hintType: .jumpBackIn)
-    
+
     lazy var overlayView: UIView = .build { [weak self] overlayView in
         overlayView.backgroundColor = UIColor.Photon.Grey90A10
         overlayView.isHidden = true
@@ -182,7 +183,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
-    
+
     private var tapGestureRecognizer: UITapGestureRecognizer {
         let dismissOverlay = UITapGestureRecognizer(target: self, action: #selector(dismissOverlayMode))
         dismissOverlay.name = FxHomeDevStrings.GestureRecognizers.dismissOverlay
@@ -272,7 +273,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     deinit {
         timer?.invalidate()
         timer = nil
@@ -289,7 +290,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         self.view.addSubviews(overlayView)
         self.view.addSubview(contextualSourceView)
         contextualSourceView.backgroundColor = .clear
-        
+
         if #available(iOS 14.0, *), !UserDefaults.standard.bool(forKey: "DidDismissDefaultBrowserCard") {
             self.view.addSubview(defaultBrowserCard)
             NSLayoutConstraint.activate([
@@ -308,7 +309,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
                 self.dismissDefaultBrowserCard()
             }
         }
-        
+
         NSLayoutConstraint.activate([
             overlayView.topAnchor.constraint(equalTo: view.topAnchor),
             overlayView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -329,6 +330,11 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
 
     override func viewDidAppear(_ animated: Bool) {
         experiments.recordExposureEvent(featureId: .homescreen)
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .view,
+                                     object: .firefoxHomepage,
+                                     value: .fxHomepageOrigin)
+
         super.viewDidAppear(animated)
     }
 
@@ -441,18 +447,18 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     func presentContextualHint() {
         overlayView.isHidden = false
         hasPresentedContextualHint = true
-        
+
         let contentSize = CGSize(width: 325, height: contextualHintViewController.heightForDescriptionLabel)
         contextualHintViewController.preferredContentSize = contentSize
         contextualHintViewController.modalPresentationStyle = .popover
-        
+
         if let popoverPresentationController = contextualHintViewController.popoverPresentationController {
             popoverPresentationController.sourceView = contextualSourceView
             popoverPresentationController.sourceRect = contextualSourceView.bounds
             popoverPresentationController.permittedArrowDirections = .down
             popoverPresentationController.delegate = self
         }
-        
+
         contextualHintViewController.onViewDismissed = { [weak self] in
             self?.overlayView.isHidden = true
             self?.homePanelDelegate?.homePanelDidDismissContextualHint(type: .jumpBackIn)
@@ -466,7 +472,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     func contextualHintPresentTimer() {
         timer = Timer.scheduledTimer(timeInterval: 1.25, target: self, selector: #selector(presentContextualOverlay), userInfo: nil, repeats: false)
     }
-    
+
     @objc func presentContextualOverlay() {
         presentContextualHint()
     }
@@ -614,7 +620,7 @@ extension FirefoxHomeViewController {
 // MARK: -  CollectionView Delegate
 
 extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
-    
+
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
@@ -855,7 +861,7 @@ extension FirefoxHomeViewController {
         jumpBackInCell.viewModel = jumpBackInViewModel
         jumpBackInCell.collectionView.reloadData()
         jumpBackInCell.setNeedsLayout()
-        
+
         return jumpBackInCell
     }
 
@@ -1264,7 +1270,7 @@ extension FirefoxHomeViewController: UIPopoverPresentationControllerDelegate {
         }
         rect.pointee = contextualSourceView.bounds
     }
-    
+
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         return .none
     }
