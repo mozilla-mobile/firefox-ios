@@ -99,8 +99,7 @@ class SearchProviderTest: BaseTestCase {
 		app.tables.cells["SettingsViewController.searchCell"].tap()
         waitForExistence(app.tables.staticTexts[provider], timeout: 5)
 		app.tables.staticTexts[provider].tap()
-		app.navigationBars.buttons.element(boundBy: 0).tap()
-
+        app.buttons["Done"].tap()
 	}
 
 	private func doSearch(searchWord: String, provider: String) {

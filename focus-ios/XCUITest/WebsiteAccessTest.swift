@@ -48,7 +48,7 @@ class WebsiteAccessTests: BaseTestCase {
         toggle.tap()
 
         app.navigationBars.buttons.element(boundBy: 0).tap()
-        app.navigationBars.buttons.element(boundBy: 0).tap()
+        app.navigationBars.buttons.element(boundBy: 1).tap()
 
         let searchOrEnterAddressTextField = app.textFields["URLBar.urlText"]
 
@@ -69,7 +69,7 @@ class WebsiteAccessTests: BaseTestCase {
         toggle.tap()
 
         app.navigationBars.buttons.element(boundBy: 0).tap()
-        app.navigationBars.buttons.element(boundBy: 0).tap()
+        app.navigationBars.buttons.element(boundBy: 1).tap()
 
         searchOrEnterAddressTextField.tap()
         searchOrEnterAddressTextField.typeText("mozilla")
@@ -95,7 +95,7 @@ class WebsiteAccessTests: BaseTestCase {
 
         app.navigationBars.buttons.element(boundBy: 0).tap()
         app.navigationBars.buttons.element(boundBy: 0).tap()
-        app.navigationBars.buttons.element(boundBy: 0).tap()
+        app.navigationBars.buttons.element(boundBy: 1).tap()
 
         // Test auto completing the domain
         let searchOrEnterAddressTextField = app.textFields["URLBar.urlText"]

@@ -28,6 +28,7 @@
         "OnboardingTest",
         "PastenGoTest\/testPastenGo()",
         "SettingAppearanceTest\/testCheckSetting()",
+        "SettingAppearanceTest\/testSafariIntegration()",
         "TrackingProtectionMenu\/testActiveProtectionSidebar()",
         "TrackingProtectionMenu\/testProtectionSidebar()",
         "WebsiteAccessTests\/testVisitWebsite()"
