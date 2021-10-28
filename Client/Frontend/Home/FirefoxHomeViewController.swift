@@ -20,10 +20,10 @@ struct FirefoxHomeUX {
     static let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 15)
     static let numberOfItemsPerRowForSizeClassIpad = UXSizeClasses(compact: 3, regular: 4, other: 2)
     static let spacingBetweenSections: CGFloat = 24
-    static let SectionInsetsForIpad: CGFloat = 101
-    static let MinimumInsets: CGFloat = 15
-    static let LibraryShortcutsHeight: CGFloat = 90
-    static let LibraryShortcutsMaxWidth: CGFloat = 375
+    static let sectionInsetsForIpad: CGFloat = 101
+    static let minimumInsets: CGFloat = 15
+    static let libraryShortcutsHeight: CGFloat = 90
+    static let libraryShortcutsMaxWidth: CGFloat = 375
     static let customizeHomeHeight: CGFloat = 100
 }
 
@@ -196,6 +196,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         customCell.delegate = self.topSitesManager
         return customCell
     }()
+
     lazy var defaultBrowserCard: DefaultBrowserCard = .build { card in
         card.backgroundColor = UIColor.theme.homePanel.topSitesBackground
     }
@@ -521,7 +522,7 @@ extension FirefoxHomeViewController {
             case .jumpBackIn: return FirefoxHomeUX.jumpBackInCellHeight
             case .recentlySaved: return FirefoxHomeUX.recentlySavedCellHeight
             case .topSites: return 0 //calculated dynamically
-            case .libraryShortcuts: return FirefoxHomeUX.LibraryShortcutsHeight
+            case .libraryShortcuts: return FirefoxHomeUX.libraryShortcutsHeight
             case .customizeHome: return FirefoxHomeUX.customizeHomeHeight
             }
         }
@@ -539,7 +540,7 @@ extension FirefoxHomeViewController {
             var insets = FirefoxHomeUX.sectionInsetsForSizeClass[currentTraits.horizontalSizeClass]
             let window = UIApplication.shared.keyWindow
             let safeAreaInsets = window?.safeAreaInsets.left ?? 0
-            insets += FirefoxHomeUX.MinimumInsets + safeAreaInsets
+            insets += FirefoxHomeUX.minimumInsets + safeAreaInsets
             return insets
         }
 
@@ -567,7 +568,7 @@ extension FirefoxHomeViewController {
             switch self {
             case .pocket:
                 let numItems = numberOfItemsForRow(traits)
-                return CGSize(width: floor(((frameWidth - inset) - (FirefoxHomeUX.MinimumInsets * (numItems - 1))) / numItems), height: height)
+                return CGSize(width: floor(((frameWidth - inset) - (FirefoxHomeUX.minimumInsets * (numItems - 1))) / numItems), height: height)
             case .topSites, .libraryShortcuts, .jumpBackIn, .recentlySaved, .customizeHome:
                 return CGSize(width: frameWidth - inset, height: height)
             }
@@ -707,7 +708,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
             }
             return cellSize
         case .libraryShortcuts:
-            let width = min(FirefoxHomeUX.LibraryShortcutsMaxWidth, cellSize.width)
+            let width = min(FirefoxHomeUX.libraryShortcutsMaxWidth, cellSize.width)
             return CGSize(width: width, height: cellSize.height)
         case .customizeHome, .pocket, .recentlySaved:
             return cellSize
