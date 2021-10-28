@@ -52,8 +52,6 @@ class FirefoxHomeHighlightCell: UICollectionViewCell, NotificationThemeable {
         siteImageView.clipsToBounds = true
         siteImageView.contentMode = .center
         siteImageView.layer.cornerRadius = FirefoxHomeHighlightCellUX.CornerRadius
-        siteImageView.layer.borderColor = FirefoxHomeHighlightCellUX.BorderColor.cgColor
-        siteImageView.layer.borderWidth = FirefoxHomeHighlightCellUX.BorderWidth
         siteImageView.layer.masksToBounds = true
         return siteImageView
     }()
