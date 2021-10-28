@@ -312,10 +312,10 @@ class JumpBackInCell: UICollectionViewCell {
     }
 }
 
-extension JumpBackInCell: Themeable {
+extension JumpBackInCell: NotificationThemeable {
     
     func applyTheme() {
-        if ThemeManager.instance.currentName == .dark {
+        if LegacyThemeManager.instance.currentName == .dark {
             [itemTitle, siteNameLabel, itemDetails].forEach { $0.textColor = UIColor.Photon.LightGrey10 }
             faviconImage.tintColor = UIColor.Photon.LightGrey10
             contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground

@@ -19,7 +19,7 @@ private struct FirefoxHomeHighlightCellUX {
     static let BorderColor = UIColor.Photon.Grey30
 }
 
-class FirefoxHomeHighlightCell: UICollectionViewCell, Themeable {
+class FirefoxHomeHighlightCell: UICollectionViewCell, NotificationThemeable {
 
     fileprivate lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()

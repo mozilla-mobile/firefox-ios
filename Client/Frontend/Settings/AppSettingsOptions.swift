@@ -67,7 +67,7 @@ class SyncNowSetting: WithAccountSetting {
     let syncBlueIcon = UIImage(named: "FxA-Sync-Blue")
     let syncIcon: UIImage? = {
         let image = UIImage(named: "FxA-Sync")
-        return ThemeManager.instance.currentName == .dark ? image?.tinted(withColor: .white) : image
+        return LegacyThemeManager.instance.currentName == .dark ? image?.tinted(withColor: .white) : image
     }()
 
     // Animation used to rotate the Sync icon 360 degrees while syncing is in progress.
@@ -1219,11 +1219,11 @@ class ThemeSetting: Setting {
     override var accessibilityIdentifier: String? { return "DisplayThemeOption" }
 
     override var status: NSAttributedString {
-        if ThemeManager.instance.systemThemeIsOn {
+        if LegacyThemeManager.instance.systemThemeIsOn {
             return NSAttributedString(string: Strings.SystemThemeSectionHeader)
-        } else if !ThemeManager.instance.automaticBrightnessIsOn {
+        } else if !LegacyThemeManager.instance.automaticBrightnessIsOn {
             return NSAttributedString(string: Strings.DisplayThemeManualStatusLabel)
-        } else if ThemeManager.instance.automaticBrightnessIsOn {
+        } else if LegacyThemeManager.instance.automaticBrightnessIsOn {
             return NSAttributedString(string: Strings.DisplayThemeAutomaticStatusLabel)
         }
         return NSAttributedString(string: "")

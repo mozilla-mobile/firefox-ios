@@ -7,7 +7,7 @@ import Shared
 import SnapKit
 import UIKit
 
-class TabMoreMenuViewController: UIViewController, Themeable {
+class TabMoreMenuViewController: UIViewController, NotificationThemeable {
     weak var delegate: TabTrayDelegate?
     var chronTabsTrayDelegate: ChronologicalTabsDelegate?
     var bottomSheetDelegate: BottomSheetDelegate?
@@ -63,7 +63,7 @@ class TabMoreMenuViewController: UIViewController, Themeable {
     }()
     
     func applyTheme() {
-        if ThemeManager.instance.currentName == .normal {
+        if LegacyThemeManager.instance.currentName == .normal {
             tabMoreMenuHeader.backgroundColor = UIColor.Photon.Grey10
         } else {
             tabMoreMenuHeader.backgroundColor = UIColor.Photon.Grey90
@@ -165,7 +165,7 @@ extension TabMoreMenuViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "moreMenuCell", for: indexPath)
         let lightColor = UIColor.theme.tableView.rowBackground
         let darkColor = UIColor.Photon.Grey80
-        cell.backgroundColor = ThemeManager.instance.currentName == .normal ? lightColor : darkColor
+        cell.backgroundColor = LegacyThemeManager.instance.currentName == .normal ? lightColor : darkColor
         cell.textLabel?.text = titles[indexPath.section]?[indexPath.row]
         cell.accessoryView = imageViews[indexPath.section]?[indexPath.row]
         cell.accessoryView?.tintColor = UIColor.theme.textField.textAndTint

@@ -25,7 +25,7 @@ private struct TopSiteCellUX {
 /*
  *  The TopSite cell that appears in the ASHorizontalScrollView.
  */
-class TopSiteItemCell: UICollectionViewCell, Themeable {
+class TopSiteItemCell: UICollectionViewCell, NotificationThemeable {
 
     var url: URL?
 

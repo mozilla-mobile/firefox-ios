@@ -93,7 +93,7 @@ protocol HomePanelDelegate: AnyObject {
     func homePanelDidDismissContextualHint(type: ContextualHintViewType)
 }
 
-protocol HomePanel: Themeable {
+protocol HomePanel: NotificationThemeable {
     var homePanelDelegate: HomePanelDelegate? { get set }
 }
 

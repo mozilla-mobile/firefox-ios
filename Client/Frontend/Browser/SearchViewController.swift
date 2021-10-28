@@ -53,7 +53,7 @@ struct ClientTabsSearchWrapper {
 class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, LoaderListener {
     var searchDelegate: SearchViewControllerDelegate?
     var currentTheme: BuiltinThemeName {
-        return BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+        return BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
     }
     fileprivate let isPrivate: Bool
     fileprivate var suggestClient: SearchSuggestClient?
@@ -564,12 +564,12 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 oneLineCell.leftImageView.contentMode = .center
                 oneLineCell.leftImageView.layer.borderWidth = 0
                 oneLineCell.leftImageView.image = UIImage(named: SearchViewControllerUX.SearchImage)
-                oneLineCell.leftImageView.tintColor = ThemeManager.instance.currentName == .dark ? UIColor.white : UIColor.black
+                oneLineCell.leftImageView.tintColor = LegacyThemeManager.instance.currentName == .dark ? UIColor.white : UIColor.black
                 oneLineCell.leftImageView.backgroundColor = nil
                 let appendButton = UIButton(type: .roundedRect)
                 appendButton.setImage(UIImage(named: SearchViewControllerUX.SearchAppendImage)?.withRenderingMode(.alwaysTemplate), for: .normal)
                 appendButton.addTarget(self, action: #selector(append(_ :)), for: .touchUpInside)
-                appendButton.tintColor = ThemeManager.instance.currentName == .dark ? UIColor.white : UIColor.black
+                appendButton.tintColor = LegacyThemeManager.instance.currentName == .dark ? UIColor.white : UIColor.black
                 appendButton.sizeToFit()
                 oneLineCell.accessoryView = indexPath.row > 0 ? appendButton : nil
                 cell = oneLineCell

@@ -68,7 +68,7 @@ struct UpdateViewControllerUX {
 class UpdateViewController: UIViewController {
     // Public constants 
     let viewModel:UpdateViewModel = UpdateViewModel()
-    static let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+    static let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
     // Private vars
     private var fxTextThemeColour: UIColor {
         // For dark theme we want to show light colours and for light we want to show dark colours
