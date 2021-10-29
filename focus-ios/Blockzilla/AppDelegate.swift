@@ -211,6 +211,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         }
         switch shortcutIdentifier {
         case .EraseAndOpen:
+            browserViewController.photonActionSheetDidDismiss()
+            browserViewController.dismiss(animated: true, completion: nil)
+            browserViewController.navigationController?.popViewController(animated: true)
             browserViewController.resetBrowser(hidePreviousSession: true)
         }
         return true
