@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct SecureConnectionStatus {
+struct SecureConnectionStatus: Equatable {
     let url: URL
     let isSecureConnection: Bool
 }

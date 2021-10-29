@@ -4,8 +4,9 @@
 
 import Foundation
 
-enum TrackingProtectionState {
+enum TrackingProtectionState: Equatable {
     case browsing(status: SecureConnectionStatus)
     case homescreen
     case settings
 }
+

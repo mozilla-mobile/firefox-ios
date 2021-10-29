@@ -253,6 +253,8 @@ class TrackingProtectionViewController: UIViewController {
     }
     
     private func calculatePreferredSize() {
+        guard state != .settings else { return }
+        
         preferredContentSize = CGSize(
             width: tableView.contentSize.width,
             height: tableView.contentSize.height + (headerHeight?.layoutConstraints[0].constant ?? .zero)

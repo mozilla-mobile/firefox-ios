@@ -600,6 +600,9 @@ class BrowserViewController: UIViewController {
                 if let error = error { print(error.localizedDescription) }
             }
         }
+        
+        // Reenable tracking protection after reset
+        Settings.set(true, forToggle: .trackingProtection)
     }
 
     private func clearBrowser() {
