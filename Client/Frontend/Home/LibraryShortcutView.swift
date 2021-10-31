@@ -13,6 +13,7 @@ import SnapKit
 class LibraryShortcutView: UIView {
     lazy var button: UIButton = {
         let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.imageView?.layer.masksToBounds = true
         button.layer.cornerRadius = 8
         button.layer.borderColor = UIColor(white: 0.0, alpha: 0.1).cgColor
@@ -24,6 +25,7 @@ class LibraryShortcutView: UIView {
 
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.textAlignment = .center
         titleLabel.lineBreakMode = .byWordWrapping
         titleLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
@@ -37,33 +39,21 @@ class LibraryShortcutView: UIView {
         addSubview(button)
         addSubview(titleLabel)
 
-        self.snp.makeConstraints { make in
-            make.width.greaterThanOrEqualTo(60)
-            make.height.equalTo(90)
-        }
-
-        button.snp.makeConstraints { make in
-            make.size.equalTo(60)
-            make.centerX.equalToSuperview()
-            make.top.equalToSuperview()
-        }
-
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(button.snp.bottom).offset(8)
-            make.leading.trailing.centerX.equalToSuperview()
-        }
+        NSLayoutConstraint.activate([
+            widthAnchor.constraint(greaterThanOrEqualToConstant: 60),
+            heightAnchor.constraint(equalToConstant: 90),
+            button.widthAnchor.constraint(equalToConstant: 60),
+            button.heightAnchor.constraint(equalToConstant: 60),
+            button.centerXAnchor.constraint(equalTo: centerXAnchor),
+            button.topAnchor.constraint(equalTo: topAnchor),
+            titleLabel.topAnchor.constraint(equalTo: button.bottomAnchor, constant: 8),
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
+            titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+        ])
     }
 
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    override func layoutSubviews() {
-        button.imageView?.snp.remakeConstraints { make in
-            make.size.equalTo(22)
-            make.center.equalToSuperview()
-        }
-
-        super.layoutSubviews()
     }
 }
