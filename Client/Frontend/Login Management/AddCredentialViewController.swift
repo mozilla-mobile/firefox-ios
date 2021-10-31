@@ -12,7 +12,7 @@ enum AddCredentialField: Int {
     case passwordItem
     
     var indexPath: IndexPath {
-        return IndexPath(row: rawValue, section: 0)
+        IndexPath(row: rawValue, section: 0)
     }
 }
 
@@ -26,8 +26,6 @@ class AddCredentialViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.estimatedRowHeight = 44.0
-            
-        // Add empty footer view to prevent seperators from being drawn past the last item.
         tableView.tableFooterView = UIView()
         return tableView
     }()
@@ -61,7 +59,7 @@ class AddCredentialViewController: UIViewController {
 
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
-            make.edges.equalTo(self.view)
+            make.edges.equalTo(view)
         }
     }
 
@@ -97,7 +95,7 @@ class AddCredentialViewController: UIViewController {
     }
     
     @objc func cancel() {
-        self.dismiss(animated: true)
+        dismiss(animated: true)
     }
     
     /// Normalize the website entered by adding `https://` URL scheme. This format is necessary in ordered to be saved on local passwords storage.
@@ -159,7 +157,7 @@ extension AddCredentialViewController: UITableViewDataSource {
     }
 
     fileprivate func wrapFooter(_ footer: UITableViewHeaderFooterView, withCellFromTableView tableView: UITableView, atIndexPath indexPath: IndexPath) -> UITableViewCell {
-        let cell = self.cell(forIndexPath: indexPath)
+        let cell = cell(forIndexPath: indexPath)
         cell.selectionStyle = .none
         cell.addSubview(footer)
         footer.snp.makeConstraints { make in
@@ -169,14 +167,14 @@ extension AddCredentialViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        3
     }
 }
 
 // MARK: - UITableViewDelegate
 extension AddCredentialViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return LoginDetailUX.InfoRowHeight
+        LoginDetailUX.InfoRowHeight
     }
 }
 
@@ -212,7 +210,7 @@ extension AddCredentialViewController: LoginDetailTableViewCellDelegate {
         saveButton.isEnabled = enableSave
     }
     
-    func canPeform(action: Selector, for cell: LoginDetailTableViewCell) -> Bool {
+    func canPerform(action: Selector, for cell: LoginDetailTableViewCell) -> Bool {
         guard let item = infoItemForCell(cell) else {
             return false
         }
@@ -237,7 +235,7 @@ extension AddCredentialViewController: LoginDetailTableViewCellDelegate {
     }
     
     fileprivate func cellForItem(_ item: AddCredentialField) -> LoginDetailTableViewCell? {
-        return tableView.cellForRow(at: item.indexPath) as? LoginDetailTableViewCell
+        tableView.cellForRow(at: item.indexPath) as? LoginDetailTableViewCell
     }
 
     func didSelectOpenAndFillForCell(_ cell: LoginDetailTableViewCell) { }

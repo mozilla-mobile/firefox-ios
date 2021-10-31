@@ -9,7 +9,7 @@ import Storage
 protocol LoginDetailTableViewCellDelegate: AnyObject {
     func didSelectOpenAndFillForCell(_ cell: LoginDetailTableViewCell)
     func shouldReturnAfterEditingDescription(_ cell: LoginDetailTableViewCell) -> Bool
-    func canPeform(action: Selector, for cell: LoginDetailTableViewCell) -> Bool
+    func canPerform(action: Selector, for cell: LoginDetailTableViewCell) -> Bool
     func textFieldDidChange(_ cell: LoginDetailTableViewCell)
     func textFieldDidEndEditing(_ cell: LoginDetailTableViewCell)
 }
@@ -35,11 +35,11 @@ class LoginDetailTableViewCell: ThemedTableViewCell {
 
     // In order for context menu handling, this is required
     override var canBecomeFirstResponder: Bool {
-        return true
+        true
     }
 
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-        return delegate?.canPeform(action: action, for: self) ?? false
+        delegate?.canPerform(action: action, for: self) ?? false
     }
 
     lazy var descriptionLabel: UITextField = {
@@ -115,7 +115,7 @@ class LoginDetailTableViewCell: ThemedTableViewCell {
 
     var highlightedLabelTitle: String? {
         get {
-            return highlightedLabel.text
+            highlightedLabel.text
         }
         set(newTitle) {
             highlightedLabel.text = newTitle
@@ -205,7 +205,7 @@ extension LoginDetailTableViewCell {
 
 extension LoginDetailTableViewCell: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        return self.delegate?.shouldReturnAfterEditingDescription(self) ?? true
+        delegate?.shouldReturnAfterEditingDescription(self) ?? true
     }
 
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
