@@ -26,6 +26,7 @@ class AddCredentialViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.estimatedRowHeight = 44.0
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.tableFooterView = UIView()
         return tableView
     }()
@@ -58,9 +59,12 @@ class AddCredentialViewController: UIViewController {
         navigationItem.leftBarButtonItem = cancelButton
 
         view.addSubview(tableView)
-        tableView.snp.makeConstraints { make in
-            make.edges.equalTo(view)
-        }
+        NSLayoutConstraint.activate([
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -154,16 +158,6 @@ extension AddCredentialViewController: UITableViewDataSource {
         loginCell.selectionStyle = .none
         loginCell.delegate = self
         return loginCell
-    }
-
-    fileprivate func wrapFooter(_ footer: UITableViewHeaderFooterView, withCellFromTableView tableView: UITableView, atIndexPath indexPath: IndexPath) -> UITableViewCell {
-        let cell = cell(forIndexPath: indexPath)
-        cell.selectionStyle = .none
-        cell.addSubview(footer)
-        footer.snp.makeConstraints { make in
-            make.edges.equalTo(cell)
-        }
-        return cell
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
