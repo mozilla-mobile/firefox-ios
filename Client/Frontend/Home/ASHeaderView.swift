@@ -9,6 +9,8 @@ public struct FirefoxHomeHeaderViewUX {
     static let Insets: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? FirefoxHomeUX.sectionInsetsForIpad + FirefoxHomeUX.minimumInsets : FirefoxHomeUX.minimumInsets
     static let TitleTopInset: CGFloat = 5
     static let sectionHeaderSize: CGFloat = 20
+    static let maxTitleLabelTextSize: CGFloat = 43 // Style title3 - AX3
+    static let maxMoreButtonTextSize: CGFloat = 36 // Style subheadline - AX3
 }
 
 enum ASHeaderViewType {
@@ -24,15 +26,17 @@ class ASHeaderView: UICollectionReusableView {
     lazy var titleLabel: UILabel = .build { label in
         label.text = self.title
         label.textColor = UIColor.theme.homePanel.activityStreamHeaderText
-        label.font = UIFont.systemFont(ofSize: FirefoxHomeHeaderViewUX.sectionHeaderSize, weight: .bold)
-        label.minimumScaleFactor = 0.6
-        label.numberOfLines = 1
-        label.adjustsFontSizeToFitWidth = true
+        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .title3,
+                                                                       maxSize: FirefoxHomeHeaderViewUX.maxTitleLabelTextSize)
+        label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 0
     }
 
     lazy var moreButton: UIButton = .build { button in
         button.isHidden = true
-        button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
+        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
+                                                                                maxSize: FirefoxHomeHeaderViewUX.maxMoreButtonTextSize)
         button.contentHorizontalAlignment = .right
         button.setTitleColor(UIColor.theme.homePanel.activityStreamHeaderButton, for: .normal)
         button.setTitleColor(UIColor.Photon.Grey50, for: .highlighted)
@@ -54,7 +58,7 @@ class ASHeaderView: UICollectionReusableView {
         super.prepareForReuse()
         moreButton.isHidden = true
         moreButton.setTitle(nil, for: .normal)
-        moreButton.accessibilityIdentifier = nil;
+        moreButton.accessibilityIdentifier = nil
         titleLabel.text = nil
         moreButton.removeTarget(nil, action: nil, for: .allEvents)
         titleLabel.textColor = UIColor.theme.homePanel.activityStreamHeaderText
@@ -74,6 +78,7 @@ class ASHeaderView: UICollectionReusableView {
             titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
         ])
         moreButton.setContentCompressionResistancePriority(.required, for: .horizontal)
+        titleLabel.setContentHuggingPriority(.fittingSizeLevel, for: .horizontal)
 
         titleLeadingConstraint = titleLabel.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: titleInsets)
         titleLeadingConstraint?.isActive = true
