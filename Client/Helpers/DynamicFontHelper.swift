@@ -222,7 +222,7 @@ class DynamicFontHelper: NSObject {
     }
 
     /// Return a bold font that will dynamically scale up to a certain size
-    /// Parameters:
+    /// - Parameters:
     ///   - textStyle: The desired textStyle for the font
     ///   - maxSize: The maximum size the font can scale - Refer to the human interface guidelines for more information on sizes for each style
     ///              https://developer.apple.com/design/human-interface-guidelines/ios/visual-design/typography/
