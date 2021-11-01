@@ -481,7 +481,6 @@ extension LibraryViewController: NotificationThemeable {
         viewModel.panelDescriptors.forEach { item in
             (item.viewController as? NotificationThemeable)?.applyTheme()
         }        
-        overrideUserInterfaceStyle = LegacyThemeManager.instance.userInterfaceStyle
 
         // There is an ANNOYING bar in the nav bar above the segment control. These are the
         // UIBarBackgroundShadowViews. We must set them to be clear images in order to
