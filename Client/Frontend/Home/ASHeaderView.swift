@@ -9,8 +9,8 @@ public struct FirefoxHomeHeaderViewUX {
     static let insets: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? FirefoxHomeUX.sectionInsetsForIpad + FirefoxHomeUX.minimumInsets : FirefoxHomeUX.minimumInsets
     static let titleTopInset: CGFloat = 5
     static let sectionHeaderSize: CGFloat = 20
-    static let maxTitleLabelTextSize: CGFloat = 43 // Style title3 - AX3
-    static let maxMoreButtonTextSize: CGFloat = 36 // Style subheadline - AX3
+    static let maxTitleLabelTextSize: CGFloat = 55 // Style title3 - AX5
+    static let maxMoreButtonTextSize: CGFloat = 49 // Style subheadline - AX5
 }
 
 enum ASHeaderViewType {
@@ -18,6 +18,7 @@ enum ASHeaderViewType {
     case normal
 }
 
+// Activity Stream header view
 class ASHeaderView: UICollectionReusableView {
     static let verticalInsets: CGFloat = 4
     var sectionType: ASHeaderViewType = .normal
@@ -74,6 +75,7 @@ class ASHeaderView: UICollectionReusableView {
             moreButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -6),
             moreButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -titleInsets),
 
+            titleLabel.topAnchor.constraint(equalTo: topAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: moreButton.leadingAnchor, constant: -FirefoxHomeHeaderViewUX.titleTopInset),
             titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
         ])

@@ -471,6 +471,16 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     @objc func presentContextualOverlay() {
         presentContextualHint()
     }
+
+    private func getHeaderSize(forSection section: Int) -> CGSize {
+        let indexPath = IndexPath(row: 0, section: section)
+        let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)
+        let size = CGSize(width: collectionView.frame.width, height: UIView.layoutFittingExpandedSize.height)
+
+        return headerView.systemLayoutSizeFitting(size,
+                                                  withHorizontalFittingPriority: .required,
+                                                  verticalFittingPriority: .fittingSizeLevel)
+    }
 }
 
 // MARK: -  Section Management
@@ -494,10 +504,6 @@ extension FirefoxHomeViewController {
             case .libraryShortcuts: return Strings.AppMenuLibraryTitleString
             case .customizeHome: return nil
             }
-        }
-
-        var headerHeight: CGSize {
-            return CGSize(width: 50, height: 40)
         }
 
         var headerImage: UIImage? {
@@ -619,9 +625,9 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-            let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header", for: indexPath) as! ASHeaderView
+            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header", for: indexPath) as! ASHeaderView
             let title = Section(indexPath.section).title
-            view.title = title
+            headerView.title = title
 
             switch Section(indexPath.section) {
             case .pocket:
@@ -630,11 +636,11 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                     TelemetryWrapper.recordEvent(category: .action, method: .view, object: .pocketSectionImpression, value: nil, extras: nil)
                     hasSentPocketSectionEvent = true
                 }
-                view.moreButton.isHidden = false
-                view.moreButton.setTitle(Strings.PocketMoreStoriesText, for: .normal)
-                view.moreButton.addTarget(self, action: #selector(showMorePocketStories), for: .touchUpInside)
-                view.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.pocket
-                return view
+                headerView.moreButton.isHidden = false
+                headerView.moreButton.setTitle(Strings.PocketMoreStoriesText, for: .normal)
+                headerView.moreButton.addTarget(self, action: #selector(showMorePocketStories), for: .touchUpInside)
+                headerView.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.pocket
+                return headerView
             case .jumpBackIn:
                 if !hasSentJumpBackInSectionEvent
                     && isJumpBackInSectionEnabled
@@ -642,42 +648,42 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                     TelemetryWrapper.recordEvent(category: .action, method: .view, object: .jumpBackInImpressions, value: nil, extras: nil)
                     hasSentJumpBackInSectionEvent = true
                 }
-                view.moreButton.isHidden = false
-                view.moreButton.setTitle(Strings.RecentlySavedShowAllText, for: .normal)
-                view.moreButton.addTarget(self, action: #selector(openTabTray), for: .touchUpInside)
-                view.moreButton.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.MoreButtons.jumpBackIn
-                view.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.jumpBackIn
+                headerView.moreButton.isHidden = false
+                headerView.moreButton.setTitle(Strings.RecentlySavedShowAllText, for: .normal)
+                headerView.moreButton.addTarget(self, action: #selector(openTabTray), for: .touchUpInside)
+                headerView.moreButton.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.MoreButtons.jumpBackIn
+                headerView.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.jumpBackIn
                 let attributes = collectionView.layoutAttributesForItem(at: indexPath)
-                    if let frame = attributes?.frame, view.convert(frame, from: collectionView).height > 1 {
+                    if let frame = attributes?.frame, headerView.convert(frame, from: collectionView).height > 1 {
                         // Using a timer for the first presentation of contextual hint due to many reloads that happen on the collection view. Invalidating the timer prevents from showing contextual hint at the wrong position.
                         timer?.invalidate()
                         if didRotate && hasPresentedContextualHint {
-                            contextualSourceView = view.titleLabel
+                            contextualSourceView = headerView.titleLabel
                             didRotate = false
                         } else if !hasPresentedContextualHint && contextualHintViewController.viewModel.shouldPresentContextualHint(profile: profile) {
-                            contextualSourceView = view.titleLabel
+                            contextualSourceView = headerView.titleLabel
                             contextualHintPresentTimer()
                         }
                 }
-                return view
+                return headerView
             case .recentlySaved:
-                view.moreButton.isHidden = false
-                view.moreButton.setTitle(Strings.RecentlySavedShowAllText, for: .normal)
-                view.moreButton.addTarget(self, action: #selector(openBookmarks), for: .touchUpInside)
-                view.moreButton.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.MoreButtons.recentlySaved
-                view.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.recentlySaved
-                return view
+                headerView.moreButton.isHidden = false
+                headerView.moreButton.setTitle(Strings.RecentlySavedShowAllText, for: .normal)
+                headerView.moreButton.addTarget(self, action: #selector(openBookmarks), for: .touchUpInside)
+                headerView.moreButton.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.MoreButtons.recentlySaved
+                headerView.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.recentlySaved
+                return headerView
             case .topSites:
-                view.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.topSites
-                view.moreButton.isHidden = true
-                return view
+                headerView.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.topSites
+                headerView.moreButton.isHidden = true
+                return headerView
             case .libraryShortcuts:
-                view.moreButton.isHidden = true
-                view.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.library
-                return view
+                headerView.moreButton.isHidden = true
+                headerView.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.library
+                return headerView
             case .customizeHome:
-                view.moreButton.isHidden = true
-                return view
+                headerView.moreButton.isHidden = true
+                return headerView
         }
         default:
             return UICollectionReusableView()
@@ -716,17 +722,18 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+
         switch Section(section) {
         case .pocket:
-            return pocketStories.isEmpty ? .zero : Section(section).headerHeight
+            return pocketStories.isEmpty ? .zero : getHeaderSize(forSection: section)
         case .topSites:
-            return isTopSitesSectionEnabled ? Section(section).headerHeight : .zero
+            return isTopSitesSectionEnabled ? getHeaderSize(forSection: section) : .zero
         case .libraryShortcuts:
-            return isYourLibrarySectionEnabled ? Section(section).headerHeight : .zero
+            return isYourLibrarySectionEnabled ? getHeaderSize(forSection: section) : .zero
         case .jumpBackIn:
-            return isJumpBackInSectionEnabled ? Section(section).headerHeight : .zero
+            return isJumpBackInSectionEnabled ? getHeaderSize(forSection: section) : .zero
         case .recentlySaved:
-            return isRecentlySavedSectionEnabled ? Section(section).headerHeight : .zero
+            return isRecentlySavedSectionEnabled ? getHeaderSize(forSection: section) : .zero
         case .customizeHome:
             return .zero
         }
