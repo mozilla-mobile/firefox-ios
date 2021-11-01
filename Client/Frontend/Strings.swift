@@ -4,41 +4,74 @@
 
 import Foundation
 
+// MARK: - Localization bundle setup
+class BundleClass {}
+
 public struct Strings {
     public static let bundle = Bundle(for: BundleClass.self)
 }
 
-class BundleClass {}
+// MARK: - String last updated app version
 
-enum StringLastUpdatedAppVersion {
+// Used as a helper enum to keep track of what app version strings were last updated in.
+fileprivate enum StringLastUpdatedAppVersion {
     case v39
+
+    // Used for all cases before version 39.
     case unknown
 }
 
-func MZLocalizedString(_ key: String, tableName: String? = nil, value: String = "", comment: String, lastUpdated: StringLastUpdatedAppVersion) -> String {
+// MARK: - Localization helper function
+fileprivate func MZLocalizedString(_ key: String, tableName: String? = nil, value: String = "", comment: String, lastUpdated: StringLastUpdatedAppVersion) -> String {
     return NSLocalizedString(key, tableName: tableName, bundle: Strings.bundle, value: value, comment: comment)
 }
 
-/// This file contains strings for Firefox iOS.
+/// This file contains all strings for Firefox iOS.
 ///
-/// As we continue to update strings, some strings may be present in at the bottom of this
+/// As we continue to update strings, old strings may be present at the bottom of this
 /// file. To preserve a clean implementation of strings, this file should be organized
-/// alphabetically, according to specific screens or feature. Each string should be under
-/// a struct giving a clear indication as to where it is being used. In this case
-/// we will prefer verbosity for the sake of accuracy, over brevity. Sub structs may,
-/// and should, also be used to separate functionality where it makes sense.
+/// alphabetically, according to specific screens or feature, on that screen. Each
+/// string should be under a struct giving a clear indication as to where it is being
+/// used. In this case we will prefer verbosity for the sake of accuracy, over brevity.
+/// Sub structs may, and should, also be used to separate functionality where it makes
+/// sense, but efforts should be made to keep structs two levels deep unless there are
+/// good reasons for doing otherwise.
 ///
 /// Note that some strings belong to one feature that appears across mulitple screens
-/// throughout the application. An example is contextual hints. In this case, it seems to
-/// make more sense to organize all those strings under the specific feature.
+/// throughout the application. An example is contextual hints. In this case, it makes
+/// more sense to organize all those strings under the specific feature.
 
-// MARK: - A
+// MARK: - Alerts
+extension String {
+    public struct Alerts {
 
-// MARK: - B
+    }
+}
 
-// MARK: - C
+// MARK: - Browser View Controller
+extension String {
+    public struct BVC {
+        public struct General {
 
-// MARK: Contextual Hints
+        }
+
+        public struct MenuItems {
+            public struct Hamburger {
+
+            }
+
+            public struct ThreeDot {
+
+            }
+
+            public struct LongPressGesture {
+
+            }
+        }
+    }
+}
+
+// MARK: - Contextual Hints
 extension String {
     public struct ContextualHints {
         public static let PersonalizedHome = MZLocalizedString("ContextualHints.Homepage.PersonalizedHome", value: "Your personalized Firefox homepage now makes it easier to pick up where you left off. Find your recent tabs, bookmarks, and search results.", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature.", lastUpdated: .v39)
@@ -47,52 +80,85 @@ extension String {
     }
 }
 
-// MARK: - D
+// MARK: - Enhanced Tracking Protection screen
+extension String {
+    public struct ETPMenu {
 
-// MARK: - E
+    }
+}
 
-// MARK: - F
-
-// MARK: Firefox Homepage
+// MARK: - Firefox Homepage
 extension String {
     public struct FirefoxHomepage {
 
-        public static let CustomizeHomeButtonTitle = MZLocalizedString("FirefoxHome.CustomizeHomeButton.Title", value: "Customize Homepage", comment: "A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page", lastUpdated: .v39)
+        public struct CustomizeHomepage {
+            public static let ButtonTitle = MZLocalizedString("FirefoxHome.CustomizeHomeButton.Title", value: "Customize Homepage", comment: "A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page", lastUpdated: .v39)
+        }
 
         public struct JumpBackIn {
             public static let GroupSiteCount = MZLocalizedString("ActivityStream.JumpBackIn.TabGroup.SiteCount", value: "Tabs: %d", comment: "On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar.", lastUpdated: .v39)
             public static let GroupTitle = MZLocalizedString("ActivityStream.JumpBackIn.TabGroup.Title", value: "Your search for \"%@\"", comment: "On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists, the Tab Group item title will be 'Your search for \"video games\"'. The %@ sign is a placeholder for the actual search the user did.", lastUpdated: .v39)
         }
+
+        public struct Pocket {
+
+        }
+
+        public struct RecentlySaved {
+
+        }
+
+        public struct RecentlyVisited {
+
+        }
+
+        public struct Shortcuts {
+
+        }
+
+        public struct YourLibrary {
+
+        }
     }
 }
 
-// MARK: - G
+// MARK: - Library Panel
+extension String {
+    public struct LibraryPanel {
 
-// MARK: - H
+        public struct Bookmarks {
 
-// MARK: - I
+        }
 
-// MARK: - J
+        public struct History {
 
-// MARK: - K
+        }
 
-// MARK: - L
+        public struct ReadingList {
 
-// MARK: - M
+        }
 
-// MARK: - N
+        public struct Downloads {
 
-// MARK: - O
+        }
+    }
+}
 
-// MARK: - P
+// MARK: - Onboarding screens
+extension String {
+    public struct Onboarding {
 
-// MARK: - Q
+    }
+}
 
-// MARK: - R
+// MARK: - Passwords and Logins
+extension String {
+    public struct PasswordsAndLogins {
 
-// MARK: - S
+    }
+}
 
-// MARK: Settings
+// MARK: - Settings screen
 extension String {
     public struct Settings {
 
@@ -130,7 +196,27 @@ extension String {
     }
 }
 
-// MARK: - T
+// MARK: - Share Sheet
+extension String {
+    public struct ShareSheet {
+
+    }
+}
+
+
+// MARK: - Switch Default Browser Screen
+extension String {
+    public struct SwitchDefaultBrowser {
+
+    }
+}
+
+// MARK: - Sync Screen
+extension String {
+    public struct SyncScreen {
+
+    }
+}
 
 // MARK: Tabs Tray
 extension String {
@@ -151,13 +237,7 @@ extension String {
     }
 }
 
-// MARK: - U
-
-// MARK: - V
-
-// MARK: - W
-
-// MARK: What's New
+// MARK: - What's New
 extension String {
     /// The text for the What's New onboarding card
     public struct WhatsNew {
@@ -172,13 +252,6 @@ extension String {
         public static let RecentButtonTitle = MZLocalizedString("Onboarding.WhatsNew.Button.Title", value: "Start Browsing", comment: "On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card", lastUpdated: .v39)
     }
 }
-
-// MARK: - X
-
-// MARK: - Y
-
-// MARK: - Z
-
 
 
 // MARK: - Strings: unorganized & unchecked for use
