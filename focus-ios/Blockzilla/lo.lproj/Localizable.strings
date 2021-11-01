@@ -325,9 +325,6 @@
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "ເປີດໃນ Firefox";
 
-/* Text for the share menu option when a user wants to open the current website in the Safari app. */
-"ShareMenu.ShareOpenSafari" = "ເປີດໃນ Safari";
-
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "ເພີ່ມ";
 

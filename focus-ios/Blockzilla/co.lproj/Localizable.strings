@@ -161,22 +161,22 @@
 "Cancel" = "Abbandunà";
 
 /* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "Leia cupiata : %@";
+"contextMenu.clipboardLink" = "Liame cupiatu : %@";
 
 /* Text for the context menu when a user wants to copy an image after long pressing it. */
 "contextMenu.copyImageTitle" = "Cupià a fiura";
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "Cupià a leia";
+"contextMenu.copyLink" = "Cupià u liame";
 
 /* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "Leia cupiata :";
+"contextMenu.linkCopied" = "Liame cupiatu :";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "Arregistrà a fiura";
 
 /* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "Sparte a leia";
+"contextMenu.shareLinkTitle" = "Sparte u liame";
 
 /* Label on button to complete edits */
 "Done" = "Fattu";
@@ -475,9 +475,6 @@
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Apre in Firefox";
 
-/* Text for the share menu option when a user wants to open the current website in the Safari app. */
-"ShareMenu.ShareOpenSafari" = "Apre cù Safari";
-
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Sparte a pagina cù…";
 
@@ -566,7 +563,7 @@
 "trackingProtection.trackersHeader" = "Perseguitatori è scenarii à bluccà";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
-"URL.addToAutocompleteLabel" = "Aghjunghje a leia à a scrittura mezu-autumatica";
+"URL.addToAutocompleteLabel" = "Aghjunghje u liame à a scrittura mezu-autumatica";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Abbandunà";
