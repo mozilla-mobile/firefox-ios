@@ -1085,6 +1085,7 @@ extension BrowserViewController: URLBarDelegate {
         toggleURLBarBackground(isBright: !webViewController.isLoading)
         shortcutsContainer.isHidden = urlBar.inBrowsingMode
         shortcutsBackground.isHidden = true
+        webViewController.focus()
     }
 
     func urlBarDidFocus(_ urlBar: URLBar) {
@@ -1545,7 +1546,6 @@ extension BrowserViewController: WebControllerDelegate {
         toggleToolbarBackground()
         toggleURLBarBackground(isBright: !urlBar.isEditing)
         urlBar.progressBar.hideProgressBar()
-        webViewController.focus()
         GleanMetrics.Browser.totalUriCount.add()
     }
 
