@@ -6,8 +6,8 @@ import UIKit
 
 // MARK: - Section Header View
 public struct FirefoxHomeHeaderViewUX {
-    static let Insets: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? FirefoxHomeUX.sectionInsetsForIpad + FirefoxHomeUX.minimumInsets : FirefoxHomeUX.minimumInsets
-    static let TitleTopInset: CGFloat = 5
+    static let insets: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? FirefoxHomeUX.sectionInsetsForIpad + FirefoxHomeUX.minimumInsets : FirefoxHomeUX.minimumInsets
+    static let titleTopInset: CGFloat = 5
     static let sectionHeaderSize: CGFloat = 20
     static let maxTitleLabelTextSize: CGFloat = 43 // Style title3 - AX3
     static let maxMoreButtonTextSize: CGFloat = 36 // Style subheadline - AX3
@@ -50,7 +50,7 @@ class ASHeaderView: UICollectionReusableView {
 
     var titleInsets: CGFloat {
         get {
-            return UIScreen.main.bounds.size.width == self.frame.size.width && UIDevice.current.userInterfaceIdiom == .pad ? FirefoxHomeHeaderViewUX.Insets : FirefoxHomeUX.minimumInsets
+            return UIScreen.main.bounds.size.width == self.frame.size.width && UIDevice.current.userInterfaceIdiom == .pad ? FirefoxHomeHeaderViewUX.insets : FirefoxHomeUX.minimumInsets
         }
     }
 
@@ -74,7 +74,7 @@ class ASHeaderView: UICollectionReusableView {
             moreButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -6),
             moreButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -titleInsets),
 
-            titleLabel.trailingAnchor.constraint(equalTo: moreButton.leadingAnchor, constant: -FirefoxHomeHeaderViewUX.TitleTopInset),
+            titleLabel.trailingAnchor.constraint(equalTo: moreButton.leadingAnchor, constant: -FirefoxHomeHeaderViewUX.titleTopInset),
             titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
         ])
         moreButton.setContentCompressionResistancePriority(.required, for: .horizontal)
