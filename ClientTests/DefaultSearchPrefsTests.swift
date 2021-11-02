@@ -10,7 +10,7 @@ import XCTest
 
 class DefaultSearchPrefsTests: XCTestCase {
 
-    func testParsing() {
+    func testParsing_hasAllInfo_succeeds() {
         // setup the list json
         let searchPrefs = DefaultSearchPrefs(with: Bundle.main.resourceURL!.appendingPathComponent("SearchPlugins").appendingPathComponent("list.json"))!
 
@@ -32,5 +32,20 @@ class DefaultSearchPrefsTests: XCTestCase {
             XCTAssertEqual(searchPrefs.searchDefault(for: locale.lang, and: locale.region), locale.resultDefault, "incorrect for \(locale.lang) and \(locale.region)")
             XCTAssertEqual(searchPrefs.visibleDefaultEngines(for: locale.lang, and: locale.region), locale.resultList)
         }
+    }
+
+    func testParsing_hasNoLocalesAndNoRegionOverrides_usesDefault() {
+        // setup the defaultOnlyTestList json
+        let testBundle = Bundle(for: type(of: self))
+        guard let filePath = testBundle.path(forResource: "defaultOnlyTestList", ofType: "json") else { fatalError("Couldn't find test file") }
+        let searchPrefs = DefaultSearchPrefs(with: URL(fileURLWithPath: filePath))!
+
+        // setup locale
+        let us = (lang: ["en-US", "en"], region: "US", resultList: ["google-b-1-m", "bing", "amazondotcom", "ddg", "twitter", "wikipedia"], resultDefault: "google-b-m")
+
+        // run tests
+        let expectedResult = "fakeDefault"
+        XCTAssertEqual(searchPrefs.searchDefault(for: us.lang, and: us.region), expectedResult, "incorrect for \(us.lang) and \(us.region)")
+        XCTAssertEqual(searchPrefs.visibleDefaultEngines(for: us.lang, and: us.region), [expectedResult])
     }
 }
