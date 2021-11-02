@@ -1336,9 +1336,9 @@ extension BrowserViewController: QRCodeViewControllerDelegate {
 
     func didScanQRCodeWithText(_ text: String) {
         TelemetryWrapper.recordEvent(category: .action, method: .scan, object: .qrCodeText)
-        func defaultAction() {
-            guard let tab = tabManager.selectedTab else { return }
-            submitSearchText(text, forTab: tab)
+        let defaultAction: () -> Void = { [weak self] in
+            guard let tab = self?.tabManager.selectedTab else { return }
+            self?.submitSearchText(text, forTab: tab)
         }
         let content = TextContentDetector.detectTextContent(text)
         switch content {
