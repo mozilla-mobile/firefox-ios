@@ -13,7 +13,6 @@ import XCGLogger
 import Account
 import MobileCoreServices
 import SDWebImage
-import SwiftyJSON
 import Telemetry
 import MozillaAppServices
 import Sentry
