@@ -1138,7 +1138,7 @@ app:
     BITRISE_EXPORT_METHOD: development
   - opts:
       is_expand: false
-    BITRISE_NIGHTLY_VERSION: '40'
+    BITRISE_NIGHTLY_VERSION: '9000'
   - opts:
       is_expand: false
     BITRISE_RELEASE_VERSION: '95'
@@ -1152,6 +1152,3 @@ trigger_map:
   workflow: Deploy_Prod_Beta
 - pull_request_target_branch: main
   workflow: RunUnitTests
-meta:
-  bitrise.io:
-    machine_type_id: standard
