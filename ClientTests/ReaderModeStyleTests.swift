@@ -13,7 +13,7 @@ class ReaderModeStyleTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
-        ThemeManager.instance.current = NormalTheme()
+        LegacyThemeManager.instance.current = NormalTheme()
     }
 
     func test_initWithProperties_succeeds() {
@@ -72,7 +72,7 @@ class ReaderModeStyleTests: XCTestCase {
     }
 
     func test_appWideThemeDark_returnsDark() {
-        ThemeManager.instance.current = DarkTheme()
+        LegacyThemeManager.instance.current = DarkTheme()
         let theme = ReaderModeTheme.preferredTheme(for: ReaderModeTheme.light)
 
         XCTAssertEqual(theme, .dark)
@@ -84,7 +84,7 @@ class ReaderModeStyleTests: XCTestCase {
     }
 
     func test_preferredColorTheme_changesFromLightToDark() {
-        ThemeManager.instance.current = DarkTheme()
+        LegacyThemeManager.instance.current = DarkTheme()
 
         var readerModeStyle = ReaderModeStyle(theme: .light,
                                               fontType: .sansSerif,
