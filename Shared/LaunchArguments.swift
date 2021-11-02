@@ -10,6 +10,7 @@ public struct LaunchArguments {
     public static let SkipIntro = "FIREFOX_SKIP_INTRO"
     public static let SkipWhatsNew = "FIREFOX_SKIP_WHATS_NEW"
     public static let SkipETPCoverSheet = "FIREFOX_SKIP_ETP_COVER_SHEET"
+    public static let SkipContextualHintJumpBackIn = "FIREFOX_SKIP_CONTEXTUAL_HINT_JUMP_BACK_IN"
     public static let ClearProfile = "FIREFOX_CLEAR_PROFILE"
     public static let StageServer = "FIREFOX_USE_STAGE_SERVER"
     public static let FxAChinaServer = "FIREFOX_USE_FXA_CHINA_SERVER"

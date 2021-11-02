@@ -25,9 +25,9 @@ class IntegrationTests: BaseTestCase {
      let key = String(parts[1])
      if testWithDB.contains(key) {
      // for the current test name, add the db fixture used
-     launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.StageServer, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + historyDB]
+     launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.StageServer, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + historyDB, LaunchArguments.SkipContextualHintJumpBackIn]
      } else if testFxAChinaServer.contains(key) {
-        launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.FxAChinaServer, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet]
+        launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.FxAChinaServer, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.SkipContextualHintJumpBackIn]
      }
      super.setUp()
      }
@@ -176,6 +176,13 @@ class IntegrationTests: BaseTestCase {
 
         // Check synced Logins
         navigator.nowAt(SettingsScreen)
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(LoginsSettings)
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        let passcodeInput = springboard.secureTextFields["Passcode field"]
+        passcodeInput.tap()
+        passcodeInput.typeText("foo\n")
+
         navigator.goto(LoginsSettings)
         waitForExistence(app.tables["Login List"], timeout: 5)
         XCTAssertTrue(app.tables.cells.staticTexts[loginEntry].exists, "The login saved on desktop is not synced")

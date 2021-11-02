@@ -85,6 +85,11 @@ class TestAppDelegate: AppDelegate {
             profile.prefs.setBool(true, forKey: PrefsKeys.GoogleTopSiteHideKey)
         }
 
+        // Don't show the Contextual hint for jump back in section.
+        if launchArguments.contains(LaunchArguments.SkipContextualHintJumpBackIn) {
+            profile.prefs.setBool(false, forKey: PrefsKeys.ContextualHintJumpBackinKey)
+        }
+        
         // Don't show the ETP Coversheet New page.
         if launchArguments.contains(LaunchArguments.SkipETPCoverSheet) {
             profile.prefs.setString(ETPCoverSheetShowType.DoNotShow.rawValue, forKey: PrefsKeys.KeyETPCoverSheetShowType)
@@ -106,7 +111,7 @@ class TestAppDelegate: AppDelegate {
 
         // Change to 0 to deactivate chron tabs
         if launchArguments.contains(LaunchArguments.ChronTabs) {
-                   profile.prefs.setInt(1, forKey: PrefsKeys.ChronTabsPrefKey)
+            profile.prefs.setInt(0, forKey: PrefsKeys.ChronTabsPrefKey)
         }
 
         if launchArguments.contains(LaunchArguments.StageServer) {

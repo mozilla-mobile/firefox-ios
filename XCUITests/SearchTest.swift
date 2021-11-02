@@ -42,7 +42,7 @@ class SearchTests: BaseTestCase {
         app.buttons["urlBar-cancel"].tap()
 
         waitForTabsButton()
-        app.buttons["TabToolbar.menuButton"].tap()
+        app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton].tap()
         navigator.nowAt(BrowserTabMenu)
         suggestionsOnOff()
 
@@ -65,7 +65,7 @@ class SearchTests: BaseTestCase {
 
         app.buttons["urlBar-cancel"].tap()
         waitForTabsButton()
-        app.buttons["TabToolbar.menuButton"].tap()
+        app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton].tap()
         navigator.nowAt(BrowserTabMenu)
 
         // Reset suggestion button, set it to on
@@ -193,6 +193,8 @@ class SearchTests: BaseTestCase {
         waitForExistence(app.webViews.staticTexts["cloud"], timeout: 10)
         // Select some text and long press to find the option
         app.webViews.staticTexts["cloud"].press(forDuration: 1)
+        // Click on the > button to get to that option
+        app.menuItems["show.next.items.menu.button"].tap()
         waitForExistence(app.menuItems["Search with Firefox"])
         app.menuItems["Search with Firefox"].tap()
         waitUntilPageLoad()

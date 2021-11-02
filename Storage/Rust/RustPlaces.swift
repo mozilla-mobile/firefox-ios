@@ -342,7 +342,13 @@ public class RustPlaces {
             return try connection.getHistoryMetadataSince(since: since)
         }
     }
-    
+
+    public func getHighlights(weights: HistoryHighlightWeights, limit: Int32) -> Deferred<Maybe<[HistoryHighlight]>> {
+        return withReader { connection in
+            return try connection.getHighlights(weights: weights, limit: limit)
+        }
+    }
+
     public func queryHistoryMetadata(query: String, limit: Int32) -> Deferred<Maybe<[HistoryMetadata]>> {
         return withReader { connection in
             return try connection.queryHistoryMetadata(query: query, limit: limit)
@@ -354,13 +360,27 @@ public class RustPlaces {
      */
     public func noteHistoryMetadataObservation(key: HistoryMetadataKey, observation: HistoryMetadataObservation) -> Deferred<Maybe<Void>> {
         return withWriter { connection in
-            return try connection.noteHistoryMetadataObservation(key: key, observation: observation)
+            if let title = observation.title {
+                return try connection.noteHistoryMetadataObservationTitle(key: key, title: title)
+            }
+            if let documentType = observation.documentType {
+                return try connection.noteHistoryMetadataObservationDocumentType(key: key, documentType: documentType)
+            }
+            if let viewTime = observation.viewTime {
+                return try connection.noteHistoryMetadataObservationViewTime(key: key, viewTime: viewTime)
+            }
         }
     }
-    
+
     public func deleteHistoryMetadataOlderThan(olderThan: Int64) -> Deferred<Maybe<Void>> {
         return withWriter { connection in
-            return try connection.deleteHistoryMetadaOlderThan(olderThan: olderThan)
+            return try connection.deleteHistoryMetadataOlderThan(olderThan: olderThan)
+        }
+    }
+
+    public func deleteHistoryMetadata(key: HistoryMetadataKey) -> Deferred<Maybe<Void>> {
+        return withWriter { connection in
+            return try connection.deleteHistoryMetadata(key: key)
         }
     }
 }

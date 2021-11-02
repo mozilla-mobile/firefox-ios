@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import UIKit
 import Shared
 
 private let iPadFactor: CGFloat = 1.06
@@ -67,6 +68,9 @@ class DynamicFontHelper: NSObject {
     }
     var DeviceFontLarge: UIFont {
         return UIFont.systemFont(ofSize: deviceFontSize + 3)
+    }
+    var DeviceFontExtraLarge: UIFont {
+        return UIFont.systemFont(ofSize: deviceFontSize + 4)
     }
     var DeviceFontMedium: UIFont {
         return UIFont.systemFont(ofSize: deviceFontSize + 1)

@@ -7,26 +7,42 @@ import SnapKit
 import UIKit
 import Shared
 
+struct GroupedTabCellProperties {
+    
+    struct CellUX {
+        static let titleFontSize: CGFloat = 17
+        static let defaultCellHeight: CGFloat = 300
+    }
+    
+    struct CellStrings {
+        static let showMoreAccessibilityId = "GroupedTabCell.ShowMoreButton"
+        static let searchButtonAccessibilityId = "GroupTabCell.SearchButton"
+    }
+}
+
 protocol GroupedTabsDelegate {
     func didSelectGroupedTab(tab: Tab?)
     func closeTab(tab: Tab)
+    func performSearchOfGroupInNewTab(searchTerm: String?)
 }
 
-protocol GroupedTabCellDelegate {
+protocol GroupedTabDelegate {
     func closeGroupTab(tab: Tab)
     func selectGroupTab(tab: Tab)
+    func newSearchFromGroup(searchTerm: String)
 }
 
-class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UITableViewDelegate, GroupedTabsDelegate {
-    var delegate: GroupedTabCellDelegate?
-    var tabGroups: [String: [Tab]]?
+class GroupedTabCell: UICollectionViewCell, NotificationThemeable, UITableViewDataSource, UITableViewDelegate, GroupedTabsDelegate {
+    
+    var tabDisplayManagerDelegate: GroupedTabDelegate?
+    var tabGroups: [ASGroup<Tab>]?
     var selectedTab: Tab? = nil
     static let Identifier = "GroupedTabCellIdentifier"
     let GroupedTabsTableIdentifier = "GroupedTabsTableIdentifier"
     let GroupedTabsHeaderIdentifier = "GroupedTabsHeaderIdentifier"
     let GroupedTabCellIdentifier = "GroupedTabCellIdentifier"
     var hasExpanded = true
-    static let defaultCellHeight: CGFloat = 300
+    
     // Views
     lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
@@ -67,18 +83,18 @@ class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UI
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tabGroups?.keys.count ?? 0
+        return tabGroups?.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return GroupedTabCell.defaultCellHeight
+        return GroupedTabCellProperties.CellUX.defaultCellHeight
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: GroupedTabCellIdentifier, for: indexPath) as! GroupedTabContainerCell
         cell.delegate = self
-        cell.tabs = tabGroups?.map { $0.value }[indexPath.item]
-        cell.titleLabel.text = tabGroups?.map { $0.key }[indexPath.item] ?? ""
+        cell.tabs = tabGroups?.map { $0.groupedItems }[indexPath.item]
+        cell.titleLabel.text = tabGroups?.map { $0.searchTerm }[indexPath.item] ?? ""
         cell.collectionView.reloadData()
         cell.selectedTab = selectedTab
         if let selectedTab = selectedTab { cell.focusTab(tab: selectedTab) }
@@ -119,9 +135,7 @@ class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UI
 
     func scrollToSelectedGroup() {
         if let searchTerm = selectedTab?.tabGroupData.tabAssociatedSearchTerm {
-            if let index = tabGroups?.map({ $0.key }).firstIndex(where: { t in
-                t == searchTerm
-            }) {
+            if let index = tabGroups?.firstIndex(where: { $0.searchTerm == searchTerm}) {
                 tableView.scrollToRow(at: IndexPath(row: index , section: 0) , at: .bottom , animated: true)
             }
         }
@@ -137,13 +151,18 @@ class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UI
     
     func didSelectGroupedTab(tab: Tab?) {
         if let tab = tab {
-            delegate?.selectGroupTab(tab: tab)
+            tabDisplayManagerDelegate?.selectGroupTab(tab: tab)
         }
     }
     
     func closeTab(tab: Tab) {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .groupedTab, value: .closeGroupedTab, extras: nil)
-        delegate?.closeGroupTab(tab: tab)
+        tabDisplayManagerDelegate?.closeGroupTab(tab: tab)
+    }
+    
+    func performSearchOfGroupInNewTab(searchTerm: String?) {
+        guard let searchTerm = searchTerm else { return }
+        tabDisplayManagerDelegate?.newSearchFromGroup(searchTerm: searchTerm)
     }
 }
 
@@ -159,10 +178,17 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
         return view
     }()
     
+    var searchButton: UIButton = .build { button in
+        button.setImage(UIImage(named: "search")?.withTintColor(.label), for: [.normal])
+        button.addTarget(self, action: #selector(handleSearchButtonTapped), for: .touchUpInside)
+        button.isAccessibilityElement = true
+        button.accessibilityIdentifier = GroupedTabCellProperties.CellStrings.searchButtonAccessibilityId
+    }
+    
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.textColor = UIColor.theme.homePanel.activityStreamHeaderText
-        titleLabel.font = UIFont.systemFont(ofSize: FirefoxHomeHeaderViewUX.sectionHeaderSize, weight: .bold)
+        titleLabel.textColor = .label
+        titleLabel.font = UIFont.systemFont(ofSize: GroupedTabCellProperties.CellUX.titleFontSize, weight: .semibold)
         titleLabel.minimumScaleFactor = 0.6
         titleLabel.numberOfLines = 1
         titleLabel.adjustsFontSizeToFitWidth = true
@@ -190,9 +216,7 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
         collectionView.semanticContentAttribute = .forceLeftToRight
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.backgroundColor = .white
         collectionView.layer.cornerRadius = 6.0
-        collectionView.layer.borderWidth = 1.0
         collectionView.layer.masksToBounds = true
 
         return collectionView
@@ -201,6 +225,7 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         initialViewSetup()
+        setupNotifcations()
     }
     
     required init?(coder: NSCoder) {
@@ -213,10 +238,13 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
         flowlayout.invalidateLayout()
     }
     
+    private func setupNotifcations() {
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .DisplayThemeChanged, object: nil)
+    }
+    
     func initialViewSetup() {
         self.selectionStyle = .default
-        containerView.addSubview(collectionView)
-        containerView.addSubview(titleLabel)
+        containerView.addSubviews(collectionView, searchButton, titleLabel)
         addSubview(containerView)
         contentView.addSubview(containerView)
         bringSubviewToFront(containerView)
@@ -226,15 +254,22 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
             make.edges.equalToSuperview()
         }
         
+        searchButton.snp.makeConstraints { make in
+            make.height.equalTo(23)
+            make.width.equalTo(40)
+            make.top.equalToSuperview().offset(30)
+            make.leading.equalTo(self.safeArea.leading).inset(8)
+        }
+        
         titleLabel.snp.makeConstraints { make in
             make.height.equalTo(23)
             make.top.equalToSuperview().offset(30)
-            make.leading.equalTo(self.safeArea.leading).inset(20)
+            make.leading.equalTo(searchButton.snp.trailing)
             make.centerX.equalToSuperview()
         }
         
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(25)
+            make.top.equalTo(titleLabel.snp.bottom).offset(16)
             make.leading.equalToSuperview().offset(12)
             make.trailing.equalToSuperview().inset(12)
             make.bottom.equalToSuperview()
@@ -250,19 +285,13 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
         }
     }
     
-    func applyTheme() {
-        let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
-        if theme == .dark {
-            self.backgroundColor = UIColor.Photon.Grey80
-            self.titleLabel.textColor = .white
-            collectionView.layer.borderColor = UIColor.Photon.DarkGrey50.cgColor
-            collectionView.layer.backgroundColor = UIColor.Photon.DarkGrey40.cgColor
+    private func applyTheme() {
+        if LegacyThemeManager.instance.currentName == .normal {
+            collectionView.backgroundColor = UIColor.Photon.White100
         } else {
-            self.backgroundColor = .white
-            self.titleLabel.textColor = .black
-            collectionView.layer.borderColor = UIColor.Photon.LightGrey50.cgColor
-            collectionView.layer.backgroundColor = UIColor.Photon.LightGrey50.cgColor
+            collectionView.backgroundColor = UIColor.Photon.DarkGrey50
         }
+        
     }
     
     override func prepareForReuse() {
@@ -307,6 +336,18 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
         print(indexPath.row)
         if let tab = tabs?[indexPath.item] {
             delegate?.didSelectGroupedTab(tab: tab)
+        }
+    }
+
+    @objc func handleSearchButtonTapped() {
+        delegate?.performSearchOfGroupInNewTab(searchTerm: titleLabel.text)
+    }
+    
+    @objc private func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        default: break
         }
     }
     
