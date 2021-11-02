@@ -28,6 +28,7 @@ public class Sentry {
     }
 
     private let SentryDSNKey = "SentryDSN"
+    private let SentryNightlyDSNKey = "SentryNightlyDSN"
     private let SentryDeviceAppHashKey = "SentryDeviceAppHash"
     private let DefaultDeviceAppHash = "0000000000000000000000000000000000000000"
     private let DeviceAppHashLength = UInt(20)
@@ -58,7 +59,14 @@ public class Sentry {
             }
         }
 
-        guard let dsn = bundle.object(forInfoDictionaryKey: SentryDSNKey) as? String, !dsn.isEmpty else {
+        var sentryDSNKey = SentryDSNKey
+
+        if AppInfo.appVersion == AppConstants.NIGHTLY_APP_VERSION, AppConstants.BuildChannel == .beta {
+            // Setup sentry for Nightly Firefox Beta
+            sentryDSNKey = SentryNightlyDSNKey
+        }
+
+        guard let dsn = bundle.object(forInfoDictionaryKey: sentryDSNKey) as? String, !dsn.isEmpty else {
             Logger.browserLogger.debug("Not enabling Sentry; Not configured in Info.plist")
             return
         }

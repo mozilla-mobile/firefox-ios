@@ -78,7 +78,12 @@ open class AppInfo {
 
     // Return the MozWhatsNewTopic key from the Info.plist
     public static var whatsNewTopic: String? {
-        return Bundle.main.object(forInfoDictionaryKey: "MozWhatsNewTopic") as? String
+        let appVersionSplit = AppInfo.appVersion.components(separatedBy: ".")
+        let majorAppVersion = appVersionSplit[0]
+        var dotVersion = ""
+        if appVersionSplit.count > 1, appVersionSplit[0] != "0" { dotVersion = appVersionSplit[1] }
+        let topic = "whats-new-ios-\(majorAppVersion)\(dotVersion)"
+        return topic
     }
 
     // Return whether the currently executing code is running in an Application
