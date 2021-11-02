@@ -43,6 +43,12 @@
 /* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
 "ActivityStream.JumpBackIn.SectionTitle" = "Mynd Nôl I";
 
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
+"ActivityStream.JumpBackIn.TabGroup.SiteCount" = "Tabiau: %d";
+
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists, the Tab Group item title will be 'Your search for \"video games\"'. The %@ sign is a placeholder for the actual search the user did. */
+"ActivityStream.JumpBackIn.TabGroup.Title" = "Eich chwilio am \"%@\"";
+
 /* A string used to signify the start of the Recently Saved section in Home Screen. */
 "ActivityStream.Library.Title" = "Cadwyd yn ddiweddar";
 
@@ -69,6 +75,9 @@
 
 /* This button will open the library showing all the users bookmarks */
 "ActivityStream.RecentlySaved.ShowAll" = "Dangos y cyfan";
+
+/* When long pressing an item in the Recently Visited section, this is the title of the button that appears, letting the user know to remove that particular item from the menu. */
+"ActivityStream.RecentlyVisited.RemoveButton.Title" = "Tynnu";
 
 /* Section title label for Shortcuts */
 "ActivityStream.Shortcuts.SectionTitle" = "Llwybrau Byr";
@@ -260,6 +269,13 @@
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "Rhannu Dolen";
 
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
+"ContextualHints.Homepage.PersonalizedHome" = "Mae eich cartref Firefox personoledig bellach yn ei gwneud hi’n haws i fynd nôl i le roeddech chi o'r blaen. Dewch o hyd i’ch tabiau, nodau tudalen a’ch canlyniadau chwilio diweddar.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup.
+   Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
+"ContextualHints.TabTray.InactiveTabs" = "Mae tabiau nad ydych chi wedi edrych arnyn nhw ers pythefnos yn cael eu symud yma.";
+
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "Methu ychwanegu'r dudalen i'r rhestr Ddarllen";
 
@@ -394,6 +410,9 @@
 /* Title for firefox about:home page in tab history list */
 "Firefox.HomePage.Title" = "Tudalen Cartref Firefox";
 
+/* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
+"FirefoxHome.CustomizeHomeButton.Title" = "Cyfaddasu’r Dudalen Cartref";
+
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Ymlaen";
 
@@ -446,7 +465,7 @@
 "fxa.signin.create-account-pt-2" = "Crëwch gyfrif Firefox.";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "Ar eich cyfrifiadur, agorwch Firefox ac ewch i <b>https://firefox.com/pair</b>";
+"fxa.signin.qr-link-instruction" = "Ar eich cyfrifiadur, agorwch Firefox ac ewch i firefox.com/pair";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "Yn Barod i Sganio";
@@ -455,7 +474,7 @@
 "fxa.signin.turn-on-sync" = "Cychwyn Sync";
 
 /* FxA sign in view email login button */
-"fxa.signin.use-email-instead" = "Defnyddio E-bost yn lle Hynny";
+"fxa.signin.use-email-instead" = "Defnyddio E-bost";
 
 /* Button label to sign into Sync */
 "FxA.SignIntoSync" = "Mewngofnodwch i Sync";
@@ -622,6 +641,18 @@
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Dangos y Tab Blaenorol";
 
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string is for the button the user must tap in order to turn on the Auto close feature */
+"InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle" = "Troi Autogau Ymlaen";
+
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string describes what happens if you elect to turn on this option. */
+"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Bydd Firefox yn cau tabiau nad ydych wedi edrych arnyn nhw dros y mis diwethaf.";
+
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This is the title of that Auto Close prompt */
+"InactiveTabs.TabTray.AutoClosePrompt.Title" = "Autogau ar ôl mis?";
+
+/* In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs. */
+"InactiveTabs.TabTray.CloseButtonTitle" = "Cau Pob Tab Segur";
+
 /* Accessibility label for button increasing font size in display settings of reader mode */
 "Increase text size" = "Cynyddu maint y testun";
 
@@ -654,9 +685,6 @@
 
 /* Toggle logins syncing setting */
 "Logins" = "Mewngofnodion";
-
-/* Label displaying welcome view title */
-"Logins.WelcomeView.Title" = "Ewch â'ch cyfrineiriau i bob man";
 
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Newidiwyd";
@@ -954,6 +982,31 @@
 
 /* Restore Tabs Affirmative Action */
 "Okay" = "Iawn";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
+"Onboarding.WhatsNew.Button.Title" = "Cychwyn Pori";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is a general description that appears under the title for what the card is about. */
+"Onboarding.WhatsNew.Description" = "Mae nawr yn haws ailgychwyn o’r lle y gwnaethoch chi adael.";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is the description for the Jump Back In bullet point */
+"Onboarding.WhatsNew.PersonalizedHome.Description" = "Symudwch i’ch tabiau agored, nodau tudalen, a’ch hanes pori.";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the descripion of the Recent Searches bullet point on the card */
+"Onboarding.WhatsNew.RecentSearches.Description" = "Ailedrych ar eich chwilio diweddaraf o’ch tudalen cartref a’ch tabiau.";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the Recent Searches bullet point on the card */
+"Onboarding.WhatsNew.RecentSearches.Title" = "Chwilio Diweddar";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the description for the Tab Group bullet point on the card */
+"Onboarding.WhatsNew.TabGroups.Description" = "Mae tudalennau o'r un chwiliad yn cael eu grwpio gyda'i gilydd.";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Tab Group bullet point on the card */
+"Onboarding.WhatsNew.TabGroups.Title" = "Grwpiau Tabiau Taclusach";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Jump Back In bullet point on the card
+   The title for the new onboarding card letting users know what is new in Firefox iOS */
+"Onboarding.WhatsNew.Title" = "Beth sy’n Newydd yn Firefox";
 
 /* Title for prompt displayed to user after the app crashes */
 "Oops! Firefox crashed" = "Wps! Mae Firefox wedi chwalu";
@@ -1337,6 +1390,45 @@
 /* General settings section title */
 "Settings.General.SectionName" = "Cyffredinol";
 
+/* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
+"Settings.Home.Option.Description" = "Dewis beth fyddwch yn ei weld ar dudalen cartref Firefox.";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
+"Settings.Home.Option.JumpBackIn" = "Mynd Nôl I";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off */
+"Settings.Home.Option.Pocket" = "Argymhellwyd gan Pocket";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Saved section on the Firefox homepage on or off */
+"Settings.Home.Option.RecentlySaved" = "Cadwyd yn Ddiweddar";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Visited section on the Firfox homepage on or off */
+"Settings.Home.Option.RecentlyVisited" = "Ymwelwyd yn Ddiweddar";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recent Searches section on the Firefox homepage on or off */
+"Settings.Home.Option.RecentSearches" = "Chwilio Diweddar";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
+"Settings.Home.Option.Shortcuts" = "Llwybrau Byr";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage after four hours of inactivity. */
+"Settings.Home.Option.StartAtHome.AfterFourHours" = "Tudalen cartref ar ôl pedair awr segur";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage every time they open up Firefox */
+"Settings.Home.Option.StartAtHome.Always" = "Tudalen Cartref";
+
+/* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
+"Settings.Home.Option.StartAtHome.Description" = "Dewis beth rydych yn ei weld pan fyddwch yn dychwelyd i Firefox.";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
+"Settings.Home.Option.StartAtHome.Never" = "Y tab diwethaf";
+
+/* Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage. */
+"Settings.Home.Option.StartAtHome.Title" = "Sgrin agoriadol";
+
+/* In the settings menu, this is the title of the Firefox Homepage customization settings section */
+"Settings.Home.Option.Title" = "Tudalen Cartref Firefox";
+
 /* Button in settings to clear the home page. */
 "Settings.HomePage.Clear.Button" = "Clirio";
 
@@ -1508,6 +1600,18 @@
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Astudiaethau";
 
+/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Inactive Tabs feature, a separate section of inactive tabs that appears in the Tab Tray, on or off */
+"Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "Tabiau Anweithredol";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
+"Settings.Tabs.CustomizeTabsSection.TabGroups" = "Grwpiau Tabiau";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the Tabs Tray customization section. The tabs tray is accessed from firefox hompage */
+"Settings.Tabs.CustomizeTabsSection.Title" = "Cyfaddasu'r Gilfach Tabiau";
+
+/* In the settings menu, this is the title for the Tabs customization section option */
+"Settings.Tabs.Title" = "Tabiau";
+
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Iawn, Wedi deall!";
 
@@ -1557,7 +1661,7 @@
 "Settings.TrackingProtection.StrictLevelInfoFooter" = "Gall rwystro tracwyr effeithio ar ymarferoldeb rhai gwefannau.";
 
 /* Tracking protection settings option for using the basic blocklist. */
-"Settings.TrackingProtectionOption.BasicBlockList" = "Safon (rhagosodedig)";
+"Settings.TrackingProtectionOption.BasicBlockList" = "Safonol (rhagosodedig)";
 
 /* Tracking protection settings option description for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BlockListBasicDescription" = "Caniatáu rhai tracwyr fel bod gwefannau'n gweithio'n iawn.";
@@ -1763,6 +1867,9 @@
 
 /* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenSelectedTab.KeyCodeTitle" = "Agor y Tab Hwn";
+
+/* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
+"TabTray.OtherTabs.Title" = "Tabiau eraill";
 
 /* The title for the tab tray in private mode */
 "TabTray.PrivateTitle" = "Tabiau Preifat";

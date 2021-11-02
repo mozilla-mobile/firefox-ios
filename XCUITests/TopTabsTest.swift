@@ -61,7 +61,7 @@ class TopTabsTest: BaseTestCase {
             waitUntilPageLoad()
             navigator.nowAt(BrowserTab)
             navigator.goto(TabTray)
-            waitForExistence(app.cells.staticTexts["IANA — IANA-managed Reserved Domains"])
+            waitForExistence(app.otherElements.cells.staticTexts["IANA-managed Reserved Domains"])
         }
     }
 
@@ -100,7 +100,7 @@ class TopTabsTest: BaseTestCase {
         if iPad() {
             app.cells.buttons["tab close"].tap()
         } else {
-            app.cells.buttons["closeTabButtonTabTray"].tap()
+            app.otherElements.cells.buttons["tab close"].tap()
         }
 
         // After removing only one tab it automatically goes to HomepanelView
@@ -189,7 +189,7 @@ class TopTabsTest: BaseTestCase {
         if iPad() {
             checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
         } else {
-            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 3)
+            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
         }
         // Close all tabs, undo it and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
@@ -240,7 +240,7 @@ class TopTabsTest: BaseTestCase {
         if iPad() {
             checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
         } else {
-            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 3)
+            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
         }
         // Close all tabs and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
@@ -373,20 +373,18 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
     // This test only runs for iPhone see bug 1409750
     func testAddTabByLongPressTabsButton() {
         if skipPlatform { return }
-        navigator.goto(URLBarOpen)
-        navigator.back()
+        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         navigator.performAction(Action.OpenNewTabLongPressTabsButton)
         navigator.goto(URLBarOpen)
         navigator.back()
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 3)
     }
 
     // This test only runs for iPhone see bug 1409750
     func testAddPrivateTabByLongPressTabsButton() {
         if skipPlatform { return }
-        navigator.goto(URLBarOpen)
-        navigator.back()
+        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         navigator.performAction(Action.OpenPrivateTabLongPressTabsButton)
         navigator.goto(URLBarOpen)
@@ -438,7 +436,7 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
         XCTAssertTrue(app.links["RFC 2606"].exists)
         waitForExistence(app.buttons["Show Tabs"])
         let numPrivTab = app.buttons["Show Tabs"].value as? String
-        XCTAssertEqual("3", numPrivTab)
+        XCTAssertEqual("2", numPrivTab)
     }
 
     // This test is disabled for iPad because the toast menu is not shown there

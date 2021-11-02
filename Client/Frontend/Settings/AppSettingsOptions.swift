@@ -67,7 +67,7 @@ class SyncNowSetting: WithAccountSetting {
     let syncBlueIcon = UIImage(named: "FxA-Sync-Blue")
     let syncIcon: UIImage? = {
         let image = UIImage(named: "FxA-Sync")
-        return ThemeManager.instance.currentName == .dark ? image?.tinted(withColor: .white) : image
+        return LegacyThemeManager.instance.currentName == .dark ? image?.tinted(withColor: .white) : image
     }()
 
     // Animation used to rotate the Sync icon 360 degrees while syncing is in progress.
@@ -524,16 +524,16 @@ class SentryIDSetting: HiddenSetting {
 
 class ShowEtpCoverSheet: HiddenSetting {
     let profile: Profile
-    
+
     override var title: NSAttributedString? {
         return NSAttributedString(string: "Debug: ETP Cover Sheet On", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
-    
+
     override init(settings: SettingsTableViewController) {
         self.profile = settings.profile
         super.init(settings: settings)
     }
-    
+
     override func onClick(_ navigationController: UINavigationController?) {
         BrowserViewController.foregroundBVC().hasTriedToPresentETPAlready = false
         // ETP is shown when user opens app for 3rd time on clean install.
@@ -553,32 +553,13 @@ class ExperimentsSettings: HiddenSetting {
 
 class ToggleChronTabs: HiddenSetting, FeatureFlagsProtocol {
     override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureActive(.chronologicalTabs) ? "OFF" : "ON"
-        return NSAttributedString(string: "Debug: Toggle chronological tabs \(toNewStatus)",
+        let toNewStatus = featureFlags.isFeatureActiveForBuild(.chronologicalTabs) ? "OFF" : "ON"
+        return NSAttributedString(string: "Toggle chronological tabs \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        featureFlags.toggle(.chronologicalTabs)
-        updateCell(navigationController)
-    }
-
-    func updateCell(_ navigationController: UINavigationController?) {
-        let controller = navigationController?.topViewController
-        let tableView = (controller as? AppSettingsTableViewController)?.tableView
-        tableView?.reloadData()
-    }
-}
-
-class ToggleJumpBackInSection: HiddenSetting, FeatureFlagsProtocol {
-    override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureActive(.jumpBackIn) ? "OFF" : "ON"
-        return NSAttributedString(string: "Debug: Toggle Jump Back In section \(toNewStatus)",
-                                  attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        featureFlags.toggle(.jumpBackIn)
+        featureFlags.toggleBuildFeature(.chronologicalTabs)
         updateCell(navigationController)
     }
 
@@ -591,32 +572,13 @@ class ToggleJumpBackInSection: HiddenSetting, FeatureFlagsProtocol {
 
 class TogglePullToRefresh: HiddenSetting, FeatureFlagsProtocol {
     override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureActive(.pullToRefresh) ? "OFF" : "ON"
-        return NSAttributedString(string: "Debug: Toggle Pull to Refresh \(toNewStatus)",
+        let toNewStatus = featureFlags.isFeatureActiveForBuild(.pullToRefresh) ? "OFF" : "ON"
+        return NSAttributedString(string: "Toggle Pull to Refresh \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        featureFlags.toggle(.pullToRefresh)
-        updateCell(navigationController)
-    }
-
-    func updateCell(_ navigationController: UINavigationController?) {
-        let controller = navigationController?.topViewController
-        let tableView = (controller as? AppSettingsTableViewController)?.tableView
-        tableView?.reloadData()
-    }
-}
-
-class ToggleRecentlySavedSection: HiddenSetting, FeatureFlagsProtocol {
-    override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureActive(.recentlySaved) ? "OFF" : "ON"
-        return NSAttributedString(string: "Debug: Toggle Recently Saved Section \(toNewStatus)",
-                                  attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        featureFlags.toggle(.recentlySaved)
+        featureFlags.toggleBuildFeature(.pullToRefresh)
         updateCell(navigationController)
     }
 
@@ -629,13 +591,13 @@ class ToggleRecentlySavedSection: HiddenSetting, FeatureFlagsProtocol {
 
 class ToggleInactiveTabs: HiddenSetting, FeatureFlagsProtocol {
     override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureActive(.inactiveTabs) ? "OFF" : "ON"
-        return NSAttributedString(string: "Toggle inactive tabs: \(toNewStatus)",
+        let toNewStatus = featureFlags.isFeatureActiveForBuild(.inactiveTabs) ? "OFF" : "ON"
+        return NSAttributedString(string: "Toggle inactive tabs \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        featureFlags.toggle(.inactiveTabs)
+        featureFlags.toggleBuildFeature(.inactiveTabs)
         InactiveTabModel.hasRunInactiveTabFeatureBefore = false
         updateCell(navigationController)
     }
@@ -647,41 +609,24 @@ class ToggleInactiveTabs: HiddenSetting, FeatureFlagsProtocol {
     }
 }
 
-class ToggleGroupedTabs: HiddenSetting, FeatureFlagsProtocol {
+
+class ResetJumpBackInContextualHint: HiddenSetting {
+    let profile: Profile
+
+    override var accessibilityIdentifier: String? { return "ResetJumpBackInContextualHint.Setting" }
+
     override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureActive(.groupedTabs) ? "ON" : "OFF"
-        return NSAttributedString(string: "Toggle grouped tabs: \(toNewStatus)",
-                                  attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: "Reset: Jump back in contextual hint", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+
+
+    override init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+        super.init(settings: settings)
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        featureFlags.toggle(.groupedTabs)
-        updateCell(navigationController)
-    }
-
-    func updateCell(_ navigationController: UINavigationController?) {
-        let controller = navigationController?.topViewController
-        let tableView = (controller as? AppSettingsTableViewController)?.tableView
-        tableView?.reloadData()
-    }
-}
-
-class ToggleStartAtHome: HiddenSetting, FeatureFlagsProtocol {
-    override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureActive(.startAtHome) ? "OFF" : "ON"
-        return NSAttributedString(string: "Debug: Toggle Start at Home: \(toNewStatus)",
-                                  attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        featureFlags.toggle(.startAtHome)
-        updateCell(navigationController)
-    }
-
-    func updateCell(_ navigationController: UINavigationController?) {
-        let controller = navigationController?.topViewController
-        let tableView = (controller as? AppSettingsTableViewController)?.tableView
-        tableView?.reloadData()
+        self.profile.prefs.removeObjectForKey(PrefsKeys.ContextualHintJumpBackinKey)
     }
 }
 
@@ -699,11 +644,11 @@ class VersionSetting: Setting {
     override var title: NSAttributedString? {
         return NSAttributedString(string: "\(AppName.longName) \(VersionSetting.appVersion) (\(VersionSetting.appBuildNumber))", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
-    
+
     public static var appVersion: String {
         return Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
     }
-    
+
     public static var appBuildNumber: String {
         return Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String
     }
@@ -736,7 +681,7 @@ class VersionSetting: Setting {
             }
         }
     }
-    
+
     func getSelectedCell(by navigationController: UINavigationController?) -> UITableViewCell? {
         let controller = navigationController?.topViewController
         let tableView = (controller as? AppSettingsTableViewController)?.tableView
@@ -859,7 +804,7 @@ class StudiesToggleSetting: BoolSetting {
         override var url: URL? {
             return SupportUtils.URLForTopic("ios-studies")
         }
-    
+
         override func onClick(_ navigationController: UINavigationController?) {
             setUpAndPushSettingsContentViewController(navigationController, self.url)
         }
@@ -921,7 +866,7 @@ class LoginsSetting: Setting {
         self.tabManager = settings.tabManager
         self.navigationController = settings.navigationController
         self.settings = settings as? AppSettingsTableViewController
-        
+
         super.init(title: NSAttributedString(string: Strings.LoginsAndPasswordsTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]),
                    delegate: delegate)
     }
@@ -934,51 +879,48 @@ class LoginsSetting: Setting {
 
     override func onClick(_: UINavigationController?) {
         deselectRow()
-        
+
         guard let navController = navigationController else { return }
         let navigationHandler: ((_ url: URL?) -> Void) = { url in
             guard let url = url else { return }
             UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
             self.delegate?.settingsOpenURLInNewTab(url)
         }
-        LoginListViewController.create(authenticateInNavigationController: navController, profile: profile, settingsDelegate: BrowserViewController.foregroundBVC(), webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
-            guard let loginsVC = loginsVC else { return }
-            navController.pushViewController(loginsVC, animated: true)
-        }
-    }
-}
-
-class TouchIDPasscodeSetting: Setting {
-    let profile: Profile
-    var tabManager: TabManager!
-
-    override var accessoryView: UIImageView? { return disclosureIndicator }
-
-    override var accessibilityIdentifier: String? { return "TouchIDPasscode" }
-
-    init(settings: SettingsTableViewController, delegate: SettingsDelegate? = nil) {
-        self.profile = settings.profile
-        self.tabManager = settings.tabManager
-        let localAuthContext = LAContext()
-
-        let title: String
-        if localAuthContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
-            if localAuthContext.biometryType == .faceID {
-                title = .AuthenticationFaceIDPasscodeSetting
+        
+        if AppAuthenticator.canAuthenticateDeviceOwner() {
+            if LoginOnboarding.shouldShow() {
+                let loginOnboardingViewController = LoginOnboardingViewController(profile: profile, tabManager: tabManager)
+                
+                loginOnboardingViewController.doneHandler = {
+                    loginOnboardingViewController.dismiss(animated: true)
+                }
+                
+                loginOnboardingViewController.proceedHandler = {
+                    LoginListViewController.create(authenticateInNavigationController: navController, profile: self.profile, settingsDelegate: BrowserViewController.foregroundBVC(), webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
+                        guard let loginsVC = loginsVC else { return }
+                        navController.pushViewController(loginsVC, animated: true)
+                        // Remove the onboarding from the navigation stack so that we go straight back to settings
+                        navController.viewControllers.removeAll { viewController in
+                            viewController == loginOnboardingViewController
+                        }
+                    }
+                }
+                
+                navigationController?.pushViewController(loginOnboardingViewController, animated: true)
+                
+                LoginOnboarding.setShown()
             } else {
-                title = .AuthenticationTouchIDPasscodeSetting
+                LoginListViewController.create(authenticateInNavigationController: navController, profile: profile, settingsDelegate: BrowserViewController.foregroundBVC(), webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
+                    guard let loginsVC = loginsVC else { return }
+                    navController.pushViewController(loginsVC, animated: true)
+                }
             }
         } else {
-            title = .AuthenticationPasscode
+            let viewController = DevicePasscodeRequiredViewController()
+            viewController.profile = profile
+            viewController.tabManager = tabManager
+            navigationController?.pushViewController(viewController, animated: true)
         }
-        super.init(title: NSAttributedString(string: title, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]),
-                   delegate: delegate)
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = AuthenticationSettingsViewController()
-        viewController.profile = profile
-        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 
@@ -1137,7 +1079,7 @@ class HomeSetting: Setting {
     override var accessoryView: UIImageView {
         getDisclosureIndicator()
     }
-    
+
     override var accessibilityIdentifier: String? { return "Home" }
 
     override var status: NSAttributedString {
@@ -1155,6 +1097,22 @@ class HomeSetting: Setting {
     override func onClick(_ navigationController: UINavigationController?) {
         let viewController = HomePageSettingViewController(prefs: profile.prefs)
         viewController.profile = profile
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+}
+
+class TabsSetting: Setting {
+
+    override var accessoryView: UIImageView? { return disclosureIndicator }
+
+    override var accessibilityIdentifier: String? { return "TabsSetting" }
+
+    init() {
+        super.init(title: NSAttributedString(string: .SettingsCustomizeTabsTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        let viewController = TabsSettingsViewController()
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
@@ -1261,11 +1219,11 @@ class ThemeSetting: Setting {
     override var accessibilityIdentifier: String? { return "DisplayThemeOption" }
 
     override var status: NSAttributedString {
-        if ThemeManager.instance.systemThemeIsOn {
+        if LegacyThemeManager.instance.systemThemeIsOn {
             return NSAttributedString(string: Strings.SystemThemeSectionHeader)
-        } else if !ThemeManager.instance.automaticBrightnessIsOn {
+        } else if !LegacyThemeManager.instance.automaticBrightnessIsOn {
             return NSAttributedString(string: Strings.DisplayThemeManualStatusLabel)
-        } else if ThemeManager.instance.automaticBrightnessIsOn {
+        } else if LegacyThemeManager.instance.automaticBrightnessIsOn {
             return NSAttributedString(string: Strings.DisplayThemeAutomaticStatusLabel)
         }
         return NSAttributedString(string: "")
@@ -1280,4 +1238,3 @@ class ThemeSetting: Setting {
         navigationController?.pushViewController(ThemeSettingsController(), animated: true)
     }
 }
-

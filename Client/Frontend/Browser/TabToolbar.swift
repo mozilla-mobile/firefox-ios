@@ -16,7 +16,7 @@ protocol TabToolbarProtocol: AnyObject {
     var forwardButton: ToolbarButton { get }
     var backButton: ToolbarButton { get }
     var multiStateButton: ToolbarButton { get }
-    var actionButtons: [Themeable & UIButton] { get }
+    var actionButtons: [NotificationThemeable & UIButton] { get }
 
     func updateBackStatus(_ canGoBack: Bool)
     func updateForwardStatus(_ canGoForward: Bool)
@@ -85,7 +85,7 @@ open class TabToolbarHelper: NSObject {
     // Default state as reload
     var middleButtonState: MiddleButtonState = .home
 
-    fileprivate func setTheme(forButtons buttons: [Themeable]) {
+    fileprivate func setTheme(forButtons buttons: [NotificationThemeable]) {
         buttons.forEach { $0.applyTheme() }
     }
 
@@ -130,7 +130,7 @@ open class TabToolbarHelper: NSObject {
         toolbar.appMenuButton.setImage(UIImage.templateImageNamed("nav-menu"), for: .normal)
         toolbar.appMenuButton.accessibilityLabel = Strings.AppMenuButtonAccessibilityLabel
         toolbar.appMenuButton.addTarget(self, action: #selector(didClickMenu), for: .touchUpInside)
-        toolbar.appMenuButton.accessibilityIdentifier = "TabToolbar.menuButton"
+        toolbar.appMenuButton.accessibilityIdentifier = AccessibilityIdentifiers.BottomToolbar.settingsMenuButton
 
         toolbar.homeButton.contentMode = .center
         toolbar.homeButton.setImage(UIImage.templateImageNamed("menu-Home"), for: .normal)
@@ -264,7 +264,7 @@ class ToolbarButton: UIButton {
     }
 }
 
-extension ToolbarButton: Themeable {
+extension ToolbarButton: NotificationThemeable {
     func applyTheme() {
         selectedTintColor = UIColor.theme.toolbarButton.selectedTint
         disabledTintColor = UIColor.theme.toolbarButton.disabledTint
@@ -284,7 +284,7 @@ class TabToolbar: UIView {
     let forwardButton = ToolbarButton()
     let backButton = ToolbarButton()
     let multiStateButton = ToolbarButton()
-    let actionButtons: [Themeable & UIButton]
+    let actionButtons: [NotificationThemeable & UIButton]
 
     fileprivate let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge", backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
     fileprivate let appMenuBadge = BadgeWithBackdrop(imageName: "menuBadge")
@@ -328,7 +328,7 @@ class TabToolbar: UIView {
         multiStateButton.accessibilityIdentifier = "TabToolbar.multiStateButton"
         tabsButton.accessibilityIdentifier = "TabToolbar.tabsButton"
         addNewTabButton.accessibilityIdentifier = "TabToolbar.addNewTabButton"
-        appMenuButton.accessibilityIdentifier = "TabToolbar.menuButton"
+        appMenuButton.accessibilityIdentifier = AccessibilityIdentifiers.BottomToolbar.settingsMenuButton
         accessibilityNavigationStyle = .combined
         accessibilityLabel = .TabToolbarNavigationToolbarAccessibilityLabel
     }
@@ -390,7 +390,7 @@ extension TabToolbar: TabToolbarProtocol {
     }
 }
 
-extension TabToolbar: Themeable, PrivateModeUI {
+extension TabToolbar: NotificationThemeable, PrivateModeUI {
     func applyTheme() {
         backgroundColor = UIColor.theme.browser.background
         helper?.setTheme(forButtons: actionButtons)

@@ -15,7 +15,8 @@ let requestDesktopSiteLabel = "Request Desktop Site"
 
 class NavigationTest: BaseTestCase {
     func testNavigation() {
-        navigator.goto(URLBarOpen)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
         let urlPlaceholder = "Search or enter address"
         XCTAssert(app.textFields["url"].exists)
         let defaultValuePlaceholder = app.textFields["url"].placeholderValue!
@@ -215,7 +216,6 @@ class NavigationTest: BaseTestCase {
 
     func testLongPressOnAddressBar() {
         //This test is for populated clipboard only so we need to make sure there's something in Pasteboard
-        navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("www.google.com")
         // Tapping two times when the text is not selected will reveal the menu
         app.textFields["address"].tap()
@@ -375,7 +375,7 @@ class NavigationTest: BaseTestCase {
     func testVerifyBrowserTabMenu() {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         navigator.performAction(Action.CloseURLBarOpen)
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 5)
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
         waitForExistence(app.tables["Context Menu"])

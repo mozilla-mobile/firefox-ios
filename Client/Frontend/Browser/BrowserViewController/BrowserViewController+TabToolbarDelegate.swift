@@ -98,19 +98,49 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         let isLoginsButtonShowing = LoginListViewController.shouldShowAppMenuShortcut(forPrefs: profile.prefs)
         let viewLogins: PhotonActionSheetItem? = !isLoginsButtonShowing ? nil :
             PhotonActionSheetItem(title: Strings.AppMenuPasswords, iconString: "key", iconType: .Image, iconAlignment: .left, isEnabled: true) { _, _ in
-            guard let navController = self.navigationController else { return }
-            let navigationHandler: ((_ url: URL?) -> Void) = { url in
-                UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
-                self.openURLInNewTab(url)
+                guard let navController = self.navigationController else { return }
+                let navigationHandler: ((_ url: URL?) -> Void) = { url in
+                    UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
+                    self.openURLInNewTab(url)
+                }
+                            
+                if AppAuthenticator.canAuthenticateDeviceOwner() {
+                    if LoginOnboarding.shouldShow() {
+                        let loginOnboardingViewController = LoginOnboardingViewController(shownFromAppMenu: true)
+                        loginOnboardingViewController.doneHandler = {
+                            loginOnboardingViewController.dismiss(animated: true)
+                        }
+                        
+                        loginOnboardingViewController.proceedHandler = {
+                            loginOnboardingViewController.dismiss(animated: true) {
+                                LoginListViewController.create(authenticateInNavigationController: navController, profile: self.profile, settingsDelegate: self, webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
+                                    guard let loginsVC = loginsVC else { return }
+                                    loginsVC.shownFromAppMenu = true
+                                    let navController = ThemedNavigationController(rootViewController: loginsVC)
+                                    self.present(navController, animated: true)
+                                    TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .logins)
+                                }
+                            }
+                        }
+                        
+                        let navController = ThemedNavigationController(rootViewController: loginOnboardingViewController)
+                        self.present(navController, animated: true)
+                        
+                        LoginOnboarding.setShown()
+                    } else {
+                        LoginListViewController.create(authenticateInNavigationController: navController, profile: self.profile, settingsDelegate: self, webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
+                            guard let loginsVC = loginsVC else { return }
+                            loginsVC.shownFromAppMenu = true
+                            let navController = ThemedNavigationController(rootViewController: loginsVC)
+                            self.present(navController, animated: true)
+                            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .logins)
+                        }
+                    }
+                } else {
+                    let navController = ThemedNavigationController(rootViewController: DevicePasscodeRequiredViewController(shownFromAppMenu: true))
+                    self.present(navController, animated: true)
+                }
             }
-            LoginListViewController.create(authenticateInNavigationController: navController, profile: self.profile, settingsDelegate: self, webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
-                guard let loginsVC = loginsVC else { return }
-                loginsVC.shownFromAppMenu = true
-                let navController = ThemedNavigationController(rootViewController: loginsVC)
-                self.present(navController, animated: true)
-                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .logins)
-            }
-        }
         
         let section0 = getLibraryActions(vcDelegate: self)
         var section1 = getOtherPanelActions(vcDelegate: self)

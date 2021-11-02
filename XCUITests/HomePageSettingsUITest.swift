@@ -25,7 +25,7 @@ class HomePageSettingsUITests: BaseTestCase {
         let key = String(parts[1])
         if testWithDB.contains(key) {
             // for the current test name, add the db fixture used
-            launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + prefilledTopSites]
+            launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + prefilledTopSites, LaunchArguments.SkipContextualHintJumpBackIn]
         }
         super.setUp()
     }
@@ -174,12 +174,12 @@ class HomePageSettingsUITests: BaseTestCase {
         enterWebPageAsHomepage(text: websiteUrl1)
         waitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: "mozilla")
         navigator.goto(SettingsScreen)
-        XCTAssertEqual(app.tables.cells["Home"].label, "Home, Homepage")
+        XCTAssertEqual(app.tables.cells["Home"].label, "Homepage, Homepage")
         //Switch to FXHome and check label
         navigator.performAction(Action.SelectHomeAsFirefoxHomePage)
         navigator.nowAt(HomeSettings)
         navigator.goto(SettingsScreen)
-        XCTAssertEqual(app.tables.cells["Home"].label, "Home, Firefox Home")
+        XCTAssertEqual(app.tables.cells["Home"].label, "Homepage, Firefox Home")
     }
     //Function to check the number of top sites shown given a selected number of rows
     private func checkNumberOfExpectedTopSites(numberOfExpectedTopSites: Int) {
@@ -187,5 +187,26 @@ class HomePageSettingsUITests: BaseTestCase {
         XCTAssertTrue(app.cells["TopSitesCell"].exists)
         let numberOfTopSites = app.collectionViews.cells["TopSitesCell"].cells.matching(identifier: "TopSite").count
         XCTAssertEqual(numberOfTopSites, numberOfExpectedTopSites)
+    }
+
+    func testJumpBackIn() throws {
+        throw XCTSkip("Disabled failing in BR - investigating") 
+        navigator.openURL(path(forTestPage: exampleUrl))
+        waitUntilPageLoad()
+        navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(NewTabScreen)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        waitForExistence(app.buttons["jumpBackInSectionMoreButton"], timeout: 5)
+        // Swipe up needed to see the content below the Jump Back In section
+        app.buttons["jumpBackInSectionMoreButton"].swipeUp()
+        XCTAssertTrue(app.cells.collectionViews.staticTexts["Example Domain"].exists)
+        // Swipe down to be able to click on Show all option
+        app.buttons["More"].swipeDown()
+        waitForExistence(app.buttons["jumpBackInSectionMoreButton"], timeout: 5)
+        app.buttons["jumpBackInSectionMoreButton"].tap()
+        // Tab tray is open with recently open tab
+        waitForExistence(app.cells.staticTexts["Example Domain"], timeout: 3)
     }
 }

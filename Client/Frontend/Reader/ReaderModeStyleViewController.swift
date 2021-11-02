@@ -37,7 +37,7 @@ protocol ReaderModeStyleViewControllerDelegate {
 
 // MARK: -
 
-class ReaderModeStyleViewController: UIViewController, Themeable {
+class ReaderModeStyleViewController: UIViewController, NotificationThemeable {
     var delegate: ReaderModeStyleViewControllerDelegate?
     var readerModeStyle: ReaderModeStyle = DefaultReaderModeStyle
 

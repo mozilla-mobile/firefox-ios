@@ -6,9 +6,11 @@ import UIKit
 import AuthenticationServices
 import SwiftKeychainWrapper
 
+let CredentialProviderAuthenticationDelay = 0.25
+
 class CredentialProviderPresenter {
     weak var view: CredentialProviderViewProtocol?
-    private let profile: Profile
+    public let profile: Profile
     
     init(view: CredentialProviderViewProtocol, profile: Profile = ExtensionProfile(localName: "profile")) {
         self.view = view
@@ -17,26 +19,17 @@ class CredentialProviderPresenter {
     
     func extensionConfigurationRequested() {
         view?.showWelcome()
-        if self.profile.logins.reopenIfClosed() != nil {
-            // At this point there is nothing useful we can do if we cannot open the logins database. Worst case
-            // we skip the synchronization and not all logins will be available to the user if they have changed
-            // since the last time.
-            return
-        }
-        
-        profile.syncCredentialIdentities().upon { result in
-            sleep(2)
-            self.cancel(with: .userCanceled)
-        }
     }
-    
-    func credentialProvisionRequested(for credentialIdentity: ASPasswordCredentialIdentity) {
+        
+    func showPasscodeRequirement() {
+        view?.showPasscodeRequirement()
+    }
 
+    func credentialProvisionRequested(for credentialIdentity: ASPasswordCredentialIdentity) {
         if self.profile.logins.reopenIfClosed() != nil {
             cancel(with: .failed)
         } else if let id = credentialIdentity.recordIdentifier {
-            
-            profile.logins.get(id: id).upon { [weak self] result in
+            profile.logins.getLogin(id: id).upon { [weak self] result in
                 switch result {
                 case .failure:
                     self?.cancel(with: .failed)
@@ -56,7 +49,7 @@ class CredentialProviderPresenter {
     if self.profile.logins.reopenIfClosed() != nil {
             cancel(with: .failed)
         } else {
-            profile.logins.list().upon {[weak self] result in
+            profile.logins.listLogins().upon {[weak self] result in
                 switch result {
                 case .failure:
                     self?.cancel(with: .failed)
@@ -81,15 +74,18 @@ class CredentialProviderPresenter {
     
 
     func credentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-        AppAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
-            switch result {
-            case .success:
-                // Move to the main thread because a state update triggers UI changes.
-                DispatchQueue.main.async { [unowned self] in
-                    self.showCredentialList(for: serviceIdentifiers)
+        // Force a short delay before we trigger authentication. See https://github.com/mozilla-mobile/firefox-ios/issues/9354
+        DispatchQueue.main.asyncAfter(deadline: .now() + CredentialProviderAuthenticationDelay) {
+            AppAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
+                switch result {
+                case .success:
+                    // Move to the main thread because a state update triggers UI changes.
+                    DispatchQueue.main.async { [unowned self] in
+                        self.showCredentialList(for: serviceIdentifiers)
+                    }
+                case .failure:
+                    self.cancel(with: .userCanceled)
                 }
-            case .failure:
-                self.cancel(with: .userCanceled)
             }
         }
     }
@@ -97,10 +93,6 @@ class CredentialProviderPresenter {
 
 private extension CredentialProviderPresenter {
     func cancel(with errorCode: ASExtensionError.Code) {
-        let error = NSError(domain: ASExtensionErrorDomain,
-                            code: errorCode.rawValue,
-                            userInfo: nil)
-        
-        self.view?.extensionContext.cancelRequest(withError: error)
+        self.view?.extensionContext.cancelRequest(withError: ASExtensionError(errorCode))
     }
 }

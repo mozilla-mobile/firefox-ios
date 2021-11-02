@@ -11,7 +11,7 @@ private struct HistoryBackButtonUX {
     static let HistoryHistoryBackButtonHeaderChevronLineWidth: CGFloat = 3.0
 }
 
-class HistoryBackButton: UIButton, Themeable {
+class HistoryBackButton: UIButton, NotificationThemeable {
     lazy var title: UILabel = {
         let label = UILabel()
         label.text = Strings.HistoryBackButtonTitle
