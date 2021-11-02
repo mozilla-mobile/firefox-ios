@@ -7,7 +7,6 @@ import Shared
 import Storage
 import XCGLogger
 import WebKit
-import SwiftyJSON
 
 private let log = Logger.browserLogger
 
@@ -263,9 +262,8 @@ class LoginsHelper: TabContentScript {
                 "name": "RemoteLogins:loginsFound",
                 "logins": logins
             ]
-
-            let json = JSON(dict)
-            let injectJavaScript = "window.__firefox__.logins.inject(\(json.stringify()!))"
+            guard let injected = dict.asString else { return }
+            let injectJavaScript = "window.__firefox__.logins.inject(\(injected))"
             self.tab?.webView?.evaluateJavascriptInDefaultContentWorld(injectJavaScript)
         }
     }

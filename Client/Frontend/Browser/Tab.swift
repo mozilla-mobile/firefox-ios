@@ -6,7 +6,6 @@ import Foundation
 import WebKit
 import Storage
 import Shared
-import SwiftyJSON
 import XCGLogger
 
 fileprivate var debugTabCount = 0
@@ -444,7 +443,8 @@ class Tab: NSObject {
             var jsonDict = [String: AnyObject]()
             jsonDict["history"] = urls as AnyObject?
             jsonDict["currentPage"] = currentPage as AnyObject?
-            guard let json = JSON(jsonDict).stringify()?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
+            
+            guard let json = jsonDict.asString?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
                 return
             }
 

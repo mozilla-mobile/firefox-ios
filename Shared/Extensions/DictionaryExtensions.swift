@@ -6,4 +6,9 @@ extension Dictionary {
     public mutating func merge(with dictionary: Dictionary) {
         dictionary.forEach { updateValue($1, forKey: $0) }
     }
+    public var asString: String? {
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: self, options: .prettyPrinted) else { return nil }
+        let jsonString = String(data: jsonData, encoding: .utf8)
+        return jsonString
+    }
 }

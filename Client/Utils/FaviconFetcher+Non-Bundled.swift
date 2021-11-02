@@ -7,7 +7,6 @@ import Shared
 import XCGLogger
 import SDWebImage
 import Fuzi
-import SwiftyJSON
 
 // Extension of FaviconFetcher that handles fetching non-bundled, non-letter favicons
 extension FaviconFetcher {
