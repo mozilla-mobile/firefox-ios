@@ -19,5 +19,6 @@ public struct AccessibilityIdentifiers {
 
     struct TabTray {
         static let filteredTabs = "filteredTabs"
+        static let deleteCloseAllButton = "TabTrayController.deleteButton.closeAll"
     }
 }
