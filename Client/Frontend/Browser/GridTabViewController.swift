@@ -109,7 +109,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
 
     /// The main interface for scrolling to an item, whether that is a group or an individual tab
     ///
-    /// This method checks for the existence of a tab to focus on other than the seleceted tab,
+    /// This method checks for the existence of a tab to focus on other than the selected tab,
     /// and then, focuses on that tab. The byproduct is that if the tab is in a group, the
     /// user would then be looking at the group. Generally, if focusing on a group and
     /// NOT the selected tab, it is advised to pass in the first tab of that group as
@@ -877,7 +877,7 @@ class TabCell: UICollectionViewCell {
     }
 
     func setTabSelected(_ isPrivate: Bool) {
-        // This creates a border around a tabcell. Using the shadow craetes a border _outside_ of the tab frame.
+        // This creates a border around a tabcell. Using the shadow creates a border _outside_ of the tab frame.
         layer.shadowColor = (isPrivate ? UIColor.theme.tabTray.privateModePurple : UIConstants.SystemBlueColor).cgColor
         layer.shadowOpacity = 1
         layer.shadowRadius = 0 // A 0 radius creates a solid border instead of a gradient blur

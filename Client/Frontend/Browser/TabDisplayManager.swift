@@ -79,6 +79,7 @@ struct TabDisplayOrder: Codable {
 }
 
 class TabDisplayManager: NSObject, FeatureFlagsProtocol {
+
     // MARK: - Variables
     var performingChainedOperations = false
     var inactiveViewModel: InactiveTabViewModel?
@@ -184,8 +185,6 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
 
         return isActive
     }
-
-
 
     init(collectionView: UICollectionView, tabManager: TabManager, tabDisplayer: TabDisplayer, reuseID: String, tabDisplayType: TabDisplayType, profile: Profile) {
         self.collectionView = collectionView
