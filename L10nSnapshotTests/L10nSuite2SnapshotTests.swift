@@ -118,8 +118,11 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         waitForExistence(app.cells["Logins"], timeout: 5)
         app.cells["Logins"].tap()
 
+        waitForExistence(app.buttons.firstMatch)
+        app.buttons["Continue"].tap()
+
         let passcodeInput = springboard.secureTextFields["Passcode field"]
-        waitForExistence(passcodeInput)
+        waitForExistence(passcodeInput, timeout: 10)
         passcodeInput.tap()
         passcodeInput.typeText("foo\n")
 
