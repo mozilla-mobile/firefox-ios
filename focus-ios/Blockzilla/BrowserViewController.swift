@@ -614,6 +614,7 @@ class BrowserViewController: UIViewController {
         browserToolbar.canGoBack = false
         browserToolbar.canGoForward = false
         browserToolbar.canDelete = false
+        urlBar.dismiss()
         urlBar.removeFromSuperview()
         urlBarContainer.alpha = 0
         homeViewController.refreshTipsDisplay()

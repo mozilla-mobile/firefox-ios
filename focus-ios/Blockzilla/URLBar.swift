@@ -421,6 +421,7 @@ class URLBar: UIView {
     @objc public func activateTextField() {
         urlText.isUserInteractionEnabled = true
         urlText.becomeFirstResponder()
+        isEditing = true
     }
 
     private func displayClearButton(shouldDisplay: Bool, animated: Bool = true) {

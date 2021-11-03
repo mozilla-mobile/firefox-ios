@@ -172,14 +172,11 @@ class OverlayView: UIView {
             }
         }
         
-        findInPageButton.backgroundColor = iPadView ? .systemBackground.withAlphaComponent(0.95) : .foundation
+        findInPageButton.backgroundColor = iPadView ? .secondarySystemBackground.withAlphaComponent(0.95) : .foundation
         
         remakeConstraintsForFindInPage()
         
         if iPadView {
-            searchButtonGroup.first?.layer.cornerRadius = UIConstants.layout.suggestionViewCornerRadius
-            searchButtonGroup.first?.clipsToBounds = true
-            searchButtonGroup.first?.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
             findInPageButton.layer.cornerRadius = UIConstants.layout.suggestionViewCornerRadius
             findInPageButton.clipsToBounds =  true
             findInPageButton.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
@@ -231,7 +228,7 @@ class OverlayView: UIView {
     
     func setColorstToSearchButtons() {
         for button in searchButtonGroup {
-            button.backgroundColor = isIpadView ? .systemBackground.withAlphaComponent(0.95) : .foundation
+            button.backgroundColor = isIpadView ? .secondarySystemBackground.withAlphaComponent(0.95) : .foundation
             button.highlightedBackgroundColor = UIColor(named: "SearchSuggestionButtonHighlight")
         }
     }
@@ -327,12 +324,7 @@ class OverlayView: UIView {
     private func updateSearchButtons() {
         for index in 0..<self.searchButtonGroup.count {
             let hasSuggestionInIndex = index < self.searchSuggestions.count
-            if isIpadView {
-                let show = searchSuggestionsPrompt.isHidden && Settings.getToggle(.enableSearchSuggestions) && hasSuggestionInIndex
-                self.searchButtonGroup[index].isHidden = !show
-            } else {
-                self.searchButtonGroup[index].isHidden = !hasSuggestionInIndex
-            }
+            self.searchButtonGroup[index].isHidden = !hasSuggestionInIndex
             if hasSuggestionInIndex {
                 self.setAttributedButtonTitle(
                     phrase: self.searchSuggestions[index],
@@ -405,13 +397,17 @@ class OverlayView: UIView {
         guard isIpadView  else {
             return
         }
-        if shouldShowFindInPage {
-            searchButtonGroup.last?.layer.maskedCorners = []
+        topBorder.backgroundColor = .clear
+        searchButtonGroup.last?.layer.cornerRadius = UIConstants.layout.suggestionViewCornerRadius
+        searchButtonGroup.last?.clipsToBounds =  true
+        searchButtonGroup.first?.layer.cornerRadius = UIConstants.layout.suggestionViewCornerRadius
+        searchButtonGroup.first?.clipsToBounds = true
+        
+        if searchSuggestions.count == 1 {
+            searchButtonGroup.first?.layer.maskedCorners = findInPageButton.isHidden ? [.layerMaxXMinYCorner, .layerMinXMinYCorner, .layerMaxXMaxYCorner, .layerMinXMaxYCorner] : [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         } else {
-            topBorder.backgroundColor = .clear
-            searchButtonGroup.last?.layer.cornerRadius = UIConstants.layout.suggestionViewCornerRadius
-            searchButtonGroup.last?.clipsToBounds =  true
-            searchButtonGroup.last?.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+            searchButtonGroup.first?.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+            searchButtonGroup.last?.layer.maskedCorners = findInPageButton.isHidden ? [.layerMaxXMaxYCorner, .layerMinXMaxYCorner] : []
         }
     }
     
