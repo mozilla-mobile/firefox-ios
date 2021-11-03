@@ -16,4 +16,8 @@ public struct AccessibilityIdentifiers {
     struct BottomToolbar {
         static let settingsMenuButton = "TabToolbar.menuButton"
     }
+
+    struct TabTray {
+        static let filteredTabs = "filteredTabs"
+    }
 }

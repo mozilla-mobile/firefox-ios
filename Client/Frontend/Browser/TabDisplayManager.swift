@@ -458,7 +458,7 @@ extension TabDisplayManager: UICollectionViewDataSource {
             view.title = .TabTrayOtherTabsSectionHeader
             view.titleLabel.font = .systemFont(ofSize: GroupedTabCellProperties.CellUX.titleFontSize, weight: .semibold)
             view.moreButton.isHidden = true
-            view.titleLabel.accessibilityIdentifier = GridTabViewController.filteredTabsAccessibilityIdentifier
+            view.titleLabel.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.filteredTabs
             
             return view
         }

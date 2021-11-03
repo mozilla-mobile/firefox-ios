@@ -39,7 +39,6 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     var tabDisplayManager: TabDisplayManager!
     var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TabCell.Identifier
     static let independentTabsHeaderIdentifier = "IndependentTabs"
-    static let filteredTabsAccessibilityIdentifier = "filteredTabs"
     var otherBrowsingModeOffset = CGPoint.zero
     // Backdrop used for displaying greyed background for private tabs
     var webViewContainerBackdrop: UIView!
@@ -165,7 +164,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         guard notification.name == .DynamicFontChanged else { return }
     }
 
-// MARK: View Controller Callbacks
+    // MARK: View Controller Callbacks
     override func viewDidLoad() {
         super.viewDidLoad()
         tabManager.addDelegate(self)
