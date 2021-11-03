@@ -91,6 +91,7 @@
         "ReaderViewTest\/testAddToReaderListOptions()",
         "ReaderViewTest\/testAddToReadingList()",
         "ReaderViewTest\/testLoadReaderContent()",
+        "SaveLoginTest",
         "SaveLoginTest\/testCreateLoginManually()",
         "SaveLoginTest\/testEditOneLoginEntry()",
         "SaveLoginTest\/testSaveLogin()",

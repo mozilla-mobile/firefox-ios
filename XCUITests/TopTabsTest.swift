@@ -249,14 +249,16 @@ class TopTabsTest: BaseTestCase {
     
     // Smoketest
     func testOpenNewTabLandscape() {
-        navigator.goto(URLBarOpen)
-        navigator.back()
-        navigator.goto(NewTabScreen)
+        navigator.performAction(Action.CloseURLBarOpen)
         XCUIDevice.shared.orientation = .landscapeLeft
-        // Verify the '+' icon is shown
-        waitForExistence(app.buttons["TabToolbar.addNewTabButton"], timeout: 15)
-        // Open a new tab using it
-        app.buttons["TabToolbar.addNewTabButton"].tap()
+        // Verify the '+' icon is shown and open a tab with it
+        if iPad() {
+            waitForExistence(app.buttons["TopTabsViewController.newTabButton"])
+            app.buttons["TopTabsViewController.newTabButton"].tap()
+        } else {
+            waitForExistence(app.buttons["TabToolbar.addNewTabButton"], timeout: 15)
+            app.buttons["TabToolbar.addNewTabButton"].tap()
+        }
         app.typeText("google.com\n")
         waitUntilPageLoad()
 

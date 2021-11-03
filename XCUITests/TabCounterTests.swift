@@ -65,8 +65,8 @@ class TabCounterTests: BaseTestCase {
         XCTAssertEqual("1", tabsOpen as? String)
 
         navigator.goto(TabTray)
-        tabsOpen = app.buttons["1"].label
-        XCTAssertTrue(app.buttons["1"].isSelected)
+        tabsOpen = app.segmentedControls["navBarTabTray"].buttons.element(boundBy:0).label
+        XCTAssertTrue(app.segmentedControls.buttons.element(boundBy: 0).isSelected)
         XCTAssertEqual("1", tabsOpen as? String)
     }
 }

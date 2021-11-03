@@ -52,7 +52,8 @@ class ActivityStreamTest: BaseTestCase {
     }
 
     func testTopSites2Add() {
-        navigator.goto(URLBarOpen)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 10)
+        navigator.performAction(Action.CloseURLBarOpen)
         if iPad() {
             checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 12)
         } else {
@@ -91,9 +92,18 @@ class ActivityStreamTest: BaseTestCase {
 
     func testTopSitesRemoveAllExceptPinnedClearPrivateData() {
         waitForExistence(app.cells["TopSitesCell"].cells.element(boundBy: 0), timeout: 10)
-        navigator.openURL("mozilla.org")
+        if iPad() {
+            navigator.performAction(Action.CloseURLBarOpen)
+            app.textFields.element(boundBy: 0).tap()
+            app.typeText("mozilla.org\n")
+        } else {
+            navigator.openURL("mozilla.org")
+        }
         waitUntilPageLoad()
-        navigator.performAction(Action.PinToTopSitesPAM)
+        
+//        navigator.performAction(Action.PinToTopSitesPAM)
+        app.buttons["TabLocationView.pageOptionsButton"].tap()
+        app.cells["action_pin"].tap()
         // Workaround to have visited website in top sites
         navigator.performAction(Action.AcceptRemovingAllTabs)
         navigator.performAction(Action.CloseURLBarOpen)
