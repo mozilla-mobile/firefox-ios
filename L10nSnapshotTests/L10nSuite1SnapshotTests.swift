@@ -223,7 +223,6 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 10)
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        app.tables.cells.element(boundBy: 0).buttons["closeTabButtonTabTray"].tap()
         snapshot("PrivateBrowsingTabsEmptyState-01")
     }
 }
