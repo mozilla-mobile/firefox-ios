@@ -271,6 +271,12 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "Το «%@» θα ήθελε πρόσβαση στις φωτογραφίες σας";
 
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "Η σύνδεση δεν είναι ασφαλής";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "Η σύνδεση είναι ασφαλής";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "Έκδοση για υπολογιστές";
 
@@ -324,6 +330,9 @@
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Η Mozilla προσπαθεί να συλλέγει μόνο όσα χρειάζεται για να παρέχει και να βελτιώνει το %@ για όλους.";
+
+/* Title for section in settings menu */
+"Settings.general" = "Γενικά";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Μάθετε περισσότερα.";
@@ -442,6 +451,9 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Αποστολή δεδομένων χρήσης";
 
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "Μελέτες";
+
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Χρήση Touch ID για ξεκλείδωμα";
 
@@ -526,6 +538,12 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "URL για άνοιγμα";
 
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "Ενεργοποίηση Face ID";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "Ενεργοποίηση Touch ID";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Χρήση Touch ID για επιστροφή στο %@";
 
@@ -540,6 +558,9 @@
 
 /* Text for tracking protection screen showing the connection is secure */
 "trackingProtection.connectionSecureLabel" = "Η σύνδεση είναι ασφαλής";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"trackingProtection.connectionVerifiedByLabel" = "Επαλήθευση από %@";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Ιχνηλάτες περιεχομένου";

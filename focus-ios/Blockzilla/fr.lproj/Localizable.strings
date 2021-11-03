@@ -271,6 +271,9 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "« %@ » souhaite accéder à vos photos";
 
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "Connexion non sécurisée";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "Voir la version ordinateur";
 
