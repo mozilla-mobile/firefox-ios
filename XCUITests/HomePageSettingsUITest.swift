@@ -36,8 +36,8 @@ class HomePageSettingsUITests: BaseTestCase {
         XCTAssertTrue(app.tables.cells["Firefox Home"].exists)
         XCTAssertTrue(app.tables.cells["HomeAsCustomURL"].exists)
         waitForExistence(app.tables.cells["TopSitesRows"])
-        XCTAssertEqual(app.tables.cells["TopSitesRows"].label as String, "Top Sites, Rows: 2")
-        XCTAssertTrue(app.tables.switches["ASPocketStoriesVisible"].isEnabled)
+        XCTAssertEqual(app.tables.cells["TopSitesRows"].label as String, "Shortcuts, Rows: 2")
+        XCTAssertTrue(app.cells.switches["Recommended by Pocket"].exists)
     }
 
     func testTyping() {
@@ -139,10 +139,8 @@ class HomePageSettingsUITests: BaseTestCase {
             //Test each of the custom row options from 1-4
             for n in 1...4 {
                 userState.numTopSitesRows = n
-                // Workaround for new Xcode11/iOS13
                 navigator.goto(HomeSettings)
-                app.tables.cells.element(boundBy: 2).tap()
-                waitForExistence(app.cells.staticTexts["1"], timeout: 3)
+                app.tables.cells.element(boundBy: 0).tap()
                 app.tables.cells.element(boundBy: n-1).tap()
                 navigator.goto(NewTabScreen)
                 app.buttons["Done"].tap()
@@ -155,7 +153,7 @@ class HomePageSettingsUITests: BaseTestCase {
             for n in 1...4 {
                 userState.numTopSitesRows = n
                 navigator.performAction(Action.SelectTopSitesRows)
-                XCTAssertEqual(app.tables.cells["TopSitesRows"].label as String, "Top Sites, Rows: " + String(n))
+                XCTAssertEqual(app.tables.cells["TopSitesRows"].label as String, "Shortcuts, Rows: " + String(n))
                 navigator.performAction(Action.GoToHomePage)
                 navigator.performAction(Action.CloseURLBarOpen)
                 navigator.nowAt(NewTabScreen)
