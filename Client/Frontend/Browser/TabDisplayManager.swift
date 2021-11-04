@@ -695,33 +695,36 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
 }
 
 extension TabDisplayManager: TabEventHandler {
+
     private func updateCellFor(tab: Tab, selectedTabChanged: Bool) {
         let selectedTab = tabManager.selectedTab
 
         updateWith(animationType: .updateTab) { [weak self] in
             guard let index = self?.dataStore.index(of: tab) else { return }
 
-            var items = [IndexPath]()
-            items.append(IndexPath(row: index, section: 0))
+            var indexPaths = [IndexPath]()
+            indexPaths.append(IndexPath(row: index, section: TabDisplaySection.regularTabs.rawValue))
 
             if selectedTabChanged {
                 self?.tabDisplayer?.focusSelectedTab()
                 // Check if the selected tab has changed. This method avoids relying on the state of the "previous" selected tab,
                 // instead it iterates the displayed tabs to see which appears selected.
                 // See also `didSelectedTabChange` for more info on why this is a good approach.
-                if let selectedTab = selectedTab, let previousSelectedIndex = self?.indexOfCellDrawnAsPreviouslySelectedTab(currentlySelected: selectedTab) {
-                    items.append(previousSelectedIndex)
+                if let selectedTab = selectedTab, let previousSelectedIndexPath = self?.indexOfCellDrawnAsPreviouslySelectedTab(currentlySelected: selectedTab) {
+                    indexPaths.append(previousSelectedIndexPath)
                 }
             }
 
-            for item in items {
-                if let cell = self?.collectionView.cellForItem(at: item), let tab = self?.dataStore.at(item.row) {
-                    let isSelected = (item.row == index && tab == self?.tabManager.selectedTab)
-                    if let tabCell = cell as? TabCell {
-                        tabCell.configureWith(tab: tab, is: isSelected)
-                    } else if let tabCell = cell as? TopTabCell {
-                        tabCell.configureWith(tab: tab, isSelected: isSelected)
-                    }
+            for indexPath in indexPaths {
+                guard let cell = self?.collectionView.cellForItem(at: indexPath), let tab = self?.dataStore.at(indexPath.row) else {
+                    return
+                }
+
+                let isSelected = (indexPath.row == index && tab == self?.tabManager.selectedTab)
+                if let tabCell = cell as? TabCell {
+                    tabCell.configureWith(tab: tab, is: isSelected)
+                } else if let tabCell = cell as? TopTabCell {
+                    tabCell.configureWith(tab: tab, isSelected: isSelected)
                 }
             }
         }
