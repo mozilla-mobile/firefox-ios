@@ -770,7 +770,7 @@ extension TabDisplayManager: TabManagerDelegate {
 
         updateWith(animationType: .addTab) { [unowned self] in
             // place new tab at the end by default unless it has been opened from parent tab
-            var indexToPlaceTab = dataStore.count - 1 > 0 ? dataStore.count - 1 : 0
+            var indexToPlaceTab = dataStore.count - 1 > 0 ? dataStore.count : 0
 
             // open a link from website next to it
             if placeNextToParentTab, let selectedTabUUID = tabManager.selectedTab?.tabUUID {
