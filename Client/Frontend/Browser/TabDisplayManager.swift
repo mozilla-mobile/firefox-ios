@@ -333,10 +333,10 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
 
     // The collection is showing this Tab as selected
     private func indexOfCellDrawnAsPreviouslySelectedTab(currentlySelected: Tab) -> IndexPath? {
-        for i in 0..<collectionView.numberOfItems(inSection: TabDisplaySection.regularTabs.rawValue) {
-            if let cell = collectionView.cellForItem(at: IndexPath(row: i, section: TabDisplaySection.regularTabs.rawValue)) as? TopTabCell, cell.selectedTab {
+        for i in 0..<collectionView.numberOfItems(inSection: 0) {
+            if let cell = collectionView.cellForItem(at: IndexPath(row: i, section: 0)) as? TopTabCell, cell.selectedTab {
                 if let tab = dataStore.at(i), tab != currentlySelected {
-                    return IndexPath(row: i, section: TabDisplaySection.regularTabs.rawValue)
+                    return IndexPath(row: i, section: 0)
                 } else {
                     return nil
                 }
@@ -361,8 +361,8 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
                 // Avoid calling with evenIfHidden=true, as it can cause a blink effect as the cell is updated.
                 // The cause of the blinking effect is unknown (and unusual).
                 var indexPaths = [IndexPath]()
-                for i in 0..<self.collectionView.numberOfItems(inSection: TabDisplaySection.groupedTabs.rawValue) {
-                    indexPaths.append(IndexPath(item: i, section: TabDisplaySection.groupedTabs.rawValue))
+                for i in 0..<self.collectionView.numberOfItems(inSection: 0) {
+                    indexPaths.append(IndexPath(item: i, section: 0))
                 }
                 self.collectionView.reloadItems(at: indexPaths)
             }
