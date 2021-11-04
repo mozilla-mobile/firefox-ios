@@ -271,6 +271,12 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "A „%@” szeretne hozzáférni a fényképeihez";
 
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "A kapcsolat nem biztonságos";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "A kapcsolat biztonságos";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "Asztali oldal kérése";
 
@@ -324,6 +330,12 @@
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "A Mozilla arra törekszik, hogy csak azt gyűjtse, ami a %@ fejlesztéséhez és támogatásához szükséges.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextStudies" = "A %@ időről időre tanulmányokat telepíthet és futtathat.";
+
+/* Title for section in settings menu */
+"Settings.general" = "Általános";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Tudjon meg többet.";
@@ -442,6 +454,9 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Használati adatok elküldése";
 
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "Tanulmányok";
+
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Touch ID használata az alkalmazás kinyitásához";
 
@@ -461,7 +476,7 @@
 "Settings.whatsNewTitle" = "Újdonságok";
 
 /* Title for settings section to enable different Siri Shortcuts. */
-"Settinsg.siriShortcutsTitle" = "SIRI GYORS PARANCSOK";
+"Settinsg.siriShortcutsTitle" = "SIRI PARANCSOK";
 
 /* Text for a share button */
 "share" = "Megosztás";
@@ -493,6 +508,9 @@
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Megnyitás a Chrome-ban";
 
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "Megnyitás az alapértelmezett böngészőben";
+
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Megnyitás a Firefoxban";
 
@@ -509,7 +527,7 @@
 "Siri.addTo" = "Hozzáadása a Sirihez";
 
 /* Label for button to edit the Siri phrase or delete the Siri functionality. */
-"Siri.editOpenUrl" = "Gyors parancs újrarögzítése vagy törlése";
+"Siri.editOpenUrl" = "Parancs újrarögzítése vagy törlése";
 
 /* Title of option in settings to set up Siri to erase */
 "Siri.erase" = "Törlés";
@@ -526,6 +544,57 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "Megnyitandó URL";
 
+/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.Biometric.Title" = "%@ zárolása, ha egy webhely nyitva van:";
+
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "Face ID bekapcsolása";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "Touch ID bekapcsolása";
+
+/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Release.Description" = "További információk erről és a %@ egyéb frissítéseiről.";
+
+/* Text for a label that indicates the title for release tip. */
+"Tip.Release.Title" = "Nocsak, friss, új külsőt kaptunk!";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "Oldalműveletek > Asztali webhely kérése";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "Egy webhely teljes, asztali verzióját szeretné?";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "%@ nyomkövető blokkolva eddig";
+
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "Ön böngészik. A %@ blokkol.";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "Válassza a Hozzáadás a parancsokhoz lehetőséget a %@ menüben";
+
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "Hozzon létre parancsokat a leggyakrabban felkeresett webhelyekhez:";
+
+/* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriErase.Description" = "Siri parancs hozzáadása";
+
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.SiriErase.Title" = "„Siri, töröld a %@ munkamenetet.”";
+
+/* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriFavorite.Description" = "Siri parancs hozzáadása";
+
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "„Siri, nyisd meg a kedvenc oldalamat.”";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "Próbálja kikapcsolni a Követés elleni védelmet";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "Hiányzik a webhely tartalma, vagy furcsán viselkedik?";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Használja a Touch ID-t a %@ böngészőbe visszatéréshez";
 
@@ -540,6 +609,9 @@
 
 /* Text for tracking protection screen showing the connection is secure */
 "trackingProtection.connectionSecureLabel" = "A kapcsolat biztonságos";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"trackingProtection.connectionVerifiedByLabel" = "Ellenőrizte: %@";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Tartalomkövetők";

@@ -5,13 +5,13 @@
 "About.missionLabel" = "%@ es producite per Mozilla. Nostre mission es promover un internet salubre e libere.";
 
 /* Label on About screen */
-"About.privateBullet1" = "Recerca e naviga justo intra le application";
+"About.privateBullet1" = "Recerca e naviga directemente in le application";
 
 /* Label on About screen */
-"About.privateBullet2" = "Bloca le traciatores (o modifica le parametros pro los autorisar)";
+"About.privateBullet2" = "Bloca traciatores (o modifica le parametros pro permitter los)";
 
 /* Label on About screen */
-"About.privateBullet3" = "Cancella pro eliminar le cookies e le chronologias de recerca e de navigation";
+"About.privateBullet3" = "Rader pro eliminar le cookies e le chronologia de recerca e de navigation";
 
 /* Label on About screen */
 "About.privateBulletHeader" = "Usa lo como navigator private:";
@@ -20,16 +20,16 @@
 "About.rowHelp" = "Adjuta";
 
 /* Link to Privacy Notice in the About screen */
-"About.rowPrivacy" = "Notification de confidentialitate";
+"About.rowPrivacy" = "Aviso de confidentialitate";
 
 /* Label for row in About screen */
 "About.rowRights" = "Tu derectos";
 
 /* Label on About screen */
-"About.safariBullet1" = "Bloca le traciatores pro un melior confidentialitate";
+"About.safariBullet1" = "Bloca traciatores pro melior confidentialitate";
 
 /* Label on About screen */
-"About.safariBullet2" = "Bloca le discargamento de characteres web pro reducer le dimension del pagina";
+"About.safariBullet2" = "Bloca typos de litteras web pro reducer le peso de paginas";
 
 /* Label on About screen */
 "About.safariBulletHeader" = "Usa lo como extension de Safari:";
@@ -59,7 +59,7 @@
 "Autocomplete.addCustomUrl" = "Adder URL personalisate";
 
 /* Label for error state when entering an invalid URL */
-"Autocomplete.addCustomUrlError" = "Clicca duple le URL que tu insereva.";
+"Autocomplete.addCustomUrlError" = "Re-verifica le URL que tu ha inserite.";
 
 /* A label displaying an example URL */
 "Autocomplete.addCustomUrlExample" = "Exemplo: example.com";
@@ -68,31 +68,31 @@
 "Autocomplete.addCustomUrlLabel" = "URL a adder";
 
 /* Placeholder for the input field to add a custom URL */
-"Autocomplete.addCustomUrlPlaceholder" = "Colla o insere le URL";
+"Autocomplete.addCustomUrlPlaceholder" = "Colla o insere un URL";
 
 /* Label for button to add a custom URL with the + prefix */
 "Autocomplete.addCustomUrlWithPlus" = "+ Adder URL personalisate";
 
 /* Description for adding and managing custom autocomplete URLs */
-"Autocomplete.customDescriptoin" = "Adde e gere le complementamento personalisate del URLs.";
+"Autocomplete.customDescriptoin" = "Adder e gerer le URLs personalisate de auto-completamento.";
 
 /* Label for button taking you to your custom Autocomplete URL list */
 "Autocomplete.customLabel" = "URLs personalisate";
 
 /* Title for the default URL list section */
-"Autocomplete.customTitle" = "LISTA del URLs PERSONALISATE";
+"Autocomplete.customTitle" = "LISTA DE URLs PERSONALISATE";
 
 /* Label for toast alerting a custom URL has been added */
 "Autocomplete.customUrlAdded" = "Nove URL personalisate addite.";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"Autocomplete.defaultDescriptoin" = "Activa pro consentir a %@ de auto-completar plus de 450 URLs popular in le barra de adresses.";
+"Autocomplete.defaultDescriptoin" = "Activa pro facer %@ auto-completar plus de 450 URLs popular in le barra de adresse.";
 
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.defaultLabel" = "Auto-completar";
 
 /* Title for the default URL list section */
-"Autocomplete.defaultTitle" = "LISTA del URLs PREDEFINITE";
+"Autocomplete.defaultTitle" = "LISTA DE URLs PREDEFINITE";
 
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Disactivate";
@@ -107,13 +107,13 @@
 "Autocomplete.enabled" = "Activate";
 
 /* Label for button taking you to your custom Autocomplete URL list */
-"Autocomplete.manageSites" = "Gerer le sitos";
+"Autocomplete.manageSites" = "Gerer sitos";
 
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.mySites" = "Mi sitos";
 
 /* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"Autocomplete.mySitesDesc" = "Activar pro que %@ completa automaticamente te URLs favorite.";
+"Autocomplete.mySitesDesc" = "Activa pro facer %@ auto-completar tu URLs favorite.";
 
 /* Label for enabling or disabling top sites */
 "Autocomplete.topSites" = "Sitos popular";
@@ -128,10 +128,10 @@
 "Browser.backLabel" = "Retro";
 
 /* Copy URL button in URL long press menu */
-"Browser.copyAddressLabel" = "Copiar le adresse";
+"Browser.copyAddressLabel" = "Copiar adresse";
 
 /* Toast displayed after a URL has been copied to the clipboard */
-"browser.copyAddressToast" = "URL copiate in le planchetta";
+"browser.copyAddressToast" = "URL copiate al area de transferentia";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Copiar";
@@ -152,7 +152,7 @@
 "Browser.shareLabel" = "Compartir";
 
 /* Accessibility label for the stop button */
-"Browser.stopLabel" = "Cessar";
+"Browser.stopLabel" = "Stoppar";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "Seliger le barra de adresse";
@@ -161,28 +161,28 @@
 "Cancel" = "Cancellar";
 
 /* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "Ligamine que tu ha copiate: %@";
+"contextMenu.clipboardLink" = "Ligamine copiate: %@";
 
 /* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "Copiar le imagine";
+"contextMenu.copyImageTitle" = "Copiar imagine";
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "Copiar le ligamine";
+"contextMenu.copyLink" = "Copiar ligamine";
 
 /* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "Ligamine que tu ha copiate:";
+"contextMenu.linkCopied" = "Ligamine copiate:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "Salvar le imagine";
+"contextMenu.saveImageTitle" = "Salvar imagine";
 
 /* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "Compartir le ligamine";
+"contextMenu.shareLinkTitle" = "Compartir ligamine";
 
 /* Label on button to complete edits */
 "Done" = "Facite";
 
 /* Label on button to allow edits */
-"Edit" = "Editar";
+"Edit" = "Modificar";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Retentar";
@@ -191,7 +191,7 @@
 "ExternalAppLink.cancelTitle" = "Cancellar";
 
 /* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
-"ExternalAppLink.messageTitle" = "%@ vole aperir un altere App";
+"ExternalAppLink.messageTitle" = "%@ vole aperir un altere application";
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "Aperir";
@@ -200,37 +200,37 @@
 "externalAppLinkWithAppName.messageTitle" = "%1$@ vole aperir %2$@";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.callButton" = "Appellar";
+"ExternalLink.callButton" = "Telephonar";
 
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.cancelButton" = "Cancellar";
 
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.emailButton" = "Email";
+"ExternalLink.emailButton" = "E-mail";
 
 /* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.messageTitleWithPlaceholder" = "Tu va exir de %@.";
+"ExternalLink.messageTitleWithPlaceholder" = "Tu quita ora %@.";
 
 /* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openAppStoreButton" = "Aperir le Magazin del applicationes";
+"ExternalLink.openAppStoreButton" = "Aperir App Store";
 
 /* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"ExternalLink.openAppStoreTitle" = "%@ vole aperir le Magazin del applicationes.";
+"ExternalLink.openAppStoreTitle" = "%@ vole aperir App Store.";
 
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openMapsButton" = "Aperi Maps";
+"ExternalLink.openMapsButton" = "Aperir Maps";
 
 /* Accessibility label for done button in Find in Page Toolbar. */
-"FindInPage.Done" = "Finite de trovar in pagina";
+"FindInPage.Done" = "Concluder le recerca in pagina";
 
 /* Accessibility label for next result button in Find in Page Toolbar. */
-"FindInPage.NextResult" = "Trovar le proxime in le pagina";
+"FindInPage.NextResult" = "Cercar proxime in pagina";
 
 /* Accessibility label for previous result button in Find in Page Toolbar. */
-"FindInPage.PreviousResult" = "Trovar le previe in le pagina";
+"FindInPage.PreviousResult" = "Cercar previe in pagina";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.lastSlide.buttonLabel" = "De accordo!";
+"FirstRun.lastSlide.buttonLabel" = "Ben, comprendite!";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "Bloca automaticamente le traciatores in linea durante que tu naviga. Pois elimina con un tocco le paginas visitate, recercas, cookies e contrasignos de tu apparato.";
@@ -239,13 +239,13 @@
 "FirstRun.messageLabelTagline" = "Naviga sin sentir te observate.";
 
 /* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
-"Focus.handoffSyncing" = "Synchronisation de Apple Handoff";
+"Focus.handoffSyncing" = "Apple Handoff ora synchronisa…";
 
 /* First label for product description on the home screen */
 "Home.descriptionLabel1" = "Navigation private automatic.";
 
 /* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "Naviga. Elimina. Repete.";
+"Home.descriptionLabel2" = "Naviga. Rade. Repete.";
 
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Clauder";
@@ -263,13 +263,19 @@
 "Open.Safari" = "Safari";
 
 /* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "Isto te permitte de salvar le imagines in tu rolo de camera";
+"photosPermission.description" = "Isto te permitte salvar imagines in tu rolo de camera";
 
 /* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "Aperir le parametros";
+"photosPermission.openSettings" = "Aperir parametros";
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” desira acceder a tu photos";
+
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "Le connexion non es secur";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "Le connexion es secur";
 
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "Requestar sito de scriptorio";
@@ -290,7 +296,7 @@
 "Save" = "Salvar";
 
 /* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
-"SearchEngine.addEngineError" = "Illo non functiona. Prova a supplantar le termino de recerca con isto: %s.";
+"SearchEngine.addEngineError" = "Isto non functiona. Tenta reimplaciar le termino de recerca per isto: %s.";
 
 /* Label for disable option on search suggestions prompt */
 "SearchSuggestions.promptDisable" = "No";
@@ -299,22 +305,22 @@
 "SearchSuggestions.promptEnable" = "Si";
 
 /* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
-"SearchSuggestions.promptMessage" = "Pro obtener suggestiones, %@ debe inviar lo que tu scribe in le barra de adresses verso le motor de recerca.";
+"SearchSuggestions.promptMessage" = "Pro obtener suggestiones, %@ debe inviar lo que tu scribe in le barra de adresse al motor de recerca.";
 
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "Monstrar le suggestiones de recerca?";
 
 /* Title for the URL Autocomplete row */
-"Settings.autocompleteSection" = "Auto-completamento del URL";
+"Settings.autocompleteSection" = "Auto-completar URLs";
 
 /* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Blocar altere traciatores de contento pote render mal-functionate alcun videos e paginas web.";
+"Settings.blockOtherMessage" = "Blocar traciatores de contento pote impedir le functionamento correcte de alcun videos e paginas web.";
 
 /* Button label for declining Content blocker alert */
 "Settings.blockOtherNo2" = "Cancellar";
 
 /* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes2" = "Blocar le traciatores de contento";
+"Settings.blockOtherYes2" = "Blocar traciatores de contento";
 
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "Obscur";
@@ -324,6 +330,12 @@
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla se effortia a colliger solmente le informationes necessari pro fornir e meliorar %@ pro totes.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextStudies" = "%@ pote installar e conducer studios de tempore in tempore.";
+
+/* Title for section in settings menu */
+"Settings.general" = "General";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Saper plus.";
@@ -335,7 +347,7 @@
 "Settings.manualTheme" = "Manual";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
-"Settings.rate" = "Valuta %@";
+"Settings.rate" = "Recenser %@";
 
 /* Label for Safari integration section */
 "Settings.safariTitle" = "INTEGRATION CON SAFARI";
@@ -353,7 +365,7 @@
 "Settings.Search.AddSearchEngineTitle" = "Adder un motor de recerca";
 
 /* Header for rows of installed search engines */
-"Settings.Search.InstalledSearchEngines" = "MOTORES de RECERCA INSTALLATE";
+"Settings.Search.InstalledSearchEngines" = "MOTORES DE RECERCA INSTALLATE";
 
 /* Label for input field for the name of the search engine to be added */
 "Settings.Search.NameToDisplay" = "Nomine a monstrar";
@@ -368,10 +380,10 @@
 "Settings.Search.SearchEngineName" = "Nomine del motor de recerca";
 
 /* Label for input of search engine template */
-"Settings.Search.SearchTemplate" = "Fila de characteres de recerca a usar";
+"Settings.Search.SearchTemplate" = "Catena de recerca a usar";
 
 /* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Exemplo: searchengineexample.com/search/?q=%s";
+"settings.Search.SearchTemplateExample" = "Exemplo: motorderecerca.example.com/search/?q=%s";
 
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Colla o insere le catena de recerca. Si necessari, reimplacia le termino de recerca per: %s.";
@@ -392,7 +404,7 @@
 "Settings.sectionMozilla" = "MOZILLA";
 
 /* Section label for performance toggles */
-"Settings.sectionPerformance" = "PERFORMANCES";
+"Settings.sectionPerformance" = "RENDIMENTO";
 
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "CONFIDENTIALITATE";
@@ -413,10 +425,10 @@
 "Settings.toggleBlockAds2" = "Publicitate";
 
 /* Label for the checkbox to toggle Analytics trackers */
-"Settings.toggleBlockAnalytics2" = "Analyse datos";
+"Settings.toggleBlockAnalytics2" = "Analytica";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Blocar le typos de character de web";
+"Settings.toggleBlockFonts" = "Blocar typos de litteras web";
 
 /* Label for the checkbox to toggle Other trackers */
 "Settings.toggleBlockOther2" = "Contento";
@@ -434,13 +446,16 @@
 "Settings.toggleHomeScreenTips" = "Monstrar le suggestiones del pagina principal";
 
 /* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "Pote causar problemas a alcun videos e paginas web";
+"Settings.toggleOtherSubtitle" = "Pote impedir le functionamento de alcun videos e paginas web";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Inviar datos de uso";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "Studios";
 
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Usar Touch ID pro disblocar le application";
@@ -461,19 +476,19 @@
 "Settings.whatsNewTitle" = "Novas";
 
 /* Title for settings section to enable different Siri Shortcuts. */
-"Settinsg.siriShortcutsTitle" = "SIRI VIAS BREVE";
+"Settinsg.siriShortcutsTitle" = "ACCESSOS DIRECTE DE SIRI";
 
 /* Text for a share button */
 "share" = "Compartir";
 
 /* Text for the share menu option when a user wants to add the site to Shortcuts */
-"ShareMenu.AddToShortcuts" = "Adder al vias breve";
+"ShareMenu.AddToShortcuts" = "Adder al accessos directe";
 
 /* Text for the share menu when a user wants to copy a URL. */
-"shareMenu.copyAddress" = "Copiar le adresse";
+"shareMenu.copyAddress" = "Copiar adresse";
 
 /* Text for the share menu option when a user wants to open the find in page menu */
-"ShareMenu.FindInPage" = "Trovar in le pagina";
+"ShareMenu.FindInPage" = "Cercar in pagina";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Discarga le application Firefox";
@@ -482,7 +497,7 @@
 "ShareMenu.PageActions" = "Actiones del pagina";
 
 /* Text for the share menu option when a user wants to remove the site from Shortcuts */
-"ShareMenu.RemoveFromShortcuts" = "Remover del vias breve";
+"ShareMenu.RemoveFromShortcuts" = "Remover del accessos directe";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Requestar sito de scriptorio";
@@ -493,6 +508,9 @@
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Aperir in Chrome";
 
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "Aperir in navigator predefinite";
+
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Aperir in Firefox";
 
@@ -500,7 +518,7 @@
 "ShareMenu.SharePage" = "Compartir le pagina con...";
 
 /* Text for the long press on a shortcut option in context menu. */
-"ShortcutView.RemoveFromShortcuts" = "Remover del vias breve";
+"ShortcutView.RemoveFromShortcuts" = "Remover del accessos directe";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Adder";
@@ -509,25 +527,76 @@
 "Siri.addTo" = "Adder a Siri";
 
 /* Label for button to edit the Siri phrase or delete the Siri functionality. */
-"Siri.editOpenUrl" = "Re-registra o dele le instantaneo";
+"Siri.editOpenUrl" = "Re-registrar o deler le accesso directe";
 
 /* Title of option in settings to set up Siri to erase */
-"Siri.erase" = "Eliminar";
+"Siri.erase" = "Rader";
 
 /* Title of option in settings to set up Siri to erase and then open the app. */
-"Siri.eraseAndOpen" = "Eliminar e aperir";
+"Siri.eraseAndOpen" = "Rader e aperir";
 
 /* Title for screen to add a favorite URL to Siri. */
-"Siri.favoriteUrl" = "Aperir le sito preferite";
+"Siri.favoriteUrl" = "Aperir sito favorite";
 
 /* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
-"Siri.openURL" = "Aperir le sito preferite";
+"Siri.openURL" = "Aperir sito favorite";
 
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "URL a aperir";
 
+/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.Biometric.Title" = "Blocar %@ quando un sito es aperte:";
+
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "Activar Face ID";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "Activar Touch ID";
+
+/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Release.Description" = "Leger plus sur iste e altere actualisationes de %@.";
+
+/* Text for a label that indicates the title for release tip. */
+"Tip.Release.Title" = "Ma si, nos ha un look toto nove!";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "Actiones del pagina > Requestar sito de scriptorio";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "Vole vider le version de scriptorio complete de un sito?";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "%@ traciatores blocate usque ora";
+
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "Tu naviga. %@ bloca.";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "Selige “Adder al accessos directe” del menu %@";
+
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "Crear accessos directe al sitos que tu visita le plus:";
+
+/* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriErase.Description" = "Adder accesso directe de Siri";
+
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.SiriErase.Title" = "“Siri, rade mi session de %@.”";
+
+/* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriFavorite.Description" = "Adder accesso directe de Siri";
+
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "“Siri, aperi mi sito favorite.”";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "Tenta disactivar le protection anti-traciamento";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "Le sito ha contento mancante o se comporta estraniemente?";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
-"touchId.reason" = "Usa ID de tocco pro retornar a %@";
+"touchId.reason" = "Usa Touch ID pro retornar a %@";
 
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Traciatores publicitari";
@@ -539,25 +608,28 @@
 "trackingProtection.connectionNotSecureLabel" = "Le connexion non es secur";
 
 /* Text for tracking protection screen showing the connection is secure */
-"trackingProtection.connectionSecureLabel" = "Connexion secur";
+"trackingProtection.connectionSecureLabel" = "Le connexion es secur";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"trackingProtection.connectionVerifiedByLabel" = "Verificate per %@";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Traciatores de contento";
 
 /* text showing the tracking protection is disabled. */
-"trackingProtection.disabledLabel" = "Protection contra le traciamento disactivate";
+"trackingProtection.disabledLabel" = "Protection antitraciamento inactive";
 
 /* Title for the tracking settings page to change what trackers are blocked. */
-"trackingProtection.label" = "Protection contra le traciamento";
+"trackingProtection.label" = "Protection antitraciamento";
 
 /* Description/subtitle for the tracking protection label. */
-"trackingProtection.labelDescription" = "Disactivar isto pote remediar alicun problemas del sito";
+"trackingProtection.labelDescription" = "Disactivar isto pote resolver certe problemas de sitos";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Saper plus";
 
 /* Text for the button that closes the Shield Data and opens the regular Settings screen. */
-"trackingProtection.moreSettings" = "Altere parametros";
+"trackingProtection.moreSettings" = "Plus parametros";
 
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Traciatores social";
@@ -569,7 +641,7 @@
 "trackingProtection.statusOn" = "Protectiones es ACTIVE pro iste session";
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.toggleDescription1" = "Disactiva usque %@ es claudite o tocca ELIMINA.";
+"trackingProtection.toggleDescription1" = "Disactivar usque tu claude %@ o tocca RADER.";
 
 /* Text for the toggle that enables/disables tracking protection. */
 "trackingProtection.toggleLabel2" = "Protection antitraciamento reinfortiate";
@@ -584,7 +656,7 @@
 "trackingProtection.trackersHeader" = "Traciatores e scripts a blocar";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
-"URL.addToAutocompleteLabel" = "Adde ligamine pro autocompletar";
+"URL.addToAutocompleteLabel" = "Adder ligamine a auto-completar";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Cancellar";
@@ -593,13 +665,13 @@
 "URL.contextMenu" = "Collar e ir";
 
 /* Erase button in the URL bar */
-"URL.eraseButtonLabel" = "ELIMINA";
+"URL.eraseButtonLabel" = "RADER";
 
 /* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel2" = "Chronologia de navigation clarate";
+"URL.eraseMessageLabel2" = "Chronologia de navigation vacuate";
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
-"URL.findOnPageLabel" = "Trovar in le pagina: %@";
+"URL.findOnPageLabel" = "Cercar in pagina: %@";
 
 /* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
 "URL.paste" = "Collar";

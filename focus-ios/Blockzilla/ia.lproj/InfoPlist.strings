@@ -1,18 +1,18 @@
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Isto te permitte de prender e inviar photos.";
+"NSCameraUsageDescription" = "Isto te permitte prender e incargar photos.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Isto te lassa disblocar le application.";
+"NSFaceIDUsageDescription" = "Isto te permitte disblocar le application.";
 
 /* Privacy - Location When In Use Usage Description */
-"NSLocationWhenInUseUsageDescription" = "Le sitos web visitate pote requirer tu geolocalisation.";
+"NSLocationWhenInUseUsageDescription" = "Le sitos web que tu visita pote requestar tu position geographic.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Isto te permitte de prender e inviar videos.";
+"NSMicrophoneUsageDescription" = "Isto te permitte prender e incargar videos.";
 
 /* Privacy - Photo Library Additions Usage Description */
-"NSPhotoLibraryAddUsageDescription" = "Isto te permitte de salvar e inviar photos.";
+"NSPhotoLibraryAddUsageDescription" = "Isto te permitte salvar e incargar photos.";
 
 /* This is the menu item that appears when you long press the Focus icon on the phone home screen. */
-"UIApplicationShortcutItemTitle.EraseAndOpen" = "Eliminar e aperir";
+"UIApplicationShortcutItemTitle.EraseAndOpen" = "Rader e aperir";
 

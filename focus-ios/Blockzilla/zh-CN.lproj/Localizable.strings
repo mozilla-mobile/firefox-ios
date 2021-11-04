@@ -271,6 +271,12 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@”想要访问您的照片";
 
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "连接不安全";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "连接安全";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "要求桌面版网站";
 
@@ -324,6 +330,12 @@
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla 坚持仅收集用来为大众改进 %@ 所必需的数据。";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextStudies" = "%@ 可能会不时地安装并运行一些研究项目。";
+
+/* Title for section in settings menu */
+"Settings.general" = "常规";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "详细了解。";
@@ -442,6 +454,9 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "发送使用统计";
 
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "研究";
+
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "使用触控 ID 解锁应用";
 
@@ -479,7 +494,7 @@
 "ShareMenu.GetFirefox" = "获取 Firefox 应用";
 
 /* Title for the share menu where users can take actions for the current website they are on. */
-"ShareMenu.PageActions" = "页面动作";
+"ShareMenu.PageActions" = "页面操作";
 
 /* Text for the share menu option when a user wants to remove the site from Shortcuts */
 "ShareMenu.RemoveFromShortcuts" = "移除快捷方式";
@@ -492,6 +507,9 @@
 
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "在 Chrome 中打开";
+
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "在默认浏览器中打开";
 
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "在 Firefox 中打开";
@@ -526,6 +544,39 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "要打开的网址";
 
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "开启面容 ID";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "开启触控 ID";
+
+/* Text for a label that indicates the title for release tip. */
+"Tip.Release.Title" = "是的，我们的外观已焕然一新！";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "页面操作 > 要求桌面版网站";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "需浏览网站的完整桌面版本？";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "迄今已拦截跟踪器数量：%@";
+
+/* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriErase.Description" = "添加 Siri 快捷指令";
+
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.SiriErase.Title" = "“Siri，清除我的 %@ 会话。”";
+
+/* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriFavorite.Description" = "添加 Siri 快捷指令";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "请尝试关闭跟踪保护";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "网站内容缺失或交互异常？";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "使用触控 ID 返回 %@";
 
@@ -540,6 +591,9 @@
 
 /* Text for tracking protection screen showing the connection is secure */
 "trackingProtection.connectionSecureLabel" = "连接安全";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"trackingProtection.connectionVerifiedByLabel" = "验证者：%@";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "内容跟踪器";

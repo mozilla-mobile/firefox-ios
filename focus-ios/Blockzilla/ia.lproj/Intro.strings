@@ -1,5 +1,5 @@
 /* Description for the 'History' panel in the First Run tour. */
-"Intro.Slides.History.Description" = "Vacua tu integre chronologia del session de navigation, contrasignos, cookies, quando tu vole con un singule tocco.";
+"Intro.Slides.History.Description" = "Vacua tote le chronologia, contrasignos e cookies de tu session de navigation, quando tu vole, con un sol tocco.";
 
 /* Title for the third  panel 'History' in the First Run tour. */
 "Intro.Slides.History.Title" = "Tu chronologia es historia";
@@ -17,8 +17,8 @@
 "Intro.Slides.Skip.Button" = "Saltar";
 
 /* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description" = "Porta le navigation private al nivello superior. Bloca publicitates e altere contentos que pote traciar te per le sitos e relentar le tempore de carga del paginas.";
+"Intro.Slides.Welcome.Description" = "Porta le navigation private al nivello superior. Bloca publicitate e altere contento que pote traciar te inter sitos e relentar le cargamento de paginas.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
-"Intro.Slides.Welcome.Title" = "Reinfortia tu confidentialitate";
+"Intro.Slides.Welcome.Title" = "Reinfortia tu vita private";
 

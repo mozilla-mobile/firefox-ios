@@ -568,6 +568,9 @@
 /* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
 "Tip.ShareTrackers.Description" = "Заблоковано елементів стеження: %@";
 
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "Ви переглядаєте. %@ блокує.";
+
 /* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
 "Tip.Shortcuts.Description" = "Виберіть Додати до ярликів у меню %@";
 
@@ -577,8 +580,14 @@
 /* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
 "Tip.SiriErase.Description" = "Додайте ярлик Siri";
 
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.SiriErase.Title" = "“Siri, зітри мій сеанс %@.”";
+
 /* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
 "Tip.SiriFavorite.Description" = "Додати ярлик Siri";
+
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "“Siri, відкрий мій улюблений сайт.”";
 
 /* Text for a label that indicates the description for sites not working tip. */
 "Tip.SitesNotWorking.Description" = "Спробуйте вимкнути захист від стеження";
