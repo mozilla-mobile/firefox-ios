@@ -115,17 +115,20 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         app.buttons["urlBar-cancel"].tap()
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
-        app.cells["SignInToSync"].swipeUp()
-        waitForExistence(app.cells["Logins"], timeout: 3)
+        waitForExistence(app.cells["Logins"], timeout: 5)
         app.cells["Logins"].tap()
 
+        waitForExistence(app.buttons.firstMatch)
+        app.buttons["Continue"].tap()
+
         let passcodeInput = springboard.secureTextFields["Passcode field"]
+        waitForExistence(passcodeInput, timeout: 10)
         passcodeInput.tap()
         passcodeInput.typeText("foo\n")
 
         waitForExistence(app.tables["Login List"], timeout: 10)
         app.buttons.element(boundBy: 1).tap()
-        waitForExistence(app.tables["Add Credential"], timeout: 3)
+        waitForExistence(app.tables["Add Credential"], timeout: 10)
         snapshot("CreateLogin")
         app.tables["Add Credential"].cells.element(boundBy: 0).tap()
         app.keyboards.keys.element(boundBy: 3).tap()
