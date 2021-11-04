@@ -332,7 +332,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     }
 
     // The collection is showing this Tab as selected
-    func indexOfCellDrawnAsPreviouslySelectedTab(currentlySelected: Tab) -> IndexPath? {
+    private func indexOfCellDrawnAsPreviouslySelectedTab(currentlySelected: Tab) -> IndexPath? {
         for i in 0..<collectionView.numberOfItems(inSection: TabDisplaySection.regularTabs.rawValue) {
             if let cell = collectionView.cellForItem(at: IndexPath(row: i, section: TabDisplaySection.regularTabs.rawValue)) as? TopTabCell, cell.selectedTab {
                 if let tab = dataStore.at(i), tab != currentlySelected {
