@@ -1,3 +1,8 @@
+queue_rules:
+  - name: default
+    conditions:
+      - check-success=Bitrise
+
 pull_request_rules:
   - name: Resolve conflict
     conditions:
@@ -27,3 +32,14 @@ pull_request_rules:
       merge:
         method: squash
         strict: smart
+  - name: String Import - Auto Merge
+    conditions:
+      - author=github-actions[bot]
+      - title~=string-import*
+      - files~=^Blockzilla\/[^\/]*\/[^\/]*.lproj\/*
+      - files~=^Blockzilla\/[^\/]*.lproj\/*
+    actions:
+      queue:
+        method: rebase
+        name: default
+  
