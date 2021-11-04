@@ -127,7 +127,12 @@ final class RatingPromptManager {
         lastRequestDate = date
         requestCount += 1
 
-        SKStoreReviewController.requestReview()
+        guard #available(iOS 14.0, *), let windowScene = BrowserViewController.foregroundBVC().view.window?.windowScene else {
+            SKStoreReviewController.requestReview()
+            return
+        }
+
+        SKStoreReviewController.requestReview(in: windowScene)
     }
 
     private func updateBookmarksCount(group: DispatchGroup) {

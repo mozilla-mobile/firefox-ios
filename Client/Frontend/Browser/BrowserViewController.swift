@@ -2678,8 +2678,9 @@ extension BrowserViewController: FeatureFlaggable {
 
 extension BrowserViewController {
     public static func foregroundBVC() -> BrowserViewController {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
-              let browserViewController = appDelegate.browserViewController else {
+        guard let sceneDelegate = UIWindow.keyWindow?.windowScene?.delegate as? SceneDelegate,
+              sceneDelegate.isForeground,
+              let browserViewController = sceneDelegate.browserViewController else {
             fatalError("Unable unwrap BrowserViewController")
         }
 
