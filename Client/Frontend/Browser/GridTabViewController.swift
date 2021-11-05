@@ -37,7 +37,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     let profile: Profile
     weak var delegate: TabTrayDelegate?
     var tabDisplayManager: TabDisplayManager!
-    var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TabCell.Identifier
+    var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TabCell.reuseIdentifier
     static let independentTabsHeaderIdentifier = "IndependentTabs"
     var otherBrowsingModeOffset = CGPoint.zero
     // Backdrop used for displaying greyed background for private tabs
@@ -73,11 +73,11 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         self.tabToFocus = tabToFocus
         super.init(nibName: nil, bundle: nil)
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        collectionView.register(TabCell.self, forCellWithReuseIdentifier: TabCell.Identifier)
+        collectionView.register(TabCell.self, forCellWithReuseIdentifier: TabCell.reuseIdentifier)
         collectionView.register(GroupedTabCell.self, forCellWithReuseIdentifier: GroupedTabCell.Identifier)
         collectionView.register(InactiveTabCell.self, forCellWithReuseIdentifier: InactiveTabCell.Identifier)
         collectionView.register(ASHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: GridTabViewController.independentTabsHeaderIdentifier)
-        tabDisplayManager = TabDisplayManager(collectionView: self.collectionView, tabManager: self.tabManager, tabDisplayer: self, reuseID: TabCell.Identifier, tabDisplayType: .TabGrid, profile: profile)
+        tabDisplayManager = TabDisplayManager(collectionView: self.collectionView, tabManager: self.tabManager, tabDisplayer: self, reuseID: TabCell.reuseIdentifier, tabDisplayType: .TabGrid, profile: profile)
         collectionView.dataSource = tabDisplayManager
         collectionView.delegate = tabLayoutDelegate
 
@@ -778,8 +778,8 @@ class TabCell: UICollectionViewCell, TabTrayCell {
         case dark
     }
 
-    static let Identifier = "TabCellIdentifier"
-    static let BorderWidth: CGFloat = 3
+    static let reuseIdentifier = "TabCellIdentifier"
+    static let borderWidth: CGFloat = 3
 
     lazy var backgroundHolder: UIView = {
         let view = UIView()
@@ -892,8 +892,8 @@ class TabCell: UICollectionViewCell, TabTrayCell {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        let shadowPath = CGRect(width: layer.frame.width + (TabCell.BorderWidth * 2), height: layer.frame.height + (TabCell.BorderWidth * 2))
-        layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: GridTabTrayControllerUX.CornerRadius+TabCell.BorderWidth).cgPath
+        let shadowPath = CGRect(width: layer.frame.width + (TabCell.borderWidth * 2), height: layer.frame.height + (TabCell.borderWidth * 2))
+        layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: GridTabTrayControllerUX.CornerRadius+TabCell.borderWidth).cgPath
     }
 
     func configureWith(tab: Tab, isSelected selected: Bool) {
@@ -967,9 +967,9 @@ class TabCell: UICollectionViewCell, TabTrayCell {
         layer.shadowRadius = 0 // A 0 radius creates a solid border instead of a gradient blur
         layer.masksToBounds = false
         // create a frame that is "BorderWidth" size bigger than the cell
-        layer.shadowOffset = CGSize(width: -TabCell.BorderWidth, height: -TabCell.BorderWidth)
-        let shadowPath = CGRect(width: layer.frame.width + (TabCell.BorderWidth * 2), height: layer.frame.height + (TabCell.BorderWidth * 2))
-        layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: GridTabTrayControllerUX.CornerRadius+TabCell.BorderWidth).cgPath
+        layer.shadowOffset = CGSize(width: -TabCell.borderWidth, height: -TabCell.borderWidth)
+        let shadowPath = CGRect(width: layer.frame.width + (TabCell.borderWidth * 2), height: layer.frame.height + (TabCell.borderWidth * 2))
+        layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: GridTabTrayControllerUX.CornerRadius+TabCell.borderWidth).cgPath
     }
 }
 
