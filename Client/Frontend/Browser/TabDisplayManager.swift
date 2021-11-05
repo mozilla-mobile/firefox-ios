@@ -721,9 +721,7 @@ extension TabDisplayManager: TabEventHandler {
                 }
 
                 let isSelected = (indexPath.row == index && tab == self?.tabManager.selectedTab)
-                if let tabCell = cell as? TabCell {
-                    tabCell.configureWith(tab: tab, is: isSelected)
-                } else if let tabCell = cell as? TopTabCell {
+                if let tabCell = cell as? TabTrayCell {
                     tabCell.configureWith(tab: tab, isSelected: isSelected)
                 }
             }

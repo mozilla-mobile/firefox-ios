@@ -333,7 +333,7 @@ extension GridTabViewController: TabDisplayer {
         tabCell.animator?.delegate = self
         tabCell.delegate = self
         let selected = tab == tabManager.selectedTab
-        tabCell.configureWith(tab: tab, is: selected)
+        tabCell.configureWith(tab: tab, isSelected: selected)
         return tabCell
     }
 }
@@ -762,7 +762,17 @@ protocol TabCellDelegate: AnyObject {
     func tabCellDidClose(_ cell: TabCell)
 }
 
-class TabCell: UICollectionViewCell {
+protocol TabTrayCell where Self: UICollectionViewCell {
+
+    /// True when the tab is the selected tab in the tray
+    var isSelectedTab: Bool { get }
+
+    /// Configure a tab cell using a Tab object, setting it's selected state at the same time
+    func configureWith(tab: Tab, isSelected selected: Bool)
+}
+
+class TabCell: UICollectionViewCell, TabTrayCell {
+
     enum Style {
         case light
         case dark
@@ -787,7 +797,6 @@ class TabCell: UICollectionViewCell {
         view.backgroundColor = UIColor.theme.tabTray.screenshotBackground
         return view
     }()
-    
 
     let titleText: UILabel = {
         let label = UILabel()
@@ -818,6 +827,7 @@ class TabCell: UICollectionViewCell {
 
     var title = UIVisualEffectView(effect: UIBlurEffect(style: UIColor.theme.tabTray.tabTitleBlur))
     var animator: SwipeAnimator?
+    var isSelectedTab = false
 
     weak var delegate: TabCellDelegate?
 
@@ -876,18 +886,6 @@ class TabCell: UICollectionViewCell {
         }
     }
 
-    func setTabSelected(_ isPrivate: Bool) {
-        // This creates a border around a tabcell. Using the shadow creates a border _outside_ of the tab frame.
-        layer.shadowColor = (isPrivate ? UIColor.theme.tabTray.privateModePurple : UIConstants.SystemBlueColor).cgColor
-        layer.shadowOpacity = 1
-        layer.shadowRadius = 0 // A 0 radius creates a solid border instead of a gradient blur
-        layer.masksToBounds = false
-        // create a frame that is "BorderWidth" size bigger than the cell
-        layer.shadowOffset = CGSize(width: -TabCell.BorderWidth, height: -TabCell.BorderWidth)
-        let shadowPath = CGRect(width: layer.frame.width + (TabCell.BorderWidth * 2), height: layer.frame.height + (TabCell.BorderWidth * 2))
-        layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: GridTabTrayControllerUX.CornerRadius+TabCell.BorderWidth).cgPath
-    }
-
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -898,7 +896,8 @@ class TabCell: UICollectionViewCell {
         layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: GridTabTrayControllerUX.CornerRadius+TabCell.BorderWidth).cgPath
     }
 
-    func configureWith(tab: Tab, is selected: Bool) {
+    func configureWith(tab: Tab, isSelected selected: Bool) {
+        isSelectedTab = selected
         titleText.text = tab.displayTitle
 
         if selected {
@@ -920,6 +919,7 @@ class TabCell: UICollectionViewCell {
             favicon.image = UIImage(named: "defaultFavicon")
             favicon.tintColor = UIColor.theme.tabTray.faviconTint
         }
+
         if selected {
             setTabSelected(tab.isPrivate)
         } else {
@@ -958,6 +958,18 @@ class TabCell: UICollectionViewCell {
 
     @objc func close() {
         delegate?.tabCellDidClose(self)
+    }
+
+    private func setTabSelected(_ isPrivate: Bool) {
+        // This creates a border around a tabcell. Using the shadow creates a border _outside_ of the tab frame.
+        layer.shadowColor = (isPrivate ? UIColor.theme.tabTray.privateModePurple : UIConstants.SystemBlueColor).cgColor
+        layer.shadowOpacity = 1
+        layer.shadowRadius = 0 // A 0 radius creates a solid border instead of a gradient blur
+        layer.masksToBounds = false
+        // create a frame that is "BorderWidth" size bigger than the cell
+        layer.shadowOffset = CGSize(width: -TabCell.BorderWidth, height: -TabCell.BorderWidth)
+        let shadowPath = CGRect(width: layer.frame.width + (TabCell.BorderWidth * 2), height: layer.frame.height + (TabCell.BorderWidth * 2))
+        layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: GridTabTrayControllerUX.CornerRadius+TabCell.BorderWidth).cgPath
     }
 }
 
