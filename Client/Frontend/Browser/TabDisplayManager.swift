@@ -79,6 +79,7 @@ struct TabDisplayOrder: Codable {
 }
 
 class TabDisplayManager: NSObject, FeatureFlagsProtocol {
+
     // MARK: - Variables
     var performingChainedOperations = false
     var inactiveViewModel: InactiveTabViewModel?
@@ -184,8 +185,6 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
 
         return isActive
     }
-
-
 
     init(collectionView: UICollectionView, tabManager: TabManager, tabDisplayer: TabDisplayer, reuseID: String, tabDisplayType: TabDisplayType, profile: Profile) {
         self.collectionView = collectionView
@@ -332,17 +331,26 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         }
     }
 
-    // The collection is showing this Tab as selected
-    func indexOfCellDrawnAsPreviouslySelectedTab(currentlySelected: Tab) -> IndexPath? {
-        for i in 0..<collectionView.numberOfItems(inSection: 0) {
-            if let cell = collectionView.cellForItem(at: IndexPath(row: i, section: 0)) as? TopTabCell, cell.selectedTab {
-                if let tab = dataStore.at(i), tab != currentlySelected {
-                    return IndexPath(row: i, section: 0)
-                } else {
-                    return nil
-                }
+    /// Find the previously selected cell, which is still displayed as selected
+    /// - Parameters:
+    ///   - currentlySelected: The currently selected tab
+    ///   - inSection: In which section should this tab be searched
+    /// - Returns: The index path of the found previsouly selected tab
+    private func indexOfCellDrawnAsPreviouslySelectedTab(currentlySelected: Tab?, inSection: Int) -> IndexPath? {
+        guard let currentlySelected = currentlySelected else { return nil }
+
+        for index in 0..<collectionView.numberOfItems(inSection: inSection) {
+            guard let cell = collectionView.cellForItem(at: IndexPath(row: index, section: inSection)) as? TabCell,
+                  cell.isSelectedTab,
+                  let tab = dataStore.at(index),
+                  tab != currentlySelected
+            else {
+                continue
             }
+
+            return IndexPath(row: index, section: inSection)
         }
+
         return nil
     }
 
@@ -458,7 +466,7 @@ extension TabDisplayManager: UICollectionViewDataSource {
             view.title = .TabTrayOtherTabsSectionHeader
             view.titleLabel.font = .systemFont(ofSize: GroupedTabCellProperties.CellUX.titleFontSize, weight: .semibold)
             view.moreButton.isHidden = true
-            view.titleLabel.accessibilityIdentifier = GridTabViewController.filteredTabsAccessibilityIdentifier
+            view.titleLabel.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.filteredTabs
             
             return view
         }
@@ -696,37 +704,6 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
 }
 
 extension TabDisplayManager: TabEventHandler {
-    private func updateCellFor(tab: Tab, selectedTabChanged: Bool) {
-        let selectedTab = tabManager.selectedTab
-
-        updateWith(animationType: .updateTab) { [weak self] in
-            guard let index = self?.dataStore.index(of: tab) else { return }
-
-            var items = [IndexPath]()
-            items.append(IndexPath(row: index, section: 0))
-
-            if selectedTabChanged {
-                self?.tabDisplayer?.focusSelectedTab()
-                // Check if the selected tab has changed. This method avoids relying on the state of the "previous" selected tab,
-                // instead it iterates the displayed tabs to see which appears selected.
-                // See also `didSelectedTabChange` for more info on why this is a good approach.
-                if let selectedTab = selectedTab, let previousSelectedIndex = self?.indexOfCellDrawnAsPreviouslySelectedTab(currentlySelected: selectedTab) {
-                    items.append(previousSelectedIndex)
-                }
-            }
-
-            for item in items {
-                if let cell = self?.collectionView.cellForItem(at: item), let tab = self?.dataStore.at(item.row) {
-                    let isSelected = (item.row == index && tab == self?.tabManager.selectedTab)
-                    if let tabCell = cell as? TabCell {
-                        tabCell.configureWith(tab: tab, is: isSelected)
-                    } else if let tabCell = cell as? TopTabCell {
-                        tabCell.configureWith(tab: tab, isSelected: isSelected)
-                    }
-                }
-            }
-        }
-    }
 
     func tab(_ tab: Tab, didLoadFavicon favicon: Favicon?, with: Data?) {
         updateCellFor(tab: tab, selectedTabChanged: false)
@@ -734,6 +711,41 @@ extension TabDisplayManager: TabEventHandler {
 
     func tab(_ tab: Tab, didChangeURL url: URL) {
         updateCellFor(tab: tab, selectedTabChanged: false)
+    }
+
+    private func updateCellFor(tab: Tab, selectedTabChanged: Bool) {
+        let selectedTab = tabManager.selectedTab
+
+        updateWith(animationType: .updateTab) { [weak self] in
+            guard let index = self?.dataStore.index(of: tab) else { return }
+            let section = self?.tabDisplayType == .TopTabTray ? 0 : TabDisplaySection.regularTabs.rawValue
+
+            var indexPaths = [IndexPath]()
+            indexPaths.append(IndexPath(row: index, section: section))
+
+            if selectedTabChanged {
+                self?.tabDisplayer?.focusSelectedTab()
+
+                // Append the previously selected tab to refresh it's state. Useful when the selected tab has change.
+                // This method avoids relying on the state of the "previous" selected tab,
+                // instead it iterates the displayed tabs to see which appears selected.
+                if let previousSelectedIndexPath = self?.indexOfCellDrawnAsPreviouslySelectedTab(currentlySelected: selectedTab,
+                                                                                                 inSection: section) {
+                    indexPaths.append(previousSelectedIndexPath)
+                }
+            }
+
+            for indexPath in indexPaths {
+                guard let cell = self?.collectionView.cellForItem(at: indexPath), let tab = self?.dataStore.at(indexPath.row) else {
+                    return
+                }
+
+                let isSelected = (indexPath.row == index && tab == self?.tabManager.selectedTab)
+                if let tabCell = cell as? TabTrayCell {
+                    tabCell.configureWith(tab: tab, isSelected: isSelected)
+                }
+            }
+        }
     }
 }
 
@@ -768,7 +780,7 @@ extension TabDisplayManager: TabManagerDelegate {
 
         updateWith(animationType: .addTab) { [unowned self] in
             // place new tab at the end by default unless it has been opened from parent tab
-            var indexToPlaceTab = dataStore.count - 1 > 0 ? dataStore.count - 1 : 0
+            var indexToPlaceTab = dataStore.count - 1 > 0 ? dataStore.count : 0
 
             // open a link from website next to it
             if placeNextToParentTab, let selectedTabUUID = tabManager.selectedTab?.tabUUID {

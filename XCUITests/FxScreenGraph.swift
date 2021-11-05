@@ -924,7 +924,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(CloseTabMenu) { screenState in
-        screenState.tap(app.sheets.buttons["TabTrayController.deleteButton.closeAll"], forAction: Action.AcceptRemovingAllTabs, transitionTo: HomePanelsScreen)
+        screenState.tap(app.sheets.buttons[AccessibilityIdentifiers.TabTray.deleteCloseAllButton], forAction: Action.AcceptRemovingAllTabs, transitionTo: HomePanelsScreen)
         screenState.backAction = cancelBackAction
     }
 
