@@ -180,15 +180,6 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         snapshot("TrackingProtectionStrictMoreInfo-02")
     }
 
-    func testSetDefaultBrowser() {
-        if #available(iOS 14, *) {
-            waitForExistence(app.buttons["Home.learnMoreDefaultBrowserbutton"], timeout: 15)
-            app.buttons["Home.learnMoreDefaultBrowserbutton"].tap()
-            waitForExistence(app.buttons["DefaultBrowserCard.goToSettingsButton"], timeout: 15)
-            snapshot("HomeDefaultBrowserLearnMore")
-        }
-    }
-
     func testMenuOnTopSites() {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         app.buttons["urlBar-cancel"].tap()
@@ -196,6 +187,15 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
         snapshot("MenuOnTopSites-01")
+
+        // Set as Default browser screenshot
+        navigator.goto(NewTabScreen)
+        if #available(iOS 14, *) {
+            waitForExistence(app.buttons["Home.learnMoreDefaultBrowserbutton"], timeout: 15)
+            app.buttons["Home.learnMoreDefaultBrowserbutton"].tap()
+            waitForExistence(app.buttons["DefaultBrowserCard.goToSettingsButton"], timeout: 15)
+            snapshot("HomeDefaultBrowserLearnMore")
+        }
     }
 
     func testSettings() {
@@ -223,7 +223,6 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 10)
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        app.tables.cells.element(boundBy: 0).buttons["closeTabButtonTabTray"].tap()
         snapshot("PrivateBrowsingTabsEmptyState-01")
     }
 }

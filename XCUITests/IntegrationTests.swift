@@ -176,8 +176,10 @@ class IntegrationTests: BaseTestCase {
 
         // Check synced Logins
         navigator.nowAt(SettingsScreen)
-        navigator.nowAt(NewTabScreen)
         navigator.goto(LoginsSettings)
+        waitForExistence(app.buttons.firstMatch)
+        app.buttons["Continue"].tap()
+
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         let passcodeInput = springboard.secureTextFields["Passcode field"]
         passcodeInput.tap()
@@ -227,7 +229,16 @@ class IntegrationTests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
 
         navigator.goto(SettingsScreen)
+        navigator.nowAt(SettingsScreen)
         navigator.goto(LoginsSettings)
+        waitForExistence(app.buttons.firstMatch)
+        app.buttons["Continue"].tap()
+
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        let passcodeInput = springboard.secureTextFields["Passcode field"]
+        passcodeInput.tap()
+        passcodeInput.typeText("foo\n")
+
         waitForExistence(app.tables["Login List"], timeout: 3)
         // Verify the login
         waitForExistence(app.staticTexts["https://accounts.google.com"])
@@ -267,6 +278,9 @@ class IntegrationTests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         navigator.goto(SettingsScreen)
         navigator.goto(LoginsSettings)
+
+        passcodeInput.tap()
+        passcodeInput.typeText("foo\n")
 
         waitForExistence(app.tables["Login List"], timeout: 10)
         waitForExistence(app.staticTexts["https://accounts.google.com"], timeout: 10)
