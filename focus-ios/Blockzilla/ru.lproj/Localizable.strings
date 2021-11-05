@@ -271,6 +271,12 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” хотел бы получить доступ к вашим Фото";
 
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "Соединение не защищено";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "Соединение защищено";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "Запросить полную версию сайта";
 
@@ -324,6 +330,12 @@
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla обязуется собирать только ту информацию, которая необходима для работы %@ и его улучшения в будущем.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextStudies" = "%@ может время от времени устанавливать и проводить исследования.";
+
+/* Title for section in settings menu */
+"Settings.general" = "Основные";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Подробнее.";
@@ -442,6 +454,9 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Отправлять данные об использовании";
 
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "Исследования";
+
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Использовать Touch ID для разблокировки приложения";
 
@@ -493,6 +508,9 @@
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Открыть в Chrome";
 
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "Открыть в браузере по умолчанию";
+
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Открыть в Firefox";
 
@@ -526,6 +544,9 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "URL для открытия";
 
+/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.Biometric.Title" = "Заблокировать %@, когда сайт открыт:";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Используйте Touch ID для возврата в %@";
 
@@ -540,6 +561,9 @@
 
 /* Text for tracking protection screen showing the connection is secure */
 "trackingProtection.connectionSecureLabel" = "Соединение защищено";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"trackingProtection.connectionVerifiedByLabel" = "Подтверждено: %@";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Трекеры содержимого";

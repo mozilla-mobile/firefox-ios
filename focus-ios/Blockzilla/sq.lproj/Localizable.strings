@@ -43,6 +43,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Hape në %@";
 
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "Ok";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "Bëni mirëfilltësimin që të ktheheni te %@";
 
@@ -262,6 +265,12 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” Do të Donte të Hynte te Fotot Tuaja";
 
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "Lidhja s’është e sigurt";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "Lidhja është e sigurt";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "Kërko Sajtin për Desktop";
 
@@ -301,14 +310,32 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Bllokimi i gjurmuesve të tjerë mund të pengojë funksionimin e disa videove dhe faqeve Web.";
 
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "Anuloje";
+
+/* Dark theme option in settings menu */
+"Settings.darkTheme" = "E errët";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ do të dërgojë te motori juaj i kërkimeve atë çka shtypni te shtylla e adresave.";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla rreket të grumbullojë vetëm sa na duhen për të ofruar dhe përmirësuar %@ për këdo.";
 
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextStudies" = "%@-i mund të instalojë dhe zhvillojë studime herë pas here.";
+
+/* Title for section in settings menu */
+"Settings.general" = "Të përgjithshme";
+
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Mësoni më tepër.";
+
+/* Light theme option in settings menu */
+"Settings.lightTheme" = "E çelët";
+
+/* Manual value for theme section in settings menu */
+"Settings.manualTheme" = "Dorazi";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "Vlerësojeni %@";
@@ -376,8 +403,29 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "SIGURI";
 
+/* System value for theme section in settings menu */
+"Settings.systemTheme" = "Temë Sistemi";
+
+/* Theme section in settings menu */
+"Settings.theme" = "Temë";
+
+/* Header for manual theme section in settings menu */
+"Settings.themePicker" = "Zgjedhës Temash";
+
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "Reklamim";
+
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "Analiza";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Blloko shkronja Web";
+
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "Lëndë";
+
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "Shoqërore";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Përdorni Face ID që të shkyçni aplikacionin";
@@ -397,11 +445,23 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Dërgo të dhëna përdorimi";
 
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "Studime";
+
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Përdorni Touch ID që të shkyçni aplikacionin";
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Touch ID mund të shkyçë %@ nëse ka tashmë të hapur një URL te aplikacioni";
+
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "Off";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "On";
+
+/* Value for theme toggle in settings menu */
+"Settings.useSystemTheme" = "Përdor Mënyrë të Çelët/të Errët Sistemi";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Ç’ka të Re";
@@ -411,6 +471,9 @@
 
 /* Text for a share button */
 "share" = "Ndajeni me të tjerët";
+
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "Shtoje te Shkurtoret";
 
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "Kopjoje Adresën";
@@ -424,6 +487,9 @@
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "Veprime Faqeje";
 
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "Hiqe nga Shkurtoret";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Kërko Sajtin për Desktop";
 
@@ -433,11 +499,17 @@
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Hape në Chrome";
 
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "Hape në Shfletuesin Parazgjedhje";
+
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Hape në Firefox";
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Ndajeni Faqen Me…";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "Hiqe nga Shkurtoret";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Shtoje";
@@ -472,6 +544,15 @@
 /* label for analytic trackers. */
 "trackingProtection.analyticTrackerLabel" = "Gjurmues analitikë";
 
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "Lidhja s’është e sigurt";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "Lidhja është e sigurt";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"trackingProtection.connectionVerifiedByLabel" = "Verifikuar nga: %@";
+
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Gjurmues lënde";
 
@@ -487,11 +568,26 @@
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Mësoni Më Tepër";
 
+/* Text for the button that closes the Shield Data and opens the regular Settings screen. */
+"trackingProtection.moreSettings" = "Më Tepër Rregullime";
+
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Gjurmues socialë";
 
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "Për këtë sesion, mbrojtjet janë OFF";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "Për këtë sesion, mbrojtjet janë ON";
+
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Çaktivizoje derisa të mbyll %@ ose prekë FSHIJE.";
+
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "Mbrojtje e Thelluar Nga Gjurmimi";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel2" = "Mbajini për vete të dhënat tuaja. %@ ju mbron nga shumë prej gjurmuesve më të rëndomtë që ndjekin ç’bëni në internet.";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Shtoni lidhje për vetëplotësim";

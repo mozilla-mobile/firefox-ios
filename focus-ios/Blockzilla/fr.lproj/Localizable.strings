@@ -274,6 +274,9 @@
 /* This is the value for a label that indicates if a user is on an unencrypted website. */
 "ProtectionStatus.NotSecure" = "Connexion non sécurisée";
 
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "Connexion sécurisée";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "Voir la version ordinateur";
 
@@ -327,6 +330,12 @@
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla veille à collecter uniquement les données nécessaires afin d’offrir et d’améliorer %@ pour tout le monde.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextStudies" = "%@ peut installer et lancer des études de temps en temps.";
+
+/* Title for section in settings menu */
+"Settings.general" = "Général";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "En savoir plus.";
@@ -445,6 +454,9 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Envoyer des données d’utilisation";
 
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "Études";
+
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Utiliser Touch ID pour déverrouiller l’application";
 
@@ -496,6 +508,9 @@
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Ouvrir dans Chrome";
 
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "Ouvrir dans le navigateur par défaut";
+
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Ouvrir dans Firefox";
 
@@ -529,6 +544,42 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "URL à ouvrir";
 
+/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.Biometric.Title" = "Verrouiller %@ lorsqu’un site est ouvert :";
+
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "Activer Face ID";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "Activer Touch ID";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "%@ traqueurs bloqués jusqu’à présent";
+
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "Vous naviguez. %@ bloque.";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "Sélectionnez Ajouter aux raccourcis dans le menu %@";
+
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "Créez des raccourcis vers les sites que vous visitez le plus :";
+
+/* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriErase.Description" = "Ajouter un raccourci Siri";
+
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.SiriErase.Title" = "« Siri, efface ma session %@. »";
+
+/* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriFavorite.Description" = "Ajouter un raccourci Siri";
+
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "« Siri, ouvre mon site préféré. »";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "Essayez de désactiver la protection contre le pistage";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Utilisez Touch ID pour revenir sur %@";
 
@@ -543,6 +594,9 @@
 
 /* Text for tracking protection screen showing the connection is secure */
 "trackingProtection.connectionSecureLabel" = "Connexion sécurisée";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"trackingProtection.connectionVerifiedByLabel" = "Vérifié par %@";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Traqueurs de contenu";

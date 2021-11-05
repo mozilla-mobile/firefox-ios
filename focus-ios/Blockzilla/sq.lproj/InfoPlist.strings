@@ -13,3 +13,6 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Kjo ju lejon të ruani dhe ngarkoni foto.";
 
+/* This is the menu item that appears when you long press the Focus icon on the phone home screen. */
+"UIApplicationShortcutItemTitle.EraseAndOpen" = "Fshije dhe Hape";
+

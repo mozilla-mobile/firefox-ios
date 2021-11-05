@@ -271,6 +271,12 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” žiada o prístup k vašim fotografiám";
 
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "Pripojenie nie je zabezpečené";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "Pripojenie je zabezpečené";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "Verzia stránky pre počítače";
 
@@ -324,6 +330,12 @@
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla sa usiluje zbierať len údaje, ktoré potrebujeme na vylepšenie aplikácie %@ pre všetkých.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextStudies" = "%@ môže občas inštalovať a spúšťať štúdie.";
+
+/* Title for section in settings menu */
+"Settings.general" = "Všeobecné";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Ďalšie informácie.";
@@ -442,6 +454,9 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Odosielať údaje o používaní";
 
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "Štúdie";
+
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Na odomknutie aplikácie použiť Touch ID";
 
@@ -493,6 +508,9 @@
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Otvoriť v Chrome";
 
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "Otvoriť v predvolenom prehliadači";
+
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Otvoriť vo Firefoxe";
 
@@ -526,6 +544,57 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "Adresa na otvorenie";
 
+/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.Biometric.Title" = "Zamknúť %@, keď je stránka otvorená:";
+
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "Zapnite Face ID";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "Zapnite Touch ID";
+
+/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Release.Description" = "Prečítajte si viac o tejto a ďalších aktualizáciách prehliadača %@.";
+
+/* Text for a label that indicates the title for release tip. */
+"Tip.Release.Title" = "Áno, máme svieži nový vzhľad!";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "Akcie stránky > Verzia stránky pre počítače";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "Chcete vidieť plnú verziu stránky pre počítače?";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "%@ zablokovaných sledovacích prvkov";
+
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "Vy prehliadate. %@ blokuje.";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "Z ponuky prehliadača %@ zvoľte Pridať medzi Skratky";
+
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "Vytvorte si odkazy na stránky, ktoré najčastejšie navštevujete:";
+
+/* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriErase.Description" = "Pridajte si skratku Siri";
+
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.SiriErase.Title" = "\"Siri, vymaž moju reláciu %@.\"";
+
+/* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriFavorite.Description" = "Pridajte si skratku Siri";
+
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "\"Siri, otvor moju obľúbenú stránku.\"";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "Skúste vypnúť ochranu pred sledovaním";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "Chýba na stránke obsah alebo sa správa zvláštne?";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Pre návrat do aplikácie %@ použite Touch ID";
 
@@ -540,6 +609,9 @@
 
 /* Text for tracking protection screen showing the connection is secure */
 "trackingProtection.connectionSecureLabel" = "Pripojenie je zabezpečené";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"trackingProtection.connectionVerifiedByLabel" = "Overil ju %@";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Ostatné sledovacie prvky";

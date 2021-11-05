@@ -331,6 +331,9 @@
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Η Mozilla προσπαθεί να συλλέγει μόνο όσα χρειάζεται για να παρέχει και να βελτιώνει το %@ για όλους.";
 
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextStudies" = "Το %@ ενδέχεται να εγκαθιστά και να εκτελεί περιστασιακά μελέτες.";
+
 /* Title for section in settings menu */
 "Settings.general" = "Γενικά";
 
@@ -544,11 +547,23 @@
 /* Text for a label that indicates the description for biometric Touch ID tip. */
 "Tip.BiometricTouchId.Description" = "Ενεργοποίηση Touch ID";
 
+/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Release.Description" = "Διαβάστε περισσότερα σχετικά με αυτό και άλλες ενημερώσεις στο %@.";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "Θέλετε να δείτε την πλήρη έκδοση ενός ιστοτόπου;";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "Επιλέξτε «Προσθήκη συντόμευσης» από το μενού του %@";
+
 /* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
 "Tip.SiriErase.Description" = "Προσθήκη συντόμευσης Siri";
 
 /* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
 "Tip.SiriFavorite.Description" = "Προσθήκη συντόμευσης Siri";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "Δοκιμάστε να απενεργοποιήσετε την προστασία από καταγραφή";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Χρήση Touch ID για επιστροφή στο %@";

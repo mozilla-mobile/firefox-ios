@@ -553,6 +553,9 @@
 /* Text for a label that indicates the description for biometric Touch ID tip. */
 "Tip.BiometricTouchId.Description" = "Vklopi Touch ID";
 
+/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Release.Description" = "Preberite več o tej in o drugih posodobitvah %@a.";
+
 /* Text for a label that indicates the description for request desktop tip. */
 "Tip.RequestDesktop.Description" = "Dejanja strani > Zahtevaj stran za namizja";
 
