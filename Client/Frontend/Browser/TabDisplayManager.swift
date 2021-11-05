@@ -718,9 +718,10 @@ extension TabDisplayManager: TabEventHandler {
 
         updateWith(animationType: .updateTab) { [weak self] in
             guard let index = self?.dataStore.index(of: tab) else { return }
+            let section = self?.tabDisplayType == .TopTabTray ? 0 : TabDisplaySection.regularTabs.rawValue
 
             var indexPaths = [IndexPath]()
-            indexPaths.append(IndexPath(row: index, section: TabDisplaySection.regularTabs.rawValue))
+            indexPaths.append(IndexPath(row: index, section: section))
 
             if selectedTabChanged {
                 self?.tabDisplayer?.focusSelectedTab()
@@ -728,7 +729,6 @@ extension TabDisplayManager: TabEventHandler {
                 // Append the previously selected tab to refresh it's state. Useful when the selected tab has change.
                 // This method avoids relying on the state of the "previous" selected tab,
                 // instead it iterates the displayed tabs to see which appears selected.
-                let section = self?.tabDisplayType == .TopTabTray ? 0 : TabDisplaySection.regularTabs.rawValue
                 if let previousSelectedIndexPath = self?.indexOfCellDrawnAsPreviouslySelectedTab(currentlySelected: selectedTab,
                                                                                                  inSection: section) {
                     indexPaths.append(previousSelectedIndexPath)
