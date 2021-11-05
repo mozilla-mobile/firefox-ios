@@ -9,7 +9,7 @@ import Storage
 private let PocketEnvAPIKey = "PocketEnvironmentAPIKey"
 private let PocketGlobalFeed = "https://getpocket.cdn.mozilla.net/v3/firefox/global-recs"
 private let MaxCacheAge: Timestamp = OneMinuteInMilliseconds * 60 // 1 hour in milliseconds
-private let SupportedLocales = ["en_US", "en_GB", "en_ZA", "de_DE", "de_AT", "de_CH"]
+private let SupportedLocales = ["en_CA", "en_US", "en_GB", "en_ZA", "de_DE", "de_AT", "de_CH"]
 public let PocketVideoFeed = "https://getpocket.cdn.mozilla.net/v3/firefox/global-video-recs"
 
 /*s
