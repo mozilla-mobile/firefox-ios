@@ -77,8 +77,6 @@
 	<string>$(MOZ_INTERNAL_URL_SCHEME)</string>
 	<key>MozPublicURLScheme</key>
 	<string>$(MOZ_PUBLIC_URL_SCHEME)</string>
-	<key>MozWhatsNewTopic</key>
-	<string>whats-new-ios-18</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
@@ -104,6 +102,8 @@
 	<string>$(POCKET_API_KEY)</string>
 	<key>SentryDSN</key>
 	<string>$(SENTRY_DSN)</string>
+	<key>SentryNightlyDSN</key>
+	<string>$(SENTRY_NIGHTLY_DSN)</string>
 	<key>NimbusURL</key>
 	<string>$(NIMBUS_URL)</string>
 	<key>UIAppFonts</key>

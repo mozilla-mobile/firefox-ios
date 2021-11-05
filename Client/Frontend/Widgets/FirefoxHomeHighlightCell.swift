@@ -19,7 +19,7 @@ private struct FirefoxHomeHighlightCellUX {
     static let BorderColor = UIColor.Photon.Grey30
 }
 
-class FirefoxHomeHighlightCell: UICollectionViewCell, Themeable {
+class FirefoxHomeHighlightCell: UICollectionViewCell, NotificationThemeable {
 
     fileprivate lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
@@ -52,8 +52,6 @@ class FirefoxHomeHighlightCell: UICollectionViewCell, Themeable {
         siteImageView.clipsToBounds = true
         siteImageView.contentMode = .center
         siteImageView.layer.cornerRadius = FirefoxHomeHighlightCellUX.CornerRadius
-        siteImageView.layer.borderColor = FirefoxHomeHighlightCellUX.BorderColor.cgColor
-        siteImageView.layer.borderWidth = FirefoxHomeHighlightCellUX.BorderWidth
         siteImageView.layer.masksToBounds = true
         return siteImageView
     }()

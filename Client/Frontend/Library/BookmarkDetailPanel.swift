@@ -170,7 +170,7 @@ class BookmarkDetailPanel: SiteTableViewController {
     override func applyTheme() {
         super.applyTheme()
 
-        if let current = navigationController?.visibleViewController as? Themeable, current !== self {
+        if let current = navigationController?.visibleViewController as? NotificationThemeable, current !== self {
             current.applyTheme()
         }
 

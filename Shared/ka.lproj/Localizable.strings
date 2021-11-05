@@ -655,9 +655,6 @@
 /* Toggle logins syncing setting */
 "Logins" = "ანგარიშები";
 
-/* Label displaying welcome view title */
-"Logins.WelcomeView.Title" = "თან წაიყოლეთ თქვენი პაროლები ყველგან";
-
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "შეცვლილი";
 
