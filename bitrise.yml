@@ -117,11 +117,14 @@ workflows:
         is_always_run: true
     - slack@3.1:
         inputs:
+        - title: ''
+        - author_name: ''
         - webhook_url: "$WEBHOOK_SLACK_TOKEN"
         - footer_icon: https://emoji.slack-edge.com/T027LFU12/testops-notify/d350cecb43e9e630.png
         - footer: Created by Mobile Test Engineering
         - pretext_on_error: "*Firefox-iOS* :firefox: *Build/XCUITests* :x:"
         - pretext: "*Firefox-iOS* :firefox: *Build/XCUITests* :white_check_mark:"
+        - timestamp: 'no'
         - fields: |
             Task | ${BITRISE_BUILD_URL}
             Owner | ${GIT_CLONE_COMMIT_AUTHOR_NAME}
