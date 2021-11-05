@@ -118,6 +118,10 @@ workflows:
     - slack@3.1:
         inputs:
         - webhook_url: "$WEBHOOK_SLACK_TOKEN"
+        - footer_icon: https://emoji.slack-edge.com/T027LFU12/testops-notify/d350cecb43e9e630.png
+        - footer: Created by Mobile Test Engineering
+        - pretext_on_error: "*Firefox-iOS* :firefox: *Build/XCUITests* :x:"
+        - pretext: "*Firefox-iOS* :firefox: *Build/XCUITests* :white_check_mark:"
   4_B_xcode_build_and_test_Fennec_Enterprise_XCUITests:
     steps:
     - xcode-build-for-simulator@0.11:
