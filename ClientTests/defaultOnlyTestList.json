@@ -1,0 +1,8 @@
+{
+  "default": {
+    "searchDefault": "fakeDefault",
+    "visibleDefaultEngines": [
+      "fakeDefault"
+    ]
+  }
+}
