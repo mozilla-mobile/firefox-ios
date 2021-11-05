@@ -5,7 +5,6 @@
 import Intents
 import IntentsUI
 
-@available(iOS 12.0, *)
 class SiriShortcuts {
     enum activityType: String {
         case erase = "EraseIntent"

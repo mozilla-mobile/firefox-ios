@@ -594,12 +594,10 @@ class BrowserViewController: UIViewController {
 
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.eraseButton)
 
-        if #available(iOS 12.0, *) {
-            userActivity = SiriShortcuts().getActivity(for: .eraseAndOpen)
-            let interaction = INInteraction(intent: eraseIntent, response: nil)
-            interaction.donate { (error) in
-                if let error = error { print(error.localizedDescription) }
-            }
+        userActivity = SiriShortcuts().getActivity(for: .eraseAndOpen)
+        let interaction = INInteraction(intent: eraseIntent, response: nil)
+        interaction.donate { (error) in
+            if let error = error { print(error.localizedDescription) }
         }
         
         // Reenable tracking protection after reset
@@ -681,7 +679,6 @@ class BrowserViewController: UIViewController {
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.settingsButton)
     }
 
-    @available(iOS 12.0, *)
     private func showSiriFavoriteSettings() {
         guard let modalDelegate = modalDelegate else { return }
 
@@ -745,7 +742,7 @@ class BrowserViewController: UIViewController {
         if urlBar.url == nil {
             urlBar.url = url
         }
-        guard #available(iOS 12.0, *), let savedUrl = UserDefaults.standard.value(forKey: "favoriteUrl") as? String else { return }
+        guard let savedUrl = UserDefaults.standard.value(forKey: "favoriteUrl") as? String else { return }
         if let currentDomain = url.baseDomain, let savedDomain = URL(string: savedUrl)?.baseDomain, currentDomain == savedDomain {
             userActivity = SiriShortcuts().getActivity(for: .openURL)
         }
@@ -1757,7 +1754,6 @@ extension BrowserViewController: UIPopoverPresentationControllerDelegate {
     }
 }
 
-@available(iOS 12.0, *)
 extension BrowserViewController {
     public var eraseIntent: EraseIntent {
         let intent = EraseIntent()

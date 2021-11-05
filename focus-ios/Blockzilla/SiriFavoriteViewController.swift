@@ -6,7 +6,6 @@ import UIKit
 import Intents
 import IntentsUI
 
-@available(iOS 12.0, *)
 class SiriFavoriteViewController: UIViewController {
     private let inputLabel = SmartLabel()
     private let textInput: UITextField = InsetTextField(insetBy: UIConstants.layout.settingsTextPadding)
@@ -189,7 +188,6 @@ class SiriFavoriteViewController: UIViewController {
     }
 }
 
-@available(iOS 12.0, *)
 extension SiriFavoriteViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         nextTapped()
@@ -197,7 +195,6 @@ extension SiriFavoriteViewController: UITextFieldDelegate {
     }
 }
 
-@available(iOS 12.0, *)
 extension SiriFavoriteViewController: INUIAddVoiceShortcutViewControllerDelegate {
     func addVoiceShortcutViewController(_ controller: INUIAddVoiceShortcutViewController, didFinishWith voiceShortcut: INVoiceShortcut?, error: Error?) {
         controller.dismiss(animated: true, completion: nil)
@@ -208,7 +205,6 @@ extension SiriFavoriteViewController: INUIAddVoiceShortcutViewControllerDelegate
     }
 }
 
-@available(iOS 12.0, *)
 extension SiriFavoriteViewController: INUIEditVoiceShortcutViewControllerDelegate {
     func editVoiceShortcutViewController(_ controller: INUIEditVoiceShortcutViewController, didUpdate voiceShortcut: INVoiceShortcut?, error: Error?) {
         controller.dismiss(animated: true, completion: nil)

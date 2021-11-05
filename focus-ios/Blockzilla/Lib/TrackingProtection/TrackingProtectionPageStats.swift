@@ -36,7 +36,6 @@ struct TPPageStats {
     }
 }
 
-@available(iOS 11, *)
 class TPStatsBlocklistChecker {
     static let shared = TPStatsBlocklistChecker()
 
@@ -94,7 +93,6 @@ func wildcardContentBlockerDomainToRegex(domain: String) -> NSRegularExpression?
     }
 }
 
-@available(iOS 11, *)
 private class TPStatsBlocklists {
     class Rule {
         let regex: NSRegularExpression
