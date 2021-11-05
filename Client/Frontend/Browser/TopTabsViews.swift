@@ -5,19 +5,19 @@
 import Foundation
 import Shared
 
-class TopTabCell: UICollectionViewCell, NotificationThemeable {
+class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell {
 
     static let Identifier = "TopTabCellIdentifier"
     static let ShadowOffsetSize: CGFloat = 2 //The shadow is used to hide the tab separator
 
-    var selectedTab = false {
+    var isSelectedTab = false {
         didSet {
             backgroundColor = .clear
             titleText.textColor = UIColor.theme.topTabs.tabForegroundSelected
             closeButton.tintColor = UIColor.theme.topTabs.closeButtonSelectedTab
             closeButton.backgroundColor = backgroundColor
             closeButton.layer.shadowColor = backgroundColor?.cgColor
-            selectedBackground.isHidden = !selectedTab
+            selectedBackground.isHidden = !isSelectedTab
         }
     }
 
@@ -101,7 +101,7 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable {
         self.clipsToBounds = false
     }
 
-    func configureWith(tab: Tab, isSelected: Bool) {
+    func configureWith(tab: Tab, isSelected selected: Bool) {
         self.titleText.text = tab.displayTitle
 
         if tab.displayTitle.isEmpty {
@@ -118,9 +118,9 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable {
             self.closeButton.accessibilityLabel = String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, tab.displayTitle)
         }
 
-        self.selectedTab = isSelected
+        self.isSelectedTab = selected
 
-        let hideCloseButton = frame.width < 148 && !isSelected
+        let hideCloseButton = frame.width < 148 && !selected
         closeButton.isHidden = hideCloseButton
 
         if let siteURL = tab.url?.displayURL {

@@ -359,7 +359,7 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: singleTabCellIdentifier, for: indexPath)
         guard let tabCell = cell as? TabCell, let tab = tabs?[indexPath.item] else { return cell }
         tabCell.delegate = self
-        tabCell.configureWith(tab: tab, is: selectedTab == tab)
+        tabCell.configureWith(tab: tab, isSelected: selectedTab == tab)
         tabCell.animator = nil
         return tabCell
     }

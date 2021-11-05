@@ -100,7 +100,7 @@ class Tab: NSObject {
 
     var consecutiveCrashes: UInt = 0
     
-    // Setting defualt page as topsites
+    // Setting default page as topsites
     var newTabPageType: NewTabPage = .topSites
     var tabUUID: String = UUID().uuidString
     private var screenshotUUIDString: String?

@@ -234,7 +234,7 @@ class BrowserUtils {
         tester.tapView(withAccessibilityLabel: "smallPrivateMask")
 
         tester.tapView(withAccessibilityIdentifier: "closeAllTabsButtonTabTray")
-        tester.tapView(withAccessibilityIdentifier: "TabTrayController.deleteButton.closeAll")
+        tester.tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
 
         tester.wait(forTimeInterval: 3)
         /* go to Normal mode */
@@ -244,7 +244,7 @@ class BrowserUtils {
             tester.tapView(withAccessibilityLabel: "1")
         }
         tester.tapView(withAccessibilityIdentifier: "closeAllTabsButtonTabTray")
-        tester.tapView(withAccessibilityIdentifier: "TabTrayController.deleteButton.closeAll")
+        tester.tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
     }
 
     class func dismissFirstRunUI(_ tester: KIFUITestActor) {
