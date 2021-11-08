@@ -216,7 +216,7 @@
 "ClipboardToast.GoToCopiedLink.Button" = "Apre";
 
 /* Message displayed when the user has a copied link on the clipboard */
-"ClipboardToast.GoToCopiedLink.Title" = "Apre a leia cupiata ?";
+"ClipboardToast.GoToCopiedLink.Title" = "Apre u liame cupiatu ?";
 
 /* Accessibility label for action denoting closing a tab in tab list (tray) */
 "Close" = "Chjode";
@@ -228,7 +228,7 @@
 "computer" = "urdinatore";
 
 /* Context menu item for bookmarking a link URL */
-"ContextMenu.BookmarkLinkButtonTitle" = "Marcà a leia";
+"ContextMenu.BookmarkLinkButtonTitle" = "Marcà u liame";
 
 /* The button text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Affissà";
@@ -246,28 +246,28 @@
 "ContextMenu.CopyImageButtonTitle" = "Cupià a fiura";
 
 /* Context menu item for copying an image URL to the clipboard */
-"ContextMenu.CopyImageLinkButtonTitle" = "Cupià a leia di a fiura";
+"ContextMenu.CopyImageLinkButtonTitle" = "Cupià u liame di a fiura";
 
 /* Context menu item for copying a link URL to the clipboard */
-"ContextMenu.CopyLinkButtonTitle" = "Cupià a leia";
+"ContextMenu.CopyLinkButtonTitle" = "Cupià u liame";
 
 /* Context menu item for downloading a link URL */
-"ContextMenu.DownloadLinkButtonTitle" = "Scaricà a destinazione di a leia";
+"ContextMenu.DownloadLinkButtonTitle" = "Scaricà a destinazione di u liame";
 
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "Apre in una nova unghjetta";
 
 /* Context menu item for opening a link in a new private tab */
-"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "Apre a leia in una nova unghjetta privata";
+"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "Apre u liame in una nova unghjetta privata";
 
 /* Context menu item for opening a link in a new tab */
-"ContextMenu.OpenLinkInNewTabButtonTitle" = "Apre a leia in una nova unghjetta";
+"ContextMenu.OpenLinkInNewTabButtonTitle" = "Apre u liame in una nova unghjetta";
 
 /* Context menu item for saving an image */
 "ContextMenu.SaveImageButtonTitle" = "Arregistrà a fiura";
 
 /* Context menu item for sharing a link URL */
-"ContextMenu.ShareLinkButtonTitle" = "Sparte a leia";
+"ContextMenu.ShareLinkButtonTitle" = "Sparte u liame";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
 "ContextualHints.Homepage.PersonalizedHome" = "A vostra pagina d’accolta Firefox persunalizata vi permette avà di rivene d’una manera faciule induve vo avete lasciatu. Ci truverete l’unghjette, l’indette, è i risultati di ricerca recente.";
@@ -399,10 +399,10 @@
 "ErrorPages.VisitOnce.Button" = "Visità quantunque";
 
 /* Question shown to user when tapping a link that opens the App Store app */
-"ExternalLink.AppStore.ConfirmationTitle" = "Apre sta leia in l’App Store ?";
+"ExternalLink.AppStore.ConfirmationTitle" = "Apre stu liame in l’App Store ?";
 
 /* Question shown to user when tapping an SMS or MailTo link that opens the external app for those. */
-"ExternalLink.AppStore.GenericConfirmationTitle" = "Apre sta leia in un’appiecazione esterna ?";
+"ExternalLink.AppStore.GenericConfirmationTitle" = "Apre stu liame in un’appiecazione esterna ?";
 
 /* Tile title for Facebook */
 "Facebook" = "Facebook";
@@ -423,7 +423,7 @@
 "FxA.AccountVerificationRequired" = "Verificazione di contu richiesta";
 
 /* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "Ci vole à verificà %@. Cuntrollate a vostra messaghjeria per accede à a leia di verificazione mandata da Firefox.";
+"FxA.AccountVerificationRequiredSurface" = "Ci vole à verificà %@. Cuntrollate a vostra messaghjeria per accede à u liame di verificazione mandatu da Firefox.";
 
 /* Button label to connect another device to Sync */
 "FxA.ConnectAnotherDevice" = "Cunnette un altru apparechju";
@@ -785,7 +785,7 @@
 "Menu.Copy.Title" = "Cupià l’indirizzu";
 
 /* Toast displayed to user after copy url pressed. */
-"Menu.CopyURL.Confirm" = "Indirizzu cupiatu ver di u preme’papei";
+"Menu.CopyURL.Confirm" = "Indirizzu cupiatu in u preme’papei";
 
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "Scaricamenti";
@@ -1207,7 +1207,7 @@
 "SendTo.Error.OK.Button" = "Vai";
 
 /* Title of error prompt displayed when an invalid URL is shared. */
-"SendTo.Error.Title" = "Sta leia ùn pò micca esse spartuta.";
+"SendTo.Error.Title" = "Stu liame ùn pò micca esse spartutu.";
 
 /* Title of the dialog that allows you to send a tab to a different device */
 "SendTo.NavBar.Title" = "Mandà l’unghjetta";
@@ -1300,7 +1300,7 @@
 "Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "Squassà l’elementi : %1$@";
 
 /* Copy app version alert shown in settings. */
-"Settings.CopyAppVersion.Title" = "Copiata ver di u preme’papei";
+"Settings.CopyAppVersion.Title" = "Cupiata in u preme’papei";
 
 /* Default text in search bar for Data Management */
 "Settings.DataManagement.SearchLabel" = "Filtrà i siti";
@@ -1445,7 +1445,7 @@
 "Settings.HomePage.URL.Title" = "Pagina d’accolta attuale";
 
 /* Button in settings to use the current link on the clipboard as home page. */
-"Settings.HomePage.UseCopiedLink.Button" = "Impiegà a leia cupiata";
+"Settings.HomePage.UseCopiedLink.Button" = "Impiegà u liame cupiatu";
 
 /* Button in settings to use the current page as home page. */
 "Settings.HomePage.UseCurrent.Button" = "Impiegà a pagina attuale";

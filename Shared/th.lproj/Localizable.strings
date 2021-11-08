@@ -403,6 +403,9 @@
 /* Title for firefox about:home page in tab history list */
 "Firefox.HomePage.Title" = "หน้าแรกของ Firefox";
 
+/* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
+"FirefoxHome.CustomizeHomeButton.Title" = "ปรับแต่งหน้าแรก";
+
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "เดินหน้า";
 
@@ -428,7 +431,7 @@
 "FxA.NoInternetConnection" = "ไม่มีการเชื่อมต่ออินเทอร์เน็ต";
 
 /* Button label to open Sync preferences */
-"FxA.OpenSyncPreferences" = "เปิดการตั้งค่า Sync";
+"FxA.OpenSyncPreferences" = "เปิดการกำหนดลักษณะ Sync";
 
 /* Instructions shown on qr code scanning view */
 "fxa.qr-scanning-view.instructions" = "สแกนรหัส QR ที่แสดงใน firefox.com/pair";
@@ -630,6 +633,9 @@
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "Hotkeys.ShowPreviousTab.DiscoveryTitle" = "แสดงแท็บก่อนหน้า";
+
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string describes what happens if you elect to turn on this option. */
+"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Firefox จะปิดแท็บที่คุณไม่ได้ดูในช่วงเดือนที่ผ่านมา";
 
 /* Accessibility label for button increasing font size in display settings of reader mode */
 "Increase text size" = "เพิ่มขนาดข้อความ";
@@ -963,6 +969,13 @@
 
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
 "Onboarding.WhatsNew.Button.Title" = "เริ่มการเรียกดู";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the Recent Searches bullet point on the card */
+"Onboarding.WhatsNew.RecentSearches.Title" = "การค้นหาล่าสุด";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Jump Back In bullet point on the card
+   The title for the new onboarding card letting users know what is new in Firefox iOS */
+"Onboarding.WhatsNew.Title" = "มีอะไรใหม่ใน Firefox";
 
 /* Title for prompt displayed to user after the app crashes */
 "Oops! Firefox crashed" = "อุปส์! Firefox เกิดข้อขัดข้อง";
@@ -1349,17 +1362,26 @@
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "กลับเข้าไป";
 
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off */
+"Settings.Home.Option.Pocket" = "แนะนำโดย Pocket";
+
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Saved section on the Firefox homepage on or off */
 "Settings.Home.Option.RecentlySaved" = "บันทึกไว้ล่าสุด";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Visited section on the Firfox homepage on or off */
 "Settings.Home.Option.RecentlyVisited" = "เยี่ยมชมล่าสุด";
 
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recent Searches section on the Firefox homepage on or off */
+"Settings.Home.Option.RecentSearches" = "การค้นหาล่าสุด";
+
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Always" = "หน้าแรก";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Never" = "แท็บสุดท้าย";
+
+/* In the settings menu, this is the title of the Firefox Homepage customization settings section */
+"Settings.Home.Option.Title" = "หน้าแรกของ Firefox";
 
 /* Button in settings to clear the home page. */
 "Settings.HomePage.Clear.Button" = "ล้าง";
@@ -1532,8 +1554,14 @@
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "การศึกษา";
 
+/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Inactive Tabs feature, a separate section of inactive tabs that appears in the Tab Tray, on or off */
+"Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "แท็บที่ไม่ได้ใช้งาน";
+
 /* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
 "Settings.Tabs.CustomizeTabsSection.TabGroups" = "กลุ่มแท็บ";
+
+/* In the settings menu, this is the title for the Tabs customization section option */
+"Settings.Tabs.Title" = "แท็บ";
 
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "ตกลง เข้าใจแล้ว";
@@ -1790,6 +1818,9 @@
 
 /* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenSelectedTab.KeyCodeTitle" = "เปิดแท็บที่เลือก";
+
+/* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
+"TabTray.OtherTabs.Title" = "แท็บอื่น";
 
 /* The title for the tab tray in private mode */
 "TabTray.PrivateTitle" = "แท็บส่วนตัว";
