@@ -1105,9 +1105,9 @@ extension FirefoxHomeViewController {
 
         if sender.accessibilityIdentifier == FxHomeAccessibilityIdentifiers.MoreButtons.recentlySaved {
             TelemetryWrapper.recordEvent(category: .action,
-                                              method: .tap,
-                                              object: .firefoxHomepage,
-                                              value: .recentlySavedSectionShowAll)
+                                         method: .tap,
+                                         object: .firefoxHomepage,
+                                         value: .recentlySavedSectionShowAll)
         } else {
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .tap,
