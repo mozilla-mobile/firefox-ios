@@ -633,10 +633,11 @@ firefox_home_page:
   firefox_homepage_origin:
     type: labeled_counter
     description: |
-      The number of times a user sees the Firefox Homepage
+      The number of times a user sees the Firefox Homepage,
+      with a home page origin.
     labels:
       - zero-search
-      - other
+      - origin-other
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-3284
     data_reviews:
