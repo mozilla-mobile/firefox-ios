@@ -167,7 +167,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     fileprivate var contextualSourceView = UIView()
     fileprivate var isZeroSearch: Bool
     var recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel()
-    var jumpBackInViewModel = FirefoxHomeJumpBackInViewModel()
+    var jumpBackInViewModel: FirefoxHomeJumpBackInViewModel
 
     fileprivate lazy var topSitesManager: ASHorizontalScrollCellManager = {
         let manager = ASHorizontalScrollCellManager()
@@ -260,6 +260,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     init(profile: Profile, isZeroSearch: Bool = false, experiments: NimbusApi = Experiments.shared) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
+        self.jumpBackInViewModel = FirefoxHomeJumpBackInViewModel(isZeroSearch: isZeroSearch)
         self.experiments = experiments
         super.init(collectionViewLayout: flowLayout)
         collectionView?.delegate = self
@@ -337,7 +338,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
                                      method: .view,
                                      object: .firefoxHomepage,
                                      value: .fxHomepageOrigin,
-                                     extras: telemetryOriginExtras)
+                                     extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
 
         super.viewDidAppear(animated)
     }
@@ -489,11 +490,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         return headerView.systemLayoutSizeFitting(size,
                                                   withHorizontalFittingPriority: .required,
                                                   verticalFittingPriority: .fittingSizeLevel)
-    }
-
-    private var telemetryOriginExtras: [String: String] {
-        let origin = isZeroSearch ? TelemetryWrapper.EventValue.fxHomepageOriginZeroSearch : TelemetryWrapper.EventValue.fxHomepageOriginOther
-        return [TelemetryWrapper.EventExtraKey.fxHomepageOrigin.rawValue: origin.rawValue]
     }
 }
 
@@ -1095,7 +1091,7 @@ extension FirefoxHomeViewController {
                                          method: .tap,
                                          object: .firefoxHomepage,
                                          value: .jumpBackInSectionShowAll,
-                                         extras: telemetryOriginExtras)
+                                         extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
         }
         homePanelDelegate?.homePanelDidRequestToOpenTabTray(withFocusedTab: nil)
     }

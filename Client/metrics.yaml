@@ -611,6 +611,22 @@ firefox_home_page:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-01-01"
+  jump_back_in_tab_opened_origin:
+    type: labeled_counter
+    description: |
+      Counts the number of times a user taps to open an
+      existing tab from the Jump Back In section,
+      with a home page origin.
+    labels:
+      - zero-search
+      - origin-other
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3284
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/XXXX
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-05-01"
   jump_back_in_group_opened:
     type: counter
     description: |
@@ -623,6 +639,22 @@ firefox_home_page:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-04-01"
+  jump_back_in_group_open_origin:
+    type: labeled_counter
+    description: |
+      Counts the number of times a user taps to open an
+      existing group from the Jump Back In section,
+      with a home page origin.
+    labels:
+      - zero-search
+      - origin-other
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3284
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/XXXX
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-05-01"
   customize_homepage_button:
     type: counter
     description: |

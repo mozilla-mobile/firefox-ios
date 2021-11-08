@@ -716,10 +716,16 @@ extension TelemetryWrapper {
             }
         case (.action, .view, .jumpBackInImpressions, _, _):
             GleanMetrics.FirefoxHomePage.jumpBackInSectionView.add()
-        case (.action, .tap, .firefoxHomepage, EventValue.jumpBackInSectionTabOpened.rawValue, _):
+        case (.action, .tap, .firefoxHomepage, EventValue.jumpBackInSectionTabOpened.rawValue, let extras):
             GleanMetrics.FirefoxHomePage.jumpBackInTabOpened.add()
-        case (.action, .tap, .firefoxHomepage, EventValue.jumpBackInSectionGroupOpened.rawValue, _):
+            if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
+                GleanMetrics.FirefoxHomePage.jumpBackInTabOpenedOrigin[homePageOrigin].add()
+            }
+        case (.action, .tap, .firefoxHomepage, EventValue.jumpBackInSectionGroupOpened.rawValue, let extras):
             GleanMetrics.FirefoxHomePage.jumpBackInGroupOpened.add()
+            if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
+                GleanMetrics.FirefoxHomePage.jumpBackInGroupOpenOrigin[homePageOrigin].add()
+            }
 
         case (.action, .tap, .firefoxHomepage, EventValue.customizeHomepageButton.rawValue, _):
             GleanMetrics.FirefoxHomePage.customizeHomepageButton.add()
@@ -731,3 +737,12 @@ extension TelemetryWrapper {
     }
 }
 
+// MARK: - Firefox Home Page
+extension TelemetryWrapper {
+
+    /// Bundle the extras dictionnary for the home page origin
+    static func getOriginExtras(isZeroSearch: Bool) -> [String: String] {
+        let origin = isZeroSearch ? TelemetryWrapper.EventValue.fxHomepageOriginZeroSearch : TelemetryWrapper.EventValue.fxHomepageOriginOther
+        return [TelemetryWrapper.EventExtraKey.fxHomepageOrigin.rawValue: origin.rawValue]
+    }
+}
