@@ -106,16 +106,16 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell {
 
         if tab.displayTitle.isEmpty {
             if let url = tab.webView?.url, let internalScheme = InternalURL(url) {
-                self.titleText.text = Strings.AppMenuNewTabTitleString
+                self.titleText.text = .AppMenuNewTabTitleString
                 self.accessibilityLabel = internalScheme.aboutComponent
             } else {
                 self.titleText.text = tab.webView?.url?.absoluteDisplayString
             }
             
-            self.closeButton.accessibilityLabel = String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, self.titleText.text ?? "")
+            self.closeButton.accessibilityLabel = String(format: .TopSitesRemoveButtonAccessibilityLabel, self.titleText.text ?? "")
         } else {
             self.accessibilityLabel = tab.displayTitle
-            self.closeButton.accessibilityLabel = String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, tab.displayTitle)
+            self.closeButton.accessibilityLabel = String(format: .TopSitesRemoveButtonAccessibilityLabel, tab.displayTitle)
         }
 
         self.isSelectedTab = selected

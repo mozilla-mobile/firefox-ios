@@ -125,7 +125,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
     private let protectionView: UIView = ETPSectionView(frame: .zero)
 
     private var protectionButton: UIButton = .build { button in
-        button.setTitle(Strings.TPProtectionSettings, for: .normal)
+        button.setTitle(.TPProtectionSettings, for: .normal)
         button.titleLabel?.font = ETPMenuUX.Fonts.viewTitleLabels
         button.setTitleColor(.systemBlue, for: .normal)
         button.contentHorizontalAlignment = .left
@@ -347,8 +347,8 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
         connectionImage.image = viewModel.connectionStatusImage
 
         toggleSwitch.isOn = viewModel.isSiteETPEnabled
-        toggleLabel.text = Strings.TrackingProtectionEnableTitle
-        toggleStatusLabel.text = toggleSwitch.isOn ? Strings.ETPOn : Strings.ETPOff
+        toggleLabel.text = .TrackingProtectionEnableTitle
+        toggleStatusLabel.text = toggleSwitch.isOn ? .ETPOn : .ETPOff
     }
 
     private func setupViewActions() {
@@ -374,8 +374,8 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
         // site is safelisted if site ETP is disabled
         viewModel.toggleSiteSafelistStatus()
         switch viewModel.isSiteETPEnabled {
-        case true: toggleStatusLabel.text = Strings.ETPOn
-        case false: toggleStatusLabel.text = Strings.ETPOff
+        case true: toggleStatusLabel.text = .ETPOn
+        case false: toggleStatusLabel.text = .ETPOff
         }
     }
 

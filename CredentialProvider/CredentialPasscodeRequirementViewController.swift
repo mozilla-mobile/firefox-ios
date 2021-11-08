@@ -53,7 +53,7 @@ class CredentialPasscodeRequirementViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .systemRed
         button.layer.cornerRadius = 8
-        button.setTitle(Strings.CancelString, for: .normal)
+        button.setTitle(.CancelString, for: .normal)
         button.titleLabel?.font = DynamicFontHelper().MediumSizeBoldFontAS
         button.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         return button

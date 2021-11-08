@@ -49,7 +49,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     // currently selected tab. This allows us to force the scroll behaviour to move
     // whereever we need to focus the user's attention.
     var tabToFocus: Tab? = nil
-    
+
     fileprivate lazy var emptyPrivateTabsView: EmptyPrivateTabsView = {
         let emptyView = EmptyPrivateTabsView()
         emptyView.learnMoreButton.addTarget(self, action: #selector(didTapLearnMore), for: .touchUpInside)
@@ -100,7 +100,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         tabManager.removeDelegate(self)
         tabDisplayManager = nil
     }
-    
+
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         guard let flowlayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
@@ -169,7 +169,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         super.viewDidLoad()
         tabManager.addDelegate(self)
         view.accessibilityLabel = .TabTrayViewAccessibilityLabel
-        
+
         webViewContainerBackdrop = UIView()
         webViewContainerBackdrop.alpha = 0
 
@@ -219,7 +219,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         webViewContainerBackdrop.snp.makeConstraints { make in
             make.edges.equalTo(self.view)
         }
-        
+
         collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -247,7 +247,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         }
 
         tabManager.willSwitchTabMode(leavingPBM: tabDisplayManager.isPrivate)
-        
+
         tabDisplayManager.togglePrivateMode(isOn: !tabDisplayManager.isPrivate, createTabOnEmptyPrivateMode: false)
 
         self.tabDisplayManager.refreshStore()
@@ -361,7 +361,7 @@ extension GridTabViewController {
         }
         closeTabsTrayHelper()
     }
-    
+
     func closeTabsTrayHelper() {
         if self.tabDisplayManager.isPrivate {
             self.emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()
@@ -547,21 +547,21 @@ extension GridTabViewController: TabDisplayCompletionDelegate, RecentlyClosedPan
         delegate?.tabTrayOpenRecentlyClosedTab(url)
         dismissTabTray()
     }
-    
+
     func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .openRecentlyClosedTab, extras: nil)
         openNewTab(URLRequest(url: url), isPrivate: isPrivate)
         dismissTabTray()
     }
-    
+
     // TabDisplayCompletionDelegate
     func displayRecentlyClosedTabs() {
         recentlyClosedTabsPanel = RecentlyClosedTabsPanel(profile: profile)
-        recentlyClosedTabsPanel!.title = Strings.RecentlyClosedTabsButtonTitle
+        recentlyClosedTabsPanel!.title = .RecentlyClosedTabsButtonTitle
         recentlyClosedTabsPanel!.recentlyClosedTabsDelegate = self
         navigationController?.pushViewController(recentlyClosedTabsPanel!, animated: true)
     }
-    
+
     func completedAnimation(for type: TabAnimationType) {
         emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
 
@@ -611,9 +611,13 @@ extension GridTabViewController {
         }
 
         let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        controller.addAction(UIAlertAction(title: Strings.AppMenuCloseAllTabsTitleString, style: .default, handler: { _ in self.closeTabsForCurrentTray() }),
+        controller.addAction(UIAlertAction(title: .AppMenuCloseAllTabsTitleString,
+                                           style: .default,
+                                           handler: { _ in self.closeTabsForCurrentTray() }),
                              accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
-        controller.addAction(UIAlertAction(title: .TabTrayCloseAllTabsPromptCancel, style: .cancel, handler: nil),
+        controller.addAction(UIAlertAction(title: .TabTrayCloseAllTabsPromptCancel,
+                                           style: .cancel,
+                                           handler: nil),
                              accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton)
         controller.popoverPresentationController?.barButtonItem = sender
         present(controller, animated: true, completion: nil)
@@ -626,11 +630,11 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
     let scrollView: UIScrollView
     var lastYOffset: CGFloat = 0
     var tabDisplayManager: TabDisplayManager
-    
+
     var sectionHeaderSize: CGSize {
         CGSize(width: 50, height: 40)
     }
-    
+
     enum ScrollDirection {
         case up
         case down
@@ -665,7 +669,7 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
             return GridTabTrayControllerUX.TextBoxHeight * 8
         }
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         switch TabDisplaySection(rawValue: section) {
         case .regularTabs:
@@ -674,10 +678,10 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
             }
         default: return .zero
         }
-        
+
         return .zero
     }
-    
+
 
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
@@ -715,7 +719,7 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
             }
 
             totalHeight = tabDisplayManager.isInactiveViewExpanded ? totalHeight : minInactiveCellHeight
-            
+
             if UIDevice.current.userInterfaceIdiom == .pad {
                 return CGSize(width: Int(collectionView.frame.size.width/2), height: totalHeight)
             } else {
@@ -845,7 +849,7 @@ class TabCell: UICollectionViewCell, TabTrayCell {
         backgroundHolder.snp.makeConstraints { make in
             make.edges.equalTo(contentView)
         }
-        
+
         backgroundHolder.addSubview(self.screenshotView)
 
         self.accessibilityCustomActions = [

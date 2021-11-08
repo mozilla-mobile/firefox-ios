@@ -131,7 +131,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView
-        headerView?.titleLabel.text = section == Section.sites.rawValue ? Strings.SettingsWebsiteDataTitle : nil
+        headerView?.titleLabel.text = section == Section.sites.rawValue ? .SettingsWebsiteDataTitle : nil
 
         headerView?.showBorder(for: .top, true)
         headerView?.showBorder(for: .bottom, true)

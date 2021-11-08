@@ -68,7 +68,7 @@ class LibraryViewController: UIViewController {
     }()
 
     fileprivate lazy var bottomRightButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(title: Strings.BookmarksEdit, style: .plain, target: self, action: #selector(bottomRightButtonAction))
+        let button = UIBarButtonItem(title: .BookmarksEdit, style: .plain, target: self, action: #selector(bottomRightButtonAction))
         button.accessibilityIdentifier = "bookmarksPanelBottomRightButton"
         return button
     }()
@@ -349,7 +349,7 @@ class LibraryViewController: UIViewController {
         case .bookmarks(state: .inFolderEditMode):
             navigationItem.rightBarButtonItem = nil
         case .bookmarks(state: .itemEditMode):
-            topRightButton.title = Strings.SettingsAddCustomEngineSaveButtonText
+            topRightButton.title = .SettingsAddCustomEngineSaveButtonText
             navigationItem.rightBarButtonItem = topRightButton
         default:
             topRightButton.title = String.AppSettingsDone
@@ -370,7 +370,7 @@ class LibraryViewController: UIViewController {
         switch viewModel.currentPanelState {
         case .bookmarks(state: let subState):
             if subState == .inFolder {
-                bottomRightButton.title = Strings.BookmarksEdit
+                bottomRightButton.title = .BookmarksEdit
             } else if subState == .inFolderEditMode {
                 bottomRightButton.title = String.AppSettingsDone
             }
