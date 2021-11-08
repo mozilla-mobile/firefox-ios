@@ -572,7 +572,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         var toast: ButtonToast?
         let numberOfTabs = recentlyClosedForUndo.count
         if numberOfTabs > 0 {
-            toast = ButtonToast(labelText: String.localizedStringWithFormat(Strings.TabsDeleteAllUndoTitle, numberOfTabs), buttonText: Strings.TabsDeleteAllUndoAction, completion: { buttonPressed in
+            toast = ButtonToast(labelText: String.localizedStringWithFormat(.TabsDeleteAllUndoTitle, numberOfTabs), buttonText: .TabsDeleteAllUndoAction, completion: { buttonPressed in
                 if buttonPressed {
                     self.undoCloseTabs()
                     self.storeChanges()

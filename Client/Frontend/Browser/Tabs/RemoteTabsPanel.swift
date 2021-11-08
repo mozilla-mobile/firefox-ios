@@ -105,7 +105,7 @@ enum RemoteTabsError {
         switch self {
         // This does not have a localized string because we have a whole specific screen for it.
         case .notLoggedIn: return ""
-        case .noClients: return Strings.EmptySyncedTabsPanelNullStateDescription
+        case .noClients: return .EmptySyncedTabsPanelNullStateDescription
         case .noTabs: return .RemoteTabErrorNoTabs
         case .failedToSync: return .RemoteTabErrorFailedToSync
         }
@@ -274,7 +274,7 @@ class RemoteTabsErrorCell: UITableViewCell {
         }
 
         titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFont
-        titleLabel.text = Strings.EmptySyncedTabsPanelStateTitle
+        titleLabel.text = .EmptySyncedTabsPanelStateTitle
         titleLabel.textAlignment = .center
         containerView.addSubview(titleLabel)
 
@@ -348,17 +348,17 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         contentView.addSubview(emptyStateImageView)
 
         titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFont
-        titleLabel.text = Strings.EmptySyncedTabsPanelStateTitle
+        titleLabel.text = .EmptySyncedTabsPanelStateTitle
         titleLabel.textAlignment = .center
         contentView.addSubview(titleLabel)
 
         instructionsLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
-        instructionsLabel.text = Strings.EmptySyncedTabsPanelNotSignedInStateDescription
+        instructionsLabel.text = .EmptySyncedTabsPanelNotSignedInStateDescription
         instructionsLabel.textAlignment = .center
         instructionsLabel.numberOfLines = 0
         contentView.addSubview(instructionsLabel)
 
-        signInButton.setTitle(Strings.FxASignInToSync, for: [])
+        signInButton.setTitle(.FxASignInToSync, for: [])
         signInButton.setTitleColor(UIColor.Photon.White100, for: [])
         signInButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
         signInButton.layer.cornerRadius = RemoteTabsPanelUX.EmptyStateSignInButtonCornerRadius

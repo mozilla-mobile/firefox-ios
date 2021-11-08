@@ -39,7 +39,7 @@ class CustomSearchViewController: SettingsTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = Strings.SettingsAddCustomEngineTitle
+        title = .SettingsAddCustomEngineTitle
         view.addSubview(spinnerView)
         spinnerView.snp.makeConstraints { make in
             make.center.equalTo(self.view.snp.center)
@@ -127,7 +127,7 @@ class CustomSearchViewController: SettingsTableViewController {
             return URL(string: string)
         }
 
-        let titleField = CustomSearchEngineTextView(placeholder: Strings.SettingsAddCustomEngineTitlePlaceholder, settingIsValid: { text in
+        let titleField = CustomSearchEngineTextView(placeholder: .SettingsAddCustomEngineTitlePlaceholder, settingIsValid: { text in
             return text != nil && text != ""
         }, settingDidChange: {fieldText in
             guard let title = fieldText else {
@@ -138,7 +138,7 @@ class CustomSearchViewController: SettingsTableViewController {
         titleField.textField.text = engineTitle
         titleField.textField.accessibilityIdentifier = "customEngineTitle"
 
-        let urlField = CustomSearchEngineTextView(placeholder: Strings.SettingsAddCustomEngineURLPlaceholder, height: 133,
+        let urlField = CustomSearchEngineTextView(placeholder: .SettingsAddCustomEngineURLPlaceholder, height: 133,
             keyboardType: .URL, settingIsValid: { text in
             //Can check url text text validity here.
             return true
@@ -151,8 +151,8 @@ class CustomSearchViewController: SettingsTableViewController {
         urlField.textField.accessibilityIdentifier = "customEngineUrl"
 
         let settings: [SettingSection] = [
-            SettingSection(title: NSAttributedString(string: Strings.SettingsAddCustomEngineTitleLabel), children: [titleField]),
-            SettingSection(title: NSAttributedString(string: Strings.SettingsAddCustomEngineURLLabel), footerTitle: NSAttributedString(string: "https://youtube.com/search?q=%s"), children: [urlField])
+            SettingSection(title: NSAttributedString(string: .SettingsAddCustomEngineTitleLabel), children: [titleField]),
+            SettingSection(title: NSAttributedString(string: .SettingsAddCustomEngineURLLabel), footerTitle: NSAttributedString(string: "https://youtube.com/search?q=%s"), children: [urlField])
         ]
 
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(self.addCustomSearchEngine))

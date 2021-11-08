@@ -138,11 +138,11 @@ extension HomePanelContextMenu {
     func getDefaultContextMenuActions(for site: Site, homePanelDelegate: HomePanelDelegate?) -> [PhotonActionSheetItem]? {
         guard let siteURL = URL(string: site.url) else { return nil }
 
-        let openInNewTabAction = PhotonActionSheetItem(title: Strings.OpenInNewTabContextMenuTitle, iconString: "quick_action_new_tab") { _, _ in
+        let openInNewTabAction = PhotonActionSheetItem(title: .OpenInNewTabContextMenuTitle, iconString: "quick_action_new_tab") { _, _ in
             homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
         }
 
-        let openInNewPrivateTabAction = PhotonActionSheetItem(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { _, _ in
+        let openInNewPrivateTabAction = PhotonActionSheetItem(title: .OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { _, _ in
             homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
         }
 
@@ -503,11 +503,11 @@ extension FirefoxHomeViewController {
 
         var title: String? {
             switch self {
-            case .pocket: return Strings.ASPocketTitle2
-            case .jumpBackIn: return String.FirefoxHomeJumpBackInSectionTitle
-            case .recentlySaved: return Strings.RecentlySavedSectionTitle
-            case .topSites: return Strings.ASShortcutsTitle
-            case .libraryShortcuts: return Strings.AppMenuLibraryTitleString
+            case .pocket: return .ASPocketTitle2
+            case .jumpBackIn: return .FirefoxHomeJumpBackInSectionTitle
+            case .recentlySaved: return .RecentlySavedSectionTitle
+            case .topSites: return .ASShortcutsTitle
+            case .libraryShortcuts: return .AppMenuLibraryTitleString
             case .customizeHome: return nil
             }
         }
@@ -643,10 +643,11 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                     hasSentPocketSectionEvent = true
                 }
                 headerView.moreButton.isHidden = false
-                headerView.moreButton.setTitle(Strings.PocketMoreStoriesText, for: .normal)
+                headerView.moreButton.setTitle(.PocketMoreStoriesText, for: .normal)
                 headerView.moreButton.addTarget(self, action: #selector(showMorePocketStories), for: .touchUpInside)
                 headerView.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.pocket
                 return headerView
+
             case .jumpBackIn:
                 if !hasSentJumpBackInSectionEvent
                     && isJumpBackInSectionEnabled
@@ -655,7 +656,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                     hasSentJumpBackInSectionEvent = true
                 }
                 headerView.moreButton.isHidden = false
-                headerView.moreButton.setTitle(Strings.RecentlySavedShowAllText, for: .normal)
+                headerView.moreButton.setTitle(.RecentlySavedShowAllText, for: .normal)
                 headerView.moreButton.addTarget(self, action: #selector(openTabTray), for: .touchUpInside)
                 headerView.moreButton.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.MoreButtons.jumpBackIn
                 headerView.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.jumpBackIn
@@ -674,11 +675,12 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                 return headerView
             case .recentlySaved:
                 headerView.moreButton.isHidden = false
-                headerView.moreButton.setTitle(Strings.RecentlySavedShowAllText, for: .normal)
+                headerView.moreButton.setTitle(.RecentlySavedShowAllText, for: .normal)
                 headerView.moreButton.addTarget(self, action: #selector(openBookmarks), for: .touchUpInside)
                 headerView.moreButton.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.MoreButtons.recentlySaved
                 headerView.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.recentlySaved
                 return headerView
+
             case .topSites:
                 headerView.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.topSites
                 headerView.moreButton.isHidden = true
@@ -1181,20 +1183,20 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
             return nil
         }
 
-        let openInNewTabAction = PhotonActionSheetItem(title: Strings.OpenInNewTabContextMenuTitle, iconString: "quick_action_new_tab") { _, _ in
+        let openInNewTabAction = PhotonActionSheetItem(title: .OpenInNewTabContextMenuTitle, iconString: "quick_action_new_tab") { _, _ in
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
             if Section(indexPath.section) == .pocket {
                 TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .pocketStory)
             }
         }
 
-        let openInNewPrivateTabAction = PhotonActionSheetItem(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { _, _ in
+        let openInNewPrivateTabAction = PhotonActionSheetItem(title: .OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { _, _ in
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
         }
 
         let bookmarkAction: PhotonActionSheetItem
         if site.bookmarked ?? false {
-            bookmarkAction = PhotonActionSheetItem(title: Strings.RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", handler: { _, _ in
+            bookmarkAction = PhotonActionSheetItem(title: .RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", handler: { _, _ in
                 self.profile.places.deleteBookmarksWithURL(url: site.url) >>== {
                     self.profile.panelDataObservers.activityStream.refreshIfNeeded(forceTopSites: false)
                     site.setBookmarked(false)
@@ -1203,7 +1205,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
                 TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .bookmark, value: .activityStream)
             })
         } else {
-            bookmarkAction = PhotonActionSheetItem(title: Strings.BookmarkContextMenuTitle, iconString: "action_bookmark", handler: { _, _ in
+            bookmarkAction = PhotonActionSheetItem(title: .BookmarkContextMenuTitle, iconString: "action_bookmark", handler: { _, _ in
                 let shareItem = ShareItem(url: site.url, title: site.title, favicon: site.icon)
                 _ = self.profile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID, url: shareItem.url, title: shareItem.title)
 
@@ -1220,7 +1222,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
             })
         }
 
-        let shareAction = PhotonActionSheetItem(title: Strings.ShareContextMenuTitle, iconString: "action_share", handler: { _, _ in
+        let shareAction = PhotonActionSheetItem(title: .ShareContextMenuTitle, iconString: "action_share", handler: { _, _ in
             let helper = ShareExtensionHelper(url: siteURL, tab: nil)
             let controller = helper.createActivityViewController { (_, _) in }
             if UIDevice.current.userInterfaceIdiom == .pad, let popoverController = controller.popoverPresentationController {
@@ -1235,15 +1237,15 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
             self.present(controller, animated: true, completion: nil)
         })
 
-        let removeTopSiteAction = PhotonActionSheetItem(title: Strings.RemoveContextMenuTitle, iconString: "action_remove", handler: { _, _ in
+        let removeTopSiteAction = PhotonActionSheetItem(title: .RemoveContextMenuTitle, iconString: "action_remove", handler: { _, _ in
             self.hideURLFromTopSites(site)
         })
 
-        let pinTopSite = PhotonActionSheetItem(title: Strings.AddToShortcutsActionTitle, iconString: "action_pin", handler: { _, _ in
+        let pinTopSite = PhotonActionSheetItem(title: .AddToShortcutsActionTitle, iconString: "action_pin", handler: { _, _ in
             self.pinTopSite(site)
         })
 
-        let removePinTopSite = PhotonActionSheetItem(title: Strings.RemoveFromShortcutsActionTitle, iconString: "action_unpin", handler: { _, _ in
+        let removePinTopSite = PhotonActionSheetItem(title: .RemoveFromShortcutsActionTitle, iconString: "action_unpin", handler: { _, _ in
             self.removePinTopSite(site)
         })
 

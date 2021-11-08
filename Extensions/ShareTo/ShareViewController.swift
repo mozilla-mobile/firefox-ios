@@ -117,15 +117,15 @@ class ShareViewController: UIViewController {
         makeSeparator(addTo: stackView)
 
         if shareItem?.isUrlType() ?? true {
-            makeActionRow(addTo: stackView, label: Strings.ShareOpenInFirefox, imageName: "open-in-firefox", action: #selector(actionOpenInFirefoxNow), hasNavigation: false)
-            makeActionRow(addTo: stackView, label: Strings.ShareLoadInBackground, imageName: "menu-Show-Tabs", action: #selector(actionLoadInBackground), hasNavigation: false)
-            makeActionRow(addTo: stackView, label: Strings.ShareBookmarkThisPage, imageName: "AddToBookmarks", action: #selector(actionBookmarkThisPage), hasNavigation: false)
-            makeActionRow(addTo: stackView, label: Strings.ShareAddToReadingList, imageName: "AddToReadingList", action: #selector(actionAddToReadingList), hasNavigation: false)
+            makeActionRow(addTo: stackView, label: .ShareOpenInFirefox, imageName: "open-in-firefox", action: #selector(actionOpenInFirefoxNow), hasNavigation: false)
+            makeActionRow(addTo: stackView, label: .ShareLoadInBackground, imageName: "menu-Show-Tabs", action: #selector(actionLoadInBackground), hasNavigation: false)
+            makeActionRow(addTo: stackView, label: .ShareBookmarkThisPage, imageName: "AddToBookmarks", action: #selector(actionBookmarkThisPage), hasNavigation: false)
+            makeActionRow(addTo: stackView, label: .ShareAddToReadingList, imageName: "AddToReadingList", action: #selector(actionAddToReadingList), hasNavigation: false)
             makeSeparator(addTo: stackView)
-            makeActionRow(addTo: stackView, label: Strings.ShareSendToDevice, imageName: "menu-Send-to-Device", action: #selector(actionSendToDevice), hasNavigation: true)
+            makeActionRow(addTo: stackView, label: .ShareSendToDevice, imageName: "menu-Send-to-Device", action: #selector(actionSendToDevice), hasNavigation: true)
         } else {
             pageInfoRowUrlLabel?.removeFromSuperview()
-            makeActionRow(addTo: stackView, label: Strings.ShareSearchInFirefox, imageName: "quickSearch", action: #selector(actionSearchInFirefox), hasNavigation: false)
+            makeActionRow(addTo: stackView, label: .ShareSearchInFirefox, imageName: "quickSearch", action: #selector(actionSearchInFirefox), hasNavigation: false)
         }
 
         let footerSpaceRow = UIView()
@@ -296,7 +296,7 @@ class ShareViewController: UIViewController {
         navigationController?.navigationBar.setValue(true, forKey: "hidesShadow") // hide separator line
         navigationItem.titleView = UIImageView(image: UIImage(named: "Icon-Small"))
         navigationItem.titleView?.contentMode = .scaleAspectFit
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: Strings.SendToCancelButton, style: .plain, target: self, action: #selector(finish))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: .SendToCancelButton, style: .plain, target: self, action: #selector(finish))
         navigationController?.navigationBar.barTintColor = ShareTheme.defaultBackground.color
     }
 
@@ -315,7 +315,7 @@ extension ShareViewController {
     @objc func actionLoadInBackground(gesture: UIGestureRecognizer) {
         // To avoid re-rentry from double tap, each action function disables the gesture
         gesture.isEnabled = false
-        animateToActionDoneView(withTitle: Strings.ShareLoadInBackgroundDone)
+        animateToActionDoneView(withTitle: .ShareLoadInBackgroundDone)
 
         if let shareItem = shareItem, case .shareItem(let item) = shareItem {
             let profile = BrowserProfile(localName: "profile")
@@ -331,7 +331,7 @@ extension ShareViewController {
 
     @objc func actionBookmarkThisPage(gesture: UIGestureRecognizer) {
         gesture.isEnabled = false
-        animateToActionDoneView(withTitle: Strings.ShareBookmarkThisPageDone)
+        animateToActionDoneView(withTitle: .ShareBookmarkThisPageDone)
 
         if let shareItem = shareItem, case .shareItem(let item) = shareItem {
             let profile = BrowserProfile(localName: "profile")
@@ -347,7 +347,7 @@ extension ShareViewController {
 
     @objc func actionAddToReadingList(gesture: UIGestureRecognizer) {
         gesture.isEnabled = false
-        animateToActionDoneView(withTitle: Strings.ShareAddToReadingListDone)
+        animateToActionDoneView(withTitle: .ShareAddToReadingListDone)
 
         if let shareItem = shareItem, case .shareItem(let item) = shareItem {
             let profile = BrowserProfile(localName: "profile")
@@ -425,4 +425,3 @@ extension ShareViewController {
         finish(afterDelay: 0)
     }
 }
-

@@ -34,9 +34,9 @@ class TabTrayViewModel {
         if foriPhone {
             switch segmentIndex {
             case 0, 1:
-                return Strings.TabTrayV2Title
+                return .TabTrayV2Title
             case 2:
-                return Strings.AppMenuSyncedTabsTitleString
+                return .AppMenuSyncedTabsTitleString
             default:
                 return nil
             }

@@ -30,7 +30,7 @@ class UpdateCoverSheetTableViewCell: UITableViewCell {
     }()
     var updateCoverSheetCellDescriptionLabel: UILabel = {
         let label = UILabel()
-        label.text = Strings.CoverSheetV22DarkModeTitle
+        label.text = .CoverSheetV22DarkModeTitle
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 20, weight: .regular)
         label.textAlignment = .left

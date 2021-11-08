@@ -111,14 +111,14 @@ class DownloadHelper: NSObject {
             label.lineBreakMode = .byCharWrapping
         }
 
-        let downloadFileItem = PhotonActionSheetItem(title: Strings.OpenInDownloadHelperAlertDownloadNow, iconString: "download") { _, _ in
+        let downloadFileItem = PhotonActionSheetItem(title: .OpenInDownloadHelperAlertDownloadNow, iconString: "download") { _, _ in
             self.browserViewController.downloadQueue.enqueue(download)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .downloadNowButton)
         }
 
         let actions = [[filenameItem], [downloadFileItem]]
 
-        browserViewController.presentSheetWith(title: download.filename, actions: actions, on: browserViewController, from: browserViewController.urlBar, closeButtonTitle: Strings.CancelString, suppressPopover: true)
+        browserViewController.presentSheetWith(title: download.filename, actions: actions, on: browserViewController, from: browserViewController.urlBar, closeButtonTitle: .CancelString, suppressPopover: true)
     }
 }
 
@@ -150,8 +150,8 @@ class OpenPassBookHelper: NSObject {
                 }
             }
         } catch {
-            let alertController = UIAlertController(title: Strings.UnableToAddPassErrorTitle, message: Strings.UnableToAddPassErrorMessage, preferredStyle: .alert)
-            alertController.addAction(UIAlertAction(title: Strings.UnableToAddPassErrorDismiss, style: .cancel) { (action) in
+            let alertController = UIAlertController(title: .UnableToAddPassErrorTitle, message: .UnableToAddPassErrorMessage, preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: .UnableToAddPassErrorDismiss, style: .cancel) { (action) in
                     // Do nothing.
             })
             browserViewController.present(alertController, animated: true, completion: nil)

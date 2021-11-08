@@ -27,7 +27,7 @@ class IntroScreenWelcomeView: UIView, CardTheme {
     }()
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = Strings.CardTitleWelcome
+        label.text = .CardTitleWelcome
         label.textColor = fxTextThemeColour
         label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         label.textAlignment = .center
@@ -37,7 +37,7 @@ class IntroScreenWelcomeView: UIView, CardTheme {
     private lazy var subTitleLabelPage1: UILabel = {
         let fontSize: CGFloat = screenSize.width <= 320 ? 16 : 20
         let label = UILabel()
-        label.text = Strings.CardTextWelcome
+        label.text = .CardTextWelcome
         label.textColor = fxTextThemeColour
         label.font = UIFont.systemFont(ofSize: fontSize)
         label.textAlignment = .center
@@ -57,7 +57,7 @@ class IntroScreenWelcomeView: UIView, CardTheme {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         button.layer.cornerRadius = 10
         button.backgroundColor = UIColor.Photon.Blue50
-        button.setTitle(Strings.IntroSignUpButtonTitle, for: .normal)
+        button.setTitle(.IntroSignUpButtonTitle, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.textAlignment = .center
@@ -71,7 +71,7 @@ class IntroScreenWelcomeView: UIView, CardTheme {
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.gray.cgColor
         button.backgroundColor = .clear
-        button.setTitle(Strings.IntroSignInButtonTitle, for: .normal)
+        button.setTitle(.IntroSignInButtonTitle, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         button.setTitleColor(UIColor.Photon.Blue50, for: .normal)
         button.titleLabel?.textAlignment = .center
@@ -79,7 +79,7 @@ class IntroScreenWelcomeView: UIView, CardTheme {
     }()
     private lazy var nextButton: UIButton = {
         let button = UIButton()
-        button.setTitle(Strings.IntroNextButtonTitle, for: .normal)
+        button.setTitle(.IntroNextButtonTitle, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         button.setTitleColor(UIColor.Photon.Blue50, for: .normal)
         button.titleLabel?.textAlignment = .center

@@ -12,7 +12,7 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = DynamicFontHelper().DeviceFontExtraLarge
-        label.text = Strings.LoginsDevicePasscodeRequiredMessage
+        label.text = .LoginsDevicePasscodeRequiredMessage
         label.textAlignment = .center
         label.numberOfLines = 0
         return label
@@ -21,7 +21,7 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
     private var learnMoreButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle(Strings.LoginsDevicePasscodeRequiredLearnMoreButtonTitle, for: .normal)
+        button.setTitle(.LoginsDevicePasscodeRequiredLearnMoreButtonTitle, for: .normal)
         button.addTarget(self, action: #selector(learnMoreButtonTapped), for: .touchUpInside)
         button.titleLabel?.font = DynamicFontHelper().DeviceFontExtraLarge
         return button
@@ -43,7 +43,7 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
             navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(doneButtonTapped))
         }
         
-        self.title = Strings.LoginsAndPasswordsTitle
+        self.title = .LoginsAndPasswordsTitle
         
         self.view.addSubviews(warningLabel, learnMoreButton)
         

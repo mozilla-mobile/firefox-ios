@@ -13,7 +13,7 @@ class FxHomeCustomizeHomeView: UICollectionViewCell {
 
     // MARK: - UI Elements
     let goToSettingsButton: UIButton = .build { button in
-        button.setTitle(.FirefoxHomeCustomizeHomeButtonTitle, for: .normal)
+        button.setTitle(.FirefoxHomepage.CustomizeHomepage.ButtonTitle, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 15, weight: .bold)
         button.layer.cornerRadius = 5
         button.accessibilityIdentifier = "FxHomeCustomizeHomeSettingButton"

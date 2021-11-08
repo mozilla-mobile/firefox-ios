@@ -9,18 +9,18 @@ extension BlockingStrength {
     var settingTitle: String {
         switch self {
         case .basic:
-            return Strings.TrackingProtectionOptionBlockListLevelStandard
+            return .TrackingProtectionOptionBlockListLevelStandard
         case .strict:
-            return Strings.TrackingProtectionOptionBlockListLevelStrict
+            return .TrackingProtectionOptionBlockListLevelStrict
         }
     }
 
     var settingSubtitle: String {
         switch self {
         case .basic:
-            return Strings.TrackingProtectionStandardLevelDescription
+            return .TrackingProtectionStandardLevelDescription
         case .strict:
-            return Strings.TrackingProtectionStrictLevelDescription
+            return .TrackingProtectionStrictLevelDescription
         }
     }
 
@@ -56,7 +56,7 @@ class TPAccessoryInfo: ThemedTableViewController {
         stack.axis = .vertical
 
         let header = UILabel()
-        header.text = Strings.TPAccessoryInfoBlocksTitle
+        header.text = .TPAccessoryInfoBlocksTitle
         header.font = DynamicFontHelper.defaultHelper.DefaultMediumBoldFont
         header.textColor = UIColor.theme.tableView.headerTextLight
 
@@ -96,33 +96,33 @@ class TPAccessoryInfo: ThemedTableViewController {
         let cell = ThemedTableViewCell(style: .subtitle, reuseIdentifier: nil)
         if indexPath.section == 0 {
             if indexPath.row == 0 {
-                cell.textLabel?.text = Strings.TPSocialBlocked
+                cell.textLabel?.text = .TPSocialBlocked
             } else {
-                cell.textLabel?.text = Strings.TPCategoryDescriptionSocial
+                cell.textLabel?.text = .TPCategoryDescriptionSocial
             }
         } else if indexPath.section == 1 {
             if indexPath.row == 0 {
-                cell.textLabel?.text = Strings.TPCrossSiteBlocked
+                cell.textLabel?.text = .TPCrossSiteBlocked
             } else {
-                cell.textLabel?.text = Strings.TPCategoryDescriptionCrossSite
+                cell.textLabel?.text = .TPCategoryDescriptionCrossSite
             }
         } else if indexPath.section == 2 {
             if indexPath.row == 0 {
-                cell.textLabel?.text = Strings.TPCryptominersBlocked
+                cell.textLabel?.text = .TPCryptominersBlocked
             } else {
-                cell.textLabel?.text = Strings.TPCategoryDescriptionCryptominers
+                cell.textLabel?.text = .TPCategoryDescriptionCryptominers
             }
         } else if indexPath.section == 3 {
             if indexPath.row == 0 {
-                cell.textLabel?.text = Strings.TPFingerprintersBlocked
+                cell.textLabel?.text = .TPFingerprintersBlocked
             } else {
-                cell.textLabel?.text = Strings.TPCategoryDescriptionFingerprinters
+                cell.textLabel?.text = .TPCategoryDescriptionFingerprinters
             }
         } else if indexPath.section == 4 {
             if indexPath.row == 0 {
-                cell.textLabel?.text = Strings.TPContentBlocked
+                cell.textLabel?.text = .TPContentBlocked
             } else {
-                cell.textLabel?.text = Strings.TPCategoryDescriptionContentTrackers
+                cell.textLabel?.text = .TPCategoryDescriptionContentTrackers
             }
         }
         cell.imageView?.tintColor = UIColor.theme.tableView.rowText
@@ -149,7 +149,7 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
 
         super.init(style: .grouped)
 
-        self.title = Strings.SettingsTrackingProtectionSectionName
+        self.title = .SettingsTrackingProtectionSectionName
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -170,8 +170,8 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
                 TelemetryWrapper.recordEvent(category: .action, method: .change, object: .setting, extras: ["pref": "ETP-strength", "to": option.rawValue])
                 
                 if option == .strict {
-                    let alert = UIAlertController(title: Strings.TrackerProtectionAlertTitle, message: Strings.TrackerProtectionAlertDescription, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: Strings.TrackerProtectionAlertButton, style: .default, handler: nil))
+                    let alert = UIAlertController(title: .TrackerProtectionAlertTitle, message: .TrackerProtectionAlertDescription, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: .TrackerProtectionAlertButton, style: .default, handler: nil))
                     self.present(alert, animated: true)
                 }
             })
@@ -185,7 +185,7 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
             return setting
         }
 
-        let enabledSetting = BoolSetting(prefs: profile.prefs, prefKey: ContentBlockingConfig.Prefs.EnabledKey, defaultValue: ContentBlockingConfig.Defaults.NormalBrowsing, attributedTitleText: NSAttributedString(string: Strings.TrackingProtectionEnableTitle)) { [weak self] enabled in
+        let enabledSetting = BoolSetting(prefs: profile.prefs, prefKey: ContentBlockingConfig.Prefs.EnabledKey, defaultValue: ContentBlockingConfig.Defaults.NormalBrowsing, attributedTitleText: NSAttributedString(string: .TrackingProtectionEnableTitle)) { [weak self] enabled in
             TabContentBlocker.prefsChanged()
             strengthSetting.forEach { item in
                 item.enabled = enabled
@@ -193,13 +193,13 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
             self?.tableView.reloadData()
         }
 
-        let firstSection = SettingSection(title: nil, footerTitle: NSAttributedString(string: Strings.TrackingProtectionCellFooter), children: [enabledSetting])
+        let firstSection = SettingSection(title: nil, footerTitle: NSAttributedString(string: .TrackingProtectionCellFooter), children: [enabledSetting])
 
-        let optionalFooterTitle = NSAttributedString(string: Strings.TrackingProtectionLevelFooter)
+        let optionalFooterTitle = NSAttributedString(string: .TrackingProtectionLevelFooter)
 
         // The bottom of the block lists section has a More Info button, implemented as a custom footer view,
         // SettingSection needs footerTitle set to create a footer, which we then override the view for.
-        let blockListsTitle = Strings.TrackingProtectionOptionProtectionLevelTitle
+        let blockListsTitle: String = .TrackingProtectionOptionProtectionLevelTitle
         let secondSection = SettingSection(title: NSAttributedString(string: blockListsTitle), footerTitle: optionalFooterTitle, children: strengthSetting)
         return [firstSection, secondSection]
     }
@@ -216,7 +216,7 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
         }
 
         // TODO: Get a dedicated string for this.
-        let title = Strings.TrackerProtectionLearnMore
+        let title: String = .TrackerProtectionLearnMore
 
         var attributes = [NSAttributedString.Key: AnyObject]()
         attributes[NSAttributedString.Key.font] = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.regular)

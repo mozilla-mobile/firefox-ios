@@ -134,16 +134,16 @@ class TabTrayV2ViewModel: NSObject {
         
         switch section {
         case .today:
-            sectionHeader = Strings.TabTrayV2TodayHeader
+            sectionHeader = .TabTrayV2TodayHeader
             date = dateFormatter.string(from: Date())
         case .yesterday:
-            sectionHeader = Strings.TabTrayV2YesterdayHeader
+            sectionHeader = .TabTrayV2YesterdayHeader
             date = dateFormatter.string(from: Date.yesterday)
         case .lastWeek:
-            sectionHeader = Strings.TabTrayV2LastWeekHeader
+            sectionHeader = .TabTrayV2LastWeekHeader
             date = dateIntervalFormatter.string(from: Date().lastWeek, to: Date(timeInterval: 6.0 * 24.0 * 3600.0, since: Date().lastWeek))
         case .older:
-            sectionHeader = Strings.TabTrayV2OlderHeader
+            sectionHeader = .TabTrayV2OlderHeader
             date = ""
         default:
             sectionHeader = ""

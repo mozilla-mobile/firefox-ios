@@ -49,7 +49,7 @@ class SyncStatusResolverTests: XCTestCase {
         let maybeResults = Maybe(success: results)
 
         let resolver = SyncStatusResolver(engineResults: maybeResults)
-        XCTAssertTrue(resolver.resolveResults() == SyncDisplayState.warning(message: Strings.FirefoxSyncOfflineTitle))
+        XCTAssertTrue(resolver.resolveResults() == SyncDisplayState.warning(message: .FirefoxSyncOfflineTitle))
     }
 
     func testAllCompletedExceptNotStartedBecauseOffline() {
@@ -60,7 +60,7 @@ class SyncStatusResolverTests: XCTestCase {
         let maybeResults = Maybe(success: results)
 
         let resolver = SyncStatusResolver(engineResults: maybeResults)
-        XCTAssertTrue(resolver.resolveResults() == SyncDisplayState.bad(message: Strings.FirefoxSyncOfflineTitle))
+        XCTAssertTrue(resolver.resolveResults() == SyncDisplayState.bad(message: .FirefoxSyncOfflineTitle))
     }
 
     func testOfflineAndNoAccount() {
@@ -72,7 +72,7 @@ class SyncStatusResolverTests: XCTestCase {
         let maybeResults = Maybe(success: results)
 
         let resolver = SyncStatusResolver(engineResults: maybeResults)
-        XCTAssertTrue(resolver.resolveResults() == SyncDisplayState.bad(message: Strings.FirefoxSyncOfflineTitle))
+        XCTAssertTrue(resolver.resolveResults() == SyncDisplayState.bad(message: .FirefoxSyncOfflineTitle))
     }
 
     func testAllPartial() {

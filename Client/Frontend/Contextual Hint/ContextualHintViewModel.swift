@@ -11,7 +11,7 @@ enum ContextualHintViewType {
     func descriptionForHint() -> String {
         switch self {
         case .jumpBackIn:
-            return String.ContextualHintsPersonalizedHome
+            return String.ContextualHints.PersonalizedHome
         }
     }
 }

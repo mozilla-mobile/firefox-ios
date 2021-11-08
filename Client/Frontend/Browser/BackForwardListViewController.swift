@@ -249,7 +249,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
 
         let isAboutHomeURL = InternalURL(item.url)?.isAboutHomeURL ?? false
         guard !isAboutHomeURL else {
-            cell.site = Site(url: item.url.absoluteString, title: Strings.FirefoxHomePage)
+            cell.site = Site(url: item.url.absoluteString, title: .FirefoxHomePage)
             return cell
         }
 

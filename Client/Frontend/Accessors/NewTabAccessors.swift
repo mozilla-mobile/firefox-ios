@@ -49,11 +49,11 @@ enum NewTabPage: String {
     var settingTitle: String {
         switch self {
         case .blankPage:
-            return Strings.SettingsNewTabBlankPage
+            return .SettingsNewTabBlankPage
         case .homePage:
-            return Strings.SettingsNewTabHomePage
+            return .SettingsNewTabHomePage
         case .topSites:
-            return Strings.SettingsNewTabTopSites
+            return .SettingsNewTabTopSites
         }
     }
 

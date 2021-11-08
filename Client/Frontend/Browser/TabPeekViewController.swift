@@ -47,7 +47,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
                     })
             }
             if self.hasRemoteClients {
-                actions.append(UIPreviewAction(title: Strings.SendToDeviceTitle, style: .default) { [weak self] previewAction, viewController in
+                actions.append(UIPreviewAction(title: .SendToDeviceTitle, style: .default) { [weak self] previewAction, viewController in
                     guard let wself = self, let clientPicker = wself.fxaDevicePicker else { return }
                     wself.delegate?.tabPeekRequestsPresentationOf(clientPicker)
                     })
@@ -58,7 +58,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
                 actions.append(UIPreviewAction(title: .TabPeekCopyUrl, style: .default) {[weak self] previewAction, viewController in
                     guard let wself = self, let url = wself.tab?.canonicalURL else { return }
                     UIPasteboard.general.url = url
-                    SimpleToast().showAlertWithText(Strings.AppMenuCopyURLConfirmMessage, bottomContainer: wself.view)
+                    SimpleToast().showAlertWithText(.AppMenuCopyURLConfirmMessage, bottomContainer: wself.view)
                 })
             }
         }
@@ -82,7 +82,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
                     })
             }
             if self.hasRemoteClients {
-                actions.append(UIAction(title: Strings.SendToDeviceTitle, image: UIImage.templateImageNamed("menu-Send"), identifier: nil) { [weak self] _ in
+                actions.append(UIAction(title: .SendToDeviceTitle, image: UIImage.templateImageNamed("menu-Send"), identifier: nil) { [weak self] _ in
                     guard let wself = self, let clientPicker = wself.fxaDevicePicker else { return }
                     wself.delegate?.tabPeekRequestsPresentationOf(clientPicker)
                     })
@@ -90,7 +90,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
             actions.append(UIAction(title: .TabPeekCopyUrl, image: UIImage.templateImageNamed("menu-Copy-Link"), identifier: nil) {[weak self] _ in
                 guard let wself = self, let url = wself.tab?.canonicalURL else { return }
                 UIPasteboard.general.url = url
-                SimpleToast().showAlertWithText(Strings.AppMenuCopyURLConfirmMessage, bottomContainer: wself.view)
+                SimpleToast().showAlertWithText(.AppMenuCopyURLConfirmMessage, bottomContainer: wself.view)
             })
         }
         actions.append(UIAction(title: .TabPeekCloseTab, image: UIImage.templateImageNamed("menu-CloseTabs"), identifier: nil) { [weak self] _ in

@@ -119,7 +119,7 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
                 backgroundview.clipsToBounds = true
             }
         }
-        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: .LoginsListSearchPlaceholder, attributes: [:]) // Set the placeholder text and color
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: .LoginsListSearchPlaceholderCredential, attributes: [:]) // Set the placeholder text and color
         return searchController
         
     }

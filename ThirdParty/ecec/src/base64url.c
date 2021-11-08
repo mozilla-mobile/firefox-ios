@@ -201,7 +201,7 @@ size_t
 ece_base64url_encode(const void* binary, size_t binaryLen,
                      ece_base64url_encode_policy_t paddingPolicy, char* base64,
                      size_t base64Len) {
-  // Don't encode empty strings.
+  // Don't encode empty .
   if (!binaryLen) {
     return 0;
   }
@@ -255,7 +255,7 @@ size_t
 ece_base64url_decode(const char* base64, size_t base64Len,
                      ece_base64url_decode_policy_t paddingPolicy,
                      uint8_t* binary, size_t binaryLen) {
-  // Don't decode empty strings.
+  // Don't decode empty .
   if (!base64Len) {
     return 0;
   }

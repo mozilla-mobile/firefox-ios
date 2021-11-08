@@ -61,7 +61,7 @@ class EnhancedTrackingProtectionMenuVM {
     // MARK: - Functions
 
     func getDetailsViewModel(withCachedImage cachedImage: UIImage?) -> EnhancedTrackingProtectionDetailsVM {
-        let verifier = String(format: Strings.TPDetailsVerifiedBy, "EXAMPLE VERIFIER")
+        let verifier = String(format: .TPDetailsVerifiedBy, "EXAMPLE VERIFIER")
         return EnhancedTrackingProtectionDetailsVM(topLevelDomain: websiteTitle,
                                                    title: tab.displayTitle,
                                                    image: cachedImage ?? UIImage(imageLiteralResourceName: "defaulFavicon"),

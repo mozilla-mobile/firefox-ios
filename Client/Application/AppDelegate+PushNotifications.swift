@@ -25,7 +25,7 @@ enum SentTabAction: String {
     static let TabSendCategory = "TabSendCategory"
 
     static func registerActions() {
-        let viewAction = UNNotificationAction(identifier: SentTabAction.view.rawValue, title: Strings.SentTabViewActionTitle, options: .foreground)
+        let viewAction = UNNotificationAction(identifier: SentTabAction.view.rawValue, title: .SentTabViewActionTitle, options: .foreground)
 
         // Register ourselves to handle the notification category set by NotificationService for APNS notifications
         let sentTabCategory = UNNotificationCategory(identifier: "org.mozilla.ios.SentTab.placeholder", actions: [viewAction], intentIdentifiers: [], options: UNNotificationCategoryOptions(rawValue: 0))

@@ -158,7 +158,7 @@ class CookiesClearable: Clearable {
 class TrackingProtectionClearable: Clearable {
     //@TODO: re-using string because we are too late in cycle to change strings
     var label: String {
-        return Strings.SettingsTrackingProtectionSectionName
+        return .SettingsTrackingProtectionSectionName
     }
 
     func clear() -> Success {
