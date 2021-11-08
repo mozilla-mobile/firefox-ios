@@ -14,7 +14,7 @@
 "Menu.CopyAddress.Title" = "Cupià l’indirizzu";
 
 /* Label for the button, displayed in the menu, used to copy the current page link to the clipboard. */
-"Menu.CopyLink.Title" = "Cupià a leia";
+"Menu.CopyLink.Title" = "Cupià u liame";
 
 /* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
 "Menu.FindInPageAction.Title" = "Circà in a pagina";

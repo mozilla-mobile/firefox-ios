@@ -41,7 +41,7 @@
 "ActivityStream.Highlights.Visited" = "Đã truy cập";
 
 /* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
-"ActivityStream.JumpBackIn.SectionTitle" = "Quay lại trang trước";
+"ActivityStream.JumpBackIn.SectionTitle" = "Trang đã xem gần đây";
 
 /* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
 "ActivityStream.JumpBackIn.TabGroup.SiteCount" = "Thẻ: %d";
@@ -1394,7 +1394,7 @@
 "Settings.Home.Option.Description" = "Chọn nội dung bạn sẽ thấy trên trang chủ Firefox.";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
-"Settings.Home.Option.JumpBackIn" = "Quay lại trang trước";
+"Settings.Home.Option.JumpBackIn" = "Trang đã xem gần đây";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off */
 "Settings.Home.Option.Pocket" = "Được đề xuất bởi Pocket";

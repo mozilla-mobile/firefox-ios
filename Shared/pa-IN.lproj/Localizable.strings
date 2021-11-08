@@ -147,7 +147,7 @@
 "Bookmark.DetailFieldURL.Label" = "URL";
 
 /* Toggle bookmarks syncing setting */
-"Bookmarks" = "ਵਰਕਾ ਨਿਸ਼ਾਨੀਆਂ";
+"Bookmarks" = "ਬੁੱਕਮਾਰਕ";
 
 /* The button on the snackbar to edit a bookmark after adding it. */
 "Bookmarks.Edit.Button" = "ਸੋਧੋ";

@@ -98,7 +98,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Vista rápida";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
-"TodayWidget.QuickViewLargeGalleryDescription" = "Agrega atajos a las pestañas abiertas.";
+"TodayWidget.QuickViewLargeGalleryDescription" = "Agregar atajos a las pestañas abiertas.";
 
 /* Sub label for Top Sites widget */
 "TodayWidget.QuickViewOpenTabsSubLabel" = "Firefox Pestañas abiertas";
