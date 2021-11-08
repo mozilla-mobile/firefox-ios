@@ -1622,8 +1622,8 @@ extension String {
 
 // MARK: - Credential Provider
 extension String {
-    public static let LoginsWelcomeViewTitle2 = MZLocalizedString("Logins.WelcomeView.Title", value: "AutoFill Firefox Passwords", comment: "Label displaying welcome view title", lastUpdated: .unknown)
-    public static let LoginsWelcomeViewTagline = MZLocalizedString("Logins.WelcomeView.Title", value: "Take your passwords everywhere", comment: "Label displaying welcome view tagline under the title", lastUpdated: .unknown)
+    public static let LoginsWelcomeViewTitle2 = MZLocalizedString("Logins.WelcomeView.Title2", value: "AutoFill Firefox Passwords", comment: "Label displaying welcome view title", lastUpdated: .unknown)
+    public static let LoginsWelcomeViewTagline = MZLocalizedString("Logins.WelcomeView.Tagline", value: "Take your passwords everywhere", comment: "Label displaying welcome view tagline under the title", lastUpdated: .unknown)
     public static let LoginsWelcomeTurnOnAutoFillButtonTitle = MZLocalizedString("Logins.WelcomeView.TurnOnAutoFill", value: "Turn on AutoFill", comment: "Title of the big blue button to enable AutoFill", lastUpdated: .unknown)
     public static let LoginsListSearchCancel = MZLocalizedString("LoginsList.Search.Cancel", value: "Cancel", comment: "Title for cancel button for user to stop searching for a particular login", lastUpdated: .unknown)
     public static let LoginsListSearchPlaceholderCredential = MZLocalizedString("LoginsList.Search.Placeholder", value: "Search logins", comment: "Placeholder text for search field", lastUpdated: .unknown)
