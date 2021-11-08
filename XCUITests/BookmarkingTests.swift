@@ -60,6 +60,8 @@ class BookmarkingTests: BaseTestCase {
 
     func testBookmarkingUI() {
         // Go to a webpage, and add to bookmarks, check it's added
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.openURL(path(forTestPage: url_1))
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
@@ -68,7 +70,12 @@ class BookmarkingTests: BaseTestCase {
         checkBookmarked()
 
         // Load a different page on a new tab, check it's not bookmarked
-        navigator.openNewURL(urlString: path(forTestPage: url_2["url"]!))
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
+        navigator.openURL(path(forTestPage: url_2["url"]!))
+        
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
         checkUnbookmarked()
@@ -106,6 +113,8 @@ class BookmarkingTests: BaseTestCase {
 
     func testAccessBookmarksFromContextMenu() {
         //Add a bookmark
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.openURL(path(forTestPage: url_2["url"]!))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
@@ -145,7 +154,7 @@ class BookmarkingTests: BaseTestCase {
         bookmark()
 
         // Now the site should be suggested
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 10)
         navigator.performAction(Action.AcceptClearPrivateData)
         navigator.goto(BrowserTab)
         navigator.goto(URLBarOpen)

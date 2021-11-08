@@ -22,7 +22,7 @@ struct InactiveTabCellUX {
     static let headerAndRowHeight: CGFloat = 45
 }
 
-class InactiveTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UITableViewDelegate {
+class InactiveTabCell: UICollectionViewCell, NotificationThemeable, UITableViewDataSource, UITableViewDelegate {
     var inactiveTabsViewModel: InactiveTabViewModel?
     static let Identifier = "InactiveTabCellIdentifier"
     let InactiveTabsTableIdentifier = "InactiveTabsTableIdentifier"
@@ -216,7 +216,7 @@ enum ExpandButtonState {
     }
 }
 
-class InactiveTabHeader: UITableViewHeaderFooterView, Themeable {
+class InactiveTabHeader: UITableViewHeaderFooterView, NotificationThemeable {
     var state: ExpandButtonState? {
         willSet(state) {
             moreButton.setImage(state?.image, for: .normal)
@@ -255,7 +255,7 @@ class InactiveTabHeader: UITableViewHeaderFooterView, Themeable {
 
     var titleInsets: CGFloat {
         get {
-            return UIScreen.main.bounds.size.width == self.frame.size.width && UIDevice.current.userInterfaceIdiom == .pad ? FirefoxHomeHeaderViewUX.Insets : FirefoxHomeUX.MinimumInsets
+            return UIScreen.main.bounds.size.width == self.frame.size.width && UIDevice.current.userInterfaceIdiom == .pad ? FirefoxHomeHeaderViewUX.insets : FirefoxHomeUX.minimumInsets
         }
     }
 
@@ -293,7 +293,7 @@ class InactiveTabHeader: UITableViewHeaderFooterView, Themeable {
     }
 
     func applyTheme() {
-        let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         self.titleLabel.textColor = theme == .dark ? .white : .black
     }
 }

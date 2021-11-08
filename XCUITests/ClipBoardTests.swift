@@ -38,6 +38,8 @@ class ClipBoardTests: BaseTestCase {
 
     // This test is disabled in release, but can still run on master
     func testClipboard() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.openURL(url)
         waitUntilPageLoad()
         checkUrl()
@@ -46,6 +48,8 @@ class ClipBoardTests: BaseTestCase {
 
         navigator.createNewTab()
         waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(URLBarOpen)
         app.textFields["address"].press(forDuration: 3)
         app.menuItems["Paste"].tap()

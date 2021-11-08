@@ -10,39 +10,51 @@ import Shared
 class RustLoginsTests: XCTestCase {
     var files: FileAccessor!
     var logins: RustLogins!
+    var encryptionKey: String!
     
     override func setUp() {
         files = MockFiles()
+        
+        if let rootDirectory = try? files.getAndEnsureDirectory() {
+            let sqlCipherDatabasePath = URL(fileURLWithPath: rootDirectory, isDirectory: true).appendingPathComponent("testlogins.db").path
+            try? files.remove("testlogins.db")
+            
+            let databasePath = URL(fileURLWithPath: rootDirectory, isDirectory: true).appendingPathComponent("testLoginsPerField.db").path
+            try? files.remove("testLoginsPerField.db")
 
-        let databasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("testlogins.db").path
-        try? files.remove("testlogins.db")
-
-        let encryptionKey = Bytes.generateRandomBytes(256).base64EncodedString
-        let salt = RustLogins.setupPlaintextHeaderAndGetSalt(databasePath: databasePath, encryptionKey: encryptionKey)
-        logins = RustLogins(databasePath: databasePath, encryptionKey: encryptionKey, salt: salt)
-        _ = logins.reopenIfClosed()
+            if let key = try? createKey() {
+                encryptionKey = key
+            } else {
+                XCTFail("Encryption key wasn't created")
+            }
+            
+            logins = RustLogins(sqlCipherDatabasePath: sqlCipherDatabasePath, databasePath: databasePath)
+            _ = logins.reopenIfClosed()
+            
+        } else {
+            XCTFail("Could not retrieve root directory")
+        }
     }
 
     func addLogin() -> Deferred<Maybe<String>> {
-        var login = LoginRecord(fromJSONDict: [
+        let login = LoginEntry(fromJSONDict: [
             "hostname": "https://example.com",
             "formSubmitUrl": "https://example.com",
             "username": "username",
             "password": "password"
         ])
-        login.httpRealm = nil
-        return logins.add(login: login)
+        return logins.addLogin(login: login)
     }
 
     func testListLogins() {
-        let listResult1 = logins.list().value
+        let listResult1 = logins.listLogins().value
         XCTAssertTrue(listResult1.isSuccess)
         XCTAssertNotNil(listResult1.successValue)
         XCTAssertEqual(listResult1.successValue!.count, 0)
         let addResult = addLogin().value
         XCTAssertTrue(addResult.isSuccess)
         XCTAssertNotNil(addResult.successValue)
-        let listResult2 = logins.list().value
+        let listResult2 = logins.listLogins().value
         XCTAssertTrue(listResult2.isSuccess)
         XCTAssertNotNil(listResult2.successValue)
         XCTAssertEqual(listResult2.successValue!.count, 1)
@@ -52,7 +64,7 @@ class RustLoginsTests: XCTestCase {
         let addResult = addLogin().value
         XCTAssertTrue(addResult.isSuccess)
         XCTAssertNotNil(addResult.successValue)
-        let getResult = logins.get(id: addResult.successValue!).value
+        let getResult = logins.getLogin(id: addResult.successValue!).value
         XCTAssertTrue(getResult.isSuccess)
         XCTAssertNotNil(getResult.successValue!)
         XCTAssertEqual(getResult.successValue!!.id, addResult.successValue!)
@@ -62,34 +74,48 @@ class RustLoginsTests: XCTestCase {
         let addResult = addLogin().value
         XCTAssertTrue(addResult.isSuccess)
         XCTAssertNotNil(addResult.successValue)
-        let getResult1 = logins.get(id: addResult.successValue!).value
+        let getResult1 = logins.getLogin(id: addResult.successValue!).value
         XCTAssertTrue(getResult1.isSuccess)
         XCTAssertNotNil(getResult1.successValue!)
-        var login = getResult1.successValue!
+        let login = getResult1.successValue!
         XCTAssertEqual(login!.id, addResult.successValue!)
-        login!.password = "password2"
-        let updateResult = logins.update(login: login!).value
+        
+        let updatedLogin = LoginEntry(
+            fromLoginEntryFlattened: LoginEntryFlattened(
+                id: "",
+                hostname: login!.hostname,
+                password: "password2",
+                username: "",
+                httpRealm: login!.httpRealm,
+                formSubmitUrl: login!.formSubmitUrl,
+                usernameField: login!.usernameField,
+                passwordField: login!.passwordField
+            )
+        )
+        
+        let updateResult = logins.updateLogin(id: login!.id, login: updatedLogin).value
         XCTAssertTrue(updateResult.isSuccess)
-        let getResult2 = logins.get(id: login!.id).value
+        let getResult2 = logins.getLogin(id: login!.id).value
         XCTAssertTrue(getResult2.isSuccess)
         XCTAssertNotNil(getResult2.successValue!)
-        XCTAssertEqual(getResult2.successValue!!.password, "password2")
+        let password = getResult2.successValue!!.decryptedPassword
+        XCTAssertEqual(password, "password2")
     }
 
     func testDeleteLogin() {
         let addResult = addLogin().value
         XCTAssertTrue(addResult.isSuccess)
         XCTAssertNotNil(addResult.successValue)
-        let getResult1 = logins.get(id: addResult.successValue!).value
+        let getResult1 = logins.getLogin(id: addResult.successValue!).value
         XCTAssertTrue(getResult1.isSuccess)
         XCTAssertNotNil(getResult1.successValue!)
         let login = getResult1.successValue!
         XCTAssertEqual(login!.id, addResult.successValue!)
-        let deleteResult = logins.delete(id: login!.id).value
+        let deleteResult = logins.deleteLogin(id: login!.id).value
         XCTAssertTrue(deleteResult.isSuccess)
         XCTAssertNotNil(deleteResult.successValue!)
         XCTAssertTrue(deleteResult.successValue!)
-        let getResult2 = logins.get(id: login!.id).value
+        let getResult2 = logins.getLogin(id: login!.id).value
         XCTAssertTrue(getResult2.isSuccess)
         XCTAssertNil(getResult2.successValue!)
     }

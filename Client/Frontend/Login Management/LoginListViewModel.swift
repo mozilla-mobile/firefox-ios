@@ -142,8 +142,8 @@ final class LoginListViewModel {
         }
     }
     
-    public func save(loginRecord: LoginRecord) -> Deferred<Maybe<String>> {
-        return profile.logins.add(login: loginRecord)
+    public func save(loginRecord: LoginEntry) -> Deferred<Maybe<String>> {
+        return profile.logins.addLogin(login: loginRecord)
     }
 
     func setBreachIndexPath(indexPath: IndexPath) {

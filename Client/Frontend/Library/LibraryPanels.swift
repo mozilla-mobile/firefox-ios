@@ -6,7 +6,7 @@ import UIKit
 import Shared
 import Storage
 
-protocol LibraryPanel: Themeable {
+protocol LibraryPanel: NotificationThemeable {
     var libraryPanelDelegate: LibraryPanelDelegate? { get set }
 }
 

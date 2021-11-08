@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-import SnapKit
 import Storage
 import Shared
 import SwiftKeychainWrapper
@@ -32,22 +31,20 @@ class LoginListViewController: SensitiveViewController {
 
     fileprivate var loginDataSource: LoginDataSource
     fileprivate let searchController = UISearchController(searchResultsController: nil)
-    fileprivate let loadingView = SettingsLoadingView()
+    fileprivate let loadingView: SettingsLoadingView = .build()
     fileprivate var deleteAlert: UIAlertController?
-    fileprivate var selectionButtonHeightConstraint: Constraint?
+    fileprivate var selectionButtonHeightConstraint: NSLayoutConstraint?
     fileprivate var selectedIndexPaths = [IndexPath]()
-    fileprivate let tableView = UITableView()
+    fileprivate let tableView: UITableView = .build()
 
     weak var settingsDelegate: SettingsDelegate?
     var shownFromAppMenu: Bool = false
     var webpageNavigationHandler: ((_ url: URL?) -> Void)?
 
-    fileprivate lazy var selectionButton: UIButton = {
-        let button = UIButton()
+    fileprivate lazy var selectionButton: UIButton = .build { button in
         button.titleLabel?.font = LoginListViewModel.LoginListUX.selectionButtonFont
-        button.addTarget(self, action: #selector(tappedSelectionButton), for: .touchUpInside)
-        return button
-    }()
+        button.addTarget(self, action: #selector(self.tappedSelectionButton), for: .touchUpInside)
+    }
 
     static func shouldShowAppMenuShortcut(forPrefs prefs: Prefs) -> Bool {
         // default to on
@@ -66,26 +63,15 @@ class LoginListViewController: SensitiveViewController {
                 deferred.fill(nil)
             }
         }
-
-        guard let authInfo = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo(), authInfo.requiresValidation() else {
-            fillDeferred(ok: true)
-            return deferred
-        }
-
-        AppAuthenticator.presentAuthenticationUsingInfo(authInfo, touchIDReason: .AuthenticationLoginsTouchReason, success: {
-            fillDeferred(ok: true)
-        }, cancel: {
-            fillDeferred(ok: false)
-        }, fallback: {
-            AppAuthenticator.presentPasscodeAuthentication(navigationController).uponQueue(.main) { isOk in
-                if isOk {
-                    // In the success case of the passcode dialog, it requires explicit dismissal to continue
-                    navigationController.dismiss(animated: true)
-                }
-
-                fillDeferred(ok: isOk)
+        
+        AppAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
+            switch result {
+                case .success():
+                    fillDeferred(ok: true)
+                case .failure(_):
+                    fillDeferred(ok: false)
             }
-        })
+        }
 
         return deferred
     }
@@ -113,6 +99,10 @@ class LoginListViewController: SensitiveViewController {
         tableView.delegate = self
         tableView.tableFooterView = UIView()
 
+        if #available(iOS 15.0, *) {
+             tableView.sectionHeaderTopPadding = 0
+         }
+
         // Setup the Search Controller
         searchController.searchBar.autocapitalizationType = .none
         searchController.searchResultsUpdater = self
@@ -135,22 +125,25 @@ class LoginListViewController: SensitiveViewController {
         view.addSubview(selectionButton)
         loadingView.isHidden = true
 
-        tableView.snp.makeConstraints { make in
-            make.top.equalTo(self.view.safeAreaLayoutGuide)
-            make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
-            make.bottom.equalTo(self.selectionButton.snp.top)
-        }
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: selectionButton.topAnchor),
 
-        selectionButton.snp.makeConstraints { make in
-            make.leading.trailing.bottom.equalTo(self.view.safeAreaLayoutGuide)
-            make.top.equalTo(self.tableView.snp.bottom)
-            make.bottom.equalTo(self.view.safeAreaLayoutGuide)
-            selectionButtonHeightConstraint = make.height.equalTo(0).constraint
-        }
+            selectionButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            selectionButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            selectionButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            selectionButton.topAnchor.constraint(equalTo: tableView.bottomAnchor),
 
-        loadingView.snp.makeConstraints { make in
-            make.edges.equalTo(tableView)
-        }
+            loadingView.topAnchor.constraint(equalTo: tableView.topAnchor),
+            loadingView.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
+            loadingView.bottomAnchor.constraint(equalTo: tableView.bottomAnchor),
+            loadingView.trailingAnchor.constraint(equalTo: tableView.trailingAnchor)
+        ])
+
+        selectionButtonHeightConstraint = selectionButton.heightAnchor.constraint(equalToConstant: 0)
+        selectionButtonHeightConstraint?.isActive = true
 
         applyTheme()
 
@@ -171,13 +164,13 @@ class LoginListViewController: SensitiveViewController {
         tableView.backgroundColor = UIColor.theme.tableView.headerBackground
         tableView.reloadData()
 
-        (tableView.tableHeaderView as? Themeable)?.applyTheme()
+        (tableView.tableHeaderView as? NotificationThemeable)?.applyTheme()
 
         selectionButton.setTitleColor(UIColor.theme.tableView.rowBackground, for: [])
         selectionButton.backgroundColor = UIColor.theme.general.highlightBlue
 
-        let isDarkTheme = ThemeManager.instance.currentName == .dark
-        var searchTextField = searchController.searchBar.searchTextField
+        let isDarkTheme = LegacyThemeManager.instance.currentName == .dark
+        let searchTextField = searchController.searchBar.searchTextField
         
         // Theme the search text field (Dark / Light)
         if isDarkTheme {
@@ -270,7 +263,7 @@ private extension LoginListViewController {
     @objc func beginEditing() {
         navigationItem.rightBarButtonItems = nil
         navigationItem.leftBarButtonItems = [cancelSelectionButton]
-        selectionButtonHeightConstraint?.update(offset: UIConstants.ToolbarHeight)
+        selectionButtonHeightConstraint?.constant = UIConstants.ToolbarHeight
         selectionButton.setTitle(.LoginListSelctAll, for: [])
         self.view.layoutIfNeeded()
         tableView.setEditing(true, animated: true)
@@ -301,7 +294,7 @@ private extension LoginListViewController {
         // Update selection and select all button
         loginSelectionController.deselectAll()
         toggleSelectionTitle()
-        selectionButtonHeightConstraint?.update(offset: 0)
+        selectionButtonHeightConstraint?.constant = 0
         selectionButton.setTitle(nil, for: [])
         self.view.layoutIfNeeded()
 
@@ -318,7 +311,7 @@ private extension LoginListViewController {
                     self.viewModel.loginAtIndexPath(indexPath)?.id
                 }
 
-                self.viewModel.profile.logins.delete(ids: guidsToDelete).uponQueue(.main) { _ in
+                self.viewModel.profile.logins.deleteLogins(ids: guidsToDelete).uponQueue(.main) { _ in
                     self.cancelSelection()
                     self.loadLogins()
                 }

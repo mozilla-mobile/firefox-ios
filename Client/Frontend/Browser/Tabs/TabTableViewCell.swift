@@ -7,7 +7,7 @@ import UIKit
 import Shared
 import SnapKit
 
-class TabTableViewCell: UITableViewCell, Themeable {
+class TabTableViewCell: UITableViewCell, NotificationThemeable {
     static let identifier = "tabCell"
     var screenshotView: UIImageView?
     var websiteTitle: UILabel?

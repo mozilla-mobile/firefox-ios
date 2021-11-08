@@ -414,7 +414,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 }
 
-extension DownloadsPanel: Themeable {
+extension DownloadsPanel: NotificationThemeable {
     func applyTheme() {
         emptyStateOverlayView.removeFromSuperview()
         emptyStateOverlayView = createEmptyStateOverlayView()

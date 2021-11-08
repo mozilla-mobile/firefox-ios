@@ -25,9 +25,9 @@ class IntegrationTests: BaseTestCase {
      let key = String(parts[1])
      if testWithDB.contains(key) {
      // for the current test name, add the db fixture used
-     launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.StageServer, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + historyDB]
+     launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.StageServer, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + historyDB, LaunchArguments.SkipContextualHintJumpBackIn]
      } else if testFxAChinaServer.contains(key) {
-        launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.FxAChinaServer, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet]
+        launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.FxAChinaServer, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.SkipContextualHintJumpBackIn]
      }
      super.setUp()
      }
@@ -177,6 +177,15 @@ class IntegrationTests: BaseTestCase {
         // Check synced Logins
         navigator.nowAt(SettingsScreen)
         navigator.goto(LoginsSettings)
+        waitForExistence(app.buttons.firstMatch)
+        app.buttons["Continue"].tap()
+
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        let passcodeInput = springboard.secureTextFields["Passcode field"]
+        passcodeInput.tap()
+        passcodeInput.typeText("foo\n")
+
+        navigator.goto(LoginsSettings)
         waitForExistence(app.tables["Login List"], timeout: 5)
         XCTAssertTrue(app.tables.cells.staticTexts[loginEntry].exists, "The login saved on desktop is not synced")
     }
@@ -220,7 +229,16 @@ class IntegrationTests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
 
         navigator.goto(SettingsScreen)
+        navigator.nowAt(SettingsScreen)
         navigator.goto(LoginsSettings)
+        waitForExistence(app.buttons.firstMatch)
+        app.buttons["Continue"].tap()
+
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        let passcodeInput = springboard.secureTextFields["Passcode field"]
+        passcodeInput.tap()
+        passcodeInput.typeText("foo\n")
+
         waitForExistence(app.tables["Login List"], timeout: 3)
         // Verify the login
         waitForExistence(app.staticTexts["https://accounts.google.com"])
@@ -260,6 +278,9 @@ class IntegrationTests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         navigator.goto(SettingsScreen)
         navigator.goto(LoginsSettings)
+
+        passcodeInput.tap()
+        passcodeInput.typeText("foo\n")
 
         waitForExistence(app.tables["Login List"], timeout: 10)
         waitForExistence(app.staticTexts["https://accounts.google.com"], timeout: 10)
