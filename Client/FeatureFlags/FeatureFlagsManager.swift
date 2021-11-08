@@ -27,6 +27,7 @@ enum FeatureFlagName: String, CaseIterable {
     case recentlySaved
     case shakeToRestore
     case startAtHome
+    case reportSiteIssue
 }
 
 /// Manages feature flags for the application.
@@ -164,5 +165,11 @@ class FeatureFlagsManager {
                                            and: profile,
                                            enabledFor: [])
         features[.startAtHome] = startAtHome
+        
+        let reportSiteIssue = FlaggableFeature(withID: .reportSiteIssue,
+                                               and: profile,
+                                               enabledFor: [.beta, .developer])
+        
+        features[.reportSiteIssue] = reportSiteIssue
     }
 }

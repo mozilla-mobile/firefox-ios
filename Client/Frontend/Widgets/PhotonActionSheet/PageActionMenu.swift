@@ -15,7 +15,7 @@ enum ButtonToastAction {
     case removePinPage
 }
 
-extension PhotonActionSheetProtocol {
+extension PhotonActionSheetProtocol where Self: FeatureFlagsProtocol {
     fileprivate func share(fileURL: URL, buttonView: UIView, presentableVC: PresentableVC) {
         let helper = ShareExtensionHelper(url: fileURL, tab: tabManager.selectedTab)
         let controller = helper.createActivityViewController { completed, activityType in
@@ -203,11 +203,13 @@ extension PhotonActionSheetProtocol {
                 findInPage()
             }
             section2.insert(findInPageAction, at: 0)
-            
-            let reportSiteIssueAction = PhotonActionSheetItem(title: Strings.AppMenuReportSiteIssueTitleString, iconString: "menu-reportSiteIssue") { _,_ in
-                reportSiteIssue()
+
+            if featureFlags.isFeatureActiveForBuild(.reportSiteIssue) {
+                let reportSiteIssueAction = PhotonActionSheetItem(title: Strings.AppMenuReportSiteIssueTitleString, iconString: "menu-reportSiteIssue") { _,_ in
+                    reportSiteIssue()
+                }
+                section2.append(reportSiteIssueAction)
             }
-            section2.append(reportSiteIssueAction)
         }
 
         return [section1, section2, section3]
