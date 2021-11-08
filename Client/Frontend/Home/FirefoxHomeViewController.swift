@@ -333,12 +333,11 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
 
     override func viewDidAppear(_ animated: Bool) {
         experiments.recordExposureEvent(featureId: .homescreen)
-        let origin = isZeroSearch ? TelemetryWrapper.EventValue.fxHomepageOriginZeroSearch : TelemetryWrapper.EventValue.fxHomepageOriginOther
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .view,
                                      object: .firefoxHomepage,
                                      value: .fxHomepageOrigin,
-                                     extras: [TelemetryWrapper.EventExtraKey.fxHomepageOrigin.rawValue: origin.rawValue])
+                                     extras: telemetryOriginExtras)
 
         super.viewDidAppear(animated)
     }
@@ -490,6 +489,11 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         return headerView.systemLayoutSizeFitting(size,
                                                   withHorizontalFittingPriority: .required,
                                                   verticalFittingPriority: .fittingSizeLevel)
+    }
+
+    private var telemetryOriginExtras: [String: String] {
+        let origin = isZeroSearch ? TelemetryWrapper.EventValue.fxHomepageOriginZeroSearch : TelemetryWrapper.EventValue.fxHomepageOriginOther
+        return [TelemetryWrapper.EventExtraKey.fxHomepageOrigin.rawValue: origin.rawValue]
     }
 }
 
@@ -1090,7 +1094,8 @@ extension FirefoxHomeViewController {
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .tap,
                                          object: .firefoxHomepage,
-                                         value: .jumpBackInSectionShowAll)
+                                         value: .jumpBackInSectionShowAll,
+                                         extras: telemetryOriginExtras)
         }
         homePanelDelegate?.homePanelDidRequestToOpenTabTray(withFocusedTab: nil)
     }

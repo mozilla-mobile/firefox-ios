@@ -709,8 +709,11 @@ extension TelemetryWrapper {
         case (.action, .tap, .firefoxHomepage, EventValue.recentlySavedReadingListAction.rawValue, _):
             GleanMetrics.FirefoxHomePage.recentlySavedReadingItem.add()
 
-        case (.action, .tap, .firefoxHomepage, EventValue.jumpBackInSectionShowAll.rawValue, _):
+        case (.action, .tap, .firefoxHomepage, EventValue.jumpBackInSectionShowAll.rawValue, let extras):
             GleanMetrics.FirefoxHomePage.jumpBackInShowAll.add()
+            if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
+                GleanMetrics.FirefoxHomePage.jumpBackInShowAllOrigin[homePageOrigin].add()
+            }
         case (.action, .view, .jumpBackInImpressions, _, _):
             GleanMetrics.FirefoxHomePage.jumpBackInSectionView.add()
         case (.action, .tap, .firefoxHomepage, EventValue.jumpBackInSectionTabOpened.rawValue, _):
