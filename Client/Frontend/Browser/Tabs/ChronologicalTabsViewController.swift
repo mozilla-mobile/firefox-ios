@@ -21,7 +21,7 @@ struct ChronologicalTabsControllerUX {
     static let backgroundColor = UIColor.Photon.Grey10
 }
 
-class ChronologicalTabsViewController: UIViewController, Themeable, TabTrayViewDelegate {
+class ChronologicalTabsViewController: UIViewController, NotificationThemeable, TabTrayViewDelegate {
     weak var delegate: TabTrayDelegate?
     // View Model
     lazy var viewModel = TabTrayV2ViewModel(viewController: self)
@@ -104,8 +104,6 @@ class ChronologicalTabsViewController: UIViewController, Themeable, TabTrayViewD
     }
 
     func applyTheme() {
-        overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
-        bottomSheetVC?.overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
         tableView.backgroundColor = UIColor.systemGroupedBackground
         emptyPrivateTabsView.titleLabel.textColor = UIColor.label
         emptyPrivateTabsView.descriptionLabel.textColor = UIColor.secondaryLabel
@@ -124,7 +122,7 @@ class ChronologicalTabsViewController: UIViewController, Themeable, TabTrayViewD
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
-        if ThemeManager.instance.systemThemeIsOn {
+        if LegacyThemeManager.instance.systemThemeIsOn {
             tableView.reloadData()
         }
     }
@@ -149,8 +147,8 @@ extension ChronologicalTabsViewController {
 
     func didTapToolbarDelete(_ sender: UIBarButtonItem) {
         let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        controller.addAction(UIAlertAction(title: Strings.AppMenuCloseAllTabsTitleString, style: .default, handler: { _ in self.viewModel.closeTabsForCurrentTray() }), accessibilityIdentifier: "TabTrayController.deleteButton.closeAll")
-        controller.addAction(UIAlertAction(title: Strings.CancelString, style: .cancel, handler: nil), accessibilityIdentifier: "TabTrayController.deleteButton.cancel")
+        controller.addAction(UIAlertAction(title: Strings.AppMenuCloseAllTabsTitleString, style: .default, handler: { _ in self.viewModel.closeTabsForCurrentTray() }), accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
+        controller.addAction(UIAlertAction(title: Strings.CancelString, style: .cancel, handler: nil), accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton)
         controller.popoverPresentationController?.barButtonItem = sender
         present(controller, animated: true, completion: nil)
         TelemetryWrapper.recordEvent(category: .action, method: .deleteAll, object: .tab, value: viewModel.isInPrivateMode ? .privateTab : .normalTab)

@@ -6,7 +6,6 @@ import Foundation
 import WebKit
 import Storage
 import Shared
-import SwiftyJSON
 import XCGLogger
 
 fileprivate var debugTabCount = 0
@@ -101,7 +100,7 @@ class Tab: NSObject {
 
     var consecutiveCrashes: UInt = 0
     
-    // Setting defualt page as topsites
+    // Setting default page as topsites
     var newTabPageType: NewTabPage = .topSites
     var tabUUID: String = UUID().uuidString
     private var screenshotUUIDString: String?
@@ -444,7 +443,8 @@ class Tab: NSObject {
             var jsonDict = [String: AnyObject]()
             jsonDict["history"] = urls as AnyObject?
             jsonDict["currentPage"] = currentPage as AnyObject?
-            guard let json = JSON(jsonDict).stringify()?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
+            
+            guard let json = jsonDict.asString?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
                 return
             }
 
@@ -744,7 +744,7 @@ class Tab: NSObject {
     }
 
     func applyTheme() {
-        UITextField.appearance().keyboardAppearance = isPrivate ? .dark : (ThemeManager.instance.currentName == .dark ? .dark : .light)
+        UITextField.appearance().keyboardAppearance = isPrivate ? .dark : (LegacyThemeManager.instance.currentName == .dark ? .dark : .light)
     }
     
     func getProviderForUrl() -> SearchEngine {
@@ -849,7 +849,7 @@ class TabWebView: WKWebView, MenuHelperInterface {
     // the theme if the webview is showing "about:blank" (nil).
     func applyTheme() {
         if url == nil {
-            let backgroundColor = ThemeManager.instance.current.browser.background.hexString
+            let backgroundColor = LegacyThemeManager.instance.current.browser.background.hexString
             evaluateJavascriptInDefaultContentWorld("document.documentElement.style.backgroundColor = '\(backgroundColor)';")
         }
     }
