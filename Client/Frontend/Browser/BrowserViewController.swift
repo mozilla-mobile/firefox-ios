@@ -749,7 +749,7 @@ class BrowserViewController: UIViewController {
             let trackingValue: TelemetryWrapper.EventValue = homePanelIsInline ? .openHomeFromPhotonMenuButton : .openHomeFromAwesomebar
             TelemetryWrapper.recordEvent(category: .action, method: .open, object: .firefoxHomepage, value: trackingValue, extras: nil)
 
-            let firefoxHomeViewController = FirefoxHomeViewController(profile: profile)
+            let firefoxHomeViewController = FirefoxHomeViewController(profile: profile, isZeroSearch: !inline)
             firefoxHomeViewController.homePanelDelegate = self
             firefoxHomeViewController.libraryPanelDelegate = self
             self.firefoxHomeViewController = firefoxHomeViewController

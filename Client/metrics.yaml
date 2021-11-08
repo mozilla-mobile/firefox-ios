@@ -630,6 +630,20 @@ firefox_home_page:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-04-01"
+  firefox_homepage_origin:
+    type: labeled_counter
+    description: |
+      The number of times a user sees the Firefox Homepage
+    labels:
+      - zero-search
+      - other
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3284
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/XXXX
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-05-01"
 
 # Library
 library:

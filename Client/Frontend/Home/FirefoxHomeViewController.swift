@@ -165,6 +165,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     fileprivate var hasSentJumpBackInSectionEvent = false
     fileprivate var timer: Timer?
     fileprivate var contextualSourceView = UIView()
+    fileprivate var isZeroSearch: Bool
     var recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel()
     var jumpBackInViewModel = FirefoxHomeJumpBackInViewModel()
 
@@ -256,8 +257,9 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     }
 
     // MARK: - Initializers
-    init(profile: Profile, experiments: NimbusApi = Experiments.shared) {
+    init(profile: Profile, isZeroSearch: Bool = false, experiments: NimbusApi = Experiments.shared) {
         self.profile = profile
+        self.isZeroSearch = isZeroSearch
         self.experiments = experiments
         super.init(collectionViewLayout: flowLayout)
         collectionView?.delegate = self
@@ -331,10 +333,12 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
 
     override func viewDidAppear(_ animated: Bool) {
         experiments.recordExposureEvent(featureId: .homescreen)
+        let origin = isZeroSearch ? TelemetryWrapper.EventValue.fxHomepageOriginZeroSearch : TelemetryWrapper.EventValue.fxHomepageOriginOther
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .view,
                                      object: .firefoxHomepage,
-                                     value: .fxHomepageOrigin)
+                                     value: .fxHomepageOrigin,
+                                     extras: [TelemetryWrapper.EventExtraKey.fxHomepageOrigin.rawValue: origin.rawValue])
 
         super.viewDidAppear(animated)
     }
