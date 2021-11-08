@@ -1,16 +1,6 @@
 {
   "images" : [
     {
-      "filename" : "Page Indicator.pdf",
-      "idiom" : "universal"
-    },
-    {
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "dark"
-        }
-      ],
       "filename" : "page_indicator.pdf",
       "idiom" : "universal"
     }
