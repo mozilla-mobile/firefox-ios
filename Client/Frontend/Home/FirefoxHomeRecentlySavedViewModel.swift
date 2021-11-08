@@ -10,5 +10,9 @@ class FirefoxHomeRecentlySavedViewModel {
     // MARK: - Properties
     
     var recentItems = [RecentlySavedItem]()
-    
+    var isZeroSearch: Bool
+
+    init(isZeroSearch: Bool) {
+        self.isZeroSearch = isZeroSearch
+    }
 }

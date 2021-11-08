@@ -500,6 +500,22 @@ firefox_home_page:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-01-01"
+  recently_saved_show_all_origin:
+    type: labeled_counter
+    description: |
+      Counts the number of times a user taps the Show All
+      button of the Recently Saved Section,
+      with a home page origin.
+    labels:
+      - zero-search
+      - origin-other
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3284
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/XXXX
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-05-01"
   recently_saved_bookmark_item:
     type: counter
     description: |
@@ -512,6 +528,22 @@ firefox_home_page:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-01-01"
+  recently_saved_bookmark_origin:
+    type: labeled_counter
+    description: |
+      Counts the number of times a bookmarked item in
+      the Recently Saved section is tapped,
+      with a home page origin.
+    labels:
+      - zero-search
+      - origin-other
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3284
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/XXXX
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-05-01"
   recently_saved_bookmark_view:
     type: event
     description: |
@@ -559,6 +591,22 @@ firefox_home_page:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-01-01"
+  recently_saved_read_origin:
+    type: labeled_counter
+    description: |
+      Counts the number of times a reading list
+      item in the Recently Saved section is tapped,
+      with a home page origin.
+    labels:
+      - zero-search
+      - origin-other
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3284
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/XXXX
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-05-01"
   jump_back_in_show_all:
     type: counter
     description: |

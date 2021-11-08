@@ -704,10 +704,19 @@ extension TelemetryWrapper {
             }
         case (.action, .tap, .firefoxHomepage, EventValue.recentlySavedSectionShowAll.rawValue, _):
             GleanMetrics.FirefoxHomePage.recentlySavedShowAll.add()
+            if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
+                GleanMetrics.FirefoxHomePage.recentlySavedShowAllOrigin[homePageOrigin].add()
+            }
         case (.action, .tap, .firefoxHomepage, EventValue.recentlySavedBookmarkItemAction.rawValue, _):
             GleanMetrics.FirefoxHomePage.recentlySavedBookmarkItem.add()
+            if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
+                GleanMetrics.FirefoxHomePage.recentlySavedBookmarkOrigin[homePageOrigin].add()
+            }
         case (.action, .tap, .firefoxHomepage, EventValue.recentlySavedReadingListAction.rawValue, _):
             GleanMetrics.FirefoxHomePage.recentlySavedReadingItem.add()
+            if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
+                GleanMetrics.FirefoxHomePage.recentlySavedReadOrigin[homePageOrigin].add()
+            }
 
         case (.action, .tap, .firefoxHomepage, EventValue.jumpBackInSectionShowAll.rawValue, let extras):
             GleanMetrics.FirefoxHomePage.jumpBackInShowAll.add()

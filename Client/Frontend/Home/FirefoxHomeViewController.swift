@@ -166,7 +166,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     fileprivate var timer: Timer?
     fileprivate var contextualSourceView = UIView()
     fileprivate var isZeroSearch: Bool
-    var recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel()
+    var recentlySavedViewModel: FirefoxHomeRecentlySavedViewModel
     var jumpBackInViewModel: FirefoxHomeJumpBackInViewModel
 
     fileprivate lazy var topSitesManager: ASHorizontalScrollCellManager = {
@@ -261,6 +261,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         self.profile = profile
         self.isZeroSearch = isZeroSearch
         self.jumpBackInViewModel = FirefoxHomeJumpBackInViewModel(isZeroSearch: isZeroSearch)
+        self.recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel(isZeroSearch: isZeroSearch)
         self.experiments = experiments
         super.init(collectionViewLayout: flowLayout)
         collectionView?.delegate = self
@@ -1103,7 +1104,8 @@ extension FirefoxHomeViewController {
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .tap,
                                          object: .firefoxHomepage,
-                                         value: .recentlySavedSectionShowAll)
+                                         value: .recentlySavedSectionShowAll,
+                                         extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
         } else {
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .tap,
