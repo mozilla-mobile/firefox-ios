@@ -44,5 +44,5 @@ jobs:
         title: "string-import-${{ env.current_date }}"
         branch: string-import-${{ env.current_date }}
         body: "This (automated) PR import string changes"
-        labels: Needs Code Review
+        labels: Needs Landing
         reviewers: mozilla-mobile/focus-ios-eng
