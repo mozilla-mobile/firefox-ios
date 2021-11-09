@@ -443,6 +443,21 @@ top_site:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-01-01"
+  pressed_tile_origin:
+    type: labeled_counter
+    description: |
+      Records an event when user taps on top site tile,
+      with a home page origin.
+    labels:
+      - zero-search
+      - origin-other
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3284
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/XXXX
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-05-01"
 
 # HomePage
 firefox_home_page:
@@ -950,6 +965,21 @@ pocket:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-01-01"
+  open_story_origin:
+    type: labeled_counter
+    description: |
+      Records when a user opens Pocket article from
+      Firefox Home Pocket feed, with a home page origin.
+    labels:
+      - zero-search
+      - origin-other
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3284
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/XXXX
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-05-01"
 
 # Preference metrics
 preferences:

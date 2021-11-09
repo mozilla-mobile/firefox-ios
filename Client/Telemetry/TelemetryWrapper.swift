@@ -500,6 +500,10 @@ extension TelemetryWrapper {
             GleanMetrics.ReadingList.open.add()
         // Top Site
         case (.action, .tap, .topSiteTile, _, let extras):
+            if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
+                GleanMetrics.TopSite.pressedTileOrigin[homePageOrigin].add()
+            }
+
             if let position = extras?[EventExtraKey.topSitePosition.rawValue] as? String, let tileType = extras?[EventExtraKey.topSiteTileType.rawValue] as? String {
                 GleanMetrics.TopSite.tilePressed.record(extra: [GleanMetrics.TopSite.TilePressedKeys.position : position, GleanMetrics.TopSite.TilePressedKeys.tileType : tileType])
             } else {
@@ -598,6 +602,10 @@ extension TelemetryWrapper {
 
         // Pocket
         case (.action, .tap, .pocketStory, _, let extras):
+            if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
+                GleanMetrics.Pocket.openStoryOrigin[homePageOrigin].add()
+            }
+
             if let position = extras?[EventExtraKey.pocketTilePosition.rawValue] as? String {
                 GleanMetrics.Pocket.openStoryPosition["position-"+position].add()
             } else {

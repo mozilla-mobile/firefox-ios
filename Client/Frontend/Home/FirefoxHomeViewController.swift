@@ -957,13 +957,24 @@ extension FirefoxHomeViewController: DataObserverDelegate {
     }
 
     func topSiteTracking(site: Site, position: Int) {
+        // Top site extra
         let topSitePositionKey = TelemetryWrapper.EventExtraKey.topSitePosition.rawValue
         let topSiteTileTypeKey = TelemetryWrapper.EventExtraKey.topSiteTileType.rawValue
         let isPinnedAndGoogle = site is PinnedSite && site.guid == GoogleTopSiteConstants.googleGUID
         let isPinnedOnly = site is PinnedSite
         let isSuggestedSite = site is SuggestedSite
         let type = isPinnedAndGoogle ? "google" : isPinnedOnly ? "user-added" : isSuggestedSite ? "suggested" : "history-based"
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .topSiteTile, value: nil, extras: [topSitePositionKey : "\(position)", topSiteTileTypeKey: type])
+        let topSiteExtra = [topSitePositionKey : "\(position)", topSiteTileTypeKey: type]
+
+        // Origin extra
+        var originExtra = TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
+        originExtra.merge(with: topSiteExtra)
+
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .topSiteTile,
+                                     value: nil,
+                                     extras: originExtra)
     }
 
     func getPocketSites() -> Success {
@@ -1070,9 +1081,20 @@ extension FirefoxHomeViewController: DataObserverDelegate {
         var site: Site? = nil
         switch section {
         case .pocket:
+            // Pocket site extra
             site = Site(url: pocketStories[index].url.absoluteString, title: pocketStories[index].title)
             let key = TelemetryWrapper.EventExtraKey.pocketTilePosition.rawValue
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .pocketStory, value: nil, extras: [key : "\(index)"])
+            let siteExtra = [key : "\(index)"]
+
+            // Origin extra
+            var originExtra = TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
+            originExtra.merge(with: siteExtra)
+
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .tap,
+                                         object: .pocketStory,
+                                         value: nil,
+                                         extras: originExtra)
         case .topSites, .libraryShortcuts, .jumpBackIn, .recentlySaved, .customizeHome:
             return
         }
@@ -1191,7 +1213,11 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
         let openInNewTabAction = PhotonActionSheetItem(title: Strings.OpenInNewTabContextMenuTitle, iconString: "quick_action_new_tab") { _, _ in
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
             if Section(indexPath.section) == .pocket {
-                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .pocketStory)
+                let originExtras = TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
+                TelemetryWrapper.recordEvent(category: .action,
+                                             method: .tap,
+                                             object: .pocketStory,
+                                             extras: originExtras)
             }
         }
 
