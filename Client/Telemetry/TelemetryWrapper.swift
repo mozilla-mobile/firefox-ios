@@ -505,7 +505,8 @@ extension TelemetryWrapper {
             }
 
             if let position = extras?[EventExtraKey.topSitePosition.rawValue] as? String, let tileType = extras?[EventExtraKey.topSiteTileType.rawValue] as? String {
-                GleanMetrics.TopSite.tilePressed.record(extra: [GleanMetrics.TopSite.TilePressedKeys.position : position, GleanMetrics.TopSite.TilePressedKeys.tileType : tileType])
+                let extra = [GleanMetrics.TopSite.TilePressedKeys.position : position, GleanMetrics.TopSite.TilePressedKeys.tileType : tileType]
+                GleanMetrics.TopSite.tilePressed.record(extra: extra)
             } else {
                 let msg = "Uninstrumented pref metric: \(category), \(method), \(object), \(value), \(String(describing: extras))"
                 Sentry.shared.send(message: msg, severity: .debug)
@@ -513,9 +514,8 @@ extension TelemetryWrapper {
         // Preferences
         case (.action, .change, .setting, _, let extras):
             if let preference = extras?["pref"] as? String, let to = (extras?["to"] ?? "undefined") as? String {
-                GleanMetrics.Preferences.changed.record(
-                extra: [GleanMetrics.Preferences.ChangedKeys.preference: preference,
-                        GleanMetrics.Preferences.ChangedKeys.changedTo: to])
+                let extra = [GleanMetrics.Preferences.ChangedKeys.preference: preference, GleanMetrics.Preferences.ChangedKeys.changedTo: to]
+                GleanMetrics.Preferences.changed.record(extra: extra)
             } else {
                 let msg = "Uninstrumented pref metric: \(category), \(method), \(object), \(value), \(String(describing: extras))"
                 Sentry.shared.send(message: msg, severity: .debug)
