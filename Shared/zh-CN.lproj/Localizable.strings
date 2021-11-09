@@ -827,7 +827,7 @@
 "Menu.NoImageModeShowImages.Label" = "显示图像";
 
 /* Label for title in page action menu. */
-"Menu.PageActions.Title" = "页面动作";
+"Menu.PageActions.Title" = "页面操作";
 
 /* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
 "Menu.Passwords.Label" = "密码";

@@ -17,6 +17,9 @@
 "DefaultBrowserOnboarding.Description1" = "1. सेटिंग पर जाएं";
 
 /* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description2" = "2. डिफ़ॉल्ट ब्राउज़र के रूप में टैप करें";
+
+/* Description for default browser onboarding card. */
 "DefaultBrowserOnboarding.Description3" = "3. Firefox चुनें";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */

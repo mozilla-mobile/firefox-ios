@@ -83,7 +83,7 @@
 "Menu.TranslatePageAction.Title" = "翻译页面";
 
 /* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
-"Menu.ViewDekstopSiteAction.Title" = "请求桌面版网站";
+"Menu.ViewDekstopSiteAction.Title" = "要求桌面版网站";
 
 /* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
 "Menu.ViewMobileSiteAction.Title" = "请求移动版网站";

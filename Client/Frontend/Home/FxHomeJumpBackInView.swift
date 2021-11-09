@@ -93,7 +93,7 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: JumpBackInCell.cellIdentifier, for: indexPath) as! JumpBackInCell
         cell.heroImage.image = nil
         cell.faviconImage.image = nil
-        
+
         if indexPath.row == (viewModel.jumpList.itemsToDisplay - 1),
            let group = viewModel.jumpList.group {
             configureCellForGroups(group: group, cell: cell)
@@ -103,12 +103,12 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
 
         return cell
     }
-    
+
     private func configureCellForGroups(group: ASGroup<Tab>, cell: JumpBackInCell) {
         let firstGroupItem = group.groupedItems.first
         let site = Site(url: firstGroupItem?.lastKnownUrl?.absoluteString ?? "", title: firstGroupItem?.lastTitle ?? "")
         let heroImageCacheKey = NSString(string: site.url)
-        
+
         if let cachedImage = SiteImageHelper.cache.object(forKey: heroImageCacheKey) {
             cell.heroImage.image = cachedImage
         } else {
@@ -118,24 +118,24 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
         }
 
         cell.itemTitle.text = group.searchTerm.localizedCapitalized
-        cell.itemDetails.text = String(format: .FirefoxHomeJumpBackInSectionGroupSiteCount, group.groupedItems.count)
+        cell.itemDetails.text = String(format: .FirefoxHomepage.JumpBackIn.GroupSiteCount, group.groupedItems.count)
         cell.faviconImage.image = UIImage(imageLiteralResourceName: "recently_closed").withRenderingMode(.alwaysTemplate)
-        cell.siteNameLabel.text = String.localizedStringWithFormat(.FirefoxHomeJumpBackInSectionGroupSiteCount, group.groupedItems.count)
+        cell.siteNameLabel.text = String.localizedStringWithFormat(.FirefoxHomepage.JumpBackIn.GroupSiteCount, group.groupedItems.count)
     }
-    
+
     private func configureCellForTab(item: Tab, cell: JumpBackInCell) {
         let itemURL = item.lastKnownUrl?.absoluteString ?? ""
         let site = Site(url: itemURL, title: item.displayTitle)
-        
+
         cell.itemTitle.text = site.title
         cell.siteNameLabel.text = site.tileURL.shortDisplayString.capitalized
-        
+
         profile.favicons.getFaviconImage(forSite: site).uponQueue(.main, block: { result in
             guard let image = result.successValue else { return }
             cell.faviconImage.image = image
             cell.setNeedsLayout()
         })
-        
+
         let heroImageCacheKey = NSString(string: site.url)
         if let cachedImage = SiteImageHelper.cache.object(forKey: heroImageCacheKey) {
             cell.heroImage.image = cachedImage
@@ -145,7 +145,7 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
             }
         }
     }
-    
+
 }
 
 extension FxHomeJumpBackInCollectionCell: UICollectionViewDelegate {
@@ -188,7 +188,7 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: JumpBackInCollectionCellUX.generalSpacing,
                             left: JumpBackInCollectionCellUX.sectionInsetSpacing,
@@ -236,14 +236,14 @@ class JumpBackInCell: UICollectionViewCell {
         label.adjustsFontSizeToFitWidth = false
         label.font = UIFont.systemFont(ofSize: JumpBackInCellUX.detailsFontSize)
     }
-    
+
     let faviconImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = JumpBackInCellUX.generalCornerRadius
     }
-    
+
     let siteNameLabel: UILabel = .build { label in
         label.adjustsFontSizeToFitWidth = false
         label.font = UIFont.systemFont(ofSize: JumpBackInCellUX.siteFontSize)
@@ -263,7 +263,7 @@ class JumpBackInCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -287,16 +287,16 @@ class JumpBackInCell: UICollectionViewCell {
             heroImage.heightAnchor.constraint(equalToConstant: JumpBackInCellUX.heroImageHeight),
             heroImage.widthAnchor.constraint(equalToConstant: JumpBackInCellUX.heroImageWidth),
             heroImage.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            
+
             itemTitle.topAnchor.constraint(equalTo: heroImage.topAnchor),
             itemTitle.leadingAnchor.constraint(equalTo: heroImage.trailingAnchor, constant: 20),
             itemTitle.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
-            
+
             faviconImage.leadingAnchor.constraint(equalTo: heroImage.trailingAnchor, constant: 20),
             faviconImage.bottomAnchor.constraint(equalTo: heroImage.bottomAnchor),
             faviconImage.heightAnchor.constraint(equalToConstant: 24),
             faviconImage.widthAnchor.constraint(equalToConstant: 24),
-            
+
             siteNameLabel.leadingAnchor.constraint(equalTo: faviconImage.trailingAnchor, constant: 8),
             siteNameLabel.centerYAnchor.constraint(equalTo: faviconImage.centerYAnchor),
             siteNameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
@@ -313,7 +313,6 @@ class JumpBackInCell: UICollectionViewCell {
 }
 
 extension JumpBackInCell: NotificationThemeable {
-    
     func applyTheme() {
         if LegacyThemeManager.instance.currentName == .dark {
             [itemTitle, siteNameLabel, itemDetails].forEach { $0.textColor = UIColor.Photon.LightGrey10 }
@@ -325,5 +324,5 @@ extension JumpBackInCell: NotificationThemeable {
             contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
         }
     }
-    
+
 }
