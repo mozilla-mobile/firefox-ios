@@ -553,6 +553,30 @@
 /* Text for a label that indicates the description for biometric Touch ID tip. */
 "Tip.BiometricTouchId.Description" = "Touch ID zmóžnić";
 
+/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Release.Description" = "Čitajće wjace wo tym a druhich aktualizacijach za %@.";
+
+/* Text for a label that indicates the title for release tip. */
+"Tip.Release.Title" = "Wězo, mamy moderny nowy napohlad!";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "Akcije strony > Desktopowe sydło požadać";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "Chceće sej dospołnu desktopowu wersiju sydła wobhladać?";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "%@ přesćěhowakow dotal zablokowane";
+
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "Wy přehladujeće. %@ blokuje.";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "Wubjerće „Zwjazanjam přidać“ w meniju %@";
+
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "Wutworće zwjazanja ze sydłami, kotrež najhusćišo wopytujeće:";
+
 /* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
 "Tip.SiriErase.Description" = "Zwjazanje Siri přidać";
 
@@ -564,6 +588,12 @@
 
 /* Text for a label that indicates the title for siri favorite tip. */
 "Tip.SiriFavorite.Title" = "„Siri, wočiń moje najlubše sydło.“";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "Spytajće slědowanski škit znjemóžnjeć";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "Sydło so dźiwnje zadźeržuje abo wobsah faluje?";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Wužiwajće Touch ID, zo byšće so k %@ wróćił";

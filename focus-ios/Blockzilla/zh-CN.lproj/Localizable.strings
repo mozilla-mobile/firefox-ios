@@ -476,7 +476,7 @@
 "Settings.whatsNewTitle" = "新版变化";
 
 /* Title for settings section to enable different Siri Shortcuts. */
-"Settinsg.siriShortcutsTitle" = "Siri 捷径";
+"Settinsg.siriShortcutsTitle" = "Siri 快捷指令";
 
 /* Text for a share button */
 "share" = "分享";
@@ -536,19 +536,25 @@
 "Siri.eraseAndOpen" = "清除并打开";
 
 /* Title for screen to add a favorite URL to Siri. */
-"Siri.favoriteUrl" = "打开喜爱的网站";
+"Siri.favoriteUrl" = "打开最常访问网站";
 
 /* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
-"Siri.openURL" = "打开喜爱的网站";
+"Siri.openURL" = "打开最常访问网站";
 
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "要打开的网址";
+
+/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.Biometric.Title" = "有网站打开时锁定 %@：";
 
 /* Text for a label that indicates the description for biometric Face ID tip. */
 "Tip.BiometricFaceId.Description" = "开启面容 ID";
 
 /* Text for a label that indicates the description for biometric Touch ID tip. */
 "Tip.BiometricTouchId.Description" = "开启触控 ID";
+
+/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Release.Description" = "了解 %@ 此版本与其他版本更新的更多信息。";
 
 /* Text for a label that indicates the title for release tip. */
 "Tip.Release.Title" = "是的，我们的外观已焕然一新！";
@@ -562,6 +568,15 @@
 /* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
 "Tip.ShareTrackers.Description" = "迄今已拦截跟踪器数量：%@";
 
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "您安心上网，%@ 自动拦截。";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "选择 %@ 菜单中的“添加快捷方式”";
+
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "为您最常访问的网站创建快捷方式：";
+
 /* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
 "Tip.SiriErase.Description" = "添加 Siri 快捷指令";
 
@@ -570,6 +585,9 @@
 
 /* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
 "Tip.SiriFavorite.Description" = "添加 Siri 快捷指令";
+
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "“Siri，打开我最常访问的网站。”";
 
 /* Text for a label that indicates the description for sites not working tip. */
 "Tip.SitesNotWorking.Description" = "请尝试关闭跟踪保护";

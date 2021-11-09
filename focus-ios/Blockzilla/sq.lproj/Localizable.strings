@@ -46,6 +46,12 @@
 /* Button to dismiss the 'Add Pass Failed' alert. */
 "AddPass.Error.Dismiss" = "Ok";
 
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "Ndodhi një gabim teksa bileta juaj shtohej te Wallet. Ju lutemi, riprovoni më vonë.";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "S’u arrit të Shtohej Biletë";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "Bëni mirëfilltësimin që të ktheheni te %@";
 
@@ -313,6 +319,9 @@
 /* Button label for declining Content blocker alert */
 "Settings.blockOtherNo2" = "Anuloje";
 
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes2" = "Blloko Gjurmues Lënde";
+
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "E errët";
 
@@ -535,6 +544,57 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "URL për hapje";
 
+/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.Biometric.Title" = "Kyçe %@, kur një sajt është i hapur:";
+
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "Aktivizo Face ID";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "Aktivizo Touch ID";
+
+/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Release.Description" = "Lexoni më tepër rreth kësaj dhe përditësimesh të tjera në %@.";
+
+/* Text for a label that indicates the title for release tip. */
+"Tip.Release.Title" = "Po, kemi një pamje të re të freskët!";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "Veprime Faqeje > Kërko Sajtin Për Desktop";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "Doni të shihni versionin e plotë për desktop të një sajti?";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "%@ gjurmues të bllokuar deri tani";
+
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "Ju shfletoni. %@ bllokon.";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "Përzgjidhni “Shtoje te Shkurtoret” që prej menusë %@";
+
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "Krijoni shkurtore për te sajtet që vizitoni më shpesh:";
+
+/* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriErase.Description" = "Shtoni shkurtore Siri";
+
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.SiriErase.Title" = "“Siri, fshi sesionin tim %@.”";
+
+/* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriFavorite.Description" = "Shtoni shkurtore Siri";
+
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "“Siri, hap sajtin tim të parapëlqyer.”";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "Provoni të çaktivizoni Mbrojtje Nga Gjurmimet";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "Mungon lëndë te sajti, apo po sillet në mënyrë të çuditshme?";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Përdorni Touch ID që të ktheheni te %@";
 
@@ -589,6 +649,12 @@
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.trackerDescriptionLabel2" = "Mbajini për vete të dhënat tuaja. %@ ju mbron nga shumë prej gjurmuesve më të rëndomtë që ndjekin ç’bëni në internet.";
 
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "Gjurmues të bllokuar që prej %@";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "Gjurmues dhe programthe për t’u bllokuar";
+
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Shtoni lidhje për vetëplotësim";
 
@@ -600,6 +666,9 @@
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "FSHIJE";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "Historiku i shfletimit u spastrua";
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Gjej në faqe: %@";
