@@ -306,7 +306,12 @@ extension WebViewController: WKNavigationDelegate {
             preferences.preferredContentMode = preferredContentMode
         }
         
-        let present: (UIViewController) -> Void = { self.present($0, animated: true, completion: nil) }
+        let present: (UIViewController) -> Void = {
+            self.present($0, animated: true) {
+                self.delegate?.webController(self, didUpdateEstimatedProgress: 1.0)
+                self.delegate?.webControllerDidFinishNavigation(self)
+            }
+        }
 
         switch navigationAction.navigationType {
             case .backForward:
