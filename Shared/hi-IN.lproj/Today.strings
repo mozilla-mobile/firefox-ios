@@ -70,8 +70,17 @@
 /* Quick action description when widget enters edit mode */
 "TodayWidget.QuickActionDescription" = "अपने मुख्य पृष्ठ पर जोड़ने के लिए Firefox शॉर्टकट चुनें।";
 
+/* Quick Actions left label text for dropdown menu when widget enters edit mode */
+"TodayWidget.QuickActionDropDownMenu" = "तुरंत कारवाई";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "तुरंत कारवाई";
+
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
 "TodayWidget.QuickActionsGalleryTitleV2" = "Firefox शॉर्टकट";
+
+/* Sub label for medium size quick action widget */
+"TodayWidget.QuickActionsSubLabel" = "फ़ायरफ़ॉक्स - तुरंत कारवाई";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "अपने खुले टैब में शॉर्टकट जोड़ें।";
@@ -97,8 +106,14 @@
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitle" = "टॉप साइट";
 
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitleV2" = "वेबसाइट शॉर्टकट";
+
 /* Sub label for Top Sites widget */
 "TodayWidget.TopSitesSubLabel" = "Firefox - टॉप साइट";
+
+/* Sub label for Shortcuts widget */
+"TodayWidget.TopSitesSubLabel2" = "फ़ायरफ़ॉक्स - वेबसाइट शॉर्टकट";
 
 /* View More for Quick View widget in Gallery View where we don't know how many tabs might be opened */
 "TodayWidget.ViewMore" = "अधिक देखें";

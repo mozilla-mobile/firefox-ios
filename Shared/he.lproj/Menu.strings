@@ -83,7 +83,7 @@
 "Menu.TranslatePageAction.Title" = "תרגום הדף";
 
 /* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
-"Menu.ViewDekstopSiteAction.Title" = "בקשת אתר מותאם למחשבים שולחניים";
+"Menu.ViewDekstopSiteAction.Title" = "בקשת אתר למחשבים";
 
 /* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
 "Menu.ViewMobileSiteAction.Title" = "בקשת אתר מותאם לנייד";

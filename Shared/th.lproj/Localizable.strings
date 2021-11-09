@@ -269,6 +269,13 @@
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "แบ่งปันลิงก์";
 
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
+"ContextualHints.Homepage.PersonalizedHome" = "ขณะนี้หน้าแรกของ Firefox ที่ปรับแต่งแบบคุณได้รับการปรับปรุงให้คุณสามารถกลับมาดูหน้าเว็บที่คุณดูค้างไว้ได้ง่ายขึ้นแล้ว ค้นหาแท็บ ที่คั่นหน้า และผลการค้นหาล่าสุดของคุณ";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup.
+   Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
+"ContextualHints.TabTray.InactiveTabs" = "แท็บที่คุณไม่ได้ดูเป็นเวลา 2 สัปดาห์จะถูกย้ายมาที่นี่";
+
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "ไม่สามารถเพิ่มหน้าไปยังรายการอ่าน";
 
@@ -634,8 +641,17 @@
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "Hotkeys.ShowPreviousTab.DiscoveryTitle" = "แสดงแท็บก่อนหน้า";
 
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string is for the button the user must tap in order to turn on the Auto close feature */
+"InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle" = "เปิดการปิดอัตโนมัติ";
+
 /* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string describes what happens if you elect to turn on this option. */
 "InactiveTabs.TabTray.AutoClosePrompt.Content" = "Firefox จะปิดแท็บที่คุณไม่ได้ดูในช่วงเดือนที่ผ่านมา";
+
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This is the title of that Auto Close prompt */
+"InactiveTabs.TabTray.AutoClosePrompt.Title" = "ต้องการปิดอัตโนมัติหลังจากหนึ่งเดือนหรือไม่";
+
+/* In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs. */
+"InactiveTabs.TabTray.CloseButtonTitle" = "ปิดแท็บที่ไม่ได้ใช้งานทั้งหมด";
 
 /* Accessibility label for button increasing font size in display settings of reader mode */
 "Increase text size" = "เพิ่มขนาดข้อความ";
@@ -970,8 +986,23 @@
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
 "Onboarding.WhatsNew.Button.Title" = "เริ่มการเรียกดู";
 
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is a general description that appears under the title for what the card is about. */
+"Onboarding.WhatsNew.Description" = "คุณสามารถกลับมาดูหน้าเว็บที่คุณดูค้างไว้ได้ง่ายขึ้นแล้ว";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is the description for the Jump Back In bullet point */
+"Onboarding.WhatsNew.PersonalizedHome.Description" = "ข้ามไปยังแท็บที่เปิดอยู่ ที่คั่นหน้า และประวัติการเรียกดู";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the descripion of the Recent Searches bullet point on the card */
+"Onboarding.WhatsNew.RecentSearches.Description" = "เยี่ยมชมการค้นหาล่าสุดของคุณใหม่จากหน้าแรกของคุณ";
+
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the Recent Searches bullet point on the card */
 "Onboarding.WhatsNew.RecentSearches.Title" = "การค้นหาล่าสุด";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the description for the Tab Group bullet point on the card */
+"Onboarding.WhatsNew.TabGroups.Description" = "หน้าจากการค้นหาเดียวกันจะถูกจัดกลุ่มเข้าด้วยกัน";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Tab Group bullet point on the card */
+"Onboarding.WhatsNew.TabGroups.Title" = "กลุ่มแท็บที่เป็นระเบียบมากขึ้น";
 
 /* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Jump Back In bullet point on the card
    The title for the new onboarding card letting users know what is new in Firefox iOS */
@@ -1359,6 +1390,9 @@
 /* General settings section title */
 "Settings.General.SectionName" = "ทั่วไป";
 
+/* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
+"Settings.Home.Option.Description" = "เลือกเนื้อหาที่คุณเห็นในหน้าแรกของ Firefox";
+
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "กลับเข้าไป";
 
@@ -1374,11 +1408,23 @@
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recent Searches section on the Firefox homepage on or off */
 "Settings.Home.Option.RecentSearches" = "การค้นหาล่าสุด";
 
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
+"Settings.Home.Option.Shortcuts" = "ทางลัด";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage after four hours of inactivity. */
+"Settings.Home.Option.StartAtHome.AfterFourHours" = "หน้าแรกหลังจากไม่มีการใช้งานเป็นเวลา 4 ชั่วโมง";
+
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Always" = "หน้าแรก";
 
+/* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
+"Settings.Home.Option.StartAtHome.Description" = "เลือกสิ่งที่คุณเห็นเมื่อคุณกลับเข้าสู่ Firefox";
+
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Never" = "แท็บสุดท้าย";
+
+/* Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage. */
+"Settings.Home.Option.StartAtHome.Title" = "หน้าจอเมื่อเปิด";
 
 /* In the settings menu, this is the title of the Firefox Homepage customization settings section */
 "Settings.Home.Option.Title" = "หน้าแรกของ Firefox";
@@ -1559,6 +1605,9 @@
 
 /* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
 "Settings.Tabs.CustomizeTabsSection.TabGroups" = "กลุ่มแท็บ";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the Tabs Tray customization section. The tabs tray is accessed from firefox hompage */
+"Settings.Tabs.CustomizeTabsSection.Title" = "ปรับแต่งถาดแท็บ";
 
 /* In the settings menu, this is the title for the Tabs customization section option */
 "Settings.Tabs.Title" = "แท็บ";

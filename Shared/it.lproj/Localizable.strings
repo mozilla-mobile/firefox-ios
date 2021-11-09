@@ -1568,7 +1568,7 @@
 "Settings.Siri.SectionDescription" = "Utilizza Siri per aprire velocemente Firefox";
 
 /* The option that takes you to the siri shortcuts settings page */
-"Settings.Siri.SectionName" = "Scorciatoie di Siri";
+"Settings.Siri.SectionName" = "Comandi di Siri";
 
 /* Section title for all studies that are currently active */
 "Settings.Studies.Active.SectionName" = "Attivi";
