@@ -35,16 +35,16 @@ class AddCredentialViewController: UIViewController {
     fileprivate weak var usernameField: UITextField!
     fileprivate weak var passwordField: UITextField!
     
-    fileprivate let didSaveAction: (LoginRecord) -> Void
+    fileprivate let didSaveAction: (LoginEntry) -> Void
     
     fileprivate lazy var cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
     fileprivate lazy var saveButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(title: Strings.SettingsAddCustomEngineSaveButtonText, style: .done, target: self, action: #selector(addCredential))
+        let button = UIBarButtonItem(title: .SettingsAddCustomEngineSaveButtonText, style: .done, target: self, action: #selector(addCredential))
         button.isEnabled = false
         return button
     }()
     
-    init(didSaveAction: @escaping (LoginRecord) -> Void) {
+    init(didSaveAction: @escaping (LoginEntry) -> Void) {
         self.didSaveAction = didSaveAction
         super.init(nibName: nil, bundle: nil)
     }
@@ -81,19 +81,17 @@ class AddCredentialViewController: UIViewController {
         }
         
         didSaveAction(
-            Login(
-                id: "",
-                hostname: hostname,
-                password: password,
-                username: username,
-                httpRealm: nil,
-                formSubmitUrl: hostname,
-                usernameField: "",
-                passwordField: "",
-                timesUsed: 0,
-                timeCreated: 0,
-                timeLastUsed: 0,
-                timePasswordChanged: 0
+            LoginEntry(
+                fromLoginEntryFlattened: LoginEntryFlattened(
+                    id: "",
+                    hostname: hostname,
+                    password: password,
+                    username: username,
+                    httpRealm: nil,
+                    formSubmitUrl: hostname,
+                    usernameField: "",
+                    passwordField: ""
+                )
             )
         )
     }

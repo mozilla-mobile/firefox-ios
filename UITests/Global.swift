@@ -234,7 +234,7 @@ class BrowserUtils {
         tester.tapView(withAccessibilityLabel: "smallPrivateMask")
 
         tester.tapView(withAccessibilityIdentifier: "closeAllTabsButtonTabTray")
-        tester.tapView(withAccessibilityIdentifier: "TabTrayController.deleteButton.closeAll")
+        tester.tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
 
         tester.wait(forTimeInterval: 3)
         /* go to Normal mode */
@@ -244,7 +244,7 @@ class BrowserUtils {
             tester.tapView(withAccessibilityLabel: "1")
         }
         tester.tapView(withAccessibilityIdentifier: "closeAllTabsButtonTabTray")
-        tester.tapView(withAccessibilityIdentifier: "TabTrayController.deleteButton.closeAll")
+        tester.tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
     }
 
     class func dismissFirstRunUI(_ tester: KIFUITestActor) {
@@ -358,8 +358,8 @@ class BrowserUtils {
 
     class func openLibraryMenu(_ tester: KIFUITestActor) {
         tester.waitForAnimationsToFinish()
-        tester.waitForView(withAccessibilityIdentifier: "TabToolbar.menuButton")
-        tester.tapView(withAccessibilityIdentifier: "TabToolbar.menuButton")
+        tester.waitForView(withAccessibilityIdentifier: AccessibilityIdentifiers.BottomToolbar.settingsMenuButton)
+        tester.tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.BottomToolbar.settingsMenuButton)
         tester.waitForAnimationsToFinish()
     }
 
@@ -503,7 +503,7 @@ class SimplePageServer {
 class SearchUtils {
     static func navigateToSearchSettings(_ tester: KIFUITestActor) {
         let engine = SearchUtils.getDefaultEngine().shortName
-        tester.tapView(withAccessibilityIdentifier: "TabToolbar.menuButton")
+        tester.tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.BottomToolbar.settingsMenuButton)
         tester.waitForAnimationsToFinish()
         tester.tapView(withAccessibilityLabel: "Settings")
         tester.waitForView(withAccessibilityLabel: "Settings")
@@ -595,29 +595,10 @@ class DynamicFontUtils {
     }
 }
 
-class PasscodeUtils {
-    static func resetPasscode() {
-        KeychainWrapper.sharedAppContainerKeychain.setAuthenticationInfo(nil)
-    }
-
-    static func setPasscode(_ code: String, interval: PasscodeInterval) {
-        let info = AuthenticationKeychainInfo(passcode: code)
-        info.updateRequiredPasscodeInterval(interval)
-        KeychainWrapper.sharedAppContainerKeychain.setAuthenticationInfo(info)
-    }
-
-    static func enterPasscode(_ tester: KIFUITestActor, digits: String) {
-        tester.tapView(withAccessibilityLabel: String(digits[digits.startIndex]))
-        tester.tapView(withAccessibilityLabel: String(digits[digits.index(digits.startIndex, offsetBy: 1)]))
-        tester.tapView(withAccessibilityLabel: String(digits[digits.index(digits.startIndex, offsetBy: 2)]))
-        tester.tapView(withAccessibilityLabel: String(digits[digits.index(digits.startIndex, offsetBy: 3)]))
-    }
-}
-
 class HomePageUtils {
     static func navigateToHomePageSettings(_ tester: KIFUITestActor) {
         tester.waitForAnimationsToFinish()
-        tester.tapView(withAccessibilityIdentifier: "TabToolbar.menuButton")
+        tester.tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.BottomToolbar.settingsMenuButton)
         tester.tapView(withAccessibilityLabel: "Settings")
         tester.tapView(withAccessibilityIdentifier: "Homepage")
     }

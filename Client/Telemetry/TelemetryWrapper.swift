@@ -66,7 +66,7 @@ class TelemetryWrapper {
         telemetryConfig.measureUserDefaultsSetting(forKey: "profile.prefkey.trackingprotection.normalbrowsing", withDefaultValue: true)
         telemetryConfig.measureUserDefaultsSetting(forKey: "profile.prefkey.trackingprotection.privatebrowsing", withDefaultValue: true)
         telemetryConfig.measureUserDefaultsSetting(forKey: "profile.prefkey.trackingprotection.strength", withDefaultValue: "basic")
-        telemetryConfig.measureUserDefaultsSetting(forKey: ThemeManagerPrefs.systemThemeIsOn.rawValue, withDefaultValue: true)
+        telemetryConfig.measureUserDefaultsSetting(forKey: LegacyThemeManagerPrefs.systemThemeIsOn.rawValue, withDefaultValue: true)
 
         let prefs = profile.prefs
         legacyTelemetry.beforeSerializePing(pingType: CorePingBuilder.PingType) { (inputDict) -> [String: Any?] in
@@ -85,7 +85,7 @@ class TelemetryWrapper {
             self.crashedLastLaunch = false
 
             outputDict["settings"] = settings
-            
+
             let delegate = UIApplication.shared.delegate as? AppDelegate
 
             outputDict["openTabCount"] = delegate?.tabManager.count ?? 0
@@ -146,7 +146,7 @@ class TelemetryWrapper {
         self.profile = profile
 
         setSyncDeviceId()
-        
+
         // Register an observer to record settings and other metrics that are more appropriate to
         // record on going to background rather than during initialization.
         NotificationCenter.default.addObserver(
@@ -156,7 +156,7 @@ class TelemetryWrapper {
             object: nil
         )
     }
-    
+
     // Sets hashed fxa sync device id for glean deletion ping
     func setSyncDeviceId() {
         guard let prefs = profile?.prefs else { return }
@@ -244,10 +244,12 @@ class TelemetryWrapper {
             GleanMetrics.TrackingProtection.strength.set("basic")
         }
         // System theme enabled
-        GleanMetrics.Theme.useSystemTheme.set(ThemeManager.instance.systemThemeIsOn)
+        GleanMetrics.Theme.useSystemTheme.set(LegacyThemeManager.instance.systemThemeIsOn)
         // Installed Mozilla applications
         GleanMetrics.InstalledMozillaProducts.focus.set(UIApplication.shared.canOpenURL(URL(string: "firefox-focus://")!))
         GleanMetrics.InstalledMozillaProducts.klar.set(UIApplication.shared.canOpenURL(URL(string: "firefox-klar://")!))
+        // Device Authentication
+        GleanMetrics.Device.authentication.set(AppAuthenticator.canAuthenticateDeviceOwner())
     }
 
     @objc func uploadError(notification: NSNotification) {
@@ -311,6 +313,7 @@ extension TelemetryWrapper {
         case tab = "tab"
         case tabTray = "tab-tray"
         case groupedTab = "grouped-tab"
+        case groupedTabPerformSearch = "grouped-tab-perform-search"
         case trackingProtectionStatistics = "tracking-protection-statistics"
         case trackingProtectionSafelist = "tracking-protection-safelist"
         case trackingProtectionMenu = "tracking-protection-menu"
@@ -424,11 +427,14 @@ extension TelemetryWrapper {
         case yourLibrarySection = "your-library-section"
         case jumpBackInSectionShowAll = "jump-back-in-section-show-all"
         case jumpBackInSectionTabOpened = "jump-back-in-section-tab-opened"
+        case jumpBackInSectionGroupOpened = "jump-back-in-section-group-opened"
         case recentlySavedSectionShowAll = "recently-saved-section-show-all"
         case recentlySavedBookmarkItemAction = "recently-saved-bookmark-item-action"
         case recentlySavedBookmarkItemView = "recently-saved-bookmark-item-view"
         case recentlySavedReadingListView = "recently-saved-reading-list-view"
         case recentlySavedReadingListAction = "recently-saved-reading-list-action"
+        case customizeHomepageButton = "customize-homepage-button"
+        case fxHomepageOrigin = "firefox-homepage-origin"
         case addBookmarkToast = "add-bookmark-toast"
         case openHomeFromAwesomebar = "open-home-from-awesomebar"
         case openHomeFromPhotonMenuButton = "open-home-from-photon-menu-button"
@@ -440,12 +446,13 @@ extension TelemetryWrapper {
         case tabGroupWithExtras = "tabGroupWithExtras"
         case closeGroupedTab = "recordCloseGroupedTab"
     }
-    
+
     public enum EventExtraKey: String, CustomStringConvertible {
         case topSitePosition = "tilePosition"
         case topSiteTileType = "tileType"
         case pocketTilePosition = "pocketTilePosition"
-        
+        case fxHomepageOrigin = "fxHomepageOrigin"
+
         // Grouped Tab
         case groupsWithTwoTabsOnly = "groupsWithTwoTabsOnly"
         case groupsWithTwoMoreTab = "groupsWithTwoMoreTab"
@@ -661,15 +668,19 @@ extension TelemetryWrapper {
             GleanMetrics.InactiveTabsTray.openRecentlyClosedList.add()
         case (.action, .tap, .inactiveTabTray, EventValue.openRecentlyClosedTab.rawValue, _):
             GleanMetrics.InactiveTabsTray.openRecentlyClosedTab.add()
-            
+
         // Tab Groups
         case (.action, .view, .tabTray, EventValue.tabGroupWithExtras.rawValue, let extras):
            let groupedTabExtras = GleanMetrics.Tabs.GroupedTabExtra.init(averageTabsInAllGroups: extras?["\(EventExtraKey.averageTabsInAllGroups)"] as? Int32, groupsTwoTabsOnly: extras?["\(EventExtraKey.groupsWithTwoTabsOnly)"] as? Int32, groupsWithMoreThanTwoTab: extras?["\(EventExtraKey.groupsWithTwoMoreTab)"] as? Int32, totalNumOfGroups: extras?["\(EventExtraKey.totalNumberOfGroups)"] as? Int32, totalTabsInAllGroups: extras?["\(EventExtraKey.totalTabsInAllGroups)"] as? Int32)
             GleanMetrics.Tabs.groupedTab.record(groupedTabExtras)
         case (.action, .tap, .groupedTab, EventValue.closeGroupedTab.rawValue, _):
             GleanMetrics.InactiveTabsTray.openRecentlyClosedTab.add()
-    
+        case (.action, .tap, .groupedTabPerformSearch, _, _):
+            GleanMetrics.Tabs.groupedTabSearch.add()
+            
         // Firefox Homepage
+        case (.action, .view, .firefoxHomepage, EventValue.fxHomepageOrigin.rawValue, _):
+            GleanMetrics.FirefoxHomePage.firefoxHomepageView.add()
         case (.action, .tap, .firefoxHomepage, EventValue.yourLibrarySection.rawValue, let extras):
             if let panel = extras?[EventObject.libraryPanel.rawValue] as? String {
                 GleanMetrics.FirefoxHomePage.yourLibrary[panel].add()
@@ -700,6 +711,11 @@ extension TelemetryWrapper {
             GleanMetrics.FirefoxHomePage.jumpBackInSectionView.add()
         case (.action, .tap, .firefoxHomepage, EventValue.jumpBackInSectionTabOpened.rawValue, _):
             GleanMetrics.FirefoxHomePage.jumpBackInTabOpened.add()
+        case (.action, .tap, .firefoxHomepage, EventValue.jumpBackInSectionGroupOpened.rawValue, _):
+            GleanMetrics.FirefoxHomePage.jumpBackInGroupOpened.add()
+
+        case (.action, .tap, .firefoxHomepage, EventValue.customizeHomepageButton.rawValue, _):
+            GleanMetrics.FirefoxHomePage.customizeHomepageButton.add()
 
         default:
             let msg = "Uninstrumented metric recorded: \(category), \(method), \(object), \(value), \(String(describing: extras))"
@@ -707,3 +723,4 @@ extension TelemetryWrapper {
         }
     }
 }
+

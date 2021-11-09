@@ -53,10 +53,10 @@ class TabCounterTests: BaseTestCase {
         if isTablet {
             app.otherElements["Tabs Tray"].collectionViews.cells.element(boundBy: 0).buttons["tab close"].tap()
         } else {
-            app.tables.cells.element(boundBy: 0).buttons["closeTabButtonTabTray"].tap()
+            app.otherElements["Tabs Tray"].cells.element(boundBy: 0).buttons["tab close"].tap()
         }
 
-        app.cells.element(boundBy: 0).tap()
+        app.otherElements["Tabs Tray"].cells.element(boundBy: 0).tap()
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
@@ -65,8 +65,8 @@ class TabCounterTests: BaseTestCase {
         XCTAssertEqual("1", tabsOpen as? String)
 
         navigator.goto(TabTray)
-        tabsOpen = app.buttons["1"].label
-        XCTAssertTrue(app.buttons["1"].isSelected)
+        tabsOpen = app.segmentedControls["navBarTabTray"].buttons.element(boundBy:0).label
+        XCTAssertTrue(app.segmentedControls.buttons.element(boundBy: 0).isSelected)
         XCTAssertEqual("1", tabsOpen as? String)
     }
 }

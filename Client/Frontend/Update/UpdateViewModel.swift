@@ -11,7 +11,7 @@ class UpdateViewModel {
     var startBrowsing: (() -> Void)?
     
     // Constants
-    let updates: [Update] = [Update(updateImage: #imageLiteral(resourceName: "darkModeUpdate"), updateText: "\(Strings.CoverSheetV22DarkModeTitle)\n\n\(Strings.CoverSheetV22DarkModeDescription)")]
+    let updates: [Update] = [Update(updateImage: #imageLiteral(resourceName: "darkModeUpdate"), updateText: "\(String.CoverSheetV22DarkModeTitle)\n\n\(String.CoverSheetV22DarkModeDescription)")]
     
     // We only show coversheet for specific app updates and not all. The list below is for the version(s)
     // we would like to show the coversheet for.
@@ -22,7 +22,7 @@ class UpdateViewModel {
     }
 
     private func setupUpdateModel() {
-        updateCoverSheetModel = UpdateCoverSheetModel(titleImage: #imageLiteral(resourceName: "splash"), titleText: Strings.WhatsNewString, updates: updates)
+        updateCoverSheetModel = UpdateCoverSheetModel(titleImage: #imageLiteral(resourceName: "splash"), titleText: .WhatsNewString, updates: updates)
     }
     
     static func isCleanInstall(userPrefs: Prefs) -> Bool {

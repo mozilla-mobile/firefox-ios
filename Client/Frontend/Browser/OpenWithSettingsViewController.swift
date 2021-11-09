@@ -23,13 +23,13 @@ class OpenWithSettingsViewController: ThemedTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = Strings.SettingsOpenWithSectionName
+        title = .SettingsOpenWithSectionName
 
         tableView.accessibilityIdentifier = "OpenWithPage.Setting.Options"
 
         let headerFooterFrame = CGRect(width: self.view.frame.width, height: SettingsUX.TableViewHeaderFooterHeight)
         let headerView = ThemedTableSectionHeaderFooterView(frame: headerFooterFrame)
-        headerView.titleLabel.text = Strings.SettingsOpenWithPageTitle.uppercased()
+        headerView.titleLabel.text = .SettingsOpenWithPageTitle.uppercased()
         let footerView = ThemedTableSectionHeaderFooterView(frame: headerFooterFrame)
 
         tableView.tableHeaderView = headerView

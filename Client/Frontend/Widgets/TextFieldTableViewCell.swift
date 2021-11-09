@@ -16,7 +16,7 @@ protocol TextFieldTableViewCellDelegate: AnyObject {
     func textFieldTableViewCell(_ textFieldTableViewCell: TextFieldTableViewCell, didChangeText text: String)
 }
 
-class TextFieldTableViewCell: UITableViewCell, Themeable {
+class TextFieldTableViewCell: UITableViewCell, NotificationThemeable {
     let titleLabel: UILabel
     let textField: UITextField
 

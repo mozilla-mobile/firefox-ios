@@ -12,7 +12,6 @@ class LoginManagerTests: KIFTestCase {
 
     override func setUp() {
         super.setUp()
-        PasscodeUtils.resetPasscode()
         webRoot = SimplePageServer.start()
         generateLogins()
         BrowserUtils.dismissFirstRunUI(tester())
@@ -21,7 +20,6 @@ class LoginManagerTests: KIFTestCase {
     override func tearDown() {
         super.tearDown()
         clearLogins()
-        PasscodeUtils.resetPasscode()
         tester().wait(forTimeInterval: 5)
         BrowserUtils.resetToAboutHomeKIF(tester())
     }
@@ -228,7 +226,7 @@ class LoginManagerTests: KIFTestCase {
         // Workaround
         tester().tapView(withAccessibilityIdentifier: "TabToolbar.tabsButton")
         tester().tapView(withAccessibilityIdentifier: "closeAllTabsButtonTabTray")
-        tester().tapView(withAccessibilityIdentifier: "TabTrayController.deleteButton.closeAll")
+        tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
     }
 
@@ -253,7 +251,7 @@ class LoginManagerTests: KIFTestCase {
         // Workaround
         tester().tapView(withAccessibilityIdentifier: "TabToolbar.tabsButton")
         tester().tapView(withAccessibilityIdentifier: "closeAllTabsButtonTabTray")
-        tester().tapView(withAccessibilityIdentifier: "TabTrayController.deleteButton.closeAll")
+        tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
     }
     // This test is disabled until bug 1486243 is fixed

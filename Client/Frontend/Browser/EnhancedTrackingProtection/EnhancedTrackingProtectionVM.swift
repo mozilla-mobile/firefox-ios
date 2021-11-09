@@ -27,7 +27,7 @@ class EnhancedTrackingProtectionMenuVM {
     }
 
     var connectionStatusImage: UIImage {
-        let insecureImageString = ThemeManager.instance.currentName == .dark ? "lock_blocked_dark" : "lock_blocked"
+        let insecureImageString = LegacyThemeManager.instance.currentName == .dark ? "lock_blocked_dark" : "lock_blocked"
         let image = connectionSecure ? UIImage(imageLiteralResourceName: "lock_verified").withRenderingMode(.alwaysTemplate) : UIImage(imageLiteralResourceName: insecureImageString)
         return image
     }
@@ -61,7 +61,7 @@ class EnhancedTrackingProtectionMenuVM {
     // MARK: - Functions
 
     func getDetailsViewModel(withCachedImage cachedImage: UIImage?) -> EnhancedTrackingProtectionDetailsVM {
-        let verifier = String(format: Strings.TPDetailsVerifiedBy, "EXAMPLE VERIFIER")
+        let verifier = String(format: .TPDetailsVerifiedBy, "EXAMPLE VERIFIER")
         return EnhancedTrackingProtectionDetailsVM(topLevelDomain: websiteTitle,
                                                    title: tab.displayTitle,
                                                    image: cachedImage ?? UIImage(imageLiteralResourceName: "defaulFavicon"),

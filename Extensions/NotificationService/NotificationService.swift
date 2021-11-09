@@ -116,45 +116,45 @@ class SyncDataDisplay {
 
 extension SyncDataDisplay {
     func displayDeviceConnectedNotification(_ deviceName: String) {
-        presentNotification(title: Strings.FxAPush_DeviceConnected_title,
-                            body: Strings.FxAPush_DeviceConnected_body,
+        presentNotification(title: .FxAPush_DeviceConnected_title,
+                            body: .FxAPush_DeviceConnected_body,
                             bodyArg: deviceName)
     }
 
     func displayDeviceDisconnectedNotification(_ deviceName: String?) {
         if let deviceName = deviceName {
-            presentNotification(title: Strings.FxAPush_DeviceDisconnected_title,
-                                body: Strings.FxAPush_DeviceDisconnected_body,
+            presentNotification(title: .FxAPush_DeviceDisconnected_title,
+                                body: .FxAPush_DeviceDisconnected_body,
                                 bodyArg: deviceName)
         } else {
             // We should never see this branch
-            presentNotification(title: Strings.FxAPush_DeviceDisconnected_title,
-                                body: Strings.FxAPush_DeviceDisconnected_UnknownDevice_body)
+            presentNotification(title: .FxAPush_DeviceDisconnected_title,
+                                body: .FxAPush_DeviceDisconnected_UnknownDevice_body)
         }
     }
 
     func displayThisDeviceDisconnectedNotification() {
-        presentNotification(title: Strings.FxAPush_DeviceDisconnected_ThisDevice_title,
-                            body: Strings.FxAPush_DeviceDisconnected_ThisDevice_body)
+        presentNotification(title: .FxAPush_DeviceDisconnected_ThisDevice_title,
+                            body: .FxAPush_DeviceDisconnected_ThisDevice_body)
     }
 
     func displayAccountVerifiedNotification() {
         Sentry.shared.send(message: "SentTab error: account not verified")
         #if MOZ_CHANNEL_BETA || DEBUG
-            presentNotification(title: Strings.SentTab_NoTabArrivingNotification_title, body: "DEBUG: Account Verified")
+            presentNotification(title: .SentTab_NoTabArrivingNotification_title, body: "DEBUG: Account Verified")
             return
         #endif
-        presentNotification(title: Strings.SentTab_NoTabArrivingNotification_title, body: Strings.SentTab_NoTabArrivingNotification_body)
+        presentNotification(title: .SentTab_NoTabArrivingNotification_title, body: .SentTab_NoTabArrivingNotification_body)
     }
 
     func displayUnknownMessageNotification(debugInfo: String) {
         Sentry.shared.send(message: "SentTab error: \(debugInfo)")
         #if MOZ_CHANNEL_BETA || DEBUG
-            presentNotification(title: Strings.SentTab_NoTabArrivingNotification_title, body: "DEBUG: " + debugInfo)
+            presentNotification(title: .SentTab_NoTabArrivingNotification_title, body: "DEBUG: " + debugInfo)
             return
         #endif
 
-        presentNotification(title: Strings.SentTab_NoTabArrivingNotification_title, body: Strings.SentTab_NoTabArrivingNotification_body)
+        presentNotification(title: .SentTab_NoTabArrivingNotification_title, body: .SentTab_NoTabArrivingNotification_body)
     }
 }
 
@@ -174,7 +174,7 @@ extension SyncDataDisplay {
             let item = ShareItem(url: urlString, title: title, favicon: nil)
             _ = tabQueue?.addToQueue(item).value // Force synchronous.
 
-            presentNotification(title: Strings.SentTab_TabArrivingNotification_NoDevice_title, body: url.absoluteDisplayExternalString)
+            presentNotification(title: .SentTab_TabArrivingNotification_NoDevice_title, body: url.absoluteDisplayExternalString)
         }
     }
 }
@@ -185,19 +185,19 @@ extension SyncDataDisplay {
         let body: String
 
         if tabs.count == 0 {
-            title = Strings.SentTab_NoTabArrivingNotification_title
+            title = .SentTab_NoTabArrivingNotification_title
             #if MOZ_CHANNEL_BETA || DEBUG
                 body = "DEBUG: Sent Tabs with no tab"
             #else
-                body = Strings.SentTab_NoTabArrivingNotification_body
+                body = .SentTab_NoTabArrivingNotification_body
             #endif
             Sentry.shared.send(message: "SentTab error: no tab")
         } else {
             let deviceNames = Set(tabs.compactMap { $0["deviceName"] as? String })
             if let deviceName = deviceNames.first, deviceNames.count == 1 {
-                title = String(format: Strings.SentTab_TabArrivingNotification_WithDevice_title, deviceName)
+                title = String(format: .SentTab_TabArrivingNotification_WithDevice_title, deviceName)
             } else {
-                title = Strings.SentTab_TabArrivingNotification_NoDevice_title
+                title = .SentTab_TabArrivingNotification_NoDevice_title
             }
 
             if tabs.count == 1 {
@@ -206,9 +206,9 @@ extension SyncDataDisplay {
                 body = (tabs[0]["displayURL"] as? String) ??
                     (tabs[0]["url"] as! String)
             } else if deviceNames.count == 0 {
-                body = Strings.SentTab_TabArrivingNotification_NoDevice_body
+                body = .SentTab_TabArrivingNotification_NoDevice_body
             } else {
-                body = String(format: Strings.SentTab_TabArrivingNotification_WithDevice_body, AppInfo.displayName)
+                body = String(format: .SentTab_TabArrivingNotification_WithDevice_body, AppInfo.displayName)
             }
         }
 

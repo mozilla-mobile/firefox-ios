@@ -23,7 +23,7 @@
 "TodayWidget.DropDownMenuItemNewSearch" = "Nueva búsqueda";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "AGrega atajos de Firefox a tu pantalla de inicio.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Agrega atajos de Firefox a tu pantalla de inicio.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Ir al enlace copiado";
