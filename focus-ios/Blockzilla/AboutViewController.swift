@@ -6,6 +6,61 @@ import Foundation
 import UIKit
 
 class AboutViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, AboutHeaderViewDelegate {
+    
+    enum AboutSection: CaseIterable {
+        case aboutHeader
+        case aboutCategories
+        
+        var numberOfRows: Int {
+            switch self {
+            case .aboutHeader:
+                return 1
+            case .aboutCategories:
+                return 3
+            }
+        }
+        
+        func configureCell(cell: UITableViewCell, with headerView: UIView, for row: Int) {
+            switch self {
+            case .aboutHeader:
+                cell.contentView.addSubview(headerView)
+                cell.contentView.backgroundColor = .systemGroupedBackground
+                headerView.snp.makeConstraints { make in
+                    make.edges.equalTo(cell)
+                }
+            case .aboutCategories:
+                switch row {
+                case 0: cell.textLabel?.text = UIConstants.strings.aboutRowHelp
+                case 1: cell.textLabel?.text = UIConstants.strings.aboutRowRights
+                case 2: cell.textLabel?.text = UIConstants.strings.aboutRowPrivacy
+                default: break
+                }
+            }
+            cell.backgroundColor = .secondarySystemGroupedBackground
+            cell.selectionStyle = .gray
+            cell.textLabel?.textColor = .primaryText
+            cell.layoutMargins = UIEdgeInsets.zero
+            
+        }
+        
+        func categoryUrl(for row: Int) -> URL? {
+            switch self {
+            case .aboutHeader:
+                return nil
+            case .aboutCategories:
+                switch row {
+                case 0:
+                    return URL(string: "https://support.mozilla.org/\(AppInfo.config.supportPath)")
+                case 1:
+                    return Bundle.main.url(forResource: AppInfo.config.rightsFile, withExtension: nil)
+                case 2:
+                    return URL(string: "https://www.mozilla.org/privacy/firefox-focus")
+                default:
+                    return nil
+                }
+            }
+        }
+    }
 
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
@@ -19,6 +74,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
         return tableView
     }()
 
+    private var sections = AboutSection.allCases
     private let headerView = AboutHeaderView()
 
     override func viewDidLoad() {
@@ -38,9 +94,13 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
             make.edges.equalToSuperview()
         }
     }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        sections.count
+    }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        sections[section].numberOfRows
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -49,31 +109,12 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
 
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        configureCell(cell, forRowAt: indexPath)
-    }
-
-    private func configureCell(_ cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        switch (indexPath as NSIndexPath).row {
-        case 0:
-            cell.contentView.addSubview(headerView)
-            cell.contentView.backgroundColor = .systemGroupedBackground
-            headerView.snp.makeConstraints { make in
-                make.edges.equalTo(cell)
-            }
-        case 1: cell.textLabel?.text = UIConstants.strings.aboutRowHelp
-        case 2: cell.textLabel?.text = UIConstants.strings.aboutRowRights
-        case 3: cell.textLabel?.text = UIConstants.strings.aboutRowPrivacy
-        default: break
-        }
-
-        cell.backgroundColor = .secondarySystemGroupedBackground
-        cell.selectionStyle = .gray
-        cell.textLabel?.textColor = .primaryText
-        cell.layoutMargins = UIEdgeInsets.zero
+        sections[indexPath.section].configureCell(cell: cell, with: headerView, for: indexPath.row)
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 0 {
+        switch sections[section] {
+        case .aboutHeader:
             let cell = UITableViewCell()
             cell.backgroundColor = .systemGroupedBackground
             // Hack to cover header separator line
@@ -87,42 +128,29 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
                 make.leading.trailing.equalToSuperview()
             }
             return cell
+        case .aboutCategories:
+            return nil
         }
-        return nil
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch (indexPath as NSIndexPath).row {
-        case 0:
-            // We ask for the height before we do a layout pass, so manually trigger a layout here
-            // so we can calculate the view's height.
+        switch sections[indexPath.section] {
+        case .aboutHeader:
             headerView.layoutIfNeeded()
-
             return headerView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
-        default: break
+        case .aboutCategories:
+            return 44
         }
-
-        return 44
     }
 
     func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        return (indexPath as NSIndexPath).row != 0
+        return sections[indexPath.section] == .aboutCategories
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        var url: URL?
-        switch (indexPath as NSIndexPath).row {
-        case 1:
-            url = URL(string: "https://support.mozilla.org/\(AppInfo.config.supportPath)")
-        case 2:
-            url = Bundle.main.url(forResource: AppInfo.config.rightsFile, withExtension: nil)
-        case 3:
-            url = URL(string: "https://www.mozilla.org/privacy/firefox-focus")
-        default: break
-        }
-
+        guard sections[indexPath.section] == .aboutCategories else { return }
+        let url: URL? = sections[indexPath.section].categoryUrl(for: indexPath.row)
         pushSettingsContentViewControllerWithURL(url)
-
         tableView.deselectRow(at: indexPath, animated: false)
     }
 
