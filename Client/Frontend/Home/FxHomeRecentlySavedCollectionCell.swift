@@ -149,7 +149,7 @@ extension FxHomeRecentlySavedCollectionCell: UICollectionViewDelegate {
             homePanelDelegate?.homePanel(didSelectURL: url, visitType: .bookmark, isGoogleTopSite: false)
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .tap,
-                                         object: .bookmark,
+                                         object: .firefoxHomepage,
                                          value: .recentlySavedBookmarkItemAction,
                                          extras: TelemetryWrapper.getOriginExtras(isZeroSearch: viewModel.isZeroSearch))
         } else if let item = dataSource[safe: indexPath.row] as? ReadingListItem,
@@ -160,7 +160,7 @@ extension FxHomeRecentlySavedCollectionCell: UICollectionViewDelegate {
             libraryPanelDelegate?.libraryPanel(didSelectURL: encodedUrl, visitType: visitType)
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .tap,
-                                         object: .readingListItem,
+                                         object: .firefoxHomepage,
                                          value: .recentlySavedReadingListAction,
                                          extras: TelemetryWrapper.getOriginExtras(isZeroSearch: viewModel.isZeroSearch))
         }
