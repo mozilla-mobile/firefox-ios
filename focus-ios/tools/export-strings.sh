@@ -14,10 +14,10 @@ echo "\n\n[*] Building tools/Localizations"
 (cd tools/Localizations && swift build)
 
 echo "\n\n[*] Exporting Strings (output in export-strings.log)"
-tools/Localizations/.build/arm64-apple-macosx/debug/Localizations \
+(cd tools/Localizations && swift run Localizations \
   --export \
-  --project-path "$PWD/Blockzilla.xcodeproj" \
-  --l10n-project-path "$PWD/focusios-l10n" > export-strings.log 2>&1
+  --project-path "$PWD/../../Blockzilla.xcodeproj" \
+  --l10n-project-path "$PWD/../../focusios-l10n") > export-strings.log 2>&1
 
 echo "\n\n[!] Hooray strings have been succesfully exported."
 echo "[!] You can create a PR in the focusios-l10n checkout"
