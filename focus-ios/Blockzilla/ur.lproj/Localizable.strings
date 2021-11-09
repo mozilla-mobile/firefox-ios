@@ -46,6 +46,9 @@
 /* Button to dismiss the 'Add Pass Failed' alert. */
 "AddPass.Error.Dismiss" = "ٹھیک ہے";
 
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "پاس کو Wallet میں شامل کرتے وقت نقص آگیا ۔ براہ مہربانی کچھ دیر بعد کوشش کریں۔";
+
 /* Title of the 'Add Pass Failed' alert. */
 "AddPass.Error.Title" = "پاس شامل کرنے میں ناکام رہا";
 
@@ -253,6 +256,12 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” آپ کی تصاویر تک رسائی حاصل کرنا چاھے گا";
 
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "کنکشن محفوظ نہیں ہے";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "کنکشن محفوظ ہے۔";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "ڈیسک ٹاپ سائٹ کی درخواست کریں";
 
@@ -286,8 +295,23 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "دیگر مواد ٹریکرز کو روکنے سے کچھ ویڈیوز اور ویب صفحات ٹوٹ سکتے ہیں۔";
 
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "منسوخ کریں";
+
+/* Dark theme option in settings menu */
+"Settings.darkTheme" = "گہرا";
+
+/* Title for section in settings menu */
+"Settings.general" = "عمومی";
+
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "مزید سیکھیں۔";
+
+/* Light theme option in settings menu */
+"Settings.lightTheme" = "ہلکا";
+
+/* Manual value for theme section in settings menu */
+"Settings.manualTheme" = "دستی";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "%@ کی شرح";
@@ -355,6 +379,15 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "SECURITY";
 
+/* System value for theme section in settings menu */
+"Settings.systemTheme" = "سسٹم تھیم";
+
+/* Theme section in settings menu */
+"Settings.theme" = "تھیم";
+
+/* Header for manual theme section in settings menu */
+"Settings.themePicker" = "تھیم چننے والا";
+
 /* Label for the checkbox to toggle Advertising trackers */
 "Settings.toggleBlockAds2" = "اشتہار";
 
@@ -381,6 +414,9 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "استعمال شدہ کوائف ارسال کریں";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "مطالعہ";
 
 /* Status off for tracking protection in settings screen */
 "Settings.trackingProtectionOff" = "بند";

@@ -271,6 +271,12 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” ต้องการเข้าถึงรูปถ่ายของคุณ";
 
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "การเชื่อมต่อไม่ปลอดภัย";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "การเชื่อมต่อปลอดภัย";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "ขอไซต์สำหรับเดสก์ท็อป";
 
@@ -316,14 +322,29 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes2" = "ปิดกั้นตัวติดตามเนื้อหา";
 
+/* Dark theme option in settings menu */
+"Settings.darkTheme" = "มืด";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ จะส่งสิ่งที่คุณพิมพ์ในแถบที่อยู่ไปยังเครื่องมือค้นหาของคุณ";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla มุ่งมั่นที่จะเก็บรวบรวมเฉพาะสิ่งที่เราจำเป็นต้องให้บริการและปรับปรุง %@ สำหรับทุกคน";
 
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextStudies" = "%@ อาจติดตั้งและเรียกใช้การศึกษาเป็นครั้งคราว";
+
+/* Title for section in settings menu */
+"Settings.general" = "ทั่วไป";
+
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "เรียนรู้เพิ่มเติม";
+
+/* Light theme option in settings menu */
+"Settings.lightTheme" = "สว่าง";
+
+/* Manual value for theme section in settings menu */
+"Settings.manualTheme" = "กำหนดเอง";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "ให้คะแนน %@";
@@ -391,6 +412,15 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "ความปลอดภัย";
 
+/* System value for theme section in settings menu */
+"Settings.systemTheme" = "ชุดตกแต่งระบบ";
+
+/* Theme section in settings menu */
+"Settings.theme" = "ชุดตกแต่ง";
+
+/* Header for manual theme section in settings menu */
+"Settings.themePicker" = "ตัวเลือกชุดตกแต่ง";
+
 /* Label for the checkbox to toggle Advertising trackers */
 "Settings.toggleBlockAds2" = "โฆษณา";
 
@@ -424,6 +454,9 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "ส่งข้อมูลการใช้งาน";
 
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "การศึกษา";
+
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "ใช้ Touch ID เพื่อปลดล็อคแอป";
 
@@ -435,6 +468,9 @@
 
 /* Status on for tracking protection in settings screen */
 "Settings.trackingProtectionOn" = "เปิด";
+
+/* Value for theme toggle in settings menu */
+"Settings.useSystemTheme" = "ใช้โหมดสว่าง/มืดของระบบ";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "มีอะไรใหม่";
@@ -472,6 +508,9 @@
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "เปิดใน Chrome";
 
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "เปิดในเบราว์เซอร์เริ่มต้น";
+
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "เปิดใน Firefox";
 
@@ -505,6 +544,30 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "URL ที่จะเปิด";
 
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "เปิด Face ID";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "เปิด Touch ID";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "ต้องการดูไซต์เวอร์ชันเดสก์ท็อปแบบเต็มหรือไม่?";
+
+/* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriErase.Description" = "เพิ่มทางลัด Siri";
+
+/* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriFavorite.Description" = "เพิ่มทางลัด Siri";
+
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "“Siri เปิดโปรดของฉัน”";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "ลองปิดการป้องกันการติดตาม";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "ไซต์ไม่มีเนื้อหาหรือทำงานแปลก ๆ ?";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "ใช้ Touch ID เพื่อกลับสู่ %@";
 
@@ -519,6 +582,9 @@
 
 /* Text for tracking protection screen showing the connection is secure */
 "trackingProtection.connectionSecureLabel" = "การเชื่อมต่อปลอดภัย";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"trackingProtection.connectionVerifiedByLabel" = "ยืนยันโดย %@";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "ตัวติดตามของเนื้อหา";

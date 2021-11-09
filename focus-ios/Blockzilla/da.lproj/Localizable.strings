@@ -304,6 +304,9 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Autofuldfør URL";
 
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "Annuller";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ sender det indtastede i adresselinjen til den valgte søgetjeneste.";
 
@@ -379,6 +382,9 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "SIKKERHED";
 
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "Indhold";
+
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Brug Face ID til at låse appen op";
 
@@ -403,6 +409,12 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Touch ID kan låse %@ op, hvis der allerede er en URL åben i appen";
 
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "Fra";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "Til";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Nyheder";
 
@@ -411,6 +423,9 @@
 
 /* Text for a share button */
 "share" = "Del";
+
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "Føj til genveje";
 
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "Kopier adresse";
@@ -423,6 +438,9 @@
 
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "Sidehandlinger";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "Fjern fra genveje";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Bed om desktop-version";
@@ -438,6 +456,9 @@
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Del side med...";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "Fjern fra genveje";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Tilføj";
@@ -472,6 +493,12 @@
 /* label for analytic trackers. */
 "trackingProtection.analyticTrackerLabel" = "Analyse-sporing";
 
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "Forbindelsen er ikke sikker";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "Forbindelsen er sikker";
+
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Sporing via indhold";
 
@@ -487,11 +514,29 @@
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Læs mere";
 
+/* Text for the button that closes the Shield Data and opens the regular Settings screen. */
+"trackingProtection.moreSettings" = "Flere indstillinger";
+
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Sporing via sociale medier";
 
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "Beskyttelse er slået FRA for denne session";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "Beskyttelse er slået Til for denne session";
+
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Slå fra indtil du lukker %@ eller klikker på SLET.";
+
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "Udvidet beskyttelse mod sporing";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel2" = "Dine data tilhører dig. %@ beskytter dig mod mange af de mest almindelige sporings-teknologier, der følger med i, hvad du laver på nettet.";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "Sporings-mekanismer blokeret siden %@";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Tilføj link til autofuldførelse";
