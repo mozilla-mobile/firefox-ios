@@ -435,6 +435,7 @@ top_site:
           Type of tile pressed (Ex: google,
           suggested, user-added or history-based)
       position:
+        type: string
         description: |
           Position of top site.
     bugs:
