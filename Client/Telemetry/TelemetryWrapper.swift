@@ -710,17 +710,17 @@ extension TelemetryWrapper {
             if let readingListItemsCount = extras?[EventObject.recentlySavedReadingItemImpressions.rawValue] as? String {
                 GleanMetrics.FirefoxHomePage.readingListView.record(extra: [.readingListCount: readingListItemsCount])
             }
-        case (.action, .tap, .firefoxHomepage, EventValue.recentlySavedSectionShowAll.rawValue, _):
+        case (.action, .tap, .firefoxHomepage, EventValue.recentlySavedSectionShowAll.rawValue, let extras):
             GleanMetrics.FirefoxHomePage.recentlySavedShowAll.add()
             if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
                 GleanMetrics.FirefoxHomePage.recentlySavedShowAllOrigin[homePageOrigin].add()
             }
-        case (.action, .tap, .firefoxHomepage, EventValue.recentlySavedBookmarkItemAction.rawValue, _):
+        case (.action, .tap, .firefoxHomepage, EventValue.recentlySavedBookmarkItemAction.rawValue, let extras):
             GleanMetrics.FirefoxHomePage.recentlySavedBookmarkItem.add()
             if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
                 GleanMetrics.FirefoxHomePage.recentlySavedBookmarkOrigin[homePageOrigin].add()
             }
-        case (.action, .tap, .firefoxHomepage, EventValue.recentlySavedReadingListAction.rawValue, _):
+        case (.action, .tap, .firefoxHomepage, EventValue.recentlySavedReadingListAction.rawValue, let extras):
             GleanMetrics.FirefoxHomePage.recentlySavedReadingItem.add()
             if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
                 GleanMetrics.FirefoxHomePage.recentlySavedReadOrigin[homePageOrigin].add()
