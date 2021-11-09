@@ -507,9 +507,7 @@ extension TelemetryWrapper {
         // Preferences
         case (.action, .change, .setting, _, let extras):
             if let preference = extras?["pref"] as? String, let to = (extras?["to"] ?? "undefined") as? String {
-                GleanMetrics.Preferences.changed.record(
-                extra: [GleanMetrics.Preferences.ChangedKeys.preference: preference,
-                        GleanMetrics.Preferences.ChangedKeys.changedTo: to])
+                GleanMetrics.Preferences.changed.record(GleanMetrics.Preferences.ChangedExtra(changedTo: to, preference: preference))
             } else {
                 let msg = "Uninstrumented pref metric: \(category), \(method), \(object), \(value), \(String(describing: extras))"
                 Sentry.shared.send(message: msg, severity: .debug)
@@ -692,7 +690,7 @@ extension TelemetryWrapper {
 
         case (.action, .view, .firefoxHomepage, EventValue.recentlySavedBookmarkItemView.rawValue, let extras):
             if let bookmarksCount = extras?[EventObject.recentlySavedBookmarkImpressions.rawValue] as? String {
-                GleanMetrics.FirefoxHomePage.recentlySavedBookmarkView.record(GleanMetrics.FirefoxHomePage.RecentlySavedBookmarkViewExtra(bookmarkCount: bookmarksCount)
+                GleanMetrics.FirefoxHomePage.recentlySavedBookmarkView.record(GleanMetrics.FirefoxHomePage.RecentlySavedBookmarkViewExtra(bookmarkCount: bookmarksCount))
             }
         case (.action, .view, .firefoxHomepage, EventValue.recentlySavedReadingListView.rawValue, let extras):
             if let readingListItemsCount = extras?[EventObject.recentlySavedReadingItemImpressions.rawValue] as? String {

@@ -853,9 +853,11 @@ preferences:
       recorded in the extra keys.
     extra_keys:
       preference:
+        type: string
         description: |
           The preference that was changed.
       changed_to:
+        type: string
         description: |
           The value the preference was changed to.
     bugs:
