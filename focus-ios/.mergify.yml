@@ -36,8 +36,9 @@ pull_request_rules:
     conditions:
       - author=github-actions[bot]
       - title~=string-import*
-      - files~=^Blockzilla\/[^\/]*\/[^\/]*.lproj\/*
-      - files~=^Blockzilla\/[^\/]*.lproj\/*
+      - or:
+        - files~=^Blockzilla\/[^\/]*\/[^\/]*.lproj\/*
+        - files~=^Blockzilla\/[^\/]*.lproj\/*
     actions:
       queue:
         method: rebase
