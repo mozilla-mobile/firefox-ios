@@ -57,7 +57,7 @@ class TabTrayViewController: UIViewController {
         let syncingLabel = UILabel()
         syncingLabel.text = .SyncingMessageWithEllipsis
         
-        let activityIndicator = UIActivityIndicatorView(style: .gray)
+        let activityIndicator = UIActivityIndicatorView(style: .medium)
         activityIndicator.color = .systemGray
         activityIndicator.startAnimating()
         
