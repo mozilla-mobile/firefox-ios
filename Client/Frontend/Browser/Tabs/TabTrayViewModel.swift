@@ -18,14 +18,14 @@ class TabTrayViewModel {
         (tabManager.normalTabs.count < 100) ? tabManager.normalTabs.count.description : "\u{221E}"
     }
 
-    init(tabTrayDelegate: TabTrayDelegate? = nil, profile: Profile, showChronTabs: Bool = false) {
+    init(tabTrayDelegate: TabTrayDelegate? = nil, profile: Profile, showChronTabs: Bool = false, tabToFocus: Tab? = nil) {
         self.profile = profile
         self.tabManager = BrowserViewController.foregroundBVC().tabManager
 
         if showChronTabs {
             self.tabTrayView = ChronologicalTabsViewController(tabTrayDelegate: tabTrayDelegate, profile: self.profile)
         } else {
-            self.tabTrayView = GridTabViewController(tabManager: self.tabManager, profile: profile, tabTrayDelegate: tabTrayDelegate)
+            self.tabTrayView = GridTabViewController(tabManager: self.tabManager, profile: profile, tabTrayDelegate: tabTrayDelegate, tabToFocus: tabToFocus)
         }
         self.syncedTabsController = RemoteTabsPanel(profile: self.profile)
     }
@@ -34,9 +34,9 @@ class TabTrayViewModel {
         if foriPhone {
             switch segmentIndex {
             case 0, 1:
-                return Strings.TabTrayV2Title
+                return .TabTrayV2Title
             case 2:
-                return Strings.AppMenuSyncedTabsTitleString
+                return .AppMenuSyncedTabsTitleString
             default:
                 return nil
             }

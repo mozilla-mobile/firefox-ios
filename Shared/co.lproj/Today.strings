@@ -8,13 +8,13 @@
 "TodayWidget.ClosePrivateTabsLabelV3" = "Chjode\nl’unghjette\nprivate";
 
 /* Copied Link from clipboard displayed */
-"TodayWidget.CopiedLinkLabelFromPasteBoardV1" = "Leia cupiata da u preme’papei";
+"TodayWidget.CopiedLinkLabelFromPasteBoardV1" = "Liame cupiatu da u preme’papei";
 
 /* Quick Actions drop down menu item for lear Private Tabs when widget enters edit mode and drop down menu expands */
 "TodayWidget.DropDownMenuItemClearPrivateTabs" = "Squassà l’unghjette private";
 
 /* Quick Actions drop down menu item for Go to Copied Link when widget enters edit mode and drop down menu expands */
-"TodayWidget.DropDownMenuItemGoToCopiedLink" = "Apre a leia cupiata";
+"TodayWidget.DropDownMenuItemGoToCopiedLink" = "Apre u liame cupiatu";
 
 /* Quick Actions drop down menu item for new private search when widget enters edit mode and drop down menu expands */
 "TodayWidget.DropDownMenuItemNewPrivateSearch" = "Nova ricerca privata";
@@ -26,16 +26,16 @@
 "TodayWidget.FirefoxShortcutGalleryDescription" = "Aghjunghjite accurtatoghji Firefox à u vostru screnu d’accolta.";
 
 /* Go to link pasted on the clipboard */
-"TodayWidget.GoToCopiedLinkLabelV1" = "Apre a leia cupiata";
+"TodayWidget.GoToCopiedLinkLabelV1" = "Apre u liame cupiatu";
 
 /* Go to copied link */
-"TodayWidget.GoToCopiedLinkLabelV2" = "Apre a\nleia cupiata";
+"TodayWidget.GoToCopiedLinkLabelV2" = "Apre u\nliame cupiatu";
 
 /* Go To Copied Link text pasted on the clipboard but this string doesn't have new line character */
-"TodayWidget.GoToCopiedLinkLabelV3" = "Apre a leia cupiata";
+"TodayWidget.GoToCopiedLinkLabelV3" = "Apre u liame cupiatu";
 
 /* Go to copied link */
-"TodayWidget.GoToCopiedLinkLabelV4" = "Apre\na leia\ncupiata";
+"TodayWidget.GoToCopiedLinkLabelV4" = "Apre\nu liame\ncupiatu";
 
 /* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
 "TodayWidget.MoreTabsLabel" = "Più di %d altre…";

@@ -40,6 +40,9 @@
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Yksityinen haku";
 
+/* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
+"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox-oikotiet";
+
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitle" = "Ykkössivustot";
 

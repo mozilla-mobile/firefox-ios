@@ -8,11 +8,11 @@ import AuthenticationServices
 extension LoginRecord {
     public var passwordCredentialIdentity: ASPasswordCredentialIdentity {
         let serviceIdentifier = ASCredentialServiceIdentifier(identifier: self.hostname, type: .URL)
-        return ASPasswordCredentialIdentity(serviceIdentifier: serviceIdentifier, user: self.username, recordIdentifier: self.id)
+        return ASPasswordCredentialIdentity(serviceIdentifier: serviceIdentifier, user: self.decryptedUsername, recordIdentifier: self.id)
     }
     
     public var passwordCredential: ASPasswordCredential {
-        return ASPasswordCredential(user: self.username, password: self.password)
+        return ASPasswordCredential(user: self.decryptedUsername, password: self.decryptedPassword)
     }
 }
 

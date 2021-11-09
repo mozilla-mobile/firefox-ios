@@ -7,7 +7,7 @@ import XCTest
 class CopiedLinksTests: BaseTestCase {
     // This test is enable Offer to open copied links, when opening firefox
     func testCopiedLinks() {
-        waitForExistence(app.textFields["url"], timeout: 5)
+//        waitForExistence(app.textFields["url"], timeout: 5)
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
@@ -26,7 +26,7 @@ class CopiedLinksTests: BaseTestCase {
 
         app.navigationBars["Settings"]/*@START_MENU_TOKEN@*/.buttons["Done"]/*[[".buttons[\"Done\"]",".buttons[\"AppSettingsTableViewController.navigationItem.leftBarButtonItem\"]"],[[[-1,1],[-1,0]]],[1]]@END_MENU_TOKEN@*/.tap()
 
-        app/*@START_MENU_TOKEN@*/.buttons["TabToolbar.menuButton"]/*[[".buttons[\"Menu\"]",".buttons[\"TabToolbar.menuButton\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        app/*@START_MENU_TOKEN@*/.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton]/*[[".buttons[\"Menu\"]",".buttons[\"TabToolbar.menuButton\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
         let settingsmenuitemCell = app.tables.cells["Settings"]
         settingsmenuitemCell.tap()
 

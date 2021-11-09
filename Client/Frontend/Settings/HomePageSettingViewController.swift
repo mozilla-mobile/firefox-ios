@@ -5,52 +5,155 @@
 import Foundation
 import Shared
 
-class HomePageSettingViewController: SettingsTableViewController {
+class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsProtocol {
 
     /* variables for checkmark settings */
     let prefs: Prefs
-    var currentChoice: NewTabPage!
+    var currentNewTabChoice: NewTabPage!
+    var currentStartAtHomeSetting: StartAtHomeSetting!
     var hasHomePage = false
     init(prefs: Prefs) {
         self.prefs = prefs
         super.init(style: .grouped)
 
-        self.title = Strings.AppMenuOpenHomePageTitleString
+        self.title = .AppMenuOpenHomePageTitleString
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    lazy var homescreen = Experiments.shared.withVariables(featureId: .homescreen, sendExposureEvent: false) {
+        Homescreen(variables: $0)
+    }
+
+    var isJumpBackInSectionEnabled: Bool {
+        let isFeatureEnabled = featureFlags.isFeatureActiveForBuild(.jumpBackIn)
+        let isNimbusFeatureEnabled = homescreen.sectionsEnabled[.jumpBackIn] == true
+        guard isFeatureEnabled, isNimbusFeatureEnabled else { return false }
+        return true
+    }
+
+    var isRecentlySavedSectionEnabled: Bool {
+        let isFeatureEnabled = featureFlags.isFeatureActiveForBuild(.recentlySaved)
+        let isNimbusFeatureEnabled = homescreen.sectionsEnabled[.recentlySaved] == true
+        guard isFeatureEnabled, isNimbusFeatureEnabled else { return false }
+        return true
+    }
 
     override func generateSettings() -> [SettingSection] {
+
+        let customizeFirefoxHomeSection = customizeFirefoxSettingSection()
+        let customizeHomePageSection = customizeHomeSettingSection()
+
+        guard let startAtHomeSection = setupStartAtHomeSection() else {
+            return [customizeFirefoxHomeSection, customizeHomePageSection]
+        }
+
+        return [customizeFirefoxHomeSection, customizeHomePageSection, startAtHomeSection]
+    }
+
+    private func customizeHomeSettingSection() -> SettingSection {
+
         // The Home button and the New Tab page can be set independently
-        self.currentChoice = NewTabAccessors.getHomePage(self.prefs)
+        self.currentNewTabChoice = NewTabAccessors.getHomePage(self.prefs)
         self.hasHomePage = HomeButtonHomePageAccessors.getHomePage(self.prefs) != nil
 
         let onFinished = {
-            self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
+            self.prefs.setString(self.currentNewTabChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
             self.tableView.reloadData()
         }
 
-        let showTopSites = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabTopSites), subtitle: nil, accessibilityIdentifier: "HomeAsFirefoxHome", isChecked: {return self.currentChoice == NewTabPage.topSites}, onChecked: {
-            self.currentChoice = NewTabPage.topSites
+        let showTopSites = CheckmarkSetting(title: NSAttributedString(string: .SettingsNewTabTopSites), subtitle: nil, accessibilityIdentifier: "HomeAsFirefoxHome", isChecked: {return self.currentNewTabChoice == NewTabPage.topSites}, onChecked: {
+            self.currentNewTabChoice = NewTabPage.topSites
             onFinished()
         })
-        let showWebPage = WebPageSetting(prefs: prefs, prefKey: PrefsKeys.HomeButtonHomePageURL, defaultValue: nil, placeholder: Strings.CustomNewPageURL, accessibilityIdentifier: "HomeAsCustomURL", isChecked: {return !showTopSites.isChecked()}, settingDidChange: { (string) in
-            self.currentChoice = NewTabPage.homePage
-            self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
+        let showWebPage = WebPageSetting(prefs: prefs, prefKey: PrefsKeys.HomeButtonHomePageURL, defaultValue: nil, placeholder: .CustomNewPageURL, accessibilityIdentifier: "HomeAsCustomURL", isChecked: {return !showTopSites.isChecked()}, settingDidChange: { (string) in
+            self.currentNewTabChoice = NewTabPage.homePage
+            self.prefs.setString(self.currentNewTabChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
             self.tableView.reloadData()
         })
         showWebPage.textField.textAlignment = .natural
 
-        let section = SettingSection(title: NSAttributedString(string: Strings.NewTabSectionName), footerTitle: NSAttributedString(string: Strings.NewTabSectionNameFooter), children: [showTopSites, showWebPage])
+        return SettingSection(title: NSAttributedString(string: .NewTabSectionName),
+                              footerTitle: NSAttributedString(string: .NewTabSectionNameFooter),
+                              children: [showTopSites, showWebPage])
+    }
 
-        let topsitesSection = SettingSection(title: NSAttributedString(string: Strings.SettingsTopSitesCustomizeTitle), footerTitle: NSAttributedString(string: Strings.SettingsTopSitesCustomizeFooter), children: [TopSitesSettings(settings: self)])
+    private func customizeFirefoxSettingSection() -> SettingSection {
 
-        let isPocketEnabledDefault = Pocket.IslocaleSupported(Locale.current.identifier)
-        let pocketSetting = BoolSetting(prefs: profile.prefs, prefKey: PrefsKeys.ASPocketStoriesVisible, defaultValue: isPocketEnabledDefault, attributedTitleText: NSAttributedString(string: Strings.SettingsNewTabPocket))
-        let pocketSection = SettingSection(title: NSAttributedString(string: Strings.SettingsNewTabASTitle), footerTitle: NSAttributedString(string: Strings.SettingsNewTabPocketFooter), children: [pocketSetting])
-        return [section, topsitesSection, pocketSection]
+        var sectionItems = [Setting]()
+
+        let pocketSetting = BoolSetting(with: .pocket,
+                                        titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.Pocket))
+
+        let jumpBackInSetting = BoolSetting(with: .jumpBackIn,
+                                            titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.JumpBackIn))
+
+        let recentlySavedSetting = BoolSetting(with: .recentlySaved,
+                                               titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.RecentlySaved))
+
+        sectionItems.append(TopSitesSettings(settings: self))
+
+        if isJumpBackInSectionEnabled {
+            sectionItems.append(jumpBackInSetting)
+        }
+
+        if isRecentlySavedSectionEnabled {
+            sectionItems.append(recentlySavedSetting)
+        }
+
+        sectionItems.append(pocketSetting)
+
+        return SettingSection(title: NSAttributedString(string: .SettingsTopSitesCustomizeTitle),
+                              footerTitle: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.Description),
+                              children: sectionItems)
+    }
+
+    private func setupStartAtHomeSection() -> SettingSection? {
+        // TODO: WHen fixing start at home, this setting needs to addressed as well. The
+        // barebones of what needs to be done are here, just needs updating.
+        return nil
+//        guard featureFlags.isFeatureActiveForBuild(.startAtHome) else { return nil }
+//        guard let startAtHomeSetting: StartAtHomeSetting = featureFlags.featureOption(.startAtHome) else { return nil }
+//        currentStartAtHomeSetting = startAtHomeSetting
+//
+//        let onOptionSelected: ((Bool, StartAtHomeSetting) -> Void) = { state, option in
+//            self.featureFlags.set(.startAtHome, to: state, with: option)
+//            self.tableView.reloadData()
+//        }
+//
+//        let afterFourHoursOption = CheckmarkSetting(title: NSAttributedString(string: .SettingsCustomizeHomeStartAtHomeAfterFourHours),
+//                                                    subtitle: nil,
+//                                                    accessibilityIdentifier: "StartAtHomeAfterFourHours",
+//                                                    isChecked: { return self.currentStartAtHomeSetting == .afterFourHours },
+//                                                    onChecked: {
+//                                                        self.currentStartAtHomeSetting = .afterFourHours
+//                                                        onOptionSelected(true, .afterFourHours)
+//        })
+//
+//        let alwaysOption = CheckmarkSetting(title: NSAttributedString(string: .SettingsCustomizeHomeStartAtHomeAlways),
+//                                            subtitle: nil,
+//                                            accessibilityIdentifier: "StartAtHomeAlways",
+//                                            isChecked: { return self.currentStartAtHomeSetting == .always },
+//                                            onChecked: {
+//                                                self.currentStartAtHomeSetting = .always
+//                                                onOptionSelected(true, .always)
+//        })
+//
+//        let neverOption = CheckmarkSetting(title: NSAttributedString(string: .SettingsCustomizeHomeStartAtHomeNever),
+//                                           subtitle: nil,
+//                                           accessibilityIdentifier: "StartAtHomeNever",
+//                                           isChecked: { return self.currentStartAtHomeSetting == .never },
+//                                           onChecked: {
+//                                            self.currentStartAtHomeSetting = .never
+//                                            onOptionSelected(false, .never)
+//        })
+//
+//        let section = SettingSection(title: NSAttributedString(string: .SettingsCustomizeHomeStartAtHomeSectionTitle),
+//                                     children: [afterFourHoursOption, alwaysOption, neverOption])
+//
+//        return section
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -69,7 +172,7 @@ class HomePageSettingViewController: SettingsTableViewController {
         override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
         override var status: NSAttributedString {
             let num = self.profile.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? TopSitesRowCountSettingsController.defaultNumberOfRows
-            return NSAttributedString(string: String(format: Strings.TopSitesRowCount, num))
+            return NSAttributedString(string: String(format: .TopSitesRowCount, num))
         }
 
         override var accessibilityIdentifier: String? { return "TopSitesRows" }
@@ -77,7 +180,8 @@ class HomePageSettingViewController: SettingsTableViewController {
 
         init(settings: SettingsTableViewController) {
             self.profile = settings.profile
-            super.init(title: NSAttributedString(string: Strings.ASTopSitesTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
+            super.init(title: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.Shortcuts,
+                                                 attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
         }
 
         override func onClick(_ navigationController: UINavigationController?) {
@@ -97,7 +201,7 @@ class TopSitesRowCountSettingsController: SettingsTableViewController {
         self.prefs = prefs
         numberOfRows = self.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? TopSitesRowCountSettingsController.defaultNumberOfRows
         super.init(style: .grouped)
-        self.title = Strings.AppMenuTopSitesTitleString
+        self.title = .AppMenuTopSitesTitleString
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -115,7 +219,7 @@ class TopSitesRowCountSettingsController: SettingsTableViewController {
         }
 
         let rows = [1, 2, 3, 4].map(createSetting)
-        let section = SettingSection(title: NSAttributedString(string: Strings.TopSitesRowSettingFooter), footerTitle: nil, children: rows)
+        let section = SettingSection(title: NSAttributedString(string: .TopSitesRowSettingFooter), footerTitle: nil, children: rows)
         return [section]
     }
 }

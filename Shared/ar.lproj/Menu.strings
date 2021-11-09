@@ -58,6 +58,9 @@
 /* Label for the button, displayed in the menu, used to show the html page source */
 "Menu.PageSourceAction.Title" = "اعرض مصدر الصفحة";
 
+/* A string used to signify the start of the Recently Saved section in Home Screen. */
+"Menu.RecentlySaved.Title" = "المحفوظة حديثًا";
+
 /* Label for the button, displayed in the menu, used to delete an existing bookmark for the current website. */
 "Menu.RemoveBookmarkAction.Title" = "احذف العلامة";
 
@@ -84,4 +87,7 @@
 
 /* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
 "Menu.ViewMobileSiteAction.Title" = "اطلب موقع محمول";
+
+/* Label for the button, displayed in the menu, used to navigate to the home page. */
+"SettingsMenu.OpenHomePageAction.Title" = "صفحة البداية";
 

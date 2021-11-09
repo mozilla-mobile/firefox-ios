@@ -47,11 +47,11 @@ class DevicePickerViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = Strings.SendToTitle
+        title = .SendToTitle
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
         navigationItem.leftBarButtonItem = UIBarButtonItem(
-            title: Strings.SendToCancelButton,
+            title: .SendToCancelButton,
             style: .plain,
             target: self,
             action: #selector(cancel)
@@ -108,7 +108,7 @@ class DevicePickerViewController: UITableViewController {
             if self.devices.isEmpty {
                 self.navigationItem.rightBarButtonItem = nil
             } else {
-                self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: Strings.SendToSendButtonTitle, style: .done, target: self, action: #selector(self.send))
+                self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: .SendToSendButtonTitle, style: .done, target: self, action: #selector(self.send))
                 self.navigationItem.rightBarButtonItem?.isEnabled = false
             }
 
@@ -262,7 +262,7 @@ class DevicePickerTableViewHeaderCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         addSubview(nameLabel)
         nameLabel.font = DevicePickerViewControllerUX.TableHeaderTextFont
-        nameLabel.text = Strings.SendToDevicesListTitle
+        nameLabel.text = .SendToDevicesListTitle
         nameLabel.textColor = DevicePickerViewControllerUX.TableHeaderTextColor
 
         nameLabel.snp.makeConstraints { (make) -> Void in
@@ -355,7 +355,7 @@ class DevicePickerNoClientsTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupHelpView(contentView,
-            introText: Strings.SendToNoDevicesFound,
+            introText: .SendToNoDevicesFound,
             showMeText: "") // TODO We used to have a 'show me how to ...' text here. But, we cannot open web pages from the extension. So this is clear for now until we decide otherwise.
         // Move the separator off screen
         separatorInset = UIEdgeInsets(top: 0, left: 1000, bottom: 0, right: 0)

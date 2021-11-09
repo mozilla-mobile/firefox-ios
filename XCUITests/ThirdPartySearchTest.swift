@@ -78,7 +78,7 @@ class ThirdPartySearchTest: BaseTestCase {
         // Need to go step by step to Search Settings. The ScreenGraph will fail to go to the Search Settings Screen
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 3)
         app.buttons["urlBar-cancel"].tap()
-        app.buttons["TabToolbar.menuButton"].tap()
+        app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton].tap()
         app.tables["Context Menu"].staticTexts["Settings"].tap()
         app.tables.staticTexts["Google"].tap()
         navigator.performAction(Action.RemoveCustomSearchEngine)
