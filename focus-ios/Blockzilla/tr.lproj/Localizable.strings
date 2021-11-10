@@ -547,8 +547,32 @@
 /* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
 "Tip.Biometric.Title" = "Bir site açıkken %@ tarayıcısını kilitle:";
 
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "Face ID’yi açın";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "Touch ID’yi açın";
+
 /* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
 "Tip.Release.Description" = "Bu güncelleme ve diğer %@ güncellemeleri hakkında bilgi alın.";
+
+/* Text for a label that indicates the title for release tip. */
+"Tip.Release.Title" = "Tasarımımız yenilendi!";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "Sayfa eylemleri > Masaüstü sitesini iste";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "Bir sitenin masaüstü sürümünü mü görmek istiyorsunuz?";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "Şimdiye kadar %@ takipçi engellendi";
+
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "Siz gezinin, %@ engellesin.";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "%@ menüsünden “Kısayollara ekle”yi seçin";
 
 /* Text for a label that indicates the title for shortcuts tip. */
 "Tip.Shortcuts.Title" = "En çok ziyaret ettiğiniz sitelere kısayollar oluşturun:";
@@ -562,8 +586,14 @@
 /* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
 "Tip.SiriFavorite.Description" = "Siri kestirmesi ekle";
 
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "“Siri, favori sitemi aç.”";
+
 /* Text for a label that indicates the description for sites not working tip. */
 "Tip.SitesNotWorking.Description" = "İzlenme korumasını kapatmayı deneyin";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "Sitenin içeriği eksik veya site çalışmıyor mu?";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "%@’a dönmek için Touch ID’yi kullanın";

@@ -556,6 +556,9 @@
 /* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
 "Tip.Release.Description" = "Γeṛ ugar ɣef waya akked yileqman-nniḍen deg %@.";
 
+/* Text for a label that indicates the title for release tip. */
+"Tip.Release.Title" = "Ih, nesεa udem amaynut!";
+
 /* Text for a label that indicates the description for request desktop tip. */
 "Tip.RequestDesktop.Description" = "Tigawin n usebter > Asuter n usmel n tnarit";
 
@@ -571,6 +574,15 @@
 /* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
 "Tip.Shortcuts.Description" = "Fren Rnu ɣer yinegzumen deg wumuɣ %@";
 
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "Enu unegzumen ɣer yismal wuɣur trezzuḍ aṭas:";
+
+/* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriErase.Description" = "Rnu inegzumen Siri";
+
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.SiriErase.Title" = "“Siri, sfeḍ tiɣimit-iw %@.”";
+
 /* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
 "Tip.SiriFavorite.Description" = "Rnu anegzum Siri";
 
@@ -579,6 +591,9 @@
 
 /* Text for a label that indicates the description for sites not working tip. */
 "Tip.SitesNotWorking.Description" = "Ɛreḍ ad tmedleḍ ammesten n uḍfar";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "Asmel ixuṣṣ agbur neɣ ur iteddu ara akken yella uqbel?";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Seqdec Touch ID akken ad tuɣaleḍ ar %@";

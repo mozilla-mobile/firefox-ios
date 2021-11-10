@@ -331,6 +331,9 @@
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla strevar etter å berre samla inn det vi treng for å tilby og forbetre %@ for alle.";
 
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextStudies" = "%@ kan installere og køyre studiar fra tid til annan.";
+
 /* Title for section in settings menu */
 "Settings.general" = "Generelt";
 
@@ -541,6 +544,21 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "URL for å opna";
 
+/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.Biometric.Title" = "Lås %@ når ein nettstad er open:";
+
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "Slå på Face-ID";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "Slå på Touch-ID";
+
+/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Release.Description" = "Les meir om denne og andre oppdateringar til %@.";
+
+/* Text for a label that indicates the title for release tip. */
+"Tip.Release.Title" = "Ja, vi har ein frisk ny utsjånad!";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Bruk «Touch ID» for å gå tilbake til %@";
 
@@ -555,6 +573,9 @@
 
 /* Text for tracking protection screen showing the connection is secure */
 "trackingProtection.connectionSecureLabel" = "Tilkoplinga er trygg";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"trackingProtection.connectionVerifiedByLabel" = "Stadfesta av %@";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Innhalds-sporfølgjarar";

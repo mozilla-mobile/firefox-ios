@@ -553,6 +553,12 @@
 /* Text for a label that indicates the description for biometric Touch ID tip. */
 "Tip.BiometricTouchId.Description" = "Activer Touch ID";
 
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "Actions de la page > Voir la version ordinateur";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "Vous souhaitez voir la version complète pour ordinateur d’un site ?";
+
 /* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
 "Tip.ShareTrackers.Description" = "%@ traqueurs bloqués jusqu’à présent";
 
