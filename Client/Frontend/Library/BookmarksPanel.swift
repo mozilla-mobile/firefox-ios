@@ -19,10 +19,10 @@ private struct BookmarksPanelUX {
 }
 
 let LocalizedRootBookmarkFolderStrings = [
-    BookmarkRoots.MenuFolderGUID: Strings.BookmarksFolderTitleMenu,
-    BookmarkRoots.ToolbarFolderGUID: Strings.BookmarksFolderTitleToolbar,
-    BookmarkRoots.UnfiledFolderGUID: Strings.BookmarksFolderTitleUnsorted,
-    BookmarkRoots.MobileFolderGUID: Strings.BookmarksFolderTitleMobile
+    BookmarkRoots.MenuFolderGUID: String.BookmarksFolderTitleMenu,
+    BookmarkRoots.ToolbarFolderGUID: String.BookmarksFolderTitleToolbar,
+    BookmarkRoots.UnfiledFolderGUID: String.BookmarksFolderTitleUnsorted,
+    BookmarkRoots.MobileFolderGUID: String.BookmarksFolderTitleMobile
 ]
 
 fileprivate class SeparatorTableViewCell: OneLineTableViewCell {
@@ -82,7 +82,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
     }
     
     func addNewBookmarkItemAction() {
-        let newBookmark = PhotonActionSheetItem(title: Strings.BookmarksNewBookmark, iconString: "action_bookmark", handler: { _, _ in
+        let newBookmark = PhotonActionSheetItem(title: .BookmarksNewBookmark, iconString: "action_bookmark", handler: { _, _ in
             guard let bookmarkFolder = self.bookmarkFolder else {
                 return
             }
@@ -91,7 +91,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
             self.navigationController?.pushViewController(detailController, animated: true)
         })
 
-        let newFolder = PhotonActionSheetItem(title: Strings.BookmarksNewFolder, iconString: "bookmarkFolder", handler: { _, _ in
+        let newFolder = PhotonActionSheetItem(title: .BookmarksNewFolder, iconString: "bookmarkFolder", handler: { _, _ in
             guard let bookmarkFolder = self.bookmarkFolder else {
                 return
             }
@@ -100,7 +100,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
             self.navigationController?.pushViewController(detailController, animated: true)
         })
 
-        let newSeparator = PhotonActionSheetItem(title: Strings.BookmarksNewSeparator, iconString: "nav-menu", handler: { _, _ in
+        let newSeparator = PhotonActionSheetItem(title: .BookmarksNewSeparator, iconString: "nav-menu", handler: { _, _ in
             let centerVisibleRow = self.centerVisibleRow()
 
             self.profile.places.createSeparator(parentGUID: self.bookmarkFolderGUID, position: UInt32(centerVisibleRow)) >>== { guid in
@@ -229,9 +229,9 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         // to prompt the user before deleting.
         if let bookmarkFolder = bookmarkNode as? BookmarkFolder,
             !bookmarkFolder.childGUIDs.isEmpty {
-            let alertController = UIAlertController(title: Strings.BookmarksDeleteFolderWarningTitle, message: Strings.BookmarksDeleteFolderWarningDescription, preferredStyle: .alert)
-            alertController.addAction(UIAlertAction(title: Strings.BookmarksDeleteFolderCancelButtonLabel, style: .cancel))
-            alertController.addAction(UIAlertAction(title: Strings.BookmarksDeleteFolderDeleteButtonLabel, style: .destructive) { (action) in
+            let alertController = UIAlertController(title: .BookmarksDeleteFolderWarningTitle, message: .BookmarksDeleteFolderWarningDescription, preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: .BookmarksDeleteFolderCancelButtonLabel, style: .cancel))
+            alertController.addAction(UIAlertAction(title: .BookmarksDeleteFolderDeleteButtonLabel, style: .destructive) { (action) in
                 doDelete()
             })
             present(alertController, animated: true, completion: nil)
@@ -404,7 +404,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
             return nil
         }
 
-        headerView.titleLabel.text = Strings.RecentlyBookmarkedTitle
+        headerView.titleLabel.text = .RecentlyBookmarkedTitle
         headerView.showBorder(for: .top, true)
         headerView.showBorder(for: .bottom, true)
 
@@ -462,7 +462,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
     }
 
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let delete = UITableViewRowAction(style: .default, title: Strings.BookmarksPanelDeleteTableAction, handler: { (action, indexPath) in
+        let delete = UITableViewRowAction(style: .default, title: .BookmarksPanelDeleteTableAction, handler: { (action, indexPath) in
             self.deleteBookmarkNodeAtIndexPath(indexPath)
             TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .bookmark, value: .bookmarksPanel, extras: ["gesture": "swipe"])
         })
@@ -496,16 +496,16 @@ extension BookmarksPanel: LibraryPanelContextMenu {
             return nil
         }
 
-        let pinTopSite = PhotonActionSheetItem(title: Strings.AddToShortcutsActionTitle, iconString: "action_pin", handler: { _, _ in
+        let pinTopSite = PhotonActionSheetItem(title: .AddToShortcutsActionTitle, iconString: "action_pin", handler: { _, _ in
             self.profile.history.addPinnedTopSite(site).uponQueue(.main) { result in
                 if result.isSuccess {
-                    SimpleToast().showAlertWithText(Strings.AppMenuAddPinToShortcutsConfirmMessage, bottomContainer: self.view)
+                    SimpleToast().showAlertWithText(.AppMenuAddPinToShortcutsConfirmMessage, bottomContainer: self.view)
                 }
             }
         })
         actions.append(pinTopSite)
 
-        let removeAction = PhotonActionSheetItem(title: Strings.RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", handler: { _, _ in
+        let removeAction = PhotonActionSheetItem(title: .RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", handler: { _, _ in
             self.deleteBookmarkNodeAtIndexPath(indexPath)
             TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .bookmark, value: .bookmarksPanel, extras: ["gesture": "long-press"])
         })

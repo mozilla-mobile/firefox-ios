@@ -11,7 +11,7 @@ class LoginOnboardingViewController: SettingsViewController {
     private var onboardingMessageLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = Strings.LoginsOnboardingMessage
+        label.text = .LoginsOnboardingMessage
         label.font = DynamicFontHelper().DeviceFontExtraLarge
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -21,7 +21,7 @@ class LoginOnboardingViewController: SettingsViewController {
     private var learnMoreButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle(Strings.LoginsOnboardingLearnMoreButtonTitle, for: .normal)
+        button.setTitle(.LoginsOnboardingLearnMoreButtonTitle, for: .normal)
         button.addTarget(self, action: #selector(learnMoreButtonTapped), for: .touchUpInside)
         button.titleLabel?.font = DynamicFontHelper().DeviceFontExtraLarge
         return button
@@ -32,7 +32,7 @@ class LoginOnboardingViewController: SettingsViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = UIColor.Photon.Blue50
         button.layer.cornerRadius = 8
-        button.setTitle(Strings.LoginsOnboardingContinueButtonTitle, for: .normal)
+        button.setTitle(.LoginsOnboardingContinueButtonTitle, for: .normal)
         button.titleLabel?.font = DynamicFontHelper().MediumSizeBoldFontAS
         button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
         button.addTarget(self, action: #selector(proceedButtonTapped), for: .touchUpInside)
@@ -58,7 +58,7 @@ class LoginOnboardingViewController: SettingsViewController {
             navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(doneButtonTapped))
         }
         
-        self.title = Strings.LoginsAndPasswordsTitle
+        self.title = .LoginsAndPasswordsTitle
         
         self.view.addSubviews(onboardingMessageLabel, learnMoreButton, continueButton)
         

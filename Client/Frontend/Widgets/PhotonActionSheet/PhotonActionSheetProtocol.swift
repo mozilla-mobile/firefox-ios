@@ -19,7 +19,7 @@ extension PhotonActionSheetProtocol {
     typealias IsPrivateTab = Bool
     typealias URLOpenAction = (URL?, IsPrivateTab) -> Void
 
-    func presentSheetWith(title: String? = nil, actions: [[PhotonActionSheetItem]], on viewController: PresentableVC, from view: UIView, closeButtonTitle: String = Strings.CloseButtonTitle, suppressPopover: Bool? = false) {
+    func presentSheetWith(title: String? = nil, actions: [[PhotonActionSheetItem]], on viewController: PresentableVC, from view: UIView, closeButtonTitle: String = .CloseButtonTitle, suppressPopover: Bool? = false) {
         let style: UIModalPresentationStyle =  !(suppressPopover ?? false) ? .popover : .overCurrentContext
         let sheet = PhotonActionSheet(title: title, actions: actions, closeButtonTitle: closeButtonTitle, style: style)
         sheet.modalPresentationStyle = style
@@ -45,20 +45,21 @@ extension PhotonActionSheetProtocol {
     }
 
     func getLongPressLocationBarActions(with urlBar: URLBarView, webViewContainer: UIView) -> [PhotonActionSheetItem] {
-        let pasteGoAction = PhotonActionSheetItem(title: Strings.PasteAndGoTitle, iconString: "menu-PasteAndGo") { _, _ in
+        let pasteGoAction = PhotonActionSheetItem(title: .PasteAndGoTitle, iconString: "menu-PasteAndGo") { _, _ in
             if let pasteboardContents = UIPasteboard.general.string {
                 urlBar.delegate?.urlBar(urlBar, didSubmitText: pasteboardContents)
             }
         }
-        let pasteAction = PhotonActionSheetItem(title: Strings.PasteTitle, iconString: "menu-Paste") { _, _ in
+        let pasteAction = PhotonActionSheetItem(title: .PasteTitle, iconString: "menu-Paste") { _, _ in
             if let pasteboardContents = UIPasteboard.general.string {
                 urlBar.enterOverlayMode(pasteboardContents, pasted: true, search: true)
             }
         }
-        let copyAddressAction = PhotonActionSheetItem(title: Strings.CopyAddressTitle, iconString: "menu-Copy-Link") { _, _ in
+        let copyAddressAction = PhotonActionSheetItem(title: .CopyAddressTitle, iconString: "menu-Copy-Link") { _, _ in
             if let url = self.tabManager.selectedTab?.canonicalURL?.displayURL ?? urlBar.currentURL {
                 UIPasteboard.general.url = url
-                SimpleToast().showAlertWithText(Strings.AppMenuCopyURLConfirmMessage, bottomContainer: webViewContainer)
+                SimpleToast().showAlertWithText(.AppMenuCopyURLConfirmMessage,
+                                                bottomContainer: webViewContainer)
             }
         }
         if UIPasteboard.general.string != nil {
@@ -76,9 +77,9 @@ extension PhotonActionSheetProtocol {
         let defaultUAisDesktop = UserAgent.isDesktop(ua: UserAgent.getUserAgent())
         let toggleActionTitle: String
         if defaultUAisDesktop {
-            toggleActionTitle = tab.changedUserAgent ? Strings.AppMenuViewDesktopSiteTitleString : Strings.AppMenuViewMobileSiteTitleString
+            toggleActionTitle = tab.changedUserAgent ? .AppMenuViewDesktopSiteTitleString : .AppMenuViewMobileSiteTitleString
         } else {
-            toggleActionTitle = tab.changedUserAgent ? Strings.AppMenuViewMobileSiteTitleString : Strings.AppMenuViewDesktopSiteTitleString
+            toggleActionTitle = tab.changedUserAgent ? .AppMenuViewMobileSiteTitleString : .AppMenuViewDesktopSiteTitleString
         }
         let toggleDesktopSite = PhotonActionSheetItem(title: toggleActionTitle, iconString: "menu-RequestDesktopSite") { _, _ in
 
@@ -91,7 +92,7 @@ extension PhotonActionSheetProtocol {
         if let url = tab.webView?.url, let helper = tab.contentBlocker, helper.isEnabled, helper.blockingStrengthPref == .strict {
             let isSafelisted = helper.status == .safelisted
 
-            let title = !isSafelisted ? Strings.TrackingProtectionReloadWithout : Strings.TrackingProtectionReloadWith
+            let title: String = !isSafelisted ? .TrackingProtectionReloadWithout : .TrackingProtectionReloadWith
             let imageName = helper.isEnabled ? "menu-TrackingProtection-Off" : "menu-TrackingProtection"
             let toggleTP = PhotonActionSheetItem(title: title, iconString: imageName) { _, _ in
                 ContentBlocker.shared.safelist(enable: !isSafelisted, url: url) {

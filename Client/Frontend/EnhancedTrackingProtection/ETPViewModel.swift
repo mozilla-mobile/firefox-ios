@@ -20,7 +20,7 @@ class ETPViewModel {
     }
 
     private func setupUpdateModel() {
-        etpCoverSheetmodel = ETPCoverSheetModel(titleImage: #imageLiteral(resourceName: "shield"), titleText: Strings.CoverSheetETPTitle, descriptionText: Strings.CoverSheetETPDescription)
+        etpCoverSheetmodel = ETPCoverSheetModel(titleImage: #imageLiteral(resourceName: "shield"), titleText: .CoverSheetETPTitle, descriptionText: .CoverSheetETPDescription)
     }
     
     static func shouldShowETPCoverSheet(userPrefs: Prefs, currentAppVersion: String = VersionSetting.appVersion, isCleanInstall: Bool, supportedAppVersions: [String] = etpCoverSheetSupportedAppVersion) -> Bool {

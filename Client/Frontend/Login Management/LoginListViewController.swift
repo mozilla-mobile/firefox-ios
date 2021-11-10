@@ -89,7 +89,7 @@ class LoginListViewController: SensitiveViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = Strings.LoginsAndPasswordsTitle
+        self.title = .LoginsAndPasswordsTitle
         tableView.register(ThemedTableViewCell.self, forCellReuseIdentifier: CellReuseIdentifier)
         tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderId)
 
@@ -107,7 +107,7 @@ class LoginListViewController: SensitiveViewController {
         searchController.searchBar.autocapitalizationType = .none
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = Strings.LoginsListSearchPlaceholder
+        searchController.searchBar.placeholder = .LoginsListSearchPlaceholder
         searchController.delegate = self
         navigationItem.hidesSearchBarWhenScrolling = false
         navigationItem.searchController = searchController
@@ -362,7 +362,7 @@ extension LoginListViewController: UITableViewDelegate {
         guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderId) as? ThemedTableSectionHeaderFooterView else {
             return nil
         }
-        headerView.titleLabel.text = Strings.LoginsListTitle
+        headerView.titleLabel.text = .LoginsListTitle
         headerView.titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmall
         // not using a grouped table: show header borders
         headerView.showBorder(for: .top, true)

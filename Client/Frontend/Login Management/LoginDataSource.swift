@@ -16,8 +16,8 @@ class LoginDataSource: NSObject, UITableViewDataSource {
     init(viewModel: LoginListViewModel) {
         self.viewModel = viewModel
         boolSettings = (
-            BoolSetting(prefs: viewModel.profile.prefs, prefKey: PrefsKeys.LoginsSaveEnabled, defaultValue: true, attributedTitleText: NSAttributedString(string: Strings.SettingToSaveLogins)),
-            BoolSetting(prefs: viewModel.profile.prefs, prefKey: PrefsKeys.LoginsShowShortcutMenuItem, defaultValue: true, attributedTitleText: NSAttributedString(string: Strings.SettingToShowLoginsInAppMenu)))
+            BoolSetting(prefs: viewModel.profile.prefs, prefKey: PrefsKeys.LoginsSaveEnabled, defaultValue: true, attributedTitleText: NSAttributedString(string: .SettingToSaveLogins)),
+            BoolSetting(prefs: viewModel.profile.prefs, prefKey: PrefsKeys.LoginsShowShortcutMenuItem, defaultValue: true, attributedTitleText: NSAttributedString(string: .SettingToShowLoginsInAppMenu)))
         super.init()
     }
 

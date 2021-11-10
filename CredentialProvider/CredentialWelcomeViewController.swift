@@ -12,13 +12,13 @@ protocol CredentialWelcomeViewControllerDelegate {
 
 class CredentialWelcomeViewController: UIViewController {
     var delegate: CredentialWelcomeViewControllerDelegate?
-    
+
     lazy private var logoImageView: UIImageView = {
         let image = UIImageView(image: UIImage(named: "logo-glyph"))
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
-    
+
     lazy private var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -28,7 +28,7 @@ class CredentialWelcomeViewController: UIViewController {
         label.textAlignment = .center
         return label
     }()
-    
+
     lazy private var taglineLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -42,11 +42,11 @@ class CredentialWelcomeViewController: UIViewController {
     lazy private var cancelButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle(Strings.CancelString, for: .normal)
+        button.setTitle(.CancelString, for: .normal)
         button.addTarget(self, action: #selector(self.cancelButtonTapped(_:)), for: .touchUpInside)
         return button
     }()
-    
+
     lazy private var proceedButton: UIButton = {
         let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -57,10 +57,10 @@ class CredentialWelcomeViewController: UIViewController {
         button.addTarget(self, action: #selector(proceedButtonTapped), for: .touchUpInside)
         return button
     }()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         view.backgroundColor = UIColor.CredentialProvider.welcomeScreenBackgroundColor
 
         view.addSubviews(cancelButton, logoImageView, titleLabel, taglineLabel, proceedButton)
@@ -77,13 +77,13 @@ class CredentialWelcomeViewController: UIViewController {
             titleLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 35, priority: .defaultHigh),
             titleLabel.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -35, priority: .defaultHigh),
             titleLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 440),
-            
+
             taglineLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
             taglineLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             taglineLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 35, priority: .defaultHigh),
             taglineLabel.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -35, priority: .defaultHigh),
             taglineLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 440),
-            
+
             proceedButton.bottomAnchor.constraint(equalTo: self.view.layoutMarginsGuide.bottomAnchor, constant: -20),
             proceedButton.heightAnchor.constraint(equalToConstant: 44),
             proceedButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
@@ -92,7 +92,7 @@ class CredentialWelcomeViewController: UIViewController {
             proceedButton.widthAnchor.constraint(lessThanOrEqualToConstant: 360)
         ])
     }
-    
+
     @objc func cancelButtonTapped(_ sender: UIButton) {
         delegate?.credentialWelcomeViewControllerDidCancel()
     }

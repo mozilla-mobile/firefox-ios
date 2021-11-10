@@ -37,13 +37,13 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         var title: String? {
             switch self {
             case .today:
-                return Strings.TableDateSectionTitleToday
+                return .TableDateSectionTitleToday
             case .yesterday:
-                return Strings.TableDateSectionTitleYesterday
+                return .TableDateSectionTitleYesterday
             case .lastWeek:
-                return Strings.TableDateSectionTitleLastWeek
+                return .TableDateSectionTitleLastWeek
             case .lastMonth:
-                return Strings.TableDateSectionTitleLastMonth
+                return .TableDateSectionTitleLastMonth
             default:
                 return nil
             }
@@ -238,7 +238,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
     func pinToTopSites(_ site: Site) {
         profile.history.addPinnedTopSite(site).uponQueue(.main) { result in
             if result.isSuccess {
-                SimpleToast().showAlertWithText(Strings.AppMenuAddPinToShortcutsConfirmMessage, bottomContainer: self.view)
+                SimpleToast().showAlertWithText(.AppMenuAddPinToShortcutsConfirmMessage, bottomContainer: self.view)
             }
         }
     }
@@ -249,7 +249,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         }
 
         let nextController = RecentlyClosedTabsPanel(profile: profile)
-        nextController.title = Strings.RecentlyClosedTabsButtonTitle
+        nextController.title = .RecentlyClosedTabsButtonTitle
         nextController.libraryPanelDelegate = libraryPanelDelegate
         nextController.recentlyClosedTabsDelegate = BrowserViewController.foregroundBVC()
         refreshControl?.endRefreshing()
@@ -268,7 +268,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
             }
         }
 
-        let alert = UIAlertController(title: Strings.ClearHistoryMenuTitle, message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: .ClearHistoryMenuTitle, message: nil, preferredStyle: .actionSheet)
 
         // This will run on the iPad-only, and sets the alert to be centered with no arrow.
         if let popoverController = alert.popoverPresentationController {
@@ -277,16 +277,16 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
             popoverController.permittedArrowDirections = []
         }
 
-        [(Strings.ClearHistoryMenuOptionTheLastHour, 1),
-         (Strings.ClearHistoryMenuOptionToday, 24),
-         (Strings.ClearHistoryMenuOptionTodayAndYesterday, 48)].forEach {
+        [(String.ClearHistoryMenuOptionTheLastHour, 1),
+         (String.ClearHistoryMenuOptionToday, 24),
+         (String.ClearHistoryMenuOptionTodayAndYesterday, 48)].forEach {
             (name, time) in
             let action = UIAlertAction(title: name, style: .destructive) { _ in
                 remove(hoursAgo: time)
             }
             alert.addAction(action)
         }
-        alert.addAction(UIAlertAction(title: Strings.ClearHistoryMenuOptionEverything, style: .destructive, handler: { _ in
+        alert.addAction(UIAlertAction(title: .ClearHistoryMenuOptionEverything, style: .destructive, handler: { _ in
             let types = WKWebsiteDataStore.allWebsiteDataTypes()
             WKWebsiteDataStore.default().removeData(ofTypes: types, modifiedSince: .distantPast, completionHandler: {})
             self.profile.history.clearHistory().uponQueue(.main) { _ in
@@ -294,7 +294,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
             }
             self.profile.recentlyClosedTabs.clearTabs()
         }))
-        let cancelAction = UIAlertAction(title: Strings.CancelString, style: .cancel)
+        let cancelAction = UIAlertAction(title: .CancelString, style: .cancel)
         alert.addAction(cancelAction)
         present(alert, animated: true)
     }
@@ -313,7 +313,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
 
     func configureClearHistory(_ cell: OneLineTableViewCell, for indexPath: IndexPath) -> OneLineTableViewCell {
         clearHistoryCell = cell
-        cell.titleLabel.text = Strings.HistoryPanelClearHistoryButtonTitle
+        cell.titleLabel.text = .HistoryPanelClearHistoryButtonTitle
         cell.leftImageView.image = UIImage.templateImageNamed("forget")
         cell.leftImageView.tintColor = UIColor.theme.browser.tint
         cell.leftImageView.backgroundColor = UIColor.theme.homePanel.historyHeaderIconsBackground
@@ -332,7 +332,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
 
     func configureRecentlyClosed(_ cell: OneLineTableViewCell, for indexPath: IndexPath) -> OneLineTableViewCell {
         cell.accessoryType = .disclosureIndicator
-        cell.titleLabel.text = Strings.RecentlyClosedTabsButtonTitle
+        cell.titleLabel.text = .RecentlyClosedTabsButtonTitle
         cell.leftImageView.image = UIImage.templateImageNamed("recently_closed")
         cell.leftImageView.tintColor = UIColor.theme.browser.tint
         cell.leftImageView.backgroundColor = UIColor.theme.homePanel.historyHeaderIconsBackground
@@ -523,7 +523,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         if indexPath.section == Section.additionalHistoryActions.rawValue {
             return []
         }
-        let title: String = Strings.HistoryPanelDelete
+        let title: String = .HistoryPanelDelete
 
         let delete = UITableViewRowAction(style: .default, title: title, handler: { (action, indexPath) in
             self.removeHistoryForURLAtIndexPath(indexPath: indexPath)
@@ -559,7 +559,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
 
         let welcomeLabel = UILabel()
         overlayView.addSubview(welcomeLabel)
-        welcomeLabel.text = Strings.HistoryPanelEmptyStateTitle
+        welcomeLabel.text = .HistoryPanelEmptyStateTitle
         welcomeLabel.textAlignment = .center
         welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontLight
         welcomeLabel.textColor = UIColor.theme.homePanel.welcomeScreenText
@@ -630,11 +630,11 @@ extension HistoryPanel: LibraryPanelContextMenu {
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {
         guard var actions = getDefaultContextMenuActions(for: site, libraryPanelDelegate: libraryPanelDelegate) else { return nil }
 
-        let removeAction = PhotonActionSheetItem(title: Strings.DeleteFromHistoryContextMenuTitle, iconString: "action_delete", handler: { _, _ in
+        let removeAction = PhotonActionSheetItem(title: .DeleteFromHistoryContextMenuTitle, iconString: "action_delete", handler: { _, _ in
             self.removeHistoryForURLAtIndexPath(indexPath: indexPath)
         })
 
-        let pinTopSite = PhotonActionSheetItem(title: Strings.AddToShortcutsActionTitle, iconString: "action_pin", handler: { _, _ in
+        let pinTopSite = PhotonActionSheetItem(title: .AddToShortcutsActionTitle, iconString: "action_pin", handler: { _, _ in
             self.pinToTopSites(site)
         })
         actions.append(pinTopSite)

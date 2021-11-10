@@ -136,7 +136,7 @@ extension FxAWebViewController: WKUIDelegate {
         helpBrowser = wv
         helpBrowser?.navigationDelegate = self
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: Strings.BackTitle, style: .plain, target: self, action: #selector(closeHelpBrowser))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: .BackTitle, style: .plain, target: self, action: #selector(closeHelpBrowser))
 
         return helpBrowser
     }

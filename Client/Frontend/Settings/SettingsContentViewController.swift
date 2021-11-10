@@ -128,7 +128,8 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         // Keeping the background constant prevents a pop of mismatched color.
         view.backgroundColor = interstitialBackgroundColor
 
-        let spinner = UIActivityIndicatorView(style: .gray)
+        let spinner = UIActivityIndicatorView(style: .medium)
+        spinner.color = .systemGray
         view.addSubview(spinner)
 
         let error = UILabel()
