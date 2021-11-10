@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Shared
-import SnapKit
 import UIKit
 import Storage
 
@@ -24,7 +23,7 @@ class LibraryViewController: UIViewController {
     var onViewDismissed: (() -> Void)? = nil
 
     // Views
-    fileprivate var controllerContainerView = UIView()
+    fileprivate var controllerContainerView: UIView = .build { view in }
     fileprivate var buttons: [LibraryPanelButton] = []
 
     // UI Elements
@@ -37,16 +36,15 @@ class LibraryViewController: UIViewController {
         librarySegmentControl.accessibilityIdentifier = "librarySegmentControl"
         librarySegmentControl.selectedSegmentIndex = 1
         librarySegmentControl.addTarget(self, action: #selector(panelChanged), for: .valueChanged)
+        librarySegmentControl.translatesAutoresizingMaskIntoConstraints = false
         return librarySegmentControl
     }()
 
-    lazy var navigationToolbar: UIToolbar = {
-        let toolbar = UIToolbar()
+    lazy var navigationToolbar: UIToolbar = .build { [weak self] toolbar in
+        guard let self = self else { return }
         toolbar.delegate = self
-        toolbar.setItems([UIBarButtonItem(customView: librarySegmentControl)], animated: false)
-
-        return toolbar
-    }()
+        toolbar.setItems([UIBarButtonItem(customView: self.librarySegmentControl)], animated: false)
+    }
 
     fileprivate lazy var topLeftButton: UIBarButtonItem =  {
         let button = UIBarButtonItem(image: UIImage.templateImageNamed("goBack"),
@@ -70,7 +68,7 @@ class LibraryViewController: UIViewController {
     }()
 
     fileprivate lazy var bottomRightButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(title: Strings.BookmarksEdit, style: .plain, target: self, action: #selector(bottomRightButtonAction))
+        let button = UIBarButtonItem(title: .BookmarksEdit, style: .plain, target: self, action: #selector(bottomRightButtonAction))
         button.accessibilityIdentifier = "bookmarksPanelBottomRightButton"
         return button
     }()
@@ -128,25 +126,21 @@ class LibraryViewController: UIViewController {
 
         setToolbarItems(bottomToolbarItemsSingleButton, animated: false)
         navigationItem.rightBarButtonItem = topRightButton
+        view.addSubviews(controllerContainerView, navigationToolbar)
 
-        view.addSubview(controllerContainerView)
-        view.addSubview(navigationToolbar)
-
-        navigationToolbar.snp.makeConstraints { make in
-            make.left.right.equalTo(view)
-            make.top.equalTo(view.safeArea.top)
-        }
-
-        librarySegmentControl.snp.makeConstraints { make in
-            make.width.lessThanOrEqualTo(343)
-            make.height.equalTo(ChronologicalTabsControllerUX.navigationMenuHeight)
-        }
-
-        controllerContainerView.snp.makeConstraints { make in
-            make.top.equalTo(navigationToolbar.snp.bottom)
-            make.bottom.equalTo(view.snp.bottom)
-            make.leading.trailing.equalTo(view)
-        }
+        NSLayoutConstraint.activate([
+            navigationToolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            navigationToolbar.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            navigationToolbar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            
+            librarySegmentControl.widthAnchor.constraint(equalToConstant: 343),
+            librarySegmentControl.heightAnchor.constraint(equalToConstant: CGFloat(ChronologicalTabsControllerUX.navigationMenuHeight)),
+            
+            controllerContainerView.topAnchor.constraint(equalTo: navigationToolbar.bottomAnchor),
+            controllerContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            controllerContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            controllerContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
 
         if selectedPanel == nil {
             selectedPanel = .bookmarks
@@ -160,7 +154,7 @@ class LibraryViewController: UIViewController {
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        ThemeManager.instance.statusBarStyle
+        LegacyThemeManager.instance.statusBarStyle
     }
 
     private func setupNotifications() {
@@ -275,9 +269,14 @@ class LibraryViewController: UIViewController {
         controllerContainerView.addSubview(libraryPanel.view)
         view.bringSubviewToFront(navigationToolbar)
         libraryPanel.endAppearanceTransition()
-        libraryPanel.view.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+
+        libraryPanel.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            libraryPanel.view.topAnchor.constraint(equalTo: navigationToolbar.bottomAnchor),
+            libraryPanel.view.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            libraryPanel.view.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            libraryPanel.view.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+        ])
         libraryPanel.didMove(toParent: self)
         updateTitle()
     }
@@ -350,7 +349,7 @@ class LibraryViewController: UIViewController {
         case .bookmarks(state: .inFolderEditMode):
             navigationItem.rightBarButtonItem = nil
         case .bookmarks(state: .itemEditMode):
-            topRightButton.title = Strings.SettingsAddCustomEngineSaveButtonText
+            topRightButton.title = .SettingsAddCustomEngineSaveButtonText
             navigationItem.rightBarButtonItem = topRightButton
         default:
             topRightButton.title = String.AppSettingsDone
@@ -371,7 +370,7 @@ class LibraryViewController: UIViewController {
         switch viewModel.currentPanelState {
         case .bookmarks(state: let subState):
             if subState == .inFolder {
-                bottomRightButton.title = Strings.BookmarksEdit
+                bottomRightButton.title = .BookmarksEdit
             } else if subState == .inFolderEditMode {
                 bottomRightButton.title = String.AppSettingsDone
             }
@@ -477,14 +476,12 @@ class LibraryViewController: UIViewController {
 }
 
 // MARK: UIAppearance
-extension LibraryViewController: Themeable {
+extension LibraryViewController: NotificationThemeable {
     @objc func applyTheme() {
         viewModel.panelDescriptors.forEach { item in
-            (item.viewController as? Themeable)?.applyTheme()
-        }
-        if #available(iOS 13.0, *) {
-            overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
-        }
+            (item.viewController as? NotificationThemeable)?.applyTheme()
+        }        
+
         // There is an ANNOYING bar in the nav bar above the segment control. These are the
         // UIBarBackgroundShadowViews. We must set them to be clear images in order to
         // have a seamless nav bar, if embedding the segmented control.
@@ -501,7 +498,7 @@ extension LibraryViewController: Themeable {
         navigationToolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
         navigationToolbar.isTranslucent = false
 
-        let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         if theme == .dark {
             navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         } else {

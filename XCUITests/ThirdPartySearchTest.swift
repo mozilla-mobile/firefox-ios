@@ -78,7 +78,7 @@ class ThirdPartySearchTest: BaseTestCase {
         // Need to go step by step to Search Settings. The ScreenGraph will fail to go to the Search Settings Screen
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 3)
         app.buttons["urlBar-cancel"].tap()
-        app.buttons["TabToolbar.menuButton"].tap()
+        app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton].tap()
         app.tables["Context Menu"].staticTexts["Settings"].tap()
         app.tables.staticTexts["Google"].tap()
         navigator.performAction(Action.RemoveCustomSearchEngine)
@@ -104,9 +104,11 @@ class ThirdPartySearchTest: BaseTestCase {
         waitForExistence(app.buttons["customEngineSaveButton"], timeout: 3)
         app.buttons["customEngineSaveButton"].tap()
         // Workaround for iOS14 need to wait for those elements and tap again
-        if #available(iOS 14.0, *) {
-            waitForExistence(app.navigationBars["Add Search Engine"], timeout: 3)
-            app.navigationBars["Add Search Engine"].buttons["Save"].tap()
+        if !iPad() {
+            if #available(iOS 14.0, *) {
+                waitForExistence(app.navigationBars["Add Search Engine"], timeout: 3)
+                app.navigationBars["Add Search Engine"].buttons["Save"].tap()
+            }
         }
     }
 

@@ -6,20 +6,20 @@ import Shared
 import Storage
 import Telemetry
 
-protocol OnViewDismissable: class {
+protocol OnViewDismissable: AnyObject {
     var onViewDismissed: (() -> Void)? { get set }
 }
 
 class DismissableNavigationViewController: UINavigationController, OnViewDismissable {
     var onViewDismissed: (() -> Void)? = nil
     var onViewWillDisappear: (() -> Void)? = nil
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         onViewWillDisappear?()
         onViewWillDisappear = nil
     }
-    
+
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         onViewDismissed?()
@@ -27,16 +27,17 @@ class DismissableNavigationViewController: UINavigationController, OnViewDismiss
     }
 }
 
-extension BrowserViewController: URLBarDelegate {
-    func showTabTray() {
+extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
+    func showTabTray(withFocusOnUnselectedTab tabToFocus: Tab? = nil) {
         Sentry.shared.clearBreadcrumbs()
 
         updateFindInPageVisibility(visible: false)
 
         self.tabTrayViewController = TabTrayViewController(tabTrayDelegate: self,
-                                                          profile: profile,
-                                                          showChronTabs: shouldShowChronTabs())
-        
+                                                           profile: profile,
+                                                           showChronTabs: shouldShowChronTabs(),
+                                                           tabToFocus: tabToFocus)
+
         tabTrayViewController?.openInNewTab = { url, isPrivate in
             let tab = self.tabManager.addTab(URLRequest(url: url), afterTab: self.tabManager.selectedTab, isPrivate: isPrivate)
             // If we are showing toptabs a user can just use the top tab bar
@@ -45,39 +46,29 @@ extension BrowserViewController: URLBarDelegate {
                 return
             }
             // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
-            let toast = ButtonToast(labelText: Strings.ContextMenuButtonToastNewTabOpenedLabelText, buttonText: Strings.ContextMenuButtonToastNewTabOpenedButtonText, completion: { buttonPressed in
+            let toast = ButtonToast(labelText: .ContextMenuButtonToastNewTabOpenedLabelText, buttonText: .ContextMenuButtonToastNewTabOpenedButtonText, completion: { buttonPressed in
                 if buttonPressed {
                     self.tabManager.selectTab(tab)
                 }
             })
             self.show(toast: toast)
         }
-        
+
         tabTrayViewController?.didSelectUrl = { url, visitType in
             guard let tab = self.tabManager.selectedTab else { return }
             self.finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
         }
-        
-        guard self.tabTrayViewController != nil else { return }
-        
-        let controller: DismissableNavigationViewController
 
-        if #available(iOS 13.0, *) {
-            controller = DismissableNavigationViewController(rootViewController: tabTrayViewController!)
-            controller.presentationController?.delegate = tabTrayViewController
-            // If we're not using the system theme, override the view's style to match
-            if !ThemeManager.instance.systemThemeIsOn {
-                controller.overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
-            }
-        } else {
-            let themedController = ThemedNavigationController(rootViewController: tabTrayViewController!)
-            themedController.presentingModalViewControllerDelegate = self
-            controller = themedController
-        }
-        self.present(controller, animated: true, completion: nil)
+        guard self.tabTrayViewController != nil else { return }
+
+        let navigationController = ThemedDefaultNavigationController(rootViewController: tabTrayViewController!)
+        navigationController.presentationController?.delegate = tabTrayViewController
+
+        self.present(navigationController, animated: true, completion: nil)
 
         if let tab = tabManager.selectedTab {
             screenshotHelper.takeScreenshot(tab)
+            tabManager.storeScreenshot(tab: tab)
         }
         TelemetryWrapper.recordEvent(category: .action, method: .open, object: .tabTray)
     }
@@ -94,7 +85,7 @@ extension BrowserViewController: URLBarDelegate {
                 shouldShowChronTabs = chronDebugValue!
             // Respect build channel based settings
             } else if chronDebugValue == nil {
-                if AppConstants.CHRONOLOGICAL_TABS {
+                if featureFlags.isFeatureActiveForBuild(.chronologicalTabs) {
                     shouldShowChronTabs = true
                 } else {
                     // Respect LP value
@@ -128,7 +119,7 @@ extension BrowserViewController: URLBarDelegate {
         let findInPageAction = {
             self.updateFindInPageVisibility(visible: true)
         }
-        
+
         let reportSiteIssue = {
             self.openURLInNewTab(SupportUtils.URLForReportSiteIssue(self.urlBar.currentURL?.absoluteString))
         }
@@ -136,7 +127,7 @@ extension BrowserViewController: URLBarDelegate {
         let successCallback: (String, ButtonToastAction) -> Void = { (successMessage, toastAction) in
             switch toastAction {
             case .removeBookmark:
-                let toast = ButtonToast(labelText: successMessage, buttonText: Strings.UndoString, textAlignment: .left) { isButtonTapped in
+                let toast = ButtonToast(labelText: successMessage, buttonText: .UndoString, textAlignment: .left) { isButtonTapped in
                     isButtonTapped ? self.addBookmark(url: urlString) : nil
                 }
                 self.show(toast: toast)
@@ -150,12 +141,11 @@ extension BrowserViewController: URLBarDelegate {
 
         // Wait for both the bookmark status and the pinned status
         deferredBookmarkStatus.both(deferredPinnedTopSiteStatus).uponQueue(.main) {
-            let shouldShowNewTabButton = false
             let isBookmarked = $0.successValue ?? false
             let isPinned = $1.successValue ?? false
             let pageActions = self.getTabActions(tab: tab, buttonView: button, presentShareMenu: actionMenuPresenter,
                                                  findInPage: findInPageAction, reportSiteIssue: reportSiteIssue, presentableVC: self, isBookmarked: isBookmarked,
-                                                 isPinned: isPinned, shouldShowNewTabButton: shouldShowNewTabButton, success: successCallback)
+                                                 isPinned: isPinned, success: successCallback)
             self.presentSheetWith(actions: pageActions, on: self, from: button)
         }
     }
@@ -173,11 +163,38 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidTapShield(_ urlBar: URLBarView) {
         if let tab = self.tabManager.selectedTab {
-            let trackingProtectionMenu = self.getTrackingSubMenu(for: tab)
-            let title = String.localizedStringWithFormat(Strings.TPPageMenuTitle, tab.url?.host ?? "")
+            let etpViewModel = EnhancedTrackingProtectionMenuVM(tab: tab, profile: profile, tabManager: tabManager)
+            etpViewModel.onOpenSettingsTapped = {
+                let settingsTableViewController = AppSettingsTableViewController()
+                settingsTableViewController.profile = self.profile
+                settingsTableViewController.tabManager = self.tabManager
+                settingsTableViewController.settingsDelegate = self
+                settingsTableViewController.deeplinkTo = .contentBlocker
+
+                let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
+                controller.presentingModalViewControllerDelegate = self
+
+                // Wait to present VC in an async dispatch queue to prevent a case where dismissal
+                // of this popover on iPad seems to block the presentation of the modal VC.
+                DispatchQueue.main.async {
+                    self.present(controller, animated: true, completion: nil)
+                }
+            }
+
+            let etpVC = EnhancedTrackingProtectionMenuVC(viewModel: etpViewModel)
+            if UIDevice.current.userInterfaceIdiom == .phone {
+                etpVC.modalPresentationStyle = .custom
+                etpVC.transitioningDelegate = self
+            } else {
+                etpVC.asPopover = true
+                etpVC.modalPresentationStyle = .popover
+                etpVC.popoverPresentationController?.sourceView = urlBar.locationView.trackingProtectionButton
+                etpVC.popoverPresentationController?.permittedArrowDirections = .up
+                etpVC.popoverPresentationController?.delegate = self
+            }
+
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
-            let shouldSuppress = UIDevice.current.userInterfaceIdiom != .pad
-            self.presentSheetWith(title: title, actions: trackingProtectionMenu, on: self, from: urlBar, suppressPopover: shouldSuppress)
+            self.present(etpVC, animated: true, completion: nil)
         }
     }
 
@@ -220,7 +237,7 @@ extension BrowserViewController: URLBarDelegate {
         switch result.value {
         case .success:
             UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.ReaderModeAddPageSuccessAcessibilityLabel)
-            SimpleToast().showAlertWithText(Strings.ShareAddToReadingListDone, bottomContainer: self.webViewContainer)
+            SimpleToast().showAlertWithText(.ShareAddToReadingListDone, bottomContainer: self.webViewContainer)
         case .failure(let error):
             UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.ReaderModeAddPageMaybeExistsErrorAccessibilityLabel)
             print("readingList.createRecordWithURL(url: \"\(url.absoluteString)\", ...) failed with error: \(error)")
@@ -267,7 +284,7 @@ extension BrowserViewController: URLBarDelegate {
         let urlActions = self.getLongPressLocationBarActions(with: urlBar, webViewContainer: self.webViewContainer)
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
-        
+
         let shouldSuppress = UIDevice.current.userInterfaceIdiom != .pad
         self.presentSheetWith(actions: [urlActions], on: self, from: urlBar, suppressPopover: shouldSuppress)
     }
@@ -350,6 +367,7 @@ extension BrowserViewController: URLBarDelegate {
             Telemetry.default.recordSearch(location: .actionBar, searchEngine: engine.engineID ?? "other")
             GleanMetrics.Search.counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.actionBar.rawValue)"].add()
             searchTelemetry?.shouldSetUrlTypeSearch = true
+            tab.updateTimerAndObserving(state: .navSearchLoaded, searchTerm: text, searchProviderUrl: searchURL.absoluteString, nextUrl: "")
             finishEditingAndSubmit(searchURL, visitType: VisitType.typed, forTab: tab)
         } else {
             // We still don't have a valid URL, so something is broken. Give up.
@@ -383,5 +401,14 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidBeginDragInteraction(_ urlBar: URLBarView) {
         dismissVisibleMenus()
+    }
+}
+
+extension BrowserViewController: UIViewControllerTransitioningDelegate {
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        let globalETPStatus = FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs)
+        return SlideOverPresentationController(presentedViewController: presented,
+                                               presenting: presenting,
+                                               withGlobalETPStatus: globalETPStatus)
     }
 }

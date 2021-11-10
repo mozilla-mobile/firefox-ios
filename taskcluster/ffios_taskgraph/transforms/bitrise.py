@@ -5,7 +5,6 @@
 Resolve secrets and dummy secrets
 """
 
-from __future__ import absolute_import, print_function, unicode_literals
 
 from taskgraph.transforms.base import TransformSequence
 
@@ -56,14 +55,14 @@ def set_worker_config(config, tasks):
         artifacts.append({
             "type": "file",
             "name": "public/logs/bitrise.log",
-            "path": "{}/bitrise.log".format(_ARTIFACTS_DIRECTORY),
+            "path": f"{_ARTIFACTS_DIRECTORY}/bitrise.log",
         })
 
         for locale in task["attributes"]["chunk_locales"]:
             artifacts.append({
                 "type": "file",
-                "name": "public/screenshots/{}.zip".format(locale),
-                "path": "{}/{}.zip".format(_ARTIFACTS_DIRECTORY, locale),
+                "name": f"public/screenshots/{locale}.zip",
+                "path": f"{_ARTIFACTS_DIRECTORY}/{locale}.zip",
             })
 
         worker.setdefault("docker-image", {"in-tree": "screenshots"})

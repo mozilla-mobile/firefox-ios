@@ -81,9 +81,8 @@ class URLBarView: UIView {
 
     var toolbarIsShowing = false
     var topTabsIsShowing = false
-    var newTabUserResearch: NewTabUserResearch?
 
-    fileprivate var locationTextField: ToolbarTextField?
+    var locationTextField: ToolbarTextField?
 
     /// Overlay mode is the state where the lock/reader icons are hidden, the home panels are shown,
     /// and the Cancel button is visible (allowing the user to leave overlay mode). Overlay mode
@@ -125,7 +124,7 @@ class URLBarView: UIView {
         let cancelButton = InsetButton()
         cancelButton.setImage(UIImage.templateImageNamed("goBack"), for: .normal)
         cancelButton.accessibilityIdentifier = "urlBar-cancel"
-        cancelButton.accessibilityLabel = Strings.BackTitle
+        cancelButton.accessibilityLabel = .BackTitle
         cancelButton.addTarget(self, action: #selector(didClickCancel), for: .touchUpInside)
         cancelButton.alpha = 0
         return cancelButton
@@ -135,7 +134,7 @@ class URLBarView: UIView {
         let button = InsetButton()
         button.setImage(UIImage.templateImageNamed("menu-ScanQRCode"), for: .normal)
         button.accessibilityIdentifier = "urlBar-scanQRCode"
-        button.accessibilityLabel = Strings.ScanQRCodeViewTitle
+        button.accessibilityLabel = .ScanQRCodeViewTitle
         button.clipsToBounds = false
         button.addTarget(self, action: #selector(showQRScanner), for: .touchUpInside)
         button.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
@@ -163,6 +162,7 @@ class URLBarView: UIView {
     
     var appMenuButton = ToolbarButton()
     var bookmarksButton = ToolbarButton()
+    var homeButton = ToolbarButton()
     var addNewTabButton = ToolbarButton()
     var forwardButton = ToolbarButton()
     var multiStateButton = ToolbarButton()
@@ -173,7 +173,7 @@ class URLBarView: UIView {
         return backButton
     }()
 
-    lazy var actionButtons: [Themeable & UIButton] = [self.tabsButton, self.bookmarksButton, self.appMenuButton, self.addNewTabButton,  self.forwardButton, self.backButton, self.multiStateButton]
+    lazy var actionButtons: [NotificationThemeable & UIButton] = [self.tabsButton, self.homeButton, self.bookmarksButton, self.appMenuButton, self.addNewTabButton,  self.forwardButton, self.backButton, self.multiStateButton]
 
     var currentURL: URL? {
         get {
@@ -216,7 +216,7 @@ class URLBarView: UIView {
         locationContainer.addSubview(locationView)
         
         [scrollToTopButton, line, tabsButton, progressBar, cancelButton, showQRScannerButton,
-         bookmarksButton, appMenuButton, addNewTabButton, forwardButton, backButton, multiStateButton, locationContainer].forEach {
+         homeButton, bookmarksButton, appMenuButton, addNewTabButton, forwardButton, backButton, multiStateButton, locationContainer].forEach {
             addSubview($0)
         }
 
@@ -288,6 +288,12 @@ class URLBarView: UIView {
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
 
+        homeButton.snp.makeConstraints { make in
+            make.trailing.equalTo(self.bookmarksButton.snp.leading)
+            make.centerY.equalTo(self)
+            make.size.equalTo(URLBarViewUX.ButtonHeight)
+        }
+
         bookmarksButton.snp.makeConstraints { make in
             make.trailing.equalTo(self.appMenuButton.snp.leading)
             make.centerY.equalTo(self)
@@ -350,7 +356,7 @@ class URLBarView: UIView {
                     // If we are showing a toolbar, show the text field next to the forward button
                     make.leading.equalTo(self.multiStateButton.snp.trailing).offset(URLBarViewUX.Padding)
                     if self.topTabsIsShowing {
-                        make.trailing.equalTo(self.bookmarksButton.snp.leading).offset(-URLBarViewUX.Padding)
+                        make.trailing.equalTo(self.homeButton.snp.leading).offset(-URLBarViewUX.Padding)
                     } else {
                         make.trailing.equalTo(self.addNewTabButton.snp.leading).offset(-URLBarViewUX.Padding)
                     }
@@ -424,7 +430,7 @@ class URLBarView: UIView {
         if !toolbarIsShowing {
             updateConstraintsIfNeeded()
         }
-        locationView.reloadButton.isHidden = toolbarIsShowing
+        locationView.reloadButton.isHidden = false
         updateViewsForOverlayModeAndToolbarChanges()
     }
 
@@ -434,13 +440,6 @@ class URLBarView: UIView {
     }
 
     func updateProgressBar(_ progress: Float) {
-        let shouldShowNewTabButton = false
-        if shouldShowNewTabButton {
-            locationView.reloadButton.reloadButtonState = progress != 1 ? .stop : .reload
-        } else {
-            locationView.reloadButton.reloadButtonState = .disabled
-        }
-        
         progressBar.alpha = 1
         progressBar.isHidden = false
         progressBar.setProgress(progress, animated: !isTransitioning)
@@ -453,14 +452,11 @@ class URLBarView: UIView {
 
     func updateReaderModeState(_ state: ReaderModeState) {
         locationView.readerModeState = state
-        switch state {
-        case .active:
-            locationView.reloadButton.isHidden = true
-        case .available:
-            locationView.reloadButton.isHidden = true
-        case .unavailable:
-            if (!toolbarIsShowing) { locationView.reloadButton.isHidden = false }
-        }
+        locationView.reloadButton.isHidden = false
+    }
+    
+    func shouldHideReloadButton(_ isHidden: Bool) {
+        locationView.reloadButton.isHidden = isHidden
     }
 
     func setAutocompleteSuggestion(_ suggestion: String?) {
@@ -529,8 +525,9 @@ class URLBarView: UIView {
         cancelButton.isHidden = false
         showQRScannerButton.isHidden = false
         progressBar.isHidden = false
-        addNewTabButton.isHidden = !toolbarIsShowing || !topTabsIsShowing
+        addNewTabButton.isHidden = !toolbarIsShowing || topTabsIsShowing
         appMenuButton.isHidden = !toolbarIsShowing
+        homeButton.isHidden = !toolbarIsShowing || !topTabsIsShowing
         bookmarksButton.isHidden = !toolbarIsShowing || !topTabsIsShowing
         forwardButton.isHidden = !toolbarIsShowing
         backButton.isHidden = !toolbarIsShowing
@@ -545,6 +542,7 @@ class URLBarView: UIView {
         progressBar.alpha = inOverlayMode || didCancel ? 0 : 1
         tabsButton.alpha = inOverlayMode ? 0 : 1
         appMenuButton.alpha = inOverlayMode ? 0 : 1
+        homeButton.alpha = inOverlayMode ? 0 : 1
         bookmarksButton.alpha = inOverlayMode ? 0 : 1
         addNewTabButton.alpha = inOverlayMode ? 0 : 1
         forwardButton.alpha = inOverlayMode ? 0 : 1
@@ -575,7 +573,7 @@ class URLBarView: UIView {
         cancelButton.isHidden = !inOverlayMode
         showQRScannerButton.isHidden = !inOverlayMode
         progressBar.isHidden = inOverlayMode
-        addNewTabButton.isHidden = !toolbarIsShowing || inOverlayMode
+        addNewTabButton.isHidden = !toolbarIsShowing || topTabsIsShowing || inOverlayMode
         appMenuButton.isHidden = !toolbarIsShowing || inOverlayMode
         bookmarksButton.isHidden = !toolbarIsShowing || inOverlayMode || !topTabsIsShowing
         forwardButton.isHidden = !toolbarIsShowing || inOverlayMode
@@ -659,16 +657,12 @@ extension URLBarView: TabToolbarProtocol {
 
     func updateMiddleButtonState(_ state: MiddleButtonState) {
         helper?.setMiddleButtonState(state)
-        switch state {
-        case .stop:
-            multiStateButton.setImage(helper?.ImageStop, for: .normal)
-        default:
-            multiStateButton.setImage(helper?.ImageReload, for: .normal)
-        }
     }
 
     func updatePageStatus(_ isWebPage: Bool) {
-        multiStateButton.isEnabled = isWebPage
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            multiStateButton.isEnabled = isWebPage
+        }
     }
 
     var access: [Any]? {
@@ -678,7 +672,7 @@ extension URLBarView: TabToolbarProtocol {
                 return [locationTextField, cancelButton]
             } else {
                 if toolbarIsShowing {
-                    return [backButton, forwardButton, multiStateButton, locationView, tabsButton, bookmarksButton, appMenuButton, addNewTabButton, progressBar]
+                    return [backButton, forwardButton, multiStateButton, locationView, tabsButton, homeButton, bookmarksButton, appMenuButton, addNewTabButton, progressBar]
                 } else {
                     return [locationView, progressBar]
                 }
@@ -715,7 +709,8 @@ extension URLBarView: TabLocationViewDelegate {
     }
 
     func tabLocationViewDidTapReload(_ tabLocationView: TabLocationView) {
-        let state = locationView.reloadButton.reloadButtonState
+        let state = locationView.reloadButton.isHidden ? locationView.reloadButton.reloadButtonState : .reload
+        
         switch state {
         case .reload:
             delegate?.urlBarDidPressReload(self)
@@ -802,7 +797,7 @@ extension URLBarView {
 
 }
 
-extension URLBarView: Themeable {
+extension URLBarView: NotificationThemeable {
     func applyTheme() {
         locationView.applyTheme()
         locationTextField?.applyTheme()
@@ -909,7 +904,7 @@ class ToolbarTextField: AutocompleteTextField {
     }
 }
 
-extension ToolbarTextField: Themeable {
+extension ToolbarTextField: NotificationThemeable {
     func applyTheme() {
         backgroundColor = UIColor.theme.textField.backgroundInOverlay
         textColor = UIColor.theme.textField.textAndTint

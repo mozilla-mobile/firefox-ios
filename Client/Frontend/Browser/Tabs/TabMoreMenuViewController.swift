@@ -7,7 +7,7 @@ import Shared
 import SnapKit
 import UIKit
 
-class TabMoreMenuViewController: UIViewController, Themeable {
+class TabMoreMenuViewController: UIViewController, NotificationThemeable {
     weak var delegate: TabTrayDelegate?
     var chronTabsTrayDelegate: ChronologicalTabsDelegate?
     var bottomSheetDelegate: BottomSheetDelegate?
@@ -16,13 +16,13 @@ class TabMoreMenuViewController: UIViewController, Themeable {
     let profile: Profile
     let tabIndex: IndexPath
 
-    let titles: [Int: [String]] = [ 1: [Strings.ShareAddToReadingList,
-                                        Strings.BookmarkContextMenuTitle,
-                                        Strings.AddToShortcutsActionTitle],
-                                    2: [Strings.CloseTabTitle],
-                                    0: [Strings.CopyAddressTitle,
-                                        Strings.ShareContextMenuTitle,
-                                        Strings.SendToDeviceTitle]
+    let titles: [Int: [String]] = [ 1: [.ShareAddToReadingList,
+                                        .BookmarkContextMenuTitle,
+                                        .AddToShortcutsActionTitle],
+                                    2: [.CloseTabTitle],
+                                    0: [.CopyAddressTitle,
+                                        .ShareContextMenuTitle,
+                                        .SendToDeviceTitle]
     ]
     let imageViews: [Int: [UIImageView]] = [ 1: [UIImageView(image: UIImage.templateImageNamed("library-readinglist")),
                                                  UIImageView(image: UIImage.templateImageNamed("bookmark")),
@@ -33,12 +33,7 @@ class TabMoreMenuViewController: UIViewController, Themeable {
                                                  UIImageView(image: UIImage.templateImageNamed("menu-Send-to-Device"))]
     ]
     lazy var tableView: UITableView = {
-        var tableView: UITableView
-        if #available(iOS 13.0, *) {
-            tableView = UITableView(frame: CGRect(), style: .insetGrouped)
-        } else {
-            tableView = UITableView()
-        }
+        var tableView = UITableView(frame: CGRect(), style: .insetGrouped)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "moreMenuCell")
         tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "moreMenuHeader")
         tableView.dataSource = self
@@ -68,7 +63,7 @@ class TabMoreMenuViewController: UIViewController, Themeable {
     }()
     
     func applyTheme() {
-        if ThemeManager.instance.currentName == .normal {
+        if LegacyThemeManager.instance.currentName == .normal {
             tabMoreMenuHeader.backgroundColor = UIColor.Photon.Grey10
         } else {
             tabMoreMenuHeader.backgroundColor = UIColor.Photon.Grey90
@@ -170,7 +165,7 @@ extension TabMoreMenuViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "moreMenuCell", for: indexPath)
         let lightColor = UIColor.theme.tableView.rowBackground
         let darkColor = UIColor.Photon.Grey80
-        cell.backgroundColor = ThemeManager.instance.currentName == .normal ? lightColor : darkColor
+        cell.backgroundColor = LegacyThemeManager.instance.currentName == .normal ? lightColor : darkColor
         cell.textLabel?.text = titles[indexPath.section]?[indexPath.row]
         cell.accessoryView = imageViews[indexPath.section]?[indexPath.row]
         cell.accessoryView?.tintColor = UIColor.theme.textField.textAndTint
@@ -189,11 +184,7 @@ extension TabMoreMenuViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if #available(iOS 13.0, *) {
-            return 0
-        } else {
-            return 8
-        }
+        return 0
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -204,7 +195,7 @@ extension TabMoreMenuViewController: UITableViewDelegate {
             switch indexPath.row {
             case 0:
                 UIPasteboard.general.url = url
-                SimpleToast().showAlertWithText(Strings.AppMenuCopyURLConfirmMessage, bottomContainer: self.view)
+                SimpleToast().showAlertWithText(.AppMenuCopyURLConfirmMessage, bottomContainer: self.view)
                 dismissMenu()
             case 1:
                 dismissMenu()

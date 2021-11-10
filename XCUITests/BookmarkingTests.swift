@@ -60,6 +60,8 @@ class BookmarkingTests: BaseTestCase {
 
     func testBookmarkingUI() {
         // Go to a webpage, and add to bookmarks, check it's added
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.openURL(path(forTestPage: url_1))
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
@@ -68,7 +70,12 @@ class BookmarkingTests: BaseTestCase {
         checkBookmarked()
 
         // Load a different page on a new tab, check it's not bookmarked
-        navigator.openNewURL(urlString: path(forTestPage: url_2["url"]!))
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
+        navigator.openURL(path(forTestPage: url_2["url"]!))
+        
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
         checkUnbookmarked()
@@ -103,9 +110,11 @@ class BookmarkingTests: BaseTestCase {
         XCTAssertEqual(list, 1, "There should be an entry in the bookmarks list")
         XCTAssertTrue(app.tables["Bookmarks List"].staticTexts[url_2["bookmarkLabel"]!].exists)
     }
-    /* Disable due to https://github.com/mozilla-mobile/firefox-ios/issues/7521
+
     func testAccessBookmarksFromContextMenu() {
         //Add a bookmark
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.openURL(path(forTestPage: url_2["url"]!))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
@@ -116,41 +125,6 @@ class BookmarkingTests: BaseTestCase {
         navigator.goto(MobileBookmarks)
         checkItemInBookmarkList()
     }
-    
-    func testRecentBookmarks() {
-        // Verify that there are only 4 cells without recent bookmarks
-        navigator.goto(LibraryPanel_Bookmarks)
-        waitForNoExistence(app.otherElements["RECENT BOOKMARKS"])
-        waitForExistence(app.tables["Bookmarks List"], timeout: 5)
-        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 4)
-        
-        //Add a bookmark
-        navigator.openURL(url_3)
-        waitForTabsButton()
-        bookmark()
-        
-        // Check if it shows in recent bookmarks
-        navigator.goto(LibraryPanel_Bookmarks)
-        waitForExistence(app.otherElements["Recent Bookmarks"], timeout: 5)
-        waitForExistence(app.staticTexts[urlLabelExample_3])
-        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 5)
-        
-        // Add another
-        navigator.openURL(path(forTestPage: url_4))
-        waitForTabsButton()
-        bookmark()
-        
-        // Check if it shows in recent bookmarks
-        navigator.goto(LibraryPanel_Bookmarks)
-        waitForExistence(app.otherElements["Recent Bookmarks"], timeout: 5)
-        waitForExistence(app.staticTexts[urlLabelExample_4])
-        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 6)
-        
-        // Click a recent bookmark and make sure it navigates. Disabled because of issue 5038 not opening recent bookmarks when tapped
-        app.tables["Bookmarks List"].cells.element(boundBy: 5).tap()
-        waitForExistence(app.textFields["url"], timeout: 6)
-        waitForValueContains(app.textFields["url"], value: url_3)
-    }*/
 
     func testBookmarksAwesomeBar() {
         navigator.nowAt(BrowserTab)
@@ -180,7 +154,7 @@ class BookmarkingTests: BaseTestCase {
         bookmark()
 
         // Now the site should be suggested
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 10)
         navigator.performAction(Action.AcceptClearPrivateData)
         navigator.goto(BrowserTab)
         navigator.goto(URLBarOpen)
@@ -285,9 +259,11 @@ class BookmarkingTests: BaseTestCase {
     }
 
     // Smoketest
-    /* Disable due to https://github.com/mozilla-mobile/firefox-ios/issues/7521
     func testBookmarkLibraryAddDeleteBookmark() {
         // Verify that there are only 4 cells without recent bookmarks
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
         navigator.goto(LibraryPanel_Bookmarks)
         waitForNoExistence(app.otherElements["Recent Bookmarks"])
         // There are 4 rows for the default folders
@@ -307,5 +283,5 @@ class BookmarkingTests: BaseTestCase {
         app.buttons["Delete"].tap()
         waitForNoExistence(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"], timeoutValue: 10)
         XCTAssertFalse(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].exists, "Bookmark not removed successfully")
-    }*/
+    }
 }

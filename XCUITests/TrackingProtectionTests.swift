@@ -6,7 +6,6 @@ import XCTest
 
 let standardBlockedElementsString = "Firefox blocks cross-site trackers, social trackers, cryptominers, and fingerprinters."
 let strictBlockedElementsString = "Firefox blocks cross-site trackers, social trackers, cryptominers, fingerprinters, and tracking content."
-let disabledStrictTPString = "No trackers known to Firefox were detected on this page."
 
 let websiteWithBlockedElements = "twitter.com"
 let differentWebsite = path(forTestPage: "test-example.html")
@@ -29,9 +28,9 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.goto(BrowserTab)
         waitUntilPageLoad()
 
-        // Now there should not be any shield icon
-        waitForNoExistence(app.buttons["TabLocationView.trackingProtectionButton"])
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
+        // The lock icon should still be there
+        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"])
+        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 5)
         navigator.goto(BrowserTab)
 
         // Switch to Private Browsing
@@ -39,9 +38,9 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.goto(BrowserTab)
         waitUntilPageLoad()
 
-        // Make sure TP is off also in PMB
-        waitForNoExistence(app.buttons["TabLocationView.trackingProtectionButton"])
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        // Make sure TP is also there in PBM
+        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"])
+        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 10)
         navigator.goto(SettingsScreen)
         // Enable TP again
         navigator.goto(TrackingProtectionSettings)
@@ -70,76 +69,30 @@ class TrackingProtectionTests: BaseTestCase {
         app.buttons["Done"].tap()
     }
 
-    func testMenuWhenThereAreBlockedElements() {
-        // Open website which has trackers blocked
-        navigator.openURL(websiteWithBlockedElements)
+    func testETPLockMenu() {
+        navigator.openURL(differentWebsite)
         waitUntilPageLoad()
-        // Open ETP menu
+        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"])
         navigator.goto(TrackingProtectionContextMenuDetails)
+        waitForExistence(app.staticTexts["Connection is not secure"], timeout: 5)
+        let switchValue = app.switches.firstMatch.value!
+        XCTAssertEqual(switchValue as! String, "1")
 
-        // Verify that all elements for ETP menu are shown
-        waitForExistence(app.tables["Context Menu"])
-        XCTAssertTrue(app.tables.cells[standardBlockedElementsString].exists, "ETP menu with elements blocked is not right")
+        app.switches.firstMatch.tap()
+        let switchValueOFF = app.switches.firstMatch.value!
+        XCTAssertEqual(switchValueOFF as! String, "0")
 
-        // Enable Strict Mode from TP menu
-        navigator.performAction(Action.OpenSettingsFromTPMenu)
-        enableStrictMode()
-
+        // Open TP Settings menu
+        app.buttons["Protection Settings"].tap()
+        waitForExistence(app.navigationBars["Tracking Protection"], timeout: 5)
+        let switchSettingsValue = app.switches["prefkey.trackingprotection.normalbrowsing"].value!
+        XCTAssertEqual(switchSettingsValue as! String, "1")
+        app.switches["prefkey.trackingprotection.normalbrowsing"].tap()
+        // Disable ETP from setting and check that it applies to the site
+        app.buttons["AppSettingsTableViewController.navigationItem.leftBarButtonItem"].tap()
         navigator.nowAt(BrowserTab)
         navigator.goto(TrackingProtectionContextMenuDetails)
-
-        // Verify that all blocked elements for ETP menu are shown
-        waitForExistence(app.tables["Context Menu"])
-        XCTAssertTrue(app.tables.cells[strictBlockedElementsString].exists, "ETP menu with elements blocked is not right")
-    }
-
-    func testDisableETPforSiteIsKeptAfterBrowsing() {
-        navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
-        // Enable Strict TP
-        navigator.openURL(websiteWithBlockedElements)
-        waitUntilPageLoad()
-        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
-        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"], timeout: 5)
-        // Open ETP menu
-        navigator.goto(TrackingProtectionContextMenuDetails)
-        waitForExistence(app.tables["Context Menu"])
-
-        // Enable Strict Mode from TP menu
-        navigator.performAction(Action.OpenSettingsFromTPMenu)
-        enableStrictMode()
-
-        navigator.nowAt(BrowserTab)
-        navigator.goto(TrackingProtectionContextMenuDetails)
-
-        disableEnableTrackingProtectionForSite()
-        navigator.performAction(Action.CloseTPContextMenu)
-        navigator.nowAt(BrowserTab)
-
-        // Go to a different site and verify that ETP is ON
-        navigator.openNewURL(urlString: differentWebsite)
-        waitUntilPageLoad()
-        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
-        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"], timeout: 5)
-        navigator.goto(TrackingProtectionContextMenuDetails)
-        waitForExistence(app.tables["Context Menu"], timeout: 5)
-        XCTAssertTrue(app.cells.images["enabled"].exists)
-        XCTAssertTrue(app.tables.cells[strictBlockedElementsString].exists, "ETP menu with elements blocked is not right")
-        navigator.performAction(Action.CloseTPContextMenu)
-        navigator.nowAt(BrowserTab)
-
-        // Go back to original site and verify that ETP is still OFF
-        navigator.openURL(websiteWithBlockedElements)
-        waitUntilPageLoad()
-        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
-        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"], timeout: 5)
-        navigator.goto(TrackingProtectionContextMenuDetails)
-        XCTAssertFalse(app.cells.images["enabled"].exists)
-        XCTAssertTrue(app.tables.cells.staticTexts[disabledStrictTPString].exists, "ETP menu with elements blocked is not right")
-
-        // Verify that ETP can be enabled again
-        navigator.performAction(Action.TrackingProtectionperSiteToggle)
-        XCTAssertTrue(app.cells.images["enabled"].exists)
+        waitForNoExistence(app.switches.firstMatch)
     }
 
     func testBasicMoreInfo() {

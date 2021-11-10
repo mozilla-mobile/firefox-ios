@@ -134,16 +134,16 @@ class TabTrayV2ViewModel: NSObject {
         
         switch section {
         case .today:
-            sectionHeader = Strings.TabTrayV2TodayHeader
+            sectionHeader = .TabTrayV2TodayHeader
             date = dateFormatter.string(from: Date())
         case .yesterday:
-            sectionHeader = Strings.TabTrayV2YesterdayHeader
+            sectionHeader = .TabTrayV2YesterdayHeader
             date = dateFormatter.string(from: Date.yesterday)
         case .lastWeek:
-            sectionHeader = Strings.TabTrayV2LastWeekHeader
+            sectionHeader = .TabTrayV2LastWeekHeader
             date = dateIntervalFormatter.string(from: Date().lastWeek, to: Date(timeInterval: 6.0 * 24.0 * 3600.0, since: Date().lastWeek))
         case .older:
-            sectionHeader = Strings.TabTrayV2OlderHeader
+            sectionHeader = .TabTrayV2OlderHeader
             date = ""
         default:
             sectionHeader = ""
@@ -161,6 +161,7 @@ class TabTrayV2ViewModel: NSObject {
 
         let tabCount = self.getTabs().count
         tabManager.removeTabAndUpdateSelectedIndex(tab)
+        NotificationCenter.default.post(name: .TabClosed, object: nil)
         if tabCount == 1 && self.getTabs().count == 1 {
             // The last tab was removed. Dismiss the tab tray
             self.viewController.dismissTabTray()
@@ -255,7 +256,7 @@ extension TabTrayV2ViewModel: TabEventHandler {
 extension TabTrayV2ViewModel: TabManagerDelegate {
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) { }
 
-    func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, isRestoring: Bool) { }
+    func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) { }
     
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
         for (section, tabs) in dataStore {

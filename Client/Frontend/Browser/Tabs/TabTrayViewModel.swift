@@ -14,25 +14,29 @@ class TabTrayViewModel {
     let tabTrayView: TabTrayViewDelegate
     let syncedTabsController: RemoteTabsPanel
 
-    init(tabTrayDelegate: TabTrayDelegate? = nil, profile: Profile, showChronTabs: Bool = false) {
+    var normalTabsCount: String {
+        (tabManager.normalTabs.count < 100) ? tabManager.normalTabs.count.description : "\u{221E}"
+    }
+
+    init(tabTrayDelegate: TabTrayDelegate? = nil, profile: Profile, showChronTabs: Bool = false, tabToFocus: Tab? = nil) {
         self.profile = profile
         self.tabManager = BrowserViewController.foregroundBVC().tabManager
 
         if showChronTabs {
             self.tabTrayView = ChronologicalTabsViewController(tabTrayDelegate: tabTrayDelegate, profile: self.profile)
         } else {
-            self.tabTrayView = GridTabViewController(tabManager: self.tabManager, profile: profile, tabTrayDelegate: tabTrayDelegate)
+            self.tabTrayView = GridTabViewController(tabManager: self.tabManager, profile: profile, tabTrayDelegate: tabTrayDelegate, tabToFocus: tabToFocus)
         }
         self.syncedTabsController = RemoteTabsPanel(profile: self.profile)
     }
 
-    func navTitle(for segmentIndex: Int) -> String? {
-        if UIDevice.current.userInterfaceIdiom == .phone {
+    func navTitle(for segmentIndex: Int, foriPhone: Bool) -> String? {
+        if foriPhone {
             switch segmentIndex {
             case 0, 1:
-                return Strings.TabTrayV2Title
+                return .TabTrayV2Title
             case 2:
-                return Strings.AppMenuSyncedTabsTitleString
+                return .AppMenuSyncedTabsTitleString
             default:
                 return nil
             }

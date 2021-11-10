@@ -13,7 +13,7 @@ class ReopenLastTabTests: KIFTestCase {
     
     var closeButtonMatchers: [GREYMatcher] {
         return [
-            grey_accessibilityID("TabTrayController.deleteButton.closeAll"),
+            grey_accessibilityID(AccessibilityIdentifiers.TabTray.deleteCloseAllButton),
             grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!)
         ]
     }

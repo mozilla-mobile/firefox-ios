@@ -16,9 +16,9 @@ enum NavigationItemText {
     func localizedString() -> String {
         switch self {
         case .Done:
-            return Strings.SettingsSearchDoneButton
+            return .SettingsSearchDoneButton
         case .Close:
-            return Strings.CloseButtonTitle
+            return .CloseButtonTitle
         }
     }
 }
@@ -32,6 +32,23 @@ struct ViewControllerConsts {
 }
 
 extension UIViewController {
+    /// Determines whether, based on size class, the particular view controller should
+    /// use iPad setup, as defined by design requirements. All iPad devices use a
+    /// combination of either (.compact, .regular) or (.regular, .regular) size class
+    /// for (width, height) for both fullscreen AND multi-tasking layouts. In some
+    /// instances, we may wish to use iPhone layouts on the iPad when its size class
+    /// is of type (.compact, .regular).
+    var shouldUseiPadSetup: Bool {
+        get {
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                if traitCollection.horizontalSizeClass == .compact { return false }
+                return true
+            }
+
+            return false
+        }
+    }
+
     /// This presents a View Controller with a bar button item that can be used to dismiss the VC
     /// - Parameters:
     ///     - navItemLocation: Define whether dismiss bar button item should be on the right or left of the navigation bar

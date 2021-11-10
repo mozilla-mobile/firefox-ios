@@ -359,7 +359,7 @@ ece_webpush_aesgcm_derive_key_and_nonce(ece_mode_t mode, EC_KEY* localKey,
   }
 
   // Next, derive the AES decryption key and nonce. We include the sender and
-  // receiver public keys in the info strings.
+  // receiver public keys in the info .
   uint8_t keyInfo[ECE_WEBPUSH_AESGCM_KEY_INFO_LENGTH];
   uint8_t nonceInfo[ECE_WEBPUSH_AESGCM_NONCE_INFO_LENGTH];
   switch (mode) {

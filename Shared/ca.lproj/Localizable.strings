@@ -40,6 +40,12 @@
 /* The description of a highlight if it is a site the user has visited */
 "ActivityStream.Highlights.Visited" = "Visitat";
 
+/* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
+"ActivityStream.JumpBackIn.SectionTitle" = "Torneu a la pestanya";
+
+/* A string used to signify the start of the Recently Saved section in Home Screen. */
+"ActivityStream.Library.Title" = "Desades recentment";
+
 /* Section title label for recently bookmarked websites */
 "ActivityStream.NewRecentBookmarks.Title" = "Adreces d'interès recents";
 
@@ -57,6 +63,12 @@
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Visitat recentment";
+
+/* Section title for the Recently Saved section. This shows websites that have had a save action. Right now it is just bookmarks but it could be used for other things like the reading list in the future. */
+"ActivityStream.RecentlySaved.SectionTitle" = "Desades recentment";
+
+/* This button will open the library showing all the users bookmarks */
+"ActivityStream.RecentlySaved.ShowAll" = "Mostra-ho tot";
 
 /* Section title label for Shortcuts */
 "ActivityStream.Shortcuts.SectionTitle" = "Dreceres";
@@ -538,6 +550,9 @@
 /* Title for the Synced Tabs Cell in the History Panel */
 "HistoryPanel.SyncedTabsCell.Title" = "Dispositius sincronitzats";
 
+/* Accessibility label for the tab toolbar indicating the Home button. */
+"Home" = "Inici";
+
 /* Button cancelling changes setting the home page for the first time. */
 "HomePage.Set.Dialog.Cancel" = "Cancel·la";
 
@@ -682,6 +697,27 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Filtre";
 
+/* Label shown when there are no logins to list */
+"LoginsList.NoLoginsFound.Description" = "Els inicis de sessió desats es mostraran aquí. Si heu desat inicis de sessió al Firefox en un altre dispositiu, inicieu la sessió al vostre compte del Firefox.";
+
+/* Label shown when there are no logins saved */
+"LoginsList.NoLoginsFound.Title" = "No s'ha trobat cap inici de sessió";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "No hi ha cap resultat que coincideixi amb la cerca.";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "No hi ha cap inici de sessió que coincideixi";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "Cancel·la";
+
+/* Placeholder text for search field */
+"LoginsList.Search.Placeholder" = "Cerca els inicis de sessió";
+
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "Seleccioneu una contrasenya per emplenar";
+
 /* Title for the list of logins */
 "LoginsList.Title" = "INICIS DE SESSIÓ DESATS";
 
@@ -794,6 +830,9 @@
 
 /* Title on tracking protection menu for blocked items. */
 "Menu.TrackingProtection.BlockedTitle" = "Blocat";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"Menu.TrackingProtection.Details.Verifier" = "Verificat per %@";
 
 /* Message in menu when no trackers blocked. */
 "Menu.TrackingProtection.NoTrackersBlockedTitle" = "No s'ha detectat cap element de seguiment conegut pel Firefox en aquesta pàgina.";
@@ -964,6 +1003,12 @@
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Política de privadesa";
 
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "La connexió no és segura";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "La connexió és segura";
+
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Motors de cerca ràpida";
 
@@ -981,6 +1026,9 @@
 
 /* Title for the Recently Closed Tabs Panel */
 "RecentlyClosedTabsPanel.Title" = "Tancades recentment";
+
+/* More button text for Recently Saved items at the home page. */
+"RecentlySaved.Actions.More" = "Mostra-ho tot";
 
 /* Accessibility Label for the tab toolbar Reload button */
 "Reload" = "Recarrega";
@@ -1191,6 +1239,9 @@
 
 /* Title displayed in header of the setting panel. */
 "Settings.ClearPrivateData.Title" = "Esborra les dades privades";
+
+/* Button in Data Management that clears private data for the selected items. Parameter is the number of items to be cleared */
+"Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "Esborra els elements: %1$@";
 
 /* Copy app version alert shown in settings. */
 "Settings.CopyAppVersion.Title" = "S'ha copiat al porta-retalls";
@@ -1553,6 +1604,9 @@
 /* Description of the confirmation dialog shown when a user tries to clear their private data. */
 "Settings.WebsiteData.ConfirmPrompt" = "Aquesta acció esborrarà totes les vostres dades de llocs web. Això no es pot desfer.";
 
+/* Description of the confirmation dialog shown when a user tries to clear some of their private data. */
+"Settings.WebsiteData.SelectedConfirmPrompt" = "Aquesta acció esborrarà els elements seleccionats. No es podrà desfer.";
+
 /* Title displayed in header of the Data Management panel. */
 "Settings.WebsiteData.Title" = "Dades de llocs web";
 
@@ -1689,6 +1743,9 @@
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "Pestanya seleccionada actualment.";
 
+/* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
+"TabTray.InactiveTabs.SectionTitle" = "Pestanyes inactives";
+
 /* The section header for tabs opened last week */
 "TabTray.LastWeek.Header" = "La darrera setmana";
 
@@ -1706,6 +1763,12 @@
 
 /* The title for the tab tray in private mode */
 "TabTray.PrivateTitle" = "Pestanyes privades";
+
+/* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
+"TabTray.RecentlyClosed.Description" = "Les pestanyes estaran disponibles aquí durant 30 dies. Passat aquest temps, es tancaran automàticament.";
+
+/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
+"TabTray.RecentlyClosed.SectionTitle" = "Tancades recentment";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "Privades";

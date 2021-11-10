@@ -10,7 +10,12 @@ struct OneLineCellUX {
     static let HorizontalMargin: CGFloat = 16
 }
 
-class OneLineTableViewCell: UITableViewCell, Themeable {
+enum OneLineTableViewCustomization {
+    case regular
+    case inactiveCell
+}
+
+class OneLineTableViewCell: UITableViewCell, NotificationThemeable {
     // Tableview cell items
     var selectedView: UIView = {
         let view = UIView()
@@ -53,8 +58,9 @@ class OneLineTableViewCell: UITableViewCell, Themeable {
     
     let containerView = UIView()
     let midView = UIView()
-    
-    private func initialViewSetup() {
+    var shouldLeftAlignTitle = false
+    var customization: OneLineTableViewCustomization = .regular
+    func initialViewSetup() {
         separatorInset = UIEdgeInsets(top: 0, left: TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin, bottom: 0, right: 0)
         self.selectionStyle = .default
         midView.addSubview(titleLabel)
@@ -70,20 +76,24 @@ class OneLineTableViewCell: UITableViewCell, Themeable {
             make.leading.equalToSuperview()
             make.trailing.equalTo(accessoryView?.snp.leading ?? contentView.snp.trailing)
         }
-        
+
         leftImageView.snp.makeConstraints { make in
             make.height.width.equalTo(28)
             make.leading.equalTo(containerView.snp.leading).offset(15)
             make.centerY.equalTo(containerView.snp.centerY)
         }
-        
+
         midView.snp.makeConstraints { make in
             make.height.equalTo(42)
             make.centerY.equalToSuperview()
-            make.leading.equalTo(leftImageView.snp.trailing).offset(13)
+            if shouldLeftAlignTitle {
+                make.leading.equalTo(containerView.snp.leading).offset(5)
+            } else {
+                make.leading.equalTo(leftImageView.snp.trailing).offset(13)
+            }
             make.trailing.equalTo(containerView.snp.trailing).offset(-7)
         }
-        
+
         titleLabel.snp.makeConstraints { make in
             make.height.equalTo(40)
             make.centerY.equalTo(midView.snp.centerY)
@@ -95,8 +105,26 @@ class OneLineTableViewCell: UITableViewCell, Themeable {
         applyTheme()
     }
     
+    func updateMidConstraint() {
+        leftImageView.snp.updateConstraints { update in
+            let leadingLeft = customization == .regular ? 15 : customization == .inactiveCell ? 5 : 15
+            update.leading.equalTo(containerView.snp.leading).offset(leadingLeft)
+        }
+
+        midView.snp.remakeConstraints { make in
+            make.height.equalTo(42)
+            make.centerY.equalToSuperview()
+            if shouldLeftAlignTitle {
+                make.leading.equalTo(containerView.snp.leading).offset(5)
+            } else {
+                make.leading.equalTo(leftImageView.snp.trailing).offset(13)
+            }
+            make.trailing.equalTo(containerView.snp.trailing).offset(-7)
+        }
+    }
+    
     func applyTheme() {
-        let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         selectedView.backgroundColor = UIColor.theme.tableView.selectedBackground
         if theme == .dark {
             self.backgroundColor = UIColor.Photon.Grey80
@@ -115,7 +143,7 @@ class OneLineTableViewCell: UITableViewCell, Themeable {
     }
 }
 
-class OneLineFooterView: UITableViewHeaderFooterView, Themeable {
+class OneLineFooterView: UITableViewHeaderFooterView, NotificationThemeable {
     fileprivate let bordersHelper = ThemedHeaderFooterViewBordersHelper()
 
     var titleLabel: UILabel = {
@@ -175,7 +203,7 @@ class OneLineFooterView: UITableViewHeaderFooterView, Themeable {
     }
 
     func applyTheme() {
-        let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         self.containerView.backgroundColor = UIColor.theme.tableView.selectedBackground
         self.titleLabel.textColor =  theme == .dark ? .white : .black
         bordersHelper.applyTheme()

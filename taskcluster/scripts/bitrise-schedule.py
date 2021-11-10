@@ -88,11 +88,11 @@ async def async_main(token, branch, commit, workflow, artifacts_directory, local
     headers = {"Authorization": token}
     async with RetryClient(headers=headers) as client:
         build_slug = await schedule_build(client, branch, commit, workflow, locales, derived_data_path)
-        log.info("Created new job. Slug: {}".format(build_slug))
+        log.info(f"Created new job. Slug: {build_slug}")
 
         try:
             await wait_for_job_to_finish(client, build_slug)
-            log.info("Job {} is successful. Retrieving artifacts...".format(build_slug))
+            log.info(f"Job {build_slug} is successful. Retrieving artifacts...")
             await download_artifacts(client, build_slug, artifacts_directory)
         finally:
             log.info("Retrieving bitrise log...")
@@ -126,34 +126,34 @@ async def schedule_build(client, branch, commit, workflow, locales, derived_data
 
     response = await do_http_request_json(client, url, method="post", json=data)
     if response.get("status", "") != "ok":
-        raise Exception("Bitrise status is not ok. Got: {}".format(response))
+        raise Exception(f"Bitrise status is not ok. Got: {response}")
 
     return response["build_slug"]
 
 
 async def wait_for_job_to_finish(client, build_slug):
-    suffix = "builds/{}".format(build_slug)
+    suffix = f"builds/{build_slug}"
     url = BITRISE_URL_TEMPLATE.format(suffix=suffix)
 
     while True:
         response = await do_http_request_json(client, url)
         if response["data"]["finished_at"]:
-            log.info("Job {} is now finished, checking result...".format(build_slug))
+            log.info(f"Job {build_slug} is now finished, checking result...")
             break
         else:
-            log.info("Job {} is still running. Waiting another minute...".format(build_slug))
+            log.info(f"Job {build_slug} is still running. Waiting another minute...")
             await asyncio.sleep(60)
 
     if response["data"]["status_text"] != "success":
         if response["data"]["status_text"] == "error":
-            raise TaskException("Job {} errored! Got: {}".format(build_slug, response), exit_code=1)
+            raise TaskException(f"Job {build_slug} errored! Got: {response}", exit_code=1)
         if response["data"]["status_text"] == "aborted":
-            raise TaskException("Job {} was aborted. Got: {}".format(build_slug, response), exit_code=2)
-        raise TaskException("Job {} is finished but not successful. Got: {}".format(build_slug, response), exit_code=3)
+            raise TaskException(f"Job {build_slug} was aborted. Got: {response}", exit_code=2)
+        raise TaskException(f"Job {build_slug} is finished but not successful. Got: {response}", exit_code=3)
 
 
 async def download_artifacts(client, build_slug, artifacts_directory):
-    suffix = "builds/{}/artifacts".format(build_slug)
+    suffix = f"builds/{build_slug}/artifacts"
     url = BITRISE_URL_TEMPLATE.format(suffix=suffix)
 
     response = await do_http_request_json(client, url)
@@ -164,7 +164,7 @@ async def download_artifacts(client, build_slug, artifacts_directory):
     }
 
     for artifact_slug, title in artifacts_metadata.items():
-        suffix = "builds/{}/artifacts/{}".format(build_slug, artifact_slug)
+        suffix = f"builds/{build_slug}/artifacts/{artifact_slug}"
         url = BITRISE_URL_TEMPLATE.format(suffix=suffix)
 
         response = await do_http_request_json(client, url)
@@ -173,16 +173,23 @@ async def download_artifacts(client, build_slug, artifacts_directory):
 
 
 async def download_log(client, build_slug, artifacts_directory):
-    suffix = "builds/{}/log".format(build_slug)
+    suffix = f"builds/{build_slug}/log"
     url = BITRISE_URL_TEMPLATE.format(suffix=suffix)
 
-    response = await do_http_request_json(client, url)
+    while True:
+        response = await do_http_request_json(client, url)
+        if response["is_archived"] == True:
+            log.info("Log is now ready")
+            break
+        else:
+            log.info("Log is still running. Waiting another minute...")
+            await asyncio.sleep(60)
+
     download_url = response["expiring_raw_log_url"]
     if download_url:
         await download_file(download_url, os.path.join(artifacts_directory, "bitrise.log"))
     else:
         log.error("Bitrise has no log to offer for job {0}. Please check https://app.bitrise.io/build/{0}".format(build_slug))
-
 
 
 CHUNK_SIZE = 128
@@ -198,19 +205,19 @@ async def download_file(download_url, file_destination):
                         break
                     fd.write(chunk)
 
-    log.info("'{}' downloaded".format(file_destination))
+    log.info(f"'{file_destination}' downloaded")
 
 
 async def do_http_request_json(client, url, method="get", **kwargs):
-    method_and_url = "{} {}".format(method.upper(), url)
-    log.debug("Making request {}...".format(method_and_url))
+    method_and_url = f"{method.upper()} {url}"
+    log.debug(f"Making request {method_and_url}...")
 
     http_function = getattr(client, method)
     async with http_function(url, **kwargs) as r:
-        log.debug("{} returned HTTP code {}".format(method_and_url, r.status))
+        log.debug(f"{method_and_url} returned HTTP code {r.status}")
         response = await r.json()
 
-    log.debug("{} returned JSON {}".format(method_and_url, response))
+    log.debug(f"{method_and_url} returned JSON {response}")
 
     return response
 

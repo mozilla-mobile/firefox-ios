@@ -74,7 +74,7 @@ class BookmarkDetailPanel: SiteTableViewController {
     var isPresentedFromToast = false
 
     fileprivate lazy var topRightButton: UIBarButtonItem =  {
-        let button = UIBarButtonItem(title: Strings.SettingsAddCustomEngineSaveButtonText, style: .done, target: self, action: #selector(topRightButtonAction))
+        let button = UIBarButtonItem(title: .SettingsAddCustomEngineSaveButtonText, style: .done, target: self, action: #selector(topRightButtonAction))
         return button
     }()
 
@@ -94,11 +94,11 @@ class BookmarkDetailPanel: SiteTableViewController {
             self.bookmarkItemOrFolderTitle = bookmarkItem.title
             self.bookmarkItemURL = bookmarkItem.url
 
-            self.title = Strings.BookmarksEditBookmark
+            self.title = .BookmarksEditBookmark
         } else if let bookmarkFolder = bookmarkNode as? BookmarkFolder {
             self.bookmarkItemOrFolderTitle = bookmarkFolder.title
 
-            self.title = Strings.BookmarksEditFolder
+            self.title = .BookmarksEditFolder
         }
     }
 
@@ -109,11 +109,11 @@ class BookmarkDetailPanel: SiteTableViewController {
             self.bookmarkItemOrFolderTitle = ""
             self.bookmarkItemURL = ""
 
-            self.title = Strings.BookmarksNewBookmark
+            self.title = .BookmarksNewBookmark
         } else if bookmarkNodeType == .folder {
             self.bookmarkItemOrFolderTitle = ""
 
-            self.title = Strings.BookmarksNewFolder
+            self.title = .BookmarksNewFolder
         }
     }
 
@@ -170,7 +170,7 @@ class BookmarkDetailPanel: SiteTableViewController {
     override func applyTheme() {
         super.applyTheme()
 
-        if let current = navigationController?.visibleViewController as? Themeable, current !== self {
+        if let current = navigationController?.visibleViewController as? NotificationThemeable, current !== self {
             current.applyTheme()
         }
 
@@ -329,7 +329,6 @@ class BookmarkDetailPanel: SiteTableViewController {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: BookmarkDetailFolderCellIdentifier, for: indexPath) as? OneLineTableViewCell else {
                 return super.tableView(tableView, cellForRowAt: indexPath)
             }
-
             // Disable folder selection when creating a new bookmark or folder.
             if isNew {
                 cell.titleLabel.alpha = 0.5
@@ -387,13 +386,13 @@ class BookmarkDetailPanel: SiteTableViewController {
 
         switch indexPath.row {
         case BookmarkDetailFieldsRow.title.rawValue:
-            cell.titleLabel.text = Strings.BookmarkDetailFieldTitle
+            cell.titleLabel.text = .BookmarkDetailFieldTitle
             cell.textField.text = bookmarkItemOrFolderTitle
             cell.textField.autocapitalizationType = .sentences
             cell.textField.keyboardType = .default
             return cell
         case BookmarkDetailFieldsRow.url.rawValue:
-            cell.titleLabel.text = Strings.BookmarkDetailFieldURL
+            cell.titleLabel.text = .BookmarkDetailFieldURL
             cell.textField.text = bookmarkItemURL
             cell.textField.autocapitalizationType = .none
             cell.textField.keyboardType = .URL

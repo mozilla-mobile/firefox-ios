@@ -16,8 +16,8 @@ class LoginDataSource: NSObject, UITableViewDataSource {
     init(viewModel: LoginListViewModel) {
         self.viewModel = viewModel
         boolSettings = (
-            BoolSetting(prefs: viewModel.profile.prefs, prefKey: PrefsKeys.LoginsSaveEnabled, defaultValue: true, attributedTitleText: NSAttributedString(string: Strings.SettingToSaveLogins)),
-            BoolSetting(prefs: viewModel.profile.prefs, prefKey: PrefsKeys.LoginsShowShortcutMenuItem, defaultValue: true, attributedTitleText: NSAttributedString(string: Strings.SettingToShowLoginsInAppMenu)))
+            BoolSetting(prefs: viewModel.profile.prefs, prefKey: PrefsKeys.LoginsSaveEnabled, defaultValue: true, attributedTitleText: NSAttributedString(string: .SettingToSaveLogins)),
+            BoolSetting(prefs: viewModel.profile.prefs, prefKey: PrefsKeys.LoginsShowShortcutMenuItem, defaultValue: true, attributedTitleText: NSAttributedString(string: .SettingToShowLoginsInAppMenu)))
         super.init()
     }
 
@@ -65,9 +65,9 @@ class LoginDataSource: NSObject, UITableViewDataSource {
         } else {
             let cell = LoginListTableViewCell(style: .subtitle, reuseIdentifier: CellReuseIdentifier, inset: tableView.separatorInset)
             guard let login = viewModel.loginAtIndexPath(indexPath) else { return cell }
+            let username = login.decryptedUsername
             cell.hostnameLabel.text = login.hostname
-            cell.usernameLabel.textColor = UIColor.theme.tableView.rowDetailText
-            cell.usernameLabel.text = login.username.isEmpty ? "(no username)" : login.username
+            cell.usernameLabel.text = username.isEmpty ? "(no username)" : username
             if NightModeHelper.hasEnabledDarkTheme(viewModel.profile.prefs) {
                 cell.breachAlertImageView.tintColor = BreachAlertsManager.darkMode
             } else {

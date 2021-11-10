@@ -26,16 +26,16 @@
 "Hide" = "Celar";
 
 /* Prompt message warning the user that deleting non-synced logins will permanently remove them */
-"Logins will be permanently removed." = "Le authenticationes essera removite permanentemente.";
+"Logins will be permanently removed." = "Le credentiales essera removite permanentemente.";
 
 /* Prompt message warning the user that deleted logins will remove logins from all connected devices */
-"Logins will be removed from all connected devices." = "Le authenticationes essera removite de tote tu apparatos connectite.";
+"Logins will be removed from all connected devices." = "Le credentiales essera removite de tote tu apparatos connectite.";
 
 /* Label describing when the current login was last modified with the timestamp as the parameter. */
 "Modified %@" = "Modificate %@";
 
 /* Label displayed when no logins are found after searching. */
-"No logins found" = "Nulle authenticationes trovate";
+"No logins found" = "Nulle credentiales trovate";
 
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "Aperir e plenar";

@@ -23,13 +23,13 @@
 "Menu.Library.Reload" = "Recargar";
 
 /* Label for the button, displayed in the menu, used to open the Library */
-"Menu.Library.Title" = "Su Biblioteca";
+"Menu.Library.Title" = "Tu biblioteca";
 
 /* Label for the button, displayed in the menu, used to open a new private tab. */
-"Menu.NewPrivateTabAction.Title" = "Nueva pestaña privada";
+"Menu.NewPrivateTabAction.Title" = "Abrir nueva pestaña privada";
 
 /* Label for the button, displayed in the menu, used to open a new tab */
-"Menu.NewTabAction.Title" = "Nueva pestaña";
+"Menu.NewTabAction.Title" = "Abrir nueva pestaña";
 
 /* Accessibility label for the button, displayed in the menu, used to open the Bookmarks home panel. Please keep as short as possible, <15 chars of space available. */
 "Menu.OpenBookmarksAction.AccessibilityLabel.v2" = "Marcadores";
@@ -58,6 +58,9 @@
 /* Label for the button, displayed in the menu, used to show the html page source */
 "Menu.PageSourceAction.Title" = "Ver código fuente";
 
+/* A string used to signify the start of the Recently Saved section in Home Screen. */
+"Menu.RecentlySaved.Title" = "Guardados recientemente";
+
 /* Label for the button, displayed in the menu, used to delete an existing bookmark for the current website. */
 "Menu.RemoveBookmarkAction.Title" = "Eliminar marcador";
 
@@ -84,4 +87,7 @@
 
 /* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
 "Menu.ViewMobileSiteAction.Title" = "Pedir versión móvil";
+
+/* Label for the button, displayed in the menu, used to navigate to the home page. */
+"SettingsMenu.OpenHomePageAction.Title" = "Página de inicio";
 

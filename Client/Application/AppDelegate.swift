@@ -27,10 +27,7 @@ let LatestAppVersionProfileKey = "latestAppVersion"
 let AllowThirdPartyKeyboardsKey = "settings.allowThirdPartyKeyboards"
 private let InitialPingSentKey = "initialPingSent"
 
-class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestoration {
-    public static func viewController(withRestorationIdentifierPath identifierComponents: [String], coder: NSCoder) -> UIViewController? {
-        return nil
-    }
+class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var browserViewController: BrowserViewController!
@@ -107,6 +104,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         let profile = getProfile(application)
 
         telemetry = TelemetryWrapper(profile: profile)
+        NSUserDefaultsPrefs(prefix: "profile").setBool(true, forKey: "isColdLaunch")
+        FeatureFlagsManager.shared.initializeFeatures(with: profile)
+        ThemeManager.shared.updateProfile(with: profile)
 
         // Start intialzing the Nimbus SDK. This should be done after Glean
         // has been started.
@@ -137,7 +137,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             }
         }
 
-        self.updateAuthenticationInfo()
+        NotificationCenter.default.addObserver(forName: .DisplayThemeChanged, object: nil, queue: .main) { (notification) -> Void in
+            if !LegacyThemeManager.instance.systemThemeIsOn {
+                self.window?.overrideUserInterfaceStyle = LegacyThemeManager.instance.userInterfaceStyle
+            } else {
+                self.window?.overrideUserInterfaceStyle = .unspecified
+            }
+        }
+
         SystemUtils.onFirstRun()
 
         RustFirefoxAccounts.startup(prefs: profile.prefs).uponQueue(.main) { _ in
@@ -149,11 +156,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
     // TODO: Move to scene controller for iOS 13
     private func setupRootViewController() {
+        if !LegacyThemeManager.instance.systemThemeIsOn {
+            self.window?.overrideUserInterfaceStyle = LegacyThemeManager.instance.userInterfaceStyle
+        }
+
         browserViewController = BrowserViewController(profile: self.profile!, tabManager: self.tabManager)
         browserViewController.edgesForExtendedLayout = []
-
-        browserViewController.restorationIdentifier = NSStringFromClass(BrowserViewController.self)
-        browserViewController.restorationClass = AppDelegate.self
 
         let navigationController = UINavigationController(rootViewController: browserViewController)
         navigationController.delegate = self
@@ -223,8 +231,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         pushNotificationSetup()
 
-        // user research variable setup for New tab user research
-        _ = NewTabUserResearch()
         // user research variable setup for Chron tabs user research
         _ = ChronTabsUserResearch()
 
@@ -245,43 +251,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
                 InstallType.updateCurrentVersion(version: AppInfo.appVersion)
                 // Profile setup
                 profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
-                
+
             } else if profile.prefs.boolForKey(PrefsKeys.KeySecondRun) == nil {
                 profile.prefs.setBool(true, forKey: PrefsKeys.KeySecondRun)
             }
         }
 
-        if #available(iOS 13.0, *) {
-            BGTaskScheduler.shared.register(forTaskWithIdentifier: "org.mozilla.ios.sync.part1", using: DispatchQueue.global()) { task in
-                guard self.profile?.hasSyncableAccount() ?? false else {
-                    self.shutdownProfileWhenNotActive(application)
-                    return
-                }
 
-                NSLog("background sync part 1") // NSLog to see in device console
-                let collection = ["bookmarks", "history"]
-                self.profile?.syncManager.syncNamedCollections(why: .backgrounded, names: collection).uponQueue(.main) { _ in
-                    task.setTaskCompleted(success: true)
-                    let request = BGProcessingTaskRequest(identifier: "org.mozilla.ios.sync.part2")
-                    request.earliestBeginDate = Date(timeIntervalSinceNow: 1)
-                    request.requiresNetworkConnectivity = true
-                    do {
-                        try BGTaskScheduler.shared.submit(request)
-                    } catch {
-                        NSLog(error.localizedDescription)
-                    }
-                }
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: "org.mozilla.ios.sync.part1", using: DispatchQueue.global()) { task in
+            guard self.profile?.hasSyncableAccount() ?? false else {
+                self.shutdownProfileWhenNotActive(application)
+                return
             }
 
-            // Split up the sync tasks so each can get maximal time for a bg task.
-            // This task runs after the bookmarks+history sync.
-            BGTaskScheduler.shared.register(forTaskWithIdentifier: "org.mozilla.ios.sync.part2", using: DispatchQueue.global()) { task in
-                NSLog("background sync part 2") // NSLog to see in device console
-                let collection = ["tabs", "logins", "clients"]
-                self.profile?.syncManager.syncNamedCollections(why: .backgrounded, names: collection).uponQueue(.main) { _ in
-                    self.shutdownProfileWhenNotActive(application)
-                    task.setTaskCompleted(success: true)
+            NSLog("background sync part 1") // NSLog to see in device console
+            let collection = ["bookmarks", "history"]
+            self.profile?.syncManager.syncNamedCollections(why: .backgrounded, names: collection).uponQueue(.main) { _ in
+                task.setTaskCompleted(success: true)
+                let request = BGProcessingTaskRequest(identifier: "org.mozilla.ios.sync.part2")
+                request.earliestBeginDate = Date(timeIntervalSinceNow: 1)
+                request.requiresNetworkConnectivity = true
+                do {
+                    try BGTaskScheduler.shared.submit(request)
+                } catch {
+                    NSLog(error.localizedDescription)
                 }
+            }
+        }
+
+        // Split up the sync tasks so each can get maximal time for a bg task.
+        // This task runs after the bookmarks+history sync.
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: "org.mozilla.ios.sync.part2", using: DispatchQueue.global()) { task in
+            NSLog("background sync part 2") // NSLog to see in device console
+            let collection = ["tabs", "logins", "clients"]
+            self.profile?.syncManager.syncNamedCollections(why: .backgrounded, names: collection).uponQueue(.main) { _ in
+                self.shutdownProfileWhenNotActive(application)
+                task.setTaskCompleted(success: true)
             }
         }
         updateSessionCount()
@@ -384,8 +389,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
-        // update top sites widget
         updateTopSitesWidget()
+        UserDefaults.standard.setValue(Date(), forKey: "LastActiveTimestamp")
+        NSUserDefaultsPrefs(prefix: "profile").setBool(false, forKey: "isColdLaunch")
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
@@ -414,11 +420,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         singleShotTimer.resume()
         shutdownWebServer = singleShotTimer
 
-        if #available(iOS 13.0, *) {
-            scheduleBGSync(application: application)
-        } else {
-            syncOnDidEnterBackground(application: application)
-        }
+        scheduleBGSync(application: application)
 
         tabManager.preserveTabs()
     }
@@ -432,33 +434,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         }
     }
 
-    fileprivate func syncOnDidEnterBackground(application: UIApplication) {
-        guard let profile = self.profile else {
-            return
-        }
-
-        profile.syncManager.applicationDidEnterBackground()
-
-        // Create an expiring background task. This allows plenty of time for db locks to be released
-        // async. Otherwise we are getting crashes due to db locks not released yet.
-        var taskId = UIBackgroundTaskIdentifier(rawValue: 0)
-        taskId = application.beginBackgroundTask(expirationHandler: {
-            print("Running out of background time, but we have a profile shutdown pending.")
-            self.shutdownProfileWhenNotActive(application)
-            application.endBackgroundTask(taskId)
-        })
-
-        if profile.hasSyncableAccount() {
-            profile.syncManager.syncEverything(why: .backgrounded).uponQueue(.main) { _ in
-                self.shutdownProfileWhenNotActive(application)
-                application.endBackgroundTask(taskId)
-            }
-        } else {
-            profile._shutdown()
-            application.endBackgroundTask(taskId)
-        }
-    }
-
     fileprivate func shutdownProfileWhenNotActive(_ application: UIApplication) {
         // Only shutdown the profile if we are not in the foreground
         guard application.applicationState != .active else {
@@ -466,22 +441,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         }
 
         profile?._shutdown()
-    }
-
-    func applicationWillEnterForeground(_ application: UIApplication) {
-        // The reason we need to call this method here instead of `applicationDidBecomeActive`
-        // is that this method is only invoked whenever the application is entering the foreground where as
-        // `applicationDidBecomeActive` will get called whenever the Touch ID authentication overlay disappears.
-        self.updateAuthenticationInfo()
-    }
-
-    fileprivate func updateAuthenticationInfo() {
-        if let authInfo = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo() {
-            if !LAContext().canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
-                authInfo.useTouchID = false
-                KeychainWrapper.sharedAppContainerKeychain.setAuthenticationInfo(authInfo)
-            }
-        }
     }
 
     fileprivate func setUpWebServer(_ profile: Profile) {
@@ -535,11 +494,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         let bvc = BrowserViewController.foregroundBVC()
-        if #available(iOS 12.0, *) {
-            if userActivity.activityType == SiriShortcuts.activityType.openURL.rawValue {
-                bvc.openBlankNewTab(focusLocationField: false)
-                return true
-            }
+        if userActivity.activityType == SiriShortcuts.activityType.openURL.rawValue {
+            bvc.openBlankNewTab(focusLocationField: false)
+            return true
         }
 
         // If the `NSUserActivity` has a `webpageURL`, it is either a deep link or an old history item
@@ -585,7 +542,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         completionHandler(handledShortCutItem)
     }
 
-    @available(iOS 13.0, *)
     private func scheduleBGSync(application: UIApplication) {
         if profile?.syncManager.isSyncing ?? false {
             // If syncing, create a bg task because _shutdown() is blocking and might take a few seconds to complete

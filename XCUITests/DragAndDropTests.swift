@@ -141,7 +141,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         let key = String(parts[1])
         if testWithDB.contains(key) {
             // for the current test name, add the db fixture used
-                launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + historyAndBookmarksDB]
+                launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + historyAndBookmarksDB, LaunchArguments.SkipContextualHintJumpBackIn]
         }
         super.setUp()
     }
@@ -178,20 +178,6 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         // Check that focus is kept on last website open
         XCTAssert(secondWebsite.url.contains(app.textFields["url"].value! as! String), "The tab has not been dropped correctly")
     }
-    /*Disabled due to 5561
-    func testDragDropToInvalidArea() {
-        if skipPlatform { return }
-
-        openTwoWebsites()
-        checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
-        // Rearrange the tabs via drag home tab and drop it to the tabs button
-        dragAndDrop(dragElement: app.collectionViews.cells[firstWebsite.tabName], dropOnElement: app.buttons["TopTabsViewController.tabsButton"])
-
-        // Check that the order of the tabs have not changed
-        checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
-        // Check that focus on the website does not change either
-        XCTAssert(secondWebsite.url.contains(app.textFields["url"].value! as! String), "The tab has not been dropped correctly")
-    }*/
 
     func testDragAndDropHomeTab() {
         if skipPlatform { return }

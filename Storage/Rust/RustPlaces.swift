@@ -15,10 +15,10 @@ public class RustPlaces {
     let writerQueue: DispatchQueue
     let readerQueue: DispatchQueue
 
-    var api: PlacesAPI?
+    public var api: PlacesAPI?
 
-    var writer: PlacesWriteConnection?
-    var reader: PlacesReadConnection?
+    public var writer: PlacesWriteConnection?
+    public var reader: PlacesReadConnection?
 
     public fileprivate(set) var isOpen: Bool = false
 
@@ -236,12 +236,14 @@ public class RustPlaces {
             return try connection.createFolder(parentGUID: parentGUID, title: title, position: position)
         }
     }
+    
 
     public func createSeparator(parentGUID: GUID, position: UInt32? = nil) -> Deferred<Maybe<GUID>> {
         return withWriter { connection in
             return try connection.createSeparator(parentGUID: parentGUID, position: position)
         }
     }
+
 
     @discardableResult
     public func createBookmark(parentGUID: GUID, url: String, title: String?, position: UInt32? = nil) -> Deferred<Maybe<GUID>> {
@@ -333,5 +335,52 @@ public class RustPlaces {
         }
 
         return deferred
+    }
+
+    public func getHistoryMetadataSince(since: Int64) -> Deferred<Maybe<[HistoryMetadata]>> {
+        return withReader { connection in
+            return try connection.getHistoryMetadataSince(since: since)
+        }
+    }
+
+    public func getHighlights(weights: HistoryHighlightWeights, limit: Int32) -> Deferred<Maybe<[HistoryHighlight]>> {
+        return withReader { connection in
+            return try connection.getHighlights(weights: weights, limit: limit)
+        }
+    }
+
+    public func queryHistoryMetadata(query: String, limit: Int32) -> Deferred<Maybe<[HistoryMetadata]>> {
+        return withReader { connection in
+            return try connection.queryHistoryMetadata(query: query, limit: limit)
+        }
+    }
+    
+    /**
+        Title observations must be made first for any given url. Observe one fact at a time (e.g. just the viewTime, or just the documentType).
+     */
+    public func noteHistoryMetadataObservation(key: HistoryMetadataKey, observation: HistoryMetadataObservation) -> Deferred<Maybe<Void>> {
+        return withWriter { connection in
+            if let title = observation.title {
+                return try connection.noteHistoryMetadataObservationTitle(key: key, title: title)
+            }
+            if let documentType = observation.documentType {
+                return try connection.noteHistoryMetadataObservationDocumentType(key: key, documentType: documentType)
+            }
+            if let viewTime = observation.viewTime {
+                return try connection.noteHistoryMetadataObservationViewTime(key: key, viewTime: viewTime)
+            }
+        }
+    }
+
+    public func deleteHistoryMetadataOlderThan(olderThan: Int64) -> Deferred<Maybe<Void>> {
+        return withWriter { connection in
+            return try connection.deleteHistoryMetadataOlderThan(olderThan: olderThan)
+        }
+    }
+
+    public func deleteHistoryMetadata(key: HistoryMetadataKey) -> Deferred<Maybe<Void>> {
+        return withWriter { connection in
+            return try connection.deleteHistoryMetadata(key: key)
+        }
     }
 }

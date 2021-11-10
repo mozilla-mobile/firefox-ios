@@ -85,6 +85,18 @@ class CacheClearable: Clearable {
     }
 }
 
+class SpotlightClearable: Clearable {
+    var label: String { .ClearableSpotlight }
+
+    func clear() -> Success {
+        let deferred = Success()
+        UserActivityHandler.clearSearchIndex() { _ in
+            deferred.fill(Maybe(success: ()))
+        }
+        return deferred
+    }
+}
+
 private func deleteLibraryFolderContents(_ folder: String) throws {
     let manager = FileManager.default
     let library = manager.urls(for: .libraryDirectory, in: .userDomainMask)[0]
@@ -146,7 +158,7 @@ class CookiesClearable: Clearable {
 class TrackingProtectionClearable: Clearable {
     //@TODO: re-using string because we are too late in cycle to change strings
     var label: String {
-        return Strings.SettingsTrackingProtectionSectionName
+        return .SettingsTrackingProtectionSectionName
     }
 
     func clear() -> Success {

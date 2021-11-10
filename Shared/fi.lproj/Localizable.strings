@@ -16,8 +16,14 @@
 /* About settings section title */
 "About" = "Tietoja";
 
+/* The title for the pinning a shortcut action */
+"ActivityStream.ContextMenu.AddToShortcuts" = "Lisää oikoteihin";
+
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite" = "Kiinnitä ykkössivustoihin";
+
+/* The title for removing a shortcut action */
+"ActivityStream.ContextMenu.RemoveFromShortcuts" = "Poista oikoteistä";
 
 /* The title for removing a pinned topsite action */
 "ActivityStream.ContextMenu.RemovePinTopsite" = "Poista kiinnitetty sivusto";
@@ -27,6 +33,9 @@
 
 /* The description of a highlight if it is a site the user has visited */
 "ActivityStream.Highlights.Visited" = "Vieraillut";
+
+/* A string used to signify the start of the Recently Saved section in Home Screen. */
+"ActivityStream.Library.Title" = "Äskettäin tallennettu";
 
 /* Section title label for recently bookmarked websites */
 "ActivityStream.NewRecentBookmarks.Title" = "Viimeisimmät kirjanmerkit";
@@ -42,6 +51,15 @@
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Viimeksi käydyt";
+
+/* Section title for the Recently Saved section. This shows websites that have had a save action. Right now it is just bookmarks but it could be used for other things like the reading list in the future. */
+"ActivityStream.RecentlySaved.SectionTitle" = "Äskettäin tallennettu";
+
+/* This button will open the library showing all the users bookmarks */
+"ActivityStream.RecentlySaved.ShowAll" = "Näytä kaikki";
+
+/* Section title label for Shortcuts */
+"ActivityStream.Shortcuts.SectionTitle" = "Oikotiet";
 
 /* label showing how many rows of topsites are shown. %d represents a number */
 "ActivityStream.TopSites.RowCount" = "Rivejä: %d";
@@ -652,6 +670,15 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Suodata";
 
+/* Label shown when there are no logins saved */
+"LoginsList.NoLoginsFound.Title" = "Kirjautumistietoja ei löytynyt";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "Hakuasi vastaavia tuloksia ei löytynyt.";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "Ei hakua vastaavia kirjautumistietoja";
+
 /* Title for the list of logins */
 "LoginsList.Title" = "TALLENNETUT KIRJAUTUMISTIEDOT";
 
@@ -671,6 +698,9 @@
 
 /* Toast displayed to the user after adding the item to the Top Sites. */
 "Menu.AddPin.Confirm" = "Kiinnitetty ykkössivustoihin";
+
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"Menu.AddPin.Confirm2" = "Lisättiin oikoteihin";
 
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "Lisätty lukulistaan";
@@ -743,6 +773,9 @@
 
 /* Toast displayed to the user after removing the item from the Top Sites. */
 "Menu.RemovePin.Confirm" = "Poistettu ykkössivustoista";
+
+/* Toast displayed to the user after removing the item to the Shortcuts. */
+"Menu.RemovePin.Confirm2" = "Poistettiin oikoteistä";
 
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "Välilehti lähetetty";
@@ -936,6 +969,9 @@
 
 /* Title for the Recently Closed Tabs Panel */
 "RecentlyClosedTabsPanel.Title" = "Äskettäin suljetut";
+
+/* More button text for Recently Saved items at the home page. */
+"RecentlySaved.Actions.More" = "Näytä kaikki";
 
 /* Accessibility Label for the tab toolbar Reload button */
 "Reload" = "Päivitä";
@@ -1238,6 +1274,9 @@
 /* General settings section title */
 "Settings.General.SectionName" = "Yleiset";
 
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
+"Settings.Home.Option.Shortcuts" = "Oikotiet";
+
 /* Button in settings to clear the home page. */
 "Settings.HomePage.Clear.Button" = "Tyhjennä";
 
@@ -1282,6 +1321,9 @@
 
 /* The footer for the section to customize top sites in the new tab settings page. */
 "Settings.NewTab.Option.CustomizeFooter" = "Useimmin vierailemasi sivustot";
+
+/* The footer for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeFooter2" = "Tallentamasi tai vierailemasi sivustot";
 
 /* The title for the section to customize top sites in the new tab settings page. */
 "Settings.NewTab.Option.CustomizeTitle" = "Mukauta Firefoxin aloitussivua";
@@ -1607,6 +1649,9 @@
 
 /* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.CloseTab.KeyCodeTitle" = "Sulje valittu välilehti";
+
+/* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
+"TabTray.InactiveTabs.SectionTitle" = "Passiiviset välilehdet";
 
 /* The section header for tabs opened last week */
 "TabTray.LastWeek.Header" = "Viime viikolla";

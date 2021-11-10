@@ -34,7 +34,7 @@
 			<string>org.mozilla.Client</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>firefox</string>
+				<string>$(MOZ_PUBLIC_URL_SCHEME)</string>
 				<string>$(MOZ_INTERNAL_URL_SCHEME)</string>
 				<string>http</string>
 				<string>https</string>
@@ -73,8 +73,10 @@
 	<true/>
 	<key>MozDevelopmentTeam</key>
 	<string>$(DEVELOPMENT_TEAM)</string>
-	<key>MozWhatsNewTopic</key>
-	<string>whats-new-ios-18</string>
+	<key>MozInternalURLScheme</key>
+	<string>$(MOZ_INTERNAL_URL_SCHEME)</string>
+	<key>MozPublicURLScheme</key>
+	<string>$(MOZ_PUBLIC_URL_SCHEME)</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
@@ -100,6 +102,8 @@
 	<string>$(POCKET_API_KEY)</string>
 	<key>SentryDSN</key>
 	<string>$(SENTRY_DSN)</string>
+	<key>SentryNightlyDSN</key>
+	<string>$(SENTRY_NIGHTLY_DSN)</string>
 	<key>NimbusURL</key>
 	<string>$(NIMBUS_URL)</string>
 	<key>UIAppFonts</key>

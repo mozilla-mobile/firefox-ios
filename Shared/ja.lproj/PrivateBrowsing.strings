@@ -5,7 +5,7 @@
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "新規プライベートタブで開く";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "履歴や Cookie は保存しません。ブックマークは保存できます。";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "履歴や Cookie を保存しません。ブックマークは保存できます。";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "詳しくはこちら";

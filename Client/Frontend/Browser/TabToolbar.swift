@@ -12,10 +12,11 @@ protocol TabToolbarProtocol: AnyObject {
     var tabsButton: TabsButton { get }
     var appMenuButton: ToolbarButton { get }
     var bookmarksButton: ToolbarButton { get }
+    var homeButton: ToolbarButton { get }
     var forwardButton: ToolbarButton { get }
     var backButton: ToolbarButton { get }
     var multiStateButton: ToolbarButton { get }
-    var actionButtons: [Themeable & UIButton] { get }
+    var actionButtons: [NotificationThemeable & UIButton] { get }
 
     func updateBackStatus(_ canGoBack: Bool)
     func updateForwardStatus(_ canGoForward: Bool)
@@ -34,6 +35,7 @@ protocol TabToolbarDelegate: AnyObject {
     func tabToolbarDidPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidLongPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressStop(_ tabToolbar: TabToolbarProtocol, button: UIButton)
+    func tabToolbarDidPressHome(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressBookmarks(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
@@ -46,7 +48,7 @@ enum MiddleButtonState {
     case reload
     case stop
     case search
-    case newTab
+    case home
 }
 
 @objcMembers
@@ -56,29 +58,34 @@ open class TabToolbarHelper: NSObject {
     let ImageStop = UIImage.templateImageNamed("nav-stop")
     let ImageSearch = UIImage.templateImageNamed("search")
     let ImageNewTab = UIImage.templateImageNamed("nav-add")
+    let ImageHome = UIImage.templateImageNamed("menu-Home")
     
     func setMiddleButtonState(_ state: MiddleButtonState) {
-        middleButtonState = state
-        switch state {
-            case .reload:
-                toolbar.multiStateButton.setImage(ImageReload, for: .normal)
-                toolbar.multiStateButton.accessibilityLabel = .TabToolbarReloadAccessibilityLabel
-            case .stop:
-                toolbar.multiStateButton.setImage(ImageStop, for: .normal)
-                toolbar.multiStateButton.accessibilityLabel = .TabToolbarStopAccessibilityLabel
-            case .search:
-                toolbar.multiStateButton.setImage(ImageSearch, for: .normal)
-                toolbar.multiStateButton.accessibilityLabel = .TabToolbarSearchAccessibilityLabel
-            case .newTab:
-                toolbar.multiStateButton.setImage(ImageNewTab, for: .normal)
-                toolbar.multiStateButton.accessibilityLabel = .TabToolbarNewTabAccessibilityLabel
+        let device = UIDevice.current.userInterfaceIdiom
+        switch (state, device) {
+        case (.search, _):
+            middleButtonState = .search
+            toolbar.multiStateButton.setImage(ImageSearch, for: .normal)
+            toolbar.multiStateButton.accessibilityLabel = .TabToolbarSearchAccessibilityLabel
+        case (.reload, .pad):
+            middleButtonState = .reload
+            toolbar.multiStateButton.setImage(ImageReload, for: .normal)
+            toolbar.multiStateButton.accessibilityLabel = .TabToolbarReloadAccessibilityLabel
+        case (.stop, .pad):
+            middleButtonState = .stop
+            toolbar.multiStateButton.setImage(ImageStop, for: .normal)
+            toolbar.multiStateButton.accessibilityLabel = .TabToolbarStopAccessibilityLabel
+        default:
+            toolbar.multiStateButton.setImage(ImageHome, for: .normal)
+            toolbar.multiStateButton.accessibilityLabel = .TabToolbarSearchAccessibilityLabel
+            middleButtonState = .home
         }
     }
     
     // Default state as reload
-    var middleButtonState: MiddleButtonState = .reload
+    var middleButtonState: MiddleButtonState = .home
 
-    fileprivate func setTheme(forButtons buttons: [Themeable]) {
+    fileprivate func setTheme(forButtons buttons: [NotificationThemeable]) {
         buttons.forEach { $0.applyTheme() }
     }
 
@@ -98,10 +105,16 @@ open class TabToolbarHelper: NSObject {
         toolbar.forwardButton.addGestureRecognizer(longPressGestureForwardButton)
         toolbar.forwardButton.addTarget(self, action: #selector(didClickForward), for: .touchUpInside)
 
-        toolbar.multiStateButton.setImage(UIImage.templateImageNamed("nav-refresh"), for: .normal)
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            toolbar.multiStateButton.setImage(UIImage.templateImageNamed("menu-Home"), for: .normal)
+        } else {
+            toolbar.multiStateButton.setImage(UIImage.templateImageNamed("nav-refresh"), for: .normal)
+        }
         toolbar.multiStateButton.accessibilityLabel = .TabToolbarReloadAccessibilityLabel
+        
         let longPressMultiStateButton = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressMultiStateButton))
         toolbar.multiStateButton.addGestureRecognizer(longPressMultiStateButton)
+
         toolbar.multiStateButton.addTarget(self, action: #selector(didPressMultiStateButton), for: .touchUpInside)
 
         toolbar.tabsButton.addTarget(self, action: #selector(didClickTabs), for: .touchUpInside)
@@ -109,19 +122,25 @@ open class TabToolbarHelper: NSObject {
         toolbar.tabsButton.addGestureRecognizer(longPressGestureTabsButton)
 
         toolbar.addNewTabButton.setImage(UIImage.templateImageNamed("menu-NewTab"), for: .normal)
-        toolbar.addNewTabButton.accessibilityLabel = Strings.AddTabAccessibilityLabel
+        toolbar.addNewTabButton.accessibilityLabel = .AddTabAccessibilityLabel
         toolbar.addNewTabButton.addTarget(self, action: #selector(didClickAddNewTab), for: .touchUpInside)
         toolbar.addNewTabButton.accessibilityIdentifier = "TabToolbar.addNewTabButton"
         
         toolbar.appMenuButton.contentMode = .center
         toolbar.appMenuButton.setImage(UIImage.templateImageNamed("nav-menu"), for: .normal)
-        toolbar.appMenuButton.accessibilityLabel = Strings.AppMenuButtonAccessibilityLabel
+        toolbar.appMenuButton.accessibilityLabel = .AppMenuButtonAccessibilityLabel
         toolbar.appMenuButton.addTarget(self, action: #selector(didClickMenu), for: .touchUpInside)
-        toolbar.appMenuButton.accessibilityIdentifier = "TabToolbar.menuButton"
+        toolbar.appMenuButton.accessibilityIdentifier = AccessibilityIdentifiers.BottomToolbar.settingsMenuButton
+
+        toolbar.homeButton.contentMode = .center
+        toolbar.homeButton.setImage(UIImage.templateImageNamed("menu-Home"), for: .normal)
+        toolbar.homeButton.accessibilityLabel = .AppMenuButtonAccessibilityLabel
+        toolbar.homeButton.addTarget(self, action: #selector(didClickHome), for: .touchUpInside)
+        toolbar.homeButton.accessibilityIdentifier = "TabToolbar.homeButton"
 
         toolbar.bookmarksButton.contentMode = .center
         toolbar.bookmarksButton.setImage(UIImage.templateImageNamed("menu-panel-Bookmarks"), for: .normal)
-        toolbar.bookmarksButton.accessibilityLabel = Strings.AppMenuButtonAccessibilityLabel
+        toolbar.bookmarksButton.accessibilityLabel = .AppMenuButtonAccessibilityLabel
         toolbar.bookmarksButton.addTarget(self, action: #selector(didClickLibrary), for: .touchUpInside)
         toolbar.bookmarksButton.accessibilityIdentifier = "TabToolbar.libraryButton"
         setTheme(forButtons: toolbar.actionButtons)
@@ -161,6 +180,10 @@ open class TabToolbarHelper: NSObject {
         toolbar.tabToolbarDelegate?.tabToolbarDidPressMenu(toolbar, button: toolbar.appMenuButton)
     }
 
+    func didClickHome() {
+        toolbar.tabToolbarDelegate?.tabToolbarDidPressHome(toolbar, button: toolbar.appMenuButton)
+    }
+
     func didClickLibrary() {
         toolbar.tabToolbarDelegate?.tabToolbarDidPressBookmarks(toolbar, button: toolbar.appMenuButton)
     }
@@ -172,21 +195,21 @@ open class TabToolbarHelper: NSObject {
 
     func didPressMultiStateButton() {
         switch middleButtonState {
-        case .reload:
-            toolbar.tabToolbarDelegate?.tabToolbarDidPressReload(toolbar, button: toolbar.multiStateButton)
+        case .home:
+            toolbar.tabToolbarDelegate?.tabToolbarDidPressHome(toolbar, button: toolbar.multiStateButton)
         case .search:
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .startSearchButton)
             toolbar.tabToolbarDelegate?.tabToolbarDidPressSearch(toolbar, button: toolbar.multiStateButton)
-        case .newTab:
-            toolbar.tabToolbarDelegate?.tabToolbarDidPressAddNewTab(toolbar, button: toolbar.addNewTabButton)
         case .stop:
             toolbar.tabToolbarDelegate?.tabToolbarDidPressStop(toolbar, button: toolbar.multiStateButton)
+        case .reload:
+            toolbar.tabToolbarDelegate?.tabToolbarDidPressReload(toolbar, button: toolbar.multiStateButton)
         }
     }
-
+    
     func didLongPressMultiStateButton(_ recognizer: UILongPressGestureRecognizer) {
         switch middleButtonState {
-        case .search, .newTab:
+        case .search:
             return
         default:
             if recognizer.state == .began {
@@ -241,7 +264,7 @@ class ToolbarButton: UIButton {
     }
 }
 
-extension ToolbarButton: Themeable {
+extension ToolbarButton: NotificationThemeable {
     func applyTheme() {
         selectedTintColor = UIColor.theme.toolbarButton.selectedTint
         disabledTintColor = UIColor.theme.toolbarButton.disabledTint
@@ -261,7 +284,7 @@ class TabToolbar: UIView {
     let forwardButton = ToolbarButton()
     let backButton = ToolbarButton()
     let multiStateButton = ToolbarButton()
-    let actionButtons: [Themeable & UIButton]
+    let actionButtons: [NotificationThemeable & UIButton]
 
     fileprivate let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge", backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
     fileprivate let appMenuBadge = BadgeWithBackdrop(imageName: "menuBadge")
@@ -305,7 +328,7 @@ class TabToolbar: UIView {
         multiStateButton.accessibilityIdentifier = "TabToolbar.multiStateButton"
         tabsButton.accessibilityIdentifier = "TabToolbar.tabsButton"
         addNewTabButton.accessibilityIdentifier = "TabToolbar.addNewTabButton"
-        appMenuButton.accessibilityIdentifier = "TabToolbar.menuButton"
+        appMenuButton.accessibilityIdentifier = AccessibilityIdentifiers.BottomToolbar.settingsMenuButton
         accessibilityNavigationStyle = .combined
         accessibilityLabel = .TabToolbarNavigationToolbarAccessibilityLabel
     }
@@ -334,6 +357,8 @@ class TabToolbar: UIView {
 }
 
 extension TabToolbar: TabToolbarProtocol {
+    var homeButton: ToolbarButton { multiStateButton }
+
     func privateModeBadge(visible: Bool) {
         privateModeBadge.show(visible)
     }
@@ -365,7 +390,7 @@ extension TabToolbar: TabToolbarProtocol {
     }
 }
 
-extension TabToolbar: Themeable, PrivateModeUI {
+extension TabToolbar: NotificationThemeable, PrivateModeUI {
     func applyTheme() {
         backgroundColor = UIColor.theme.browser.background
         helper?.setTheme(forButtons: actionButtons)

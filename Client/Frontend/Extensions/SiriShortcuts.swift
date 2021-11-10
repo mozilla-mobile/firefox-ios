@@ -7,7 +7,6 @@ import Intents
 import IntentsUI
 import Shared
 
-@available(iOS 12.0, *)
 class SiriShortcuts {
     enum activityType: String {
         case openURL = "org.mozilla.ios.Firefox.newTab"
@@ -22,9 +21,9 @@ class SiriShortcuts {
 
     private var openUrlActivity: NSUserActivity? = {
         let activity = NSUserActivity(activityType: activityType.openURL.rawValue)
-        activity.title = Strings.SettingsSiriOpenURL
+        activity.title = .SettingsSiriOpenURL
         activity.isEligibleForPrediction = true
-        activity.suggestedInvocationPhrase = Strings.SettingsSiriOpenURL
+        activity.suggestedInvocationPhrase = .SettingsSiriOpenURL
         activity.persistentIdentifier = NSUserActivityPersistentIdentifier(activityType.openURL.rawValue)
         return activity
     }()

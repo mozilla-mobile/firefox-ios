@@ -23,7 +23,7 @@ open class ClosedTabsStore {
     open func addTab(_ url: URL, title: String?, faviconURL: String?) {
         let recentlyClosedTab = ClosedTab(url: url, title: title ?? "", faviconURL: faviconURL ?? "")
         tabs.insert(recentlyClosedTab, at: 0)
-        if tabs.count > 5 {
+        if tabs.count > 10 {
             tabs.removeLast()
         }
         let archivedTabsArray = NSKeyedArchiver.archivedData(withRootObject: tabs)

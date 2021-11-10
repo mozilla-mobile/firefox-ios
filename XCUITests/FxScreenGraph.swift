@@ -69,9 +69,6 @@ let allSettingsScreens = [
     NewTabSettings,
     OpenWithSettings,
     DisplaySettings,
-
-    LoginsSettings,
-    PasscodeSettings,
     ClearPrivateDataSettings,
     TrackingProtectionSettings,
 ]
@@ -338,7 +335,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             }
         }
         makeURLBarAvailable(screenState)
-        screenState.tap(app.buttons["TabToolbar.menuButton"], to: BrowserTabMenu)
+        screenState.tap(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], to: BrowserTabMenu)
 
         if isTablet {
             screenState.tap(app.buttons["Private Mode"], forAction: Action.TogglePrivateModeFromTabBarNewTab) { userState in
@@ -590,7 +587,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(table.cells["OpenWith.Setting"], to: OpenWithSettings)
         screenState.tap(table.cells["DisplayThemeOption"], to: DisplaySettings)
         screenState.tap(table.cells["SiriSettings"], to: SiriSettings)
-        screenState.tap(table.cells["TouchIDPasscode"], to: PasscodeSettings)
         screenState.tap(table.cells["Logins"], to: LoginsSettings, if: "passcode == nil")
         screenState.tap(table.cells["Logins"], to: LockedLoginsSettings, if: "passcode != nil")
         screenState.tap(table.cells["ClearPrivateData"], to: ClearPrivateDataSettings)
@@ -910,7 +906,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             if isTablet {
                 userState.numTabs = Int(app.collectionViews["Top Tabs View"].cells.count)
             } else {
-                userState.numTabs = Int(app.tables.cells.count)
+                userState.numTabs = Int(app.otherElements["Tabs Tray"].cells.count)
             }
         }
     }
@@ -928,7 +924,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(CloseTabMenu) { screenState in
-        screenState.tap(app.sheets.buttons["TabTrayController.deleteButton.closeAll"], forAction: Action.AcceptRemovingAllTabs, transitionTo: HomePanelsScreen)
+        screenState.tap(app.sheets.buttons[AccessibilityIdentifiers.TabTray.deleteCloseAllButton], forAction: Action.AcceptRemovingAllTabs, transitionTo: HomePanelsScreen)
         screenState.backAction = cancelBackAction
     }
 
@@ -941,7 +937,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     func makeToolBarAvailable(_ screenState: MMScreenStateNode<FxUserState>) {
-        screenState.tap(app.buttons["TabToolbar.menuButton"], to: BrowserTabMenu)
+        screenState.tap(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], to: BrowserTabMenu)
         if isTablet {
             screenState.tap(app.buttons["TopTabsViewController.tabsButton"], to: TabTray)
         } else {
@@ -958,9 +954,12 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(BrowserTab) { screenState in
         makeURLBarAvailable(screenState)
         screenState.tap(app.buttons["TabLocationView.pageOptionsButton"], to: PageOptionsMenu)
-        screenState.tap(app.buttons["TabToolbar.menuButton"], to: BrowserTabMenu)
+        screenState.tap(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], to: BrowserTabMenu)
 
         screenState.tap(app.buttons["TabLocationView.trackingProtectionButton"], to: TrackingProtectionContextMenuDetails)
+
+        screenState.tap(app.buttons["TabToolbar.homeButton"], forAction: Action.GoToHomePage) { userState in
+        }
 
         makeToolBarAvailable(screenState)
         let link = app.webViews.element(boundBy: 0).links.element(boundBy: 0)
@@ -970,11 +969,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.press(image, to: WebImageContextMenu)
         
         if !isTablet {
-            let reloadButton = app.buttons["TabToolbar.multiStateButton"]
+            let reloadButton = app.buttons["TabLocationView.reloadButton"]
         screenState.press(reloadButton, to: ReloadLongPressMenu)
         screenState.tap(reloadButton, forAction: Action.ReloadURL, transitionTo: WebPageLoading) { _ in }
         } else {
-            let reloadButton = app.buttons["Reload"]
+            let reloadButton = app.buttons["TabLocationView.reloadButton"]
         screenState.press(reloadButton, to: ReloadLongPressMenu)
         screenState.tap(reloadButton, forAction: Action.ReloadURL, transitionTo: WebPageLoading) { _ in }
         }
@@ -1079,9 +1078,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             userState.nightMode = !userState.nightMode
         }
 
-        screenState.tap(app.tables.cells["menu-Home"], forAction: Action.GoToHomePage) { userState in
-        }
-
         screenState.tap(app.tables.cells["whatsnew"], forAction: Action.OpenWhatsNewPage) { userState in
         }
 
@@ -1146,7 +1142,7 @@ extension MMNavigator where T == FxUserState {
             self.goto(PageOptionsMenu)
             app.tables["Context Menu"].cells[view.rawValue].tap()
         } else if BrowserMenuOptions.contains(view) {
-            waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
+            waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 5)
             self.goto(BrowserTabMenu)
             app.tables["Context Menu"].cells[view.rawValue].tap()
         }

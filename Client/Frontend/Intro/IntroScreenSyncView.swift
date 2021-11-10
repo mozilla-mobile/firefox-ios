@@ -54,7 +54,7 @@ class IntroScreenSyncView: UIView, CardTheme {
     }()
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = Strings.CardTitleFxASyncDevices
+        label.text = .CardTitleFxASyncDevices
         label.textColor = fxTextThemeColour
         label.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
         label.textAlignment = .center
@@ -63,7 +63,7 @@ class IntroScreenSyncView: UIView, CardTheme {
     }()
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
-        label.text = Strings.CardDescriptionFxASyncDevices
+        label.text = .CardDescriptionFxASyncDevices
         label.textColor = fxTextThemeColour
         label.font = UIFont.systemFont(ofSize: 22, weight: .regular)
         label.textAlignment = .center
@@ -75,7 +75,7 @@ class IntroScreenSyncView: UIView, CardTheme {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         button.layer.cornerRadius = 10
         button.backgroundColor = UIColor.Photon.Blue50
-        button.setTitle(Strings.IntroSignUpButtonTitle, for: .normal)
+        button.setTitle(.IntroSignUpButtonTitle, for: .normal)
         button.accessibilityIdentifier = "signUpButtonSyncView"
         return button
     }()
@@ -84,7 +84,7 @@ class IntroScreenSyncView: UIView, CardTheme {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         button.backgroundColor = .clear
         button.setTitleColor(UIColor.Photon.Blue50, for: .normal)
-        button.setTitle(Strings.StartBrowsingButtonTitle, for: .normal)
+        button.setTitle(.StartBrowsingButtonTitle, for: .normal)
         button.titleLabel?.textAlignment = .center
         button.accessibilityIdentifier = "startBrowsingButtonSyncView"
         return button
@@ -181,13 +181,13 @@ class IntroScreenSyncView: UIView, CardTheme {
     // MARK: Button Actions
     @objc private func signUpAction() {
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .dismissedOnboardingSignUp, extras: ["slide-num": 1])
-        print("Sign up")
+        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .syncScreenSignUp)
         signUp?()
     }
     
     @objc private func startBrowsingAction() {
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .dismissedOnboarding, extras: ["slide-num": 1])
-        print("Start Browsing")
+        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .syncScreenStartBrowse)
         startBrowsing?()
     }
 }

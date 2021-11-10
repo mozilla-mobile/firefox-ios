@@ -5,8 +5,8 @@
 import Foundation
 import Shared
 import WebKit
-import SwiftyJSON
 
+private let log = Logger.browserLogger
 let ReaderModeProfileKeyStyle = "readermode.style"
 
 enum ReaderModeMessageType: String {
@@ -36,7 +36,7 @@ enum ReaderModeTheme: String {
         // Get current Firefox theme (Dark vs Normal)
         // Normal means light theme. This is the overall theme used
         // by Firefox iOS app
-        let appWideTheme = ThemeManager.instance.currentName
+        let appWideTheme = LegacyThemeManager.instance.currentName
         // We check for 3 basic themes we have Light / Dark / Sepia
         // Theme: Dark - app-wide dark overrides all
         if appWideTheme == .dark {
@@ -152,7 +152,7 @@ struct ReaderModeStyle {
 
     /// Encode the style to a JSON dictionary that can be passed to ReaderMode.js
     func encode() -> String {
-        return JSON(["theme": theme.rawValue, "fontType": fontType.rawValue, "fontSize": fontSize.rawValue]).stringify() ?? ""
+        return encodeAsDictionary().asString ?? ""
     }
 
     /// Encode the style to a dictionary that can be stored in the profile
@@ -199,8 +199,10 @@ struct ReadabilityResult {
     var domain = ""
     var url = ""
     var content = ""
+    var textContent = ""
     var title = ""
     var credits = ""
+    var excerpt = ""
 
     init?(object: AnyObject?) {
         if let dict = object as? NSDictionary {
@@ -215,6 +217,12 @@ struct ReadabilityResult {
             if let content = dict["content"] as? String {
                 self.content = content
             }
+            if let textContent = dict["textContent"] as? String {
+                self.textContent = textContent
+            }
+            if let excerpt = dict["excerpt"] as? String {
+                self.excerpt = excerpt
+            }
             if let title = dict["title"] as? String {
                 self.title = title
             }
@@ -228,12 +236,16 @@ struct ReadabilityResult {
 
     /// Initialize from a JSON encoded string
     init?(string: String) {
-        let object = JSON(parseJSON: string)
-        let domain = object["domain"].string
-        let url = object["url"].string
-        let content = object["content"].string
-        let title = object["title"].string
-        let credits = object["credits"].string
+        guard let data = string.data(using: .utf8),
+              let object = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [String: String] else { return nil }
+        
+        let domain = object["domain"]
+        let url = object["url"]
+        let content = object["content"]
+        let textContent = object["textContent"]
+        let excerpt = object["excerpt"]
+        let title = object["title"]
+        let credits = object["credits"]
 
         if domain == nil || url == nil || content == nil || title == nil || credits == nil {
             return nil
@@ -244,17 +256,19 @@ struct ReadabilityResult {
         self.content = content!
         self.title = title!
         self.credits = credits!
+        self.textContent = textContent ?? ""
+        self.excerpt = excerpt ?? ""
     }
 
     /// Encode to a dictionary, which can then for example be json encoded
     func encode() -> [String: Any] {
-        return ["domain": domain, "url": url, "content": content, "title": title, "credits": credits]
+        return ["domain": domain, "url": url, "content": content, "title": title, "credits": credits, "textContent": textContent, "excerpt": excerpt]
     }
 
     /// Encode to a JSON encoded string
     func encode() -> String {
         let dict: [String: Any] = self.encode()
-        return JSON(dict).stringify()!
+        return dict.asString!
     }
 }
 
@@ -307,6 +321,8 @@ class ReaderMode: TabContentScript {
         guard let tab = tab else {
             return
         }
+        log.info("ReaderMode: Readability result available!")
+        tab.readabilityResult = readabilityResult
         delegate?.readerMode(self, didParseReadabilityResult: readabilityResult, forTab: tab)
     }
 

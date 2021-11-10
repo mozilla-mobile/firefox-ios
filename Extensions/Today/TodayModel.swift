@@ -3,16 +3,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Shared
 
 struct TodayModel {
     static var copiedURL: URL?
     static var searchedText: String?
 
     var scheme: String {
-        guard let string = Bundle.main.object(forInfoDictionaryKey: "MozInternalURLScheme") as? String else {
-            // Something went wrong/weird, but we should fallback to the public one.
-            return "firefox"
-        }
-        return string
+        return URL.mozInternalScheme
     }
 }

@@ -40,6 +40,12 @@
 /* The description of a highlight if it is a site the user has visited */
 "ActivityStream.Highlights.Visited" = "Այցելած";
 
+/* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
+"ActivityStream.JumpBackIn.SectionTitle" = "Վերադառնալ";
+
+/* A string used to signify the start of the Recently Saved section in Home Screen. */
+"ActivityStream.Library.Title" = "Վերջերս պահպանված";
+
 /* Section title label for recently bookmarked websites */
 "ActivityStream.NewRecentBookmarks.Title" = "Վերջին էջանիշեր";
 
@@ -57,6 +63,12 @@
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Վերջերս այցելված";
+
+/* Section title for the Recently Saved section. This shows websites that have had a save action. Right now it is just bookmarks but it could be used for other things like the reading list in the future. */
+"ActivityStream.RecentlySaved.SectionTitle" = "Վերջերս պահպանված";
+
+/* This button will open the library showing all the users bookmarks */
+"ActivityStream.RecentlySaved.ShowAll" = "Ցուցադրել բոլորը";
 
 /* Section title label for Shortcuts */
 "ActivityStream.Shortcuts.SectionTitle" = "Դյուրանցումներ";
@@ -538,6 +550,9 @@
 /* Title for the Synced Tabs Cell in the History Panel */
 "HistoryPanel.SyncedTabsCell.Title" = "Համաժամեցված սարքեր";
 
+/* Accessibility label for the tab toolbar indicating the Home button. */
+"Home" = "Տուն";
+
 /* Button cancelling changes setting the home page for the first time. */
 "HomePage.Set.Dialog.Cancel" = "Չեղարկել";
 
@@ -682,6 +697,27 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Զտիչ";
 
+/* Label shown when there are no logins to list */
+"LoginsList.NoLoginsFound.Description" = "Պահված մուտքագրումները կցուցադրվեն այստեղ: Եթե Firefox-ում մուտքագրումները պահել եք այլ սարքում, ապա մուտք գործեք ձեր Firefox հաշիվ:";
+
+/* Label shown when there are no logins saved */
+"LoginsList.NoLoginsFound.Title" = "Մուտքագրումներ չկան";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "Որոնման հետ համընկնում չկա։";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "Համապատասխան մուտքագրում չկա";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "Չեղարկել";
+
+/* Placeholder text for search field */
+"LoginsList.Search.Placeholder" = "Որոնել մուտքագրումներ";
+
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "Ընտրեք գաղտնաբառ լրացնելու համար";
+
 /* Title for the list of logins */
 "LoginsList.Title" = "ՊԱՀՊԱՆՎԱԾ ՄՈՒՏՔԱՆՈՒՆՆԵՐ";
 
@@ -794,6 +830,9 @@
 
 /* Title on tracking protection menu for blocked items. */
 "Menu.TrackingProtection.BlockedTitle" = "Արգելափակված է";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"Menu.TrackingProtection.Details.Verifier" = "Հաստատել է %S-ի կողմից";
 
 /* Message in menu when no trackers blocked. */
 "Menu.TrackingProtection.NoTrackersBlockedTitle" = "Firefox-ը այս էջում հայտնի հետագծիչներ չի հայտնաբերել։";
@@ -964,6 +1003,12 @@
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Գաղտնիության Դրույթներ";
 
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "Կապակցումն անվտանգ չէ";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "Կապակցումը ապահով է";
+
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Որոգ որոնման որոնիչներ";
 
@@ -981,6 +1026,9 @@
 
 /* Title for the Recently Closed Tabs Panel */
 "RecentlyClosedTabsPanel.Title" = "Վերջերս փակված";
+
+/* More button text for Recently Saved items at the home page. */
+"RecentlySaved.Actions.More" = "Ցուցադրել բոլորը";
 
 /* Accessibility Label for the tab toolbar Reload button */
 "Reload" = "Կրկին բեռնել";
@@ -1191,6 +1239,9 @@
 
 /* Title displayed in header of the setting panel. */
 "Settings.ClearPrivateData.Title" = "Մաքրել անձնական տվյալները";
+
+/* Button in Data Management that clears private data for the selected items. Parameter is the number of items to be cleared */
+"Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "Մաքրել տարրերը. %1$@";
 
 /* Copy app version alert shown in settings. */
 "Settings.CopyAppVersion.Title" = "Պատճենվել է սեղմատախտակին";
@@ -1553,6 +1604,9 @@
 /* Description of the confirmation dialog shown when a user tries to clear their private data. */
 "Settings.WebsiteData.ConfirmPrompt" = "Այս գործողությունը կմաքրի ձեր կայքի բոլոր տվյալները։ Այն չի կարող հետարկվել։";
 
+/* Description of the confirmation dialog shown when a user tries to clear some of their private data. */
+"Settings.WebsiteData.SelectedConfirmPrompt" = "Այս գործողությունը կմաքրի ընտրված միույթները։ Այն չի կարող հետարկվել։";
+
 /* Title displayed in header of the Data Management panel. */
 "Settings.WebsiteData.Title" = "Կայքի տվյալներ";
 
@@ -1689,6 +1743,9 @@
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "Ներկայումս ընտրված ներդիրը:";
 
+/* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
+"TabTray.InactiveTabs.SectionTitle" = "Ոչ ակտիվ ներդիրներ";
+
 /* The section header for tabs opened last week */
 "TabTray.LastWeek.Header" = "Վերջին շաբաթում";
 
@@ -1706,6 +1763,12 @@
 
 /* The title for the tab tray in private mode */
 "TabTray.PrivateTitle" = "Մասնավոր ներդիրներ";
+
+/* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
+"TabTray.RecentlyClosed.Description" = "Ներդիրներն այստեղ հասանելի են 30 օրվա ընթացքում: Այդ ժամանակից հետո ներդիրներ ինքնաշխատ կփակվեն:";
+
+/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
+"TabTray.RecentlyClosed.SectionTitle" = "Վերջին փակվածը";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "Մասնավոր";

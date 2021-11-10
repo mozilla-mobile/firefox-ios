@@ -44,7 +44,7 @@ class TabTrayViewController: UIViewController {
     }()
 
     lazy var syncTabButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(title: Strings.FxASyncNow,
+        let button = UIBarButtonItem(title: .FxASyncNow,
                                      style: .plain,
                                      target: self,
                                      action: #selector(didTapSyncTabs))
@@ -55,9 +55,9 @@ class TabTrayViewController: UIViewController {
     
     lazy var syncLoadingView: UIStackView = {
         let syncingLabel = UILabel()
-        syncingLabel.text = Strings.SyncingMessageWithEllipsis
+        syncingLabel.text = .SyncingMessageWithEllipsis
         
-        let activityIndicator = UIActivityIndicatorView(style: .gray)
+        let activityIndicator = UIActivityIndicatorView(style: .medium)
         activityIndicator.color = .systemGray
         activityIndicator.startAnimating()
         
@@ -85,7 +85,7 @@ class TabTrayViewController: UIViewController {
         label.font = TabsButtonUX.TitleFont
         label.layer.cornerRadius = TabsButtonUX.CornerRadius
         label.textAlignment = .center
-        label.text = (viewModel.tabManager.normalTabs.count < 100) ? viewModel.tabManager.normalTabs.count.description : "\u{221E}"
+        label.text = viewModel.normalTabsCount
         return label
     }()
 
@@ -99,7 +99,7 @@ class TabTrayViewController: UIViewController {
 
     lazy var navigationMenu: UISegmentedControl = {
         var navigationMenu: UISegmentedControl
-        if UIDevice.current.userInterfaceIdiom == .pad {
+        if shouldUseiPadSetup {
             navigationMenu = iPadNavigationMenuIdentifiers
         } else {
             navigationMenu = iPhoneNavigationMenuIdentifiers
@@ -112,9 +112,9 @@ class TabTrayViewController: UIViewController {
     }()
 
     lazy var iPadNavigationMenuIdentifiers: UISegmentedControl = {
-        return UISegmentedControl(items: [Strings.TabTraySegmentedControlTitlesTabs,
-                                          Strings.TabTraySegmentedControlTitlesPrivateTabs,
-                                          Strings.TabTraySegmentedControlTitlesSyncedTabs])
+        return UISegmentedControl(items: [String.TabTraySegmentedControlTitlesTabs,
+                                          String.TabTraySegmentedControlTitlesPrivateTabs,
+                                          String.TabTraySegmentedControlTitlesSyncedTabs])
     }()
 
     lazy var iPhoneNavigationMenuIdentifiers: UISegmentedControl = {
@@ -128,7 +128,7 @@ class TabTrayViewController: UIViewController {
         let toolbar = UIToolbar()
         toolbar.delegate = self
         toolbar.setItems([UIBarButtonItem(customView: navigationMenu)], animated: false)
-
+        toolbar.isTranslucent = false
         return toolbar
     }()
 
@@ -136,23 +136,15 @@ class TabTrayViewController: UIViewController {
         return .lightContent
     }
 
-    var onViewDismissed: (() -> Void)? = nil
-
     // Initializers
-    init(tabTrayDelegate: TabTrayDelegate? = nil, profile: Profile, showChronTabs: Bool = false) {
-        self.viewModel = TabTrayViewModel(tabTrayDelegate: tabTrayDelegate, profile: profile, showChronTabs: showChronTabs)
+    init(tabTrayDelegate: TabTrayDelegate? = nil, profile: Profile, showChronTabs: Bool = false, tabToFocus: Tab? = nil) {
+        self.viewModel = TabTrayViewModel(tabTrayDelegate: tabTrayDelegate, profile: profile, showChronTabs: showChronTabs, tabToFocus: tabToFocus)
 
         super.init(nibName: nil, bundle: nil)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        onViewDismissed?()
-        onViewDismissed = nil
     }
 
     deinit {
@@ -165,12 +157,13 @@ class TabTrayViewController: UIViewController {
         viewSetup()
         applyTheme()
         setupNotifications()
+        updatePrivateUIState()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        if UIDevice.current.userInterfaceIdiom == .pad {
+        if shouldUseiPadSetup {
             navigationController?.isToolbarHidden = true
         } else {
             navigationController?.isToolbarHidden = false
@@ -185,16 +178,18 @@ class TabTrayViewController: UIViewController {
            let window = appWindow as UIWindow? {
             window.backgroundColor = .black
         }
-
-        navigationController?.navigationBar.shadowImage = UIImage()
-
-        if UIDevice.current.userInterfaceIdiom == .pad {
+        
+        if shouldUseiPadSetup {
             iPadViewSetup()
         } else {
             iPhoneViewSetup()
         }
 
         showPanel(viewModel.tabTrayView)
+    }
+    
+    func updatePrivateUIState() {
+        UserDefaults.standard.set(viewModel.tabManager.selectedTab?.isPrivate ?? false, forKey: "wasLastSessionPrivate")
     }
 
     fileprivate func iPadViewSetup() {
@@ -225,10 +220,12 @@ class TabTrayViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .DisplayThemeChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .ProfileDidStartSyncing, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .ProfileDidFinishSyncing, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .TabClosed, object: nil)
     }
 
     fileprivate func updateTitle() {
-        if let newTitle = viewModel.navTitle(for: navigationMenu.selectedSegmentIndex) {
+        if let newTitle = viewModel.navTitle(for: navigationMenu.selectedSegmentIndex,
+                                             foriPhone: !shouldUseiPadSetup) {
             navigationItem.title  = newTitle
         }
     }
@@ -258,6 +255,7 @@ class TabTrayViewController: UIViewController {
         }
         updateToolbarItems(forSyncTabs: viewModel.profile.hasSyncableAccount())
         viewModel.tabTrayView.didTogglePrivateMode(privateMode)
+        updatePrivateUIState()
     }
 
     fileprivate func showPanel(_ panel: UIViewController) {
@@ -265,7 +263,7 @@ class TabTrayViewController: UIViewController {
         panel.beginAppearanceTransition(true, animated: true)
         view.addSubview(panel.view)
         view.bringSubviewToFront(navigationToolbar)
-        let topEdgeInset = UIDevice.current.userInterfaceIdiom == .pad ? 0 : GridTabTrayControllerUX.NavigationToolbarHeight
+        let topEdgeInset = shouldUseiPadSetup ? 0 : GridTabTrayControllerUX.NavigationToolbarHeight
         panel.additionalSafeAreaInsets = UIEdgeInsets(top: topEdgeInset, left: 0, bottom: 0, right: 0)
         panel.endAppearanceTransition()
         panel.view.snp.makeConstraints { make in
@@ -286,7 +284,7 @@ class TabTrayViewController: UIViewController {
     }
 
     fileprivate func updateToolbarItems(forSyncTabs showSyncItems: Bool = false) {
-        if UIDevice.current.userInterfaceIdiom == .pad {
+        if shouldUseiPadSetup {
             if navigationMenu.selectedSegmentIndex == 2 {
                 navigationItem.rightBarButtonItems = (showSyncItems ? [doneButton, fixedSpace, syncTabButton] : [doneButton])
                 navigationItem.leftBarButtonItem = nil
@@ -309,6 +307,9 @@ class TabTrayViewController: UIViewController {
             applyTheme()
         case .ProfileDidStartSyncing, .ProfileDidFinishSyncing:
             updateButtonTitle(notification)
+        case .TabClosed:
+            countLabel.text = viewModel.normalTabsCount
+            iPhoneNavigationMenuIdentifiers.setImage(UIImage(named: "nav-tabcounter")!.overlayWith(image: countLabel), forSegmentAt: 0)
         default:
             break
         }
@@ -330,7 +331,7 @@ class TabTrayViewController: UIViewController {
                 guard let self = self else { return }
                 
                 self.syncTabButton.customView = nil
-                self.syncTabButton.title = Strings.FxASyncNow
+                self.syncTabButton.title = .FxASyncNow
                 self.syncTabButton.isEnabled = true
             }
         default:
@@ -339,27 +340,18 @@ class TabTrayViewController: UIViewController {
     }
 }
 
-extension TabTrayViewController: Themeable {
+extension TabTrayViewController: NotificationThemeable {
      @objc func applyTheme() {
-         if #available(iOS 13.0, *) {
-             overrideUserInterfaceStyle =  ThemeManager.instance.userInterfaceStyle
-         }
          view.backgroundColor = UIColor.theme.tabTray.background
-         navigationController?.navigationBar.barTintColor = UIColor.theme.tabTray.toolbar
-         navigationController?.navigationBar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
-         navigationController?.toolbar.barTintColor = UIColor.theme.tabTray.toolbar
-         navigationController?.toolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
-         navigationItem.rightBarButtonItem?.tintColor = UIColor.theme.tabTray.toolbarButtonTint
          navigationToolbar.barTintColor = UIColor.theme.tabTray.toolbar
          navigationToolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
-         let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
          if theme == .dark {
              navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
          } else {
              navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
          }
          viewModel.syncedTabsController.applyTheme()
-         setNeedsStatusBarAppearanceUpdate()
      }
  }
 
@@ -374,7 +366,7 @@ extension TabTrayViewController: UIAdaptivePresentationControllerDelegate, UIPop
     // Popover and not as a full-screen modal, which is the default on compact device classes.
     func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
 
-        if UIDevice.current.userInterfaceIdiom == .pad {
+        if shouldUseiPadSetup {
             return .overFullScreen
         }
 

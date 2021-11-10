@@ -5,9 +5,14 @@
 import UIKit
 import Shared
 
+enum AppSettingsDeeplinkOption {
+    case contentBlocker
+    case customizeHomepage
+}
+
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
-class AppSettingsTableViewController: SettingsTableViewController {
-    var showContentBlockerSetting = false
+class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsProtocol {
+    var deeplinkTo: AppSettingsDeeplinkOption?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,14 +34,26 @@ class AppSettingsTableViewController: SettingsTableViewController {
         // display name, etc.
         ////profile.rustAccount.refreshProfile()
 
-        if showContentBlockerSetting {
-            let viewController = ContentBlockerSettingViewController(prefs: profile.prefs)
-            viewController.profile = profile
+        checkForDeeplinkSetting()
+    }
+
+    private func checkForDeeplinkSetting() {
+        guard let deeplink = deeplinkTo else { return }
+        var viewController: SettingsTableViewController
+
+        switch deeplink {
+        case .contentBlocker:
+            viewController = ContentBlockerSettingViewController(prefs: profile.prefs)
             viewController.tabManager = tabManager
-            navigationController?.pushViewController(viewController, animated: false)
-            // Add a done button from this view
-            viewController.navigationItem.rightBarButtonItem = navigationItem.rightBarButtonItem
+
+        case .customizeHomepage:
+            viewController = HomePageSettingViewController(prefs: profile.prefs)
         }
+
+        viewController.profile = profile
+        navigationController?.pushViewController(viewController, animated: false)
+        // Add a done button from this view
+        viewController.navigationItem.rightBarButtonItem = navigationItem.rightBarButtonItem
     }
 
     override func generateSettings() -> [SettingSection] {
@@ -53,8 +70,10 @@ class AppSettingsTableViewController: SettingsTableViewController {
                         titleText: .AppSettingsBlockPopups),
            ]
 
-        if #available(iOS 12.0, *) {
-            generalSettings.insert(SiriPageSetting(settings: self), at: 5)
+        generalSettings.insert(SiriPageSetting(settings: self), at: 5)
+
+        if featureFlags.isFeatureActiveForBuild(.groupedTabs) || featureFlags.isFeatureActiveForBuild(.inactiveTabs) {
+            generalSettings.insert(TabsSetting(), at: 3)
         }
 
         let accountChinaSyncSetting: [Setting]
@@ -72,22 +91,22 @@ class AppSettingsTableViewController: SettingsTableViewController {
 
         generalSettings += [
             BoolSetting(prefs: prefs, prefKey: "showClipboardBar", defaultValue: false,
-                        titleText: Strings.SettingsOfferClipboardBarTitle,
-                        statusText: Strings.SettingsOfferClipboardBarStatus),
+                        titleText: .SettingsOfferClipboardBarTitle,
+                        statusText: .SettingsOfferClipboardBarStatus),
             BoolSetting(prefs: prefs, prefKey: PrefsKeys.ContextMenuShowLinkPreviews, defaultValue: true,
-                        titleText: Strings.SettingsShowLinkPreviewsTitle,
-                        statusText: Strings.SettingsShowLinkPreviewsStatus)
+                        titleText: .SettingsShowLinkPreviewsTitle,
+                        statusText: .SettingsShowLinkPreviewsStatus)
         ]
-        
+
         if #available(iOS 14.0, *) {
             settings += [
                 SettingSection(footerTitle: NSAttributedString(string: String.DefaultBrowserCardDescription), children: [DefaultBrowserSetting()])
             ]
         }
-        
-        let accountSectionTitle = NSAttributedString(string: Strings.FxAFirefoxAccount)
 
-        let footerText = !profile.hasAccount() ? NSAttributedString(string: Strings.FxASyncUsageDetails) : nil
+        let accountSectionTitle = NSAttributedString(string: .FxAFirefoxAccount)
+
+        let footerText = !profile.hasAccount() ? NSAttributedString(string: .FxASyncUsageDetails) : nil
         settings += [
             SettingSection(title: accountSectionTitle, footerTitle: footerText, children: [
                 // Without a Firefox Account:
@@ -98,11 +117,10 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 SyncNowSetting(settings: self)
             ] + accountChinaSyncSetting )]
 
-        settings += [ SettingSection(title: NSAttributedString(string: Strings.SettingsGeneralSectionTitle), children: generalSettings)]
+        settings += [ SettingSection(title: NSAttributedString(string: .SettingsGeneralSectionTitle), children: generalSettings)]
 
         var privacySettings = [Setting]()
         privacySettings.append(LoginsSetting(settings: self, delegate: settingsDelegate))
-        privacySettings.append(TouchIDPasscodeSetting(settings: self))
 
         privacySettings.append(ClearPrivateDataSetting(settings: self))
 
@@ -143,7 +161,9 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 ChangeToChinaSetting(settings: self),
                 ShowEtpCoverSheet(settings: self),
                 ToggleChronTabs(settings: self),
-                ToggleRecentlySavedSection(settings: self),
+                TogglePullToRefresh(settings: self),
+                ToggleInactiveTabs(settings: self),
+                ResetJumpBackInContextualHint(settings: self),
                 ExperimentsSettings(settings: self)
             ])]
 

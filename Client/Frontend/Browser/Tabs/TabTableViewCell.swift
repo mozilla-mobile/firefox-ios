@@ -7,7 +7,7 @@ import UIKit
 import Shared
 import SnapKit
 
-class TabTableViewCell: UITableViewCell, Themeable {
+class TabTableViewCell: UITableViewCell, NotificationThemeable {
     static let identifier = "tabCell"
     var screenshotView: UIImageView?
     var websiteTitle: UILabel?
@@ -88,16 +88,9 @@ class TabTableViewCell: UITableViewCell, Themeable {
     }
 
     func applyTheme() {
-        if #available(iOS 13.0, *) {
-            backgroundColor = UIColor.secondarySystemGroupedBackground
-            textLabel?.textColor = UIColor.label
-            detailTextLabel?.textColor = UIColor.secondaryLabel
-            closeButton.tintColor = UIColor.secondaryLabel
-        } else {
-            backgroundColor = UIColor.theme.tableView.rowBackground
-            textLabel?.textColor = UIColor.theme.tableView.rowText
-            detailTextLabel?.textColor = UIColor.theme.tableView.rowDetailText
-            closeButton.tintColor = UIColor.theme.tabTray.cellCloseButton
-        }
+        backgroundColor = UIColor.secondarySystemGroupedBackground
+        textLabel?.textColor = UIColor.label
+        detailTextLabel?.textColor = UIColor.secondaryLabel
+        closeButton.tintColor = UIColor.secondaryLabel
     }
 }

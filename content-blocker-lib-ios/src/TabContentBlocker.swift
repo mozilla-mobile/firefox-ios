@@ -9,7 +9,7 @@ extension Notification.Name {
    public static let contentBlockerTabSetupRequired = Notification.Name("contentBlockerTabSetupRequired")
 }
 
-protocol ContentBlockerTab: class {
+protocol ContentBlockerTab: AnyObject {
     func currentURL() -> URL?
     func currentWebView() -> WKWebView?
     func imageContentBlockingEnabled() -> Bool

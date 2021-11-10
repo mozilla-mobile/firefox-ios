@@ -7,6 +7,9 @@
 /* Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard */
 "Copy URL" = "यूआरएल प्रतिलिपि गर्नुहोस्";
 
+/* Label for preview action on Tab Tray Tab to send the current link to another device */
+"Menu.SendLinkToDevice" = "लिङ्कलाई उपकरणमा पठाउनुहोस्";
+
 /* String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch */
 "Open Last Bookmark" = "अन्तिम पुस्तकचिनो खोल्नुहोस्";
 

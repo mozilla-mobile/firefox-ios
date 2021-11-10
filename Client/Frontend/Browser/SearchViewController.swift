@@ -36,7 +36,7 @@ private struct SearchViewControllerUX {
 }
 
 protocol SearchViewControllerDelegate: AnyObject {
-    func searchViewController(_ searchViewController: SearchViewController, didSelectURL url: URL)
+    func searchViewController(_ searchViewController: SearchViewController, didSelectURL url: URL, searchTerm: String?)
     func searchViewController(_ searchViewController: SearchViewController, uuid: String)
     func presentSearchSettingsController()
     func searchViewController(_ searchViewController: SearchViewController, didHighlightText text: String, search: Bool)
@@ -53,7 +53,7 @@ struct ClientTabsSearchWrapper {
 class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, LoaderListener {
     var searchDelegate: SearchViewControllerDelegate?
     var currentTheme: BuiltinThemeName {
-        return BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+        return BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
     }
     fileprivate let isPrivate: Bool
     fileprivate var suggestClient: SearchSuggestClient?
@@ -79,13 +79,19 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
     var suggestions: [String]? = []
     var savedQuery: String = ""
+    var experimental: Variables?
     static var userAgent: String?
 
     
     init(profile: Profile, isPrivate: Bool, tabManager: TabManager) {
         self.isPrivate = isPrivate
         self.tabManager = tabManager
+        self.experimental = Experiments.shared.getVariables(featureId: .search).getVariables("awesome-bar")
         super.init(profile: profile)
+        
+        if #available(iOS 15.0, *) {
+            tableView.sectionHeaderTopPadding = 0
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -288,7 +294,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         Telemetry.default.recordSearch(location: .quickSearch, searchEngine: engine.engineID ?? "other")
         GleanMetrics.Search.counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.quickSearch.rawValue)"].add()
 
-        searchDelegate?.searchViewController(self, didSelectURL: url)
+        searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: "")
     }
 
     @objc func didClickSearchButton() {
@@ -345,19 +351,38 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     
     func searchTabs(for searchString: String) {
         let currentTabs = self.isPrivate ? self.tabManager.privateTabs : self.tabManager.normalTabs
-        filteredOpenedTabs = currentTabs.filter { tab in
-            let title = tab.title ?? tab.lastTitle
-            if title?.lowercased().range(of: searchString.lowercased()) != nil {
-                return true
-            }
-            let tabUrl = tab.url ?? tab.sessionData?.urls.last
-            if let url = tabUrl, InternalURL.isValid(url: url) {
+
+        // Small helper function to do case insensitive searching.
+        // We split the search query by spaces so we can simulate full text search.
+        let searchTerms = searchString.split(separator: " ")
+        func find(in content: String?) -> Bool {
+            guard let content = content else {
                 return false
             }
-            if tabUrl?.absoluteString.lowercased().range(of: searchString.lowercased()) != nil {
-                return true
+            return searchTerms.reduce(true) {
+                $0 && content.range(of: $1, options: .caseInsensitive) != nil
             }
-            return false
+        }
+        // Searching within the content will get annoying, so only start searching
+        // in content when there are at least one word with more than 3 letters in.
+        let searchInContent = (experimental?.getBool("use-page-content") ?? false)
+            && searchTerms.find { $0.count >= 3 } != nil
+
+        filteredOpenedTabs = currentTabs.filter { tab in
+            guard let url = tab.url ?? tab.sessionData?.urls.last,
+                  !InternalURL.isValid(url: url) else {
+                return false
+            }
+            let lines = [
+                    tab.title ?? tab.lastTitle,
+                    searchInContent ? tab.readabilityResult?.textContent : nil,
+                    url.absoluteString
+                ]
+                .filter { $0 != nil }
+                .map { $0! }
+
+            let text = lines.joined(separator: "\n")
+            return find(in: text)
         }
     }
     
@@ -413,7 +438,9 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 }
             } else {
                 self.suggestions = suggestions!
-                 // First suggestion should be what the user is searching
+                // Remove user searching term inside suggestions list
+                self.suggestions?.removeAll(where: { $0.trimmingCharacters(in: .whitespacesAndNewlines) == self.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines) } )
+                // First suggestion should be what the user is searching
                 self.suggestions?.insert(self.searchQuery, at: 0)
             }
 
@@ -444,19 +471,18 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             if let url = engine.searchURLForQuery(suggestion) {
                 Telemetry.default.recordSearch(location: .suggestion, searchEngine: engine.engineID ?? "other")
                 GleanMetrics.Search.counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.suggestion.rawValue)"].add()
-                
-                searchDelegate?.searchViewController(self, didSelectURL: url)
+                searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: suggestion)
             }
         case .openedTabs:
             let tab = self.filteredOpenedTabs[indexPath.row]
             searchDelegate?.searchViewController(self, uuid: tab.tabUUID)
         case .remoteTabs:
             let remoteTab = self.filteredRemoteClientTabs[indexPath.row].tab
-            searchDelegate?.searchViewController(self, didSelectURL: remoteTab.URL)
+            searchDelegate?.searchViewController(self, didSelectURL: remoteTab.URL, searchTerm: nil)
         case .bookmarksAndHistory:
             if let site = data[indexPath.row] {
                 if let url = URL(string: site.url) {
-                    searchDelegate?.searchViewController(self, didSelectURL: url)
+                    searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)
                     TelemetryWrapper.recordEvent(category: .action, method: .open, object: .bookmark, value: .awesomebarResults)
                 }
             }
@@ -538,12 +564,12 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 oneLineCell.leftImageView.contentMode = .center
                 oneLineCell.leftImageView.layer.borderWidth = 0
                 oneLineCell.leftImageView.image = UIImage(named: SearchViewControllerUX.SearchImage)
-                oneLineCell.leftImageView.tintColor = ThemeManager.instance.currentName == .dark ? UIColor.white : UIColor.black
+                oneLineCell.leftImageView.tintColor = LegacyThemeManager.instance.currentName == .dark ? UIColor.white : UIColor.black
                 oneLineCell.leftImageView.backgroundColor = nil
                 let appendButton = UIButton(type: .roundedRect)
                 appendButton.setImage(UIImage(named: SearchViewControllerUX.SearchAppendImage)?.withRenderingMode(.alwaysTemplate), for: .normal)
                 appendButton.addTarget(self, action: #selector(append(_ :)), for: .touchUpInside)
-                appendButton.tintColor = ThemeManager.instance.currentName == .dark ? UIColor.white : UIColor.black
+                appendButton.tintColor = LegacyThemeManager.instance.currentName == .dark ? UIColor.white : UIColor.black
                 appendButton.sizeToFit()
                 oneLineCell.accessoryView = indexPath.row > 0 ? appendButton : nil
                 cell = oneLineCell

@@ -8,7 +8,7 @@
 "Copy URL" = "Cupià l’indirizzu";
 
 /* Label for preview action on Tab Tray Tab to send the current link to another device */
-"Menu.SendLinkToDevice" = "Mandà a leia à un apparechju";
+"Menu.SendLinkToDevice" = "Mandà u liame à un apparechju";
 
 /* String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch */
 "Open Last Bookmark" = "Ultima indetta";
@@ -17,7 +17,7 @@
 "Open Last Tab" = "Ultima unghjetta mandata";
 
 /* Accessibility label, associated to the 3D Touch action on the current tab in the tab tray, used to display a larger preview of the tab. */
-"Preview of %@" = "Apprezzazione di %@";
+"Preview of %@" = "Fighjulata di %@";
 
 /* Label for preview action on Tab Tray Tab to send the current tab to another device */
 "Send to Device" = "Mandà à l’apparechju";

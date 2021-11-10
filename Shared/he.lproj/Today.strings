@@ -73,6 +73,9 @@
 /* Quick Actions left label text for dropdown menu when widget enters edit mode */
 "TodayWidget.QuickActionDropDownMenu" = "פעולה מהירה";
 
+/* Description for small size widget to add it to home screen */
+"TodayWidget.QuickActionGalleryDescription" = "ניתן להוסיף קיצור דרך ל־Firefox למסך הבית שלך. לאחר הוספת הווידג’ט, יש ללחוץ ולהחזיק כדי לערוך אותו לבחור בקיצור דרך שונה.";
+
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "פעולות מהירות";
 
@@ -111,6 +114,9 @@
 
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitle" = "אתרים מובילים";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitleV2" = "קיצורי דרך לאתרים";
 
 /* Sub label for Top Sites widget */
 "TodayWidget.TopSitesSubLabel" = "‏Firefox - אתרים מובילים";

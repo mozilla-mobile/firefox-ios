@@ -16,6 +16,9 @@
 /* About settings section title */
 "About" = "Tocante a";
 
+/* The title for the pinning a shortcut action */
+"ActivityStream.ContextMenu.AddToShortcuts" = "Amestar a Atayos";
+
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite" = "Fixar en Sitios Principales";
 
@@ -81,6 +84,9 @@
 
 /* Toggle bookmarks syncing setting */
 "Bookmarks" = "Marcadores";
+
+/* The button on the snackbar to edit a bookmark after adding it. */
+"Bookmarks.Edit.Button" = "Editar";
 
 /* The label to show the location of the folder where the bookmark is located */
 "Bookmarks.Folder.Label" = "Carpeta";
@@ -151,14 +157,23 @@
 /* The label text in the Button Toast for switching to a fresh New Tab. */
 "ContextMenu.ButtonToast.NewTabOpened.LabelText" = "Abrióse una llingüeta nueva";
 
+/* Context menu item for copying an image to the clipboard */
+"ContextMenu.CopyImageButtonTitle" = "Copiar la imaxe";
+
+/* Context menu item for copying an image URL to the clipboard */
+"ContextMenu.CopyImageLinkButtonTitle" = "Copiar l'enllaz de la imaxe";
+
+/* Context menu item for copying a link URL to the clipboard */
+"ContextMenu.CopyLinkButtonTitle" = "Copiar l'enllaz";
+
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
-"Could not add page to Reading list" = "Nun pudo amestase la páxina a la llista de llectura.";
+"Could not add page to Reading list" = "Nun se pudo amestar la páxina a la llista de llectura.";
 
 /* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
-"Could not add page to Reading List. Maybe it’s already there?" = "Nun pudo amestase la páxina a Llista de Llectura. Quiciabes yá tea ellí.";
+"Could not add page to Reading List. Maybe it’s already there?" = "Nun se pudo amestar la páxina a Llista de Llectura. Quiciabes yá tea ellí.";
 
 /* Error message that is shown in settings when there was a problem loading */
-"Could not load page." = "Nun pudo cargase la páxina.";
+"Could not load page." = "Nun se pudo cargar la páxina.";
 
 /* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
 "CoverSheet.v22.DarkMode.Description" = "Pa usuarios d'iOS 13, Firefox cambia pal estilu escuru cuando'l teléfonu tea nel mou escuridá. Pa camudar esti comportamientu, vete p'Axustes > Estilu.";
@@ -247,7 +262,7 @@
 "ErrorPages.AdvancedWarning1.Text" = "Alvertencia: nun podemos confirmar que la conexón al sitiu seya segura.";
 
 /* Additional warning text when clicking the Advanced button on error pages */
-"ErrorPages.AdvancedWarning2.Text" = "Quiciabes seya una mala configuración o manipulación por un atacante. Sigui si aceutes el riesgu potencial.";
+"ErrorPages.AdvancedWarning2.Text" = "Quiciabes seya una mala configuración o manipulación por un atacador. Sigui si aceutes el riesgu potencial.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Esta conexón nun ye d'enfotu";
@@ -528,6 +543,15 @@
 /* For filtering the login list, search only the website names */
 "LoginsList.LoginsListFilterWebsite" = "Sitiu web";
 
+/* Placeholder test for search box in logins list view. */
+"LoginsList.LoginsListSearchPlaceholder" = "Peñerar";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "Nun hai resultaos que concasen cola busca.";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "Encaboxar";
+
 /* Title for the list of logins */
 "LoginsList.Title" = "ANICIOS DE SESIÓN GUARDAOS";
 
@@ -683,7 +707,7 @@
 "Oops! Firefox crashed" = "¡Meca! Firefox cascó";
 
 /* See http://mzl.la/1LXbDOL */
-"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Abri artículos na Vista de Llector calcando l'iconu del llibru cuando apaeza na barra de títulos.";
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Abri artículos na Vista de Llectora calcando l'iconu del llibru cuando apaeza na barra de títulos.";
 
 /* See http://mzl.la/1G7uHo7 */
 "Open Settings" = "Abrir Axustes";
@@ -695,7 +719,7 @@
 "OpenURL.Error.Message" = "Firefox nun pue abrir la páxina porque tien una direición que nun ye válida.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
-"OpenURL.Error.Title" = "Nun pue abrise la páxina";
+"OpenURL.Error.Title" = "Nun se pue abrir la páxina";
 
 /* Accessibility label for the Page Options menu button */
 "Page Options Menu" = "Menú d'opciones de la páxina";
@@ -720,6 +744,12 @@
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Política de privacidá";
+
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "La conexón nun ye segura";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "La conexón ye segura";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Motores de busca rápida";
@@ -799,7 +829,7 @@
 "Search.ThirdPartyEngines.DuplicateErrorTitle" = "Falló";
 
 /* A title explaining that we failed to add a search engine */
-"Search.ThirdPartyEngines.FailedMessage" = "Nun pudo amestase'l fornidor de busques.";
+"Search.ThirdPartyEngines.FailedMessage" = "Nun se pudo amestar el fornidor de busques.";
 
 /* A title explaining that we failed to add a search engine */
 "Search.ThirdPartyEngines.FailedTitle" = "Falló";
@@ -842,7 +872,7 @@
 "SendTo.Error.OK.Button" = "Aceutar";
 
 /* Title of error prompt displayed when an invalid URL is shared. */
-"SendTo.Error.Title" = "L'enllaz que tentes de compartir nun pue compartise.";
+"SendTo.Error.Title" = "L'enllaz que tentes de compartir nun se pue compartir.";
 
 /* Error message shown in the remote tabs panel */
 "SendTo.NoDevicesFound.Message" = "Nun tienes más preseos conectaos a esta cuenta de Firefox disponible pa sincronizar.";
@@ -930,6 +960,9 @@
 
 /* Title of the alert when prompting the user asking to disconnect. */
 "Settings.Disconnect.Title" = "¿Desconectase de Sync?";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Manually'. */
+"Settings.DisplayTheme.Manual.SwitchSubtitle" = "Escueyi qué estilu quies";
 
 /* Option choice in display theme settings for dark theme */
 "Settings.DisplayTheme.OptionDark" = "Escuridá";
@@ -1076,6 +1109,9 @@
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Unviar datos d'usu";
 
+/* Setting to show Logins & Passwords quick access in the application menu */
+"Settings.ShowLoginsInAppMenu.Title" = "Amosar nel menú d'aplicaciones";
+
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Atayos de Siri";
 
@@ -1161,7 +1197,7 @@
 "Settings.WebsiteData.ButtonShowMore" = "Amosar más";
 
 /* Description of the confirmation dialog shown when a user tries to clear their private data. */
-"Settings.WebsiteData.ConfirmPrompt" = "Esta aición va desaniciar tolos datos de los sitios web. Nun pue desfacese.";
+"Settings.WebsiteData.ConfirmPrompt" = "Esta aición va desaniciar tolos datos de los sitios web. Nun se pue desfacer.";
 
 /* Title displayed in header of the Data Management panel. */
 "Settings.WebsiteData.Title" = "Datos de sitios web";
@@ -1282,7 +1318,7 @@
 "TabTray.Yesterday.Header" = "Ayeri";
 
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
-"The page could not be displayed in Reader View." = "La páxina nun pudo amosase en Vista de Llectura.";
+"The page could not be displayed in Reader View." = "La páxina nun se pudo amosar en Vista de Llectura.";
 
 /* Error message in the remote tabs panel */
 "There was a problem accessing tabs from your other devices. Try again in a few moments." = "Hebo un problema al acceder a les llingüetes d'otros preseos de to. Volvi tentalo nun momentu.";

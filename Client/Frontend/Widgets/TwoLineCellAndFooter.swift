@@ -12,7 +12,7 @@ struct TwoLineCellUX {
 
 // TODO: Add support for accessibility for when text size changes
 
-class TwoLineImageOverlayCell: UITableViewCell, Themeable {
+class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable {
     // Tableview cell items
     var selectedView: UIView = {
         let view = UIView()
@@ -76,6 +76,7 @@ class TwoLineImageOverlayCell: UITableViewCell, Themeable {
 
         containerView.addSubview(leftOverlayImageView)
         addSubview(containerView)
+        contentView.addSubview(containerView)
         bringSubviewToFront(containerView)
 
         containerView.snp.makeConstraints { make in
@@ -123,7 +124,7 @@ class TwoLineImageOverlayCell: UITableViewCell, Themeable {
     }
     
     func applyTheme() {
-        let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         if theme == .dark {
             self.backgroundColor = UIColor.Photon.Grey80
             self.titleLabel.textColor = .white
@@ -154,7 +155,7 @@ class TwoLineImageOverlayCell: UITableViewCell, Themeable {
 }
 
 
-class SimpleTwoLineCell: UITableViewCell, Themeable {
+class SimpleTwoLineCell: UITableViewCell, NotificationThemeable {
     // Tableview cell items
     var selectedView: UIView = {
         let view = UIView()
@@ -232,7 +233,7 @@ class SimpleTwoLineCell: UITableViewCell, Themeable {
     }
     
     func applyTheme() {
-        let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         if theme == .dark {
             self.backgroundColor = UIColor.Photon.Grey80
             self.titleLabel.textColor = .white
@@ -254,7 +255,7 @@ class SimpleTwoLineCell: UITableViewCell, Themeable {
 
 // TODO: Add support for accessibility for when text size changes
 
-class TwoLineHeaderFooterView: UITableViewHeaderFooterView, Themeable {
+class TwoLineHeaderFooterView: UITableViewHeaderFooterView, NotificationThemeable {
     fileprivate let bordersHelper = ThemedHeaderFooterViewBordersHelper()
     var leftImageView: UIImageView = {
         let imgView = UIImageView()
@@ -329,7 +330,7 @@ class TwoLineHeaderFooterView: UITableViewHeaderFooterView, Themeable {
     }
 
     func applyTheme() {
-        let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         self.backgroundColor = UIColor.theme.tableView.selectedBackground
         if theme == .dark {
             self.titleLabel.textColor = .white
