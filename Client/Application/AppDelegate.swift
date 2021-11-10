@@ -27,10 +27,7 @@ let LatestAppVersionProfileKey = "latestAppVersion"
 let AllowThirdPartyKeyboardsKey = "settings.allowThirdPartyKeyboards"
 private let InitialPingSentKey = "initialPingSent"
 
-class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestoration {
-    public static func viewController(withRestorationIdentifierPath identifierComponents: [String], coder: NSCoder) -> UIViewController? {
-        return nil
-    }
+class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var browserViewController: BrowserViewController!
@@ -165,9 +162,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         browserViewController = BrowserViewController(profile: self.profile!, tabManager: self.tabManager)
         browserViewController.edgesForExtendedLayout = []
-
-        browserViewController.restorationIdentifier = NSStringFromClass(BrowserViewController.self)
-        browserViewController.restorationClass = AppDelegate.self
 
         let navigationController = UINavigationController(rootViewController: browserViewController)
         navigationController.delegate = self
