@@ -8,7 +8,6 @@ import Storage
 import SDWebImage
 import XCGLogger
 import SyncTelemetry
-import SnapKit
 
 class LibraryShortcutView: UIView {
     lazy var button: UIButton = {

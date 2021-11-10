@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-import SnapKit
+
 import Storage
 
 protocol LoginDetailTableViewCellDelegate: AnyObject {
@@ -29,7 +29,11 @@ enum LoginTableViewCellStyle {
 
 class LoginDetailTableViewCell: ThemedTableViewCell {
 
-    fileprivate let labelContainer = UIView()
+    fileprivate lazy var labelContainer: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
 
     weak var delegate: LoginDetailTableViewCellDelegate?
 
@@ -44,6 +48,7 @@ class LoginDetailTableViewCell: ThemedTableViewCell {
 
     lazy var descriptionLabel: UITextField = {
         let label = UITextField()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = LoginTableViewCellUX.descriptionLabelFont
         label.isUserInteractionEnabled = false
         label.autocapitalizationType = .none
@@ -61,6 +66,7 @@ class LoginDetailTableViewCell: ThemedTableViewCell {
     // and the text property is exposed using a get/set property below.
     fileprivate lazy var highlightedLabel: UILabel = {
         let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = LoginTableViewCellUX.highlightedLabelFont
         label.textColor = LoginTableViewCellUX.highlightedLabelTextColor
         label.numberOfLines = 1
@@ -147,23 +153,25 @@ class LoginDetailTableViewCell: ThemedTableViewCell {
     }
 
     fileprivate func configureLayout() {
-        labelContainer.snp.remakeConstraints { make in
-            make.centerY.equalTo(contentView)
-            make.trailing.equalTo(contentView).offset(-LoginTableViewCellUX.HorizontalMargin)
-            make.leading.equalTo(contentView).offset(LoginTableViewCellUX.HorizontalMargin)
-        }
+        NSLayoutConstraint.activate([
+            labelContainer.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            labelContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -LoginTableViewCellUX.HorizontalMargin),
+            labelContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: LoginTableViewCellUX.HorizontalMargin)
+        ])
 
-        highlightedLabel.snp.remakeConstraints { make in
-            make.leading.top.equalTo(labelContainer)
-            make.bottom.equalTo(descriptionLabel.snp.top)
-            make.width.equalTo(labelContainer)
-        }
+        NSLayoutConstraint.activate([
+            highlightedLabel.leadingAnchor.constraint(equalTo: labelContainer.leadingAnchor),
+            highlightedLabel.topAnchor.constraint(equalTo: labelContainer.topAnchor),
+            highlightedLabel.bottomAnchor.constraint(equalTo: descriptionLabel.topAnchor),
+            highlightedLabel.widthAnchor.constraint(equalTo: labelContainer.widthAnchor)
+        ])
 
-        descriptionLabel.snp.remakeConstraints { make in
-            make.leading.bottom.equalTo(labelContainer)
-            make.top.equalTo(highlightedLabel.snp.bottom)
-            make.width.equalTo(labelContainer)
-        }
+        NSLayoutConstraint.activate([
+            descriptionLabel.leadingAnchor.constraint(equalTo: labelContainer.leadingAnchor),
+            descriptionLabel.bottomAnchor.constraint(equalTo: labelContainer.bottomAnchor),
+            descriptionLabel.topAnchor.constraint(equalTo: highlightedLabel.bottomAnchor),
+            descriptionLabel.widthAnchor.constraint(equalTo: labelContainer.widthAnchor)
+        ])
 
         setNeedsUpdateConstraints()
     }
