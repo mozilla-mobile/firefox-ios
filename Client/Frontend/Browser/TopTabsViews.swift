@@ -5,19 +5,19 @@
 import Foundation
 import Shared
 
-class TopTabCell: UICollectionViewCell, Themeable {
+class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell {
 
     static let Identifier = "TopTabCellIdentifier"
     static let ShadowOffsetSize: CGFloat = 2 //The shadow is used to hide the tab separator
 
-    var selectedTab = false {
+    var isSelectedTab = false {
         didSet {
             backgroundColor = .clear
             titleText.textColor = UIColor.theme.topTabs.tabForegroundSelected
             closeButton.tintColor = UIColor.theme.topTabs.closeButtonSelectedTab
             closeButton.backgroundColor = backgroundColor
             closeButton.layer.shadowColor = backgroundColor?.cgColor
-            selectedBackground.isHidden = !selectedTab
+            selectedBackground.isHidden = !isSelectedTab
         }
     }
 
@@ -101,26 +101,26 @@ class TopTabCell: UICollectionViewCell, Themeable {
         self.clipsToBounds = false
     }
 
-    func configureWith(tab: Tab, isSelected: Bool) {
+    func configureWith(tab: Tab, isSelected selected: Bool) {
         self.titleText.text = tab.displayTitle
 
         if tab.displayTitle.isEmpty {
             if let url = tab.webView?.url, let internalScheme = InternalURL(url) {
-                self.titleText.text = Strings.AppMenuNewTabTitleString
+                self.titleText.text = .AppMenuNewTabTitleString
                 self.accessibilityLabel = internalScheme.aboutComponent
             } else {
                 self.titleText.text = tab.webView?.url?.absoluteDisplayString
             }
             
-            self.closeButton.accessibilityLabel = String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, self.titleText.text ?? "")
+            self.closeButton.accessibilityLabel = String(format: .TopSitesRemoveButtonAccessibilityLabel, self.titleText.text ?? "")
         } else {
             self.accessibilityLabel = tab.displayTitle
-            self.closeButton.accessibilityLabel = String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, tab.displayTitle)
+            self.closeButton.accessibilityLabel = String(format: .TopSitesRemoveButtonAccessibilityLabel, tab.displayTitle)
         }
 
-        self.selectedTab = isSelected
+        self.isSelectedTab = selected
 
-        let hideCloseButton = frame.width < 148 && !isSelected
+        let hideCloseButton = frame.width < 148 && !selected
         closeButton.isHidden = hideCloseButton
 
         if let siteURL = tab.url?.displayURL {

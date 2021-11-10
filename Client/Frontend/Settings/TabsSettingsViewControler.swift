@@ -10,7 +10,7 @@ class TabsSettingsViewController: SettingsTableViewController, FeatureFlagsProto
     init() {
         super.init(style: .grouped)
 
-        self.title = .SettingsCustomizeTabsTitle
+        self.title = .Settings.SectionTitles.TabsTitle
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -23,10 +23,10 @@ class TabsSettingsViewController: SettingsTableViewController, FeatureFlagsProto
 
 
         let inactiveTabsSetting = BoolSetting(with: .inactiveTabs,
-                                              titleText: NSAttributedString(string: .SettingsCustomizeTabsInactiveTabs))
+                                              titleText: NSAttributedString(string: .Settings.Tabs.InactiveTabs))
 
         let tabGroupsSetting = BoolSetting(with: .groupedTabs,
-                                           titleText: NSAttributedString(string: .SettingsCustomizeTabsTabGroups))
+                                           titleText: NSAttributedString(string: .Settings.Tabs.TabGroups))
 
 
         if featureFlags.isFeatureActiveForBuild(.inactiveTabs) {
@@ -37,7 +37,7 @@ class TabsSettingsViewController: SettingsTableViewController, FeatureFlagsProto
             sectionItems.append(tabGroupsSetting)
         }
 
-        return [SettingSection(title: NSAttributedString(string: .SettingsCustomizeTabsSectionTitle),
+        return [SettingSection(title: NSAttributedString(string: .Settings.Tabs.TabsSectionTitle),
                                children: sectionItems)]
     }
 

@@ -37,9 +37,8 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     let profile: Profile
     weak var delegate: TabTrayDelegate?
     var tabDisplayManager: TabDisplayManager!
-    var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TabCell.Identifier
+    var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TabCell.reuseIdentifier
     static let independentTabsHeaderIdentifier = "IndependentTabs"
-    static let filteredTabsAccessibilityIdentifier = "filteredTabs"
     var otherBrowsingModeOffset = CGPoint.zero
     // Backdrop used for displaying greyed background for private tabs
     var webViewContainerBackdrop: UIView!
@@ -50,7 +49,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     // currently selected tab. This allows us to force the scroll behaviour to move
     // whereever we need to focus the user's attention.
     var tabToFocus: Tab? = nil
-    
+
     fileprivate lazy var emptyPrivateTabsView: EmptyPrivateTabsView = {
         let emptyView = EmptyPrivateTabsView()
         emptyView.learnMoreButton.addTarget(self, action: #selector(didTapLearnMore), for: .touchUpInside)
@@ -74,11 +73,11 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         self.tabToFocus = tabToFocus
         super.init(nibName: nil, bundle: nil)
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        collectionView.register(TabCell.self, forCellWithReuseIdentifier: TabCell.Identifier)
+        collectionView.register(TabCell.self, forCellWithReuseIdentifier: TabCell.reuseIdentifier)
         collectionView.register(GroupedTabCell.self, forCellWithReuseIdentifier: GroupedTabCell.Identifier)
         collectionView.register(InactiveTabCell.self, forCellWithReuseIdentifier: InactiveTabCell.Identifier)
         collectionView.register(ASHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: GridTabViewController.independentTabsHeaderIdentifier)
-        tabDisplayManager = TabDisplayManager(collectionView: self.collectionView, tabManager: self.tabManager, tabDisplayer: self, reuseID: TabCell.Identifier, tabDisplayType: .TabGrid, profile: profile)
+        tabDisplayManager = TabDisplayManager(collectionView: self.collectionView, tabManager: self.tabManager, tabDisplayer: self, reuseID: TabCell.reuseIdentifier, tabDisplayType: .TabGrid, profile: profile)
         collectionView.dataSource = tabDisplayManager
         collectionView.delegate = tabLayoutDelegate
 
@@ -101,7 +100,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         tabManager.removeDelegate(self)
         tabDisplayManager = nil
     }
-    
+
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         guard let flowlayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
@@ -110,7 +109,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
 
     /// The main interface for scrolling to an item, whether that is a group or an individual tab
     ///
-    /// This method checks for the existence of a tab to focus on other than the seleceted tab,
+    /// This method checks for the existence of a tab to focus on other than the selected tab,
     /// and then, focuses on that tab. The byproduct is that if the tab is in a group, the
     /// user would then be looking at the group. Generally, if focusing on a group and
     /// NOT the selected tab, it is advised to pass in the first tab of that group as
@@ -165,12 +164,12 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         guard notification.name == .DynamicFontChanged else { return }
     }
 
-// MARK: View Controller Callbacks
+    // MARK: View Controller Callbacks
     override func viewDidLoad() {
         super.viewDidLoad()
         tabManager.addDelegate(self)
         view.accessibilityLabel = .TabTrayViewAccessibilityLabel
-        
+
         webViewContainerBackdrop = UIView()
         webViewContainerBackdrop.alpha = 0
 
@@ -220,7 +219,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         webViewContainerBackdrop.snp.makeConstraints { make in
             make.edges.equalTo(self.view)
         }
-        
+
         collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -248,7 +247,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         }
 
         tabManager.willSwitchTabMode(leavingPBM: tabDisplayManager.isPrivate)
-        
+
         tabDisplayManager.togglePrivateMode(isOn: !tabDisplayManager.isPrivate, createTabOnEmptyPrivateMode: false)
 
         self.tabDisplayManager.refreshStore()
@@ -334,7 +333,7 @@ extension GridTabViewController: TabDisplayer {
         tabCell.animator?.delegate = self
         tabCell.delegate = self
         let selected = tab == tabManager.selectedTab
-        tabCell.configureWith(tab: tab, is: selected)
+        tabCell.configureWith(tab: tab, isSelected: selected)
         return tabCell
     }
 }
@@ -362,7 +361,7 @@ extension GridTabViewController {
         }
         closeTabsTrayHelper()
     }
-    
+
     func closeTabsTrayHelper() {
         if self.tabDisplayManager.isPrivate {
             self.emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()
@@ -548,21 +547,21 @@ extension GridTabViewController: TabDisplayCompletionDelegate, RecentlyClosedPan
         delegate?.tabTrayOpenRecentlyClosedTab(url)
         dismissTabTray()
     }
-    
+
     func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .openRecentlyClosedTab, extras: nil)
         openNewTab(URLRequest(url: url), isPrivate: isPrivate)
         dismissTabTray()
     }
-    
+
     // TabDisplayCompletionDelegate
     func displayRecentlyClosedTabs() {
         recentlyClosedTabsPanel = RecentlyClosedTabsPanel(profile: profile)
-        recentlyClosedTabsPanel!.title = Strings.RecentlyClosedTabsButtonTitle
+        recentlyClosedTabsPanel!.title = .RecentlyClosedTabsButtonTitle
         recentlyClosedTabsPanel!.recentlyClosedTabsDelegate = self
         navigationController?.pushViewController(recentlyClosedTabsPanel!, animated: true)
     }
-    
+
     func completedAnimation(for type: TabAnimationType) {
         emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
 
@@ -612,8 +611,14 @@ extension GridTabViewController {
         }
 
         let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        controller.addAction(UIAlertAction(title: Strings.AppMenuCloseAllTabsTitleString, style: .default, handler: { _ in self.closeTabsForCurrentTray() }), accessibilityIdentifier: "TabTrayController.deleteButton.closeAll")
-        controller.addAction(UIAlertAction(title: .TabTrayCloseAllTabsPromptCancel, style: .cancel, handler: nil), accessibilityIdentifier: "TabTrayController.deleteButton.cancel")
+        controller.addAction(UIAlertAction(title: .AppMenuCloseAllTabsTitleString,
+                                           style: .default,
+                                           handler: { _ in self.closeTabsForCurrentTray() }),
+                             accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
+        controller.addAction(UIAlertAction(title: .TabTrayCloseAllTabsPromptCancel,
+                                           style: .cancel,
+                                           handler: nil),
+                             accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton)
         controller.popoverPresentationController?.barButtonItem = sender
         present(controller, animated: true, completion: nil)
     }
@@ -625,11 +630,11 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
     let scrollView: UIScrollView
     var lastYOffset: CGFloat = 0
     var tabDisplayManager: TabDisplayManager
-    
+
     var sectionHeaderSize: CGSize {
         CGSize(width: 50, height: 40)
     }
-    
+
     enum ScrollDirection {
         case up
         case down
@@ -664,7 +669,7 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
             return GridTabTrayControllerUX.TextBoxHeight * 8
         }
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         switch TabDisplaySection(rawValue: section) {
         case .regularTabs:
@@ -673,10 +678,10 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
             }
         default: return .zero
         }
-        
+
         return .zero
     }
-    
+
 
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
@@ -714,7 +719,7 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
             }
 
             totalHeight = tabDisplayManager.isInactiveViewExpanded ? totalHeight : minInactiveCellHeight
-            
+
             if UIDevice.current.userInterfaceIdiom == .pad {
                 return CGSize(width: Int(collectionView.frame.size.width/2), height: totalHeight)
             } else {
@@ -761,14 +766,24 @@ protocol TabCellDelegate: AnyObject {
     func tabCellDidClose(_ cell: TabCell)
 }
 
-class TabCell: UICollectionViewCell {
+protocol TabTrayCell where Self: UICollectionViewCell {
+
+    /// True when the tab is the selected tab in the tray
+    var isSelectedTab: Bool { get }
+
+    /// Configure a tab cell using a Tab object, setting it's selected state at the same time
+    func configureWith(tab: Tab, isSelected selected: Bool)
+}
+
+class TabCell: UICollectionViewCell, TabTrayCell {
+
     enum Style {
         case light
         case dark
     }
 
-    static let Identifier = "TabCellIdentifier"
-    static let BorderWidth: CGFloat = 3
+    static let reuseIdentifier = "TabCellIdentifier"
+    static let borderWidth: CGFloat = 3
 
     lazy var backgroundHolder: UIView = {
         let view = UIView()
@@ -786,7 +801,6 @@ class TabCell: UICollectionViewCell {
         view.backgroundColor = UIColor.theme.tabTray.screenshotBackground
         return view
     }()
-    
 
     let titleText: UILabel = {
         let label = UILabel()
@@ -817,6 +831,7 @@ class TabCell: UICollectionViewCell {
 
     var title = UIVisualEffectView(effect: UIBlurEffect(style: UIColor.theme.tabTray.tabTitleBlur))
     var animator: SwipeAnimator?
+    var isSelectedTab = false
 
     weak var delegate: TabCellDelegate?
 
@@ -834,7 +849,7 @@ class TabCell: UICollectionViewCell {
         backgroundHolder.snp.makeConstraints { make in
             make.edges.equalTo(contentView)
         }
-        
+
         backgroundHolder.addSubview(self.screenshotView)
 
         self.accessibilityCustomActions = [
@@ -875,29 +890,18 @@ class TabCell: UICollectionViewCell {
         }
     }
 
-    func setTabSelected(_ isPrivate: Bool) {
-        // This creates a border around a tabcell. Using the shadow craetes a border _outside_ of the tab frame.
-        layer.shadowColor = (isPrivate ? UIColor.theme.tabTray.privateModePurple : UIConstants.SystemBlueColor).cgColor
-        layer.shadowOpacity = 1
-        layer.shadowRadius = 0 // A 0 radius creates a solid border instead of a gradient blur
-        layer.masksToBounds = false
-        // create a frame that is "BorderWidth" size bigger than the cell
-        layer.shadowOffset = CGSize(width: -TabCell.BorderWidth, height: -TabCell.BorderWidth)
-        let shadowPath = CGRect(width: layer.frame.width + (TabCell.BorderWidth * 2), height: layer.frame.height + (TabCell.BorderWidth * 2))
-        layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: GridTabTrayControllerUX.CornerRadius+TabCell.BorderWidth).cgPath
-    }
-
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        let shadowPath = CGRect(width: layer.frame.width + (TabCell.BorderWidth * 2), height: layer.frame.height + (TabCell.BorderWidth * 2))
-        layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: GridTabTrayControllerUX.CornerRadius+TabCell.BorderWidth).cgPath
+        let shadowPath = CGRect(width: layer.frame.width + (TabCell.borderWidth * 2), height: layer.frame.height + (TabCell.borderWidth * 2))
+        layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: GridTabTrayControllerUX.CornerRadius+TabCell.borderWidth).cgPath
     }
 
-    func configureWith(tab: Tab, is selected: Bool) {
+    func configureWith(tab: Tab, isSelected selected: Bool) {
+        isSelectedTab = selected
         titleText.text = tab.displayTitle
 
         if selected {
@@ -919,6 +923,7 @@ class TabCell: UICollectionViewCell {
             favicon.image = UIImage(named: "defaultFavicon")
             favicon.tintColor = UIColor.theme.tabTray.faviconTint
         }
+
         if selected {
             setTabSelected(tab.isPrivate)
         } else {
@@ -958,9 +963,21 @@ class TabCell: UICollectionViewCell {
     @objc func close() {
         delegate?.tabCellDidClose(self)
     }
+
+    private func setTabSelected(_ isPrivate: Bool) {
+        // This creates a border around a tabcell. Using the shadow creates a border _outside_ of the tab frame.
+        layer.shadowColor = (isPrivate ? UIColor.theme.tabTray.privateModePurple : UIConstants.SystemBlueColor).cgColor
+        layer.shadowOpacity = 1
+        layer.shadowRadius = 0 // A 0 radius creates a solid border instead of a gradient blur
+        layer.masksToBounds = false
+        // create a frame that is "BorderWidth" size bigger than the cell
+        layer.shadowOffset = CGSize(width: -TabCell.borderWidth, height: -TabCell.borderWidth)
+        let shadowPath = CGRect(width: layer.frame.width + (TabCell.borderWidth * 2), height: layer.frame.height + (TabCell.borderWidth * 2))
+        layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: GridTabTrayControllerUX.CornerRadius+TabCell.borderWidth).cgPath
+    }
 }
 
-extension GridTabViewController: Themeable {
+extension GridTabViewController: NotificationThemeable {
 
     @objc func applyTheme() {
         webViewContainerBackdrop.backgroundColor = UIColor.Photon.Ink90

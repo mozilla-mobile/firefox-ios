@@ -83,7 +83,7 @@
 "Menu.TranslatePageAction.Title" = "Перевести страницу";
 
 /* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
-"Menu.ViewDekstopSiteAction.Title" = "Запросить версию для компьютера";
+"Menu.ViewDekstopSiteAction.Title" = "Запросить полную версию сайта";
 
 /* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
 "Menu.ViewMobileSiteAction.Title" = "Запросить мобильную версию сайта";

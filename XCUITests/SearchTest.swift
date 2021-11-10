@@ -42,7 +42,7 @@ class SearchTests: BaseTestCase {
         app.buttons["urlBar-cancel"].tap()
 
         waitForTabsButton()
-        app.buttons["TabToolbar.menuButton"].tap()
+        app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton].tap()
         navigator.nowAt(BrowserTabMenu)
         suggestionsOnOff()
 
@@ -65,7 +65,7 @@ class SearchTests: BaseTestCase {
 
         app.buttons["urlBar-cancel"].tap()
         waitForTabsButton()
-        app.buttons["TabToolbar.menuButton"].tap()
+        app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton].tap()
         navigator.nowAt(BrowserTabMenu)
 
         // Reset suggestion button, set it to on

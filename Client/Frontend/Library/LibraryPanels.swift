@@ -6,7 +6,7 @@ import UIKit
 import Shared
 import Storage
 
-protocol LibraryPanel: Themeable {
+protocol LibraryPanel: NotificationThemeable {
     var libraryPanelDelegate: LibraryPanelDelegate? { get set }
 }
 
@@ -31,13 +31,13 @@ enum LibraryPanelType: Int, CaseIterable {
     var title: String {
         switch self {
         case .bookmarks:
-            return Strings.AppMenuBookmarksTitleString
+            return .AppMenuBookmarksTitleString
         case .history:
-            return Strings.AppMenuHistoryTitleString
+            return .AppMenuHistoryTitleString
         case .downloads:
-            return Strings.AppMenuDownloadsTitleString
+            return .AppMenuDownloadsTitleString
         case .readingList:
-            return Strings.AppMenuReadingListTitleString
+            return .AppMenuReadingListTitleString
         }
     }
 }

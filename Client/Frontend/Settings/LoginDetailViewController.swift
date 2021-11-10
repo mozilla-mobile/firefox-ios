@@ -30,7 +30,7 @@ fileprivate class CenteredDetailCell: ThemedTableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         var f = detailTextLabel?.frame ?? CGRect()
-        f.center = frame.center
+        f.center = CGPoint(x: frame.center.x - safeAreaInsets.right, y: frame.center.y)
         detailTextLabel?.frame = f
     }
 }
@@ -119,7 +119,7 @@ class LoginDetailViewController: SensitiveViewController {
         let itemsToHideSeperators: [InfoItem] = [.passwordItem, .lastModifiedSeparator]
         itemsToHideSeperators.forEach { item in
             let cell = tableView.cellForRow(at: IndexPath(row: item.rawValue, section: 0))
-            cell?.separatorInset = UIEdgeInsets(top: 0, left: cell?.bounds.width ?? 0, bottom: 0, right: 0)
+            cell?.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: cell?.bounds.width ?? 0)
         }
 
         // Rows to display full width seperator
@@ -253,8 +253,7 @@ extension LoginDetailViewController: UITableViewDelegate {
         cell.becomeFirstResponder()
 
         let menu = UIMenuController.shared
-        menu.setTargetRect(cell.frame, in: self.tableView)
-        menu.setMenuVisible(true, animated: true)
+        menu.showMenu(from: self.tableView, rect: cell.frame)
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

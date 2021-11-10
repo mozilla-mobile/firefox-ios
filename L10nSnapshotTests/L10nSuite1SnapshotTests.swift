@@ -85,7 +85,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         sleep(3)
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         app.buttons["urlBar-cancel"].tap()
-        //waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 15)
+        //waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 15)
         navigator.nowAt(NewTabScreen)
         app.collectionViews.cells["TopSite"].firstMatch.swipeUp()
         snapshot("TopSitesMenu-00")
@@ -102,7 +102,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     func testHistoryTableContextMenu() {
         navigator.openURL(loremIpsumURL)
         waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"], timeoutValue: 3)
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 10)
         navigator.goto(HistoryPanelContextMenu)
         snapshot("HistoryTableContextMenu-01")
     }
@@ -135,7 +135,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     func testETPperSite() {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         app.buttons["urlBar-cancel"].tap()
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 10)
         navigator.nowAt(NewTabScreen)
         // Enable Strict ETP
         navigator.goto(TrackingProtectionSettings)
@@ -161,7 +161,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     func testSettingsETP() {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         app.buttons["urlBar-cancel"].tap()
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 10)
         navigator.nowAt(NewTabScreen)
         navigator.goto(TrackingProtectionSettings)
 
@@ -180,7 +180,16 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         snapshot("TrackingProtectionStrictMoreInfo-02")
     }
 
-    func testSetDefaultBrowser() {
+    func testMenuOnTopSites() {
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
+        app.buttons["urlBar-cancel"].tap()
+        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 10)
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(BrowserTabMenu)
+        snapshot("MenuOnTopSites-01")
+
+        // Set as Default browser screenshot
+        navigator.goto(NewTabScreen)
         if #available(iOS 14, *) {
             waitForExistence(app.buttons["Home.learnMoreDefaultBrowserbutton"], timeout: 15)
             app.buttons["Home.learnMoreDefaultBrowserbutton"].tap()
@@ -189,20 +198,11 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         }
     }
 
-    func testMenuOnTopSites() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
-        app.buttons["urlBar-cancel"].tap()
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(BrowserTabMenu)
-        snapshot("MenuOnTopSites-01")
-    }
-
     func testSettings() {
         let table = app.tables.element(boundBy: 0)
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         app.buttons["urlBar-cancel"].tap()
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 10)
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
         table.forEachScreen { i in
@@ -220,10 +220,9 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     func testPrivateBrowsingTabsEmptyState() {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         app.buttons["urlBar-cancel"].tap()
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 10)
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        app.tables.cells.element(boundBy: 0).buttons["closeTabButtonTabTray"].tap()
         snapshot("PrivateBrowsingTabsEmptyState-01")
     }
 }

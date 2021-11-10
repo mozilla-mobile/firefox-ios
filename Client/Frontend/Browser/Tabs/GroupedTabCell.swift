@@ -32,7 +32,7 @@ protocol GroupedTabDelegate {
     func newSearchFromGroup(searchTerm: String)
 }
 
-class GroupedTabCell: UICollectionViewCell, Themeable, UITableViewDataSource, UITableViewDelegate, GroupedTabsDelegate {
+class GroupedTabCell: UICollectionViewCell, NotificationThemeable, UITableViewDataSource, UITableViewDelegate, GroupedTabsDelegate {
     
     var tabDisplayManagerDelegate: GroupedTabDelegate?
     var tabGroups: [ASGroup<Tab>]?
@@ -286,7 +286,7 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
     }
     
     private func applyTheme() {
-        if ThemeManager.instance.currentName == .normal {
+        if LegacyThemeManager.instance.currentName == .normal {
             collectionView.backgroundColor = UIColor.Photon.White100
         } else {
             collectionView.backgroundColor = UIColor.Photon.DarkGrey50
@@ -359,7 +359,7 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: singleTabCellIdentifier, for: indexPath)
         guard let tabCell = cell as? TabCell, let tab = tabs?[indexPath.item] else { return cell }
         tabCell.delegate = self
-        tabCell.configureWith(tab: tab, is: selectedTab == tab)
+        tabCell.configureWith(tab: tab, isSelected: selectedTab == tab)
         tabCell.animator = nil
         return tabCell
     }

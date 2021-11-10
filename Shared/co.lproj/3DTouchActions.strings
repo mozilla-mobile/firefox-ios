@@ -8,7 +8,7 @@
 "Copy URL" = "Cupià l’indirizzu";
 
 /* Label for preview action on Tab Tray Tab to send the current link to another device */
-"Menu.SendLinkToDevice" = "Mandà a leia à un apparechju";
+"Menu.SendLinkToDevice" = "Mandà u liame à un apparechju";
 
 /* String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch */
 "Open Last Bookmark" = "Ultima indetta";

@@ -7,7 +7,6 @@ import Shared
 import Storage
 import XCGLogger
 import WebKit
-import SwiftyJSON
 
 private let log = Logger.browserLogger
 
@@ -173,9 +172,9 @@ class LoginsHelper: TabContentScript {
         let url = login.hostname.replacingOccurrences(of: https, with: "", options: .regularExpression, range: nil)
         let userName = login.username
         if !userName.isEmpty {
-            promptMessage = String(format: Strings.SaveLoginUsernamePrompt, userName, url)
+            promptMessage = String(format: .SaveLoginUsernamePrompt, userName, url)
         } else {
-            promptMessage = String(format: Strings.SaveLoginPrompt, url)
+            promptMessage = String(format: .SaveLoginPrompt, url)
         }
 
         if let existingPrompt = self.snackBar {
@@ -183,12 +182,12 @@ class LoginsHelper: TabContentScript {
         }
 
         snackBar = TimerSnackBar(text: promptMessage, img: UIImage(named: "key"))
-        let dontSave = SnackButton(title: Strings.LoginsHelperDontSaveButtonTitle, accessibilityIdentifier: "SaveLoginPrompt.dontSaveButton", bold: false) { bar in
+        let dontSave = SnackButton(title: .LoginsHelperDontSaveButtonTitle, accessibilityIdentifier: "SaveLoginPrompt.dontSaveButton", bold: false) { bar in
             self.tab?.removeSnackbar(bar)
             self.snackBar = nil
             return
         }
-        let save = SnackButton(title: Strings.LoginsHelperSaveLoginButtonTitle, accessibilityIdentifier: "SaveLoginPrompt.saveLoginButton", bold: true) { bar in
+        let save = SnackButton(title: .LoginsHelperSaveLoginButtonTitle, accessibilityIdentifier: "SaveLoginPrompt.saveLoginButton", bold: true) { bar in
             self.tab?.removeSnackbar(bar)
             self.snackBar = nil
             _ = self.profile.logins.addLogin(login: login)
@@ -206,9 +205,9 @@ class LoginsHelper: TabContentScript {
         let formatted: String
         let userName = new.username
         if !userName.isEmpty {
-            formatted = String(format: Strings.UpdateLoginUsernamePrompt, userName, new.hostname)
+            formatted = String(format: .UpdateLoginUsernamePrompt, userName, new.hostname)
         } else {
-            formatted = String(format: Strings.UpdateLoginPrompt, new.hostname)
+            formatted = String(format: .UpdateLoginPrompt, new.hostname)
         }
 
         if let existingPrompt = self.snackBar {
@@ -216,11 +215,11 @@ class LoginsHelper: TabContentScript {
         }
 
         snackBar = TimerSnackBar(text: formatted, img: UIImage(named: "key"))
-        let dontSave = SnackButton(title: Strings.LoginsHelperDontUpdateButtonTitle, accessibilityIdentifier: "UpdateLoginPrompt.donttUpdateButton", bold: false) { bar in
+        let dontSave = SnackButton(title: .LoginsHelperDontUpdateButtonTitle, accessibilityIdentifier: "UpdateLoginPrompt.donttUpdateButton", bold: false) { bar in
             self.tab?.removeSnackbar(bar)
             self.snackBar = nil
         }
-        let update = SnackButton(title: Strings.LoginsHelperUpdateButtonTitle, accessibilityIdentifier: "UpdateLoginPrompt.updateButton", bold: true) { bar in
+        let update = SnackButton(title: .LoginsHelperUpdateButtonTitle, accessibilityIdentifier: "UpdateLoginPrompt.updateButton", bold: true) { bar in
             self.tab?.removeSnackbar(bar)
             self.snackBar = nil
             _ = self.profile.logins.updateLogin(id: old.id, login: new)
@@ -263,9 +262,8 @@ class LoginsHelper: TabContentScript {
                 "name": "RemoteLogins:loginsFound",
                 "logins": logins
             ]
-
-            let json = JSON(dict)
-            let injectJavaScript = "window.__firefox__.logins.inject(\(json.stringify()!))"
+            guard let injected = dict.asString else { return }
+            let injectJavaScript = "window.__firefox__.logins.inject(\(injected))"
             self.tab?.webView?.evaluateJavascriptInDefaultContentWorld(injectJavaScript)
         }
     }

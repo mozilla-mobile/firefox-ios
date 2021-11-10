@@ -46,7 +46,7 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
                 return
             }
             // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
-            let toast = ButtonToast(labelText: Strings.ContextMenuButtonToastNewTabOpenedLabelText, buttonText: Strings.ContextMenuButtonToastNewTabOpenedButtonText, completion: { buttonPressed in
+            let toast = ButtonToast(labelText: .ContextMenuButtonToastNewTabOpenedLabelText, buttonText: .ContextMenuButtonToastNewTabOpenedButtonText, completion: { buttonPressed in
                 if buttonPressed {
                     self.tabManager.selectTab(tab)
                 }
@@ -63,10 +63,6 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
 
         let navigationController = ThemedDefaultNavigationController(rootViewController: tabTrayViewController!)
         navigationController.presentationController?.delegate = tabTrayViewController
-        // If we're not using the system theme, override the view's style to match
-        if !ThemeManager.instance.systemThemeIsOn {
-            navigationController.overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
-        }
 
         self.present(navigationController, animated: true, completion: nil)
 
@@ -131,7 +127,7 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
         let successCallback: (String, ButtonToastAction) -> Void = { (successMessage, toastAction) in
             switch toastAction {
             case .removeBookmark:
-                let toast = ButtonToast(labelText: successMessage, buttonText: Strings.UndoString, textAlignment: .left) { isButtonTapped in
+                let toast = ButtonToast(labelText: successMessage, buttonText: .UndoString, textAlignment: .left) { isButtonTapped in
                     isButtonTapped ? self.addBookmark(url: urlString) : nil
                 }
                 self.show(toast: toast)
@@ -241,7 +237,7 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
         switch result.value {
         case .success:
             UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.ReaderModeAddPageSuccessAcessibilityLabel)
-            SimpleToast().showAlertWithText(Strings.ShareAddToReadingListDone, bottomContainer: self.webViewContainer)
+            SimpleToast().showAlertWithText(.ShareAddToReadingListDone, bottomContainer: self.webViewContainer)
         case .failure(let error):
             UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.ReaderModeAddPageMaybeExistsErrorAccessibilityLabel)
             print("readingList.createRecordWithURL(url: \"\(url.absoluteString)\", ...) failed with error: \(error)")

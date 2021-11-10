@@ -71,7 +71,7 @@ class HistoryTests: BaseTestCase {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 5)
         //Clear private data from settings and confirm
         navigator.goto(ClearPrivateDataSettings)
         app.tables.cells["ClearPrivateData"].tap()
@@ -238,6 +238,8 @@ class HistoryTests: BaseTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         // Open the default website
         userState.url = path(forTestPage: "test-mozilla-book.html")
+        navigator.nowAt(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.goto(BrowserTab)
         // It is necessary to open two sites so that when one is closed private mode is not closed
         navigator.openNewURL(urlString: path(forTestPage: "test-mozilla-org.html"))
@@ -249,7 +251,7 @@ class HistoryTests: BaseTestCase {
         if isTablet {
             app.otherElements["Tabs Tray"].collectionViews.cells.element(boundBy: 0).buttons["tab close"].tap()
         } else {
-            app.tables.cells.element(boundBy: 0).buttons["closeTabButtonTabTray"].tap()
+            app.otherElements.cells.element(boundBy: 0).buttons["tab close"].tap()
         }
 
         navigator.performAction(Action.OpenNewTabFromTabTray)

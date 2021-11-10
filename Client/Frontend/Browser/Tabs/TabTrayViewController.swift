@@ -44,7 +44,7 @@ class TabTrayViewController: UIViewController {
     }()
 
     lazy var syncTabButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(title: Strings.FxASyncNow,
+        let button = UIBarButtonItem(title: .FxASyncNow,
                                      style: .plain,
                                      target: self,
                                      action: #selector(didTapSyncTabs))
@@ -55,9 +55,9 @@ class TabTrayViewController: UIViewController {
     
     lazy var syncLoadingView: UIStackView = {
         let syncingLabel = UILabel()
-        syncingLabel.text = Strings.SyncingMessageWithEllipsis
+        syncingLabel.text = .SyncingMessageWithEllipsis
         
-        let activityIndicator = UIActivityIndicatorView(style: .gray)
+        let activityIndicator = UIActivityIndicatorView(style: .medium)
         activityIndicator.color = .systemGray
         activityIndicator.startAnimating()
         
@@ -112,9 +112,9 @@ class TabTrayViewController: UIViewController {
     }()
 
     lazy var iPadNavigationMenuIdentifiers: UISegmentedControl = {
-        return UISegmentedControl(items: [Strings.TabTraySegmentedControlTitlesTabs,
-                                          Strings.TabTraySegmentedControlTitlesPrivateTabs,
-                                          Strings.TabTraySegmentedControlTitlesSyncedTabs])
+        return UISegmentedControl(items: [String.TabTraySegmentedControlTitlesTabs,
+                                          String.TabTraySegmentedControlTitlesPrivateTabs,
+                                          String.TabTraySegmentedControlTitlesSyncedTabs])
     }()
 
     lazy var iPhoneNavigationMenuIdentifiers: UISegmentedControl = {
@@ -331,7 +331,7 @@ class TabTrayViewController: UIViewController {
                 guard let self = self else { return }
                 
                 self.syncTabButton.customView = nil
-                self.syncTabButton.title = Strings.FxASyncNow
+                self.syncTabButton.title = .FxASyncNow
                 self.syncTabButton.isEnabled = true
             }
         default:
@@ -340,13 +340,12 @@ class TabTrayViewController: UIViewController {
     }
 }
 
-extension TabTrayViewController: Themeable {
+extension TabTrayViewController: NotificationThemeable {
      @objc func applyTheme() {
-         overrideUserInterfaceStyle =  ThemeManager.instance.userInterfaceStyle
          view.backgroundColor = UIColor.theme.tabTray.background
          navigationToolbar.barTintColor = UIColor.theme.tabTray.toolbar
          navigationToolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
-         let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
          if theme == .dark {
              navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
          } else {
