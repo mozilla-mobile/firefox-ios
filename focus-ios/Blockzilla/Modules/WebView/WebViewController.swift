@@ -282,7 +282,7 @@ extension WebViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         delegate?.webControllerDidStartNavigation(self)
         if case .on = trackingProtectionStatus { trackingInformation = TPPageStats() }
-        currentContentMode = navigation.effectiveContentMode
+        currentContentMode = navigation?.effectiveContentMode
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
