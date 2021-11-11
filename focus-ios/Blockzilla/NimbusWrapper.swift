@@ -59,4 +59,6 @@ class NimbusWrapper {
         self.nimbus?.applyPendingExperiments()
         self.nimbus?.fetchExperiments()
     }
+    
+    var shouldHaveBoldTitle: Bool { nimbus?.getVariables(featureId: .nimbusValidation).getBool("bold-tip-title") == true }
 }

@@ -160,6 +160,8 @@ struct UIConstants {
         static let trackingProtectionHeader = UIFont.systemFont(ofSize: 15, weight: .regular)
         static let trackingProtectionStatsText = UIFont.systemFont(ofSize: 15)
         static let trackingProtectionStatsDetail = UIFont.systemFont(ofSize: 20)
+        static let tipTitleMedium = UIFont.systemFont(ofSize: 14, weight: .medium)
+        static let tipTitleBold = UIFont.systemFont(ofSize: 14, weight: .bold)
     }
 
     struct layout {

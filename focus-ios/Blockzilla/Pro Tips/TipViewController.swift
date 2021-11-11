@@ -6,10 +6,13 @@ import UIKit
 
 class TipViewController: UIViewController {
     
+    // Mark dependency explicit
+    private let nimbus = NimbusWrapper.shared
+    
     private lazy var tipTitleLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .secondaryText
-        label.font = UIConstants.fonts.shareTrackerStatsLabel
+        label.textColor = .secondaryLabel
+        label.font = nimbus.shouldHaveBoldTitle == true ? UIConstants.fonts.tipTitleBold : UIConstants.fonts.tipTitleMedium
         label.textAlignment = .center
         label.numberOfLines = 0
         return label
@@ -18,7 +21,7 @@ class TipViewController: UIViewController {
     private lazy var tipDescriptionButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitleColor(.accent, for: .normal)
-        button.setTitleColor(.accent, for: .highlighted)
+        button.setTitleColor(.secondaryLabel, for: .disabled)
         button.titleLabel?.font = UIConstants.fonts.shareTrackerStatsLabel
         button.titleLabel?.textAlignment = .center
         button.titleLabel?.numberOfLines = 0
@@ -60,12 +63,6 @@ class TipViewController: UIViewController {
         view.addGestureRecognizer(tap)
         
         tipTitleLabel.text = tip.title
-        
-        if let variables = NimbusWrapper.shared.nimbus?.getVariables(featureId: .nimbusValidation), variables.getBool("bold-tip-title") == true {
-            tipTitleLabel.font = UIConstants.fonts.shareTrackerStatsLabelBold
-        } else {
-            tipTitleLabel.font = UIConstants.fonts.shareTrackerStatsLabel
-        }
         
         tipDescriptionButton.setTitle(tip.description, for: .normal)
         tipDescriptionButton.addTarget(self, action: #selector(tapTip), for: .touchUpInside)
