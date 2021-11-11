@@ -218,17 +218,3 @@ extension SiriFavoriteViewController: INUIEditVoiceShortcutViewControllerDelegat
         controller.dismiss(animated: true, completion: nil)
     }
 }
-
-class EditView: UIView {
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.backgroundColor = UIConstants.colors.cellSelected
-    }
-
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.backgroundColor = UIConstants.colors.cellBackground
-    }
-
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.backgroundColor = UIConstants.colors.cellBackground
-    }
-}

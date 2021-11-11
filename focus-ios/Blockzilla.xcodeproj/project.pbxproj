@@ -58,6 +58,15 @@
 		746BD9281F75C45A00BE8DB9 /* DictionaryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746BD9271F75C45A00BE8DB9 /* DictionaryExtensions.swift */; };
 		747ADA181FC38EFC00970132 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747ADA171FC38EFC00970132 /* IntroViewController.swift */; };
 		74F94FF21FD9CA070047E629 /* Intro.strings in Resources */ = {isa = PBXBuildFile; fileRef = 74F94FF41FD9CA070047E629 /* Intro.strings */; };
+		8400574E273516F600E48144 /* ScrollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8400574D273516F600E48144 /* ScrollViewController.swift */; };
+		840057502735182900E48144 /* PageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8400574F2735182800E48144 /* PageControl.swift */; };
+		8400575227351B7800E48144 /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8400575127351B7700E48144 /* EditView.swift */; };
+		840057542735301600E48144 /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840057532735301600E48144 /* SettingsTableViewCell.swift */; };
+		840057562735305600E48144 /* SettingsTableViewAccessoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840057552735305600E48144 /* SettingsTableViewAccessoryCell.swift */; };
+		840057582735309500E48144 /* SettingsTableViewToggleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840057572735309500E48144 /* SettingsTableViewToggleCell.swift */; };
+		8400575A27353B1800E48144 /* UIPasteBoardExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8400575927353B1800E48144 /* UIPasteBoardExtensions.swift */; };
+		8400575C27353BBD00E48144 /* UIScreenExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8400575B27353BBD00E48144 /* UIScreenExtensions.swift */; };
+		8400575E27353C3200E48144 /* UILabelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8400575D27353C3200E48144 /* UILabelExtensions.swift */; };
 		845174A626CD0C2500510113 /* ShortcutsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845174A526CD0C2500510113 /* ShortcutsManager.swift */; };
 		845174A826CD2C7100510113 /* ShortcutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845174A726CD2C7100510113 /* ShortcutView.swift */; };
 		846A23182668CC4500DB3C37 /* FullScreen.js in Resources */ = {isa = PBXBuildFile; fileRef = 846A23172668CC4500DB3C37 /* FullScreen.js */; };
@@ -574,6 +583,15 @@
 		74F9507E1FD9D08A0047E629 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Intro.strings; sourceTree = "<group>"; };
 		74F950801FD9D0A00047E629 /* af */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = af; path = af.lproj/Intro.strings; sourceTree = "<group>"; };
 		80D9AA926EFBD788739486EB /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		8400574D273516F600E48144 /* ScrollViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViewController.swift; sourceTree = "<group>"; };
+		8400574F2735182800E48144 /* PageControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageControl.swift; sourceTree = "<group>"; };
+		8400575127351B7700E48144 /* EditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditView.swift; sourceTree = "<group>"; };
+		840057532735301600E48144 /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
+		840057552735305600E48144 /* SettingsTableViewAccessoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewAccessoryCell.swift; sourceTree = "<group>"; };
+		840057572735309500E48144 /* SettingsTableViewToggleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewToggleCell.swift; sourceTree = "<group>"; };
+		8400575927353B1800E48144 /* UIPasteBoardExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIPasteBoardExtensions.swift; sourceTree = "<group>"; };
+		8400575B27353BBD00E48144 /* UIScreenExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScreenExtensions.swift; sourceTree = "<group>"; };
+		8400575D27353C3200E48144 /* UILabelExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabelExtensions.swift; sourceTree = "<group>"; };
 		845174A526CD0C2500510113 /* ShortcutsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsManager.swift; sourceTree = "<group>"; };
 		845174A726CD2C7100510113 /* ShortcutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutView.swift; sourceTree = "<group>"; };
 		846A23172668CC4500DB3C37 /* FullScreen.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = FullScreen.js; sourceTree = "<group>"; };
@@ -1437,6 +1455,8 @@
 				1D3BEDFA20C5E76A0019B722 /* FindInPageBar.swift */,
 				846A23172668CC4500DB3C37 /* FullScreen.js */,
 				747ADA171FC38EFC00970132 /* IntroViewController.swift */,
+				8400574F2735182800E48144 /* PageControl.swift */,
+				8400574D273516F600E48144 /* ScrollViewController.swift */,
 				D30179C21BCC6F65009AD388 /* AboutViewController.swift */,
 				74584E341FA1077000AF2582 /* SettingsContentViewController.swift */,
 				7460BD661F58B1B10096B745 /* GradientProgressBar.swift */,
@@ -1454,6 +1474,7 @@
 				D5ABA3D71FCC846800D5C060 /* AddCustomDomainViewController.swift */,
 				C8415DB226E9FA38008BAAA2 /* UIApplication+Orientation.swift */,
 				D3DA77841DC2C307009C114E /* ErrorPage.swift */,
+				8400575127351B7700E48144 /* EditView.swift */,
 				D30AEEBA1DE4CB1B0096A2E7 /* FileManagerExtensions.swift */,
 				D3561B2A1DB5925100A5EEAF /* GradientBackgroundView.swift */,
 				D3E3CA7C1DA827AD0079C94B /* HomeViewController.swift */,
@@ -1475,6 +1496,9 @@
 				D3E54FD01DEFB063003E1AFF /* SearchEngineManager.swift */,
 				D3E54FDF1DF0E221003E1AFF /* SearchSettingsViewController.swift */,
 				D33A1AB01BC48FAC0003D929 /* SettingsViewController.swift */,
+				840057532735301600E48144 /* SettingsTableViewCell.swift */,
+				840057552735305600E48144 /* SettingsTableViewAccessoryCell.swift */,
+				840057572735309500E48144 /* SettingsTableViewToggleCell.swift */,
 				16D465B02127891000FEC226 /* SiriFavoriteViewController.swift */,
 				163BFFE52125EE260007CEBC /* SiriShortcuts.swift */,
 				EBE44F4D20ADDF6A005AFEA6 /* SmartLabel.swift */,
@@ -1488,6 +1512,9 @@
 				D392881C1BC5CF180016A9A0 /* UIColorExtensions.swift */,
 				D392887E1BC5E47E0016A9A0 /* UIConstants.swift */,
 				D3E54FDD1DF0E0D6003E1AFF /* UIImageExtensions.swift */,
+				8400575D27353C3200E48144 /* UILabelExtensions.swift */,
+				8400575927353B1800E48144 /* UIPasteBoardExtensions.swift */,
+				8400575B27353BBD00E48144 /* UIScreenExtensions.swift */,
 				D32F71D21BCEF67C006D44FC /* UIViewExtensions.swift */,
 				EB84F96E209380CE00BA6739 /* URLExtensions.swift */,
 				D3E2C96A1DA3069000DEBE3D /* URIFixup.swift */,
@@ -2103,6 +2130,7 @@
 				D3E54FE01DF0E221003E1AFF /* SearchSettingsViewController.swift in Sources */,
 				30DFF98021810BF20055707C /* SearchSuggestClient.swift in Sources */,
 				C8337E06271089C200093D42 /* Section.swift in Sources */,
+				840057582735309500E48144 /* SettingsTableViewToggleCell.swift in Sources */,
 				16D7169C2114EF76000C8A66 /* BlockerToggle.swift in Sources */,
 				C817A35822CE73B4002529FF /* ReadWriteLock.swift in Sources */,
 				C82D143426EF644E007B275C /* UIViewController+Child.swift in Sources */,
@@ -2111,7 +2139,11 @@
 				C89AA96C271720330089838F /* ThemeViewController.swift in Sources */,
 				F7B3E49D2165C32B00118785 /* SearchSuggestionsPromptView.swift in Sources */,
 				D33E9B241E1D93DD00A39A44 /* RequestHandler.swift in Sources */,
+				8400575227351B7800E48144 /* EditView.swift in Sources */,
+				8400575C27353BBD00E48144 /* UIScreenExtensions.swift in Sources */,
 				C8337DFE2710898800093D42 /* SwitchTableViewCell.swift in Sources */,
+				840057502735182900E48144 /* PageControl.swift in Sources */,
+				8400574E273516F600E48144 /* ScrollViewController.swift in Sources */,
 				D3426AF61DB84E7A0016DA5A /* SearchEngine.swift in Sources */,
 				B3CD41C91FD1027000AEBD58 /* InsetTextField.swift in Sources */,
 				D30179071BC6CB19009AD388 /* BlockerEnabledDetector.swift in Sources */,
@@ -2120,11 +2152,13 @@
 				161D90312108085F00C2A74A /* HomeViewToolbar.swift in Sources */,
 				EBE44F4E20ADDF6A005AFEA6 /* SmartLabel.swift in Sources */,
 				E4BF2DD71BACE8CA00DA9D68 /* AppDelegate.swift in Sources */,
+				8400575E27353C3200E48144 /* UILabelExtensions.swift in Sources */,
 				D3E2C9691DA3024800DEBE3D /* InsetButton.swift in Sources */,
 				F8BC6A0927224B890026AB9F /* NimbusWrapper.swift in Sources */,
 				C8337DF52710898800093D42 /* ToggleItem.swift in Sources */,
 				F7FF8B5B2194084000CCA80F /* UIDeviceExtensions.swift in Sources */,
 				F805722F1DBEE504004339C1 /* WebCacheUtils.swift in Sources */,
+				8400575A27353B1800E48144 /* UIPasteBoardExtensions.swift in Sources */,
 				1D3BEDFB20C5E76B0019B722 /* FindInPageBar.swift in Sources */,
 				84EF9F97269489980000E361 /* TipsPageControl.swift in Sources */,
 				D30DF93E1DC1634F0064736C /* Toast.swift in Sources */,
@@ -2137,11 +2171,13 @@
 				D392881D1BC5CF180016A9A0 /* UIColorExtensions.swift in Sources */,
 				EB84F96F209380CE00BA6739 /* URLExtensions.swift in Sources */,
 				D3E3CA7D1DA827AD0079C94B /* HomeViewController.swift in Sources */,
+				840057542735301600E48144 /* SettingsTableViewCell.swift in Sources */,
 				D8E0152C1FB4136E00CA3B9F /* AddSearchEngineViewController.swift in Sources */,
 				D3E251EB1DAD714C005918DC /* SafariInstructionsViewController.swift in Sources */,
 				C80F901C26C554B800F5112B /* PhotonActionSheetCell.swift in Sources */,
 				D35A0E021E26C94F00297884 /* ClosedRangeExtensions.swift in Sources */,
 				C88A5D3B26EF9245009A135D /* ShareTrackersViewController.swift in Sources */,
+				840057562735305600E48144 /* SettingsTableViewAccessoryCell.swift in Sources */,
 				D3E2C8FA1D9F170200DEBE3D /* LocalContentBlocker.swift in Sources */,
 				C817A35722CE73B4002529FF /* Deferred.swift in Sources */,
 				D35C11471E04AADA005FFFEF /* AppConfig.swift in Sources */,

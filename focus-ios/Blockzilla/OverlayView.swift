@@ -505,44 +505,10 @@ class OverlayView: UIView {
         }
     }
 }
-extension URL {
-    public func isWebPage() -> Bool {
-        let schemes = ["http", "https"]
-        if let scheme = scheme, schemes.contains(scheme) {
-            return true
-        }
-        return false
-    }
-}
 
 extension OverlayView: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {}
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {}
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {}
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {}
-}
-
-extension UIPasteboard {
-
-    //
-    // As of iOS 11: macOS/iOS's Universal Clipboard feature causes UIPasteboard to block.
-    //
-    // (Known) Apple Radars that have been filed:
-    //
-    //  http://www.openradar.me/28787338
-    //  http://www.openradar.me/28774309
-    //
-    // Discussion on Twitter:
-    //
-    //  https://twitter.com/steipete/status/787985965432369152
-    //
-    //  To workaround this, urlAsync(callback:) makes a call of UIPasteboard.general on
-    //  an async dispatch queue, calling the completion block when done.
-    //
-    func urlAsync(callback: @escaping (URL?) -> Void) {
-        DispatchQueue.global().async {
-            let url = URL(string: UIPasteboard.general.string ?? "")
-            callback(url)
-        }
-    }
 }
