@@ -593,7 +593,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     @objc private func whatsNewClicked() {
-        highlightsButton.tintColor = UIColor.white
+        highlightsButton.tintColor = view.currentTheme == .light ? .systemGray2 : .white
         navigationController?.pushViewController(SettingsContentViewController(url: URL(forSupportTopic: .whatsNew)), animated: true)
         whatsNew.didShowWhatsNew()
     }

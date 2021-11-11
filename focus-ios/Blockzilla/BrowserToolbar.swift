@@ -99,10 +99,9 @@ class BrowserToolbar: UIView {
     var color: toolbarState = .loading {
         didSet {
             let duration = UIConstants.layout.urlBarTransitionAnimationDuration
-            let isLightMode = UserDefaults.standard.theme == .light || (UserDefaults.standard.theme == .device && self.traitCollection.userInterfaceStyle == .light)
             backgroundDark.animateHidden(color != .dark, duration: duration)
             backgroundBright.animateHidden(color != .bright, duration: duration)
-            backgroundLoading.animateHidden(isLightMode ? true : color != .loading, duration: duration)
+            backgroundLoading.animateHidden(currentTheme == .light ? true : color != .loading, duration: duration)
             toolset.isLoading = color == .loading
         }
     }

@@ -5,6 +5,11 @@
 import UIKit
 
 extension UIView {
+    
+    var currentTheme: UIUserInterfaceStyle {
+        return UserDefaults.standard.theme == .device ? self.traitCollection.userInterfaceStyle : UserDefaults.standard.theme.userInterfaceStyle
+    }
+    
     /// Animate the opacity of the view, updating its hidden state on completion.
     func animateHidden(_ hidden: Bool, duration: TimeInterval, completion: (() -> Void)? = nil) {
         self.isHidden = false
