@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import Combine
 
 class TrackingHeaderView: UIView {
     private lazy var faviImageView: AsyncImageView = {
@@ -59,8 +60,8 @@ class TrackingHeaderView: UIView {
         }
     }
     
-    func configure(domain: String, imageURL: URL) {
+    func configure(domain: String, publisher: AnyPublisher<UIImage, Never>) {
         self.domainLabel.text = domain
-        self.faviImageView.load(imageURL: imageURL, defaultImage: .defaultFavicon)
+        self.faviImageView.load(from: publisher)
     }
 }

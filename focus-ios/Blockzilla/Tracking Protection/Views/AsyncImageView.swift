@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import Combine
 
 class AsyncImageView: UIView {
     
@@ -47,11 +48,22 @@ class AsyncImageView: UIView {
                     self?.activityIndicator.stopAnimating()
                     self?.imageView.image = image
                     
-                case .error:
+                case .failure:
                     self?.imageView.image = defaultImage
                     self?.activityIndicator.stopAnimating()
                 }
             }
         }
+    }
+    
+    var cancellable: AnyCancellable?
+    
+    func load(from publisher: AnyPublisher<UIImage, Never>) {
+        activityIndicator.startAnimating()
+        cancellable = publisher
+            .sink { image in
+                self.activityIndicator.stopAnimating()
+                self.imageView.image = image
+            }
     }
 }

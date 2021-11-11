@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import Combine
 
 class ImageLoader {
     private var loadedImages = [URL: UIImage]()
@@ -11,7 +12,7 @@ class ImageLoader {
 
 extension ImageLoader {
     @discardableResult
-    func loadImage(_ url: URL, _ completion: @escaping (Result<UIImage, Error>) -> Void) -> UUID? {
+    func loadImage(_ url: URL, _ completion: @escaping (Swift.Result<UIImage, Error>) -> Void) -> UUID? {
         
         if let image = loadedImages[url] {
             completion(.success(image))
@@ -33,7 +34,7 @@ extension ImageLoader {
             guard let error = error else { return }
             
             guard (error as NSError).code == NSURLErrorCancelled else {
-                completion(.error(error))
+                completion(.failure(error))
                 return
             }
         }
@@ -41,6 +42,14 @@ extension ImageLoader {
         
         runningRequests[uuid] = task
         return uuid
+    }
+    
+    func loadImage(_ url: URL) -> Future<UIImage, Error> {
+        Future { promise in
+            self.loadImage(url) { result in
+                promise(result)
+            }
+        }
     }
     
     func cancelLoad(_ uuid: UUID) {
