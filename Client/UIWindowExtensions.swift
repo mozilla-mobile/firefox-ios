@@ -6,16 +6,23 @@ import Foundation
 
 extension UIWindow {
     static var keyWindow: UIWindow? {
-        UIApplication.shared.windows.first(where: \.isKeyWindow)
+        return UIApplication.shared.connectedScenes
+            .filter { $0.activationState == .foregroundActive }
+            .first(where: { $0 is UIWindowScene })
+            .flatMap({ $0 as? UIWindowScene })?.windows
+            .first(where: \.isKeyWindow)
     }
+
     static var isLandscape: Bool {
         interfaceOrientation?
             .isLandscape ?? false
     }
+
     static var isPortrait: Bool {
         interfaceOrientation?
             .isPortrait ?? false
     }
+
     static var interfaceOrientation: UIInterfaceOrientation? {
         keyWindow?.windowScene?.interfaceOrientation
     }
