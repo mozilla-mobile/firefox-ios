@@ -488,7 +488,7 @@ struct UIConstants {
         static let AddSearchEngineName = NSLocalizedString("Settings.Search.SearchEngineName", value: "Search engine name", comment: "Placeholder text for input of new search engine name")
         static let AddSearchEngineTemplate = NSLocalizedString("Settings.Search.SearchTemplate", value: "Search string to use", comment: "Label for input of search engine template")
         static let AddSearchEngineTemplatePlaceholder = NSLocalizedString("Settings.Search.SearchTemplatePlaceholder", value: "Paste or enter search string. If necessary, replace search term with: %s.", comment: "Placeholder text for input of new search engine template")
-        static let AddSearchEngineTemplateExample = NSLocalizedString("settings.Search.SearchTemplateExample", value: "Example: searchengineexample.com/search/?q=%s", comment: "Text displayed as an example of the template to add a search engine.")
+        static let AddSearchEngineTemplateExample2 = NSLocalizedString("settings.Search.SearchTemplateExample", value: "Example: searchengine.example.com/search/?q=%s", comment: "Text displayed as an example of the template to add a search engine.")
         static let RestoreSearchEnginesLabel = NSLocalizedString("Settings.Search.RestoreEngine", value: "Restore Default Search Engines", comment: "Label for button to bring deleted default engines back")
         static let Edit = NSLocalizedString("Edit", value: "Edit", comment: "Label on button to allow edits")
         static let Done = NSLocalizedString("Done", value: "Done", comment: "Label on button to complete edits")
