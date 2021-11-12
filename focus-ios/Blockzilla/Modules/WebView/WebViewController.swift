@@ -273,6 +273,10 @@ class WebViewController: UIViewController, WebController {
     func focus() {
         browserView.becomeFirstResponder()
     }
+    
+    func resetZoom() {
+        browserView.scrollView.setZoomScale(1.0, animated: true)
+    }
 
     override func viewDidLoad() {
         self.browserView.addObserver(self, forKeyPath: "URL", options: .new, context: nil)
