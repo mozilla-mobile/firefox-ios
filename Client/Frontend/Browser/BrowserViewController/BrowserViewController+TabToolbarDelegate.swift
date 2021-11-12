@@ -100,7 +100,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             PhotonActionSheetItem(title: .AppMenuPasswords, iconString: "key", iconType: .Image, iconAlignment: .left, isEnabled: true) { _, _ in
                 guard let navController = self.navigationController else { return }
                 let navigationHandler: ((_ url: URL?) -> Void) = { url in
-                    UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
+                    UIWindow.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
                     self.openURLInNewTab(url)
                 }
                             
