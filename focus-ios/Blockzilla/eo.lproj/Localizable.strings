@@ -346,9 +346,6 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Serĉa teksto";
 
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Ekzemplo: searchengineexample.com/search/?q=%s";
-
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Alguu aŭ tajpu tekston. Se bezonatas, anstataŭigu la serĉan tekston per: %s.";
 

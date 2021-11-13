@@ -382,9 +382,6 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Chaîne de recherche à utiliser";
 
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Exemple : searchengineexample.com/search/?q=%s";
-
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Collez ou saisissez une chaîne de recherche. Si nécessaire, remplacez le terme recherché avec : %s.";
 
@@ -553,6 +550,12 @@
 /* Text for a label that indicates the description for biometric Touch ID tip. */
 "Tip.BiometricTouchId.Description" = "Activer Touch ID";
 
+/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Release.Description" = "En savoir plus sur cette mise à jour et les autres mises à jour de %@.";
+
+/* Text for a label that indicates the title for release tip. */
+"Tip.Release.Title" = "Mais oui, nous avons un nouveau look rafraichi !";
+
 /* Text for a label that indicates the description for request desktop tip. */
 "Tip.RequestDesktop.Description" = "Actions de la page > Voir la version ordinateur";
 
@@ -585,6 +588,9 @@
 
 /* Text for a label that indicates the description for sites not working tip. */
 "Tip.SitesNotWorking.Description" = "Essayez de désactiver la protection contre le pistage";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "Un site se comporte bizarrement ou du contenu manque ?";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Utilisez Touch ID pour revenir sur %@";

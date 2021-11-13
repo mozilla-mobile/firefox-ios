@@ -316,9 +316,6 @@
 /* Placeholder text for input of new search engine name */
 "Settings.Search.SearchEngineName" = "ಹುಡುಕಾಟ ಎಂಜಿನ್ ಹೆಸರು";
 
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "ಉದಾಹರಣೆ: searchengineexample.com/search/?q=%s";
-
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "ಅಂಟಿಸಿ ಅಥವಾ ಹುಡುಕಾಟ ಸಾಲನ್ನು ನಮೂದಿಸಿ. ಅಗತ್ಯವಿದ್ದರೆ, ಹುಡುಕಾಟ ಪದವನ್ನು ಇದರೊಂದಿಗೆ ಬದಲಾಯಿಸಿ: %s.";
 

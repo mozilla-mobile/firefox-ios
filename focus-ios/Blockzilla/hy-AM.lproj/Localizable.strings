@@ -265,9 +265,6 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Որոնել տողը՝ օգտագործելու համար";
 
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Օրինակ՝ example.com/search/?q=%s";
-
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Տեղադրեք կամ մուտքագրեք որոնիչի տողը: Եթե անհրաժեշտ է՝ փոխարինեք որոնվող բառը հետևյալով՝ %s:";
 

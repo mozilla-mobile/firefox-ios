@@ -361,9 +361,6 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Catena di ricerca à impiegà";
 
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Esempiu : searchengineexample.com/search/?q=%s";
-
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Incullate o scrivite una catena di ricerca. S’ellu hè bisognu, rimpiazzate u termine di ricerca da : %s.";
 

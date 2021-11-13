@@ -382,9 +382,6 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Paieškos eilutės struktūra";
 
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Pavyzdys: example.com/search/?q=%s";
-
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Įdėkite arba įveskite paieškos eilutę. Jeigu reikia, pakeiskite paieškos žodžius šiuo tekstu: %s.";
 

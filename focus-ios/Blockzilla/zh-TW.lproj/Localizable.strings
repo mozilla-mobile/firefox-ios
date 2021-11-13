@@ -382,9 +382,6 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "要使用的搜尋字串";
 
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "例如: searchengineexample.com/search/?q=%s";
-
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "請貼上或輸入搜尋字串。有需要的話，將搜尋詞修改為: %s。";
 

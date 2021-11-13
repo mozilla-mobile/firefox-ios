@@ -346,9 +346,6 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "İstifadə ediləcək axtarış sətri";
 
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Məsələn: mozillaz.org/search/?q=%s";
-
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Axtarış sətrini daxil edin və ya yapışdırın. Əgər lazımdırsa, axtarış ifadəsini bununla dəyişin: %s.";
 

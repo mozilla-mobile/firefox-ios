@@ -361,9 +361,6 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "رشته جست‌وجو برای اضافه کردن";
 
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "مثال: searchengineexample.com/search/?q=%s";
-
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "جای‌گذاری یا ورود رشتهٔ جست‌وجو. در صورت لزوم، شرط جست‌وجو را با %s جایگزین کنید.";
 

@@ -370,9 +370,6 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "String pencarian untuk digunakan";
 
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Contoh: contohmesinpencari.id/search/?q=%s";
-
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Tempel atau masukkan string pencarian. Jika diperlukan, ganti istilah pencarian dengan: %s.";
 

@@ -349,9 +349,6 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Text de căutare spre utilizare";
 
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Exemplu: exempludemotordecăutare.com/search/?q=%s";
-
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Lipește sau introdu formatul de căutare. Dacă este necesar, înlocuiește termenul de căutare cu: %s.";
 

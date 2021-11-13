@@ -319,9 +319,6 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Käytettävä hakulause";
 
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Esimerkki: esimerkkihakukone.com/search/?q=%s";
-
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Hakukone";
 

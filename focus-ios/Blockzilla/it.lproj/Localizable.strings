@@ -382,9 +382,6 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Stringa di ricerca da utilizzare";
 
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Esempio: searchengineexample.com/search/?q=%s";
-
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Incolla o inserisci la stringa di ricerca. Se necessario sostituisci i termini di ricerca con %s.";
 
@@ -476,7 +473,7 @@
 "Settings.whatsNewTitle" = "Novità";
 
 /* Title for settings section to enable different Siri Shortcuts. */
-"Settinsg.siriShortcutsTitle" = "SCORCIATOIE SIRI";
+"Settinsg.siriShortcutsTitle" = "COMANDI SIRI";
 
 /* Text for a share button */
 "share" = "Condividi";

@@ -346,9 +346,6 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "An sreang luirg a thèid a chleachdadh";
 
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Mar eisimpleir: searchengineexample.com/search/?q=%s";
-
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Cuir sreang luirg a-steach. Ma bhios feum, cuir na leanas an àite a’ bhriathair-luirg: %s.";
 

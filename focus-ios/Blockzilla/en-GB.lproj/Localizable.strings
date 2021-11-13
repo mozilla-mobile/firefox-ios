@@ -361,9 +361,6 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Search string to use";
 
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Example: searchengineexample.com/search/?q=%s";
-
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Paste or enter search string. If necessary, replace search term with: %s.";
 

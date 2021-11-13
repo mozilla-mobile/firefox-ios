@@ -271,9 +271,6 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "ຊອກຫາສະຕຣິງທີ່ຈະໃຊ້";
 
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "ຕົວຢ່າງ: searchengineexample.com/search/?q=%s";
-
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "ວາງ ຫຼື ປ້ອນ String ການຄົ້ນຫາ ຫາກຈຳເປັນໃຫ້ແທນທີ່ຄຳຄົ້ນຫາດ້ວຍ: %s.";
 

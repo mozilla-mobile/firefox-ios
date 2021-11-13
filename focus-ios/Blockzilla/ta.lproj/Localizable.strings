@@ -310,9 +310,6 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "பயன்படுத்த வேண்டிய தேடல் தொடர்";
 
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "எகா: searchengineexample.com/search/?q=%s";
-
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "தேடல் தொடரை ஒட்டு அல்லது உள்ளிடு. தேவைப்படின், தேடல் தொடரை பதிலிடு: %s.";
 

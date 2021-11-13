@@ -346,9 +346,6 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "वापरण्यासाठी स्ट्रिंग शोधा";
 
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "उदाहरण: searchengineexample.com/search/?q=%s";
-
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "शोध संज्ञा चिकटवा किंवा प्रविष्ट करा. गरज वाटल्यास शोध संज्ञा याने बदला: %s.";
 

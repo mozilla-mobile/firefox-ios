@@ -346,9 +346,6 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "অনুসন্ধানের জন্যে স্ট্রিং";
 
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "উদাহরণ: searchengineexample.com/search/?q=%s";
-
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "প্রতিলেপন বা অনুসন্ধান বাক্য লিখুন। প্রয়োজন হলে, অনুসন্ধান শব্দটি %s দিয়ে প্রতিস্থাপন করুন।";
 

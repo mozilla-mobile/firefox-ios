@@ -382,9 +382,6 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Όρος αναζήτησης για χρήση";
 
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Παράδειγμα: searchengineexample.com/search/?q=%s";
-
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Επικολλήστε ή εισαγάγετε έναν όρο αναζήτησης. Αν πρέπει, αντικαταστήστε τον όρο αναζήτησης με: %s.";
 

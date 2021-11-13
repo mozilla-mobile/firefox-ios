@@ -262,9 +262,6 @@
 /* Label for input field for the name of the search engine to be added */
 "Settings.Search.NameToDisplay" = "ప్రదర్శించడానికి పేరు";
 
-/* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "ఉదాహరణ: searchengineexample.com/search/?q=%s";
-
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "శోధన యంత్రం";
 
