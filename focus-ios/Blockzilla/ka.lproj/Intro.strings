@@ -8,7 +8,7 @@
 "Intro.Slides.Next.Button" = "შემდეგი";
 
 /* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "რამე განსხვავებულს ეძებთ? აირჩიეთ სხვა საძიებო სისტემა.";
+"Intro.Slides.Search.Description" = "განსხვავებულად გსურთ მოიძიოთ? აირჩიეთ სასურველი საძიებო.";
 
 /* Title for the second  panel 'Search' in the First Run tour. */
 "Intro.Slides.Search.Title" = "მოიძიეთ გვერდები, თქვენებურად";

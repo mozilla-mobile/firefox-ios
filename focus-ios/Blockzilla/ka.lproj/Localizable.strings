@@ -29,7 +29,7 @@
 "About.safariBullet1" = "შეზღუდეთ თვალთვალი, მეტი პირადულობისთვის";
 
 /* Label on About screen */
-"About.safariBullet2" = "ვებშრიფტების შეზღუდვა, გვერდის მოცულობის შესამცირებლად";
+"About.safariBullet2" = "შეზღუდეთ ვებშრიფტები, გვერდის მოცულობის შესამცირებლად";
 
 /* Label on About screen */
 "About.safariBulletHeader" = "გამოიყენეთ, Safari-ს დამატებად:";
@@ -65,7 +65,7 @@
 "Autocomplete.addCustomUrlExample" = "მაგალითად: example.com";
 
 /* Label for the input to add a custom URL */
-"Autocomplete.addCustomUrlLabel" = "URL დასამატებლად";
+"Autocomplete.addCustomUrlLabel" = "ბმული დასამატებლად";
 
 /* Placeholder for the input field to add a custom URL */
 "Autocomplete.addCustomUrlPlaceholder" = "ჩასვით ან შეიყვანეთ URL";
@@ -271,6 +271,12 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” ცდილობს თქვენს სურათებთან წვდომის მიღებას";
 
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "კავშირი დაუცველია";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "კავშირი დაცულია";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "სრული საიტი";
 
@@ -305,7 +311,7 @@
 "SearchSuggestions.promptTitle" = "გსურთ ძიების შემოთავაზებების ჩვენება?";
 
 /* Title for the URL Autocomplete row */
-"Settings.autocompleteSection" = "URL-ს თვითშევსება";
+"Settings.autocompleteSection" = "ბმულის თვითშევსება";
 
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "შიგთავსის სხვა მეთვალყურეების შეზღუდვამ, შესაძლოა ზოგი გვერდის ან ვიდეოს ჩვენება შეაფერხოს.";
@@ -325,6 +331,12 @@
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla აღრიცხავს მხოლოდ იმ მონაცემებს, რომლებიც გვეხმარება, გავაუმჯობესოთ %@.";
 
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextStudies" = "%@ დროდადრო დააყენებს და ჩაატარებს კვლევებს.";
+
+/* Title for section in settings menu */
+"Settings.general" = "ზოგადი";
+
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "ვრცლად.";
 
@@ -338,16 +350,16 @@
 "Settings.rate" = "შეაფასეთ %@";
 
 /* Label for Safari integration section */
-"Settings.safariTitle" = "SAFARI შეთავსება";
+"Settings.safariTitle" = "SAFARI-სთან შეთავსება";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "პარამეტრები";
 
 /* Text for button to add another search engine in settings */
-"Settings.Search.AddSearchEngineButton" = "სხვა საძიებო სისტემის დამატება";
+"Settings.Search.AddSearchEngineButton" = "სხვა საძიებოს დამატება";
 
 /* Text for button to add another search engine in settings with the + prefix */
-"Settings.Search.AddSearchEngineButtonWithPlus" = "+ სხვა საძიებო სისტემის დამატება";
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ სხვა საძიებოს დამატება";
 
 /* Title on add search engine settings screen */
 "Settings.Search.AddSearchEngineTitle" = "საძიებო სისტემის დამატება";
@@ -371,7 +383,7 @@
 "Settings.Search.SearchTemplate" = "საძიებო ფრაზა";
 
 /* Placeholder text for input of new search engine template */
-"Settings.Search.SearchTemplatePlaceholder" = "ჩასვით ან შეიყვანეთ საძიებო ფრაზა. თუ საჭიროა, შეცვალეთ სიტყვა %s-ით.";
+"Settings.Search.SearchTemplatePlaceholder" = "ჩასვით ან შეიყვანეთ საძიებო ფრაზა. თუ საჭიროა, მიუწერეთ %s.";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "საძიებო სისტემა";
@@ -398,7 +410,7 @@
 "Settings.sectionSecurity" = "უსაფრთხოება";
 
 /* System value for theme section in settings menu */
-"Settings.systemTheme" = "სისტემის იერსახე";
+"Settings.systemTheme" = "სისტემის მიხედვით";
 
 /* Theme section in settings menu */
 "Settings.theme" = "იერსახე";
@@ -428,7 +440,7 @@
 "Settings.toggleFaceIDDescription" = "სახის ამომცნობით შესაძლებელია გაიხსნას %@ თუ URL-ბმული უკვე გახსნილია პროგრამაში";
 
 /* Show home screen tips toggle label on settings screen */
-"Settings.toggleHomeScreenTips" = "ცნობების ჩვენება საწყის გვერდზე";
+"Settings.toggleHomeScreenTips" = "ცნობები საწყის გვერდზე";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "შესაძლოა, ზოგიერთმა საიტმა ან ვიდეომ არ იმუშაოს გამართულად";
@@ -438,6 +450,9 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "მონაცემების აღრიცხვა";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "კვლევები";
 
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "გამოიყენეთ თითის ანაბეჭდი, პროგრამის გასახსნელად";
@@ -458,7 +473,7 @@
 "Settings.whatsNewTitle" = "რა სიახლეებია";
 
 /* Title for settings section to enable different Siri Shortcuts. */
-"Settinsg.siriShortcutsTitle" = "SIRI მალსახმობები";
+"Settinsg.siriShortcutsTitle" = "SIRI-ს მალსახმობები";
 
 /* Text for a share button */
 "share" = "გაზიარება";
@@ -490,6 +505,9 @@
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Chrome-ში გახსნა";
 
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "ნაგულისხმევი ბრაუზერით";
+
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Firefox-ში გახსნა";
 
@@ -512,7 +530,7 @@
 "Siri.erase" = "გასუფთავება";
 
 /* Title of option in settings to set up Siri to erase and then open the app. */
-"Siri.eraseAndOpen" = "გასუფთავება და გახსნა";
+"Siri.eraseAndOpen" = "წაშლა და გახსნა";
 
 /* Title for screen to add a favorite URL to Siri. */
 "Siri.favoriteUrl" = "რჩეული საიტის გახსნა";
@@ -521,7 +539,58 @@
 "Siri.openURL" = "რჩეული საიტის გახსნა";
 
 /* Label for input to set a favorite URL to be opened by Siri. */
-"Siri.urlToOpen" = "URL-მისამართი გასახსნელად";
+"Siri.urlToOpen" = "ბმული გასახსნელად";
+
+/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.Biometric.Title" = "ჩაიკეტოს %@ საიტის გახსნისას:";
+
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "ჩაირთოს Face ID";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "ჩაირთოს Touch ID";
+
+/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Release.Description" = "იხილეთ, %@-ის ამ და სხვა სიახლეებზე ვრცლად.";
+
+/* Text for a label that indicates the title for release tip. */
+"Tip.Release.Title" = "რასაკვირველია, ახალი იერსახითაა!";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "გვერდზე ზემოქმედება > სრული საიტი";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "გსურთ, საიტის სრული სახით ხილვა?";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "%@ შეიზრუდა ამ დრომდე.";
+
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "თქვენ ნახულობთ. %@ ზღუდავს.";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "აირჩიეთ მალსახმობებში დამატება %@ მენიუდან";
+
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "შექმენით, სასურველი საიტების მალსახმობები:";
+
+/* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriErase.Description" = "Siri-მალსახმობის დამატება";
+
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.SiriErase.Title" = "„Siri, გაასუფთავე %@.”";
+
+/* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriFavorite.Description" = "Siri-მალსახმობის დამატება";
+
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "„Siri, გახსენი ჩემი რჩეული საიტი.“";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "სცადეთ, თვალთვალისგან დაცვის გათიშვა";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "საიტზე აკლია რამე ან უცნაურად მუშაობს?";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "გამოიყენეთ თითის ანაბეჭდი, %@-ზე დასაბრუნებლად";
@@ -537,6 +606,9 @@
 
 /* Text for tracking protection screen showing the connection is secure */
 "trackingProtection.connectionSecureLabel" = "კავშირი დაცულია";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"trackingProtection.connectionVerifiedByLabel" = "დამმოწმებელია %@";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "შიგთავსის აღმრიცხველი";
@@ -575,7 +647,7 @@
 "trackingProtection.trackerDescriptionLabel2" = "დატოვეთ თქვენი მონაცემები პირადი. %@ აგარიდებთ ცნობილი მეთვალყურეების უმეტესობას, რომლებიც თან დაგყვებათ ინტერნეტში.";
 
 /* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
-"trackingProtection.trackersBlockedLabel" = "სულ შეზღუდულია თარიღიდან %@";
+"trackingProtection.trackersBlockedLabel" = "სულ შეზღუდული, თარიღიდან %@";
 
 /* Text for the header of trackers section from Tracking Protection. */
 "trackingProtection.trackersHeader" = "შესაზღუდი მეთვალყურეები";

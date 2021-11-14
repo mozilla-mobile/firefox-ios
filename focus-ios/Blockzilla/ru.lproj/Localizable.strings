@@ -5,13 +5,13 @@
 "About.missionLabel" = "%@ создан Mozilla. Нашей миссией является обеспечение здоровья и открытости Интернета.";
 
 /* Label on About screen */
-"About.privateBullet1" = "Ищите и сёрфите прямо из приложения";
+"About.privateBullet1" = "Ищите и работайте в Интернете прямо из приложения";
 
 /* Label on About screen */
 "About.privateBullet2" = "Блокируйте трекеры (или обновите параметры, чтобы разрешить трекеры)";
 
 /* Label on About screen */
-"About.privateBullet3" = "Стирайте, чтобы удалить куки, а также историю поиска и веб-сёрфинга";
+"About.privateBullet3" = "Стирайте, чтобы удалить куки, а также историю поиска и просмотра";
 
 /* Label on About screen */
 "About.privateBulletHeader" = "Используйте его как приватный браузер:";
@@ -47,10 +47,10 @@
 "AddPass.Error.Dismiss" = "Ок";
 
 /* Message of the 'Add Pass Failed' alert. */
-"AddPass.Error.Message" = "При добавлении пароля в Wallet произошла ошибка. Пожалуйста, попробуйте снова.";
+"AddPass.Error.Message" = "При добавлении карты в Wallet произошла ошибка. Пожалуйста, повторите попытку позже.";
 
 /* Title of the 'Add Pass Failed' alert. */
-"AddPass.Error.Title" = "Не удалось добавить пароль";
+"AddPass.Error.Title" = "Не удалось добавить карту";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "Аутентифицируйтесь для возврата в %@";
@@ -74,7 +74,7 @@
 "Autocomplete.addCustomUrlWithPlus" = "+ Добавить пользовательский URL";
 
 /* Description for adding and managing custom autocomplete URLs */
-"Autocomplete.customDescriptoin" = "Добавление и управление пользовательскими URL автодополнения.";
+"Autocomplete.customDescriptoin" = "Добавление и управление пользовательскими автодополняемыми URL.";
 
 /* Label for button taking you to your custom Autocomplete URL list */
 "Autocomplete.customLabel" = "Пользовательские URL";
@@ -122,7 +122,7 @@
 "BiometricPrompt.newSession" = "Новый сеанс";
 
 /* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
-"BiometricPrompt.reason" = "Блокируйте %@, при открытии его заново, чтобы предотвратить доступ посторонних.";
+"BiometricPrompt.reason" = "Разблокируйте %@ каждый раз при открытии, чтобы предотвратить доступ посторонних.";
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Назад";
@@ -236,7 +236,7 @@
 "FirstRun.messageLabelDescription" = "Автоматически блокируйте онлайн-трекеры во время веб-сёрфинга. Затем нажмите кнопку, чтобы стереть посещённые страницы, поиски, куки и пароли со своего устройства.";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelTagline" = "Сёрфите Интернет не опасаясь слежки.";
+"FirstRun.messageLabelTagline" = "Работайте в Интернете, не опасаясь слежки.";
 
 /* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
 "Focus.handoffSyncing" = "Синхронизация Apple Handoff";
@@ -281,7 +281,7 @@
 "Request Desktop Site" = "Запросить полную версию сайта";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsContentBlockers" = "Нажмите Safari, затем выберите Правила блокирования контента";
+"Safari.instructionsContentBlockers" = "Нажмите Safari, затем выберите «Правила блокирования контента»";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsEnable" = "Включите %@";
@@ -311,7 +311,7 @@
 "SearchSuggestions.promptTitle" = "Показывать поисковые предложения?";
 
 /* Title for the URL Autocomplete row */
-"Settings.autocompleteSection" = "URL-адрес автодополнения";
+"Settings.autocompleteSection" = "Автодополнение URL";
 
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Блокирование других трекеров содержимого может нарушить работу некоторых видео и веб-страниц.";
@@ -326,10 +326,10 @@
 "Settings.darkTheme" = "Тёмная";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSearchSuggestion" = "%@ будет отправлять в поисковую систему то, что вы вводите в адресной строке.";
+"Settings.detailTextSearchSuggestion" = "%@ будет отправлять то, что вы вводите в адресной строке, в вашу поисковую систему.";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSendUsageData" = "Mozilla обязуется собирать только ту информацию, которая необходима для работы %@ и его улучшения в будущем.";
+"Settings.detailTextSendUsageData" = "Mozilla обязуется собирать только ту информацию, которая необходима для работы и улучшения %@.";
 
 /* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextStudies" = "%@ может время от времени устанавливать и проводить исследования.";
@@ -543,6 +543,21 @@
 
 /* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
 "Tip.Biometric.Title" = "Заблокировать %@, когда сайт открыт:";
+
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "Включите Face ID";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "Включите Touch ID";
+
+/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Release.Description" = "Подробнее об этом и других обновлениях %@.";
+
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "«Siri, открой мой любимый сайт».";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "Попробуйте отключить защиту от отслеживания";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Используйте Touch ID для возврата в %@";

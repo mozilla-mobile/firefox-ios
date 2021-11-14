@@ -130,6 +130,9 @@
 /* Copy URL button in URL long press menu */
 "Browser.copyAddressLabel" = "ठेगाना कपि गर्नुहोस्";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL क्लिपबोर्डमा कपि गरियो।";
+
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "कपि";
 
@@ -165,6 +168,9 @@
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "लिङ्कको प्रतिलिपि बनाउनुहोस्";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "तपाईंले कपि गर्नुभएको लिङ्क:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "तस्विर सङ्ग्रह गर्नुहोस्";
@@ -469,11 +475,125 @@
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "SIRI सर्टकटहरू";
 
+/* Text for a share button */
+"share" = "सेयर";
+
 /* Text for the share menu option when a user wants to add the site to Shortcuts */
 "ShareMenu.AddToShortcuts" = "सर्टकटहरुमा थप्नुहोस्";
 
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "ठेगाना कपि गर्नुहोस्";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "पृष्ठमा खोज्नुहोस्";
+
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Firefox App पाउनुहोस्";
+
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "पृष्ठ कार्यहरु";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "सर्टकटहरु बाट हटाउनुहोस्";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "डेस्कटप साइट अनुरोध गर्नुहोस्";
+
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "मोबाइल साइट अनुरोध गर्नुहोस्";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Chrome मा खोल्नुहोस्";
+
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "पूर्वनिर्धारित ब्राउजरमा खोल्नुहोस्";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Firefox मा खोल्नुहोस्";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "यससँग पृष्ठ सेयर गर्नुहोस्...";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "सर्टकटहरु बाट हटाउनुहोस्";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "थप्नुहोस्";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Siri मा थप्नुहोस्";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "पुन: रेकर्ड वा सर्टकट हटाउनुहोस्";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "मेटाउनुहोस्";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "मेटाउनुहोस् & खोल्नुहोस्";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "मनपर्ने साइट खोल्नुहोस्";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "मनपर्ने साइट खोल्नुहोस्";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "खोल्नको लागि URL";
+
+/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.Biometric.Title" = "जब साइट खुला छ %@ लक गर्नुहोस्:";
+
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "फेस आईडी खुला गर्नुहोस्";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "टच आईडी खुल्ला गर्नुहोस्";
+
+/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Release.Description" = "यसको बारेमा थप पढ्नुहोस् र %@ मा अन्य अपडेटहरू।";
+
+/* Text for a label that indicates the title for release tip. */
+"Tip.Release.Title" = "किन हो, हामीसँग बिल्कुलै नयाँ लुक छ!";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "पृष्ठ कार्यहरू > डेस्कटप साइट अनुरोध गर्नुहोस्";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "एउटा साइटको पूर्ण डेस्कटप संस्करण हेर्न चाहनुहुन्छ?";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "%@ ट्र्याकरहरू अहिलेसम्म अवरुद्ध भएका छन्";
+
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "तपाईं ब्राउज गर्नुहोस्। %@ अवरोधहरू।";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "%@ मेनुबाट 'सर्टकटहरूमा थप्नुहोस्' चयन गर्नुहोस्";
+
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "तपाईंले सबैभन्दा धेरै भ्रमण गर्ने साइटहरूमा सर्टकटहरू सिर्जना गर्नुहोस्:";
+
+/* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriErase.Description" = "Siri सर्टकट थप्नुहोस्";
+
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.SiriErase.Title" = "\"सिरी, मेरो %@ सत्र मेटाऊ।\"";
+
+/* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriFavorite.Description" = "Siri सर्टकट थप्नुहोस्";
+
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "\"सिरी, मेरो मनपर्ने साइट खोल।\"";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "ट्र्याकिङ्ग सुरक्षा बन्द गर्ने प्रयास गर्नुहोस्";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "साइट हराइरहेको सामग्री वा अनौठो कार्य अनुभव गर्नुभएको छ?";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "%@ मा फर्कन टच आईडीको प्रयोग गर्नुहोस्";
 
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "विज्ञापन ट्रयाकरहरू";
@@ -481,17 +601,59 @@
 /* label for analytic trackers. */
 "trackingProtection.analyticTrackerLabel" = "विश्लेषणात्मक ट्रयाकरहरू";
 
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "यो जडान सुरक्षित छैन";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "यो जडान सुरक्षित छ";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"trackingProtection.connectionVerifiedByLabel" = "%@ द्वारा प्रमाणित";
+
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "सामग्री ट्रयाकरहरू";
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "ट्रयाकिङ्ग सुरक्षा बन्द छ";
 
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "ट्रयाकिङ्ग सुरक्षा";
+
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "यसलाई बन्द गर्नाले केही साइटका समस्याहरू समाधान गर्न सक्छ";
+
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "थप जान्नुहोस्";
 
+/* Text for the button that closes the Shield Data and opens the regular Settings screen. */
+"trackingProtection.moreSettings" = "थप सेटिङ्गहरु";
+
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "सामाजिक ट्रयाकरहरू";
+
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "यस सत्रका लागि सुरक्षाहरू बन्द छन्";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "यस सत्रका लागि सुरक्षाहरू खुल्ला छन्";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "तपाईंले बन्द नगरेसम्म %@ वा मेटाउन ट्याप नगरेसम्म असक्षम गर्नुहोस्।";
+
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "थप बलियो ट्रयाकिङ्ग सुरक्षा";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel2" = "आफ्नो डाटा आफैसङ्ग राख्नुहोस्। %@ ले तपाईलाई धेरै सामान्य ट्र्याकरहरूबाट जोगाउँछ, जसले तपाईले अनलाइनमा गर्नु भएको कुरालाई पछ्याउँछन्।";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "%@ देखि ट्र्याकरहरू अवरुद्ध भएका छन्";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "ब्लक गर्नका लागि ट्र्याकरहरू र स्क्रिप्टहरू";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "स्वत: पुरा गर्न लिङ्क थप्नुहोस्";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "रद्द गर्नुहोस्";
@@ -501,6 +663,15 @@
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "मेट्नुहोस्";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "ब्राउजिङ्ग इतिहास खाली गरियो";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "पृष्ठमा खोज्नुहोस्: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "टाँस्नुहोस्";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "खोज्नुहोस् वा ठेगाना प्रविष्ट गर्नुहोस्";

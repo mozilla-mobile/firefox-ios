@@ -2,7 +2,7 @@
 "NSCameraUsageDescription" = "Це дозволяє вам знімати й вивантажувати фото.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Це дозволить вам блокувати програму.";
+"NSFaceIDUsageDescription" = "Це дозволить вам розблоковувати програму.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Відвідувані вами вебсайти можуть запитувати ваше розташування.";

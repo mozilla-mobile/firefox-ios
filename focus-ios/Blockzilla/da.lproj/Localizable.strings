@@ -268,6 +268,12 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” vil gerne have adgang til dine billeder";
 
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "Forbindelsen er ikke sikker";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "Forbindelsen er sikker";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "Bed om desktop-version";
 
@@ -312,6 +318,12 @@
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla stræber efter kun at indsamle, hvad vi skal bruge for at kunne tilbyde og forbedre %@ for alle.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextStudies" = "%@ kan installere og afvikle undersøgelser fra tid til anden.";
+
+/* Title for section in settings menu */
+"Settings.general" = "Generelt";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Læs mere.";
@@ -379,6 +391,21 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "SIKKERHED";
 
+/* System value for theme section in settings menu */
+"Settings.systemTheme" = "System-tema";
+
+/* Theme section in settings menu */
+"Settings.theme" = "Tema";
+
+/* Header for manual theme section in settings menu */
+"Settings.themePicker" = "Tema-vælger";
+
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "Reklamer";
+
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "Analyse";
+
 /* Label for the checkbox to toggle Other trackers */
 "Settings.toggleBlockOther2" = "Indhold";
 
@@ -399,6 +426,9 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Send data for anvendelse";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "Undersøgelser";
 
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Brug Touch ID til at låse appen op";
@@ -448,6 +478,9 @@
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Åbn i Chrome";
 
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "Åbn i standardbrowser";
+
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Åbn i Firefox";
 
@@ -481,6 +514,24 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "URL, der skal åbnes";
 
+/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.Biometric.Title" = "Lås %@, når et websted er åbent:";
+
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "Aktiver Face ID";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "Deaktiver Face ID";
+
+/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Release.Description" = "Læs mere om denne og andre opdateringer til %@.";
+
+/* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriErase.Description" = "Tilføj Siri-genvej";
+
+/* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriFavorite.Description" = "Tilføj Siri-genvej";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Brug Touch ID for at vende tilbage til %@";
 
@@ -495,6 +546,9 @@
 
 /* Text for tracking protection screen showing the connection is secure */
 "trackingProtection.connectionSecureLabel" = "Forbindelsen er sikker";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"trackingProtection.connectionVerifiedByLabel" = "Bekræftet af %@";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Sporing via indhold";
