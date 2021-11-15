@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Account
 import Shared
@@ -483,7 +483,7 @@ class CheckmarkSetting: Setting {
             cell.accessoryType = .checkmark
             cell.tintColor = isChecked() ? UIColor.theme.tableView.rowActionAccessory : UIColor.clear
         } else {
-            let window = UIApplication.shared.keyWindow
+            let window = UIWindow.keyWindow
             let safeAreaInsets = window?.safeAreaInsets.left ?? 0
             cell.indentationWidth = 42 + safeAreaInsets
             cell.indentationLevel = 1

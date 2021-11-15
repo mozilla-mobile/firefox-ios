@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import MozillaAppServices
 import Shared
@@ -103,7 +103,7 @@ class TelemetryWrapper {
             let searchEngines = SearchEngines(prefs: profile.prefs, files: profile.files)
             settings["defaultSearchEngine"] = searchEngines.defaultEngine.engineID ?? "custom"
 
-            if let windowBounds = UIApplication.shared.keyWindow?.bounds {
+            if let windowBounds = UIWindow.keyWindow?.bounds {
                 settings["windowWidth"] = String(describing: windowBounds.width)
                 settings["windowHeight"] = String(describing: windowBounds.height)
             }

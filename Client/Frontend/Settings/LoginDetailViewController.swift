@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import Storage
@@ -30,7 +30,7 @@ fileprivate class CenteredDetailCell: ThemedTableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         var f = detailTextLabel?.frame ?? CGRect()
-        f.center = frame.center
+        f.center = CGPoint(x: frame.center.x - safeAreaInsets.right, y: frame.center.y)
         detailTextLabel?.frame = f
     }
 }
@@ -119,7 +119,7 @@ class LoginDetailViewController: SensitiveViewController {
         let itemsToHideSeperators: [InfoItem] = [.passwordItem, .lastModifiedSeparator]
         itemsToHideSeperators.forEach { item in
             let cell = tableView.cellForRow(at: IndexPath(row: item.rawValue, section: 0))
-            cell?.separatorInset = UIEdgeInsets(top: 0, left: cell?.bounds.width ?? 0, bottom: 0, right: 0)
+            cell?.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: cell?.bounds.width ?? 0)
         }
 
         // Rows to display full width seperator

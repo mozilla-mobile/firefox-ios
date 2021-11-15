@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
 import Account
@@ -421,7 +421,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
     }
 
     override func updateConstraints() {
-        if UIApplication.shared.statusBarOrientation.isLandscape && !(DeviceInfo.deviceModel().range(of: "iPad") != nil) {
+        if UIWindow.isLandscape && !(DeviceInfo.deviceModel().range(of: "iPad") != nil) {
             instructionsLabel.snp.remakeConstraints { make in
                 make.top.equalTo(titleLabel.snp.bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
                 make.width.equalTo(RemoteTabsPanelUX.EmptyStateInstructionsWidth)

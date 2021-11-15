@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import Shared
@@ -883,7 +883,7 @@ class LoginsSetting: Setting {
         guard let navController = navigationController else { return }
         let navigationHandler: ((_ url: URL?) -> Void) = { url in
             guard let url = url else { return }
-            UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
+            UIWindow.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
             self.delegate?.settingsOpenURLInNewTab(url)
         }
 
