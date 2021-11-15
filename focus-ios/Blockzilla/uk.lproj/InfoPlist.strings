@@ -14,5 +14,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Це дозволяє вам знімати й вивантажувати фото.";
 
 /* This is the menu item that appears when you long press the Focus icon on the phone home screen. */
-"UIApplicationShortcutItemTitle.EraseAndOpen" = "Стерти і відкрити";
+"UIApplicationShortcutItemTitle.EraseAndOpen" = "Стерти й відкрити";
 
