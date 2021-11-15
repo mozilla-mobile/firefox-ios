@@ -452,7 +452,7 @@ top_site:
       - zero-search
       - origin-other
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3284
+      - https://github.com/mozilla-mobile/firefox-ios/issues/9308
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9494
     notification_emails:
@@ -525,7 +525,7 @@ firefox_home_page:
       - zero-search
       - origin-other
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3284
+      - https://github.com/mozilla-mobile/firefox-ios/issues/9308
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9494
     notification_emails:
@@ -553,7 +553,7 @@ firefox_home_page:
       - zero-search
       - origin-other
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3284
+      - https://github.com/mozilla-mobile/firefox-ios/issues/9308
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9494
     notification_emails:
@@ -616,7 +616,7 @@ firefox_home_page:
       - zero-search
       - origin-other
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3284
+      - https://github.com/mozilla-mobile/firefox-ios/issues/9308
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9494
     notification_emails:
@@ -644,7 +644,7 @@ firefox_home_page:
       - zero-search
       - origin-other
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3284
+      - https://github.com/mozilla-mobile/firefox-ios/issues/9308
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9494
     notification_emails:
@@ -684,7 +684,7 @@ firefox_home_page:
       - zero-search
       - origin-other
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3284
+      - https://github.com/mozilla-mobile/firefox-ios/issues/9308
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9494
     notification_emails:
@@ -712,7 +712,7 @@ firefox_home_page:
       - zero-search
       - origin-other
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3284
+      - https://github.com/mozilla-mobile/firefox-ios/issues/9308
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9494
     notification_emails:
@@ -750,7 +750,7 @@ firefox_home_page:
       - zero-search
       - origin-other
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3284
+      - https://github.com/mozilla-mobile/firefox-ios/issues/9308
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9494
     notification_emails:
@@ -974,7 +974,7 @@ pocket:
       - zero-search
       - origin-other
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3284
+      - https://github.com/mozilla-mobile/firefox-ios/issues/9308
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9494
     notification_emails:
