@@ -431,7 +431,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         if let readingList = profile.readingList.getAvailableRecords().value.successValue?.prefix(RecentlySavedCollectionCellUX.readingListItemsLimit) {
             var readingListItems = Array(readingList)
             readingListItems = RecentItemsHelper.filterStaleItems(recentItems: readingListItems,
-                                                                       since: Date()) as! [ReadingListItem]
+                                                                  since: Date()) as! [ReadingListItem]
             self.hasReadingListitems = !readingListItems.isEmpty
 
             TelemetryWrapper.recordEvent(category: .action,
