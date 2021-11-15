@@ -453,6 +453,9 @@ extension TelemetryWrapper {
         case pocketTilePosition = "pocketTilePosition"
         case fxHomepageOrigin = "fxHomepageOrigin"
 
+        case preference = "pref"
+        case preferenceChanged = "to"
+
         // Grouped Tab
         case groupsWithTwoTabsOnly = "groupsWithTwoTabsOnly"
         case groupsWithTwoMoreTab = "groupsWithTwoMoreTab"
@@ -506,7 +509,7 @@ extension TelemetryWrapper {
             }
         // Preferences
         case (.action, .change, .setting, _, let extras):
-            if let preference = extras?["pref"] as? String, let to = (extras?["to"] ?? "undefined") as? String {
+            if let preference = extras?[EventExtraKey.preference.rawValue] as? String, let to = ((extras?[EventExtraKey.preferenceChanged.rawValue]) ?? "undefined") as? String {
                 GleanMetrics.Preferences.changed.record(GleanMetrics.Preferences.ChangedExtra(changedTo: to, preference: preference))
             } else {
                 let msg = "Uninstrumented pref metric: \(category), \(method), \(object), \(value), \(String(describing: extras))"

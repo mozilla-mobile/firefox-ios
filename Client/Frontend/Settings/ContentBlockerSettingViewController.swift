@@ -166,8 +166,10 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
                 self.prefs.setString(self.currentBlockingStrength.rawValue, forKey: ContentBlockingConfig.Prefs.StrengthKey)
                 TabContentBlocker.prefsChanged()
                 self.tableView.reloadData()
-                
-                TelemetryWrapper.recordEvent(category: .action, method: .change, object: .setting, extras: ["pref": "ETP-strength", "to": option.rawValue])
+
+                let extras = [TelemetryWrapper.EventExtraKey.preference.rawValue: "ETP-strength",
+                              TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: option.rawValue]
+                TelemetryWrapper.recordEvent(category: .action, method: .change, object: .setting, extras: extras)
                 
                 if option == .strict {
                     let alert = UIAlertController(title: .TrackerProtectionAlertTitle, message: .TrackerProtectionAlertDescription, preferredStyle: .alert)
