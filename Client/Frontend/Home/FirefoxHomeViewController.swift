@@ -422,7 +422,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
                                              method: .view,
                                              object: .firefoxHomepage,
                                              value: .recentlySavedBookmarkItemView,
-                                             extras: [TelemetryWrapper.EventObject.recentlySavedBookmarkImpressions.rawValue: bookmarks.count])
+                                             extras: [TelemetryWrapper.EventObject.recentlySavedBookmarkImpressions.rawValue: "\(bookmarks.count)"])
             }
 
             self?.collectionView.reloadData()
@@ -437,8 +437,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .view,
                                          object: .firefoxHomepage,
-                                         value: .recentlySavedBookmarkItemView,
-                                         extras: [TelemetryWrapper.EventObject.recentlySavedReadingItemImpressions.rawValue: readingListItems.count])
+                                         value: .recentlySavedReadingListView,
+                                         extras: [TelemetryWrapper.EventObject.recentlySavedReadingItemImpressions.rawValue: "\(readingListItems.count)"])
 
             self.collectionView.reloadData()
         }
