@@ -1408,6 +1408,17 @@ tabs:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-01-01"
+  normal_and_private_uri_count:
+    type: counter
+    description: |
+      Record the number of URI's visited by the user.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/9158
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9504
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
   grouped_tab:
     type: event
     description: |

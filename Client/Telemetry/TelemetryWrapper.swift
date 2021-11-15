@@ -280,6 +280,7 @@ extension TelemetryWrapper {
         case drag = "drag"
         case drop = "drop"
         case foreground = "foreground"
+        case navigate = "navigate"
         case open = "open"
         case press = "press"
         case pull = "pull"
@@ -541,6 +542,8 @@ extension TelemetryWrapper {
             GleanMetrics.Tabs.closeTabTray.record()
         case(.action, .pull, .reload, _, _):
             GleanMetrics.Tabs.pullToRefresh.add()
+        case(.action, .navigate, .tab, _, _):
+            GleanMetrics.Tabs.normalAndPrivateUriCount.add()
         // Settings Menu
         case (.action, .open, .settingsMenuSetAsDefaultBrowser, _, _):
             GleanMetrics.SettingsMenu.setAsDefaultBrowserPressed.add()
