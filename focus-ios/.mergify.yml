@@ -32,6 +32,17 @@ pull_request_rules:
       merge:
         method: squash
         strict: smart
+  - name: String Import - Auto Approve
+    conditions:
+      - author=github-actions[bot]
+      - title~=string-import*
+      - or:
+        - files~=^Blockzilla\/[^\/]*\/[^\/]*.lproj\/*
+        - files~=^Blockzilla\/[^\/]*.lproj\/*
+    actions:
+      review:
+        type: APPROVE
+        message: Automatically approving string import
   - name: String Import - Auto Merge
     conditions:
       - author=github-actions[bot]
