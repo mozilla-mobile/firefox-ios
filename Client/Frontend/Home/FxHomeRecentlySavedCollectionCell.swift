@@ -147,14 +147,22 @@ extension FxHomeRecentlySavedCollectionCell: UICollectionViewDelegate {
             guard let url = URIFixup.getURL(item.url) else { return }
             
             homePanelDelegate?.homePanel(didSelectURL: url, visitType: .bookmark, isGoogleTopSite: false)
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .bookmark, value: .recentlySavedBookmarkItemAction)
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .tap,
+                                         object: .firefoxHomepage,
+                                         value: .recentlySavedBookmarkItemAction,
+                                         extras: TelemetryWrapper.getOriginExtras(isZeroSearch: viewModel.isZeroSearch))
         } else if let item = dataSource[safe: indexPath.row] as? ReadingListItem,
                   let url = URL(string: item.url),
                   let encodedUrl = url.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL()) {
             
             let visitType = VisitType.bookmark
             libraryPanelDelegate?.libraryPanel(didSelectURL: encodedUrl, visitType: visitType)
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .readingListItem, value: .recentlySavedReadingListAction)
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .tap,
+                                         object: .firefoxHomepage,
+                                         value: .recentlySavedReadingListAction,
+                                         extras: TelemetryWrapper.getOriginExtras(isZeroSearch: viewModel.isZeroSearch))
         }
         
     }

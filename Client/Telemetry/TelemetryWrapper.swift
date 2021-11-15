@@ -280,6 +280,7 @@ extension TelemetryWrapper {
         case drag = "drag"
         case drop = "drop"
         case foreground = "foreground"
+        case navigate = "navigate"
         case open = "open"
         case press = "press"
         case pull = "pull"
@@ -435,6 +436,8 @@ extension TelemetryWrapper {
         case recentlySavedReadingListAction = "recently-saved-reading-list-action"
         case customizeHomepageButton = "customize-homepage-button"
         case fxHomepageOrigin = "firefox-homepage-origin"
+        case fxHomepageOriginZeroSearch = "zero-search"
+        case fxHomepageOriginOther = "origin-other"
         case addBookmarkToast = "add-bookmark-toast"
         case openHomeFromAwesomebar = "open-home-from-awesomebar"
         case openHomeFromPhotonMenuButton = "open-home-from-photon-menu-button"
@@ -501,6 +504,10 @@ extension TelemetryWrapper {
             GleanMetrics.ReadingList.open.add()
         // Top Site
         case (.action, .tap, .topSiteTile, _, let extras):
+            if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
+                GleanMetrics.TopSite.pressedTileOrigin[homePageOrigin].add()
+            }
+
             if let position = extras?[EventExtraKey.topSitePosition.rawValue] as? String, let tileType = extras?[EventExtraKey.topSiteTileType.rawValue] as? String {
                 GleanMetrics.TopSite.tilePressed.record(GleanMetrics.TopSite.TilePressedExtra(position: position, tileType: tileType))
             } else {
@@ -536,6 +543,8 @@ extension TelemetryWrapper {
             GleanMetrics.Tabs.closeTabTray.record()
         case(.action, .pull, .reload, _, _):
             GleanMetrics.Tabs.pullToRefresh.add()
+        case(.action, .navigate, .tab, _, _):
+            GleanMetrics.Tabs.normalAndPrivateUriCount.add()
         // Settings Menu
         case (.action, .open, .settingsMenuSetAsDefaultBrowser, _, _):
             GleanMetrics.SettingsMenu.setAsDefaultBrowserPressed.add()
@@ -597,6 +606,10 @@ extension TelemetryWrapper {
 
         // Pocket
         case (.action, .tap, .pocketStory, _, let extras):
+            if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
+                GleanMetrics.Pocket.openStoryOrigin[homePageOrigin].add()
+            }
+
             if let position = extras?[EventExtraKey.pocketTilePosition.rawValue] as? String {
                 GleanMetrics.Pocket.openStoryPosition["position-"+position].add()
             } else {
@@ -680,8 +693,10 @@ extension TelemetryWrapper {
             GleanMetrics.Tabs.groupedTabSearch.add()
             
         // Firefox Homepage
-        case (.action, .view, .firefoxHomepage, EventValue.fxHomepageOrigin.rawValue, _):
-            GleanMetrics.FirefoxHomePage.firefoxHomepageView.add()
+        case (.action, .view, .firefoxHomepage, EventValue.fxHomepageOrigin.rawValue, let extras):
+            if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
+                GleanMetrics.FirefoxHomePage.firefoxHomepageOrigin[homePageOrigin].add()
+            }
         case (.action, .tap, .firefoxHomepage, EventValue.yourLibrarySection.rawValue, let extras):
             if let panel = extras?[EventObject.libraryPanel.rawValue] as? String {
                 GleanMetrics.FirefoxHomePage.yourLibrary[panel].add()
@@ -699,21 +714,39 @@ extension TelemetryWrapper {
             if let readingListItemsCount = extras?[EventObject.recentlySavedReadingItemImpressions.rawValue] as? String {
                 GleanMetrics.FirefoxHomePage.readingListView.record(GleanMetrics.FirefoxHomePage.ReadingListViewExtra(readingListCount: readingListItemsCount))
             }
-        case (.action, .tap, .firefoxHomepage, EventValue.recentlySavedSectionShowAll.rawValue, _):
+        case (.action, .tap, .firefoxHomepage, EventValue.recentlySavedSectionShowAll.rawValue, let extras):
             GleanMetrics.FirefoxHomePage.recentlySavedShowAll.add()
-        case (.action, .tap, .firefoxHomepage, EventValue.recentlySavedBookmarkItemAction.rawValue, _):
+            if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
+                GleanMetrics.FirefoxHomePage.recentlySavedShowAllOrigin[homePageOrigin].add()
+            }
+        case (.action, .tap, .firefoxHomepage, EventValue.recentlySavedBookmarkItemAction.rawValue, let extras):
             GleanMetrics.FirefoxHomePage.recentlySavedBookmarkItem.add()
-        case (.action, .tap, .firefoxHomepage, EventValue.recentlySavedReadingListAction.rawValue, _):
+            if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
+                GleanMetrics.FirefoxHomePage.recentlySavedBookmarkOrigin[homePageOrigin].add()
+            }
+        case (.action, .tap, .firefoxHomepage, EventValue.recentlySavedReadingListAction.rawValue, let extras):
             GleanMetrics.FirefoxHomePage.recentlySavedReadingItem.add()
+            if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
+                GleanMetrics.FirefoxHomePage.recentlySavedReadOrigin[homePageOrigin].add()
+            }
 
-        case (.action, .tap, .firefoxHomepage, EventValue.jumpBackInSectionShowAll.rawValue, _):
+        case (.action, .tap, .firefoxHomepage, EventValue.jumpBackInSectionShowAll.rawValue, let extras):
             GleanMetrics.FirefoxHomePage.jumpBackInShowAll.add()
+            if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
+                GleanMetrics.FirefoxHomePage.jumpBackInShowAllOrigin[homePageOrigin].add()
+            }
         case (.action, .view, .jumpBackInImpressions, _, _):
             GleanMetrics.FirefoxHomePage.jumpBackInSectionView.add()
-        case (.action, .tap, .firefoxHomepage, EventValue.jumpBackInSectionTabOpened.rawValue, _):
+        case (.action, .tap, .firefoxHomepage, EventValue.jumpBackInSectionTabOpened.rawValue, let extras):
             GleanMetrics.FirefoxHomePage.jumpBackInTabOpened.add()
-        case (.action, .tap, .firefoxHomepage, EventValue.jumpBackInSectionGroupOpened.rawValue, _):
+            if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
+                GleanMetrics.FirefoxHomePage.jumpBackInTabOpenedOrigin[homePageOrigin].add()
+            }
+        case (.action, .tap, .firefoxHomepage, EventValue.jumpBackInSectionGroupOpened.rawValue, let extras):
             GleanMetrics.FirefoxHomePage.jumpBackInGroupOpened.add()
+            if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
+                GleanMetrics.FirefoxHomePage.jumpBackInGroupOpenOrigin[homePageOrigin].add()
+            }
 
         case (.action, .tap, .firefoxHomepage, EventValue.customizeHomepageButton.rawValue, _):
             GleanMetrics.FirefoxHomePage.customizeHomepageButton.add()
@@ -725,3 +758,12 @@ extension TelemetryWrapper {
     }
 }
 
+// MARK: - Firefox Home Page
+extension TelemetryWrapper {
+
+    /// Bundle the extras dictionnary for the home page origin
+    static func getOriginExtras(isZeroSearch: Bool) -> [String: String] {
+        let origin = isZeroSearch ? TelemetryWrapper.EventValue.fxHomepageOriginZeroSearch : TelemetryWrapper.EventValue.fxHomepageOriginOther
+        return [TelemetryWrapper.EventExtraKey.fxHomepageOrigin.rawValue: origin.rawValue]
+    }
+}
