@@ -1076,6 +1076,7 @@ class BrowserViewController: UIViewController {
                 tab.lastTitle = title
                 navigateInTab(tab: tab, webViewStatus: .title)
             }
+            TelemetryWrapper.recordEvent(category: .action, method: .navigate, object: .tab)
         case .canGoBack:
             guard tab === tabManager.selectedTab, let canGoBack = change?[.newKey] as? Bool else {
                 break
