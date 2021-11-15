@@ -29,14 +29,16 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
     var layoutVariables: JumpBackInLayoutVariables
     private var tabManager: TabManager
     private var profile: Profile
+    private var isZeroSearch: Bool
     lazy var siteImageHelper = SiteImageHelper(profile: profile)
 
     var onTapGroup: ((Tab) -> Void)?
 
-    init() {
+    init(isZeroSearch: Bool) {
         self.tabManager = BrowserViewController.foregroundBVC().tabManager
         self.profile = BrowserViewController.foregroundBVC().profile
         self.layoutVariables = JumpBackInLayoutVariables(columns: 1, scrollDirection: .vertical, maxItemsToDisplay: 2)
+        self.isZeroSearch = isZeroSearch
     }
 
     public func updateDataAnd(_ layoutVariables: JumpBackInLayoutVariables) {
@@ -52,7 +54,11 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
 
         onTapGroup?(firstTab)
 
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .firefoxHomepage, value: .jumpBackInSectionGroupOpened)
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .firefoxHomepage,
+                                     value: .jumpBackInSectionGroupOpened,
+                                     extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
     }
 
     public func switchTo(tab: Tab) {
@@ -60,7 +66,11 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
             BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode()
         }
         tabManager.selectTab(tab)
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .firefoxHomepage, value: .jumpBackInSectionTabOpened)
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .firefoxHomepage,
+                                     value: .jumpBackInSectionTabOpened,
+                                     extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
     }
 
     private func updateJumpListData() {
