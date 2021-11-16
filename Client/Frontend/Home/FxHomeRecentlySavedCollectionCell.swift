@@ -46,7 +46,6 @@ class FxHomeRecentlySavedCollectionCell: UICollectionViewCell {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: compositionalLayout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.alwaysBounceHorizontal = true
         collectionView.backgroundColor = UIColor.clear
         collectionView.dataSource = self
         collectionView.delegate = self
