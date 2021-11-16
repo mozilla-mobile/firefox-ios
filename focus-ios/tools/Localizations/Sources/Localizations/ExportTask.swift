@@ -13,11 +13,11 @@ struct ExportTask {
 
     // Locales that are in the Xcode project
     let LOCALES: [String] = [
-        "af", "an", "ar", "ast", "az", "bg", "bn", "br", "bs", "ca", "cs", "cy", "da", "de", "dsb",
-        "el", "en", "eo", "es-AR", "es-CL", "es-ES", "es-MX", "eu", "fa", "fi", "fil", "fr", "ga", "gd", "gu-IN",
+        "af", "an", "ar", "ast", "az", "bg", "bn", "br", "bs", "ca", "co", "cs", "cy", "da", "de", "dsb",
+        "el", "en", "en-GB", "eo", "es-AR", "es-CL", "es-ES", "es-MX", "eu", "fa", "fi", "fil", "fr", "ga", "gd", "gu-IN",
         "he", "hi-IN", "hsb", "hu", "hy-AM", "ia", "id", "is", "it", "ja", "ka", "kab", "kk", "kn", "ko",
         "lo", "lt", "lv", "mr", "ms", "my", "nb", "ne-NP", "nl", "nn", "pl", "pt-BR", "pt-PT", "ro", "ru", "ses", "sk",
-        "sl", "sq", "sv", "ta", "te", "th", "tr", "uk", "ur", "uz", "vi", "zh-CN", "zh-TW",
+        "sl", "sq", "sv", "ta", "te", "th", "tr", "tt", "uk", "ur", "uz", "vi", "zh-CN", "zh-TW",
     ]
     
     private let EXCLUDED_FILES: Set<String> = [

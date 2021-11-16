@@ -68,6 +68,7 @@ te
 th
 tl
 tr
+tt
 uk
 ur
 uz
