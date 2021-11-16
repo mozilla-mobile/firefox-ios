@@ -430,10 +430,12 @@ top_site:
       Records an event when user taps on top site tile.
     extra_keys:
       tile_type:
+        type: string
         description: |
           Type of tile pressed (Ex: google,
           suggested, user-added or history-based)
       position:
+        type: string
         description: |
           Position of top site.
     bugs:
@@ -566,6 +568,7 @@ firefox_home_page:
       in the Recently Saved section on the home page.
     extra_keys:
       bookmark_count:
+        type: string
         description: |
           The number of bookmarked items in the
           Recently Saved section.
@@ -584,6 +587,7 @@ firefox_home_page:
       on the Firefox home page.
     extra_keys:
       reading_list_count:
+        type: string
         description: |
           The number of reading list items in the
           Recently Saved section.
@@ -991,9 +995,11 @@ preferences:
       recorded in the extra keys.
     extra_keys:
       preference:
+        type: string
         description: |
           The preference that was changed.
       changed_to:
+        type: string
         description: |
           The value the preference was changed to.
     bugs:
