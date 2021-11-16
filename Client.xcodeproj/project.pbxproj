@@ -52,23 +52,13 @@
 		1B308A9F2714F01E001D6200 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3D99F7270E8CF8006E1264 /* SwiftKeychainWrapper */; };
 		1B308AA02714F01E001D6200 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1BDA1F8627113817006B2FAB /* SwiftyJSON */; };
 		1B308AA12714F01E001D6200 /* SwiftProtobuf in Frameworks */ = {isa = PBXBuildFile; productRef = 1BDA1F8B271138A5006B2FAB /* SwiftProtobuf */; };
-		1B308AB727150CD7001D6200 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1B308AB627150CD7001D6200 /* SwiftyJSON */; };
-		1B308AB927150CDD001D6200 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B308AB827150CDD001D6200 /* SwiftKeychainWrapper */; };
 		1B3D99F1270E89D0006E1264 /* Telemetry in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3D99F0270E89D0006E1264 /* Telemetry */; };
-		1B3D9A0A270E90C6006E1264 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3D9A09270E90C6006E1264 /* SwiftKeychainWrapper */; };
-		1B3D9A16270E944E006E1264 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3D9A15270E944E006E1264 /* SwiftKeychainWrapper */; };
-		1B3D9A1A270E9466006E1264 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3D9A19270E9466006E1264 /* SwiftKeychainWrapper */; };
-		1B3D9A1D270E96E4006E1264 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3D9A1C270E96E4006E1264 /* SwiftKeychainWrapper */; };
 		1B750BE1274312D3002CBA18 /* RustLog in Frameworks */ = {isa = PBXBuildFile; productRef = 1B750BE0274312D3002CBA18 /* RustLog */; };
-		1B8C9F6C27116C9000694199 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1B8C9F6B27116C9000694199 /* SwiftyJSON */; };
-		1BDA1F8527113788006B2FAB /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1BDA1F8427113788006B2FAB /* SwiftyJSON */; };
-		1BDA1F8A27113852006B2FAB /* SwiftProtobuf in Frameworks */ = {isa = PBXBuildFile; productRef = 1BDA1F8927113852006B2FAB /* SwiftProtobuf */; };
 		1BE9ECB0271765C800D729BB /* Nimbus in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECAF271765C800D729BB /* Nimbus */; };
 		1BE9ECBE2717663100D729BB /* FxAClient in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECBD2717663100D729BB /* FxAClient */; };
 		1BE9ECC02717663200D729BB /* Logins in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECBF2717663200D729BB /* Logins */; };
 		1BE9ECC22717663200D729BB /* Places in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECC12717663200D729BB /* Places */; };
 		1BE9ECC42717663200D729BB /* Viaduct in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECC32717663200D729BB /* Viaduct */; };
-		1BE9ECC827176F8B00D729BB /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECC727176F8B00D729BB /* SwiftKeychainWrapper */; };
 		1BE9ECCA27176FEA00D729BB /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECC927176FEA00D729BB /* SwiftyJSON */; };
 		1BE9ECCC2717704300D729BB /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECCB2717704300D729BB /* SwiftyJSON */; };
 		1BE9ECCE271770A600D729BB /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECCD271770A600D729BB /* SwiftyJSON */; };
@@ -4216,9 +4206,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1B308AB727150CD7001D6200 /* SwiftyJSON in Frameworks */,
 				C820439A2523DC4500740B71 /* libStorage.a in Frameworks */,
-				1B308AB927150CDD001D6200 /* SwiftKeychainWrapper in Frameworks */,
 				D09A0CDC1FAA24CC009A0273 /* libAccount.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4254,7 +4242,6 @@
 			files = (
 				C82043852523DBF600740B71 /* Sync.framework in Frameworks */,
 				C877037A25222F30006E38EB /* Shared.framework in Frameworks */,
-				1BDA1F8527113788006B2FAB /* SwiftyJSON in Frameworks */,
 				C8E18F20222EDED000E30E52 /* SafariServices.framework in Frameworks */,
 				1BE9ECB0271765C800D729BB /* Nimbus in Frameworks */,
 				C8E18F1E222EDE4500E30E52 /* Accelerate.framework in Frameworks */,
@@ -4262,7 +4249,6 @@
 				E6231C051B90A472005ABB0D /* libxml2.2.tbd in Frameworks */,
 				E6231C011B90A44F005ABB0D /* libz.tbd in Frameworks */,
 				E4B3348A1BBF23F9004E2BFF /* AdSupport.framework in Frameworks */,
-				1BDA1F8A27113852006B2FAB /* SwiftProtobuf in Frameworks */,
 				1B3D99F1270E89D0006E1264 /* Telemetry in Frameworks */,
 				3BA9A0231D2C208C00BD418C /* Fuzi.framework in Frameworks */,
 				7BA4A9471C4CED900091D032 /* GCDWebServers.framework in Frameworks */,
@@ -4272,7 +4258,6 @@
 				7B8A47F61D01D3B400C07734 /* PassKit.framework in Frameworks */,
 				7B604F9B1C4950F2006EEEC3 /* SDWebImage.framework in Frameworks */,
 				7B604FA21C495268006EEEC3 /* SnapKit.framework in Frameworks */,
-				1B3D9A1D270E96E4006E1264 /* SwiftKeychainWrapper in Frameworks */,
 				7B604FBB1C495D8A006EEEC3 /* XCGLogger.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4326,7 +4311,6 @@
 			files = (
 				C82043AE2523DC8B00740B71 /* Sync.framework in Frameworks */,
 				C877039725222FE6006E38EB /* Shared.framework in Frameworks */,
-				1B3D9A0A270E90C6006E1264 /* SwiftKeychainWrapper in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4389,7 +4373,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1BE9ECC827176F8B00D729BB /* SwiftKeychainWrapper in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4399,7 +4382,6 @@
 			files = (
 				F8324A072649A188007E4BFA /* AuthenticationServices.framework in Frameworks */,
 				F8324AF62649B540007E4BFA /* Shared.framework in Frameworks */,
-				1B3D9A1A270E9466006E1264 /* SwiftKeychainWrapper in Frameworks */,
 				F8324AFA2649B540007E4BFA /* Sync.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4419,9 +4401,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C82043AF2523DC9600740B71 /* Sync.framework in Frameworks */,
-				1B8C9F6C27116C9000694199 /* SwiftyJSON in Frameworks */,
 				C877039625222FDC006E38EB /* Shared.framework in Frameworks */,
-				1B3D9A16270E944E006E1264 /* SwiftKeychainWrapper in Frameworks */,
 				3BA9A0321D2C2C0500BD418C /* Fuzi.framework in Frameworks */,
 				0B75AEA91AC20FB20015E5DC /* ImageIO.framework in Frameworks */,
 				7B604F9D1C495143006EEEC3 /* SDWebImage.framework in Frameworks */,
@@ -6484,8 +6464,6 @@
 			);
 			name = Sync;
 			packageProductDependencies = (
-				1B308AB627150CD7001D6200 /* SwiftyJSON */,
-				1B308AB827150CDD001D6200 /* SwiftKeychainWrapper */,
 			);
 			productName = Sync;
 			productReference = 2827315E1ABC9BE600AA1954 /* Sync.framework */;
@@ -6532,6 +6510,7 @@
 				1B308AA32715011D001D6200 /* PBXTargetDependency */,
 				1BDA1F8E271138EB006B2FAB /* PBXTargetDependency */,
 				1B3D99F6270E8CDE006E1264 /* PBXTargetDependency */,
+				1B750BE5274327B7002CBA18 /* PBXTargetDependency */,
 			);
 			name = Shared;
 			packageProductDependencies = (
@@ -6656,13 +6635,11 @@
 			buildRules = (
 			);
 			dependencies = (
-				1B3D9A08270E90C2006E1264 /* PBXTargetDependency */,
 				C82043D82523DDC000740B71 /* PBXTargetDependency */,
 				D0EA58171FA836D200D03ED1 /* PBXTargetDependency */,
 			);
 			name = NotificationService;
 			packageProductDependencies = (
-				1B3D9A09270E90C6006E1264 /* SwiftKeychainWrapper */,
 			);
 			productName = NotificationService;
 			productReference = 397848DB1ED86605004C0C0B /* NotificationService.appex */;
@@ -6810,13 +6787,11 @@
 			buildRules = (
 			);
 			dependencies = (
-				1BE9ECC627176F1800D729BB /* PBXTargetDependency */,
 				E6F965141B2F1CF20034B023 /* PBXTargetDependency */,
 				E6F9653A1B2F1D330034B023 /* PBXTargetDependency */,
 			);
 			name = SharedTests;
 			packageProductDependencies = (
-				1BE9ECC727176F8B00D729BB /* SwiftKeychainWrapper */,
 			);
 			productName = SharedTests;
 			productReference = E6F9650C1B2F1CF20034B023 /* SharedTests.xctest */;
@@ -6833,13 +6808,11 @@
 			buildRules = (
 			);
 			dependencies = (
-				1B3D9A18270E9462006E1264 /* PBXTargetDependency */,
 				F8324AF92649B540007E4BFA /* PBXTargetDependency */,
 				F8324AFD2649B540007E4BFA /* PBXTargetDependency */,
 			);
 			name = CredentialProvider;
 			packageProductDependencies = (
-				1B3D9A19270E9466006E1264 /* SwiftKeychainWrapper */,
 			);
 			productName = CredentialProvider;
 			productReference = F8324A052649A188007E4BFA /* CredentialProvider.appex */;
@@ -6873,9 +6846,6 @@
 			name = Client;
 			packageProductDependencies = (
 				1B3D99F0270E89D0006E1264 /* Telemetry */,
-				1B3D9A1C270E96E4006E1264 /* SwiftKeychainWrapper */,
-				1BDA1F8427113788006B2FAB /* SwiftyJSON */,
-				1BDA1F8927113852006B2FAB /* SwiftProtobuf */,
 				1BE9ECAF271765C800D729BB /* Nimbus */,
 			);
 			productName = Client;
@@ -6917,14 +6887,11 @@
 			buildRules = (
 			);
 			dependencies = (
-				1B3D9A14270E9442006E1264 /* PBXTargetDependency */,
 				D09A0CF11FAA2C7E009A0273 /* PBXTargetDependency */,
 				D09A0CF31FAA2C81009A0273 /* PBXTargetDependency */,
 			);
 			name = ShareTo;
 			packageProductDependencies = (
-				1B3D9A15270E944E006E1264 /* SwiftKeychainWrapper */,
-				1B8C9F6B27116C9000694199 /* SwiftyJSON */,
 			);
 			productName = ShareToFirefox;
 			productReference = F84B22491A0920C600AAB793 /* ShareTo.appex */;
@@ -8532,21 +8499,13 @@
 			isa = PBXTargetDependency;
 			productRef = 1B3D99F5270E8CDE006E1264 /* SwiftKeychainWrapper */;
 		};
-		1B3D9A08270E90C2006E1264 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 1B3D9A07270E90C2006E1264 /* SwiftKeychainWrapper */;
-		};
-		1B3D9A14270E9442006E1264 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 1B3D9A13270E9442006E1264 /* SwiftKeychainWrapper */;
-		};
-		1B3D9A18270E9462006E1264 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 1B3D9A17270E9462006E1264 /* SwiftKeychainWrapper */;
-		};
 		1B750BDF274312C8002CBA18 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 1B750BDE274312C8002CBA18 /* RustLog */;
+		};
+		1B750BE5274327B7002CBA18 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 1B750BE4274327B7002CBA18 /* SwiftProtobuf */;
 		};
 		1BDA1F8E271138EB006B2FAB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -8559,10 +8518,6 @@
 		1BE9EC9B271619FE00D729BB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 1BE9EC9A271619FE00D729BB /* Viaduct */;
-		};
-		1BE9ECC627176F1800D729BB /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 1BE9ECC527176F1800D729BB /* SwiftKeychainWrapper */;
 		};
 		2827316B1ABC9BE700AA1954 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -12592,16 +12547,6 @@
 			package = 1B308A5F2714C9BD001D6200 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
 			productName = FxAClient;
 		};
-		1B308AB627150CD7001D6200 /* SwiftyJSON */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1BDA1F8327113788006B2FAB /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
-			productName = SwiftyJSON;
-		};
-		1B308AB827150CDD001D6200 /* SwiftKeychainWrapper */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
-			productName = SwiftKeychainWrapper;
-		};
 		1B3D99F0270E89D0006E1264 /* Telemetry */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1B3D99EF270E89D0006E1264 /* XCRemoteSwiftPackageReference "telemetry-ios" */;
@@ -12617,41 +12562,6 @@
 			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
 			productName = SwiftKeychainWrapper;
 		};
-		1B3D9A07270E90C2006E1264 /* SwiftKeychainWrapper */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
-			productName = SwiftKeychainWrapper;
-		};
-		1B3D9A09270E90C6006E1264 /* SwiftKeychainWrapper */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
-			productName = SwiftKeychainWrapper;
-		};
-		1B3D9A13270E9442006E1264 /* SwiftKeychainWrapper */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
-			productName = SwiftKeychainWrapper;
-		};
-		1B3D9A15270E944E006E1264 /* SwiftKeychainWrapper */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
-			productName = SwiftKeychainWrapper;
-		};
-		1B3D9A17270E9462006E1264 /* SwiftKeychainWrapper */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
-			productName = SwiftKeychainWrapper;
-		};
-		1B3D9A19270E9466006E1264 /* SwiftKeychainWrapper */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
-			productName = SwiftKeychainWrapper;
-		};
-		1B3D9A1C270E96E4006E1264 /* SwiftKeychainWrapper */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
-			productName = SwiftKeychainWrapper;
-		};
 		1B750BDE274312C8002CBA18 /* RustLog */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1BE9ECAA271765C800D729BB /* XCRemoteSwiftPackageReference "rust-components-swift" */;
@@ -12662,25 +12572,15 @@
 			package = 1BE9ECAA271765C800D729BB /* XCRemoteSwiftPackageReference "rust-components-swift" */;
 			productName = RustLog;
 		};
-		1B8C9F6B27116C9000694199 /* SwiftyJSON */ = {
+		1B750BE4274327B7002CBA18 /* SwiftProtobuf */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 1BDA1F8327113788006B2FAB /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
-			productName = SwiftyJSON;
-		};
-		1BDA1F8427113788006B2FAB /* SwiftyJSON */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1BDA1F8327113788006B2FAB /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
-			productName = SwiftyJSON;
+			package = 1BDA1F8827113852006B2FAB /* XCRemoteSwiftPackageReference "swift-protobuf" */;
+			productName = SwiftProtobuf;
 		};
 		1BDA1F8627113817006B2FAB /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1BDA1F8327113788006B2FAB /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
 			productName = SwiftyJSON;
-		};
-		1BDA1F8927113852006B2FAB /* SwiftProtobuf */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1BDA1F8827113852006B2FAB /* XCRemoteSwiftPackageReference "swift-protobuf" */;
-			productName = SwiftProtobuf;
 		};
 		1BDA1F8B271138A5006B2FAB /* SwiftProtobuf */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -12726,16 +12626,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1BE9ECAA271765C800D729BB /* XCRemoteSwiftPackageReference "rust-components-swift" */;
 			productName = Viaduct;
-		};
-		1BE9ECC527176F1800D729BB /* SwiftKeychainWrapper */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
-			productName = SwiftKeychainWrapper;
-		};
-		1BE9ECC727176F8B00D729BB /* SwiftKeychainWrapper */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
-			productName = SwiftKeychainWrapper;
 		};
 		1BE9ECC927176FEA00D729BB /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;
