@@ -5,7 +5,10 @@
 import XCTest
 
 class RequestDesktopTest: BaseTestCase {
-    func testActivityMenuRequestDesktopItem() {
+    // Smoketest
+    // Disabled due to issue #2782
+    func testActivityMenuRequestDesktopItem() throws {
+        throw XCTSkip("Due to bug 2782")
         let urlBarTextField = app.textFields["URLBar.urlText"]
 
         // Wait for existence rather than hittable because the textfield is technically disabled

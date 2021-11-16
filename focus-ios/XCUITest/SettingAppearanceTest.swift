@@ -120,9 +120,8 @@ class SettingAppearanceTest: BaseTestCase {
 
         waitForExistence(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
-        print(app.debugDescription)
 
-        let safariButton = app.cells["Open in Safari"]
+        let safariButton = app.cells["icon_favicon"]
         waitForExistence(safariButton)
         safariButton.tap()
 
