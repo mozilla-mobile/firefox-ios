@@ -1021,6 +1021,10 @@
 		F8CE543926C169D8000A5F9C /* lt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lt; path = lt.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F8CE543A26C169D8000A5F9C /* lt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lt; path = lt.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F8DE0EC726CC887800A31419 /* SupportUtilsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportUtilsTest.swift; sourceTree = "<group>"; };
+		F8E4E8C027444A6900A97CCD /* tt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tt; path = tt.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		F8E4E8C127444A6900A97CCD /* tt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tt; path = tt.lproj/Intents.strings; sourceTree = "<group>"; };
+		F8E4E8C227444A6900A97CCD /* tt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tt; path = tt.lproj/Intro.strings; sourceTree = "<group>"; };
+		F8E4E8C327444A6900A97CCD /* tt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tt; path = tt.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1849,6 +1853,7 @@
 				lt,
 				"en-GB",
 				co,
+				tt,
 			);
 			mainGroup = E4BF2DCA1BACE8CA00DA9D68;
 			packageReferences = (
@@ -2338,6 +2343,7 @@
 				F8CE543526C169D8000A5F9C /* lt */,
 				F8820C7226E19B1E006AB3B8 /* en-GB */,
 				F8820C7926E19B4D006AB3B8 /* co */,
+				F8E4E8C127444A6900A97CCD /* tt */,
 			);
 			name = Intents.strings;
 			sourceTree = "<group>";
@@ -2422,6 +2428,7 @@
 				F8CE543426C169D8000A5F9C /* lt */,
 				F8820C7126E19B1E006AB3B8 /* en-GB */,
 				F8820C7826E19B4D006AB3B8 /* co */,
+				F8E4E8C227444A6900A97CCD /* tt */,
 			);
 			name = Intro.strings;
 			sourceTree = "<group>";
@@ -2506,6 +2513,7 @@
 				F8CE543726C169D8000A5F9C /* lt */,
 				F8820C7426E19B1E006AB3B8 /* en-GB */,
 				F8820C7B26E19B4D006AB3B8 /* co */,
+				F8E4E8C327444A6900A97CCD /* tt */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -2590,6 +2598,7 @@
 				F8CE543626C169D8000A5F9C /* lt */,
 				F8820C7326E19B1E006AB3B8 /* en-GB */,
 				F8820C7A26E19B4D006AB3B8 /* co */,
+				F8E4E8C027444A6900A97CCD /* tt */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";

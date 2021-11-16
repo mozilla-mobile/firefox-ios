@@ -155,7 +155,7 @@
 "Browser.stopLabel" = "Стоп";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
-"browserShortcutDescription.selectLocationBar" = "Виберіть панель адреси";
+"browserShortcutDescription.selectLocationBar" = "Вибрати панель адреси";
 
 /* Label on button to cancel edits */
 "Cancel" = "Скасувати";
@@ -509,7 +509,7 @@
 "ShareMenu.ShareOpenDefaultBrowser" = "Відкрити у типовому браузері";
 
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
-"ShareMenu.ShareOpenFirefox" = "Відкрити в Firefox";
+"ShareMenu.ShareOpenFirefox" = "Відкрити у Firefox";
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Поділитися сторінкою...";
@@ -530,7 +530,7 @@
 "Siri.erase" = "Стерти";
 
 /* Title of option in settings to set up Siri to erase and then open the app. */
-"Siri.eraseAndOpen" = "Стерти і відкрити";
+"Siri.eraseAndOpen" = "Стерти й відкрити";
 
 /* Title for screen to add a favorite URL to Siri. */
 "Siri.favoriteUrl" = "Відкрити улюблений сайт";
@@ -575,7 +575,7 @@
 "Tip.Shortcuts.Title" = "Створіть ярлики для сайтів, які ви відвідуєте найчастіше:";
 
 /* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
-"Tip.SiriErase.Description" = "Додайте ярлик Siri";
+"Tip.SiriErase.Description" = "Додати швидку команду Siri";
 
 /* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
 "Tip.SiriErase.Title" = "“Siri, зітри мій сеанс %@.”";
@@ -593,7 +593,7 @@
 "Tip.SitesNotWorking.Title" = "На сайті відсутній вміст або він дивно поводиться?";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
-"touchId.reason" = "Використовувати Touch ID для повернення до %@";
+"touchId.reason" = "Використовуйте Touch ID для повернення до %@";
 
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Стеження реклами";
@@ -638,13 +638,13 @@
 "trackingProtection.statusOn" = "Захист увімкнено для цього сеансу";
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.toggleDescription1" = "Вимкнути до закриття %@, або оберіть СТЕРТИ.";
+"trackingProtection.toggleDescription1" = "Вимкнути до закриття %@ або натискання СТЕРТИ.";
 
 /* Text for the toggle that enables/disables tracking protection. */
 "trackingProtection.toggleLabel2" = "Розширений захист від стеження";
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel2" = "Зберігайте свої дані при собі. %@ захищає вас від численних найпоширеніших елементів стеження, що переслідують вас в мережі.";
+"trackingProtection.trackerDescriptionLabel2" = "Зберігайте свої дані при собі. %@ захищає вас від багатьох найпоширеніших елементів стеження, що переслідують вас в Інтернеті.";
 
 /* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
 "trackingProtection.trackersBlockedLabel" = "Заблоковано стеження, починаючи з %@";
