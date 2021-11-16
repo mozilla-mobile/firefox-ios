@@ -73,8 +73,10 @@ class TelemetryWrapperTests: XCTestCase {
     }
 
     func test_firefoxHomePageAddView_GleanIsCalled() {
-        TelemetryWrapper.recordEvent(category: .action, method: .view, object: .firefoxHomepage, value: .fxHomepageOrigin)
-        testCounterMetricRecordingSuccess(metric: GleanMetrics.FirefoxHomePage.firefoxHomepageView)
+        let extras = [TelemetryWrapper.EventExtraKey.fxHomepageOrigin.rawValue: TelemetryWrapper.EventValue.fxHomepageOriginZeroSearch.rawValue]
+        TelemetryWrapper.recordEvent(category: .action, method: .view, object: .firefoxHomepage, value: .fxHomepageOrigin, extras: extras)
+
+        testLabeledMetricSuccess(metric: GleanMetrics.FirefoxHomePage.firefoxHomepageOrigin)
     }
 }
 
@@ -99,6 +101,15 @@ extension TelemetryWrapperTests {
         XCTAssertTrue(metric.testHasValue())
         XCTAssertEqual(try! metric.testGetValue(), 1)
 
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidLabel), 0)
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidOverflow), 0)
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidState), 0)
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidValue), 0)
+    }
+
+    func testLabeledMetricSuccess(metric: LabeledMetricType<CounterMetricType>,
+                                  file: StaticString = #file,
+                                  line: UInt = #line) {
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidLabel), 0)
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidOverflow), 0)
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidState), 0)
