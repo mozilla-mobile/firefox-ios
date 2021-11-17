@@ -102,23 +102,12 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell {
     }
 
     func configureWith(tab: Tab, isSelected selected: Bool) {
-        self.titleText.text = tab.displayTitle
-
-        if tab.displayTitle.isEmpty {
-            if let url = tab.webView?.url, let internalScheme = InternalURL(url) {
-                titleText.text = .AppMenuNewTabTitleString
-                accessibilityLabel = internalScheme.aboutComponent
-            } else {
-                titleText.text = tab.webView?.url?.absoluteDisplayString
-            }
-            
-            closeButton.accessibilityLabel = String(format: .TopSitesRemoveButtonAccessibilityLabel, self.titleText.text ?? "")
-        } else {
-            accessibilityLabel = tab.displayTitle
-            closeButton.accessibilityLabel = String(format: .TopSitesRemoveButtonAccessibilityLabel, tab.displayTitle)
-        }
-
         isSelectedTab = selected
+
+        titleText.text = getTabTrayTitle(tab: tab)
+        accessibilityLabel = getA11yTitleLabel(tab: tab)
+
+        closeButton.accessibilityLabel = String(format: .TopSitesRemoveButtonAccessibilityLabel, self.titleText.text ?? "")
 
         let hideCloseButton = frame.width < 148 && !selected
         closeButton.isHidden = hideCloseButton
