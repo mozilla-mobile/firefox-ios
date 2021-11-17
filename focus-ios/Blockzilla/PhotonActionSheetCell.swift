@@ -150,7 +150,7 @@ class PhotonActionSheetCell: UITableViewCell {
         }
         
         if action.textStyle == .subtitle {
-            subtitleLabel.textColor = UIConstants.colors.actionMenuItemSubtitleLabel
+            subtitleLabel.textColor = .tertiaryLabel
             subtitleLabel.font = UIConstants.fonts.actionMenuItemSubtitle
         }
         

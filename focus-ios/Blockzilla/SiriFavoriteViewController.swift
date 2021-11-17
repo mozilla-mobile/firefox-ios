@@ -103,7 +103,7 @@ class SiriFavoriteViewController: UIViewController {
 
         let editLabel = UILabel()
         editLabel.text = UIConstants.strings.editOpenUrl
-        editLabel.textColor = UIConstants.colors.siriTint
+        editLabel.textColor = .accent
 
         editView.addSubview(editLabel)
         editLabel.snp.makeConstraints { make in

@@ -10,10 +10,10 @@ class EditView: UIView {
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.backgroundColor = UIConstants.colors.cellBackground
+        self.backgroundColor = .systemGroupedBackground
     }
 
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.backgroundColor = UIConstants.colors.cellBackground
+        self.backgroundColor = .systemGroupedBackground
     }
 }
