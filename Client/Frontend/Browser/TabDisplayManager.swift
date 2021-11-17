@@ -335,7 +335,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     /// - Parameters:
     ///   - currentlySelected: The currently selected tab
     ///   - inSection: In which section should this tab be searched
-    /// - Returns: The index path of the found previsouly selected tab
+    /// - Returns: The index path of the found previously selected tab
     private func indexOfCellDrawnAsPreviouslySelectedTab(currentlySelected: Tab?, inSection: Int) -> IndexPath? {
         guard let currentlySelected = currentlySelected else { return nil }
 
