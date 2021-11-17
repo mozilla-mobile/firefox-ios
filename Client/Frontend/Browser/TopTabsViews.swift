@@ -123,15 +123,8 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell {
         let hideCloseButton = frame.width < 148 && !selected
         closeButton.isHidden = hideCloseButton
 
-        if let siteURL = tab.url?.displayURL {
-            self.favicon.contentMode = .center
-            self.favicon.setImageAndBackground(forIcon: tab.displayFavicon, website: siteURL) { [weak self] in
-                guard let self = self else { return }
-                self.favicon.image = self.favicon.image?.createScaled(CGSize(width: 15, height: 15))
-                if self.favicon.backgroundColor == .clear {
-                    self.favicon.backgroundColor = .white
-                }
-            }
+        if let favIcon = tab.displayFavicon, let url = URL(string: favIcon.url) {
+            favicon.sd_setImage(with: url, placeholderImage: UIImage(named: "defaultFavicon"), options: [], completed: nil)
         } else {
             self.favicon.image = UIImage(named: "defaultFavicon")
             self.favicon.tintColor = UIColor.theme.tabTray.faviconTint
