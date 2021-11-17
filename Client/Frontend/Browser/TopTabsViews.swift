@@ -43,6 +43,7 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell {
         titleText.lineBreakMode = .byCharWrapping
         titleText.font = DynamicFontHelper.defaultHelper.DefaultSmallFont
         titleText.semanticContentAttribute = .forceLeftToRight
+        titleText.isAccessibilityElement = false
         return titleText
     }()
 
@@ -106,6 +107,7 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell {
 
         titleText.text = getTabTrayTitle(tab: tab)
         accessibilityLabel = getA11yTitleLabel(tab: tab)
+        isAccessibilityElement = true
 
         closeButton.accessibilityLabel = String(format: .TopSitesRemoveButtonAccessibilityLabel, self.titleText.text ?? "")
 
