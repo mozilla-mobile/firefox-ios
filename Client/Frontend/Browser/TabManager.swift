@@ -448,7 +448,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         return result
     }
 
-    func removeTabAndUpdateSelectedIndex(_ tab: Tab) {
+    func removeTab(_ tab: Tab) {
         removeTab(tab, flushToDisk: true)
         hideNetworkActivitySpinner()
 
@@ -487,7 +487,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
     /// Remove a tab, will notify delegate of the tab removal
     /// - Parameters:
     ///   - tab: the tab to remove
-    ///   - flushToDisk: Will store changes if true
+    ///   - flushToDisk: Will store changes if true, and update selected index
     fileprivate func removeTab(_ tab: Tab, flushToDisk: Bool) {
         assert(Thread.isMainThread)
 
@@ -511,7 +511,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
             updateIndexAfterRemovalOf(tab, deletedIndex: removalIndex)
         }
 
-        // Notifiy of changes
+        // Notify of tab removal
         delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: store.isRestoringTabs) }
         TabEvent.post(.didClose, for: tab)
     }
@@ -602,7 +602,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
 
         // In non-private mode, delete all tabs will automatically create a tab
         if let tab = tabs.first, !tab.isPrivate {
-            removeTabAndUpdateSelectedIndex(tab)
+            removeTab(tab)
         }
 
         selectTab(selectedTab)

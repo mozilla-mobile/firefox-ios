@@ -396,7 +396,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
                 return
             }
 
-            self.tabManager.removeTabAndUpdateSelectedIndex(tab)
+            self.tabManager.removeTab(tab)
         }
     }
 
@@ -532,7 +532,7 @@ extension TabDisplayManager: GroupedTabDelegate {
             return
         }
 
-        self.tabManager.removeTabAndUpdateSelectedIndex(tab)
+        self.tabManager.removeTab(tab)
         refreshStore()
     }
 
