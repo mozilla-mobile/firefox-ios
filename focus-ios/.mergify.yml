@@ -18,9 +18,9 @@ pull_request_rules:
       - label!=Work In Progress
       - label!=Do Not Land
     actions:
-      merge:
+      queue:
         method: rebase
-        strict: smart
+        name: default
   - name: Needs landing - Squash
     conditions:
       - label=Needs Landing (Squash)
@@ -29,9 +29,9 @@ pull_request_rules:
       - label!=work in progress
       - label!=do not land
     actions:
-      merge:
+      queue:
         method: squash
-        strict: smart
+        name: default
   - name: String Import - Auto Approve
     conditions:
       - author=github-actions[bot]
