@@ -789,7 +789,7 @@ extension TabTrayCell {
         if let url = tab.url, let about = InternalURL(url)?.aboutComponent { aboutComponent = about }
         let baseName = tab.displayTitle.isEmpty ? aboutComponent.isEmpty ? getTabTrayTitle(tab: tab) : aboutComponent : tab.displayTitle
 
-        if isSelectedTab, let baseName = baseName {
+        if isSelectedTab, let baseName = baseName, !baseName.isEmpty {
             return baseName + ". " + String.TabTrayCurrentlySelectedTabAccessibilityLabel
         } else if isSelectedTab {
             return String.TabTrayCurrentlySelectedTabAccessibilityLabel
