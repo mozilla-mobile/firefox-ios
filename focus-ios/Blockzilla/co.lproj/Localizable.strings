@@ -271,6 +271,12 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "« %@ » vole accede à e vostre fotò";
 
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "A cunnessione ùn hè micca assicurata";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "A cunnessione hè assicurata";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "Fighjà a versione urdinatore";
 
@@ -316,14 +322,29 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes2" = "Bluccà i perseguitatori di cuntenutu";
 
+/* Dark theme option in settings menu */
+"Settings.darkTheme" = "Scuru";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ manderà à u vostru mutore di ricerca ciò chì vo scrivite in a barra d’indirizzu.";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla face casu di cullettà solu i dati chì sò ghjuvevule per rigalà è amendà %@ per tutti.";
 
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextStudies" = "%@ pò installà è lancià studii di quandu in quandu.";
+
+/* Title for section in settings menu */
+"Settings.general" = "Generale";
+
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Sapene di più.";
+
+/* Light theme option in settings menu */
+"Settings.lightTheme" = "Chjaru";
+
+/* Manual value for theme section in settings menu */
+"Settings.manualTheme" = "Manuale";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "Valutà %@";
@@ -388,6 +409,15 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "SICURITÀ";
 
+/* System value for theme section in settings menu */
+"Settings.systemTheme" = "Tema di u sistema";
+
+/* Theme section in settings menu */
+"Settings.theme" = "Tema";
+
+/* Header for manual theme section in settings menu */
+"Settings.themePicker" = "Selettore di tema";
+
 /* Label for the checkbox to toggle Advertising trackers */
 "Settings.toggleBlockAds2" = "Publicità";
 
@@ -421,6 +451,9 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Mandà i dati d’adopru";
 
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "Studii";
+
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Impiegà Touch ID per spalancà l’appiecazione";
 
@@ -432,6 +465,9 @@
 
 /* Status on for tracking protection in settings screen */
 "Settings.trackingProtectionOn" = "Attivata";
+
+/* Value for theme toggle in settings menu */
+"Settings.useSystemTheme" = "Impiegà u modu chjaru o scuru di u sistema";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Ciò chì hè novu";
@@ -469,6 +505,9 @@
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Apre in Chrome";
 
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "Apre in u navigatore predefinitu";
+
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Apre in Firefox";
 
@@ -502,6 +541,57 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "Indirizzu à apre";
 
+/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.Biometric.Title" = "Ammarchjunà %@ quandu un situ hè apertu :";
+
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "Attivà Face ID";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "Attivà Touch ID";
+
+/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Release.Description" = "Sapene di più nant’à stu rinnovu è ancu d’altri per %@.";
+
+/* Text for a label that indicates the title for release tip. */
+"Tip.Release.Title" = "Hè vera, avemu un aspettu tuttu novu !";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "Azzioni di a pagina > Fighjà a versione urdinatore";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "Vulete fighjà a versione urdinatore cumpleta d’un situ ?";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "%@ perseguitatori bluccati sin’avà";
+
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "Navigate. %@ blucca.";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "Selezziunate « Aghjunghje à l’accurtatoghji » da u listinu di %@";
+
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "Create l’accurtatoghji per i siti chì vo visitate u più :";
+
+/* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriErase.Description" = "Aghjunghje un accurtatoghju Siri";
+
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.SiriErase.Title" = "« Siri, squassa a mo sessione %@. »";
+
+/* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriFavorite.Description" = "Aghjunghje un accurtatoghju Siri";
+
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "« Siri, apre u mo situ preferitu. »";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "Pruvate di disattivà a prutezzione contr’à u spiunagiu";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "Ci seria u cuntenutu chì manca o u situ si cumpurteria d’una manera strana ?";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Impiegà Touch ID per rivene nant’à %@";
 
@@ -516,6 +606,9 @@
 
 /* Text for tracking protection screen showing the connection is secure */
 "trackingProtection.connectionSecureLabel" = "A cunnessione hè assicurata";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"trackingProtection.connectionVerifiedByLabel" = "Verificatu da %@";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Perseguitatori di cuntenutu";

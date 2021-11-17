@@ -296,7 +296,7 @@
 "Save" = "Зберегти";
 
 /* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
-"SearchEngine.addEngineError" = "Це не спрацювало. Спробуйте змінити пошуковий запит цим: %s.";
+"SearchEngine.addEngineError" = "Це не спрацювало. Спробуйте замінити пошуковий запит цим: %s.";
 
 /* Label for disable option on search suggestions prompt */
 "SearchSuggestions.promptDisable" = "Ні";
@@ -314,7 +314,7 @@
 "Settings.autocompleteSection" = "Автозавершення URL";
 
 /* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Блокування інших елементів стеження може пошкодити деякі відео і вебсторінки.";
+"Settings.blockOtherMessage" = "Блокування інших елементів стеження може порушити роботу деяких відео і вебсторінок.";
 
 /* Button label for declining Content blocker alert */
 "Settings.blockOtherNo2" = "Скасувати";
@@ -329,7 +329,7 @@
 "Settings.detailTextSearchSuggestion" = "%@ відправлятиме провайдеру пошуку текст, введений в адресному рядку.";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSendUsageData" = "Mozilla зобов'язується збирати лише дані, що необхідні для роботи і вдосконалення %@.";
+"Settings.detailTextSendUsageData" = "Mozilla зобов'язується збирати лише ті дані, що необхідні для роботи та вдосконалення %@.";
 
 /* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextStudies" = "%@ може час від часу встановлювати й виконувати дослідження.";
@@ -443,7 +443,7 @@
 "Settings.toggleHomeScreenTips" = "Показувати поради на головному екрані";
 
 /* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "Може пошкодити деякі відео і вебсторінки";
+"Settings.toggleOtherSubtitle" = "Може порушити роботу деяких відео і вебсторінок";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
@@ -659,7 +659,7 @@
 "URL.cancelLabel" = "Скасувати";
 
 /* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
-"URL.contextMenu" = "Вставити і перейти";
+"URL.contextMenu" = "Уставити й перейти";
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "СТЕРТИ";
