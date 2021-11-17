@@ -286,7 +286,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         self.isInactiveViewExpanded = inactiveViewModel.inactiveTabs.count > 0
         let recentlyClosedTabs = inactiveViewModel.recentlyClosedTabs
         if recentlyClosedTabs.count > 0 {
-            self.tabManager.removeTabs(recentlyClosedTabs, shouldNotify: true)
+            self.tabManager.removeTabs(recentlyClosedTabs)
             self.tabManager.selectTab(selectedTab)
         }
     }

@@ -449,9 +449,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
     }
 
     func removeTabAndUpdateSelectedIndex(_ tab: Tab) {
-        guard let index = tabs.firstIndex(where: { $0 === tab }) else { return }
-        removeTab(tab, flushToDisk: true, notify: true)
-        updateIndexAfterRemovalOf(tab, deletedIndex: index)
+        removeTab(tab, flushToDisk: true)
         hideNetworkActivitySpinner()
 
         TelemetryWrapper.recordEvent(
@@ -486,9 +484,11 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         }
     }
 
-    /// - Parameter notify: if set to true, will call the delegate after the tab
-    ///   is removed.
-    fileprivate func removeTab(_ tab: Tab, flushToDisk: Bool, notify: Bool) {
+    /// Remove a tab, will notify delegate of the tab removal
+    /// - Parameters:
+    ///   - tab: the tab to remove
+    ///   - flushToDisk: Will store changes if true
+    fileprivate func removeTab(_ tab: Tab, flushToDisk: Bool) {
         assert(Thread.isMainThread)
 
         guard let removalIndex = tabs.firstIndex(where: { $0 === tab }) else {
@@ -506,14 +506,14 @@ class TabManager: NSObject, FeatureFlagsProtocol {
 
         tab.close()
 
-        if notify {
-            delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: store.isRestoringTabs) }
-            TabEvent.post(.didClose, for: tab)
-        }
-
         if flushToDisk {
             storeChanges()
+            updateIndexAfterRemovalOf(tab, deletedIndex: removalIndex)
         }
+
+        // Notifiy of changes
+        delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: store.isRestoringTabs) }
+        TabEvent.post(.didClose, for: tab)
     }
 
     // Select the most recently visited tab, IFF it is also the parent tab of the closed tab.
@@ -543,7 +543,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
 
     func removeTabsAndAddNormalTab(_ tabs: [Tab]) {
         for tab in tabs {
-            self.removeTab(tab, flushToDisk: false, notify: true)
+            self.removeTab(tab, flushToDisk: false)
         }
         if normalTabs.isEmpty {
             selectTab(addTab())
@@ -553,7 +553,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
 
     func removeTabsWithoutToast(_ tabs: [Tab]) {
         for tab in tabs {
-            self.removeTab(tab, flushToDisk: false, notify: true)
+            self.removeTab(tab, flushToDisk: false)
         }
     }
 
@@ -613,9 +613,9 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         recentlyClosedForUndo.removeAll()
     }
 
-    func removeTabs(_ tabs: [Tab], shouldNotify: Bool = true) {
+    func removeTabs(_ tabs: [Tab]) {
         for tab in tabs {
-            self.removeTab(tab, flushToDisk: false, notify: shouldNotify)
+            self.removeTab(tab, flushToDisk: false)
         }
         storeChanges()
     }
