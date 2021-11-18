@@ -111,7 +111,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
     }
 
     private func setupStartAtHomeSection() -> SettingSection? {
-        // TODO: WHen fixing start at home, this setting needs to addressed as well. The
+        // ROUX: WHen fixing start at home, this setting needs to addressed as well. The
         // barebones of what needs to be done are here, just needs updating.
         return nil
 //        guard featureFlags.isFeatureActiveForBuild(.startAtHome) else { return nil }

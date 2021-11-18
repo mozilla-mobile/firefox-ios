@@ -34,7 +34,7 @@ class TabManagerStore: FeatureFlagsProtocol {
     var shouldOpenHome: Bool {
         let isColdLaunch = NSUserDefaultsPrefs(prefix: "profile").boolForKey("isColdLaunch")
         guard let coldLaunch = isColdLaunch, featureFlags.isFeatureActiveForBuild(.startAtHome) else { return false }
-        // TODO: When fixing start at home, the below code is correct, but needs to be
+        // ROUX: When fixing start at home, the below code is correct, but needs to be
         // uncommented in order to get the feature working properly
 //        guard let setting: StartAtHomeSetting = featureFlags.featureOption(.startAtHome) else { return false }
 //
