@@ -775,6 +775,30 @@ protocol TabTrayCell where Self: UICollectionViewCell {
     func configureWith(tab: Tab, isSelected selected: Bool)
 }
 
+extension TabTrayCell {
+
+    /// Use the display title unless it's an empty string, then use the base domain from the url
+    func getTabTrayTitle(tab: Tab) -> String? {
+        let baseDomain = tab.sessionData?.urls.last?.baseDomain ?? tab.url?.baseDomain
+        let urlLabel = baseDomain != nil ? baseDomain!.contains("local") ? "" : baseDomain : ""
+        return tab.displayTitle.isEmpty ? urlLabel : tab.displayTitle
+    }
+
+    func getA11yTitleLabel(tab: Tab) -> String? {
+        var aboutComponent = ""
+        if let url = tab.url, let about = InternalURL(url)?.aboutComponent { aboutComponent = about }
+        let baseName = tab.displayTitle.isEmpty ? aboutComponent.isEmpty ? getTabTrayTitle(tab: tab) : aboutComponent : tab.displayTitle
+
+        if isSelectedTab, let baseName = baseName, !baseName.isEmpty {
+            return baseName + ". " + String.TabTrayCurrentlySelectedTabAccessibilityLabel
+        } else if isSelectedTab {
+            return String.TabTrayCurrentlySelectedTabAccessibilityLabel
+        } else {
+            return baseName
+        }
+    }
+}
+
 class TabCell: UICollectionViewCell, TabTrayCell {
 
     enum Style {
@@ -902,18 +926,9 @@ class TabCell: UICollectionViewCell, TabTrayCell {
 
     func configureWith(tab: Tab, isSelected selected: Bool) {
         isSelectedTab = selected
-        titleText.text = tab.displayTitle
 
-        if selected {
-            accessibilityLabel = tab.displayTitle + ". " + String.TabTrayCurrentlySelectedTabAccessibilityLabel
-        } else if !tab.displayTitle.isEmpty {
-            accessibilityLabel = tab.displayTitle
-        } else if let url = tab.url, let about = InternalURL(url)?.aboutComponent {
-            accessibilityLabel = about
-        } else {
-            accessibilityLabel = ""
-        }
-
+        titleText.text = getTabTrayTitle(tab: tab)
+        accessibilityLabel = getA11yTitleLabel(tab: tab)
         isAccessibilityElement = true
         accessibilityHint = .TabTraySwipeToCloseAccessibilityHint
 
