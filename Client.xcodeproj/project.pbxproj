@@ -54,7 +54,7 @@
 		1B308AA12714F01E001D6200 /* SwiftProtobuf in Frameworks */ = {isa = PBXBuildFile; productRef = 1BDA1F8B271138A5006B2FAB /* SwiftProtobuf */; };
 		1B3D99F1270E89D0006E1264 /* Telemetry in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3D99F0270E89D0006E1264 /* Telemetry */; };
 		1B750BE1274312D3002CBA18 /* RustLog in Frameworks */ = {isa = PBXBuildFile; productRef = 1B750BE0274312D3002CBA18 /* RustLog */; };
-		1BE9ECB0271765C800D729BB /* Nimbus in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECAF271765C800D729BB /* Nimbus */; };
+		1BA892A22746D88500C5F7D2 /* Nimbus in Frameworks */ = {isa = PBXBuildFile; productRef = 1BA892A12746D88500C5F7D2 /* Nimbus */; };
 		1BE9ECBE2717663100D729BB /* FxAClient in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECBD2717663100D729BB /* FxAClient */; };
 		1BE9ECC02717663200D729BB /* Logins in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECBF2717663200D729BB /* Logins */; };
 		1BE9ECC22717663200D729BB /* Places in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECC12717663200D729BB /* Places */; };
@@ -4232,6 +4232,7 @@
 				1BE9ECC42717663200D729BB /* Viaduct in Frameworks */,
 				1BE9ECC22717663200D729BB /* Places in Frameworks */,
 				1BE9ECBE2717663100D729BB /* FxAClient in Frameworks */,
+				1BA892A22746D88500C5F7D2 /* Nimbus in Frameworks */,
 				1B750BE1274312D3002CBA18 /* RustLog in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4243,7 +4244,6 @@
 				C82043852523DBF600740B71 /* Sync.framework in Frameworks */,
 				C877037A25222F30006E38EB /* Shared.framework in Frameworks */,
 				C8E18F20222EDED000E30E52 /* SafariServices.framework in Frameworks */,
-				1BE9ECB0271765C800D729BB /* Nimbus in Frameworks */,
 				C8E18F1E222EDE4500E30E52 /* Accelerate.framework in Frameworks */,
 				F8324A7C2649A5A5007E4BFA /* AuthenticationServices.framework in Frameworks */,
 				E6231C051B90A472005ABB0D /* libxml2.2.tbd in Frameworks */,
@@ -6503,11 +6503,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				1B750BDF274312C8002CBA18 /* PBXTargetDependency */,
-				1BE9EC9B271619FE00D729BB /* PBXTargetDependency */,
-				1BE9EC97271616EB00D729BB /* PBXTargetDependency */,
-				1B308AA7271503E5001D6200 /* PBXTargetDependency */,
-				1B308AA32715011D001D6200 /* PBXTargetDependency */,
 				1BDA1F8E271138EB006B2FAB /* PBXTargetDependency */,
 				1B3D99F6270E8CDE006E1264 /* PBXTargetDependency */,
 				1B750BE5274327B7002CBA18 /* PBXTargetDependency */,
@@ -6522,6 +6517,7 @@
 				1BE9ECC12717663200D729BB /* Places */,
 				1BE9ECC32717663200D729BB /* Viaduct */,
 				1B750BE0274312D3002CBA18 /* RustLog */,
+				1BA892A12746D88500C5F7D2 /* Nimbus */,
 			);
 			productName = Shared;
 			productReference = 288A2D861AB8B3260023ABC3 /* Shared.framework */;
@@ -6846,7 +6842,6 @@
 			name = Client;
 			packageProductDependencies = (
 				1B3D99F0270E89D0006E1264 /* Telemetry */,
-				1BE9ECAF271765C800D729BB /* Nimbus */,
 			);
 			productName = Client;
 			productReference = F84B21BE1A090F8100AAB793 /* Client.app */;
@@ -8487,21 +8482,9 @@
 			target = 047F9B2624E1FE1C00CD7DF7 /* WidgetKitExtension */;
 			targetProxy = 047F9B3024E1FE1F00CD7DF7 /* PBXContainerItemProxy */;
 		};
-		1B308AA32715011D001D6200 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 1B308AA22715011D001D6200 /* Places */;
-		};
-		1B308AA7271503E5001D6200 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 1B308AA6271503E5001D6200 /* FxAClient */;
-		};
 		1B3D99F6270E8CDE006E1264 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 1B3D99F5270E8CDE006E1264 /* SwiftKeychainWrapper */;
-		};
-		1B750BDF274312C8002CBA18 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 1B750BDE274312C8002CBA18 /* RustLog */;
 		};
 		1B750BE5274327B7002CBA18 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -8510,14 +8493,6 @@
 		1BDA1F8E271138EB006B2FAB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 1BDA1F8D271138EB006B2FAB /* SwiftyJSON */;
-		};
-		1BE9EC97271616EB00D729BB /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 1BE9EC96271616EB00D729BB /* Logins */;
-		};
-		1BE9EC9B271619FE00D729BB /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 1BE9EC9A271619FE00D729BB /* Viaduct */;
 		};
 		2827316B1ABC9BE700AA1954 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -12486,14 +12461,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		1B308A5F2714C9BD001D6200 /* XCRemoteSwiftPackageReference "rust-components-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "/Users/skhamis/moz/rust-components-swift";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.0.6;
-			};
-		};
 		1B3D99EF270E89D0006E1264 /* XCRemoteSwiftPackageReference "telemetry-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mozilla-mobile/telemetry-ios";
@@ -12537,16 +12504,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		1B308AA22715011D001D6200 /* Places */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1B308A5F2714C9BD001D6200 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
-			productName = Places;
-		};
-		1B308AA6271503E5001D6200 /* FxAClient */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1B308A5F2714C9BD001D6200 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
-			productName = FxAClient;
-		};
 		1B3D99F0270E89D0006E1264 /* Telemetry */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1B3D99EF270E89D0006E1264 /* XCRemoteSwiftPackageReference "telemetry-ios" */;
@@ -12562,11 +12519,6 @@
 			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
 			productName = SwiftKeychainWrapper;
 		};
-		1B750BDE274312C8002CBA18 /* RustLog */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1BE9ECAA271765C800D729BB /* XCRemoteSwiftPackageReference "rust-components-swift" */;
-			productName = RustLog;
-		};
 		1B750BE0274312D3002CBA18 /* RustLog */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1BE9ECAA271765C800D729BB /* XCRemoteSwiftPackageReference "rust-components-swift" */;
@@ -12576,6 +12528,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1BDA1F8827113852006B2FAB /* XCRemoteSwiftPackageReference "swift-protobuf" */;
 			productName = SwiftProtobuf;
+		};
+		1BA892A12746D88500C5F7D2 /* Nimbus */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1BE9ECAA271765C800D729BB /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = Nimbus;
 		};
 		1BDA1F8627113817006B2FAB /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -12591,21 +12548,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1BDA1F8327113788006B2FAB /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
 			productName = SwiftyJSON;
-		};
-		1BE9EC96271616EB00D729BB /* Logins */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1B308A5F2714C9BD001D6200 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
-			productName = Logins;
-		};
-		1BE9EC9A271619FE00D729BB /* Viaduct */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1B308A5F2714C9BD001D6200 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
-			productName = Viaduct;
-		};
-		1BE9ECAF271765C800D729BB /* Nimbus */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1BE9ECAA271765C800D729BB /* XCRemoteSwiftPackageReference "rust-components-swift" */;
-			productName = Nimbus;
 		};
 		1BE9ECBD2717663100D729BB /* FxAClient */ = {
 			isa = XCSwiftPackageProductDependency;
