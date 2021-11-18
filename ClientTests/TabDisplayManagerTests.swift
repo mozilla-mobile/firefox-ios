@@ -180,6 +180,76 @@ class TabDisplayManagerTests: XCTestCase {
         XCTAssertEqual(manager.tabs[1].tabUUID, childTab.tabUUID, "Child tab should be placed after the parent tab, at index 1")
         XCTAssertEqual(tabDisplayManager.dataStore.at(1)?.tabUUID, childTab.tabUUID, "Child tab should be placed after the parent tab, at index 1")
     }
+
+    // MARK: Selected cell
+
+    func testSelectedCell_withThreeTabs_lastTabSelectedAndRemoved() {
+        let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
+
+        // Add three tabs with selected at last position
+        manager.addTab()
+        manager.addTab()
+        let selectedTab = manager.addTab()
+        manager.selectTab(selectedTab)
+
+        // Remove selected
+        XCTAssertEqual(tabDisplayManager.dataStore.count, 3)
+        manager.removeTab(selectedTab)
+
+        // Should be selected tab is index 1, and no other one is selected
+        XCTAssertEqual(tabDisplayManager.dataStore.count, 2)
+        for index in 0...1 {
+            let cell = tabDisplayManager.collectionView(collectionView, cellForItemAt: IndexPath(row: index, section: 0)) as! TabTrayCell
+            if index == 1 {
+                XCTAssertTrue(cell.isSelectedTab)
+            } else {
+                XCTAssertFalse(cell.isSelectedTab)
+            }
+        }
+    }
+
+    func testSelectedCell_withThreeTabs_secondTabSelectedAndRemoved() {
+        let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
+
+        // Add three tabs with selected at last position
+        manager.addTab()
+        let selectedTab = manager.addTab()
+        manager.addTab()
+        manager.selectTab(selectedTab)
+
+        // Remove selected
+        XCTAssertEqual(tabDisplayManager.dataStore.count, 3)
+        manager.removeTab(selectedTab)
+
+        // Should be selected tab is index 1, and no other one is selected
+        XCTAssertEqual(tabDisplayManager.dataStore.count, 2)
+        for index in 0...1 {
+            let cell = tabDisplayManager.collectionView(collectionView, cellForItemAt: IndexPath(row: index, section: 0)) as! TabTrayCell
+            if index == 1 {
+                XCTAssertTrue(cell.isSelectedTab)
+            } else {
+                XCTAssertFalse(cell.isSelectedTab)
+            }
+        }
+    }
+
+    func testSelectedCell_withTwoTabs_secondTabSelectedAndRemoved() {
+        let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
+
+        // Add three tabs with selected at last position
+        manager.addTab()
+        let selectedTab = manager.addTab()
+        manager.selectTab(selectedTab)
+
+        // Remove selected
+        XCTAssertEqual(tabDisplayManager.dataStore.count, 2)
+        manager.removeTab(selectedTab)
+
+        // Should be selected tab is index 1, and no other one is selected
+        XCTAssertEqual(tabDisplayManager.dataStore.count, 1)
+        let cell = tabDisplayManager.collectionView(collectionView, cellForItemAt: IndexPath(row: 0, section: 0)) as! TabTrayCell
+        XCTAssertTrue(cell.isSelectedTab)
+    }
 }
 
 // Helper methods
@@ -203,10 +273,9 @@ extension TabDisplayManagerTests: TabDisplayer {
     func focusSelectedTab() {}
 
     func cellFactory(for cell: UICollectionViewCell, using tab: Tab) -> UICollectionViewCell {
-        guard let tabCell = cell as? TopTabCell else { return UICollectionViewCell() }
+        guard let tabCell = cell as? TabTrayCell else { return UICollectionViewCell() }
         let isSelected = (tab == manager.selectedTab)
         tabCell.configureWith(tab: tab, isSelected: isSelected)
-        tabCell.applyTheme()
         return tabCell
     }
 }
@@ -235,5 +304,14 @@ class MockCollectionView: UICollectionView {
     override func performBatchUpdates(_ updates: (() -> Void)?, completion: ((Bool) -> Void)? = nil) {
         updates?()
         completion?(true)
+    }
+
+    /// Due to the usage of MockCollectionView with the overriden performBatchUpdates in prod code for those tests, deleteItems needs an extra check.
+    /// No check was added for prod code so it would crash in case of concurrency (which would be abnormal and need to be detected)
+    override func deleteItems(at indexPaths: [IndexPath]) {
+        guard indexPaths[0].row <= numberOfItems(inSection: 0) - 1 else {
+            return
+        }
+        super.deleteItems(at: indexPaths)
     }
 }
