@@ -442,6 +442,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     }
 }
 
+// MARK: - UICollectionViewDataSource
 extension TabDisplayManager: UICollectionViewDataSource {
     @objc func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if tabDisplayType == .TopTabTray {
@@ -515,6 +516,7 @@ extension TabDisplayManager: UICollectionViewDataSource {
     }
 }
 
+// MARK: - GroupedTabDelegate
 extension TabDisplayManager: GroupedTabDelegate {
     
     func newSearchFromGroup(searchTerm: String) {
@@ -542,6 +544,7 @@ extension TabDisplayManager: GroupedTabDelegate {
     }
 }
 
+// MARK: - InactiveTabsDelegate
 extension TabDisplayManager: InactiveTabsDelegate {
     func didTapRecentlyClosed() {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .openRecentlyClosedList, extras: nil)
@@ -566,6 +569,7 @@ extension TabDisplayManager: InactiveTabsDelegate {
     }
 }
 
+// MARK: - TabSelectionDelegate
 extension TabDisplayManager: TabSelectionDelegate {
     func didSelectTabAtIndex(_ index: Int) {
         guard let tab = dataStore.at(index) else { return }
@@ -578,6 +582,7 @@ extension TabDisplayManager: TabSelectionDelegate {
     }
 }
 
+// MARK: - UIDropInteractionDelegate
 extension TabDisplayManager: UIDropInteractionDelegate {
     func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
         // Prevent tabs from being dragged and dropped onto the "New Tab" button.
@@ -605,6 +610,7 @@ extension TabDisplayManager: UIDropInteractionDelegate {
     }
 }
 
+// MARK: - UICollectionViewDragDelegate
 extension TabDisplayManager: UICollectionViewDragDelegate {
     // This is called when the user has long-pressed on a cell, please note that `collectionView.hasActiveDrag` is not true
     // until the user's finger moves. This problem is mitigated by checking the collectionView for activated long press gesture recognizers.
@@ -636,6 +642,7 @@ extension TabDisplayManager: UICollectionViewDragDelegate {
     }
 }
 
+// MARK: - UICollectionViewDropDelegate
 extension TabDisplayManager: UICollectionViewDropDelegate {
     private func dragPreviewParameters(_ collectionView: UICollectionView, dragPreviewParametersForItemAt indexPath: IndexPath) -> UIDragPreviewParameters? {
         guard let cell = collectionView.cellForItem(at: indexPath) as? TopTabCell else { return nil }
@@ -779,26 +786,31 @@ extension TabDisplayManager: TabManagerDelegate {
         }
 
         updateWith(animationType: .addTab) { [unowned self] in
-            // place new tab at the end by default unless it has been opened from parent tab
-            var indexToPlaceTab = dataStore.count - 1 > 0 ? dataStore.count : 0
-
-            // open a link from website next to it
-            if placeNextToParentTab, let selectedTabUUID = tabManager.selectedTab?.tabUUID {
-                let selectedTabIndex = self.dataStore.firstIndexDel() { t in
-                    if let uuid = t.value?.tabUUID {
-                        return uuid == selectedTabUUID
-                    }
-                    return false
-                }
-
-                if let selectedTabIndex = selectedTabIndex {
-                    indexToPlaceTab = selectedTabIndex + 1
-                }
-            }
+            let indexToPlaceTab = getIndexToPlaceTab(placeNextToParentTab: placeNextToParentTab)
             self.dataStore.insert(tab, at: indexToPlaceTab)
             let section = self.tabDisplayType == .TopTabTray ? 0 : TabDisplaySection.regularTabs.rawValue
             self.collectionView.insertItems(at: [IndexPath(row: indexToPlaceTab, section: section)])
         }
+    }
+
+    func getIndexToPlaceTab(placeNextToParentTab: Bool) -> Int {
+        // Place new tab at the end by default unless it has been opened from parent tab
+        var indexToPlaceTab = dataStore.count > 0 ? dataStore.count : 0
+
+        // Open a link from website next to it
+        if placeNextToParentTab, let selectedTabUUID = tabManager.selectedTab?.tabUUID {
+            let selectedTabIndex = dataStore.firstIndexDel() { t in
+                if let uuid = t.value?.tabUUID {
+                    return uuid == selectedTabUUID
+                }
+                return false
+            }
+
+            if let selectedTabIndex = selectedTabIndex {
+                indexToPlaceTab = selectedTabIndex + 1
+            }
+        }
+        return indexToPlaceTab
     }
 
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
