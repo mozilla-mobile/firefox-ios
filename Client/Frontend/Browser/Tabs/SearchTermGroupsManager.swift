@@ -209,6 +209,7 @@ class SearchTermGroupsManager {
                 let firstTabTimestamp = firstTab.lastExecutedTime ?? firstTab.sessionData?.lastUsedTime ?? firstTab.firstCreatedTime ?? 0
                 let secondTabTimestamp = secondTab.lastExecutedTime ?? secondTab.sessionData?.lastUsedTime ?? secondTab.firstCreatedTime ?? 0
                 return firstTabTimestamp < secondTabTimestamp
+
             } else if let firstSite = $0 as? Site, let secondSite = $1 as? Site {
                 let firstSiteATimestamp = TimeInterval.fromMicrosecondTimestamp(firstSite.latestVisit?.date ?? 0)
                 let secondSiteTimestamp = TimeInterval.fromMicrosecondTimestamp(secondSite.latestVisit?.date ?? 0)
