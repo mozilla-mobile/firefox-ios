@@ -52,7 +52,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
                 case 0:
                     return URL(string: "https://support.mozilla.org/\(AppInfo.config.supportPath)")
                 case 1:
-                    return Bundle.main.url(forResource: AppInfo.config.rightsFile, withExtension: nil)
+                    return URL(string: "https://www.mozilla.org/en-US/about/legal/terms/firefox/")
                 case 2:
                     return URL(string: "https://www.mozilla.org/privacy/firefox-focus")
                 default:

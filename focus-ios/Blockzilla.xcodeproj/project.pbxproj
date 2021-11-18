@@ -212,8 +212,6 @@
 		F8324CE4264EA223007E4BFA /* gpl.html in Resources */ = {isa = PBXBuildFile; fileRef = F8324CDF264EA223007E4BFA /* gpl.html */; };
 		F8324CE5264EA223007E4BFA /* licenses.html in Resources */ = {isa = PBXBuildFile; fileRef = F8324CE0264EA223007E4BFA /* licenses.html */; };
 		F8324CE6264EA223007E4BFA /* style.css in Resources */ = {isa = PBXBuildFile; fileRef = F8324CE1264EA223007E4BFA /* style.css */; };
-		F8324CE7264EA223007E4BFA /* rights-focus.html in Resources */ = {isa = PBXBuildFile; fileRef = F8324CE2264EA223007E4BFA /* rights-focus.html */; };
-		F8324CE8264EA223007E4BFA /* rights-klar.html in Resources */ = {isa = PBXBuildFile; fileRef = F8324CE3264EA223007E4BFA /* rights-klar.html */; };
 		F85F7A292655AD5800395515 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A282655AD5800395515 /* SnapKit */; };
 		F85F7A2B2655AD5800395515 /* Fuzi in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A2A2655AD5800395515 /* Fuzi */; };
 		F85F7A2F2655AD5800395515 /* Telemetry in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A2E2655AD5800395515 /* Telemetry */; };
@@ -988,8 +986,6 @@
 		F8324CDF264EA223007E4BFA /* gpl.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = gpl.html; sourceTree = "<group>"; };
 		F8324CE0264EA223007E4BFA /* licenses.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = licenses.html; sourceTree = "<group>"; };
 		F8324CE1264EA223007E4BFA /* style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = style.css; sourceTree = "<group>"; };
-		F8324CE2264EA223007E4BFA /* rights-focus.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "rights-focus.html"; sourceTree = "<group>"; };
-		F8324CE3264EA223007E4BFA /* rights-klar.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "rights-klar.html"; sourceTree = "<group>"; };
 		F8820C7126E19B1E006AB3B8 /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/Intro.strings"; sourceTree = "<group>"; };
 		F8820C7226E19B1E006AB3B8 /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/Intents.strings"; sourceTree = "<group>"; };
 		F8820C7326E19B1E006AB3B8 /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
@@ -1560,8 +1556,6 @@
 				F8324CDF264EA223007E4BFA /* gpl.html */,
 				F8324CE0264EA223007E4BFA /* licenses.html */,
 				F8324CE1264EA223007E4BFA /* style.css */,
-				F8324CE2264EA223007E4BFA /* rights-focus.html */,
-				F8324CE3264EA223007E4BFA /* rights-klar.html */,
 			);
 			path = LocalWebServer;
 			sourceTree = "<group>";
@@ -1945,12 +1939,10 @@
 				F8324CE6264EA223007E4BFA /* style.css in Resources */,
 				D3426AEF1DB846BB0016DA5A /* topdomains.txt in Resources */,
 				B3D23BEF1FA3A9E500D9C50F /* postload.js in Resources */,
-				F8324CE7264EA223007E4BFA /* rights-focus.html in Resources */,
 				D50939A91FBF807A005D4316 /* Settings.bundle in Resources */,
 				F8324CE4264EA223007E4BFA /* gpl.html in Resources */,
 				D3E54FD51DEFB25B003E1AFF /* SearchPlugins in Resources */,
 				D3E2C8FF1D9F17AC00DEBE3D /* web-fonts.json in Resources */,
-				F8324CE8264EA223007E4BFA /* rights-klar.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
