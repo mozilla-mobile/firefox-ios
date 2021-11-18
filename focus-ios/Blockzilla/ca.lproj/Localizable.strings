@@ -271,6 +271,12 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "El «%@» vol accedir a les vostres fotos";
 
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "La connexió no és segura";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "La connexió és segura";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "Mostra el lloc d'escriptori";
 
@@ -324,6 +330,12 @@
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla s'esforça per recollir només les dades necessàries per oferir i millorar el %@ per a tothom.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextStudies" = "El %@ pot instal·lar i executar estudis de tant en tant.";
+
+/* Title for section in settings menu */
+"Settings.general" = "General";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Més informació.";
@@ -439,6 +451,9 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Envia dades d'ús";
 
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "Estudis";
+
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Utilitza el Touch ID per desblocar l'aplicació";
 
@@ -490,6 +505,9 @@
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Obre al Chrome";
 
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "Obre al navegador per defecte";
+
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Obre al Firefox";
 
@@ -503,7 +521,7 @@
 "Siri.add" = "Afegeix";
 
 /* Button to add a specified shortcut option to Siri. */
-"Siri.addTo" = "Afegeix al Siri";
+"Siri.addTo" = "Afegeix a Siri";
 
 /* Label for button to edit the Siri phrase or delete the Siri functionality. */
 "Siri.editOpenUrl" = "Torna a enregistrar o suprimeix la drecera";
@@ -523,6 +541,57 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "URL que s'obrirà";
 
+/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.Biometric.Title" = "Bloca el %@ quan un lloc és obert:";
+
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "Activa el Face ID";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "Activa el Touch ID";
+
+/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Release.Description" = "Més informació sobre aquesta i altres actualitzacions del %@.";
+
+/* Text for a label that indicates the title for release tip. */
+"Tip.Release.Title" = "Doncs sí: tenim un nou aspecte!";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "Accions de la pàgina > Mostra el lloc d'escriptori";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "Voleu veure la versió completa d'escriptori d'un lloc web?";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "%@ elements de seguiment bloquejats fins ara";
+
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "Navegueu sense por, que el %@ ho bloca.";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "Seleccioneu «Afegeix a les dreceres» en el menú del %@";
+
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "Creeu dreceres als llocs que visiteu més:";
+
+/* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriErase.Description" = "Afegeix una drecera de Siri";
+
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.SiriErase.Title" = "«Siri, esborra la meva sessió del %@.»";
+
+/* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriFavorite.Description" = "Afegeix una drecera de Siri";
+
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "«Siri, obre el meu lloc preferit.»";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "Proveu de desactivar la protecció contra el seguiment";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "Hi falta contingut al lloc o actua de forma estranya?";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Utilitzeu el Touch ID per tornar al %@";
 
@@ -537,6 +606,9 @@
 
 /* Text for tracking protection screen showing the connection is secure */
 "trackingProtection.connectionSecureLabel" = "La connexió és segura";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"trackingProtection.connectionVerifiedByLabel" = "Verificat per %@";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Elements de seguiment de contingut";

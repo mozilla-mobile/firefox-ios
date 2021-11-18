@@ -542,7 +542,7 @@
 "Siri.urlToOpen" = "URL à ouvrir";
 
 /* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
-"Tip.Biometric.Title" = "Verrouiller %@ lorsqu’un site est ouvert :";
+"Tip.Biometric.Title" = "Verrouillez %@ lorsqu’un site est ouvert :";
 
 /* Text for a label that indicates the description for biometric Face ID tip. */
 "Tip.BiometricFaceId.Description" = "Activer Face ID";
