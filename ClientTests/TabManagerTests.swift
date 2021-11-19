@@ -21,15 +21,21 @@ open class TabManagerMockProfile: MockProfile {
 struct MethodSpy {
     let functionName: String
     let method: ((_ tabs: [Tab?]) -> Void)?
+    let file: StaticString
+    let line: UInt
 
-    init(functionName: String) {
+    init(functionName: String, file: StaticString = #file, line: UInt = #line) {
         self.functionName = functionName
         self.method = nil
+        self.file = file
+        self.line = line
     }
 
-    init(functionName: String, method: ((_ tabs: [Tab?]) -> Void)?) {
+    init(functionName: String, file: StaticString = #file, line: UInt = #line, method: ((_ tabs: [Tab?]) -> Void)?) {
         self.functionName = functionName
         self.method = method
+        self.file = file
+        self.line = line
     }
 }
 
@@ -51,12 +57,14 @@ open class MockTabManagerDelegate: TabManagerDelegate {
 
     func testDelegateMethodWithName(_ name: String, tabs: [Tab?]) {
         guard let spy = self.methodCatchers.first else {
-            XCTAssert(false, "No method was availible in the queue. For the delegate method \(name) to use")
+            XCTAssert(false, "No method was available in the queue. For the delegate method \(name) to use")
             return
         }
-        XCTAssertEqual(spy.functionName, name)
-        if let methodCheck = spy.method {
+        XCTAssertEqual(spy.functionName, name, file: spy.file, line: spy.line)
+        if let methodCheck = spy.method, spy.functionName == name {
             methodCheck(tabs)
+        } else if spy.functionName != name {
+            XCTFail("Spy function name \(spy.functionName) didn't had the same name as the first element in the queue \(name)")
         }
         methodCatchers.removeFirst()
     }
