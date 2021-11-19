@@ -60,6 +60,7 @@ open class MockTabManagerDelegate: TabManagerDelegate {
             XCTAssert(false, "No method was available in the queue. For the delegate method \(name) to use")
             return
         }
+
         XCTAssertEqual(spy.functionName, name, file: spy.file, line: spy.line)
         if let methodCheck = spy.method, spy.functionName == name {
             methodCheck(tabs)

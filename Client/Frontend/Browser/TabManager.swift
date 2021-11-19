@@ -269,9 +269,9 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         return profile.prefs.boolForKey("settings.closePrivateTabs") ?? false
     }
 
-    //Called by other classes to signal that they are entering/exiting private mode
-    //This is called by TabTrayVC when the private mode button is pressed and BEFORE we've switched to the new mode
-    //we only want to remove all private tabs when leaving PBM and not when entering.
+    // Called by other classes to signal that they are entering/exiting private mode
+    // This is called by TabTrayVC when the private mode button is pressed and BEFORE we've switched to the new mode
+    // we only want to remove all private tabs when leaving PBM and not when entering.
     func willSwitchTabMode(leavingPBM: Bool) {
         recentlyClosedForUndo.removeAll()
 
