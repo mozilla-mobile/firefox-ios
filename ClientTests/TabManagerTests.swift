@@ -57,7 +57,7 @@ open class MockTabManagerDelegate: TabManagerDelegate {
 
     func testDelegateMethodWithName(_ name: String, tabs: [Tab?]) {
         guard let spy = self.methodCatchers.first else {
-            XCTAssert(false, "No method was available in the queue. For the delegate method \(name) to use")
+            XCTFail("No method was available in the queue. For the delegate method \(name) to use")
             return
         }
 
