@@ -125,6 +125,7 @@ class TabManagerTests: XCTestCase {
         manager.addTab()
         delegate.verify("Not all delegate methods were called")
         XCTAssertEqual(manager.normalTabs.count, 1, "There should be one normal tab")
+        XCTAssertEqual(manager.tabs.count, 1, "There should be one tab")
     }
 
     func testAddTabShouldAddOnePrivateTab() {
@@ -133,6 +134,7 @@ class TabManagerTests: XCTestCase {
         manager.addTab(isPrivate: true)
         delegate.verify("Not all delegate methods were called")
         XCTAssertEqual(manager.privateTabs.count, 1, "There should be one private tab")
+        XCTAssertEqual(manager.tabs.count, 1, "There should be one tab")
     }
 
     func testAddTabAndSelect() {
