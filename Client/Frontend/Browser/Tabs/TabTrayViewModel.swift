@@ -18,9 +18,13 @@ class TabTrayViewModel {
         (tabManager.normalTabs.count < 100) ? tabManager.normalTabs.count.description : "\u{221E}"
     }
 
-    init(tabTrayDelegate: TabTrayDelegate? = nil, profile: Profile, showChronTabs: Bool = false, tabToFocus: Tab? = nil) {
+    init(tabTrayDelegate: TabTrayDelegate? = nil,
+         profile: Profile,
+         showChronTabs: Bool = false,
+         tabToFocus: Tab? = nil,
+         tabManager: TabManager) {
         self.profile = profile
-        self.tabManager = BrowserViewController.foregroundBVC().tabManager
+        self.tabManager = tabManager
 
         if showChronTabs {
             self.tabTrayView = ChronologicalTabsViewController(tabTrayDelegate: tabTrayDelegate, profile: self.profile)

@@ -137,10 +137,20 @@ class TabTrayViewController: UIViewController {
     }
 
     // Initializers
-    init(tabTrayDelegate: TabTrayDelegate? = nil, profile: Profile, showChronTabs: Bool = false, tabToFocus: Tab? = nil) {
-        self.viewModel = TabTrayViewModel(tabTrayDelegate: tabTrayDelegate, profile: profile, showChronTabs: showChronTabs, tabToFocus: tabToFocus)
+    init(tabTrayDelegate: TabTrayDelegate? = nil,
+         profile: Profile,
+         showChronTabs: Bool = false,
+         tabToFocus: Tab? = nil,
+         tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager) {
+
+        self.viewModel = TabTrayViewModel(tabTrayDelegate: tabTrayDelegate,
+                                          profile: profile,
+                                          showChronTabs: showChronTabs,
+                                          tabToFocus: tabToFocus,
+                                          tabManager: tabManager)
 
         super.init(nibName: nil, bundle: nil)
+        setupNotifications()
     }
 
     required init?(coder: NSCoder) {
@@ -154,9 +164,9 @@ class TabTrayViewController: UIViewController {
     // Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+
         viewSetup()
         applyTheme()
-        setupNotifications()
         updatePrivateUIState()
     }
 
