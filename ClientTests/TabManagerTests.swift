@@ -48,7 +48,7 @@ open class MockTabManagerDelegate: TabManagerDelegate {
     var methodCatchers: [MethodSpy] = []
 
     func expect(_ methods: [MethodSpy]) {
-        self.methodCatchers = methods
+        self.methodCatchers.append(contentsOf: methods)
     }
 
     func verify(_ message: String) {
