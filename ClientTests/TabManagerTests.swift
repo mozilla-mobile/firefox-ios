@@ -112,6 +112,8 @@ class TabManagerTests: XCTestCase {
     }
 
     override func tearDown() {
+        delegate.verify("Not all delegate methods were called")
+
         profile._shutdown()
         manager.removeDelegate(delegate)
         manager.removeAll()
@@ -123,7 +125,7 @@ class TabManagerTests: XCTestCase {
         manager.addDelegate(delegate)
         delegate.expect([didAdd])
         manager.addTab()
-        delegate.verify("Not all delegate methods were called")
+
         XCTAssertEqual(manager.normalTabs.count, 1, "There should be one normal tab")
         XCTAssertEqual(manager.tabs.count, 1, "There should be one tab")
     }
@@ -132,7 +134,6 @@ class TabManagerTests: XCTestCase {
         manager.addDelegate(delegate)
         delegate.expect([didAdd])
         manager.addTab(isPrivate: true)
-        delegate.verify("Not all delegate methods were called")
         XCTAssertEqual(manager.privateTabs.count, 1, "There should be one private tab")
         XCTAssertEqual(manager.tabs.count, 1, "There should be one tab")
     }
@@ -165,7 +166,6 @@ class TabManagerTests: XCTestCase {
         // it wont call didSelect because addTabAndSelect did not pass last removed tab
         delegate.expect([didRemove, didAdd, didSelect])
         manager.removeTab(tab)
-        delegate.verify("Not all delegate methods were called")
     }
 
     func testDidDeleteLastPrivateTab() {
@@ -187,7 +187,6 @@ class TabManagerTests: XCTestCase {
         }
         delegate.expect([didRemove, didSelect])
         manager.removeTab(privateTab)
-        delegate.verify("Not all delegate methods were called")
     }
 
     func testDidCreateNormalTabWhenDeletingAll() {
@@ -209,7 +208,6 @@ class TabManagerTests: XCTestCase {
         delegate.expect([didRemove, didAdd, didSelect, removeAllTabs])
 
         manager.removeTabsWithToast(manager.normalTabs)
-        delegate.verify("Not all delegate methods were called")
     }
 
     func testDeletePrivateTabsOnExit() {
@@ -328,8 +326,6 @@ class TabManagerTests: XCTestCase {
         }
         delegate.expect([didRemove, didSelect])
         manager.removeTab(manager.tabs.last!)
-
-        delegate.verify("Not all delegate methods were called")
     }
 
     func testDelegatesCalledWhenRemovingPrivateTabs() {
@@ -367,8 +363,6 @@ class TabManagerTests: XCTestCase {
         // select the new tab to trigger the delegate methods
         manager.selectTab(newTab)
 
-        // check
-        delegate.verify("Not all delegate methods were called")
     }
 
     func testDeleteFirstTab() {
@@ -387,7 +381,6 @@ class TabManagerTests: XCTestCase {
         }
         delegate.expect([didRemove, didSelect])
         manager.removeTab(manager.tabs.first!)
-        delegate.verify("Not all delegate methods were called")
     }
 
     func testRemoveTabSelectedTabShouldChangeIndex() {
@@ -449,7 +442,6 @@ class TabManagerTests: XCTestCase {
         delegate.expect([didRemove, didSelect])
         manager.removeTab(last)
 
-        delegate.verify("Not all delegate methods were called")
     }
 
     func testRemoveTabAndUpdateSelectedIndexIsSelectedParentTabAfterRemoval() {
