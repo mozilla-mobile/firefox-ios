@@ -42,9 +42,9 @@ struct MethodSpy {
 fileprivate let spyDidSelectedTabChange = "tabManager(_:didSelectedTabChange:previous:isRestoring:)"
 
 open class MockTabManagerDelegate: TabManagerDelegate {
-    //this array represents the order in which delegate methods should be called.
-    //each delegate method will pop the first struct from the array. If the method name doesn't match the struct then the order is incorrect
-    //Then it evaluates the method closure which will return true/false depending on if the tabs are correct
+    // This array represents the order in which delegate methods should be called.
+    // each delegate method will pop the first struct from the array. If the method name doesn't match the struct then the order is incorrect
+    // Then it evaluates the method closure which will return true/false depending on if the tabs are correct
     var methodCatchers: [MethodSpy] = []
 
     func expect(_ methods: [MethodSpy]) {
@@ -141,7 +141,7 @@ class TabManagerTests: XCTestCase {
     }
 
     func testMoveTabFromLastToFirstPosition() {
-        // add two tabs, last one will be selected
+        // Add two tabs, last one will be selected
         manager.selectTab(manager.addTab())
         manager.moveTab(isPrivate: false, fromIndex: 1, toIndex: 0)
         XCTAssertEqual(manager.selectedIndex, 0, "There should be selected second tab")
@@ -164,7 +164,7 @@ class TabManagerTests: XCTestCase {
     }
 
     func testDidDeleteLastPrivateTab() {
-        //create the tab before adding the mock delegate. So we don't have to check delegate calls we dont care about
+        // create the tab before adding the mock delegate. So we don't have to check delegate calls we dont care about
         let tab = manager.addTab()
         manager.selectTab(tab)
         let privateTab = manager.addTab(isPrivate: true)
@@ -188,7 +188,7 @@ class TabManagerTests: XCTestCase {
     func testDidCreateNormalTabWhenDeletingAll() {
         let removeAllTabs = MethodSpy(functionName: "tabManagerDidRemoveAllTabs(_:toast:)")
 
-        //create the tab before adding the mock delegate. So we don't have to check delegate calls we dont care about
+        // create the tab before adding the mock delegate. So we don't have to check delegate calls we dont care about
         let tab = manager.addTab()
         manager.selectTab(tab)
         let privateTab = manager.addTab(isPrivate: true)
@@ -308,9 +308,8 @@ class TabManagerTests: XCTestCase {
     }
 
     func testDeleteLastTab() {
-
-        //create the tab before adding the mock delegate. So we don't have to check delegate calls we dont care about
-        (0..<10).forEach {_ in manager.addTab() }
+        // Create the tab before adding the mock delegate. So we don't have to check delegate calls we dont care about
+        (0..<10).forEach { _ in manager.addTab() }
         manager.selectTab(manager.tabs.last)
         let deleteTab = manager.tabs.last
         let newSelectedTab = manager.tabs[8]
@@ -329,7 +328,7 @@ class TabManagerTests: XCTestCase {
     }
 
     func testDelegatesCalledWhenRemovingPrivateTabs() {
-        //setup
+        // setup
         profile.prefs.setBool(true, forKey: "settings.closePrivateTabs")
 
         // create one private and one normal tab
@@ -368,9 +367,8 @@ class TabManagerTests: XCTestCase {
     }
 
     func testDeleteFirstTab() {
-
-        //create the tab before adding the mock delegate. So we don't have to check delegate calls we dont care about
-        (0..<10).forEach {_ in manager.addTab() }
+        // Create the tab before adding the mock delegate. So we don't have to check delegate calls we dont care about
+        (0..<10).forEach { _ in manager.addTab() }
         manager.selectTab(manager.tabs.first)
         let deleteTab = manager.tabs.first
         let newSelectedTab = manager.tabs[1]
