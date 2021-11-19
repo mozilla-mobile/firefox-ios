@@ -732,14 +732,12 @@ extension TabDisplayManager: TabEventHandler {
 
             if selectedTabChanged {
                 self?.tabDisplayer?.focusSelectedTab()
+            }
 
-                // Append the previously selected tab to refresh it's state. Useful when the selected tab has change.
-                // This method avoids relying on the state of the "previous" selected tab,
-                // instead it iterates the displayed tabs to see which appears selected.
-                if let previousSelectedIndexPath = self?.indexOfCellDrawnAsPreviouslySelectedTab(currentlySelected: selectedTab,
-                                                                                                 inSection: section) {
-                    indexPaths.append(previousSelectedIndexPath)
-                }
+            // Refresh the previously selected tab, useful when the selected tab has changed, or a tab has been removed affecting the selected index
+            if let previous = self?.indexOfCellDrawnAsPreviouslySelectedTab(currentlySelected: selectedTab,
+                                                                            inSection: section) {
+                indexPaths.append(previous)
             }
 
             for indexPath in indexPaths {
