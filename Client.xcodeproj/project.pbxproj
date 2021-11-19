@@ -70,6 +70,8 @@
 		1B0DFD3E27485B240008EB0A /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B0DFD3D27485B240008EB0A /* SwiftKeychainWrapper */; };
 		1B0DFD4027485B560008EB0A /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B0DFD3F27485B560008EB0A /* SwiftKeychainWrapper */; };
 		1B0DFD4227485C3E0008EB0A /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B0DFD4127485C3E0008EB0A /* SwiftKeychainWrapper */; };
+		1B0DFD452748611C0008EB0A /* AppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B0DFD20274855C00008EB0A /* AppServices.framework */; };
+		1B0DFD46274861490008EB0A /* AppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B0DFD20274855C00008EB0A /* AppServices.framework */; };
 		1B3D99F1270E89D0006E1264 /* Telemetry in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3D99F0270E89D0006E1264 /* Telemetry */; };
 		1BE9ECCA27176FEA00D729BB /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECC927176FEA00D729BB /* SwiftyJSON */; };
 		1BE9ECCC2717704300D729BB /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECCB2717704300D729BB /* SwiftyJSON */; };
@@ -4328,6 +4330,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1B0DFD452748611C0008EB0A /* AppServices.framework in Frameworks */,
 				1BE9ECCA27176FEA00D729BB /* SwiftyJSON in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4431,6 +4434,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1B0DFD46274861490008EB0A /* AppServices.framework in Frameworks */,
 				1BE9ECCE271770A600D729BB /* SwiftyJSON in Frameworks */,
 				E6231C081B90A71E005ABB0D /* libz.tbd in Frameworks */,
 				1BE9ECD0271770AB00D729BB /* SwiftKeychainWrapper in Frameworks */,
@@ -7591,7 +7595,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
+			shellScript = "/usr/local/Homebrew/bin/carthage copy-frameworks\n";
 		};
 		CDF3D3002461D92F00A93748 /* Glean SDK Generator Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -7627,7 +7631,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
+			shellScript = "/usr/local/Homebrew/bin/carthage copy-frameworks";
 		};
 		E6639F191BF11E3A002D0853 /* Conditionally Add Settings Bundle */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -7657,7 +7661,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
+			shellScript = "/usr/local/Homebrew/bin/carthage copy-frameworks";
 		};
 /* End PBXShellScriptBuildPhase section */
 
