@@ -619,7 +619,6 @@ class BrowserViewController: UIViewController {
         presentDBOnboardingViewController()
         presentUpdateViewController()
         screenshotHelper.viewIsVisible = true
-//        screenshotHelper.takePendingScreenshots(tabManager.tabs)
 
         super.viewDidAppear(animated)
 

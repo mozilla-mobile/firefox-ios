@@ -693,7 +693,6 @@ class Tab: NSObject {
             } else {
                 self.screenshot = screenshot
             }
-            print("TAKE SCR - BG COLOR - \(backgroundColor) - AVG COLOR - \(avgColor) - EQ - \(avgColor.isEqual(backgroundColor))")
         }
     }
 
