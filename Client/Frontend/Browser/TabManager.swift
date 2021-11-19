@@ -449,7 +449,9 @@ class TabManager: NSObject, FeatureFlagsProtocol {
     }
 
     func removeTab(_ tab: Tab) {
+        guard let index = tabs.firstIndex(where: { $0 === tab }) else { return }
         removeTab(tab, flushToDisk: true)
+        updateIndexAfterRemovalOf(tab, deletedIndex: index)
         hideNetworkActivitySpinner()
 
         TelemetryWrapper.recordEvent(
@@ -508,7 +510,6 @@ class TabManager: NSObject, FeatureFlagsProtocol {
 
         if flushToDisk {
             storeChanges()
-            updateIndexAfterRemovalOf(tab, deletedIndex: removalIndex)
         }
 
         // Notify of tab removal
