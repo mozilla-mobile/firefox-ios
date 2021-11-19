@@ -484,6 +484,9 @@
 /* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
 "Siri.openURL" = "پسندیدہ سائٹ کھولیں";
 
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "سائٹ کا مکمل ڈیسک ٹاپ ورژن دیکھنا چاہتے ہیں؟";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "اشتھاری ٹریکرز";
 
