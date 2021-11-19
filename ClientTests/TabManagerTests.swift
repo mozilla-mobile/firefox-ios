@@ -144,9 +144,12 @@ class TabManagerTests: XCTestCase {
 
     func testMoveTabFromLastToFirstPosition() {
         // Add two tabs, last one will be selected
+        manager.addTab()
         manager.selectTab(manager.addTab())
+        XCTAssertEqual(manager.tabs.count, 2, "There should be two tabs")
+
         manager.moveTab(isPrivate: false, fromIndex: 1, toIndex: 0)
-        XCTAssertEqual(manager.selectedIndex, 0, "There should be selected second tab")
+        XCTAssertEqual(manager.selectedIndex, 0, "Second tab should be selected")
     }
 
     func testDidDeleteLastTab() {
