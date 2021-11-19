@@ -100,6 +100,7 @@ class TabManagerTests: XCTestCase {
     let didRemove = MethodSpy(functionName: "tabManager(_:didRemoveTab:isRestoring:)")
     let didAdd = MethodSpy(functionName: "tabManager(_:didAddTab:placeNextToParentTab:isRestoring:)")
     let didSelect = MethodSpy(functionName: spyDidSelectedTabChange)
+    let didRemoveAllTabs = MethodSpy(functionName: "tabManagerDidRemoveAllTabs(_:toast:)")
 
     var profile: TabManagerMockProfile!
     var manager: TabManager!
@@ -159,67 +160,112 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(manager.selectedIndex, 0, "Second tab should be selected")
     }
 
-    func testDidDeleteLastTab() {
-        let didSelect = MethodSpy(functionName: spyDidSelectedTabChange) { tabs in
-            XCTAssertNotNil(tabs[0])
-            XCTAssertNotNil(tabs[1])
+    func testAddTwoTabs_selectWithoutPrevious() {
+        manager.addDelegate(delegate)
+        let didSelectSecond = MethodSpy(functionName: spyDidSelectedTabChange) { tabs in
+            XCTAssertNotNil(tabs[0]) // Selected
+            XCTAssertNil(tabs[1]) // Previous
         }
+        delegate.expect([didAdd, didAdd, didSelectSecond])
 
-        // create the tab before adding the mock delegate. So we don't have to check delegate calls we dont care about
+        manager.addTab()
+        let tab = manager.addTab()
+        XCTAssertEqual(manager.tabs.count, 2, "There should be two tabs")
+
+        manager.selectTab(tab)
+        XCTAssertEqual(manager.selectedTab, tab, "Tab should be selected")
+    }
+
+    func testAddTwoTabs_selectFirstThenSelectSecond_previousIsntNil() {
+        manager.addDelegate(delegate)
+        let didSelectSecond = MethodSpy(functionName: spyDidSelectedTabChange) { tabs in
+            XCTAssertNotNil(tabs[0]) // Selected
+            XCTAssertNotNil(tabs[1]) // Previous
+        }
+        delegate.expect([didAdd, didSelect, didAdd, didSelectSecond])
+
+        let firstTab = manager.addTab()
+        manager.selectTab(firstTab)
+
+        let secondTab = manager.addTab()
+        manager.selectTab(secondTab)
+        XCTAssertEqual(manager.tabs.count, 2, "There should be two tabs")
+    }
+
+    func testAddTwoTabs_selectFirstThenSelectSecond_thenDeleteLastTab() {
+        manager.addDelegate(delegate)
+        // Calling didRemove adds a delegate call to didSelect here since we're removing the selected tab
+        delegate.expect([didAdd, didSelect, didAdd, didSelect, didRemove, didSelect])
+
+        let firstTab = manager.addTab()
+        manager.selectTab(firstTab)
+        let secondTab = manager.addTab()
+        manager.selectTab(secondTab)
+        XCTAssertEqual(manager.tabs.count, 2, "There should be two tabs")
+        XCTAssertEqual(manager.selectedTab, secondTab, "Second tab should be selected")
+
+        manager.removeTab(secondTab)
+        XCTAssertEqual(manager.tabs.count, 1, "There should be one tabs")
+        XCTAssertEqual(manager.selectedTab, firstTab, "First tab should be selected since second tab was removed")
+    }
+
+    func testDidSelectPrivateTabAfterNormalTab() {
+        manager.addDelegate(delegate)
+        delegate.expect([didAdd, didSelect, didAdd])
         let tab = manager.addTab()
         manager.selectTab(tab)
-        manager.addDelegate(delegate)
-        // it wont call didSelect because addTabAndSelect did not pass last removed tab
-        delegate.expect([didRemove, didAdd, didSelect])
-        manager.removeTab(tab)
+        let privateTab = manager.addTab(isPrivate: true)
+
+        let didSelectPrivate = MethodSpy(functionName: spyDidSelectedTabChange) { tabs in
+            let nextPrivate = tabs[0]!
+            let previousNormal = tabs[1]!
+            XCTAssertTrue(previousNormal != nextPrivate)
+            XCTAssertTrue(nextPrivate == privateTab)
+            XCTAssertTrue(nextPrivate.isPrivate)
+            XCTAssertTrue(previousNormal == tab)
+            XCTAssertFalse(previousNormal.isPrivate)
+            XCTAssertTrue(self.manager.selectedTab == privateTab)
+        }
+        delegate.expect([didSelectPrivate])
+        manager.selectTab(privateTab)
     }
 
     func testDidDeleteLastPrivateTab() {
-        // create the tab before adding the mock delegate. So we don't have to check delegate calls we dont care about
+        manager.addDelegate(delegate)
+        // Calling didRemove adds a delegate call to didSelect here since we're removing the selected tab
+        delegate.expect([didAdd, didSelect, didAdd, didSelect, didRemove, didSelect])
         let tab = manager.addTab()
         manager.selectTab(tab)
         let privateTab = manager.addTab(isPrivate: true)
         manager.selectTab(privateTab)
-        manager.addDelegate(delegate)
-
-        let didSelect = MethodSpy(functionName: spyDidSelectedTabChange) { tabs in
-            let next = tabs[0]!
-            let previous = tabs[1]!
-            XCTAssertTrue(previous != next)
-            XCTAssertTrue(previous == privateTab)
-            XCTAssertTrue(next == tab)
-            XCTAssertTrue(previous.isPrivate)
-            XCTAssertTrue(self.manager.selectedTab == next)
-        }
-        delegate.expect([didRemove, didSelect])
         manager.removeTab(privateTab)
     }
 
     func testDidCreateNormalTabWhenDeletingAll() {
-        let removeAllTabs = MethodSpy(functionName: "tabManagerDidRemoveAllTabs(_:toast:)")
+        // This test makes sure that a normal tab is always added even when a normal tab is not selected when calling removeAll
+        manager.addDelegate(delegate)
 
-        // create the tab before adding the mock delegate. So we don't have to check delegate calls we dont care about
+        delegate.expect([didAdd, didAdd, didSelect, didAdd, didSelect])
+        manager.addTab()
         let tab = manager.addTab()
         manager.selectTab(tab)
         let privateTab = manager.addTab(isPrivate: true)
         manager.selectTab(privateTab)
-        manager.addDelegate(delegate)
+        XCTAssertEqual(manager.normalTabs.count, 2, "There should be two normal tabs")
+        XCTAssertEqual(manager.privateTabs.count, 1, "There should be one private tab")
 
-
-        let didSelect = MethodSpy(functionName: spyDidSelectedTabChange) { _ in
-            // test fails if this not called
-        }
-
-        // This test makes sure that a normal tab is always added even when a normal tab is not selected when calling removeAll
-        delegate.expect([didRemove, didAdd, didSelect, removeAllTabs])
-
+        // Function removeTabsWithToast calls didRemove for each tab removed, adds a normal tab and select it then calls didRemoveAllTabs
+        delegate.expect([didRemove, didRemove, didAdd, didSelect, didRemoveAllTabs])
         manager.removeTabsWithToast(manager.normalTabs)
+        XCTAssertEqual(manager.normalTabs.count, 1, "There should be one normal tab")
+        XCTAssertEqual(manager.privateTabs.count, 1, "There should be one private tab")
+        XCTAssertFalse(manager.selectedTab!.isPrivate, "Selected tab should be normal tab")
     }
 
-    func testDeletePrivateTabsOnExit() {
+    func testPrivatePreference_deletePrivateTabsOnExit() {
         profile.prefs.setBool(true, forKey: "settings.closePrivateTabs")
 
-        // create one private and one normal tab
+        // Create one private and one normal tab
         let tab = manager.addTab()
         manager.selectTab(tab)
         manager.selectTab(manager.addTab(isPrivate: true))
@@ -250,7 +296,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(manager.privateTabs.count, 1, "If the flag is false then private tabs should still exist")
     }
 
-    func testTogglePBMDelete() {
+    func testPrivatePreference_togglePBMDeletesPrivate() {
         profile.prefs.setBool(true, forKey: "settings.closePrivateTabs")
 
         let tab = manager.addTab()
@@ -267,7 +313,6 @@ class TabManagerTests: XCTestCase {
     }
 
     func testRemoveNonSelectedTab() {
-
         let tab = manager.addTab()
         manager.selectTab(tab)
         manager.addTab()
@@ -316,34 +361,38 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(manager.selectedTab, tab0)
     }
 
-    func testDeleteLastTab() {
-        // Create the tab before adding the mock delegate. So we don't have to check delegate calls we dont care about
+    func testDeleteLastTab_selectsThePrevious() {
+        manager.addDelegate(delegate)
+        var methods = Array(repeating: didAdd, count: 10)
+        methods.append(contentsOf: [didSelect])
+        delegate.expect(methods)
+
         (0..<10).forEach { _ in manager.addTab() }
         manager.selectTab(manager.tabs.last)
         let deleteTab = manager.tabs.last
         let newSelectedTab = manager.tabs[8]
-        manager.addDelegate(delegate)
 
-        let didSelect = MethodSpy(functionName: spyDidSelectedTabChange) { tabs in
+        let didSelectNew = MethodSpy(functionName: spyDidSelectedTabChange) { tabs in
             let next = tabs[0]!
             let previous = tabs[1]!
             XCTAssertEqual(deleteTab, previous)
             XCTAssertEqual(next, newSelectedTab)
         }
-        delegate.expect([didRemove, didSelect])
+        delegate.expect([didRemove, didSelectNew])
         manager.removeTab(manager.tabs.last!)
     }
 
     func testDelegatesCalledWhenRemovingPrivateTabs() {
-        // setup
+        // Setup
+        manager.addDelegate(delegate)
         profile.prefs.setBool(true, forKey: "settings.closePrivateTabs")
+        delegate.expect([didAdd, didAdd, didSelect, didAdd, didSelect])
 
-        // create one private and one normal tab
+        // Create one private and one normal tab
         let tab = manager.addTab()
         let newTab = manager.addTab()
         manager.selectTab(tab)
         manager.selectTab(manager.addTab(isPrivate: true))
-        manager.addDelegate(delegate)
 
         // Double check a few things
         XCTAssertEqual(manager.selectedTab?.isPrivate, true, "The selected tab should be the private tab")
@@ -352,32 +401,35 @@ class TabManagerTests: XCTestCase {
         // switch to normal mode. Which should delete the private tabs
         manager.willSwitchTabMode(leavingPBM: true)
 
-        //make sure tabs are cleared properly and indexes are reset
+        // make sure tabs are cleared properly and indexes are reset
         XCTAssertEqual(manager.privateTabs.count, 0, "Private tab should have been deleted")
         XCTAssertEqual(manager.selectedIndex, -1, "The selected index should have been reset")
 
         // didSelect should still be called when switching between a nil tab
-        let didSelect = MethodSpy(functionName: spyDidSelectedTabChange) { tabs in
+        let didSelectNewTab = MethodSpy(functionName: spyDidSelectedTabChange) { tabs in
             XCTAssertNil(tabs[1], "there should be no previous tab")
             let next = tabs[0]!
             XCTAssertFalse(next.isPrivate)
         }
 
         // make sure delegate method is actually called
-        delegate.expect([didSelect])
+        delegate.expect([didSelectNewTab])
 
         // select the new tab to trigger the delegate methods
         manager.selectTab(newTab)
-
     }
 
     func testDeleteFirstTab() {
-        // Create the tab before adding the mock delegate. So we don't have to check delegate calls we dont care about
+        manager.addDelegate(delegate)
+        var methods = Array(repeating: didAdd, count: 10)
+        methods.append(contentsOf: [didSelect])
+        delegate.expect(methods)
+
         (0..<10).forEach { _ in manager.addTab() }
         manager.selectTab(manager.tabs.first)
         let deleteTab = manager.tabs.first
         let newSelectedTab = manager.tabs[1]
-        manager.addDelegate(delegate)
+        XCTAssertEqual(manager.tabs.count, 10)
 
         let didSelect = MethodSpy(functionName: spyDidSelectedTabChange) { tabs in
             let next = tabs[0]!
