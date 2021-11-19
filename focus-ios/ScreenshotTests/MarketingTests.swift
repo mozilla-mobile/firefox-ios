@@ -18,8 +18,8 @@ class MarketingTests: BaseTestCaseL10n {
         snapshot("Home")
         // Go to ETP Menu
         app.buttons["HomeView.settingsButton"].tap()
-        waitForExistence(app.tables.cells["icon_settings"])
-        app.tables.cells["icon_settings"].tap()
+        waitForExistence(app.tables.cells["Settings"])
+        app.tables.cells["Settings"].tap()
         waitForExistence(app.cells["settingsViewController.trackingCell"])
         app.cells["settingsViewController.trackingCell"].tap()
         snapshot("Settings-TP")

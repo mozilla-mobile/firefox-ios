@@ -11,16 +11,6 @@ protocol FindInPageBarDelegate: AnyObject {
     func findInPageDidPressClose(_ findInPage: FindInPageBar)
 }
 
-private struct FindInPageUX {
-    static let BackgroundColor = UIColor.foundation
-    static let ButtonColor = UIColor.white
-    static let MatchCountColor = UIColor.primaryText.withAlphaComponent(0.6)
-    static let MatchCountFont = UIConstants.fonts.searchButton
-    static let SearchTextColor = UIColor.primaryText
-    static let SearchTextFont = UIConstants.fonts.searchButton
-    static let TopBorderColor = UIColor.divider
-}
-
 class FindInPageBar: UIView {
     weak var delegate: FindInPageBarDelegate?
     private let searchText = UITextField()
@@ -64,12 +54,12 @@ class FindInPageBar: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        backgroundColor = FindInPageUX.BackgroundColor
+        backgroundColor = .foundation
 
         searchText.addTarget(self, action: #selector(didTextChange), for: .editingChanged)
-        searchText.textColor = FindInPageUX.SearchTextColor
-        searchText.tintColor = FindInPageUX.SearchTextColor
-        searchText.font = FindInPageUX.SearchTextFont
+        searchText.textColor = .primaryText
+        searchText.tintColor = .primaryText
+        searchText.font = .body16
         searchText.autocapitalizationType = .none
         searchText.autocorrectionType = .no
         searchText.inputAssistantItem.leadingBarButtonGroups = []
@@ -80,21 +70,21 @@ class FindInPageBar: UIView {
         searchText.delegate = self
         addSubview(searchText)
 
-        matchCountView.textColor = FindInPageUX.MatchCountColor
-        matchCountView.font = FindInPageUX.MatchCountFont
+        matchCountView.textColor = .primaryText.withAlphaComponent(0.6)
+        matchCountView.font = .body16
         matchCountView.isHidden = true
         matchCountView.accessibilityIdentifier = "FindInPage.matchCount"
         addSubview(matchCountView)
 
         previousButton.setImage(UIImage(named: "find_previous"), for: [])
-        previousButton.setTitleColor(FindInPageUX.ButtonColor, for: [])
+        previousButton.setTitleColor(.white, for: [])
         previousButton.accessibilityLabel = UIConstants.strings.findInPagePreviousLabel
         previousButton.addTarget(self, action: #selector(didFindPrevious), for: .touchUpInside)
         previousButton.accessibilityIdentifier = "FindInPage.find_previous"
         addSubview(previousButton)
 
         nextButton.setImage(UIImage(named: "find_next"), for: [])
-        nextButton.setTitleColor(FindInPageUX.ButtonColor, for: [])
+        nextButton.setTitleColor(.white, for: [])
         nextButton.accessibilityLabel = UIConstants.strings.findInPageNextLabel
         nextButton.addTarget(self, action: #selector(didFindNext), for: .touchUpInside)
         nextButton.accessibilityIdentifier = "FindInPage.find_next"
@@ -102,14 +92,14 @@ class FindInPageBar: UIView {
 
         let closeButton = UIButton()
         closeButton.setImage(UIImage(named: "icon_stop_menu"), for: [])
-        closeButton.setTitleColor(FindInPageUX.ButtonColor, for: [])
+        closeButton.setTitleColor(.white, for: [])
         closeButton.accessibilityLabel = UIConstants.strings.findInPageDoneLabel
         closeButton.addTarget(self, action: #selector(didPressClose), for: .touchUpInside)
         closeButton.accessibilityIdentifier = "FindInPage.close"
         addSubview(closeButton)
 
         let topBorder = UIView()
-        topBorder.backgroundColor = FindInPageUX.TopBorderColor
+        topBorder.backgroundColor = .foundation
         addSubview(topBorder)
 
         searchText.snp.makeConstraints { make in

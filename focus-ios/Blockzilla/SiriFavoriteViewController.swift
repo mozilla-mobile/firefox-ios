@@ -39,7 +39,7 @@ class SiriFavoriteViewController: UIViewController {
         view.backgroundColor = .systemGroupedBackground
 
         inputLabel.text = UIConstants.strings.urlToOpen
-        inputLabel.font = UIConstants.fonts.settingsInputLabel
+        inputLabel.font = .body18
         inputLabel.textColor = .primaryText
         view.addSubview(inputLabel)
 
@@ -64,7 +64,7 @@ class SiriFavoriteViewController: UIViewController {
 
         inputDescription.text = UIConstants.strings.autocompleteAddCustomUrlExample
         inputDescription.textColor = .primaryText
-        inputDescription.font = UIConstants.fonts.settingsDescriptionText
+        inputDescription.font = .footnote12
         view.addSubview(inputDescription)
 
         inputLabel.snp.makeConstraints { make in

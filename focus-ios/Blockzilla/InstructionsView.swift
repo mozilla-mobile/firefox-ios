@@ -50,7 +50,7 @@ private class InstructionView: UIView {
         label.text = text
         label.textColor = UIConstants.colors.defaultFont
         label.numberOfLines = 0
-        label.font = UIConstants.fonts.safariInstruction
+        label.font = .body16Medium
         label.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .vertical)
         addSubview(label)
 

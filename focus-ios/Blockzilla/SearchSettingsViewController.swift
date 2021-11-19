@@ -92,7 +92,7 @@ class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITab
         } else if indexPath.section == 1 && indexPath.row == 0 {
             let cell = UITableViewCell(style: .default, reuseIdentifier: "restoreDefaultEngines")
             cell.textLabel?.text = UIConstants.strings.RestoreSearchEnginesLabel
-            cell.textLabel?.font = UIFont.systemFont(ofSize: 17)
+            cell.textLabel?.font = .body17
             cell.textLabel?.numberOfLines = 0
             cell.textLabel?.lineBreakMode = .byWordWrapping
             cell.accessibilityIdentifier = "restoreDefaults"

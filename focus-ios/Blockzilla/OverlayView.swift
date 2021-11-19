@@ -81,7 +81,7 @@ class OverlayView: UIView {
         let padding = UIConstants.layout.searchButtonInset
         let attributedString = NSMutableAttributedString(string: UIConstants.strings.addToAutocompleteButton, attributes: [.foregroundColor: UIConstants.Photon.Grey10])
 
-        addToAutocompleteButton.titleLabel?.font = UIConstants.fonts.copyButton
+        addToAutocompleteButton.titleLabel?.font = .body16
         addToAutocompleteButton.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
         addToAutocompleteButton.titleLabel?.lineBreakMode = .byTruncatingTail
         addToAutocompleteButton.setImage(#imageLiteral(resourceName: "icon_add_to_autocomplete"), for: .normal)
@@ -99,7 +99,7 @@ class OverlayView: UIView {
 
         findInPageButton.isHidden = true
         shouldShowFindInPage = false
-        findInPageButton.titleLabel?.font = UIConstants.fonts.copyButton
+        findInPageButton.titleLabel?.font = .body16
         findInPageButton.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
         findInPageButton.titleLabel?.lineBreakMode = .byTruncatingTail
         findInPageButton.addTarget(self, action: #selector(didPressFindOnPage), for: .touchUpInside)
@@ -115,7 +115,7 @@ class OverlayView: UIView {
         lastSeparator.isHidden = true
         addSubview(lastSeparator)
         
-        copyButton.titleLabel?.font = UIConstants.fonts.copyButton
+        copyButton.titleLabel?.font = .body16
         copyButton.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
         copyButton.titleLabel?.lineBreakMode = .byTruncatingTail
         copyButton.backgroundColor = UIConstants.colors.background
@@ -200,7 +200,7 @@ class OverlayView: UIView {
         searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .normal)
         searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .highlighted)
         searchButton.backgroundColor = .above
-        searchButton.titleLabel?.font = UIConstants.fonts.searchButton
+        searchButton.titleLabel?.font = .body16
 
         searchButton.setIndex(i)
         setUpOverlayButton(button: searchButton)
@@ -262,16 +262,16 @@ class OverlayView: UIView {
      */
 	func getAttributedButtonTitle(phrase: String, localizedStringFormat: String) -> NSAttributedString {
         let attributedString = NSMutableAttributedString(string: localizedStringFormat, attributes: [.foregroundColor: UIColor.primaryText])
-		let phraseString = NSAttributedString(string: phrase, attributes: [.font: UIConstants.fonts.copyButtonQuery,
+		let phraseString = NSAttributedString(string: phrase, attributes: [.font: UIFont.body17,
                                                                            .foregroundColor: UIColor.primaryText])
 		if phrase != searchQuery {
-			let searchString = NSAttributedString(string: searchQuery, attributes: [.font: UIConstants.fonts.copyButtonQuery,
+			let searchString = NSAttributedString(string: searchQuery, attributes: [.font: UIFont.body17,
                                                                                     .foregroundColor: UIColor.primaryText])
 			// split suggestion into searchQuery and suggested part
 			let suggestion = phrase.components(separatedBy: searchQuery)
 			// suggestion was split
 			if suggestion.count > 1 {
-                let restOfSuggestion = NSAttributedString(string: suggestion[1], attributes: [.font: UIConstants.fonts.copyButtonRest,
+                let restOfSuggestion = NSAttributedString(string: suggestion[1], attributes: [.font: UIFont.body17,
                                                                                               .foregroundColor: UIColor.primaryText])
 				attributedString.append(searchString)
 				attributedString.append(restOfSuggestion)

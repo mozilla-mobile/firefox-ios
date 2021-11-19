@@ -300,7 +300,7 @@ private class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView {
 
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.font = UIConstants.fonts.actionMenuTitle
+        titleLabel.font = .footnote12
         titleLabel.numberOfLines = 1
         titleLabel.textColor = UIConstants.Photon.Grey10.withAlphaComponent(0.6)
         return titleLabel

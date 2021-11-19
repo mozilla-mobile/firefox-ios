@@ -54,7 +54,7 @@ class ShortcutView: UIView {
         
         let letterLabel = UILabel()
         letterLabel.textColor = .primaryText
-        letterLabel.font = .systemFont(ofSize: 20)
+        letterLabel.font = .title20
         letterLabel.text = ShortcutsManager.shared.firstLetterFor(shortcut: shortcut)
         addSubview(letterLabel)
         letterLabel.snp.makeConstraints { make in
@@ -63,7 +63,7 @@ class ShortcutView: UIView {
         
         let nameLabel = UILabel()
         nameLabel.textColor = .primaryText
-        nameLabel.font = .systemFont(ofSize: 12)
+        nameLabel.font = .footnote12
         nameLabel.text = ShortcutsManager.shared.nameFor(shortcut: shortcut)
         addSubview(nameLabel)
         nameLabel.snp.makeConstraints { make in

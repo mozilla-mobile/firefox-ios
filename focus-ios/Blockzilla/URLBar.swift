@@ -193,7 +193,7 @@ class URLBar: UIView {
 
         truncatedUrlText.alpha = 0
         truncatedUrlText.isUserInteractionEnabled = false
-        truncatedUrlText.font = UIConstants.fonts.truncatedUrlText
+        truncatedUrlText.font = .footnote12
         truncatedUrlText.tintColor = .primaryText
         truncatedUrlText.textColor = .primaryText
         truncatedUrlText.backgroundColor = UIColor.clear
@@ -218,7 +218,7 @@ class URLBar: UIView {
         clearButton.setImage(#imageLiteral(resourceName: "icon_clear"), for: .normal)
         clearButton.addTarget(self, action: #selector(didPressClear), for: .touchUpInside)
 
-        urlText.font = UIConstants.fonts.urlText
+        urlText.font = .body15
         urlText.tintColor = .primaryText
         urlText.textColor = .primaryText
         urlText.highlightColor = .accent.withAlphaComponent(0.4)

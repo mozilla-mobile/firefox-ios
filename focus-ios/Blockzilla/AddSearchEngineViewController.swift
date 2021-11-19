@@ -65,7 +65,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         nameInput.textColor = .primaryText
         nameInput.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: rowHeight))
         nameInput.leftViewMode = .always
-        nameInput.font = UIConstants.fonts.addSearchEngineInput
+        nameInput.font = .body15
         nameInput.accessibilityIdentifier = "nameInput"
         nameInput.autocorrectionType = .no
         nameInput.tintColor = .accent
@@ -79,7 +79,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         templatePlaceholderLabel.backgroundColor = .secondarySystemGroupedBackground
         templatePlaceholderLabel.textColor = .primaryText.withAlphaComponent(0.65)
         templatePlaceholderLabel.text = UIConstants.strings.AddSearchEngineTemplatePlaceholder
-        templatePlaceholderLabel.font = UIConstants.fonts.addSearchEngineInput
+        templatePlaceholderLabel.font = .body15
         templatePlaceholderLabel.contentInset = UIEdgeInsets(top: -2, left: 3, bottom: 0, right: 0)
         templatePlaceholderLabel.isEditable = false
         templatePlaceholderLabel.layer.cornerRadius = UIConstants.layout.settingsCellCornerRadius
@@ -94,7 +94,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         templateInput.backgroundColor = .clear
         templateInput.textColor = .primaryText
         templateInput.keyboardType = .URL
-        templateInput.font = UIConstants.fonts.addSearchEngineInput
+        templateInput.font = .body15
         templateInput.accessibilityIdentifier = "templateInput"
         templateInput.autocapitalizationType = .none
         templateInput.keyboardAppearance = .dark
@@ -113,7 +113,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
 
         exampleLabel.numberOfLines = 1
         exampleLabel.attributedText = subtitle
-        exampleLabel.font = UIConstants.fonts.addSearchEngineExampleLabel
+        exampleLabel.font = .footnote12
         exampleLabel.adjustsFontSizeToFitWidth = true
         exampleLabel.minimumScaleFactor = 0.5
         exampleLabel.isUserInteractionEnabled = true

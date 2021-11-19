@@ -10,7 +10,7 @@ class AsianLocaleTest: BaseTestCase {
         waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
         // Set search engine to Google
 		app.buttons["HomeView.settingsButton"].tap()
-        app.tables.cells["icon_settings"].tap()
+        app.tables.cells["Settings"].tap()
         waitForExistence(app.tables.cells["SettingsViewController.searchCell"])
 		app.tables.cells["SettingsViewController.searchCell"].tap()
 

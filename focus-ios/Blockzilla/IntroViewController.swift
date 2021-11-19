@@ -83,7 +83,7 @@ class IntroViewController: UIViewController {
 
         skipButton.backgroundColor = .clear
         skipButton.setTitle(UIConstants.strings.SkipIntroButtonTitle, for: .normal)
-        skipButton.titleLabel?.font = UIConstants.fonts.aboutText
+        skipButton.titleLabel?.font = .footnote14
         skipButton.setTitleColor(.white, for: .normal)
         skipButton.sizeToFit()
         skipButton.accessibilityIdentifier = "IntroViewController.button"

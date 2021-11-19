@@ -92,7 +92,7 @@ class SearchEngine: NSObject, NSCoding {
         faviconLabel.backgroundColor = UIConstants.Photon.Purple80
         faviconLabel.text = String(faviconLetter)
         faviconLabel.textAlignment = .center
-        faviconLabel.font = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.medium)
+        faviconLabel.font = .body18Medium
         faviconLabel.textColor = UIColor.white
         let imageRenderer = UIGraphicsImageRenderer(size: faviconLabel.bounds.size)
 

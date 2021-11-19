@@ -97,48 +97,6 @@ struct UIConstants {
 
     }
 
-    struct fonts {
-        static let aboutText = UIFont.systemFont(ofSize: 14)
-        static let cancelButton = UIFont.systemFont(ofSize: 15)
-        static let copyButton = UIFont.systemFont(ofSize: 16)
-        static let copyButtonQuery = UIFont.systemFont(ofSize: 17)
-        static let copyButtonRest = UIFont.boldSystemFont(ofSize: 17)
-        static let deleteButton = UIFont.systemFont(ofSize: 11)
-        static let firstRunDisclaimer = UIFont.systemFont(ofSize: 14)
-        static let firstRunMessage = UIFont.systemFont(ofSize: 14)
-        static let firstRunTitle = UIFont.systemFont(ofSize: 18)
-        static let firstRunButton = UIFont.systemFont(ofSize: 16)
-        static let homeLabel = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.ultraLight)
-        static let safariInstruction = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.medium)
-        static let searchButton = UIFont.systemFont(ofSize: 16)
-        static let searchButtonQuery = UIFont.boldSystemFont(ofSize: 16)
-        static let settingsHomeButton = UIFont.systemFont(ofSize: 15)
-        static let settingsOverlayButton = UIFont.systemFont(ofSize: 13)
-        static let tableSectionHeader = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.regular)
-        static let toast = UIFont.systemFont(ofSize: 12, weight: .semibold)
-        static let urlText = UIFont.systemFont(ofSize: 15)
-        static let truncatedUrlText = UIFont.systemFont(ofSize: 12)
-        static let settingsInputLabel = UIFont.systemFont(ofSize: 18)
-        static let settingsDescriptionText = UIFont.systemFont(ofSize: 12)
-        static let shareTrackerStatsLabel = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.light)
-        static let shareTrackerStatsLabelBold = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.bold)
-        static let closeButtonTitle = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.bold)
-        static let actionMenuItem = UIFont.systemFont(ofSize: 16)
-        static let actionMenuTitle = UIFont.systemFont(ofSize: 12)
-        static let actionMenuItemBold = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.bold)
-        static let actionMenuItemSubtitle = UIFont.systemFont(ofSize: 12)
-		static let addSearchEngineInput = UIFont.systemFont(ofSize: 15)
-		static let addSearchEngineExampleLabel = UIFont.systemFont(ofSize: 12)
-		static let promptTitle = UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.bold)
-		static let promptMessage = UIFont.systemFont(ofSize: 15)
-        static let promptButton = UIFont.systemFont(ofSize: 17, weight: .medium)
-        static let trackingProtectionHeader = UIFont.systemFont(ofSize: 15, weight: .regular)
-        static let trackingProtectionStatsText = UIFont.systemFont(ofSize: 15)
-        static let trackingProtectionStatsDetail = UIFont.systemFont(ofSize: 20)
-        static let tipTitleMedium = UIFont.systemFont(ofSize: 14, weight: .medium)
-        static let tipTitleBold = UIFont.systemFont(ofSize: 14, weight: .bold)
-    }
-
     struct layout {
         static let browserToolbarDisabledOpacity: CGFloat = 0.4
         static let browserToolbarHeight: CGFloat = 44
