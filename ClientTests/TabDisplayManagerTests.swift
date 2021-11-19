@@ -183,72 +183,55 @@ class TabDisplayManagerTests: XCTestCase {
 
     // MARK: Selected cell
 
-    func testSelectedCell_withThreeTabs_lastTabSelectedAndRemoved() {
+    func testSelectedCell_lastTabSelectedAndRemoved() {
         let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
 
-        // Add three tabs with selected at last position
+        // Add four tabs with selected at last position
+        manager.addTab()
         manager.addTab()
         manager.addTab()
         let selectedTab = manager.addTab()
         manager.selectTab(selectedTab)
 
-        // Remove selected
-        XCTAssertEqual(tabDisplayManager.dataStore.count, 3)
+        // Remove selected tab
         manager.removeTab(selectedTab)
 
-        // Should be selected tab is index 1, and no other one is selected
-        XCTAssertEqual(tabDisplayManager.dataStore.count, 2)
-        for index in 0...1 {
-            let cell = tabDisplayManager.collectionView(collectionView, cellForItemAt: IndexPath(row: index, section: 0)) as! TabTrayCell
-            if index == 1 {
-                XCTAssertTrue(cell.isSelectedTab)
-            } else {
-                XCTAssertFalse(cell.isSelectedTab)
-            }
-        }
+        // Should be selected tab is index 2, and no other one is selected
+        testSelectedCells(tabDisplayManager: tabDisplayManager, numberOfCells: 3, selectedIndex: 2)
     }
 
-    func testSelectedCell_withThreeTabs_secondTabSelectedAndRemoved() {
+    func testSelectedCell_secondToLastTabSelectedAndRemoved() {
         let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
 
-        // Add three tabs with selected at last position
+        // Add four tabs with selected at second to last position
+        manager.addTab()
         manager.addTab()
         let selectedTab = manager.addTab()
         manager.addTab()
         manager.selectTab(selectedTab)
 
         // Remove selected
-        XCTAssertEqual(tabDisplayManager.dataStore.count, 3)
         manager.removeTab(selectedTab)
 
-        // Should be selected tab is index 1, and no other one is selected
-        XCTAssertEqual(tabDisplayManager.dataStore.count, 2)
-        for index in 0...1 {
-            let cell = tabDisplayManager.collectionView(collectionView, cellForItemAt: IndexPath(row: index, section: 0)) as! TabTrayCell
-            if index == 1 {
-                XCTAssertTrue(cell.isSelectedTab)
-            } else {
-                XCTAssertFalse(cell.isSelectedTab)
-            }
-        }
+        // Should be selected tab is index 2, and no other one is selected
+        testSelectedCells(tabDisplayManager: tabDisplayManager, numberOfCells: 3, selectedIndex: 2)
     }
 
-    func testSelectedCell_withTwoTabs_secondTabSelectedAndRemoved() {
+    func testSelectedCell_secondToLastTabSelectedAndTabBeforeRemoved() {
         let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
 
-        // Add three tabs with selected at last position
+        // Add four tabs with selected at second to last position
         manager.addTab()
+        let tabToRemove = manager.addTab()
         let selectedTab = manager.addTab()
+        manager.addTab()
         manager.selectTab(selectedTab)
 
-        // Remove selected
-        XCTAssertEqual(tabDisplayManager.dataStore.count, 2)
-        manager.removeTab(selectedTab)
+        // Remove second tab
+        manager.removeTab(tabToRemove)
 
         // Should be selected tab is index 1, and no other one is selected
-        XCTAssertEqual(tabDisplayManager.dataStore.count, 1)
-        let cell = tabDisplayManager.collectionView(collectionView, cellForItemAt: IndexPath(row: 0, section: 0)) as! TabTrayCell
-        XCTAssertTrue(cell.isSelectedTab)
+        testSelectedCells(tabDisplayManager: tabDisplayManager, numberOfCells: 3, selectedIndex: 1)
     }
 }
 
@@ -265,6 +248,18 @@ extension TabDisplayManagerTests {
         collectionView.dataSource = tabDisplayManager
         tabDisplayManager.dataStore = useMockDataStore ? mockDataStore : dataStore
         return tabDisplayManager
+    }
+
+    func testSelectedCells(tabDisplayManager: TabDisplayManager, numberOfCells: Int, selectedIndex: Int) {
+        XCTAssertEqual(tabDisplayManager.dataStore.count, numberOfCells)
+        for index in 0..<numberOfCells {
+            let cell = tabDisplayManager.collectionView(collectionView, cellForItemAt: IndexPath(row: index, section: 0)) as! TabTrayCell
+            if index == selectedIndex {
+                XCTAssertTrue(cell.isSelectedTab)
+            } else {
+                XCTAssertFalse(cell.isSelectedTab)
+            }
+        }
     }
 }
 
