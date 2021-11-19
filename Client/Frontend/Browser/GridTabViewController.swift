@@ -931,7 +931,24 @@ class TabCell: UICollectionViewCell, TabTrayCell {
             layer.shadowPath = nil
             layer.shadowOpacity = 0
         }
-        screenshotView.image = tab.screenshot
+        
+        if let url = tab.url, let tabScreenshot = tab.screenshot, (url.absoluteString.starts(with: "internal") &&
+            tab.isHomeScreenshot) {
+            screenshotView.image = tabScreenshot
+        } else if let url = tab.url, (!url.absoluteString.starts(with: "internal") &&
+            tab.isHomeScreenshot) {
+            if let domainUrl = self.getTabDomainUrl(tab: tab) {
+                // Set Favicon from domain url when screenshot from tab is empty
+                self.screenshotView.setImageAndBackground(forIcon: tab.displayFavicon, website: domainUrl) {}
+            }
+        } else if let tabScreenshot = tab.screenshot {
+            screenshotView.image = tabScreenshot
+        } else {
+            if let domainUrl = self.getTabDomainUrl(tab: tab) {
+                // Set Favicon from domain url when screenshot from tab is empty
+                self.screenshotView.setImageAndBackground(forIcon: tab.displayFavicon, website: domainUrl) {}
+            }
+        }
     }
 
     override func prepareForReuse() {
@@ -974,6 +991,13 @@ class TabCell: UICollectionViewCell, TabTrayCell {
         layer.shadowOffset = CGSize(width: -TabCell.borderWidth, height: -TabCell.borderWidth)
         let shadowPath = CGRect(width: layer.frame.width + (TabCell.borderWidth * 2), height: layer.frame.height + (TabCell.borderWidth * 2))
         layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: GridTabTrayControllerUX.CornerRadius+TabCell.borderWidth).cgPath
+    }
+    
+    func getTabDomainUrl(tab: Tab) -> URL? {
+        guard tab.url != nil else {
+            return tab.sessionData?.urls.last?.domainURL
+        }
+        return tab.url?.domainURL
     }
 }
 

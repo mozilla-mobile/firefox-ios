@@ -37,6 +37,10 @@ extension TabManager: TabEventHandler {
     func tab(_ tab: Tab, didLoadFavicon favicon: Favicon?, with: Data?) {
         store.preserveTabs(tabs, selectedTab: selectedTab)
     }
+    
+    func tabDidSetScreenshot(_ tab: Tab, isHomeScreenshot: Bool) {
+        storeScreenshot(tab: tab)
+    }
 }
 
 // TabManager must extend NSObjectProtocol in order to implement WKNavigationDelegate
@@ -153,7 +157,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         self.store = TabManagerStore(imageStore: imageStore, prefs: profile.prefs)
         super.init()
 
-        register(self, forTabEvents: .didLoadFavicon)
+        register(self, forTabEvents: .didLoadFavicon, .didSetScreenshot)
 
         addNavigationDelegate(self)
 
@@ -222,6 +226,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
 
     func storeScreenshot(tab: Tab) {
         store.preserveScreenshot(forTab: tab)
+        storeChanges()
     }
 
     // This function updates the _selectedIndex.

@@ -116,7 +116,8 @@ class Tab: NSObject {
     
     var adsTelemetryUrlList: [String] = [String]()
     var adsProviderName: String = ""
-    
+    var isHomeScreenshot: Bool = false
+
     // To check if current URL is the starting page i.e. either blank page or internal page like topsites
     var isURLStartingPage: Bool {
         guard url != nil else { return true }
@@ -684,7 +685,16 @@ class Tab: NSObject {
     }
 
     func setScreenshot(_ screenshot: UIImage?) {
-        self.screenshot = screenshot
+        // check if screenshot is all solid color
+        if let val = screenshot, let avgColor = val.averageColor {
+            let backgroundColor = LegacyThemeManager.instance.current.browser.background
+            if avgColor.isEqual(backgroundColor) {
+                self.screenshot = nil
+            } else {
+                self.screenshot = screenshot
+            }
+            print("TAKE SCR - BG COLOR - \(backgroundColor) - AVG COLOR - \(avgColor) - EQ - \(avgColor.isEqual(backgroundColor))")
+        }
     }
 
     func toggleChangeUserAgent() {
