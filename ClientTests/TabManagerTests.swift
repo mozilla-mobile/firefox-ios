@@ -99,6 +99,7 @@ class TabManagerTests: XCTestCase {
 
     let didRemove = MethodSpy(functionName: "tabManager(_:didRemoveTab:isRestoring:)")
     let didAdd = MethodSpy(functionName: "tabManager(_:didAddTab:placeNextToParentTab:isRestoring:)")
+    let didSelect = MethodSpy(functionName: spyDidSelectedTabChange)
 
     var profile: TabManagerMockProfile!
     var manager: TabManager!
@@ -140,6 +141,8 @@ class TabManagerTests: XCTestCase {
     }
 
     func testAddTabAndSelect() {
+        manager.addDelegate(delegate)
+        delegate.expect([didAdd, didSelect])
         manager.selectTab(manager.addTab())
         XCTAssertEqual(manager.selectedIndex, 0, "There should be selected first tab")
     }
