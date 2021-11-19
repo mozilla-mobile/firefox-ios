@@ -49,16 +49,28 @@
 		0BF1B7E31AC60DEA00A7B407 /* InsetButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF1B7E21AC60DEA00A7B407 /* InsetButton.swift */; };
 		0BF42D4F1A7CD09600889E28 /* TestFavicons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF42D4E1A7CD09600889E28 /* TestFavicons.swift */; };
 		0BF8F8DA1AEFF1C900E90BC2 /* noTitle.html in Resources */ = {isa = PBXBuildFile; fileRef = 0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */; };
-		1B308A9F2714F01E001D6200 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3D99F7270E8CF8006E1264 /* SwiftKeychainWrapper */; };
-		1B308AA02714F01E001D6200 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1BDA1F8627113817006B2FAB /* SwiftyJSON */; };
-		1B308AA12714F01E001D6200 /* SwiftProtobuf in Frameworks */ = {isa = PBXBuildFile; productRef = 1BDA1F8B271138A5006B2FAB /* SwiftProtobuf */; };
+		1B0DFCFD274855C00008EB0A /* Logins in Frameworks */ = {isa = PBXBuildFile; productRef = 1B0DFCB8274855C00008EB0A /* Logins */; };
+		1B0DFD01274855C00008EB0A /* Viaduct in Frameworks */ = {isa = PBXBuildFile; productRef = 1B0DFCBA274855C00008EB0A /* Viaduct */; };
+		1B0DFD02274855C00008EB0A /* Places in Frameworks */ = {isa = PBXBuildFile; productRef = 1B0DFCB9274855C00008EB0A /* Places */; };
+		1B0DFD03274855C00008EB0A /* FxAClient in Frameworks */ = {isa = PBXBuildFile; productRef = 1B0DFCB6274855C00008EB0A /* FxAClient */; };
+		1B0DFD04274855C00008EB0A /* Nimbus in Frameworks */ = {isa = PBXBuildFile; productRef = 1B0DFCBC274855C00008EB0A /* Nimbus */; };
+		1B0DFD05274855C00008EB0A /* RustLog in Frameworks */ = {isa = PBXBuildFile; productRef = 1B0DFCBB274855C00008EB0A /* RustLog */; };
+		1B0DFD25274856D60008EB0A /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1B0DFD24274856D60008EB0A /* SwiftyJSON */; };
+		1B0DFD28274857340008EB0A /* AppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B0DFD20274855C00008EB0A /* AppServices.framework */; };
+		1B0DFD29274857350008EB0A /* AppServices.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1B0DFD20274855C00008EB0A /* AppServices.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		1B0DFD30274858860008EB0A /* AppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B0DFD20274855C00008EB0A /* AppServices.framework */; };
+		1B0DFD32274858B10008EB0A /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1B0DFD31274858B10008EB0A /* SwiftyJSON */; };
+		1B0DFD33274858CE0008EB0A /* AppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B0DFD20274855C00008EB0A /* AppServices.framework */; };
+		1B0DFD34274858E70008EB0A /* AppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B0DFD20274855C00008EB0A /* AppServices.framework */; };
+		1B0DFD35274859020008EB0A /* AppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B0DFD20274855C00008EB0A /* AppServices.framework */; };
+		1B0DFD36274859310008EB0A /* AppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B0DFD20274855C00008EB0A /* AppServices.framework */; };
+		1B0DFD3827485A780008EB0A /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B0DFD3727485A780008EB0A /* SwiftKeychainWrapper */; };
+		1B0DFD3A27485AC10008EB0A /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B0DFD3927485AC10008EB0A /* SwiftKeychainWrapper */; };
+		1B0DFD3C27485B050008EB0A /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B0DFD3B27485B050008EB0A /* SwiftKeychainWrapper */; };
+		1B0DFD3E27485B240008EB0A /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B0DFD3D27485B240008EB0A /* SwiftKeychainWrapper */; };
+		1B0DFD4027485B560008EB0A /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B0DFD3F27485B560008EB0A /* SwiftKeychainWrapper */; };
+		1B0DFD4227485C3E0008EB0A /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B0DFD4127485C3E0008EB0A /* SwiftKeychainWrapper */; };
 		1B3D99F1270E89D0006E1264 /* Telemetry in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3D99F0270E89D0006E1264 /* Telemetry */; };
-		1B750BE1274312D3002CBA18 /* RustLog in Frameworks */ = {isa = PBXBuildFile; productRef = 1B750BE0274312D3002CBA18 /* RustLog */; };
-		1BA892A22746D88500C5F7D2 /* Nimbus in Frameworks */ = {isa = PBXBuildFile; productRef = 1BA892A12746D88500C5F7D2 /* Nimbus */; };
-		1BE9ECBE2717663100D729BB /* FxAClient in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECBD2717663100D729BB /* FxAClient */; };
-		1BE9ECC02717663200D729BB /* Logins in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECBF2717663200D729BB /* Logins */; };
-		1BE9ECC22717663200D729BB /* Places in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECC12717663200D729BB /* Places */; };
-		1BE9ECC42717663200D729BB /* Viaduct in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECC32717663200D729BB /* Viaduct */; };
 		1BE9ECCA27176FEA00D729BB /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECC927176FEA00D729BB /* SwiftyJSON */; };
 		1BE9ECCC2717704300D729BB /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECCB2717704300D729BB /* SwiftyJSON */; };
 		1BE9ECCE271770A600D729BB /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECCD271770A600D729BB /* SwiftyJSON */; };
@@ -1213,6 +1225,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		1B0DFD2C274857350008EB0A /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				1B0DFD29274857350008EB0A /* AppServices.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2F3444EC1AB2378200FD9731 /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1482,6 +1505,8 @@
 		1AC74B5BBF452B60564AA754 /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		1AFE49DBBA4B3693F364688F /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nn; path = nn.lproj/Storage.strings; sourceTree = "<group>"; };
 		1AFF4A3789E3E6F506BA879A /* ta */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ta; path = ta.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1B0DFD20274855C00008EB0A /* AppServices.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AppServices.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1B0DFD21274855C10008EB0A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = "/Users/skhamis/moz/firefox-ios/Info.plist"; sourceTree = "<absolute>"; };
 		1B5945BE90BF6470FA3D4257 /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/Search.strings; sourceTree = "<group>"; };
 		1B8B4FF5B5B7E07A7E61B89C /* an */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = an; path = an.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
 		1BA54369A0F131F4D825ECC4 /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/Search.strings; sourceTree = "<group>"; };
@@ -4198,7 +4223,21 @@
 			files = (
 				C8CC4F8725253E79003FDE1F /* WidgetKit.framework in Frameworks */,
 				43118CDD251A9CA700F24376 /* Shared.framework in Frameworks */,
+				1B0DFD28274857340008EB0A /* AppServices.framework in Frameworks */,
 				047F9B2924E1FE1C00CD7DF7 /* SwiftUI.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1B0DFCFC274855C00008EB0A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1B0DFCFD274855C00008EB0A /* Logins in Frameworks */,
+				1B0DFD01274855C00008EB0A /* Viaduct in Frameworks */,
+				1B0DFD02274855C00008EB0A /* Places in Frameworks */,
+				1B0DFD03274855C00008EB0A /* FxAClient in Frameworks */,
+				1B0DFD04274855C00008EB0A /* Nimbus in Frameworks */,
+				1B0DFD05274855C00008EB0A /* RustLog in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4206,7 +4245,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1B0DFD30274858860008EB0A /* AppServices.framework in Frameworks */,
 				C820439A2523DC4500740B71 /* libStorage.a in Frameworks */,
+				1B0DFD3A27485AC10008EB0A /* SwiftKeychainWrapper in Frameworks */,
+				1B0DFD32274858B10008EB0A /* SwiftyJSON in Frameworks */,
 				D09A0CDC1FAA24CC009A0273 /* libAccount.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4225,15 +4267,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1BE9ECC02717663200D729BB /* Logins in Frameworks */,
-				1B308AA02714F01E001D6200 /* SwiftyJSON in Frameworks */,
-				1B308A9F2714F01E001D6200 /* SwiftKeychainWrapper in Frameworks */,
-				1B308AA12714F01E001D6200 /* SwiftProtobuf in Frameworks */,
-				1BE9ECC42717663200D729BB /* Viaduct in Frameworks */,
-				1BE9ECC22717663200D729BB /* Places in Frameworks */,
-				1BE9ECBE2717663100D729BB /* FxAClient in Frameworks */,
-				1BA892A22746D88500C5F7D2 /* Nimbus in Frameworks */,
-				1B750BE1274312D3002CBA18 /* RustLog in Frameworks */,
+				1B0DFD3827485A780008EB0A /* SwiftKeychainWrapper in Frameworks */,
+				1B0DFD25274856D60008EB0A /* SwiftyJSON in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4241,7 +4276,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1B0DFD36274859310008EB0A /* AppServices.framework in Frameworks */,
 				C82043852523DBF600740B71 /* Sync.framework in Frameworks */,
+				1B0DFD4227485C3E0008EB0A /* SwiftKeychainWrapper in Frameworks */,
 				C877037A25222F30006E38EB /* Shared.framework in Frameworks */,
 				C8E18F20222EDED000E30E52 /* SafariServices.framework in Frameworks */,
 				C8E18F1E222EDE4500E30E52 /* Accelerate.framework in Frameworks */,
@@ -4309,7 +4346,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1B0DFD33274858CE0008EB0A /* AppServices.framework in Frameworks */,
 				C82043AE2523DC8B00740B71 /* Sync.framework in Frameworks */,
+				1B0DFD3C27485B050008EB0A /* SwiftKeychainWrapper in Frameworks */,
 				C877039725222FE6006E38EB /* Shared.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4380,7 +4419,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1B0DFD34274858E70008EB0A /* AppServices.framework in Frameworks */,
 				F8324A072649A188007E4BFA /* AuthenticationServices.framework in Frameworks */,
+				1B0DFD4027485B560008EB0A /* SwiftKeychainWrapper in Frameworks */,
 				F8324AF62649B540007E4BFA /* Shared.framework in Frameworks */,
 				F8324AFA2649B540007E4BFA /* Sync.framework in Frameworks */,
 			);
@@ -4400,11 +4441,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1B0DFD35274859020008EB0A /* AppServices.framework in Frameworks */,
 				C82043AF2523DC9600740B71 /* Sync.framework in Frameworks */,
 				C877039625222FDC006E38EB /* Shared.framework in Frameworks */,
 				3BA9A0321D2C2C0500BD418C /* Fuzi.framework in Frameworks */,
 				0B75AEA91AC20FB20015E5DC /* ImageIO.framework in Frameworks */,
 				7B604F9D1C495143006EEEC3 /* SDWebImage.framework in Frameworks */,
+				1B0DFD3E27485B240008EB0A /* SwiftKeychainWrapper in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4436,6 +4479,14 @@
 				047F9B3A24E1FF4000CD7DF7 /* SearchQuickLinks.swift */,
 			);
 			path = SearchQuickLinksMedium;
+			sourceTree = "<group>";
+		};
+		1B0DFD4327485CAF0008EB0A /* AppServices */ = {
+			isa = PBXGroup;
+			children = (
+				1B0DFD21274855C10008EB0A /* Info.plist */,
+			);
+			path = AppServices;
 			sourceTree = "<group>";
 		};
 		1DA3CE5B24EEE71B00422BB2 /* OpenTabs */ = {
@@ -6141,6 +6192,7 @@
 				D39FA1601A83E0EC00EE869C /* UITests */,
 				3BFE4B081D342FB900DDF53F /* XCUITests */,
 				DA9FD87B24E212F500168D1E /* Recovered References */,
+				1B0DFD4327485CAF0008EB0A /* AppServices */,
 			);
 			sourceTree = "<group>";
 		};
@@ -6169,6 +6221,7 @@
 				397848DB1ED86605004C0C0B /* NotificationService.appex */,
 				047F9B2724E1FE1C00CD7DF7 /* WidgetKitExtension.appex */,
 				F8324A052649A188007E4BFA /* CredentialProvider.appex */,
+				1B0DFD20274855C00008EB0A /* AppServices.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -6437,6 +6490,7 @@
 				047F9B2324E1FE1C00CD7DF7 /* Sources */,
 				047F9B2424E1FE1C00CD7DF7 /* Frameworks */,
 				047F9B2524E1FE1C00CD7DF7 /* Resources */,
+				1B0DFD2C274857350008EB0A /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -6447,6 +6501,31 @@
 			productName = WidgetKitExtension;
 			productReference = 047F9B2724E1FE1C00CD7DF7 /* WidgetKitExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
+		};
+		1B0DFCAC274855C00008EB0A /* AppServices */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1B0DFD1B274855C00008EB0A /* Build configuration list for PBXNativeTarget "AppServices" */;
+			buildPhases = (
+				1B0DFCBD274855C00008EB0A /* Sources */,
+				1B0DFCFC274855C00008EB0A /* Frameworks */,
+				1B0DFD06274855C00008EB0A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AppServices;
+			packageProductDependencies = (
+				1B0DFCB6274855C00008EB0A /* FxAClient */,
+				1B0DFCB8274855C00008EB0A /* Logins */,
+				1B0DFCB9274855C00008EB0A /* Places */,
+				1B0DFCBA274855C00008EB0A /* Viaduct */,
+				1B0DFCBB274855C00008EB0A /* RustLog */,
+				1B0DFCBC274855C00008EB0A /* Nimbus */,
+			);
+			productName = Shared;
+			productReference = 1B0DFD20274855C00008EB0A /* AppServices.framework */;
+			productType = "com.apple.product-type.framework";
 		};
 		2827315D1ABC9BE600AA1954 /* Sync */ = {
 			isa = PBXNativeTarget;
@@ -6464,6 +6543,8 @@
 			);
 			name = Sync;
 			packageProductDependencies = (
+				1B0DFD31274858B10008EB0A /* SwiftyJSON */,
+				1B0DFD3927485AC10008EB0A /* SwiftKeychainWrapper */,
 			);
 			productName = Sync;
 			productReference = 2827315E1ABC9BE600AA1954 /* Sync.framework */;
@@ -6503,21 +6584,11 @@
 			buildRules = (
 			);
 			dependencies = (
-				1BDA1F8E271138EB006B2FAB /* PBXTargetDependency */,
-				1B3D99F6270E8CDE006E1264 /* PBXTargetDependency */,
-				1B750BE5274327B7002CBA18 /* PBXTargetDependency */,
 			);
 			name = Shared;
 			packageProductDependencies = (
-				1B3D99F7270E8CF8006E1264 /* SwiftKeychainWrapper */,
-				1BDA1F8627113817006B2FAB /* SwiftyJSON */,
-				1BDA1F8B271138A5006B2FAB /* SwiftProtobuf */,
-				1BE9ECBD2717663100D729BB /* FxAClient */,
-				1BE9ECBF2717663200D729BB /* Logins */,
-				1BE9ECC12717663200D729BB /* Places */,
-				1BE9ECC32717663200D729BB /* Viaduct */,
-				1B750BE0274312D3002CBA18 /* RustLog */,
-				1BA892A12746D88500C5F7D2 /* Nimbus */,
+				1B0DFD24274856D60008EB0A /* SwiftyJSON */,
+				1B0DFD3727485A780008EB0A /* SwiftKeychainWrapper */,
 			);
 			productName = Shared;
 			productReference = 288A2D861AB8B3260023ABC3 /* Shared.framework */;
@@ -6636,6 +6707,7 @@
 			);
 			name = NotificationService;
 			packageProductDependencies = (
+				1B0DFD3B27485B050008EB0A /* SwiftKeychainWrapper */,
 			);
 			productName = NotificationService;
 			productReference = 397848DB1ED86605004C0C0B /* NotificationService.appex */;
@@ -6809,6 +6881,7 @@
 			);
 			name = CredentialProvider;
 			packageProductDependencies = (
+				1B0DFD3F27485B560008EB0A /* SwiftKeychainWrapper */,
 			);
 			productName = CredentialProvider;
 			productReference = F8324A052649A188007E4BFA /* CredentialProvider.appex */;
@@ -6842,6 +6915,7 @@
 			name = Client;
 			packageProductDependencies = (
 				1B3D99F0270E89D0006E1264 /* Telemetry */,
+				1B0DFD4127485C3E0008EB0A /* SwiftKeychainWrapper */,
 			);
 			productName = Client;
 			productReference = F84B21BE1A090F8100AAB793 /* Client.app */;
@@ -6887,6 +6961,7 @@
 			);
 			name = ShareTo;
 			packageProductDependencies = (
+				1B0DFD3D27485B240008EB0A /* SwiftKeychainWrapper */,
 			);
 			productName = ShareToFirefox;
 			productReference = F84B22491A0920C600AAB793 /* ShareTo.appex */;
@@ -7179,10 +7254,11 @@
 				390527491C874D35007E0BB7 /* Today */,
 				047F9B2624E1FE1C00CD7DF7 /* WidgetKitExtension */,
 				F8324A042649A188007E4BFA /* CredentialProvider */,
+				1B0DFCAC274855C00008EB0A /* AppServices */,
 				288A2D851AB8B3260023ABC3 /* Shared */,
+				2827315D1ABC9BE600AA1954 /* Sync */,
 				2FCAE2191ABB51F800877008 /* Storage */,
 				2FA435FA1ABB83B4008031D1 /* Account */,
-				2827315D1ABC9BE600AA1954 /* Sync */,
 				E69DB0741E97DEA9008A67E6 /* SyncTelemetry */,
 				F84B21D21A090F8100AAB793 /* ClientTests */,
 				D39FA15E1A83E0EC00EE869C /* UITests */,
@@ -7207,6 +7283,13 @@
 				047F9B2E24E1FE1F00CD7DF7 /* Assets.xcassets in Resources */,
 				D58A202C25C9D96400105D25 /* Localizable.strings in Resources */,
 				1D9E1FE524FEF56C006E561D /* TopSites in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1B0DFD06274855C00008EB0A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7607,6 +7690,13 @@
 				DA9FD88824E213DD00168D1E /* QuickLink.swift in Sources */,
 				DA9FD88324E213B500168D1E /* QuickLinkSelection.intentdefinition in Sources */,
 				1DA3CE5D24EEE73100422BB2 /* OpenTabsWidget.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1B0DFCBD274855C00008EB0A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8481,18 +8571,6 @@
 			isa = PBXTargetDependency;
 			target = 047F9B2624E1FE1C00CD7DF7 /* WidgetKitExtension */;
 			targetProxy = 047F9B3024E1FE1F00CD7DF7 /* PBXContainerItemProxy */;
-		};
-		1B3D99F6270E8CDE006E1264 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 1B3D99F5270E8CDE006E1264 /* SwiftKeychainWrapper */;
-		};
-		1B750BE5274327B7002CBA18 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 1B750BE4274327B7002CBA18 /* SwiftProtobuf */;
-		};
-		1BDA1F8E271138EB006B2FAB /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 1BDA1F8D271138EB006B2FAB /* SwiftyJSON */;
 		};
 		2827316B1ABC9BE700AA1954 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -10799,6 +10877,95 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		1B0DFD1C274855C00008EB0A /* Fennec */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = Fennec;
+		};
+		1B0DFD1D274855C00008EB0A /* Fennec_Enterprise */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = Fennec_Enterprise;
+		};
+		1B0DFD1E274855C00008EB0A /* Firefox */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_TESTABILITY = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = Firefox;
+		};
+		1B0DFD1F274855C00008EB0A /* FirefoxBeta */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = FirefoxBeta;
+		};
 		282731771ABC9BE800AA1954 /* Fennec */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -12215,6 +12382,17 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
 		};
+		1B0DFD1B274855C00008EB0A /* Build configuration list for PBXNativeTarget "AppServices" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1B0DFD1C274855C00008EB0A /* Fennec */,
+				1B0DFD1D274855C00008EB0A /* Fennec_Enterprise */,
+				1B0DFD1E274855C00008EB0A /* Firefox */,
+				1B0DFD1F274855C00008EB0A /* FirefoxBeta */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Fennec;
+		};
 		282731971ABC9BE800AA1954 /* Build configuration list for PBXNativeTarget "Sync" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -12461,6 +12639,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		1B0DFCB7274855C00008EB0A /* XCRemoteSwiftPackageReference "rust-components-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mozilla/rust-components-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.0.7;
+			};
+		};
 		1B3D99EF270E89D0006E1264 /* XCRemoteSwiftPackageReference "telemetry-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mozilla-mobile/telemetry-ios";
@@ -12504,70 +12690,80 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		1B0DFCB6274855C00008EB0A /* FxAClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B0DFCB7274855C00008EB0A /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = FxAClient;
+		};
+		1B0DFCB8274855C00008EB0A /* Logins */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B0DFCB7274855C00008EB0A /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = Logins;
+		};
+		1B0DFCB9274855C00008EB0A /* Places */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B0DFCB7274855C00008EB0A /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = Places;
+		};
+		1B0DFCBA274855C00008EB0A /* Viaduct */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B0DFCB7274855C00008EB0A /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = Viaduct;
+		};
+		1B0DFCBB274855C00008EB0A /* RustLog */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B0DFCB7274855C00008EB0A /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = RustLog;
+		};
+		1B0DFCBC274855C00008EB0A /* Nimbus */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B0DFCB7274855C00008EB0A /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = Nimbus;
+		};
+		1B0DFD24274856D60008EB0A /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1BDA1F8327113788006B2FAB /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
+		1B0DFD31274858B10008EB0A /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1BDA1F8327113788006B2FAB /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
+		1B0DFD3727485A780008EB0A /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
+		1B0DFD3927485AC10008EB0A /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
+		1B0DFD3B27485B050008EB0A /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
+		1B0DFD3D27485B240008EB0A /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
+		1B0DFD3F27485B560008EB0A /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
+		1B0DFD4127485C3E0008EB0A /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
 		1B3D99F0270E89D0006E1264 /* Telemetry */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1B3D99EF270E89D0006E1264 /* XCRemoteSwiftPackageReference "telemetry-ios" */;
 			productName = Telemetry;
-		};
-		1B3D99F5270E8CDE006E1264 /* SwiftKeychainWrapper */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
-			productName = SwiftKeychainWrapper;
-		};
-		1B3D99F7270E8CF8006E1264 /* SwiftKeychainWrapper */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
-			productName = SwiftKeychainWrapper;
-		};
-		1B750BE0274312D3002CBA18 /* RustLog */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1BE9ECAA271765C800D729BB /* XCRemoteSwiftPackageReference "rust-components-swift" */;
-			productName = RustLog;
-		};
-		1B750BE4274327B7002CBA18 /* SwiftProtobuf */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1BDA1F8827113852006B2FAB /* XCRemoteSwiftPackageReference "swift-protobuf" */;
-			productName = SwiftProtobuf;
-		};
-		1BA892A12746D88500C5F7D2 /* Nimbus */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1BE9ECAA271765C800D729BB /* XCRemoteSwiftPackageReference "rust-components-swift" */;
-			productName = Nimbus;
-		};
-		1BDA1F8627113817006B2FAB /* SwiftyJSON */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1BDA1F8327113788006B2FAB /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
-			productName = SwiftyJSON;
-		};
-		1BDA1F8B271138A5006B2FAB /* SwiftProtobuf */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1BDA1F8827113852006B2FAB /* XCRemoteSwiftPackageReference "swift-protobuf" */;
-			productName = SwiftProtobuf;
-		};
-		1BDA1F8D271138EB006B2FAB /* SwiftyJSON */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1BDA1F8327113788006B2FAB /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
-			productName = SwiftyJSON;
-		};
-		1BE9ECBD2717663100D729BB /* FxAClient */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1BE9ECAA271765C800D729BB /* XCRemoteSwiftPackageReference "rust-components-swift" */;
-			productName = FxAClient;
-		};
-		1BE9ECBF2717663200D729BB /* Logins */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1BE9ECAA271765C800D729BB /* XCRemoteSwiftPackageReference "rust-components-swift" */;
-			productName = Logins;
-		};
-		1BE9ECC12717663200D729BB /* Places */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1BE9ECAA271765C800D729BB /* XCRemoteSwiftPackageReference "rust-components-swift" */;
-			productName = Places;
-		};
-		1BE9ECC32717663200D729BB /* Viaduct */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1BE9ECAA271765C800D729BB /* XCRemoteSwiftPackageReference "rust-components-swift" */;
-			productName = Viaduct;
 		};
 		1BE9ECC927176FEA00D729BB /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;
