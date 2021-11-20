@@ -271,6 +271,12 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” сурәтләрегезгә ирешергә тели";
 
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "Бәйләнеш хәвефсез түгел";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "Бәйләнеш хәвефсез";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "Сайтның тулы версиясен сорау";
 
@@ -324,6 +330,12 @@
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla, %@-ны һәркемгә дә тәкъдим итү һәм яхшырту өчен кирәкле мәгълүматларны гына җыярга тырыша.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextStudies" = "%@ ара-тирә тикшеренүләр урнаштырырга һәм үткәрергә мөмкин.";
+
+/* Title for section in settings menu */
+"Settings.general" = "Гомуми көйләүләр";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Күбрәк белү.";
@@ -439,6 +451,9 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Куллану мәгълүматларын җибәрү";
 
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "Тикшеренүләр";
+
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Кушымтаны ачу өчен Touch ID кулланыгыз";
 
@@ -490,6 +505,9 @@
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Chrome-да ачу";
 
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "Стандарт браузерда ачу";
+
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Firefox-та ачу";
 
@@ -523,6 +541,57 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "Ачылачак URL";
 
+/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.Biometric.Title" = "Сайт ачык булганда %@ бикләнсен:";
+
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "Face ID-ны кабызу";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "Touch ID-ны кабызу";
+
+/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Release.Description" = "%@ кушымтасындагы бу һәм башка яңартулар турында күбрәк укыгыз.";
+
+/* Text for a label that indicates the title for release tip. */
+"Tip.Release.Title" = "Нишләп булмасын, чынлап та безнең төс-кыяфәтебез үзгәрде!";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "Бит өчен гамәлләр > Сайтның тулы версиясен сорау";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "Сайтның тулы, стационар версиясен күрәсегез киләме?";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "Әлегә %@ күзәтүче блокланды";
+
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "Сиз гизәсез. %@ блоклый.";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "%@ менюсыннан «Ярлыкларга өстәү»не сайлагыз";
+
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "Сез иң күп караган сайтларга ярлыклар булдырыгыз:";
+
+/* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriErase.Description" = "Siri ярлыгын өстәү";
+
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.SiriErase.Title" = "«Siri, %@ утырышымны бетер.»";
+
+/* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriFavorite.Description" = "Siri ярлыгын өстәү";
+
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "«Siri, яраткан сайтымны ач.»";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "Күзәтелүдән саклауны сүндереп карагыз";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "Сайтта нидер төшеп калган яки сәер кебекме?";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "%@ кушымтасына кире кайту өчен Touch ID кулланыгыз";
 
@@ -537,6 +606,9 @@
 
 /* Text for tracking protection screen showing the connection is secure */
 "trackingProtection.connectionSecureLabel" = "Хәвефсез бәйләнеш";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"trackingProtection.connectionVerifiedByLabel" = "Раслаучы: %@";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Эчтәлек күзәтүчеләре";

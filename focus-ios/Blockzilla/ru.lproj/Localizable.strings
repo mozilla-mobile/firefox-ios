@@ -116,7 +116,7 @@
 "Autocomplete.mySitesDesc" = "Включить автодополнение %@ URL ваших любимых сайтов.";
 
 /* Label for enabling or disabling top sites */
-"Autocomplete.topSites" = "Топ сайтов";
+"Autocomplete.topSites" = "Популярные сайты";
 
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Новый сеанс";
@@ -233,7 +233,7 @@
 "FirstRun.lastSlide.buttonLabel" = "Понятно!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Автоматически блокируйте онлайн-трекеры во время веб-сёрфинга. Затем нажмите кнопку, чтобы стереть посещённые страницы, поиски, куки и пароли со своего устройства.";
+"FirstRun.messageLabelDescription" = "Автоматически блокируйте онлайн-трекеры во время работы в Интернете. Затем нажмите, чтобы стереть посещённые страницы, поисковые запросы, куки и пароли со своего устройства.";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Работайте в Интернете, не опасаясь слежки.";
@@ -269,7 +269,7 @@
 "photosPermission.openSettings" = "Открыть Параметры";
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "“%@” хотел бы получить доступ к вашим Фото";
+"photosPermission.title" = "«%@» хочет получить доступ к вашим фото";
 
 /* This is the value for a label that indicates if a user is on an unencrypted website. */
 "ProtectionStatus.NotSecure" = "Соединение не защищено";
@@ -278,7 +278,7 @@
 "ProtectionStatus.Secure" = "Соединение защищено";
 
 /* Label for button that requests the desktop version of the currently loaded website. */
-"Request Desktop Site" = "Запросить полную версию сайта";
+"Request Desktop Site" = "Полная версия сайта";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Нажмите Safari, затем выберите «Правила блокирования контента»";
@@ -380,10 +380,10 @@
 "Settings.Search.SearchEngineName" = "Имя поисковой системы";
 
 /* Label for input of search engine template */
-"Settings.Search.SearchTemplate" = "Строка поискового запроса";
+"Settings.Search.SearchTemplate" = "Поисковый запрос";
 
 /* Placeholder text for input of new search engine template */
-"Settings.Search.SearchTemplatePlaceholder" = "Вставьте или введите строку поискового запроса. При необходимости, замените поисковый термин на %s.";
+"Settings.Search.SearchTemplatePlaceholder" = "Вставьте или введите поисковый запрос. При необходимости замените его на %s.";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Поисковая система";
@@ -437,7 +437,7 @@
 "Settings.toggleFaceID" = "Использовать Face ID для разблокировки приложения";
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
-"Settings.toggleFaceIDDescription" = "Face ID будет блокировать %@, если в нём открыта какая-либо страница";
+"Settings.toggleFaceIDDescription" = "Face ID будет разблокировать %@, если в нём открыта какая-либо страница";
 
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "Показывать советы на домашнем экране";
@@ -497,10 +497,10 @@
 "ShareMenu.RemoveFromShortcuts" = "Удалить из ярлыков";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
-"ShareMenu.RequestDesktop" = "Запросить полную версию сайта";
+"ShareMenu.RequestDesktop" = "Полная версия сайта";
 
 /* Text for the share menu option when a user wants to reload the site as a mobile device */
-"ShareMenu.RequestMobile" = "Запросить мобильную версию сайта";
+"ShareMenu.RequestMobile" = "Мобильная версия сайта";
 
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Открыть в Chrome";
@@ -553,11 +553,44 @@
 /* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
 "Tip.Release.Description" = "Подробнее об этом и других обновлениях %@.";
 
+/* Text for a label that indicates the title for release tip. */
+"Tip.Release.Title" = "Почему бы и нет, у нас новый внешний вид!";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "Действия на странице > Полная версия сайта";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "Хотите увидеть полную версию сайта?";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "Заблокировано трекеров: %@";
+
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "Вы просматриваете. %@ блокирует.";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "Выберите «Добавить в ярлыки» в меню %@";
+
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "Создайте ярлыки для сайтов, которые вы посещаете чаще всего:";
+
+/* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriErase.Description" = "Добавить быструю команду Siri";
+
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.SiriErase.Title" = "«Siri, сотри мою сессию %@.»";
+
+/* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriFavorite.Description" = "Добавить быструю команду Siri";
+
 /* Text for a label that indicates the title for siri favorite tip. */
 "Tip.SiriFavorite.Title" = "«Siri, открой мой любимый сайт».";
 
 /* Text for a label that indicates the description for sites not working tip. */
 "Tip.SitesNotWorking.Description" = "Попробуйте отключить защиту от отслеживания";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "На сайте отсутствует контент или он ведёт себя странно?";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Используйте Touch ID для возврата в %@";
@@ -575,7 +608,7 @@
 "trackingProtection.connectionSecureLabel" = "Соединение защищено";
 
 /* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
-"trackingProtection.connectionVerifiedByLabel" = "Подтверждено: %@";
+"trackingProtection.connectionVerifiedByLabel" = "Подтверждено %@";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Трекеры содержимого";
@@ -611,10 +644,10 @@
 "trackingProtection.toggleLabel2" = "Улучшенная защита от отслеживания";
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel2" = "Храните свои данные при себе. %@ защитит вас от многих наиболее известных трекеров, которые следят за вашим поведением в Интернете.";
+"trackingProtection.trackerDescriptionLabel2" = "Храните свои данные при себе. %@ защитит вас от большинства наиболее известных трекеров, которые следят за вами в Интернете.";
 
 /* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
-"trackingProtection.trackersBlockedLabel" = "Заблокировано трекеров, начиная с %@";
+"trackingProtection.trackersBlockedLabel" = "Заблокировано трекеров с %@";
 
 /* Text for the header of trackers section from Tracking Protection. */
 "trackingProtection.trackersHeader" = "Блокируемые трекеры и скрипты";

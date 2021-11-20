@@ -314,7 +314,7 @@
 "Settings.autocompleteSection" = "Автозавершення URL";
 
 /* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Блокування інших елементів стеження може порушити роботу деяких відео і вебсторінок.";
+"Settings.blockOtherMessage" = "Блокування інших елементів стеження може порушити роботу деяких відео й вебсторінок.";
 
 /* Button label for declining Content blocker alert */
 "Settings.blockOtherNo2" = "Скасувати";
@@ -443,7 +443,7 @@
 "Settings.toggleHomeScreenTips" = "Показувати поради на головному екрані";
 
 /* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "Може порушити роботу деяких відео і вебсторінок";
+"Settings.toggleOtherSubtitle" = "Може порушити роботу деяких відео й вебсторінок";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
@@ -506,7 +506,7 @@
 "ShareMenu.ShareOpenChrome" = "Відкрити в Chrome";
 
 /* Text for the share menu option when a user wants to open the current website in the default browser. */
-"ShareMenu.ShareOpenDefaultBrowser" = "Відкрити у типовому браузері";
+"ShareMenu.ShareOpenDefaultBrowser" = "Відкрити в типовому браузері";
 
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Відкрити у Firefox";
