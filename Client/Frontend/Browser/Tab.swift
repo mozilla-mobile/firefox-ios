@@ -176,7 +176,8 @@ class Tab: NSObject {
         }
         return self.url
     }
-    
+
+    // roux
     var isFxHomeTab: Bool {
         if let numberOfUrls = self.sessionData?.urls.count,
            let offset = self.sessionData?.currentPage,

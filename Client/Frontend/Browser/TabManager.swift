@@ -678,21 +678,15 @@ extension TabManager {
     }
 
     func restoreTabs(_ forced: Bool = false) {
-        defer {
-            // Always make sure there is a single normal tab.
-            if normalTabs.isEmpty {
-                let tab = addTab()
-                if selectedTab == nil {
-                    selectTab(tab)
-                }
-            }
-        }
+        defer { checkForSingleTab() }
+        guard forced || count == 0,
+              !AppConstants.IsRunningTest,
+              !DebugSettingsBundleOptions.skipSessionRestore,
+              store.hasTabsToRestoreAtStartup
+        else { return }
 
-        guard forced || count == 0, !AppConstants.IsRunningTest, !DebugSettingsBundleOptions.skipSessionRestore, store.hasTabsToRestoreAtStartup else {
-            return
-        }
-
-        var tabToSelect = store.restoreStartupTabs(clearPrivateTabs: shouldClearPrivateTabs(), tabManager: self)
+        var tabToSelect = store.restoreStartupTabs(clearPrivateTabs: shouldClearPrivateTabs(),
+                                                   tabManager: self)
         let wasLastSessionPrivate = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
         if wasLastSessionPrivate, !(tabToSelect?.isPrivate ?? false) {
             tabToSelect = addTab(isPrivate: true)
@@ -702,6 +696,38 @@ extension TabManager {
 
         for delegate in self.delegates {
             delegate.get()?.tabManagerDidRestoreTabs(self)
+        }
+    }
+
+    func startAtHome() {
+        defer { checkForSingleTab() }
+        guard count == 0,
+              !AppConstants.IsRunningTest,
+              !DebugSettingsBundleOptions.skipSessionRestore,
+              store.hasTabsToRestoreAtStartup
+        else { return }
+
+        var tabToSelect = store.restoreStartupTabs(clearPrivateTabs: shouldClearPrivateTabs(),
+                                                   tabManager: self)
+        let wasLastSessionPrivate = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
+        if wasLastSessionPrivate, !(tabToSelect?.isPrivate ?? false) {
+            tabToSelect = addTab(isPrivate: true)
+        }
+
+        selectTab(tabToSelect)
+
+        for delegate in self.delegates {
+            delegate.get()?.tabManagerDidRestoreTabs(self)
+        }
+    }
+
+    private func checkForSingleTab() {
+        // Always make sure there is a single normal tab.
+        if normalTabs.isEmpty {
+            let tab = addTab()
+            if selectedTab == nil {
+                selectTab(tab)
+            }
         }
     }
 }

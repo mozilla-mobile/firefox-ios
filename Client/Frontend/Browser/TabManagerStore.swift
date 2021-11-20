@@ -32,33 +32,30 @@ class TabManagerStore: FeatureFlagsProtocol {
     }
 
     var shouldOpenHome: Bool {
-        let isColdLaunch = NSUserDefaultsPrefs(prefix: "profile").boolForKey("isColdLaunch")
-        guard let coldLaunch = isColdLaunch, featureFlags.isFeatureActiveForBuild(.startAtHome) else { return false }
-        // ROUX: When fixing start at home, the below code is correct, but needs to be
-        // uncommented in order to get the feature working properly
-//        guard let setting: StartAtHomeSetting = featureFlags.featureOption(.startAtHome) else { return false }
-//
-//        let lastActiveTimestamp = UserDefaults.standard.object(forKey: "LastActiveTimestamp") as? Date ?? Date()
-//        let dateComponents = Calendar.current.dateComponents([.hour, .minute, .second], from: lastActiveTimestamp, to: Date())
-//
-//        var timeSinceLastActivity: Int
-//        var timeToOpenNewHome: Int
-//        switch setting {
-//        case .afterFourHours:
-//            timeSinceLastActivity = dateComponents.hour ?? 0
-//            timeToOpenNewHome = 4
-//
-//        case .always:
-//            // ROUX: this needs to be MINUTES. Currently seconds for testing
-//            timeSinceLastActivity = dateComponents.second ?? 0
-//            timeToOpenNewHome = 5
-//
-//        case .never: return false // should never get here, but the switch must be exhaustive
-//        }
-//
-//        return timeSinceLastActivity >= timeToOpenNewHome || coldLaunch
+//        guard let isColdLaunch = NSUserDefaultsPrefs(prefix: "profile").boolForKey("isColdLaunch"),
+//              isColdLaunch,
+        guard featureFlags.isFeatureActiveForBuild(.startAtHome),
+              let setting: StartAtHomeSetting = featureFlags.userPreferenceFor(.startAtHome),
+              setting != .disabled
+        else { return false }
 
-        return false
+        let lastActiveTimestamp = UserDefaults.standard.object(forKey: "LastActiveTimestamp") as? Date ?? Date()
+        let dateComponents = Calendar.current.dateComponents([.hour, .minute, .second],
+                                                             from: lastActiveTimestamp,
+                                                             to: Date())
+        var timeSinceLastActivity = 0
+        var timeToOpenNewHome = 0
+
+        if setting == .afterFourHours {
+            timeSinceLastActivity = dateComponents.second ?? 0
+            timeToOpenNewHome = 20
+
+        } else if setting == .always {
+            timeSinceLastActivity = dateComponents.second ?? 0
+            timeToOpenNewHome = 5
+        }
+
+        return timeSinceLastActivity >= timeToOpenNewHome //|| coldLaunch
     }
 
     var hasTabsToRestoreAtStartup: Bool {
@@ -150,9 +147,8 @@ class TabManagerStore: FeatureFlagsProtocol {
         assertIsMainThread("Restoration is a main-only operation")
         guard !lockedForReading, savedTabs.count > 0 else { return nil }
         lockedForReading = true
-        defer {
-            lockedForReading = false
-        }
+        defer { lockedForReading = false }
+        
         var savedTabs = savedTabs
         // Make sure to wipe the private tabs if the user has the pref turned on
         if clearPrivateTabs {
@@ -178,11 +174,31 @@ class TabManagerStore: FeatureFlagsProtocol {
                 fxHomeTab = tab.isFxHomeTab ? tab : nil
             }
 
+            fxHomeTab = tab.isFxHomeTab ? tab : nil
             customHomeTab = tab.isCustomHomeTab ? tab : nil
         }
 
         if tabToSelect == nil {
             tabToSelect = tabManager.tabs.first(where: { $0.isPrivate == false })
+        }
+
+        if shouldOpenHome {
+            let page = NewTabAccessors.getHomePage(prefs)
+            let customUrl = HomeButtonHomePageAccessors.getHomePage(prefs)
+            let homeUrl = URL(string: "internal://local/about/home")
+
+            if page == .homePage, let customUrl = customUrl {
+                return customHomeTab ?? tabManager.addTab(URLRequest(url: customUrl))
+
+            } else if page == .topSites, let homeUrl = homeUrl {
+                let home = fxHomeTab ?? tabManager.addTab()
+                home.loadRequest(PrivilegedRequest(url: homeUrl) as URLRequest)
+                home.url = homeUrl
+                return home
+
+            } else {
+                tabToSelect = tabManager.addTab()
+            }
         }
 
         return tabToSelect
@@ -199,6 +215,7 @@ class TabManagerStore: FeatureFlagsProtocol {
 
             if page == .homePage, let customUrl = customUrl {
                 return customHomeTab ?? tabManager.addTab(URLRequest(url: customUrl))
+
             } else if page == .topSites, let homeUrl = homeUrl {
                 let home = fxHomeTab ?? tabManager.addTab()
                 home.loadRequest(PrivilegedRequest(url: homeUrl) as URLRequest)

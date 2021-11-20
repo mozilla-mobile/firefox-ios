@@ -379,6 +379,7 @@ class BrowserViewController: UIViewController {
 
         // ROUX: When implementing StartATHome, this might be a good place to call
         // the feature when restoring not from a launch.
+//        tabManager.restoreTabs()
     }
 
     override func viewDidLoad() {
