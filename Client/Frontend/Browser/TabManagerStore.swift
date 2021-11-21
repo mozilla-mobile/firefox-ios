@@ -31,33 +31,6 @@ class TabManagerStore: FeatureFlagsProtocol {
         return lockedForReading
     }
 
-    var shouldOpenHome: Bool {
-//        guard let isColdLaunch = NSUserDefaultsPrefs(prefix: "profile").boolForKey("isColdLaunch"),
-//              isColdLaunch,
-        guard featureFlags.isFeatureActiveForBuild(.startAtHome),
-              let setting: StartAtHomeSetting = featureFlags.userPreferenceFor(.startAtHome),
-              setting != .disabled
-        else { return false }
-
-        let lastActiveTimestamp = UserDefaults.standard.object(forKey: "LastActiveTimestamp") as? Date ?? Date()
-        let dateComponents = Calendar.current.dateComponents([.hour, .minute, .second],
-                                                             from: lastActiveTimestamp,
-                                                             to: Date())
-        var timeSinceLastActivity = 0
-        var timeToOpenNewHome = 0
-
-        if setting == .afterFourHours {
-            timeSinceLastActivity = dateComponents.second ?? 0
-            timeToOpenNewHome = 20
-
-        } else if setting == .always {
-            timeSinceLastActivity = dateComponents.second ?? 0
-            timeToOpenNewHome = 5
-        }
-
-        return timeSinceLastActivity >= timeToOpenNewHome //|| coldLaunch
-    }
-
     var hasTabsToRestoreAtStartup: Bool {
         return archivedStartupTabs.0.count > 0
     }
@@ -156,9 +129,7 @@ class TabManagerStore: FeatureFlagsProtocol {
         }
 
         var tabToSelect: Tab?
-
         var fxHomeTab: Tab?
-        var customHomeTab: Tab?
         let wasLastSessionPrivate = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
 
         for savedTab in savedTabs {
@@ -169,62 +140,20 @@ class TabManagerStore: FeatureFlagsProtocol {
                 tabToSelect = tab
             }
 
+            // ROUX: figure out the correct behaviour for opening to the correct private/regular tab
             // select Home Tab for correct previous private / regular session
             if tab.isPrivate == wasLastSessionPrivate {
                 fxHomeTab = tab.isFxHomeTab ? tab : nil
             }
 
             fxHomeTab = tab.isFxHomeTab ? tab : nil
-            customHomeTab = tab.isCustomHomeTab ? tab : nil
         }
 
         if tabToSelect == nil {
             tabToSelect = tabManager.tabs.first(where: { $0.isPrivate == false })
         }
 
-        if shouldOpenHome {
-            let page = NewTabAccessors.getHomePage(prefs)
-            let customUrl = HomeButtonHomePageAccessors.getHomePage(prefs)
-            let homeUrl = URL(string: "internal://local/about/home")
-
-            if page == .homePage, let customUrl = customUrl {
-                return customHomeTab ?? tabManager.addTab(URLRequest(url: customUrl))
-
-            } else if page == .topSites, let homeUrl = homeUrl {
-                let home = fxHomeTab ?? tabManager.addTab()
-                home.loadRequest(PrivilegedRequest(url: homeUrl) as URLRequest)
-                home.url = homeUrl
-                return home
-
-            } else {
-                tabToSelect = tabManager.addTab()
-            }
-        }
-
         return tabToSelect
-    }
-
-    func shouldOpenHomeWith(tabManager: TabManager) -> Tab? {
-        var fxHomeTab: Tab?
-        var customHomeTab: Tab?
-
-        if shouldOpenHome {
-            let page = NewTabAccessors.getHomePage(prefs)
-            let customUrl = HomeButtonHomePageAccessors.getHomePage(prefs)
-            let homeUrl = URL(string: "internal://local/about/home")
-
-            if page == .homePage, let customUrl = customUrl {
-                return customHomeTab ?? tabManager.addTab(URLRequest(url: customUrl))
-
-            } else if page == .topSites, let homeUrl = homeUrl {
-                let home = fxHomeTab ?? tabManager.addTab()
-                home.loadRequest(PrivilegedRequest(url: homeUrl) as URLRequest)
-                home.url = homeUrl
-                return home
-            }
-        }
-
-        return tabManager.selectedTab
     }
 
     func clearArchive() {
