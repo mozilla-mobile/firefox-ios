@@ -145,32 +145,6 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         return eligibleTabs
     }
 
-    var shouldStartAtHome: Bool {
-//        guard let isColdLaunch = NSUserDefaultsPrefs(prefix: "profile").boolForKey("isColdLaunch"),
-//              isColdLaunch,
-        guard featureFlags.isFeatureActiveForBuild(.startAtHome),
-              let setting: StartAtHomeSetting = featureFlags.userPreferenceFor(.startAtHome),
-              setting != .disabled
-        else { return false }
-
-        let lastActiveTimestamp = UserDefaults.standard.object(forKey: "LastActiveTimestamp") as? Date ?? Date()
-        let dateComponents = Calendar.current.dateComponents([.hour, .minute, .second],
-                                                             from: lastActiveTimestamp,
-                                                             to: Date())
-        var timeSinceLastActivity = 0
-        var timeToOpenNewHome = 0
-
-        if setting == .afterFourHours {
-            timeSinceLastActivity = dateComponents.second ?? 0
-            timeToOpenNewHome = 4
-
-        } else if setting == .always {
-            timeSinceLastActivity = dateComponents.second ?? 0
-            timeToOpenNewHome = 5
-        }
-
-        return timeSinceLastActivity >= timeToOpenNewHome //|| coldLaunch
-    }
 
     var lastSessionWasPrivate: Bool {
         return UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
@@ -737,34 +711,69 @@ extension TabManager {
         // Always make sure there is a single normal tab.
         if normalTabs.isEmpty {
             let tab = addTab()
-            if selectedTab == nil {
-                selectTab(tab)
-            }
+            if selectedTab == nil { selectTab(tab) }
         }
     }
 
-    func startAtHomeCheck() {
-        guard !AppConstants.IsRunningTest else { return }
+    // MARK: - Start at Home
 
-        var tabToSelect: Tab?
+    /// Public interface for checking whether the StartAtHome Feature should run.
+    public func startAtHomeCheck() {
+        guard !AppConstants.IsRunningTest,
+              !DebugSettingsBundleOptions.skipSessionRestore,
+        else { return }
 
-        if shouldStartAtHome {
+
+        if shouldStartAtHome() {
             let scannableTabs = lastSessionWasPrivate ? privateTabs : normalTabs
             let existingHomeTab = scanForExistingHomeTab(in: scannableTabs,
                                                          with: profile.prefs)
-            tabToSelect = createStartAtHomeTab(withExistingTab: existingHomeTab,
-                                               and: profile.prefs)
+            let tabToSelect = createStartAtHomeTab(withExistingTab: existingHomeTab,
+                                                   inPrivateMode: lastSessionWasPrivate,
+                                                   and: profile.prefs)
 
-        } else {
-            tabToSelect = selectedTab
-            if lastSessionWasPrivate, !(tabToSelect?.isPrivate ?? false) {
-                tabToSelect = addTab(isPrivate: true)
-            }
+            selectTab(tabToSelect)
         }
-
-        selectTab(tabToSelect)
     }
 
+    /// Determines whether the Start at Home feature is enabled, how long it has been since
+    /// the user's last activity and whether, based on their settings, Start at Home feature
+    /// should perform its function.
+    private func shouldStartAtHome() -> Bool {
+//        guard let isColdLaunch = NSUserDefaultsPrefs(prefix: "profile").boolForKey("isColdLaunch"),
+//              isColdLaunch,
+        guard featureFlags.isFeatureActiveForBuild(.startAtHome),
+              let setting: StartAtHomeSetting = featureFlags.userPreferenceFor(.startAtHome),
+              setting != .disabled
+        else { return false }
+
+        let lastActiveTimestamp = UserDefaults.standard.object(forKey: "LastActiveTimestamp") as? Date ?? Date()
+        let dateComponents = Calendar.current.dateComponents([.hour, .second],
+                                                             from: lastActiveTimestamp,
+                                                             to: Date())
+        var timeSinceLastActivity = 0
+        var timeToOpenNewHome = 0
+
+        if setting == .afterFourHours {
+            timeSinceLastActivity = dateComponents.hour ?? 0
+            timeToOpenNewHome = 4
+
+        } else if setting == .always {
+            timeSinceLastActivity = dateComponents.second ?? 0
+            timeToOpenNewHome = 5
+        }
+
+        return timeSinceLastActivity >= timeToOpenNewHome //|| coldLaunch
+    }
+
+    /// Looks to see if the user already has a homepage tab open (as per their preferences)
+    /// and, if they do, returns that tab, in order to avoid opening multiple duplicate
+    /// homepage tabs.
+    ///
+    /// - Parameters:
+    ///   - tabs: The tabs to be scanned, either private, or normal, based on the last session
+    ///   - profilePreferences: Preferences stored in the user's `Profile`
+    /// - Returns: An optional tab, that matches the user's new tab preferences.
     private func scanForExistingHomeTab(in tabs: [Tab],
                                         with profilePreferences: Prefs) -> Tab? {
 
@@ -784,7 +793,15 @@ extension TabManager {
         return nil
     }
 
+    /// <#Description#>
+    /// - Parameters:
+    ///   - existingTab: A `Tab` that is the user's homepage, that is already open
+    ///   - privateMode: Whether the last session was private or not, so that, if there's
+    ///   no homepage open, we open a new tab in the correct state.
+    ///   - profilePreferences: Preferences, stored in the user's `Profile`
+    /// - Returns: A selectable tab
     private func createStartAtHomeTab(withExistingTab existingTab: Tab?,
+                                      inPrivateMode privateMode: Bool,
                                       and profilePreferences: Prefs) -> Tab? {
 
         let page = NewTabAccessors.getHomePage(profilePreferences)
@@ -792,14 +809,16 @@ extension TabManager {
         let homeUrl = URL(string: "internal://local/about/home")
 
         if page == .homePage, let customUrl = customUrl {
-            return existingTab ?? addTab(URLRequest(url: customUrl))
+            return existingTab ?? addTab(URLRequest(url: customUrl), isPrivate: privateMode)
 
         } else if page == .topSites, let homeUrl = homeUrl {
-            let home = existingTab ?? addTab()
+            let home = existingTab ?? addTab(isPrivate: privateMode)
             home.loadRequest(PrivilegedRequest(url: homeUrl) as URLRequest)
             home.url = homeUrl
             return home
         }
+
+        return selectedTab ?? addTab()
     }
 }
 

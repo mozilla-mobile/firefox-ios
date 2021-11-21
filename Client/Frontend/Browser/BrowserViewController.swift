@@ -377,8 +377,6 @@ class BrowserViewController: UIViewController {
             urlBar.locationView.tabDidChangeContentBlocking(tab)
         }
 
-        // ROUX: When implementing StartATHome, this might be a good place to call
-        // the feature when restoring not from a launch.
         tabManager.startAtHomeCheck()
     }
 

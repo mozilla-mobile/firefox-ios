@@ -129,8 +129,6 @@ class TabManagerStore: FeatureFlagsProtocol {
         }
 
         var tabToSelect: Tab?
-        var fxHomeTab: Tab?
-        let wasLastSessionPrivate = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
 
         for savedTab in savedTabs {
             // Provide an empty request to prevent a new tab from loading the home screen
@@ -139,14 +137,6 @@ class TabManagerStore: FeatureFlagsProtocol {
             if savedTab.isSelected {
                 tabToSelect = tab
             }
-
-            // ROUX: figure out the correct behaviour for opening to the correct private/regular tab
-            // select Home Tab for correct previous private / regular session
-            if tab.isPrivate == wasLastSessionPrivate {
-                fxHomeTab = tab.isFxHomeTab ? tab : nil
-            }
-
-            fxHomeTab = tab.isFxHomeTab ? tab : nil
         }
 
         if tabToSelect == nil {
