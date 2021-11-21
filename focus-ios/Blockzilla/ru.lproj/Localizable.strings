@@ -554,7 +554,7 @@
 "Tip.Release.Description" = "Подробнее об этом и других обновлениях %@.";
 
 /* Text for a label that indicates the title for release tip. */
-"Tip.Release.Title" = "Почему бы и нет, у нас новый внешний вид!";
+"Tip.Release.Title" = "Почему бы и да, у нас новый внешний вид!";
 
 /* Text for a label that indicates the description for request desktop tip. */
 "Tip.RequestDesktop.Description" = "Действия на странице > Полная версия сайта";
