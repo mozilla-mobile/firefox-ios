@@ -340,7 +340,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         guard let currentlySelected = currentlySelected else { return nil }
 
         for index in 0..<collectionView.numberOfItems(inSection: inSection) {
-            guard let cell = collectionView.cellForItem(at: IndexPath(row: index, section: inSection)) as? TabCell,
+            guard let cell = collectionView.cellForItem(at: IndexPath(row: index, section: inSection)) as? TabTrayCell,
                   cell.isSelectedTab,
                   let tab = dataStore.at(index),
                   tab != currentlySelected
@@ -732,12 +732,14 @@ extension TabDisplayManager: TabEventHandler {
 
             if selectedTabChanged {
                 self?.tabDisplayer?.focusSelectedTab()
-            }
 
-            // Refresh the previously selected tab, useful when the selected tab has changed, or a tab has been removed affecting the selected index
-            if let previous = self?.indexOfCellDrawnAsPreviouslySelectedTab(currentlySelected: selectedTab,
-                                                                            inSection: section) {
-                indexPaths.append(previous)
+                // Append the previously selected tab to refresh it's state. Useful when the selected tab has change.
+                // This method avoids relying on the state of the "previous" selected tab,
+                // instead it iterates the displayed tabs to see which appears selected.
+                if let previousSelectedIndexPath = self?.indexOfCellDrawnAsPreviouslySelectedTab(currentlySelected: selectedTab,
+                                                                                                 inSection: section) {
+                    indexPaths.append(previousSelectedIndexPath)
+                }
             }
 
             for indexPath in indexPaths {
