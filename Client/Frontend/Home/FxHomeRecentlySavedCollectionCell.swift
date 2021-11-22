@@ -43,19 +43,39 @@ class FxHomeRecentlySavedCollectionCell: UICollectionViewCell {
     
     // UI
     lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: compositionalLayout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.alwaysBounceHorizontal = true
         collectionView.backgroundColor = UIColor.clear
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(RecentlySavedCell.self, forCellWithReuseIdentifier: RecentlySavedCell.cellIdentifier)
         
         return collectionView
+    }()
+
+    private lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: NSCollectionLayoutDimension.absolute(RecentlySavedCollectionCellUX.cellWidth),
+            heightDimension: NSCollectionLayoutDimension.estimated(RecentlySavedCollectionCellUX.cellHeight)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets(top: RecentlySavedCollectionCellUX.generalSpacing,
+                                                     leading: RecentlySavedCollectionCellUX.sectionInsetSpacing,
+                                                     bottom: RecentlySavedCollectionCellUX.generalSpacing,
+                                                     trailing: RecentlySavedCollectionCellUX.sectionInsetSpacing)
+
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: NSCollectionLayoutDimension.absolute(RecentlySavedCollectionCellUX.cellWidth),
+            heightDimension: NSCollectionLayoutDimension.fractionalHeight(1)
+        )
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+
+        let section = NSCollectionLayoutSection(group: group)
+        section.interGroupSpacing = RecentlySavedCollectionCellUX.generalSpacing
+        section.orthogonalScrollingBehavior = .continuous
+
+        return UICollectionViewCompositionalLayout(section: section)
     }()
     
     // MARK: - Inits
@@ -168,33 +188,15 @@ extension FxHomeRecentlySavedCollectionCell: UICollectionViewDelegate {
     }
 }
 
-extension FxHomeRecentlySavedCollectionCell: UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: RecentlySavedCollectionCellUX.cellWidth, height: RecentlySavedCollectionCellUX.cellHeight)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: RecentlySavedCollectionCellUX.generalSpacing,
-                            left: RecentlySavedCollectionCellUX.sectionInsetSpacing,
-                            bottom: RecentlySavedCollectionCellUX.generalSpacing,
-                            right: RecentlySavedCollectionCellUX.sectionInsetSpacing)
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return RecentlySavedCollectionCellUX.generalSpacing
-    }
-    
-}
-
 private struct RecentlySavedCellUX {
     static let generalCornerRadius: CGFloat = 12
-    static let bookmarkTitleFontSize: CGFloat = 17
-    static let bookmarkDetailsFontSize: CGFloat = 12
-    static let labelsWrapperSpacing: CGFloat = 4
-    static let bookmarkStackViewSpacing: CGFloat = 8
-    static let bookmarkStackViewShadowRadius: CGFloat = 4
-    static let bookmarkStackViewShadowOffset: CGFloat = 2
+    // TODO: Limiting font size to AX2 until we use compositional layout in all Firefox HomePage. Should be AX5.
+    static let bookmarkTitleMaxFontSize: CGFloat = 26 // Style caption1 - AX2
+    static let generalSpacing: CGFloat = 8
+    static let heroImageHeight: CGFloat = 92
+    static let heroImageWidth: CGFloat = 110
+    static let recentlySavedCellShadowRadius: CGFloat = 4
+    static let recentlySavedCellShadowOffset: CGFloat = 2
 }
 
 /// A cell used in FxHomeScreen's Recently Saved section. It holds bookmarks and reading list items.
@@ -212,9 +214,11 @@ class RecentlySavedCell: UICollectionViewCell, NotificationThemeable {
         imageView.layer.cornerRadius = RecentlySavedCellUX.generalCornerRadius
         imageView.backgroundColor = .systemBackground
     }
+
     let itemTitle: UILabel = .build { label in
-        label.adjustsFontSizeToFitWidth = false
-        label.font = UIFont.systemFont(ofSize: RecentlySavedCellUX.bookmarkTitleFontSize)
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
+                                                                   maxSize: RecentlySavedCellUX.bookmarkTitleMaxFontSize)
+        label.adjustsFontForContentSizeCategory = true
         label.textColor = .label
     }
     
@@ -240,8 +244,8 @@ class RecentlySavedCell: UICollectionViewCell, NotificationThemeable {
     
     private func setupLayout() {
         contentView.layer.cornerRadius = RecentlySavedCellUX.generalCornerRadius
-        contentView.layer.shadowRadius = RecentlySavedCellUX.bookmarkStackViewShadowRadius
-        contentView.layer.shadowOffset = CGSize(width: 0, height: RecentlySavedCellUX.bookmarkStackViewShadowOffset)
+        contentView.layer.shadowRadius = RecentlySavedCellUX.recentlySavedCellShadowRadius
+        contentView.layer.shadowOffset = CGSize(width: 0, height: RecentlySavedCellUX.recentlySavedCellShadowOffset)
         contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         contentView.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
         
@@ -251,12 +255,12 @@ class RecentlySavedCell: UICollectionViewCell, NotificationThemeable {
             heroImage.topAnchor.constraint(equalTo: contentView.topAnchor),
             heroImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             heroImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            heroImage.heightAnchor.constraint(equalToConstant: 92),
-            heroImage.widthAnchor.constraint(equalToConstant: 110),
+            heroImage.heightAnchor.constraint(equalToConstant: RecentlySavedCellUX.heroImageHeight),
+            heroImage.widthAnchor.constraint(equalToConstant: RecentlySavedCellUX.heroImageWidth),
             
-            itemTitle.topAnchor.constraint(equalTo: heroImage.bottomAnchor, constant: 8),
+            itemTitle.topAnchor.constraint(equalTo: heroImage.bottomAnchor, constant: RecentlySavedCellUX.generalSpacing),
             itemTitle.leadingAnchor.constraint(equalTo: heroImage.leadingAnchor),
-            itemTitle.trailingAnchor.constraint(equalTo: heroImage.trailingAnchor, constant: -2)
+            itemTitle.trailingAnchor.constraint(equalTo: heroImage.trailingAnchor)
         ])
     }
     
