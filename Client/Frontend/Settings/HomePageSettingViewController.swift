@@ -111,49 +111,56 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
     }
 
     private func setupStartAtHomeSection() -> SettingSection? {
-        // TODO: WHen fixing start at home, this setting needs to addressed as well. The
-        // barebones of what needs to be done are here, just needs updating.
-        return nil
-//        guard featureFlags.isFeatureActiveForBuild(.startAtHome) else { return nil }
-//        guard let startAtHomeSetting: StartAtHomeSetting = featureFlags.featureOption(.startAtHome) else { return nil }
-//        currentStartAtHomeSetting = startAtHomeSetting
-//
-//        let onOptionSelected: ((Bool, StartAtHomeSetting) -> Void) = { state, option in
-//            self.featureFlags.set(.startAtHome, to: state, with: option)
-//            self.tableView.reloadData()
-//        }
-//
-//        let afterFourHoursOption = CheckmarkSetting(title: NSAttributedString(string: .SettingsCustomizeHomeStartAtHomeAfterFourHours),
-//                                                    subtitle: nil,
-//                                                    accessibilityIdentifier: "StartAtHomeAfterFourHours",
-//                                                    isChecked: { return self.currentStartAtHomeSetting == .afterFourHours },
-//                                                    onChecked: {
-//                                                        self.currentStartAtHomeSetting = .afterFourHours
-//                                                        onOptionSelected(true, .afterFourHours)
-//        })
-//
-//        let alwaysOption = CheckmarkSetting(title: NSAttributedString(string: .SettingsCustomizeHomeStartAtHomeAlways),
-//                                            subtitle: nil,
-//                                            accessibilityIdentifier: "StartAtHomeAlways",
-//                                            isChecked: { return self.currentStartAtHomeSetting == .always },
-//                                            onChecked: {
-//                                                self.currentStartAtHomeSetting = .always
-//                                                onOptionSelected(true, .always)
-//        })
-//
-//        let neverOption = CheckmarkSetting(title: NSAttributedString(string: .SettingsCustomizeHomeStartAtHomeNever),
-//                                           subtitle: nil,
-//                                           accessibilityIdentifier: "StartAtHomeNever",
-//                                           isChecked: { return self.currentStartAtHomeSetting == .never },
-//                                           onChecked: {
-//                                            self.currentStartAtHomeSetting = .never
-//                                            onOptionSelected(false, .never)
-//        })
-//
-//        let section = SettingSection(title: NSAttributedString(string: .SettingsCustomizeHomeStartAtHomeSectionTitle),
-//                                     children: [afterFourHoursOption, alwaysOption, neverOption])
-//
-//        return section
+        guard featureFlags.isFeatureActiveForBuild(.startAtHome) else { return nil }
+        guard let startAtHomeSetting: StartAtHomeSetting = featureFlags.userPreferenceFor(.startAtHome) else { return nil }
+        currentStartAtHomeSetting = startAtHomeSetting
+
+        typealias a11y = AccessibilityIdentifiers.Settings.Homepage.StartAtHome
+
+        let onOptionSelected: ((Bool, StartAtHomeSetting) -> Void) = { state, option in
+            self.featureFlags.setUserPreferenceFor(.startAtHome, to: option)
+            self.tableView.reloadData()
+
+            let extras = [TelemetryWrapper.EventExtraKey.preference.rawValue: PrefsKeys.StartAtHome,
+                          TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: option.rawValue]
+            TelemetryWrapper.recordEvent(category: .action, method: .change, object: .setting, extras: extras)
+        }
+
+        let afterFourHoursOption = CheckmarkSetting(
+            title: NSAttributedString(string: .Settings.Homepage.StartAtHome.AfterFourHours),
+            subtitle: nil,
+            accessibilityIdentifier: a11y.afterFourHours,
+            isChecked: { return self.currentStartAtHomeSetting == .afterFourHours },
+            onChecked: {
+                self.currentStartAtHomeSetting = .afterFourHours
+                onOptionSelected(true, .afterFourHours)
+        })
+
+        let alwaysOption = CheckmarkSetting(
+            title: NSAttributedString(string: .Settings.Homepage.StartAtHome.Always),
+            subtitle: nil,
+            accessibilityIdentifier: a11y.always,
+            isChecked: { return self.currentStartAtHomeSetting == .always },
+            onChecked: {
+                self.currentStartAtHomeSetting = .always
+                onOptionSelected(true, .always)
+        })
+
+        let neverOption = CheckmarkSetting(
+            title: NSAttributedString(string: .Settings.Homepage.StartAtHome.Never),
+            subtitle: nil,
+            accessibilityIdentifier: a11y.disabled,
+            isChecked: { return self.currentStartAtHomeSetting == .disabled },
+            onChecked: {
+                self.currentStartAtHomeSetting = .disabled
+                onOptionSelected(false, .disabled)
+        })
+
+        let section = SettingSection(title: NSAttributedString(string: .Settings.Homepage.StartAtHome.SectionTitle),
+                                     footerTitle: NSAttributedString(string: .Settings.Homepage.StartAtHome.SectionDescription),
+                                     children: [afterFourHoursOption, alwaysOption, neverOption])
+
+        return section
     }
 
     override func viewDidDisappear(_ animated: Bool) {

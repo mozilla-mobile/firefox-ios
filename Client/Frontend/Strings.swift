@@ -178,7 +178,7 @@ extension String {
                 public static let Description = MZLocalizedString("Settings.Home.Option.Description", value: "Choose content you see on the Firefox homepage.", comment: "In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for.", lastUpdated: .v39)
             }
 
-            struct StartAtHome {
+            public struct StartAtHome {
                 public static let SectionTitle = MZLocalizedString("Settings.Home.Option.StartAtHome.Title", value: "Opening screen", comment: "Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage.", lastUpdated: .v39)
                 public static let SectionDescription = MZLocalizedString("Settings.Home.Option.StartAtHome.Description", value: "Choose what you see when you return to Firefox.", comment: "In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do.", lastUpdated: .v39)
                 public static let AfterFourHours = MZLocalizedString("Settings.Home.Option.StartAtHome.AfterFourHours", value: "Homepage after four hours of inactivity", comment: "In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage after four hours of inactivity.", lastUpdated: .v39)
