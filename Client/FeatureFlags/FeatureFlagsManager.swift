@@ -163,7 +163,7 @@ class FeatureFlagsManager {
 
         let startAtHome = FlaggableFeature(withID: .startAtHome,
                                            and: profile,
-                                           enabledFor: [])
+                                           enabledFor: [.release, .beta, .developer])
         features[.startAtHome] = startAtHome
         
         let reportSiteIssue = FlaggableFeature(withID: .reportSiteIssue,

@@ -176,29 +176,19 @@ class Tab: NSObject {
         }
         return self.url
     }
-    
+
     var isFxHomeTab: Bool {
-        if let numberOfUrls = self.sessionData?.urls.count,
-           let offset = self.sessionData?.currentPage,
-           let url = self.sessionData?.urls[numberOfUrls - 1 + offset],
-           url.absoluteString.hasPrefix("internal://") {
-            return true
-        }
+        if let url = url, url.absoluteString.hasPrefix("internal://") { return true }
         return false
     }
     
     var isCustomHomeTab: Bool {
         guard let profile = self.browserViewController?.profile else { return false }
         
-        // Note: sessionData holds your navigation history on that tab, & sessionData.currentPage
-        //  is where you are currently. With numberOfUrls - 1 + offset, we're grabbing the url
-        //  for the last known position of navigation for that tab.
         if let customHomeUrl = HomeButtonHomePageAccessors.getHomePage(profile.prefs),
-           let numberOfUrls = self.sessionData?.urls.count,
-           let offset = self.sessionData?.currentPage,
-           let url = self.sessionData?.urls[numberOfUrls - 1 + offset],
-           let baseDomain = url.baseDomain,
            let customHomeBaseDomain = customHomeUrl.baseDomain,
+           let url = url,
+           let baseDomain = url.baseDomain,
            baseDomain.hasPrefix(customHomeBaseDomain) {
             return true
         }

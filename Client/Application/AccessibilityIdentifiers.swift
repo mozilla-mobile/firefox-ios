@@ -22,4 +22,14 @@ public struct AccessibilityIdentifiers {
         static let deleteCloseAllButton = "TabTrayController.deleteButton.closeAll"
         static let deleteCancelButton = "TabTrayController.deleteButton.cancel"
     }
+
+    struct Settings {
+        struct Homepage {
+            struct StartAtHome {
+                static let afterFourHours = "StartAtHomeAfterFourHours"
+                static let always = "StartAtHomeAlways"
+                static let disabled = "StartAtHomeDisabled"
+            }
+        }
+    }
 }

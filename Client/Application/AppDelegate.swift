@@ -104,7 +104,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let profile = getProfile(application)
 
         telemetry = TelemetryWrapper(profile: profile)
-        NSUserDefaultsPrefs(prefix: "profile").setBool(true, forKey: "isColdLaunch")
         FeatureFlagsManager.shared.initializeFeatures(with: profile)
         ThemeManager.shared.updateProfile(with: profile)
 
@@ -391,7 +390,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillResignActive(_ application: UIApplication) {
         updateTopSitesWidget()
         UserDefaults.standard.setValue(Date(), forKey: "LastActiveTimestamp")
-        NSUserDefaultsPrefs(prefix: "profile").setBool(false, forKey: "isColdLaunch")
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
