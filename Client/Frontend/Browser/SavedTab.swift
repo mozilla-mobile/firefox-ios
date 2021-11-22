@@ -18,7 +18,8 @@ class SavedTab: NSObject, NSCoding {
     var UUID: String?
     var tabGroupData: TabGroupData?
     var createdAt: Timestamp?
-    
+    var hasHomeScreenshot: Bool
+
     var jsonDictionary: [String: AnyObject] {
         let title: String = self.title ?? "null"
         let faviconURL: String = self.faviconURL ?? "null"
@@ -34,6 +35,7 @@ class SavedTab: NSObject, NSCoding {
             "UUID": self.UUID as AnyObject,
             "tabGroupData": self.tabGroupData as AnyObject,
             "createdAt": self.createdAt as AnyObject,
+            "hasHomeScreenshot": String(self.hasHomeScreenshot) as AnyObject
         ]
         
         if let sessionDataInfo = self.sessionData?.jsonDictionary {
@@ -43,7 +45,7 @@ class SavedTab: NSObject, NSCoding {
         return json
     }
     
-    init?(screenshotUUID: UUID?, isSelected: Bool, title: String?, isPrivate: Bool, faviconURL: String?, url: URL?, sessionData: SessionData?, uuid: String, tabGroupData: TabGroupData?, createdAt: Timestamp?) {
+    init?(screenshotUUID: UUID?, isSelected: Bool, title: String?, isPrivate: Bool, faviconURL: String?, url: URL?, sessionData: SessionData?, uuid: String, tabGroupData: TabGroupData?, createdAt: Timestamp?, hasHomeScreenshot: Bool) {
 
         self.screenshotUUID = screenshotUUID
         self.isSelected = isSelected
@@ -55,7 +57,8 @@ class SavedTab: NSObject, NSCoding {
         self.UUID = uuid
         self.tabGroupData = tabGroupData
         self.createdAt = createdAt
-        
+        self.hasHomeScreenshot = hasHomeScreenshot
+
         super.init()
     }
     
@@ -70,6 +73,7 @@ class SavedTab: NSObject, NSCoding {
         self.UUID = coder.decodeObject(forKey: "UUID") as? String
         self.tabGroupData = coder.decodeObject(forKey: "tabGroupData") as? TabGroupData
         self.createdAt = coder.decodeObject(forKey: "createdAt") as? Timestamp
+        self.hasHomeScreenshot = coder.decodeBool(forKey: "hasHomeScreenshot")
     }
     
     func encode(with coder: NSCoder) {
@@ -83,6 +87,7 @@ class SavedTab: NSObject, NSCoding {
         coder.encode(UUID, forKey: "UUID")
         coder.encode(tabGroupData, forKey: "tabGroupData")
         coder.encode(createdAt, forKey: "createdAt")
+        coder.encode(hasHomeScreenshot, forKey: "hasHomeScreenshot")
     }
 }
 

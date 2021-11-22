@@ -116,7 +116,7 @@ class Tab: NSObject {
     
     var adsTelemetryUrlList: [String] = [String]()
     var adsProviderName: String = ""
-    var isHomeScreenshot: Bool = false
+    var hasHomeScreenshot: Bool = false
 
     // To check if current URL is the starting page i.e. either blank page or internal page like topsites
     var isURLStartingPage: Bool {
@@ -688,11 +688,11 @@ class Tab: NSObject {
         // check if screenshot is all solid color
         if let val = screenshot, let avgColor = val.averageColor {
             let backgroundColor = LegacyThemeManager.instance.current.browser.background
-            if avgColor.isEqual(backgroundColor) {
+            guard !avgColor.isEqual(backgroundColor) else {
                 self.screenshot = nil
-            } else {
-                self.screenshot = screenshot
+                return
             }
+            self.screenshot = screenshot
         }
     }
 

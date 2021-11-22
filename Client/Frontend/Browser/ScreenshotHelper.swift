@@ -32,7 +32,7 @@ class ScreenshotHelper {
         if InternalURL(url)?.isAboutHomeURL ?? false {
             if let homePanel = controller?.firefoxHomeViewController {
                 let screenshot = homePanel.view.screenshot(quality: UIConstants.ActiveScreenshotQuality)
-                tab.isHomeScreenshot = true
+                tab.hasHomeScreenshot = true
                 tab.setScreenshot(screenshot)
                 TabEvent.post(.didSetScreenshot(isHome: true) , for: tab)
             }
@@ -44,7 +44,7 @@ class ScreenshotHelper {
             
             webView.takeSnapshot(with: configuration) { image, error in
                 if let image = image {
-                    tab.isHomeScreenshot = false
+                    tab.hasHomeScreenshot = false
                     tab.setScreenshot(image)
                     TabEvent.post(.didSetScreenshot(isHome: false) , for: tab)
                 } else if let error = error {

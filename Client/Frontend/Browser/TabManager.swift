@@ -38,7 +38,13 @@ extension TabManager: TabEventHandler {
         store.preserveTabs(tabs, selectedTab: selectedTab)
     }
     
-    func tabDidSetScreenshot(_ tab: Tab, isHomeScreenshot: Bool) {
+    func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {
+        guard tab.screenshot != nil else {
+            // Remove screenshot from image store so we can use favicon
+            // when a screenshot isn't available for the associated tab url
+            removeScreenshot(tab: tab)
+            return
+        }
         storeScreenshot(tab: tab)
     }
 }
@@ -226,6 +232,11 @@ class TabManager: NSObject, FeatureFlagsProtocol {
 
     func storeScreenshot(tab: Tab) {
         store.preserveScreenshot(forTab: tab)
+        storeChanges()
+    }
+    
+    func removeScreenshot(tab: Tab) {
+        store.removeScreenshot(forTab: tab)
         storeChanges()
     }
 

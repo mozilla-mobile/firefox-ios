@@ -933,10 +933,10 @@ class TabCell: UICollectionViewCell, TabTrayCell {
         }
         
         if let url = tab.url, let tabScreenshot = tab.screenshot, (url.absoluteString.starts(with: "internal") &&
-            tab.isHomeScreenshot) {
+            tab.hasHomeScreenshot) {
             screenshotView.image = tabScreenshot
         } else if let url = tab.url, (!url.absoluteString.starts(with: "internal") &&
-            tab.isHomeScreenshot) {
+            tab.hasHomeScreenshot) {
             if let domainUrl = self.getTabDomainUrl(tab: tab) {
                 // Set Favicon from domain url when screenshot from tab is empty
                 self.screenshotView.setImageAndBackground(forIcon: tab.displayFavicon, website: domainUrl) {}

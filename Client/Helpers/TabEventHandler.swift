@@ -60,7 +60,7 @@ protocol TabEventHandler: AnyObject {
     func tabDidClose(_ tab: Tab)
     func tabDidToggleDesktopMode(_ tab: Tab)
     func tabDidChangeContentBlocking(_ tab: Tab)
-    func tabDidSetScreenshot(_ tab: Tab, isHomeScreenshot: Bool)
+    func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool)
 }
 
 // Provide default implmentations, because we don't want to litter the code with
@@ -76,7 +76,7 @@ extension TabEventHandler {
     func tabDidClose(_ tab: Tab) {}
     func tabDidToggleDesktopMode(_ tab: Tab) {}
     func tabDidChangeContentBlocking(_ tab: Tab) {}
-    func tabDidSetScreenshot(_ tab: Tab, isHomeScreenshot: Bool) {}
+    func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {}
 }
 
 enum TabEventLabel: String {
@@ -137,8 +137,8 @@ enum TabEvent {
             handler.tabDidToggleDesktopMode(tab)
         case .didChangeContentBlocking:
             handler.tabDidChangeContentBlocking(tab)
-        case .didSetScreenshot(let isHomeScreenshot):
-            handler.tabDidSetScreenshot(tab, isHomeScreenshot: isHomeScreenshot)
+        case .didSetScreenshot(let hasHomeScreenshot):
+            handler.tabDidSetScreenshot(tab, hasHomeScreenshot: hasHomeScreenshot)
         }
     }
 }

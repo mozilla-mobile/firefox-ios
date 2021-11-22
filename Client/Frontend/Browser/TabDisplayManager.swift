@@ -709,7 +709,7 @@ extension TabDisplayManager: TabEventHandler {
         updateCellFor(tab: tab, selectedTabChanged: false)
     }
     
-    func tabDidSetScreenshot(_ tab: Tab, isHomeScreenshot: Bool) {
+    func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {
         updateCellFor(tab: tab, selectedTabChanged: false)
     }
 
