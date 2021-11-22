@@ -90,16 +90,20 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
     private func createJumpList(from tabs: [Tab], and groups: [ASGroup<Tab>]? = nil) -> JumpList {
         let recentGroup = groups?.first
         let groupCount = recentGroup != nil ? 1 : 0
-        let recentTabs = filter(tabs: tabs, usingGroupCount: groupCount)
+        let recentTabs = filter(tabs: tabs, from: recentGroup, usingGroupCount: groupCount)
 
         return JumpList(group: recentGroup, tabs: recentTabs)
     }
 
-    private func filter(tabs: [Tab], usingGroupCount groupCount: Int) -> [Tab] {
+    private func filter(tabs: [Tab], from recentGroup: ASGroup<Tab>?, usingGroupCount groupCount: Int) -> [Tab] {
         var recentTabs = [Tab]()
         let maxItemCount = layoutVariables.maxItemsToDisplay - groupCount
 
         for tab in tabs {
+            // We must make sure to not include any 'solo' tabs that are also part of a group
+            // because they should not show up in the Jump Back In section.
+            if let recentGroup = recentGroup, recentGroup.groupedItems.contains(tab) { continue }
+
             recentTabs.append(tab)
             // We are only showing one group in Jump Back in, so adjust count accordingly
             if recentTabs.count == maxItemCount { break }
