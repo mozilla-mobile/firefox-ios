@@ -741,11 +741,12 @@ extension TabManager {
     /// should perform its function.
     private func shouldStartAtHome() -> Bool {
         guard let isColdLaunch = NSUserDefaultsPrefs(prefix: "profile").boolForKey("isColdLaunch"),
-              isColdLaunch,
               featureFlags.isFeatureActiveForBuild(.startAtHome),
               let setting: StartAtHomeSetting = featureFlags.userPreferenceFor(.startAtHome),
               setting != .disabled
         else { return false }
+
+        if isColdLaunch { return true }
 
         let lastActiveTimestamp = UserDefaults.standard.object(forKey: "LastActiveTimestamp") as? Date ?? Date()
         let dateComponents = Calendar.current.dateComponents([.hour, .second],
@@ -763,7 +764,7 @@ extension TabManager {
             timeToOpenNewHome = 5
         }
 
-        return timeSinceLastActivity >= timeToOpenNewHome //|| coldLaunch
+        return timeSinceLastActivity >= timeToOpenNewHome
     }
 
     /// Looks to see if the user already has a homepage tab open (as per their preferences)
