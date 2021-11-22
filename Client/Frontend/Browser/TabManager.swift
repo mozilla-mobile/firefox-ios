@@ -508,13 +508,13 @@ class TabManager: NSObject, FeatureFlagsProtocol {
 
         tab.close()
 
-        if flushToDisk {
-            storeChanges()
-        }
-
         // Notify of tab removal
         delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: store.isRestoringTabs) }
         TabEvent.post(.didClose, for: tab)
+
+        if flushToDisk {
+            storeChanges()
+        }
     }
 
     // Select the most recently visited tab, IFF it is also the parent tab of the closed tab.
