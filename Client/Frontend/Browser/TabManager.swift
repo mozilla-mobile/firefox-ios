@@ -720,7 +720,7 @@ extension TabManager {
     /// Public interface for checking whether the StartAtHome Feature should run.
     public func startAtHomeCheck() {
         guard !AppConstants.IsRunningTest,
-              !DebugSettingsBundleOptions.skipSessionRestore,
+              !DebugSettingsBundleOptions.skipSessionRestore
         else { return }
 
 
@@ -740,9 +740,9 @@ extension TabManager {
     /// the user's last activity and whether, based on their settings, Start at Home feature
     /// should perform its function.
     private func shouldStartAtHome() -> Bool {
-//        guard let isColdLaunch = NSUserDefaultsPrefs(prefix: "profile").boolForKey("isColdLaunch"),
-//              isColdLaunch,
-        guard featureFlags.isFeatureActiveForBuild(.startAtHome),
+        guard let isColdLaunch = NSUserDefaultsPrefs(prefix: "profile").boolForKey("isColdLaunch"),
+              isColdLaunch,
+              featureFlags.isFeatureActiveForBuild(.startAtHome),
               let setting: StartAtHomeSetting = featureFlags.userPreferenceFor(.startAtHome),
               setting != .disabled
         else { return false }
@@ -793,7 +793,9 @@ extension TabManager {
         return nil
     }
 
-    /// <#Description#>
+    /// Provides a tab on which to open if the start at home feature is enabled. This tab
+    /// can be an existing one, or, if no suitable candidate exists, a new one.
+    ///
     /// - Parameters:
     ///   - existingTab: A `Tab` that is the user's homepage, that is already open
     ///   - privateMode: Whether the last session was private or not, so that, if there's

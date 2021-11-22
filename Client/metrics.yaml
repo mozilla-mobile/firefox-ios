@@ -1008,7 +1008,7 @@ preferences:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-01-01"
+    expires: "2022-06-01"
   new_tab_experience:
     type: string
     description: |
