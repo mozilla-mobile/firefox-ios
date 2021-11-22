@@ -166,7 +166,7 @@ private func optionalIntegerHeader(_ input: AnyObject?) -> Int64? {
     }
 
     if let val = input as? String {
-        return Scanner(string: val).scanLongLong()
+        return Scanner(string: val).scanInt64()
     }
 
     if let val: Double = input as? Double {
@@ -188,7 +188,7 @@ private func optionalUIntegerHeader(_ input: AnyObject?) -> Timestamp? {
     }
 
     if let val = input as? String {
-        return Scanner(string: val).scanUnsignedLongLong()
+        return Scanner(string: val).scanUInt64()
     }
 
     if let val: Double = input as? Double {
