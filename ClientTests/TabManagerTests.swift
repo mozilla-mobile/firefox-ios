@@ -65,7 +65,7 @@ open class MockTabManagerDelegate: TabManagerDelegate {
         if let methodCheck = spy.method, spy.functionName == name {
             methodCheck(tabs)
         } else if spy.functionName != name {
-            XCTFail("Spy function name \(spy.functionName) didn't had the same name as the first element in the queue \(name)")
+            XCTFail("Spy function name \(spy.functionName) didn't had the same name as the first element in the queue \(name)", file: spy.file, line: spy.line)
         }
         methodCatchers.removeFirst()
     }
