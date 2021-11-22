@@ -29,6 +29,9 @@
 "About.safariBullet1" = "Bloker sporings-mekanismer for at beskytte dit privatliv bedre";
 
 /* Label on About screen */
+"About.safariBullet2" = "Bloker webskrifttyper, så sider indlæses hurtigere";
+
+/* Label on About screen */
 "About.safariBulletHeader" = "Brug som udvidelse til Safari:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
@@ -310,8 +313,17 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Autofuldfør URL";
 
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Blokering af andre former for indholdssporing kan forhindre nogle videoer og websider i at fungere.";
+
 /* Button label for declining Content blocker alert */
 "Settings.blockOtherNo2" = "Annuller";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes2" = "Bloker indholdssporing";
+
+/* Dark theme option in settings menu */
+"Settings.darkTheme" = "Mørkt";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ sender det indtastede i adresselinjen til den valgte søgetjeneste.";
@@ -327,6 +339,12 @@
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Læs mere.";
+
+/* Light theme option in settings menu */
+"Settings.lightTheme" = "Lyst";
+
+/* Manual value for theme section in settings menu */
+"Settings.manualTheme" = "Manuelt";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "Vurder %@";
@@ -406,8 +424,14 @@
 /* Label for the checkbox to toggle Analytics trackers */
 "Settings.toggleBlockAnalytics2" = "Analyse";
 
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Blokér webskrifttyper";
+
 /* Label for the checkbox to toggle Other trackers */
 "Settings.toggleBlockOther2" = "Indhold";
+
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "Sociale";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Brug Face ID til at låse appen op";
@@ -441,6 +465,9 @@
 
 /* Status on for tracking protection in settings screen */
 "Settings.trackingProtectionOn" = "Til";
+
+/* Value for theme toggle in settings menu */
+"Settings.useSystemTheme" = "Brug systemets lys-/mørk-tilstand";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Nyheder";
@@ -526,11 +553,44 @@
 /* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
 "Tip.Release.Description" = "Læs mere om denne og andre opdateringer til %@.";
 
+/* Text for a label that indicates the title for release tip. */
+"Tip.Release.Title" = "Vi har fået et friskt, nyt udseende!";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "Sidehandlinger > Bed om desktop-version";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "Vil du se den fulde desktop-version af et websted?";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "%@ sporings-mekanismer blokeret indtil videre";
+
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "Du browser. %@ blokerer.";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "Vælg “Føj til genveje” fra %@-menuen";
+
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "Opret genveje til de websteder, du besøger mest:";
+
 /* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
 "Tip.SiriErase.Description" = "Tilføj Siri-genvej";
 
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.SiriErase.Title" = "“Siri, slet min %@-session.”";
+
 /* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
 "Tip.SiriFavorite.Description" = "Tilføj Siri-genvej";
+
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "“Siri, åbn min yndlingsside.”";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "Prøv at deaktivere beskyttelse mod sporing";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "Mangler siden indhold eller opfører den sig underligt?";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Brug Touch ID for at vende tilbage til %@";
@@ -588,6 +648,9 @@
 
 /* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
 "trackingProtection.trackersBlockedLabel" = "Sporings-mekanismer blokeret siden %@";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "Sporings-mekanismer og scripts, der skal blokeres";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Tilføj link til autofuldførelse";
