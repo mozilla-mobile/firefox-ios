@@ -727,8 +727,7 @@ extension TabDisplayManager: TabEventHandler {
             guard let index = self?.dataStore.index(of: tab) else { return }
             let section = self?.tabDisplayType == .TopTabTray ? 0 : TabDisplaySection.regularTabs.rawValue
 
-            var indexPaths = [IndexPath]()
-            indexPaths.append(IndexPath(row: index, section: section))
+            var indexPaths = [IndexPath(row: index, section: section)]
 
             if selectedTabChanged {
                 self?.tabDisplayer?.focusSelectedTab()
@@ -743,16 +742,25 @@ extension TabDisplayManager: TabEventHandler {
             }
 
             for indexPath in indexPaths {
-                guard let cell = self?.collectionView.cellForItem(at: indexPath), let tab = self?.dataStore.at(indexPath.row) else {
-                    return
-                }
+                self?.refreshCell(atIndexPath: indexPath)
 
-                let isSelected = (indexPath.row == index && tab == self?.tabManager.selectedTab)
-                if let tabCell = cell as? TabTrayCell {
-                    tabCell.configureWith(tab: tab, isSelected: isSelected)
-                }
+                // Due to https://github.com/mozilla-mobile/firefox-ios/issues/9526 - Refresh next cell to avoid two selected cells
+                let nextTabIndex = IndexPath(row: indexPath.row + 1, section: indexPath.section)
+                self?.refreshCell(atIndexPath: nextTabIndex, forceUpdate: false)
             }
         }
+    }
+
+    private func refreshCell(atIndexPath indexPath: IndexPath, forceUpdate: Bool = true) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? TabTrayCell, let tab = dataStore.at(indexPath.row) else {
+            return
+        }
+
+        // Only update from nextTabIndex if needed
+        guard forceUpdate || cell.isSelectedTab else { return }
+
+        let isSelected = tab == tabManager.selectedTab
+        cell.configureWith(tab: tab, isSelected: isSelected)
     }
 }
 
