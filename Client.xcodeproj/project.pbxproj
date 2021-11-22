@@ -780,7 +780,6 @@
 		E65075A31E37F7AB006961AC /* KeychainWrapperExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075741E37F7AB006961AC /* KeychainWrapperExtensions.swift */; };
 		E65075A41E37F7AB006961AC /* NSCharacterSetExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075751E37F7AB006961AC /* NSCharacterSetExtensions.swift */; };
 		E65075A51E37F7AB006961AC /* NSFileManagerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075761E37F7AB006961AC /* NSFileManagerExtensions.swift */; };
-		E65075A71E37F7AB006961AC /* ScannerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075781E37F7AB006961AC /* ScannerExtensions.swift */; };
 		E65075A91E37F7AB006961AC /* URLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650757A1E37F7AB006961AC /* URLExtensions.swift */; };
 		E65075AA1E37F7AB006961AC /* URLProtectionSpaceExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650757B1E37F7AB006961AC /* URLProtectionSpaceExtensions.swift */; };
 		E65075AB1E37F7AB006961AC /* SetExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650757C1E37F7AB006961AC /* SetExtensions.swift */; };
@@ -3867,7 +3866,6 @@
 		E65075741E37F7AB006961AC /* KeychainWrapperExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainWrapperExtensions.swift; sourceTree = "<group>"; };
 		E65075751E37F7AB006961AC /* NSCharacterSetExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSCharacterSetExtensions.swift; sourceTree = "<group>"; };
 		E65075761E37F7AB006961AC /* NSFileManagerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSFileManagerExtensions.swift; sourceTree = "<group>"; };
-		E65075781E37F7AB006961AC /* ScannerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScannerExtensions.swift; sourceTree = "<group>"; };
 		E650757A1E37F7AB006961AC /* URLExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLExtensions.swift; sourceTree = "<group>"; };
 		E650757B1E37F7AB006961AC /* URLProtectionSpaceExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLProtectionSpaceExtensions.swift; sourceTree = "<group>"; };
 		E650757C1E37F7AB006961AC /* SetExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetExtensions.swift; sourceTree = "<group>"; };
@@ -5854,7 +5852,6 @@
 				E65075741E37F7AB006961AC /* KeychainWrapperExtensions.swift */,
 				E65075751E37F7AB006961AC /* NSCharacterSetExtensions.swift */,
 				E65075761E37F7AB006961AC /* NSFileManagerExtensions.swift */,
-				E65075781E37F7AB006961AC /* ScannerExtensions.swift */,
 				E650757A1E37F7AB006961AC /* URLExtensions.swift */,
 				E650757B1E37F7AB006961AC /* URLProtectionSpaceExtensions.swift */,
 				E650757C1E37F7AB006961AC /* SetExtensions.swift */,
@@ -7661,7 +7658,6 @@
 				D053D6742211CD53006C6B64 /* KeychainStore.swift in Sources */,
 				E65075C01E37F7AB006961AC /* WeakList.swift in Sources */,
 				E65075AE1E37F7AB006961AC /* UIImageExtensions.swift in Sources */,
-				E65075A71E37F7AB006961AC /* ScannerExtensions.swift in Sources */,
 				C8CFF4E422F9FDB6002CC6BD /* effective_tld_names.swift in Sources */,
 				E65075A21E37F7AB006961AC /* HexExtensions.swift in Sources */,
 				288A2DB61AB8B38D0023ABC3 /* Result.swift in Sources */,

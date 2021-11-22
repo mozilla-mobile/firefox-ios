@@ -22,7 +22,7 @@ extension UIColor {
             alpha: 1)
     }
 
-    public convenience init(rgba: UInt32) {
+    public convenience init(rgba: UInt64) {
         self.init(
             red: CGFloat((rgba & 0xFF000000) >> 24) / 255.0,
             green: CGFloat((rgba & 0x00FF0000) >> 16)  / 255.0,
@@ -32,8 +32,8 @@ extension UIColor {
     }
 
     public convenience init(colorString: String) {
-        var colorInt: UInt32 = 0
-        Scanner(string: colorString).scanHexInt32(&colorInt)
+        var colorInt: UInt64 = 0
+        Scanner(string: colorString).scanHexInt64(&colorInt)
         self.init(rgb: (Int) (colorInt))
     }
 
