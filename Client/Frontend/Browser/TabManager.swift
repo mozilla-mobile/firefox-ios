@@ -740,13 +740,10 @@ extension TabManager {
     /// the user's last activity and whether, based on their settings, Start at Home feature
     /// should perform its function.
     private func shouldStartAtHome() -> Bool {
-        guard let isColdLaunch = NSUserDefaultsPrefs(prefix: "profile").boolForKey("isColdLaunch"),
-              featureFlags.isFeatureActiveForBuild(.startAtHome),
+        guard featureFlags.isFeatureActiveForBuild(.startAtHome),
               let setting: StartAtHomeSetting = featureFlags.userPreferenceFor(.startAtHome),
               setting != .disabled
         else { return false }
-
-        if isColdLaunch { return true }
 
         let lastActiveTimestamp = UserDefaults.standard.object(forKey: "LastActiveTimestamp") as? Date ?? Date()
         let dateComponents = Calendar.current.dateComponents([.hour, .second],
