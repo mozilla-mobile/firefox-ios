@@ -521,10 +521,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         }
 
         let deleteAction = UIContextualAction(style: .destructive, title: .HistoryPanelDelete) { [weak self] (_, _, completion) in
-            guard let strongSelf = self else {
-                completion(false)
-                return
-            }
+            guard let strongSelf = self else { completion(false); return }
 
             strongSelf.removeHistoryForURLAtIndexPath(indexPath: indexPath)
             completion(true)

@@ -381,10 +381,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive, title: .DownloadsPanelDeleteTitle) { [weak self] (_, _, completion) in
-            guard let strongSelf = self else {
-                completion(false)
-                return
-            }
+            guard let strongSelf = self else { completion(false); return }
 
             if let downloadedFile = strongSelf.downloadedFileForIndexPath(indexPath),
                strongSelf.deleteDownloadedFile(downloadedFile) {
@@ -401,10 +398,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
 
         let shareAction = UIContextualAction(style: .normal, title: .DownloadsPanelShareTitle) { [weak self] (_, view, completion) in
-            guard let strongSelf = self else {
-                completion(false)
-                return
-            }
+            guard let strongSelf = self else { completion(false); return }
 
             view.backgroundColor = strongSelf.view.tintColor
             if let downloadedFile = strongSelf.downloadedFileForIndexPath(indexPath) {

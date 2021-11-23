@@ -459,10 +459,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive, title: .BookmarksPanelDeleteTableAction) { [weak self] (_, _, completion) in
-            guard let strongSelf = self else {
-                completion(false)
-                return
-            }
+            guard let strongSelf = self else { completion(false); return }
 
             strongSelf.deleteBookmarkNodeAtIndexPath(indexPath)
             TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .bookmark, value: .bookmarksPanel, extras: ["gesture": "swipe"])
