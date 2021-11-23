@@ -1032,14 +1032,7 @@ class TabCell: UICollectionViewCell, TabTrayCell {
         let shadowPath = CGRect(width: layer.frame.width + (TabCell.borderWidth * 2), height: layer.frame.height + (TabCell.borderWidth * 2))
         layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: GridTabTrayControllerUX.CornerRadius+TabCell.borderWidth).cgPath
     }
-    
-    func getTabDomainUrl(tab: Tab) -> URL? {
-        guard tab.url != nil else {
-            return tab.sessionData?.urls.last?.domainURL
-        }
-        return tab.url?.domainURL
-    }
-    
+
     func setFaviconImage(for tab: Tab, with imageView: UIImageView) {
         if let url = tab.url?.domainURL ?? tab.sessionData?.urls.last?.domainURL {
             imageView.setImageAndBackground(forIcon: tab.displayFavicon, website: url) {}
