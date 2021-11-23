@@ -101,7 +101,7 @@ extension BrowserViewController: WKUIDelegate {
         if let tab = tabManager[webView] {
             // Need to wait here in case we're waiting for a pending `window.open()`.
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
-                self.tabManager.removeTabAndUpdateSelectedIndex(tab)
+                self.tabManager.removeTab(tab)
             }
         }
     }
@@ -418,7 +418,7 @@ extension BrowserViewController: WKNavigationDelegate {
                     TimerSnackBar.showAppStoreConfirmationBar(forTab: tab, appStoreURL: url) { _ in
                         // If a new window was opened for this URL (it will have no history), close it.
                         if tab.historyList.isEmpty {
-                            self.tabManager.removeTabAndUpdateSelectedIndex(tab)
+                            self.tabManager.removeTab(tab)
                         }
                     }
                 }

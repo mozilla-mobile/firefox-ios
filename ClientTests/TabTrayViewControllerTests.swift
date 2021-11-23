@@ -46,7 +46,7 @@ class TabTrayViewControllerTests: XCTestCase {
         NotificationCenter.default.addObserver(forName: .TabClosed, object: nil, queue: nil) { notification in
             expectation?.fulfill()
         }
-        manager.removeTabAndUpdateSelectedIndex(tabToRemove)
+        manager.removeTab(tabToRemove)
         waitForExpectations(timeout: 1.0, handler: nil)
 
         XCTAssertEqual(tabTray.viewModel.normalTabsCount, "1")

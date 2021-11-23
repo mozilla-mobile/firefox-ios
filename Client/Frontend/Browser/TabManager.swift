@@ -278,9 +278,9 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         return profile.prefs.boolForKey("settings.closePrivateTabs") ?? false
     }
 
-    //Called by other classes to signal that they are entering/exiting private mode
-    //This is called by TabTrayVC when the private mode button is pressed and BEFORE we've switched to the new mode
-    //we only want to remove all private tabs when leaving PBM and not when entering.
+    // Called by other classes to signal that they are entering/exiting private mode
+    // This is called by TabTrayVC when the private mode button is pressed and BEFORE we've switched to the new mode
+    // we only want to remove all private tabs when leaving PBM and not when entering.
     func willSwitchTabMode(leavingPBM: Bool) {
         recentlyClosedForUndo.removeAll()
 
@@ -457,9 +457,9 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         return result
     }
 
-    func removeTabAndUpdateSelectedIndex(_ tab: Tab) {
+    func removeTab(_ tab: Tab) {
         guard let index = tabs.firstIndex(where: { $0 === tab }) else { return }
-        removeTab(tab, flushToDisk: true, notify: true)
+        removeTab(tab, flushToDisk: true)
         updateIndexAfterRemovalOf(tab, deletedIndex: index)
         hideNetworkActivitySpinner()
 
@@ -495,9 +495,11 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         }
     }
 
-    /// - Parameter notify: if set to true, will call the delegate after the tab
-    ///   is removed.
-    fileprivate func removeTab(_ tab: Tab, flushToDisk: Bool, notify: Bool) {
+    /// Remove a tab, will notify delegate of the tab removal
+    /// - Parameters:
+    ///   - tab: the tab to remove
+    ///   - flushToDisk: Will store changes if true, and update selected index
+    fileprivate func removeTab(_ tab: Tab, flushToDisk: Bool) {
         assert(Thread.isMainThread)
 
         guard let removalIndex = tabs.firstIndex(where: { $0 === tab }) else {
@@ -515,10 +517,9 @@ class TabManager: NSObject, FeatureFlagsProtocol {
 
         tab.close()
 
-        if notify {
-            delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: store.isRestoringTabs) }
-            TabEvent.post(.didClose, for: tab)
-        }
+        // Notify of tab removal
+        delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: store.isRestoringTabs) }
+        TabEvent.post(.didClose, for: tab)
 
         if flushToDisk {
             storeChanges()
@@ -552,7 +553,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
 
     func removeTabsAndAddNormalTab(_ tabs: [Tab]) {
         for tab in tabs {
-            self.removeTab(tab, flushToDisk: false, notify: true)
+            self.removeTab(tab, flushToDisk: false)
         }
         if normalTabs.isEmpty {
             selectTab(addTab())
@@ -562,7 +563,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
 
     func removeTabsWithoutToast(_ tabs: [Tab]) {
         for tab in tabs {
-            self.removeTab(tab, flushToDisk: false, notify: true)
+            self.removeTab(tab, flushToDisk: false)
         }
     }
 
@@ -611,7 +612,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
 
         // In non-private mode, delete all tabs will automatically create a tab
         if let tab = tabs.first, !tab.isPrivate {
-            removeTabAndUpdateSelectedIndex(tab)
+            removeTab(tab)
         }
 
         selectTab(selectedTab)
@@ -622,9 +623,9 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         recentlyClosedForUndo.removeAll()
     }
 
-    func removeTabs(_ tabs: [Tab], shouldNotify: Bool = true) {
+    func removeTabs(_ tabs: [Tab]) {
         for tab in tabs {
-            self.removeTab(tab, flushToDisk: false, notify: shouldNotify)
+            self.removeTab(tab, flushToDisk: false)
         }
         storeChanges()
     }
