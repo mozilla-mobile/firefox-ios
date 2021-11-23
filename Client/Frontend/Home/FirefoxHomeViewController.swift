@@ -28,23 +28,6 @@ struct FirefoxHomeUX {
     static let customizeHomeHeight: CGFloat = 100
 }
 
-struct FxHomeAccessibilityIdentifiers {
-    struct MoreButtons {
-        static let recentlySaved = "recentlySavedSectionMoreButton"
-        static let jumpBackIn = "jumpBackInSectionMoreButton"
-        static let historyHighlights = "historyHighlightsSectionMoreButton"
-    }
-
-    struct SectionTitles {
-        static let jumpBackIn = "jumpBackInTitle"
-        static let recentlySaved = "jumpBackInTitle"
-        static let historyHighlights = "historyHightlightsTitle"
-        static let pocket = "pocketTitle"
-        static let library = "libraryTitle"
-        static let topSites = "topSitesTitle"
-    }
-}
-
 struct FxHomeDevStrings {
     struct GestureRecognizers {
         static let dismissOverlay = "dismissOverlay"
@@ -156,6 +139,8 @@ extension HomePanelContextMenu {
 // MARK: - HomeVC
 
 class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureFlagsProtocol {
+    typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
+
     weak var homePanelDelegate: HomePanelDelegate?
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     fileprivate var hasPresentedContextualHint = false
@@ -641,7 +626,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                 headerView.moreButton.isHidden = false
                 headerView.moreButton.setTitle(.PocketMoreStoriesText, for: .normal)
                 headerView.moreButton.addTarget(self, action: #selector(showMorePocketStories), for: .touchUpInside)
-                headerView.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.pocket
+                headerView.titleLabel.accessibilityIdentifier = a11y.SectionTitles.pocket
                 return headerView
 
             case .jumpBackIn:
@@ -654,8 +639,8 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                 headerView.moreButton.isHidden = false
                 headerView.moreButton.setTitle(.RecentlySavedShowAllText, for: .normal)
                 headerView.moreButton.addTarget(self, action: #selector(openTabTray), for: .touchUpInside)
-                headerView.moreButton.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.MoreButtons.jumpBackIn
-                headerView.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.jumpBackIn
+                headerView.moreButton.accessibilityIdentifier = a11y.MoreButtons.jumpBackIn
+                headerView.titleLabel.accessibilityIdentifier = a11y.SectionTitles.jumpBackIn
                 let attributes = collectionView.layoutAttributesForItem(at: indexPath)
                     if let frame = attributes?.frame, headerView.convert(frame, from: collectionView).height > 1 {
                         // Using a timer for the first presentation of contextual hint due to many reloads that happen on the collection view. Invalidating the timer prevents from showing contextual hint at the wrong position.
@@ -673,8 +658,8 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                 headerView.moreButton.isHidden = false
                 headerView.moreButton.setTitle(.RecentlySavedShowAllText, for: .normal)
                 headerView.moreButton.addTarget(self, action: #selector(openBookmarks), for: .touchUpInside)
-                headerView.moreButton.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.MoreButtons.recentlySaved
-                headerView.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.recentlySaved
+                headerView.moreButton.accessibilityIdentifier = a11y.MoreButtons.recentlySaved
+                headerView.titleLabel.accessibilityIdentifier = a11y.SectionTitles.recentlySaved
                 return headerView
 
             case .historyHighlights:
@@ -686,17 +671,17 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                 headerView.moreButton.isHidden = false
                 headerView.moreButton.setTitle(.RecentlySavedShowAllText, for: .normal)
                 headerView.moreButton.addTarget(self, action: #selector(openHistory), for: .touchUpInside)
-                headerView.moreButton.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.MoreButtons.historyHighlights
-                headerView.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.historyHighlights
+                headerView.moreButton.accessibilityIdentifier = a11y.MoreButtons.historyHighlights
+                headerView.titleLabel.accessibilityIdentifier = a11y.SectionTitles.historyHighlights
                 return headerView
 
             case .topSites:
-                headerView.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.topSites
+                headerView.titleLabel.accessibilityIdentifier = a11y.SectionTitles.topSites
                 headerView.moreButton.isHidden = true
                 return headerView
             case .libraryShortcuts:
                 headerView.moreButton.isHidden = true
-                headerView.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.library
+                headerView.titleLabel.accessibilityIdentifier = a11y.SectionTitles.library
                 return headerView
             case .customizeHome:
                 headerView.moreButton.isHidden = true
@@ -1155,7 +1140,7 @@ extension FirefoxHomeViewController: DataObserverDelegate {
 
 extension FirefoxHomeViewController {
     @objc func openTabTray(_ sender: UIButton) {
-        if sender.accessibilityIdentifier == FxHomeAccessibilityIdentifiers.MoreButtons.jumpBackIn {
+        if sender.accessibilityIdentifier == a11y.MoreButtons.jumpBackIn {
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .tap,
                                          object: .firefoxHomepage,
@@ -1168,7 +1153,7 @@ extension FirefoxHomeViewController {
     @objc func openBookmarks(_ sender: UIButton) {
         homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .bookmarks)
 
-        if sender.accessibilityIdentifier == FxHomeAccessibilityIdentifiers.MoreButtons.recentlySaved {
+        if sender.accessibilityIdentifier == a11y.MoreButtons.recentlySaved {
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .tap,
                                          object: .firefoxHomepage,
@@ -1185,7 +1170,7 @@ extension FirefoxHomeViewController {
 
     @objc func openHistory(_ sender: UIButton) {
         homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .history)
-        if sender.accessibilityIdentifier == FxHomeAccessibilityIdentifiers.MoreButtons.historyHighlights {
+        if sender.accessibilityIdentifier == a11y.MoreButtons.historyHighlights {
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .tap,
                                          object: .firefoxHomepage,
