@@ -1158,14 +1158,14 @@ app:
     BITRISE_NIGHTLY_VERSION: '9000'
   - opts:
       is_expand: false
-    BITRISE_RELEASE_VERSION: '95'
+    BITRISE_RELEASE_VERSION: '40'
   - opts:
       is_expand: false
-    BITRISE_BETA_VERSION: '95'
+    BITRISE_BETA_VERSION: '40'
 trigger_map:
 - push_branch: main
   workflow: RunUnitTests
-- push_branch: v39.0
+- push_branch: v40.0
   workflow: Deploy_Prod_Beta
 - pull_request_target_branch: main
   workflow: RunUnitTests
