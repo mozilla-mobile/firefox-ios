@@ -50,7 +50,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
             return [customizeFirefoxHomeSection, customizeHomePageSection]
         }
 
-        return [customizeFirefoxHomeSection, customizeHomePageSection, startAtHomeSection]
+        return [startAtHomeSection, customizeFirefoxHomeSection, customizeHomePageSection]
     }
 
     private func customizeHomeSettingSection() -> SettingSection {
@@ -158,7 +158,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
 
         let section = SettingSection(title: NSAttributedString(string: .Settings.Homepage.StartAtHome.SectionTitle),
                                      footerTitle: NSAttributedString(string: .Settings.Homepage.StartAtHome.SectionDescription),
-                                     children: [afterFourHoursOption, alwaysOption, neverOption])
+                                     children: [alwaysOption, neverOption, afterFourHoursOption])
 
         return section
     }
