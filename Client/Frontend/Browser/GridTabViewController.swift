@@ -985,7 +985,7 @@ class TabCell: UICollectionViewCell, TabTrayCell {
         } else if let tabScreenshot = tab.screenshot {
             screenshotView.image = tabScreenshot
 
-        // Favicon or letter when tab screenshot isn't available
+        // Favicon or letter image when tab screenshot isn't available
         } else {
             setFaviconImage(for: tab, with: smallFaviconView)
         }
@@ -1046,13 +1046,6 @@ class TabCell: UICollectionViewCell, TabTrayCell {
             faviconBG.isHidden = false
             screenshotView.image = nil
         }
-//        let sessionDomainUrl = tab.sessionData?.urls.last?.domainURL
-//        if let url = tab.url?.domainURL {
-//            // Set Favicon from domain url when screenshot from tab is empty
-//            imageView.setImageAndBackground(forIcon: tab.displayFavicon, website: url) {}
-//            faviconBG.isHidden = false
-//            screenshotView.image = nil
-//        }
     }
 }
 
