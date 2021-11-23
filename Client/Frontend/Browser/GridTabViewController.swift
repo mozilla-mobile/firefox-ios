@@ -971,26 +971,23 @@ class TabCell: UICollectionViewCell, TabTrayCell {
 
         faviconBG.isHidden = true
 
+        // Regular screenshot for home or internal url when tab has home screenshot
         if let url = tab.url, let tabScreenshot = tab.screenshot, (url.absoluteString.starts(with: "internal") &&
             tab.hasHomeScreenshot) {
             screenshotView.image = tabScreenshot
+
+        // Favicon or letter image when home screenshot is present for a regular (non-internal) url
         } else if let url = tab.url, (!url.absoluteString.starts(with: "internal") &&
             tab.hasHomeScreenshot) {
-            if let domainUrl = self.getTabDomainUrl(tab: tab) {
-                // Set Favicon from domain url when screenshot from tab is empty
-                self.smallFaviconView.setImageAndBackground(forIcon: tab.displayFavicon, website: domainUrl) {}
-                faviconBG.isHidden = false
-                screenshotView.image = nil
-            }
+            setFaviconImage(for: tab, with: smallFaviconView)
+
+        // Tab screenshot when available
         } else if let tabScreenshot = tab.screenshot {
             screenshotView.image = tabScreenshot
+
+        // Favicon or letter when tab screenshot isn't available
         } else {
-            if let domainUrl = self.getTabDomainUrl(tab: tab) {
-                // Set Favicon from domain url when screenshot from tab is empty
-                self.smallFaviconView.setImageAndBackground(forIcon: tab.displayFavicon, website: domainUrl) {}
-                faviconBG.isHidden = false
-                screenshotView.image = nil
-            }
+            setFaviconImage(for: tab, with: smallFaviconView)
         }
     }
 
@@ -1041,6 +1038,21 @@ class TabCell: UICollectionViewCell, TabTrayCell {
             return tab.sessionData?.urls.last?.domainURL
         }
         return tab.url?.domainURL
+    }
+    
+    func setFaviconImage(for tab: Tab, with imageView: UIImageView) {
+        if let url = tab.url?.domainURL ?? tab.sessionData?.urls.last?.domainURL {
+            imageView.setImageAndBackground(forIcon: tab.displayFavicon, website: url) {}
+            faviconBG.isHidden = false
+            screenshotView.image = nil
+        }
+//        let sessionDomainUrl = tab.sessionData?.urls.last?.domainURL
+//        if let url = tab.url?.domainURL {
+//            // Set Favicon from domain url when screenshot from tab is empty
+//            imageView.setImageAndBackground(forIcon: tab.displayFavicon, website: url) {}
+//            faviconBG.isHidden = false
+//            screenshotView.image = nil
+//        }
     }
 }
 
