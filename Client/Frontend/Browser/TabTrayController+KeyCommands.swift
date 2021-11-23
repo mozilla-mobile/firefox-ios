@@ -32,7 +32,7 @@ extension GridTabViewController {
     @objc func didCloseTabKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "close-tab"])
         if let tab = tabManager.selectedTab {
-            tabManager.removeTabAndUpdateSelectedIndex(tab)
+            tabManager.removeTab(tab)
         }
     }
 
