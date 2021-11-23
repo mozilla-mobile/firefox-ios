@@ -5,8 +5,7 @@
 import UIKit
 
 struct UIConstants {
-
-    static var ToolbarHeight: CGFloat = 46
+    
     static let maximumNumberOfShortcuts = 4
 
     struct colors {
@@ -100,22 +99,16 @@ struct UIConstants {
     struct layout {
         static let browserToolbarDisabledOpacity: CGFloat = 0.4
         static let browserToolbarHeight: CGFloat = 44
-        static let cellSeparatorLeadingOffset: CGFloat = 14
         static let deleteAnimationDuration: TimeInterval = 0.25
-        static let alphaToZeroDeleteAnimationDuration: TimeInterval = deleteAnimationDuration * (2 / 3)
-        static let displayKeyboardDeleteAnimationDuration: TimeInterval = deleteAnimationDuration * (1 / 3)
-        static let lockIconInset: Float = 4
         static let shieldIconInset: Float = 9
         static let shieldIconIPadInset: Float = 15
         static let shieldIconSize: Float = 19
-        static let navigationDoneOffset: Float = -10
         static let overlayAnimationDuration: TimeInterval = 0.25
-		static let autocompleteAnimationDuration: TimeInterval = 0.2
-		static let autocompleteAfterDelayDuration: TimeInterval = 0.5
+        static let autocompleteAnimationDuration: TimeInterval = 0.2
+        static let autocompleteAfterDelayDuration: TimeInterval = 0.5
         static let overlayButtonHeight: Int = 56
         static let smallDeviceMaxNumSuggestions: Int = 4
         static let largeDeviceMaxNumSuggestions: Int = 5
-        static let progressVisibilityAnimationDuration: TimeInterval = 0.25
         static let searchButtonInset: CGFloat = 15
         static let toastAnimationDuration: TimeInterval = 0.3
         static let toastDuration: TimeInterval = 1.5
@@ -130,22 +123,14 @@ struct UIConstants {
         static let urlBarHeightInset: CGFloat = 0
         static let urlBarContainerHeightInset: CGFloat = 10
         static let urlBarTextInset: CGFloat = 30
-        static let urlBarShadowOpacity: Float = 0.3
-        static let urlBarShadowRadius: CGFloat = 2
-        static let urlBarShadowOffset = CGSize(width: 0, height: 2)
         static let urlBarWidthInset: CGFloat = 8
         static let urlBarBorderInset: CGFloat = 0
         static let urlBarBorderHeight: CGFloat = 36
-		static let urlBarPageActionsButtonInsets = UIEdgeInsets(top: 10, left: 8, bottom: 8, right: 10)
-		static let urlBarClearButtonWidth: CGFloat = 20
-		static let urlBarClearButtonHeight: CGFloat = 20
-		static let urlBarLayoutPriorityRawValue: Float = 1000
-        static let reloadButtonIPadOffset: CGFloat = -15
-        static let deleteButtonInset: CGFloat = -12
+        static let urlBarClearButtonWidth: CGFloat = 20
+        static let urlBarClearButtonHeight: CGFloat = 20
+        static let urlBarLayoutPriorityRawValue: Float = 1000
         static let deleteButtonOffset: CGFloat = -5
         static let urlBarIconInset: CGFloat = 8
-        static let settingsDefaultTitleOffset = 3
-        static let settingsFirstTitleOffset = 16
         static let settingsItemInset = 16
         static let settingsItemOffset: CGFloat = 26
         static let settingsCellCornerRadius: CGFloat = 8
@@ -154,7 +139,6 @@ struct UIConstants {
         static let textLogoOffset: CGFloat = -10 - browserToolbarHeight / 2
         static let textLogoOffsetSmallDevice: CGFloat = 10 - browserToolbarHeight / 4
         static let textLogoMargin: CGFloat = 44
-        static let tipDescriptionMargin: CGFloat = 12
         static let tipViewHeight: CGFloat = 148
         static let tipViewBottomOffset: CGFloat = 6
         static let tipViewPadding: CGFloat = 16
@@ -167,61 +151,45 @@ struct UIConstants {
         static let suggestionViewHeightMultiplier: CGFloat = 0.25
         static let suggestionViewWidthMultiplier: CGFloat = 0.75
         static let separatorHeight: CGFloat = 0.5
-        static let shareTrackersBottomOffset: CGFloat = -20
-        static let shareTrackersHeight: CGFloat = 36
-        static let homeViewTextOffset: CGFloat = 5
         static let homeViewLabelMinimumScale: CGFloat = 0.65
         static let truncateCharactersLimit = 160
         static let truncateHeadCharactersCount = (truncateCharactersLimit - UIConstants.strings.truncateLeader.count) / 2
         static let truncateTailCharactersCount = Int(ceil(Double(truncateCharactersLimit - UIConstants.strings.truncateLeader.count) / 2.0))
-        static let homeTipTitleLableOffset: CGFloat = 3
-        static let homePrivateBrowsingDescriptionLabelTopOffset: CGFloat = 5
-		static let findInPageSearchTextInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 0)
-		static let findInPagePreviousButtonOffset: CGFloat = 16
+        static let findInPageSearchTextInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 0)
+        static let findInPagePreviousButtonOffset: CGFloat = 16
         static let progressBarHeight: CGFloat = 1.5
-		static let progressBarOffset: CGFloat = 1
-		static let trackingProtectionHeight: CGFloat = 18
-        static let trackingProtectionTableInset: CGFloat = 16
-        static let trackingProtectionHeaderHeight: CGFloat = 120
-        static let trackingProtectionHeaderDefault: CGFloat = 36
-        static let trackingProtectionFooterHeight: CGFloat = 60
-        static let trackingProtectionFooterDefault: CGFloat = 20
-		static let collapsedProtectionBadgeOffset: CGFloat = 10
-		static let truncatedUrlTextOffset: CGFloat = 5
-		static let addSearchEngineInputHeight: CGFloat = 44
-		static let addSearchEngineInputWidth: CGFloat = 10
-		static let addSearchEngineInputOffset: CGFloat = 16
-		static let addSearchEngineTemplateContainerHeight: CGFloat = 88
-		static let addSearchEnginePlaceholderHeight: CGFloat = 44
-		static let addSearchEnginePlaceholderOffset: CGFloat = 4
-		static let addSearchEngineTemplateInputPadding: CGFloat = 5
-		static let addSearchEnginePlaceholderPadding: CGFloat = 9
-		static let addSearchEngineExampleLabelOffset: CGFloat = 2
-		static let promptTitleOffset: CGFloat = 16
-		static let promptTitlePadding: CGFloat = 10
-		static let promptMessageOffset: CGFloat = 18
-		static let promptMessagePadding: CGFloat = 32
+        static let trackingProtectionHeight: CGFloat = 18
+        static let collapsedProtectionBadgeOffset: CGFloat = 10
+        static let truncatedUrlTextOffset: CGFloat = 5
+        static let addSearchEngineInputHeight: CGFloat = 44
+        static let addSearchEngineInputOffset: CGFloat = 16
+        static let addSearchEngineTemplateContainerHeight: CGFloat = 88
+        static let addSearchEngineExampleLabelOffset: CGFloat = 2
+        static let promptTitleOffset: CGFloat = 16
+        static let promptTitlePadding: CGFloat = 10
+        static let promptMessageOffset: CGFloat = 18
+        static let promptMessagePadding: CGFloat = 32
         static let promptButtonWidth: CGFloat = 66
         static let promptButtonHeight: CGFloat = 34
         static let promptButtonTopOffset: CGFloat = 38
         static let promptButtonBottomInset: CGFloat = 32
         static let promptButtonCenterOffset: CGFloat = 8
-		static let AutocompleteCustomURLLabelOffset: CGFloat = 50
-		static let introViewOffset: CGFloat = 24
-		static let introViewCardButtonOffset: CGFloat = 5
-		static let introViewButtonFrame = CGRect(x: 0, y: 0, width: 6, height: 6)
-		static let introViewPageControlOffset: CGFloat = 24
-		static let introViewSkipButtonOffset: CGFloat = 24
-		static let introViewCornerRadius: CGFloat = 6
-		static let introViewShadowOpacity: Float = 0.2
-		static let introViewShadowRadius: CGFloat = 12
-		static let introViewImageWidth: CGFloat = 280
-		static let introViewImageHeight: CGFloat = 212
-		static let introViewTitleLabelOffset: CGFloat = 24
-		static let introViewTitleLabelInset: CGFloat = 24
-		static let introViewTextLabelOffset: CGFloat = 16
-		static let introViewTextLabelPadding: CGFloat = 24
-		static let introViewTextLabelInset: CGFloat = 24
+        static let autocompleteCustomURLLabelOffset: CGFloat = 50
+        static let introViewOffset: CGFloat = 24
+        static let introViewCardButtonOffset: CGFloat = 5
+        static let introViewButtonFrame = CGRect(x: 0, y: 0, width: 6, height: 6)
+        static let introViewPageControlOffset: CGFloat = 24
+        static let introViewSkipButtonOffset: CGFloat = 24
+        static let introViewCornerRadius: CGFloat = 6
+        static let introViewShadowOpacity: Float = 0.2
+        static let introViewShadowRadius: CGFloat = 12
+        static let introViewImageWidth: CGFloat = 280
+        static let introViewImageHeight: CGFloat = 212
+        static let introViewTitleLabelOffset: CGFloat = 24
+        static let introViewTitleLabelInset: CGFloat = 24
+        static let introViewTextLabelOffset: CGFloat = 16
+        static let introViewTextLabelPadding: CGFloat = 24
+        static let introViewTextLabelInset: CGFloat = 24
         static let pageControlSpacing: CGFloat = 2
         static let toastMessageHeight: CGFloat = 48
         static let shortcutViewWidth: CGFloat = 60
@@ -243,6 +211,7 @@ struct UIConstants {
         static let smallestSplitViewMaxWidthLimit: CGFloat = UIScreen.main.bounds.width * 0.45
         static let iPhoneSEHeight: CGFloat = 568
         static let searchSuggestionsArrowButtonWidth: CGFloat = 30
+        static var toolbarHeight: CGFloat = 46
     }
 
     struct strings {

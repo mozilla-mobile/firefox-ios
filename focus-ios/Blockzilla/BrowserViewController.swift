@@ -534,7 +534,7 @@ class BrowserViewController: UIViewController {
                     self.mainContainerView.insertSubview(fillerView, belowSubview: self.browserToolbar)
 
                     findInPageBar.snp.makeConstraints { make in
-                        make.height.equalTo(UIConstants.ToolbarHeight)
+                        make.height.equalTo(UIConstants.layout.toolbarHeight)
                         make.leading.trailing.equalTo(self.alertStackView)
                         make.bottom.equalTo(self.alertStackView.snp.bottom)
                     }

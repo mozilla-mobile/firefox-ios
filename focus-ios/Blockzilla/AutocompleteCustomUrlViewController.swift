@@ -33,7 +33,7 @@ class AutocompleteCustomUrlViewController: UIViewController {
 
         label.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset(UIConstants.layout.AutocompleteCustomURLLabelOffset)
+            make.top.equalToSuperview().offset(UIConstants.layout.autocompleteCustomURLLabelOffset)
         }
 
         tableView.snp.makeConstraints { make in
