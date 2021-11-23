@@ -317,22 +317,28 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
         return cell
     }
 
-    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         guard let record = records?[indexPath.row] else {
-            return []
+            return nil
         }
 
-        let delete = UITableViewRowAction(style: .default, title: .ReaderPanelRemove) { [weak self] action, index in
-            self?.deleteItem(atIndex: index)
+        let deleteAction = UIContextualAction(style: .destructive, title: .ReaderPanelRemove) { [weak self] (_, _, completion) in
+            guard let strongSelf = self else { completion(false); return }
+
+            strongSelf.deleteItem(atIndex: indexPath)
+            completion(true)
         }
 
         let toggleText: String = record.unread ? .ReaderPanelMarkAsRead : .ReaderModeBarMarkAsUnread
-        let unreadToggle = UITableViewRowAction(style: .normal, title: toggleText.stringSplitWithNewline()) { [weak self] (action, index) in
-            self?.toggleItem(atIndex: index)
-        }
-        unreadToggle.backgroundColor = ReadingListTableViewCellUX.MarkAsReadButtonBackgroundColor
+        let unreadToggleAction = UIContextualAction(style: .normal, title: toggleText.stringSplitWithNewline()) { [weak self] (_, view, completion) in
+            guard let strongSelf = self else { completion(false); return }
 
-        return [unreadToggle, delete]
+            view.backgroundColor = ReadingListTableViewCellUX.MarkAsReadButtonBackgroundColor
+            strongSelf.toggleItem(atIndex: indexPath)
+            completion(true)
+        }
+
+        return UISwipeActionsConfiguration(actions: [unreadToggleAction, deleteAction])
     }
 
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
