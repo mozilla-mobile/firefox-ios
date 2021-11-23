@@ -139,24 +139,11 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         view.addSubview(spinner)
 
         let error = SmartLabel()
-//        error.text = TODOPageLoadErrorString
-//        error.textColor = UIColor.red
-//        error.textAlignment = NSTextAlignment.center
-//        error.isHidden = true
-//        view.addSubview(error)
 
         spinner.snp.makeConstraints { make in
             make.center.equalTo(view)
             return
         }
-
-//        error.snp.makeConstraints { make in
-//            make.center.equalTo(view)
-//            make.left.equalTo(view.snp.left).offset(20)
-//            make.right.equalTo(view.snp.right).offset(-20)
-//            make.height.equalTo(44)
-//            return
-//        }
 
         return (view, spinner, error)
     }
