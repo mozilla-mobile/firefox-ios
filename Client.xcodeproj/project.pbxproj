@@ -429,21 +429,9 @@
 		C82A94F2269F68ED00624AA7 /* FeatureFlagsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82A94E6269CB77F00624AA7 /* FeatureFlagsManager.swift */; };
 		C82A94F3269F68F300624AA7 /* FlaggableFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82A94E4269CB77500624AA7 /* FlaggableFeature.swift */; };
 		C82CDD47233E8996002E2743 /* Tab+ChangeUserAgent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82CDD45233E8996002E2743 /* Tab+ChangeUserAgent.swift */; };
-		C8340BE824EC69EE00FE91A6 /* ASNUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C8340B7424EC69EE00FE91A6 /* ASNUtils.m */; };
-		C8340BEA24EC69EE00FE91A6 /* CHMutableNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = C8340B7624EC69EE00FE91A6 /* CHMutableNumber.m */; };
-		C8340BEC24EC69EE00FE91A6 /* NSData+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = C8340B7824EC69EE00FE91A6 /* NSData+Utils.m */; };
-		C8340BEE24EC69EE00FE91A6 /* NSData+SHA.m in Sources */ = {isa = PBXBuildFile; fileRef = C8340B7A24EC69EE00FE91A6 /* NSData+SHA.m */; };
-		C8340BEF24EC69EE00FE91A6 /* NSData+KeyDerivation.m in Sources */ = {isa = PBXBuildFile; fileRef = C8340B7B24EC69EE00FE91A6 /* NSData+KeyDerivation.m */; };
-		C8340BF124EC69EE00FE91A6 /* NSData+Base32.m in Sources */ = {isa = PBXBuildFile; fileRef = C8340B7D24EC69EE00FE91A6 /* NSData+Base32.m */; };
-		C8340C4424EC69EE00FE91A6 /* PrivateKey.m in Sources */ = {isa = PBXBuildFile; fileRef = C8340BD224EC69EE00FE91A6 /* PrivateKey.m */; };
-		C8340C4624EC69EE00FE91A6 /* PublicKey.m in Sources */ = {isa = PBXBuildFile; fileRef = C8340BD424EC69EE00FE91A6 /* PublicKey.m */; };
 		C8340C4824EC69EE00FE91A6 /* NSData+Base16.m in Sources */ = {isa = PBXBuildFile; fileRef = C8340BD624EC69EE00FE91A6 /* NSData+Base16.m */; };
-		C8340C4A24EC69EE00FE91A6 /* CHNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = C8340BD824EC69EE00FE91A6 /* CHNumber.m */; };
 		C8340C4F24EC69EE00FE91A6 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C8340BDE24EC69EE00FE91A6 /* libcrypto.a */; };
 		C8340C5024EC69EE00FE91A6 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C8340BDF24EC69EE00FE91A6 /* libssl.a */; };
-		C8340C5124EC69EE00FE91A6 /* RSAKeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = C8340BE024EC69EE00FE91A6 /* RSAKeyPair.m */; };
-		C8340C5224EC69EE00FE91A6 /* JSONWebTokenUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C8340BE124EC69EE00FE91A6 /* JSONWebTokenUtils.m */; };
-		C8340C5324EC69EE00FE91A6 /* KeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = C8340BE224EC69EE00FE91A6 /* KeyPair.m */; };
 		C8340C5E24EC6A3500FE91A6 /* trailer.c in Sources */ = {isa = PBXBuildFile; fileRef = C8340C5824EC6A3500FE91A6 /* trailer.c */; };
 		C8340C5F24EC6A3500FE91A6 /* base64url.c in Sources */ = {isa = PBXBuildFile; fileRef = C8340C5924EC6A3500FE91A6 /* base64url.c */; };
 		C8340C6024EC6A3500FE91A6 /* encrypt.c in Sources */ = {isa = PBXBuildFile; fileRef = C8340C5A24EC6A3500FE91A6 /* encrypt.c */; };
@@ -2998,18 +2986,7 @@
 		C82A94E4269CB77500624AA7 /* FlaggableFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlaggableFeature.swift; sourceTree = "<group>"; };
 		C82A94E6269CB77F00624AA7 /* FeatureFlagsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagsManager.swift; sourceTree = "<group>"; };
 		C82CDD45233E8996002E2743 /* Tab+ChangeUserAgent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Tab+ChangeUserAgent.swift"; sourceTree = "<group>"; };
-		C8340B7324EC69EE00FE91A6 /* CHNumber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHNumber.h; sourceTree = "<group>"; };
-		C8340B7424EC69EE00FE91A6 /* ASNUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASNUtils.m; sourceTree = "<group>"; };
 		C8340B7524EC69EE00FE91A6 /* NSData+Base16.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base16.h"; sourceTree = "<group>"; };
-		C8340B7624EC69EE00FE91A6 /* CHMutableNumber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHMutableNumber.m; sourceTree = "<group>"; };
-		C8340B7724EC69EE00FE91A6 /* PublicKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublicKey.h; sourceTree = "<group>"; };
-		C8340B7824EC69EE00FE91A6 /* NSData+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Utils.m"; sourceTree = "<group>"; };
-		C8340B7924EC69EE00FE91A6 /* RSAKeyPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSAKeyPair.h; sourceTree = "<group>"; };
-		C8340B7A24EC69EE00FE91A6 /* NSData+SHA.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+SHA.m"; sourceTree = "<group>"; };
-		C8340B7B24EC69EE00FE91A6 /* NSData+KeyDerivation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+KeyDerivation.m"; sourceTree = "<group>"; };
-		C8340B7C24EC69EE00FE91A6 /* KeyPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyPair.h; sourceTree = "<group>"; };
-		C8340B7D24EC69EE00FE91A6 /* NSData+Base32.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base32.m"; sourceTree = "<group>"; };
-		C8340B7E24EC69EE00FE91A6 /* JSONWebTokenUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONWebTokenUtils.h; sourceTree = "<group>"; };
 		C8340B8124EC69EE00FE91A6 /* pem2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pem2.h; sourceTree = "<group>"; };
 		C8340B8224EC69EE00FE91A6 /* kdf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kdf.h; sourceTree = "<group>"; };
 		C8340B8324EC69EE00FE91A6 /* pem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pem.h; sourceTree = "<group>"; };
@@ -3090,26 +3067,9 @@
 		C8340BCE24EC69EE00FE91A6 /* ebcdic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ebcdic.h; sourceTree = "<group>"; };
 		C8340BCF24EC69EE00FE91A6 /* idea.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = idea.h; sourceTree = "<group>"; };
 		C8340BD024EC69EE00FE91A6 /* lhash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lhash.h; sourceTree = "<group>"; };
-		C8340BD124EC69EE00FE91A6 /* CHMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHMath.h; sourceTree = "<group>"; };
-		C8340BD224EC69EE00FE91A6 /* PrivateKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrivateKey.m; sourceTree = "<group>"; };
-		C8340BD324EC69EE00FE91A6 /* NSData+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Utils.h"; sourceTree = "<group>"; };
-		C8340BD424EC69EE00FE91A6 /* PublicKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublicKey.m; sourceTree = "<group>"; };
-		C8340BD524EC69EE00FE91A6 /* CHMutableNumber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHMutableNumber.h; sourceTree = "<group>"; };
 		C8340BD624EC69EE00FE91A6 /* NSData+Base16.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base16.m"; sourceTree = "<group>"; };
-		C8340BD724EC69EE00FE91A6 /* ASNUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASNUtils.h; sourceTree = "<group>"; };
-		C8340BD824EC69EE00FE91A6 /* CHNumber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHNumber.m; sourceTree = "<group>"; };
-		C8340BD924EC69EE00FE91A6 /* NSData+KeyDerivation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+KeyDerivation.h"; sourceTree = "<group>"; };
-		C8340BDA24EC69EE00FE91A6 /* NSData+SHA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+SHA.h"; sourceTree = "<group>"; };
-		C8340BDB24EC69EE00FE91A6 /* CHNumber_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHNumber_Private.h; sourceTree = "<group>"; };
-		C8340BDC24EC69EE00FE91A6 /* FxA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FxA.h; sourceTree = "<group>"; };
 		C8340BDE24EC69EE00FE91A6 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcrypto.a; sourceTree = "<group>"; };
 		C8340BDF24EC69EE00FE91A6 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libssl.a; sourceTree = "<group>"; };
-		C8340BE024EC69EE00FE91A6 /* RSAKeyPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSAKeyPair.m; sourceTree = "<group>"; };
-		C8340BE124EC69EE00FE91A6 /* JSONWebTokenUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONWebTokenUtils.m; sourceTree = "<group>"; };
-		C8340BE224EC69EE00FE91A6 /* KeyPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyPair.m; sourceTree = "<group>"; };
-		C8340BE324EC69EE00FE91A6 /* NSData+Base32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base32.h"; sourceTree = "<group>"; };
-		C8340BE424EC69EE00FE91A6 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C8340BE524EC69EE00FE91A6 /* PrivateKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrivateKey.h; sourceTree = "<group>"; };
 		C8340C5824EC6A3500FE91A6 /* trailer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = trailer.c; sourceTree = "<group>"; };
 		C8340C5924EC6A3500FE91A6 /* base64url.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = base64url.c; sourceTree = "<group>"; };
 		C8340C5A24EC6A3500FE91A6 /* encrypt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = encrypt.c; sourceTree = "<group>"; };
@@ -5130,38 +5090,10 @@
 		C8340B7224EC69EE00FE91A6 /* FxA */ = {
 			isa = PBXGroup;
 			children = (
-				C8340B7324EC69EE00FE91A6 /* CHNumber.h */,
-				C8340B7424EC69EE00FE91A6 /* ASNUtils.m */,
 				C8340B7524EC69EE00FE91A6 /* NSData+Base16.h */,
-				C8340B7624EC69EE00FE91A6 /* CHMutableNumber.m */,
-				C8340B7724EC69EE00FE91A6 /* PublicKey.h */,
-				C8340B7824EC69EE00FE91A6 /* NSData+Utils.m */,
-				C8340B7924EC69EE00FE91A6 /* RSAKeyPair.h */,
-				C8340B7A24EC69EE00FE91A6 /* NSData+SHA.m */,
-				C8340B7B24EC69EE00FE91A6 /* NSData+KeyDerivation.m */,
-				C8340B7C24EC69EE00FE91A6 /* KeyPair.h */,
-				C8340B7D24EC69EE00FE91A6 /* NSData+Base32.m */,
-				C8340B7E24EC69EE00FE91A6 /* JSONWebTokenUtils.h */,
 				C8340B7F24EC69EE00FE91A6 /* include */,
-				C8340BD124EC69EE00FE91A6 /* CHMath.h */,
-				C8340BD224EC69EE00FE91A6 /* PrivateKey.m */,
-				C8340BD324EC69EE00FE91A6 /* NSData+Utils.h */,
-				C8340BD424EC69EE00FE91A6 /* PublicKey.m */,
-				C8340BD524EC69EE00FE91A6 /* CHMutableNumber.h */,
 				C8340BD624EC69EE00FE91A6 /* NSData+Base16.m */,
-				C8340BD724EC69EE00FE91A6 /* ASNUtils.h */,
-				C8340BD824EC69EE00FE91A6 /* CHNumber.m */,
-				C8340BD924EC69EE00FE91A6 /* NSData+KeyDerivation.h */,
-				C8340BDA24EC69EE00FE91A6 /* NSData+SHA.h */,
-				C8340BDB24EC69EE00FE91A6 /* CHNumber_Private.h */,
-				C8340BDC24EC69EE00FE91A6 /* FxA.h */,
 				C8340BDD24EC69EE00FE91A6 /* lib */,
-				C8340BE024EC69EE00FE91A6 /* RSAKeyPair.m */,
-				C8340BE124EC69EE00FE91A6 /* JSONWebTokenUtils.m */,
-				C8340BE224EC69EE00FE91A6 /* KeyPair.m */,
-				C8340BE324EC69EE00FE91A6 /* NSData+Base32.h */,
-				C8340BE424EC69EE00FE91A6 /* Info.plist */,
-				C8340BE524EC69EE00FE91A6 /* PrivateKey.h */,
 			);
 			name = FxA;
 			path = FxA/FxA;
@@ -7680,33 +7612,21 @@
 				39F99FE41E3A6F1700F353B4 /* PushClient.swift in Sources */,
 				39F99FE51E3A6F1700F353B4 /* PushConfiguration.swift in Sources */,
 				EB07F860240D696000924860 /* PushNotificationSetup.swift in Sources */,
-				C8340C4424EC69EE00FE91A6 /* PrivateKey.m in Sources */,
 				D047C55620E1640B001A3C07 /* KeyBundle.swift in Sources */,
 				C8340C6024EC6A3500FE91A6 /* encrypt.c in Sources */,
-				C8340BE824EC69EE00FE91A6 /* ASNUtils.m in Sources */,
-				C8340BEF24EC69EE00FE91A6 /* NSData+KeyDerivation.m in Sources */,
 				39F99FE61E3A6F1700F353B4 /* PushRegistration.swift in Sources */,
 				3E82980324BE4C31000A59FF /* FxATelemetryUtils.swift in Sources */,
 				C8340C5E24EC6A3500FE91A6 /* trailer.c in Sources */,
 				C8340C6224EC6A3500FE91A6 /* decrypt.c in Sources */,
-				C8340BF124EC69EE00FE91A6 /* NSData+Base32.m in Sources */,
 				C8340C6124EC6A3500FE91A6 /* keys.c in Sources */,
-				C8340C4624EC69EE00FE91A6 /* PublicKey.m in Sources */,
-				C8340C5224EC69EE00FE91A6 /* JSONWebTokenUtils.m in Sources */,
 				C8E2E80D23D20FB3005AACE6 /* RustFirefoxAccounts.swift in Sources */,
 				C8E2E80C23D20FB3005AACE6 /* Avatar.swift in Sources */,
 				2FDBCF611ABFC9DE00AFF7F0 /* SyncAuthState.swift in Sources */,
-				C8340BEA24EC69EE00FE91A6 /* CHMutableNumber.m in Sources */,
-				C8340C4A24EC69EE00FE91A6 /* CHNumber.m in Sources */,
 				C8340C4824EC69EE00FE91A6 /* NSData+Base16.m in Sources */,
-				C8340C5324EC69EE00FE91A6 /* KeyPair.m in Sources */,
-				C8340C5124EC69EE00FE91A6 /* RSAKeyPair.m in Sources */,
-				C8340BEC24EC69EE00FE91A6 /* NSData+Utils.m in Sources */,
 				39C22C291E89791C000C0E56 /* PushCrypto.swift in Sources */,
 				C8340C5F24EC6A3500FE91A6 /* base64url.c in Sources */,
 				2FA436351ABB8436008031D1 /* TokenServerClient.swift in Sources */,
 				2FA436331ABB8436008031D1 /* HawkHelper.swift in Sources */,
-				C8340BEE24EC69EE00FE91A6 /* NSData+SHA.m in Sources */,
 				C8340C6324EC6A3500FE91A6 /* params.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
