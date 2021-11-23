@@ -28,3 +28,6 @@
 
 /bitrise.yml @mozilla-mobile/releng @isabelrios @st3fan
 
+# Changes to string files can be reviewed and approved by mergify
+
+/Blockzilla/**/*.strings @mergify
