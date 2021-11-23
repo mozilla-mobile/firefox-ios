@@ -663,11 +663,18 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                 return headerView
 
             case .historyHighlights:
-                if !hasSentHistoryHighlightsSectionEvent && isHistoryHightlightsSectionEnabled && !historyHighlightsViewModel.historyItems.isEmpty {
+                if !hasSentHistoryHighlightsSectionEvent
+                    && isHistoryHightlightsSectionEnabled
+                    && !historyHighlightsViewModel.historyItems.isEmpty {
                     // ROUX
-//                    TelemetryWrapper.recordEvent(category: .action, method: .view, object: .jumpBackInImpressions, value: nil, extras: nil)
+                    TelemetryWrapper.recordEvent(category: .action,
+                                                 method: .view,
+                                                 object: .historyImpressions,
+                                                 value: nil,
+                                                 extras: nil)
                     hasSentHistoryHighlightsSectionEvent = true
                 }
+                
                 headerView.moreButton.isHidden = false
                 headerView.moreButton.setTitle(.RecentlySavedShowAllText, for: .normal)
                 headerView.moreButton.addTarget(self, action: #selector(openHistory), for: .touchUpInside)
