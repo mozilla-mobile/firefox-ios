@@ -133,9 +133,6 @@
 /* Label on button to cancel edits */
 "Cancel" = "ರದ್ದು ಮಾಡು";
 
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "ನೀವು ನಕಲಿಸಿದ ಕೊಂಡಿ: %@";
-
 /* Text for the context menu when a user wants to copy an image after long pressing it. */
 "contextMenu.copyImageTitle" = "ಚಿತ್ರವನ್ನು ನಕಲಿಸು";
 
@@ -324,9 +321,6 @@
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "SEARCH";
-
-/* Label for Safari integration section */
-"Settings.sectionIntegration" = "INTEGRATION";
 
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA‍";

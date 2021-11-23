@@ -151,9 +151,6 @@
 /* Label on button to cancel edits */
 "Cancel" = "रद्द करा";
 
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "आपण कॉपी केलेला दुवा: %@";
-
 /* Text for the context menu when a user wants to copy an image after long pressing it. */
 "contextMenu.copyImageTitle" = "प्रतिमा कॉपी करा";
 
@@ -357,9 +354,6 @@
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "शोधा";
-
-/* Label for Safari integration section */
-"Settings.sectionIntegration" = "एकीकरण";
 
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";

@@ -151,9 +151,6 @@
 /* Label on button to cancel edits */
 "Cancel" = "Nuligi";
 
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "Ligilo kopiita de vi: %@";
-
 /* Text for the context menu when a user wants to copy an image after long pressing it. */
 "contextMenu.copyImageTitle" = "Kopii bildon";
 
@@ -357,9 +354,6 @@
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "SERĈI";
-
-/* Label for Safari integration section */
-"Settings.sectionIntegration" = "INTEGRO";
 
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";

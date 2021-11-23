@@ -160,9 +160,6 @@
 /* Label on button to cancel edits */
 "Cancel" = "Batal";
 
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "Tautan Anda salin: %@";
-
 /* Text for the context menu when a user wants to copy an image after long pressing it. */
 "contextMenu.copyImageTitle" = "Salin Gambar";
 
@@ -393,9 +390,6 @@
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "CARI";
-
-/* Label for Safari integration section */
-"Settings.sectionIntegration" = "INTEGRASI";
 
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";

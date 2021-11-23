@@ -154,9 +154,6 @@
 /* Label on button to cancel edits */
 "Cancel" = "ביטול";
 
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "קישור שהעתקת: %@";
-
 /* Text for the context menu when a user wants to copy an image after long pressing it. */
 "contextMenu.copyImageTitle" = "העתקת תמונה";
 
@@ -384,9 +381,6 @@
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "חיפוש";
-
-/* Label for Safari integration section */
-"Settings.sectionIntegration" = "הטמעה";
 
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";

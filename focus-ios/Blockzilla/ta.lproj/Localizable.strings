@@ -133,9 +133,6 @@
 /* Label on button to cancel edits */
 "Cancel" = "ரத்து";
 
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "நீங்கள் நகலெடுத்த இணைப்பு: %@";
-
 /* Text for the context menu when a user wants to copy an image after long pressing it. */
 "contextMenu.copyImageTitle" = "படத்தை நகலெடு";
 
@@ -318,9 +315,6 @@
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "தேடல்";
-
-/* Label for Safari integration section */
-"Settings.sectionIntegration" = "ஒன்றிணைத்தல்";
 
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "மொசில்லா";

@@ -115,9 +115,6 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "Socruithe";
 
-/* Label for Safari integration section */
-"Settings.sectionIntegration" = "COMHTHÁTHÚ";
-
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";
 

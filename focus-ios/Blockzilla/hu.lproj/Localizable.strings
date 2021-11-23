@@ -160,9 +160,6 @@
 /* Label on button to cancel edits */
 "Cancel" = "Mégse";
 
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "A másolt hivatkozás: %@";
-
 /* Text for the context menu when a user wants to copy an image after long pressing it. */
 "contextMenu.copyImageTitle" = "Kép másolása";
 
@@ -393,9 +390,6 @@
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "KERESÉS";
-
-/* Label for Safari integration section */
-"Settings.sectionIntegration" = "INTEGRÁCIÓ";
 
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";

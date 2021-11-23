@@ -160,9 +160,6 @@
 /* Label on button to cancel edits */
 "Cancel" = "Nullañ";
 
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "Ereoù eilet ganeoc'h: %@";
-
 /* Text for the context menu when a user wants to copy an image after long pressing it. */
 "contextMenu.copyImageTitle" = "Eilañ ar skeudenn";
 
@@ -381,9 +378,6 @@
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "KLASK";
-
-/* Label for Safari integration section */
-"Settings.sectionIntegration" = "ENFRAMMAÑ";
 
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";

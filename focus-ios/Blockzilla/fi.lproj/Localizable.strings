@@ -133,9 +133,6 @@
 /* Label on button to cancel edits */
 "Cancel" = "Kumoa";
 
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "Kopioitu linkki: %@";
-
 /* Text for the context menu when a user wants to copy an image after long pressing it. */
 "contextMenu.copyImageTitle" = "Kopioi kuva";
 
@@ -327,9 +324,6 @@
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "HAKU";
-
-/* Label for Safari integration section */
-"Settings.sectionIntegration" = "INTEGROINTI";
 
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";

@@ -160,9 +160,6 @@
 /* Label on button to cancel edits */
 "Cancel" = "Přetorhnyć";
 
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "Wotkaz, kotryž sće kopěrował: %@";
-
 /* Text for the context menu when a user wants to copy an image after long pressing it. */
 "contextMenu.copyImageTitle" = "Wobraz kopěrować";
 
@@ -393,9 +390,6 @@
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "PYTANJE";
-
-/* Label for Safari integration section */
-"Settings.sectionIntegration" = "INTEGRACIJA";
 
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";

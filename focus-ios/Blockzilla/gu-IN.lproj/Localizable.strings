@@ -175,9 +175,6 @@
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "SEARCH";
 
-/* Label for Safari integration section */
-"Settings.sectionIntegration" = "INTEGRATION";
-
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";
 

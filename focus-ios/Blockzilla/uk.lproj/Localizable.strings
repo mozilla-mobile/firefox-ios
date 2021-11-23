@@ -5,7 +5,7 @@
 "About.missionLabel" = "%@ створено в Mozilla. Наша місія — сприяння розвитку здорового й відкритого Інтернету.";
 
 /* Label on About screen */
-"About.privateBullet1" = "Пошук і перегляд прямо в програмі";
+"About.privateBullet1" = "Шукайте й переглядайте безпосередньо в програмі";
 
 /* Label on About screen */
 "About.privateBullet2" = "Блокуйте стеження (або оновіть налаштування, щоб дозволити стеження)";
@@ -14,7 +14,7 @@
 "About.privateBullet3" = "Стирайте для видалення куків, а також історії пошуку й перегляду";
 
 /* Label on About screen */
-"About.privateBulletHeader" = "Використовуйте його як приватний браузер:";
+"About.privateBulletHeader" = "Використовуйте як приватний браузер:";
 
 /* Label for row in About screen */
 "About.rowHelp" = "Допомога";
@@ -32,7 +32,7 @@
 "About.safariBullet2" = "Блокуйте вебшрифти для зменшення розміру сторінок";
 
 /* Label on About screen */
-"About.safariBulletHeader" = "Використовуйте його як розширення для Safari:";
+"About.safariBulletHeader" = "Використовуйте як розширення для Safari:";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
 "About.title" = "Про %@";
@@ -74,7 +74,7 @@
 "Autocomplete.addCustomUrlWithPlus" = "+ Додати власну URL-адресу";
 
 /* Description for adding and managing custom autocomplete URLs */
-"Autocomplete.customDescriptoin" = "Додавання й керування автозавершенням власних URL-адрес.";
+"Autocomplete.customDescriptoin" = "Додавайте і керуйте автозавершенням власних URL-адрес.";
 
 /* Label for button taking you to your custom Autocomplete URL list */
 "Autocomplete.customLabel" = "Власні URL";
@@ -98,7 +98,7 @@
 "Autocomplete.disabled" = "Вимкнено";
 
 /* Label for toast alerting that the custom URL being added is a duplicate */
-"Autocomplete.duplicateUrl" = "URL вже наявна";
+"Autocomplete.duplicateUrl" = "URL вже наявний";
 
 /* Label for button to add a custom URL */
 "Autocomplete.emptyState" = "Немає власних URL-адрес для показу";
@@ -113,7 +113,7 @@
 "Autocomplete.mySites" = "Мої сайти";
 
 /* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"Autocomplete.mySitesDesc" = "Увімкнути, щоб %@ автоматично завершував URL-адреси популярних сайтів.";
+"Autocomplete.mySitesDesc" = "Увімкніть, щоб %@ автоматично завершував URL-адреси ваших улюблених сайтів.";
 
 /* Label for enabling or disabling top sites */
 "Autocomplete.topSites" = "Популярні сайти";
@@ -160,9 +160,6 @@
 /* Label on button to cancel edits */
 "Cancel" = "Скасувати";
 
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "Ваше скопійоване посилання: %@";
-
 /* Text for the context menu when a user wants to copy an image after long pressing it. */
 "contextMenu.copyImageTitle" = "Копіювати зображення";
 
@@ -170,7 +167,7 @@
 "contextMenu.copyLink" = "Копіювати посилання";
 
 /* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "Ваше скопійоване посилання:";
+"contextMenu.linkCopied" = "Скопійоване посилання:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "Зберегти зображення";
@@ -394,9 +391,6 @@
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "ПОШУК";
 
-/* Label for Safari integration section */
-"Settings.sectionIntegration" = "ІНТЕГРАЦІЯ";
-
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";
 
@@ -581,7 +575,7 @@
 "Tip.SiriErase.Title" = "“Siri, зітри мій сеанс %@.”";
 
 /* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
-"Tip.SiriFavorite.Description" = "Додати ярлик Siri";
+"Tip.SiriFavorite.Description" = "Додати швидку команду Siri";
 
 /* Text for a label that indicates the title for siri favorite tip. */
 "Tip.SiriFavorite.Title" = "“Siri, відкрий мій улюблений сайт.”";

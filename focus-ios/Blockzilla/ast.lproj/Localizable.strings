@@ -109,9 +109,6 @@
 /* Label on button to cancel edits */
 "Cancel" = "Encaboxar";
 
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "L'enllaz que copiesti: %@";
-
 /* Text for the context menu when a user wants to copy an image after long pressing it. */
 "contextMenu.copyImageTitle" = "Copiar imaxe";
 
@@ -270,9 +267,6 @@
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "GUETA";
-
-/* Label for Safari integration section */
-"Settings.sectionIntegration" = "INTEGRACIÓN";
 
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";

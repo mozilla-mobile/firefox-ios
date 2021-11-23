@@ -151,9 +151,6 @@
 /* Label on button to cancel edits */
 "Cancel" = "Отказ";
 
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "Копирана препратка: %@";
-
 /* Text for the context menu when a user wants to copy an image after long pressing it. */
 "contextMenu.copyImageTitle" = "Копиране на изображението";
 
@@ -357,9 +354,6 @@
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "ТЪРСЕНЕ";
-
-/* Label for Safari integration section */
-"Settings.sectionIntegration" = "ИНТЕГРАЦИЯ";
 
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";

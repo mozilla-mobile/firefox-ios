@@ -160,9 +160,6 @@
 /* Label on button to cancel edits */
 "Cancel" = "キャンセル";
 
-/* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "コピーしたリンク: %@";
-
 /* Text for the context menu when a user wants to copy an image after long pressing it. */
 "contextMenu.copyImageTitle" = "画像をコピー";
 
@@ -393,9 +390,6 @@
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "検索";
-
-/* Label for Safari integration section */
-"Settings.sectionIntegration" = "統合";
 
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";

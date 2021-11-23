@@ -115,9 +115,6 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "Sozlamalar";
 
-/* Label for Safari integration section */
-"Settings.sectionIntegration" = "INTEGRATSIYA";
-
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";
 
