@@ -791,6 +791,20 @@ class TabCell: UICollectionViewCell, TabTrayCell {
         view.clipsToBounds = true
         view.backgroundColor = UIColor.theme.tabTray.cellBackground
         return view
+        
+    }()
+
+    lazy private var faviconBG: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = TopSiteCellUX.CellCornerRadius
+        view.layer.borderWidth = TopSiteCellUX.BorderWidth
+        view.layer.shadowOffset = CGSize(width: 0, height: 2)
+        view.layer.shadowRadius = TopSiteCellUX.ShadowRadius
+        view.backgroundColor = UIColor.theme.homePanel.shortcutBackground
+        view.layer.borderColor = TopSiteCellUX.BorderColor.cgColor
+        view.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
+        view.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
+        return view
     }()
 
     lazy var screenshotView: UIImageView = {
@@ -799,6 +813,17 @@ class TabCell: UICollectionViewCell, TabTrayCell {
         view.clipsToBounds = true
         view.isUserInteractionEnabled = false
         view.backgroundColor = UIColor.theme.tabTray.screenshotBackground
+        return view
+    }()
+    
+    lazy var smallFaviconView: UIImageView = {
+        let view = UIImageView()
+        view.contentMode = .scaleAspectFill
+        view.clipsToBounds = true
+        view.isUserInteractionEnabled = false
+        view.backgroundColor = UIColor.clear
+        view.layer.cornerRadius = TopSiteCellUX.IconCornerRadius
+        view.layer.masksToBounds = true
         return view
     }()
 
@@ -845,12 +870,13 @@ class TabCell: UICollectionViewCell, TabTrayCell {
         self.closeButton.addTarget(self, action: #selector(close), for: .touchUpInside)
 
         contentView.addSubview(backgroundHolder)
-
+        
         backgroundHolder.snp.makeConstraints { make in
             make.edges.equalTo(contentView)
         }
 
-        backgroundHolder.addSubview(self.screenshotView)
+        faviconBG.addSubview(smallFaviconView)
+        backgroundHolder.addSubviews(screenshotView, faviconBG)
 
         self.accessibilityCustomActions = [
             UIAccessibilityCustomAction(name: .TabTrayCloseAccessibilityCustomAction, target: self.animator, selector: #selector(SwipeAnimator.closeWithoutGesture))
@@ -887,6 +913,17 @@ class TabCell: UICollectionViewCell, TabTrayCell {
             make.top.equalToSuperview()
             make.left.right.equalTo(backgroundHolder)
             make.bottom.equalTo(backgroundHolder.snp.bottom)
+        }
+        
+        faviconBG.snp.makeConstraints { make in
+            make.centerY.equalToSuperview().offset(10)
+            make.centerX.equalToSuperview()
+            make.size.equalTo(TopSiteCellUX.BackgroundSize)
+        }
+        
+        smallFaviconView.snp.makeConstraints { make in
+            make.size.equalTo(TopSiteCellUX.IconSize)
+            make.center.equalTo(faviconBG)
         }
     }
 
@@ -931,7 +968,9 @@ class TabCell: UICollectionViewCell, TabTrayCell {
             layer.shadowPath = nil
             layer.shadowOpacity = 0
         }
-        
+
+        faviconBG.isHidden = true
+
         if let url = tab.url, let tabScreenshot = tab.screenshot, (url.absoluteString.starts(with: "internal") &&
             tab.hasHomeScreenshot) {
             screenshotView.image = tabScreenshot
@@ -939,14 +978,18 @@ class TabCell: UICollectionViewCell, TabTrayCell {
             tab.hasHomeScreenshot) {
             if let domainUrl = self.getTabDomainUrl(tab: tab) {
                 // Set Favicon from domain url when screenshot from tab is empty
-                self.screenshotView.setImageAndBackground(forIcon: tab.displayFavicon, website: domainUrl) {}
+                self.smallFaviconView.setImageAndBackground(forIcon: tab.displayFavicon, website: domainUrl) {}
+                faviconBG.isHidden = false
+                screenshotView.image = nil
             }
         } else if let tabScreenshot = tab.screenshot {
             screenshotView.image = tabScreenshot
         } else {
             if let domainUrl = self.getTabDomainUrl(tab: tab) {
                 // Set Favicon from domain url when screenshot from tab is empty
-                self.screenshotView.setImageAndBackground(forIcon: tab.displayFavicon, website: domainUrl) {}
+                self.smallFaviconView.setImageAndBackground(forIcon: tab.displayFavicon, website: domainUrl) {}
+                faviconBG.isHidden = false
+                screenshotView.image = nil
             }
         }
     }
