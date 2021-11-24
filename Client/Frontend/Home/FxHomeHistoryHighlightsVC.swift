@@ -75,7 +75,11 @@ class FxHomeHistoryHighlightsCollectionCell: UICollectionViewCell, ReusableCell 
         // Create a base item to be used in the collection view
         let item = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                               heightDimension: .fractionalHeight(itemFractionalHeight)))
+                                               heightDimension: .estimated(40)))
+//        let itemSize = NSCollectionLayoutSize(
+//            widthDimension: NSCollectionLayoutDimension.absolute(RecentlySavedCollectionCellUX.cellWidth),
+//            heightDimension: NSCollectionLayoutDimension.estimated(RecentlySavedCollectionCellUX.cellHeight)
+//        )
 
         // Create the vertical group in which the base item will go into
         var verticalGroupCount: Int {
@@ -138,8 +142,10 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecentlyVisitedCell.cellIdentifier, for: indexPath) as! RecentlyVisitedCell
-        let hideBottomLine = isBottomCell(indexPath: indexPath, totalItems: viewModel?.historyItems.count)
-        let cornersToRound = determineCornerToRound(indexPath: indexPath, totalItems: viewModel?.historyItems.count)
+        let hideBottomLine = isBottomCell(indexPath: indexPath,
+                                          totalItems: viewModel?.historyItems.count)
+        let cornersToRound = determineCornerToRound(indexPath: indexPath,
+                                                    totalItems: viewModel?.historyItems.count)
 
         if let item = viewModel?.historyItems[safe: indexPath.row] {
 
@@ -170,7 +176,7 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
 
         // One cell
         if totalItems == 1
-            // Two cells and index is bottom cell
+            // Two cells AND index is bottom cell of the veritcal group
             || (totalItems == 2 && indexPath.row == 1)
             || (totalItems == 3 && indexPath.row == 2)
             // More than two cells AND is a bottom cell in the column
@@ -220,7 +226,7 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
         if totalItems > 6 && index == 8 { return true }
         if totalItems > 3 && totalItems < 7 && index == 5 { return true }
         if totalItems == 3 && index == 2 { return true }
-        if totalItems == 2 && index == 2 { return true }
+        if totalItems == 2 && index == 1 { return true }
         if totalItems == 1 && index == 0 { return true }
 
         return false
@@ -338,16 +344,16 @@ class RecentlyVisitedCell: UICollectionViewCell, ReusableCell {
 //        contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
 //        contentView.layer.shadowOpacity = 0.12
 
-        contentView.addSubview(hiddenContainer)
+//        contentView.addSubview(hiddenContainer)
         contentView.addSubview(heroImage)
         contentView.addSubview(itemTitle)
         contentView.addSubview(bottomLine)
 
         NSLayoutConstraint.activate([
-            hiddenContainer.topAnchor.constraint(equalTo: contentView.topAnchor, constant: -5),
-            hiddenContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            hiddenContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            hiddenContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+//            hiddenContainer.topAnchor.constraint(equalTo: contentView.topAnchor, constant: -5),
+//            hiddenContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+//            hiddenContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+//            hiddenContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
 
             heroImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             heroImage.heightAnchor.constraint(equalToConstant: RecentlyVisitedCellUX.heroImageDimension),

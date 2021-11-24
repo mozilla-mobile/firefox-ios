@@ -669,7 +669,6 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                 if !hasSentHistoryHighlightsSectionEvent
                     && isHistoryHightlightsSectionEnabled
                     && !historyHighlightsViewModel.historyItems.isEmpty {
-                    // ROUX
                     TelemetryWrapper.recordEvent(category: .action,
                                                  method: .view,
                                                  object: .historyImpressions,
