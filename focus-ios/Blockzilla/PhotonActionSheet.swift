@@ -11,7 +11,7 @@ struct PhotonActionSheetUX {
     static let HeaderFooterHeight: CGFloat = 0
     static let RowHeight: CGFloat = 50
     static let BorderWidth: CGFloat = 0.5
-    static let BorderColor = UIConstants.Photon.Grey30
+    static let BorderColor = UIColor.grey30
     static let CornerRadius: CGFloat = 10
     static let SiteImageViewSize = 52
     static let IconSize = CGSize(width: 24, height: 24)
@@ -22,9 +22,9 @@ struct PhotonActionSheetUX {
     static let BackgroundAlpha: CGFloat = 0.9
     static let TitleHeaderHeight: CGFloat = 36
     static let SeparatorHeaderHeight: CGFloat = 12
-    static let SeparatorColor = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
-    static let SectionSeparatorColor = UIConstants.Photon.Grey50.withAlphaComponent(0.5)
-    static let TableViewBackgroundColor = UIConstants.Photon.Ink90.withAlphaComponent(PhotonActionSheetUX.BackgroundAlpha)
+    static let SeparatorColor = UIColor.grey10.withAlphaComponent(0.2)
+    static let SectionSeparatorColor = UIColor.grey50.withAlphaComponent(0.5)
+    static let TableViewBackgroundColor = UIColor.ink90.withAlphaComponent(PhotonActionSheetUX.BackgroundAlpha)
     static let BlurAlpha: CGFloat = 0.7
     static let SeparatorRowHeight: CGFloat = 8
 }
@@ -77,7 +77,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     weak var delegate: PhotonActionSheetDelegate?
     private(set) var actions: [[PhotonActionSheetItem]]
 
-    private var tintColor = UIConstants.Photon.Grey10
+    private var tintColor = UIColor.grey10
     private var tableView = UITableView(frame: .zero, style: .grouped)
 
     lazy var tapRecognizer: UITapGestureRecognizer = {
@@ -302,7 +302,7 @@ private class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView {
         let titleLabel = UILabel()
         titleLabel.font = .footnote12
         titleLabel.numberOfLines = 1
-        titleLabel.textColor = UIConstants.Photon.Grey10.withAlphaComponent(0.6)
+        titleLabel.textColor = .grey10.withAlphaComponent(0.6)
         return titleLabel
     }()
 

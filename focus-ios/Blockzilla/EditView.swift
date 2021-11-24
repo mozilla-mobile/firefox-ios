@@ -6,7 +6,7 @@ import UIKit
 
 class EditView: UIView {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.backgroundColor = UIConstants.colors.cellSelected
+        self.backgroundColor = .grey10.withAlphaComponent(0.2)
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {

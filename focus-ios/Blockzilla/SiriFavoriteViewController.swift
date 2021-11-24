@@ -34,7 +34,7 @@ class SiriFavoriteViewController: UIViewController {
     private func setUpInputUI() {
         title = UIConstants.strings.favoriteUrlTitle
         navigationController?.navigationBar.tintColor = .accent
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIConstants.colors.defaultFont]
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.defaultFont]
         navigationController?.navigationBar.isTranslucent = false
         view.backgroundColor = .systemGroupedBackground
 
@@ -55,7 +55,7 @@ class SiriFavoriteViewController: UIViewController {
         if let storedFavorite = UserDefaults.standard.value(forKey: "favoriteUrl") as? String {
             textInput.text = storedFavorite
         } else {
-            textInput.attributedPlaceholder = NSAttributedString(string: UIConstants.strings.autocompleteAddCustomUrlPlaceholder, attributes: [.foregroundColor: UIConstants.colors.inputPlaceholder])
+            textInput.attributedPlaceholder = NSAttributedString(string: UIConstants.strings.autocompleteAddCustomUrlPlaceholder, attributes: [.foregroundColor: UIColor.inputPlaceholder])
         }
 
         textInput.accessibilityIdentifier = "urlInput"

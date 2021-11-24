@@ -90,7 +90,7 @@ class ScrollViewController: UIPageViewController, PageControlDelegate {
         titleLabel.numberOfLines = 2
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.minimumScaleFactor = IntroViewControllerUX.MinimumFontScale
-        titleLabel.textColor = UIConstants.colors.firstRunTitle
+        titleLabel.textColor = .firstRunTitle
         titleLabel.textAlignment = NSTextAlignment.center
         titleLabel.text = title
         titleLabel.font = .body18
@@ -110,7 +110,7 @@ class ScrollViewController: UIPageViewController, PageControlDelegate {
         textLabel.minimumScaleFactor = IntroViewControllerUX.MinimumFontScale
         textLabel.lineBreakMode = .byTruncatingTail
         textLabel.textAlignment = .center
-        textLabel.textColor = UIConstants.colors.firstRunMessage
+        textLabel.textColor = .grey50
         textLabel.font = .footnote14
 
         introView.addSubview(textLabel)
@@ -133,12 +133,12 @@ class ScrollViewController: UIPageViewController, PageControlDelegate {
 
         if orderedViewControllers.count == slides.count - 1 {
             cardButton.setTitle(UIConstants.strings.firstRunButton, for: .normal)
-            cardButton.setTitleColor(UIConstants.colors.firstRunNextButton, for: .normal)
+            cardButton.setTitleColor(.purple50, for: .normal)
             cardButton.titleLabel?.font = .body16
             cardButton.addTarget(self, action: #selector(ScrollViewController.didTapStartBrowsingButton), for: .touchUpInside)
         } else {
             cardButton.setTitle(UIConstants.strings.NextIntroButtonTitle, for: .normal)
-            cardButton.setTitleColor(UIConstants.colors.firstRunNextButton, for: .normal)
+            cardButton.setTitleColor(.purple50, for: .normal)
             cardButton.titleLabel?.font = .body16
             cardButton.addTarget(self, action: #selector(ScrollViewController.incrementPage), for: .touchUpInside)
         }

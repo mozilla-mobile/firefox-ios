@@ -89,7 +89,7 @@ class SearchEngine: NSObject, NSCoding {
         let faviconLetter = name.uppercased()[name.startIndex]
 
         let faviconLabel = SmartLabel(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
-        faviconLabel.backgroundColor = UIConstants.Photon.Purple80
+        faviconLabel.backgroundColor = .purple80
         faviconLabel.text = String(faviconLetter)
         faviconLabel.textAlignment = .center
         faviconLabel.font = .body18Medium

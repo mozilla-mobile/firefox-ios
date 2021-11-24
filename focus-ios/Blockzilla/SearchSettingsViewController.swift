@@ -102,7 +102,7 @@ class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITab
                 cell.selectionStyle = .gray
                 cell.isUserInteractionEnabled = true
             } else {
-                cell.textLabel?.textColor = UIConstants.colors.settingsDisabled
+                cell.textLabel?.textColor = .inputPlaceholder
                 cell.selectionStyle = .none
                 cell.isUserInteractionEnabled = false
             }
@@ -139,7 +139,7 @@ class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITab
                 cell.accessoryType = .checkmark
 
                 if tableView.isEditing {
-                    cell.textLabel?.textColor = UIConstants.colors.settingsDisabled.withAlphaComponent(0.5)
+                    cell.textLabel?.textColor = .inputPlaceholder.withAlphaComponent(0.5)
                     cell.separatorInset = UIEdgeInsets(top: 0, left: 93, bottom: 0, right: 0)
                     cell.tintColor = tableView.tintColor.withAlphaComponent(0.5)
                     cell.imageView?.alpha = 0.5
@@ -211,7 +211,7 @@ class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITab
         navigationItem.hidesBackButton = tableView.isEditing
     }
 
-    private func getBackgroundView(bgColor: UIColor = UIConstants.colors.cellSelected) -> UIView {
+    private func getBackgroundView(bgColor: UIColor = .grey10.withAlphaComponent(0.2)) -> UIView {
         let view = UIView()
         return view
     }

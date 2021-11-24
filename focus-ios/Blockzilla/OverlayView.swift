@@ -75,11 +75,11 @@ class OverlayView: UIView {
             makeSearchSuggestionButton(atIndex: i)
         }
 
-        topBorder.backgroundColor = UIConstants.Photon.Grey90.withAlphaComponent(0.4)
+        topBorder.backgroundColor = .grey90.withAlphaComponent(0.4)
         addSubview(topBorder)
 
         let padding = UIConstants.layout.searchButtonInset
-        let attributedString = NSMutableAttributedString(string: UIConstants.strings.addToAutocompleteButton, attributes: [.foregroundColor: UIConstants.Photon.Grey10])
+        let attributedString = NSMutableAttributedString(string: UIConstants.strings.addToAutocompleteButton, attributes: [.foregroundColor: UIColor.grey10])
 
         addToAutocompleteButton.titleLabel?.font = .body16
         addToAutocompleteButton.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
@@ -89,7 +89,7 @@ class OverlayView: UIView {
         addToAutocompleteButton.setAttributedTitle(attributedString, for: .normal)
         addToAutocompleteButton.addTarget(self, action: #selector(didPressAddToAutocomplete), for: .touchUpInside)
         addToAutocompleteButton.accessibilityIdentifier = "AddToAutocomplete.button"
-        addToAutocompleteButton.backgroundColor = UIConstants.colors.background
+        addToAutocompleteButton.backgroundColor = .ink90
         setUpOverlayButton(button: addToAutocompleteButton)
         addSubview(addToAutocompleteButton)
 
@@ -118,7 +118,7 @@ class OverlayView: UIView {
         copyButton.titleLabel?.font = .body16
         copyButton.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
         copyButton.titleLabel?.lineBreakMode = .byTruncatingTail
-        copyButton.backgroundColor = UIConstants.colors.background
+        copyButton.backgroundColor = .ink90
         if UIView.userInterfaceLayoutDirection(for: copyButton.semanticContentAttribute) == .rightToLeft {
             copyButton.contentHorizontalAlignment = .right
         } else {
@@ -131,7 +131,7 @@ class OverlayView: UIView {
     }
     
     private func updateLayout(for iPadView: Bool) {
-        searchSuggestionsPrompt.backgroundColor = iPadView ? .clear : UIConstants.colors.background
+        searchSuggestionsPrompt.backgroundColor = iPadView ? .clear : .ink90
         
         topBorder.snp.remakeConstraints { make in
             make.top.equalTo(searchSuggestionsPrompt.snp.bottom)
@@ -187,7 +187,7 @@ class OverlayView: UIView {
             searchButtonGroup.first?.layer.cornerRadius = 0
             findInPageButton.layer.cornerRadius = 0
             lastSeparator.backgroundColor = .clear
-            topBorder.backgroundColor =  UIConstants.Photon.Grey90.withAlphaComponent(0.4)
+            topBorder.backgroundColor =  .grey90.withAlphaComponent(0.4)
             
         }
         setColorstToSearchButtons()
@@ -305,7 +305,7 @@ class OverlayView: UIView {
             // Hide the autocomplete button on home screen and when the user is typing
             self.addToAutocompleteButton.isHidden = true
             if !self.isIpadView {
-            self.topBorder.backgroundColor =  searchSuggestionsPromptHidden ? UIConstants.Photon.Grey90.withAlphaComponent(0.4) : UIColor(rgb: 0x42455A)
+                self.topBorder.backgroundColor =  searchSuggestionsPromptHidden ? .grey90.withAlphaComponent(0.4) : UIColor(rgb: 0x42455A)
             }
             self.updateSearchButtons()
             let lastSearchButtonIndex = min(self.searchSuggestions.count, self.searchButtonGroup.count) - 1

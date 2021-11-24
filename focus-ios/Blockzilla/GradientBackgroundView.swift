@@ -5,7 +5,7 @@
 import UIKit
 
 class GradientBackgroundView: UIView {
-    init(alpha: Float = 0.1, startPoint: CGPoint = CGPoint(x: -0.2, y: 0), endPoint: CGPoint = CGPoint(x: 1.2, y: 1), background: UIColor = UIConstants.colors.gradientBackground) {
+    init(alpha: Float = 0.1, startPoint: CGPoint = CGPoint(x: -0.2, y: 0), endPoint: CGPoint = CGPoint(x: 1.2, y: 1), background: UIColor = .gradientBackground) {
         super.init(frame: CGRect.zero)
 
         backgroundColor = background
@@ -34,7 +34,7 @@ class GradientBackgroundView: UIView {
         guard let gradient = self.layer as? CAGradientLayer else { return }
         gradient.startPoint = startPoint
         gradient.endPoint = endPoint
-        let gradients = [UIConstants.colors.gradientLeft, UIConstants.colors.gradientMiddle, UIConstants.colors.gradientRight]
+        let gradients: [UIColor] = [.red60, .magenta70, .purple80]
         gradient.colors = gradients.map { $0.withAlphaComponent(CGFloat(alpha)).cgColor }
     }
 }
@@ -43,10 +43,10 @@ class IntroCardGradientBackgroundView: UIView {
     init(alpha: Float = 1) {
         super.init(frame: CGRect.zero)
 
-        backgroundColor = UIConstants.colors.gradientBackground
+        backgroundColor = .gradientBackground
 
         let gradient = self.layer as! CAGradientLayer
-        let gradients = [UIConstants.Photon.Grey10, UIConstants.Photon.White100]
+        let gradients: [UIColor] = [.grey10, .white]
         gradient.colors = gradients.map { $0.withAlphaComponent(CGFloat(alpha)).cgColor }
     }
 

@@ -150,7 +150,7 @@ class BrowserViewController: UIViewController {
         isIPadRegularDimensions = traitCollection.horizontalSizeClass == .regular && traitCollection.verticalSizeClass == .regular
 
         darkView.isHidden = true
-        darkView.backgroundColor = UIConstants.colors.background
+        darkView.backgroundColor = .ink90
         darkView.alpha = 0.4
         view.addSubview(darkView)
         darkView.snp.makeConstraints { make in
@@ -526,7 +526,7 @@ class BrowserViewController: UIViewController {
                     self.findInPageBar = findInPageBar
                     let fillerView = UIView()
                     self.fillerView = fillerView
-                    fillerView.backgroundColor = UIConstants.Photon.Grey70
+                    fillerView.backgroundColor = .grey70
                     findInPageBar.text = text
                     findInPageBar.delegate = self
 

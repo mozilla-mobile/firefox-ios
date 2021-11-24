@@ -15,8 +15,8 @@ class BlockerToggle: Equatable {
         self.setting = setting
         self.subtitle = subtitle
         toggle.accessibilityIdentifier = "BlockerToggle.\(setting.rawValue)"
-        toggle.onTintColor = UIConstants.colors.toggleOn
-        toggle.tintColor = UIConstants.colors.toggleOff
+        toggle.onTintColor = .magenta40
+        toggle.tintColor = .grey10.withAlphaComponent(0.2)
     }
 
     static func == (lhs: BlockerToggle, rhs: BlockerToggle) -> Bool {

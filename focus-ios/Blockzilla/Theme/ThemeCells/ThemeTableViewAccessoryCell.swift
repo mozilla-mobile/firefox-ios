@@ -17,7 +17,7 @@ class ThemeTableViewAccessoryCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         let backgroundColorView = UIView()
-        backgroundColorView.backgroundColor = UIConstants.colors.cellSelected
+        backgroundColorView.backgroundColor = .grey10.withAlphaComponent(0.2)
         selectedBackgroundView = backgroundColorView
         textLabel?.numberOfLines = 0
         textLabel?.lineBreakMode = .byWordWrapping
