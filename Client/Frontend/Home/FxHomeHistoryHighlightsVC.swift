@@ -59,76 +59,38 @@ class FxHomeHistoryHighlightsCollectionCell: UICollectionViewCell, ReusableCell 
     }
 
     public static func createLayout(for totalItems: Int? = 1, with width: CGFloat = 360) -> UICollectionViewCompositionalLayout {
-        guard let totalItems = totalItems else { fatalError("TotalItems should ALWAYS exist.")}
-
-        // Create the vertical group in which the base item will go into
-        var itemFractionalHeight: CGFloat {
-            if totalItems == 2 {
-                return 0.5
-            } else if totalItems >= 3 {
-                return 1/3
-            }
-
-            return 1
-        }
-
-        // Create a base item to be used in the collection view
         let item = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                               heightDimension: .fractionalHeight(itemFractionalHeight)))
-
-        // Create the vertical group in which the base item will go into
-        var verticalGroupCount: Int {
-            if [1, 2, 3].contains(totalItems) {
-                return 1
-            } else if [4, 5, 6].contains(totalItems) {
-                return 2
-            } else if [7, 8, 9].contains(totalItems) {
-                return 3
-            }
-
-            return 1
-        }
-
-        var verticalGroupWidth: NSCollectionLayoutDimension {
-            if verticalGroupCount == 1 {
-                return .absolute(width)
-            } else {
-                return .fractionalWidth(1/CGFloat(verticalGroupCount))
-            }
-        }
+                                               heightDimension: .estimated(65)))
 
         let verticalGroup = NSCollectionLayoutGroup.vertical(
-            layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/CGFloat(verticalGroupCount)),
-                                               heightDimension: .fractionalHeight(1)),
-            subitems: [item])
+            layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                               heightDimension: .estimated(65)),
+            subitems: [item, item, item])
 
-        // Which are organized into horizontal groups if there are more than three items
-        let horizontalGroup = NSCollectionLayoutGroup.horizontal(
-            layoutSize: NSCollectionLayoutSize(widthDimension: .absolute(width * CGFloat(verticalGroupCount)),
-                                               heightDimension: .fractionalHeight(1)),
-            subitems: [verticalGroup])
-
-        let section = NSCollectionLayoutSection(group: horizontalGroup)
+        let section = NSCollectionLayoutSection(group: verticalGroup)
+        section.orthogonalScrollingBehavior = .continuous
         return UICollectionViewCompositionalLayout(section: section)
     }
 }
 
 extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // If there are 3 or less tabs, we can return the standard count, as we don't need
-        // to display filler cells. However, if we have 4, 5, 7, or 8 items, we will
-        // need to display filler cells to make the collection view behave according
-        // to the specified design.
-        if let count = viewModel?.historyItems.count, count <= 3 {
-            return count
-        } else if [4, 5].contains(viewModel?.historyItems.count) {
-            return 6
-        } else if [7, 8].contains(viewModel?.historyItems.count) {
-            return 9
+        guard let count = viewModel?.historyItems.count else {
+            return 0
         }
 
-        return 0
+        // If there are 3 or less tabs, we can return the standard count, as we don't need
+        // to display filler cells. However, if there's more items, filler cells needs to be accounted
+        // for so sections are always a multiple of 3 (since there's 3 cells per column).
+        let numberOfItemsPerColumn = 3
+        if count <= numberOfItemsPerColumn {
+            return count
+        } else {
+            let numberOfColumns = ceil(Double(count) / Double(numberOfItemsPerColumn))
+            // return the numberOfItemsInSection accounting for filler cells
+            return Int(numberOfColumns) * numberOfItemsPerColumn
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
