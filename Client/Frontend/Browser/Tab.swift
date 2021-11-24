@@ -686,7 +686,7 @@ class Tab: NSObject {
 
     func setScreenshot(_ screenshot: UIImage?) {
         // check if screenshot is same color as background
-        if let val = screenshot, let avgColor = val.averageColor {
+        if let val = screenshot, let avgColor = val.averageColor() {
             let backgroundColor = LegacyThemeManager.instance.current.browser.background
             guard !avgColor.isEqual(backgroundColor) else {
                 self.screenshot = nil
