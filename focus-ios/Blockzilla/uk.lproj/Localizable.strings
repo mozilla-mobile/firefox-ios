@@ -5,7 +5,7 @@
 "About.missionLabel" = "%@ створено в Mozilla. Наша місія — сприяння розвитку здорового й відкритого Інтернету.";
 
 /* Label on About screen */
-"About.privateBullet1" = "Шукайте й переглядайте безпосередньо в програмі";
+"About.privateBullet1" = "Шукайте й переглядайте просто з програми";
 
 /* Label on About screen */
 "About.privateBullet2" = "Блокуйте стеження (або оновіть налаштування, щоб дозволити стеження)";
@@ -431,7 +431,7 @@
 "Settings.toggleFaceID" = "Використовувати Face ID для розблокування програми";
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
-"Settings.toggleFaceIDDescription" = "Face ID може розблокувати %@ якщо URL-адреса вже відкрита в програмі";
+"Settings.toggleFaceIDDescription" = "Face ID блокуватиме %@, якщо в програмі відкрито якусь сторінку";
 
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "Показувати поради на головному екрані";
@@ -452,7 +452,7 @@
 "Settings.toggleTouchID" = "Використовувати Touch ID для розблокування програми";
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
-"Settings.toggleTouchIDDescription" = "Touch ID може розблокувати %@ якщо URL-адреса вже відкрита в програмі";
+"Settings.toggleTouchIDDescription" = "Touch ID блокуватиме %@, якщо в програмі відкрито якусь сторінку";
 
 /* Status off for tracking protection in settings screen */
 "Settings.trackingProtectionOff" = "Вимкнено";
