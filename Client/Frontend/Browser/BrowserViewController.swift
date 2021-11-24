@@ -618,7 +618,6 @@ class BrowserViewController: UIViewController {
         presentDBOnboardingViewController()
         presentUpdateViewController()
         screenshotHelper.viewIsVisible = true
-        screenshotHelper.takePendingScreenshots(tabManager.tabs)
 
         super.viewDidAppear(animated)
 
@@ -1157,7 +1156,6 @@ class BrowserViewController: UIViewController {
     func openURLInNewTab(_ url: URL?, isPrivate: Bool = false) {
         if let selectedTab = tabManager.selectedTab {
             screenshotHelper.takeScreenshot(selectedTab)
-            tabManager.storeScreenshot(tab: selectedTab)
         }
         let request: URLRequest?
         if let url = url {
@@ -1299,8 +1297,12 @@ class BrowserViewController: UIViewController {
         }
 
         // Represents WebView observation or delegate update that called this function
-        switch webViewStatus {
-        case .title, .url, .finishedNavigation:
+        
+        if webViewStatus == .finishedNavigation {
+            // A delay of 500 milliseconds is added when we take screenshot
+            // as we don't know exactly when wkwebview is rendered
+            let delayedTimeInterval = DispatchTimeInterval.milliseconds(500)
+
             if tab !== tabManager.selectedTab, let webView = tab.webView {
                 // To Screenshot a tab that is hidden we must add the webView,
                 // then wait enough time for the webview to render.
@@ -1313,12 +1315,15 @@ class BrowserViewController: UIViewController {
                 // There are cases in which the page will still show a loading animation or nothing when the screenshot is being taken,
                 // depending on internet connection
                 // Issue created: https://github.com/mozilla-mobile/firefox-ios/issues/7003
-                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1000)) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + delayedTimeInterval) {
                     self.screenshotHelper.takeScreenshot(tab)
-                    self.tabManager.storeScreenshot(tab: tab)
                     if webView.superview == self.view {
                         webView.removeFromSuperview()
                     }
+                }
+            } else if tab.webView != nil {
+                DispatchQueue.main.asyncAfter(deadline: .now() + delayedTimeInterval) {
+                    self.screenshotHelper.takeScreenshot(tab)
                 }
             }
         }

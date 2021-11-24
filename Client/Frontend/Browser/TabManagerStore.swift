@@ -70,6 +70,12 @@ class TabManagerStore: FeatureFlagsProtocol {
             imageStore?.put(uuidString, image: screenshot)
         }
     }
+    
+    func removeScreenshot(forTab tab: Tab?) {
+        if let tab = tab, let screenshotUUID = tab.screenshotUUID {
+            imageStore?.removeImage(screenshotUUID.uuidString)
+        }
+    }
 
     // Async write of the tab state. In most cases, code doesn't care about performing an operation
     // after this completes. Deferred completion is called always, regardless of Data.write return value.
