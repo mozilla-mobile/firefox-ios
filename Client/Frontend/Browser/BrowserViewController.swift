@@ -1296,6 +1296,10 @@ class BrowserViewController: UIViewController {
         // Represents WebView observation or delegate update that called this function
         
         if webViewStatus == .finishedNavigation {
+            // A delay of 500 milliseconds is added when we take screenshot
+            // as we don't know exactly when wkwebview is rendered
+            let delayedTimeInterval = DispatchTimeInterval.milliseconds(500)
+
             if tab !== tabManager.selectedTab, let webView = tab.webView {
                 // To Screenshot a tab that is hidden we must add the webView,
                 // then wait enough time for the webview to render.
@@ -1308,14 +1312,14 @@ class BrowserViewController: UIViewController {
                 // There are cases in which the page will still show a loading animation or nothing when the screenshot is being taken,
                 // depending on internet connection
                 // Issue created: https://github.com/mozilla-mobile/firefox-ios/issues/7003
-                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + delayedTimeInterval) {
                     self.screenshotHelper.takeScreenshot(tab)
                     if webView.superview == self.view {
                         webView.removeFromSuperview()
                     }
                 }
-            } else if let webView = tab.webView {
-                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
+            } else if tab.webView != nil {
+                DispatchQueue.main.asyncAfter(deadline: .now() + delayedTimeInterval) {
                     self.screenshotHelper.takeScreenshot(tab)
                 }
             }
