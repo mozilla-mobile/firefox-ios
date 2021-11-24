@@ -57,8 +57,8 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
 
         super.init(profile: profile)
 
-        [ Notification.Name.FirefoxAccountChanged,
-          Notification.Name.DynamicFontChanged ].forEach {
+        [Notification.Name.FirefoxAccountChanged,
+         Notification.Name.DynamicFontChanged].forEach {
             NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: $0, object: nil)
         }
 
@@ -69,6 +69,10 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 
     override func viewDidLoad() {
@@ -433,10 +437,6 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         return true
     }
 
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        // Intentionally blank. Required to use UITableViewRowActions
-    }
-
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         // Root folders cannot be moved.
         guard let bookmarkFolder = self.bookmarkFolder, bookmarkFolder.guid != BookmarkRoots.RootGUID else {
@@ -457,17 +457,16 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         bookmarkNodes.insert(bookmarkNode, at: destinationIndexPath.row)
     }
 
-    func tableView(_ tableView: UITableView, editingStyleForRowAtIndexPath indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        return .delete
-    }
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(style: .destructive, title: .BookmarksPanelDeleteTableAction) { [weak self] (_, _, completion) in
+            guard let strongSelf = self else { completion(false); return }
 
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let delete = UITableViewRowAction(style: .default, title: .BookmarksPanelDeleteTableAction, handler: { (action, indexPath) in
-            self.deleteBookmarkNodeAtIndexPath(indexPath)
+            strongSelf.deleteBookmarkNodeAtIndexPath(indexPath)
             TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .bookmark, value: .bookmarksPanel, extras: ["gesture": "swipe"])
-        })
+            completion(true)
+        }
 
-        return [delete]
+        return UISwipeActionsConfiguration(actions: [deleteAction])
     }
 }
 
