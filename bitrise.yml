@@ -605,12 +605,6 @@ workflows:
       bitrise.io:
         stack: osx-xcode-13.0.x
         machine_type_id: g2.4core
-    before_run:
-    - 1_git_clone_and_post_clone
-    - 2_certificate_and_profile
-    - 3_provisioning_and_npm_installation
-    after_run:
-    - 5_deploy_and_slack
   Deploy_Beta:
     steps:
     - activate-ssh-key@4.1:
