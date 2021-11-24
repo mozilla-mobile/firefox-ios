@@ -58,13 +58,20 @@ class FxHomeHistoryHighlightsCollectionCell: UICollectionViewCell, ReusableCell 
         ])
     }
 
-    public static func createLayout(for totalItems: Int? = 1, with width: CGFloat = 360) -> UICollectionViewCompositionalLayout {
+    public static func createLayout() -> UICollectionViewCompositionalLayout {
         let item = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                heightDimension: .estimated(65)))
 
+        let groupWidth: NSCollectionLayoutDimension
+        if UIScreen.main.traitCollection.horizontalSizeClass == .compact {
+            groupWidth = NSCollectionLayoutDimension.fractionalWidth(1)
+        } else {
+            groupWidth = NSCollectionLayoutDimension.fractionalWidth(1/3)
+        }
+
         let verticalGroup = NSCollectionLayoutGroup.vertical(
-            layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+            layoutSize: NSCollectionLayoutSize(widthDimension: groupWidth,
                                                heightDimension: .estimated(65)),
             subitems: [item, item, item])
 
