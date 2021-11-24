@@ -75,11 +75,7 @@ class FxHomeHistoryHighlightsCollectionCell: UICollectionViewCell, ReusableCell 
         // Create a base item to be used in the collection view
         let item = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                               heightDimension: .estimated(40)))
-//        let itemSize = NSCollectionLayoutSize(
-//            widthDimension: NSCollectionLayoutDimension.absolute(RecentlySavedCollectionCellUX.cellWidth),
-//            heightDimension: NSCollectionLayoutDimension.estimated(RecentlySavedCollectionCellUX.cellHeight)
-//        )
+                                               heightDimension: .fractionalHeight(itemFractionalHeight)))
 
         // Create the vertical group in which the base item will go into
         var verticalGroupCount: Int {
@@ -108,18 +104,13 @@ class FxHomeHistoryHighlightsCollectionCell: UICollectionViewCell, ReusableCell 
             subitems: [item])
 
         // Which are organized into horizontal groups if there are more than three items
-//        if totalItems > 3 {
-            let horizontalGroup = NSCollectionLayoutGroup.horizontal(
-                layoutSize: NSCollectionLayoutSize(widthDimension: .absolute(width * CGFloat(verticalGroupCount)),
-                                                   heightDimension: .fractionalHeight(1)),
-                subitems: [verticalGroup])
+        let horizontalGroup = NSCollectionLayoutGroup.horizontal(
+            layoutSize: NSCollectionLayoutSize(widthDimension: .absolute(width * CGFloat(verticalGroupCount)),
+                                               heightDimension: .fractionalHeight(1)),
+            subitems: [verticalGroup])
 
-            let section = NSCollectionLayoutSection(group: horizontalGroup)
-            return UICollectionViewCompositionalLayout(section: section)
-//        }
-//
-//        let section = NSCollectionLayoutSection(group: verticalGroup)
-//        return UICollectionViewCompositionalLayout(section: section)
+        let section = NSCollectionLayoutSection(group: horizontalGroup)
+        return UICollectionViewCompositionalLayout(section: section)
     }
 }
 
@@ -170,6 +161,8 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
 
         return cell
     }
+
+    // MARK: - Cell helper functions
 
     private func isBottomCell(indexPath: IndexPath, totalItems: Int?) -> Bool {
         guard let totalItems = totalItems else { return false }
@@ -287,16 +280,31 @@ class RecentlyVisitedCell: UICollectionViewCell, ReusableCell {
     }
 
     let itemTitle: UILabel = .build { label in
-        label.adjustsFontSizeToFitWidth = false
-        label.font = UIFont.systemFont(ofSize: RecentlyVisitedCellUX.titleFontSize)
+        // Limiting max size to accomodate for non-self-sizing parent cell.
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
+                                                                   maxSize: 23)
+        label.adjustsFontForContentSizeCategory = true
     }
+
+    let itemDescription: UILabel = .build { label in
+        // Limiting max size to accomodate for non-self-sizing parent cell.
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
+                                                                   maxSize: 18)
+        label.adjustsFontForContentSizeCategory = true
+    }
+
+    private lazy var textStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [itemTitle, itemDescription])
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.distribution = .fillProportionally
+        stack.axis = .vertical
+        stack.alignment = .leading
+
+        return stack
+    }()
 
     let bottomLine: UIView = .build { line in
         line.isHidden = false
-    }
-
-    let hiddenContainer: UIView = .build { container in
-
     }
 
     var isFillerCell: Bool = false {
@@ -326,6 +334,7 @@ class RecentlyVisitedCell: UICollectionViewCell, ReusableCell {
         itemTitle.text = options.title
         bottomLine.alpha = options.hideBottomLine ? 0 : 1
         isFillerCell = options.isFillerCell
+        itemDescription.isHidden = itemDescription.text?.isEmpty ?? false
 
         if let corners = options.corners {
             contentView.addRoundedCorners([corners], radius: RecentlyVisitedCellUX.generalCornerRadius)
@@ -338,32 +347,19 @@ class RecentlyVisitedCell: UICollectionViewCell, ReusableCell {
     }
 
     private func setupLayout() {
-//        contentView.layer.cornerRadius = HistoryHighlightsCellUX.generalCornerRadius
-//        contentView.layer.shadowRadius = HistoryHighlightsCellUX.stackViewShadowRadius
-//        contentView.layer.shadowOffset = CGSize(width: 0, height: HistoryHighlightsCellUX.stackViewShadowOffset)
-//        contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-//        contentView.layer.shadowOpacity = 0.12
-
-//        contentView.addSubview(hiddenContainer)
         contentView.addSubview(heroImage)
-        contentView.addSubview(itemTitle)
+        contentView.addSubview(textStack)
         contentView.addSubview(bottomLine)
 
         NSLayoutConstraint.activate([
-//            hiddenContainer.topAnchor.constraint(equalTo: contentView.topAnchor, constant: -5),
-//            hiddenContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-//            hiddenContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-//            hiddenContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-
             heroImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             heroImage.heightAnchor.constraint(equalToConstant: RecentlyVisitedCellUX.heroImageDimension),
             heroImage.widthAnchor.constraint(equalToConstant: RecentlyVisitedCellUX.heroImageDimension),
-            heroImage.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            heroImage.centerYAnchor.constraint(equalTo: textStack.centerYAnchor),
 
-            itemTitle.heightAnchor.constraint(equalToConstant: 22),
-            itemTitle.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            itemTitle.leadingAnchor.constraint(equalTo: heroImage.trailingAnchor, constant: 12),
-            itemTitle.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
+            textStack.leadingAnchor.constraint(equalTo: heroImage.trailingAnchor, constant: 12),
+            textStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
+            textStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: 3),
 
             bottomLine.heightAnchor.constraint(equalToConstant: 0.5),
             bottomLine.leadingAnchor.constraint(equalTo: itemTitle.leadingAnchor),
@@ -384,7 +380,6 @@ class RecentlyVisitedCell: UICollectionViewCell, ReusableCell {
 extension RecentlyVisitedCell: Themeable {
     func applyTheme() {
         contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
-        hiddenContainer.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
         heroImage.tintColor = UIColor.theme.homePanel.recentlyVisitedCellGroupImage
         bottomLine.backgroundColor = UIColor.theme.homePanel.recentlyVisitedCellBottomLine
     }

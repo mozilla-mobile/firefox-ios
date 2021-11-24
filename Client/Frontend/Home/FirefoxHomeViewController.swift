@@ -17,7 +17,7 @@ struct FirefoxHomeUX {
     static let highlightCellHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 200
     static let jumpBackInCellHeight: CGFloat = 120
     static let recentlySavedCellHeight: CGFloat = 136
-    static let historyHighlightsCellHeight: CGFloat = 62
+    static let historyHighlightsCellHeight: CGFloat = 70
     static let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 15)
     static let numberOfItemsPerRowForSizeClassIpad = UXSizeClasses(compact: 3, regular: 4, other: 2)
     static let spacingBetweenSections: CGFloat = 24
