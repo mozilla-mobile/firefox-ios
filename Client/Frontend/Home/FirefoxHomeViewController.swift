@@ -34,7 +34,6 @@ struct FxHomeDevStrings {
     }
 }
 
-
 /*
  Size classes are the way Apple requires us to specify our UI.
  Split view on iPad can make a landscape app appear with the demensions of an iPhone app
@@ -289,8 +288,12 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        Section.allCases.forEach { collectionView.register($0.cellType, forCellWithReuseIdentifier: $0.cellIdentifier) }
-        collectionView?.register(ASHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header")
+        Section.allCases.forEach {
+            collectionView.register($0.cellType, forCellWithReuseIdentifier: $0.cellIdentifier)
+        }
+        collectionView?.register(ASHeaderView.self,
+                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                 withReuseIdentifier: "Header")
         collectionView?.keyboardDismissMode = .onDrag
         collectionView?.backgroundColor = .clear
         view.addSubviews(overlayView)
@@ -573,13 +576,13 @@ extension FirefoxHomeViewController {
 
         var cellIdentifier: String {
             switch self {
-            case .topSites: return "TopSiteCell"
-            case .pocket: return "PocketCell"
-            case .jumpBackIn: return "JumpBackInCell"
-            case .recentlySaved: return "RecentlySavedCell"
+            case .topSites: return ASHorizontalScrollCell.cellIdentifier
+            case .pocket: return FirefoxHomeHighlightCell.cellIdentifier
+            case .jumpBackIn: return FxHomeJumpBackInCollectionCell.cellIdentifier
+            case .recentlySaved: return FxHomeRecentlySavedCollectionCell.cellIdentifier
             case .historyHighlights: return FxHomeHistoryHighlightsCollectionCell.cellIdentifier
-            case .libraryShortcuts: return  "LibraryShortcutsCell"
-            case .customizeHome: return "CustomizeHomeCell"
+            case .libraryShortcuts: return  ASLibraryCell.cellIdentifier
+            case .customizeHome: return FxHomeCustomizeHomeView.cellIdentifier
             }
         }
 
@@ -674,7 +677,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                                                  extras: nil)
                     hasSentHistoryHighlightsSectionEvent = true
                 }
-                
+
                 headerView.moreButton.isHidden = false
                 headerView.moreButton.setTitle(.RecentlySavedShowAllText, for: .normal)
                 headerView.moreButton.addTarget(self, action: #selector(openHistory), for: .touchUpInside)
