@@ -515,20 +515,19 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         return super.tableView(tableView, heightForHeaderInSection: section)
     }
 
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        // Intentionally blank. Required to use UITableViewRowActions
-    }
-
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        if indexPath.section == Section.additionalHistoryActions.rawValue {
-            return []
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        guard indexPath.section != Section.additionalHistoryActions.rawValue else {
+            return nil
         }
-        let title: String = .HistoryPanelDelete
 
-        let delete = UITableViewRowAction(style: .default, title: title, handler: { (action, indexPath) in
-            self.removeHistoryForURLAtIndexPath(indexPath: indexPath)
-        })
-        return [delete]
+        let deleteAction = UIContextualAction(style: .destructive, title: .HistoryPanelDelete) { [weak self] (_, _, completion) in
+            guard let strongSelf = self else { completion(false); return }
+
+            strongSelf.removeHistoryForURLAtIndexPath(indexPath: indexPath)
+            completion(true)
+        }
+
+        return UISwipeActionsConfiguration(actions: [deleteAction])
     }
 
     // MARK: - Empty State
