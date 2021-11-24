@@ -156,7 +156,7 @@ class SettingAppearanceTest: BaseTestCase {
         settingsButton.tap()
 
         // Navigate to Autocomplete Settings
-        waitForHittable(app.tables.cells["SettingsViewController.autocompleteCell"])
+        waitForExistence(app.tables.cells["SettingsViewController.autocompleteCell"])
         app.tables.cells["SettingsViewController.autocompleteCell"].tap()
 
         // Verify that autocomplete is enabled
@@ -183,15 +183,15 @@ class SettingAppearanceTest: BaseTestCase {
         settingsButton.tap()
 
         // Navigate to Autocomplete Settings
-        waitForHittable(app.tables.cells["SettingsViewController.autocompleteCell"])
+        waitForExistence(app.tables.cells["SettingsViewController.autocompleteCell"])
         app.tables.cells["SettingsViewController.autocompleteCell"].tap()
 
         // Navigate to the customURL list
-        waitForHittable(app.tables.cells["customURLS"])
+        waitForExistence(app.tables.cells["customURLS"])
         app.tables.cells["customURLS"].tap()
 
         // Navigate to add domain screen
-        waitForHittable(app.tables.cells["addCustomDomainCell"])
+        waitForExistence(app.tables.cells["addCustomDomainCell"])
         app.tables.cells["addCustomDomainCell"].tap()
 
         // Edit Text Field

@@ -22,8 +22,10 @@ class TrackingProtectionMenu: BaseTestCase {
         app.switches["BlockerToggle.TrackingProtection"].tap()
 
         // Reopen the tracking protection sidebar
-        app.buttons["closeSheetButton"].tap()
-        app.otherElements["URLBar.trackingProtectionIcon"].tap()
+        if !iPad() {
+            app.buttons["closeSheetButton"].tap()
+            app.otherElements["URLBar.trackingProtectionIcon"].tap()
+        }
 
         // Wait for the sidebar to open
         let switchValue = app.switches["BlockerToggle.TrackingProtection"].value!
