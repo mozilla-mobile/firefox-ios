@@ -48,7 +48,13 @@ class BrowserToolset {
         deleteButton.isEnabled = false
 
         contextMenuButton.tintColor = .primaryText
-        contextMenuButton.addTarget(self, action: #selector(didPressContextMenu), for: .touchUpInside)
+        if #available(iOS 14.0, *) {
+            contextMenuButton.showsMenuAsPrimaryAction = true
+            contextMenuButton.menu = UIMenu(children: [])
+            contextMenuButton.addTarget(self, action: #selector(didPressContextMenu), for: .menuActionTriggered)
+        } else {
+            contextMenuButton.addTarget(self, action: #selector(didPressContextMenu), for: .touchUpInside)
+        }
         contextMenuButton.accessibilityLabel = UIConstants.strings.browserSettings
         contextMenuButton.accessibilityIdentifier = "HomeView.settingsButton"
         contextMenuButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets

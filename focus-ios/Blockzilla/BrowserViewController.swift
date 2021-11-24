@@ -669,18 +669,6 @@ class BrowserViewController: UIViewController {
         SKStoreReviewController.requestReview()
     }
 
-    private func showSettings(shouldScrollToSiri: Bool = false) {
-        guard let modalDelegate = modalDelegate else { return }
-
-        let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: browserToolbar.toolset, shouldScrollToSiri: shouldScrollToSiri)
-        let settingsNavController = UINavigationController(rootViewController: settingsViewController)
-        settingsNavController.modalPresentationStyle = .formSheet
-
-        modalDelegate.presentModal(viewController: settingsNavController, animated: true)
-
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.settingsButton)
-    }
-
     private func showSiriFavoriteSettings() {
         guard let modalDelegate = modalDelegate else { return }
 
@@ -925,7 +913,92 @@ class BrowserViewController: UIViewController {
             overlayView.currentURL = urlBar.url?.absoluteString ?? ""
         }
     }
+    
+    @available(iOS 14, *)
+    func buildActions(for sender: UIView) -> [UIMenuElement] {
+        var actions: [UIMenuElement] = []
+
+        if let url = urlBar.url {
+            let utils = OpenUtils(url: url, webViewController: webViewController)
+
+            getShortcutsItem(for: url)
+                .map(UIAction.init)
+                .map { UIMenu(options: .displayInline, children: [$0]) }
+                .map {
+                    actions.append($0)
+                }
+            
+
+            var actionItems: [UIMenuElement] = [UIAction(findInPageItem)]
+            actionItems.append(
+                webViewController.requestMobileSite
+                ? UIAction(requestMobileItem)
+                : UIAction(requestDesktopItem)
+            )
+            
+            let actionMenu = UIMenu(options: .displayInline, children: actionItems)
+            actions.append(actionMenu)
+
+            var shareItems: [UIMenuElement?] = [UIAction(copyItem)]
+            shareItems.append(UIAction(sharePageItem(for: utils, sender: sender)))
+            shareItems.append(openInFireFoxItem(for: url).map(UIAction.init))
+            shareItems.append(openInChromeItem(for: url).map(UIAction.init))
+            shareItems.append(UIAction(openInDefaultBrowserItem(for: url)))
+        
+            let shareMenu = UIMenu(options: .displayInline, children: shareItems.compactMap { $0 })
+            actions.append(shareMenu)
+            
+        } else {
+            actions.append(UIMenu(options: .displayInline, children: [UIAction(helpItem)]))
+        }
+        actions.append(UIMenu(options: .displayInline, children: [UIAction(settingsItem)]))
+        
+        return actions
+    }
+    
+    func buildActions(for sender: UIView) -> [[PhotonActionSheetItem]] {
+        var actions: [[PhotonActionSheetItem]] = []
+        
+        if let url = urlBar.url {
+            let utils = OpenUtils(url: url, webViewController: webViewController)
+
+            actions.append([getShortcutsItem(for: url).map(PhotonActionSheetItem.init)].compactMap{ $0 })
+            
+            var actionItems = [PhotonActionSheetItem(findInPageItem)]
+            actionItems.append(
+                webViewController.requestMobileSite
+                ? PhotonActionSheetItem(requestMobileItem)
+                : PhotonActionSheetItem(requestDesktopItem)
+            )
+            
+            var shareItems: [PhotonActionSheetItem?] = [PhotonActionSheetItem(copyItem)]
+            shareItems.append(PhotonActionSheetItem(sharePageItem(for: utils, sender: sender)))
+            shareItems.append(openInFireFoxItem(for: url).map(PhotonActionSheetItem.init))
+            shareItems.append(openInChromeItem(for: url).map(PhotonActionSheetItem.init))
+            shareItems.append(PhotonActionSheetItem(openInDefaultBrowserItem(for: url)))
+            
+            actions.append(actionItems)
+            actions.append(shareItems.compactMap { $0 })
+        } else {
+            actions.append([PhotonActionSheetItem(helpItem)])
+        }
+        
+        actions.append([PhotonActionSheetItem(settingsItem)])
+        return actions
+    }
+    
+    func presentContextMenu(from sender: InsetButton) {
+        if #available(iOS 14, *) {
+            sender.showsMenuAsPrimaryAction = true
+            sender.menu = UIMenu(children: buildActions(for: sender))
+        } else {
+            let pageActionsMenu = PhotonActionSheet(actions: buildActions(for: sender))
+            presentPhotonActionSheet(pageActionsMenu, from: sender)
+        }
+    }
 }
+
+extension BrowserViewController: MenuItemProvider {}
 
 extension BrowserViewController: UIDropInteractionDelegate {
     func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
@@ -1166,80 +1239,6 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidLongPress(_ urlBar: URLBar) { }
-    
-    func presentContextMenu(from sender: UIView) {
-        var actions: [[PhotonActionSheetItem]] = []
-        
-        if let url = urlBar.url {
-            let utils = OpenUtils(url: url, webViewController: webViewController)
-            let items = PageActionSheetItems(url: url)
-            
-            let shortcut = Shortcut(url: url)
-            if shortcutManager.isSaved(shortcut: shortcut) {
-                let shortcutItem = [items.removeFromShortcutsItem]
-                actions.append(shortcutItem)
-            } else if shortcutManager.numberOfShortcuts < UIConstants.maximumNumberOfShortcuts {
-                let shortcutItem = [items.addToShortcutsItem]
-                actions.append(shortcutItem)
-            }
-            
-            let sharePageItem = PhotonActionSheetItem(title: UIConstants.strings.sharePage, iconString: "icon_openwith_active") { [weak self] _ in
-                guard let self = self else { return }
-                let shareVC = utils.buildShareViewController()
-                
-                // Exact frame dimensions taken from presentPhotonActionSheet
-                shareVC.popoverPresentationController?.sourceView = sender
-                shareVC.popoverPresentationController?.sourceRect = CGRect(x: sender.frame.width/2, y: sender.frame.size.height * 0.75, width: 1, height: 1)
-                
-                shareVC.becomeFirstResponder()
-                self.present(shareVC, animated: true, completion: nil)
-            }
-            
-            var actionItems = [items.findInPageItem]
-            actionItems.append(
-                webViewController.requestMobileSite
-                    ? items.requestMobileItem
-                    : items.requestDesktopItem
-            )
-            
-            let copyItem = PhotonActionSheetItem(title: UIConstants.strings.copyAddress, iconString: "icon_link") { [weak self] _ in
-                guard let self = self else { return }
-                self.urlBar.copyToClipboard()
-                Toast(text: UIConstants.strings.copyURLToast).show()
-            }
-            var shareItems = [copyItem]
-            shareItems.append(sharePageItem)
-            
-            if items.canOpenInFirefox {
-                shareItems.append(items.openInFireFoxItem)
-            }
-            if items.canOpenInChrome {
-                shareItems.append(items.openInChromeItem)
-            }
-            shareItems.append(items.openInDefaultBrowserItem)
-            
-            actions.append(actionItems)
-            actions.append(shareItems)
-        } else {
-            let helpItem = PhotonActionSheetItem(title: UIConstants.strings.aboutRowHelp, iconString: "icon_help") { [weak self] _ in
-                guard let self = self else { return }
-                self.submit(text: "https://support.mozilla.org/en-US/products/focus-firefox/Focus-ios")
-            }
-            
-            actions.append([helpItem])
-        }
-        
-        let settingsItem = PhotonActionSheetItem(title: UIConstants.strings.settingsTitle, iconString: "icon_settings") { [weak self] _ in
-            guard let self = self else { return }
-            self.showSettings()
-        }
-        
-        actions.append([settingsItem])
-        
-        let pageActionsMenu = PhotonActionSheet(actions: actions)
-        
-        presentPhotonActionSheet(pageActionsMenu, from: sender)
-    }
 }
 
 extension BrowserViewController: PhotonActionSheetDelegate {
@@ -1787,4 +1786,115 @@ extension BrowserViewController {
 protocol WhatsNewDelegate {
     func shouldShowWhatsNew() -> Bool
     func didShowWhatsNew()
+}
+
+extension BrowserViewController: MenuActionable {
+    
+    func openInFirefox(url: URL) {
+        guard let escaped = url.absoluteString.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed),
+              let firefoxURL = URL(string: "firefox://open-url?url=\(escaped)&private=true"),
+              UIApplication.shared.canOpenURL(firefoxURL) else {
+                  return
+              }
+        
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.menu, value: "firefox")
+        UIApplication.shared.open(firefoxURL, options: [:])
+    }
+    
+    func findInPage() {
+        NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: UIConstants.strings.findInPageNotification)))
+    }
+    
+    func openInDefaultBrowser(url: URL) {
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.menu, value: "default")
+        UIApplication.shared.open(url, options: [:])
+    }
+    
+    func openInChrome(url: URL) {
+        // Code pulled from https://github.com/GoogleChrome/OpenInChrome
+        // Replace the URL Scheme with the Chrome equivalent.
+        var chromeScheme: String?
+        if url.scheme == "http" {
+            chromeScheme = "googlechrome"
+        } else if url.scheme == "https" {
+            chromeScheme = "googlechromes"
+        }
+        
+        // Proceed only if a valid Google Chrome URI Scheme is available.
+        guard let scheme = chromeScheme,
+              let rangeForScheme = url.absoluteString.range(of: ":"),
+              let chromeURL = URL(string: scheme + url.absoluteString[rangeForScheme.lowerBound...]) else { return }
+        
+        // Open the URL with Chrome.
+        UIApplication.shared.open(chromeURL, options: [:])
+    }
+    
+    var canOpenInFirefox: Bool {
+        return UIApplication.shared.canOpenURL(URL(string: "firefox://")!)
+    }
+
+    var canOpenInChrome: Bool {
+        return UIApplication.shared.canOpenURL(URL(string: "googlechrome://")!)
+    }
+    
+    func requestDesktopBrowsing() {
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.requestDesktop)
+        NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: UIConstants.strings.requestDesktopNotification)))
+    }
+    
+    func requestMobileBrowsing() {
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.requestMobile)
+        NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: UIConstants.strings.requestMobileNotification)))
+    }
+    
+    func showSharePage(for utils: OpenUtils, sender: UIView) {
+        let shareVC = utils.buildShareViewController()
+        
+        // Exact frame dimensions taken from presentPhotonActionSheet
+        shareVC.popoverPresentationController?.sourceView = sender
+        shareVC.popoverPresentationController?.sourceRect =
+        CGRect(
+            x: sender.frame.width/2,
+            y: sender.frame.size.height,
+            width: 1,
+            height: 1
+        )
+        
+        shareVC.becomeFirstResponder()
+        self.present(shareVC, animated: true, completion: nil)
+    }
+    
+    func showSettings(shouldScrollToSiri: Bool = false) {
+        guard let modalDelegate = modalDelegate else { return }
+
+        let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: browserToolbar.toolset, shouldScrollToSiri: shouldScrollToSiri)
+        let settingsNavController = UINavigationController(rootViewController: settingsViewController)
+        settingsNavController.modalPresentationStyle = .formSheet
+
+        modalDelegate.presentModal(viewController: settingsNavController, animated: true)
+
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.settingsButton)
+    }
+    
+    func showHelp() {
+        submit(text: "https://support.mozilla.org/en-US/products/focus-firefox/Focus-ios")
+    }
+    
+    func showCopy() {
+        urlBar.copyToClipboard()
+        Toast(text: UIConstants.strings.copyURLToast).show()
+    }
+    
+    func addToShortcuts(url: URL) {
+        let shortcut = Shortcut(url: url)
+        self.shortcutManager.addToShortcuts(shortcut: shortcut)
+        GleanMetrics.Shortcuts.shortcutAddedCounter.add()
+        TipManager.shortcutsTip = false
+    }
+    
+    func removeShortcut(url: URL) {
+        let shortcut = Shortcut(url: url)
+        self.shortcutManager.removeFromShortcuts(shortcut: shortcut)
+        GleanMetrics.Shortcuts.shortcutRemovedCounter["removed_from_browser_menu"].add()
+    }
 }

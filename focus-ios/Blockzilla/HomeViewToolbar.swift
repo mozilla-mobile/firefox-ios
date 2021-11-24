@@ -13,9 +13,9 @@ class HomeViewToolbar: UIView {
             guard UIDevice.current.userInterfaceIdiom == .pad else { return }
             
             if isIPadRegularDimensions {
-                toolset.contextMenuButton.removeFromSuperview()
+                toolset.contextMenuButton.isHidden = true
             } else {
-                stackView.addArrangedSubview(toolset.contextMenuButton)
+                toolset.contextMenuButton.isHidden = false
             }
         }
     }

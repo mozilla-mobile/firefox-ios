@@ -38,8 +38,10 @@ class FindInPageTest: BaseTestCase {
 
         waitForExistence(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
-        waitForExistence(app.tables.cells["Find in Page"])
-        app.tables.cells["Find in Page"].tap()
+        
+        let findInPageButton = app.findInPageButton
+        waitForExistence(findInPageButton, timeout: 10)
+        findInPageButton.tap()
 
         // Activate find in page activity item and search for a keyword
         app.typeText("Domain")

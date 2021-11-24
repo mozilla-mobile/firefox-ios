@@ -39,8 +39,9 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
         // Set search engine to Google
         app.buttons["HomeView.settingsButton"].tap()
-        waitForExistence(app.tables.cells["Settings"])
-        app.tables.cells["Settings"].tap()
+        let settingsButton = app.settingsButton
+        waitForExistence(settingsButton, timeout: 10)
+        settingsButton.tap()
         waitForExistence(app.tables.cells["SettingsViewController.searchCell"])
         checkToggle(isOn: false)
     }
@@ -71,7 +72,9 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         // Check search suggestions toggle is ON
         waitForHittable(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
-        app.tables.cells["Settings"].tap()
+        let settingsButton = app.settingsButton
+        waitForExistence(settingsButton, timeout: 10)
+        settingsButton.tap()
         waitForExistence(app.tables.cells["SettingsViewController.searchCell"])
         checkToggle(isOn: true)
     }
@@ -105,7 +108,9 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         // Check search suggestions toggle is OFF
         waitForHittable(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
-        app.tables.cells["Settings"].tap()
+        let settingsButton = app.settingsButton
+        waitForExistence(settingsButton, timeout: 10)
+        settingsButton.tap()
         waitForExistence(app.tables.cells["SettingsViewController.searchCell"])
         checkToggle(isOn: false)
     }
@@ -160,7 +165,9 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         // Disable through settings
         waitForExistence(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
-        app.tables.cells["Settings"].tap()
+        let settingsButton = app.settingsButton
+        waitForExistence(settingsButton, timeout: 10)
+        settingsButton.tap()
         waitForExistence(app.tables.cells["SettingsViewController.searchCell"])
         app.tables.switches["BlockerToggle.enableSearchSuggestions"].tap()
         if iPad() {
