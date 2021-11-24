@@ -96,4 +96,19 @@ open class DiskImageStore {
             return succeed()
         }
     }
+    
+    /// Remove image with provided key
+    open func removeImage(_ key: String) -> Success {
+        return deferDispatchAsync(queue) { () -> Success in
+            let url = URL(fileURLWithPath: self.filesDir).appendingPathComponent(key)
+
+            do {
+                try FileManager.default.removeItem(at: url)
+            } catch {
+                log.warning("Failed to remove DiskImageStore item at \(url.absoluteString): \(error)")
+            }
+
+            return succeed()
+        }
+    }
 }

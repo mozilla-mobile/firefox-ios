@@ -7,7 +7,7 @@ import Shared
 import SDWebImage
 import Storage
 
-private struct TopSiteCellUX {
+struct TopSiteCellUX {
     static let TitleHeight: CGFloat = 20
     static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
     static let CellCornerRadius: CGFloat = 8

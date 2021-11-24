@@ -817,6 +817,20 @@ class TabCell: UICollectionViewCell, TabTrayCell {
         view.clipsToBounds = true
         view.backgroundColor = UIColor.theme.tabTray.cellBackground
         return view
+        
+    }()
+
+    lazy private var faviconBG: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = TopSiteCellUX.CellCornerRadius
+        view.layer.borderWidth = TopSiteCellUX.BorderWidth
+        view.layer.shadowOffset = CGSize(width: 0, height: 2)
+        view.layer.shadowRadius = TopSiteCellUX.ShadowRadius
+        view.backgroundColor = UIColor.theme.homePanel.shortcutBackground
+        view.layer.borderColor = TopSiteCellUX.BorderColor.cgColor
+        view.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
+        view.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
+        return view
     }()
 
     lazy var screenshotView: UIImageView = {
@@ -825,6 +839,17 @@ class TabCell: UICollectionViewCell, TabTrayCell {
         view.clipsToBounds = true
         view.isUserInteractionEnabled = false
         view.backgroundColor = UIColor.theme.tabTray.screenshotBackground
+        return view
+    }()
+    
+    lazy var smallFaviconView: UIImageView = {
+        let view = UIImageView()
+        view.contentMode = .scaleAspectFill
+        view.clipsToBounds = true
+        view.isUserInteractionEnabled = false
+        view.backgroundColor = UIColor.clear
+        view.layer.cornerRadius = TopSiteCellUX.IconCornerRadius
+        view.layer.masksToBounds = true
         return view
     }()
 
@@ -871,12 +896,13 @@ class TabCell: UICollectionViewCell, TabTrayCell {
         self.closeButton.addTarget(self, action: #selector(close), for: .touchUpInside)
 
         contentView.addSubview(backgroundHolder)
-
+        
         backgroundHolder.snp.makeConstraints { make in
             make.edges.equalTo(contentView)
         }
 
-        backgroundHolder.addSubview(self.screenshotView)
+        faviconBG.addSubview(smallFaviconView)
+        backgroundHolder.addSubviews(screenshotView, faviconBG)
 
         self.accessibilityCustomActions = [
             UIAccessibilityCustomAction(name: .TabTrayCloseAccessibilityCustomAction, target: self.animator, selector: #selector(SwipeAnimator.closeWithoutGesture))
@@ -914,6 +940,17 @@ class TabCell: UICollectionViewCell, TabTrayCell {
             make.left.right.equalTo(backgroundHolder)
             make.bottom.equalTo(backgroundHolder.snp.bottom)
         }
+        
+        faviconBG.snp.makeConstraints { make in
+            make.centerY.equalToSuperview().offset(10)
+            make.centerX.equalToSuperview()
+            make.size.equalTo(TopSiteCellUX.BackgroundSize)
+        }
+        
+        smallFaviconView.snp.makeConstraints { make in
+            make.size.equalTo(TopSiteCellUX.IconSize)
+            make.center.equalTo(faviconBG)
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -948,7 +985,27 @@ class TabCell: UICollectionViewCell, TabTrayCell {
             layer.shadowPath = nil
             layer.shadowOpacity = 0
         }
-        screenshotView.image = tab.screenshot
+
+        faviconBG.isHidden = true
+
+        // Regular screenshot for home or internal url when tab has home screenshot
+        if let url = tab.url, let tabScreenshot = tab.screenshot, (url.absoluteString.starts(with: "internal") &&
+            tab.hasHomeScreenshot) {
+            screenshotView.image = tabScreenshot
+
+        // Favicon or letter image when home screenshot is present for a regular (non-internal) url
+        } else if let url = tab.url, (!url.absoluteString.starts(with: "internal") &&
+            tab.hasHomeScreenshot) {
+            setFaviconImage(for: tab, with: smallFaviconView)
+
+        // Tab screenshot when available
+        } else if let tabScreenshot = tab.screenshot {
+            screenshotView.image = tabScreenshot
+
+        // Favicon or letter image when tab screenshot isn't available
+        } else {
+            setFaviconImage(for: tab, with: smallFaviconView)
+        }
     }
 
     override func prepareForReuse() {
@@ -991,6 +1048,14 @@ class TabCell: UICollectionViewCell, TabTrayCell {
         layer.shadowOffset = CGSize(width: -TabCell.borderWidth, height: -TabCell.borderWidth)
         let shadowPath = CGRect(width: layer.frame.width + (TabCell.borderWidth * 2), height: layer.frame.height + (TabCell.borderWidth * 2))
         layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: GridTabTrayControllerUX.CornerRadius+TabCell.borderWidth).cgPath
+    }
+
+    func setFaviconImage(for tab: Tab, with imageView: UIImageView) {
+        if let url = tab.url?.domainURL ?? tab.sessionData?.urls.last?.domainURL {
+            imageView.setImageAndBackground(forIcon: tab.displayFavicon, website: url) {}
+            faviconBG.isHidden = false
+            screenshotView.image = nil
+        }
     }
 }
 

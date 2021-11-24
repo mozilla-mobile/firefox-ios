@@ -198,7 +198,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         self.setupExperiment()
         self.inactiveViewModel = InactiveTabViewModel()
         tabManager.addDelegate(self)
-        register(self, forTabEvents: .didLoadFavicon, .didChangeURL)
+        register(self, forTabEvents: .didLoadFavicon, .didChangeURL, .didSetScreenshot)
         self.dataStore.removeAll()
         getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
             guard tabsToDisplay.count > 0 else { return }
@@ -713,6 +713,10 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
 extension TabDisplayManager: TabEventHandler {
 
     func tab(_ tab: Tab, didLoadFavicon favicon: Favicon?, with: Data?) {
+        updateCellFor(tab: tab, selectedTabChanged: false)
+    }
+    
+    func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {
         updateCellFor(tab: tab, selectedTabChanged: false)
     }
 
