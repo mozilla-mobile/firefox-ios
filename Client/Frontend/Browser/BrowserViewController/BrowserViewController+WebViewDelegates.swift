@@ -29,7 +29,6 @@ extension BrowserViewController: WKUIDelegate {
 
         if let currentTab = tabManager.selectedTab {
             screenshotHelper.takeScreenshot(currentTab)
-            tabManager.storeScreenshot(tab: currentTab)
         }
 
         guard let bvc = parentTab.browserViewController else { return nil }
