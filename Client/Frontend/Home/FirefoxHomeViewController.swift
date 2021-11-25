@@ -289,11 +289,11 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         super.viewDidLoad()
 
         Section.allCases.forEach { collectionView.register($0.cellType, forCellWithReuseIdentifier: $0.cellIdentifier) }
-        self.collectionView?.register(ASHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header")
+        collectionView?.register(ASHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header")
         collectionView?.keyboardDismissMode = .onDrag
         collectionView?.backgroundColor = .clear
-        self.view.addSubviews(overlayView)
-        self.view.addSubview(contextualSourceView)
+        view.addSubviews(overlayView)
+        view.addSubview(contextualSourceView)
         contextualSourceView.backgroundColor = .clear
 
         if #available(iOS 14.0, *), !UserDefaults.standard.bool(forKey: "DidDismissDefaultBrowserCard") {
@@ -323,7 +323,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         ])
 
         self.view.backgroundColor = UIColor.theme.homePanel.topSitesBackground
-        self.profile.panelDataObservers.activityStream.delegate = self
+        profile.panelDataObservers.activityStream.delegate = self
 
         applyTheme()
     }
