@@ -20,7 +20,7 @@ struct JumpList {
     }
 }
 
-class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol, CanSetHeroImage {
+class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol, CanGetHeroImage {
 
     // MARK: - Properties
     var jumpList = JumpList(group: nil, tabs: [Tab]())

@@ -85,11 +85,14 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
         let firstGroupItem = group.groupedItems.first
         let site = Site(url: firstGroupItem?.lastKnownUrl?.absoluteString ?? "", title: firstGroupItem?.lastTitle ?? "")
 
-        viewModel.setHeroImage(cell.heroImage, site: site)
         cell.itemTitle.text = group.searchTerm.localizedCapitalized
         cell.itemDetails.text = String(format: .FirefoxHomepage.JumpBackIn.GroupSiteCount, group.groupedItems.count)
         cell.faviconImage.image = UIImage(imageLiteralResourceName: "recently_closed").withRenderingMode(.alwaysTemplate)
         cell.siteNameLabel.text = String.localizedStringWithFormat(.FirefoxHomepage.JumpBackIn.GroupSiteCount, group.groupedItems.count)
+
+        viewModel.getHeroImage(forSite: site) { image in
+            cell.heroImage.image = image
+        }
     }
 
     private func configureCellForTab(item: Tab, cell: JumpBackInCell) {
@@ -101,10 +104,11 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
 
         viewModel.getFaviconImage(forSite: site) { image in
             cell.faviconImage.image = image
-            cell.setNeedsLayout()
         }
 
-        viewModel.setHeroImage(cell.heroImage, site: site)
+        viewModel.getHeroImage(forSite: site) { image in
+            cell.heroImage.image = image
+        }
     }
 }
 
@@ -232,6 +236,9 @@ class JumpBackInCell: UICollectionViewCell {
         super.prepareForReuse()
         heroImage.image = nil
         faviconImage.image = nil
+        siteNameLabel.text = nil
+        itemDetails.text = nil
+        itemTitle.text = nil
         applyTheme()
     }
 

@@ -7,19 +7,19 @@ import Storage
 
 /// Protocol to help get the hero image for the UI
 /// The hero image is first retrieved from the cache, and if it's not there we fetch it from the Site
-protocol CanSetHeroImage {
+protocol CanGetHeroImage {
     var siteImageHelper: SiteImageHelper { get }
-    func setHeroImage(_ heroImage: UIImageView, site: Site)
+    func getHeroImage(forSite site: Site, completion: @escaping (UIImage?) -> Void)
 }
 
-extension CanSetHeroImage {
-    func setHeroImage(_ heroImage: UIImageView, site: Site) {
+extension CanGetHeroImage {
+    func getHeroImage(forSite site: Site, completion: @escaping (UIImage?) -> Void) {
         let heroImageCacheKey = NSString(string: site.url)
         if let cachedImage = SiteImageHelper.cache.object(forKey: heroImageCacheKey) {
-            heroImage.image = cachedImage
+            completion(cachedImage)
         } else {
             siteImageHelper.fetchImageFor(site: site, imageType: .heroImage, shouldFallback: true) { image in
-                heroImage.image = image
+                completion(image)
             }
         }
     }

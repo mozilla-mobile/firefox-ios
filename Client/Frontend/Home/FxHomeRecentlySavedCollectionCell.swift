@@ -100,7 +100,9 @@ extension FxHomeRecentlySavedCollectionCell: UICollectionViewDataSource {
         if let item = viewModel.recentItems[safe: indexPath.row] {
             let site = Site(url: item.url, title: item.title, bookmarked: true)
             cell.itemTitle.text = site.title
-            viewModel.setHeroImage(cell.heroImage, site: site)
+            viewModel.getHeroImage(forSite: site) { image in
+                cell.heroImage.image = image
+            }
         }
         
         return cell
@@ -190,6 +192,7 @@ class RecentlySavedCell: UICollectionViewCell, NotificationThemeable {
         super.prepareForReuse()
 
         heroImage.image = nil
+        itemTitle.text = nil
         applyTheme()
     }
     

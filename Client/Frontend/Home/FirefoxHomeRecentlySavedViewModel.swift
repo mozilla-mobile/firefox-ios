@@ -13,7 +13,7 @@ protocol RecentlySavedItem {
 extension ReadingListItem: RecentlySavedItem { }
 extension BookmarkItem: RecentlySavedItem { }
 
-class FirefoxHomeRecentlySavedViewModel: CanSetHeroImage {
+class FirefoxHomeRecentlySavedViewModel: CanGetHeroImage {
     
     // MARK: - Properties
     var profile: Profile!
