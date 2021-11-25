@@ -6,18 +6,19 @@ import Foundation
 
 class FxHomeHistoryHightlightsVM {
 
-    // MARK: - Properties
+    // MARK: - Properties & Variables
     var historyItems = [Tab]()
+    var tabManager: TabManager
 
     private var recentTabs = [Tab]()
     private var maxItemsAllowed = 9
 
-    var tabManager: TabManager
-
+    // MARK: - Inits
     init() {
         self.tabManager = BrowserViewController.foregroundBVC().tabManager
     }
 
+    // MARK: - Public methods
     public func updateData() {
         loadItems()
     }
@@ -30,6 +31,7 @@ class FxHomeHistoryHightlightsVM {
 //        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .firefoxHomepage, value: .jumpBackInSectionTabOpened)
     }
 
+    // MARK: - Private Methods
     private func loadItems() {
         configureData()
         var items = [Tab]()

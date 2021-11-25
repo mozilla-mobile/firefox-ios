@@ -235,8 +235,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
 
     var isHistoryHightlightsSectionEnabled: Bool {
         get {
-            guard featureFlags.isFeatureActiveForBuild(.historyHighlights)
-                    // ROUX this needs user configuration here as well
+            guard featureFlags.isFeatureActiveForBuild(.historyHighlights),
+                  featureFlags.userPreferenceFor(.historyHighlights) == UserFeaturePreference.enabled
             else { return false }
             let tabManager = BrowserViewController.foregroundBVC().tabManager
 

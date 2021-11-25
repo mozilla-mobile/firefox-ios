@@ -41,6 +41,11 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
         return true
     }
 
+    var isHistoryHighlightsSectionEnabled: Bool {
+        // TODO: If this feature is going behind a Nimbus flag, that should be added here
+        return featureFlags.isFeatureActiveForBuild(.historyHighlights)
+    }
+
     override func generateSettings() -> [SettingSection] {
 
         let customizeFirefoxHomeSection = customizeFirefoxSettingSection()
@@ -82,6 +87,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
 
     private func customizeFirefoxSettingSection() -> SettingSection {
 
+        // Setup
         var sectionItems = [Setting]()
 
         let pocketSetting = BoolSetting(with: .pocket,
@@ -93,6 +99,10 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
         let recentlySavedSetting = BoolSetting(with: .recentlySaved,
                                                titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.RecentlySaved))
 
+        let historyHighlightsSetting = BoolSetting(with: .historyHighlights,
+                                                   titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.RecentSearches))
+
+        // Section ordering
         sectionItems.append(TopSitesSettings(settings: self))
 
         if isJumpBackInSectionEnabled {
@@ -101,6 +111,10 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
 
         if isRecentlySavedSectionEnabled {
             sectionItems.append(recentlySavedSetting)
+        }
+
+        if isHistoryHighlightsSectionEnabled {
+            sectionItems.append(historyHighlightsSetting)
         }
 
         sectionItems.append(pocketSetting)

@@ -6,9 +6,6 @@ import UIKit
 
 private struct RecentlyVisitedCellUX {
     static let generalCornerRadius: CGFloat = 10
-    static let titleFontSize: CGFloat = 17
-    static let detailsFontSize: CGFloat = 12
-    static let labelsWrapperSpacing: CGFloat = 4
     static let heroImageDimension: CGFloat = 24
 }
 
@@ -28,7 +25,11 @@ struct RecentlyVisitedCellOptions {
     }
 
     init(shouldHideBottomLine: Bool, with corners: UIRectCorner? = nil, andIsFillerCell: Bool) {
-        self.init(title: "", shouldHideBottomLine: shouldHideBottomLine, with: corners, and: nil, andIsFillerCell: andIsFillerCell)
+        self.init(title: "",
+                  shouldHideBottomLine: shouldHideBottomLine,
+                  with: corners,
+                  and: nil,
+                  andIsFillerCell: andIsFillerCell)
     }
 }
 
@@ -97,7 +98,12 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func updateCell(with options: RecentlyVisitedCellOptions) {
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    // MARK: - Public methods
+    public func updateCell(with options: RecentlyVisitedCellOptions) {
         itemTitle.text = options.title
         bottomLine.alpha = options.hideBottomLine ? 0 : 1
         isFillerCell = options.isFillerCell
@@ -108,7 +114,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
         }
     }
 
-    // MARK: - Helpers
+    // MARK: - Setup Helper methods
     private func setupObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .DisplayThemeChanged, object: nil)
     }
@@ -126,7 +132,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
 
             textStack.leadingAnchor.constraint(equalTo: heroImage.trailingAnchor, constant: 12),
             textStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
-            textStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: 3),
+            textStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
 
             bottomLine.heightAnchor.constraint(equalToConstant: 0.5),
             bottomLine.leadingAnchor.constraint(equalTo: itemTitle.leadingAnchor),
@@ -135,6 +141,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
         ])
     }
 
+    // MARK: - Nofications
     @objc private func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .DisplayThemeChanged:
