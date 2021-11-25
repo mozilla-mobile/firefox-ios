@@ -14,7 +14,7 @@ class FxHomeHistoryHightlightsVM {
 
     private var recentTabs = [Tab]()
     private var maxItemsAllowed: Int {
-        HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn * HistoryHighlightsCollectionCellConstants.maxNumberOfColunms
+        HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn * HistoryHighlightsCollectionCellConstants.maxNumberOfColumns
     }
 
     // MARK: - Inits

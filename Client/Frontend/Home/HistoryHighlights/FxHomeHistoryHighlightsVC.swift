@@ -7,7 +7,7 @@ import Storage
 
 struct HistoryHighlightsCollectionCellConstants {
     static let maxNumberOfItemsPerColumn = 3
-    static let maxNumberOfColunms = 3
+    static let maxNumberOfColumns = 3
 }
 
 class FxHomeHistoryHighlightsCollectionCell: UICollectionViewCell, ReusableCell {
@@ -46,7 +46,6 @@ class FxHomeHistoryHighlightsCollectionCell: UICollectionViewCell, ReusableCell 
                      and viewModel: FxHomeHistoryHightlightsVM) {
         self.init(frame: frame)
         setupLayout()
-
     }
 
     override init(frame: CGRect) {
@@ -103,7 +102,7 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
         // If there are less than or equal items to the max number of items allowed per column,
         // we can return the standard count, as we don't need to display filler cells.
         // However, if there's more items, filler cells needs to be accounted for, so sections
-        // are always a multiple of the max number of items allowed per colunm.
+        // are always a multiple of the max number of items allowed per column.
         if count <= HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn {
             return count
         } else {
@@ -167,8 +166,8 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
 
     private func isBottomOfColumn(with currentIndex: Int, totalItems: Int) -> Bool {
         var bottomCellIndex: Int
-        for colunm in 1...numberOfColumns {
-            bottomCellIndex = (HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn * colunm) - 1
+        for column in 1...numberOfColumns {
+            bottomCellIndex = (HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn * column) - 1
             if currentIndex == bottomCellIndex { return true }
         }
 
