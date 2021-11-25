@@ -322,10 +322,14 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
             overlayView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
 
-        self.view.backgroundColor = UIColor.theme.homePanel.topSitesBackground
         profile.panelDataObservers.activityStream.delegate = self
 
         applyTheme()
+
+        topSiteCell.collectionView.reloadData()
+        if let collectionView = self.collectionView, collectionView.numberOfSections > 0, collectionView.numberOfItems(inSection: 0) > 0 {
+            collectionView.reloadData()
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -388,11 +392,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
 
     func applyTheme() {
         defaultBrowserCard.applyTheme()
-        self.view.backgroundColor = UIColor.theme.homePanel.topSitesBackground
-        topSiteCell.collectionView.reloadData()
-        if let collectionView = self.collectionView, collectionView.numberOfSections > 0, collectionView.numberOfItems(inSection: 0) > 0 {
-            collectionView.reloadData()
-        }
+        view.backgroundColor = UIColor.theme.homePanel.topSitesBackground
     }
 
     func scrollToTop(animated: Bool = false) {
