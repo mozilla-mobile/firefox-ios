@@ -5,8 +5,9 @@
 import UIKit
 import Storage
 
-struct HistoryHighlightsCollectionCellUX {
+struct HistoryHighlightsCollectionCellConstants {
     static let maxNumberOfItemsPerColumn = 3
+    static let maxNumberOfColunms = 3
 }
 
 class FxHomeHistoryHighlightsCollectionCell: UICollectionViewCell, ReusableCell {
@@ -18,7 +19,7 @@ class FxHomeHistoryHighlightsCollectionCell: UICollectionViewCell, ReusableCell 
     // MARK: - Variables
     var numberOfColumns: Int {
         guard let count = viewModel?.historyItems.count else { return 0 }
-        return Int(ceil(Double(count) / Double(HistoryHighlightsCollectionCellUX.maxNumberOfItemsPerColumn)))
+        return Int(ceil(Double(count) / Double(HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn)))
     }
 
     // MARK: - UI Elements
@@ -103,10 +104,10 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
         // we can return the standard count, as we don't need to display filler cells.
         // However, if there's more items, filler cells needs to be accounted for, so sections
         // are always a multiple of the max number of items allowed per colunm.
-        if count <= HistoryHighlightsCollectionCellUX.maxNumberOfItemsPerColumn {
+        if count <= HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn {
             return count
         } else {
-            return numberOfColumns * HistoryHighlightsCollectionCellUX.maxNumberOfItemsPerColumn
+            return numberOfColumns * HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn
         }
     }
 
@@ -167,7 +168,7 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
     private func isBottomOfColumn(with currentIndex: Int, totalItems: Int) -> Bool {
         var bottomCellIndex: Int
         for colunm in 1...numberOfColumns {
-            bottomCellIndex = (HistoryHighlightsCollectionCellUX.maxNumberOfItemsPerColumn * colunm) - 1
+            bottomCellIndex = (HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn * colunm) - 1
             if currentIndex == bottomCellIndex { return true }
         }
 
@@ -193,7 +194,7 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
     }
 
     private func isTopRightCell(index: Int, totalItems: Int) -> Bool {
-        let topRightIndex = (HistoryHighlightsCollectionCellUX.maxNumberOfItemsPerColumn * (numberOfColumns - 1))
+        let topRightIndex = (HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn * (numberOfColumns - 1))
         if index == topRightIndex { return true }
 
         return false
@@ -201,10 +202,10 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
 
     private func isBottomLeftCell(index: Int, totalItems: Int) -> Bool {
         var bottomLeftIndex: Int {
-            if totalItems <= HistoryHighlightsCollectionCellUX.maxNumberOfItemsPerColumn {
+            if totalItems <= HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn {
                 return totalItems - 1
             } else {
-                return HistoryHighlightsCollectionCellUX.maxNumberOfItemsPerColumn - 1
+                return HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn - 1
             }
         }
 
@@ -215,10 +216,10 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
 
     private func isBottomRightCell(index: Int, totalItems: Int) -> Bool {
         var bottomRightIndex: Int {
-            if totalItems <= HistoryHighlightsCollectionCellUX.maxNumberOfItemsPerColumn {
+            if totalItems <= HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn {
                 return totalItems - 1
             } else {
-                return (HistoryHighlightsCollectionCellUX.maxNumberOfItemsPerColumn * numberOfColumns) - 1
+                return (HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn * numberOfColumns) - 1
             }
         }
 
@@ -232,8 +233,8 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // TODO: In a separate ticket, we will be handling the taps of the cells to
         // do the respective thing they should do.
-//        if let tab = viewModel.jumpableTabs[safe: indexPath.row] {
-//            viewModel.switchTo(tab)
+//        if let tab = viewModel?.historyItems[safe: indexPath.row] {
+            viewModel?.switchTo()
 //        }
     }
 }

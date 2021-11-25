@@ -261,7 +261,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         self.isZeroSearch = isZeroSearch
         self.jumpBackInViewModel = FirefoxHomeJumpBackInViewModel(isZeroSearch: isZeroSearch, profile: profile)
         self.recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel(isZeroSearch: isZeroSearch, profile: profile)
-        self.historyHighlightsViewModel = FxHomeHistoryHightlightsVM()
+        self.historyHighlightsViewModel = FxHomeHistoryHightlightsVM(with: BrowserViewController.foregroundBVC().tabManager)
         self.experiments = experiments
         super.init(collectionViewLayout: flowLayout)
         collectionView?.delegate = self
@@ -731,12 +731,20 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
             return CGSize(width: width, height: cellSize.height)
 
         case .historyHighlights:
-            // ROUX
-            if historyHighlightsViewModel.historyItems.count == 2 {
-                cellSize.height *= 2
-            } else if historyHighlightsViewModel.historyItems.count > 2 {
-                cellSize.height *= 3
+            // Returns the total height based on a variable column/row layout
+            let itemCount = historyHighlightsViewModel.historyItems.count
+            for number in 1...HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn {
+                if itemCount >= HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn {
+                    cellSize.height *= CGFloat(HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn)
+                    break
+                }
+
+                if itemCount == number {
+                    cellSize.height *= CGFloat(number)
+                    break
+                }
             }
+
             return cellSize
 
         case .customizeHome, .pocket, .recentlySaved:
@@ -896,6 +904,13 @@ extension FirefoxHomeViewController {
     private func configureHistoryHighlightsCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let historyCell = cell as! FxHomeHistoryHighlightsCollectionCell
         historyCell.profile = profile
+
+        historyHighlightsViewModel.onTapItem = { [weak self] in
+            // TODO: When the data is hooked up, this will actually send a user to
+            // the correct place in history
+            self?.openHistory(UIButton())
+        }
+
         historyCell.viewModel = historyHighlightsViewModel
         historyHighlightsViewModel.updateData()
         historyCell.collectionView.reloadData()

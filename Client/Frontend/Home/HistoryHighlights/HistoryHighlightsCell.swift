@@ -16,7 +16,12 @@ struct RecentlyVisitedCellOptions {
     let hideBottomLine: Bool
     let isFillerCell: Bool
 
-    init(title: String, shouldHideBottomLine: Bool, with corners: UIRectCorner? = nil, and heroImage: UIImage? = nil, andIsFillerCell: Bool) {
+    init(title: String,
+         shouldHideBottomLine: Bool,
+         with corners: UIRectCorner? = nil,
+         and heroImage: UIImage? = nil,
+         andIsFillerCell: Bool) {
+
         self.title = title
         self.hideBottomLine = shouldHideBottomLine
         self.corners = corners
@@ -24,7 +29,10 @@ struct RecentlyVisitedCellOptions {
         self.isFillerCell = andIsFillerCell
     }
 
-    init(shouldHideBottomLine: Bool, with corners: UIRectCorner? = nil, andIsFillerCell: Bool) {
+    init(shouldHideBottomLine: Bool,
+         with corners: UIRectCorner? = nil,
+         andIsFillerCell: Bool) {
+
         self.init(title: "",
                   shouldHideBottomLine: shouldHideBottomLine,
                   with: corners,
@@ -33,12 +41,10 @@ struct RecentlyVisitedCellOptions {
     }
 }
 
-/// A cell used in FxHomeScreen's Jump Back In section.
+/// A cell used in FxHomeScreen's History Highlights section.
 class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
 
-    // MARK: - Properties
-
-    // UI
+    // MARK: - UI Elements
     let heroImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
