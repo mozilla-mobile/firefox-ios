@@ -12,8 +12,7 @@ class FxHomeHistoryHighlightsCollectionCell: UICollectionViewCell, ReusableCell 
     var viewModel: FxHomeHistoryHightlightsVM?
 
     lazy var collectionView: UICollectionView = {
-        let layout = FxHomeHistoryHighlightsCollectionCell.createLayout()
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: compositionalLayout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.isScrollEnabled = true
         collectionView.alwaysBounceVertical = false
@@ -58,7 +57,7 @@ class FxHomeHistoryHighlightsCollectionCell: UICollectionViewCell, ReusableCell 
         ])
     }
 
-    public static func createLayout() -> UICollectionViewCompositionalLayout {
+    private lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         let item = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                heightDimension: .estimated(65)))
@@ -78,7 +77,7 @@ class FxHomeHistoryHighlightsCollectionCell: UICollectionViewCell, ReusableCell 
         let section = NSCollectionLayoutSection(group: verticalGroup)
         section.orthogonalScrollingBehavior = .continuous
         return UICollectionViewCompositionalLayout(section: section)
-    }
+    }()
 }
 
 extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {

@@ -898,8 +898,6 @@ extension FirefoxHomeViewController {
         historyCell.profile = profile
         historyCell.viewModel = historyHighlightsViewModel
         historyHighlightsViewModel.updateData()
-        let layout = FxHomeHistoryHighlightsCollectionCell.createLayout()
-        historyCell.collectionView.setCollectionViewLayout(layout, animated: false)
         historyCell.collectionView.reloadData()
         historyCell.setNeedsLayout()
 
