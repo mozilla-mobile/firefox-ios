@@ -688,6 +688,7 @@
 		DD31E0FB1B382B520077078A /* TabPrintPageRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD31E0FA1B382B520077078A /* TabPrintPageRenderer.swift */; };
 		DDA24A431FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA24A341FD84D620098F159 /* DefaultSearchPrefs.swift */; };
 		DDA24A451FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA24A341FD84D620098F159 /* DefaultSearchPrefs.swift */; };
+		DF036E43274FD434002E834E /* HistoryHighlightsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF036E42274FD434002E834E /* HistoryHighlightsCell.swift */; };
 		DFACDFAA274D489B00A94EEC /* FxHomeHistoryHighlightsVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFACDFA9274D489B00A94EEC /* FxHomeHistoryHighlightsVM.swift */; };
 		DFACDFAC274D48A500A94EEC /* FxHomeHistoryHighlightsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFACDFAB274D48A500A94EEC /* FxHomeHistoryHighlightsVC.swift */; };
 		DFACDFAF274D4D6D00A94EEC /* ReusableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFACDFAE274D4D6D00A94EEC /* ReusableCell.swift */; };
@@ -3698,6 +3699,7 @@
 		DE964E9A99B08F1FC7A3C6E5 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		DEE24C998DA12ED5CE67FF6A /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Menu.strings; sourceTree = "<group>"; };
 		DEE64F20810420CECBA98E54 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Search.strings; sourceTree = "<group>"; };
+		DF036E42274FD434002E834E /* HistoryHighlightsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryHighlightsCell.swift; sourceTree = "<group>"; };
 		DF10441BA5FD33966E422B37 /* sat-Olck */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sat-Olck"; path = "sat-Olck.lproj/Intro.strings"; sourceTree = "<group>"; };
 		DF16405B8C523F7BDC578A89 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		DF4A44AB9DB2BE71AD028C35 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/Today.strings; sourceTree = "<group>"; };
@@ -5632,6 +5634,16 @@
 			path = SearchQuickLinksSmall;
 			sourceTree = "<group>";
 		};
+		DF036E41274FD3FC002E834E /* HistoryHighlights */ = {
+			isa = PBXGroup;
+			children = (
+				DFACDFAB274D48A500A94EEC /* FxHomeHistoryHighlightsVC.swift */,
+				DFACDFA9274D489B00A94EEC /* FxHomeHistoryHighlightsVM.swift */,
+				DF036E42274FD434002E834E /* HistoryHighlightsCell.swift */,
+			);
+			path = HistoryHighlights;
+			sourceTree = "<group>";
+		};
 		DFACDFAD274D4D4B00A94EEC /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
@@ -6297,8 +6309,7 @@
 				96F626FF2669B0D100C82340 /* FxHomeRecentlySavedCollectionCell.swift */,
 				C826BD4926973895006BBE24 /* FxHomeJumpBackInView.swift */,
 				C8A012F026AB07D70096A7A7 /* FxHomeJumpBackInViewModel.swift */,
-				DFACDFAB274D48A500A94EEC /* FxHomeHistoryHighlightsVC.swift */,
-				DFACDFA9274D489B00A94EEC /* FxHomeHistoryHighlightsVM.swift */,
+				DF036E41274FD3FC002E834E /* HistoryHighlights */,
 				C8656D78270F866700E199EA /* FxHomeCustomizeView.swift */,
 				3BB50E101D6274CD004B33DF /* FirefoxHomeTopSitesCell.swift */,
 				2386E4E524F8358E0072EF17 /* DefaultBrowserCard.swift */,
@@ -7980,6 +7991,7 @@
 				D3B6923F1B9F9A58004B87A4 /* FindInPageHelper.swift in Sources */,
 				F85C7F122721048E004BDBA4 /* Layout.swift in Sources */,
 				39EF4378260CF5A30011E22E /* AppDelegate+Experiments.swift in Sources */,
+				DF036E43274FD434002E834E /* HistoryHighlightsCell.swift in Sources */,
 				EB9A179C20E69A7F00B12184 /* LegacyDarkTheme.swift in Sources */,
 				DA52E1DA25F5961F0092204C /* TabTrayViewController.swift in Sources */,
 				EB1C84BF212EFFBF001489DF /* BrowserViewController+ReaderMode.swift in Sources */,
