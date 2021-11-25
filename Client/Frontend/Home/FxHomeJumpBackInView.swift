@@ -23,27 +23,7 @@ struct JumpBackInLayoutVariables {
 class FxHomeJumpBackInCollectionCell: UICollectionViewCell {
 
     // MARK: - Properties
-    var profile: Profile!
-    var viewModel: FirefoxHomeJumpBackInViewModel!
-    lazy var siteImageHelper = SiteImageHelper(profile: profile)
-
-    var layoutVariables: JumpBackInLayoutVariables {
-        let horizontalVariables = JumpBackInLayoutVariables(columns: 2, scrollDirection: .horizontal, maxItemsToDisplay: 4)
-        let verticalVariables = JumpBackInLayoutVariables(columns: 1, scrollDirection: .vertical, maxItemsToDisplay: 2)
-
-        let deviceIsiPad = UIDevice.current.userInterfaceIdiom == .pad
-        let deviceIsInLandscapeMode = UIWindow.isLandscape
-        let horizontalSizeClassIsCompact = traitCollection.horizontalSizeClass == .compact
-
-        if deviceIsiPad {
-            if horizontalSizeClassIsCompact { return verticalVariables }
-            return horizontalVariables
-
-        } else {
-            if deviceIsInLandscapeMode { return horizontalVariables }
-            return verticalVariables
-        }
-    }
+    var viewModel = FirefoxHomeJumpBackInViewModel()
 
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -85,14 +65,11 @@ class FxHomeJumpBackInCollectionCell: UICollectionViewCell {
 
 extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        viewModel.updateDataAnd(layoutVariables)
         return viewModel.jumpList.itemsToDisplay
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: JumpBackInCell.cellIdentifier, for: indexPath) as! JumpBackInCell
-        cell.heroImage.image = nil
-        cell.faviconImage.image = nil
 
         if indexPath.row == (viewModel.jumpList.itemsToDisplay - 1),
            let group = viewModel.jumpList.group {
@@ -107,16 +84,8 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
     private func configureCellForGroups(group: ASGroup<Tab>, cell: JumpBackInCell) {
         let firstGroupItem = group.groupedItems.first
         let site = Site(url: firstGroupItem?.lastKnownUrl?.absoluteString ?? "", title: firstGroupItem?.lastTitle ?? "")
-        let heroImageCacheKey = NSString(string: site.url)
 
-        if let cachedImage = SiteImageHelper.cache.object(forKey: heroImageCacheKey) {
-            cell.heroImage.image = cachedImage
-        } else {
-            siteImageHelper.fetchImageFor(site: site, imageType: .heroImage, shouldFallback: true) { image in
-                cell.heroImage.image = image
-            }
-        }
-
+        viewModel.setHeroImage(cell.heroImage, site: site)
         cell.itemTitle.text = group.searchTerm.localizedCapitalized
         cell.itemDetails.text = String(format: .FirefoxHomepage.JumpBackIn.GroupSiteCount, group.groupedItems.count)
         cell.faviconImage.image = UIImage(imageLiteralResourceName: "recently_closed").withRenderingMode(.alwaysTemplate)
@@ -130,22 +99,13 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
         cell.itemTitle.text = site.title
         cell.siteNameLabel.text = site.tileURL.shortDisplayString.capitalized
 
-        profile.favicons.getFaviconImage(forSite: site).uponQueue(.main, block: { result in
-            guard let image = result.successValue else { return }
+        viewModel.getFaviconImage(forSite: site) { image in
             cell.faviconImage.image = image
             cell.setNeedsLayout()
-        })
-
-        let heroImageCacheKey = NSString(string: site.url)
-        if let cachedImage = SiteImageHelper.cache.object(forKey: heroImageCacheKey) {
-            cell.heroImage.image = cachedImage
-        } else {
-            siteImageHelper.fetchImageFor(site: site, imageType: .heroImage, shouldFallback: true) { image in
-                cell.heroImage.image = image
-            }
         }
-    }
 
+        viewModel.setHeroImage(cell.heroImage, site: site)
+    }
 }
 
 extension FxHomeJumpBackInCollectionCell: UICollectionViewDelegate {
@@ -266,6 +226,13 @@ class JumpBackInCell: UICollectionViewCell {
 
     deinit {
         NotificationCenter.default.removeObserver(self)
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        heroImage.image = nil
+        faviconImage.image = nil
+        applyTheme()
     }
 
     // MARK: - Helpers

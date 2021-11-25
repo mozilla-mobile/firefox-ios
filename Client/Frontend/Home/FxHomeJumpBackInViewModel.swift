@@ -3,8 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
-
-fileprivate let MaximumNumberOfGroups: Int = 1
+import Storage
 
 struct JumpList {
     let group: ASGroup<Tab>?
@@ -21,32 +20,56 @@ struct JumpList {
     }
 }
 
-class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
+class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol, CanSetHeroImage {
 
     // MARK: - Properties
     var jumpList = JumpList(group: nil, tabs: [Tab]())
+    var onTapGroup: ((Tab) -> Void)?
+    var profile: Profile!
 
-    var layoutVariables: JumpBackInLayoutVariables
-    private var tabManager: TabManager
-    private var profile: Profile
-    private var isZeroSearch: Bool
     lazy var siteImageHelper = SiteImageHelper(profile: profile)
 
-    var onTapGroup: ((Tab) -> Void)?
+    private var tabManager: TabManager
+    private var isZeroSearch: Bool
 
-    init(isZeroSearch: Bool) {
-        self.tabManager = BrowserViewController.foregroundBVC().tabManager
-        self.profile = BrowserViewController.foregroundBVC().profile
-        self.layoutVariables = JumpBackInLayoutVariables(columns: 1, scrollDirection: .vertical, maxItemsToDisplay: 2)
+    init(isZeroSearch: Bool = false,
+         tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager) {
+
+        self.tabManager = tabManager
         self.isZeroSearch = isZeroSearch
     }
 
-    public func updateDataAnd(_ layoutVariables: JumpBackInLayoutVariables) {
-        self.layoutVariables = layoutVariables
-        updateJumpListData()
+    var layoutVariables: JumpBackInLayoutVariables {
+        let deviceIsiPad = UIDevice.current.userInterfaceIdiom == .pad
+        let deviceIsInLandscapeMode = UIWindow.isLandscape
+
+        if deviceIsiPad {
+            return JumpBackInLayoutVariables(numberOfItemsInColumn: 1, maxItemsToDisplay: 3)
+
+        } else {
+            if deviceIsInLandscapeMode { return JumpBackInLayoutVariables(numberOfItemsInColumn: 2, maxItemsToDisplay: 4) }
+            return JumpBackInLayoutVariables(numberOfItemsInColumn: 2, maxItemsToDisplay: 2)
+        }
     }
 
-    public func switchTo(group: ASGroup<Tab>) {
+    func updateData(completion: @escaping () -> Void) {
+        if featureFlags.isFeatureActiveForBuild(.groupedTabs),
+           featureFlags.userPreferenceFor(.groupedTabs) == UserFeaturePreference.enabled {
+            let recentTabs = tabManager.recentlyAccessedNormalTabs
+            SearchTermGroupsManager.getTabGroups(with: profile,
+                                          from: recentTabs,
+                                          using: .orderedDescending) { [weak self] groups, _ in
+                guard let strongSelf = self else { completion(); return }
+                strongSelf.jumpList = strongSelf.createJumpList(from: recentTabs, and: groups)
+                completion()
+            }
+        } else {
+            jumpList = createJumpList(from: tabManager.recentlyAccessedNormalTabs)
+            completion()
+        }
+    }
+
+    func switchTo(group: ASGroup<Tab>) {
         if BrowserViewController.foregroundBVC().urlBar.inOverlayMode {
             BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode()
         }
@@ -61,7 +84,7 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
                                      extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
     }
 
-    public func switchTo(tab: Tab) {
+    func switchTo(tab: Tab) {
         if BrowserViewController.foregroundBVC().urlBar.inOverlayMode {
             BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode()
         }
@@ -73,19 +96,14 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
                                      extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
     }
 
-    private func updateJumpListData() {
-        if featureFlags.isFeatureActiveForBuild(.groupedTabs),
-           featureFlags.userPreferenceFor(.groupedTabs) == UserFeaturePreference.enabled {
-            let recentTabs = tabManager.recentlyAccessedNormalTabs
-            SearchTermGroupsManager.getTabGroups(with: profile,
-                                          from: recentTabs,
-                                          using: .orderedDescending) { groups, _ in
-                self.jumpList = self.createJumpList(from: recentTabs, and: groups)
-            }
-        } else {
-            self.jumpList = createJumpList(from: tabManager.recentlyAccessedNormalTabs)
-        }
+    func getFaviconImage(forSite site: Site, completion: @escaping (UIImage?) -> Void) {
+        profile.favicons.getFaviconImage(forSite: site).uponQueue(.main, block: { result in
+            guard let image = result.successValue else { completion(nil); return }
+            completion(image)
+        })
     }
+
+    // MARK: - Private
 
     private func createJumpList(from tabs: [Tab], and groups: [ASGroup<Tab>]? = nil) -> JumpList {
         let recentGroup = groups?.first
@@ -112,4 +130,3 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
         return recentTabs
     }
 }
-
