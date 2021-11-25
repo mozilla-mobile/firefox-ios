@@ -386,7 +386,12 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     }
 
     @objc func reload(notification: Notification) {
-        reloadAll()
+        switch notification.name {
+        case .DisplayThemeChanged, .DynamicFontChanged:
+            reloadAll(shouldUpdateData: false)
+        default:
+            reloadAll()
+        }
     }
 
     func applyTheme() {
@@ -853,9 +858,9 @@ extension FirefoxHomeViewController {
 
 extension FirefoxHomeViewController: DataObserverDelegate {
 
-    // Reloads both highlights and top sites data from their respective caches. Does not invalidate the cache.
-    // See ActivityStreamDataObserver for invalidation logic.
-    func reloadAll() {
+    /// Reload all data including refreshing cells content and fetching data from backend
+    /// - Parameter shouldUpdateData: True means backend data should be refetched
+    func reloadAll(shouldUpdateData: Bool = true) {
         // Overlay view is used by contextual hint and reloading the view while the hint is shown can cause the popover to flicker
         guard overlayView.isHidden else { return }
 
@@ -863,12 +868,16 @@ extension FirefoxHomeViewController: DataObserverDelegate {
 
         // TODO: Reload with a protocol comformance once all sections are standardized
         // Idea is that each section will load it's data from it's own view model
-        recentlySavedViewModel.updateData {}
-        jumpBackInViewModel.updateData {}
+        if shouldUpdateData {
+            recentlySavedViewModel.updateData {}
+            jumpBackInViewModel.updateData {}
+        }
 
         collectionView?.reloadData()
     }
 
+    // Reloads both highlights and top sites data from their respective caches. Does not invalidate the cache.
+    // See ActivityStreamDataObserver for invalidation logic.
     private func loadTopSitesData() {
         TopSitesHandler.getTopSites(profile: profile).uponQueue(.main) { [weak self] result in
             guard let self = self else { return }

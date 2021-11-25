@@ -22,11 +22,7 @@ class FirefoxHomeRecentlySavedViewModel {
     private let profile: Profile
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private var readingListItems = [ReadingListItem]()
-    private var recentBookmarks = [BookmarkItem]() {
-        didSet {
-            recentBookmarks = RecentItemsHelper.filterStaleItems(recentItems: recentBookmarks, since: Date()) as! [BookmarkItem]
-        }
-    }
+    private var recentBookmarks = [BookmarkItem]()
 
     init(isZeroSearch: Bool, profile: Profile) {
         self.isZeroSearch = isZeroSearch
@@ -75,10 +71,10 @@ class FirefoxHomeRecentlySavedViewModel {
     // MARK: - Private
 
     private func updateRecentBookmarks(bookmarks: [BookmarkItem]) {
-        recentBookmarks = bookmarks
+        recentBookmarks = RecentItemsHelper.filterStaleItems(recentItems: bookmarks, since: Date()) as! [BookmarkItem]
 
         // Send telemetry if bookmarks aren't empty
-        if !bookmarks.isEmpty, !RecentItemsHelper.filterStaleItems(recentItems: bookmarks, since: Date()).isEmpty {
+        if !recentBookmarks.isEmpty {
 
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .view,
