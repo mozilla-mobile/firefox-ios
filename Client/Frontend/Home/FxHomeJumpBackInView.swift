@@ -27,7 +27,7 @@ class FxHomeJumpBackInCollectionCell: UICollectionViewCell {
 
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = layoutVariables.scrollDirection
+        layout.scrollDirection = viewModel.layoutVariables.scrollDirection
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.isScrollEnabled = false
@@ -126,7 +126,7 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDelegateFlowLayout {
 
         var itemWidth: CGFloat
         let totalHorizontalSpacing = collectionView.bounds.width
-        let columns = layoutVariables.columns
+        let columns = viewModel.layoutVariables.columns
         if columns == 2 {
             itemWidth = (totalHorizontalSpacing - JumpBackInCollectionCellUX.iPadHorizontalSpacing) / columns
         } else {

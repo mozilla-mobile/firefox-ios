@@ -40,15 +40,20 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol, CanSetHeroImage {
     }
 
     var layoutVariables: JumpBackInLayoutVariables {
+        let horizontalVariables = JumpBackInLayoutVariables(columns: 2, scrollDirection: .horizontal, maxItemsToDisplay: 4)
+        let verticalVariables = JumpBackInLayoutVariables(columns: 1, scrollDirection: .vertical, maxItemsToDisplay: 2)
+
         let deviceIsiPad = UIDevice.current.userInterfaceIdiom == .pad
         let deviceIsInLandscapeMode = UIWindow.isLandscape
+        let horizontalSizeClassIsCompact = UIScreen.main.traitCollection.horizontalSizeClass == .compact
 
         if deviceIsiPad {
-            return JumpBackInLayoutVariables(numberOfItemsInColumn: 1, maxItemsToDisplay: 3)
+            if horizontalSizeClassIsCompact { return verticalVariables }
+            return horizontalVariables
 
         } else {
-            if deviceIsInLandscapeMode { return JumpBackInLayoutVariables(numberOfItemsInColumn: 2, maxItemsToDisplay: 4) }
-            return JumpBackInLayoutVariables(numberOfItemsInColumn: 2, maxItemsToDisplay: 2)
+            if deviceIsInLandscapeMode { return horizontalVariables }
+            return verticalVariables
         }
     }
 
