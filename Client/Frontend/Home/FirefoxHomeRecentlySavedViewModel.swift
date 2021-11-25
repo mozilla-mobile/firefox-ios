@@ -13,14 +13,14 @@ protocol RecentlySavedItem {
 extension ReadingListItem: RecentlySavedItem { }
 extension BookmarkItem: RecentlySavedItem { }
 
-class FirefoxHomeRecentlySavedViewModel: CanGetHeroImage {
+class FirefoxHomeRecentlySavedViewModel {
     
     // MARK: - Properties
+
     var profile: Profile!
     var isZeroSearch: Bool
 
-    lazy var siteImageHelper = SiteImageHelper(profile: profile)
-
+    private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private var readingListItems = [ReadingListItem]()
     private var recentBookmarks = [BookmarkItem]() {
         didSet {
@@ -41,7 +41,7 @@ class FirefoxHomeRecentlySavedViewModel: CanGetHeroImage {
         return items
     }
 
-    /// Using dispatch group to know when data has completely loaded for both sourced (recent bookmarks and reading list items)
+    /// Using dispatch group to know when data has completely loaded for both sources (recent bookmarks and reading list items)
     func updateData(completion: @escaping () -> Void) {
         let group = DispatchGroup()
         group.enter()
@@ -59,6 +59,12 @@ class FirefoxHomeRecentlySavedViewModel: CanGetHeroImage {
 
         group.notify(queue: .main) {
             completion()
+        }
+    }
+
+    func getHeroImage(forSite site: Site, completion: @escaping (UIImage?) -> Void) {
+        siteImageHelper.fetchImageFor(site: site, imageType: .heroImage, shouldFallback: false) { image in
+            completion(image)
         }
     }
 }

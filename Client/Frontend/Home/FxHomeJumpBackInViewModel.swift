@@ -20,15 +20,15 @@ struct JumpList {
     }
 }
 
-class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol, CanGetHeroImage {
+class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
 
     // MARK: - Properties
+
     var jumpList = JumpList(group: nil, tabs: [Tab]())
     var onTapGroup: ((Tab) -> Void)?
     var profile: Profile!
 
-    lazy var siteImageHelper = SiteImageHelper(profile: profile)
-
+    private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private var tabManager: TabManager
     private var isZeroSearch: Bool
 
@@ -102,10 +102,15 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol, CanGetHeroImage {
     }
 
     func getFaviconImage(forSite site: Site, completion: @escaping (UIImage?) -> Void) {
-        profile.favicons.getFaviconImage(forSite: site).uponQueue(.main, block: { result in
-            guard let image = result.successValue else { completion(nil); return }
+        siteImageHelper.fetchImageFor(site: site, imageType: .favicon, shouldFallback: false) { image in
             completion(image)
-        })
+        }
+    }
+
+    func getHeroImage(forSite site: Site, completion: @escaping (UIImage?) -> Void) {
+        siteImageHelper.fetchImageFor(site: site, imageType: .heroImage, shouldFallback: false) { image in
+            completion(image)
+        }
     }
 
     // MARK: - Private
