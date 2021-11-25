@@ -96,11 +96,13 @@ extension FxHomeRecentlySavedCollectionCell: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecentlySavedCell.cellIdentifier, for: indexPath) as! RecentlySavedCell
-        
+        cell.tag = indexPath.row
+
         if let item = viewModel.recentItems[safe: indexPath.row] {
             let site = Site(url: item.url, title: item.title, bookmarked: true)
             cell.itemTitle.text = site.title
             viewModel.getHeroImage(forSite: site) { image in
+                guard cell.tag == indexPath.row else { return }
                 cell.heroImage.image = image
             }
         }
