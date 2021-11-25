@@ -905,9 +905,10 @@ extension FirefoxHomeViewController: DataObserverDelegate {
         loadTopSitesData()
 
         // TODO: Reload with a protocol comformance once all sections are standardized
-        // Idea is that each section will load it's data from it's own view model, and refresh when it needs instead of being a global collection view
+        // Idea is that each section will load it's data from it's own view model
         recentlySavedViewModel.updateData {}
         jumpBackInViewModel.updateData {}
+
         collectionView?.reloadData()
     }
 
