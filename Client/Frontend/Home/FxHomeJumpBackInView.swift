@@ -23,11 +23,11 @@ struct JumpBackInLayoutVariables {
 class FxHomeJumpBackInCollectionCell: UICollectionViewCell {
 
     // MARK: - Properties
-    var viewModel = FirefoxHomeJumpBackInViewModel()
+    var viewModel: FirefoxHomeJumpBackInViewModel?
 
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = viewModel.layoutVariables.scrollDirection
+        layout.scrollDirection = viewModel?.layoutVariables.scrollDirection ?? UICollectionView.ScrollDirection.horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.isScrollEnabled = false
@@ -65,11 +65,12 @@ class FxHomeJumpBackInCollectionCell: UICollectionViewCell {
 
 extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.jumpList.itemsToDisplay
+        return viewModel?.jumpList.itemsToDisplay ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: JumpBackInCell.cellIdentifier, for: indexPath) as! JumpBackInCell
+        guard let viewModel = viewModel else { return UICollectionViewCell() }
 
         if indexPath.row == (viewModel.jumpList.itemsToDisplay - 1),
            let group = viewModel.jumpList.group {
@@ -90,6 +91,7 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
         cell.faviconImage.image = UIImage(imageLiteralResourceName: "recently_closed").withRenderingMode(.alwaysTemplate)
         cell.siteNameLabel.text = String.localizedStringWithFormat(.FirefoxHomepage.JumpBackIn.GroupSiteCount, group.groupedItems.count)
 
+        guard let viewModel = viewModel else { return }
         viewModel.getHeroImage(forSite: site) { image in
             cell.heroImage.image = image
         }
@@ -102,6 +104,7 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
         cell.itemTitle.text = site.title
         cell.siteNameLabel.text = site.tileURL.shortDisplayString.capitalized
 
+        guard let viewModel = viewModel else { return }
         viewModel.getFaviconImage(forSite: site) { image in
             cell.faviconImage.image = image
         }
@@ -114,6 +117,7 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
 
 extension FxHomeJumpBackInCollectionCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let viewModel = viewModel else { return }
         if indexPath.row == viewModel.jumpList.itemsToDisplay - 1,
            let group = viewModel.jumpList.group {
             viewModel.switchTo(group: group)
@@ -127,6 +131,7 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDelegate {
 
 extension FxHomeJumpBackInCollectionCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        guard let viewModel = viewModel else { return CGSize() }
 
         var itemWidth: CGFloat
         let totalHorizontalSpacing = collectionView.bounds.width

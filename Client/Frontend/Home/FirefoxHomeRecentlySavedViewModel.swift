@@ -17,9 +17,9 @@ class FirefoxHomeRecentlySavedViewModel {
     
     // MARK: - Properties
 
-    var profile: Profile!
     var isZeroSearch: Bool
 
+    private let profile: Profile
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private var readingListItems = [ReadingListItem]()
     private var recentBookmarks = [BookmarkItem]() {
@@ -41,19 +41,23 @@ class FirefoxHomeRecentlySavedViewModel {
         return items
     }
 
+    // Whether the section is enabled or not
+    var isEnabled: Bool {
+        return !recentBookmarks.isEmpty || !readingListItems.isEmpty
+    }
+
     /// Using dispatch group to know when data has completely loaded for both sources (recent bookmarks and reading list items)
     func updateData(completion: @escaping () -> Void) {
         let group = DispatchGroup()
         group.enter()
         profile.places.getRecentBookmarks(limit: RecentlySavedCollectionCellUX.bookmarkItemsLimit).uponQueue(.main, block: { [weak self] result in
-            self?.recentBookmarks = result.successValue ?? []
+            self?.updateRecentBookmarks(bookmarks: result.successValue ?? [])
             group.leave()
         })
 
         group.enter()
         if let readingList = profile.readingList.getAvailableRecords().value.successValue?.prefix(RecentlySavedCollectionCellUX.readingListItemsLimit) {
-            let readingListItems = Array(readingList)
-            self.readingListItems = RecentItemsHelper.filterStaleItems(recentItems: readingListItems, since: Date()) as! [ReadingListItem]
+            updateReadingList(items: Array(readingList))
             group.leave()
         }
 
@@ -66,5 +70,31 @@ class FirefoxHomeRecentlySavedViewModel {
         siteImageHelper.fetchImageFor(site: site, imageType: .heroImage, shouldFallback: false) { image in
             completion(image)
         }
+    }
+
+    // MARK: - Private
+
+    private func updateRecentBookmarks(bookmarks: [BookmarkItem]) {
+        recentBookmarks = bookmarks
+
+        // Send telemetry if bookmarks aren't empty
+        if !bookmarks.isEmpty, !RecentItemsHelper.filterStaleItems(recentItems: bookmarks, since: Date()).isEmpty {
+
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .view,
+                                         object: .firefoxHomepage,
+                                         value: .recentlySavedBookmarkItemView,
+                                         extras: [TelemetryWrapper.EventObject.recentlySavedBookmarkImpressions.rawValue: "\(bookmarks.count)"])
+        }
+    }
+
+    private func updateReadingList(items: [ReadingListItem]) {
+        readingListItems = RecentItemsHelper.filterStaleItems(recentItems: readingListItems, since: Date()) as! [ReadingListItem]
+
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .view,
+                                     object: .firefoxHomepage,
+                                     value: .recentlySavedReadingListView,
+                                     extras: [TelemetryWrapper.EventObject.recentlySavedReadingItemImpressions.rawValue: "\(readingListItems.count)"])
     }
 }

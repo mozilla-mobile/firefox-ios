@@ -26,17 +26,19 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
 
     var jumpList = JumpList(group: nil, tabs: [Tab]())
     var onTapGroup: ((Tab) -> Void)?
-    var profile: Profile!
 
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
-    private var tabManager: TabManager
-    private var isZeroSearch: Bool
+    private let isZeroSearch: Bool
+    private let profile: Profile
+    private let tabManager: TabManager
 
     init(isZeroSearch: Bool = false,
+         profile: Profile,
          tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager) {
 
-        self.tabManager = tabManager
+        self.profile = profile
         self.isZeroSearch = isZeroSearch
+        self.tabManager = tabManager
     }
 
     var layoutVariables: JumpBackInLayoutVariables {

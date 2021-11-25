@@ -204,8 +204,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     }
 
     var pocketStories: [PocketStory] = []
-    var hasRecentBookmarks = false
-    var hasReadingListitems = false
+
     var currentTab: Tab? {
         let tabManager = BrowserViewController.foregroundBVC().tabManager
         return tabManager.selectedTab
@@ -242,7 +241,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
               featureFlags.userPreferenceFor(.recentlySaved) == UserFeaturePreference.enabled
         else { return false }
 
-        return hasRecentBookmarks || hasReadingListitems
+        return recentlySavedViewModel.isEnabled
     }
 
     var isPocketSectionEnabled: Bool {
@@ -260,7 +259,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     init(profile: Profile, isZeroSearch: Bool = false, experiments: NimbusApi = Experiments.shared) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
-        self.jumpBackInViewModel = FirefoxHomeJumpBackInViewModel(isZeroSearch: isZeroSearch)
+        self.jumpBackInViewModel = FirefoxHomeJumpBackInViewModel(isZeroSearch: isZeroSearch, profile: profile)
         self.recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel(isZeroSearch: isZeroSearch, profile: profile)
         self.experiments = experiments
         super.init(collectionViewLayout: flowLayout)
@@ -412,42 +411,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
                 }
             }
         }
-    }
-
-    func configureRecentlySavedSection() {
-        profile.places.getRecentBookmarks(limit: 5).uponQueue(.main) { [weak self] result in
-            self?.hasRecentBookmarks = false
-
-            if let bookmarks = result.successValue,
-               !bookmarks.isEmpty,
-               !RecentItemsHelper.filterStaleItems(recentItems: bookmarks, since: Date()).isEmpty {
-                self?.hasRecentBookmarks = true
-
-                TelemetryWrapper.recordEvent(category: .action,
-                                             method: .view,
-                                             object: .firefoxHomepage,
-                                             value: .recentlySavedBookmarkItemView,
-                                             extras: [TelemetryWrapper.EventObject.recentlySavedBookmarkImpressions.rawValue: "\(bookmarks.count)"])
-            }
-
-            self?.collectionView.reloadData()
-        }
-
-        if let readingList = profile.readingList.getAvailableRecords().value.successValue?.prefix(RecentlySavedCollectionCellUX.readingListItemsLimit) {
-            var readingListItems = Array(readingList)
-            readingListItems = RecentItemsHelper.filterStaleItems(recentItems: readingListItems,
-                                                                  since: Date()) as! [ReadingListItem]
-            self.hasReadingListitems = !readingListItems.isEmpty
-
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .view,
-                                         object: .firefoxHomepage,
-                                         value: .recentlySavedReadingListView,
-                                         extras: [TelemetryWrapper.EventObject.recentlySavedReadingItemImpressions.rawValue: "\(readingListItems.count)"])
-
-            self.collectionView.reloadData()
-        }
-
     }
 
     func presentContextualHint() {
@@ -855,7 +818,6 @@ extension FirefoxHomeViewController {
 
     private func configureRecentlySavedCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let recentlySavedCell = cell as! FxHomeRecentlySavedCollectionCell
-        recentlySavedViewModel.profile = profile
         recentlySavedCell.viewModel = recentlySavedViewModel
         recentlySavedCell.homePanelDelegate = homePanelDelegate
         recentlySavedCell.libraryPanelDelegate = libraryPanelDelegate
@@ -867,7 +829,6 @@ extension FirefoxHomeViewController {
 
     private func configureJumpBackInCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let jumpBackInCell = cell as! FxHomeJumpBackInCollectionCell
-        jumpBackInViewModel.profile = profile
         jumpBackInCell.viewModel = jumpBackInViewModel
 
         jumpBackInViewModel.onTapGroup = { [weak self] tab in
@@ -898,10 +859,6 @@ extension FirefoxHomeViewController: DataObserverDelegate {
         // Overlay view is used by contextual hint and reloading the view while the hint is shown can cause the popover to flicker
         guard overlayView.isHidden else { return }
 
-        // If the pocket stories are not availible for the Locale the PocketAPI will return nil
-        // So it is okay if the default here is true
-
-        configureRecentlySavedSection()
         loadTopSitesData()
 
         // TODO: Reload with a protocol comformance once all sections are standardized
