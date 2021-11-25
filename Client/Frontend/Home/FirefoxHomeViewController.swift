@@ -261,7 +261,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         self.profile = profile
         self.isZeroSearch = isZeroSearch
         self.jumpBackInViewModel = FirefoxHomeJumpBackInViewModel(isZeroSearch: isZeroSearch)
-        self.recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel(isZeroSearch: isZeroSearch)
+        self.recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel(isZeroSearch: isZeroSearch, profile: profile)
         self.experiments = experiments
         super.init(collectionViewLayout: flowLayout)
         collectionView?.delegate = self
@@ -855,25 +855,24 @@ extension FirefoxHomeViewController {
 
     private func configureRecentlySavedCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let recentlySavedCell = cell as! FxHomeRecentlySavedCollectionCell
+        recentlySavedViewModel.profile = profile
+        recentlySavedCell.viewModel = recentlySavedViewModel
         recentlySavedCell.homePanelDelegate = homePanelDelegate
         recentlySavedCell.libraryPanelDelegate = libraryPanelDelegate
-        recentlySavedCell.profile = profile
         recentlySavedCell.collectionView.reloadData()
         recentlySavedCell.setNeedsLayout()
-        recentlySavedCell.viewModel = recentlySavedViewModel
 
         return recentlySavedCell
     }
 
     private func configureJumpBackInCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let jumpBackInCell = cell as! FxHomeJumpBackInCollectionCell
-        jumpBackInCell.profile = profile
+        jumpBackInViewModel.profile = profile
+        jumpBackInCell.viewModel = jumpBackInViewModel
 
         jumpBackInViewModel.onTapGroup = { [weak self] tab in
             self?.homePanelDelegate?.homePanelDidRequestToOpenTabTray(withFocusedTab: tab)
         }
-
-        jumpBackInCell.viewModel = jumpBackInViewModel
         jumpBackInCell.collectionView.reloadData()
         jumpBackInCell.setNeedsLayout()
 
