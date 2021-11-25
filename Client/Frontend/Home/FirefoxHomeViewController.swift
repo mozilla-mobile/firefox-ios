@@ -904,19 +904,11 @@ extension FirefoxHomeViewController: DataObserverDelegate {
         configureRecentlySavedSection()
         loadTopSitesData()
 
+        // TODO: Reload with a protocol comformance once all sections are standardized
+        // Idea is that each section will load it's data from it's own view model, and refresh when it needs instead of being a global collection view
+        recentlySavedViewModel.updateData {}
+        jumpBackInViewModel.updateData {}
         collectionView?.reloadData()
-
-        // TODO: Reload with a protocol comformance once all sections are standardized, for each section that depends on async data
-        // Idea is that each section will load it's data from it's own view model
-        recentlySavedViewModel.updateData { [weak self] in
-            let indexSet = IndexSet(integer: Section.recentlySaved.rawValue)
-            self?.collectionView.reloadSections(indexSet)
-        }
-
-        jumpBackInViewModel.updateData { [weak self] in
-            let indexSet = IndexSet(integer: Section.jumpBackIn.rawValue)
-            self?.collectionView.reloadSections(indexSet)
-        }
     }
 
     private func loadTopSitesData() {
