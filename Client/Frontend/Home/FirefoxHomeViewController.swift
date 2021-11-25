@@ -414,7 +414,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         }
     }
 
-    func configureItemsForRecentlySaved() {
+    func configureRecentlySavedSection() {
         profile.places.getRecentBookmarks(limit: 5).uponQueue(.main) { [weak self] result in
             self?.hasRecentBookmarks = false
 
@@ -902,7 +902,7 @@ extension FirefoxHomeViewController: DataObserverDelegate {
         // If the pocket stories are not availible for the Locale the PocketAPI will return nil
         // So it is okay if the default here is true
 
-        self.configureItemsForRecentlySaved()
+        configureRecentlySavedSection()
 
         TopSitesHandler.getTopSites(profile: profile).uponQueue(.main) { [weak self] result in
             guard let self = self else { return }
