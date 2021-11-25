@@ -766,9 +766,9 @@ firefox_home_page:
       Counts the number of times a user taps the
       Show All button in the History section
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-2905
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3470
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8905
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9563
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-06-01"
@@ -778,9 +778,9 @@ firefox_home_page:
       Counts the number of times a user sees the
       History Highlights section on the homepage
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-2905
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3470
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8905
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9563
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-06-01"
@@ -790,9 +790,9 @@ firefox_home_page:
       Counts the number of times a user taps to open an
       existing tab from the History Highlights section
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-2905
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3470
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8905
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9563
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-06-01"
