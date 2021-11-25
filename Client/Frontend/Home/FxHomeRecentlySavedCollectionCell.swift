@@ -41,8 +41,8 @@ class FxHomeRecentlySavedCollectionCell: UICollectionViewCell {
 
     private lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: NSCollectionLayoutDimension.absolute(RecentlySavedCollectionCellUX.cellWidth),
-            heightDimension: NSCollectionLayoutDimension.estimated(RecentlySavedCollectionCellUX.cellHeight)
+            widthDimension: .absolute(RecentlySavedCollectionCellUX.cellWidth),
+            heightDimension: .estimated(RecentlySavedCollectionCellUX.cellHeight)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         item.contentInsets = NSDirectionalEdgeInsets(top: RecentlySavedCollectionCellUX.generalSpacing,
@@ -51,8 +51,8 @@ class FxHomeRecentlySavedCollectionCell: UICollectionViewCell {
                                                      trailing: RecentlySavedCollectionCellUX.sectionInsetSpacing)
 
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: NSCollectionLayoutDimension.absolute(RecentlySavedCollectionCellUX.cellWidth),
-            heightDimension: NSCollectionLayoutDimension.fractionalHeight(1)
+            widthDimension: .absolute(RecentlySavedCollectionCellUX.cellWidth),
+            heightDimension: .fractionalHeight(1)
         )
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
 
