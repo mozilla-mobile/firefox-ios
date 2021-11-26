@@ -204,8 +204,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     }
 
     var pocketStories: [PocketStory] = []
-    var hasRecentBookmarks = false
-    var hasReadingListitems = false
+
     var currentTab: Tab? {
         let tabManager = BrowserViewController.foregroundBVC().tabManager
         return tabManager.selectedTab
@@ -242,7 +241,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
               featureFlags.userPreferenceFor(.recentlySaved) == UserFeaturePreference.enabled
         else { return false }
 
-        return hasRecentBookmarks || hasReadingListitems
+        return recentlySavedViewModel.hasData
     }
 
     var isPocketSectionEnabled: Bool {
@@ -260,8 +259,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     init(profile: Profile, isZeroSearch: Bool = false, experiments: NimbusApi = Experiments.shared) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
-        self.jumpBackInViewModel = FirefoxHomeJumpBackInViewModel(isZeroSearch: isZeroSearch)
-        self.recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel(isZeroSearch: isZeroSearch)
+        self.jumpBackInViewModel = FirefoxHomeJumpBackInViewModel(isZeroSearch: isZeroSearch, profile: profile)
+        self.recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel(isZeroSearch: isZeroSearch, profile: profile)
         self.experiments = experiments
         super.init(collectionViewLayout: flowLayout)
         collectionView?.delegate = self
@@ -289,11 +288,11 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         super.viewDidLoad()
 
         Section.allCases.forEach { collectionView.register($0.cellType, forCellWithReuseIdentifier: $0.cellIdentifier) }
-        self.collectionView?.register(ASHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header")
+        collectionView?.register(ASHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header")
         collectionView?.keyboardDismissMode = .onDrag
         collectionView?.backgroundColor = .clear
-        self.view.addSubviews(overlayView)
-        self.view.addSubview(contextualSourceView)
+        view.addSubviews(overlayView)
+        view.addSubview(contextualSourceView)
         contextualSourceView.backgroundColor = .clear
 
         if #available(iOS 14.0, *), !UserDefaults.standard.bool(forKey: "DidDismissDefaultBrowserCard") {
@@ -322,10 +321,14 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
             overlayView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
 
-        self.view.backgroundColor = UIColor.theme.homePanel.topSitesBackground
-        self.profile.panelDataObservers.activityStream.delegate = self
+        profile.panelDataObservers.activityStream.delegate = self
 
         applyTheme()
+
+        topSiteCell.collectionView.reloadData()
+        if let collectionView = self.collectionView, collectionView.numberOfSections > 0, collectionView.numberOfItems(inSection: 0) > 0 {
+            collectionView.reloadData()
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -383,16 +386,17 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     }
 
     @objc func reload(notification: Notification) {
-        reloadAll()
+        switch notification.name {
+        case .DisplayThemeChanged, .DynamicFontChanged:
+            reloadAll(shouldUpdateData: false)
+        default:
+            reloadAll()
+        }
     }
 
     func applyTheme() {
         defaultBrowserCard.applyTheme()
-        self.view.backgroundColor = UIColor.theme.homePanel.topSitesBackground
-        topSiteCell.collectionView.reloadData()
-        if let collectionView = self.collectionView, collectionView.numberOfSections > 0, collectionView.numberOfItems(inSection: 0) > 0 {
-            collectionView.reloadData()
-        }
+        view.backgroundColor = UIColor.theme.homePanel.topSitesBackground
     }
 
     func scrollToTop(animated: Bool = false) {
@@ -412,42 +416,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
                 }
             }
         }
-    }
-
-    func configureItemsForRecentlySaved() {
-        profile.places.getRecentBookmarks(limit: 5).uponQueue(.main) { [weak self] result in
-            self?.hasRecentBookmarks = false
-
-            if let bookmarks = result.successValue,
-               !bookmarks.isEmpty,
-               !RecentItemsHelper.filterStaleItems(recentItems: bookmarks, since: Date()).isEmpty {
-                self?.hasRecentBookmarks = true
-
-                TelemetryWrapper.recordEvent(category: .action,
-                                             method: .view,
-                                             object: .firefoxHomepage,
-                                             value: .recentlySavedBookmarkItemView,
-                                             extras: [TelemetryWrapper.EventObject.recentlySavedBookmarkImpressions.rawValue: "\(bookmarks.count)"])
-            }
-
-            self?.collectionView.reloadData()
-        }
-
-        if let readingList = profile.readingList.getAvailableRecords().value.successValue?.prefix(RecentlySavedCollectionCellUX.readingListItemsLimit) {
-            var readingListItems = Array(readingList)
-            readingListItems = RecentItemsHelper.filterStaleItems(recentItems: readingListItems,
-                                                                  since: Date()) as! [ReadingListItem]
-            self.hasReadingListitems = !readingListItems.isEmpty
-
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .view,
-                                         object: .firefoxHomepage,
-                                         value: .recentlySavedReadingListView,
-                                         extras: [TelemetryWrapper.EventObject.recentlySavedReadingItemImpressions.rawValue: "\(readingListItems.count)"])
-
-            self.collectionView.reloadData()
-        }
-
     }
 
     func presentContextualHint() {
@@ -855,25 +823,22 @@ extension FirefoxHomeViewController {
 
     private func configureRecentlySavedCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let recentlySavedCell = cell as! FxHomeRecentlySavedCollectionCell
+        recentlySavedCell.viewModel = recentlySavedViewModel
         recentlySavedCell.homePanelDelegate = homePanelDelegate
         recentlySavedCell.libraryPanelDelegate = libraryPanelDelegate
-        recentlySavedCell.profile = profile
         recentlySavedCell.collectionView.reloadData()
         recentlySavedCell.setNeedsLayout()
-        recentlySavedCell.viewModel = recentlySavedViewModel
 
         return recentlySavedCell
     }
 
     private func configureJumpBackInCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let jumpBackInCell = cell as! FxHomeJumpBackInCollectionCell
-        jumpBackInCell.profile = profile
+        jumpBackInCell.viewModel = jumpBackInViewModel
 
         jumpBackInViewModel.onTapGroup = { [weak self] tab in
             self?.homePanelDelegate?.homePanelDidRequestToOpenTabTray(withFocusedTab: tab)
         }
-
-        jumpBackInCell.viewModel = jumpBackInViewModel
         jumpBackInCell.collectionView.reloadData()
         jumpBackInCell.setNeedsLayout()
 
@@ -893,17 +858,27 @@ extension FirefoxHomeViewController {
 
 extension FirefoxHomeViewController: DataObserverDelegate {
 
-    // Reloads both highlights and top sites data from their respective caches. Does not invalidate the cache.
-    // See ActivityStreamDataObserver for invalidation logic.
-    func reloadAll() {
+    /// Reload all data including refreshing cells content and fetching data from backend
+    /// - Parameter shouldUpdateData: True means backend data should be refetched
+    func reloadAll(shouldUpdateData: Bool = true) {
         // Overlay view is used by contextual hint and reloading the view while the hint is shown can cause the popover to flicker
         guard overlayView.isHidden else { return }
 
-        // If the pocket stories are not availible for the Locale the PocketAPI will return nil
-        // So it is okay if the default here is true
+        loadTopSitesData()
 
-        self.configureItemsForRecentlySaved()
+        // TODO: Reload with a protocol comformance once all sections are standardized
+        // Idea is that each section will load it's data from it's own view model
+        if shouldUpdateData {
+            recentlySavedViewModel.updateData {}
+            jumpBackInViewModel.updateData {}
+        }
 
+        collectionView?.reloadData()
+    }
+
+    // Reloads both highlights and top sites data from their respective caches. Does not invalidate the cache.
+    // See ActivityStreamDataObserver for invalidation logic.
+    private func loadTopSitesData() {
         TopSitesHandler.getTopSites(profile: profile).uponQueue(.main) { [weak self] result in
             guard let self = self else { return }
 
