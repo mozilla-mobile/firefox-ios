@@ -903,7 +903,6 @@ extension FirefoxHomeViewController {
 
     private func configureHistoryHighlightsCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let historyCell = cell as! FxHomeHistoryHighlightsCollectionCell
-        historyCell.profile = profile
 
         historyHighlightsViewModel.onTapItem = { [weak self] in
             // TODO: When the data is hooked up, this will actually send a user to
