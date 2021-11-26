@@ -23,31 +23,11 @@ struct JumpBackInLayoutVariables {
 class FxHomeJumpBackInCollectionCell: UICollectionViewCell {
 
     // MARK: - Properties
-    var profile: Profile!
-    var viewModel: FirefoxHomeJumpBackInViewModel!
-    lazy var siteImageHelper = SiteImageHelper(profile: profile)
-
-    var layoutVariables: JumpBackInLayoutVariables {
-        let horizontalVariables = JumpBackInLayoutVariables(columns: 2, scrollDirection: .horizontal, maxItemsToDisplay: 4)
-        let verticalVariables = JumpBackInLayoutVariables(columns: 1, scrollDirection: .vertical, maxItemsToDisplay: 2)
-
-        let deviceIsiPad = UIDevice.current.userInterfaceIdiom == .pad
-        let deviceIsInLandscapeMode = UIWindow.isLandscape
-        let horizontalSizeClassIsCompact = traitCollection.horizontalSizeClass == .compact
-
-        if deviceIsiPad {
-            if horizontalSizeClassIsCompact { return verticalVariables }
-            return horizontalVariables
-
-        } else {
-            if deviceIsInLandscapeMode { return horizontalVariables }
-            return verticalVariables
-        }
-    }
+    var viewModel: FirefoxHomeJumpBackInViewModel?
 
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = layoutVariables.scrollDirection
+        layout.scrollDirection = viewModel?.layoutVariables.scrollDirection ?? UICollectionView.ScrollDirection.horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.isScrollEnabled = false
@@ -85,14 +65,12 @@ class FxHomeJumpBackInCollectionCell: UICollectionViewCell {
 
 extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        viewModel.updateDataAnd(layoutVariables)
-        return viewModel.jumpList.itemsToDisplay
+        return viewModel?.jumpList.itemsToDisplay ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: JumpBackInCell.cellIdentifier, for: indexPath) as! JumpBackInCell
-        cell.heroImage.image = nil
-        cell.faviconImage.image = nil
+        guard let viewModel = viewModel else { return UICollectionViewCell() }
 
         if indexPath.row == (viewModel.jumpList.itemsToDisplay - 1),
            let group = viewModel.jumpList.group {
@@ -107,20 +85,16 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
     private func configureCellForGroups(group: ASGroup<Tab>, cell: JumpBackInCell) {
         let firstGroupItem = group.groupedItems.first
         let site = Site(url: firstGroupItem?.lastKnownUrl?.absoluteString ?? "", title: firstGroupItem?.lastTitle ?? "")
-        let heroImageCacheKey = NSString(string: site.url)
-
-        if let cachedImage = SiteImageHelper.cache.object(forKey: heroImageCacheKey) {
-            cell.heroImage.image = cachedImage
-        } else {
-            siteImageHelper.fetchImageFor(site: site, imageType: .heroImage, shouldFallback: true) { image in
-                cell.heroImage.image = image
-            }
-        }
 
         cell.itemTitle.text = group.searchTerm.localizedCapitalized
         cell.itemDetails.text = String(format: .FirefoxHomepage.JumpBackIn.GroupSiteCount, group.groupedItems.count)
         cell.faviconImage.image = UIImage(imageLiteralResourceName: "recently_closed").withRenderingMode(.alwaysTemplate)
         cell.siteNameLabel.text = String.localizedStringWithFormat(.FirefoxHomepage.JumpBackIn.GroupSiteCount, group.groupedItems.count)
+
+        guard let viewModel = viewModel else { return }
+        viewModel.getHeroImage(forSite: site) { image in
+            cell.heroImage.image = image
+        }
     }
 
     private func configureCellForTab(item: Tab, cell: JumpBackInCell) {
@@ -130,26 +104,20 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
         cell.itemTitle.text = site.title
         cell.siteNameLabel.text = site.tileURL.shortDisplayString.capitalized
 
-        profile.favicons.getFaviconImage(forSite: site).uponQueue(.main, block: { result in
-            guard let image = result.successValue else { return }
+        guard let viewModel = viewModel else { return }
+        viewModel.getFaviconImage(forSite: site) { image in
             cell.faviconImage.image = image
-            cell.setNeedsLayout()
-        })
+        }
 
-        let heroImageCacheKey = NSString(string: site.url)
-        if let cachedImage = SiteImageHelper.cache.object(forKey: heroImageCacheKey) {
-            cell.heroImage.image = cachedImage
-        } else {
-            siteImageHelper.fetchImageFor(site: site, imageType: .heroImage, shouldFallback: true) { image in
-                cell.heroImage.image = image
-            }
+        viewModel.getHeroImage(forSite: site) { image in
+            cell.heroImage.image = image
         }
     }
-
 }
 
 extension FxHomeJumpBackInCollectionCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let viewModel = viewModel else { return }
         if indexPath.row == viewModel.jumpList.itemsToDisplay - 1,
            let group = viewModel.jumpList.group {
             viewModel.switchTo(group: group)
@@ -163,10 +131,11 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDelegate {
 
 extension FxHomeJumpBackInCollectionCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        guard let viewModel = viewModel else { return CGSize() }
 
         var itemWidth: CGFloat
         let totalHorizontalSpacing = collectionView.bounds.width
-        let columns = layoutVariables.columns
+        let columns = viewModel.layoutVariables.columns
         if columns == 2 {
             itemWidth = (totalHorizontalSpacing - JumpBackInCollectionCellUX.iPadHorizontalSpacing) / columns
         } else {
@@ -266,6 +235,16 @@ class JumpBackInCell: UICollectionViewCell {
 
     deinit {
         NotificationCenter.default.removeObserver(self)
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        heroImage.image = nil
+        faviconImage.image = nil
+        siteNameLabel.text = nil
+        itemDetails.text = nil
+        itemTitle.text = nil
+        applyTheme()
     }
 
     // MARK: - Helpers
