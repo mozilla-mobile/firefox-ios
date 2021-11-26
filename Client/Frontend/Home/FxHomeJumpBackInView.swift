@@ -116,7 +116,6 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
         let site = Site(url: firstGroupItem?.lastKnownUrl?.absoluteString ?? "", title: firstGroupItem?.lastTitle ?? "")
 
         cell.itemTitle.text = group.searchTerm.localizedCapitalized
-        cell.itemDetails.text = String(format: .FirefoxHomepage.JumpBackIn.GroupSiteCount, group.groupedItems.count)
         cell.faviconImage.image = UIImage(imageLiteralResourceName: "recently_closed").withRenderingMode(.alwaysTemplate)
         cell.siteNameLabel.text = String.localizedStringWithFormat(.FirefoxHomepage.JumpBackIn.GroupSiteCount, group.groupedItems.count)
 
@@ -161,11 +160,9 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDelegate {
 
 private struct JumpBackInCellUX {
     static let generalCornerRadius: CGFloat = 12
-    static let titleFontSize: CGFloat = 17
-    static let siteFontSize: CGFloat = 15
-    static let detailsFontSize: CGFloat = 12
-    static let labelsWrapperSpacing: CGFloat = 4
-    static let stackViewSpacing: CGFloat = 8
+    // TODO: Limiting font size to xxLarge until we use compositional layout in all Firefox HomePage. Should be AX5.
+    static let titleFontSize: CGFloat = 19 // Style subheadline - xxLarge
+    static let siteFontSize: CGFloat = 16 // Style caption1 - xxLarge
     static let stackViewShadowRadius: CGFloat = 4
     static let stackViewShadowOffset: CGFloat = 2
     static let heroImageWidth: CGFloat = 108
@@ -189,14 +186,10 @@ class JumpBackInCell: UICollectionViewCell {
     }
 
     let itemTitle: UILabel = .build { label in
-        label.adjustsFontSizeToFitWidth = false
-        label.font = UIFont.systemFont(ofSize: JumpBackInCellUX.titleFontSize)
+        label.adjustsFontForContentSizeCategory = true
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
+                                                                   maxSize: JumpBackInCellUX.titleFontSize)
         label.numberOfLines = 2
-    }
-
-    let itemDetails: UILabel = .build { label in
-        label.adjustsFontSizeToFitWidth = false
-        label.font = UIFont.systemFont(ofSize: JumpBackInCellUX.detailsFontSize)
     }
 
     let faviconImage: UIImageView = .build { imageView in
@@ -207,8 +200,9 @@ class JumpBackInCell: UICollectionViewCell {
     }
 
     let siteNameLabel: UILabel = .build { label in
-        label.adjustsFontSizeToFitWidth = false
-        label.font = UIFont.systemFont(ofSize: JumpBackInCellUX.siteFontSize)
+        label.adjustsFontForContentSizeCategory = true
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
+                                                                   maxSize: JumpBackInCellUX.siteFontSize)
         label.textColor = .label
     }
 
@@ -235,7 +229,6 @@ class JumpBackInCell: UICollectionViewCell {
         heroImage.image = nil
         faviconImage.image = nil
         siteNameLabel.text = nil
-        itemDetails.text = nil
         itemTitle.text = nil
         applyTheme()
     }
@@ -258,20 +251,21 @@ class JumpBackInCell: UICollectionViewCell {
             heroImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             heroImage.heightAnchor.constraint(equalToConstant: JumpBackInCellUX.heroImageHeight),
             heroImage.widthAnchor.constraint(equalToConstant: JumpBackInCellUX.heroImageWidth),
-            heroImage.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            heroImage.topAnchor.constraint(equalTo: itemTitle.topAnchor),
 
-            itemTitle.topAnchor.constraint(equalTo: heroImage.topAnchor),
-            itemTitle.leadingAnchor.constraint(equalTo: heroImage.trailingAnchor, constant: 20),
-            itemTitle.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
+            itemTitle.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            itemTitle.leadingAnchor.constraint(equalTo: heroImage.trailingAnchor, constant: 16),
+            itemTitle.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
 
-            faviconImage.leadingAnchor.constraint(equalTo: heroImage.trailingAnchor, constant: 20),
-            faviconImage.bottomAnchor.constraint(equalTo: heroImage.bottomAnchor),
+            faviconImage.topAnchor.constraint(greaterThanOrEqualTo: itemTitle.bottomAnchor, constant: 8),
+            faviconImage.leadingAnchor.constraint(equalTo: itemTitle.leadingAnchor),
             faviconImage.heightAnchor.constraint(equalToConstant: 24),
             faviconImage.widthAnchor.constraint(equalToConstant: 24),
+            faviconImage.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
 
             siteNameLabel.leadingAnchor.constraint(equalTo: faviconImage.trailingAnchor, constant: 8),
             siteNameLabel.centerYAnchor.constraint(equalTo: faviconImage.centerYAnchor),
-            siteNameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
+            siteNameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
         ])
     }
 
@@ -287,11 +281,11 @@ class JumpBackInCell: UICollectionViewCell {
 extension JumpBackInCell: NotificationThemeable {
     func applyTheme() {
         if LegacyThemeManager.instance.currentName == .dark {
-            [itemTitle, siteNameLabel, itemDetails].forEach { $0.textColor = UIColor.Photon.LightGrey10 }
+            [itemTitle, siteNameLabel].forEach { $0.textColor = UIColor.Photon.LightGrey10 }
             faviconImage.tintColor = UIColor.Photon.LightGrey10
             contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
         } else {
-            [itemTitle, siteNameLabel, itemDetails].forEach { $0.textColor = UIColor.Photon.DarkGrey90 }
+            [itemTitle, siteNameLabel].forEach { $0.textColor = UIColor.Photon.DarkGrey90 }
             faviconImage.tintColor = UIColor.Photon.DarkGrey90
             contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
         }
