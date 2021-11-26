@@ -261,7 +261,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         self.isZeroSearch = isZeroSearch
         self.jumpBackInViewModel = FirefoxHomeJumpBackInViewModel(isZeroSearch: isZeroSearch, profile: profile)
         self.recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel(isZeroSearch: isZeroSearch, profile: profile)
-        self.historyHighlightsViewModel = FxHomeHistoryHightlightsVM(with: BrowserViewController.foregroundBVC().tabManager)
+        self.historyHighlightsViewModel = FxHomeHistoryHightlightsVM()
         self.experiments = experiments
         super.init(collectionViewLayout: flowLayout)
         collectionView?.delegate = self

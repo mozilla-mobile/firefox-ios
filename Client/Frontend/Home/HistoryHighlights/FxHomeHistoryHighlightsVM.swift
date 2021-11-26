@@ -19,7 +19,7 @@ class FxHomeHistoryHightlightsVM {
     }
 
     // MARK: - Inits
-    init(with tabManager: TabManager,
+    init(with tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager,
          foregroundBVC: BrowserViewController = BrowserViewController.foregroundBVC()) {
         self.tabManager = tabManager
         self.foregroundBVC = foregroundBVC
