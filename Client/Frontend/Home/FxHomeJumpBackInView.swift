@@ -21,7 +21,8 @@ class FxHomeJumpBackInCollectionCell: UICollectionViewCell {
     var viewModel: FirefoxHomeJumpBackInViewModel?
 
     lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: compositionalLayout)
+        let layout = UICollectionViewCompositionalLayout(section: layoutSection)
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.isScrollEnabled = false
         collectionView.backgroundColor = UIColor.clear
@@ -44,6 +45,16 @@ class FxHomeJumpBackInCollectionCell: UICollectionViewCell {
     }
 
     // MARK: - Helpers
+
+    func reloadLayout() {
+        viewModel?.refreshData()
+        collectionView.collectionViewLayout = UICollectionViewCompositionalLayout(section: layoutSection)
+        collectionView.collectionViewLayout.invalidateLayout()
+        collectionView.reloadData()
+    }
+
+    // MARK: - Private
+
     private func setupLayout() {
         contentView.addSubview(collectionView)
 
@@ -55,7 +66,7 @@ class FxHomeJumpBackInCollectionCell: UICollectionViewCell {
         ])
     }
 
-    private lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
+    private var layoutSection: NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .estimated(JumpBackInCollectionCellUX.cellHeight)
@@ -67,33 +78,34 @@ class FxHomeJumpBackInCollectionCell: UICollectionViewCell {
             heightDimension: .estimated(JumpBackInCollectionCellUX.cellHeight)
         )
 
-        let subItems = Array(repeating: item, count: FirefoxHomeJumpBackInViewModel.numberOfItemsInColumn)
+        let subItems = Array(repeating: item, count: FirefoxHomeJumpBackInViewModel.maxNumberOfItemsInColumn)
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: subItems)
         group.interItemSpacing = JumpBackInCollectionCellUX.interItemSpacing
+        group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0,
+                                                      bottom: 0, trailing: JumpBackInCollectionCellUX.interGroupSpacing)
 
         let section = NSCollectionLayoutSection(group: group)
-        section.interGroupSpacing = JumpBackInCollectionCellUX.interGroupSpacing
 
         section.orthogonalScrollingBehavior = .continuous
-
-        return UICollectionViewCompositionalLayout(section: section)
-    }()
+        return section
+    }
 }
 
+// MARK: - UICollectionViewDataSource
 extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel?.jumpList.itemsToDisplay ?? 0
+        return viewModel?.jumpBackInList.itemsToDisplay ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: JumpBackInCell.cellIdentifier, for: indexPath) as! JumpBackInCell
         guard let viewModel = viewModel else { return UICollectionViewCell() }
 
-        if indexPath.row == (viewModel.jumpList.itemsToDisplay - 1),
-           let group = viewModel.jumpList.group {
+        if indexPath.row == (viewModel.jumpBackInList.itemsToDisplay - 1),
+           let group = viewModel.jumpBackInList.group {
             configureCellForGroups(group: group, cell: cell)
         } else {
-            configureCellForTab(item: viewModel.jumpList.tabs[indexPath.row], cell: cell)
+            configureCellForTab(item: viewModel.jumpBackInList.tabs[indexPath.row], cell: cell)
         }
 
         return cell
@@ -132,15 +144,16 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
     }
 }
 
+// MARK: - UICollectionViewDelegate
 extension FxHomeJumpBackInCollectionCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let viewModel = viewModel else { return }
-        if indexPath.row == viewModel.jumpList.itemsToDisplay - 1,
-           let group = viewModel.jumpList.group {
+        if indexPath.row == viewModel.jumpBackInList.itemsToDisplay - 1,
+           let group = viewModel.jumpBackInList.group {
             viewModel.switchTo(group: group)
 
         } else {
-            let tab = viewModel.jumpList.tabs[indexPath.row]
+            let tab = viewModel.jumpBackInList.tabs[indexPath.row]
             viewModel.switchTo(tab: tab)
         }
     }

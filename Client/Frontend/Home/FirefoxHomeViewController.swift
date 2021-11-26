@@ -624,7 +624,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
             case .jumpBackIn:
                 if !hasSentJumpBackInSectionEvent
                     && isJumpBackInSectionEnabled
-                    && !(jumpBackInViewModel.jumpList.itemsToDisplay == 0) {
+                    && !(jumpBackInViewModel.jumpBackInList.itemsToDisplay == 0) {
                     TelemetryWrapper.recordEvent(category: .action, method: .view, object: .jumpBackInImpressions, value: nil, extras: nil)
                     hasSentJumpBackInSectionEvent = true
                 }
@@ -686,7 +686,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
             let estimatedLayout = layout.calculateLayout(for: CGSize(width: cellSize.width, height: 0))
             return CGSize(width: cellSize.width, height: estimatedLayout.size.height)
         case .jumpBackIn:
-            cellSize.height *= CGFloat(FirefoxHomeJumpBackInViewModel.numberOfItemsInColumn)
+            cellSize.height *= CGFloat(jumpBackInViewModel.numberOfItemsInColumn)
             return cellSize
         case .libraryShortcuts:
             let width = min(FirefoxHomeUX.libraryShortcutsMaxWidth, cellSize.width)
@@ -833,7 +833,7 @@ extension FirefoxHomeViewController {
         jumpBackInViewModel.onTapGroup = { [weak self] tab in
             self?.homePanelDelegate?.homePanelDidRequestToOpenTabTray(withFocusedTab: tab)
         }
-        jumpBackInCell.collectionView.reloadData()
+        jumpBackInCell.reloadLayout()
         jumpBackInCell.setNeedsLayout()
 
         return jumpBackInCell
