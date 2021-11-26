@@ -41,21 +41,29 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
         self.tabManager = tabManager
     }
 
-    var layoutVariables: JumpBackInLayoutVariables {
-        let horizontalVariables = JumpBackInLayoutVariables(columns: 2, scrollDirection: .horizontal, maxItemsToDisplay: 4)
-        let verticalVariables = JumpBackInLayoutVariables(columns: 1, scrollDirection: .vertical, maxItemsToDisplay: 2)
-
-        let deviceIsiPad = UIDevice.current.userInterfaceIdiom == .pad
-        let deviceIsInLandscapeMode = UIWindow.isLandscape
-        let horizontalSizeClassIsCompact = UIScreen.main.traitCollection.horizontalSizeClass == .compact
-
+    static var maxItemsToDisplay: Int {
         if deviceIsiPad {
-            if horizontalSizeClassIsCompact { return verticalVariables }
-            return horizontalVariables
-
+            return 3 // iPad
+        } else if deviceIsInLandscapeMode {
+            return 4 // iPhone in landscape
         } else {
-            if deviceIsInLandscapeMode { return horizontalVariables }
-            return verticalVariables
+            return 2 // iPhone in portrait
+        }
+    }
+
+    static var numberOfItemsInColumn: Int {
+        return deviceIsiPad ? 1 : 2
+    }
+
+    static var widthDimension: NSCollectionLayoutDimension {
+        if deviceIsiPad && deviceIsInLandscapeMode {
+            return .fractionalWidth(1/3) // iPad in landscape
+        } else if deviceIsiPad {
+            return .fractionalWidth(1) // iPad in portrait
+        } else if deviceIsInLandscapeMode {
+            return .fractionalWidth(1/2) // iPhone in landscape
+        } else {
+            return .fractionalWidth(1) // iPhone in portrait
         }
     }
 
@@ -127,7 +135,7 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
 
     private func filter(tabs: [Tab], from recentGroup: ASGroup<Tab>?, usingGroupCount groupCount: Int) -> [Tab] {
         var recentTabs = [Tab]()
-        let maxItemCount = layoutVariables.maxItemsToDisplay - groupCount
+        let maxItemCount = FirefoxHomeJumpBackInViewModel.maxItemsToDisplay - groupCount
 
         for tab in tabs {
             // We must make sure to not include any 'solo' tabs that are also part of a group
@@ -140,5 +148,14 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
         }
 
         return recentTabs
+    }
+
+
+    private static var deviceIsiPad: Bool {
+        UIDevice.current.userInterfaceIdiom == .pad
+    }
+
+    private static var deviceIsInLandscapeMode: Bool {
+        UIWindow.isLandscape
     }
 }

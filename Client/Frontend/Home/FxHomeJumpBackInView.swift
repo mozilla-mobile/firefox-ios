@@ -6,18 +6,13 @@ import UIKit
 import Storage
 
 struct JumpBackInCollectionCellUX {
-    static let cellHeight: CGFloat = 100
+    static let cellHeight: CGFloat = 112
+    static let cellWidth: CGFloat = 350
     static let verticalCellSpacing: CGFloat = 8
     static let iPadHorizontalSpacing: CGFloat = 48
     static let iPadCellSpacing: CGFloat = 16
-    static let generalSpacing: CGFloat = 8
-    static let sectionInsetSpacing: CGFloat = 4
-}
-
-struct JumpBackInLayoutVariables {
-    let columns: CGFloat
-    let scrollDirection: UICollectionView.ScrollDirection
-    let maxItemsToDisplay: Int
+    static let interGroupSpacing: CGFloat = 8
+    static let interItemSpacing = NSCollectionLayoutSpacing.fixed(8)
 }
 
 class FxHomeJumpBackInCollectionCell: UICollectionViewCell {
@@ -26,9 +21,7 @@ class FxHomeJumpBackInCollectionCell: UICollectionViewCell {
     var viewModel: FirefoxHomeJumpBackInViewModel?
 
     lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = viewModel?.layoutVariables.scrollDirection ?? UICollectionView.ScrollDirection.horizontal
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: compositionalLayout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.isScrollEnabled = false
         collectionView.backgroundColor = UIColor.clear
@@ -61,6 +54,30 @@ class FxHomeJumpBackInCollectionCell: UICollectionViewCell {
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])
     }
+
+    private lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(JumpBackInCollectionCellUX.cellHeight)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: FirefoxHomeJumpBackInViewModel.widthDimension,
+            heightDimension: .estimated(JumpBackInCollectionCellUX.cellHeight)
+        )
+
+        let subItems = Array(repeating: item, count: FirefoxHomeJumpBackInViewModel.numberOfItemsInColumn)
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: subItems)
+        group.interItemSpacing = JumpBackInCollectionCellUX.interItemSpacing
+
+        let section = NSCollectionLayoutSection(group: group)
+        section.interGroupSpacing = JumpBackInCollectionCellUX.interGroupSpacing
+
+        section.orthogonalScrollingBehavior = .continuous
+
+        return UICollectionViewCompositionalLayout(section: section)
+    }()
 }
 
 extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
@@ -126,43 +143,6 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDelegate {
             let tab = viewModel.jumpList.tabs[indexPath.row]
             viewModel.switchTo(tab: tab)
         }
-    }
-}
-
-extension FxHomeJumpBackInCollectionCell: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        guard let viewModel = viewModel else { return CGSize() }
-
-        var itemWidth: CGFloat
-        let totalHorizontalSpacing = collectionView.bounds.width
-        let columns = viewModel.layoutVariables.columns
-        if columns == 2 {
-            itemWidth = (totalHorizontalSpacing - JumpBackInCollectionCellUX.iPadHorizontalSpacing) / columns
-        } else {
-            itemWidth = totalHorizontalSpacing / columns
-        }
-        let itemSize = CGSize(width: itemWidth, height: JumpBackInCollectionCellUX.cellHeight)
-
-        return itemSize
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            return JumpBackInCollectionCellUX.verticalCellSpacing
-        }
-
-        return JumpBackInCollectionCellUX.iPadCellSpacing
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: JumpBackInCollectionCellUX.generalSpacing,
-                            left: JumpBackInCollectionCellUX.sectionInsetSpacing,
-                            bottom: JumpBackInCollectionCellUX.generalSpacing,
-                            right: JumpBackInCollectionCellUX.sectionInsetSpacing)
     }
 }
 

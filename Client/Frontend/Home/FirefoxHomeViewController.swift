@@ -686,13 +686,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
             let estimatedLayout = layout.calculateLayout(for: CGSize(width: cellSize.width, height: 0))
             return CGSize(width: cellSize.width, height: estimatedLayout.size.height)
         case .jumpBackIn:
-            if jumpBackInViewModel.layoutVariables.scrollDirection == .horizontal {
-                if jumpBackInViewModel.jumpList.itemsToDisplay > 2 {
-                    cellSize.height *= 2
-                }
-            } else if jumpBackInViewModel.layoutVariables.scrollDirection == .vertical {
-                cellSize.height *= CGFloat(jumpBackInViewModel.jumpList.itemsToDisplay)
-            }
+            cellSize.height *= CGFloat(FirefoxHomeJumpBackInViewModel.numberOfItemsInColumn)
             return cellSize
         case .libraryShortcuts:
             let width = min(FirefoxHomeUX.libraryShortcutsMaxWidth, cellSize.width)
