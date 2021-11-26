@@ -16,14 +16,6 @@ struct RecentlySavedCollectionCellUX {
     static let sectionInsetSpacing: CGFloat = 4
 }
 
-protocol RecentlySavedItem {
-    var title: String { get }
-    var url: String { get }
-}
-
-extension ReadingListItem: RecentlySavedItem { }
-extension BookmarkItem: RecentlySavedItem { }
-
 /// A cell serving as a collectionView to hold its associated recently saved cells.
 class FxHomeRecentlySavedCollectionCell: UICollectionViewCell {
     
@@ -31,15 +23,8 @@ class FxHomeRecentlySavedCollectionCell: UICollectionViewCell {
     
     weak var homePanelDelegate: HomePanelDelegate?
     weak var libraryPanelDelegate: LibraryPanelDelegate?
-    var profile: Profile!
-    var recentBookmarks = [BookmarkItem]() {
-        didSet {
-            recentBookmarks = RecentItemsHelper.filterStaleItems(recentItems: recentBookmarks, since: Date()) as! [BookmarkItem]
-        }
-    }
-    var readingListItems = [ReadingListItem]()
+
     var viewModel: FirefoxHomeRecentlySavedViewModel!
-    lazy var siteImageHelper = SiteImageHelper(profile: profile)
     
     // UI
     lazy var collectionView: UICollectionView = {
@@ -56,8 +41,8 @@ class FxHomeRecentlySavedCollectionCell: UICollectionViewCell {
 
     private lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: NSCollectionLayoutDimension.absolute(RecentlySavedCollectionCellUX.cellWidth),
-            heightDimension: NSCollectionLayoutDimension.estimated(RecentlySavedCollectionCellUX.cellHeight)
+            widthDimension: .absolute(RecentlySavedCollectionCellUX.cellWidth),
+            heightDimension: .estimated(RecentlySavedCollectionCellUX.cellHeight)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         item.contentInsets = NSDirectionalEdgeInsets(top: RecentlySavedCollectionCellUX.generalSpacing,
@@ -66,8 +51,8 @@ class FxHomeRecentlySavedCollectionCell: UICollectionViewCell {
                                                      trailing: RecentlySavedCollectionCellUX.sectionInsetSpacing)
 
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: NSCollectionLayoutDimension.absolute(RecentlySavedCollectionCellUX.cellWidth),
-            heightDimension: NSCollectionLayoutDimension.fractionalHeight(1)
+            widthDimension: .absolute(RecentlySavedCollectionCellUX.cellWidth),
+            heightDimension: .fractionalHeight(1)
         )
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
 
@@ -102,68 +87,33 @@ class FxHomeRecentlySavedCollectionCell: UICollectionViewCell {
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])
     }
-    
-    private func loadItems() -> [RecentlySavedItem] {
-        var items = [RecentlySavedItem]()
-        
-        items.append(contentsOf: recentBookmarks)
-        items.append(contentsOf: readingListItems)
-        
-        viewModel.recentItems = items
-        
-        return items
-    }
-    
-    private func configureDataSource() {
-        profile.places.getRecentBookmarks(limit: RecentlySavedCollectionCellUX.bookmarkItemsLimit).uponQueue(.main, block: { [weak self] result in
-            self?.recentBookmarks = result.successValue ?? []
-        })
-        
-        if let readingList = profile.readingList.getAvailableRecords().value.successValue?.prefix(RecentlySavedCollectionCellUX.readingListItemsLimit) {
-            let readingListItems = Array(readingList)
-            self.readingListItems = RecentItemsHelper.filterStaleItems(recentItems: readingListItems, since: Date()) as! [ReadingListItem]
-        }
-    }
-    
 }
 
 extension FxHomeRecentlySavedCollectionCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        configureDataSource()
-        
-        return loadItems().count
+        return viewModel.recentItems.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecentlySavedCell.cellIdentifier, for: indexPath) as! RecentlySavedCell
-        let dataSource = loadItems()
-        
-        if let item = dataSource[safe: indexPath.row] {
+        cell.tag = indexPath.row
+
+        if let item = viewModel.recentItems[safe: indexPath.row] {
             let site = Site(url: item.url, title: item.title, bookmarked: true)
             cell.itemTitle.text = site.title
-            cell.heroImage.image = nil
-            
-            let heroImageCacheKey = NSString(string: site.url)
-            if let cachedImage = SiteImageHelper.cache.object(forKey: heroImageCacheKey) {
-                cell.heroImage.image = cachedImage
-            } else {
-                siteImageHelper.fetchImageFor(site: site, imageType: .heroImage, shouldFallback: true) { image in
-                    cell.heroImage.image = image
-                }
+            viewModel.getHeroImage(forSite: site) { image in
+                guard cell.tag == indexPath.row else { return }
+                cell.heroImage.image = image
             }
-            
         }
         
         return cell
     }
-    
 }
 
 extension FxHomeRecentlySavedCollectionCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let dataSource = loadItems()
-        
-        if let item = dataSource[safe: indexPath.row] as? BookmarkItem {
+        if let item = viewModel.recentItems[safe: indexPath.row] as? BookmarkItem {
             guard let url = URIFixup.getURL(item.url) else { return }
             
             homePanelDelegate?.homePanel(didSelectURL: url, visitType: .bookmark, isGoogleTopSite: false)
@@ -172,7 +122,7 @@ extension FxHomeRecentlySavedCollectionCell: UICollectionViewDelegate {
                                          object: .firefoxHomepage,
                                          value: .recentlySavedBookmarkItemAction,
                                          extras: TelemetryWrapper.getOriginExtras(isZeroSearch: viewModel.isZeroSearch))
-        } else if let item = dataSource[safe: indexPath.row] as? ReadingListItem,
+        } else if let item = viewModel.recentItems[safe: indexPath.row] as? ReadingListItem,
                   let url = URL(string: item.url),
                   let encodedUrl = url.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL()) {
             
@@ -238,6 +188,14 @@ class RecentlySavedCell: UICollectionViewCell, NotificationThemeable {
     
     deinit {
         NotificationCenter.default.removeObserver(self)
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+
+        heroImage.image = nil
+        itemTitle.text = nil
+        applyTheme()
     }
     
     // MARK: - Helpers
