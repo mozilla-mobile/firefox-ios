@@ -150,7 +150,6 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
         return recentTabs
     }
 
-
     private static var deviceIsiPad: Bool {
         UIDevice.current.userInterfaceIdiom == .pad
     }

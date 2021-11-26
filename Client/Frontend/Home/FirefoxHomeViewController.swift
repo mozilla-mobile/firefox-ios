@@ -241,7 +241,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
               featureFlags.userPreferenceFor(.recentlySaved) == UserFeaturePreference.enabled
         else { return false }
 
-        return recentlySavedViewModel.isEnabled
+        return recentlySavedViewModel.hasData
     }
 
     var isPocketSectionEnabled: Bool {
