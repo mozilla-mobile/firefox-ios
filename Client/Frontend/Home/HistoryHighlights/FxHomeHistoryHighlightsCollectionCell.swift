@@ -20,6 +20,9 @@ class FxHomeHistoryHighlightsCollectionCell: UICollectionViewCell, ReusableCell 
     var viewModel: FxHomeHistoryHightlightsVM?
 
     // MARK: - Variables
+    /// We calculate the number of columns dynamically based on the numbers of items
+    /// available such that we always have the appropriate number of columns for the
+    /// rest of the dynamic calculations.
     var numberOfColumns: Int {
         guard let count = viewModel?.historyItems.count else { return 0 }
         return Int(ceil(Double(count) / Double(HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn)))
