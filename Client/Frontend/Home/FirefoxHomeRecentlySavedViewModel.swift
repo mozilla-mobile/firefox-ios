@@ -37,8 +37,8 @@ class FirefoxHomeRecentlySavedViewModel {
         return items
     }
 
-    // Whether the section is enabled or not
-    var isEnabled: Bool {
+    // Whether the section is has data to show or not
+    var hasData: Bool {
         return !recentBookmarks.isEmpty || !readingListItems.isEmpty
     }
 
