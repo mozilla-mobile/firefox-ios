@@ -10,10 +10,13 @@ struct HistoryHighlightsCollectionCellConstants {
     static let maxNumberOfColumns = 3
 }
 
+struct HistoryHighlightsCollectionCellUX {
+    static let estimatedCellHeight: CGFloat = 65
+}
+
 class FxHomeHistoryHighlightsCollectionCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Properties
-    var profile: Profile?
     var viewModel: FxHomeHistoryHightlightsVM?
 
     // MARK: - Variables
@@ -42,7 +45,6 @@ class FxHomeHistoryHighlightsCollectionCell: UICollectionViewCell, ReusableCell 
 
     // MARK: - Inits
     convenience init(frame: CGRect,
-                     with profile: Profile,
                      and viewModel: FxHomeHistoryHightlightsVM) {
         self.init(frame: frame)
         setupLayout()
@@ -72,7 +74,7 @@ class FxHomeHistoryHighlightsCollectionCell: UICollectionViewCell, ReusableCell 
     private lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         let item = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                               heightDimension: .estimated(65))
+                                               heightDimension: .estimated(HistoryHighlightsCollectionCellUX.estimatedCellHeight))
         )
 
         let groupWidth: NSCollectionLayoutDimension
@@ -84,7 +86,7 @@ class FxHomeHistoryHighlightsCollectionCell: UICollectionViewCell, ReusableCell 
 
         let verticalGroup = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(widthDimension: groupWidth,
-                                               heightDimension: .estimated(65)),
+                                               heightDimension: .estimated(HistoryHighlightsCollectionCellUX.estimatedCellHeight)),
             subitems: [item, item, item]
         )
 
@@ -178,7 +180,7 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
         guard let totalItems = totalItems else { return [] }
         var cornersToRound = UIRectCorner()
 
-        if isTopLeftCell(index: indexPath.row, totalItems: totalItems) { cornersToRound.insert(.topLeft) }
+        if isTopLeftCell(index: indexPath.row) { cornersToRound.insert(.topLeft) }
         if isTopRightCell(index: indexPath.row, totalItems: totalItems) { cornersToRound.insert(.topRight) }
         if isBottomLeftCell(index: indexPath.row, totalItems: totalItems) { cornersToRound.insert(.bottomLeft) }
         if isBottomRightCell(index: indexPath.row, totalItems: totalItems) { cornersToRound.insert(.bottomRight) }
@@ -186,7 +188,7 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
         return cornersToRound
     }
 
-    private func isTopLeftCell(index: Int, totalItems: Int) -> Bool {
+    private func isTopLeftCell(index: Int) -> Bool {
         if index == 0 { return true }
 
         return false

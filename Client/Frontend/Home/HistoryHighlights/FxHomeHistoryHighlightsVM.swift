@@ -8,7 +8,8 @@ class FxHomeHistoryHightlightsVM {
 
     // MARK: - Properties & Variables
     var historyItems = [Tab]()
-    var tabManager: TabManager
+    private var tabManager: TabManager
+    private var foregroundBVC: BrowserViewController
 
     var onTapItem: (() -> Void)?
 
@@ -18,8 +19,10 @@ class FxHomeHistoryHightlightsVM {
     }
 
     // MARK: - Inits
-    init(with tabManager: TabManager) {
+    init(with tabManager: TabManager,
+         foregroundBVC: BrowserViewController = BrowserViewController.foregroundBVC()) {
         self.tabManager = tabManager
+        self.foregroundBVC = foregroundBVC
     }
 
     // MARK: - Public methods
@@ -28,8 +31,8 @@ class FxHomeHistoryHightlightsVM {
     }
 
     public func switchTo() {
-        if BrowserViewController.foregroundBVC().urlBar.inOverlayMode {
-            BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode()
+        if foregroundBVC.urlBar.inOverlayMode {
+            foregroundBVC.urlBar.leaveOverlayMode()
         }
         onTapItem?()
 //        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .firefoxHomepage, value: .jumpBackInSectionTabOpened)
