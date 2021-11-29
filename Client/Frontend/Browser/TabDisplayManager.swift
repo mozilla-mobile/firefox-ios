@@ -560,7 +560,6 @@ extension TabDisplayManager: GroupedTabDelegate {
         }
 
         self.tabManager.removeTab(tab)
-//        refreshStore()
         removeGroupTab(with: tab)
     }
 
