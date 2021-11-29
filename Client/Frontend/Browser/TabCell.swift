@@ -119,37 +119,8 @@ class TabCell: UICollectionViewCell, TabTrayCell {
 
         
         NSLayoutConstraint.activate([
-//            title.topAnchor.constraint(equalTo: backgroundHolder.topAnchor),
-//            title.leftAnchor.constraint(equalTo: backgroundHolder.leftAnchor),
-//            title.rightAnchor.constraint(equalTo: backgroundHolder.rightAnchor),
-//            title.heightAnchor.constraint(equalToConstant: GridTabTrayControllerUX.TextBoxHeight),
-//            
-//            favicon.leadingAnchor.constraint(equalTo: title.contentView.leadingAnchor, constant: 6),
-//            favicon.topAnchor.constraint(equalTo: self.topAnchor, constant: ((GridTabTrayControllerUX.TextBoxHeight - GridTabTrayControllerUX.FaviconSize) / 2)),
-//            favicon.heightAnchor.constraint(equalToConstant: GridTabTrayControllerUX.TextBoxHeight),
-//            favicon.widthAnchor.constraint(equalToConstant: GridTabTrayControllerUX.TextBoxHeight),
-//            qrSignInLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
-//            qrSignInLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-//
-//            pairImageView.topAnchor.constraint(equalTo: qrSignInLabel.bottomAnchor),
-//            pairImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-//            pairImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.3),
-//            pairImageView.widthAnchor.constraint(equalTo: view.widthAnchor),
-//
-//            instructionsLabel.topAnchor.constraint(equalTo: pairImageView.bottomAnchor),
-//            instructionsLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-//            instructionsLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.85),
-//
-//            scanButton.topAnchor.constraint(equalTo: instructionsLabel.bottomAnchor, constant: 30),
-//            scanButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-//            scanButton.widthAnchor.constraint(equalToConstant: 328),
-//            scanButton.heightAnchor.constraint(equalToConstant: 44),
-//
-//            emailButton.topAnchor.constraint(equalTo: scanButton.bottomAnchor, constant: 10),
-//            emailButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-//            emailButton.widthAnchor.constraint(equalToConstant: 328),
-//            emailButton.heightAnchor.constraint(equalToConstant: 44)
         ])
+
         title.snp.makeConstraints { (make) in
             make.top.left.right.equalTo(backgroundHolder)
             make.height.equalTo(GridTabTrayControllerUX.TextBoxHeight)
