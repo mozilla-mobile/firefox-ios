@@ -268,6 +268,7 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         super.prepareForReuse()
         heroImage.image = nil
         faviconImage.image = nil
+        fallbackFaviconImage.image = nil
         siteNameLabel.text = nil
         itemTitle.text = nil
         setFallBackFaviconVisibility(isHidden: false)
