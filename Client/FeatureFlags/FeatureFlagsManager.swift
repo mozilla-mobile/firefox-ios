@@ -125,12 +125,12 @@ class FeatureFlagsManager {
 
         let groupedTabs = FlaggableFeature(withID: .groupedTabs,
                                            and: profile,
-                                           enabledFor: [.beta, .developer])
+                                           enabledFor: [.developer])
         features[.groupedTabs] = groupedTabs
 
         let jumpBackIn = FlaggableFeature(withID: .jumpBackIn,
                                           and: profile,
-                                          enabledFor: [.beta, .developer])
+                                          enabledFor: [.developer])
         features[.jumpBackIn] = jumpBackIn
 
         /// Use the Nimbus experimentation platform. If this is `true` then
@@ -153,7 +153,7 @@ class FeatureFlagsManager {
 
         let recentlySaved = FlaggableFeature(withID: .recentlySaved,
                                              and: profile,
-                                             enabledFor: [.beta, .developer])
+                                             enabledFor: [.developer])
         features[.recentlySaved] = recentlySaved
 
         let shakeToRestore = FlaggableFeature(withID: .shakeToRestore,
