@@ -381,33 +381,28 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     
     func removeGroupTab(with tab:Tab) {
         let groupData = indexOfGroupTab(tab: tab)
+        let groupIndexPath = IndexPath(row: 0, section: TabDisplaySection.groupedTabs.rawValue)
         guard let groupName = groupData?.groupName,
               let tabIndexInGroup = groupData?.indexOfTabInGroup,
               let indexOfGroup = tabGroups?.firstIndex(where: { group in
                   group.searchTerm == groupName
-              }) else {
+              }),
+              let groupedCell = self.collectionView.cellForItem(at: groupIndexPath) as? GroupedTabCell else {
             return
         }
         
-        // case: Group has less than 2 tabs (refresh all)
+        // case: Group has less than 3 tabs (refresh all)
         if let count = tabGroups?[indexOfGroup].groupedItems.count, count < 3 {
-            
+            refreshStore()
         } else {
-            // case: Group has 2 tabs, we are good to remove just one element from group
+            // case: Group has more than 2 tabs, we are good to remove just one tab from group
             tabGroups?[indexOfGroup].groupedItems.remove(at: tabIndexInGroup)
-//            let indexPath =  IndexPath(item: tabIndexInGroup-1, section: TabDisplaySection.groupedTabs.rawValue)
-//            let indexSet = IndexSet(integer: TabDisplaySection.groupedTabs.rawValue)
-            let groupIndexPath = IndexPath(row: 0, section: TabDisplaySection.groupedTabs.rawValue)
-            if let groupedCell = self.collectionView.cellForItem(at: groupIndexPath) as? GroupedTabCell {
                 groupedCell.tabDisplayManagerDelegate = self
                 groupedCell.tabGroups = self.tabGroups
                 groupedCell.hasExpanded = true
                 groupedCell.selectedTab = tabManager.selectedTab
-//                groupedCell.tableView.reloadData()
                 groupedCell.tableView.reloadRows(at: [IndexPath(row: indexOfGroup, section: 0)], with: .automatic)
                 groupedCell.scrollToSelectedGroup()
-            }
-//            self.collectionView.reloadSections(indexSet)
         }
     }
 
