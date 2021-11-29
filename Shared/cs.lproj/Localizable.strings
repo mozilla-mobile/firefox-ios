@@ -677,6 +677,24 @@
 /* Toggle logins syncing setting */
 "Logins" = "Přihlašovací údaje";
 
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "Zjistit více";
+
+/* Title of the Continue button. */
+"Logins.Onboarding.ContinueButtonTitle" = "Pokračovat";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.Onboarding.LearnMoreButtonTitle" = "Zjistit více";
+
+/* Label displaying welcome view tagline under the title */
+"Logins.WelcomeView.Tagline" = "Vezměte si svá hesla všude s sebou";
+
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title2" = "Automatické vyplňování hesel z Firefoxu";
+
+/* Title of the big blue button to enable AutoFill */
+"Logins.WelcomeView.TurnOnAutoFill" = "Zapnout automatické vyplňování";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Upraveno";
 
