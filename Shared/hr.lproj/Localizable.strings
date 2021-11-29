@@ -686,6 +686,33 @@
 /* Toggle logins syncing setting */
 "Logins" = "Prijave";
 
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "Saznaj više";
+
+/* Message shown when you enter Logins & Passwords without having a device passcode set. */
+"Logins.DevicePasscodeRequired.Message" = "Za spremanje i automatsko ispunjavanje prijava i lozinki, omogući Face ID, Touch ID ili lozinku uređaja.";
+
+/* Title of the Continue button. */
+"Logins.Onboarding.ContinueButtonTitle" = "Nastavi";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.Onboarding.LearnMoreButtonTitle" = "Saznaj više";
+
+/* Message shown when you enter Logins & Passwords for the first time. */
+"Logins.Onboarding.Message" = "Tvoje prijave i lozinke sada su zaštićene Face ID-om, Touch ID-om ili lozinkom uređaja.";
+
+/* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
+"Logins.PasscodeRequirement.Warning" = "Za korištenje automatskog ispunjavanja u Firefoxu, moraš omogućiti lozinku uređaja.";
+
+/* Label displaying welcome view tagline under the title */
+"Logins.WelcomeView.Tagline" = "Ponesi svoje lozinke sa sobom";
+
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title2" = "Automatski ispuni Firefoxove lozinke";
+
+/* Title of the big blue button to enable AutoFill */
+"Logins.WelcomeView.TurnOnAutoFill" = "Uključi auto. ispunjavanje";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Promijenjeno";
 
@@ -1849,6 +1876,9 @@
 
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "Trenutno odabrana kartica.";
+
+/* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as \"Others\" */
+"TabTray.Header.FilteredTabs.SectionHeader" = "Ostalo";
 
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
 "TabTray.InactiveTabs.SectionTitle" = "Neaktivne kartice";

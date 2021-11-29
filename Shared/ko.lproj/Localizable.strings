@@ -686,6 +686,33 @@
 /* Toggle logins syncing setting */
 "Logins" = "로그인";
 
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "자세히 알아보기";
+
+/* Message shown when you enter Logins & Passwords without having a device passcode set. */
+"Logins.DevicePasscodeRequired.Message" = "로그인과 비밀번호를 저장하고 자동 완성하려면 Face ID나 Touch ID, 기기 암호를 활성화하세요.";
+
+/* Title of the Continue button. */
+"Logins.Onboarding.ContinueButtonTitle" = "계속";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.Onboarding.LearnMoreButtonTitle" = "자세히 알아보기";
+
+/* Message shown when you enter Logins & Passwords for the first time. */
+"Logins.Onboarding.Message" = "로그인과 비밀번호가 Face ID나 Touch ID, 기기 암호로 보호됩니다.";
+
+/* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
+"Logins.PasscodeRequirement.Warning" = "Firefox의 자동 완성 기능을 사용하려면 기기 암호가 활성화되어 있어야 합니다.";
+
+/* Label displaying welcome view tagline under the title */
+"Logins.WelcomeView.Tagline" = "어디에서나 비밀번호를 사용하세요.";
+
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title2" = "Firefox 비밀번호 자동 완성";
+
+/* Title of the big blue button to enable AutoFill */
+"Logins.WelcomeView.TurnOnAutoFill" = "자동 완성 켜기";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "수정됨";
 
@@ -1849,6 +1876,9 @@
 
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "현재 선택된 탭입니다.";
+
+/* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as \"Others\" */
+"TabTray.Header.FilteredTabs.SectionHeader" = "그외";
 
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
 "TabTray.InactiveTabs.SectionTitle" = "비활성 탭";

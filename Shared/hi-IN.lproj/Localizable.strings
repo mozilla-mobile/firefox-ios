@@ -673,6 +673,24 @@
 /* Toggle logins syncing setting */
 "Logins" = "लॉगिन";
 
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "अधिक जानें";
+
+/* Title of the Continue button. */
+"Logins.Onboarding.ContinueButtonTitle" = "जारी रखें";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.Onboarding.LearnMoreButtonTitle" = "अधिक जानें";
+
+/* Label displaying welcome view tagline under the title */
+"Logins.WelcomeView.Tagline" = "हर जगह अपना पासवर्ड लेकर चलें";
+
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title2" = "AutoFill Firefox पासवर्ड";
+
+/* Title of the big blue button to enable AutoFill */
+"Logins.WelcomeView.TurnOnAutoFill" = "AutoFill चालू करें";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "संशोधित";
 
@@ -720,6 +738,9 @@
 
 /* Label that appears after the search if there are no logins matching the search */
 "LoginsList.NoMatchingResult.Subtitle" = "आपकी खोज के अनुरूप कोई परिणाम नहीं मिला है।";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "कोई मिलान लॉगिन नहीं";
 
 /* Title for cancel button for user to stop searching for a particular login */
 "LoginsList.Search.Cancel" = "रद्द करें";
@@ -1256,6 +1277,9 @@
 /* Title displayed in header of the setting panel. */
 "Settings.ClearPrivateData.Title" = "निजी डेटा मिटाएं";
 
+/* Button in Data Management that clears private data for the selected items. Parameter is the number of items to be cleared */
+"Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "चीजें साफ़ करें: %1$@";
+
 /* Copy app version alert shown in settings. */
 "Settings.CopyAppVersion.Title" = "क्लिपबोर्ड में कॉपी हो गया";
 
@@ -1349,6 +1373,9 @@
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "वापस अंदर जायें";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off */
+"Settings.Home.Option.Pocket" = "Pocket द्वारा अनुशंसित";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Saved section on the Firefox homepage on or off */
 "Settings.Home.Option.RecentlySaved" = "हाल ही में सहेजा गया";
@@ -1776,6 +1803,9 @@
 
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "वर्तमान में चयनित टैब।";
+
+/* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as \"Others\" */
+"TabTray.Header.FilteredTabs.SectionHeader" = "अन्य";
 
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
 "TabTray.InactiveTabs.SectionTitle" = "निष्क्रिय टैब";

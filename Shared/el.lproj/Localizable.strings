@@ -686,6 +686,33 @@
 /* Toggle logins syncing setting */
 "Logins" = "Συνδέσεις";
 
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "Μάθετε περισσότερα";
+
+/* Message shown when you enter Logins & Passwords without having a device passcode set. */
+"Logins.DevicePasscodeRequired.Message" = "Για αποθήκευση και αυτόματη συμπλήρωση στοιχείων σύνδεσης, ενεργοποιήστε το Face ID, το Touch ID ή ένα συνθηματικό.";
+
+/* Title of the Continue button. */
+"Logins.Onboarding.ContinueButtonTitle" = "Συνέχεια";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.Onboarding.LearnMoreButtonTitle" = "Μάθετε περισσότερα";
+
+/* Message shown when you enter Logins & Passwords for the first time. */
+"Logins.Onboarding.Message" = "Τα στοιχεία σύνδεσής σας προστατεύονται από το Face ID, το Touch ID ή ένα συνθηματικό.";
+
+/* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
+"Logins.PasscodeRequirement.Warning" = "Για τη λειτουργίας αυτόματης συμπλήρωσης του Firefox, πρέπει να έχετε ενεργοποιήσει το συνθηματικό συσκευής.";
+
+/* Label displaying welcome view tagline under the title */
+"Logins.WelcomeView.Tagline" = "Πάρτε τους κωδικούς πρόσβασής σας παντού";
+
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title2" = "Αυτόματη συμπλήρωση κωδικών πρόσβασης Firefox";
+
+/* Title of the big blue button to enable AutoFill */
+"Logins.WelcomeView.TurnOnAutoFill" = "Ενεργοποίηση αυτόματης συμπλήρωσης";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Τροποποίηση";
 
@@ -1849,6 +1876,9 @@
 
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "Τρέχουσα επιλεγμένη καρτέλα.";
+
+/* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as \"Others\" */
+"TabTray.Header.FilteredTabs.SectionHeader" = "Άλλες";
 
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
 "TabTray.InactiveTabs.SectionTitle" = "Ανενεργές καρτέλες";

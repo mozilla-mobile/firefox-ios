@@ -686,6 +686,33 @@
 /* Toggle logins syncing setting */
 "Logins" = "Inicios de sesión";
 
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "Conocer más";
+
+/* Message shown when you enter Logins & Passwords without having a device passcode set. */
+"Logins.DevicePasscodeRequired.Message" = "Para guardar y autocompletar inicios de sesión y contraseñas, habilite Face ID, Touch ID o un código de acceso del dispositivo.";
+
+/* Title of the Continue button. */
+"Logins.Onboarding.ContinueButtonTitle" = "Continuar";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.Onboarding.LearnMoreButtonTitle" = "Conocer más";
+
+/* Message shown when you enter Logins & Passwords for the first time. */
+"Logins.Onboarding.Message" = "Tus inicios de sesión y contraseñas ahora están protegidas por Face ID, Touch ID o un código de acceso para el dispositivo.";
+
+/* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
+"Logins.PasscodeRequirement.Warning" = "Para utilizar AutoFill en Firefox, tenés que tener habilitada una contraseña para el dispositivo.";
+
+/* Label displaying welcome view tagline under the title */
+"Logins.WelcomeView.Tagline" = "Llevá tus contraseñas a todas partes";
+
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title2" = "Autocompletar contraseñas de Firefox";
+
+/* Title of the big blue button to enable AutoFill */
+"Logins.WelcomeView.TurnOnAutoFill" = "Habilitar Autocompletar";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Modificado";
 
@@ -1849,6 +1876,9 @@
 
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "Pestaña actualmente seleccionada.";
+
+/* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as \"Others\" */
+"TabTray.Header.FilteredTabs.SectionHeader" = "Otras";
 
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
 "TabTray.InactiveTabs.SectionTitle" = "Pestañas inactivas";

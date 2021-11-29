@@ -686,6 +686,33 @@
 /* Toggle logins syncing setting */
 "Logins" = "Логиндер";
 
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "Көбірек білу";
+
+/* Message shown when you enter Logins & Passwords without having a device passcode set. */
+"Logins.DevicePasscodeRequired.Message" = "Логиндер мен парольдерді сақтау және автотолтыру үшін Face ID, Touch ID немесе құрылғы рұқсат кодын іске қосыңыз.";
+
+/* Title of the Continue button. */
+"Logins.Onboarding.ContinueButtonTitle" = "Жалғастыру";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.Onboarding.LearnMoreButtonTitle" = "Көбірек білу";
+
+/* Message shown when you enter Logins & Passwords for the first time. */
+"Logins.Onboarding.Message" = "Логиндеріңіз бен парольдеріңіз енді Face ID, Touch ID немесе құрылғы рұқсат коды арқылы қорғалған.";
+
+/* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
+"Logins.PasscodeRequirement.Warning" = "Firefox үшін автотолтыру мүмкіндігін пайдалану үшін құрылғының рұқсат коды іске қосылған болуы керек.";
+
+/* Label displaying welcome view tagline under the title */
+"Logins.WelcomeView.Tagline" = "Парольдеріңізді өзіңізбен бірге алып жүріңіз";
+
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title2" = "Firefox парольдерін автотолтыру";
+
+/* Title of the big blue button to enable AutoFill */
+"Logins.WelcomeView.TurnOnAutoFill" = "Автотолтыруды іске қосу";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Өзгертілген";
 
@@ -1849,6 +1876,9 @@
 
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "Ағымдағы таңдалған бет.";
+
+/* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as \"Others\" */
+"TabTray.Header.FilteredTabs.SectionHeader" = "Басқалар";
 
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
 "TabTray.InactiveTabs.SectionTitle" = "Белсенді емес беттер";

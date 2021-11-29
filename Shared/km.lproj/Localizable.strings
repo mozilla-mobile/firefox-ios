@@ -40,6 +40,18 @@
 /* The description of a highlight if it is a site the user has visited */
 "ActivityStream.Highlights.Visited" = "បានទស្សនា";
 
+/* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
+"ActivityStream.JumpBackIn.SectionTitle" = "រំលង​ត្រឡប់វិញ";
+
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
+"ActivityStream.JumpBackIn.TabGroup.SiteCount" = "ផ្ទាំង៖ %d";
+
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists, the Tab Group item title will be 'Your search for \"video games\"'. The %@ sign is a placeholder for the actual search the user did. */
+"ActivityStream.JumpBackIn.TabGroup.Title" = "ការស្វែងរក​របស់អ្នក​សម្រាប់ \"%@\"";
+
+/* A string used to signify the start of the Recently Saved section in Home Screen. */
+"ActivityStream.Library.Title" = "បានរក្សាទុក​ថ្មីៗ";
+
 /* Section title label for recently bookmarked websites */
 "ActivityStream.NewRecentBookmarks.Title" = "ចំណាំ​ថ្មីៗ";
 
@@ -57,6 +69,15 @@
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "បាន​ចូលមើល​ថ្មីៗ";
+
+/* Section title for the Recently Saved section. This shows websites that have had a save action. Right now it is just bookmarks but it could be used for other things like the reading list in the future. */
+"ActivityStream.RecentlySaved.SectionTitle" = "បានរក្សាទុក​ថ្មីៗ";
+
+/* This button will open the library showing all the users bookmarks */
+"ActivityStream.RecentlySaved.ShowAll" = "បង្ហាញ​ទាំងអស់";
+
+/* When long pressing an item in the Recently Visited section, this is the title of the button that appears, letting the user know to remove that particular item from the menu. */
+"ActivityStream.RecentlyVisited.RemoveButton.Title" = "ដកចេញ";
 
 /* Section title label for Shortcuts */
 "ActivityStream.Shortcuts.SectionTitle" = "ផ្លូវកាត់";
@@ -247,6 +268,13 @@
 
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "ចែករំលែក​តំណ";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
+"ContextualHints.Homepage.PersonalizedHome" = "ឥឡូវនេះ គេហទំព័រ Firefox ដែលស្របតាមបុគ្គល​របស់អ្នក​ ងាយស្រួល​ជាងមុន​ក្នុងការជ្រើសរើស​កន្លែង​ដែលអ្នកបានចាកចេញ។ រក​ផ្ទាំង​ ចំណាំ និង​លទ្ធផល​ស្វែងរក​ថ្មីៗ​របស់អ្នក។";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup.
+   Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
+"ContextualHints.TabTray.InactiveTabs" = "ផ្ទាំង​ដែល​អ្នក​មិន​បាន​មើល​រយៈពេល​ពីរសប្ដាហ៍​បានផ្លាស់ទី​នៅទីនេះ។";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "មិន​អាច​បន្ថែម​ទំព័រ​ទៅ​បញ្ជី​អាន​បាន​ទេ";

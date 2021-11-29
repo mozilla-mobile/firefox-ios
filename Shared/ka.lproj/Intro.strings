@@ -44,7 +44,7 @@
 "Intro.Slides.Safe.Sync.Title" = "უსაფრთხო დასინქრონება";
 
 /* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "რამე განსხვავებულს ეძებთ? აირჩიეთ სხვა საძიებო სისტემა ნაგულისხმევად (ან დაამატეთ თავად) პარამეტრებიდან.";
+"Intro.Slides.Search.Description" = "განსხვავებულად გსურთ მოიძიოთ? აირჩიეთ სხვა საძიებო სისტემა ნაგულისხმევად (ან დაამატეთ თავად) პარამეტრებიდან.";
 
 /* Title for the second  panel 'Search' in the First Run tour. */
 "Intro.Slides.Search.Title" = "მოიძიეთ გვერდები, თქვენებურად";

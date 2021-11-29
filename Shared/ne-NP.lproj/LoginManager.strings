@@ -10,6 +10,9 @@
 /* Copy password text selection menu item */
 "Copy" = "प्रतिलिपि बनाउनुहोस्";
 
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "%@ सिर्जना गरियो";
+
 /* Label for the button used to delete the current login. */
 "Delete" = "मेट्नुहोस्";
 
@@ -28,11 +31,17 @@
 /* Prompt message warning the user that deleted logins will remove logins from all connected devices */
 "Logins will be removed from all connected devices." = "सबै जडित यन्त्रहरूबाट लगइनहरू हटाइनेछ।";
 
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "परिमार्जित %@";
+
 /* Label displayed when no logins are found after searching. */
 "No logins found" = "लगइनहरू फेला परेन";
 
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "खोलेर भर्नुहोस्";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "पासवर्ड";
 
 /* Reveal password text selection menu item */
 "Reveal" = "प्रकट";
@@ -45,4 +54,10 @@
 
 /* Label for the button used to select all logins. */
 "Select All" = "सबै चयन गर्नुहोस्";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "प्रयोगकर्ता नाम";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "वेबसाइट";
 

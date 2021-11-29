@@ -3702,6 +3702,11 @@
 		DF036E42274FD434002E834E /* HistoryHighlightsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryHighlightsCell.swift; sourceTree = "<group>"; };
 		DF10441BA5FD33966E422B37 /* sat-Olck */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sat-Olck"; path = "sat-Olck.lproj/Intro.strings"; sourceTree = "<group>"; };
 		DF16405B8C523F7BDC578A89 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/LoginManager.strings; sourceTree = "<group>"; };
+		DF46B9A32755297000657F75 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/Today.strings"; sourceTree = "<group>"; };
+		DF46B9A42755297000657F75 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/BookmarkPanel.strings"; sourceTree = "<group>"; };
+		DF46B9A52755297000657F75 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/BookmarkPanelDeleteConfirm.strings"; sourceTree = "<group>"; };
+		DF46B9A62755297000657F75 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/WidgetIntents.strings"; sourceTree = "<group>"; };
+		DF46B9A72755297000657F75 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		DF4A44AB9DB2BE71AD028C35 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/Today.strings; sourceTree = "<group>"; };
 		DF4B4523B01B0EDC485E3BCB /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		DFACDFA9274D489B00A94EEC /* FxHomeHistoryHighlightsVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxHomeHistoryHighlightsVM.swift; sourceTree = "<group>"; };
@@ -8831,6 +8836,7 @@
 				D5E16123261FCA2200F02D6E /* eo */,
 				43EB00C3265861E8009A5F61 /* az */,
 				D5E343802697613600A57583 /* bg */,
+				DF46B9A32755297000657F75 /* ne-NP */,
 			);
 			name = Today.strings;
 			sourceTree = "<group>";
@@ -10362,6 +10368,7 @@
 				D5C974D9261FCA5F004631C7 /* lo */,
 				D5E79E94263C729200D1E356 /* te */,
 				D594AB18269761C500F9B437 /* gd */,
+				DF46B9A42755297000657F75 /* ne-NP */,
 			);
 			name = BookmarkPanel.strings;
 			sourceTree = "<group>";
@@ -10430,6 +10437,7 @@
 				D5C974DA261FCA5F004631C7 /* lo */,
 				D55C98AD263C72250000DA62 /* he */,
 				D594AB1B269761C500F9B437 /* gd */,
+				DF46B9A72755297000657F75 /* ne-NP */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -10501,6 +10509,7 @@
 				D5C974DB261FCA5F004631C7 /* lo */,
 				D5E79E95263C729200D1E356 /* te */,
 				D594AB19269761C500F9B437 /* gd */,
+				DF46B9A52755297000657F75 /* ne-NP */,
 			);
 			name = BookmarkPanelDeleteConfirm.strings;
 			sourceTree = "<group>";
@@ -10571,6 +10580,7 @@
 				D5781476261FCA8C003595F6 /* pa-IN */,
 				D5E79E97263C729200D1E356 /* te */,
 				D594AB1A269761C500F9B437 /* gd */,
+				DF46B9A62755297000657F75 /* ne-NP */,
 			);
 			name = WidgetIntents.intentdefinition;
 			sourceTree = "<group>";
