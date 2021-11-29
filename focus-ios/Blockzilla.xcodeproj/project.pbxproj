@@ -5447,7 +5447,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.0.7;
+				minimumVersion = 87.0.0;
 			};
 		};
 		F8324C2D264C807C007E4BFA /* XCRemoteSwiftPackageReference "SnapKit" */ = {
