@@ -1161,7 +1161,7 @@ app:
     BITRISE_RELEASE_VERSION: '40'
   - opts:
       is_expand: false
-    BITRISE_BETA_VERSION: '40'
+    BITRISE_BETA_VERSION: '95'
 trigger_map:
 - push_branch: main
   workflow: RunUnitTests
