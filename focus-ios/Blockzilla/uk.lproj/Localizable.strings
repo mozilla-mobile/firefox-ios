@@ -533,7 +533,7 @@
 "Siri.openURL" = "Відкрити улюблений сайт";
 
 /* Label for input to set a favorite URL to be opened by Siri. */
-"Siri.urlToOpen" = "Відкрити URL";
+"Siri.urlToOpen" = "URL-адреса";
 
 /* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
 "Tip.Biometric.Title" = "Блокувати %@, якщо сайт відкрито:";
