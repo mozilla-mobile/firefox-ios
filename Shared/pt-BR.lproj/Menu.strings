@@ -89,5 +89,5 @@
 "Menu.ViewMobileSiteAction.Title" = "Versão do site para dispositivo móvel";
 
 /* Label for the button, displayed in the menu, used to navigate to the home page. */
-"SettingsMenu.OpenHomePageAction.Title" = "Página inicial";
+"SettingsMenu.OpenHomePageAction.Title" = "Tela inicial";
 
