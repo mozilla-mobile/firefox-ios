@@ -822,12 +822,12 @@ class TabCell: UICollectionViewCell, TabTrayCell {
 
     lazy private var faviconBG: UIView = {
         let view = UIView()
-        view.layer.cornerRadius = TopSiteCellUX.CellCornerRadius
-        view.layer.borderWidth = TopSiteCellUX.BorderWidth
+        view.layer.cornerRadius = TopSiteCellUX.cellCornerRadius
+        view.layer.borderWidth = TopSiteCellUX.borderWidth
         view.layer.shadowOffset = CGSize(width: 0, height: 2)
-        view.layer.shadowRadius = TopSiteCellUX.ShadowRadius
+        view.layer.shadowRadius = TopSiteCellUX.shadowRadius
         view.backgroundColor = UIColor.theme.homePanel.shortcutBackground
-        view.layer.borderColor = TopSiteCellUX.BorderColor.cgColor
+        view.layer.borderColor = TopSiteCellUX.borderColor.cgColor
         view.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         view.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
         return view
@@ -848,7 +848,7 @@ class TabCell: UICollectionViewCell, TabTrayCell {
         view.clipsToBounds = true
         view.isUserInteractionEnabled = false
         view.backgroundColor = UIColor.clear
-        view.layer.cornerRadius = TopSiteCellUX.IconCornerRadius
+        view.layer.cornerRadius = TopSiteCellUX.iconCornerRadius
         view.layer.masksToBounds = true
         return view
     }()
@@ -944,11 +944,11 @@ class TabCell: UICollectionViewCell, TabTrayCell {
         faviconBG.snp.makeConstraints { make in
             make.centerY.equalToSuperview().offset(10)
             make.centerX.equalToSuperview()
-            make.size.equalTo(TopSiteCellUX.BackgroundSize)
+            make.size.equalTo(TopSiteCellUX.backgroundSize)
         }
         
         smallFaviconView.snp.makeConstraints { make in
-            make.size.equalTo(TopSiteCellUX.IconSize)
+            make.size.equalTo(TopSiteCellUX.iconSize)
             make.center.equalTo(faviconBG)
         }
     }

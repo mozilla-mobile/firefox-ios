@@ -8,18 +8,17 @@ import SDWebImage
 import Storage
 
 struct TopSiteCellUX {
-    static let TitleHeight: CGFloat = 20
-    static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
-    static let CellCornerRadius: CGFloat = 8
-    static let TitleOffset: CGFloat = 4
-    static let OverlayColor = UIColor(white: 0.0, alpha: 0.25)
-    static let IconSize = CGSize(width: 36, height: 36)
-    static let IconCornerRadius: CGFloat = 4
-    static let BackgroundSize = CGSize(width: 60, height: 60)
-    static let ShadowRadius: CGFloat = 6
-    static let BorderColor = UIColor(white: 0, alpha: 0.1)
-    static let BorderWidth: CGFloat = 0.5
-    static let PinIconSize: CGFloat = 12
+    static let titleHeight: CGFloat = 20
+    static let cellCornerRadius: CGFloat = 8
+    static let titleOffset: CGFloat = 4
+    static let overlayColor = UIColor(white: 0.0, alpha: 0.25)
+    static let iconSize = CGSize(width: 36, height: 36)
+    static let iconCornerRadius: CGFloat = 4
+    static let backgroundSize = CGSize(width: 60, height: 60)
+    static let shadowRadius: CGFloat = 6
+    static let borderColor = UIColor(white: 0, alpha: 0.1)
+    static let borderWidth: CGFloat = 0.5
+    static let pinIconSize: CGFloat = 12
 }
 
 /*
@@ -31,7 +30,7 @@ class TopSiteItemCell: UICollectionViewCell, NotificationThemeable {
 
     lazy var imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.layer.cornerRadius = TopSiteCellUX.IconCornerRadius
+        imageView.layer.cornerRadius = TopSiteCellUX.iconCornerRadius
         imageView.layer.masksToBounds = true
         return imageView
     }()
@@ -48,16 +47,16 @@ class TopSiteItemCell: UICollectionViewCell, NotificationThemeable {
         let titleLabel = UILabel()
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
-        titleLabel.preferredMaxLayoutWidth = TopSiteCellUX.BackgroundSize.width + TopSiteCellUX.ShadowRadius
+        titleLabel.preferredMaxLayoutWidth = TopSiteCellUX.backgroundSize.width + TopSiteCellUX.shadowRadius
         return titleLabel
     }()
 
     lazy private var faviconBG: UIView = {
         let view = UIView()
-        view.layer.cornerRadius = TopSiteCellUX.CellCornerRadius
-        view.layer.borderWidth = TopSiteCellUX.BorderWidth
+        view.layer.cornerRadius = TopSiteCellUX.cellCornerRadius
+        view.layer.borderWidth = TopSiteCellUX.borderWidth
         view.layer.shadowOffset = CGSize(width: 0, height: 2)
-        view.layer.shadowRadius = TopSiteCellUX.ShadowRadius
+        view.layer.shadowRadius = TopSiteCellUX.shadowRadius
         return view
     }()
 
@@ -86,7 +85,7 @@ class TopSiteItemCell: UICollectionViewCell, NotificationThemeable {
         titleWrapper.snp.makeConstraints { make in
             make.top.equalTo(faviconBG.snp.bottom).offset(8)
             make.bottom.centerX.equalTo(contentView)
-            make.width.lessThanOrEqualTo(TopSiteCellUX.BackgroundSize.width + 20)
+            make.width.lessThanOrEqualTo(TopSiteCellUX.backgroundSize.width + 20)
         }
 
         titleLabel.snp.makeConstraints { make in
@@ -95,7 +94,7 @@ class TopSiteItemCell: UICollectionViewCell, NotificationThemeable {
         }
 
         imageView.snp.makeConstraints { make in
-            make.size.equalTo(TopSiteCellUX.IconSize)
+            make.size.equalTo(TopSiteCellUX.iconSize)
             make.center.equalTo(faviconBG)
         }
 
@@ -105,11 +104,11 @@ class TopSiteItemCell: UICollectionViewCell, NotificationThemeable {
 
         faviconBG.snp.makeConstraints { make in
             make.top.centerX.equalTo(contentView)
-            make.size.equalTo(TopSiteCellUX.BackgroundSize)
+            make.size.equalTo(TopSiteCellUX.backgroundSize)
         }
 
         pinImageView.snp.makeConstraints { make in
-            make.size.equalTo(TopSiteCellUX.PinIconSize)
+            make.size.equalTo(TopSiteCellUX.pinIconSize)
         }
     }
 
@@ -144,11 +143,11 @@ class TopSiteItemCell: UICollectionViewCell, NotificationThemeable {
         if let _ = site as? PinnedSite {
             titleWrapper.addSubview(pinImageView)
             pinImageView.snp.makeConstraints { make in
-                make.trailing.equalTo(self.titleLabel.snp.leading).offset(-TopSiteCellUX.TitleOffset)
+                make.trailing.equalTo(self.titleLabel.snp.leading).offset(-TopSiteCellUX.titleOffset)
                 make.centerY.equalTo(self.titleLabel.snp.centerY)
             }
             titleLabel.snp.updateConstraints { make in
-                make.leading.equalTo(titleWrapper).offset(TopSiteCellUX.PinIconSize + TopSiteCellUX.TitleOffset)
+                make.leading.equalTo(titleWrapper).offset(TopSiteCellUX.pinIconSize + TopSiteCellUX.titleOffset)
             }
         } else {
             titleLabel.snp.updateConstraints { make in
@@ -165,10 +164,10 @@ class TopSiteItemCell: UICollectionViewCell, NotificationThemeable {
     func applyTheme() {
         pinImageView.tintColor = UIColor.theme.homePanel.topSitePin
         faviconBG.backgroundColor = UIColor.theme.homePanel.shortcutBackground
-        faviconBG.layer.borderColor = TopSiteCellUX.BorderColor.cgColor
+        faviconBG.layer.borderColor = TopSiteCellUX.borderColor.cgColor
         faviconBG.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         faviconBG.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
-        selectedOverlay.backgroundColor = TopSiteCellUX.OverlayColor
+        selectedOverlay.backgroundColor = TopSiteCellUX.overlayColor
         titleLabel.backgroundColor = UIColor.clear
         titleLabel.textColor = UIColor.theme.homePanel.topSiteDomain
     }
@@ -179,9 +178,9 @@ class EmptyTopsiteDecorationCell: UICollectionReusableView {
 
     lazy private var emptyBG: UIView = {
         let view = UIView()
-        view.layer.cornerRadius = TopSiteCellUX.CellCornerRadius
-        view.layer.borderWidth = TopSiteCellUX.BorderWidth
-        view.layer.borderColor = TopSiteCellUX.BorderColor.cgColor
+        view.layer.cornerRadius = TopSiteCellUX.cellCornerRadius
+        view.layer.borderWidth = TopSiteCellUX.borderWidth
+        view.layer.borderColor = TopSiteCellUX.borderColor.cgColor
         return view
     }()
 
@@ -190,7 +189,7 @@ class EmptyTopsiteDecorationCell: UICollectionReusableView {
         addSubview(emptyBG)
         emptyBG.snp.makeConstraints { make in
             make.top.centerX.equalToSuperview()
-            make.size.equalTo(TopSiteCellUX.BackgroundSize)
+            make.size.equalTo(TopSiteCellUX.backgroundSize)
         }
     }
 
@@ -324,7 +323,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
         let cellAttr = self.computeLayoutAttributesForCellAtIndexPath(indexPath)
         decorationAttr.frame = cellAttr.frame
 
-        decorationAttr.frame.size.height -= TopSiteCellUX.TitleHeight
+        decorationAttr.frame.size.height -= TopSiteCellUX.titleHeight
         decorationAttr.zIndex = -1
         return decorationAttr
     }
