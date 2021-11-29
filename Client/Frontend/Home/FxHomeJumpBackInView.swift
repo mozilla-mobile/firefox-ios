@@ -100,18 +100,19 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: JumpBackInCell.cellIdentifier, for: indexPath) as! JumpBackInCell
         guard let viewModel = viewModel else { return UICollectionViewCell() }
+        cell.tag = indexPath.item
 
         if indexPath.row == (viewModel.jumpBackInList.itemsToDisplay - 1),
            let group = viewModel.jumpBackInList.group {
-            configureCellForGroups(group: group, cell: cell)
+            configureCellForGroups(group: group, cell: cell, indexPath: indexPath)
         } else {
-            configureCellForTab(item: viewModel.jumpBackInList.tabs[indexPath.row], cell: cell)
+            configureCellForTab(item: viewModel.jumpBackInList.tabs[indexPath.row], cell: cell, indexPath: indexPath)
         }
 
         return cell
     }
 
-    private func configureCellForGroups(group: ASGroup<Tab>, cell: JumpBackInCell) {
+    private func configureCellForGroups(group: ASGroup<Tab>, cell: JumpBackInCell, indexPath: IndexPath) {
         let firstGroupItem = group.groupedItems.first
         let site = Site(url: firstGroupItem?.lastKnownUrl?.absoluteString ?? "", title: firstGroupItem?.lastTitle ?? "")
 
@@ -121,11 +122,12 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
 
         guard let viewModel = viewModel else { return }
         viewModel.getHeroImage(forSite: site) { image in
+            guard cell.tag == indexPath.item else { return }
             cell.heroImage.image = image
         }
     }
 
-    private func configureCellForTab(item: Tab, cell: JumpBackInCell) {
+    private func configureCellForTab(item: Tab, cell: JumpBackInCell, indexPath: IndexPath) {
         let itemURL = item.lastKnownUrl?.absoluteString ?? ""
         let site = Site(url: itemURL, title: item.displayTitle)
 
@@ -134,10 +136,12 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
 
         guard let viewModel = viewModel else { return }
         viewModel.getFaviconImage(forSite: site) { image in
+            guard cell.tag == indexPath.item else { return }
             cell.faviconImage.image = image
         }
 
         viewModel.getHeroImage(forSite: site) { image in
+            guard cell.tag == indexPath.item else { return }
             cell.heroImage.image = image
         }
     }
