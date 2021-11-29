@@ -151,7 +151,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         tabDisplayOrder.regularTabUUID = uuids
         TabDisplayOrder.encode(tabDisplayOrder: tabDisplayOrder)
     }
-
+    
     var tabGroups: [ASGroup<Tab>]?
     var tabsInAllGroups: [Tab]? {
         (tabGroups?.map{$0.groupedItems}.flatMap{$0})
@@ -378,6 +378,38 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
             self.tabDisplayer?.focusSelectedTab()
         }
     }
+    
+    func removeGroupTab(with tab:Tab) {
+        let groupData = indexOfGroupTab(tab: tab)
+        guard let groupName = groupData?.groupName,
+              let tabIndexInGroup = groupData?.indexOfTabInGroup,
+              let indexOfGroup = tabGroups?.firstIndex(where: { group in
+                  group.searchTerm == groupName
+              }) else {
+            return
+        }
+        
+        // case: Group has less than 2 tabs (refresh all)
+        if let count = tabGroups?[indexOfGroup].groupedItems.count, count < 3 {
+            
+        } else {
+            // case: Group has 2 tabs, we are good to remove just one element from group
+            tabGroups?[indexOfGroup].groupedItems.remove(at: tabIndexInGroup)
+//            let indexPath =  IndexPath(item: tabIndexInGroup-1, section: TabDisplaySection.groupedTabs.rawValue)
+//            let indexSet = IndexSet(integer: TabDisplaySection.groupedTabs.rawValue)
+            let groupIndexPath = IndexPath(row: 0, section: TabDisplaySection.groupedTabs.rawValue)
+            if let groupedCell = self.collectionView.cellForItem(at: groupIndexPath) as? GroupedTabCell {
+                groupedCell.tabDisplayManagerDelegate = self
+                groupedCell.tabGroups = self.tabGroups
+                groupedCell.hasExpanded = true
+                groupedCell.selectedTab = tabManager.selectedTab
+//                groupedCell.tableView.reloadData()
+                groupedCell.tableView.reloadRows(at: [IndexPath(row: indexOfGroup, section: 0)], with: .automatic)
+                groupedCell.scrollToSelectedGroup()
+            }
+//            self.collectionView.reloadSections(indexSet)
+        }
+    }
 
     // The user has tapped the close button or has swiped away the cell
     func closeActionPerformed(forCell cell: UICollectionViewCell) {
@@ -533,7 +565,8 @@ extension TabDisplayManager: GroupedTabDelegate {
         }
 
         self.tabManager.removeTab(tab)
-        refreshStore()
+//        refreshStore()
+        removeGroupTab(with: tab)
     }
 
     func selectGroupTab(tab: Tab) {
