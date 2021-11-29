@@ -135,13 +135,27 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
         cell.siteNameLabel.text = site.tileURL.shortDisplayString.capitalized
 
         guard let viewModel = viewModel else { return }
+        /// Sets a small favicon in place of the hero image in case there's no hero image
         viewModel.getFaviconImage(forSite: site) { image in
             guard cell.tag == indexPath.item else { return }
             cell.faviconImage.image = image
+
+            if cell.heroImage.image == nil {
+                cell.fallbackFaviconImage.image = image
+            }
         }
 
+        /// Replace the fallback favicon image when it's ready or available
         viewModel.getHeroImage(forSite: site) { image in
             guard cell.tag == indexPath.item else { return }
+
+            // If image is a square use it as a favicon
+            if image?.size.width == image?.size.height {
+                cell.fallbackFaviconImage.image = image
+                return
+            }
+
+            cell.setFallBackFaviconVisibility(isHidden: true)
             cell.heroImage.image = image
         }
     }
@@ -169,8 +183,8 @@ private struct JumpBackInCellUX {
     static let siteFontSize: CGFloat = 16 // Style caption1 - xxLarge
     static let stackViewShadowRadius: CGFloat = 4
     static let stackViewShadowOffset: CGFloat = 2
-    static let heroImageWidth: CGFloat = 108
-    static let heroImageHeight: CGFloat = 80
+    static let heroImageSize =  CGSize(width: 108, height: 80)
+    static let fallbackFaviconSize = CGSize(width: 56, height: 56)
 }
 
 // MARK: - JumpBackInCell
@@ -183,7 +197,7 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = JumpBackInCellUX.generalCornerRadius
-        imageView.backgroundColor = .systemBackground
+        imageView.backgroundColor = .clear
     }
 
     let itemTitle: UILabel = .build { label in
@@ -205,6 +219,31 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
                                                                    maxSize: JumpBackInCellUX.siteFontSize)
         label.textColor = .label
+    }
+
+    // Used as a fallback if hero image isn't set
+    let fallbackFaviconImage: UIImageView = .build { imageView in
+        imageView.contentMode = .scaleAspectFit
+        imageView.clipsToBounds = true
+        imageView.backgroundColor = UIColor.clear
+        imageView.layer.cornerRadius = TopSiteCellUX.iconCornerRadius
+        imageView.layer.masksToBounds = true
+    }
+
+    private var fallbackFaviconBackground: UIView = .build { view in
+        view.layer.cornerRadius = TopSiteCellUX.cellCornerRadius
+        view.layer.borderWidth = TopSiteCellUX.borderWidth
+        view.layer.shadowOffset = CGSize(width: 0, height: 2)
+        view.layer.shadowRadius = TopSiteCellUX.shadowRadius
+        view.backgroundColor = UIColor.theme.homePanel.shortcutBackground
+        view.layer.borderColor = TopSiteCellUX.borderColor.cgColor
+        view.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
+        view.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
+    }
+
+    // Contains the hero image and fallback favicons
+    private var imageContainer: UIView = .build { view in
+        view.backgroundColor = .clear
     }
 
     // MARK: - Inits
@@ -231,10 +270,17 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         faviconImage.image = nil
         siteNameLabel.text = nil
         itemTitle.text = nil
+        setFallBackFaviconVisibility(isHidden: false)
         applyTheme()
     }
 
     // MARK: - Helpers
+
+    func setFallBackFaviconVisibility(isHidden: Bool) {
+        fallbackFaviconBackground.isHidden = isHidden
+        fallbackFaviconImage.isHidden = isHidden
+    }
+
     private func setupObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .DisplayThemeChanged, object: nil)
     }
@@ -246,16 +292,24 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         contentView.layer.shadowOpacity = 0.12
 
-        contentView.addSubviews(heroImage, itemTitle, faviconImage, siteNameLabel)
+        fallbackFaviconBackground.addSubviews(fallbackFaviconImage)
+        imageContainer.addSubviews(heroImage, fallbackFaviconBackground)
+        contentView.addSubviews(itemTitle, faviconImage, siteNameLabel, imageContainer)
 
         NSLayoutConstraint.activate([
-            heroImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            heroImage.heightAnchor.constraint(equalToConstant: JumpBackInCellUX.heroImageHeight),
-            heroImage.widthAnchor.constraint(equalToConstant: JumpBackInCellUX.heroImageWidth),
-            heroImage.topAnchor.constraint(equalTo: itemTitle.topAnchor),
+            imageContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            imageContainer.heightAnchor.constraint(equalToConstant: JumpBackInCellUX.heroImageSize.height),
+            imageContainer.widthAnchor.constraint(equalToConstant: JumpBackInCellUX.heroImageSize.width),
+            imageContainer.topAnchor.constraint(equalTo: itemTitle.topAnchor),
+            imageContainer.bottomAnchor.constraint(greaterThanOrEqualTo: contentView.bottomAnchor, constant: -16),
+
+            heroImage.topAnchor.constraint(equalTo: imageContainer.topAnchor),
+            heroImage.leadingAnchor.constraint(equalTo: imageContainer.leadingAnchor),
+            heroImage.trailingAnchor.constraint(equalTo: imageContainer.trailingAnchor),
+            heroImage.bottomAnchor.constraint(equalTo: imageContainer.bottomAnchor),
 
             itemTitle.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-            itemTitle.leadingAnchor.constraint(equalTo: heroImage.trailingAnchor, constant: 16),
+            itemTitle.leadingAnchor.constraint(equalTo: imageContainer.trailingAnchor, constant: 16),
             itemTitle.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
 
             faviconImage.topAnchor.constraint(greaterThanOrEqualTo: itemTitle.bottomAnchor, constant: 8),
@@ -267,6 +321,16 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
             siteNameLabel.leadingAnchor.constraint(equalTo: faviconImage.trailingAnchor, constant: 8),
             siteNameLabel.centerYAnchor.constraint(equalTo: faviconImage.centerYAnchor),
             siteNameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+
+            fallbackFaviconBackground.centerXAnchor.constraint(equalTo: imageContainer.centerXAnchor),
+            fallbackFaviconBackground.centerYAnchor.constraint(equalTo: imageContainer.centerYAnchor),
+            fallbackFaviconBackground.heightAnchor.constraint(equalToConstant: JumpBackInCellUX.heroImageSize.height),
+            fallbackFaviconBackground.widthAnchor.constraint(equalToConstant: JumpBackInCellUX.heroImageSize.width),
+
+            fallbackFaviconImage.heightAnchor.constraint(equalToConstant: JumpBackInCellUX.fallbackFaviconSize.height),
+            fallbackFaviconImage.widthAnchor.constraint(equalToConstant: JumpBackInCellUX.fallbackFaviconSize.width),
+            fallbackFaviconImage.centerXAnchor.constraint(equalTo: fallbackFaviconBackground.centerXAnchor),
+            fallbackFaviconImage.centerYAnchor.constraint(equalTo: fallbackFaviconBackground.centerYAnchor),
         ])
     }
 
@@ -284,12 +348,18 @@ extension JumpBackInCell: NotificationThemeable {
         if LegacyThemeManager.instance.currentName == .dark {
             [itemTitle, siteNameLabel].forEach { $0.textColor = UIColor.Photon.LightGrey10 }
             faviconImage.tintColor = UIColor.Photon.LightGrey10
-            contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
+            fallbackFaviconImage.tintColor = UIColor.Photon.LightGrey10
         } else {
             [itemTitle, siteNameLabel].forEach { $0.textColor = UIColor.Photon.DarkGrey90 }
             faviconImage.tintColor = UIColor.Photon.DarkGrey90
-            contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
+            fallbackFaviconImage.tintColor = UIColor.Photon.DarkGrey90
         }
+
+        fallbackFaviconBackground.backgroundColor = UIColor.theme.homePanel.shortcutBackground
+        fallbackFaviconBackground.layer.borderColor = TopSiteCellUX.borderColor.cgColor
+        fallbackFaviconBackground.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
+        fallbackFaviconBackground.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
+        contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
     }
 
 }
