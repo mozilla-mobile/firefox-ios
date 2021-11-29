@@ -20,6 +20,7 @@ enum FeatureFlagName: String, CaseIterable {
     case chronologicalTabs
     case inactiveTabs
     case groupedTabs
+    case historyHighlights
     case jumpBackIn
     case nimbus
     case pocket
@@ -155,6 +156,11 @@ class FeatureFlagsManager {
                                              and: profile,
                                              enabledFor: [.beta, .developer])
         features[.recentlySaved] = recentlySaved
+
+        let historyHighlights = FlaggableFeature(withID: .historyHighlights,
+                                                 and: profile,
+                                                 enabledFor: [.developer])
+        features[.historyHighlights] = historyHighlights
 
         let shakeToRestore = FlaggableFeature(withID: .shakeToRestore,
                                               and: profile,

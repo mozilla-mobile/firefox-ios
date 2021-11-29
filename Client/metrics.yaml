@@ -760,6 +760,42 @@ firefox_home_page:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-05-01"
+  history_highlights_show_all:
+    type: counter
+    description: |
+      Counts the number of times a user taps the
+      Show All button in the History section
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3470
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9563
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-06-01"
+  history_highlights_view:
+    type: counter
+    description: |
+      Counts the number of times a user sees the
+      History Highlights section on the homepage
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3470
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9563
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-06-01"
+  history_highlights_item_opened:
+    type: counter
+    description: |
+      Counts the number of times a user taps to open an
+      existing tab from the History Highlights section
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3470
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9563
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-06-01"
 
 # Library
 library:

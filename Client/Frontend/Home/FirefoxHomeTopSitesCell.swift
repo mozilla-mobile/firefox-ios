@@ -211,7 +211,7 @@ private struct ASHorizontalScrollCellUX {
 /*
  The View that describes the topSite cell that appears in the tableView.
  */
-class ASHorizontalScrollCell: UICollectionViewCell {
+class ASHorizontalScrollCell: UICollectionViewCell, ReusableCell {
 
     lazy var collectionView: UICollectionView = {
         let layout  = HorizontalFlowLayout()
