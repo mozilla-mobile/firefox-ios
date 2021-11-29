@@ -9,7 +9,7 @@ fileprivate struct HomeViewUX {
     static let settingsButtonTopAnchorSpace: CGFloat = 28
 }
 
-class FxHomeCustomizeHomeView: UICollectionViewCell {
+class FxHomeCustomizeHomeView: UICollectionViewCell, ReusableCell {
 
     // MARK: - UI Elements
     let goToSettingsButton: UIButton = .build { button in

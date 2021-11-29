@@ -17,7 +17,7 @@ struct RecentlySavedCollectionCellUX {
 }
 
 /// A cell serving as a collectionView to hold its associated recently saved cells.
-class FxHomeRecentlySavedCollectionCell: UICollectionViewCell {
+class FxHomeRecentlySavedCollectionCell: UICollectionViewCell, ReusableCell {
     
     // MARK: - Properties
     
@@ -34,7 +34,8 @@ class FxHomeRecentlySavedCollectionCell: UICollectionViewCell {
         collectionView.backgroundColor = UIColor.clear
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(RecentlySavedCell.self, forCellWithReuseIdentifier: RecentlySavedCell.cellIdentifier)
+        collectionView.register(RecentlySavedCell.self,
+                                forCellWithReuseIdentifier: RecentlySavedCell.cellIdentifier)
         
         return collectionView
     }()
@@ -150,13 +151,9 @@ private struct RecentlySavedCellUX {
 }
 
 /// A cell used in FxHomeScreen's Recently Saved section. It holds bookmarks and reading list items.
-class RecentlySavedCell: UICollectionViewCell, NotificationThemeable {
+class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeable {
     
-    // MARK: - Properties
-    
-    static let cellIdentifier = "recentlySavedCell"
-    
-    // UI
+    // MARK: - UI Elements
     let heroImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true

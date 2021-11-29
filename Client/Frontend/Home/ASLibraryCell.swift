@@ -4,7 +4,7 @@
 
 import Shared
 
-class ASLibraryCell: UICollectionViewCell, NotificationThemeable {
+class ASLibraryCell: UICollectionViewCell, ReusableCell, NotificationThemeable {
 
     var mainView: UIStackView = .build()
 

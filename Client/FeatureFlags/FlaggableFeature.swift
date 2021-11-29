@@ -21,6 +21,8 @@ struct FlaggableFeature {
             return PrefsKeys.KeyEnableInactiveTabs
         case .groupedTabs:
             return PrefsKeys.KeyEnableGroupedTabs
+        case .historyHighlights:
+            return PrefsKeys.HistoryHighlightsSectionEnabled
         case .jumpBackIn:
             return PrefsKeys.JumpBackInSectionEnabled
         case .pocket:

@@ -276,8 +276,8 @@ class BoolSetting: Setting, FeatureFlagsProtocol {
     func writeBool(_ control: UISwitch) {
         if let featureFlagName = featureFlagName {
             let controlState = control.isOn ? UserFeaturePreference.enabled : UserFeaturePreference.disabled
-            featureFlags.setUserPreferenceFor(featureFlagName,
-                                              to: controlState)
+            featureFlags.setUserPreferenceFor(featureFlagName, to: controlState)
+
         } else {
             guard let key = prefKey else {
                 return

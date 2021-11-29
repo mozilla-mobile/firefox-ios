@@ -61,6 +61,7 @@ public struct PrefsKeys {
     public static let KeyBlockPopups = "blockPopups"
     public static let RecentlySavedSectionEnabled = "recentlySavedSectionEnabled"
     public static let JumpBackInSectionEnabled = "jumpBackInSectionEnabled"
+    public static let HistoryHighlightsSectionEnabled = "recentlySavedSectionEnabled"
 
     // Tabs Tray
     public static let KeyEnableInactiveTabs = "KeyInactiveTabs"

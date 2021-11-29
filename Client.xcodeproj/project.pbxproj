@@ -688,6 +688,10 @@
 		DD31E0FB1B382B520077078A /* TabPrintPageRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD31E0FA1B382B520077078A /* TabPrintPageRenderer.swift */; };
 		DDA24A431FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA24A341FD84D620098F159 /* DefaultSearchPrefs.swift */; };
 		DDA24A451FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA24A341FD84D620098F159 /* DefaultSearchPrefs.swift */; };
+		DF036E43274FD434002E834E /* HistoryHighlightsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF036E42274FD434002E834E /* HistoryHighlightsCell.swift */; };
+		DFACDFAA274D489B00A94EEC /* FxHomeHistoryHighlightsVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFACDFA9274D489B00A94EEC /* FxHomeHistoryHighlightsVM.swift */; };
+		DFACDFAC274D48A500A94EEC /* FxHomeHistoryHighlightsCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFACDFAB274D48A500A94EEC /* FxHomeHistoryHighlightsCollectionCell.swift */; };
+		DFACDFAF274D4D6D00A94EEC /* ReusableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFACDFAE274D4D6D00A94EEC /* ReusableCell.swift */; };
 		E1D8BC7A21FF7A0000B100BD /* TPStatsBlocklistsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D8BC7921FF7A0000B100BD /* TPStatsBlocklistsTests.swift */; };
 		E402000A1E6493C800B45AFF /* LaunchArguments.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075861E37F7AB006961AC /* LaunchArguments.swift */; };
 		E40AFC541DD0E93300DA5651 /* L10nPermissionStringsSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40AFC531DD0E93300DA5651 /* L10nPermissionStringsSnapshotTests.swift */; };
@@ -3695,10 +3699,14 @@
 		DE964E9A99B08F1FC7A3C6E5 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		DEE24C998DA12ED5CE67FF6A /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Menu.strings; sourceTree = "<group>"; };
 		DEE64F20810420CECBA98E54 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Search.strings; sourceTree = "<group>"; };
+		DF036E42274FD434002E834E /* HistoryHighlightsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryHighlightsCell.swift; sourceTree = "<group>"; };
 		DF10441BA5FD33966E422B37 /* sat-Olck */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sat-Olck"; path = "sat-Olck.lproj/Intro.strings"; sourceTree = "<group>"; };
 		DF16405B8C523F7BDC578A89 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		DF4A44AB9DB2BE71AD028C35 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/Today.strings; sourceTree = "<group>"; };
 		DF4B4523B01B0EDC485E3BCB /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
+		DFACDFA9274D489B00A94EEC /* FxHomeHistoryHighlightsVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxHomeHistoryHighlightsVM.swift; sourceTree = "<group>"; };
+		DFACDFAB274D48A500A94EEC /* FxHomeHistoryHighlightsCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxHomeHistoryHighlightsCollectionCell.swift; sourceTree = "<group>"; };
+		DFACDFAE274D4D6D00A94EEC /* ReusableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusableCell.swift; sourceTree = "<group>"; };
 		DFD6456AA6B9F19B62C14026 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		DFE8447DBAB67C2A5B61E4D0 /* bo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bo; path = bo.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E00742CA84A2A2D0DD19B0AE /* ast */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ast; path = ast.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
@@ -5626,6 +5634,24 @@
 			path = SearchQuickLinksSmall;
 			sourceTree = "<group>";
 		};
+		DF036E41274FD3FC002E834E /* HistoryHighlights */ = {
+			isa = PBXGroup;
+			children = (
+				DFACDFAB274D48A500A94EEC /* FxHomeHistoryHighlightsCollectionCell.swift */,
+				DFACDFA9274D489B00A94EEC /* FxHomeHistoryHighlightsVM.swift */,
+				DF036E42274FD434002E834E /* HistoryHighlightsCell.swift */,
+			);
+			path = HistoryHighlights;
+			sourceTree = "<group>";
+		};
+		DFACDFAD274D4D4B00A94EEC /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				DFACDFAE274D4D6D00A94EEC /* ReusableCell.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
 		E40A18F61EDC73D5006B7F28 /* Entitlements */ = {
 			isa = PBXGroup;
 			children = (
@@ -6090,23 +6116,24 @@
 		F84B21C01A090F8100AAB793 /* Client */ = {
 			isa = PBXGroup;
 			children = (
-				ACD605D124B35EEE00EE4454 /* metrics.yaml */,
-				C86E4F6F2493BA8E0087BFD9 /* Generated */,
-				7B2142FC1E5E055000CDD3FC /* InfoPlist.strings */,
-				F84B22431A09165600AAB793 /* Info.plist */,
-				F84B21EB1A0910F600AAB793 /* Assets */,
 				F84B21E41A0910F600AAB793 /* Application */,
+				F84B21EB1A0910F600AAB793 /* Assets */,
 				E60961841B62B7E100DD640F /* Configuration */,
 				E689C6FF1E0C716F008BAADB /* Entitlements */,
 				39EF434C260A736D0011E22E /* Experiments */,
 				28EADE5C1AFC3A6D007FB2FB /* Extensions */,
 				C82A94E3269CB74500624AA7 /* FeatureFlags */,
 				F84B21F11A0910F600AAB793 /* Frontend */,
+				C86E4F6F2493BA8E0087BFD9 /* Generated */,
 				39A359BD1BFCCE7B006B9E87 /* Helpers */,
-				434F97F124196B4200812FDF /* UserResearch */,
-				E69DB0B91E97E301008A67E6 /* Telemetry */,
-				E65075551E37F714006961AC /* Utils */,
+				F84B22431A09165600AAB793 /* Info.plist */,
+				7B2142FC1E5E055000CDD3FC /* InfoPlist.strings */,
 				74821FFD1DB6D3AC00EEEA72 /* MailSchemes.plist */,
+				ACD605D124B35EEE00EE4454 /* metrics.yaml */,
+				DFACDFAD274D4D4B00A94EEC /* Protocols */,
+				E69DB0B91E97E301008A67E6 /* Telemetry */,
+				434F97F124196B4200812FDF /* UserResearch */,
+				E65075551E37F714006961AC /* Utils */,
 			);
 			path = Client;
 			sourceTree = "<group>";
@@ -6282,6 +6309,7 @@
 				96F626FF2669B0D100C82340 /* FxHomeRecentlySavedCollectionCell.swift */,
 				C826BD4926973895006BBE24 /* FxHomeJumpBackInView.swift */,
 				C8A012F026AB07D70096A7A7 /* FxHomeJumpBackInViewModel.swift */,
+				DF036E41274FD3FC002E834E /* HistoryHighlights */,
 				C8656D78270F866700E199EA /* FxHomeCustomizeView.swift */,
 				3BB50E101D6274CD004B33DF /* FirefoxHomeTopSitesCell.swift */,
 				2386E4E524F8358E0072EF17 /* DefaultBrowserCard.swift */,
@@ -7945,6 +7973,7 @@
 				CA8226F324C11DB7008A6F38 /* LoginListTableViewCell.swift in Sources */,
 				436715892488216A006D1D4E /* TabTableViewCell.swift in Sources */,
 				E4A960061ABB9C450069AD6F /* ReaderModeUtils.swift in Sources */,
+				DFACDFAC274D48A500A94EEC /* FxHomeHistoryHighlightsCollectionCell.swift in Sources */,
 				048B4C8324A53F26001B56E8 /* ButtonWithSublabel.swift in Sources */,
 				435D660323D793DF0046EFA2 /* UpdateModel.swift in Sources */,
 				EBF47E701F7979DF00899189 /* TelemetryWrapper.swift in Sources */,
@@ -7962,6 +7991,7 @@
 				D3B6923F1B9F9A58004B87A4 /* FindInPageHelper.swift in Sources */,
 				F85C7F122721048E004BDBA4 /* Layout.swift in Sources */,
 				39EF4378260CF5A30011E22E /* AppDelegate+Experiments.swift in Sources */,
+				DF036E43274FD434002E834E /* HistoryHighlightsCell.swift in Sources */,
 				EB9A179C20E69A7F00B12184 /* LegacyDarkTheme.swift in Sources */,
 				DA52E1DA25F5961F0092204C /* TabTrayViewController.swift in Sources */,
 				EB1C84BF212EFFBF001489DF /* BrowserViewController+ReaderMode.swift in Sources */,
@@ -7977,6 +8007,7 @@
 				D0B9483D22A18B78002F4AA1 /* TextFieldTableViewCell.swift in Sources */,
 				C8954A512729AD9D001C7283 /* FxDefaultTheme.swift in Sources */,
 				C45F44691D087DB600CB7EF0 /* TopTabsViewController.swift in Sources */,
+				DFACDFAF274D4D6D00A94EEC /* ReusableCell.swift in Sources */,
 				1D0BA05C24F46A0400D731B5 /* TopSitesManager.swift in Sources */,
 				0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */,
 				C8FB0C782321523D00031088 /* PageActionMenu.swift in Sources */,
@@ -8156,6 +8187,7 @@
 				1DA3CE5F24EEE7C600422BB2 /* SiteArchiver.swift in Sources */,
 				D04D1B92209790B60074B35F /* Toast.swift in Sources */,
 				D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */,
+				DFACDFAA274D489B00A94EEC /* FxHomeHistoryHighlightsVM.swift in Sources */,
 				274A36CE239EB9EC00A21587 /* LibraryViewController+LibraryPanelDelegate.swift in Sources */,
 				43F7952525795F69005AEE40 /* SearchTelemetry.swift in Sources */,
 				E65075541E37F6FC006961AC /* DynamicFontHelper.swift in Sources */,

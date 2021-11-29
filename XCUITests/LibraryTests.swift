@@ -28,7 +28,7 @@ class LibraryTestsIphone: IphoneOnlyTestCase {
         if skipPlatform {return}
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
-        waitForExistence(app.staticTexts["libraryTitle"], timeout: 3)
+        waitForExistence(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.library], timeout: 3)
         waitForExistence(app.buttons["menu Bookmark"])
         waitForExistence(app.buttons["menu panel ReadingList"])
         waitForExistence(app.buttons["menu panel Downloads"])

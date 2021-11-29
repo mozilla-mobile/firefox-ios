@@ -25,7 +25,7 @@ enum BuiltinThemeName: String {
 // Convenience reference to these normal mode colors which are used in a few color classes.
 fileprivate let defaultBackground = UIColor.Photon.Grey10
 fileprivate let defaultSeparator = UIColor.Photon.Grey30
-fileprivate let defaultTextAndTint = UIColor.Photon.Grey80 
+fileprivate let defaultTextAndTint = UIColor.Photon.Grey80
 
 class TableViewColor {
     var rowBackground: UIColor { return UIColor.Photon.White100 }
@@ -56,7 +56,7 @@ class ActionMenuColor {
 
 class URLBarColor {
     var border: UIColor { return UIColor.Photon.Grey90A10 }
-    func activeBorder(_ isPrivate: Bool) -> UIColor { 
+    func activeBorder(_ isPrivate: Bool) -> UIColor {
         return !isPrivate ? UIColor.Photon.Blue20A40 : UIColor.Defaults.MobilePrivatePurple
     }
     var tint: UIColor { return UIColor.Photon.Blue40A30 }
@@ -184,6 +184,9 @@ class HomePanelColor {
     var shortcutShadowOpacity: Float { return 0.2 }
     
     var recentlySavedBookmarkCellBackground: UIColor { return .white}
+    
+    var recentlyVisitedCellGroupImage: UIColor { return UIColor.Photon.DarkGrey90 }
+    var recentlyVisitedCellBottomLine: UIColor { return UIColor.Photon.LightGrey40 }
 
     var activityStreamHeaderText: UIColor { return UIColor.Photon.DarkGrey90 }
     var activityStreamHeaderButton: UIColor { return UIColor.Photon.Blue50 }

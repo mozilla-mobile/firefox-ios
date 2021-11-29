@@ -20,7 +20,7 @@ struct JumpBackInLayoutVariables {
     let maxItemsToDisplay: Int
 }
 
-class FxHomeJumpBackInCollectionCell: UICollectionViewCell {
+class FxHomeJumpBackInCollectionCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Properties
     var viewModel: FirefoxHomeJumpBackInViewModel?
@@ -181,12 +181,9 @@ private struct JumpBackInCellUX {
 
 // MARK: - JumpBackInCell
 /// A cell used in FxHomeScreen's Jump Back In section.
-class JumpBackInCell: UICollectionViewCell {
+class JumpBackInCell: UICollectionViewCell, ReusableCell {
 
-    // MARK: - Properties
-    static let cellIdentifier = "jumpBackInCell"
-
-    // UI
+    // MARK: - UI Elements
     let heroImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
