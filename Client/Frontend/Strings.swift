@@ -16,6 +16,7 @@ public struct Strings {
 // Used as a helper enum to keep track of what app version strings were last updated in.
 fileprivate enum StringLastUpdatedAppVersion {
     case v39
+    case v96
 
     // Used for all cases before version 39.
     case unknown
@@ -108,7 +109,8 @@ extension String {
 
         }
 
-        public struct RecentlyVisited {
+        public struct HistoryHighlights {
+            public static let Title = MZLocalizedString("ActivityStream.RecentHistory.Title", value: "Recently Visited", comment: "Section title label for recently visited websites", lastUpdated: .v96)
 
         }
 
@@ -300,7 +302,6 @@ extension String {
     public static let TopSitesRowSettingFooter = MZLocalizedString("ActivityStream.TopSites.RowSettingFooter", value: "Set Rows", comment: "The title for the setting page which lets you select the number of top site rows", lastUpdated: .unknown)
     public static let TopSitesRowCount = MZLocalizedString("ActivityStream.TopSites.RowCount", value: "Rows: %d", comment: "label showing how many rows of topsites are shown. %d represents a number", lastUpdated: .unknown)
     public static let RecentlyBookmarkedTitle = MZLocalizedString("ActivityStream.NewRecentBookmarks.Title", value: "Recent Bookmarks", comment: "Section title label for recently bookmarked websites", lastUpdated: .unknown)
-    public static let RecentlyVisitedTitle = MZLocalizedString("ActivityStream.RecentHistory.Title", value: "Recently Visited", comment: "Section title label for recently visited websites", lastUpdated: .unknown)
     public static let RecentlySavedSectionTitle = MZLocalizedString("ActivityStream.Library.Title", value: "Recently Saved", comment: "A string used to signify the start of the Recently Saved section in Home Screen.", lastUpdated: .unknown)
     public static let RecentlySavedShowAllText = MZLocalizedString("RecentlySaved.Actions.More", value: "Show All", comment: "More button text for Recently Saved items at the home page.", lastUpdated: .unknown)
 }

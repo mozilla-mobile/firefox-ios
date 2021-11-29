@@ -126,6 +126,8 @@ fileprivate class DarkHomePanelColor: HomePanelColor {
     
     override var recentlySavedBookmarkCellBackground: UIColor { return UIColor.Photon.DarkGrey30 }
 
+    override var recentlyVisitedCellGroupImage: UIColor { return .white }
+    
     override var downloadedFileIcon: UIColor { return UIColor.Photon.Grey30 }
 
     override var historyHeaderIconsBackground: UIColor { return UIColor.clear }

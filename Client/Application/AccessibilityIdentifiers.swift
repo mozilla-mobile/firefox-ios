@@ -17,6 +17,24 @@ public struct AccessibilityIdentifiers {
         static let settingsMenuButton = "TabToolbar.menuButton"
     }
 
+    struct FirefoxHomepage {
+
+        struct MoreButtons {
+            static let recentlySaved = "recentlySavedSectionMoreButton"
+            static let jumpBackIn = "jumpBackInSectionMoreButton"
+            static let historyHighlights = "historyHighlightsSectionMoreButton"
+        }
+
+        struct SectionTitles {
+            static let jumpBackIn = "jumpBackInTitle"
+            static let recentlySaved = "recentlySavedTitle"
+            static let historyHighlights = "historyHightlightsTitle"
+            static let pocket = "pocketTitle"
+            static let library = "libraryTitle"
+            static let topSites = "topSitesTitle"
+        }
+    }
+
     struct TabTray {
         static let filteredTabs = "filteredTabs"
         static let deleteCloseAllButton = "TabTrayController.deleteButton.closeAll"
