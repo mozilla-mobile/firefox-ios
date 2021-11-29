@@ -686,6 +686,33 @@
 /* Toggle logins syncing setting */
 "Logins" = "Přizjewjenja";
 
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "Dalše informacije";
+
+/* Message shown when you enter Logins & Passwords without having a device passcode set. */
+"Logins.DevicePasscodeRequired.Message" = "Zo byšće přizjewjenja a hesła składował a awtomatisce wupjelnił, zmóžńće Face ID, Touch ID abo gratowy hesłowy kod.";
+
+/* Title of the Continue button. */
+"Logins.Onboarding.ContinueButtonTitle" = "Dale";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.Onboarding.LearnMoreButtonTitle" = "Dalše informacije";
+
+/* Message shown when you enter Logins & Passwords for the first time. */
+"Logins.Onboarding.Message" = "Waše přizjewjenja a hesła so nětko přez Face ID, Touch ID abo gratowy hesłowy kod škitaja.";
+
+/* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
+"Logins.PasscodeRequirement.Warning" = "Zo byšće funkciju awtomatiskeho wupjelnjenja Firefox wužiwał, dyrbiće gratowy hesłowy kod zmóžnjeny być.";
+
+/* Label displaying welcome view tagline under the title */
+"Logins.WelcomeView.Tagline" = "Wzmiće swoje hesła wšudźe sobu";
+
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title2" = "Hesła Firefox awtomatisce wupjelnić";
+
+/* Title of the big blue button to enable AutoFill */
+"Logins.WelcomeView.TurnOnAutoFill" = "Awtomatiske wupjelnjenje zmóžnić";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Změnjeny";
 
@@ -1849,6 +1876,9 @@
 
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "Tuchwilu wubrany rajtark.";
+
+/* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as \"Others\" */
+"TabTray.Header.FilteredTabs.SectionHeader" = "Druhe";
 
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
 "TabTray.InactiveTabs.SectionTitle" = "Njeaktiwne rajtarki";

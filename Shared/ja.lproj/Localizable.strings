@@ -686,6 +686,33 @@
 /* Toggle logins syncing setting */
 "Logins" = "ログイン情報";
 
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "詳細情報";
+
+/* Message shown when you enter Logins & Passwords without having a device passcode set. */
+"Logins.DevicePasscodeRequired.Message" = "ログイン情報とパスワードを保存して自動入力するには、Face ID または Touch ID、端末のパスコードを有効にしてください。";
+
+/* Title of the Continue button. */
+"Logins.Onboarding.ContinueButtonTitle" = "続ける";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.Onboarding.LearnMoreButtonTitle" = "詳細情報";
+
+/* Message shown when you enter Logins & Passwords for the first time. */
+"Logins.Onboarding.Message" = "ログイン情報とパスワードが Face ID または Touch ID、端末のパスコードにより保護されるようになりました。";
+
+/* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
+"Logins.PasscodeRequirement.Warning" = "Firefox の自動入力機能を使用するには、端末のパスコードを有効にする必要があります。";
+
+/* Label displaying welcome view tagline under the title */
+"Logins.WelcomeView.Tagline" = "どこでもパスワードが使える";
+
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title2" = "Firefox でパスワードを自動入力";
+
+/* Title of the big blue button to enable AutoFill */
+"Logins.WelcomeView.TurnOnAutoFill" = "自動入力をオンにする";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "変更日時";
 
@@ -1849,6 +1876,9 @@
 
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "現在選択されているタブ。";
+
+/* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as \"Others\" */
+"TabTray.Header.FilteredTabs.SectionHeader" = "他のタブ";
 
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
 "TabTray.InactiveTabs.SectionTitle" = "休止中のタブ";

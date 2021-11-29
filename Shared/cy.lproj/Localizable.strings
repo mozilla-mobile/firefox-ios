@@ -686,6 +686,33 @@
 /* Toggle logins syncing setting */
 "Logins" = "Mewngofnodion";
 
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "Dysgu Rhagor";
+
+/* Message shown when you enter Logins & Passwords without having a device passcode set. */
+"Logins.DevicePasscodeRequired.Message" = "I gadw ac awtolanwl mewngofnodion a chyfrineiriau, galluogwch Face ID, Touch ID neu god pas dyfais.";
+
+/* Title of the Continue button. */
+"Logins.Onboarding.ContinueButtonTitle" = "Parhau";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.Onboarding.LearnMoreButtonTitle" = "Dysgu Rhagor";
+
+/* Message shown when you enter Logins & Passwords for the first time. */
+"Logins.Onboarding.Message" = "Bellach mae eich mewngofnodion a'ch cyfrineiriau wedi'u diogelu gan Face ID, Touch ID neu god pas dyfais.";
+
+/* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
+"Logins.PasscodeRequirement.Warning" = "I ddefnyddio nodwedd AwtoLanw Firefox, mae'n rhaid bod gennych god pas dyfais wedi'i alluogi.";
+
+/* Label displaying welcome view tagline under the title */
+"Logins.WelcomeView.Tagline" = "Ewch â'ch cyfrineiriau i bob man";
+
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title2" = "Cyfrineiriau AwtoLanw Firefox";
+
+/* Title of the big blue button to enable AutoFill */
+"Logins.WelcomeView.TurnOnAutoFill" = "Troi AwtoLanw Ymlaen";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Newidiwyd";
 
@@ -1849,6 +1876,9 @@
 
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "Tab a ddewiswyd ar hyn o bryd.";
+
+/* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as \"Others\" */
+"TabTray.Header.FilteredTabs.SectionHeader" = "Eraill";
 
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
 "TabTray.InactiveTabs.SectionTitle" = "Tabiau Anweithredol";

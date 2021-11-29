@@ -686,6 +686,33 @@
 /* Toggle logins syncing setting */
 "Logins" = "Паролі";
 
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "Докладніше";
+
+/* Message shown when you enter Logins & Passwords without having a device passcode set. */
+"Logins.DevicePasscodeRequired.Message" = "Щоб зберігати й автоматично заповнювати поля паролів, увімкніть Face ID, Touch ID або пароль пристрою.";
+
+/* Title of the Continue button. */
+"Logins.Onboarding.ContinueButtonTitle" = "Продовжити";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.Onboarding.LearnMoreButtonTitle" = "Докладніше";
+
+/* Message shown when you enter Logins & Passwords for the first time. */
+"Logins.Onboarding.Message" = "Відтепер ваші паролі захищені Face ID, Touch ID або паролем пристрою.";
+
+/* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
+"Logins.PasscodeRequirement.Warning" = "Щоб використовувати функцію автозаповнення Firefox, увімкніть пароль пристрою.";
+
+/* Label displaying welcome view tagline under the title */
+"Logins.WelcomeView.Tagline" = "Майте доступ до своїх паролів всюди";
+
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title2" = "Автозаповнення паролів Firefox";
+
+/* Title of the big blue button to enable AutoFill */
+"Logins.WelcomeView.TurnOnAutoFill" = "Увімкнути автозаповнення";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Змінено";
 
@@ -1849,6 +1876,9 @@
 
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "Вибрана вкладка.";
+
+/* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as \"Others\" */
+"TabTray.Header.FilteredTabs.SectionHeader" = "Інші";
 
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
 "TabTray.InactiveTabs.SectionTitle" = "Неактивні вкладки";

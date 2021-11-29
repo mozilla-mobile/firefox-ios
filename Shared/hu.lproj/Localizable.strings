@@ -686,6 +686,33 @@
 /* Toggle logins syncing setting */
 "Logins" = "Bejelentkezések";
 
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "További tudnivalók";
+
+/* Message shown when you enter Logins & Passwords without having a device passcode set. */
+"Logins.DevicePasscodeRequired.Message" = "A bejelentkezések és jelszavak mentéséhez és automatikus kitöltéséhez engedélyezze a Face ID-t, a Touch ID-t vagy egy eszközjelkódot.";
+
+/* Title of the Continue button. */
+"Logins.Onboarding.ContinueButtonTitle" = "Folytatás";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.Onboarding.LearnMoreButtonTitle" = "További tudnivalók";
+
+/* Message shown when you enter Logins & Passwords for the first time. */
+"Logins.Onboarding.Message" = "Bejelentkezéseit és jelszavait mostantól a Face ID, a Touch ID vagy egy eszközjelkód védi.";
+
+/* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
+"Logins.PasscodeRequirement.Warning" = "A Firefox automatikus kitöltési funkciójának használatához engedélyeznie kell az eszköz jelkódját.";
+
+/* Label displaying welcome view tagline under the title */
+"Logins.WelcomeView.Tagline" = "Vigye magával a jelszavait bárhová";
+
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title2" = "Firefox jelszavak automatikus kitöltése";
+
+/* Title of the big blue button to enable AutoFill */
+"Logins.WelcomeView.TurnOnAutoFill" = "Automatikus kitöltés bekapcsolása";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Módosítva";
 
@@ -1849,6 +1876,9 @@
 
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "Jelenleg kiválasztott lap.";
+
+/* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as \"Others\" */
+"TabTray.Header.FilteredTabs.SectionHeader" = "Egyebek";
 
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
 "TabTray.InactiveTabs.SectionTitle" = "Inaktív lapok";
