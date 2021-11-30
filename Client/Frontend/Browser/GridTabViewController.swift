@@ -37,7 +37,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     let profile: Profile
     weak var delegate: TabTrayDelegate?
     var tabDisplayManager: TabDisplayManager!
-    var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TabCell.reuseIdentifier
+    var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TabCell.cellIdentifier
     static let independentTabsHeaderIdentifier = "IndependentTabs"
     var otherBrowsingModeOffset = CGPoint.zero
     // Backdrop used for displaying greyed background for private tabs
@@ -73,11 +73,11 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         self.tabToFocus = tabToFocus
         super.init(nibName: nil, bundle: nil)
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        collectionView.register(TabCell.self, forCellWithReuseIdentifier: TabCell.reuseIdentifier)
+        collectionView.register(TabCell.self, forCellWithReuseIdentifier: TabCell.cellIdentifier)
         collectionView.register(GroupedTabCell.self, forCellWithReuseIdentifier: GroupedTabCell.Identifier)
         collectionView.register(InactiveTabCell.self, forCellWithReuseIdentifier: InactiveTabCell.Identifier)
         collectionView.register(ASHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: GridTabViewController.independentTabsHeaderIdentifier)
-        tabDisplayManager = TabDisplayManager(collectionView: self.collectionView, tabManager: self.tabManager, tabDisplayer: self, reuseID: TabCell.reuseIdentifier, tabDisplayType: .TabGrid, profile: profile)
+        tabDisplayManager = TabDisplayManager(collectionView: self.collectionView, tabManager: self.tabManager, tabDisplayer: self, reuseID: TabCell.cellIdentifier, tabDisplayType: .TabGrid, profile: profile)
         collectionView.dataSource = tabDisplayManager
         collectionView.delegate = tabLayoutDelegate
 

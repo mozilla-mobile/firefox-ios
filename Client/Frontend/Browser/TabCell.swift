@@ -5,14 +5,13 @@
 import Foundation
 import UIKit
 
-class TabCell: UICollectionViewCell, TabTrayCell {
+class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
 
     enum Style {
         case light
         case dark
     }
 
-    static let reuseIdentifier = "TabCellIdentifier"
     static let borderWidth: CGFloat = 3
 
     lazy var backgroundHolder: UIView = .build { view in
