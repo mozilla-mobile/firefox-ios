@@ -217,11 +217,7 @@ class ActivityStreamTest: BaseTestCase {
             app.buttons["Show Tabs"].tap()
         }
         navigator.nowAt(TabTray)
-        if iPad() {
-            waitForExistence(app.collectionViews.cells.staticTexts["Apple"], timeout: 5)
-        } else {
-            waitForExistence(app.collectionViews.cells.staticTexts["Apple"], timeout: 5)
-        }
+        waitForExistence(app.collectionViews.cells.staticTexts["Apple"], timeout: 5)
         app.cells.staticTexts["Apple"].firstMatch.tap()
 
         // The website is open
