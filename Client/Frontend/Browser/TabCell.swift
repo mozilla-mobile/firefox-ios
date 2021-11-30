@@ -15,17 +15,13 @@ class TabCell: UICollectionViewCell, TabTrayCell {
     static let reuseIdentifier = "TabCellIdentifier"
     static let borderWidth: CGFloat = 3
 
-    lazy var backgroundHolder: UIView = {
-        let view = UIView()
+    lazy var backgroundHolder: UIView = .build { view in
         view.layer.cornerRadius = GridTabTrayControllerUX.CornerRadius
         view.clipsToBounds = true
         view.backgroundColor = UIColor.theme.tabTray.cellBackground
-        return view
-        
-    }()
+    }
 
-    lazy private var faviconBG: UIView = {
-        let view = UIView()
+    lazy private var faviconBG: UIView = .build { view in
         view.layer.cornerRadius = TopSiteCellUX.CellCornerRadius
         view.layer.borderWidth = TopSiteCellUX.BorderWidth
         view.layer.shadowOffset = CGSize(width: 0, height: 2)
@@ -34,55 +30,44 @@ class TabCell: UICollectionViewCell, TabTrayCell {
         view.layer.borderColor = TopSiteCellUX.BorderColor.cgColor
         view.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         view.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
-        return view
-    }()
+    }
 
-    lazy var screenshotView: UIImageView = {
-        let view = UIImageView()
+    lazy var screenshotView: UIImageView = .build { view in
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
         view.isUserInteractionEnabled = false
         view.backgroundColor = UIColor.theme.tabTray.screenshotBackground
-        return view
-    }()
+    }
     
-    lazy var smallFaviconView: UIImageView = {
-        let view = UIImageView()
+    lazy var smallFaviconView: UIImageView = .build { view in
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
         view.isUserInteractionEnabled = false
         view.backgroundColor = UIColor.clear
         view.layer.cornerRadius = TopSiteCellUX.IconCornerRadius
         view.layer.masksToBounds = true
-        return view
-    }()
+    }
 
-    let titleText: UILabel = {
-        let label = UILabel()
+    lazy var titleText: UILabel = .build { label in
         label.isUserInteractionEnabled = false
         label.numberOfLines = 1
         label.font = DynamicFontHelper.defaultHelper.DefaultSmallFontBold
         label.textColor = UIColor.theme.tabTray.tabTitleText
-        return label
-    }()
+    }
 
-    let favicon: UIImageView = {
-        let favicon = UIImageView()
+    lazy var favicon: UIImageView = .build { favicon in
         favicon.backgroundColor = UIColor.clear
         favicon.layer.cornerRadius = 2.0
         favicon.layer.masksToBounds = true
-        return favicon
-    }()
+    }
 
-    let closeButton: UIButton = {
-        let button = UIButton()
+    lazy var closeButton: UIButton = .build { button in
         button.setImage(UIImage.templateImageNamed("tab_close"), for: [])
         button.imageView?.contentMode = .scaleAspectFit
         button.contentMode = .center
         button.tintColor = UIColor.theme.tabTray.cellCloseButton
         button.imageEdgeInsets = UIEdgeInsets(equalInset: GridTabTrayControllerUX.CloseButtonEdgeInset)
-        return button
-    }()
+    }
 
     var title = UIVisualEffectView(effect: UIBlurEffect(style: UIColor.theme.tabTray.tabTitleBlur))
     var animator: SwipeAnimator?
@@ -100,10 +85,6 @@ class TabCell: UICollectionViewCell, TabTrayCell {
         self.closeButton.addTarget(self, action: #selector(close), for: .touchUpInside)
 
         contentView.addSubview(backgroundHolder)
-        
-        backgroundHolder.snp.makeConstraints { make in
-            make.edges.equalTo(contentView)
-        }
 
         faviconBG.addSubview(smallFaviconView)
         backgroundHolder.addSubviews(screenshotView, faviconBG)
@@ -113,55 +94,57 @@ class TabCell: UICollectionViewCell, TabTrayCell {
         ]
 
         backgroundHolder.addSubview(title)
+        title.translatesAutoresizingMaskIntoConstraints = false
         title.contentView.addSubview(self.closeButton)
         title.contentView.addSubview(self.titleText)
         title.contentView.addSubview(self.favicon)
 
-        
-        NSLayoutConstraint.activate([
-        ])
-
-        title.snp.makeConstraints { (make) in
-            make.top.left.right.equalTo(backgroundHolder)
-            make.height.equalTo(GridTabTrayControllerUX.TextBoxHeight)
-        }
-
-        favicon.snp.makeConstraints { make in
-            make.leading.equalTo(title.contentView).offset(6)
-            make.top.equalTo((GridTabTrayControllerUX.TextBoxHeight - GridTabTrayControllerUX.FaviconSize) / 2)
-            make.size.equalTo(GridTabTrayControllerUX.FaviconSize)
-        }
-
-        titleText.snp.makeConstraints { (make) in
-            make.leading.equalTo(favicon.snp.trailing).offset(6)
-            make.trailing.equalTo(closeButton.snp.leading).offset(-6)
-            make.centerY.equalTo(title.contentView)
-        }
-
-        closeButton.snp.makeConstraints { make in
-            make.size.equalTo(GridTabTrayControllerUX.CloseButtonSize)
-            make.centerY.trailing.equalTo(title.contentView)
-        }
-
-        screenshotView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.left.right.equalTo(backgroundHolder)
-            make.bottom.equalTo(backgroundHolder.snp.bottom)
-        }
-        
-        faviconBG.snp.makeConstraints { make in
-            make.centerY.equalToSuperview().offset(10)
-            make.centerX.equalToSuperview()
-            make.size.equalTo(TopSiteCellUX.BackgroundSize)
-        }
-        
-        smallFaviconView.snp.makeConstraints { make in
-            make.size.equalTo(TopSiteCellUX.IconSize)
-            make.center.equalTo(faviconBG)
-        }
-
+        setupConstraint()
     }
+    
+    func setupConstraint() {
+        NSLayoutConstraint.activate([
+            backgroundHolder.topAnchor.constraint(equalTo: contentView.topAnchor),
+            backgroundHolder.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            backgroundHolder.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            backgroundHolder.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
+            title.topAnchor.constraint(equalTo: backgroundHolder.topAnchor),
+            title.leftAnchor.constraint(equalTo: backgroundHolder.leftAnchor),
+            title.rightAnchor.constraint(equalTo: backgroundHolder.rightAnchor),
+            title.heightAnchor.constraint(equalToConstant: GridTabTrayControllerUX.TextBoxHeight),
+
+            favicon.leadingAnchor.constraint(equalTo: title.leadingAnchor, constant: 6),
+            favicon.topAnchor.constraint(equalTo: title.topAnchor , constant: (GridTabTrayControllerUX.TextBoxHeight - GridTabTrayControllerUX.FaviconSize) / 2),
+            favicon.heightAnchor.constraint(equalToConstant: GridTabTrayControllerUX.FaviconSize),
+            favicon.widthAnchor.constraint(equalToConstant: GridTabTrayControllerUX.FaviconSize),
+
+            closeButton.heightAnchor.constraint(equalToConstant: GridTabTrayControllerUX.CloseButtonSize),
+            closeButton.widthAnchor.constraint(equalToConstant: GridTabTrayControllerUX.CloseButtonSize),
+            closeButton.centerYAnchor.constraint(equalTo: title.contentView.centerYAnchor),
+            closeButton.rightAnchor.constraint(equalTo: title.rightAnchor),
+
+            titleText.leadingAnchor.constraint(equalTo: favicon.trailingAnchor, constant: 6),
+            titleText.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: 6),
+            titleText.centerYAnchor.constraint(equalTo: title.contentView.centerYAnchor),
+
+            screenshotView.topAnchor.constraint(equalTo: topAnchor),
+            screenshotView.leftAnchor.constraint(equalTo: backgroundHolder.leftAnchor),
+            screenshotView.rightAnchor.constraint(equalTo: backgroundHolder.rightAnchor),
+            screenshotView.bottomAnchor.constraint(equalTo: backgroundHolder.bottomAnchor),
+
+            faviconBG.centerYAnchor.constraint(equalTo: centerYAnchor, constant: 10),
+            faviconBG.centerXAnchor.constraint(equalTo: centerXAnchor),
+            faviconBG.heightAnchor.constraint(equalToConstant: TopSiteCellUX.BackgroundSize.height),
+            faviconBG.widthAnchor.constraint(equalToConstant: TopSiteCellUX.BackgroundSize.width),
+
+            smallFaviconView.heightAnchor.constraint(equalToConstant: TopSiteCellUX.IconSize.height),
+            smallFaviconView.widthAnchor.constraint(equalToConstant: TopSiteCellUX.IconSize.width),
+            smallFaviconView.centerYAnchor.constraint(equalTo: faviconBG.centerYAnchor),
+            smallFaviconView.centerXAnchor.constraint(equalTo: faviconBG.centerXAnchor),
+        ])
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
