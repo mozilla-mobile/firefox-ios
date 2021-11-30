@@ -233,13 +233,10 @@ class NavigationTest: BaseTestCase {
             XCTAssertTrue(app.menuItems["Cut"].exists)
             XCTAssertTrue(app.menuItems["Look Up"].exists)
             XCTAssertTrue(app.menuItems["Share…"].exists)
-            XCTAssertTrue(app.menuItems["Paste"].exists)
-            XCTAssertTrue(app.menuItems["Paste & Go"].exists)
         } else {
             XCTAssertTrue(app.menuItems["Copy"].exists)
             XCTAssertTrue(app.menuItems["Cut"].exists)
             XCTAssertTrue(app.menuItems["Look Up"].exists)
-            XCTAssertTrue(app.menuItems["Paste"].exists)
         }
         
         app.textFields["address"].typeText("\n")

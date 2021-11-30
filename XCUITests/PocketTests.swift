@@ -9,8 +9,8 @@ class PocketTest: BaseTestCase {
     func testPocketEnabledByDefault() throws {
         throw XCTSkip("Disabled due to #7855")
         navigator.goto(NewTabScreen)
-        waitForExistence(app.staticTexts["pocketTitle"])
-        XCTAssertEqual(app.staticTexts["pocketTitle"].label, "Trending on Pocket")
+        waitForExistence(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket])
+        XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket].label, "Trending on Pocket")
 
         // There should be two stories on iPhone and three on iPad
         let numPocketStories = app.collectionViews.containing(.cell, identifier:"TopSitesCell").children(matching: .cell).count-1
@@ -23,11 +23,11 @@ class PocketTest: BaseTestCase {
         // Disable Pocket
         navigator.performAction(Action.TogglePocketInNewTab)
         navigator.goto(NewTabScreen)
-        waitForNoExistence(app.staticTexts["pocketTitle"])
+        waitForNoExistence(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket])
         // Enable it again
         navigator.performAction(Action.TogglePocketInNewTab)
         navigator.goto(NewTabScreen)
-        waitForExistence(app.staticTexts["pocketTitle"])
+        waitForExistence(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket])
 
         // Tap on the first Pocket element
         app.collectionViews.containing(.cell, identifier:"TopSitesCell").children(matching: .cell).element(boundBy: 1).tap()

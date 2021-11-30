@@ -17,6 +17,7 @@ struct FirefoxHomeUX {
     static let highlightCellHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 200
     static let jumpBackInCellHeight: CGFloat = 120
     static let recentlySavedCellHeight: CGFloat = 136
+    static let historyHighlightsCellHeight: CGFloat = 70
     static let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 15)
     static let numberOfItemsPerRowForSizeClassIpad = UXSizeClasses(compact: 3, regular: 4, other: 2)
     static let spacingBetweenSections: CGFloat = 24
@@ -27,27 +28,11 @@ struct FirefoxHomeUX {
     static let customizeHomeHeight: CGFloat = 100
 }
 
-struct FxHomeAccessibilityIdentifiers {
-    struct MoreButtons {
-        static let recentlySaved = "recentlySavedSectionMoreButton"
-        static let jumpBackIn = "jumpBackInSectionMoreButton"
-    }
-
-    struct SectionTitles {
-        static let jumpBackIn = "jumpBackInTitle"
-        static let recentlySaved = "jumpBackInTitle"
-        static let pocket = "pocketTitle"
-        static let library = "libraryTitle"
-        static let topSites = "topSitesTitle"
-    }
-}
-
 struct FxHomeDevStrings {
     struct GestureRecognizers {
         static let dismissOverlay = "dismissOverlay"
     }
 }
-
 
 /*
  Size classes are the way Apple requires us to specify our UI.
@@ -153,6 +138,8 @@ extension HomePanelContextMenu {
 // MARK: - HomeVC
 
 class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureFlagsProtocol {
+    typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
+
     weak var homePanelDelegate: HomePanelDelegate?
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     fileprivate var hasPresentedContextualHint = false
@@ -163,11 +150,13 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     fileprivate let experiments: NimbusApi
     fileprivate var hasSentPocketSectionEvent = false
     fileprivate var hasSentJumpBackInSectionEvent = false
+    fileprivate var hasSentHistoryHighlightsSectionEvent = false
     fileprivate var timer: Timer?
     fileprivate var contextualSourceView = UIView()
     fileprivate var isZeroSearch: Bool
     var recentlySavedViewModel: FirefoxHomeRecentlySavedViewModel
     var jumpBackInViewModel: FirefoxHomeJumpBackInViewModel
+    var historyHighlightsViewModel: FxHomeHistoryHightlightsVM
 
     fileprivate lazy var topSitesManager: ASHorizontalScrollCellManager = {
         let manager = ASHorizontalScrollCellManager()
@@ -244,6 +233,17 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         return recentlySavedViewModel.hasData
     }
 
+    var isHistoryHightlightsSectionEnabled: Bool {
+        get {
+            guard featureFlags.isFeatureActiveForBuild(.historyHighlights),
+                  featureFlags.userPreferenceFor(.historyHighlights) == UserFeaturePreference.enabled
+            else { return false }
+            let tabManager = BrowserViewController.foregroundBVC().tabManager
+
+            return !tabManager.recentlyAccessedNormalTabs.isEmpty
+        }
+    }
+
     var isPocketSectionEnabled: Bool {
         // For Pocket, the user preference check returns a user preference if it exists in
         // UserDefaults, and, if it does not, it will return a default preference based on
@@ -261,6 +261,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         self.isZeroSearch = isZeroSearch
         self.jumpBackInViewModel = FirefoxHomeJumpBackInViewModel(isZeroSearch: isZeroSearch, profile: profile)
         self.recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel(isZeroSearch: isZeroSearch, profile: profile)
+        self.historyHighlightsViewModel = FxHomeHistoryHightlightsVM()
         self.experiments = experiments
         super.init(collectionViewLayout: flowLayout)
         collectionView?.delegate = self
@@ -287,8 +288,12 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        Section.allCases.forEach { collectionView.register($0.cellType, forCellWithReuseIdentifier: $0.cellIdentifier) }
-        collectionView?.register(ASHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header")
+        Section.allCases.forEach {
+            collectionView.register($0.cellType, forCellWithReuseIdentifier: $0.cellIdentifier)
+        }
+        collectionView?.register(ASHeaderView.self,
+                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                 withReuseIdentifier: "Header")
         collectionView?.keyboardDismissMode = .onDrag
         collectionView?.backgroundColor = .clear
         view.addSubviews(overlayView)
@@ -471,6 +476,7 @@ extension FirefoxHomeViewController {
         case libraryShortcuts
         case jumpBackIn
         case recentlySaved
+        case historyHighlights
         case pocket
         case customizeHome
 
@@ -481,6 +487,7 @@ extension FirefoxHomeViewController {
             case .recentlySaved: return .RecentlySavedSectionTitle
             case .topSites: return .ASShortcutsTitle
             case .libraryShortcuts: return .AppMenuLibraryTitleString
+            case .historyHighlights: return .FirefoxHomepage.HistoryHighlights.Title
             case .customizeHome: return nil
             }
         }
@@ -496,7 +503,7 @@ extension FirefoxHomeViewController {
 
         var footerHeight: CGSize {
             switch self {
-            case .pocket, .jumpBackIn, .recentlySaved, .customizeHome: return .zero
+            case .pocket, .jumpBackIn, .recentlySaved, .historyHighlights, .customizeHome: return .zero
             case .topSites, .libraryShortcuts: return CGSize(width: 50, height: 5)
             }
         }
@@ -506,6 +513,7 @@ extension FirefoxHomeViewController {
             case .pocket: return FirefoxHomeUX.highlightCellHeight
             case .jumpBackIn: return FirefoxHomeUX.jumpBackInCellHeight
             case .recentlySaved: return FirefoxHomeUX.recentlySavedCellHeight
+            case .historyHighlights: return FirefoxHomeUX.historyHighlightsCellHeight
             case .topSites: return 0 //calculated dynamically
             case .libraryShortcuts: return FirefoxHomeUX.libraryShortcutsHeight
             case .customizeHome: return FirefoxHomeUX.customizeHomeHeight
@@ -541,7 +549,8 @@ extension FirefoxHomeViewController {
                 }
 
                 return numItems
-            case .topSites, .libraryShortcuts, .jumpBackIn, .recentlySaved, .customizeHome:
+
+            case .topSites,.libraryShortcuts, .jumpBackIn, .recentlySaved, .historyHighlights, .customizeHome:
                 return 1
             }
         }
@@ -554,7 +563,7 @@ extension FirefoxHomeViewController {
             case .pocket:
                 let numItems = numberOfItemsForRow(traits)
                 return CGSize(width: floor(((frameWidth - inset) - (FirefoxHomeUX.minimumInsets * (numItems - 1))) / numItems), height: height)
-            case .topSites, .libraryShortcuts, .jumpBackIn, .recentlySaved, .customizeHome:
+            case .topSites, .libraryShortcuts, .jumpBackIn, .recentlySaved, .historyHighlights, .customizeHome:
                 return CGSize(width: frameWidth - inset, height: height)
             }
         }
@@ -567,12 +576,13 @@ extension FirefoxHomeViewController {
 
         var cellIdentifier: String {
             switch self {
-            case .topSites: return "TopSiteCell"
-            case .pocket: return "PocketCell"
-            case .jumpBackIn: return "JumpBackInCell"
-            case .recentlySaved: return "RecentlySavedCell"
-            case .libraryShortcuts: return  "LibraryShortcutsCell"
-            case .customizeHome: return "CustomizeHomeCell"
+            case .topSites: return ASHorizontalScrollCell.cellIdentifier
+            case .pocket: return FirefoxHomeHighlightCell.cellIdentifier
+            case .jumpBackIn: return FxHomeJumpBackInCollectionCell.cellIdentifier
+            case .recentlySaved: return FxHomeRecentlySavedCollectionCell.cellIdentifier
+            case .historyHighlights: return FxHomeHistoryHighlightsCollectionCell.cellIdentifier
+            case .libraryShortcuts: return  ASLibraryCell.cellIdentifier
+            case .customizeHome: return FxHomeCustomizeHomeView.cellIdentifier
             }
         }
 
@@ -582,6 +592,7 @@ extension FirefoxHomeViewController {
             case .pocket: return FirefoxHomeHighlightCell.self
             case .jumpBackIn: return FxHomeJumpBackInCollectionCell.self
             case .recentlySaved: return FxHomeRecentlySavedCollectionCell.self
+            case .historyHighlights: return FxHomeHistoryHighlightsCollectionCell.self
             case .libraryShortcuts: return ASLibraryCell.self
             case .customizeHome: return FxHomeCustomizeHomeView.self
             }
@@ -618,7 +629,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                 headerView.moreButton.isHidden = false
                 headerView.moreButton.setTitle(.PocketMoreStoriesText, for: .normal)
                 headerView.moreButton.addTarget(self, action: #selector(showMorePocketStories), for: .touchUpInside)
-                headerView.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.pocket
+                headerView.titleLabel.accessibilityIdentifier = a11y.SectionTitles.pocket
                 return headerView
 
             case .jumpBackIn:
@@ -631,8 +642,8 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                 headerView.moreButton.isHidden = false
                 headerView.moreButton.setTitle(.RecentlySavedShowAllText, for: .normal)
                 headerView.moreButton.addTarget(self, action: #selector(openTabTray), for: .touchUpInside)
-                headerView.moreButton.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.MoreButtons.jumpBackIn
-                headerView.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.jumpBackIn
+                headerView.moreButton.accessibilityIdentifier = a11y.MoreButtons.jumpBackIn
+                headerView.titleLabel.accessibilityIdentifier = a11y.SectionTitles.jumpBackIn
                 let attributes = collectionView.layoutAttributesForItem(at: indexPath)
                     if let frame = attributes?.frame, headerView.convert(frame, from: collectionView).height > 1 {
                         // Using a timer for the first presentation of contextual hint due to many reloads that happen on the collection view. Invalidating the timer prevents from showing contextual hint at the wrong position.
@@ -650,17 +661,36 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                 headerView.moreButton.isHidden = false
                 headerView.moreButton.setTitle(.RecentlySavedShowAllText, for: .normal)
                 headerView.moreButton.addTarget(self, action: #selector(openBookmarks), for: .touchUpInside)
-                headerView.moreButton.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.MoreButtons.recentlySaved
-                headerView.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.recentlySaved
+                headerView.moreButton.accessibilityIdentifier = a11y.MoreButtons.recentlySaved
+                headerView.titleLabel.accessibilityIdentifier = a11y.SectionTitles.recentlySaved
+                return headerView
+
+            case .historyHighlights:
+                if !hasSentHistoryHighlightsSectionEvent
+                    && isHistoryHightlightsSectionEnabled
+                    && !historyHighlightsViewModel.historyItems.isEmpty {
+                    TelemetryWrapper.recordEvent(category: .action,
+                                                 method: .view,
+                                                 object: .historyImpressions,
+                                                 value: nil,
+                                                 extras: nil)
+                    hasSentHistoryHighlightsSectionEvent = true
+                }
+
+                headerView.moreButton.isHidden = false
+                headerView.moreButton.setTitle(.RecentlySavedShowAllText, for: .normal)
+                headerView.moreButton.addTarget(self, action: #selector(openHistory), for: .touchUpInside)
+                headerView.moreButton.accessibilityIdentifier = a11y.MoreButtons.historyHighlights
+                headerView.titleLabel.accessibilityIdentifier = a11y.SectionTitles.historyHighlights
                 return headerView
 
             case .topSites:
-                headerView.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.topSites
+                headerView.titleLabel.accessibilityIdentifier = a11y.SectionTitles.topSites
                 headerView.moreButton.isHidden = true
                 return headerView
             case .libraryShortcuts:
                 headerView.moreButton.isHidden = true
-                headerView.titleLabel.accessibilityIdentifier = FxHomeAccessibilityIdentifiers.SectionTitles.library
+                headerView.titleLabel.accessibilityIdentifier = a11y.SectionTitles.library
                 return headerView
             case .customizeHome:
                 headerView.moreButton.isHidden = true
@@ -685,6 +715,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
             let layout = topSiteCell.collectionView.collectionViewLayout as! HorizontalFlowLayout
             let estimatedLayout = layout.calculateLayout(for: CGSize(width: cellSize.width, height: 0))
             return CGSize(width: cellSize.width, height: estimatedLayout.size.height)
+
         case .jumpBackIn:
             if jumpBackInViewModel.layoutVariables.scrollDirection == .horizontal {
                 if jumpBackInViewModel.jumpList.itemsToDisplay > 2 {
@@ -694,9 +725,28 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                 cellSize.height *= CGFloat(jumpBackInViewModel.jumpList.itemsToDisplay)
             }
             return cellSize
+
         case .libraryShortcuts:
             let width = min(FirefoxHomeUX.libraryShortcutsMaxWidth, cellSize.width)
             return CGSize(width: width, height: cellSize.height)
+
+        case .historyHighlights:
+            // Returns the total height based on a variable column/row layout
+            let itemCount = historyHighlightsViewModel.historyItems.count
+            for number in 1...HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn {
+                if itemCount >= HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn {
+                    cellSize.height *= CGFloat(HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn)
+                    break
+                }
+
+                if itemCount == number {
+                    cellSize.height *= CGFloat(number)
+                    break
+                }
+            }
+
+            return cellSize
+
         case .customizeHome, .pocket, .recentlySaved:
             return cellSize
         }
@@ -713,6 +763,8 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
             return isYourLibrarySectionEnabled ? getHeaderSize(forSection: section) : .zero
         case .jumpBackIn:
             return isJumpBackInSectionEnabled ? getHeaderSize(forSection: section) : .zero
+        case .historyHighlights:
+            return isHistoryHightlightsSectionEnabled ? getHeaderSize(forSection: section) : .zero
         case .recentlySaved:
             return isRecentlySavedSectionEnabled ? getHeaderSize(forSection: section) : .zero
         case .customizeHome:
@@ -766,6 +818,8 @@ extension FirefoxHomeViewController {
             return isJumpBackInSectionEnabled ? 1 : 0
         case .recentlySaved:
             return isRecentlySavedSectionEnabled ? 1 : 0
+        case .historyHighlights:
+            return isHistoryHightlightsSectionEnabled ? 1 : 0
         case .libraryShortcuts:
             return isYourLibrarySectionEnabled ? 1 : 0
         case .customizeHome:
@@ -786,6 +840,8 @@ extension FirefoxHomeViewController {
             return configureJumpBackInCell(cell, forIndexPath: indexPath)
         case .recentlySaved:
             return configureRecentlySavedCell(cell, forIndexPath: indexPath)
+        case .historyHighlights:
+            return configureHistoryHighlightsCell(cell, forIndexPath: indexPath)
         case .libraryShortcuts:
             return configureLibraryShortcutsCell(cell, forIndexPath: indexPath)
         case .customizeHome:
@@ -843,6 +899,23 @@ extension FirefoxHomeViewController {
         jumpBackInCell.setNeedsLayout()
 
         return jumpBackInCell
+    }
+
+    private func configureHistoryHighlightsCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
+        let historyCell = cell as! FxHomeHistoryHighlightsCollectionCell
+
+        historyHighlightsViewModel.onTapItem = { [weak self] in
+            // TODO: When the data is hooked up, this will actually send a user to
+            // the correct place in history
+            self?.openHistory(UIButton())
+        }
+
+        historyCell.viewModel = historyHighlightsViewModel
+        historyHighlightsViewModel.updateData()
+        historyCell.collectionView.reloadData()
+        historyCell.setNeedsLayout()
+
+        return historyCell
     }
 
     private func configureCustomizeHomeCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
@@ -1041,7 +1114,7 @@ extension FirefoxHomeViewController: DataObserverDelegate {
             let pointInTopSite = longPressGestureRecognizer.location(in: topSiteCell.collectionView)
             guard let topSiteIndexPath = topSiteCell.collectionView.indexPathForItem(at: pointInTopSite) else { return }
             presentContextMenu(for: topSiteIndexPath)
-        case .libraryShortcuts, .jumpBackIn, .recentlySaved, .customizeHome:
+        case .libraryShortcuts, .jumpBackIn, .recentlySaved, .historyHighlights, .customizeHome:
             return
         }
     }
@@ -1072,7 +1145,7 @@ extension FirefoxHomeViewController: DataObserverDelegate {
                                          object: .pocketStory,
                                          value: nil,
                                          extras: originExtra)
-        case .topSites, .libraryShortcuts, .jumpBackIn, .recentlySaved, .customizeHome:
+        case .topSites, .libraryShortcuts, .jumpBackIn, .recentlySaved, .historyHighlights, .customizeHome:
             return
         }
 
@@ -1086,7 +1159,7 @@ extension FirefoxHomeViewController: DataObserverDelegate {
 
 extension FirefoxHomeViewController {
     @objc func openTabTray(_ sender: UIButton) {
-        if sender.accessibilityIdentifier == FxHomeAccessibilityIdentifiers.MoreButtons.jumpBackIn {
+        if sender.accessibilityIdentifier == a11y.MoreButtons.jumpBackIn {
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .tap,
                                          object: .firefoxHomepage,
@@ -1099,7 +1172,7 @@ extension FirefoxHomeViewController {
     @objc func openBookmarks(_ sender: UIButton) {
         homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .bookmarks)
 
-        if sender.accessibilityIdentifier == FxHomeAccessibilityIdentifiers.MoreButtons.recentlySaved {
+        if sender.accessibilityIdentifier == a11y.MoreButtons.recentlySaved {
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .tap,
                                          object: .firefoxHomepage,
@@ -1114,13 +1187,21 @@ extension FirefoxHomeViewController {
         }
     }
 
-    @objc func openHistory() {
+    @objc func openHistory(_ sender: UIButton) {
         homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .history)
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .firefoxHomepage,
-                                     value: .yourLibrarySection,
-                                     extras: [TelemetryWrapper.EventObject.libraryPanel.rawValue: TelemetryWrapper.EventValue.historyPanel.rawValue])
+        if sender.accessibilityIdentifier == a11y.MoreButtons.historyHighlights {
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .tap,
+                                         object: .firefoxHomepage,
+                                         value: .historyHighlightsShowAll)
+
+        } else {
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .tap,
+                                         object: .firefoxHomepage,
+                                         value: .yourLibrarySection,
+                                         extras: [TelemetryWrapper.EventObject.libraryPanel.rawValue: TelemetryWrapper.EventValue.historyPanel.rawValue])
+        }
     }
 
     @objc func openReadingList() {
@@ -1167,7 +1248,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
             return Site(url: pocketStories[indexPath.row].url.absoluteString, title: pocketStories[indexPath.row].title)
         case .topSites:
             return topSitesManager.content[indexPath.item]
-        case .libraryShortcuts, .jumpBackIn, .recentlySaved, .customizeHome:
+        case .libraryShortcuts, .jumpBackIn, .recentlySaved, .historyHighlights, .customizeHome:
             return nil
         }
     }
@@ -1183,7 +1264,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
             }
         case .pocket:
             sourceView = self.collectionView?.cellForItem(at: indexPath)
-        case .libraryShortcuts, .jumpBackIn, .recentlySaved, .customizeHome:
+        case .libraryShortcuts, .jumpBackIn, .recentlySaved, .historyHighlights, .customizeHome:
             return nil
         }
 
@@ -1267,7 +1348,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
         var actions = [openInNewTabAction, openInNewPrivateTabAction, bookmarkAction, shareAction]
 
         switch Section(indexPath.section) {
-        case .pocket, .libraryShortcuts, .jumpBackIn, .recentlySaved, .customizeHome: break
+        case .pocket, .libraryShortcuts, .jumpBackIn, .recentlySaved, .historyHighlights, .customizeHome: break
         case .topSites: actions.append(contentsOf: topSiteActions)
         }
 

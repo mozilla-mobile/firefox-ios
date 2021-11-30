@@ -196,14 +196,14 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         navigator.performAction(Action.CloseURLBarOpen)
-        waitForExistence(app.buttons["jumpBackInSectionMoreButton"], timeout: 5)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn], timeout: 5)
         // Swipe up needed to see the content below the Jump Back In section
-        app.buttons["jumpBackInSectionMoreButton"].swipeUp()
+        app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn].swipeUp()
         XCTAssertTrue(app.cells.collectionViews.staticTexts["Example Domain"].exists)
         // Swipe down to be able to click on Show all option
         app.buttons["More"].swipeDown()
-        waitForExistence(app.buttons["jumpBackInSectionMoreButton"], timeout: 5)
-        app.buttons["jumpBackInSectionMoreButton"].tap()
+        waitForExistence(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn], timeout: 5)
+        app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn].tap()
         // Tab tray is open with recently open tab
         waitForExistence(app.cells.staticTexts["Example Domain"], timeout: 3)
     }
