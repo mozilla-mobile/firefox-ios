@@ -371,11 +371,11 @@ public struct SyncPing: SyncTelemetryPing {
             // start, return why and a reason.
             switch status {
             case .completed(let stats):
-                engine.merge(with: stats.asDictionary())
+                engine = engine.merge(with: stats.asDictionary())
             case .partial(let stats):
-                engine.merge(with: stats.asDictionary())
+                engine = engine.merge(with: stats.asDictionary())
             case .notStarted(let reason):
-                engine.merge(with: [
+                engine = engine.merge(with: [
                     "status": reason.telemetryId
                 ])
             }

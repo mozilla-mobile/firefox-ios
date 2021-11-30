@@ -1017,14 +1017,14 @@ extension FirefoxHomeViewController: DataObserverDelegate {
         let topSiteExtra = [topSitePositionKey : "\(position)", topSiteTileTypeKey: type]
 
         // Origin extra
-        var originExtra = TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
-        originExtra.merge(with: topSiteExtra)
+        let originExtra = TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
+        let extras = originExtra.merge(with: topSiteExtra)
 
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .topSiteTile,
                                      value: nil,
-                                     extras: originExtra)
+                                     extras: extras)
     }
 
     func getPocketSites() -> Success {
@@ -1137,14 +1137,14 @@ extension FirefoxHomeViewController: DataObserverDelegate {
             let siteExtra = [key : "\(index)"]
 
             // Origin extra
-            var originExtra = TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
-            originExtra.merge(with: siteExtra)
+            let originExtra = TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
+            let extras = originExtra.merge(with: siteExtra)
 
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .tap,
                                          object: .pocketStory,
                                          value: nil,
-                                         extras: originExtra)
+                                         extras: extras)
         case .topSites, .libraryShortcuts, .jumpBackIn, .recentlySaved, .historyHighlights, .customizeHome:
             return
         }

@@ -91,8 +91,8 @@ public class Sentry {
                 let deviceAppHash = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)?.string(forKey: self.SentryDeviceAppHashKey)
                 event.context?.appContext?["device_app_hash"] = deviceAppHash ?? self.DefaultDeviceAppHash
 
-                var attributes = event.extra ?? [:]
-                attributes.merge(with: self.attributes)
+                let attributes = event.extra ?? [:]
+                self.attributes = attributes.merge(with: self.attributes)
                 event.extra = attributes
             }
         } catch let error {
@@ -133,10 +133,10 @@ public class Sentry {
         // Build the dictionary
         var extraEvents: [String: Any] = [:]
         if let paramEvents = extra {
-            extraEvents.merge(with: paramEvents)
+            extraEvents = extraEvents.merge(with: paramEvents)
         }
         if let extraString = description {
-            extraEvents.merge(with: ["errorDescription": extraString])
+            extraEvents = extraEvents.merge(with: ["errorDescription": extraString])
         }
         printMessage(message: message, extra: extraEvents)
 
@@ -153,10 +153,10 @@ public class Sentry {
     public func sendWithStacktrace(message: String, tag: SentryTag = .general, severity: SentrySeverity = .info, extra: [String: Any]? = nil, description: String? = nil, completion: SentryRequestFinished? = nil) {
         var extraEvents: [String: Any] = [:]
         if let paramEvents = extra {
-            extraEvents.merge(with: paramEvents)
+            extraEvents = extraEvents.merge(with: paramEvents)
         }
         if let extraString = description {
-            extraEvents.merge(with: ["errorDescription": extraString])
+            extraEvents = extraEvents.merge(with: ["errorDescription": extraString])
         }
         printMessage(message: message, extra: extraEvents)
 
@@ -174,7 +174,7 @@ public class Sentry {
     }
 
     public func addAttributes(_ attributes: [String: Any]) {
-        self.attributes.merge(with: attributes)
+        self.attributes = self.attributes.merge(with: attributes)
     }
 
     public func breadcrumb(category: String, message: String) {
