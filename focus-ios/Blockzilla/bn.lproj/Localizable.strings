@@ -337,6 +337,9 @@
 /* Light theme option in settings menu */
 "Settings.lightTheme" = "উজ্জ্বল";
 
+/* Manual value for theme section in settings menu */
+"Settings.manualTheme" = "ম্যানুয়াল";
+
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "রেট %@";
 
@@ -397,8 +400,29 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "নিরাপত্তা";
 
+/* System value for theme section in settings menu */
+"Settings.systemTheme" = "সিস্টেম থিম";
+
+/* Theme section in settings menu */
+"Settings.theme" = "থিম";
+
+/* Header for manual theme section in settings menu */
+"Settings.themePicker" = "থিম পিকার";
+
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "বিজ্ঞাপন";
+
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "বিশ্লেষণ";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "ওয়েব ফন্ট অবরুদ্ধ করুন";
+
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "কন্টেন্ট";
+
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "সামাজিক";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "অ্যাপ চালু করার জন্য ফেস আইডি ব্যবহার করুন";
@@ -418,11 +442,23 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "ব্যবহারের উপাত্ত প্রেরণ করে";
 
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "অধ্যয়ন";
+
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "অ্যাপ চালু করার জন্য টাচ আইডি ব্যবহার করুন";
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "URL ইতিমধ্যে অ্যাপে খোলা থাকলে টাচ আইডি %@ আনলক করতে পারে";
+
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "বন্ধ";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "চালু";
+
+/* Value for theme toggle in settings menu */
+"Settings.useSystemTheme" = "সিস্টেম লাইট/ডার্ক মোড ব্যবহার করুন";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "নতুন যা কিছু";
@@ -432,6 +468,9 @@
 
 /* Text for a share button */
 "share" = "শেয়ার";
+
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "শর্টকাট যোগ করুন";
 
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "ঠিকানা অনুলিপি করুন";
@@ -445,6 +484,9 @@
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "পেজ একশন";
 
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "শর্টকাট থেকে সরান";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "ডেস্কটপ সাইটের জন্য অনুরোধ করুন";
 
@@ -454,11 +496,17 @@
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Chrome এ খুলুন";
 
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "ডিফল্ট ব্রাউজারে খুলুন";
+
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Firefox এ খুলুন";
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "পাতা শেয়ার করুন...";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "শর্টকাট থেকে সরান";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "যোগ";
@@ -483,6 +531,9 @@
 
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "খুলতে URL";
+
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "ফেস আইডি চালু করুন";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "%@ এ ফিরে আসার জন্য Touch ID ব্যবহার করুন";
