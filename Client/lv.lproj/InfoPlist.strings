@@ -1,7 +1,7 @@
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Šis ļauj uzņemt un augšupielādēt foto.";
 
-/* file, You can obtain one at http://mozilla.org/MPL/2.0 */
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Lapas, ko apmeklējat var prasīt jūsu atrašanās vietu.";
 
 /* Privacy - Microphone Usage Description */

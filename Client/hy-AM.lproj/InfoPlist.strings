@@ -4,7 +4,7 @@
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Ձեր պահված մուտքերը մուտք գործելու համար Firefox- ը պահանջում է Face ID:";
 
-/* file, You can obtain one at http://mozilla.org/MPL/2.0 */
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Ձեր այցելած կայքերը կարող են հարցնել ձեր տեղադրությունը։";
 
 /* Privacy - Microphone Usage Description */
