@@ -70,7 +70,7 @@ class FirefoxHomeRecentlySavedViewModel {
     }
 
     func getHeroImage(forSite site: Site, completion: @escaping (UIImage?) -> Void) {
-        siteImageHelper.fetchImageFor(site: site, imageType: .heroImage, shouldFallback: false) { image in
+        siteImageHelper.fetchImageFor(site: site, imageType: .heroImage, shouldFallback: true) { image in
             completion(image)
         }
     }
