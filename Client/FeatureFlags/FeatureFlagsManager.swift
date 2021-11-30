@@ -116,7 +116,7 @@ class FeatureFlagsManager {
 
         let chronTabs = FlaggableFeature(withID: .chronologicalTabs,
                                          and: profile,
-                                         enabledFor: [])
+                                         enabledFor: [.developer])
         features[.chronologicalTabs] = chronTabs
 
         let inactiveTabs = FlaggableFeature(withID: .inactiveTabs,
