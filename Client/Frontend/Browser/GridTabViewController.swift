@@ -768,39 +768,6 @@ protocol TabCellDelegate: AnyObject {
     func tabCellDidClose(_ cell: TabCell)
 }
 
-protocol TabTrayCell where Self: UICollectionViewCell {
-
-    /// True when the tab is the selected tab in the tray
-    var isSelectedTab: Bool { get }
-
-    /// Configure a tab cell using a Tab object, setting it's selected state at the same time
-    func configureWith(tab: Tab, isSelected selected: Bool)
-}
-
-extension TabTrayCell {
-
-    /// Use the display title unless it's an empty string, then use the base domain from the url
-    func getTabTrayTitle(tab: Tab) -> String? {
-        let baseDomain = tab.sessionData?.urls.last?.baseDomain ?? tab.url?.baseDomain
-        let urlLabel = baseDomain != nil ? baseDomain!.contains("local") ? "" : baseDomain : ""
-        return tab.displayTitle.isEmpty ? urlLabel : tab.displayTitle
-    }
-
-    func getA11yTitleLabel(tab: Tab) -> String? {
-        var aboutComponent = ""
-        if let url = tab.url, let about = InternalURL(url)?.aboutComponent { aboutComponent = about }
-        let baseName = tab.displayTitle.isEmpty ? aboutComponent.isEmpty ? getTabTrayTitle(tab: tab) : aboutComponent : tab.displayTitle
-
-        if isSelectedTab, let baseName = baseName, !baseName.isEmpty {
-            return baseName + ". " + String.TabTrayCurrentlySelectedTabAccessibilityLabel
-        } else if isSelectedTab {
-            return String.TabTrayCurrentlySelectedTabAccessibilityLabel
-        } else {
-            return baseName
-        }
-    }
-}
-
 extension GridTabViewController: NotificationThemeable {
 
     @objc func applyTheme() {
