@@ -4,7 +4,7 @@
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox richiede Face ID per accede à e vostre identificazioni di cunnessione arregistrate.";
 
-/* file, You can obtain one at http://mozilla.org/MPL/2.0 */
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "I siti web chì vò visitate ponu richiede à cunnosce a vostra lucalizazione.";
 
 /* Privacy - Microphone Usage Description */

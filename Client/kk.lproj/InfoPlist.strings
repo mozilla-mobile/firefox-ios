@@ -4,7 +4,7 @@
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox сақталған логиндерге қатынау үшін Face ID талап етеді.";
 
-/* file, You can obtain one at http://mozilla.org/MPL/2.0 */
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Сіз ашатын веб-сайттар сізден орналасуыңызды сұрауы мүмкін.";
 
 /* Privacy - Microphone Usage Description */

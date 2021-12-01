@@ -4,7 +4,7 @@
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "ᱟᱢᱟᱜ ᱥᱟᱺᱪᱟᱣ ᱠᱟᱱ ᱵᱚᱞᱚ ᱠᱚ ᱟᱫᱮᱨ ᱞᱟᱹᱜᱤᱫ Firefox ᱟᱢᱟᱜ ᱢᱚᱦᱲᱟ ID ᱫᱚᱨᱠᱟᱨ ᱾";
 
-/* file, You can obtain one at http://mozilla.org/MPL/2.0 */
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "ᱦᱤᱨᱤᱟᱠᱟᱱ ᱣᱮᱵᱥᱟᱭᱤᱴ ᱟᱢᱟᱜ ᱡᱟᱭᱜᱟ ᱠᱚ ᱠᱷᱚᱡ ᱫᱟᱲᱮᱟᱜᱼᱟ᱾";
 
 /* Privacy - Microphone Usage Description */

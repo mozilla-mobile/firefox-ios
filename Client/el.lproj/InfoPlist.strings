@@ -4,7 +4,7 @@
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Το Firefox απαιτεί το Face ID για πρόσβαση στις αποθηκευμένες συνδέσεις σας.";
 
-/* file, You can obtain one at http://mozilla.org/MPL/2.0 */
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Οι ιστοσελίδες που επισκέπτεστε ίσως απαιτήσουν την τοποθεσία σας.";
 
 /* Privacy - Microphone Usage Description */

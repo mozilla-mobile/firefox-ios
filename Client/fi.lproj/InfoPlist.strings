@@ -4,7 +4,7 @@
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox vaatii Face ID:n, jotta voit käyttää tallennettuja kirjautumistietoja.";
 
-/* file, You can obtain one at http://mozilla.org/MPL/2.0 */
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Vierailemasi sivustot voivat kysyä lupaa sijaintiisi.";
 
 /* Privacy - Microphone Usage Description */

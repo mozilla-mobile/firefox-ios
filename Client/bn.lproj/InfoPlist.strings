@@ -4,7 +4,7 @@
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "আপনার সংরক্ষিত লগইনগুলি অ্যাক্সেস করতে Firefox এর ফেস আইডির প্রয়োজন।";
 
-/* file, You can obtain one at http://mozilla.org/MPL/2.0 */
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "যে ওয়েবসাইট আপনি ব্রাউজ করছেন, তা আপনার অবস্থান জানতে চাইতে পারে।";
 
 /* Privacy - Microphone Usage Description */

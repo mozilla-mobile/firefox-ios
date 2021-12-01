@@ -4,7 +4,7 @@
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox Face ID trjeba, aby pśistup k wašym skłaźonym pśizjawjenjam měł.";
 
-/* file, You can obtain one at http://mozilla.org/MPL/2.0 */
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Websedła, kótarež se woglědujośo, pominaju snaź wašo městno.";
 
 /* Privacy - Microphone Usage Description */

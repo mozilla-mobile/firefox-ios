@@ -1,7 +1,7 @@
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "ଏହା ଆପଣକୁ ଫଟୋ ଉଠାଇବା ଓ ଅପଲୋଡ଼ କରିବାର ସୁଯୋଗ ଦେବ ।";
 
-/* file, You can obtain one at http://mozilla.org/MPL/2.0 */
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "ଆପଣ ଦେଖୁଥିବା ୱେବସାଇଟସବୁ ଆପଣଙ୍କ ଅବସ୍ଥିତି ମାଗିପାରନ୍ତି ।";
 
 /* Privacy - Microphone Usage Description */

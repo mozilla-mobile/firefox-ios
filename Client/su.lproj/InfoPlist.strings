@@ -4,7 +4,7 @@
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox butuh Face ID pikeun muka login simpenan anjeun.";
 
-/* file, You can obtain one at http://mozilla.org/MPL/2.0 */
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Raramatloka nu disorang ku anjeun sigana ménta lokasi anjeun.";
 
 /* Privacy - Microphone Usage Description */
