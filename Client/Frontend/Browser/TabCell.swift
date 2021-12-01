@@ -6,6 +6,7 @@ import Foundation
 import UIKit
 import Shared
 
+// MARK: - Tab Tray Cell Protocol
 protocol TabTrayCell where Self: UICollectionViewCell {
     /// True when the tab is the selected tab in the tray
     var isSelectedTab: Bool { get }
@@ -14,8 +15,9 @@ protocol TabTrayCell where Self: UICollectionViewCell {
     func configureWith(tab: Tab, isSelected selected: Bool)
 }
 
+// MARK: - Tab Cell
 class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
-
+    // MARK: - Constants
     enum Style {
         case light
         case dark
@@ -23,6 +25,7 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
 
     static let borderWidth: CGFloat = 3
 
+    // MARK: - UI Vars
     lazy var backgroundHolder: UIView = .build { view in
         view.layer.cornerRadius = GridTabTrayControllerUX.CornerRadius
         view.clipsToBounds = true
@@ -86,6 +89,7 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
     // Changes depending on whether we're full-screen or not.
     var margin = CGFloat(0)
 
+    // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -163,6 +167,7 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
         layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: GridTabTrayControllerUX.CornerRadius+TabCell.borderWidth).cgPath
     }
 
+    // MARK: - Configure tab cell with a Tab
     func configureWith(tab: Tab, isSelected selected: Bool) {
         isSelectedTab = selected
 
@@ -259,6 +264,7 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
     }
 }
 
+// MARK: - Extension Tab Tray Cell protocol
 extension TabTrayCell {
 
     /// Use the display title unless it's an empty string, then use the base domain from the url
