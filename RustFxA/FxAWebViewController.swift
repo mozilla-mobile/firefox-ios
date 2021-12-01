@@ -87,7 +87,6 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
         if dismissType == .dismiss {
             super.dismiss(animated: animated, completion: completion)
         } else if dismissType == .popToTabTray {
-            print("SOMETHING")
             shouldDismissFxASignInViewController?()
         } else {
             navigationController?.popToRootViewController(animated: true)
