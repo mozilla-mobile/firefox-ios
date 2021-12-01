@@ -206,6 +206,9 @@ workflows:
             CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan $TEST_PLAN_NAME
         - scheme: Focus
     - deploy-to-bitrise-io@1: {}
+    - github-status@2:
+        inputs:
+        - status_identifier: "Focus-build"
     - slack@3:
         run_if: ".IsBuildFailed"
         inputs:
@@ -268,6 +271,9 @@ workflows:
             CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan "$TEST_PLAN_NAME"
         - scheme: Klar
     - deploy-to-bitrise-io@1: {}
+    - github-status@2:
+        inputs:
+        - status_identifier: "Klar-build"
     - slack@3:
         run_if: ".IsBuildFailed"
         inputs:
