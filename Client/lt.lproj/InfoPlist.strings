@@ -4,7 +4,7 @@
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Norint pasiekti jūsų įrašytus prisijungimus, „Firefox“ reikalingas „Face ID“.";
 
-/* file, You can obtain one at http://mozilla.org/MPL/2.0 */
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Svetainės gali teirautis jūsų buvimo vietos.";
 
 /* Privacy - Microphone Usage Description */
