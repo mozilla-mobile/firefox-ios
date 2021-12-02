@@ -4,9 +4,7 @@
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Mae Firefox angen mynediad i Face ID i'ch mewngofnodion sydd wedi'u cadw.";
 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Efallai y bydd gwefannau rydych yn ymweld â nhw'n gofyn am eich lleoliad.";
 
 /* Privacy - Microphone Usage Description */

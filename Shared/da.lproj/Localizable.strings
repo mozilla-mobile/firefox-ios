@@ -686,6 +686,33 @@
 /* Toggle logins syncing setting */
 "Logins" = "Logins";
 
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "Læs mere";
+
+/* Message shown when you enter Logins & Passwords without having a device passcode set. */
+"Logins.DevicePasscodeRequired.Message" = "For at gemme og autoudfylde logins og adgangskoder, skal du aktivere Face ID, Touch ID eller en enhedsadgangskode.";
+
+/* Title of the Continue button. */
+"Logins.Onboarding.ContinueButtonTitle" = "Fortsæt";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.Onboarding.LearnMoreButtonTitle" = "Læs mere";
+
+/* Message shown when you enter Logins & Passwords for the first time. */
+"Logins.Onboarding.Message" = "Dine logins og adgangskoder er nu beskyttet af Face ID, Touch ID eller en enhedsadgangskode.";
+
+/* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
+"Logins.PasscodeRequirement.Warning" = "For at bruge funktionen Autoudfyld for Firefox skal du have en enhedsadgangskode aktiveret.";
+
+/* Label displaying welcome view tagline under the title */
+"Logins.WelcomeView.Tagline" = "Tag dine adgangskoder med overalt";
+
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title2" = "Autoudfyld adgangskoder i Firefox";
+
+/* Title of the big blue button to enable AutoFill */
+"Logins.WelcomeView.TurnOnAutoFill" = "Slå Autoudfyld til";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Ændret";
 
@@ -1849,6 +1876,9 @@
 
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "Aktuelt valgte faneblad.";
+
+/* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as \"Others\" */
+"TabTray.Header.FilteredTabs.SectionHeader" = "Andre";
 
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
 "TabTray.InactiveTabs.SectionTitle" = "Inaktive faneblade";

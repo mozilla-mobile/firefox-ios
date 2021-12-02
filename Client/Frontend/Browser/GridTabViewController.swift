@@ -782,14 +782,17 @@ extension TabTrayCell {
     /// Use the display title unless it's an empty string, then use the base domain from the url
     func getTabTrayTitle(tab: Tab) -> String? {
         let baseDomain = tab.sessionData?.urls.last?.baseDomain ?? tab.url?.baseDomain
-        let urlLabel = baseDomain != nil ? baseDomain!.contains("local") ? "" : baseDomain : ""
-        return tab.displayTitle.isEmpty ? urlLabel : tab.displayTitle
+        var backUpName: String = "" // In case display title is empty
+        if let baseDomain = baseDomain {
+            backUpName = baseDomain.contains("local") ? .AppMenuOpenHomePageTitleString : baseDomain
+        } else if let url = tab.url, let about = InternalURL(url)?.aboutComponent {
+            backUpName = about
+        }
+        return tab.displayTitle.isEmpty ? backUpName : tab.displayTitle
     }
 
     func getA11yTitleLabel(tab: Tab) -> String? {
-        var aboutComponent = ""
-        if let url = tab.url, let about = InternalURL(url)?.aboutComponent { aboutComponent = about }
-        let baseName = tab.displayTitle.isEmpty ? aboutComponent.isEmpty ? getTabTrayTitle(tab: tab) : aboutComponent : tab.displayTitle
+        let baseName = getTabTrayTitle(tab: tab)
 
         if isSelectedTab, let baseName = baseName, !baseName.isEmpty {
             return baseName + ". " + String.TabTrayCurrentlySelectedTabAccessibilityLabel

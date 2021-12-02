@@ -390,6 +390,9 @@
 		8A11C8132731E54800AC7318 /* DictionaryExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A11C8122731E54800AC7318 /* DictionaryExtensionsTests.swift */; };
 		8A8A05E42746ACAC004267A0 /* TabDisplayManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8A05E32746ACAC004267A0 /* TabDisplayManagerTests.swift */; };
 		8AA6ADB52742B567004EEE23 /* TelemetryWrapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA6ADB42742B567004EEE23 /* TelemetryWrapperTests.swift */; };
+		8AEE62C92756BA34003207D1 /* LoginsHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 8AEE62C62756BA34003207D1 /* LoginsHelper.js */; };
+		8AEE62CA2756BA34003207D1 /* TrackingProtectionStats.js in Resources */ = {isa = PBXBuildFile; fileRef = 8AEE62C72756BA34003207D1 /* TrackingProtectionStats.js */; };
+		8AEE62CB2756BA34003207D1 /* DownloadHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 8AEE62C82756BA34003207D1 /* DownloadHelper.js */; };
 		8AFE4C2127480D0C00B97C65 /* TabTrayViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFE4C2027480D0B00B97C65 /* TabTrayViewControllerTests.swift */; };
 		8D8251811F4DE67F00780643 /* AdvancedAccountSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8251721F4DE67E00780643 /* AdvancedAccountSettingViewController.swift */; };
 		8DCD3BCD1ED5B7FA00446D38 /* FxADeepLinkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCD3BCC1ED5B7FA00446D38 /* FxADeepLinkingTests.swift */; };
@@ -2542,6 +2545,9 @@
 		8AAD4900BB6F4DF6056B581F /* ml */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ml; path = ml.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		8AB04613B101195AADCC1F1B /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = "cs.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		8AD440CBBF202B15E74E186D /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/Search.strings; sourceTree = "<group>"; };
+		8AEE62C62756BA34003207D1 /* LoginsHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = LoginsHelper.js; path = AllFrames/AtDocumentStart/LoginsHelper.js; sourceTree = "<group>"; };
+		8AEE62C72756BA34003207D1 /* TrackingProtectionStats.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = TrackingProtectionStats.js; path = AllFrames/AtDocumentStart/TrackingProtectionStats.js; sourceTree = "<group>"; };
+		8AEE62C82756BA34003207D1 /* DownloadHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = DownloadHelper.js; path = AllFrames/AtDocumentStart/DownloadHelper.js; sourceTree = "<group>"; };
 		8AFE4C2027480D0B00B97C65 /* TabTrayViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabTrayViewControllerTests.swift; sourceTree = "<group>"; };
 		8B3245D190D4FA80C3B46EC8 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Search.strings"; sourceTree = "<group>"; };
 		8B674438A5487ABCD2DD7CA5 /* ses */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ses; path = ses.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -3702,6 +3708,11 @@
 		DF036E42274FD434002E834E /* HistoryHighlightsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryHighlightsCell.swift; sourceTree = "<group>"; };
 		DF10441BA5FD33966E422B37 /* sat-Olck */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sat-Olck"; path = "sat-Olck.lproj/Intro.strings"; sourceTree = "<group>"; };
 		DF16405B8C523F7BDC578A89 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/LoginManager.strings; sourceTree = "<group>"; };
+		DF46B9A32755297000657F75 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/Today.strings"; sourceTree = "<group>"; };
+		DF46B9A42755297000657F75 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/BookmarkPanel.strings"; sourceTree = "<group>"; };
+		DF46B9A52755297000657F75 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/BookmarkPanelDeleteConfirm.strings"; sourceTree = "<group>"; };
+		DF46B9A62755297000657F75 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/WidgetIntents.strings"; sourceTree = "<group>"; };
+		DF46B9A72755297000657F75 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		DF4A44AB9DB2BE71AD028C35 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/Today.strings; sourceTree = "<group>"; };
 		DF4B4523B01B0EDC485E3BCB /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		DFACDFA9274D489B00A94EEC /* FxHomeHistoryHighlightsVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxHomeHistoryHighlightsVM.swift; sourceTree = "<group>"; };
@@ -5353,6 +5364,9 @@
 		D0FCF7E71FE44CA9004A7995 /* UserScripts */ = {
 			isa = PBXGroup;
 			children = (
+				8AEE62C82756BA34003207D1 /* DownloadHelper.js */,
+				8AEE62C62756BA34003207D1 /* LoginsHelper.js */,
+				8AEE62C72756BA34003207D1 /* TrackingProtectionStats.js */,
 				D0FCF7E81FE44D8F004A7995 /* AllFrames */,
 				D0FCF7E91FE44DA2004A7995 /* MainFrame */,
 			);
@@ -7281,6 +7295,8 @@
 			files = (
 				39D056382665235700FBEE59 /* initial_experiments.json in Resources */,
 				D38A1EE01CB458EC0080C842 /* CertError.html in Resources */,
+				8AEE62CB2756BA34003207D1 /* DownloadHelper.js in Resources */,
+				8AEE62CA2756BA34003207D1 /* TrackingProtectionStats.js in Resources */,
 				0BA1E0301B051A07007675AF /* NetError.css in Resources */,
 				3BC659491E5BA4AE006D560F /* TopSites in Resources */,
 				E4B7B77E1A793CF20022C5E0 /* FiraSans-SemiBold.ttf in Resources */,
@@ -7327,6 +7343,7 @@
 				EBE7635820ADCB7600E27F2D /* SendTo.xcassets in Resources */,
 				E4ECCDAE1AB131770005E717 /* FiraSans-Medium.ttf in Resources */,
 				C8954A4C2729AD31001C7283 /* FxColours.xcassets in Resources */,
+				8AEE62C92756BA34003207D1 /* LoginsHelper.js in Resources */,
 				EBC9D38922D4D56F0011D881 /* disconnect-block-cookies-advertising.json in Resources */,
 				D0E17FB6201F847600F1FCB5 /* FxASignIn.js in Resources */,
 				E4424B3C1AC71FB400F44C38 /* FiraSans-Book.ttf in Resources */,
@@ -8831,6 +8848,7 @@
 				D5E16123261FCA2200F02D6E /* eo */,
 				43EB00C3265861E8009A5F61 /* az */,
 				D5E343802697613600A57583 /* bg */,
+				DF46B9A32755297000657F75 /* ne-NP */,
 			);
 			name = Today.strings;
 			sourceTree = "<group>";
@@ -10362,6 +10380,7 @@
 				D5C974D9261FCA5F004631C7 /* lo */,
 				D5E79E94263C729200D1E356 /* te */,
 				D594AB18269761C500F9B437 /* gd */,
+				DF46B9A42755297000657F75 /* ne-NP */,
 			);
 			name = BookmarkPanel.strings;
 			sourceTree = "<group>";
@@ -10430,6 +10449,7 @@
 				D5C974DA261FCA5F004631C7 /* lo */,
 				D55C98AD263C72250000DA62 /* he */,
 				D594AB1B269761C500F9B437 /* gd */,
+				DF46B9A72755297000657F75 /* ne-NP */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -10501,6 +10521,7 @@
 				D5C974DB261FCA5F004631C7 /* lo */,
 				D5E79E95263C729200D1E356 /* te */,
 				D594AB19269761C500F9B437 /* gd */,
+				DF46B9A52755297000657F75 /* ne-NP */,
 			);
 			name = BookmarkPanelDeleteConfirm.strings;
 			sourceTree = "<group>";
@@ -10571,6 +10592,7 @@
 				D5781476261FCA8C003595F6 /* pa-IN */,
 				D5E79E97263C729200D1E356 /* te */,
 				D594AB1A269761C500F9B437 /* gd */,
+				DF46B9A62755297000657F75 /* ne-NP */,
 			);
 			name = WidgetIntents.intentdefinition;
 			sourceTree = "<group>";

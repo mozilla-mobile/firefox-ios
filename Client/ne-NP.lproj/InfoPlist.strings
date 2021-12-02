@@ -1,19 +1,17 @@
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "यसले तपाईँलाई तस्विर लिन र अपलोड गर्न दिन्छ।";
+"NSCameraUsageDescription" = "Firefox ले QR कोडहरू स्क्यान गर्न र फोटो र भिडियो खिच्न तपाईंको क्यामरा प्रयोग गर्दछ।";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox लाई तपाइँको सुरक्षित लगइनहरु लाई पहुँच गर्न फेस आईडी चाहिन्छ। ";
+"NSFaceIDUsageDescription" = "Firefox लाई तपाइँको सुरक्षित लगइनहरु लाई पहुँच गर्न फेस आईडी चाहिन्छ।";
 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
-"NSLocationWhenInUseUsageDescription" = "तपाईंले भ्रमण गर्ने वेबसाइटहरूले तपाईंको स्थान अनुरोध गर्न सक्दछन् ।";
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "तपाईंले भ्रमण गर्ने वेबसाइटहरूले तपाईंको स्थान अनुरोध गर्न सक्छन् ।";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "यसले तपाईँलाई भिडियो सङ्ग्रह गर्न र अपलोड गर्न दिन्छ।";
+"NSMicrophoneUsageDescription" = "Firefox ले अडियो रेकर्ड गर्न र अडियो अपलोड गर्न तपाईंको माइक्रोफोन प्रयोग गर्छ।";
 
 /* Privacy - Photo Library Additions Usage Description */
-"NSPhotoLibraryAddUsageDescription" = "यसले तपाईंलाई फोटोहरू संग्रह गर्न दिन्छ ।";
+"NSPhotoLibraryAddUsageDescription" = "यसले तपाईंलाई फोटोहरू सेभ गर्न दिन्छ ।";
 
 /* (No Comment) */
 "ShortcutItemTitleNewPrivateTab" = "नयाँ निजी ट्याब";

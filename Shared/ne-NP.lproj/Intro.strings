@@ -14,56 +14,56 @@
 "Intro.Slides.Button.SignUp" = "साइन अप";
 
 /* Description for the second item in the table related to fast searching via address bar */
-"Intro.Slides.Fast.Search.Description" = "खोज सुझावहरूले तपाइँलाई छिटो वेबसाइटहरूमा लैजान्छ। ";
+"Intro.Slides.Fast.Search.Description" = "खोज सुझावहरूले तपाइँलाई छिटो वेबसाइटहरूमा लैजान्छ।";
 
 /* Title for the second item in the table related to fast searching via address bar */
 "Intro.Slides.Fast.Search.Title" = "द्रुत खोजी";
 
 /* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "यस उपकरणको फायरफक्समा बुकमार्कहरू, ईतिहास र पासवर्डहरू ल्याउनुहोस् ।";
+"Intro.Slides.Firefox.Account.Sync.Description" = "बुकमार्कहरू, इतिहास र पासवर्डहरू यस उपकरणको Firefox मा ल्याउनुहोस् ।";
 
 /* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Title" = "उपकरणहरू बीच फायरफक्स सिंक गर्नुहोस्";
+"Intro.Slides.Firefox.Account.Sync.Title" = "उपकरणहरू बीच Firefox सिङ्क गर्नुहोस्";
 
 /* Description for the 'Mail' panel in the First Run tour. */
 "Intro.Slides.Mail.Description" = "कुनै पनि इमेल एप प्रयोग गर्नुहोस् - मेल मात्र हैन - Firefox को साथमा ।";
 
 /* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "तपाईँले मेलहरू पाउनु भएको छ … विकल्पहरू";
+"Intro.Slides.Mail.Title" = "तपाईँले इमेल प्राप्त गर्नुभएको छ … विकल्पहरू";
 
 /* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "निजी ब्राउजिङ्ग मोडमा छिर्नको लागि मास्क आइकन मा थिच्नुहोस् ।";
+"Intro.Slides.Private.Description" = "निजी ब्राउजिङ्ग मोडमा छिर्नको लागि मास्क आइकनमा ट्याप गर्नुहोस्।";
 
 /* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "कसैले पनि नहेरे झैँ ब्राउज गर्नुहोस्";
+"Intro.Slides.Private.Title" = "कसैले पनि नहेरेझैँ ब्राउज गर्नुहोस्";
 
 /* Description for the third item in the table related to safe syncing with a firefox account */
 "Intro.Slides.Safe.Sync.Description" = "तपाईको लगइनहरू र डेटा सुरक्षित गर्नुहोस् जहाँ तपाईं फायरफक्स प्रयोग गर्नुहुन्छ ।";
 
 /* Title for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Title" = "सुरक्षित sync";
+"Intro.Slides.Safe.Sync.Title" = "सुरक्षित सिङ्क";
 
 /* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "केहि फरक खोज्दै हुनुहुन्छ ? सेटिङ्हरूमा अर्को पूर्वनिर्धारित खोजी इञ्जिन छनौट गर्नुहोस् (वा आफ्नै थप्नुहोस्) ।";
+"Intro.Slides.Search.Description" = "केहि फरक खोज्दै हुनुहुन्छ ? सेटिङ्गहरूमा अर्को पूर्वनिर्धारित खोजी इञ्जिन छनौट गर्नुहोस् (वा आफ्नै थप्नुहोस्) ।";
 
 /* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "तपाईंको खोजी, तपाईंको बाटो";
+"Intro.Slides.Search.Title" = "तपाईंको खोजी, तपाईंकै मर्जी";
 
 /* Description for the 'Sync' panel in the First Run tour. */
-"Intro.Slides.TrailheadSync.Description" = "सिंक गर्न र अधिक सुविधाहरू पहुँच गर्न तपाईंको खातामा साइन इन गर्नुहोस् ।";
+"Intro.Slides.TrailheadSync.Description" = "सिङ्क गर्न र अधिक सुविधाहरू पहुँच गर्न तपाईंको खातामा साइन इन गर्नुहोस् ।";
 
 /* Title for the second panel 'Sync' in the First Run tour. */
-"Intro.Slides.TrailheadSync.Title.v2" = "तपाइँको फोन मा तपाइँको बुकमार्क, इतिहास, र पासवर्डहरु सिंक गर्नुहोस् ।";
+"Intro.Slides.TrailheadSync.Title.v2" = "तपाइँको फोनमा तपाइँको बुकमार्क, इतिहास, र पासवर्डहरु सिङ्क गर्नुहोस् ।";
 
 /* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description.v2" = "छिटो, निजी, र तपाईंको पक्षमा ।";
+"Intro.Slides.Welcome.Description.v2" = "छिटो, निजी, र तपाईंको हितमा ।";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
-"Intro.Slides.Welcome.Title.v2" = "Firefoxमा स्वागत छ";
+"Intro.Slides.Welcome.Title.v2" = "Firefoxमा हार्दिक स्वागत छ";
 
 /* See http://mzl.la/1T8gxwo */
-"Start Browsing" = "ब्राउजिङ्ग सुरु गर्नुहोस";
+"Start Browsing" = "ब्राउजिङ्ग सुरु गर्नुहोस्";
 
 /* The button that opens the sign in page for sync. See http://mzl.la/1T8gxwo */
-"Turn on Sync…" = "सिंक सक्रिय गर्नुहोस्...";
+"Turn on Sync…" = "सिङ्क सक्रिय गर्नुहोस्…";
 
