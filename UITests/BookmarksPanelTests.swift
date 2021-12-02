@@ -70,7 +70,6 @@ class BookmarksPanelTests: KIFTestCase {
         EarlGrey.selectElement(with: grey_accessibilityLabel("Some Livemark")).perform(grey_tap())
 
         // … so we show the truncated URL.
-        // Strangely, earlgrey cannot find the label in buddybuild, but passes locally.
         // Using KIF for this check for now.
         EarlGrey.selectElement(with: grey_accessibilityValue("www.google.ca/")).assert(grey_sufficientlyVisible())
 

@@ -8,9 +8,9 @@ import Storage
 import MozillaAppServices
 
 struct ASGroup<T> {
-    let searchTerm: String
-    let groupedItems: [T]
-    let timestamp: Timestamp
+    var searchTerm: String
+    var groupedItems: [T]
+    var timestamp: Timestamp
 }
 
 class SearchTermGroupsManager {

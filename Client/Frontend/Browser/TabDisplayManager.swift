@@ -151,7 +151,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         tabDisplayOrder.regularTabUUID = uuids
         TabDisplayOrder.encode(tabDisplayOrder: tabDisplayOrder)
     }
-
+    
     var tabGroups: [ASGroup<Tab>]?
     var tabsInAllGroups: [Tab]? {
         (tabGroups?.map{$0.groupedItems}.flatMap{$0})
@@ -378,6 +378,33 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
             self.tabDisplayer?.focusSelectedTab()
         }
     }
+    
+    func removeGroupTab(with tab:Tab) {
+        let groupData = indexOfGroupTab(tab: tab)
+        let groupIndexPath = IndexPath(row: 0, section: TabDisplaySection.groupedTabs.rawValue)
+        guard let groupName = groupData?.groupName,
+              let tabIndexInGroup = groupData?.indexOfTabInGroup,
+              let indexOfGroup = tabGroups?.firstIndex(where: { group in
+                  group.searchTerm == groupName
+              }),
+              let groupedCell = self.collectionView.cellForItem(at: groupIndexPath) as? GroupedTabCell else {
+            return
+        }
+        
+        // case: Group has less than 3 tabs (refresh all)
+        if let count = tabGroups?[indexOfGroup].groupedItems.count, count < 3 {
+            refreshStore()
+        } else {
+            // case: Group has more than 2 tabs, we are good to remove just one tab from group
+            tabGroups?[indexOfGroup].groupedItems.remove(at: tabIndexInGroup)
+                groupedCell.tabDisplayManagerDelegate = self
+                groupedCell.tabGroups = self.tabGroups
+                groupedCell.hasExpanded = true
+                groupedCell.selectedTab = tabManager.selectedTab
+                groupedCell.tableView.reloadRows(at: [IndexPath(row: indexOfGroup, section: 0)], with: .automatic)
+                groupedCell.scrollToSelectedGroup()
+        }
+    }
 
     // The user has tapped the close button or has swiped away the cell
     func closeActionPerformed(forCell cell: UICollectionViewCell) {
@@ -533,7 +560,7 @@ extension TabDisplayManager: GroupedTabDelegate {
         }
 
         self.tabManager.removeTab(tab)
-        refreshStore()
+        removeGroupTab(with: tab)
     }
 
     func selectGroupTab(tab: Tab) {
